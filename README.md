@@ -42,6 +42,8 @@
 ```
 changeBG:testBG01.jpg;//改变背景
 changeP:testFigure01.png;//改变人物立绘
+changeBG:none;//关闭背景
+changeP:none;//关闭人物立绘
 ```
 
 **注意：你的背景图片应该被放在background文件夹内，而立绘图片则应该放在figure文件夹中。**

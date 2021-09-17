@@ -4,7 +4,7 @@ changeBG_next:testBG01.jpg;
 changeP_next:testFigure01.png;
 未名女孩:......;
 未名女孩:！;
-changeP:none;
+changeP_next:none;
 changeBG_next:testBG02.jpg;
 奥尔加大佐:山不会向我走来，但是我可以走向山;
 奥尔加大佐:但是，现在又没有了山;

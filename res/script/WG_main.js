@@ -21,9 +21,11 @@ function getScene() {
                 }
                 console.log('Read scene complete.');
                 // console.log(currentScene);
+                nextSentenceProcessor();
             }
         }
     }
+
 }
 
 window.onload = function (){
