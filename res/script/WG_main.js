@@ -52,7 +52,7 @@ function nextSentenceProcessor() {
         if (thisSentence[1] === 'none'){
             ReactDOM.render(<div/>,document.getElementById('figureImage'));
         }else{
-            let pUrl = "/game/figure/"+thisSentence[1];
+            let pUrl = "game/figure/"+thisSentence[1];
             let changedP = <img src={pUrl} alt='figure' className='p_center'/>
             // console.log('now changing person');
             ReactDOM.render(changedP,document.getElementById('figureImage'));
@@ -63,7 +63,7 @@ function nextSentenceProcessor() {
         if (thisSentence[1] === 'none'){
             ReactDOM.render(<div/>,document.getElementById('figureImage'));
         }else{
-            let pUrl = "/game/figure/"+thisSentence[1];
+            let pUrl = "game/figure/"+thisSentence[1];
             let changedP = <img src={pUrl} alt='figure' className='p_center'/>
             // console.log('now changing person');
             ReactDOM.render(changedP,document.getElementById('figureImage'));
