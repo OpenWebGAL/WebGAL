@@ -7,5 +7,5 @@ changeP_next:testFigure01.png;
 changeP:none;
 changeBG_next:testBG02.jpg;
 奥尔加大佐:山不会向我走来，但是我可以走向山;
-奥尔加大佐:但是现在又没有了山;
+奥尔加大佐:但是，现在又没有了山;
 changeBG:none;
