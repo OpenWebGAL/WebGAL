@@ -20,7 +20,7 @@ function getScene() {
                     currentScene[i] = currentScene[i].split(":");
                 }
                 console.log('Read scene complete.');
-                console.log(currentScene);
+                // console.log(currentScene);
             }
         }
     }
@@ -32,7 +32,7 @@ window.onload = function (){
 
 function processSentence(i){
     if(i<currentScene.length)
-        return currentScene[i][0]+": "+currentScene[i][1];
+        return {name:currentScene[i][0],text:currentScene[i][1]};
 }
 
 function nextSentenceProcessor() {
@@ -43,7 +43,7 @@ function nextSentenceProcessor() {
     let command = thisSentence[0];
     console.log(command)
     if (command === 'changeBG') {
-        console.log('Now change background to ' + "url('/game/background/" + thisSentence[1] + "')");
+        // console.log('Now change background to ' + "url('/game/background/" + thisSentence[1] + "')");
         document.getElementById('mainBackground').style.backgroundImage = "url('/game/background/" + thisSentence[1] + "')";
     }
     else if(command === 'changeP'){
@@ -52,13 +52,34 @@ function nextSentenceProcessor() {
         }else{
             let pUrl = "/game/figure/"+thisSentence[1];
             let changedP = <img src={pUrl} alt='figure' className='p_center'/>
-            console.log('now changing person');
+            // console.log('now changing person');
             ReactDOM.render(changedP,document.getElementById('figureImage'));
         }
 
     }
+    else if(command === 'changeP_next'){
+        if (thisSentence[1] === 'none'){
+            ReactDOM.render(<div/>,document.getElementById('figureImage'));
+        }else{
+            let pUrl = "/game/figure/"+thisSentence[1];
+            let changedP = <img src={pUrl} alt='figure' className='p_center'/>
+            // console.log('now changing person');
+            ReactDOM.render(changedP,document.getElementById('figureImage'));
+        }
+        currentSentence = currentSentence+1;
+        nextSentenceProcessor();
+        return;
+    }
+    else if(command === 'changeBG_next'){
+        document.getElementById('mainBackground').style.backgroundImage = "url('/game/background/" + thisSentence[1] + "')";
+        currentSentence = currentSentence+1;
+        nextSentenceProcessor();
+        return;
+    }
     else {
-        let changedText = <p>{processSentence(currentSentence)}</p>
+        let changedName = <span>{processSentence(currentSentence)['name']}</span>
+        let changedText = <p>{processSentence(currentSentence)['text']}</p>
+        ReactDOM.render(changedName, document.getElementById('pName'));
         ReactDOM.render(changedText, document.getElementById('SceneText'));
     }
     currentSentence = currentSentence+1;
