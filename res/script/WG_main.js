@@ -46,7 +46,7 @@ function nextSentenceProcessor() {
     console.log(command)
     if (command === 'changeBG') {
         // console.log('Now change background to ' + "url('/game/background/" + thisSentence[1] + "')");
-        document.getElementById('mainBackground').style.backgroundImage = "url('/game/background/" + thisSentence[1] + "')";
+        document.getElementById('mainBackground').style.backgroundImage = "url('game/background/" + thisSentence[1] + "')";
     }
     else if(command === 'changeP'){
         if (thisSentence[1] === 'none'){
@@ -73,7 +73,7 @@ function nextSentenceProcessor() {
         return;
     }
     else if(command === 'changeBG_next'){
-        document.getElementById('mainBackground').style.backgroundImage = "url('/game/background/" + thisSentence[1] + "')";
+        document.getElementById('mainBackground').style.backgroundImage = "url('game/background/" + thisSentence[1] + "')";
         currentSentence = currentSentence+1;
         nextSentenceProcessor();
         return;
