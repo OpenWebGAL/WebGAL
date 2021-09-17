@@ -1,0 +1,15 @@
+#mainTextWindow{
+    background-color: rgba(0,0,0,0.5);
+    padding: 5px 5px 5px 5px;
+    width: 96%;
+    margin: 0 3% 0 3%;
+}
+
+#bottomBox{
+    position: fixed;
+    bottom: 15px;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    height: 20%;
+}
