@@ -16,6 +16,7 @@ function getScene() {
                 currentScene = getScReq.responseText;
                 currentScene = currentScene.split('\n');
                 for (let i = 0;i<currentScene.length;i++){
+                    currentScene[i] = currentScene[i].split(";")[0];
                     currentScene[i] = currentScene[i].split(":");
                 }
                 console.log('Read scene complete.');
@@ -34,8 +35,25 @@ function processSentence(i){
         return currentScene[i][0]+": "+currentScene[i][1];
 }
 
-function nextSentenceProcessor(){
-    let changedText = <p>{processSentence(currentSentence)}</p>
-    ReactDOM.render(changedText,document.getElementById('SceneText'));
+function nextSentenceProcessor() {
+    if(currentSentence >= currentScene.length){
+        return;
+    }
+    let thisSentence = currentScene[currentSentence];
+    let command = thisSentence[0];
+    console.log(command)
+    if (command === 'changeBG') {
+        console.log('Now change background to ' + "url('/game/background/" + thisSentence[1] + "')");
+        document.getElementById('mainBackground').style.backgroundImage = "url('/game/background/" + thisSentence[1] + "')";
+    }
+    else if(command === 'changeP'){
+        let changedP = <img src="/game/figure/testFigure01.png" alt='figure' className='p_center'/>
+        console.log('now changing person');
+        ReactDOM.render(changedP,document.getElementById('figureImage'));
+    }
+    else {
+        let changedText = <p>{processSentence(currentSentence)}</p>
+        ReactDOM.render(changedText, document.getElementById('SceneText'));
+    }
     currentSentence = currentSentence+1;
 }
