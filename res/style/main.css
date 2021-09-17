@@ -23,6 +23,11 @@
 #SceneText{
     color: white;
 }
+#pName{
+    background-color: rgba(255,255,255,0.7);
+    padding: 3px 7px 3px 7px;
+    border-radius: 5px;
+}
 
 #mainBackground{
     width: 100%;
