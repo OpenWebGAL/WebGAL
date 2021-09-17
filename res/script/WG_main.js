@@ -47,9 +47,15 @@ function nextSentenceProcessor() {
         document.getElementById('mainBackground').style.backgroundImage = "url('/game/background/" + thisSentence[1] + "')";
     }
     else if(command === 'changeP'){
-        let changedP = <img src="/game/figure/testFigure01.png" alt='figure' className='p_center'/>
-        console.log('now changing person');
-        ReactDOM.render(changedP,document.getElementById('figureImage'));
+        if (thisSentence[1] === 'none'){
+            ReactDOM.render(<div/>,document.getElementById('figureImage'));
+        }else{
+            let pUrl = "/game/figure/"+thisSentence[1];
+            let changedP = <img src={pUrl} alt='figure' className='p_center'/>
+            console.log('now changing person');
+            ReactDOM.render(changedP,document.getElementById('figureImage'));
+        }
+
     }
     else {
         let changedText = <p>{processSentence(currentSentence)}</p>
