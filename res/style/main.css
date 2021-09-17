@@ -46,6 +46,8 @@
 .p_center{
     max-height: 100%;
     max-width: 100%;
+    width: auto;
+    height: auto;
 }
 #figureImage{
     width: 100%;
