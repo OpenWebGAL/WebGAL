@@ -51,19 +51,24 @@
 }
 
 .p_center{
+    /*display: block;*/
     max-height: 100%;
     max-width: 100%;
     width: auto;
     height: auto;
+    /*overflow: hidden;*/
 }
 #figureImage{
     width: 100%;
+
     position: absolute;
     display: flex;
     justify-content: center;
     top:5px;
     bottom: 5px;
     z-index:2;
+    min-width: 600px;
+    overflow: hidden;
 }
 
 #controlBar{
