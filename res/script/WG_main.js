@@ -1,12 +1,13 @@
 var currentScene ='';
 var currentSceneIndex = 0;
 var currentSentence = 0;
+var currentText = 0;
 function getScene() {
     let getScReq = null;
     getScReq = new XMLHttpRequest();
 
     if (getScReq != null) {
-        getScReq.open("get", "game/scene/start.sce", true);
+        getScReq.open("get", "game/scene/start.txt", true);
         getScReq.send();
         getScReq.onreadystatechange = doResult; //设置回调函数
     }
@@ -80,9 +81,57 @@ function nextSentenceProcessor() {
     }
     else {
         let changedName = <span>{processSentence(currentSentence)['name']}</span>
-        let changedText = <p>{processSentence(currentSentence)['text']}</p>
+        let textArray = processSentence(currentSentence)['text'].split("");
+        // let changedText = <p>{processSentence(currentSentence)['text']}</p>
         ReactDOM.render(changedName, document.getElementById('pName'));
-        ReactDOM.render(changedText, document.getElementById('SceneText'));
+        showTextArray(textArray,currentText+1);
+        currentText = currentText + 1;
     }
     currentSentence = currentSentence+1;
+}
+
+function showTextArray(textArray,now){
+    ReactDOM.render(<span> </span>, document.getElementById('SceneText'));
+    let elementArray = [];
+    let i = 0;
+    clearInterval(interval);
+    var interval = setInterval(showSingle,60);
+    function showSingle() {
+        let tempElement = <span key={i} className='singleWord'>{textArray[i]}</span>
+        elementArray.push(tempElement);
+        if(currentText === now)
+            ReactDOM.render(<div>{elementArray}</div>, document.getElementById('SceneText'));
+        i = i+1;
+        if(i > textArray.length && currentText!== now){
+            clearInterval(interval);
+        }
+    }
+}
+
+function onSetting(){
+    let settingInterface = <div>
+        <div className="singleSettingItem">
+            <span className="settingItemTitle">字体大小</span>
+        </div>
+        <div className="singleSettingItem">
+            <span className="settingItemTitle">文字显示速度</span>
+        </div>
+        <div className="singleSettingItem">
+            <span className="settingItemTitle">音量调节</span>
+        </div>
+        <div className="singleSettingItem">
+            <span className="settingItemTitle">中断语音设置</span>
+        </div>
+        <div className="singleSettingItem">
+            <span className="settingItemTitle">字体选择</span>
+        </div>
+    </div>
+    document.getElementById("settings").style.display = "flex"
+    document.getElementById("bottomBox").style.display = "none"
+    ReactDOM.render(settingInterface,document.getElementById("settingItems"))
+}
+
+function closeSettings(){
+    document.getElementById("settings").style.display = "none"
+    document.getElementById("bottomBox").style.display = "flex"
 }

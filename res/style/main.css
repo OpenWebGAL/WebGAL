@@ -15,13 +15,15 @@
     border-radius: 10px;
 }
 
+
+
 #bottomBox{
     position: absolute;
     bottom: 15px;
     display: flex;
     justify-content: center;
     width: 100%;
-    height: 25%;
+    height: 30%;
 }
 #SceneText{
     color: white;
@@ -69,14 +71,24 @@
 }
 
 .controlButton{
-    border: 2px solid #8E354A;
-    background-color: #FEDFE1;
+    border-bottom: 3px solid #FEDFE1;
+    /*background-color: #FEDFE1;*/
     padding: 3px 7px 3px 7px;
     margin: 0 5px 0 5px;
-    border-radius: 5px;
-    color: #B5495B;
+    /*border-radius: 5px;*/
+    color: white;
     text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
 }
 .controlButton:hover{
-    background-color: rgb(200,200,200);
+    background-color: rgba(0,0,0,0.3);
+}
+.singleWord{
+    -webkit-animation: showSoftly 0.5s;
+}
+
+
+@-webkit-keyframes showSoftly /* Safari 与 Chrome */
+{
+    from {opacity: 0;}
+    to {opacity: 100%;}
 }

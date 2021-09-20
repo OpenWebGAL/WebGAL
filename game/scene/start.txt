@@ -1,0 +1,7 @@
+changeBG_next:testBG03.png;
+比企谷八幡:现在开始测试渐变显示的效果;
+changeP_next:testFigure02.png;
+雪之下雪乃:开始了呢;
+雪之下雪乃:不知道效果如何;
+changeP_next:none;
+:;
