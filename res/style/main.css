@@ -36,8 +36,8 @@
     font-size: x-large;
     /*background-color: rgba(255,255,255,0.7);*/
     padding: 3px 7px 3px 7px;
-    border-radius: 5px;
-    border-bottom: 1px solid rgba(255,255,255,0.5);
+    /*border-radius: 5px;*/
+    border-bottom: 2px solid rgba(255,255,255,0.5);
     width: 30%;
 }
 
