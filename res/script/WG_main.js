@@ -20,8 +20,13 @@ function getScene(url) {
                 currentScene = getScReq.responseText;
                 currentScene = currentScene.split('\n');
                 for (let i = 0;i<currentScene.length;i++){
-                    currentScene[i] = currentScene[i].split(";")[0];
+                    let tempSentence = currentScene[i].split(";")[0];
+                    let commandLength = tempSentence.split(":")[0].length;
+                    let command = currentScene[i].split(":")[0];
+                    let content = tempSentence.slice(commandLength+1);
                     currentScene[i] = currentScene[i].split(":");
+                    currentScene[i][0] = command;
+                    currentScene[i][1] = content;
                 }
                 console.log('Read scene complete.');
                 // console.log(currentScene);
@@ -91,21 +96,14 @@ function nextSentenceProcessor() {
     }
     else if(command === 'choose'){
         document.getElementById('chooseBox').style.display = 'flex';
-        let chooseItems ='';
-        for (let i = 1; i <thisSentence.length ; i++) {
-            chooseItems = chooseItems+thisSentence[i]+':';
-        }
-        console.log(chooseItems);
+        let chooseItems =thisSentence[1];
         chooseItems = chooseItems.split("}")[0];
         chooseItems = chooseItems.split("{")[1];
-        console.log(chooseItems)
         let selection = chooseItems.split(',')
-        console.log(selection)
         for (let i = 0;i<selection.length;i++){
             selection[i] = selection[i].split(":");
         }
         let elements = []
-        console.log(selection)
         for (let i = 0; i < selection.length; i++) {
             let temp = <div className='singleChoose' key={i} onClick={()=>{chooseScene(selection[i][1]);}}>{selection[i][0]}</div>
             elements.push(temp)
@@ -130,7 +128,7 @@ function showTextArray(textArray,now){
     let i = 0;
     clearInterval(interval);
     var interval = setInterval(showSingle,35);
-    console.log("now: "+now+" currentText: "+currentText)
+    // console.log("now: "+now+" currentText: "+currentText)
     function showSingle() {
         let tempElement = <span key={i} className='singleWord'>{textArray[i]}</span>
         elementArray.push(tempElement);
