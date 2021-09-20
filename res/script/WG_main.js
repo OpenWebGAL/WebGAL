@@ -2,12 +2,15 @@ var currentScene ='';
 var currentSceneIndex = 0;
 var currentSentence = 0;
 var currentText = 0;
-function getScene() {
+function getScene(url) {
+    currentScene ='';
+    currentText = 0;
+
     let getScReq = null;
     getScReq = new XMLHttpRequest();
 
     if (getScReq != null) {
-        getScReq.open("get", "game/scene/start.txt", true);
+        getScReq.open("get",url , true);
         getScReq.send();
         getScReq.onreadystatechange = doResult; //设置回调函数
     }
@@ -22,6 +25,8 @@ function getScene() {
                 }
                 console.log('Read scene complete.');
                 // console.log(currentScene);
+                currentSentence = 0;
+                console.log("start:"+currentSentence)
                 nextSentenceProcessor();
             }
         }
@@ -30,7 +35,7 @@ function getScene() {
 }
 
 window.onload = function (){
-    getScene();
+    getScene("game/scene/start.txt");
 }
 
 function processSentence(i){
@@ -79,6 +84,35 @@ function nextSentenceProcessor() {
         nextSentenceProcessor();
         return;
     }
+    else if(command === 'changeScene'){
+        let sUrl = "game/scene/"+thisSentence[1];
+        getScene(sUrl);
+        return;
+    }
+    else if(command === 'choose'){
+        document.getElementById('chooseBox').style.display = 'flex';
+        let chooseItems ='';
+        for (let i = 1; i <thisSentence.length ; i++) {
+            chooseItems = chooseItems+thisSentence[i]+':';
+        }
+        console.log(chooseItems);
+        chooseItems = chooseItems.split("}")[0];
+        chooseItems = chooseItems.split("{")[1];
+        console.log(chooseItems)
+        let selection = chooseItems.split(',')
+        console.log(selection)
+        for (let i = 0;i<selection.length;i++){
+            selection[i] = selection[i].split(":");
+        }
+        let elements = []
+        console.log(selection)
+        for (let i = 0; i < selection.length; i++) {
+            let temp = <div className='singleChoose' key={i} onClick={()=>{chooseScene(selection[i][1]);}}>{selection[i][0]}</div>
+            elements.push(temp)
+        }
+        ReactDOM.render(<div>{elements}</div>,document.getElementById('chooseBox'))
+        return;
+    }
     else {
         let changedName = <span>{processSentence(currentSentence)['name']}</span>
         let textArray = processSentence(currentSentence)['text'].split("");
@@ -95,7 +129,8 @@ function showTextArray(textArray,now){
     let elementArray = [];
     let i = 0;
     clearInterval(interval);
-    var interval = setInterval(showSingle,60);
+    var interval = setInterval(showSingle,35);
+    console.log("now: "+now+" currentText: "+currentText)
     function showSingle() {
         let tempElement = <span key={i} className='singleWord'>{textArray[i]}</span>
         elementArray.push(tempElement);
@@ -134,4 +169,11 @@ function onSetting(){
 function closeSettings(){
     document.getElementById("settings").style.display = "none"
     document.getElementById("bottomBox").style.display = "flex"
+}
+
+function chooseScene(url){
+    console.log(url);
+    let sUrl = "game/scene/"+url;
+    getScene(sUrl);
+    document.getElementById("chooseBox").style.display="none"
 }
