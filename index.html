@@ -6,11 +6,21 @@
     <script src="res/script/react.development.js" crossorigin></script>
     <script src="res/script/react-dom.development.js" crossorigin></script>
     <link rel="stylesheet" type="text/css" href="res/style/main.css">
+    <link rel="stylesheet" type="text/css" href="res/style/settings.css">
 </head>
 <body>
 <script src="res/script/babel.min.js"></script>
 <div id="mainBackground"></div>
 <div id="figureImage"></div>
+<div id="settings">
+    <div id="settingsMainBox">
+        <div id="close" onclick="closeSettings()">关闭</div>
+        <div id="settingsTitle">
+            设置
+        </div>
+        <div id="settingItems"></div>
+    </div>
+</div>
 <div id="bottomBox">
     <div id="mainTextWindow" onclick="nextSentenceProcessor()">
             <div id="pName"></div>
@@ -23,7 +33,7 @@
         <div class="controlButton">回溯</div>
         <div class="controlButton">存档</div>
         <div class="controlButton">读档</div>
-        <div class="controlButton">设置</div>
+        <div class="controlButton" onclick="onSetting()">设置</div>
         <div class="controlButton">退出</div>
     </div>
 </div>
