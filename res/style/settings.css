@@ -32,16 +32,33 @@
 }
 
 .settingItemTitle{
-    font-size: large;
+    font-size: x-large;
     border-bottom: 2px solid #FEDFE1;
 }
 
 .singleSettingItem{
     margin: 15px 0 0 0;
     padding: 5px 0 5px 0;
+    font-size: large;
 }
 
 .closeSVG{
     width: 60px;
     height:60px;
+}
+
+.settingItemButton{
+    padding: 3px 15px 3px 15px;
+    min-width: 50px;
+    margin: 0 0 0 10px;
+    color: white;
+    border: 2px solid #FEDFE1;
+    border-radius: 5px;
+    text-align: center;
+}
+
+.settingItemButton:hover{
+    background-color: #FEDFE1;
+    color: #8E354A;
+    font-weight: bold;
 }

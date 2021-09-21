@@ -284,9 +284,15 @@ function onSetting(){
     let settingInterface = <div>
         <div className="singleSettingItem">
             <span className="settingItemTitle">字体大小</span>
+            <span className='settingItemButton'>小</span>
+            <span className='settingItemButton'>中</span>
+            <span className='settingItemButton'>大</span>
         </div>
         <div className="singleSettingItem">
             <span className="settingItemTitle">文字显示速度</span>
+            <span className='settingItemButton'>慢</span>
+            <span className='settingItemButton'>中</span>
+            <span className='settingItemButton'>快</span>
         </div>
     </div>
     document.getElementById("settings").style.display = "flex"
