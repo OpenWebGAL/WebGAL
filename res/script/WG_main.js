@@ -2,6 +2,11 @@ var currentScene ='';
 var currentSceneIndex = 0;
 var currentSentence = 0;
 var currentText = 0;
+var auto = 0;
+var fast = 0;
+var setAutoWaitTime = 1500;
+var autoWaitTime = 1500;
+var textShowWatiTime = 35;
 var currentInfo ={
     SceneName:'',
     SentenceID:0,
@@ -163,6 +168,7 @@ function nextSentenceProcessor() {
         // console.log('Now change background to ' + "url('/game/background/" + thisSentence[1] + "')");
         document.getElementById('mainBackground').style.backgroundImage = "url('game/background/" + thisSentence[1] + "')";
         currentInfo["bg_Name"]= thisSentence[1];
+        autoPlay('on');
     }
     else if(command === 'changeP'){
         if (thisSentence[1] === 'none'){
@@ -175,7 +181,7 @@ function nextSentenceProcessor() {
             ReactDOM.render(changedP,document.getElementById('figureImage'));
             currentInfo["fig_Name"] = thisSentence[1];
         }
-
+        autoPlay('on');
     }
     else if(command === 'changeP_next'){
         if (thisSentence[1] === 'none'){
@@ -238,6 +244,18 @@ function nextSentenceProcessor() {
     }
     currentSentence = currentSentence+1;
     currentInfo["SentenceID"] = currentSentence;
+
+    function autoPlay(active){
+        if(auto === 1 && active === 'on'){
+            let interval = setInterval(jumpNext,autoWaitTime);
+            function jumpNext(){
+                if(auto === 1)
+                    nextSentenceProcessor();
+                clearInterval(interval);
+            }
+
+        }
+    }
 }
 
 function showTextArray(textArray,now){
@@ -245,7 +263,7 @@ function showTextArray(textArray,now){
     let elementArray = [];
     let i = 0;
     clearInterval(interval);
-    var interval = setInterval(showSingle,35);
+    var interval = setInterval(showSingle,textShowWatiTime);
     console.log("now: "+now+" currentText: "+currentText)
     function showSingle() {
         let tempElement = <span key={i} className='singleWord'>{textArray[i]}</span>
@@ -253,8 +271,11 @@ function showTextArray(textArray,now){
         if(currentText === now)
             ReactDOM.render(<div>{elementArray}</div>, document.getElementById('SceneText'));
         i = i+1;
-        if(i > textArray.length && currentText!== now){
+        if(i > textArray.length +(autoWaitTime/35) || currentText!== now){
             clearInterval(interval);
+            if(auto === 1&&currentText === now){
+                nextSentenceProcessor();
+            }
         }
     }
 }
@@ -266,15 +287,6 @@ function onSetting(){
         </div>
         <div className="singleSettingItem">
             <span className="settingItemTitle">文字显示速度</span>
-        </div>
-        <div className="singleSettingItem">
-            <span className="settingItemTitle">音量调节</span>
-        </div>
-        <div className="singleSettingItem">
-            <span className="settingItemTitle">中断语音设置</span>
-        </div>
-        <div className="singleSettingItem">
-            <span className="settingItemTitle">字体选择</span>
         </div>
     </div>
     document.getElementById("settings").style.display = "flex"
@@ -293,4 +305,60 @@ function chooseScene(url){
     let sUrl = "game/scene/"+url;
     getScene(sUrl);
     document.getElementById("chooseBox").style.display="none"
+}
+
+
+
+function autoNext(){
+    if(auto === 0){
+        autoWaitTime = setAutoWaitTime;
+        textShowWatiTime = 35
+        fast = 0;
+        auto = 0;
+        document.getElementById('fastButton').style.backgroundColor = 'rgba(255,255,255,0)';
+        document.getElementById('fastButton').style.color = 'white';
+        console.log("notFast");
+        autoWaitTime = setAutoWaitTime;
+        auto = 1;
+        console.log("auto");
+        document.getElementById('autoButton').style.backgroundColor = 'rgba(255,255,255,0.8)';
+        document.getElementById('autoButton').style.color = '#8E354A';
+        nextSentenceProcessor();
+
+    }
+    else if(auto === 1){
+        autoWaitTime = setAutoWaitTime;
+        auto = 0;
+        document.getElementById('autoButton').style.backgroundColor = 'rgba(255,255,255,0)';
+        document.getElementById('autoButton').style.color = 'white';
+        console.log("notAuto");
+    }
+}
+
+function fastNext(){
+    if(fast === 0){
+        autoWaitTime = setAutoWaitTime;
+        auto = 0;
+        document.getElementById('autoButton').style.backgroundColor = 'rgba(255,255,255,0)';
+        document.getElementById('autoButton').style.color = 'white';
+        console.log("notAuto");
+        autoWaitTime = 500;
+        textShowWatiTime = 5;
+        fast = 1;
+        auto = 1;
+        console.log("fast");
+        document.getElementById('fastButton').style.backgroundColor = 'rgba(255,255,255,0.8)';
+        document.getElementById('fastButton').style.color = '#8E354A';
+        nextSentenceProcessor();
+
+    }
+    else if(fast === 1){
+        autoWaitTime = setAutoWaitTime;
+        textShowWatiTime = 35
+        fast = 0;
+        auto = 0;
+        document.getElementById('fastButton').style.backgroundColor = 'rgba(255,255,255,0)';
+        document.getElementById('fastButton').style.color = 'white';
+        console.log("notFast");
+    }
 }
