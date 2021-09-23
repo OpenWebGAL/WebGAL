@@ -1,27 +1,31 @@
-var currentScene ='';
-var currentSceneIndex = 0;
-var currentSentence = 0;
-var currentText = 0;
-var auto = 0;
-var fast = 0;
-var setAutoWaitTime = 1500;
-var autoWaitTime = 1500;
-var textShowWatiTime = 35;
-var currentInfo ={
-    SceneName:'',
-    SentenceID:0,
-    bg_Name:'',
-    fig_Name:'',
-    showText:'',
-    showName:'',
-    command:'',
-    choose:'',
-    currentText:0
+//初始化变量表
+{
+    var currentScene ='';
+    var currentSceneIndex = 0;
+    var currentSentence = 0;
+    var currentText = 0;
+    var auto = 0;
+    var fast = 0;
+    var setAutoWaitTime = 1500;
+    var autoWaitTime = 1500;
+    var textShowWatiTime = 35;
+    var currentInfo ={
+        SceneName:'',
+        SentenceID:0,
+        bg_Name:'',
+        fig_Name:'',
+        showText:'',
+        showName:'',
+        command:'',
+        choose:'',
+        currentText:0
+    }
 }
 
-
+// 初始化存档系统
 var Saves=[];
 
+// 读取游戏存档
 function LoadSavedGame(index) {
     let save = Saves[index];
     //get Scene:
@@ -104,11 +108,13 @@ function LoadSavedGame(index) {
 
 }
 
+// 保存当前游戏状态
 function saveGame(index){
     let tempInfo = JSON.stringify(currentInfo);
     Saves[index] = JSON.parse(tempInfo);
 }
 
+// 获取场景脚本
 function getScene(url) {
     currentScene ='';
     currentText = 0;
@@ -146,16 +152,19 @@ function getScene(url) {
 
 }
 
+// 引擎加载完成
 window.onload = function (){
     getScene("game/scene/start.txt");
     currentInfo["SceneName"] = 'start.txt';
 }
 
+// 处理脚本
 function processSentence(i){
     if(i<currentScene.length)
         return {name:currentScene[i][0],text:currentScene[i][1]};
 }
 
+// 读取下一条脚本
 function nextSentenceProcessor() {
 
     if(currentSentence >= currentScene.length){
@@ -258,6 +267,7 @@ function nextSentenceProcessor() {
     }
 }
 
+// 渐显文字
 function showTextArray(textArray,now){
     ReactDOM.render(<span> </span>, document.getElementById('SceneText'));
     let elementArray = [];
@@ -280,6 +290,7 @@ function showTextArray(textArray,now){
     }
 }
 
+// 打开设置
 function onSetting(){
     let settingInterface = <div>
         <div className="singleSettingItem">
@@ -300,11 +311,13 @@ function onSetting(){
     ReactDOM.render(settingInterface,document.getElementById("settingItems"))
 }
 
+// 关闭设置
 function closeSettings(){
     document.getElementById("settings").style.display = "none"
     document.getElementById("bottomBox").style.display = "flex"
 }
 
+// 分支选择
 function chooseScene(url){
     console.log(url);
     currentInfo["SceneName"] = url;
@@ -313,8 +326,7 @@ function chooseScene(url){
     document.getElementById("chooseBox").style.display="none"
 }
 
-
-
+//自动播放
 function autoNext(){
     if(auto === 0){
         autoWaitTime = setAutoWaitTime;
@@ -341,6 +353,7 @@ function autoNext(){
     }
 }
 
+// 快进
 function fastNext(){
     if(fast === 0){
         autoWaitTime = setAutoWaitTime;
