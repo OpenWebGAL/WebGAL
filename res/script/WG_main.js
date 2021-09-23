@@ -162,6 +162,7 @@ function getScene(url) {
 // 引擎加载完成
 window.onload = function (){
     loadSettings();
+    document.getElementById('Title').style.backgroundImage = 'url("game/background/Title1.png")';
     getScene("game/scene/start.txt");
     currentInfo["SceneName"] = 'start.txt';
 }
