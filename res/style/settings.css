@@ -5,8 +5,8 @@
     left: 15px;
     right: 15px;
     display: none;
-    z-index: 10;
-    background-color: rgba(0,0,0,0.5);
+    z-index: 15;
+    background-color: rgba(0,0,0,0.7);
     background-image: linear-gradient(rgba(255,255,255,0) 0%,rgba(255,255,255,0) 75%,rgba(255,255,255,0.3)100%);
     /*border-radius: 15px;*/
     -webkit-animation: showSoftly 0.5s;
@@ -16,10 +16,11 @@
     color: white;
     display: block;
     padding: 15px 15px 15px 15px;
+    width: 100%;
 }
 
 #settingsTitle{
-    font-size: xx-large;
+    font-size: 300%;
 }
 
 #close{
@@ -32,14 +33,14 @@
 }
 
 .settingItemTitle{
-    font-size: x-large;
+    font-size: xx-large;
     border-bottom: 2px solid #FEDFE1;
 }
 
 .singleSettingItem{
     margin: 15px 0 0 0;
     padding: 5px 0 5px 0;
-    font-size: large;
+    font-size: x-large;
 }
 
 .closeSVG{
@@ -61,4 +62,29 @@
     background-color: #FEDFE1;
     color: #8E354A;
     font-weight: bold;
+}
+
+.settingItemButtonOn{
+    background-color: #FEDFE1;
+    padding: 3px 15px 3px 15px;
+    min-width: 50px;
+    margin: 0 0 0 10px;
+    color: #8E354A;
+    font-weight: bold;
+    border: 3px solid #8E354A;
+    border-radius: 5px;
+    text-align: center;
+}
+
+#previewDiv{
+    width: 100%;
+}
+
+#textPreview{
+    font-size: medium;
+    padding: 10px 10px 10px 10px;
+    margin: 10px 10px 10px 10px;
+    border: 3px solid rgba(255,255,255,1);
+    width: 95%;
+    min-height: 20vh;
 }

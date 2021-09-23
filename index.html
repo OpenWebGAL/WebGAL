@@ -11,7 +11,21 @@
 </head>
 <body>
 <script src="res/script/babel.min.js"></script>
-<div id="mainBackground"></div>
+<div id="Title">
+    <div id="TitleModel">
+        <div id="setButtonBottom">
+            <div class="TitleSingleButton" id="leftTitleButton" onclick="hideTitle()">开始游戏</div>
+            <div class="TitleSingleButton">继续游戏</div>
+            <div class="TitleSingleButton">读取存档</div>
+            <div class="TitleSingleButton" onclick="onSetting()">设置界面</div>
+            <div class="TitleSingleButton">退出游戏</div>
+        </div>
+
+    </div>
+</div>
+<div id="mainBackground">
+
+</div>
 <div id="figureImage"></div>
 <div id="settings">
     <div id="settingsMainBox">
@@ -22,6 +36,7 @@
             设置
         </div>
         <div id="settingItems"></div>
+        <div id="textPreview"></div>
     </div>
 </div>
 
