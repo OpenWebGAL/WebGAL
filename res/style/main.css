@@ -144,7 +144,7 @@
     background-repeat: no-repeat;
     background-size:cover;
     /*background-color: white;*/
-    background-image: url("/game/background/Title1.png");
+    background-image: url("game/background/Title1.png");
 }
 
 #TitleModel{
