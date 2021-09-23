@@ -20,10 +20,17 @@
         choose:'',
         currentText:0
     }
+    var onTextPreview = 0;
 }
 
 // 初始化存档系统
 var Saves=[];
+
+// 初始化设置表
+var Settings = {
+    font_size: 'medium',
+    play_speed:'medium'
+};
 
 // 读取游戏存档
 function LoadSavedGame(index) {
@@ -154,9 +161,29 @@ function getScene(url) {
 
 // 引擎加载完成
 window.onload = function (){
+    loadSettings();
     getScene("game/scene/start.txt");
     currentInfo["SceneName"] = 'start.txt';
 }
+
+function loadSettings(){
+    if(Settings["font_size"] === 'small'){
+        document.getElementById('SceneText').style.fontSize = '150%';
+    }else if(Settings["font_size"] === 'medium'){
+        document.getElementById('SceneText').style.fontSize = '200%';
+    }else if(Settings["font_size"] === 'large'){
+        document.getElementById('SceneText').style.fontSize = '250%';
+    }
+
+    if(Settings["play_speed"] === 'low'){
+        textShowWatiTime = 150;
+    } else if(Settings["play_speed"] === 'medium'){
+        textShowWatiTime = 50;
+    }else if(Settings["play_speed"] === 'fast'){
+        textShowWatiTime = 10;
+    }
+}
+
 
 // 处理脚本
 function processSentence(i){
@@ -291,25 +318,62 @@ function showTextArray(textArray,now){
     }
 }
 
+function showTextPreview(text){
+    onTextPreview = onTextPreview+1;
+    let textArray = text.split("");
+    if(Settings["font_size"] === 'small'){
+        document.getElementById('previewDiv').style.fontSize = '150%';
+    }else if(Settings["font_size"] === 'medium'){
+        document.getElementById('previewDiv').style.fontSize = '200%';
+    }else if(Settings["font_size"] === 'large'){
+        document.getElementById('previewDiv').style.fontSize = '250%';
+    }
+    ReactDOM.render(<span> </span>, document.getElementById('previewDiv'));
+    let elementArray = [];
+    let i = 0;
+    clearInterval(interval2);
+    var interval2 = setInterval(showSingle,textShowWatiTime);
+    function showSingle() {
+        if(onTextPreview>1){
+            onTextPreview = onTextPreview-1;
+            clearInterval(interval2);
+            return;
+        }
+        let tempElement = <span key={i} className='singleWord'>{textArray[i]}</span>
+        elementArray.push(tempElement);
+        ReactDOM.render(<div>{elementArray}</div>, document.getElementById('previewDiv'));
+        i = i+1;
+        if(i > textArray.length +(1000/35)){
+            clearInterval(interval2);
+            interval2 = setInterval(showSingle,textShowWatiTime);
+            i = 0;
+            elementArray = [];
+            if(Settings["font_size"] === 'small'){
+                document.getElementById('previewDiv').style.fontSize = '150%';
+            }else if(Settings["font_size"] === 'medium'){
+                document.getElementById('previewDiv').style.fontSize = '200%';
+            }else if(Settings["font_size"] === 'large'){
+                document.getElementById('previewDiv').style.fontSize = '250%';
+            }
+        }
+    }
+}
+
 // 打开设置
 function onSetting(){
     let settingInterface = <div>
         <div className="singleSettingItem">
-            <span className="settingItemTitle">字体大小</span>
-            <span className='settingItemButton'>小</span>
-            <span className='settingItemButton'>中</span>
-            <span className='settingItemButton'>大</span>
-        </div>
-        <div className="singleSettingItem">
-            <span className="settingItemTitle">文字显示速度</span>
-            <span className='settingItemButton'>慢</span>
-            <span className='settingItemButton'>中</span>
-            <span className='settingItemButton'>快</span>
+            <SettingButtons_font/>
+            <SettingButtons_speed/>
+            <br/>
+            <div className='settingItemTitle'>效果预览</div>
         </div>
     </div>
-    document.getElementById("settings").style.display = "flex"
-    document.getElementById("bottomBox").style.display = "none"
-    ReactDOM.render(settingInterface,document.getElementById("settingItems"))
+    document.getElementById("settings").style.display = "flex";
+    document.getElementById("bottomBox").style.display = "none";
+    ReactDOM.render(settingInterface,document.getElementById("settingItems"));
+    ReactDOM.render(<div id="previewDiv" />,document.getElementById('textPreview'));
+    showTextPreview('现在预览的是文本框字体大小和播放速度的情况，您可以根据您的观感调整上面的选项。');
 }
 
 // 关闭设置
@@ -381,4 +445,144 @@ function fastNext(){
         document.getElementById('fastButton').style.color = 'white';
         console.log("notFast");
     }
+}
+
+class SettingButtons_font extends React.Component{
+    constructor(props) {
+        super(props);
+        this.state = {buttonState : ['','','']}
+    }
+
+    componentDidMount() {
+        let buttonStateNow = ['','',''];
+        if(Settings['font_size'] === 'small'){
+            buttonStateNow[0] = 'On';
+        }else if (Settings['font_size'] === 'medium'){
+            buttonStateNow[1] = 'On';
+        }else if (Settings['font_size'] === 'large'){
+            buttonStateNow[2] = 'On';
+        }
+        this.setState(
+            {
+                buttonState:buttonStateNow
+            }
+        )
+    }
+
+
+    componentWillUnmount() {
+    }
+
+    changeButtonState(i){
+        if(i === 0){
+            Settings['font_size'] = 'small';
+            document.getElementById('SceneText').style.fontSize = '150%';
+        }else if(i === 1){
+            Settings["font_size"] = 'medium';
+            document.getElementById('SceneText').style.fontSize = '200%';
+        }else if(i === 2){
+            Settings["font_size"] = 'large';
+            document.getElementById('SceneText').style.fontSize = '250%';
+        }
+        let buttonStateNow = ['','',''];
+        if(Settings['font_size'] === 'small'){
+            buttonStateNow[0] = 'On';
+        }else if (Settings['font_size'] === 'medium'){
+            buttonStateNow[1] = 'On';
+        }else if (Settings['font_size'] === 'large'){
+            buttonStateNow[2] = 'On';
+        }
+        this.setState(
+            {
+                buttonState:buttonStateNow
+            }
+        )
+    }
+
+
+    render(){
+
+        return(
+            <div className="singleSettingItem">
+                <span className="settingItemTitle">字体大小</span>
+                <span className={'settingItemButton'+this.state.buttonState[0]} onClick={()=>{this.changeButtonState(0)}}>小</span>
+                <span className={'settingItemButton'+this.state.buttonState[1]} onClick={()=>{this.changeButtonState(1)}}>中</span>
+                <span className={'settingItemButton'+this.state.buttonState[2]} onClick={()=>{this.changeButtonState(2)}}>大</span>
+            </div>
+        );
+    }
+
+}
+
+class SettingButtons_speed extends React.Component{
+    constructor(props) {
+        super(props);
+        this.state = {buttonState : ['','','']}
+    }
+
+    componentDidMount() {
+        let buttonStateNow = ['','',''];
+        if(Settings['play_speed'] === 'low'){
+            buttonStateNow[0] = 'On';
+        }else if (Settings['play_speed'] === 'medium'){
+            buttonStateNow[1] = 'On';
+        }else if (Settings['play_speed'] === 'fast'){
+            buttonStateNow[2] = 'On';
+        }
+        this.setState(
+            {
+                buttonState:buttonStateNow
+            }
+        )
+    }
+
+
+    componentWillUnmount() {
+    }
+
+    changeButtonState(i){
+        if(i === 0){
+            Settings['play_speed'] = 'low';
+            textShowWatiTime = 55;
+        }else if(i === 1){
+            Settings["play_speed"] = 'medium';
+            textShowWatiTime = 35;
+        }else if(i === 2){
+            Settings["play_speed"] = 'fast';
+            textShowWatiTime = 20;
+        }
+        let buttonStateNow = ['','',''];
+        if(Settings['play_speed'] === 'low'){
+            buttonStateNow[0] = 'On';
+        }else if (Settings['play_speed'] === 'medium'){
+            buttonStateNow[1] = 'On';
+        }else if (Settings['play_speed'] === 'fast'){
+            buttonStateNow[2] = 'On';
+        }
+        this.setState(
+            {
+                buttonState:buttonStateNow
+            }
+        )
+    }
+
+
+    render(){
+
+        return(
+            <div className="singleSettingItem">
+                <span className="settingItemTitle">播放速度</span>
+                <span className={'settingItemButton'+this.state.buttonState[0]} onClick={()=>{this.changeButtonState(0)}}>慢</span>
+                <span className={'settingItemButton'+this.state.buttonState[1]} onClick={()=>{this.changeButtonState(1)}}>中</span>
+                <span className={'settingItemButton'+this.state.buttonState[2]} onClick={()=>{this.changeButtonState(2)}}>快</span>
+            </div>
+        );
+    }
+
+}
+
+function hideTitle() {
+    document.getElementById('Title').style.display = 'none';
+    getScene("game/scene/start.txt");
+    currentInfo["SceneName"] = 'start.txt';
 }

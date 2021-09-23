@@ -29,7 +29,7 @@
 #SceneText{
     padding: 15px 0 0 0;
     color: white;
-    font-size: xx-large;
+    font-size: 200%;
 }
 #pName{
     color: white;
@@ -134,4 +134,50 @@
 .singleChoose:hover{
     background-color: rgba(255,255,255,1);
     font-weight: bold;
+}
+
+#Title{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    z-index: 11;
+    background-repeat: no-repeat;
+    background-size:cover;
+    /*background-color: white;*/
+    background-image: url("/game/background/Title1.png");
+}
+
+#TitleModel{
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 15%;
+    background-color: rgba(0,0,0,0.7);
+    /*background-image: linear-gradient(rgba(255,255,255,1) 0%,rgba(255,255,255,0) 30%,rgba(255,255,255,0)100%);*/
+    z-index: 12;
+}
+
+.TitleSingleButton{
+    padding: 10px 10px 10px 10px;
+    border-right: 2px solid #FEDFE1;
+    color: white;
+    width: 50%;
+    text-align: center;
+}
+
+.TitleSingleButton:hover{
+    background-color: rgba(255,255,255,0.2);
+}
+
+#leftTitleButton{
+    border-left: 2px solid #FEDFE1;
+}
+
+#setButtonBottom{
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    top: 15px;
+    width: 100%;
+    font-size: xx-large;
 }
