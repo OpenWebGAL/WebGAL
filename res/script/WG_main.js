@@ -216,8 +216,9 @@ function nextSentenceProcessor() {
     }
     else if(command === 'changeScene'){
         let sUrl = "game/scene/"+thisSentence[1];
-        currentInfo["SceneName"] = thisSentence[1];
+        let SceneName =  thisSentence[1];
         getScene(sUrl);
+        currentInfo["SceneName"] =SceneName;
         return;
     }
     else if(command === 'choose'){
