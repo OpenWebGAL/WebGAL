@@ -195,8 +195,6 @@ window.onload = function (){
     currentInfo["SceneName"] = 'start.txt';
 }
 
-
-
 function loadSettings(){
     if(Settings["font_size"] === 'small'){
         document.getElementById('SceneText').style.fontSize = '150%';
@@ -214,7 +212,6 @@ function loadSettings(){
         textShowWatiTime = 10;
     }
 }
-
 
 // 处理脚本
 function processSentence(i){
