@@ -27,6 +27,11 @@
     margin: 0 5px 5px 5px;
 }
 
+#loadMainBox{
+    height: 100%;
+
+}
+
 #LoadIndex{
     padding: 5px 5px 15px 5px;
     width: 98%;
@@ -34,9 +39,12 @@
 }
 
 #LoadItems{
+    padding: 10px 10px 10px 10px;
+    height: 75%;
     display: flex;
     justify-items: center;
     justify-content: center;
+
 }
 
 .LoadIndexButton:hover{
@@ -59,33 +67,39 @@
 
 #LoadMain{
     width: 100%;
+    height: 90%;
+
 }
 
 .LoadSingleElement{
     width: 90%;
-    height: 10vh;
+    height: 7vh;
     color: white;
     text-align: center;
     font-size: xx-large;
     padding: 10px 10px 10px 10px;
     border: 2px solid #FEDFE1;
-    margin: 5px 5% 5px 3%;
+    margin: 10px 5% 10px 3%;
     overflow: hidden;
+    background-color: rgba(255,255,255,0.15);
 }
 
 #LoadButtonList{
+    height: 100%;
+    overflow: scroll;
+    overflow-scrolling: auto;
 }
+
+::-webkit-scrollbar {display:none}
 
 .LoadSingleElement:hover{
     background-color: #FEDFE1;
     width: 90%;
-    height: 10vh;
     color: #8E354A;
     text-align: center;
     font-size: xx-large;
     padding: 10px 10px 10px 10px;
     border: 2px solid #8E354A;
-    margin: 5px 5% 5px 3%;
 }
 
 .LSE_top{
