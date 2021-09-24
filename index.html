@@ -16,7 +16,7 @@
         <div id="setButtonBottom">
             <div class="TitleSingleButton" id="leftTitleButton" onclick="hideTitle()">开始游戏</div>
             <div class="TitleSingleButton">继续游戏</div>
-            <div class="TitleSingleButton">读取存档</div>
+            <div class="TitleSingleButton" onclick="onLoadGame()">读取存档</div>
             <div class="TitleSingleButton" onclick="onSetting()">设置界面</div>
             <div class="TitleSingleButton">退出游戏</div>
         </div>
@@ -40,17 +40,19 @@
     </div>
 </div>
 
-<!--<div id="Load">-->
-<!--    <div id="loadMainBox">-->
-<!--        <div id="closeLoad" onclick="closeLoad()">-->
-<!--            <img src="res/img/close.svg" class="closeSVG" alt="close">-->
-<!--        </div>-->
-<!--        <div id="LoadTitle">-->
-<!--            读档-->
-<!--        </div>-->
-<!--        <div id="LoadItems"></div>-->
-<!--    </div>-->
-<!--</div>-->
+<div id="Load">
+    <div id="loadMainBox">
+        <div id="closeLoad" onclick="closeLoad()">
+            <img src="res/img/close.svg" class="closeSVG" alt="close">
+        </div>
+        <div id="LoadTitle">
+            读档
+        </div>
+        <div id="LoadItems">
+
+        </div>
+    </div>
+</div>
 
 <div id="chooseBox">
 

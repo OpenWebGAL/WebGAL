@@ -26,14 +26,40 @@
 // 初始化存档系统
 var Saves=[];
 
+//初始化需要记录到cookie的变量
+var currentSavePage = 0;
+var currentLoadPage = 0;
+
 // 初始化设置表
 var Settings = {
     font_size: 'medium',
     play_speed:'medium'
 };
 
+function loadCookie(){
+    if(document.cookie){
+        let data = JSON.parse(document.cookie)
+        Saves = data.SavedGame;
+        currentSavePage = data.SP;
+        currentLoadPage  = data.LP;
+        Settings = data.cSettings;
+    }
+}
+
+function writeCookie(){
+    let toCookie = {
+        SavedGame:Saves,
+        SP:currentSavePage,
+        LP:currentLoadPage,
+        cSettings:Settings
+    }
+    document.cookie = JSON.stringify(toCookie);
+}
+
 // 读取游戏存档
 function LoadSavedGame(index) {
+    closeLoad();
+    hideTitle();
     let save = Saves[index];
     //get Scene:
     let url = '/game/scene/'
@@ -119,6 +145,7 @@ function LoadSavedGame(index) {
 function saveGame(index){
     let tempInfo = JSON.stringify(currentInfo);
     Saves[index] = JSON.parse(tempInfo);
+    writeCookie();
 }
 
 // 获取场景脚本
@@ -161,11 +188,14 @@ function getScene(url) {
 
 // 引擎加载完成
 window.onload = function (){
+    loadCookie();
     loadSettings();
     document.getElementById('Title').style.backgroundImage = 'url("game/background/Title1.png")';
-    getScene("game/scene/start.txt");
+    getScene("/game/scene/start.txt");
     currentInfo["SceneName"] = 'start.txt';
 }
+
+
 
 function loadSettings(){
     if(Settings["font_size"] === 'small'){
@@ -362,6 +392,7 @@ function showTextPreview(text){
 
 // 打开设置
 function onSetting(){
+    loadCookie();
     let settingInterface = <div>
         <div className="singleSettingItem">
             <SettingButtons_font/>
@@ -493,6 +524,7 @@ class SettingButtons_font extends React.Component{
         }else if (Settings['font_size'] === 'large'){
             buttonStateNow[2] = 'On';
         }
+        writeCookie();
         this.setState(
             {
                 buttonState:buttonStateNow
@@ -560,6 +592,7 @@ class SettingButtons_speed extends React.Component{
         }else if (Settings['play_speed'] === 'fast'){
             buttonStateNow[2] = 'On';
         }
+        writeCookie();
         this.setState(
             {
                 buttonState:buttonStateNow
@@ -586,4 +619,94 @@ function hideTitle() {
     document.getElementById('Title').style.display = 'none';
     getScene("game/scene/start.txt");
     currentInfo["SceneName"] = 'start.txt';
+}
+
+function onLoadGame() {
+    loadCookie();
+    document.getElementById('Load').style.display = 'block';
+    ReactDOM.render(<LoadMainModel PageQty={5}/>,document.getElementById('LoadItems'))
+}
+
+function closeLoad() {
+    document.getElementById('Load').style.display = 'none';
+}
+
+class LoadMainModel extends  React.Component{
+    Buttons = [];
+    SaveButtons = [];
+    LoadPageQty = 0;
+    setCurrentPage(page){
+        currentSavePage = page;
+        this.setState({
+            currentPage:currentSavePage
+        })
+    }
+
+    loadButtons(){
+        this.Buttons = [];
+        for (let i = 0; i < this.LoadPageQty; i++) {
+            let temp =<span className="LoadIndexButton" onClick={()=>{this.setCurrentPage(i)}} key={i}>{i+1}</span>
+            if(i === currentSavePage)
+                temp =<span className="LoadIndexButtonOn" onClick={()=>{this.setCurrentPage(i)}} key={i}>{i+1}</span>
+            this.Buttons.push(temp);
+        }
+    }
+
+    loadSaveButtons(){
+        this.SaveButtons = [];
+        for (let i = currentSavePage*5+1; i <= currentSavePage*5+5; i++) {
+            if(Saves[i]){
+                let thisButtonName = Saves[i]["showName"];
+                let thisButtonText = Saves[i]["showText"];
+                let temp = <div className="LoadSingleElement" key={i} onClick={()=>{LoadSavedGame(i)}}>
+                    <div className="LSE_top">
+                        <span className={"LSE_index"}>{i}</span>
+                        <span className={"LSE_name"}>{thisButtonName}</span>
+                    </div>
+                    <div className="LSE_bottom">
+                        {thisButtonText}
+                    </div>
+                </div>
+                this.SaveButtons.push(temp);
+            }else
+            {
+                let temp = <div className="LoadSingleElement" key={i}>空</div>
+                this.SaveButtons.push(temp);
+                console.log(i)
+            }
+
+        }
+    }
+
+    constructor(props) {
+        super(props);
+        this.LoadPageQty = props.PageQty;
+        this.state = {
+            currentPage:currentSavePage
+        }
+        this.loadButtons();
+    }
+
+    componentDidMount() {
+    }
+
+
+    componentWillUnmount() {
+    }
+
+    render(){
+        this.loadButtons();
+        this.loadSaveButtons();
+        return(
+            <div id="LoadMain">
+                <div id="LoadIndex">
+                    {this.Buttons}
+                </div>
+                <div id="LoadButtonList">
+                    {this.SaveButtons}
+                </div>
+            </div>
+
+        );
+    }
 }

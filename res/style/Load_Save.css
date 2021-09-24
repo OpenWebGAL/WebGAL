@@ -5,9 +5,101 @@
     left: 15px;
     right: 15px;
     display: none;
-    z-index: 5;
+    z-index: 14;
     background-color: rgba(0,0,0,0.5);
     background-image: linear-gradient(rgba(255,255,255,0) 0%,rgba(255,255,255,0) 75%,rgba(255,255,255,0.3)100%);
     /*border-radius: 15px;*/
     -webkit-animation: showSoftly 0.5s;
+}
+
+#LoadTitle{
+    color: white;
+    font-size: 250%;
+    padding: 5px 10px 10px 10px ;
+}
+
+.LoadIndexButton{
+    border: 2px solid #FEDFE1;
+    border-radius: 5px ;
+    font-size: large;
+    color:white;
+    padding: 5px 20px 5px 20px;
+    margin: 0 5px 5px 5px;
+}
+
+#LoadIndex{
+    padding: 5px 5px 15px 5px;
+    width: 98%;
+    border-bottom: 2px solid #FEDFE1;
+}
+
+#LoadItems{
+    display: flex;
+    justify-items: center;
+    justify-content: center;
+}
+
+.LoadIndexButton:hover{
+    font-weight: bold;
+    background-color: rgba(255,255,255,0.5);
+    color: #8E354A;
+    background-color: #FEDFE1;
+}
+
+.LoadIndexButtonOn{
+    border: 2px solid #8E354A;
+    border-radius: 5px ;
+    font-size: large;
+    color:#8E354A;
+    padding: 5px 20px 5px 20px;
+    margin: 0 5px 5px 5px;
+    background-color: #FEDFE1;
+    font-weight: bold;
+}
+
+#LoadMain{
+    width: 100%;
+}
+
+.LoadSingleElement{
+    width: 90%;
+    height: 10vh;
+    color: white;
+    text-align: center;
+    font-size: xx-large;
+    padding: 10px 10px 10px 10px;
+    border: 2px solid #FEDFE1;
+    margin: 5px 5% 5px 3%;
+    overflow: hidden;
+}
+
+#LoadButtonList{
+}
+
+.LoadSingleElement:hover{
+    background-color: #FEDFE1;
+    width: 90%;
+    height: 10vh;
+    color: #8E354A;
+    text-align: center;
+    font-size: xx-large;
+    padding: 10px 10px 10px 10px;
+    border: 2px solid #8E354A;
+    margin: 5px 5% 5px 3%;
+}
+
+.LSE_top{
+    font-size: 75%;
+    text-align: left;
+}
+
+.LSE_index{
+    border-right: 2px solid #FEDFE1;
+    margin: 0 5px 0 0;
+}
+.LSE_bottom{
+    text-align: left;
+    font-size: 60%;
+    overflow: hidden;
+    padding: 0 0 10px 0;
 }
