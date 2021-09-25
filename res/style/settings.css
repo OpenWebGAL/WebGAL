@@ -88,3 +88,11 @@
     width: 95%;
     min-height: 20vh;
 }
+
+.deleteCookie{
+    width: auto;
+ }
+
+.deleteCookie:hover{
+    color: #8E354A;
+}
