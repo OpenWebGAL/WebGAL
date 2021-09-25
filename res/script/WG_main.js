@@ -62,7 +62,7 @@ function LoadSavedGame(index) {
     hideTitle();
     let save = Saves[index];
     //get Scene:
-    let url = '/game/scene/'
+    let url = 'game/scene/'
     url = url + save['SceneName'];
     currentScene ='';
     currentText = 0;
