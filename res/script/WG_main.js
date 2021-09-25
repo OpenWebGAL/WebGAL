@@ -394,6 +394,7 @@ function onSetting(){
         <div className="singleSettingItem">
             <SettingButtons_font/>
             <SettingButtons_speed/>
+            <div className={"deleteCookie"}>清除所有设置选项以及存档</div>
             <br/>
             <div className='settingItemTitle'>效果预览</div>
         </div>
