@@ -89,15 +89,15 @@ function LoadSavedGame(index) {
                     currentScene[i][0] = command;
                     currentScene[i][1] = content;
                 }
-                console.log('Read scene complete.');
+                // console.log('Read scene complete.');
                 // console.log(currentScene);
                 currentSentence = save["SentenceID"];
                 currentText = save["SentenceID"];
-                console.log("start:"+currentSentence)
+                // console.log("start:"+currentSentence)
 
                 //load saved scene:
                 let command = save["command"];
-                console.log('readSaves:'+command)
+                // console.log('readSaves:'+command)
                 document.getElementById('mainBackground').style.backgroundImage = "url('game/background/" + save["bg_Name"] + "')";
                 if (save["fig_Name"] === 'none'){
                     ReactDOM.render(<div/>,document.getElementById('figureImage'));
@@ -175,10 +175,10 @@ function getScene(url) {
                     currentScene[i][0] = command;
                     currentScene[i][1] = content;
                 }
-                console.log('Read scene complete.');
+                // console.log('Read scene complete.');
                 // console.log(currentScene);
                 currentSentence = 0;
-                console.log("start:"+currentSentence)
+                // console.log("start:"+currentSentence)
                 nextSentenceProcessor();
             }
         }
@@ -227,7 +227,7 @@ function nextSentenceProcessor() {
     }
     let thisSentence = currentScene[currentSentence];
     let command = thisSentence[0];
-    console.log(command)
+    // console.log(command)
     if (command === 'changeBG') {
         // console.log('Now change background to ' + "url('/game/background/" + thisSentence[1] + "')");
         document.getElementById('mainBackground').style.backgroundImage = "url('game/background/" + thisSentence[1] + "')";
@@ -330,7 +330,7 @@ function showTextArray(textArray,now){
     let i = 0;
     clearInterval(interval);
     var interval = setInterval(showSingle,textShowWatiTime);
-    console.log("now: "+now+" currentText: "+currentText)
+    // console.log("now: "+now+" currentText: "+currentText)
     function showSingle() {
         let tempElement = <span key={i} className='singleWord'>{textArray[i]}</span>
         elementArray.push(tempElement);
@@ -413,7 +413,7 @@ function closeSettings(){
 
 // 分支选择
 function chooseScene(url){
-    console.log(url);
+    // console.log(url);
     currentInfo["SceneName"] = url;
     let sUrl = "game/scene/"+url;
     getScene(sUrl);
@@ -429,10 +429,10 @@ function autoNext(){
         auto = 0;
         document.getElementById('fastButton').style.backgroundColor = 'rgba(255,255,255,0)';
         document.getElementById('fastButton').style.color = 'white';
-        console.log("notFast");
+        // console.log("notFast");
         autoWaitTime = setAutoWaitTime;
         auto = 1;
-        console.log("auto");
+        // console.log("auto");
         document.getElementById('autoButton').style.backgroundColor = 'rgba(255,255,255,0.8)';
         document.getElementById('autoButton').style.color = '#8E354A';
         nextSentenceProcessor();
@@ -443,7 +443,7 @@ function autoNext(){
         auto = 0;
         document.getElementById('autoButton').style.backgroundColor = 'rgba(255,255,255,0)';
         document.getElementById('autoButton').style.color = 'white';
-        console.log("notAuto");
+        // console.log("notAuto");
     }
 }
 
@@ -454,12 +454,12 @@ function fastNext(){
         auto = 0;
         document.getElementById('autoButton').style.backgroundColor = 'rgba(255,255,255,0)';
         document.getElementById('autoButton').style.color = 'white';
-        console.log("notAuto");
+        // console.log("notAuto");
         autoWaitTime = 500;
         textShowWatiTime = 5;
         fast = 1;
         auto = 1;
-        console.log("fast");
+        // console.log("fast");
         document.getElementById('fastButton').style.backgroundColor = 'rgba(255,255,255,0.8)';
         document.getElementById('fastButton').style.color = '#8E354A';
         nextSentenceProcessor();
@@ -472,7 +472,7 @@ function fastNext(){
         auto = 0;
         document.getElementById('fastButton').style.backgroundColor = 'rgba(255,255,255,0)';
         document.getElementById('fastButton').style.color = 'white';
-        console.log("notFast");
+        // console.log("notFast");
     }
 }
 
@@ -633,17 +633,18 @@ class LoadMainModel extends  React.Component{
     SaveButtons = [];
     LoadPageQty = 0;
     setCurrentPage(page){
-        currentSavePage = page;
+        currentLoadPage = page;
         this.setState({
-            currentPage:currentSavePage
+            currentPage:currentLoadPage
         })
+        writeCookie();
     }
 
     loadButtons(){
         this.Buttons = [];
         for (let i = 0; i < this.LoadPageQty; i++) {
             let temp =<span className="LoadIndexButton" onClick={()=>{this.setCurrentPage(i)}} key={i}>{i+1}</span>
-            if(i === currentSavePage)
+            if(i === currentLoadPage)
                 temp =<span className="LoadIndexButtonOn" onClick={()=>{this.setCurrentPage(i)}} key={i}>{i+1}</span>
             this.Buttons.push(temp);
         }
@@ -651,7 +652,7 @@ class LoadMainModel extends  React.Component{
 
     loadSaveButtons(){
         this.SaveButtons = [];
-        for (let i = currentSavePage*5+1; i <= currentSavePage*5+5; i++) {
+        for (let i = currentLoadPage*5+1; i <= currentLoadPage*5+5; i++) {
             if(Saves[i]){
                 let thisButtonName = Saves[i]["showName"];
                 let thisButtonText = Saves[i]["showText"];
@@ -669,7 +670,7 @@ class LoadMainModel extends  React.Component{
             {
                 let temp = <div className="LoadSingleElement" key={i}>空</div>
                 this.SaveButtons.push(temp);
-                console.log(i)
+                // console.log(i)
             }
 
         }
@@ -679,7 +680,7 @@ class LoadMainModel extends  React.Component{
         super(props);
         this.LoadPageQty = props.PageQty;
         this.state = {
-            currentPage:currentSavePage
+            currentPage:currentLoadPage
         }
         this.loadButtons();
     }
@@ -727,6 +728,7 @@ class SaveMainModel extends  React.Component{
         this.setState({
             currentPage:currentSavePage
         })
+        writeCookie();
     }
 
     loadButtons(){
@@ -759,7 +761,7 @@ class SaveMainModel extends  React.Component{
             {
                 let temp = <div className="SaveSingleElement" key={i} onClick={()=>{this.save_NonSaved(i)}}>空</div>
                 this.SaveButtons.push(temp);
-                console.log(i)
+                // console.log(i)
             }
 
         }
@@ -807,5 +809,16 @@ class SaveMainModel extends  React.Component{
             </div>
 
         );
+    }
+}
+
+class ChooseModel extends React.Component{
+    constructor(props) {
+        super(props);
+        this.state = {
+            Title:props.Title,
+            LeftChoose:props.LeftChoose,
+            RightChoose:props.RightChoose
+        }
     }
 }
