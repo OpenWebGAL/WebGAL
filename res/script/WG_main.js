@@ -707,3 +707,105 @@ class LoadMainModel extends  React.Component{
         );
     }
 }
+
+function onSaveGame() {
+    loadCookie();
+    document.getElementById('Save').style.display = 'block';
+    ReactDOM.render(<SaveMainModel PageQty={5}/>,document.getElementById('SaveItems'))
+}
+
+function closeSave() {
+    document.getElementById('Save').style.display = 'none';
+}
+
+class SaveMainModel extends  React.Component{
+    Buttons = [];
+    SaveButtons = [];
+    LoadPageQty = 0;
+    setCurrentPage(page){
+        currentSavePage = page;
+        this.setState({
+            currentPage:currentSavePage
+        })
+    }
+
+    loadButtons(){
+        this.Buttons = [];
+        for (let i = 0; i < this.LoadPageQty; i++) {
+            let temp =<span className="SaveIndexButton" onClick={()=>{this.setCurrentPage(i)}} key={i}>{i+1}</span>
+            if(i === currentSavePage)
+                temp =<span className="SaveIndexButtonOn" onClick={()=>{this.setCurrentPage(i)}} key={i}>{i+1}</span>
+            this.Buttons.push(temp);
+        }
+    }
+
+    loadSaveButtons(){
+        this.SaveButtons = [];
+        for (let i = currentSavePage*5+1; i <= currentSavePage*5+5; i++) {
+            if(Saves[i]){
+                let thisButtonName = Saves[i]["showName"];
+                let thisButtonText = Saves[i]["showText"];
+                let temp = <div className="SaveSingleElement" key={i} onClick={()=>{this.save_onSaved(i)}}>
+                    <div className="SSE_top">
+                        <span className={"SSE_index"}>{i}</span>
+                        <span className={"SSE_name"}>{thisButtonName}</span>
+                    </div>
+                    <div className="SSE_bottom">
+                        {thisButtonText}
+                    </div>
+                </div>
+                this.SaveButtons.push(temp);
+            }else
+            {
+                let temp = <div className="SaveSingleElement" key={i} onClick={()=>{this.save_NonSaved(i)}}>空</div>
+                this.SaveButtons.push(temp);
+                console.log(i)
+            }
+
+        }
+    }
+
+    save_NonSaved(index){
+        saveGame(index);
+        writeCookie();
+        closeSave();
+    }
+
+    save_onSaved(index){
+        saveGame(index);
+        writeCookie();
+        closeSave();
+    }
+
+    constructor(props) {
+        super(props);
+        this.LoadPageQty = props.PageQty;
+        this.state = {
+            currentPage:currentSavePage
+        }
+        this.loadButtons();
+    }
+
+    componentDidMount() {
+    }
+
+
+    componentWillUnmount() {
+    }
+
+    render(){
+        this.loadButtons();
+        this.loadSaveButtons();
+        return(
+            <div id="SaveMain">
+                <div id="SaveIndex">
+                    {this.Buttons}
+                </div>
+                <div id="SaveButtonList">
+                    {this.SaveButtons}
+                </div>
+            </div>
+
+        );
+    }
+}
