@@ -1,7 +1,2 @@
-changeBG_next:testBG03.png;
-比企谷八幡:现在开始测试文字渐变显示的效果;
-changeP_next:testFigure02.png;
-雪之下雪乃:文字的渐变显示是Galgame游戏引擎的重要功能;
-雪之下雪乃:良好的显示效果能够使玩家在游玩时感到赏心悦目，与此相对的，如果渐变显示过于僵硬、或是喧宾夺主，都会大幅降低游戏体验;
-changeP_next:none;
-changeScene:C2.txt;
+WebGAL:这是一个循环测试界面，如果你想要跳转到正式的Demo，请选择第二个选项。
+choose:{继续循环测试:circletest.txt,进入Demo:C1.txt}

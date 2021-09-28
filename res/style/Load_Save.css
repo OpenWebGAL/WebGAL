@@ -1,13 +1,14 @@
+
 #Load{
     position: absolute;
-    top: 15px;
-    bottom: 15px;
-    left: 15px;
-    right: 15px;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
     display: none;
     z-index: 14;
-    background-color: rgba(0,0,0,0.5);
-    background-image: linear-gradient(rgba(255,255,255,0) 0%,rgba(255,255,255,0) 75%,rgba(255,255,255,0.3)100%);
+    background-color: rgb(0,0,0);
+    /*background-image: linear-gradient(rgba(255,255,255,0) 0%,rgba(255,255,255,0) 75%,rgba(255,255,255,0.3)100%);*/
     /*border-radius: 15px;*/
     -webkit-animation: showSoftly 0.5s;
 }
@@ -72,15 +73,22 @@
 }
 
 .LoadSingleElement{
+    overflow: hidden;
+    margin: 10px 5% 10px 3%;
     width: 90%;
-    height: 7vh;
-    color: white;
+    height: 9vh;
+    background-color: white;
+    color: #8E354A;
     text-align: center;
     font-size: xx-large;
-    padding: 10px 10px 10px 10px;
+    padding: 5px 5px 5px 10px;
+    border: 2px solid #8E354A;
+
+
+}
+.LoadSingleElement:hover{
+    color: white;
     border: 2px solid #FEDFE1;
-    margin: 10px 5% 10px 3%;
-    overflow: hidden;
     background-color: rgba(255,255,255,0.15);
 }
 
@@ -92,27 +100,24 @@
 
 ::-webkit-scrollbar {display:none}
 
-.LoadSingleElement:hover{
-    background-color: #FEDFE1;
-    width: 90%;
-    color: #8E354A;
-    text-align: center;
-    font-size: xx-large;
-    padding: 10px 10px 10px 10px;
-    border: 2px solid #8E354A;
-}
-
 .LSE_top{
+    padding: 0 0 0 5px;
+    border-bottom: 2px solid rgba(0,0,0,0.2);
     font-size: 75%;
     text-align: left;
+    width: 15%
 }
 
 .LSE_index{
-    padding: 0 5px 0 5px;
-    border-right: 2px solid #FEDFE1;
+    display: none;
+    padding: 0 15px 0 15px;
+    border: 2px solid #8E354A;
     margin: 0 5px 0 0;
+    border-radius: 5px;
+
 }
 .LSE_bottom{
+    margin: 7px 0 0 0;
     text-align: left;
     font-size: 60%;
     overflow: hidden;

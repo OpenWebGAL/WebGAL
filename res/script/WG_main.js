@@ -56,10 +56,23 @@ function writeCookie(){
     document.cookie = JSON.stringify(toCookie);
 }
 
+function clearCookie(){
+    let toCookie = {
+        SavedGame:[],
+        SP:0,
+        LP:0,
+        cSettings:{
+            font_size: 'medium',
+            play_speed:'medium'
+        }
+    }
+    document.cookie = JSON.stringify(toCookie);
+}
+
 // 读取游戏存档
 function LoadSavedGame(index) {
     closeLoad();
-    hideTitle();
+    hideTitle('non-restart');
     let save = Saves[index];
     //get Scene:
     let url = 'game/scene/'
@@ -98,8 +111,9 @@ function LoadSavedGame(index) {
                 //load saved scene:
                 let command = save["command"];
                 // console.log('readSaves:'+command)
-                document.getElementById('mainBackground').style.backgroundImage = "url('game/background/" + save["bg_Name"] + "')";
-                if (save["fig_Name"] === 'none'){
+                if(save["bg_Name"]!=='')
+                    document.getElementById('mainBackground').style.backgroundImage = "url('game/background/" + save["bg_Name"] + "')";
+                if (save["fig_Name"] === ''){
                     ReactDOM.render(<div/>,document.getElementById('figureImage'));
                 }else{
                     let pUrl = "game/figure/"+save["fig_Name"];
@@ -155,7 +169,7 @@ function getScene(url) {
 
     let getScReq = null;
     getScReq = new XMLHttpRequest();
-
+    console.log('now read scene')
     if (getScReq != null) {
         getScReq.open("get",url , true);
         getScReq.send();
@@ -190,9 +204,7 @@ function getScene(url) {
 window.onload = function (){
     loadCookie();
     loadSettings();
-    document.getElementById('Title').style.backgroundImage = 'url("game/background/Title1.png")';
-    getScene("/game/scene/start.txt");
-    currentInfo["SceneName"] = 'start.txt';
+    document.getElementById('Title').style.backgroundImage = 'url("game/background/Title4.png")';
 }
 
 function loadSettings(){
@@ -394,7 +406,7 @@ function onSetting(){
         <div className="singleSettingItem">
             <SettingButtons_font/>
             <SettingButtons_speed/>
-            <div className={"deleteCookie"}>清除所有设置选项以及存档</div>
+            <div className={"deleteCookie"} onClick={()=>{showMesModel('你确定要清除缓存吗','要','不要',clearCookie)}}>清除所有设置选项以及存档</div>
             <br/>
             <div className='settingItemTitle'>效果预览</div>
         </div>
@@ -613,10 +625,12 @@ class SettingButtons_speed extends React.Component{
 
 }
 
-function hideTitle() {
+function hideTitle(ifRes) {
     document.getElementById('Title').style.display = 'none';
-    getScene("game/scene/start.txt");
-    currentInfo["SceneName"] = 'start.txt';
+    if(ifRes !== 'non-restart'){
+        getScene("game/scene/start.txt");
+        currentInfo["SceneName"] = 'start.txt';
+    }
 }
 
 function onLoadGame() {
@@ -771,13 +785,20 @@ class SaveMainModel extends  React.Component{
     save_NonSaved(index){
         saveGame(index);
         writeCookie();
-        closeSave();
+        this.setState({
+            currentPage:currentSavePage
+        });
     }
 
     save_onSaved(index){
-        saveGame(index);
-        writeCookie();
-        closeSave();
+        showMesModel('你要覆盖这个存档吗','覆盖','不',function () {
+            saveGame(index);
+            writeCookie();
+            closeSave();
+        })
+        this.setState({
+            currentPage:currentSavePage
+        });
     }
 
     constructor(props) {
@@ -813,13 +834,15 @@ class SaveMainModel extends  React.Component{
     }
 }
 
-class ChooseModel extends React.Component{
-    constructor(props) {
-        super(props);
-        this.state = {
-            Title:props.Title,
-            LeftChoose:props.LeftChoose,
-            RightChoose:props.RightChoose
-        }
-    }
+function showMesModel(Title,Left,Right,func) {
+    document.getElementById('MesModel').style.display='block';
+    let element =
+        <div className={'MesMainWindow'}>
+            <div className={"MesTitle"}>{Title}</div>
+            <div className={'MesChooseContainer'}>
+                <div className={'MesChoose'} onClick={()=>{func();document.getElementById('MesModel').style.display='none';}}>{Left}</div>
+                <div className={'MesChoose'} onClick={()=>{document.getElementById('MesModel').style.display='none';}}>{Right}</div>
+            </div>
+    </div>
+    ReactDOM.render(element,document.getElementById('MesModel'))
 }
