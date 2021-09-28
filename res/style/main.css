@@ -124,13 +124,13 @@
 .singleChoose{
     background-color: #FEDFE1;
     color: #8E354A;
-    padding: 10px 15px 10px 15px;
-    width: 40vw;
+    padding: 20px 15px 20px 15px;
+    width: 30vw;
     margin: 10px 0 10px 0;
     border: 2px solid #8E354A;
     text-align: center;
     border-radius: 15px;
-    font-size: x-large;
+    font-size: xx-large;
 }
 
 .singleChoose:hover{
