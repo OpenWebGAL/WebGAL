@@ -38,7 +38,10 @@ var Settings = {
 
 function loadCookie(){
     if(document.cookie){
-        let data = JSON.parse(document.cookie)
+        // let pre_process = document.cookie;
+        // let fst = pre_process.split(';')[0];
+        // let scd = document.cookie.slice(fst.length+1);
+        let data = JSON.parse(document.cookie);
         Saves = data.SavedGame;
         currentSavePage = data.SP;
         currentLoadPage  = data.LP;
@@ -47,13 +50,16 @@ function loadCookie(){
 }
 
 function writeCookie(){
+    var expire = new Date((new Date()).getTime() + 20000 * 24 * 60 * 60000);//有效期20000天
+    expire = ";expires=" + expire.toGMTString();
     let toCookie = {
         SavedGame:Saves,
         SP:currentSavePage,
         LP:currentLoadPage,
         cSettings:Settings
     }
-    document.cookie = JSON.stringify(toCookie);
+    console.log(JSON.stringify(toCookie)+expire);
+    document.cookie = JSON.stringify(toCookie)+expire;
 }
 
 function clearCookie(){
