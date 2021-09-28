@@ -1,26 +1,28 @@
 #settings{
     position: absolute;
-    top: 15px;
-    bottom: 15px;
-    left: 15px;
-    right: 15px;
+    top: 20px;
+    bottom: 20px;
+    left: 45px;
+    right: 45px;
     display: none;
     z-index: 15;
-    background-color: rgba(0,0,0,0.7);
+    background-color: rgba(255,255,255,0.95);
     background-image: linear-gradient(rgba(255,255,255,0) 0%,rgba(255,255,255,0) 75%,rgba(255,255,255,0.3)100%);
     /*border-radius: 15px;*/
     -webkit-animation: showSoftly 0.5s;
+    padding: 30px 30px 30px 30px;
+    box-shadow: 5px 5px 15px rgba(0,0,0,0.5);
 }
 
 #settingsMainBox{
-    color: white;
+    color: #8E354A;
     display: block;
     padding: 15px 15px 15px 15px;
     width: 100%;
 }
 
 #settingsTitle{
-    font-size: 300%;
+    font-size: 250%;
 }
 
 #close{
@@ -34,7 +36,7 @@
 
 .settingItemTitle{
     font-size: xx-large;
-    border-bottom: 2px solid #FEDFE1;
+    border-bottom: 2px solid #8E354A;
 }
 
 .singleSettingItem{
@@ -52,27 +54,28 @@
     padding: 3px 15px 3px 15px;
     min-width: 50px;
     margin: 0 0 0 10px;
-    color: white;
-    border: 2px solid #FEDFE1;
-    border-radius: 5px;
+    color: rgba(0,0,0,0.7);
+    /*border-bottom: 2px solid #FEDFE1;*/
+    /*border-radius: 5px;*/
     text-align: center;
 }
 
 .settingItemButton:hover{
-    background-color: #FEDFE1;
+    /*background-color: rgba(0,0,0,0.1);*/
     color: #8E354A;
     font-weight: bold;
+    border-bottom: 2px solid #8E354A;
 }
 
 .settingItemButtonOn{
-    background-color: #FEDFE1;
+    background-color: rgba(219,77,109,0.05);
     padding: 3px 15px 3px 15px;
     min-width: 50px;
     margin: 0 0 0 10px;
     color: #8E354A;
     font-weight: bold;
-    border: 3px solid #8E354A;
-    border-radius: 5px;
+    border-bottom: 2px solid #8E354A;
+    /*border-radius: 5px;*/
     text-align: center;
 }
 
@@ -81,6 +84,8 @@
 }
 
 #textPreview{
+    color: white;
+    background-color: rgba(0,0,0,0.4);
     font-size: medium;
     padding: 10px 10px 10px 10px;
     margin: 10px 10px 10px 10px;
@@ -90,9 +95,11 @@
 }
 
 .deleteCookie{
+    margin: 15px 0 15px 0;
     width: auto;
  }
 
 .deleteCookie:hover{
-    color: #8E354A;
+    color: rgba(0,0,0,0.8);
+    background-color: rgba(0,0,0,0.1);
 }

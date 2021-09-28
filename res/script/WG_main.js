@@ -204,7 +204,7 @@ function getScene(url) {
 window.onload = function (){
     loadCookie();
     loadSettings();
-    document.getElementById('Title').style.backgroundImage = 'url("game/background/Title4.png")';
+    document.getElementById('Title').style.backgroundImage = 'url("./game/background/Title.png")';
 }
 
 function loadSettings(){
@@ -845,4 +845,20 @@ function showMesModel(Title,Left,Right,func) {
             </div>
     </div>
     ReactDOM.render(element,document.getElementById('MesModel'))
+}
+
+function exit(){
+    showMesModel('你确定要退出吗','退出','留在本页',function (){window.close()})
+}
+
+function Title() {
+    showMesModel('要返回到标题界面吗','是','不要',function (){document.getElementById('Title').style.display = 'block';})
+}
+
+function continueGame(){
+    if(currentScene === ''){
+        getScene("game/scene/start.txt");
+        currentInfo["SceneName"] = 'start.txt';
+    }
+    document.getElementById('Title').style.display = 'none';
 }

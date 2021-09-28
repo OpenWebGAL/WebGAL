@@ -16,10 +16,10 @@
     <div id="TitleModel">
         <div id="setButtonBottom">
             <div class="TitleSingleButton" id="leftTitleButton" onclick="hideTitle()">开始游戏</div>
-            <div class="TitleSingleButton">继续游戏</div>
+            <div class="TitleSingleButton" onclick="continueGame()">继续游戏</div>
             <div class="TitleSingleButton" onclick="onLoadGame()">读取存档</div>
             <div class="TitleSingleButton" onclick="onSetting()">设置界面</div>
-            <div class="TitleSingleButton">退出游戏</div>
+            <div class="TitleSingleButton" onclick="exit()">退出游戏</div>
         </div>
 
     </div>
@@ -31,7 +31,7 @@
 <div id="settings">
     <div id="settingsMainBox">
         <div id="close" onclick="closeSettings()">
-            <img src="res/img/close.svg" class="closeSVG" alt="close">
+            <img src="res/img/closeBlack.svg" class="closeSVG" alt="close">
         </div>
         <div id="settingsTitle">
             设置
@@ -86,7 +86,8 @@
         <div class="controlButton" onclick="onSaveGame()" id="saveButton">存档</div>
         <div class="controlButton" onclick="onLoadGame()" id="loadButton">读档</div>
         <div class="controlButton" onclick="onSetting()">设置</div>
-<!--        <div class="controlButton">退出</div>-->
+        <div class="controlButton" onclick="Title()" id="titleButton">标题</div>
+        <div class="controlButton" onclick="exit()">退出</div>
     </div>
 </div>
 <script src="res/script/WG_main.js" type="text/babel"></script>
