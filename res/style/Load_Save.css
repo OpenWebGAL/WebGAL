@@ -1,29 +1,31 @@
 
 #Load{
     position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
+    top: 20px;
+    bottom: 20px;
+    left: 45px;
+    right: 45px;
     display: none;
     z-index: 14;
-    background-color: rgb(0,0,0);
+    background-color: rgba(255,255,255,0.95);
     /*background-image: linear-gradient(rgba(255,255,255,0) 0%,rgba(255,255,255,0) 75%,rgba(255,255,255,0.3)100%);*/
     /*border-radius: 15px;*/
     -webkit-animation: showSoftly 0.5s;
+    padding: 30px 30px 30px 30px;
+    box-shadow: 5px 5px 15px rgba(0,0,0,0.5);
 }
 
 #LoadTitle{
-    color: white;
+    color: #005CAF;
     font-size: 250%;
-    padding: 5px 10px 10px 10px ;
+    padding: 5px 10px 5px 10px ;
 }
 
 .LoadIndexButton{
-    border: 2px solid #FEDFE1;
-    border-radius: 5px ;
+    /*border: 2px solid #FEDFE1;*/
+    /*border-radius: 5px ;*/
     font-size: large;
-    color:white;
+    color:#005CAF;
     padding: 5px 20px 5px 20px;
     margin: 0 5px 5px 5px;
 }
@@ -34,35 +36,37 @@
 }
 
 #LoadIndex{
-    padding: 5px 5px 15px 5px;
-    width: 98%;
-    border-bottom: 2px solid #FEDFE1;
+    padding: 5px 5px 7px 5px;
+    width: 100%;
+    border-bottom: 1px solid rgba(0,0,0,0.3);
 }
 
 #LoadItems{
-    padding: 10px 10px 10px 10px;
+    padding: 5px 10px 10px 10px;
     height: 75%;
     display: flex;
     justify-items: center;
     justify-content: center;
-
 }
 
 .LoadIndexButton:hover{
     font-weight: bold;
-    background-color: rgba(255,255,255,0.5);
-    color: #8E354A;
-    background-color: #FEDFE1;
+    /*background-color: rgba(0,0,0,0.1);*/
+    border-bottom: 2px solid #005CAF;
+    /*color: #8E354A;*/
+    /*background-color: #FEDFE1;*/
 }
 
 .LoadIndexButtonOn{
-    border: 2px solid #8E354A;
-    border-radius: 5px ;
+    border-bottom: 3px solid #005CAF;
+    /*border-radius: 5px ;*/
     font-size: large;
-    color:#8E354A;
+    color:#005CAF;
+    /*color: white;*/
     padding: 5px 20px 5px 20px;
     margin: 0 5px 5px 5px;
-    background-color: #FEDFE1;
+    background-color: rgba(0,92,175,0.07);
+    /*background-color: rgba(0,0,0,0.05);*/
     font-weight: bold;
 }
 
@@ -74,25 +78,31 @@
 
 .LoadSingleElement{
     overflow: hidden;
-    margin: 10px 5% 10px 3%;
-    width: 90%;
+    margin: 5px 10px 5px 10px;
+    width: 95%;
     height: 9vh;
-    background-color: white;
-    color: #8E354A;
-    text-align: center;
+    /*background-color: white;*/
+    color: #005CAF;
+    /*text-align: center;*/
     font-size: xx-large;
     padding: 5px 5px 5px 10px;
-    border: 2px solid #8E354A;
-
-
+    /*border-left: 3px solid #51A8DD;*/
+    /*border-top: 1px solid rgba(0,0,0,0.1);*/
+    border-bottom: 1px solid rgba(0,0,0,0.3);
+    /*border-right: 1px solid rgba(0,0,0,0.1);*/
+    /*box-shadow: 1px 1px 7px rgba(0,0,0,0.2);*/
 }
 .LoadSingleElement:hover{
-    color: white;
-    border: 2px solid #FEDFE1;
-    background-color: rgba(255,255,255,0.15);
+    /*color: white;*/
+    /*border: 2px solid #FEDFE1;*/
+    margin: 5px 10px 3px 10px;
+    background-color: rgba(0,0,0,0.05);
+    border-bottom: 1px solid #005CAF;
 }
 
 #LoadButtonList{
+    /*display: flex;*/
+    /*flex-wrap: wrap;*/
     height: 100%;
     overflow: scroll;
     overflow-scrolling: auto;
@@ -101,8 +111,8 @@
 ::-webkit-scrollbar {display:none}
 
 .LSE_top{
-    padding: 0 0 0 5px;
-    border-bottom: 2px solid rgba(0,0,0,0.2);
+    padding: 0 0 0 0;
+    /*border-bottom: 2px solid rgba(0,0,0,0.2);*/
     font-size: 75%;
     text-align: left;
     width: 15%
@@ -117,7 +127,9 @@
 
 }
 .LSE_bottom{
-    margin: 7px 0 0 0;
+    height: 2vh;
+    color: rgba(0,0,0,0.8);
+    margin: 3px 0 0 0;
     text-align: left;
     font-size: 60%;
     overflow: hidden;
@@ -127,29 +139,31 @@
 
 #Save{
     position: absolute;
-    top: 15px;
-    bottom: 15px;
-    left: 15px;
-    right: 15px;
+    top: 20px;
+    bottom: 20px;
+    left: 45px;
+    right: 45px;
     display: none;
     z-index: 14;
-    background-color: rgba(0,0,0,0.5);
-    background-image: linear-gradient(rgba(255,255,255,0) 0%,rgba(255,255,255,0) 75%,rgba(255,255,255,0.3)100%);
+    background-color: rgba(255,255,255,0.95);
+    /*background-image: linear-gradient(rgba(255,255,255,0) 0%,rgba(255,255,255,0) 75%,rgba(255,255,255,0.3)100%);*/
     /*border-radius: 15px;*/
     -webkit-animation: showSoftly 0.5s;
+    padding: 30px 30px 30px 30px;
+    box-shadow: 5px 5px 15px rgba(0,0,0,0.5);
 }
 
 #SaveTitle{
-    color: white;
+    color: #77428D;
     font-size: 250%;
-    padding: 5px 10px 10px 10px ;
+    padding: 5px 10px 5px 10px ;
 }
 
 .SaveIndexButton{
-    border: 2px solid #FEDFE1;
-    border-radius: 5px ;
+    /*border: 2px solid #FEDFE1;*/
+    /*border-radius: 5px ;*/
     font-size: large;
-    color:white;
+    color:#77428D;
     padding: 5px 20px 5px 20px;
     margin: 0 5px 5px 5px;
 }
@@ -160,13 +174,13 @@
 }
 
 #SaveIndex{
-    padding: 5px 5px 15px 5px;
-    width: 98%;
-    border-bottom: 2px solid #FEDFE1;
+    padding: 5px 5px 7px 5px;
+    width: 100%;
+    border-bottom: 1px solid rgba(0,0,0,0.3);
 }
 
 #SaveItems{
-    padding: 10px 10px 10px 10px;
+    padding: 5px 10px 10px 10px;
     height: 75%;
     display: flex;
     justify-items: center;
@@ -176,19 +190,22 @@
 
 .SaveIndexButton:hover{
     font-weight: bold;
-    background-color: rgba(255,255,255,0.5);
-    color: #8E354A;
-    background-color: #FEDFE1;
+    /*background-color: rgba(0,0,0,0.1);*/
+    border-bottom: 2px solid #77428D;
+    /*color: #8E354A;*/
+    /*background-color: #FEDFE1;*/
 }
 
 .SaveIndexButtonOn{
-    border: 2px solid #8E354A;
-    border-radius: 5px ;
+    border-bottom: 3px solid #77428D;
+    /*border-radius: 5px ;*/
     font-size: large;
-    color:#8E354A;
+    color:#77428D;
+    /*color: white;*/
     padding: 5px 20px 5px 20px;
     margin: 0 5px 5px 5px;
-    background-color: #FEDFE1;
+    background-color: rgba(119,66,141,0.07);
+    /*background-color: rgba(0,0,0,0.05);*/
     font-weight: bold;
 }
 
@@ -199,16 +216,20 @@
 }
 
 .SaveSingleElement{
-    width: 90%;
-    height: 7vh;
-    color: white;
-    text-align: center;
-    font-size: xx-large;
-    padding: 10px 10px 10px 10px;
-    border: 2px solid #FEDFE1;
-    margin: 10px 5% 10px 3%;
     overflow: hidden;
-    background-color: rgba(255,255,255,0.15);
+    margin: 5px 10px 5px 10px;
+    width: 95%;
+    height: 9vh;
+    /*background-color: white;*/
+    color: #77428D;
+    /*text-align: center;*/
+    font-size: xx-large;
+    padding: 5px 5px 5px 10px;
+    /*border-left: 3px solid #51A8DD;*/
+    /*border-top: 1px solid rgba(0,0,0,0.1);*/
+    border-bottom: 1px solid rgba(0,0,0,0.3);
+    /*border-right: 1px solid rgba(0,0,0,0.1);*/
+    /*box-shadow: 1px 1px 7px rgba(0,0,0,0.2);*/
 }
 
 #SaveButtonList{
@@ -219,26 +240,33 @@
 
 
 .SaveSingleElement:hover{
-    background-color: #FEDFE1;
-    width: 90%;
-    color: #8E354A;
-    text-align: center;
-    font-size: xx-large;
-    padding: 10px 10px 10px 10px;
-    border: 2px solid #8E354A;
+    /*color: white;*/
+    /*border: 2px solid #FEDFE1;*/
+    margin: 5px 10px 3px 10px;
+    background-color: rgba(0,0,0,0.05);
+    border-bottom: 1px solid #77428D;
 }
 
 .SSE_top{
+    padding: 0 0 0 0;
+    /*border-bottom: 2px solid rgba(0,0,0,0.2);*/
     font-size: 75%;
     text-align: left;
+    width: 15%
 }
 
 .SSE_index{
-    padding: 0 5px 0 5px;
-    border-right: 2px solid #FEDFE1;
+    display: none;
+    padding: 0 15px 0 15px;
+    border: 2px solid #8E354A;
     margin: 0 5px 0 0;
+    border-radius: 5px;
+
 }
 .SSE_bottom{
+    height: 2vh;
+    color: rgba(0,0,0,0.8);
+    margin: 3px 0 0 0;
     text-align: left;
     font-size: 60%;
     overflow: hidden;
