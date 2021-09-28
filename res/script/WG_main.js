@@ -636,7 +636,7 @@ function hideTitle(ifRes) {
 function onLoadGame() {
     loadCookie();
     document.getElementById('Load').style.display = 'block';
-    ReactDOM.render(<LoadMainModel PageQty={5}/>,document.getElementById('LoadItems'))
+    ReactDOM.render(<LoadMainModel PageQty={15}/>,document.getElementById('LoadItems'))
 }
 
 function closeLoad() {
@@ -727,7 +727,7 @@ class LoadMainModel extends  React.Component{
 function onSaveGame() {
     loadCookie();
     document.getElementById('Save').style.display = 'block';
-    ReactDOM.render(<SaveMainModel PageQty={5}/>,document.getElementById('SaveItems'))
+    ReactDOM.render(<SaveMainModel PageQty={15}/>,document.getElementById('SaveItems'))
 }
 
 function closeSave() {
