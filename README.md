@@ -4,6 +4,8 @@
 
 Demo: http://msfasr.com/WebGAL_Demo_Page/
 
+开发版下载：https://github.com/MakinoharaShoko/WebGAL/releases/
+
 ## 如何在本地运行WebGAL？
 
 WebGAL理论上可以在任何浏览器上运行，但是由于浏览器的**限制跨域访问**机制，本地js可能无法在浏览器上运行，因此，你需要在本地建立一个http服务器。你可以选择任何你喜爱的的http服务器，并通过本地http服务器访问index.html来开始游戏。如果你没有本地http服务器，你可以使用Node.js简单地搭建一个。
@@ -73,7 +75,7 @@ changeP_next:testFigure01.png;//改变人物立绘
 
 如果你这样做，那么在背景图片/立绘替换后，程序会立刻执行下一条语句。
 
-### （开发中）跳转场景与分支选择：
+### 跳转场景与分支选择：
 
 在Galgame中，跳转章节、场景与分支选择是不可或缺的，因此，本游戏模组也支持场景跳转与分支选择。
 
