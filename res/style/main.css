@@ -233,3 +233,15 @@
 .MesChoose:hover{
     background-color: rgba(0,0,0,0.1);
 }
+
+a{
+    color: #8E354A;
+}
+
+a:hover{
+    color: #FEDFE1;
+}
+
+a:visited{
+    color: #8E354A;
+}
