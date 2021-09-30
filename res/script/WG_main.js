@@ -413,6 +413,7 @@ function onSetting(){
             <SettingButtons_font/>
             <SettingButtons_speed/>
             <div className={"deleteCookie"} onClick={()=>{showMesModel('你确定要清除缓存吗','要','不要',clearCookie)}}>清除所有设置选项以及存档</div>
+            <div>本作品由 WebGAL 强力驱动，<a href={"https://github.com/MakinoharaShoko/WebGAL"}>了解 WebGAL</a>。</div>
             <br/>
             <div className='settingItemTitle'>效果预览</div>
         </div>
