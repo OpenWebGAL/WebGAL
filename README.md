@@ -10,7 +10,7 @@ Demo: http://msfasr.com/WebGAL_Demo_Page/
 
 #### Windows用户可以使用以下方式快速打开调试界面:
 
-首先，请在 Node.js 官网 （http://nodejs.cn/download/）下载Windows安装包安装 Node.js ，然后运行解压目录下的”导入依赖模块.ps1“（不能双击打开，需要右键选择”使用 PowerShell 运行“），然后双击”开始调试.bat“就可以看到 WebGAL 的界面了。
+首先，请在 Node.js 官网  http://nodejs.cn/download/  下载Windows安装包安装 Node.js ，然后运行解压目录下的”导入依赖模块.ps1“（不能双击打开，需要右键选择”使用 PowerShell 运行“），然后双击”开始调试.bat“就可以看到 WebGAL 的界面了。
 
 #### 其他用户：
 
