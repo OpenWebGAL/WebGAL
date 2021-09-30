@@ -4,7 +4,11 @@
 
 Demo: http://msfasr.com/WebGAL_Demo_Page/
 
-开发版下载：https://github.com/MakinoharaShoko/WebGAL/releases/
+## 如果你是想要开发属于自己的 Galgame 的开发者，请下载发行版：
+
+https://github.com/MakinoharaShoko/WebGAL/releases/
+
+如果下载速度过慢，请尝试通过蓝奏云网盘下载： https://www.lanzouw.com/i6VURupao8h
 
 ## 如何在本地运行WebGAL？
 
