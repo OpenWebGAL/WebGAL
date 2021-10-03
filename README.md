@@ -14,7 +14,7 @@ https://github.com/MakinoharaShoko/WebGAL/releases/
 
 #### Windows用户可以使用以下方式快速打开调试界面:
 
-首先，请在 Node.js 官网  http://nodejs.cn/download/  下载Windows安装包安装 Node.js ，然后运行解压目录下的”导入依赖模块.ps1“（不能双击打开，需要右键选择”使用 PowerShell 运行“），然后双击”开始调试.bat“就可以看到 WebGAL 的界面了。
+现在，你可以直接运行WebGAL-win.exe即可开始调试你的视觉小说。如果遇到杀毒软件拦截或防火墙拦截等情况，请放行以允许该程序运行。
 
 #### 其他用户：
 
