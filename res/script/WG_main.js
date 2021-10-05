@@ -18,9 +18,11 @@
         showName:'',
         command:'',
         choose:'',
-        currentText:0
+        currentText:0,
+        vocal:''
     }
     var onTextPreview = 0;
+    var currentName = '';
 }
 
 // 初始化存档系统
@@ -190,6 +192,7 @@ function getScene(url) {
                     let tempSentence = currentScene[i].split(";")[0];
                     let commandLength = tempSentence.split(":")[0].length;
                     let command = currentScene[i].split(":")[0];
+                    command = command.split(';')[0];
                     let content = tempSentence.slice(commandLength+1);
                     currentScene[i] = currentScene[i].split(":");
                     currentScene[i][0] = command;
@@ -234,7 +237,32 @@ function loadSettings(){
 // 处理脚本
 function processSentence(i){
     if(i<currentScene.length)
-        return {name:currentScene[i][0],text:currentScene[i][1]};
+    {
+        let vocal = '';
+        if(currentScene[i][1] !== '')
+        {
+            let text = currentScene[i][1];
+            if(currentScene[i][1].split('vocal-').length > 1)
+            {
+                vocal = currentScene[i][1].split('vocal-')[1].split(',')[0];
+                text = currentScene[i][1].split('vocal-')[1].slice(currentScene[i][1].split('vocal-')[1].split(',')[0].length+1);
+            }
+            currentName = currentScene[i][0];
+            return {name:currentName,text:text,vocal:vocal};
+        }
+        else
+        {
+            let text = currentScene[i][0];
+            if(currentScene[i][0].split('vocal-').length > 1){
+                vocal = currentScene[i][0].split('vocal-')[1].split(',')[0];
+                text = currentScene[i][0].split('vocal-')[1].slice(currentScene[i][0].split('vocal-')[1].split(',')[0].length+1);
+            }
+            return {name:currentName,text:text,vocal:vocal};
+        }
+
+
+    }
+
 }
 
 // 读取下一条脚本
@@ -317,6 +345,7 @@ function nextSentenceProcessor() {
         currentInfo["command"] = processSentence(currentSentence)['name'];
         currentInfo["showName"] = processSentence(currentSentence)['name'];
         currentInfo["showText"] = processSentence(currentSentence)['text'];
+        currentInfo["vocal"] = processSentence(currentSentence)['vocal'];
         let changedName = <span>{processSentence(currentSentence)['name']}</span>
         let textArray = processSentence(currentSentence)['text'].split("");
         // let changedText = <p>{processSentence(currentSentence)['text']}</p>
