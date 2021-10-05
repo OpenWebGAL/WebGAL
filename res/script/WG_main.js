@@ -19,7 +19,8 @@
         command:'',
         choose:'',
         currentText:0,
-        vocal:''
+        vocal:'',
+        bgm:''
     }
     var onTextPreview = 0;
     var currentName = '';
@@ -341,6 +342,13 @@ function nextSentenceProcessor() {
         ReactDOM.render(<div>{elements}</div>,document.getElementById('chooseBox'))
         return;
     }
+    else if(command === 'bgm'){
+        currentInfo["bgm"] = thisSentence[1];
+        loadBGM();
+        currentSentence = currentSentence+1;
+        nextSentenceProcessor();
+        return;
+    }
     else {
         currentInfo["command"] = processSentence(currentSentence)['name'];
         currentInfo["showName"] = processSentence(currentSentence)['name'];
@@ -350,6 +358,9 @@ function nextSentenceProcessor() {
         let textArray = processSentence(currentSentence)['text'].split("");
         // let changedText = <p>{processSentence(currentSentence)['text']}</p>
         ReactDOM.render(changedName, document.getElementById('pName'));
+        if(currentInfo["vocal"]!== ''){
+            playVocal();
+        }
         showTextArray(textArray,currentText+1);
         currentText = currentText + 1;
         currentInfo["currentText"] = currentText;
@@ -897,4 +908,28 @@ function continueGame(){
         currentInfo["SceneName"] = 'start.txt';
     }
     document.getElementById('Title').style.display = 'none';
+}
+
+function loadBGM() {
+    let bgmName = currentInfo["bgm"];
+    if(bgmName === '' || bgmName === 'none'){
+        ReactDOM.render(<div/>,document.getElementById("bgm"));
+        return;
+    }
+    let url = "./game/bgm/"+bgmName;
+    let audio = <audio src={url} id={"currentBGM"}/>
+    ReactDOM.render(audio,document.getElementById("bgm"));
+    let playControl = document.getElementById("currentBGM");
+    playControl.currentTime = 0;
+    playControl.play();
+}
+
+function playVocal() {
+    let vocalName = currentInfo["vocal"];
+    let url = './game/vocal/'+vocalName;
+    let vocal = <audio src={url} id={"currentVocal"}/>
+    ReactDOM.render(vocal,document.getElementById('vocal'));
+    let VocalControl = document.getElementById("currentVocal");
+    VocalControl.currentTime = 0;
+    VocalControl.play();
 }
