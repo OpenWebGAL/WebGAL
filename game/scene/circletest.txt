@@ -5,6 +5,6 @@ WebGAL:测试文本连续输出;
 现在的文本是？;
 bgm:none;
 注意，即将进行语音测试;
-vocal-Vocal1.ogg,测试语音。;
-vocal-Vocal1.ogg,测试语音切换。;
+WebGAL:vocal-Vocal1.ogg,测试语音。;
+WebGAL:vocal-Vocal1.ogg,测试语音切换。;
 changeScene:circletest.txt;
