@@ -465,7 +465,8 @@ function showTextArray(textArray,now){
                     clearInterval(interval);
                     nextSentenceProcessor();
                 }
-            }
+            }else
+                clearInterval(interval);
         }
     }
 }
