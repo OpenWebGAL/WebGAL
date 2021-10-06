@@ -295,6 +295,62 @@ function nextSentenceProcessor() {
         }
         autoPlay('on');
     }
+    else if(command === 'changeP_left'){
+        if (thisSentence[1] === 'none'){
+            ReactDOM.render(<div/>,document.getElementById('figureImage_left'));
+            currentInfo["fig_Name"] = 'none';
+        }else{
+            let pUrl = "game/figure/"+thisSentence[1];
+            let changedP = <img src={pUrl} alt='figure' className='p_center'/>
+            // console.log('now changing person');
+            ReactDOM.render(changedP,document.getElementById('figureImage_left'));
+            currentInfo["fig_Name"] = thisSentence[1];
+        }
+        autoPlay('on');
+    }
+    else if(command === 'changeP_right'){
+        if (thisSentence[1] === 'none'){
+            ReactDOM.render(<div/>,document.getElementById('figureImage_right'));
+            currentInfo["fig_Name"] = 'none';
+        }else{
+            let pUrl = "game/figure/"+thisSentence[1];
+            let changedP = <img src={pUrl} alt='figure' className='p_center'/>
+            // console.log('now changing person');
+            ReactDOM.render(changedP,document.getElementById('figureImage_right'));
+            currentInfo["fig_Name"] = thisSentence[1];
+        }
+        autoPlay('on');
+    }
+    else if(command === 'changeP_left_next'){
+        if (thisSentence[1] === 'none'){
+            ReactDOM.render(<div/>,document.getElementById('figureImage_left'));
+            currentInfo["fig_Name"] = 'none';
+        }else{
+            let pUrl = "game/figure/"+thisSentence[1];
+            let changedP = <img src={pUrl} alt='figure' className='p_center'/>
+            // console.log('now changing person');
+            ReactDOM.render(changedP,document.getElementById('figureImage_left'));
+            currentInfo["fig_Name"] = thisSentence[1];
+        }
+        currentSentence = currentSentence+1;
+        nextSentenceProcessor();
+        return;
+    }
+    else if(command === 'changeP_right_next'){
+        if (thisSentence[1] === 'none'){
+            ReactDOM.render(<div/>,document.getElementById('figureImage_left'));
+            currentInfo["fig_Name"] = 'none';
+        }else{
+            let pUrl = "game/figure/"+thisSentence[1];
+            let changedP = <img src={pUrl} alt='figure' className='p_center'/>
+            // console.log('now changing person');
+            ReactDOM.render(changedP,document.getElementById('figureImage_left'));
+            currentInfo["fig_Name"] = thisSentence[1];
+        }
+        currentSentence = currentSentence+1;
+        nextSentenceProcessor();
+        return;
+    }
     else if(command === 'changeP_next'){
         if (thisSentence[1] === 'none'){
             ReactDOM.render(<div/>,document.getElementById('figureImage'));
