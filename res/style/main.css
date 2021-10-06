@@ -248,3 +248,50 @@ a:hover{
 a:visited{
     color: #8E354A;
 }
+
+.p_left{
+    display: block;
+    max-height: 100%;
+    max-width: 100%;
+    width: auto;
+    height: auto;
+    /*overflow: hidden;*/
+    object-fit: cover;
+    -webkit-animation: showSoftly 0.5s;
+}
+#figureImage_left{
+    padding: 0 0 0 50px;
+    width: 100%;
+    position: absolute;
+    display: flex;
+    justify-content: left;
+    top:5px;
+    bottom: 5px;
+    z-index:2;
+    -webkit-animation: showSoftly 0.5s;
+    /*min-width: 600px;*/
+    /*overflow: hidden;*/
+}
+.p_right{
+    display: block;
+    max-height: 100%;
+    max-width: 100%;
+    width: auto;
+    height: auto;
+    /*overflow: hidden;*/
+    object-fit: cover;
+    -webkit-animation: showSoftly 0.5s;
+}
+#figureImage_right{
+    padding: 0 50px 0 0;
+    width: 100%;
+    position: absolute;
+    display: flex;
+    justify-content: right;
+    top:5px;
+    bottom: 5px;
+    z-index:2;
+    -webkit-animation: showSoftly 0.5s;
+    /*min-width: 600px;*/
+    /*overflow: hidden;*/
+}
