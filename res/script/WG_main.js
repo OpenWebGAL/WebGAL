@@ -153,6 +153,7 @@ function LoadSavedGame(index) {
                 // let changedText = <p>{processSentence(currentSentence)['text']}</p>
                 ReactDOM.render(changedName, document.getElementById('pName'));
                 currentText = save["currentText"];
+                playVocal();
                 showTextArray(textArray,currentText);
                 // currentText = currentText + 1;
 
@@ -396,9 +397,18 @@ function showTextArray(textArray,now){
             ReactDOM.render(<div>{elementArray}</div>, document.getElementById('SceneText'));
         i = i+1;
         if(i > textArray.length +(autoWaitTime/35) || currentText!== now){
-            clearInterval(interval);
+
             if(auto === 1&&currentText === now){
-                nextSentenceProcessor();
+                if(document.getElementById('currentVocal')&&fast === 0){
+                    if(document.getElementById('currentVocal').ended)
+                    {
+                        clearInterval(interval);
+                        nextSentenceProcessor();
+                    }
+                }else{
+                    clearInterval(interval);
+                    nextSentenceProcessor();
+                }
             }
         }
     }
@@ -921,6 +931,7 @@ function loadBGM() {
     ReactDOM.render(audio,document.getElementById("bgm"));
     let playControl = document.getElementById("currentBGM");
     playControl.currentTime = 0;
+    playControl.volume = 0.25;
     playControl.play();
 }
 
