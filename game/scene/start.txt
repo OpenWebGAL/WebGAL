@@ -1,3 +1,9 @@
 bgm:夏影.mp3;
-WebGAL:这是一个循环测试界面，如果你想要跳转到正式的Demo，请选择第二个选项。
-choose:{继续循环测试:circletest.txt,进入Demo:C1.txt}
+changeBG_next:testBG03.png;
+changeP_next:testFigure03.png;
+雪之下雪乃:vocal-V1.ogg,你到得真早;
+vocal-V2.ogg,对不起，等很久了吗？;
+changeP_next:testFigure04.png;
+比企谷八幡:vocal-V3.ogg,刚到而已;
+changeP_next:testFigure03.png;
+雪之下雪乃:vocal-V4.ogg,方便帮我开门吗;

@@ -50,6 +50,7 @@
     z-index: 1;
     background-repeat: no-repeat;
     background-size:cover;
+    -webkit-animation: showSoftly 0.5s;
 }
 
 .p_center{
@@ -60,6 +61,7 @@
     height: auto;
     /*overflow: hidden;*/
     object-fit: cover;
+    -webkit-animation: showSoftly 0.5s;
 }
 #figureImage{
     width: 100%;
@@ -69,6 +71,7 @@
     top:5px;
     bottom: 5px;
     z-index:2;
+    -webkit-animation: showSoftly 0.5s;
     /*min-width: 600px;*/
     /*overflow: hidden;*/
 }
