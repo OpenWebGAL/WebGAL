@@ -8,7 +8,7 @@ Demo: http://msfasr.com/WebGAL_Demo_Page/
 
 https://github.com/MakinoharaShoko/WebGAL/releases/
 
-如果下载速度过慢，请尝试通过蓝奏云网盘下载： https://www.lanzouw.com/i7Fieuzyh6h
+如果下载速度过慢，请尝试通过蓝奏云网盘下载： https://www.lanzouw.com/ilKAGv21lrc
 
 ## 如何在本地运行WebGAL？
 
