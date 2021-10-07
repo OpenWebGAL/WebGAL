@@ -297,7 +297,6 @@ function nextSentenceProcessor() {
     if(currentSentence >= currentScene.length){
         return;
     }
-    loadBGM();
     let thisSentence = currentScene[currentSentence];
     let command = thisSentence[0];
     // console.log(command)
@@ -768,6 +767,7 @@ function hideTitle(ifRes) {
     document.getElementById('Title').style.display = 'none';
     if(ifRes !== 'non-restart'){
         currentInfo["bgm"] = '';
+        loadBGM();
         getScene("game/scene/start.txt");
         currentInfo["SceneName"] = 'start.txt';
         ReactDOM.render(<div/>,document.getElementById('figureImage'));
@@ -1016,7 +1016,7 @@ function loadBGM() {
         return;
     }
     let url = "./game/bgm/"+bgmName;
-    let audio = <audio src={url} id={"currentBGM"}/>
+    let audio = <audio src={url} id={"currentBGM"} loop="loop"/>
     ReactDOM.render(audio,document.getElementById("bgm"));
     let playControl = document.getElementById("currentBGM");
     playControl.currentTime = 0;
