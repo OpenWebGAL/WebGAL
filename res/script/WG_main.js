@@ -173,6 +173,10 @@ function LoadSavedGame(index) {
                 ReactDOM.render(changedName, document.getElementById('pName'));
                 currentText = save["currentText"];
                 currentInfo["vocal"] = save['vocal'];
+                if(currentInfo['bgm'] !== save['bgm']){
+                    currentInfo['bgm'] = save['bgm'];
+                    loadBGM();
+                }
                 playVocal();
                 showTextArray(textArray,currentText);
                 // currentText = currentText + 1;
@@ -293,6 +297,7 @@ function nextSentenceProcessor() {
     if(currentSentence >= currentScene.length){
         return;
     }
+    loadBGM();
     let thisSentence = currentScene[currentSentence];
     let command = thisSentence[0];
     // console.log(command)
