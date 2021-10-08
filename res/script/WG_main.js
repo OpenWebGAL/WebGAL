@@ -125,7 +125,7 @@ function LoadSavedGame(index) {
                 // console.log('readSaves:'+command)
                 if(save["bg_Name"]!=='')
                     document.getElementById('mainBackground').style.backgroundImage = "url('game/background/" + save["bg_Name"] + "')";
-                if (save["fig_Name"] === ''){
+                if (save["fig_Name"] === ''||save["fig_Name"] === 'none'){
                     ReactDOM.render(<div/>,document.getElementById('figureImage'));
                 }else{
                     let pUrl = "game/figure/"+save["fig_Name"];
@@ -133,7 +133,7 @@ function LoadSavedGame(index) {
                     // console.log('now changing person');
                     ReactDOM.render(changedP,document.getElementById('figureImage'));
                 }
-                if (save["fig_Name_left"] === ''){
+                if (save["fig_Name_left"] === ''||save["fig_Name_left"] === 'none'){
                     ReactDOM.render(<div/>,document.getElementById('figureImage_left'));
                 }else{
                     let pUrl = "game/figure/"+save["fig_Name_left"];
@@ -141,7 +141,7 @@ function LoadSavedGame(index) {
                     // console.log('now changing person');
                     ReactDOM.render(changedP,document.getElementById('figureImage_left'));
                 }
-                if (save["fig_Name_right"] === ''){
+                if (save["fig_Name_right"] === ''||save["fig_Name_right"] === 'none'){
                     ReactDOM.render(<div/>,document.getElementById('figureImage_right'));
                 }else{
                     let pUrl = "game/figure/"+save["fig_Name_right"];
