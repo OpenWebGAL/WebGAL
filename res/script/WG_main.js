@@ -302,7 +302,7 @@ function processSentence(i){
 
 // 读取下一条脚本
 function nextSentenceProcessor() {
-
+    let saveBacklogNow = false;
     if(currentSentence >= currentScene.length){
         return;
     }
@@ -451,21 +451,25 @@ function nextSentenceProcessor() {
         if(currentInfo["vocal"]!== ''){
             playVocal();
         }
-        if(CurrentBacklog.length<=500){
-            let temp = JSON.stringify(currentInfo);
-            CurrentBacklog.push(JSON.parse(temp));
-        }else{
-
-            CurrentBacklog.shift();
-            let temp = JSON.stringify(currentInfo);
-            CurrentBacklog.push(JSON.parse(temp));
-        }
+        saveBacklogNow = true;
         showTextArray(textArray,currentText+1);
         currentText = currentText + 1;
         currentInfo["currentText"] = currentText;
     }
     currentSentence = currentSentence+1;
     currentInfo["SentenceID"] = currentSentence;
+    if(saveBacklogNow){
+        if(CurrentBacklog.length<=500){
+            let temp = JSON.stringify(currentInfo);
+            let pushElement = JSON.parse(temp);
+            CurrentBacklog.push(pushElement);
+        }else{
+            CurrentBacklog.shift();
+            let temp = JSON.stringify(currentInfo);
+            let pushElement = JSON.parse(temp);
+            CurrentBacklog.push(pushElement);
+        }
+    }
 
     function autoPlay(active){
         if(auto === 1 && active === 'on'){
@@ -782,6 +786,7 @@ class SettingButtons_speed extends React.Component{
 }
 
 function hideTitle(ifRes) {
+    CurrentBacklog = [];
     document.getElementById('Title').style.display = 'none';
     if(ifRes !== 'non-restart'){
         currentInfo["bgm"] = '';
@@ -1058,13 +1063,121 @@ function showBacklog(){
     document.getElementById('bottomBox').style.display = 'none';
     let showBacklogList = [];
     for (let i = 0 ; i<CurrentBacklog.length ; i++){
-        let temp = <div className={'backlog_singleElement'} key={i}>
+        let temp = <div className={'backlog_singleElement'} key={i} onClick={()=>{jumpFromBacklog(i)}}>
             <div>{CurrentBacklog[i].showName}</div>
             <div>{CurrentBacklog[i].showText}</div>
         </div>
         showBacklogList.push(temp)
     }
     ReactDOM.render(<div>{showBacklogList}</div>,document.getElementById('backlogContent'));
+}
+
+function jumpFromBacklog(index) {
+    closeBacklog();
+    let save = CurrentBacklog[index];
+    for (let i = CurrentBacklog.length - 1 ; i > index ; i--){
+        CurrentBacklog.pop();
+    }
+    //get Scene:
+    let url = 'game/scene/'
+    url = url + save['SceneName'];
+    currentScene ='';
+    currentText = 0;
+
+    let getScReq = null;
+    getScReq = new XMLHttpRequest();
+
+    if (getScReq != null) {
+        getScReq.open("get",url , true);
+        getScReq.send();
+        getScReq.onreadystatechange = doResult; //设置回调函数
+    }
+    function doResult() {
+        if (getScReq.readyState === 4) { //4表示执行完成
+            if (getScReq.status === 200) { //200表示执行成功
+                currentScene = getScReq.responseText;
+                currentScene = currentScene.split('\n');
+                for (let i = 0;i<currentScene.length;i++){
+                    let tempSentence = currentScene[i].split(";")[0];
+                    let commandLength = tempSentence.split(":")[0].length;
+                    let command = currentScene[i].split(":")[0];
+                    let content = tempSentence.slice(commandLength+1);
+                    currentScene[i] = currentScene[i].split(":");
+                    currentScene[i][0] = command;
+                    currentScene[i][1] = content;
+                }
+                // console.log('Read scene complete.');
+                // console.log(currentScene);
+                currentSentence = save["SentenceID"];
+                currentText = save["SentenceID"];
+                // console.log("start:"+currentSentence)
+
+                //load saved scene:
+                let command = save["command"];
+                // console.log('readSaves:'+command)
+                if(save["bg_Name"]!=='')
+                    document.getElementById('mainBackground').style.backgroundImage = "url('game/background/" + save["bg_Name"] + "')";
+                if (save["fig_Name"] === ''||save["fig_Name"] === 'none'){
+                    ReactDOM.render(<div/>,document.getElementById('figureImage'));
+                }else{
+                    let pUrl = "game/figure/"+save["fig_Name"];
+                    let changedP = <img src={pUrl} alt='figure' className='p_center'/>
+                    // console.log('now changing person');
+                    ReactDOM.render(changedP,document.getElementById('figureImage'));
+                }
+                if (save["fig_Name_left"] === ''||save["fig_Name_left"] === 'none'){
+                    ReactDOM.render(<div/>,document.getElementById('figureImage_left'));
+                }else{
+                    let pUrl = "game/figure/"+save["fig_Name_left"];
+                    let changedP = <img src={pUrl} alt='figure' className='p_center'/>
+                    // console.log('now changing person');
+                    ReactDOM.render(changedP,document.getElementById('figureImage_left'));
+                }
+                if (save["fig_Name_right"] === ''||save["fig_Name_right"] === 'none'){
+                    ReactDOM.render(<div/>,document.getElementById('figureImage_right'));
+                }else{
+                    let pUrl = "game/figure/"+save["fig_Name_right"];
+                    let changedP = <img src={pUrl} alt='figure' className='p_center'/>
+                    // console.log('now changing person');
+                    ReactDOM.render(changedP,document.getElementById('figureImage_right'));
+                }
+
+                if(command === 'choose'){
+                    document.getElementById('chooseBox').style.display = 'flex';
+                    let chooseItems =save["choose"];
+                    chooseItems = chooseItems.split("}")[0];
+                    chooseItems = chooseItems.split("{")[1];
+                    let selection = chooseItems.split(',')
+                    for (let i = 0;i<selection.length;i++){
+                        selection[i] = selection[i].split(":");
+                    }
+                    let elements = []
+                    for (let i = 0; i < selection.length; i++) {
+                        let temp = <div className='singleChoose' key={i} onClick={()=>{chooseScene(selection[i][1]);}}>{selection[i][0]}</div>
+                        elements.push(temp)
+                    }
+                    ReactDOM.render(<div>{elements}</div>,document.getElementById('chooseBox'))
+                    // return;
+                }
+                let changedName = <span>{save["showName"]}</span>
+                let textArray = save["showText"].split("");
+                // let changedText = <p>{processSentence(currentSentence)['text']}</p>
+                ReactDOM.render(changedName, document.getElementById('pName'));
+                currentText = save["currentText"];
+                currentInfo["vocal"] = save['vocal'];
+                if(currentInfo['bgm'] !== save['bgm']){
+                    currentInfo['bgm'] = save['bgm'];
+                    loadBGM();
+                }
+                playVocal();
+                showTextArray(textArray,currentText);
+                // currentText = currentText + 1;
+
+                // currentSentence = currentSentence+1;
+            }
+        }
+    }
+
 }
 
 function closeBacklog(){
