@@ -10,19 +10,19 @@
     var autoWaitTime = 1500;
     var textShowWatiTime = 35;
     var currentInfo ={
-        SceneName:'',
-        SentenceID:0,
-        bg_Name:'',
-        fig_Name:'',
-        fig_Name_left:'',
-        fig_Name_right:'',
-        showText:'',
-        showName:'',
-        command:'',
-        choose:'',
-        currentText:0,
-        vocal:'',
-        bgm:''
+        SceneName:'',//场景文件名
+        SentenceID:0,//语句ID
+        bg_Name:'',//背景文件名
+        fig_Name:'',//立绘_中 文件名
+        fig_Name_left:'',//立绘_左 文件名
+        fig_Name_right:'',//立绘_右 文件名
+        showText:'',//文字
+        showName:'',//人物名
+        command:'',//语句指令
+        choose:'',//选项列表
+        currentText:0,//当前文字ID
+        vocal:'',//语音 文件名
+        bgm:''//背景音乐 文件名
     }
     var onTextPreview = 0;
     var currentName = '';
@@ -30,6 +30,10 @@
 
 // 初始化存档系统
 var Saves=[];
+var SaveBacklog=[];
+
+// 初始化backlog存储表
+var CurrentBacklog=[];
 
 //初始化需要记录到cookie的变量
 var currentSavePage = 0;
@@ -48,6 +52,7 @@ function loadCookie(){
         // let scd = document.cookie.slice(fst.length+1);
         let data = JSON.parse(localStorage.getItem('WebGAL'));
         Saves = data.SavedGame;
+        SaveBacklog = data.SavedBacklog;
         currentSavePage = data.SP;
         currentLoadPage  = data.LP;
         Settings = data.cSettings;
@@ -59,6 +64,7 @@ function writeCookie(){
     // expire = ";expires=" + expire.toGMTString();
     let toCookie = {
         SavedGame:Saves,
+        SavedBacklog:SaveBacklog,
         SP:currentSavePage,
         LP:currentLoadPage,
         cSettings:Settings
@@ -71,6 +77,7 @@ function writeCookie(){
 function clearCookie(){
     let toCookie = {
         SavedGame:[],
+        SavedBacklog:[],
         SP:0,
         LP:0,
         cSettings:{
@@ -185,7 +192,7 @@ function LoadSavedGame(index) {
             }
         }
     }
-
+    CurrentBacklog = SaveBacklog[index];
 
 }
 
@@ -193,6 +200,8 @@ function LoadSavedGame(index) {
 function saveGame(index){
     let tempInfo = JSON.stringify(currentInfo);
     Saves[index] = JSON.parse(tempInfo);
+    let tempBacklog = JSON.stringify(CurrentBacklog);
+    SaveBacklog[index]= JSON.parse(tempBacklog);
     writeCookie();
 }
 
@@ -236,7 +245,7 @@ function getScene(url) {
 }
 
 // 引擎加载完成
-window.onload = function (){
+window.onload = function () {
     loadCookie();
     loadSettings();
     document.getElementById('Title').style.backgroundImage = 'url("./game/background/Title.png")';
@@ -293,7 +302,7 @@ function processSentence(i){
 
 // 读取下一条脚本
 function nextSentenceProcessor() {
-
+    let saveBacklogNow = false;
     if(currentSentence >= currentScene.length){
         return;
     }
@@ -442,12 +451,25 @@ function nextSentenceProcessor() {
         if(currentInfo["vocal"]!== ''){
             playVocal();
         }
+        saveBacklogNow = true;
         showTextArray(textArray,currentText+1);
         currentText = currentText + 1;
         currentInfo["currentText"] = currentText;
     }
     currentSentence = currentSentence+1;
     currentInfo["SentenceID"] = currentSentence;
+    if(saveBacklogNow){
+        if(CurrentBacklog.length<=500){
+            let temp = JSON.stringify(currentInfo);
+            let pushElement = JSON.parse(temp);
+            CurrentBacklog.push(pushElement);
+        }else{
+            CurrentBacklog.shift();
+            let temp = JSON.stringify(currentInfo);
+            let pushElement = JSON.parse(temp);
+            CurrentBacklog.push(pushElement);
+        }
+    }
 
     function autoPlay(active){
         if(auto === 1 && active === 'on'){
@@ -764,6 +786,7 @@ class SettingButtons_speed extends React.Component{
 }
 
 function hideTitle(ifRes) {
+    CurrentBacklog = [];
     document.getElementById('Title').style.display = 'none';
     if(ifRes !== 'non-restart'){
         currentInfo["bgm"] = '';
@@ -1035,6 +1058,134 @@ function playVocal() {
     VocalControl.play();
 }
 
+function showBacklog(){
+    document.getElementById('backlog').style.display = 'block';
+    document.getElementById('bottomBox').style.display = 'none';
+    let showBacklogList = [];
+    for (let i = 0 ; i<CurrentBacklog.length ; i++){
+        let temp = <div className={'backlog_singleElement'} key={i} onClick={()=>{jumpFromBacklog(i)}}>
+            <div>{CurrentBacklog[i].showName}</div>
+            <div>{CurrentBacklog[i].showText}</div>
+        </div>
+        showBacklogList.push(temp)
+    }
+    ReactDOM.render(<div>{showBacklogList}</div>,document.getElementById('backlogContent'));
+}
+
+function jumpFromBacklog(index) {
+    closeBacklog();
+    let save = CurrentBacklog[index];
+    for (let i = CurrentBacklog.length - 1 ; i > index ; i--){
+        CurrentBacklog.pop();
+    }
+    //get Scene:
+    let url = 'game/scene/'
+    url = url + save['SceneName'];
+    currentScene ='';
+    currentText = 0;
+
+    let getScReq = null;
+    getScReq = new XMLHttpRequest();
+
+    if (getScReq != null) {
+        getScReq.open("get",url , true);
+        getScReq.send();
+        getScReq.onreadystatechange = doResult; //设置回调函数
+    }
+    function doResult() {
+        if (getScReq.readyState === 4) { //4表示执行完成
+            if (getScReq.status === 200) { //200表示执行成功
+                currentScene = getScReq.responseText;
+                currentScene = currentScene.split('\n');
+                for (let i = 0;i<currentScene.length;i++){
+                    let tempSentence = currentScene[i].split(";")[0];
+                    let commandLength = tempSentence.split(":")[0].length;
+                    let command = currentScene[i].split(":")[0];
+                    let content = tempSentence.slice(commandLength+1);
+                    currentScene[i] = currentScene[i].split(":");
+                    currentScene[i][0] = command;
+                    currentScene[i][1] = content;
+                }
+                // console.log('Read scene complete.');
+                // console.log(currentScene);
+                currentSentence = save["SentenceID"];
+                currentText = save["SentenceID"];
+                // console.log("start:"+currentSentence)
+
+                //load saved scene:
+                let command = save["command"];
+                // console.log('readSaves:'+command)
+                if(save["bg_Name"]!=='')
+                    document.getElementById('mainBackground').style.backgroundImage = "url('game/background/" + save["bg_Name"] + "')";
+                if (save["fig_Name"] === ''||save["fig_Name"] === 'none'){
+                    ReactDOM.render(<div/>,document.getElementById('figureImage'));
+                }else{
+                    let pUrl = "game/figure/"+save["fig_Name"];
+                    let changedP = <img src={pUrl} alt='figure' className='p_center'/>
+                    // console.log('now changing person');
+                    ReactDOM.render(changedP,document.getElementById('figureImage'));
+                }
+                if (save["fig_Name_left"] === ''||save["fig_Name_left"] === 'none'){
+                    ReactDOM.render(<div/>,document.getElementById('figureImage_left'));
+                }else{
+                    let pUrl = "game/figure/"+save["fig_Name_left"];
+                    let changedP = <img src={pUrl} alt='figure' className='p_center'/>
+                    // console.log('now changing person');
+                    ReactDOM.render(changedP,document.getElementById('figureImage_left'));
+                }
+                if (save["fig_Name_right"] === ''||save["fig_Name_right"] === 'none'){
+                    ReactDOM.render(<div/>,document.getElementById('figureImage_right'));
+                }else{
+                    let pUrl = "game/figure/"+save["fig_Name_right"];
+                    let changedP = <img src={pUrl} alt='figure' className='p_center'/>
+                    // console.log('now changing person');
+                    ReactDOM.render(changedP,document.getElementById('figureImage_right'));
+                }
+
+                if(command === 'choose'){
+                    document.getElementById('chooseBox').style.display = 'flex';
+                    let chooseItems =save["choose"];
+                    chooseItems = chooseItems.split("}")[0];
+                    chooseItems = chooseItems.split("{")[1];
+                    let selection = chooseItems.split(',')
+                    for (let i = 0;i<selection.length;i++){
+                        selection[i] = selection[i].split(":");
+                    }
+                    let elements = []
+                    for (let i = 0; i < selection.length; i++) {
+                        let temp = <div className='singleChoose' key={i} onClick={()=>{chooseScene(selection[i][1]);}}>{selection[i][0]}</div>
+                        elements.push(temp)
+                    }
+                    ReactDOM.render(<div>{elements}</div>,document.getElementById('chooseBox'))
+                    // return;
+                }
+                let changedName = <span>{save["showName"]}</span>
+                let textArray = save["showText"].split("");
+                // let changedText = <p>{processSentence(currentSentence)['text']}</p>
+                ReactDOM.render(changedName, document.getElementById('pName'));
+                currentText = save["currentText"];
+                currentInfo["vocal"] = save['vocal'];
+                if(currentInfo['bgm'] !== save['bgm']){
+                    currentInfo['bgm'] = save['bgm'];
+                    loadBGM();
+                }
+                playVocal();
+                showTextArray(textArray,currentText);
+                // currentText = currentText + 1;
+
+                // currentSentence = currentSentence+1;
+            }
+        }
+    }
+
+}
+
+function closeBacklog(){
+    document.getElementById('backlog').style.display = 'none';
+    document.getElementById('bottomBox').style.display = 'flex';
+}
+
+// 禁止F12
 document.onkeydown=function(e){
         if(e.keyCode === 123){
             e.returnValue=false
