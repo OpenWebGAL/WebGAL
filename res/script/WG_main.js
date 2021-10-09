@@ -1053,6 +1053,25 @@ function playVocal() {
     VocalControl.play();
 }
 
+function showBacklog(){
+    document.getElementById('backlog').style.display = 'block';
+    document.getElementById('bottomBox').style.display = 'none';
+    let showBacklogList = [];
+    for (let i = 0 ; i<CurrentBacklog.length ; i++){
+        let temp = <div className={'backlog_singleElement'} key={i}>
+            <div>{CurrentBacklog[i].showName}</div>
+            <div>{CurrentBacklog[i].showText}</div>
+        </div>
+        showBacklogList.push(temp)
+    }
+    ReactDOM.render(<div>{showBacklogList}</div>,document.getElementById('backlogContent'));
+}
+
+function closeBacklog(){
+    document.getElementById('backlog').style.display = 'none';
+    document.getElementById('bottomBox').style.display = 'flex';
+}
+
 // 禁止F12
 // document.onkeydown=function(e){
 //         if(e.keyCode === 123){
