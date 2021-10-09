@@ -1036,7 +1036,7 @@ function playVocal() {
 }
 
 document.onkeydown=function(e){
-        if(e.keyCode==123){
+        if(e.keyCode === 123){
             e.returnValue=false
             return false
         }
