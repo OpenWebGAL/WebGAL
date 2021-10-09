@@ -10,19 +10,19 @@
     var autoWaitTime = 1500;
     var textShowWatiTime = 35;
     var currentInfo ={
-        SceneName:'',
-        SentenceID:0,
-        bg_Name:'',
-        fig_Name:'',
-        fig_Name_left:'',
-        fig_Name_right:'',
-        showText:'',
-        showName:'',
-        command:'',
-        choose:'',
-        currentText:0,
-        vocal:'',
-        bgm:''
+        SceneName:'',//场景文件名
+        SentenceID:0,//语句ID
+        bg_Name:'',//背景文件名
+        fig_Name:'',//立绘_中 文件名
+        fig_Name_left:'',//立绘_左 文件名
+        fig_Name_right:'',//立绘_右 文件名
+        showText:'',//文字
+        showName:'',//人物名
+        command:'',//语句指令
+        choose:'',//选项列表
+        currentText:0,//当前文字ID
+        vocal:'',//语音 文件名
+        bgm:''//背景音乐 文件名
     }
     var onTextPreview = 0;
     var currentName = '';
