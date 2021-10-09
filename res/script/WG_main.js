@@ -30,6 +30,10 @@
 
 // 初始化存档系统
 var Saves=[];
+var SaveBacklog=[];
+
+// 初始化backlog存储表
+var CurrentBacklog=[];
 
 //初始化需要记录到cookie的变量
 var currentSavePage = 0;
@@ -48,6 +52,7 @@ function loadCookie(){
         // let scd = document.cookie.slice(fst.length+1);
         let data = JSON.parse(localStorage.getItem('WebGAL'));
         Saves = data.SavedGame;
+        SaveBacklog = data.SavedBacklog;
         currentSavePage = data.SP;
         currentLoadPage  = data.LP;
         Settings = data.cSettings;
@@ -59,6 +64,7 @@ function writeCookie(){
     // expire = ";expires=" + expire.toGMTString();
     let toCookie = {
         SavedGame:Saves,
+        SavedBacklog:SaveBacklog,
         SP:currentSavePage,
         LP:currentLoadPage,
         cSettings:Settings
@@ -71,6 +77,7 @@ function writeCookie(){
 function clearCookie(){
     let toCookie = {
         SavedGame:[],
+        SavedBacklog:[],
         SP:0,
         LP:0,
         cSettings:{
@@ -185,7 +192,7 @@ function LoadSavedGame(index) {
             }
         }
     }
-
+    CurrentBacklog = SaveBacklog[index];
 
 }
 
@@ -193,6 +200,8 @@ function LoadSavedGame(index) {
 function saveGame(index){
     let tempInfo = JSON.stringify(currentInfo);
     Saves[index] = JSON.parse(tempInfo);
+    let tempBacklog = JSON.stringify(CurrentBacklog);
+    SaveBacklog[index]= JSON.parse(tempBacklog);
     writeCookie();
 }
 
@@ -236,7 +245,7 @@ function getScene(url) {
 }
 
 // 引擎加载完成
-window.onload = function (){
+window.onload = function () {
     loadCookie();
     loadSettings();
     document.getElementById('Title').style.backgroundImage = 'url("./game/background/Title.png")';
@@ -441,6 +450,15 @@ function nextSentenceProcessor() {
         ReactDOM.render(changedName, document.getElementById('pName'));
         if(currentInfo["vocal"]!== ''){
             playVocal();
+        }
+        if(CurrentBacklog.length<=500){
+            let temp = JSON.stringify(currentInfo);
+            CurrentBacklog.push(JSON.parse(temp));
+        }else{
+
+            CurrentBacklog.shift();
+            let temp = JSON.stringify(currentInfo);
+            CurrentBacklog.push(JSON.parse(temp));
         }
         showTextArray(textArray,currentText+1);
         currentText = currentText + 1;
