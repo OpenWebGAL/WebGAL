@@ -1034,3 +1034,9 @@ function playVocal() {
     VocalControl.currentTime = 0;
     VocalControl.play();
 }
+document.onkeydown=function(e){
+        if(e.keyCode==123){
+            e.returnValue=false
+            return false
+        }
+    }
