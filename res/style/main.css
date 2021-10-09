@@ -260,8 +260,8 @@ a:visited{
     -webkit-animation: showSoftly 0.5s;
 }
 #figureImage_left{
-    padding: 0 0 0 50px;
-    width: 100%;
+    left: 2%;
+    width: 98%;
     position: absolute;
     display: flex;
     justify-content: left;
@@ -283,8 +283,8 @@ a:visited{
     -webkit-animation: showSoftly 0.5s;
 }
 #figureImage_right{
-    padding: 0 50px 0 0;
-    width: 100%;
+    right: 2%;
+    width: 98%;
     position: absolute;
     display: flex;
     justify-content: right;
