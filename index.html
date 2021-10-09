@@ -42,6 +42,12 @@
         <div id="textPreview"></div>
     </div>
 </div>
+<div id="backlog">
+    <div id="closeBl" onclick="closeBacklog()">
+        <img src="res/img/closeWhite.svg" class="closeSVG" alt="close">
+    </div>
+    <div id="backlogContent"></div>
+</div>
 
 <div id="Load">
     <div id="loadMainBox">
@@ -89,7 +95,7 @@
         <div class="controlButton" onclick="onLoadGame()" id="loadButton">读档</div>
         <div class="controlButton" onclick="onSetting()">设置</div>
         <div class="controlButton" onclick="Title()" id="titleButton">标题</div>
-        <div class="controlButton" onclick="exit()">退出</div>
+        <div class="controlButton" onclick="showBacklog()">回溯</div>
     </div>
 </div>
 <div id="bgm"></div>
