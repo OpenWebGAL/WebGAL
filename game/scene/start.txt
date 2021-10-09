@@ -1,8 +1,8 @@
-changeBG_next:testBG03.png;
-changeP_left_next:testFigure03.png;
+changeBG_next:testBG03t.png;
+changeP_left_next:testFigure03t.png;
 雪之下雪乃:vocal-V1.ogg,你到得真早;
 vocal-V2.ogg,对不起，等很久了吗？;
 bgm:夏影.mp3;
-changeP_next:testFigure04.png;
+changeP_next:testFigure04t.png;
 比企谷八幡:vocal-V3.ogg,刚到而已;
 雪之下雪乃:vocal-V4.ogg,方便帮我开门吗;
