@@ -297,6 +297,7 @@ a:visited{
 }
 
 #backlog{
+    color: white;
     position: absolute;
     top: 20px;
     bottom: 20px;
