@@ -26,6 +26,7 @@
     }
     var onTextPreview = 0;
     var currentName = '';
+    var showingText = false;
 }
 
 // 初始化存档系统
@@ -307,6 +308,10 @@ function processSentence(i){
 
 // 读取下一条脚本
 function nextSentenceProcessor() {
+    if(showingText){
+        showingText = false;
+        return;
+    }
     let saveBacklogNow = false;
     if(currentSentence >= currentScene.length){
         return;
@@ -491,33 +496,53 @@ function nextSentenceProcessor() {
 
 // 渐显文字
 function showTextArray(textArray,now){
+    showingText = false;
     ReactDOM.render(<span> </span>, document.getElementById('SceneText'));
     let elementArray = [];
     let i = 0;
     clearInterval(interval);
     var interval = setInterval(showSingle,textShowWatiTime);
     // console.log("now: "+now+" currentText: "+currentText)
+    showingText = true;
     function showSingle() {
-        let tempElement = <span key={i} className='singleWord'>{textArray[i]}</span>
-        elementArray.push(tempElement);
-        if(currentText === now)
-            ReactDOM.render(<div>{elementArray}</div>, document.getElementById('SceneText'));
-        i = i+1;
+        if(!showingText){
+            let textFull = '';
+            for (let j = 0;j<textArray.length;j++){
+                textFull = textFull+textArray[j];
+            }
+            ReactDOM.render(<div>{textFull}</div>, document.getElementById('SceneText'));
+            i = textArray.length + 1 +(autoWaitTime/35);
+
+        }else{
+            let tempElement = <span key={i} className='singleWord'>{textArray[i]}</span>
+            elementArray.push(tempElement);
+            if(currentText === now)
+                ReactDOM.render(<div>{elementArray}</div>, document.getElementById('SceneText'));
+            i = i+1;
+        }
+        if(i > textArray.length && auto !== 1){
+            showingText = false;
+        }
         if(i > textArray.length +(autoWaitTime/35) || currentText!== now){
 
-            if(auto === 1&&currentText === now){
+            if(auto === 1 && currentText === now){
                 if(document.getElementById('currentVocal')&&fast === 0){
                     if(document.getElementById('currentVocal').ended)
                     {
                         clearInterval(interval);
+                        showingText = false;
                         nextSentenceProcessor();
                     }
                 }else{
                     clearInterval(interval);
+                    showingText = false;
                     nextSentenceProcessor();
                 }
-            }else
+            }else{
+                showingText = false;
                 clearInterval(interval);
+            }
+
         }
     }
 }
@@ -1206,11 +1231,11 @@ function isMobile(){
 //             return false
 //         }
 //     }
-//禁止右键菜单以及选择文字
-// document.addEventListener('contextmenu', function(e) {
-//   e.preventDefault();
-//   });
-// document.addEventListener('selectstart', function(e) {
-//   e.preventDefault();
-//   });
+// 禁止右键菜单以及选择文字
+document.addEventListener('contextmenu', function(e) {
+  e.preventDefault();
+  });
+document.addEventListener('selectstart', function(e) {
+  e.preventDefault();
+  });
 
