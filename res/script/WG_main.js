@@ -511,7 +511,15 @@ function showTextArray(textArray,now){
                 textFull = textFull+textArray[j];
             }
             ReactDOM.render(<div>{textFull}</div>, document.getElementById('SceneText'));
-            i = textArray.length + 1 +(autoWaitTime/35);
+            if(auto === 1){
+                if(i < textArray.length + 1){
+                    i = textArray.length + 1;
+                }else{
+                    i = i+1;
+                }
+            }else{
+                i = textArray.length + 1 +(autoWaitTime/35);
+            }
 
         }else{
             let tempElement = <span key={i} className='singleWord'>{textArray[i]}</span>
