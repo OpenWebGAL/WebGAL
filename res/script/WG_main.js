@@ -26,6 +26,7 @@
     }
     var onTextPreview = 0;
     var currentName = '';
+    var showingText = false;
 }
 
 // 初始化存档系统
@@ -249,6 +250,11 @@ window.onload = function () {
     loadCookie();
     loadSettings();
     document.getElementById('Title').style.backgroundImage = 'url("./game/background/Title.png")';
+    if(isMobile()){
+        console.log("nowis mobile view");
+        document.getElementById('bottomBox').style.height = '45%';
+        document.getElementById('TitleModel').style.height = '20%';
+    }
 }
 
 function loadSettings(){
@@ -302,6 +308,10 @@ function processSentence(i){
 
 // 读取下一条脚本
 function nextSentenceProcessor() {
+    if(showingText){
+        showingText = false;
+        return;
+    }
     let saveBacklogNow = false;
     if(currentSentence >= currentScene.length){
         return;
@@ -486,33 +496,61 @@ function nextSentenceProcessor() {
 
 // 渐显文字
 function showTextArray(textArray,now){
+    showingText = false;
     ReactDOM.render(<span> </span>, document.getElementById('SceneText'));
     let elementArray = [];
     let i = 0;
     clearInterval(interval);
     var interval = setInterval(showSingle,textShowWatiTime);
     // console.log("now: "+now+" currentText: "+currentText)
+    showingText = true;
     function showSingle() {
-        let tempElement = <span key={i} className='singleWord'>{textArray[i]}</span>
-        elementArray.push(tempElement);
-        if(currentText === now)
-            ReactDOM.render(<div>{elementArray}</div>, document.getElementById('SceneText'));
-        i = i+1;
+        if(!showingText){
+            let textFull = '';
+            for (let j = 0;j<textArray.length;j++){
+                textFull = textFull+textArray[j];
+            }
+            ReactDOM.render(<div>{textFull}</div>, document.getElementById('SceneText'));
+            if(auto === 1){
+                if(i < textArray.length + 1){
+                    i = textArray.length + 1;
+                }else{
+                    i = i+1;
+                }
+            }else{
+                i = textArray.length + 1 +(autoWaitTime/35);
+            }
+
+        }else{
+            let tempElement = <span key={i} className='singleWord'>{textArray[i]}</span>
+            elementArray.push(tempElement);
+            if(currentText === now)
+                ReactDOM.render(<div>{elementArray}</div>, document.getElementById('SceneText'));
+            i = i+1;
+        }
+        if(i > textArray.length && auto !== 1){
+            showingText = false;
+        }
         if(i > textArray.length +(autoWaitTime/35) || currentText!== now){
 
-            if(auto === 1&&currentText === now){
+            if(auto === 1 && currentText === now){
                 if(document.getElementById('currentVocal')&&fast === 0){
                     if(document.getElementById('currentVocal').ended)
                     {
                         clearInterval(interval);
+                        showingText = false;
                         nextSentenceProcessor();
                     }
                 }else{
                     clearInterval(interval);
+                    showingText = false;
                     nextSentenceProcessor();
                 }
-            }else
+            }else{
+                showingText = false;
                 clearInterval(interval);
+            }
+
         }
     }
 }
@@ -1064,8 +1102,8 @@ function showBacklog(){
     let showBacklogList = [];
     for (let i = 0 ; i<CurrentBacklog.length ; i++){
         let temp = <div className={'backlog_singleElement'} key={i} onClick={()=>{jumpFromBacklog(i)}}>
-            <div>{CurrentBacklog[i].showName}</div>
-            <div>{CurrentBacklog[i].showText}</div>
+            <div className={"backlog_name"}>{CurrentBacklog[i].showName}</div>
+            <div className={"backlog_text"}>{CurrentBacklog[i].showText}</div>
         </div>
         showBacklogList.push(temp)
     }
@@ -1185,14 +1223,23 @@ function closeBacklog(){
     document.getElementById('bottomBox').style.display = 'flex';
 }
 
-// 禁止F12
-document.onkeydown=function(e){
-        if(e.keyCode === 123){
-            e.returnValue=false
-            return false
-        }
+function isMobile(){
+    let info = navigator.userAgent;
+    let agents = ["Android", "iPhone", "SymbianOS", "Windows Phone", "iPod", "iPad"];
+    for(let i = 0; i < agents.length; i++){
+        if(info.indexOf(agents[i]) >= 0) return true;
     }
-//禁止右键菜单以及选择文字
+    return false;
+}
+
+// 禁止F12
+// document.onkeydown=function(e){
+//         if(e.keyCode === 123){
+//             e.returnValue=false
+//             return false
+//         }
+//     }
+// 禁止右键菜单以及选择文字
 document.addEventListener('contextmenu', function(e) {
   e.preventDefault();
   });

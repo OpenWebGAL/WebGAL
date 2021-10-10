@@ -19,6 +19,7 @@
     display: block;
     padding: 15px 15px 15px 15px;
     width: 100%;
+    overflow: scroll;
 }
 
 #settingsTitle{
