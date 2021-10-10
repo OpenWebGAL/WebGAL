@@ -249,6 +249,11 @@ window.onload = function () {
     loadCookie();
     loadSettings();
     document.getElementById('Title').style.backgroundImage = 'url("./game/background/Title.png")';
+    if(isMobile()){
+        console.log("nowis mobile view");
+        document.getElementById('bottomBox').style.height = '45%';
+        document.getElementById('TitleModel').style.height = '20%';
+    }
 }
 
 function loadSettings(){
@@ -1064,8 +1069,8 @@ function showBacklog(){
     let showBacklogList = [];
     for (let i = 0 ; i<CurrentBacklog.length ; i++){
         let temp = <div className={'backlog_singleElement'} key={i} onClick={()=>{jumpFromBacklog(i)}}>
-            <div>{CurrentBacklog[i].showName}</div>
-            <div>{CurrentBacklog[i].showText}</div>
+            <div className={"backlog_name"}>{CurrentBacklog[i].showName}</div>
+            <div className={"backlog_text"}>{CurrentBacklog[i].showText}</div>
         </div>
         showBacklogList.push(temp)
     }
@@ -1185,6 +1190,15 @@ function closeBacklog(){
     document.getElementById('bottomBox').style.display = 'flex';
 }
 
+function isMobile(){
+    let info = navigator.userAgent;
+    let agents = ["Android", "iPhone", "SymbianOS", "Windows Phone", "iPod", "iPad"];
+    for(let i = 0; i < agents.length; i++){
+        if(info.indexOf(agents[i]) >= 0) return true;
+    }
+    return false;
+}
+
 // 禁止F12
 // document.onkeydown=function(e){
 //         if(e.keyCode === 123){
@@ -1193,10 +1207,10 @@ function closeBacklog(){
 //         }
 //     }
 //禁止右键菜单以及选择文字
-document.addEventListener('contextmenu', function(e) {
-  e.preventDefault();
-  });
-document.addEventListener('selectstart', function(e) {
-  e.preventDefault();
-  });
+// document.addEventListener('contextmenu', function(e) {
+//   e.preventDefault();
+//   });
+// document.addEventListener('selectstart', function(e) {
+//   e.preventDefault();
+//   });
 
