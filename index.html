@@ -11,6 +11,9 @@
 </head>
 <body>
 <script src="res/script/babel.min.js"></script>
+<div  id ="ren_test" class="ren_preview">
+
+</div>
 <div id="MesModel"></div>
 <div id="Title">
     <div id="TitleModel">
@@ -24,12 +27,12 @@
 
     </div>
 </div>
-<div id="mainBackground">
+<div id="mainBackground" onclick="clickOnBack()">
 
 </div>
-<div id="figureImage"></div>
-<div id="figureImage_left"></div>
-<div id="figureImage_right"></div>
+<div id="figureImage" onclick="clickOnBack()"></div>
+<div id="figureImage_left" onclick="clickOnBack()"></div>
+<div id="figureImage_right" onclick="clickOnBack()"></div>
 <div id="settings">
     <div id="settingsMainBox">
         <div id="close" onclick="closeSettings()">
@@ -82,6 +85,10 @@
 
 </div>
 <div id="bottomBox">
+    <div id="top_control">
+        <span class="top_button" onclick="showBacklog()" >回溯</span>
+        <span class="top_button" onclick="hideTextBox()">隐藏</span>
+    </div>
     <div id="mainTextWindow" onclick="nextSentenceProcessor()">
             <div id="pName"></div>
             <div id="SceneText" ></div>
@@ -90,12 +97,10 @@
         <div class="controlButton" onclick="playVocal()">重播</div>
         <div class="controlButton" onclick="autoNext()" id="autoButton">自动</div>
         <div class="controlButton" onclick="fastNext()" id="fastButton">快进</div>
-<!--        <div class="controlButton">回溯</div>-->
         <div class="controlButton" onclick="onSaveGame()" id="saveButton">存档</div>
         <div class="controlButton" onclick="onLoadGame()" id="loadButton">读档</div>
         <div class="controlButton" onclick="onSetting()">设置</div>
         <div class="controlButton" onclick="Title()" id="titleButton">标题</div>
-        <div class="controlButton" onclick="showBacklog()">回溯</div>
     </div>
 </div>
 <div id="bgm"></div>
