@@ -449,6 +449,53 @@ function nextSentenceProcessor() {
         nextSentenceProcessor();
         return;
     }
+    else if(command === 'choose_label'){
+
+        currentInfo["command"] = command;
+        document.getElementById('chooseBox').style.display = 'flex';
+        let chooseItems =thisSentence[1];
+        currentInfo["choose"]=chooseItems;
+        chooseItems = chooseItems.split("}")[0];
+        chooseItems = chooseItems.split("{")[1];
+        let selection = chooseItems.split(',')
+        for (let i = 0;i<selection.length;i++){
+            selection[i] = selection[i].split(":");
+        }
+        let elements = []
+        for (let i = 0; i < selection.length; i++) {
+            let temp = <div className='singleChoose' key={i} onClick={()=>{chooseJumpFun(selection[i][1]);}}>{selection[i][0]}</div>
+            elements.push(temp)
+        }
+        ReactDOM.render(<div>{elements}</div>,document.getElementById('chooseBox'))
+        return;
+    }
+    else if(command === 'jump_label'){
+        let lab_name = thisSentence[1];
+        //find the line of the label:
+        let find = false;
+        let jmp_sentence = 0;
+        for (let i = 0; i < currentScene.length; i++) {
+            if(currentScene[i][0] === 'label' && currentScene[i][1] === lab_name){
+                find = true;
+                jmp_sentence = i;
+            }
+        }
+        if(find){
+            currentSentence = jmp_sentence;
+            nextSentenceProcessor();
+            return;
+        }else
+        {
+            currentSentence = currentSentence+1;
+            nextSentenceProcessor();
+            return;
+        }
+    }
+    else if(command === 'label'){
+        currentSentence = currentSentence+1;
+        nextSentenceProcessor();
+        return;
+    }
     else {
         currentInfo["command"] = processSentence(currentSentence)['name'];
         currentInfo["showName"] = processSentence(currentSentence)['name'];
@@ -593,6 +640,29 @@ function showTextPreview(text){
                 document.getElementById('previewDiv').style.fontSize = '250%';
             }
         }
+    }
+}
+
+function chooseJumpFun(label){
+    let lab_name = label;
+    //find the line of the label:
+    let find = false;
+    let jmp_sentence = 0;
+    for (let i = 0; i < currentScene.length; i++) {
+        if(currentScene[i][0] === 'label' && currentScene[i][1] === lab_name){
+            find = true;
+            jmp_sentence = i;
+        }
+    }
+    if(find){
+        currentSentence = jmp_sentence;
+        nextSentenceProcessor();
+        document.getElementById("chooseBox").style.display="none"
+    }else
+    {
+        currentSentence = currentSentence+1;
+        nextSentenceProcessor();
+        document.getElementById("chooseBox").style.display="none"
     }
 }
 
@@ -1230,6 +1300,54 @@ function isMobile(){
         if(info.indexOf(agents[i]) >= 0) return true;
     }
     return false;
+}
+
+var hideTextStatus = false;
+function hideTextBox(){
+    if(!hideTextStatus){
+        document.getElementById('bottomBox').style.display = 'none';
+        hideTextStatus = true;
+    }
+}
+function clickOnBack(){
+    if(hideTextStatus){
+        document.getElementById('bottomBox').style.display = 'flex';
+        hideTextStatus = false;
+    }else {
+        nextSentenceProcessor();
+    }
+}
+
+function ren_miniPic(){
+    document.getElementById('ren_test').style.display = 'block';
+    let backUrl = "./game/background/"+currentInfo["bg_Name"];
+    let leftFigUrl = "./game/figure/"+currentInfo["fig_Name_left"];
+    let FigUrl = "./game/figure/"+currentInfo["fig_Name"];
+    let rightFigUrl = "./game/figure/"+currentInfo["fig_Name_right"];
+    let renderList= [];
+    if(currentInfo["fig_Name_left"]!=='none'&& currentInfo["fig_Name_left"]!==''){
+        let tempIn= <div id={"mini_fig_left"} className={"mini_fig"}>
+            <img src={leftFigUrl} alt={"mini_fig"} className={"mini_fig_pic"}/>
+        </div>
+        renderList.push(tempIn);
+    }
+    if(currentInfo["fig_Name"]!=='none'&& currentInfo["fig_Name"]!==''){
+        let tempIn= <div id={"mini_fig_center"} className={"mini_fig"}>
+            <img src={FigUrl} alt={"mini_fig"} className={"mini_fig_pic"}/>
+        </div>
+        renderList.push(tempIn);
+    }
+    if(currentInfo["fig_Name_right"]!=='none'&& currentInfo["fig_Name_right"]!==''){
+        let tempIn= <div id={"mini_fig_right"} className={"mini_fig"}>
+            <img src={rightFigUrl} alt={"mini_fig"} className={"mini_fig_pic"}/>
+        </div>
+        renderList.push(tempIn);
+    }
+    let element = <div id={"miniPic"}>
+        {renderList}
+    </div>
+    ReactDOM.render(element,document.getElementById('ren_test'));
+    document.getElementById('ren_test').style.backgroundImage = "url('" + backUrl + "')";
 }
 
 // 禁止F12
