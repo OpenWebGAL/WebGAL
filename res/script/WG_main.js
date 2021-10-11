@@ -449,6 +449,53 @@ function nextSentenceProcessor() {
         nextSentenceProcessor();
         return;
     }
+    else if(command === 'choose_label'){
+
+        currentInfo["command"] = command;
+        document.getElementById('chooseBox').style.display = 'flex';
+        let chooseItems =thisSentence[1];
+        currentInfo["choose"]=chooseItems;
+        chooseItems = chooseItems.split("}")[0];
+        chooseItems = chooseItems.split("{")[1];
+        let selection = chooseItems.split(',')
+        for (let i = 0;i<selection.length;i++){
+            selection[i] = selection[i].split(":");
+        }
+        let elements = []
+        for (let i = 0; i < selection.length; i++) {
+            let temp = <div className='singleChoose' key={i} onClick={()=>{chooseJumpFun(selection[i][1]);}}>{selection[i][0]}</div>
+            elements.push(temp)
+        }
+        ReactDOM.render(<div>{elements}</div>,document.getElementById('chooseBox'))
+        return;
+    }
+    else if(command === 'jump_label'){
+        let lab_name = thisSentence[1];
+        //find the line of the label:
+        let find = false;
+        let jmp_sentence = 0;
+        for (let i = 0; i < currentScene.length; i++) {
+            if(currentScene[i][0] === 'label' && currentScene[i][1] === lab_name){
+                find = true;
+                jmp_sentence = i;
+            }
+        }
+        if(find){
+            currentSentence = jmp_sentence;
+            nextSentenceProcessor();
+            return;
+        }else
+        {
+            currentSentence = currentSentence+1;
+            nextSentenceProcessor();
+            return;
+        }
+    }
+    else if(command === 'label'){
+        currentSentence = currentSentence+1;
+        nextSentenceProcessor();
+        return;
+    }
     else {
         currentInfo["command"] = processSentence(currentSentence)['name'];
         currentInfo["showName"] = processSentence(currentSentence)['name'];
@@ -593,6 +640,29 @@ function showTextPreview(text){
                 document.getElementById('previewDiv').style.fontSize = '250%';
             }
         }
+    }
+}
+
+function chooseJumpFun(label){
+    let lab_name = label;
+    //find the line of the label:
+    let find = false;
+    let jmp_sentence = 0;
+    for (let i = 0; i < currentScene.length; i++) {
+        if(currentScene[i][0] === 'label' && currentScene[i][1] === lab_name){
+            find = true;
+            jmp_sentence = i;
+        }
+    }
+    if(find){
+        currentSentence = jmp_sentence;
+        nextSentenceProcessor();
+        document.getElementById("chooseBox").style.display="none"
+    }else
+    {
+        currentSentence = currentSentence+1;
+        nextSentenceProcessor();
+        document.getElementById("chooseBox").style.display="none"
     }
 }
 
@@ -1249,6 +1319,7 @@ function clickOnBack(){
 }
 
 function ren_miniPic(){
+    document.getElementById('ren_test').style.display = 'block';
     let backUrl = "./game/background/"+currentInfo["bg_Name"];
     let leftFigUrl = "./game/figure/"+currentInfo["fig_Name_left"];
     let FigUrl = "./game/figure/"+currentInfo["fig_Name"];

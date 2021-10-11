@@ -363,6 +363,7 @@ a:visited{
 }
 
 .ren_preview{
+    display: none;
     position: absolute;
     top: 5px;
     right: 5px;
