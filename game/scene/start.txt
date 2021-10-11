@@ -13,4 +13,4 @@ changeP_next:testFigure04.png;
 比如一下子把页面拉伸得很长之类的事情
 但是想要调节好，还是一件很难的事情，我们都不清楚应该把高度定为多少。
 接下来来测试一下带分支的情况怎么样
-choose:{分支1:C1.txt,分支2:C2.txt};
+choose:{测试jump:C1.txt,测试 choose jump:C2.txt};
