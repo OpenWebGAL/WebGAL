@@ -1232,6 +1232,53 @@ function isMobile(){
     return false;
 }
 
+var hideTextStatus = false;
+function hideTextBox(){
+    if(!hideTextStatus){
+        document.getElementById('bottomBox').style.display = 'none';
+        hideTextStatus = true;
+    }
+}
+function clickOnBack(){
+    if(hideTextStatus){
+        document.getElementById('bottomBox').style.display = 'flex';
+        hideTextStatus = false;
+    }else {
+        nextSentenceProcessor();
+    }
+}
+
+function ren_miniPic(){
+    let backUrl = "./game/background/"+currentInfo["bg_Name"];
+    let leftFigUrl = "./game/figure/"+currentInfo["fig_Name_left"];
+    let FigUrl = "./game/figure/"+currentInfo["fig_Name"];
+    let rightFigUrl = "./game/figure/"+currentInfo["fig_Name_right"];
+    let renderList= [];
+    if(currentInfo["fig_Name_left"]!=='none'&& currentInfo["fig_Name_left"]!==''){
+        let tempIn= <div id={"mini_fig_left"} className={"mini_fig"}>
+            <img src={leftFigUrl} alt={"mini_fig"} className={"mini_fig_pic"}/>
+        </div>
+        renderList.push(tempIn);
+    }
+    if(currentInfo["fig_Name"]!=='none'&& currentInfo["fig_Name"]!==''){
+        let tempIn= <div id={"mini_fig_center"} className={"mini_fig"}>
+            <img src={FigUrl} alt={"mini_fig"} className={"mini_fig_pic"}/>
+        </div>
+        renderList.push(tempIn);
+    }
+    if(currentInfo["fig_Name_right"]!=='none'&& currentInfo["fig_Name_right"]!==''){
+        let tempIn= <div id={"mini_fig_right"} className={"mini_fig"}>
+            <img src={rightFigUrl} alt={"mini_fig"} className={"mini_fig_pic"}/>
+        </div>
+        renderList.push(tempIn);
+    }
+    let element = <div id={"miniPic"}>
+        {renderList}
+    </div>
+    ReactDOM.render(element,document.getElementById('ren_test'));
+    document.getElementById('ren_test').style.backgroundImage = "url('" + backUrl + "')";
+}
+
 // 禁止F12
 // document.onkeydown=function(e){
 //         if(e.keyCode === 123){

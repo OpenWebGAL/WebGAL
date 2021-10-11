@@ -347,3 +347,65 @@ a:visited{
 .backlog_text{
     padding: 0 0 0 15px;
 }
+
+#top_control{
+    position: absolute;
+    top:5px;
+    z-index: 4;
+    width: 100%;
+    padding: 0 35px 0 0;
+}
+
+.top_button{
+    float: right;
+    padding: 5px 10px 5px 10px;
+    color: white;
+}
+
+.ren_preview{
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    width: 10%;
+    height: 10%;
+    max-width: 10%;
+    max-height: 10%;
+    z-index: 16;
+    background-color: white;
+    background-repeat: no-repeat;
+    background-size:cover;
+}
+
+#miniPic{
+    height: 10vh;
+    width: 10vh;
+}
+
+.mini_fig_pic{
+    max-width: 10vw;
+    max-height: 10vh;
+    width: auto;
+    height: auto;
+    object-fit: cover;
+}
+
+#mini_fig_center{
+    position: absolute;
+    z-index: 17;
+    display: flex;
+    width: 10vw;
+    justify-content: center;
+    justify-items: center;
+}
+
+#mini_fig_left{
+    position: absolute;
+    z-index: 17;
+    float: left;
+}
+
+#mini_fig_right{
+    position: absolute;
+    z-index: 17;
+    float: right;
+}
