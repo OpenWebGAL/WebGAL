@@ -1365,3 +1365,297 @@ document.addEventListener('selectstart', function(e) {
   e.preventDefault();
   });
 
+
+
+/**
+ * 查询当前组件状态
+ * @param {string | Array.<string> | undefined} widgets
+ * @returns {boolean | Map.<string, boolean>}
+ */
+function queryWidgetState(widgets) {
+    const name2query = new Map([
+        ['TitleScreen', 'div#Title'],
+        ['TextBox', 'div#bottomBox'],
+        ['SaveScreen', 'div#Save'],
+        ['LoadScreen', 'div#Load'],
+        ['SettingScreen', 'div#settings'],
+        ['BacklogScreen', 'div#backlog'],
+        ['PanicScreen', 'div#panic-overlay'],
+    ]);
+
+    let reduce = false;
+    if (typeof (widgets) === 'string') {
+        widgets = [widgets,];
+        reduce = true;
+    }
+    else if (widgets === undefined) {
+        widgets = Array.from(name2query.keys())
+    }
+
+    let state_map = new Map();
+    for (const wi of widgets) {
+        const query = name2query.get(wi);
+        if (query === undefined)
+            throw new RangeError(`No widget named ${wi}.`);
+        const ele = document.querySelector(query);
+        let disp = ele.style.display;
+        if (disp === '')
+            disp = window.getComputedStyle(ele).display;
+        state_map.set(wi, disp !== 'none');
+    }
+
+    if (reduce)
+        state_map = state_map.values().next().value
+    return state_map;
+}
+
+
+/**
+ * 略过 ignore，检测 states 中所有组件是否均隐藏
+ * @param {Map.<string, boolean>} states
+ * @param {string | Array.<string> | undefined} ignore
+ * @returns {boolean}
+ */
+function AllHiddenIgnore(states, ignore) {
+    if (typeof (ignore) === 'string')
+        ignore = [ignore,];
+    else if (ignore === undefined)
+        ignore = []
+    for (const [key, value] of states) {
+        if (value === true && !ignore.includes(key))
+            return false;
+    }
+    return true;
+}
+
+
+
+// -------- 快捷键 --------
+
+document.addEventListener('keydown', function (ev) {
+    if (ev.isComposing || ev.defaultPrevented || ev.repeat)
+        return;
+
+    switch (ev.code) {
+        // begin ctrl skip
+        case 'ControlLeft':
+        case 'ControlRight':
+            {
+                const state = queryWidgetState();
+                // 「正在游戏」状态
+                if (AllHiddenIgnore(state, 'TextBox')) {
+                    fastNext();
+                    ev.preventDefault();
+                }
+            }
+            break;
+
+        default:
+            break;
+    }
+});
+
+
+document.addEventListener('keyup', function (ev) {
+    if (ev.isComposing || ev.defaultPrevented)
+        return;
+
+    switch (ev.code) {
+        // end ctrl skip
+        case 'ControlLeft':
+        case 'ControlRight':
+            {
+                const state = queryWidgetState();
+                // 「正在游戏」状态
+                if (AllHiddenIgnore(state, 'TextBox')) {
+                    fastNext();
+                    ev.preventDefault();
+                }
+            }
+            break;
+
+        // advance text / confirm
+        case 'Space':
+        case 'Enter':
+        case 'NumpadEnter':
+            {
+                const state = queryWidgetState();
+                if (AllHiddenIgnore(state, 'TextBox')) {
+                    // 文本框显示
+                    if (state.get('TextBox'))
+                        nextSentenceProcessor();
+                    else {
+                        document.querySelector('div#bottomBox').style.display = 'flex';
+                        hideTextStatus = false;
+                    }
+                    ev.preventDefault();
+                }
+            }
+            break;
+
+        // auto mode
+        case 'KeyA':
+            {
+                const state = queryWidgetState();
+                if (AllHiddenIgnore(state, 'TextBox')) {
+                    autoNext();
+                    ev.preventDefault();
+                }
+            }
+            break;
+
+        // skip mode
+        case 'KeyF':
+            {
+                const state = queryWidgetState();
+                if (AllHiddenIgnore(state, 'TextBox')) {
+                    fastNext();
+                    ev.preventDefault();
+                }
+            }
+            break;
+
+        // replay voice
+        case 'KeyV':
+            {
+                const state = queryWidgetState();
+                if (AllHiddenIgnore(state, 'TextBox')) {
+                    playVocal();
+                    ev.preventDefault();
+                }
+            }
+            break;
+
+        // save dialog
+        case 'KeyS':
+            {
+                const state = queryWidgetState();
+                if (AllHiddenIgnore(state, ['TextBox', 'SaveScreen'])) {
+                    if (state.get('SaveScreen'))
+                        closeSave();
+                    else
+                        onSaveGame();
+                    ev.preventDefault();
+                }
+            }
+            break;
+
+        // load dialog
+        case 'KeyL':
+            {
+                const state = queryWidgetState();
+                if (AllHiddenIgnore(state, ['TextBox', 'LoadScreen'])) {
+                    if (state.get('LoadScreen'))
+                        closeLoad();
+                    else
+                        onLoadGame();
+                    ev.preventDefault();
+                }
+            }
+            break;
+
+        // settings dialog
+        case 'KeyC':
+            {
+                const state = queryWidgetState();
+                if (AllHiddenIgnore(state, ['TextBox', 'SettingScreen'])) {
+                    if (state.get('SettingScreen'))
+                        closeSettings();
+                    else
+                        onSetting();
+                    ev.preventDefault();
+                }
+            }
+            break;
+
+        // open backlog
+        case 'ArrowUp':
+            {
+                const state = queryWidgetState();
+                // 已经打开 backlog 后不再拦截上键
+                if (AllHiddenIgnore(state, 'TextBox')) {
+                    showBacklog();
+                    ev.preventDefault();
+                }
+            }
+            break;
+
+        // hide window
+        case 'Delete':
+            {
+                if (AllHiddenIgnore(queryWidgetState(['TitleScreen', 'PanicScreen']))) {
+                    const state = queryWidgetState(['TextBox', 'SaveScreen', 'LoadScreen', 'SettingScreen', 'BacklogScreen']);
+                    // 「正在游戏」状态
+                    if (AllHiddenIgnore(state, 'TextBox')) {
+                        if (state.get('TextBox')) {
+                            document.querySelector('div#bottomBox').style.display = 'none';
+                            hideTextStatus = true;
+                        }
+                        else {
+                            document.querySelector('div#bottomBox').style.display = 'flex';
+                            hideTextStatus = false;
+                        }
+                    }
+                    // 有其他窗口
+                    else {
+                        if (state.get('SaveScreen'))
+                            closeSave();
+                        if (state.get('LoadScreen'))
+                            closeLoad();
+                        if (state.get('SettingScreen'))
+                            closeSettings();
+                        if (state.get('BacklogScreen'))
+                            closeBacklog()
+                        // 紧急回避专用 ESC 键控制
+                    }
+                    ev.preventDefault();
+                }
+            }
+            break;
+
+        // panic button
+        case 'Escape':
+            {
+                if (queryWidgetState('PanicScreen'))
+                    hidePanic();
+                else
+                    showPanic('Yoozle');
+                ev.preventDefault();
+            }
+            break;
+
+        default:
+            break;
+    }
+});
+
+
+
+function showPanic(showType) {
+    document.querySelector('div#panic-overlay').style.display = 'block';
+    if (showType === 'Yoozle') {
+        let ele =
+            <div className="yoozle-container">
+                <div className="yoozle-title">
+                    <span>
+                        <span className="yoozle-gl-blue">Y</span><span className="yoozle-gl-red">o</span><span
+                            className="yoozle-gl-yellow">o</span><span className="yoozle-gl-blue">z</span><span
+                                className="yoozle-gl-green">l</span><span className="yoozle-gl-red yoozle-e-rotate">e</span>
+                    </span>
+                </div>
+                <div className="yoozle-search">
+                    <input className="yoozle-search-bar" type="text" defaultValue="" />
+                    <div className="yoozle-search-buttons">
+                        <input className="yoozle-btn" type="submit" value="Yoozle Search" />
+                        <input className="yoozle-btn" type="submit" value="I'm Feeling Lucky" />
+                    </div>
+                </div>
+            </div>
+        ReactDOM.render(ele, document.querySelector('div#panic-overlay'));
+        document.querySelector('input.yoozle-search-bar').value = '';
+    }
+}
+
+function hidePanic() {
+    document.querySelector('div#panic-overlay').style.display = 'none';
+}
