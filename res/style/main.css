@@ -360,6 +360,10 @@ a:visited{
     float: right;
     padding: 5px 10px 5px 10px;
     color: white;
+    border: 1px solid rgba(255,255,255,0.2);
+}
+.top_button:hover{
+    background-color: rgba(255,255,255,0.2);
 }
 
 .ren_preview{
