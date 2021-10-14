@@ -496,6 +496,11 @@ function nextSentenceProcessor() {
         nextSentenceProcessor();
         return;
     }
+    else if(command === 'intro'){
+        let introText = thisSentence[1];
+        showIntro(introText);
+        return;
+    }
     else {
         currentInfo["command"] = processSentence(currentSentence)['name'];
         currentInfo["showName"] = processSentence(currentSentence)['name'];
@@ -1291,6 +1296,46 @@ function jumpFromBacklog(index) {
 function closeBacklog(){
     document.getElementById('backlog').style.display = 'none';
     document.getElementById('bottomBox').style.display = 'flex';
+}
+
+function showIntro(text){
+    let i = 0;
+    let IntroView =
+        <div>
+            <div className={"skipIntro"} onClick={()=>{
+                if(introInterval)
+                    clearInterval(introInterval);
+                document.getElementById("intro").style.display = 'none';
+                currentSentence = currentSentence+1;
+                nextSentenceProcessor();
+            }}>
+                跳过
+            </div>
+            <div id={"textShowArea"} className={"textShowArea_styl"}>
+            </div>
+        </div>
+    ;
+    ReactDOM.render(IntroView,document.getElementById("intro"));
+    document.getElementById("intro").style.display = 'block';
+    let textArray = text.split(',');
+    let introInterval = setInterval(textShow,1500);
+    let introAll = [];
+    function textShow(){
+        let singleRow = <div className={"introSingleRow"}>{textArray[i]}</div>;
+        introAll.push(singleRow);
+        i = i+1;
+        ReactDOM.render(<div>{introAll}</div>,document.getElementById("textShowArea"));
+        if(i>= textArray.length){
+            clearInterval(introInterval);
+            setTimeout(clearIntro,3500);
+        }
+    }
+}
+
+function clearIntro(){
+    document.getElementById("intro").style.display = 'none';
+    currentSentence = currentSentence+1;
+    nextSentenceProcessor();
 }
 
 function isMobile(){
