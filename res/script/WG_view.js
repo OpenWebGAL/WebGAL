@@ -984,7 +984,7 @@ function jumpFromBacklog(index) {
                 playVocal();
                 showTextArray(textArray,currentText);
                 // currentText = currentText + 1;
-
+                currentInfo = save;
                 // currentSentence = currentSentence+1;
             }
         }
