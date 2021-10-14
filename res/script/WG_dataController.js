@@ -27,6 +27,7 @@
     var onTextPreview = 0;
     var currentName = '';
     var showingText = false;
+    var hideTextStatus = false;
 }
 
 // 初始化存档系统
