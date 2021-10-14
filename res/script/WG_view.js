@@ -1,0 +1,3 @@
+class WG_view {
+
+}
