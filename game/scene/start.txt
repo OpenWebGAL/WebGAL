@@ -2,6 +2,7 @@ changeBG_next:testBG03.png;
 changeP_left_next:testFigure03.png;
 雪之下雪乃:vocal-V1.ogg,你到得真早;
 vocal-V2.ogg,对不起，等很久了吗？;
+intro:独角戏之所以空虚，,并非因为只有一个演员，,而是观众的目光，,刺的好痛。;
 bgm:夏影.mp3;
 changeP_next:testFigure04.png;
 比企谷八幡:vocal-V3.ogg,刚到而已;
