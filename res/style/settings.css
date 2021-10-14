@@ -104,3 +104,16 @@
     color: rgba(0,0,0,0.8);
     background-color: rgba(0,0,0,0.1);
 }
+
+div.importer-exporter {
+    margin-bottom: 15px;
+}
+
+div.importer-exporter span {
+    margin-right: 45px;
+}
+
+div.importer-exporter span:hover {
+    color: rgba(0, 0, 0, 0.8);
+    background-color: rgba(0, 0, 0, 0.1);
+}
