@@ -4,7 +4,7 @@ window.onload = function () {
     loadSettings();
     document.getElementById('Title').style.backgroundImage = 'url("./game/background/Title.png")';
     if(isMobile()){
-        console.log("nowis mobile view");
+        console.log("now is mobile view");
         document.getElementById('bottomBox').style.height = '45%';
         document.getElementById('TitleModel').style.height = '20%';
     }
