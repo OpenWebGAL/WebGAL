@@ -1172,6 +1172,9 @@ function playVocal() {
 }
 
 function showBacklog(){
+    let even = window.event || arguments.callee.caller.arguments[0];
+    even.preventDefault();
+    even.stopPropagation();//阻止事件冒泡
     document.getElementById('backlog').style.display = 'block';
     document.getElementById('bottomBox').style.display = 'none';
     let showBacklogList = [];
@@ -1350,6 +1353,9 @@ function isMobile(){
 
 var hideTextStatus = false;
 function hideTextBox(){
+    let even = window.event || arguments.callee.caller.arguments[0];
+    even.preventDefault();
+    even.stopPropagation();//阻止事件冒泡
     if(!hideTextStatus){
         document.getElementById('bottomBox').style.display = 'none';
         hideTextStatus = true;
