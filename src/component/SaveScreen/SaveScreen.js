@@ -1,9 +1,10 @@
 import './SaveScreen.css'
 import closeBlack from '../../assets/img/closeBlack.svg'
 import {connect} from "react-redux";
-import store, {act, actions} from "../../store/store";
+import {act, actions} from "../../store/store";
 import ListContent from "../ListContent/ListContent";
 import AlertDialog from "../AlertDialog/AlertDialog";
+import GamePlay from "../../core/GamePlay";
 
 const mapStateToProps = state => {
     return {
@@ -23,8 +24,7 @@ function SaveScreen(props) {
     }
 
     function onSaveOnEmpty(index) {
-        console.log("onSaveOnEmpty", index)
-        act(actions.ADD_SAVES, store.getState()['runtime'], index)
+        GamePlay.saveGame(index)
     }
 
     function onSaveOnNonEmpty(index) {
@@ -32,13 +32,12 @@ function SaveScreen(props) {
             title: "是否覆盖此存档？",
             left: {
                 text: "确认",
-                callback: () => act(actions.ADD_SAVES, index)
+                callback: () => onSaveOnEmpty(index)
             },
             right: {
                 text: "取消",
             }
         })
-        console.log("onSaveOnNonEmpty", index)
     }
 
     return (
