@@ -1,0 +1,36 @@
+#Load {
+    position: absolute;
+    top: 20px;
+    bottom: 20px;
+    left: 45px;
+    right: 45px;
+    display: none;
+    z-index: 14;
+    background-color: rgba(255, 255, 255, 0.95);
+    /*background-image: linear-gradient(rgba(255,255,255,0) 0%,rgba(255,255,255,0) 75%,rgba(255,255,255,0.3)100%);*/
+    /*border-radius: 15px;*/
+    -webkit-animation: showSoftly 0.5s;
+    padding: 30px 30px 30px 30px;
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.5);
+}
+
+#LoadTitle {
+    color: #005CAF;
+    font-size: 250%;
+    padding: 5px 10px 5px 10px;
+}
+
+#loadMainBox {
+    height: 100%;
+
+}
+
+#LoadItems {
+    padding: 5px 10px 10px 10px;
+    height: 75%;
+    display: flex;
+    justify-items: center;
+    justify-content: center;
+}
+
+
