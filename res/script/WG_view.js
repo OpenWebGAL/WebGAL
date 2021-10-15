@@ -94,13 +94,11 @@ function LoadSavedGame(index) {
                 }
                 playVocal();
                 showTextArray(textArray);
-
-                // currentSentence = currentSentence+1;
+                CurrentBacklog = SaveBacklog[index];
+                currentInfo = save;
             }
         }
     }
-    CurrentBacklog = SaveBacklog[index];
-
 }
 
 // 读取下一条脚本
@@ -319,7 +317,9 @@ function nextSentenceProcessor() {
         if(CurrentBacklog.length<=500){
             let temp = JSON.stringify(currentInfo);
             let pushElement = JSON.parse(temp);
+            console.log("现在写入backlog")
             CurrentBacklog.push(pushElement);
+            console.log(CurrentBacklog);
         }else{
             CurrentBacklog.shift();
             let temp = JSON.stringify(currentInfo);
@@ -897,8 +897,6 @@ function jumpFromBacklog(index) {
                     currentScene[i][0] = command;
                     currentScene[i][1] = content;
                 }
-                // console.log('Read scene complete.');
-                // console.log(currentScene);
                 currentSentence = save["SentenceID"];
                 // console.log("start:"+currentSentence)
 
