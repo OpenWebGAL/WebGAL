@@ -146,7 +146,7 @@ function KeyShortcut() {
             // load dialog
             case 'KeyL': {
                 const state = queryWidgetState();
-                if (AllHiddenIgnore(state, ['TextBox', 'LoadScreen'])) {
+                if (AllHiddenIgnore(state, ['TitleScreen', 'TextBox', 'LoadScreen'])) {
                     if (state.get('LoadScreen'))
                         act(actions.HIDE_LOAD_SCREEN)
                     // closeLoad();
@@ -161,7 +161,7 @@ function KeyShortcut() {
             // settings dialog
             case 'KeyC': {
                 const state = queryWidgetState();
-                if (AllHiddenIgnore(state, ['TextBox', 'SettingScreen'])) {
+                if (AllHiddenIgnore(state, ['TitleScreen', 'TextBox', 'SettingScreen'])) {
                     if (state.get('SettingScreen'))
                         act(actions.HIDE_SETTINGS_SCREEN)
                     // closeSettings();
@@ -191,7 +191,7 @@ function KeyShortcut() {
                 console.log('ArrowDown')
 
                 // 已经打开 backlog 后不再拦截上键
-                if (AllHiddenIgnore(state, 'BacklogScreen')) {
+                if (AllHiddenIgnore(state, ['TextBox', 'BacklogScreen'])) {
                     act(actions.HIDE_BACKLOG_SCREEN)
                     // showBacklog();
                     ev.preventDefault();

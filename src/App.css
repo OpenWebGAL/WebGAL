@@ -1,2 +1,12 @@
 .App {
 }
+
+#mainBackground{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    z-index: 1;
+    background-repeat: no-repeat;
+    background-size:cover;
+    -webkit-animation: showSoftly 0.5s;
+}

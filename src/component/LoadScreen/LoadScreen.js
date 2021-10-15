@@ -23,7 +23,6 @@ function LoadScreen(props) {
 
     function onLoad(index) {
         GamePlay.loadSavedGame(index)
-        console.log("onLoad", index)
     }
 
     return (

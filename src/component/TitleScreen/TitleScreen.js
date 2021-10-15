@@ -6,7 +6,8 @@ import GamePlay from "../../core/GamePlay";
 
 const mapStateToProps = state => {
     return {
-        display: state.titleScreen.display
+        display: state.titleScreen.display,
+        titleBgUrl: state.titleScreen.titleBgUrl
     }
 }
 
@@ -15,10 +16,12 @@ function TitleScreen(props) {
     function hideTitle() {
         GamePlay.getScene("game/scene/start.txt")
         act(actions.HIDE_TITLE_SCREEN)
+        act(actions.SHOW_TEXT_BOX)
     }
 
     function continueGame() {
         act(actions.HIDE_TITLE_SCREEN, null)
+        act(actions.SHOW_TEXT_BOX)
     }
 
     function onLoadGame() {
@@ -42,11 +45,13 @@ function TitleScreen(props) {
                 text: "取消"
             }
         })
-
     }
 
     function checkDisplay() {
-        return {'display': props.display ? 'block' : 'none'}
+        return {
+            display: props.display ? 'block' : 'none',
+            backgroundImage: `url(${props?.titleBgUrl})`
+        }
     }
 
     return (

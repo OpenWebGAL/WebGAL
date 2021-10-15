@@ -6,16 +6,25 @@ import PanicOverlay from "./component/PanicScreen/PanicScreen";
 import BacklogScreen from "./component/BacklogScreen/BacklogScreen";
 import SaveScreen from "./component/SaveScreen/SaveScreen";
 import LoadScreen from "./component/LoadScreen/LoadScreen";
+import {connect} from "react-redux";
+import GamePlay from "./core/GamePlay";
 
-function App() {
+const mapStateToProps = state => {
+    return {
+        gameplay_bg: state.runtime.bg_Name
+    }
+}
+
+function App(props) {
 
     function clickBackGround() {
-        console.log("clickOnBack")
+        GamePlay.nextSentenceProcessor()
     }
 
     return (
         <div className="App">
-            <div id="mainBackground" onClick={clickBackGround}/>
+            <div id="mainBackground" onClick={clickBackGround}
+                 style={{backgroundImage: `url(/game/background/${props.gameplay_bg})`}}/>
             <LoadScreen/>
             <SaveScreen/>
             <BacklogScreen/>
@@ -27,4 +36,4 @@ function App() {
     );
 }
 
-export default App;
+export default connect(mapStateToProps)(App);
