@@ -31,7 +31,8 @@ const runtimeState = {
     },
 
     titleScreen: {
-        display: false
+        display: false,
+        titleBgUrl: '/game/background/Title.png'
     },
 
     textBox: {
@@ -55,7 +56,7 @@ const runtimeState = {
     }
 }
 
-// 获取本地存储数据，并赋值给localDataState
+// 获取本地存储数据，并赋值给runtimeState
 if (localData != null) {
     Object.assign(runtimeState, localData)
 }

@@ -6,7 +6,8 @@ import GamePlay from "../../core/GamePlay";
 
 const mapStateToProps = state => {
     return {
-        display: state.titleScreen.display
+        display: state.titleScreen.display,
+        titleBgUrl: state.titleScreen.titleBgUrl
     }
 }
 
@@ -42,11 +43,13 @@ function TitleScreen(props) {
                 text: "取消"
             }
         })
-
     }
 
     function checkDisplay() {
-        return {'display': props.display ? 'block' : 'none'}
+        return {
+            display: props.display ? 'block' : 'none',
+            backgroundImage: `url(${props?.titleBgUrl})`
+        }
     }
 
     return (
