@@ -2,6 +2,8 @@ import './TextBox.css'
 import {connect} from "react-redux";
 import {act, actions} from "../../store/store";
 import GamePlay from "../../core/GamePlay";
+import {useEffect, useState} from "react";
+import DynamicEffectUtil from "../../utils/DynamicEffectUtil";
 
 const mapStateToProps = state => {
     return {
@@ -12,6 +14,15 @@ const mapStateToProps = state => {
 }
 
 function TextBox(props) {
+    const [textAnimateInterval, setTextAnimateInterval] = useState()
+
+    useEffect(() => {
+        if (textAnimateInterval !== null) clearInterval(textAnimateInterval)
+
+        setTextAnimateInterval(
+            DynamicEffectUtil.showTextArray(props.showText, document.getElementById("SceneText"))
+        )
+    }, [props.showText])
 
     function hideTextBox() {
         act(actions.HIDE_TEXT_BOX)
@@ -64,9 +75,7 @@ function TextBox(props) {
                 <div id="pName">
                     <span>{props.showName}</span>
                 </div>
-                <div id="SceneText">
-                    <span>{props.showText}</span>
-                </div>
+                <div id="SceneText"/>
             </div>
             <div id="controlBar">
                 <div className="controlButton" onClick={playVocal}>重播</div>

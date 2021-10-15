@@ -6,6 +6,9 @@
     justify-content: center;
     width: 100%;
     height: 35%;
+
+    user-select: none;
+    -webkit-user-select: none;
 }
 
 #top_control {

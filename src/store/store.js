@@ -23,6 +23,9 @@ const runtimeState = {
         vocal: '',//语音 文件名
         bgm: ''//背景音乐 文件名
     },
+    tempState: {
+        showingText: false
+    },
 
     settingsScreen: {
         display: false,
@@ -85,6 +88,8 @@ const actions = {
     SET_RUNTIME_BGM: '设置背景音乐文件名',
     SET_RUNTIME: '设置运行时数据',
     CLEAR_RUNTIME: '清空运行时数据',
+
+    SET_TEMP_SHOWING_TEXT: '设置文字显示状态',
 
     SHOW_SETTINGS_SCREEN: "显示设置面板",
     HIDE_SETTINGS_SCREEN: "隐藏设置面板",
@@ -205,6 +210,18 @@ const SavesReducer = (state = runtimeState.saves, action) => {
             break
         case actions.CLEAR_SAVES:
             return []
+    }
+    return temp
+}
+
+const tempStateReducer = (state = runtimeState.tempState, action) => {
+    let temp = {...state}
+
+    // eslint-disable-next-line default-case
+    switch (action.type) {
+        case actions.SET_TEMP_SHOWING_TEXT:
+            Object.assign(temp, {showingText: action.payload || false})
+            break
     }
     return temp
 }
@@ -334,6 +351,7 @@ const reducers = combineReducers({
     scene: sceneReducer,
     saves: SavesReducer,
     runtime: runtimeReducer,
+    tempState: tempStateReducer,
     textBox: textBoxReducer,
     settingsScreen: settingsScreenReducer,
     titleScreen: titleScreenReducer,
@@ -347,7 +365,7 @@ const store = createStore(reducers)
 
 // 设置需要忽略不保存进LocalStorage的属性，
 // const ignored = ["scene"]
-const ignored = []
+const ignored = ["tempState"]
 
 saveState()
 store.subscribe(saveState)

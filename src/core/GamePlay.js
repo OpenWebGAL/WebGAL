@@ -61,6 +61,11 @@ let GamePlay = (function () {
      * 读取下一条脚本
      */
     function nextSentenceProcessor() {
+        if (store.getState()["tempState"].showingText) {
+            act(actions.SET_TEMP_SHOWING_TEXT, false)
+            return
+        }
+
         let index = store.getState()["runtime"].SentenceID || 0
         sentenceProcessor(index + 1)
     }
