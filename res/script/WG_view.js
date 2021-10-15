@@ -8,7 +8,6 @@ function LoadSavedGame(index) {
     let url = 'game/scene/'
     url = url + save['SceneName'];
     currentScene ='';
-    currentText = 0;
 
     let getScReq = null;
     getScReq = new XMLHttpRequest();
@@ -35,7 +34,6 @@ function LoadSavedGame(index) {
                 // console.log('Read scene complete.');
                 // console.log(currentScene);
                 currentSentence = save["SentenceID"];
-                currentText = save["SentenceID"];
                 // console.log("start:"+currentSentence)
 
                 //load saved scene:
@@ -89,25 +87,19 @@ function LoadSavedGame(index) {
                 let textArray = save["showText"].split("");
                 // let changedText = <p>{processSentence(currentSentence)['text']}</p>
                 ReactDOM.render(changedName, document.getElementById('pName'));
-                currentText = save["currentText"];
                 currentInfo["vocal"] = save['vocal'];
                 if(currentInfo['bgm'] !== save['bgm']){
                     currentInfo['bgm'] = save['bgm'];
                     loadBGM();
                 }
                 playVocal();
-                showTextArray(textArray,currentText);
-                // currentText = currentText + 1;
-
-                // currentSentence = currentSentence+1;
+                showTextArray(textArray);
+                CurrentBacklog = SaveBacklog[index];
+                currentInfo = save;
             }
         }
     }
-    CurrentBacklog = SaveBacklog[index];
-
 }
-
-
 
 // 读取下一条脚本
 function nextSentenceProcessor() {
@@ -317,9 +309,7 @@ function nextSentenceProcessor() {
             playVocal();
         }
         saveBacklogNow = true;
-        showTextArray(textArray,currentText+1);
-        currentText = currentText + 1;
-        currentInfo["currentText"] = currentText;
+        showTextArray(textArray);
     }
     currentSentence = currentSentence+1;
     currentInfo["SentenceID"] = currentSentence;
@@ -327,12 +317,13 @@ function nextSentenceProcessor() {
         if(CurrentBacklog.length<=500){
             let temp = JSON.stringify(currentInfo);
             let pushElement = JSON.parse(temp);
-            CurrentBacklog.push(pushElement);
+            console.log("现在写入backlog");
+            CurrentBacklog[CurrentBacklog.length] = JSON.parse(temp);
+            console.log(CurrentBacklog);
         }else{
             CurrentBacklog.shift();
             let temp = JSON.stringify(currentInfo);
-            let pushElement = JSON.parse(temp);
-            CurrentBacklog.push(pushElement);
+            CurrentBacklog[CurrentBacklog.length] = JSON.parse(temp);
         }
     }
 
@@ -350,14 +341,13 @@ function nextSentenceProcessor() {
 }
 
 // 渐显文字
-function showTextArray(textArray,now){
+function showTextArray(textArray){
     showingText = false;
     ReactDOM.render(<span> </span>, document.getElementById('SceneText'));
     let elementArray = [];
     let i = 0;
     clearInterval(interval);
     var interval = setInterval(showSingle,textShowWatiTime);
-    // console.log("now: "+now+" currentText: "+currentText)
     showingText = true;
     function showSingle() {
         if(!showingText){
@@ -379,16 +369,15 @@ function showTextArray(textArray,now){
         }else{
             let tempElement = <span key={i} className='singleWord'>{textArray[i]}</span>
             elementArray.push(tempElement);
-            if(currentText === now)
-                ReactDOM.render(<div>{elementArray}</div>, document.getElementById('SceneText'));
+            ReactDOM.render(<div>{elementArray}</div>, document.getElementById('SceneText'));
             i = i+1;
         }
         if(i > textArray.length && auto !== 1){
             showingText = false;
         }
-        if(i > textArray.length +(autoWaitTime/35) || currentText!== now){
+        if(i > textArray.length +(autoWaitTime/35)){
 
-            if(auto === 1 && currentText === now){
+            if(auto === 1){
                 if(document.getElementById('currentVocal')&&fast === 0){
                     if(document.getElementById('currentVocal').ended)
                     {
@@ -451,8 +440,6 @@ function showTextPreview(text){
     }
 }
 
-
-
 // 打开设置
 function onSetting(){
     loadCookie();
@@ -473,8 +460,6 @@ function onSetting(){
     ReactDOM.render(<div id="previewDiv" />,document.getElementById('textPreview'));
     showTextPreview('现在预览的是文本框字体大小和播放速度的情况，您可以根据您的观感调整上面的选项。');
 }
-
-
 
 class SettingButtons_font extends React.Component{
     constructor(props) {
@@ -636,8 +621,6 @@ function onLoadGame() {
     ReactDOM.render(<LoadMainModel PageQty={15}/>,document.getElementById('LoadItems'))
 }
 
-
-
 class LoadMainModel extends  React.Component{
     Buttons = [];
     SaveButtons = [];
@@ -724,8 +707,6 @@ function onSaveGame() {
     document.getElementById('Save').style.display = 'block';
     ReactDOM.render(<SaveMainModel PageQty={15}/>,document.getElementById('SaveItems'))
 }
-
-
 
 class SaveMainModel extends  React.Component{
     Buttons = [];
@@ -840,8 +821,6 @@ function showMesModel(Title,Left,Right,func) {
     ReactDOM.render(element,document.getElementById('MesModel'))
 }
 
-
-
 function loadBGM() {
     let bgmName = currentInfo["bgm"];
     if(bgmName === '' || bgmName === 'none'){
@@ -887,14 +866,13 @@ function showBacklog(){
 function jumpFromBacklog(index) {
     closeBacklog();
     let save = CurrentBacklog[index];
-    for (let i = CurrentBacklog.length - 1 ; i > index ; i--){
+    for (let i = CurrentBacklog.length - 1 ; i > index-1 ; i--){
         CurrentBacklog.pop();
     }
     //get Scene:
     let url = 'game/scene/'
     url = url + save['SceneName'];
     currentScene ='';
-    currentText = 0;
 
     let getScReq = null;
     getScReq = new XMLHttpRequest();
@@ -918,10 +896,7 @@ function jumpFromBacklog(index) {
                     currentScene[i][0] = command;
                     currentScene[i][1] = content;
                 }
-                // console.log('Read scene complete.');
-                // console.log(currentScene);
                 currentSentence = save["SentenceID"];
-                currentText = save["SentenceID"];
                 // console.log("start:"+currentSentence)
 
                 //load saved scene:
@@ -975,16 +950,16 @@ function jumpFromBacklog(index) {
                 let textArray = save["showText"].split("");
                 // let changedText = <p>{processSentence(currentSentence)['text']}</p>
                 ReactDOM.render(changedName, document.getElementById('pName'));
-                currentText = save["currentText"];
                 currentInfo["vocal"] = save['vocal'];
                 if(currentInfo['bgm'] !== save['bgm']){
                     currentInfo['bgm'] = save['bgm'];
                     loadBGM();
                 }
                 playVocal();
-                showTextArray(textArray,currentText);
-                // currentText = currentText + 1;
+                currentName = save["showName"];
+                showTextArray(textArray);
                 currentInfo = save;
+                CurrentBacklog[CurrentBacklog.length] = JSON.parse(JSON.stringify(currentInfo));
                 // currentSentence = currentSentence+1;
             }
         }
@@ -992,21 +967,19 @@ function jumpFromBacklog(index) {
 
 }
 
-
-
 function showIntro(text){
     let i = 0;
     let IntroView =
         <div>
-            <div className={"skipIntro"} onClick={()=>{
-                if(introInterval)
-                    clearInterval(introInterval);
-                document.getElementById("intro").style.display = 'none';
-                currentSentence = currentSentence+1;
-                nextSentenceProcessor();
-            }}>
-                跳过
-            </div>
+            {/*<div className={"skipIntro"} onClick={()=>{*/}
+            {/*    if(introInterval)*/}
+            {/*        clearInterval(introInterval);*/}
+            {/*    document.getElementById("intro").style.display = 'none';*/}
+            {/*    currentSentence = currentSentence+1;*/}
+            {/*    nextSentenceProcessor();*/}
+            {/*}}>*/}
+            {/*    跳过*/}
+            {/*</div>*/}
             <div id={"textShowArea"} className={"textShowArea_styl"}>
             </div>
         </div>
@@ -1028,13 +1001,6 @@ function showIntro(text){
         }
     }
 }
-
-
-
-
-
-
-
 
 function ren_miniPic(){
     document.getElementById('ren_test').style.display = 'block';
@@ -1067,10 +1033,6 @@ function ren_miniPic(){
     ReactDOM.render(element,document.getElementById('ren_test'));
     document.getElementById('ren_test').style.backgroundImage = "url('" + backUrl + "')";
 }
-
-
-
-
 
 /**
  * 查询当前组件状态
@@ -1133,12 +1095,6 @@ function AllHiddenIgnore(states, ignore) {
     return true;
 }
 
-
-
-
-
-
-
 // -------- 紧急回避 --------
 
 function showPanic(showType) {
@@ -1169,8 +1125,6 @@ function showPanic(showType) {
 function hidePanic() {
     document.querySelector('div#panic-overlay').style.display = 'none';
 }
-
-
 
 // -------- 导入导出存档 --------
 

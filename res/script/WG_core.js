@@ -32,7 +32,6 @@ function saveGame(index){
 // 获取场景脚本
 function getScene(url) {
     currentScene ='';
-    currentText = 0;
 
     let getScReq = null;
     getScReq = new XMLHttpRequest();
