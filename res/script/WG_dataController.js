@@ -105,3 +105,7 @@ function loadSettings(){
         textShowWatiTime = 10;
     }
 }
+
+function SyncCurrentStatus(statusKey,newStatus) {
+    currentInfo[statusKey] = newStatus;
+}
