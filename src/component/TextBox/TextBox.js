@@ -9,18 +9,36 @@ const mapStateToProps = state => {
     return {
         display: state.textBox.display,
         showName: state.runtime.showName,
-        showText: state.runtime.showText
+        showText: state.runtime.showText,
+        playSpeed: state.settingsScreen.playSpeed,
+        fontSize: state.settingsScreen.fontSize
     }
 }
 
 function TextBox(props) {
     const [textAnimateInterval, setTextAnimateInterval] = useState()
 
+    const playSpeedMap = {
+        slow: 75,
+        medium: 50,
+        fast: 30
+    }
+
+    const fontSizeMap = {
+        small: '16px',
+        medium: '24px',
+        large: '32px'
+    }
+
     useEffect(() => {
         if (textAnimateInterval !== null) clearInterval(textAnimateInterval)
 
         setTextAnimateInterval(
-            DynamicEffectUtil.showTextArray(props.showText, document.getElementById("SceneText"))
+            DynamicEffectUtil.showTextArray(
+                props.showText,
+                document.getElementById("SceneText"),
+                playSpeedMap[props.playSpeed]
+            )
         )
     }, [props.showText])
 
@@ -75,7 +93,7 @@ function TextBox(props) {
                 <div id="pName">
                     <span>{props.showName}</span>
                 </div>
-                <div id="SceneText"/>
+                <div id="SceneText" style={{fontSize: fontSizeMap[props.fontSize]}}/>
             </div>
             <div id="controlBar">
                 <div className="controlButton" onClick={playVocal}>重播</div>
