@@ -71,7 +71,7 @@ const actions = {
 
     ADD_SAVES: '添加存档',
     DELETE_SAVES: '删除存档',
-    CLEAR_SAVES: '清空运行时数据',
+    CLEAR_SAVES: '清空存档数据',
 
     SET_RUNTIME_SCENE_NAME: '设置请景文件名',
     SET_RUNTIME_SENTENCE_ID: '设置语句ID',
@@ -202,14 +202,12 @@ const SavesReducer = (state = runtimeState.saves, action) => {
     // eslint-disable-next-line default-case
     switch (action.type) {
         case actions.ADD_SAVES:
-            if (action?.payload != null) {
-                if (action?.extra != null) {
-                    temp[action?.extra] = action.payload
-                }
+            if (action?.payload != null && action?.extra != null) {
+                temp[action?.extra] = action?.payload
             }
             break
         case actions.CLEAR_SAVES:
-            return []
+            return {}
     }
     return temp
 }
