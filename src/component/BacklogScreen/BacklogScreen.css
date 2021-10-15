@@ -1,0 +1,51 @@
+#backlog {
+    color: white;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: block;
+    z-index: 14;
+    background-color: rgba(0, 0, 0, 0.5);
+    background-image: linear-gradient(rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0) 75%, rgba(255, 255, 255, 0.3) 100%);
+    /*border-radius: 15px;*/
+    -webkit-animation: showSoftly 0.5s;
+    padding: 15px 1% 15px 1%;
+}
+
+#blTitle {
+    color: white;
+    padding: 5px 5px 5px 5px;
+    font-size: xx-large;
+}
+
+#backlogContent {
+    position: absolute;
+    bottom: 5px;
+    display: flex;
+    flex-flow: column-reverse;
+    width: 88%;
+    padding: 0 5% 0 5%;
+    height: 86%;
+    overflow: scroll;
+}
+
+.backlog_singleElement {
+    font-size: larger;
+    border-top: 1px solid rgba(255, 255, 255, 1);
+    padding: 10px 0 10px 0;
+    width: 100%;
+}
+
+.backlog_singleElement:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.backlog_name {
+    font-size: larger;
+}
+
+.backlog_text {
+    padding: 0 0 0 15px;
+}

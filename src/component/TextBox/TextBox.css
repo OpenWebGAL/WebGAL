@@ -1,0 +1,81 @@
+
+#bottomBox {
+    position: absolute;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    height: 35%;
+}
+
+#top_control {
+    position: absolute;
+    top: 5px;
+    z-index: 4;
+    width: 100%;
+    padding: 0 35px 0 0;
+}
+
+.top_button {
+    float: right;
+    padding: 5px 10px 5px 10px;
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.top_button:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+#mainTextWindow {
+    /*background-color: rgba(86,108,115,0.8);*/
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 15px 10% 15px 10%;
+    width: 100%;
+    margin: 0 0 0 0;
+    z-index: 3;
+    background-image: linear-gradient(rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0) 75%, rgba(255, 255, 255, 0.3) 100%);
+    /*box-shadow: 5px 5px 10px rgba(0,0,0,0.3);*/
+    /*border-radius: 10px;*/
+}
+
+#pName {
+    color: white;
+    font-size: x-large;
+    /*background-color: rgba(255,255,255,0.7);*/
+    padding: 3px 7px 3px 7px;
+    /*border-radius: 5px;*/
+    border-bottom: 2px solid rgba(255, 255, 255, 0.5);
+    width: 30%;
+}
+
+#SceneText {
+    padding: 15px 0 0 0;
+    color: white;
+    font-size: 200%;
+    overflow: hidden;
+    height: 60%;
+}
+
+#controlBar {
+    position: absolute;
+    bottom: 5px;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    z-index: 4;
+}
+
+.controlButton {
+    border-bottom: 3px solid #FEDFE1;
+    /*background-color: #FEDFE1;*/
+    padding: 3px 7px 3px 7px;
+    margin: 0 5px 0 5px;
+    /*border-radius: 5px;*/
+    color: white;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.controlButton:hover {
+    background-color: rgba(0, 0, 0, 0.3);
+}
