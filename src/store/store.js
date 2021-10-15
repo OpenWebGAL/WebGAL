@@ -31,12 +31,12 @@ const runtimeState = {
     },
 
     titleScreen: {
-        display: false,
+        display: true,
         titleBgUrl: '/game/background/Title.png'
     },
 
     textBox: {
-        display: false
+        display: true
     },
 
     panicScreen: {
