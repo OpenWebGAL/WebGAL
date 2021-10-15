@@ -3,7 +3,6 @@
     var currentScene ='';
     var currentSceneIndex = 0;
     var currentSentence = 0;
-    var currentText = 0;
     var auto = 0;
     var fast = 0;
     var setAutoWaitTime = 1500;
@@ -20,7 +19,6 @@
         showName:'',//人物名
         command:'',//语句指令
         choose:'',//选项列表
-        currentText:0,//当前文字ID
         vocal:'',//语音 文件名
         bgm:''//背景音乐 文件名
     }

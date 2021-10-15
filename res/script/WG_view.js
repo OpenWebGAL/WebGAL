@@ -8,7 +8,6 @@ function LoadSavedGame(index) {
     let url = 'game/scene/'
     url = url + save['SceneName'];
     currentScene ='';
-    currentText = 0;
 
     let getScReq = null;
     getScReq = new XMLHttpRequest();
@@ -35,7 +34,6 @@ function LoadSavedGame(index) {
                 // console.log('Read scene complete.');
                 // console.log(currentScene);
                 currentSentence = save["SentenceID"];
-                currentText = save["SentenceID"];
                 // console.log("start:"+currentSentence)
 
                 //load saved scene:
@@ -89,15 +87,13 @@ function LoadSavedGame(index) {
                 let textArray = save["showText"].split("");
                 // let changedText = <p>{processSentence(currentSentence)['text']}</p>
                 ReactDOM.render(changedName, document.getElementById('pName'));
-                currentText = save["currentText"];
                 currentInfo["vocal"] = save['vocal'];
                 if(currentInfo['bgm'] !== save['bgm']){
                     currentInfo['bgm'] = save['bgm'];
                     loadBGM();
                 }
                 playVocal();
-                showTextArray(textArray,currentText);
-                // currentText = currentText + 1;
+                showTextArray(textArray);
 
                 // currentSentence = currentSentence+1;
             }
@@ -106,8 +102,6 @@ function LoadSavedGame(index) {
     CurrentBacklog = SaveBacklog[index];
 
 }
-
-
 
 // 读取下一条脚本
 function nextSentenceProcessor() {
@@ -317,9 +311,7 @@ function nextSentenceProcessor() {
             playVocal();
         }
         saveBacklogNow = true;
-        showTextArray(textArray,currentText+1);
-        currentText = currentText + 1;
-        currentInfo["currentText"] = currentText;
+        showTextArray(textArray);
     }
     currentSentence = currentSentence+1;
     currentInfo["SentenceID"] = currentSentence;
@@ -350,14 +342,13 @@ function nextSentenceProcessor() {
 }
 
 // 渐显文字
-function showTextArray(textArray,now){
+function showTextArray(textArray){
     showingText = false;
     ReactDOM.render(<span> </span>, document.getElementById('SceneText'));
     let elementArray = [];
     let i = 0;
     clearInterval(interval);
     var interval = setInterval(showSingle,textShowWatiTime);
-    // console.log("now: "+now+" currentText: "+currentText)
     showingText = true;
     function showSingle() {
         if(!showingText){
@@ -379,16 +370,15 @@ function showTextArray(textArray,now){
         }else{
             let tempElement = <span key={i} className='singleWord'>{textArray[i]}</span>
             elementArray.push(tempElement);
-            if(currentText === now)
-                ReactDOM.render(<div>{elementArray}</div>, document.getElementById('SceneText'));
+            ReactDOM.render(<div>{elementArray}</div>, document.getElementById('SceneText'));
             i = i+1;
         }
         if(i > textArray.length && auto !== 1){
             showingText = false;
         }
-        if(i > textArray.length +(autoWaitTime/35) || currentText!== now){
+        if(i > textArray.length +(autoWaitTime/35)){
 
-            if(auto === 1 && currentText === now){
+            if(auto === 1){
                 if(document.getElementById('currentVocal')&&fast === 0){
                     if(document.getElementById('currentVocal').ended)
                     {
@@ -451,8 +441,6 @@ function showTextPreview(text){
     }
 }
 
-
-
 // 打开设置
 function onSetting(){
     loadCookie();
@@ -473,8 +461,6 @@ function onSetting(){
     ReactDOM.render(<div id="previewDiv" />,document.getElementById('textPreview'));
     showTextPreview('现在预览的是文本框字体大小和播放速度的情况，您可以根据您的观感调整上面的选项。');
 }
-
-
 
 class SettingButtons_font extends React.Component{
     constructor(props) {
@@ -636,8 +622,6 @@ function onLoadGame() {
     ReactDOM.render(<LoadMainModel PageQty={15}/>,document.getElementById('LoadItems'))
 }
 
-
-
 class LoadMainModel extends  React.Component{
     Buttons = [];
     SaveButtons = [];
@@ -724,8 +708,6 @@ function onSaveGame() {
     document.getElementById('Save').style.display = 'block';
     ReactDOM.render(<SaveMainModel PageQty={15}/>,document.getElementById('SaveItems'))
 }
-
-
 
 class SaveMainModel extends  React.Component{
     Buttons = [];
@@ -840,8 +822,6 @@ function showMesModel(Title,Left,Right,func) {
     ReactDOM.render(element,document.getElementById('MesModel'))
 }
 
-
-
 function loadBGM() {
     let bgmName = currentInfo["bgm"];
     if(bgmName === '' || bgmName === 'none'){
@@ -894,7 +874,6 @@ function jumpFromBacklog(index) {
     let url = 'game/scene/'
     url = url + save['SceneName'];
     currentScene ='';
-    currentText = 0;
 
     let getScReq = null;
     getScReq = new XMLHttpRequest();
@@ -921,7 +900,6 @@ function jumpFromBacklog(index) {
                 // console.log('Read scene complete.');
                 // console.log(currentScene);
                 currentSentence = save["SentenceID"];
-                currentText = save["SentenceID"];
                 // console.log("start:"+currentSentence)
 
                 //load saved scene:
@@ -975,15 +953,13 @@ function jumpFromBacklog(index) {
                 let textArray = save["showText"].split("");
                 // let changedText = <p>{processSentence(currentSentence)['text']}</p>
                 ReactDOM.render(changedName, document.getElementById('pName'));
-                currentText = save["currentText"];
                 currentInfo["vocal"] = save['vocal'];
                 if(currentInfo['bgm'] !== save['bgm']){
                     currentInfo['bgm'] = save['bgm'];
                     loadBGM();
                 }
                 playVocal();
-                showTextArray(textArray,currentText);
-                // currentText = currentText + 1;
+                showTextArray(textArray);
                 currentInfo = save;
                 // currentSentence = currentSentence+1;
             }
@@ -991,8 +967,6 @@ function jumpFromBacklog(index) {
     }
 
 }
-
-
 
 function showIntro(text){
     let i = 0;
@@ -1029,13 +1003,6 @@ function showIntro(text){
     }
 }
 
-
-
-
-
-
-
-
 function ren_miniPic(){
     document.getElementById('ren_test').style.display = 'block';
     let backUrl = "./game/background/"+currentInfo["bg_Name"];
@@ -1067,10 +1034,6 @@ function ren_miniPic(){
     ReactDOM.render(element,document.getElementById('ren_test'));
     document.getElementById('ren_test').style.backgroundImage = "url('" + backUrl + "')";
 }
-
-
-
-
 
 /**
  * 查询当前组件状态
@@ -1133,12 +1096,6 @@ function AllHiddenIgnore(states, ignore) {
     return true;
 }
 
-
-
-
-
-
-
 // -------- 紧急回避 --------
 
 function showPanic(showType) {
@@ -1169,8 +1126,6 @@ function showPanic(showType) {
 function hidePanic() {
     document.querySelector('div#panic-overlay').style.display = 'none';
 }
-
-
 
 // -------- 导入导出存档 --------
 
