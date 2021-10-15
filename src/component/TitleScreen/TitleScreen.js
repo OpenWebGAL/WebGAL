@@ -16,10 +16,12 @@ function TitleScreen(props) {
     function hideTitle() {
         GamePlay.getScene("game/scene/start.txt")
         act(actions.HIDE_TITLE_SCREEN)
+        act(actions.SHOW_TEXT_BOX)
     }
 
     function continueGame() {
         act(actions.HIDE_TITLE_SCREEN, null)
+        act(actions.SHOW_TEXT_BOX)
     }
 
     function onLoadGame() {

@@ -5,7 +5,7 @@ let GamePlay = (function () {
     let actionMap = {
         vocal: actions.SET_RUNTIME_VOCAL,
         text: actions.SET_RUNTIME_SENTENCE_TEXT,
-        name: actions.SET_RUNTIME_SENTENCE_TEXT
+        name: actions.SET_RUNTIME_SPEAKER_NAME
     }
 
     /**
@@ -45,6 +45,7 @@ let GamePlay = (function () {
         act(actions.SET_RUNTIME, store.getState()["saves"][index])
         act(actions.HIDE_LOAD_SCREEN)
         act(actions.HIDE_TITLE_SCREEN)
+        act(actions.SHOW_TEXT_BOX)
     }
 
     /**
