@@ -13,8 +13,9 @@ const mapStateToProps = state => {
 
 function TitleScreen(props) {
 
-    function hideTitle() {
+    function startGame() {
         GamePlay.getScene("game/scene/start.txt")
+        act(actions.CLEAR_RUNTIME)
         act(actions.HIDE_TITLE_SCREEN)
         act(actions.SHOW_TEXT_BOX)
     }
@@ -24,11 +25,11 @@ function TitleScreen(props) {
         act(actions.SHOW_TEXT_BOX)
     }
 
-    function onLoadGame() {
+    function ToLoadScreen() {
         act(actions.SHOW_LOAD_SCREEN)
     }
 
-    function onSetting() {
+    function ToSettingsScreen() {
         act(actions.SHOW_SETTINGS_SCREEN, null)
     }
 
@@ -58,10 +59,10 @@ function TitleScreen(props) {
         <div id="TitlePage" style={checkDisplay()}>
             <div id="TitleModel">
                 <div id="setButtonBottom">
-                    <div className="TitleSingleButton" id="leftTitleButton" onClick={hideTitle}>开始游戏</div>
+                    <div className="TitleSingleButton" id="leftTitleButton" onClick={startGame}>开始游戏</div>
                     <div className="TitleSingleButton" onClick={continueGame}>继续游戏</div>
-                    <div className="TitleSingleButton" onClick={onLoadGame}>读取存档</div>
-                    <div className="TitleSingleButton" onClick={onSetting}>设置界面</div>
+                    <div className="TitleSingleButton" onClick={ToLoadScreen}>读取存档</div>
+                    <div className="TitleSingleButton" onClick={ToSettingsScreen}>设置界面</div>
                     <div className="TitleSingleButton" onClick={exit}>退出游戏</div>
                 </div>
             </div>

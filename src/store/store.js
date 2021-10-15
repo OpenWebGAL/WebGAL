@@ -23,6 +23,9 @@ const runtimeState = {
         vocal: '',//语音 文件名
         bgm: ''//背景音乐 文件名
     },
+    tempState: {
+        showingText: false
+    },
 
     settingsScreen: {
         display: false,
@@ -68,7 +71,7 @@ const actions = {
 
     ADD_SAVES: '添加存档',
     DELETE_SAVES: '删除存档',
-    CLEAR_SAVES: '清空运行时数据',
+    CLEAR_SAVES: '清空存档数据',
 
     SET_RUNTIME_SCENE_NAME: '设置请景文件名',
     SET_RUNTIME_SENTENCE_ID: '设置语句ID',
@@ -85,6 +88,8 @@ const actions = {
     SET_RUNTIME_BGM: '设置背景音乐文件名',
     SET_RUNTIME: '设置运行时数据',
     CLEAR_RUNTIME: '清空运行时数据',
+
+    SET_TEMP_SHOWING_TEXT: '设置文字显示状态',
 
     SHOW_SETTINGS_SCREEN: "显示设置面板",
     HIDE_SETTINGS_SCREEN: "隐藏设置面板",
@@ -197,14 +202,24 @@ const SavesReducer = (state = runtimeState.saves, action) => {
     // eslint-disable-next-line default-case
     switch (action.type) {
         case actions.ADD_SAVES:
-            if (action?.payload != null) {
-                if (action?.extra != null) {
-                    temp[action?.extra] = action.payload
-                }
+            if (action?.payload != null && action?.extra != null) {
+                temp[action?.extra] = action?.payload
             }
             break
         case actions.CLEAR_SAVES:
-            return []
+            return {}
+    }
+    return temp
+}
+
+const tempStateReducer = (state = runtimeState.tempState, action) => {
+    let temp = {...state}
+
+    // eslint-disable-next-line default-case
+    switch (action.type) {
+        case actions.SET_TEMP_SHOWING_TEXT:
+            Object.assign(temp, {showingText: action.payload || false})
+            break
     }
     return temp
 }
@@ -334,6 +349,7 @@ const reducers = combineReducers({
     scene: sceneReducer,
     saves: SavesReducer,
     runtime: runtimeReducer,
+    tempState: tempStateReducer,
     textBox: textBoxReducer,
     settingsScreen: settingsScreenReducer,
     titleScreen: titleScreenReducer,
@@ -347,7 +363,7 @@ const store = createStore(reducers)
 
 // 设置需要忽略不保存进LocalStorage的属性，
 // const ignored = ["scene"]
-const ignored = []
+const ignored = ["tempState"]
 
 saveState()
 store.subscribe(saveState)
