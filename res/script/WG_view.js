@@ -317,14 +317,13 @@ function nextSentenceProcessor() {
         if(CurrentBacklog.length<=500){
             let temp = JSON.stringify(currentInfo);
             let pushElement = JSON.parse(temp);
-            console.log("现在写入backlog")
-            CurrentBacklog.push(pushElement);
+            console.log("现在写入backlog");
+            CurrentBacklog[CurrentBacklog.length] = JSON.parse(temp);
             console.log(CurrentBacklog);
         }else{
             CurrentBacklog.shift();
             let temp = JSON.stringify(currentInfo);
-            let pushElement = JSON.parse(temp);
-            CurrentBacklog.push(pushElement);
+            CurrentBacklog[CurrentBacklog.length] = JSON.parse(temp);
         }
     }
 
@@ -867,7 +866,7 @@ function showBacklog(){
 function jumpFromBacklog(index) {
     closeBacklog();
     let save = CurrentBacklog[index];
-    for (let i = CurrentBacklog.length - 1 ; i > index ; i--){
+    for (let i = CurrentBacklog.length - 1 ; i > index-1 ; i--){
         CurrentBacklog.pop();
     }
     //get Scene:
@@ -957,8 +956,10 @@ function jumpFromBacklog(index) {
                     loadBGM();
                 }
                 playVocal();
+                currentName = save["showName"];
                 showTextArray(textArray);
                 currentInfo = save;
+                CurrentBacklog[CurrentBacklog.length] = JSON.parse(JSON.stringify(currentInfo));
                 // currentSentence = currentSentence+1;
             }
         }
