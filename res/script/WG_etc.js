@@ -13,9 +13,7 @@ document.addEventListener('selectstart', function(e) {
     e.preventDefault();
 });
 
-
 // -------- 快捷键 --------
-
 document.addEventListener('keydown', function (ev) {
     if (ev.isComposing || ev.defaultPrevented || ev.repeat)
         return;
@@ -38,8 +36,6 @@ document.addEventListener('keydown', function (ev) {
             break;
     }
 });
-
-
 document.addEventListener('keyup', function (ev) {
     if (ev.isComposing || ev.defaultPrevented)
         return;
@@ -212,3 +208,18 @@ document.addEventListener('keyup', function (ev) {
             break;
     }
 });
+
+//手机优化
+function isMobile(){
+    let info = navigator.userAgent;
+    let agents = ["Android", "iPhone", "SymbianOS", "Windows Phone", "iPod", "iPad"];
+    for(let i = 0; i < agents.length; i++){
+        if(info.indexOf(agents[i]) >= 0) return true;
+    }
+    return false;
+}
+function MobileChangeStyle(){
+    console.log("now is mobile view");
+    document.getElementById('bottomBox').style.height = '45%';
+    document.getElementById('TitleModel').style.height = '20%';
+}

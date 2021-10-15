@@ -1,23 +1,11 @@
-// 引擎加载完成
+//引擎加载完成
 window.onload = function () {
     loadCookie();
     loadSettings();
     document.getElementById('Title').style.backgroundImage = 'url("./game/background/Title.png")';
     if(isMobile()){
-        console.log("now is mobile view");
-        document.getElementById('bottomBox').style.height = '45%';
-        document.getElementById('TitleModel').style.height = '20%';
+        MobileChangeStyle();
     }
-}
-
-//手机优化
-function isMobile(){
-    let info = navigator.userAgent;
-    let agents = ["Android", "iPhone", "SymbianOS", "Windows Phone", "iPod", "iPad"];
-    for(let i = 0; i < agents.length; i++){
-        if(info.indexOf(agents[i]) >= 0) return true;
-    }
-    return false;
 }
 
 // 保存当前游戏状态
@@ -98,6 +86,7 @@ function processSentence(i){
 
 }
 
+//通过label跳分支
 function chooseJumpFun(label){
     let lab_name = label;
     //find the line of the label:
@@ -121,128 +110,242 @@ function chooseJumpFun(label){
     }
 }
 
-// 关闭设置
-function closeSettings(){
-    document.getElementById("settings").style.display = "none"
-    document.getElementById("bottomBox").style.display = "flex"
-}
-
-// 分支选择
-function chooseScene(url){
-    // console.log(url);
-    currentInfo["SceneName"] = url;
-    let sUrl = "game/scene/"+url;
-    getScene(sUrl);
-    document.getElementById("chooseBox").style.display="none"
-}
-
-//自动播放
-function autoNext(){
-    if(auto === 0){
-        autoWaitTime = setAutoWaitTime;
-        textShowWatiTime = 35
-        fast = 0;
-        auto = 0;
-        document.getElementById('fastButton').style.backgroundColor = 'rgba(255,255,255,0)';
-        document.getElementById('fastButton').style.color = 'white';
-        // console.log("notFast");
-        autoWaitTime = setAutoWaitTime;
-        auto = 1;
-        // console.log("auto");
-        document.getElementById('autoButton').style.backgroundColor = 'rgba(255,255,255,0.8)';
-        document.getElementById('autoButton').style.color = '#8E354A';
-        nextSentenceProcessor();
-
-    }
-    else if(auto === 1){
-        autoWaitTime = setAutoWaitTime;
-        auto = 0;
-        document.getElementById('autoButton').style.backgroundColor = 'rgba(255,255,255,0)';
-        document.getElementById('autoButton').style.color = 'white';
-        // console.log("notAuto");
-    }
-}
-
-// 快进
-function fastNext(){
-    if(fast === 0){
-        autoWaitTime = setAutoWaitTime;
-        auto = 0;
-        document.getElementById('autoButton').style.backgroundColor = 'rgba(255,255,255,0)';
-        document.getElementById('autoButton').style.color = 'white';
-        // console.log("notAuto");
-        autoWaitTime = 500;
-        textShowWatiTime = 5;
-        fast = 1;
-        auto = 1;
-        // console.log("fast");
-        document.getElementById('fastButton').style.backgroundColor = 'rgba(255,255,255,0.8)';
-        document.getElementById('fastButton').style.color = '#8E354A';
-        nextSentenceProcessor();
-
-    }
-    else if(fast === 1){
-        autoWaitTime = setAutoWaitTime;
-        textShowWatiTime = 35
-        fast = 0;
-        auto = 0;
-        document.getElementById('fastButton').style.backgroundColor = 'rgba(255,255,255,0)';
-        document.getElementById('fastButton').style.color = 'white';
-        // console.log("notFast");
-    }
-}
-
-function closeLoad() {
-    document.getElementById('Load').style.display = 'none';
-}
-
-function exit(){
-    showMesModel('你确定要退出吗','退出','留在本页',function (){window.close()})
-}
-
-function Title() {
-    showMesModel('要返回到标题界面吗','是','不要',function (){document.getElementById('Title').style.display = 'block';})
-}
-
-function continueGame(){
-    if(currentScene === ''){
-        getScene("game/scene/start.txt");
-        currentInfo["SceneName"] = 'start.txt';
-    }
-    document.getElementById('Title').style.display = 'none';
-}
-
-function closeSave() {
-    document.getElementById('Save').style.display = 'none';
-}
-
-function closeBacklog(){
-    document.getElementById('backlog').style.display = 'none';
-    document.getElementById('bottomBox').style.display = 'flex';
-}
-
-function clearIntro(){
-    document.getElementById("intro").style.display = 'none';
-    currentSentence = currentSentence+1;
-    nextSentenceProcessor();
-}
-
-function hideTextBox(){
-    let even = window.event || arguments.callee.caller.arguments[0];
-    even.preventDefault();
-    even.stopPropagation();//阻止事件冒泡
-    if(!hideTextStatus){
-        document.getElementById('bottomBox').style.display = 'none';
-        hideTextStatus = true;
-    }
-}
-
 function clickOnBack(){
     if(hideTextStatus){
         document.getElementById('bottomBox').style.display = 'flex';
         hideTextStatus = false;
     }else {
         nextSentenceProcessor();
+    }
+}
+
+// 读取下一条脚本
+function nextSentenceProcessor() {
+
+    if(showingText){
+        showingText = false;
+        return;
+    }//检测目前是否正在进行文字渐显，如果渐显，则终止渐显，直接读完文本
+    let saveBacklogNow = false;//该变量决定此条语句是否需要加入到backlog
+    if(currentSentence >= currentScene.length){
+        return;
+    }//如果超过场景文本行数，停止处理语句。
+    let thisSentence = currentScene[currentSentence];//此条语句的内容
+    let command = thisSentence[0];//此条语句的控制文本（也可能是省略人物对话的语句）
+    let S_content = thisSentence[1]
+    if (command === 'changeBG') {
+        VC_changeBG(S_content);//界面控制：换背景
+        SyncCurrentStatus("bg_Name",S_content);//同步当前状态
+        autoPlay('on');//在非next语句下调用autoplay
+    }//改背景
+    else if(command === 'changeP'){
+        VC_changeP(S_content);
+        autoPlay('on');
+    }//改立绘
+    else if(command === 'changeP_left'){
+        if (thisSentence[1] === 'none'){
+            ReactDOM.render(<div/>,document.getElementById('figureImage_left'));
+            currentInfo["fig_Name_left"] = 'none';
+        }else{
+            let pUrl = "game/figure/"+thisSentence[1];
+            let changedP = <img src={pUrl} alt='figure' className='p_center'/>
+            // console.log('now changing person');
+            ReactDOM.render(changedP,document.getElementById('figureImage_left'));
+            currentInfo["fig_Name_left"] = thisSentence[1];
+        }
+        autoPlay('on');
+    }
+    else if(command === 'changeP_right'){
+        if (thisSentence[1] === 'none'){
+            ReactDOM.render(<div/>,document.getElementById('figureImage_right'));
+            currentInfo["fig_Name_right"] = 'none';
+        }else{
+            let pUrl = "game/figure/"+thisSentence[1];
+            let changedP = <img src={pUrl} alt='figure' className='p_center'/>
+            // console.log('now changing person');
+            ReactDOM.render(changedP,document.getElementById('figureImage_right'));
+            currentInfo["fig_Name_right"] = thisSentence[1];
+        }
+        autoPlay('on');
+    }
+    else if(command === 'changeP_left_next'){
+        if (thisSentence[1] === 'none'){
+            ReactDOM.render(<div/>,document.getElementById('figureImage_left'));
+            currentInfo["fig_Name_left"] = 'none';
+        }else{
+            let pUrl = "game/figure/"+thisSentence[1];
+            let changedP = <img src={pUrl} alt='figure' className='p_center'/>
+            // console.log('now changing person');
+            ReactDOM.render(changedP,document.getElementById('figureImage_left'));
+            currentInfo["fig_Name_left"] = thisSentence[1];
+        }
+        currentSentence = currentSentence+1;
+        nextSentenceProcessor();
+        return;
+    }
+    else if(command === 'changeP_right_next'){
+        if (thisSentence[1] === 'none'){
+            ReactDOM.render(<div/>,document.getElementById('figureImage_right'));
+            currentInfo["fig_Name_right"] = 'none';
+        }else{
+            let pUrl = "game/figure/"+thisSentence[1];
+            let changedP = <img src={pUrl} alt='figure' className='p_center'/>
+            // console.log('now changing person');
+            ReactDOM.render(changedP,document.getElementById('figureImage_right'));
+            currentInfo["fig_Name_right"] = thisSentence[1];
+        }
+        currentSentence = currentSentence+1;
+        nextSentenceProcessor();
+        return;
+    }
+    else if(command === 'changeP_next'){
+        if (thisSentence[1] === 'none'){
+            ReactDOM.render(<div/>,document.getElementById('figureImage'));
+            currentInfo["fig_Name"] = thisSentence[1];
+        }else{
+            let pUrl = "game/figure/"+thisSentence[1];
+            let changedP = <img src={pUrl} alt='figure' className='p_center'/>
+            // console.log('now changing person');
+            ReactDOM.render(changedP,document.getElementById('figureImage'));
+            currentInfo["fig_Name"] = thisSentence[1];
+        }
+        currentSentence = currentSentence+1;
+        nextSentenceProcessor();
+        return;
+    }
+    else if(command === 'changeBG_next'){
+        document.getElementById('mainBackground').style.backgroundImage = "url('game/background/" + thisSentence[1] + "')";
+        currentSentence = currentSentence+1;
+        currentInfo["bg_Name"] = thisSentence[1];
+        nextSentenceProcessor();
+        return;
+    }
+    else if(command === 'changeScene'){
+        let sUrl = "game/scene/"+thisSentence[1];
+        let SceneName =  thisSentence[1];
+        getScene(sUrl);
+        currentInfo["SceneName"] =SceneName;
+        return;
+    }
+    else if(command === 'choose'){
+        currentInfo["command"] = command;
+        document.getElementById('chooseBox').style.display = 'flex';
+        let chooseItems =thisSentence[1];
+        currentInfo["choose"]=chooseItems;
+        chooseItems = chooseItems.split("}")[0];
+        chooseItems = chooseItems.split("{")[1];
+        let selection = chooseItems.split(',')
+        for (let i = 0;i<selection.length;i++){
+            selection[i] = selection[i].split(":");
+        }
+        let elements = []
+        for (let i = 0; i < selection.length; i++) {
+            let temp = <div className='singleChoose' key={i} onClick={()=>{chooseScene(selection[i][1]);}}>{selection[i][0]}</div>
+            elements.push(temp)
+        }
+        ReactDOM.render(<div>{elements}</div>,document.getElementById('chooseBox'))
+        return;
+    }
+    else if(command === 'bgm'){
+        currentInfo["bgm"] = thisSentence[1];
+        loadBGM();
+        currentSentence = currentSentence+1;
+        nextSentenceProcessor();
+        return;
+    }
+    else if(command === 'choose_label'){
+
+        currentInfo["command"] = command;
+        document.getElementById('chooseBox').style.display = 'flex';
+        let chooseItems =thisSentence[1];
+        currentInfo["choose"]=chooseItems;
+        chooseItems = chooseItems.split("}")[0];
+        chooseItems = chooseItems.split("{")[1];
+        let selection = chooseItems.split(',')
+        for (let i = 0;i<selection.length;i++){
+            selection[i] = selection[i].split(":");
+        }
+        let elements = []
+        for (let i = 0; i < selection.length; i++) {
+            let temp = <div className='singleChoose' key={i} onClick={()=>{chooseJumpFun(selection[i][1]);}}>{selection[i][0]}</div>
+            elements.push(temp)
+        }
+        ReactDOM.render(<div>{elements}</div>,document.getElementById('chooseBox'))
+        return;
+    }
+    else if(command === 'jump_label'){
+        let lab_name = thisSentence[1];
+        //find the line of the label:
+        let find = false;
+        let jmp_sentence = 0;
+        for (let i = 0; i < currentScene.length; i++) {
+            if(currentScene[i][0] === 'label' && currentScene[i][1] === lab_name){
+                find = true;
+                jmp_sentence = i;
+            }
+        }
+        if(find){
+            currentSentence = jmp_sentence;
+            nextSentenceProcessor();
+            return;
+        }else
+        {
+            currentSentence = currentSentence+1;
+            nextSentenceProcessor();
+            return;
+        }
+    }
+    else if(command === 'label'){
+        currentSentence = currentSentence+1;
+        nextSentenceProcessor();
+        return;
+    }
+    else if(command === 'intro'){
+        let introText = thisSentence[1];
+        showIntro(introText);
+        return;
+    }
+    else {
+        currentInfo["command"] = processSentence(currentSentence)['name'];
+        currentInfo["showName"] = processSentence(currentSentence)['name'];
+        currentInfo["showText"] = processSentence(currentSentence)['text'];
+        currentInfo["vocal"] = processSentence(currentSentence)['vocal'];
+        let changedName = <span>{processSentence(currentSentence)['name']}</span>
+        let textArray = processSentence(currentSentence)['text'].split("");
+        // let changedText = <p>{processSentence(currentSentence)['text']}</p>
+        ReactDOM.render(changedName, document.getElementById('pName'));
+        if(currentInfo["vocal"]!== ''){
+            playVocal();
+        }
+        saveBacklogNow = true;
+        showTextArray(textArray);
+    }
+    currentSentence = currentSentence+1;
+    currentInfo["SentenceID"] = currentSentence;
+    if(saveBacklogNow){
+        if(CurrentBacklog.length<=500){
+            let temp = JSON.stringify(currentInfo);
+            let pushElement = JSON.parse(temp);
+            console.log("现在写入backlog");
+            CurrentBacklog[CurrentBacklog.length] = JSON.parse(temp);
+            console.log(CurrentBacklog);
+        }else{
+            CurrentBacklog.shift();
+            let temp = JSON.stringify(currentInfo);
+            CurrentBacklog[CurrentBacklog.length] = JSON.parse(temp);
+        }
+    }
+
+    function autoPlay(active){
+        if(auto === 1 && active === 'on'){
+            let interval = setInterval(jumpNext,autoWaitTime);
+            function jumpNext(){
+                if(auto === 1)
+                    nextSentenceProcessor();
+                clearInterval(interval);
+            }
+
+        }
     }
 }
 
