@@ -972,15 +972,15 @@ function showIntro(text){
     let i = 0;
     let IntroView =
         <div>
-            <div className={"skipIntro"} onClick={()=>{
-                if(introInterval)
-                    clearInterval(introInterval);
-                document.getElementById("intro").style.display = 'none';
-                currentSentence = currentSentence+1;
-                nextSentenceProcessor();
-            }}>
-                跳过
-            </div>
+            {/*<div className={"skipIntro"} onClick={()=>{*/}
+            {/*    if(introInterval)*/}
+            {/*        clearInterval(introInterval);*/}
+            {/*    document.getElementById("intro").style.display = 'none';*/}
+            {/*    currentSentence = currentSentence+1;*/}
+            {/*    nextSentenceProcessor();*/}
+            {/*}}>*/}
+            {/*    跳过*/}
+            {/*</div>*/}
             <div id={"textShowArea"} className={"textShowArea_styl"}>
             </div>
         </div>
