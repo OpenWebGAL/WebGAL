@@ -71,7 +71,7 @@ const actions = {
     CLEAR_SAVES: '清空运行时数据',
 
     SET_RUNTIME_SCENE_NAME: '设置请景文件名',
-    SET_RUNTIME_SENTENCE_ID: '设置语句',
+    SET_RUNTIME_SENTENCE_ID: '设置语句ID',
     SET_RUNTIME_BACKGROUND: '设置背景文件名',
     SET_RUNTIME_FIGURE_NAME_MIDDLE: '设置立绘_中',
     SET_RUNTIME_FIGURE_NAME_LEFT: '设置立绘_左',
@@ -141,7 +141,7 @@ const runtimeReducer = (state = runtimeState.runtime, action) => {
     let temp = {...state}
 
     // eslint-disable-next-line default-case
-    switch (temp.action) {
+    switch (action.type) {
         case actions.SET_RUNTIME_SCENE_NAME:
             Object.assign(temp, {SceneName: action.payload})
             break
@@ -346,8 +346,8 @@ const reducers = combineReducers({
 const store = createStore(reducers)
 
 // 设置需要忽略不保存进LocalStorage的属性，
-const ignored = ["scene"]
-
+// const ignored = ["scene"]
+const ignored = []
 
 saveState()
 store.subscribe(saveState)

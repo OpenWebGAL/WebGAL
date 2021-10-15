@@ -19,7 +19,6 @@ function App(props) {
 
     function clickBackGround() {
         GamePlay.nextSentenceProcessor()
-        console.log("clickOnBack")
     }
 
     return (
