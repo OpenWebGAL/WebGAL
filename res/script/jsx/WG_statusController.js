@@ -266,8 +266,6 @@ function LoadSavedGame(index) {
     }
 }
 
-
-
 function showTextPreview(text){
     onTextPreview = onTextPreview+1;
     let textArray = text.split("");
