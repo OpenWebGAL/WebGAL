@@ -1,4 +1,4 @@
-import './PanicScreen.css'
+import '../../assets/css/PanicScreen.css'
 import {connect} from "react-redux";
 
 const mapStateToProps = state => {

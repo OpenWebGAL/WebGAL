@@ -1,8 +1,8 @@
-import './LoadScreen.css'
+import '../../assets/css/LoadScreen.css'
 import closeBlack from '../../assets/img/closeBlack.svg'
 import {act, actions} from "../../store/store";
 import {connect} from "react-redux";
-import ListContent from "../ListContent/ListContent";
+import ListContent from "../ChildComponent/ListContent";
 import GamePlay from "../../core/GamePlay";
 
 const mapStateToProps = state => {

@@ -1,5 +1,5 @@
 import {useState} from "react";
-import './ListContent.css'
+import '../../assets/css/ListContent.css'
 
 function ListContent(props) {
     const [currentPage, setCurrentPage] = useState(0)

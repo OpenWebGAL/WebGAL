@@ -1,10 +1,10 @@
-import SettingsButtonSelector from "../SettingsButtonSelector/SettingsButtonSelector";
+import SettingsButtonSelector from "../ChildComponent/SettingsButtonSelector";
 
-import './SettingsScreen.css'
+import '../../assets/css/SettingsScreen.css'
 import closeBlack from '../../assets/img/closeBlack.svg'
 import {act, actions} from "../../store/store";
 import {connect} from "react-redux";
-import AlertDialog from "../AlertDialog/AlertDialog";
+import AlertDialog from "../FunctionalComponent/AlertDialog";
 
 const mapStateToProps = state => {
     return {

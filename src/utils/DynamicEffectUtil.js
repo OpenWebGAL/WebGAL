@@ -7,16 +7,16 @@ let DynamicEffectUtil = (function DynamicEffectUtil() {
      * 逐字渲染
      * @param {string} text 需要渲染的内容
      * @param {Element} targetElement 目标容器
+     * @param {number|undefined?} showTime
      * @returns {Object|?} 返回定时循环对象
      */
-    function showTextArray(text, targetElement) {
+    function showTextArray(text, targetElement, showTime = 50) {
         if (typeof text !== 'string' || text === '') return
         act(actions.SET_TEMP_SHOWING_TEXT, true)
 
         let textArray = text.split('')
         let fontCount = textArray.length
 
-        let singleLetterTime = 50
         let temp = []
         let index = 0
 
@@ -30,7 +30,7 @@ let DynamicEffectUtil = (function DynamicEffectUtil() {
             }
 
             ReactDOM.render(<div>{temp}</div>, targetElement)
-        }, singleLetterTime)
+        }, showTime)
         return interval
     }
 

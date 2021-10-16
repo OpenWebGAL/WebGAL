@@ -1,4 +1,4 @@
-import './FigureItem.css'
+import '../../assets/css/FigureItem.css'
 
 function FigureItem() {
 

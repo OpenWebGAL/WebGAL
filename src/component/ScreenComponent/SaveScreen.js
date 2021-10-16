@@ -1,9 +1,9 @@
-import './SaveScreen.css'
+import '../../assets/css/SaveScreen.css'
 import closeBlack from '../../assets/img/closeBlack.svg'
 import {connect} from "react-redux";
 import {act, actions} from "../../store/store";
-import ListContent from "../ListContent/ListContent";
-import AlertDialog from "../AlertDialog/AlertDialog";
+import ListContent from "../ChildComponent/ListContent";
+import AlertDialog from "../FunctionalComponent/AlertDialog";
 import GamePlay from "../../core/GamePlay";
 
 const mapStateToProps = state => {

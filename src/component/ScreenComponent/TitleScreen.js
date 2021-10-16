@@ -1,7 +1,7 @@
-import './TitleScreen.css'
+import '../../assets/css/TitleScreen.css'
 import {act, actions} from '../../store/store'
 import {connect} from "react-redux";
-import AlertDialog from "../AlertDialog/AlertDialog";
+import AlertDialog from "../FunctionalComponent/AlertDialog";
 import GamePlay from "../../core/GamePlay";
 
 const mapStateToProps = state => {
