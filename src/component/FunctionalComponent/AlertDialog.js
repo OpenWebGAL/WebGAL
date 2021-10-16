@@ -1,4 +1,4 @@
-import './AlertDialog.css'
+import '../../assets/css/AlertDialog.css'
 import React, {Component} from "react";
 import * as ReactDOM from "react-dom";
 

@@ -1,4 +1,4 @@
-import './TextBox.css'
+import '../../assets/css/TextBox.css'
 import {connect} from "react-redux";
 import {act, actions} from "../../store/store";
 import GamePlay from "../../core/GamePlay";

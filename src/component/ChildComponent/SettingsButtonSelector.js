@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import './SettingsButtonSelector.css'
+import '../../assets/css/SettingsButtonSelector.css'
 
 function SettingsButtonSelector(props) {
     // 初始化状态属性值

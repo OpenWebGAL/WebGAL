@@ -1,4 +1,5 @@
 import store, {act, actions} from "../store/store";
+import GamePlay from "../core/GamePlay";
 
 function KeyShortcut() {
     const name2query = new Map([
@@ -83,7 +84,7 @@ function KeyShortcut() {
                 if (AllHiddenIgnore(state, 'TextBox')) {
                     // 文本框显示
                     if (state.get('TextBox'))
-                        act(actions.NEXT_SENTENCE)
+                        GamePlay.nextSentenceProcessor()
                     // nextSentenceProcessor();
                     else {
                         act(actions.SHOW_TEXT_BOX)

@@ -1,11 +1,11 @@
 import './App.css';
-import SettingsPanel from "./component/SettingsScreen/SettingsScreen";
-import TextBox from "./component/TextBox/TextBox";
-import TitleScreen from "./component/TitleScreen/TitleScreen";
-import PanicOverlay from "./component/PanicScreen/PanicScreen";
-import BacklogScreen from "./component/BacklogScreen/BacklogScreen";
-import SaveScreen from "./component/SaveScreen/SaveScreen";
-import LoadScreen from "./component/LoadScreen/LoadScreen";
+import SettingsPanel from "./component/ScreenComponent/SettingsScreen";
+import TextBox from "./component/ScreenComponent/TextBox";
+import TitleScreen from "./component/ScreenComponent/TitleScreen";
+import PanicOverlay from "./component/ScreenComponent/PanicScreen";
+import BacklogScreen from "./component/ScreenComponent/BacklogScreen";
+import SaveScreen from "./component/ScreenComponent/SaveScreen";
+import LoadScreen from "./component/ScreenComponent/LoadScreen";
 import {connect} from "react-redux";
 import GamePlay from "./core/GamePlay";
 

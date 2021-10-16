@@ -1,5 +1,5 @@
 import closeWhite from '../../assets/img/closeWhite.svg'
-import './BacklogScreen.css'
+import '../../assets/css/BacklogScreen.css'
 import {connect} from "react-redux";
 import {act, actions} from "../../store/store";
 
