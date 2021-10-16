@@ -15,6 +15,19 @@ document.addEventListener('selectstart', function(e) {
 
 
 
+// -------- 右键 --------
+
+document.addEventListener('mouseup', function (ev) {
+    if (ev.button === 2) {
+        // 目前等功能同于 delete 键
+        const evt = new KeyboardEvent('keyup', { key: 'Delete', code: 'Delete' });
+        document.dispatchEvent(evt);
+        ev.preventDefault();
+    }
+});
+
+
+
 // -------- 滚轮 --------
 
 document.addEventListener('wheel', function (ev) {
