@@ -1,3 +1,185 @@
+// 读取下一条脚本
+function nextSentenceProcessor() {
+
+    if(showingText){
+        showingText = false;
+        return;
+    }//检测目前是否正在进行文字渐显，如果渐显，则终止渐显，直接读完文本
+    let saveBacklogNow = false;//该变量决定此条语句是否需要加入到backlog
+    if(getStatus('SentenceID') >= currentScene.length){
+        return;
+    }//如果超过场景文本行数，停止处理语句。
+    let thisSentence = currentScene[getStatus('SentenceID')];//此条语句的内容
+    let command = thisSentence[0];//此条语句的控制文本（也可能是省略人物对话的语句）
+    let S_content = thisSentence[1]
+    if (command === 'changeBG') {
+        VC_changeBG(S_content);//界面控制：换背景
+        SyncCurrentStatus("bg_Name",S_content);//同步当前状态
+        autoPlay('on');//在非next语句下调用autoplay
+    }//改背景
+    else if(command === 'changeP'){
+        VC_changeP(S_content,'center');
+        SyncCurrentStatus('fig_Name',S_content);
+        autoPlay('on');
+    }//改立绘
+    else if(command === 'changeP_left'){
+        VC_changeP(S_content,'left');
+        SyncCurrentStatus('fig_Name_left',S_content);
+        autoPlay('on');
+    }
+    else if(command === 'changeP_right'){
+        VC_changeP(S_content,'right');
+        SyncCurrentStatus('fig_Name_right',S_content);
+        autoPlay('on');
+    }
+    else if(command === 'changeP_next'){
+        VC_changeP(S_content,'center');
+        SyncCurrentStatus('fig_Name',S_content);
+        increaseSentence();
+        nextSentenceProcessor();
+        return;
+    }
+    else if(command === 'changeP_left_next'){
+        VC_changeP(S_content,'left');
+        SyncCurrentStatus('fig_Name_left',S_content);
+        increaseSentence();
+        nextSentenceProcessor();
+        return;
+    }
+    else if(command === 'changeP_right_next'){
+        VC_changeP(S_content,'right')
+        SyncCurrentStatus('fig_Name_right',S_content);
+        increaseSentence();
+        nextSentenceProcessor();
+        return;
+    }
+    else if(command === 'changeBG_next'){
+        VC_changeBG(S_content);
+        increaseSentence();
+        SyncCurrentStatus("bg_Name",S_content);
+        nextSentenceProcessor();
+        return;
+    }
+    else if(command === 'changeScene'){
+        let sUrl = "game/scene/"+thisSentence[1];
+        let SceneName =  thisSentence[1];
+        getScene(sUrl);
+        SyncCurrentStatus('SceneName',S_content);
+        return;
+    }
+    else if(command === 'choose'){
+        SyncCurrentStatus('command',command);
+        SyncCurrentStatus('choose',S_content);
+        let chooseItems =S_content;
+        chooseItems = chooseItems.split("}")[0];
+        chooseItems = chooseItems.split("{")[1];
+        let selection = chooseItems.split(',')
+        for (let i = 0;i<selection.length;i++){
+            selection[i] = selection[i].split(":");
+        }
+        VC_choose(selection);
+        return;
+    }
+    else if(command === 'bgm'){
+        currentInfo["bgm"] = thisSentence[1];
+        loadBGM();
+        increaseSentence();
+        nextSentenceProcessor();
+        return;
+    }
+    else if(command === 'choose_label'){
+
+        currentInfo["command"] = command;
+        document.getElementById('chooseBox').style.display = 'flex';
+        let chooseItems =thisSentence[1];
+        currentInfo["choose"]=chooseItems;
+        chooseItems = chooseItems.split("}")[0];
+        chooseItems = chooseItems.split("{")[1];
+        let selection = chooseItems.split(',')
+        for (let i = 0;i<selection.length;i++){
+            selection[i] = selection[i].split(":");
+        }
+        let elements = []
+        for (let i = 0; i < selection.length; i++) {
+            let temp = <div className='singleChoose' key={i} onClick={()=>{chooseJumpFun(selection[i][1]);}}>{selection[i][0]}</div>
+            elements.push(temp)
+        }
+        ReactDOM.render(<div>{elements}</div>,document.getElementById('chooseBox'))
+        return;
+    }
+    else if(command === 'jump_label'){
+        let lab_name = thisSentence[1];
+        //find the line of the label:
+        let find = false;
+        let jmp_sentence = 0;
+        for (let i = 0; i < currentScene.length; i++) {
+            if(currentScene[i][0] === 'label' && currentScene[i][1] === lab_name){
+                find = true;
+                jmp_sentence = i;
+            }
+        }
+        if(find){
+            SyncCurrentStatus("SentenceID",jmp_sentence);
+            nextSentenceProcessor();
+            return;
+        }else
+        {
+            increaseSentence();
+            nextSentenceProcessor();
+            return;
+        }
+    }
+    else if(command === 'label'){
+        increaseSentence();
+        nextSentenceProcessor();
+        return;
+    }
+    else if(command === 'intro'){
+        let introText = thisSentence[1];
+        showIntro(introText);
+        return;
+    }
+    else {
+        currentInfo["command"] = processSentence(getStatus("SentenceID"))['name'];
+        currentInfo["showName"] = processSentence(getStatus("SentenceID"))['name'];
+        currentInfo["showText"] = processSentence(getStatus("SentenceID"))['text'];
+        currentInfo["vocal"] = processSentence(getStatus("SentenceID"))['vocal'];
+        let changedName = <span>{processSentence(getStatus("SentenceID"))['name']}</span>
+        let textArray = processSentence(getStatus("SentenceID"))['text'].split("");
+        ReactDOM.render(changedName, document.getElementById('pName'));
+        if(currentInfo["vocal"]!== ''){
+            playVocal();
+        }
+        saveBacklogNow = true;
+        showTextArray(textArray);
+    }
+    increaseSentence();
+    if(saveBacklogNow){
+        if(CurrentBacklog.length<=500){
+            let temp = JSON.stringify(currentInfo);
+            let pushElement = JSON.parse(temp);
+            console.log("现在写入backlog");
+            CurrentBacklog[CurrentBacklog.length] = JSON.parse(temp);
+            console.log(CurrentBacklog);
+        }else{
+            CurrentBacklog.shift();
+            let temp = JSON.stringify(currentInfo);
+            CurrentBacklog[CurrentBacklog.length] = JSON.parse(temp);
+        }
+    }
+
+    function autoPlay(active){
+        if(auto === 1 && active === 'on'){
+            let interval = setInterval(jumpNext,autoWaitTime);
+            function jumpNext(){
+                if(auto === 1)
+                    nextSentenceProcessor();
+                clearInterval(interval);
+            }
+
+        }
+    }
+}
 
 // 读取游戏存档
 function LoadSavedGame(index) {
@@ -31,12 +213,7 @@ function LoadSavedGame(index) {
                     currentScene[i][0] = command;
                     currentScene[i][1] = content;
                 }
-                // console.log('Read scene complete.');
-                // console.log(currentScene);
-                currentSentence = save["SentenceID"];
-                // console.log("start:"+currentSentence)
-
-                //load saved scene:
+                SyncCurrentStatus('SentenceID',save["SentenceID"]);
                 let command = save["command"];
                 // console.log('readSaves:'+command)
                 if(save["bg_Name"]!=='')
@@ -85,7 +262,6 @@ function LoadSavedGame(index) {
                 }
                 let changedName = <span>{save["showName"]}</span>
                 let textArray = save["showText"].split("");
-                // let changedText = <p>{processSentence(currentSentence)['text']}</p>
                 ReactDOM.render(changedName, document.getElementById('pName'));
                 currentInfo["vocal"] = save['vocal'];
                 if(currentInfo['bgm'] !== save['bgm']){
@@ -582,31 +758,6 @@ function showMesModel(Title,Left,Right,func) {
     ReactDOM.render(element,document.getElementById('MesModel'))
 }
 
-function loadBGM() {
-    let bgmName = currentInfo["bgm"];
-    if(bgmName === '' || bgmName === 'none'){
-        ReactDOM.render(<div/>,document.getElementById("bgm"));
-        return;
-    }
-    let url = "./game/bgm/"+bgmName;
-    let audio = <audio src={url} id={"currentBGM"} loop="loop"/>
-    ReactDOM.render(audio,document.getElementById("bgm"));
-    let playControl = document.getElementById("currentBGM");
-    playControl.currentTime = 0;
-    playControl.volume = 0.25;
-    playControl.play();
-}
-
-function playVocal() {
-    let vocalName = currentInfo["vocal"];
-    let url = './game/vocal/'+vocalName;
-    let vocal = <audio src={url} id={"currentVocal"}/>
-    ReactDOM.render(vocal,document.getElementById('vocal'));
-    let VocalControl = document.getElementById("currentVocal");
-    VocalControl.currentTime = 0;
-    VocalControl.play();
-}
-
 function showBacklog(){
     let even = window.event || arguments.callee.caller.arguments[0];
     even.preventDefault();
@@ -657,10 +808,7 @@ function jumpFromBacklog(index) {
                     currentScene[i][0] = command;
                     currentScene[i][1] = content;
                 }
-                currentSentence = save["SentenceID"];
-                // console.log("start:"+currentSentence)
-
-                //load saved scene:
+                SyncCurrentStatus('SentenceID',save["SentenceID"]);
                 let command = save["command"];
                 // console.log('readSaves:'+command)
                 if(save["bg_Name"]!=='')
@@ -709,7 +857,6 @@ function jumpFromBacklog(index) {
                 }
                 let changedName = <span>{save["showName"]}</span>
                 let textArray = save["showText"].split("");
-                // let changedText = <p>{processSentence(currentSentence)['text']}</p>
                 ReactDOM.render(changedName, document.getElementById('pName'));
                 currentInfo["vocal"] = save['vocal'];
                 if(currentInfo['bgm'] !== save['bgm']){
@@ -717,11 +864,10 @@ function jumpFromBacklog(index) {
                     loadBGM();
                 }
                 playVocal();
-                currentName = save["showName"];
+                SyncCurrentStatus("showName",save["showName"]);
                 showTextArray(textArray);
                 currentInfo = save;
                 CurrentBacklog[CurrentBacklog.length] = JSON.parse(JSON.stringify(currentInfo));
-                // currentSentence = currentSentence+1;
             }
         }
     }
@@ -732,15 +878,6 @@ function showIntro(text){
     let i = 0;
     let IntroView =
         <div>
-            {/*<div className={"skipIntro"} onClick={()=>{*/}
-            {/*    if(introInterval)*/}
-            {/*        clearInterval(introInterval);*/}
-            {/*    document.getElementById("intro").style.display = 'none';*/}
-            {/*    currentSentence = currentSentence+1;*/}
-            {/*    nextSentenceProcessor();*/}
-            {/*}}>*/}
-            {/*    跳过*/}
-            {/*</div>*/}
             <div id={"textShowArea"} className={"textShowArea_styl"}>
             </div>
         </div>
