@@ -77,7 +77,7 @@ function nextSentenceProcessor() {
         for (let i = 0;i<selection.length;i++){
             selection[i] = selection[i].split(":");
         }
-        VC_choose(selection);
+        VC_choose(selection,'scene');
         return;
     }
     else if(command === 'bgm'){
@@ -88,23 +88,16 @@ function nextSentenceProcessor() {
         return;
     }
     else if(command === 'choose_label'){
-
-        currentInfo["command"] = command;
-        document.getElementById('chooseBox').style.display = 'flex';
-        let chooseItems =thisSentence[1];
-        currentInfo["choose"]=chooseItems;
+        SyncCurrentStatus('command',command);
+        SyncCurrentStatus('choose',S_content);
+        let chooseItems =S_content;
         chooseItems = chooseItems.split("}")[0];
         chooseItems = chooseItems.split("{")[1];
         let selection = chooseItems.split(',')
         for (let i = 0;i<selection.length;i++){
             selection[i] = selection[i].split(":");
         }
-        let elements = []
-        for (let i = 0; i < selection.length; i++) {
-            let temp = <div className='singleChoose' key={i} onClick={()=>{chooseJumpFun(selection[i][1]);}}>{selection[i][0]}</div>
-            elements.push(temp)
-        }
-        ReactDOM.render(<div>{elements}</div>,document.getElementById('chooseBox'))
+        VC_choose(selection,'label')
         return;
     }
     else if(command === 'jump_label'){
@@ -140,27 +133,22 @@ function nextSentenceProcessor() {
         return;
     }
     else {
-        currentInfo["command"] = processSentence(getStatus("SentenceID"))['name'];
-        currentInfo["showName"] = processSentence(getStatus("SentenceID"))['name'];
-        currentInfo["showText"] = processSentence(getStatus("SentenceID"))['text'];
-        currentInfo["vocal"] = processSentence(getStatus("SentenceID"))['vocal'];
-        let changedName = <span>{processSentence(getStatus("SentenceID"))['name']}</span>
-        let textArray = processSentence(getStatus("SentenceID"))['text'].split("");
-        ReactDOM.render(changedName, document.getElementById('pName'));
+        SyncCurrentStatus('command',processSentence(getStatus("SentenceID"))['name']);
+        SyncCurrentStatus('showName',processSentence(getStatus("SentenceID"))['name']);
+        SyncCurrentStatus('showText',processSentence(getStatus("SentenceID"))['text']);
+        SyncCurrentStatus('vocal',processSentence(getStatus("SentenceID"))['vocal']);
+        VC_textShow(getStatus('showName'),getStatus('showText'));
         if(currentInfo["vocal"]!== ''){
             playVocal();
         }
         saveBacklogNow = true;
-        showTextArray(textArray);
     }
     increaseSentence();
     if(saveBacklogNow){
         if(CurrentBacklog.length<=500){
             let temp = JSON.stringify(currentInfo);
             let pushElement = JSON.parse(temp);
-            console.log("现在写入backlog");
             CurrentBacklog[CurrentBacklog.length] = JSON.parse(temp);
-            console.log(CurrentBacklog);
         }else{
             CurrentBacklog.shift();
             let temp = JSON.stringify(currentInfo);
@@ -215,7 +203,7 @@ function LoadSavedGame(index) {
                 }
                 SyncCurrentStatus('SentenceID',save["SentenceID"]);
                 let command = save["command"];
-                // console.log('readSaves:'+command)
+                console.log('readSavesCommand:'+command)
                 if(save["bg_Name"]!=='')
                     document.getElementById('mainBackground').style.backgroundImage = "url('game/background/" + save["bg_Name"] + "')";
                 if (save["fig_Name"] === ''||save["fig_Name"] === 'none'){
@@ -242,9 +230,7 @@ function LoadSavedGame(index) {
                     // console.log('now changing person');
                     ReactDOM.render(changedP,document.getElementById('figureImage_right'));
                 }
-
-                if(command === 'choose'){
-                    document.getElementById('chooseBox').style.display = 'flex';
+                if(command === 'choose'||command === 'choose_label'){
                     let chooseItems =save["choose"];
                     chooseItems = chooseItems.split("}")[0];
                     chooseItems = chooseItems.split("{")[1];
@@ -252,13 +238,16 @@ function LoadSavedGame(index) {
                     for (let i = 0;i<selection.length;i++){
                         selection[i] = selection[i].split(":");
                     }
-                    let elements = []
-                    for (let i = 0; i < selection.length; i++) {
-                        let temp = <div className='singleChoose' key={i} onClick={()=>{chooseScene(selection[i][1]);}}>{selection[i][0]}</div>
-                        elements.push(temp)
+                    let choose_mode = '';
+                    switch (command){
+                        case 'choose':
+                            choose_mode = 'scene';
+                            break;
+                        case 'choose_label':
+                            choose_mode = 'label';
+                            break;
                     }
-                    ReactDOM.render(<div>{elements}</div>,document.getElementById('chooseBox'))
-                    // return;
+                    VC_choose(selection,choose_mode);
                 }
                 let changedName = <span>{save["showName"]}</span>
                 let textArray = save["showText"].split("");
@@ -277,64 +266,7 @@ function LoadSavedGame(index) {
     }
 }
 
-// 渐显文字
-function showTextArray(textArray){
-    showingText = false;
-    ReactDOM.render(<span> </span>, document.getElementById('SceneText'));
-    let elementArray = [];
-    let i = 0;
-    clearInterval(interval);
-    var interval = setInterval(showSingle,textShowWatiTime);
-    showingText = true;
-    function showSingle() {
-        if(!showingText){
-            let textFull = '';
-            for (let j = 0;j<textArray.length;j++){
-                textFull = textFull+textArray[j];
-            }
-            ReactDOM.render(<div>{textFull}</div>, document.getElementById('SceneText'));
-            if(auto === 1){
-                if(i < textArray.length + 1){
-                    i = textArray.length + 1;
-                }else{
-                    i = i+1;
-                }
-            }else{
-                i = textArray.length + 1 +(autoWaitTime/35);
-            }
 
-        }else{
-            let tempElement = <span key={i} className='singleWord'>{textArray[i]}</span>
-            elementArray.push(tempElement);
-            ReactDOM.render(<div>{elementArray}</div>, document.getElementById('SceneText'));
-            i = i+1;
-        }
-        if(i > textArray.length && auto !== 1){
-            showingText = false;
-        }
-        if(i > textArray.length +(autoWaitTime/35)){
-
-            if(auto === 1){
-                if(document.getElementById('currentVocal')&&fast === 0){
-                    if(document.getElementById('currentVocal').ended)
-                    {
-                        clearInterval(interval);
-                        showingText = false;
-                        nextSentenceProcessor();
-                    }
-                }else{
-                    clearInterval(interval);
-                    showingText = false;
-                    nextSentenceProcessor();
-                }
-            }else{
-                showingText = false;
-                clearInterval(interval);
-            }
-
-        }
-    }
-}
 
 function showTextPreview(text){
     onTextPreview = onTextPreview+1;
@@ -872,32 +804,6 @@ function jumpFromBacklog(index) {
         }
     }
 
-}
-
-function showIntro(text){
-    let i = 0;
-    let IntroView =
-        <div>
-            <div id={"textShowArea"} className={"textShowArea_styl"}>
-            </div>
-        </div>
-    ;
-    ReactDOM.render(IntroView,document.getElementById("intro"));
-    ReactDOM.render(<div>{" "}</div>,document.getElementById("textShowArea"));
-    document.getElementById("intro").style.display = 'block';
-    let textArray = text.split(',');
-    let introInterval = setInterval(textShow,1500);
-    let introAll = [];
-    function textShow(){
-        let singleRow = <div className={"introSingleRow"}>{textArray[i]}</div>;
-        introAll.push(singleRow);
-        i = i+1;
-        ReactDOM.render(<div>{introAll}</div>,document.getElementById("textShowArea"));
-        if(i>= textArray.length){
-            clearInterval(introInterval);
-            setTimeout(clearIntro,3500);
-        }
-    }
 }
 
 function ren_miniPic(){
