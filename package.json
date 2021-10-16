@@ -1,0 +1,26 @@
+{
+  "name": "webgal",
+  "version": "3.0.3",
+  "description": "### 一次编写，处处运行，无需网页开发基础，3分钟即可学会所有的语法，只要你有灵感，就可以立刻开始开始创作你自己的Galgame！",
+  "main": "",
+  "dependencies": {},
+  "devDependencies": {
+    "@commitlint/cli": "^13.2.1",
+    "@commitlint/config-conventional": "^13.2.0",
+    "husky": "^7.0.2"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepare": "husky install"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MakinoharaShoko/WebGAL.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MakinoharaShoko/WebGAL/issues"
+  },
+  "homepage": "https://github.com/MakinoharaShoko/WebGAL#readme"
+}
