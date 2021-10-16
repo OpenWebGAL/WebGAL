@@ -2,7 +2,7 @@
 window.onload = function () {
     loadCookie();
     loadSettings();
-    document.getElementById('Title').style.backgroundImage = 'url("./game/background/Title.png")';
+    getGameInfo();
     if(isMobile()){
         MobileChangeStyle();
     }
