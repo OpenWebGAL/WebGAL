@@ -14,6 +14,26 @@ document.addEventListener('selectstart', function(e) {
 });
 
 
+
+// -------- 滚轮 --------
+
+document.addEventListener('wheel', function (ev) {
+    const state = queryWidgetState();
+    if (!(AllHiddenIgnore(state, 'TextBox') && state.get('TextBox')))
+        return;
+    // 「正在游戏」状态
+    if (ev.deltaY > 0) {
+        nextSentenceProcessor();
+        ev.preventDefault();
+    }
+    else if (ev.deltaY < 0) {
+        showBacklog();
+        ev.preventDefault();
+    }
+});
+
+
+
 // -------- 快捷键 --------
 
 document.addEventListener('keydown', function (ev) {
