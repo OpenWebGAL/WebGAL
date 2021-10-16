@@ -107,7 +107,7 @@ function closeBacklog(){
 // 关闭intro界面
 function clearIntro(){
     document.getElementById("intro").style.display = 'none';
-    currentSentence = currentSentence+1;
+    increaseSentence();
     nextSentenceProcessor();
 }
 
