@@ -9,7 +9,7 @@
 {
     var GameInfo =
         {
-            GameName:'WebGAL Demo',
+            Game_name:'WebGAL Demo',
             Game_key:'WG_default',
             Title_img:'Title.png',
             Title_bgm:'夏影.mp3'
@@ -64,7 +64,7 @@ function loadCookie(){
         // let pre_process = document.cookie;
         // let fst = pre_process.split(';')[0];
         // let scd = document.cookie.slice(fst.length+1);
-        let data = JSON.parse(localStorage.getItem('WebGAL'));
+        let data = JSON.parse(localStorage.getItem(GameInfo['Game_key']));
         Saves = data.SavedGame;
         SaveBacklog = data.SavedBacklog;
         currentSavePage = data.SP;
@@ -99,7 +99,7 @@ function clearCookie(){
             play_speed:'medium'
         }
     }
-    localStorage.setItem('WebGAL',JSON.stringify(toCookie));
+    localStorage.setItem(GameInfo['Game_key'],JSON.stringify(toCookie));
 }
 
 function loadSettings(){
@@ -145,11 +145,11 @@ function getGameInfo() {
             let textList = getInfoCon.responseText;
             textList = textList.split('\n');
             for (let i = 0; i < textList.length; i++) {
-                let temp = textList[i].split(':');
-                temp[1] = temp[1].split(';')[0];
+                let tempStr = textList[i].split(";")[0];
+                let temp = tempStr.split(':');
                 switch (temp[0]) {
-                    case 'GameName':
-                        GameInfo['GameName'] = temp[1];
+                    case 'Game_name':
+                        GameInfo['Game_name'] = temp[1];
                         break;
                     case 'Game_key':
                         GameInfo['Game_key'] = temp[1];
@@ -165,7 +165,7 @@ function getGameInfo() {
             document.getElementById('Title').style.backgroundImage = 'url("./game/background/'+GameInfo["Title_img"]+'")';
             SyncCurrentStatus('bgm',GameInfo['Title_bgm']);
             loadBGM();
-            document.title = GameInfo['GameName'];
+            document.title = GameInfo['Game_name'];
         }
 
     }

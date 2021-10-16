@@ -1,4 +1,4 @@
-GameName:WebGAL;
+Game_name:WebGAL;
 Game_key:0f33fdGr;
 Title_img:Title2.png;
 Title_bgm:夏影.mp3;
