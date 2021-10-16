@@ -5,6 +5,17 @@
     var textShowWatiTime = 35;
 }
 
+//初始化游戏信息表
+{
+    var GameInfo =
+        {
+            GameName:'WebGAL Demo',
+            Game_key:'WG_default',
+            Title_img:'Title.png',
+            Title_bgm:'夏影.mp3'
+        }
+}
+
 //初始化运行时变量表
 {
     var currentScene ='';
@@ -49,7 +60,7 @@ var Settings = {
 };
 
 function loadCookie(){
-    if(localStorage.getItem('WebGAL')){
+    if(localStorage.getItem(GameInfo['Game_key'])){
         // let pre_process = document.cookie;
         // let fst = pre_process.split(';')[0];
         // let scd = document.cookie.slice(fst.length+1);
@@ -73,7 +84,7 @@ function writeCookie(){
         cSettings:Settings
     }
     // console.log(JSON.stringify(toCookie));
-    localStorage.setItem('WebGAL',JSON.stringify(toCookie));
+    localStorage.setItem(GameInfo['Game_key'],JSON.stringify(toCookie));
     // document.cookie = JSON.stringify(toCookie);
 }
 
@@ -125,4 +136,39 @@ function getStatus(statusKey){
 
 function increaseSentence(){
     SyncCurrentStatus('SentenceID',getStatus('SentenceID')+1);
+}
+
+function getGameInfo() {
+    let getInfoCon = new XMLHttpRequest();
+    getInfoCon.onreadystatechange = function (){
+        if(getInfoCon.status === 200){
+            let textList = getInfoCon.responseText;
+            textList = textList.split('\n');
+            for (let i = 0; i < textList.length; i++) {
+                let temp = textList[i].split(':');
+                temp[1] = temp[1].split(';')[0];
+                switch (temp[0]) {
+                    case 'GameName':
+                        GameInfo['GameName'] = temp[1];
+                        break;
+                    case 'Game_key':
+                        GameInfo['Game_key'] = temp[1];
+                        break;
+                    case 'Title_img':
+                        GameInfo['Title_img'] = temp[1];
+                        break;
+                    case 'Title_bgm':
+                        GameInfo['Title_bgm'] = temp[1];
+                        break;
+                }
+            }
+            document.getElementById('Title').style.backgroundImage = 'url("./game/background/'+GameInfo["Title_img"]+'")';
+            SyncCurrentStatus('bgm',GameInfo['Title_bgm']);
+            loadBGM();
+            document.title = GameInfo['GameName'];
+        }
+
+    }
+    getInfoCon.open('GET','game/config.txt');
+    getInfoCon.send();
 }
