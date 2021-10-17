@@ -4,14 +4,14 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import {Provider} from "react-redux";
-import store from './store/store'
+import Store from './store/Store'
 import KeyShortcut from "./utils/KeyShortcut";
 
 KeyShortcut()
 
 ReactDOM.render(
     <React.StrictMode>
-        <Provider store={store}>
+        <Provider store={Store}>
             <App/>
         </Provider>
     </React.StrictMode>,

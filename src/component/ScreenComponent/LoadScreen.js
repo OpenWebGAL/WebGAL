@@ -1,24 +1,21 @@
 import '../../assets/css/LoadScreen.css'
 import closeBlack from '../../assets/img/closeBlack.svg'
-import {act, actions} from "../../store/store";
+import {act} from "../../store/Store";
 import {connect} from "react-redux";
 import ListContent from "../ChildComponent/ListContent";
 import GamePlay from "../../core/GamePlay";
+import {uiActions} from "../../store/UiStore";
 
 const mapStateToProps = state => {
     return {
-        display: state.loadScreen.display,
+        display: state.uiState.loadScreen,
         saves: state.saves
     }
 }
 
 function LoadScreen(props) {
     function closeLoad() {
-        act(actions.HIDE_LOAD_SCREEN)
-    }
-
-    function checkDisplay() {
-        return {'display': props.display ? 'block' : 'none'}
+        act(uiActions.SET_LOAD_SCREEN, false)
     }
 
     function onLoad(index) {
@@ -26,7 +23,7 @@ function LoadScreen(props) {
     }
 
     return (
-        <div id="Load" style={checkDisplay()}>
+        <div id="Load" style={{'display': props.display ? 'block' : 'none'}}>
             <div id="loadMainBox">
                 <div id="closeLoad" onClick={closeLoad}>
                     <img src={closeBlack} className="closeSVG" id="LoadClose" alt="close"/>

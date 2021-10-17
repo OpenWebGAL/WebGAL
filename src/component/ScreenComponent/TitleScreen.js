@@ -1,36 +1,44 @@
 import '../../assets/css/TitleScreen.css'
-import {act, actions} from '../../store/store'
+import Store, {act} from '../../store/Store'
 import {connect} from "react-redux";
 import AlertDialog from "../FunctionalComponent/AlertDialog";
 import GamePlay from "../../core/GamePlay";
+import {uiActions} from "../../store/UiStore";
+import {cActions} from "../../store/CurrentInfoStore";
 
 const mapStateToProps = state => {
     return {
-        display: state.titleScreen.display,
-        titleBgUrl: state.titleScreen.titleBgUrl
+        display: state.uiState.titleScreen,
+        titleBgUrl: state.runtime.bg_Name // todo
     }
 }
 
 function TitleScreen(props) {
 
+    let defaultEntry = "game/scene/start.txt"
+
     function startGame() {
-        GamePlay.getScene("game/scene/start.txt")
-        act(actions.CLEAR_RUNTIME)
-        act(actions.HIDE_TITLE_SCREEN)
-        act(actions.SHOW_TEXT_BOX)
+        act(cActions.CLEAR_RUNTIME)
+        GamePlay.getScene(defaultEntry).then(() => {
+            GamePlay.sentenceProcessor(0)
+            act(uiActions.SET_TITLE_SCREEN, false)
+            act(uiActions.SET_TEXT_BOX, true)
+        })
     }
 
     function continueGame() {
-        act(actions.HIDE_TITLE_SCREEN, null)
-        act(actions.SHOW_TEXT_BOX)
+        GamePlay.getScene(Store.getState()["runtime"].SceneName || defaultEntry).then(() => {
+            act(uiActions.SET_TITLE_SCREEN, false)
+            act(uiActions.SET_TEXT_BOX, true)
+        })
     }
 
     function ToLoadScreen() {
-        act(actions.SHOW_LOAD_SCREEN)
+        act(uiActions.SET_LOAD_SCREEN, true)
     }
 
     function ToSettingsScreen() {
-        act(actions.SHOW_SETTINGS_SCREEN, null)
+        act(uiActions.SET_SETTINGS_SCREEN, true)
     }
 
     function exit() {
@@ -39,7 +47,7 @@ function TitleScreen(props) {
             left: {
                 text: "确认",
                 callback: () => {
-                    act(actions.CLEAR_RUNTIME)
+                    act(cActions.CLEAR_RUNTIME)
                 }
             },
             right: {

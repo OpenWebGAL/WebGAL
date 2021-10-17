@@ -1,11 +1,12 @@
 import closeWhite from '../../assets/img/closeWhite.svg'
 import '../../assets/css/BacklogScreen.css'
 import {connect} from "react-redux";
-import {act, actions} from "../../store/store";
+import {act} from "../../store/Store";
+import {uiActions} from "../../store/UiStore";
 
 const mapStateToProps = state => {
     return {
-        display: state.backlogScreen.display
+        display: state.uiState.backlogScreen
     }
 }
 
@@ -30,12 +31,9 @@ function BacklogScreen(props) {
     }
 
     function closeBacklog() {
-        act(actions.HIDE_BACKLOG_SCREEN)
+        act(uiActions.SET_BACKLOG_SCREEN, false)
     }
 
-    function checkDisplay() {
-        return {'display': props.display ? 'block' : 'none'}
-    }
 
     let showBacklogList = [];
     for (let i = 0; i < CurrentBacklog.length; i++) {
@@ -46,7 +44,7 @@ function BacklogScreen(props) {
     }
 
     return (
-        <div id="backlog" style={checkDisplay()}>
+        <div id="backlog" style={{'display': props.display ? 'block' : 'none'}}>
             <div id="closeBl" onClick={closeBacklog}>
                 <img src={closeWhite} className="closeSVG" alt="close"/>
             </div>

@@ -1,17 +1,18 @@
 import '../../assets/css/TextBox.css'
 import {connect} from "react-redux";
-import {act, actions} from "../../store/store";
+import {act} from "../../store/Store";
 import GamePlay from "../../core/GamePlay";
 import {useEffect, useState} from "react";
 import DynamicEffectUtil from "../../utils/DynamicEffectUtil";
+import {uiActions} from "../../store/UiStore";
 
 const mapStateToProps = state => {
     return {
-        display: state.textBox.display,
+        display: state.uiState.textBox,
         showName: state.runtime.showName,
         showText: state.runtime.showText,
-        playSpeed: state.settingsScreen.playSpeed,
-        fontSize: state.settingsScreen.fontSize
+        playSpeed: state.settings.playSpeed,
+        fontSize: state.settings.fontSize
     }
 }
 
@@ -43,11 +44,11 @@ function TextBox(props) {
     }, [props.showText])
 
     function hideTextBox() {
-        act(actions.HIDE_TEXT_BOX)
+        act(uiActions.SET_TEXT_BOX, false)
     }
 
     function showBacklog() {
-        act(actions.SHOW_BACKLOG_SCREEN)
+        act(uiActions.SET_BACKLOG_SCREEN, true)
     }
 
     function nextSentenceProcessor() {
@@ -67,20 +68,20 @@ function TextBox(props) {
     }
 
     function ToSaveScreen() {
-        act(actions.SHOW_SAVE_SCREEN)
+        act(uiActions.SET_SAVE_SCREEN, true)
     }
 
     function ToLoadScreen() {
-        act(actions.SHOW_LOAD_SCREEN)
+        act(uiActions.SET_LOAD_SCREEN, true)
     }
 
     function ToSettingsScreen() {
-        act(actions.SHOW_SETTINGS_SCREEN)
+        act(uiActions.SET_SETTINGS_SCREEN, true)
     }
 
     function ToTitleScreen() {
-        act(actions.SHOW_TITLE_SCREEN)
-        act(actions.HIDE_TEXT_BOX)
+        act(uiActions.SET_TITLE_SCREEN, true)
+        act(uiActions.SET_TEXT_BOX, false)
     }
 
     return (

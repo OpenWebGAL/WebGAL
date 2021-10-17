@@ -1,14 +1,15 @@
 import '../../assets/css/SaveScreen.css'
 import closeBlack from '../../assets/img/closeBlack.svg'
 import {connect} from "react-redux";
-import {act, actions} from "../../store/store";
+import {act} from "../../store/Store";
 import ListContent from "../ChildComponent/ListContent";
 import AlertDialog from "../FunctionalComponent/AlertDialog";
 import GamePlay from "../../core/GamePlay";
+import {uiActions} from "../../store/UiStore";
 
 const mapStateToProps = state => {
     return {
-        display: state.saveScreen.display,
+        display: state.uiState.saveScreen,
         saves: state.saves
     }
 }
@@ -16,11 +17,7 @@ const mapStateToProps = state => {
 function SaveScreen(props) {
 
     function closeSave() {
-        act(actions.HIDE_SAVE_SCREEN)
-    }
-
-    function checkDisplay() {
-        return {'display': props.display ? 'block' : 'none'}
+        act(uiActions.SET_SAVE_SCREEN, false)
     }
 
     function onSaveOnEmpty(index) {
@@ -41,7 +38,7 @@ function SaveScreen(props) {
     }
 
     return (
-        <div id="Save" style={checkDisplay()}>
+        <div id="Save" style={{'display': props.display ? 'block' : 'none'}}>
             <div id="saveMainBox">
                 <div id="closeSave" onClick={closeSave}>
                     <img src={closeBlack} className="closeSVG" alt="close"/>
