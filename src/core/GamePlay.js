@@ -12,10 +12,11 @@ let GamePlay = (function () {
 
     /**
      * 通过url地址读取情景文件
-     * @param {string} url 文件地址 本地或远程都可以
+     * @param url 文件地址 本地或远程都可以
+     * @returns {Promise<string>} 返回一个Promise对象，可继续链式调用
      */
     function getScene(url) {
-        fetch(url)
+        return fetch(url)
             .then((r) => r.text())
             .then((data) => {
                 data = data.split('\n');
@@ -32,7 +33,6 @@ let GamePlay = (function () {
                 act(actions.SET_SCENE, data)
                 act(cActions.SET_RUNTIME_SCENE_NAME, url)
                 console.log("[加载成功]", url)
-                sentenceProcessor()
             })
             .catch((error) => {
                 console.log("[加载失败]", url, error)
