@@ -7,6 +7,9 @@
     background-repeat: no-repeat;
     background-size: cover;
     background-color: rgba(0, 0, 0, 0.25);
+
+    animation: showSoftly .5s;
+    -webkit-animation: showSoftly .5s;
 }
 
 .MesMainWindow {
