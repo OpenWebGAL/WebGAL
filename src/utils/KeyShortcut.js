@@ -2,6 +2,10 @@ import Store, {act} from "../store/Store";
 import GamePlay from "../core/GamePlay";
 import {uiActions} from "../store/UiStore";
 
+/**
+ *  @Author Junbo Xiong
+ *  @Date 2021/10/13 at 1:06
+ */
 function KeyShortcut() {
     const name2query = new Map([
         ['TitleScreen', 'titleScreen'],
@@ -59,6 +63,28 @@ function KeyShortcut() {
         return true;
     }
 
+
+    /**
+     * @author Junbo Xiong
+     * @Date 2021/10/17 at 0:21
+     */
+    // -------- 滚轮 --------
+    document.addEventListener('wheel', function (ev) {
+        const state = queryWidgetState();
+        if (!(AllHiddenIgnore(state, 'TextBox') && state.get('TextBox')))
+            return;
+        // 「正在游戏」状态
+        if (ev.deltaY > 0) {
+            GamePlay.nextSentenceProcessor()
+            // ev.preventDefault();
+        } else if (ev.deltaY < 0) {
+            act(uiActions.SET_BACKLOG_SCREEN, true)
+            // ev.preventDefault();
+        }
+    });
+
+
+    // -------- 快捷键 --------
     document.addEventListener('keyup', function (ev) {
         if (ev.isComposing || ev.defaultPrevented)
             return;
@@ -86,11 +112,8 @@ function KeyShortcut() {
                     // 文本框显示
                     if (state.get('TextBox'))
                         GamePlay.nextSentenceProcessor()
-                    // nextSentenceProcessor();
                     else {
                         act(uiActions.SET_TEXT_BOX, true)
-                        // document.querySelector('div#bottomBox').style.display = 'flex';
-                        // hideTextStatus = false;
                     }
                     ev.preventDefault();
                 }
