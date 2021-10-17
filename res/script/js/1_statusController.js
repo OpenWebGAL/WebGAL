@@ -267,6 +267,19 @@ function hideTitle(ifRes) {
     }
 }
 
+// 分支选择（请求getScene）
+function chooseScene(url){
+    // console.log(url);
+    currentInfo["SceneName"] = url;
+    let sUrl = "game/scene/"+url;
+    getScene(sUrl);
+    document.getElementById("chooseBox").style.display="none"
+}
+
+//进入下一句
+function increaseSentence(){
+    SyncCurrentStatus('SentenceID',getStatus('SentenceID')+1);
+}
 
 
 
