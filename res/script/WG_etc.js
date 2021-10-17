@@ -13,6 +13,39 @@ document.addEventListener('selectstart', function(e) {
     e.preventDefault();
 });
 
+
+
+
+// -------- 右键 --------
+
+document.addEventListener('mouseup', function (ev) {
+    if (ev.button === 2) {
+        // 目前等功能同于 delete 键
+        const evt = new KeyboardEvent('keyup', { key: 'Delete', code: 'Delete' });
+        document.dispatchEvent(evt);
+        ev.preventDefault();
+    }
+});
+
+
+
+// -------- 滚轮 --------
+
+document.addEventListener('wheel', function (ev) {
+    const state = queryWidgetState();
+    if (!(AllHiddenIgnore(state, 'TextBox') && state.get('TextBox')))
+        return;
+    // 「正在游戏」状态
+    if (ev.deltaY > 0) {
+        nextSentenceProcessor();
+        ev.preventDefault();
+    }
+    else if (ev.deltaY < 0) {
+        showBacklog();
+        ev.preventDefault();
+    }
+});
+
 // -------- 快捷键 --------
 document.addEventListener('keydown', function (ev) {
     if (ev.isComposing || ev.defaultPrevented || ev.repeat)
