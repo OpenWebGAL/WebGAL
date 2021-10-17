@@ -172,6 +172,7 @@ function nextSentenceProcessor() {
 // 读取游戏存档
 function LoadSavedGame(index) {
     closeLoad();
+    VC_closeChoose();
     hideTitle('non-restart');
     let save = Saves[index];
     let url = 'game/scene/'
@@ -210,6 +211,7 @@ function LoadSavedGame(index) {
 //从回溯读取
 function jumpFromBacklog(index) {
     closeBacklog();
+    VC_closeChoose();
     let save = CurrentBacklog[index];
     for (let i = CurrentBacklog.length - 1 ; i > index-1 ; i--){
         CurrentBacklog.pop();
