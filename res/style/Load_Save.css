@@ -50,17 +50,17 @@
 
 .LS_singleElement{
     overflow: hidden;
-    margin: 5px 10px 5px 10px;
-    width: 45%;
-    height: 85px;
+    margin: 15px 10px 5px 10px;
+    width: 600px;
+    height: 100px;
     font-size: xx-large;
     padding: 5px 5px 5px 10px;
-    border-bottom: 1px solid rgba(0,0,0,0.3);
+    border: 2px solid #8E354A;
     display: flex;
 }
 
 .LS_singleElement:hover{
-    margin: 5px 10px 3px 10px;
+    /*margin: 5px 10px 3px 10px;*/
     background-color: rgba(0,0,0,0.05);
 }
 
@@ -93,7 +93,7 @@
 
 }
 .LSE_bottom{
-    height: 25px;
+    height: 39px;
     color: rgba(0,0,0,0.8);
     margin: 3px 0 0 0;
     text-align: left;
