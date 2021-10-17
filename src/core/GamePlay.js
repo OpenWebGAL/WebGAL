@@ -43,7 +43,7 @@ let GamePlay = (function () {
      * 通过 index 读取存档到 runtime 对象中
      * @param {number} index 存档在 saves 对象中的索引值
      */
-    function loadSavedGame(index) {
+    function loadGame(index) {
         console.log("[读取]", index)
         let loadResult = Store.getState()["saves"][index]
 
@@ -89,7 +89,7 @@ let GamePlay = (function () {
 
     /**
      * 读取指定脚本
-     * @param {number?} index
+     * @param {number} index
      */
     function sentenceProcessor(index) {
         if (index == null) return
@@ -123,7 +123,9 @@ let GamePlay = (function () {
                 act(cActions.SET_RUNTIME_FIGURE_NAME_RIGHT, payload)
                 break
             case 'CHANGE_SCENE':
-                getScene(`game/scene/${payload}`)
+                getScene(`game/scene/${payload}`).then(() => {
+
+                })
                 return;
             case 'CHOOSE':// todo 分支选择界面未完成
                 break
@@ -136,7 +138,6 @@ let GamePlay = (function () {
                 return
             default:
                 let result = processSentence(currentSentence)
-                console.log(result)
                 Object.keys(result).forEach((key) => act(actionMap[key], result[key]))
                 break
         }
@@ -193,7 +194,7 @@ let GamePlay = (function () {
         // todo 要做一个音频播放组件
     }
 
-    return {getScene, loadSavedGame, saveGame, nextSentenceProcessor}
+    return {getScene, loadSavedGame: loadGame, saveGame, nextSentenceProcessor, sentenceProcessor}
 })()
 
 export default GamePlay
