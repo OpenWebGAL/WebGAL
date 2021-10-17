@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>INDEX</title>
-    <script src="res/script/react.development.js" crossorigin></script>
-    <script src="res/script/react-dom.development.js" crossorigin></script>
+    <script src="res/script/React_Environment/react.development.js" crossorigin></script>
+    <script src="res/script/React_Environment/react-dom.development.js" crossorigin></script>
     <link rel="stylesheet" type="text/css" href="res/style/main.css">
     <link rel="stylesheet" type="text/css" href="res/style/settings.css">
     <link rel="stylesheet" type="text/css" href="res/style/Load_Save.css">
@@ -12,11 +12,8 @@
     <link rel="stylesheet" type="text/css" href="res/style/window.css">
 </head>
 <body>
-<script src="res/script/babel.min.js"></script>
+<script src="res/script/React_Environment/babel.min.js"></script>
 <div id="intro" class="intro_styl"></div>
-<div  id ="ren_test" class="ren_preview">
-
-</div>
 <div id="MesModel"></div>
 <div id="Title">
     <div id="TitleModel">
@@ -54,28 +51,28 @@
     </div>
     <div id="backlogContent"></div>
 </div>
-<div id="Load">
-    <div id="loadMainBox">
+<div id="Load" class="LS_Main">
+    <div id="loadMainBox" class="LS_mainBox">
         <div id="closeLoad" onclick="closeLoad()">
             <img src="res/img/closeBlack.svg"  class="closeSVG" id="LoadClose" alt="close">
         </div>
         <div id="LoadTitle">
             读档
         </div>
-        <div id="LoadItems">
+        <div id="LoadItems" class="LS_Items">
 
         </div>
     </div>
 </div>
-<div id="Save">
-    <div id="saveMainBox">
+<div id="Save" class="LS_Main">
+    <div id="saveMainBox" class="LS_mainBox">
         <div id="closeSave" onclick="closeSave()">
             <img src="res/img/closeBlack.svg" class="closeSVG" alt="close">
         </div>
         <div id="SaveTitle">
             存档
         </div>
-        <div id="SaveItems">
+        <div id="SaveItems" class="LS_Items">
 
         </div>
     </div>
@@ -108,6 +105,9 @@
 <script src="res/script/WG_dataController.js"></script>
 <script src="res/script/WG_core.js"></script>
 <script src="res/script/WG_etc.js"></script>
-<script src="res/script/jsx/WG_view.js" type="text/babel"></script>
+<script src="res/script/jsx/WG_viewComponents.js" type="text/babel"></script>
+<script src="res/script/jsx/WG_viewController.js" type="text/babel"></script>
+<script src="res/script/WG_UI_Controller.js"></script>
+<script src="res/script/WG_statusController.js"></script>
 </body>
 </html>
