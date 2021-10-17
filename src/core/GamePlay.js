@@ -70,10 +70,18 @@ let GamePlay = (function () {
      */
     function checkIsShowingText() {
         let isShowingText = Store.getState()["temp"].isShowingText
-
         if (isShowingText) act(actions.SET_TEMP_IS_SHOWING_TEXT, false)
-
         return isShowingText
+    }
+
+    /**
+     * 判断文字框是否已隐藏
+     * @returns {boolean}
+     */
+    function checkIsShowingTextBox() {
+        let isHideTextBox = Store.getState()["uiState"].textBox || false
+        if (!isHideTextBox) act(uiActions.SET_TEXT_BOX, true)
+        return isHideTextBox
     }
 
     /**
@@ -82,6 +90,7 @@ let GamePlay = (function () {
     function nextSentenceProcessor() {
         // 如果正在显示文字，则不解析下一句，并结束显示文字的动画
         if (checkIsShowingText()) return
+        if (!checkIsShowingTextBox()) return
 
         let index = Store.getState()["runtime"].SentenceID || 0
         sentenceProcessor(index + 1)
@@ -127,7 +136,9 @@ let GamePlay = (function () {
 
                 })
                 return;
-            case 'CHOOSE':// todo 分支选择界面未完成
+            case 'INTRO':   // todo 独白界面未完成
+                break
+            case 'CHOOSE':  // todo 分支选择界面未完成
                 break
             case 'CHOOSE_LABEL':// todo 分支选择界面未完成
                 break

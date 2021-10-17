@@ -20,9 +20,9 @@ function TitleScreen(props) {
     function startGame() {
         act(cActions.CLEAR_RUNTIME)
         GamePlay.getScene(defaultEntry).then(() => {
-            GamePlay.sentenceProcessor(0)
             act(uiActions.SET_TITLE_SCREEN, false)
             act(uiActions.SET_TEXT_BOX, true)
+            GamePlay.sentenceProcessor(0)
         })
     }
 
