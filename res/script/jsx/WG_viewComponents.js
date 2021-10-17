@@ -253,17 +253,24 @@ class LoadMainModel extends  React.Component{
 
     loadSaveButtons(){
         this.SaveButtons = [];
-        for (let i = currentLoadPage*5+1; i <= currentLoadPage*5+5; i++) {
+        for (let i = currentLoadPage*6+1; i <= currentLoadPage*6+6; i++) {
             if(Saves[i]){
                 let thisButtonName = Saves[i]["showName"];
                 let thisButtonText = Saves[i]["showText"];
+                let miniPic = ren_miniPic(i);
+                let backUrl = "game/background/"+Saves[i]["bg_Name"];
                 let temp = <div className="LoadSingleElement LS_singleElement" key={i} onClick={()=>{LoadSavedGame(i)}}>
-                    <div className="LSE_top">
-                        <span className={"LSE_index"}>{i}</span>
-                        <span className={"LSE_name"}>{thisButtonName}</span>
+                    <div className={"ren"} key={i} style={{backgroundImage: `url(${backUrl})`}}>
+                        {miniPic}
                     </div>
-                    <div className="LSE_bottom">
-                        {thisButtonText}
+                    <div>
+                        <div className="LSE_top">
+                            <span className={"LSE_index"}>{i}</span>
+                            <span className={"LSE_name"}>{thisButtonName}</span>
+                        </div>
+                        <div className="LSE_bottom">
+                            {thisButtonText}
+                        </div>
                     </div>
                 </div>
                 this.SaveButtons.push(temp);
@@ -348,8 +355,8 @@ class SaveMainModel extends  React.Component{
                     </div>
                     <div>
                         <div className="LSE_top">
-                        <span className={"LSE_index"}>{i}</span>
-                        <span className={"LSE_name"}>{thisButtonName}</span>
+                            <span className={"LSE_index"}>{i}</span>
+                            <span className={"LSE_name"}>{thisButtonName}</span>
                     </div>
                     <div className="LSE_bottom">
                         {thisButtonText}
