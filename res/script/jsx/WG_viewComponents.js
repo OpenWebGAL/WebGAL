@@ -46,9 +46,9 @@ class ImporterExporter extends React.Component {
         return (
             <div className="importer-exporter">
                 <span className="label-saves-exporter" onClick={() => { this.exportSaves(); }}>导出存档</span>
-                <a target="_blank" id="dummy-saves-exporter" style={{ display: "none" }}></a>
+                <a target="_blank" id="dummy-saves-exporter" style={{display: "none"}}/>
                 <span className="label-saves-importer" onClick={() => { this.dummyInput.click(); }}>导入存档</span>
-                <input type="file" id="dummy-saves-importer" style={{ display: "none" }} onChange={this.importSaves}></input>
+                <input type="file" id="dummy-saves-importer" style={{display: "none"}} onChange={this.importSaves}/>
             </div>
         );
     }
@@ -87,10 +87,9 @@ function ren_miniPic(i){
         </span>
         renderList.push(tempIn);
     }
-    let element = <div id={"ren_SE"+i} className={"miniPic"}>
+    return <div id={"ren_SE" + i} className={"miniPic"}>
         {renderList}
-    </div>
-    return element;
+    </div>;
 }
 
 class SettingButtons_font extends React.Component{
@@ -123,12 +122,15 @@ class SettingButtons_font extends React.Component{
         if(i === 0){
             Settings['font_size'] = 'small';
             document.getElementById('SceneText').style.fontSize = '150%';
+            document.getElementById('previewDiv').style.fontSize = '150%';
         }else if(i === 1){
             Settings["font_size"] = 'medium';
             document.getElementById('SceneText').style.fontSize = '200%';
+            document.getElementById('previewDiv').style.fontSize = '200%';
         }else if(i === 2){
             Settings["font_size"] = 'large';
             document.getElementById('SceneText').style.fontSize = '250%';
+            document.getElementById('previewDiv').style.fontSize = '250%';
         }
         let buttonStateNow = ['','',''];
         if(Settings['font_size'] === 'small'){

@@ -149,10 +149,6 @@ function hidePanic() {
 }
 
 
-
-
-
-
 /**
  * 查询当前组件状态
  * @param {string | Array.<string> | undefined} widgets
