@@ -3,18 +3,14 @@ import {connect} from "react-redux";
 
 const mapStateToProps = state => {
     return {
-        display: state.panicScreen.display
+        display: state.uiState.panicScreen
     }
 }
 
 function PanicScreen(props) {
 
-    function checkDisplay() {
-        return {'display': props.display ? 'block' : 'none'}
-    }
-
     return (
-        <div id="panic-overlay" style={checkDisplay()}>
+        <div id="panic-overlay" style={{'display': props.display ? 'block' : 'none'}}>
             <div className="yoozle-container">
                 <div className="yoozle-title">
                     <span>

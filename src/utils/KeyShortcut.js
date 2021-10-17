@@ -1,5 +1,6 @@
-import store, {act, actions} from "../store/store";
+import Store, {act} from "../store/Store";
 import GamePlay from "../core/GamePlay";
+import {uiActions} from "../store/UiStore";
 
 function KeyShortcut() {
     const name2query = new Map([
@@ -31,7 +32,7 @@ function KeyShortcut() {
             let query = name2query.get(key)
             if (query === undefined)
                 throw new RangeError(`No widget named ${key}.`);
-            state_map.set(key, store.getState()[query]?.display || false)
+            state_map.set(key, Store.getState()["uiState"][query] || false)
         }
 
         if (reduce)
@@ -69,7 +70,7 @@ function KeyShortcut() {
                 const state = queryWidgetState();
                 // 「正在游戏」状态
                 if (AllHiddenIgnore(state, 'TextBox')) {
-                    act(actions.FAST_NEXT)
+                    // act(actions.FAST_NEXT) todo 未重构实现快进的逻辑
                     // fastNext();
                     ev.preventDefault();
                 }
@@ -87,7 +88,7 @@ function KeyShortcut() {
                         GamePlay.nextSentenceProcessor()
                     // nextSentenceProcessor();
                     else {
-                        act(actions.SHOW_TEXT_BOX)
+                        act(uiActions.SET_TEXT_BOX, true)
                         // document.querySelector('div#bottomBox').style.display = 'flex';
                         // hideTextStatus = false;
                     }
@@ -100,7 +101,7 @@ function KeyShortcut() {
             case 'KeyA': {
                 const state = queryWidgetState();
                 if (AllHiddenIgnore(state, 'TextBox')) {
-                    act(actions.AUTO_NEXT)
+                    // act(actions.AUTO_NEXT) todo 未重构实现自动播放的逻辑
                     // autoNext();
                     ev.preventDefault();
                 }
@@ -111,7 +112,7 @@ function KeyShortcut() {
             case 'KeyF': {
                 const state = queryWidgetState();
                 if (AllHiddenIgnore(state, 'TextBox')) {
-                    act(actions.FAST_NEXT)
+                    // act(actions.FAST_NEXT) todo 未重构实现快进的逻辑
                     // fastNext();
                     ev.preventDefault();
                 }
@@ -122,7 +123,7 @@ function KeyShortcut() {
             case 'KeyV': {
                 const state = queryWidgetState();
                 if (AllHiddenIgnore(state, 'TextBox')) {
-                    act(actions.PLAY_VOCAL)
+                    // act(actions.PLAY_VOCAL) todo 未重构实现播放语音的逻辑
                     // playVocal();
                     ev.preventDefault();
                 }
@@ -133,12 +134,7 @@ function KeyShortcut() {
             case 'KeyS': {
                 const state = queryWidgetState();
                 if (AllHiddenIgnore(state, ['TextBox', 'SaveScreen'])) {
-                    if (state.get('SaveScreen'))
-                        act(actions.HIDE_SAVE_SCREEN)
-                    // closeSave();
-                    else
-                        act(actions.SHOW_SAVE_SCREEN)
-                    // onSaveGame();
+                    act(uiActions.SET_SAVE_SCREEN, !state.get('SaveScreen'))
                     ev.preventDefault();
                 }
             }
@@ -148,12 +144,7 @@ function KeyShortcut() {
             case 'KeyL': {
                 const state = queryWidgetState();
                 if (AllHiddenIgnore(state, ['TitleScreen', 'TextBox', 'LoadScreen'])) {
-                    if (state.get('LoadScreen'))
-                        act(actions.HIDE_LOAD_SCREEN)
-                    // closeLoad();
-                    else
-                        act(actions.SHOW_LOAD_SCREEN)
-                    // onLoadGame();
+                    act(uiActions.SET_LOAD_SCREEN, !state.get('LoadScreen'))
                     ev.preventDefault();
                 }
             }
@@ -163,12 +154,7 @@ function KeyShortcut() {
             case 'KeyC': {
                 const state = queryWidgetState();
                 if (AllHiddenIgnore(state, ['TitleScreen', 'TextBox', 'SettingScreen'])) {
-                    if (state.get('SettingScreen'))
-                        act(actions.HIDE_SETTINGS_SCREEN)
-                    // closeSettings();
-                    else
-                        act(actions.SHOW_SETTINGS_SCREEN)
-                    // onSetting();
+                    act(uiActions.SET_SETTINGS_SCREEN, !state.get('SettingScreen'))
                     ev.preventDefault();
                 }
             }
@@ -179,8 +165,7 @@ function KeyShortcut() {
                 const state = queryWidgetState();
                 // 已经打开 backlog 后不再拦截上键
                 if (AllHiddenIgnore(state, 'TextBox')) {
-                    act(actions.SHOW_BACKLOG_SCREEN)
-                    // showBacklog();
+                    act(uiActions.SET_BACKLOG_SCREEN, true)
                     ev.preventDefault();
                 }
             }
@@ -193,8 +178,7 @@ function KeyShortcut() {
 
                 // 已经打开 backlog 后不再拦截上键
                 if (AllHiddenIgnore(state, ['TextBox', 'BacklogScreen'])) {
-                    act(actions.HIDE_BACKLOG_SCREEN)
-                    // showBacklog();
+                    act(uiActions.SET_BACKLOG_SCREEN, false)
                     ev.preventDefault();
                 }
             }
@@ -206,31 +190,14 @@ function KeyShortcut() {
                     const state = queryWidgetState(['TextBox', 'SaveScreen', 'LoadScreen', 'SettingScreen', 'BacklogScreen']);
                     // 「正在游戏」状态
                     if (AllHiddenIgnore(state, 'TextBox')) {
-                        if (state.get('TextBox')) {
-                            act(actions.HIDE_TEXT_BOX)
-                            // document.querySelector('div#bottomBox').style.display = 'none';
-                            // hideTextStatus = true;
-                        } else {
-                            act(actions.SHOW_TEXT_BOX)
-                            // document.querySelector('div#bottomBox').style.display = 'flex';
-                            // hideTextStatus = false;
-                        }
+                        act(uiActions.SET_TEXT_BOX, !state.get('TextBox'))
                     }
                     // 有其他窗口
                     else {
-                        if (state.get('SaveScreen'))
-                            act(actions.HIDE_SAVE_SCREEN)
-                        // closeSave();
-                        if (state.get('LoadScreen'))
-                            act(actions.HIDE_LOAD_SCREEN)
-                        // closeLoad();
-                        if (state.get('SettingScreen'))
-                            act(actions.HIDE_SETTINGS_SCREEN)
-                        // closeSettings();
-                        if (state.get('BacklogScreen'))
-                            act(actions.HIDE_BACKLOG_SCREEN)
-                        // closeBacklog()
-                        // 紧急回避专用 ESC 键控制
+                        act(uiActions.SET_SAVE_SCREEN, false)
+                        act(uiActions.SET_LOAD_SCREEN, false)
+                        act(uiActions.SET_SETTINGS_SCREEN, false)
+                        act(uiActions.SET_BACKLOG_SCREEN, false)
                     }
                     ev.preventDefault();
                 }
@@ -238,12 +205,7 @@ function KeyShortcut() {
 
             // panic button
             case 'Escape':
-                if (queryWidgetState('PanicScreen'))
-                    act(actions.HIDE_PANIC_SCREEN)
-                // hidePanic();
-                else
-                    act(actions.SHOW_PANIC_SCREEN)
-                // showPanic('Yoozle');
+                act(uiActions.SET_PANIC_SCREEN, !queryWidgetState('PanicScreen'))
                 ev.preventDefault();
                 break;
 

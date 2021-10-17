@@ -10,6 +10,8 @@ https://github.com/MakinoharaShoko/WebGAL/releases/
 
 如果下载速度过慢，请尝试通过蓝奏云网盘下载： https://www.lanzouw.com/ilKAGv21lrc
 
+## 想要参与引擎开发的开发者请先阅读 DEV_NOTE
+
 ## 如何在本地运行WebGAL？
 
 #### Windows用户可以使用以下方式快速打开调试界面:

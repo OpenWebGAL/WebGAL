@@ -1,5 +1,5 @@
 import * as ReactDOM from "react-dom";
-import store, {act, actions} from "../store/store";
+import Store, {act, actions} from "../store/Store";
 
 let DynamicEffectUtil = (function DynamicEffectUtil() {
 
@@ -11,8 +11,11 @@ let DynamicEffectUtil = (function DynamicEffectUtil() {
      * @returns {Object|?} 返回定时循环对象
      */
     function showTextArray(text, targetElement, showTime = 50) {
-        if (typeof text !== 'string' || text === '') return
-        act(actions.SET_TEMP_SHOWING_TEXT, true)
+        if (typeof text !== 'string' || text === '') {
+            ReactDOM.render(<div>{text}</div>, targetElement)
+            return
+        }
+        act(actions.SET_TEMP_IS_SHOWING_TEXT, true)
 
         let textArray = text.split('')
         let fontCount = textArray.length
@@ -23,10 +26,10 @@ let DynamicEffectUtil = (function DynamicEffectUtil() {
         let interval = setInterval(() => {
             temp.push(<span key={index} className="singleWord">{text[index++]}</span>)
 
-            if (index >= fontCount || !store.getState()["tempState"].showingText) {
+            if (index >= fontCount || !Store.getState()["temp"].isShowingText) {
                 temp = text
                 clearInterval(interval)
-                act(actions.SET_TEMP_SHOWING_TEXT, false)
+                act(actions.SET_TEMP_IS_SHOWING_TEXT, false)
             }
 
             ReactDOM.render(<div>{temp}</div>, targetElement)

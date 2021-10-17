@@ -1,23 +1,24 @@
 import SettingsButtonSelector from "../ChildComponent/SettingsButtonSelector";
-
 import '../../assets/css/SettingsScreen.css'
 import closeBlack from '../../assets/img/closeBlack.svg'
-import {act, actions} from "../../store/store";
+import {act, actions} from "../../store/Store";
 import {connect} from "react-redux";
 import AlertDialog from "../FunctionalComponent/AlertDialog";
+import {uiActions} from "../../store/UiStore";
+import {cActions} from "../../store/CurrentInfoStore";
 
 const mapStateToProps = state => {
     return {
-        display: state.settingsScreen.display,
-        fontSize: state.settingsScreen.fontSize,
-        playSpeed: state.settingsScreen.playSpeed
+        display: state.uiState.settingsScreen,
+        fontSize: state.settings.fontSize,
+        playSpeed: state.settings.playSpeed
     }
 }
 
 function SettingsScreen(props) {
 
     function closeSettings() {
-        act(actions.TOGGLE_SETTINGS_SCREEN)
+        act(uiActions.SET_SETTINGS_SCREEN, false)
     }
 
     function onSelectFontSize(index) {
@@ -37,17 +38,13 @@ function SettingsScreen(props) {
                 text: "要",
                 callback: () => {
                     act(actions.CLEAR_SAVES)
-                    act(actions.CLEAR_RUNTIME)
+                    act(cActions.CLEAR_RUNTIME)
                 }
             },
             right: {
                 text: "不要"
             },
         })
-    }
-
-    function checkDisplay() {
-        return {'display': props.display ? 'block' : 'none'}
     }
 
     function checkFontSizeSelectionIndex() {
@@ -59,7 +56,7 @@ function SettingsScreen(props) {
     }
 
     return (
-        <div id="SettingsPanel" style={checkDisplay()}>
+        <div id="SettingsPanel" style={{'display': props.display ? 'block' : 'none'}}>
             <div id="settingsMainBox">
                 <div id="close" onClick={() => closeSettings()}>
                     <img src={closeBlack} className="closeSVG" alt="close"/>

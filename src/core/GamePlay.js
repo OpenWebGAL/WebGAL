@@ -1,19 +1,22 @@
-import store, {act, actions} from "../store/store";
+import Store, {act, actions} from "../store/Store";
+import {uiActions} from "../store/UiStore";
+import {cActions} from "../store/CurrentInfoStore";
 
 let GamePlay = (function () {
 
     let actionMap = {
-        vocal: actions.SET_RUNTIME_VOCAL,
-        text: actions.SET_RUNTIME_SENTENCE_TEXT,
-        name: actions.SET_RUNTIME_SPEAKER_NAME
+        vocal: cActions.SET_RUNTIME_VOCAL,
+        text: cActions.SET_RUNTIME_SENTENCE_TEXT,
+        name: cActions.SET_RUNTIME_SPEAKER_NAME
     }
 
     /**
      * 通过url地址读取情景文件
-     * @param {string} url 文件地址 本地或远程都可以
+     * @param url 文件地址 本地或远程都可以
+     * @returns {Promise<string>} 返回一个Promise对象，可继续链式调用
      */
     function getScene(url) {
-        fetch(url)
+        return fetch(url)
             .then((r) => r.text())
             .then((data) => {
                 data = data.split('\n');
@@ -28,8 +31,8 @@ let GamePlay = (function () {
                     data[i][1] = content;
                 }
                 act(actions.SET_SCENE, data)
+                act(cActions.SET_RUNTIME_SCENE_NAME, url)
                 console.log("[加载成功]", url)
-                sentenceProcessor()
             })
             .catch((error) => {
                 console.log("[加载失败]", url, error)
@@ -40,12 +43,16 @@ let GamePlay = (function () {
      * 通过 index 读取存档到 runtime 对象中
      * @param {number} index 存档在 saves 对象中的索引值
      */
-    function loadSavedGame(index) {
+    function loadGame(index) {
         console.log("[读取]", index)
-        act(actions.SET_RUNTIME, store.getState()["saves"][index])
-        act(actions.HIDE_LOAD_SCREEN)
-        act(actions.HIDE_TITLE_SCREEN)
-        act(actions.SHOW_TEXT_BOX)
+        let loadResult = Store.getState()["saves"][index]
+
+        getScene(loadResult.SceneName).then(() => {
+            act(cActions.SET_RUNTIME, loadResult)
+            act(uiActions.SET_LOAD_SCREEN, false)
+            act(uiActions.SET_TITLE_SCREEN, false)
+            act(uiActions.SET_TEXT_BOX, true)
+        })
     }
 
     /**
@@ -54,71 +61,83 @@ let GamePlay = (function () {
      */
     function saveGame(index) {
         console.log("[存档]", index)
-        act(actions.ADD_SAVES, store.getState()['runtime'], index)
+        act(actions.ADD_SAVES, Store.getState()['runtime'], index)
+    }
+
+    /**
+     * 判断是否正在显示文字
+     * @returns {boolean}
+     */
+    function checkIsShowingText() {
+        let isShowingText = Store.getState()["temp"].isShowingText
+
+        if (isShowingText) act(actions.SET_TEMP_IS_SHOWING_TEXT, false)
+
+        return isShowingText
     }
 
     /**
      * 读取下一条脚本
      */
     function nextSentenceProcessor() {
-        if (store.getState()["tempState"].showingText) {
-            act(actions.SET_TEMP_SHOWING_TEXT, false)
-            return
-        }
+        // 如果正在显示文字，则不解析下一句，并结束显示文字的动画
+        if (checkIsShowingText()) return
 
-        let index = store.getState()["runtime"].SentenceID || 0
+        let index = Store.getState()["runtime"].SentenceID || 0
         sentenceProcessor(index + 1)
     }
 
     /**
      * 读取指定脚本
-     * @param {number?} index
+     * @param {number} index
      */
     function sentenceProcessor(index) {
-        let currentScene = store.getState()["scene"]
-        let currentSentenceIndex = index || store.getState()["runtime"].SentenceID || 0
-        let currentSentence = currentScene[currentSentenceIndex]
+        if (index == null) return
+
+        let currentScene = Store.getState()["scene"]
+        let currentSentence = currentScene[index]
 
         if (currentSentence === null || currentSentence === undefined) return
 
         let command = currentSentence[0]
         let payload = currentSentence[1]
 
-        act(actions.SET_RUNTIME_COMMAND, command)
-        act(actions.SET_RUNTIME_SENTENCE_ID, currentSentenceIndex)
+        act(cActions.SET_RUNTIME_COMMAND, command)
+        act(cActions.SET_RUNTIME_SENTENCE_ID, index)
 
         switch (command.toUpperCase()) {
             case 'CHANGEBG':
             case 'CHANGEBG_NEXT':
-                act(actions.SET_RUNTIME_BACKGROUND, payload)
+                act(cActions.SET_RUNTIME_BACKGROUND, payload)
                 break
             case 'CHANGEP':
             case 'CHANGEP_NEXT':
-                act(actions.SET_RUNTIME_FIGURE_NAME_MIDDLE, payload)
+                act(cActions.SET_RUNTIME_FIGURE_NAME_MIDDLE, payload)
                 break
             case 'CHANGEP_LEFT':
             case 'CHANGEP_LEFT_NEXT':
-                act(actions.SET_RUNTIME_FIGURE_NAME_LEFT, payload)
+                act(cActions.SET_RUNTIME_FIGURE_NAME_LEFT, payload)
                 break
             case 'CHANGEP_RIGHT':
             case 'CHANGEP_RIGHT_NEXT':
-                act(actions.SET_RUNTIME_FIGURE_NAME_RIGHT, payload)
+                act(cActions.SET_RUNTIME_FIGURE_NAME_RIGHT, payload)
                 break
             case 'CHANGE_SCENE':
-                getScene(`game/scene/${payload}`)
+                getScene(`game/scene/${payload}`).then(() => {
+
+                })
                 return;
             case 'CHOOSE':// todo 分支选择界面未完成
                 break
             case 'CHOOSE_LABEL':// todo 分支选择界面未完成
                 break
             case 'BGM':
-                act(actions.SET_RUNTIME_BGM, payload)
+                act(cActions.SET_RUNTIME_BGM, payload)
                 loadBGM(`game/bgm/${payload}`)
                 nextSentenceProcessor()
                 return
             default:
                 let result = processSentence(currentSentence)
-                console.log(result)
                 Object.keys(result).forEach((key) => act(actionMap[key], result[key]))
                 break
         }
@@ -175,7 +194,7 @@ let GamePlay = (function () {
         // todo 要做一个音频播放组件
     }
 
-    return {getScene, loadSavedGame, saveGame, nextSentenceProcessor}
+    return {getScene, loadSavedGame: loadGame, saveGame, nextSentenceProcessor, sentenceProcessor}
 })()
 
 export default GamePlay
