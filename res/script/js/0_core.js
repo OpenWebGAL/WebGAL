@@ -1,3 +1,55 @@
+//引擎加载完成
+window.onload = function () {
+    loadCookie();
+    loadSettings();
+    getGameInfo();
+    if(isMobile()){
+        MobileChangeStyle();
+    }
+}
+
+// 保存当前游戏状态
+function saveGame(index){
+    let tempInfo = JSON.stringify(currentInfo);
+    Saves[index] = JSON.parse(tempInfo);
+    let tempBacklog = JSON.stringify(CurrentBacklog);
+    SaveBacklog[index]= JSON.parse(tempBacklog);
+    writeCookie();
+}
+
+//通过label跳分支
+function chooseJumpFun(label){
+    let lab_name = label;
+    //find the line of the label:
+    let find = false;
+    let jmp_sentence = 0;
+    for (let i = 0; i < currentScene.length; i++) {
+        if(currentScene[i][0] === 'label' && currentScene[i][1] === lab_name){
+            find = true;
+            jmp_sentence = i;
+        }
+    }
+    if(find){
+        SyncCurrentStatus('SentenceID',jmp_sentence);
+        nextSentenceProcessor();
+        document.getElementById("chooseBox").style.display="none"
+    }else
+    {
+        increaseSentence();
+        nextSentenceProcessor();
+        document.getElementById("chooseBox").style.display="none"
+    }
+}
+
+//点击背景
+function clickOnBack(){
+    if(hideTextStatus){
+        document.getElementById('bottomBox').style.display = 'flex';
+        hideTextStatus = false;
+    }else {
+        nextSentenceProcessor();
+    }
+}
 
 // 打开设置
 function onSetting(){
@@ -23,15 +75,6 @@ function onSaveGame() {
 function closeSettings(){
     document.getElementById("settings").style.display = "none"
     document.getElementById("bottomBox").style.display = "flex"
-}
-
-// 分支选择（请求getScene）
-function chooseScene(url){
-    // console.log(url);
-    currentInfo["SceneName"] = url;
-    let sUrl = "game/scene/"+url;
-    getScene(sUrl);
-    document.getElementById("chooseBox").style.display="none"
 }
 
 //自动播放
@@ -149,63 +192,5 @@ function hidePanic() {
 }
 
 
-/**
- * 查询当前组件状态
- * @param {string | Array.<string> | undefined} widgets
- * @returns {boolean | Map.<string, boolean>}
- */
-function queryWidgetState(widgets) {
-    const name2query = new Map([
-        ['TitleScreen', 'div#Title'],
-        ['TextBox', 'div#bottomBox'],
-        ['SaveScreen', 'div#Save'],
-        ['LoadScreen', 'div#Load'],
-        ['SettingScreen', 'div#settings'],
-        ['BacklogScreen', 'div#backlog'],
-        ['PanicScreen', 'div#panic-overlay'],
-    ]);
-
-    let reduce = false;
-    if (typeof (widgets) === 'string') {
-        widgets = [widgets,];
-        reduce = true;
-    }
-    else if (widgets === undefined) {
-        widgets = Array.from(name2query.keys())
-    }
-
-    let state_map = new Map();
-    for (const wi of widgets) {
-        const query = name2query.get(wi);
-        if (query === undefined)
-            throw new RangeError(`No widget named ${wi}.`);
-        const ele = document.querySelector(query);
-        let disp = ele.style.display;
-        if (disp === '')
-            disp = window.getComputedStyle(ele).display;
-        state_map.set(wi, disp !== 'none');
-    }
-
-    if (reduce)
-        state_map = state_map.values().next().value
-    return state_map;
-}
 
 
-/**
- * 略过 ignore，检测 states 中所有组件是否均隐藏
- * @param {Map.<string, boolean>} states
- * @param {string | Array.<string> | undefined} ignore
- * @returns {boolean}
- */
-function AllHiddenIgnore(states, ignore) {
-    if (typeof (ignore) === 'string')
-        ignore = [ignore,];
-    else if (ignore === undefined)
-        ignore = []
-    for (const [key, value] of states) {
-        if (value === true && !ignore.includes(key))
-            return false;
-    }
-    return true;
-}
