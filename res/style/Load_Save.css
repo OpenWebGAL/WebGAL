@@ -1,5 +1,20 @@
+.LS_indexButton{
+    font-size: large;
+    padding: 5px 20px 5px 20px;
+    margin: 0 5px 5px 5px;
+}
 
-#Load{
+.LS_indexButtonOn{
+    font-weight: bold;
+    padding: 5px 20px 5px 20px;
+    margin: 0 5px 5px 5px;
+}
+
+.LS_indexButton:hover{
+    font-weight: bold;
+}
+
+.LS_Main{
     position: absolute;
     top: 20px;
     bottom: 20px;
@@ -15,33 +30,7 @@
     box-shadow: 5px 5px 15px rgba(0,0,0,0.5);
 }
 
-#LoadTitle{
-    color: #005CAF;
-    font-size: 250%;
-    padding: 5px 10px 5px 10px ;
-}
-
-.LoadIndexButton{
-    /*border: 2px solid #FEDFE1;*/
-    /*border-radius: 5px ;*/
-    font-size: large;
-    color:#005CAF;
-    padding: 5px 20px 5px 20px;
-    margin: 0 5px 5px 5px;
-}
-
-#loadMainBox{
-    height: 100%;
-
-}
-
-#LoadIndex{
-    padding: 5px 5px 7px 5px;
-    width: 100%;
-    border-bottom: 1px solid rgba(0,0,0,0.3);
-}
-
-#LoadItems{
+.LS_Items{
     padding: 5px 10px 10px 10px;
     height: 75%;
     display: flex;
@@ -49,70 +38,50 @@
     justify-content: center;
 }
 
-.LoadIndexButton:hover{
-    font-weight: bold;
-    /*background-color: rgba(0,0,0,0.1);*/
-    border-bottom: 2px solid #005CAF;
-    /*color: #8E354A;*/
-    /*background-color: #FEDFE1;*/
+.LS_mainBox{
+    height: 100%;
 }
 
-.LoadIndexButtonOn{
-    border-bottom: 3px solid #005CAF;
-    /*border-radius: 5px ;*/
-    font-size: large;
-    color:#005CAF;
-    /*color: white;*/
-    padding: 5px 20px 5px 20px;
-    margin: 0 5px 5px 5px;
-    background-color: rgba(0,92,175,0.07);
-    /*background-color: rgba(0,0,0,0.05);*/
-    font-weight: bold;
-}
-
-#LoadMain{
+.LS_Index{
+    padding: 5px 5px 7px 5px;
     width: 100%;
-    height: 90%;
-
+    border-bottom: 1px solid rgba(0,0,0,0.3);
 }
 
-.LoadSingleElement{
+.LS_singleElement{
     overflow: hidden;
-    margin: 5px 10px 5px 10px;
-    width: 95%;
-    height: 9vh;
-    /*background-color: white;*/
-    color: #005CAF;
-    /*text-align: center;*/
+    margin: 15px 10px 5px 10px;
+    width: 600px;
+    height: 100px;
     font-size: xx-large;
     padding: 5px 5px 5px 10px;
-    /*border-left: 3px solid #51A8DD;*/
-    /*border-top: 1px solid rgba(0,0,0,0.1);*/
-    border-bottom: 1px solid rgba(0,0,0,0.3);
-    /*border-right: 1px solid rgba(0,0,0,0.1);*/
-    /*box-shadow: 1px 1px 7px rgba(0,0,0,0.2);*/
-}
-.LoadSingleElement:hover{
-    /*color: white;*/
-    /*border: 2px solid #FEDFE1;*/
-    margin: 5px 10px 3px 10px;
-    background-color: rgba(0,0,0,0.05);
-    border-bottom: 1px solid #005CAF;
+    border: 1px solid rgba(0,0,0,0.3);
+    background-color: rgba(255,255,255,0.95);
+    box-shadow: 3px 3px 15px  rgba(0,0,0,0.05);
+    display: flex;
 }
 
-#LoadButtonList{
-    /*display: flex;*/
-    /*flex-wrap: wrap;*/
+.LS_singleElement:hover{
+    /*margin: 5px 10px 3px 10px;*/
+    background-color: rgba(0,0,0,0.05);
+}
+
+.LS_ButtonList{
     height: 100%;
     overflow: scroll;
     overflow-scrolling: auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
 }
 
-::-webkit-scrollbar {display:none}
+.LS_renderMain{
+    width: 100%;
+    height: 90%;
+}
 
 .LSE_top{
     padding: 0 0 0 0;
-    /*border-bottom: 2px solid rgba(0,0,0,0.2);*/
     font-size: 75%;
     text-align: left;
 }
@@ -126,7 +95,7 @@
 
 }
 .LSE_bottom{
-    height: 2vh;
+    height: 39px;
     color: rgba(0,0,0,0.8);
     margin: 3px 0 0 0;
     text-align: left;
@@ -135,22 +104,35 @@
     padding: 0 0 10px 0;
 }
 
+::-webkit-scrollbar {display:none}
 
-#Save{
-    position: absolute;
-    top: 20px;
-    bottom: 20px;
-    left: 45px;
-    right: 45px;
-    display: none;
-    z-index: 14;
-    background-color: rgba(255,255,255,0.95);
-    /*background-image: linear-gradient(rgba(255,255,255,0) 0%,rgba(255,255,255,0) 75%,rgba(255,255,255,0.3)100%);*/
-    /*border-radius: 15px;*/
-    -webkit-animation: showSoftly 0.5s;
-    padding: 30px 30px 30px 30px;
-    box-shadow: 5px 5px 15px rgba(0,0,0,0.5);
+#LoadTitle{
+    color: #005CAF;
+    font-size: 250%;
+    padding: 5px 10px 5px 10px ;
 }
+
+.LoadIndexButton{
+    color:#005CAF;
+}
+
+.LoadIndexButton:hover{
+    border-bottom: 2px solid #005CAF;
+}
+
+.LoadIndexButtonOn{
+    border-bottom: 3px solid #005CAF;
+    color:#005CAF;
+    background-color: rgba(0,92,175,0.07);
+}
+
+.LoadSingleElement{
+    color: #005CAF;
+}
+.LoadSingleElement:hover{
+    border-bottom: 1px solid #005CAF;
+}
+
 
 #SaveTitle{
     color: #77428D;
@@ -159,114 +141,24 @@
 }
 
 .SaveIndexButton{
-    /*border: 2px solid #FEDFE1;*/
-    /*border-radius: 5px ;*/
-    font-size: large;
     color:#77428D;
-    padding: 5px 20px 5px 20px;
-    margin: 0 5px 5px 5px;
-}
-
-#saveMainBox{
-    height: 100%;
-
-}
-
-#SaveIndex{
-    padding: 5px 5px 7px 5px;
-    width: 100%;
-    border-bottom: 1px solid rgba(0,0,0,0.3);
-}
-
-#SaveItems{
-    padding: 5px 10px 10px 10px;
-    height: 75%;
-    display: flex;
-    justify-items: center;
-    justify-content: center;
-
 }
 
 .SaveIndexButton:hover{
     font-weight: bold;
-    /*background-color: rgba(0,0,0,0.1);*/
     border-bottom: 2px solid #77428D;
-    /*color: #8E354A;*/
-    /*background-color: #FEDFE1;*/
 }
 
 .SaveIndexButtonOn{
     border-bottom: 3px solid #77428D;
-    /*border-radius: 5px ;*/
-    font-size: large;
     color:#77428D;
-    /*color: white;*/
-    padding: 5px 20px 5px 20px;
-    margin: 0 5px 5px 5px;
     background-color: rgba(119,66,141,0.07);
-    /*background-color: rgba(0,0,0,0.05);*/
-    font-weight: bold;
-}
-
-#SaveMain{
-    width: 100%;
-    height: 90%;
-
 }
 
 .SaveSingleElement{
-    overflow: hidden;
-    margin: 5px 10px 5px 10px;
-    width: 95%;
-    height: 9vh;
-    /*background-color: white;*/
     color: #77428D;
-    /*text-align: center;*/
-    font-size: xx-large;
-    padding: 5px 5px 5px 10px;
-    /*border-left: 3px solid #51A8DD;*/
-    /*border-top: 1px solid rgba(0,0,0,0.1);*/
-    border-bottom: 1px solid rgba(0,0,0,0.3);
-    /*border-right: 1px solid rgba(0,0,0,0.1);*/
-    /*box-shadow: 1px 1px 7px rgba(0,0,0,0.2);*/
 }
-
-#SaveButtonList{
-    height: 100%;
-    overflow: scroll;
-    overflow-scrolling: auto;
-}
-
 
 .SaveSingleElement:hover{
-    /*color: white;*/
-    /*border: 2px solid #FEDFE1;*/
-    margin: 5px 10px 3px 10px;
-    background-color: rgba(0,0,0,0.05);
     border-bottom: 1px solid #77428D;
-}
-
-.SSE_top{
-    padding: 0 0 0 0;
-    /*border-bottom: 2px solid rgba(0,0,0,0.2);*/
-    font-size: 75%;
-    text-align: left;
-}
-
-.SSE_index{
-    display: none;
-    padding: 0 15px 0 15px;
-    border: 2px solid #8E354A;
-    margin: 0 5px 0 0;
-    border-radius: 5px;
-
-}
-.SSE_bottom{
-    height: 2vh;
-    color: rgba(0,0,0,0.8);
-    margin: 3px 0 0 0;
-    text-align: left;
-    font-size: 60%;
-    overflow: hidden;
-    padding: 0 0 10px 0;
 }
