@@ -64,6 +64,35 @@ class ImporterExporter extends React.Component {
     }
 }
 
+function ren_miniPic(i){
+    let leftFigUrl = "./game/figure/"+Saves[i]["fig_Name_left"];
+    let FigUrl = "./game/figure/"+Saves[i]["fig_Name"];
+    let rightFigUrl = "./game/figure/"+Saves[i]["fig_Name_right"];
+    let renderList= [];
+    if(Saves[i]["fig_Name_left"]!=='none'&& Saves[i]["fig_Name_left"]!==''){
+        let tempIn= <span className={"mini_fig mini_fig_left"}>
+            <img src={leftFigUrl} alt={"mini_fig"} className={"mini_fig_pic"}/>
+        </span>
+        renderList.push(tempIn);
+    }
+    if(Saves[i]["fig_Name"]!=='none'&& Saves[i]["fig_Name"]!==''){
+        let tempIn= <span className={"mini_fig mini_fig_center"}>
+            <img src={FigUrl} alt={"mini_fig"} className={"mini_fig_pic"}/>
+        </span>
+        renderList.push(tempIn);
+    }
+    if(Saves[i]["fig_Name_right"]!=='none'&& Saves[i]["fig_Name_right"]!==''){
+        let tempIn= <span className={"mini_fig mini_fig_right"}>
+            <img src={rightFigUrl} alt={"mini_fig"} className={"mini_fig_pic"}/>
+        </span>
+        renderList.push(tempIn);
+    }
+    let element = <div id={"ren_SE"+i} className={"miniPic"}>
+        {renderList}
+    </div>
+    return element;
+}
+
 class SettingButtons_font extends React.Component{
     constructor(props) {
         super(props);
@@ -215,9 +244,9 @@ class LoadMainModel extends  React.Component{
     loadButtons(){
         this.Buttons = [];
         for (let i = 0; i < this.LoadPageQty; i++) {
-            let temp =<span className="LoadIndexButton" onClick={()=>{this.setCurrentPage(i)}} key={i}>{i+1}</span>
+            let temp =<span className="LoadIndexButton LS_indexButton" onClick={()=>{this.setCurrentPage(i)}} key={i}>{i+1}</span>
             if(i === currentLoadPage)
-                temp =<span className="LoadIndexButtonOn" onClick={()=>{this.setCurrentPage(i)}} key={i}>{i+1}</span>
+                temp =<span className="LoadIndexButtonOn LS_indexButtonOn" onClick={()=>{this.setCurrentPage(i)}} key={i}>{i+1}</span>
             this.Buttons.push(temp);
         }
     }
@@ -228,7 +257,7 @@ class LoadMainModel extends  React.Component{
             if(Saves[i]){
                 let thisButtonName = Saves[i]["showName"];
                 let thisButtonText = Saves[i]["showText"];
-                let temp = <div className="LoadSingleElement" key={i} onClick={()=>{LoadSavedGame(i)}}>
+                let temp = <div className="LoadSingleElement LS_singleElement" key={i} onClick={()=>{LoadSavedGame(i)}}>
                     <div className="LSE_top">
                         <span className={"LSE_index"}>{i}</span>
                         <span className={"LSE_name"}>{thisButtonName}</span>
@@ -240,7 +269,7 @@ class LoadMainModel extends  React.Component{
                 this.SaveButtons.push(temp);
             }else
             {
-                let temp = <div className="LoadSingleElement" key={i}>空</div>
+                let temp = <div className="LoadSingleElement LS_singleElement" key={i}>空</div>
                 this.SaveButtons.push(temp);
                 // console.log(i)
             }
@@ -268,11 +297,11 @@ class LoadMainModel extends  React.Component{
         this.loadButtons();
         this.loadSaveButtons();
         return(
-            <div id="LoadMain">
-                <div id="LoadIndex">
+            <div id="LoadMain" className={"LS_renderMain"}>
+                <div id="LoadIndex" className={"LS_Index"}>
                     {this.Buttons}
                 </div>
-                <div id="LoadButtonList">
+                <div id="LoadButtonList" className={"LS_ButtonList"}>
                     {this.SaveButtons}
                 </div>
             </div>
@@ -285,6 +314,7 @@ class SaveMainModel extends  React.Component{
     Buttons = [];
     SaveButtons = [];
     LoadPageQty = 0;
+    ren_bg_list = [];
     setCurrentPage(page){
         currentSavePage = page;
         this.setState({
@@ -296,32 +326,40 @@ class SaveMainModel extends  React.Component{
     loadButtons(){
         this.Buttons = [];
         for (let i = 0; i < this.LoadPageQty; i++) {
-            let temp =<span className="SaveIndexButton" onClick={()=>{this.setCurrentPage(i)}} key={i}>{i+1}</span>
+            let temp =<span className="SaveIndexButton LS_indexButton" onClick={()=>{this.setCurrentPage(i)}} key={i}>{i+1}</span>
             if(i === currentSavePage)
-                temp =<span className="SaveIndexButtonOn" onClick={()=>{this.setCurrentPage(i)}} key={i}>{i+1}</span>
+                temp =<span className="SaveIndexButtonOn LS_indexButtonOn" onClick={()=>{this.setCurrentPage(i)}} key={i}>{i+1}</span>
             this.Buttons.push(temp);
         }
     }
 
     loadSaveButtons(){
         this.SaveButtons = [];
+        this.ren_bg_list = [];
         for (let i = currentSavePage*5+1; i <= currentSavePage*5+5; i++) {
             if(Saves[i]){
                 let thisButtonName = Saves[i]["showName"];
                 let thisButtonText = Saves[i]["showText"];
-                let temp = <div className="SaveSingleElement" key={i} onClick={()=>{this.save_onSaved(i)}}>
-                    <div className="SSE_top">
-                        <span className={"SSE_index"}>{i}</span>
-                        <span className={"SSE_name"}>{thisButtonName}</span>
+                let miniPic = ren_miniPic(i);
+                let backUrl = "game/background/"+Saves[i]["bg_Name"];
+                let temp = <div className="SaveSingleElement LS_singleElement" key={i} onClick={()=>{this.save_onSaved(i)}}>
+                    <div className={"ren"} key={i} style={{backgroundImage: `url(${backUrl})`}}>
+                        {miniPic}
                     </div>
-                    <div className="SSE_bottom">
+                    <div>
+                        <div className="LSE_top">
+                        <span className={"LSE_index"}>{i}</span>
+                        <span className={"LSE_name"}>{thisButtonName}</span>
+                    </div>
+                    <div className="LSE_bottom">
                         {thisButtonText}
+                    </div>
                     </div>
                 </div>
                 this.SaveButtons.push(temp);
             }else
             {
-                let temp = <div className="SaveSingleElement" key={i} onClick={()=>{this.save_NonSaved(i)}}>空</div>
+                let temp = <div className="SaveSingleElement LS_singleElement" key={i} onClick={()=>{this.save_NonSaved(i)}}>空</div>
                 this.SaveButtons.push(temp);
                 // console.log(i)
             }
@@ -368,11 +406,11 @@ class SaveMainModel extends  React.Component{
         this.loadButtons();
         this.loadSaveButtons();
         return(
-            <div id="SaveMain">
-                <div id="SaveIndex">
+            <div id="SaveMain" className={"LS_renderMain"}>
+                <div id="SaveIndex" className={"LS_Index"}>
                     {this.Buttons}
                 </div>
-                <div id="SaveButtonList">
+                <div id="SaveButtonList" className={"LS_ButtonList"}>
                     {this.SaveButtons}
                 </div>
             </div>

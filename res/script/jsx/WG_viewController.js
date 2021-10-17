@@ -185,38 +185,6 @@ function playVocal() {
     VocalControl.play();
 }
 
-function ren_miniPic(){
-    document.getElementById('ren_test').style.display = 'block';
-    let backUrl = "./game/background/"+currentInfo["bg_Name"];
-    let leftFigUrl = "./game/figure/"+currentInfo["fig_Name_left"];
-    let FigUrl = "./game/figure/"+currentInfo["fig_Name"];
-    let rightFigUrl = "./game/figure/"+currentInfo["fig_Name_right"];
-    let renderList= [];
-    if(currentInfo["fig_Name_left"]!=='none'&& currentInfo["fig_Name_left"]!==''){
-        let tempIn= <div id={"mini_fig_left"} className={"mini_fig"}>
-            <img src={leftFigUrl} alt={"mini_fig"} className={"mini_fig_pic"}/>
-        </div>
-        renderList.push(tempIn);
-    }
-    if(currentInfo["fig_Name"]!=='none'&& currentInfo["fig_Name"]!==''){
-        let tempIn= <div id={"mini_fig_center"} className={"mini_fig"}>
-            <img src={FigUrl} alt={"mini_fig"} className={"mini_fig_pic"}/>
-        </div>
-        renderList.push(tempIn);
-    }
-    if(currentInfo["fig_Name_right"]!=='none'&& currentInfo["fig_Name_right"]!==''){
-        let tempIn= <div id={"mini_fig_right"} className={"mini_fig"}>
-            <img src={rightFigUrl} alt={"mini_fig"} className={"mini_fig_pic"}/>
-        </div>
-        renderList.push(tempIn);
-    }
-    let element = <div id={"miniPic"}>
-        {renderList}
-    </div>
-    ReactDOM.render(element,document.getElementById('ren_test'));
-    document.getElementById('ren_test').style.backgroundImage = "url('" + backUrl + "')";
-}
-
 function showIntro(text){
     let i = 0;
     let IntroView =
@@ -232,7 +200,7 @@ function showIntro(text){
     let introInterval = setInterval(textShow,1500);
     let introAll = [];
     function textShow(){
-        let singleRow = <div className={"introSingleRow"}>{textArray[i]}</div>;
+        let singleRow = <div className={"introSingleRow"} key={i}>{textArray[i]}</div>;
         introAll.push(singleRow);
         i = i+1;
         ReactDOM.render(<div>{introAll}</div>,document.getElementById("textShowArea"));
