@@ -11,8 +11,11 @@ let DynamicEffectUtil = (function DynamicEffectUtil() {
      * @returns {Object|?} 返回定时循环对象
      */
     function showTextArray(text, targetElement, showTime = 50) {
-        if (typeof text !== 'string' || text === '') return
-        act(actions.SET_TEMP_SHOWING_TEXT, true)
+        if (typeof text !== 'string' || text === '') {
+            ReactDOM.render(<div>{text}</div>, targetElement)
+            return
+        }
+        act(actions.SET_TEMP_IS_SHOWING_TEXT, true)
 
         let textArray = text.split('')
         let fontCount = textArray.length
