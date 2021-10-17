@@ -1,10 +1,10 @@
 import '../../assets/css/TextBox.css'
 import {connect} from "react-redux";
-import {act} from "../../store/Store";
+import Store, {act, actions} from "../../store/Store";
 import GamePlay from "../../core/GamePlay";
-import {useEffect, useState} from "react";
-import DynamicEffectUtil from "../../utils/DynamicEffectUtil";
+import {useEffect} from "react";
 import {uiActions} from "../../store/UiStore";
+import ShowTextArrayUtil from "../../utils/ShowTextArrayUtil";
 
 const mapStateToProps = state => {
     return {
@@ -17,8 +17,6 @@ const mapStateToProps = state => {
 }
 
 function TextBox(props) {
-    const [textAnimateInterval, setTextAnimateInterval] = useState()
-
     const playSpeedMap = {
         slow: 75,
         medium: 50,
@@ -32,14 +30,13 @@ function TextBox(props) {
     }
 
     useEffect(() => {
-        if (textAnimateInterval !== null) clearInterval(textAnimateInterval)
-
-        setTextAnimateInterval(
-            DynamicEffectUtil.showTextArray(
-                props.showText,
-                document.getElementById("SceneText"),
-                playSpeedMap[props.playSpeed]
-            )
+        ShowTextArrayUtil.showIn(
+            props.showText,
+            document.getElementById("SceneText"),
+            playSpeedMap[props.playSpeed],
+            () => !Store.getState()["temp"].isShowingText,
+            () => act(actions.SET_TEMP_IS_SHOWING_TEXT, true),
+            () => act(actions.SET_TEMP_IS_SHOWING_TEXT, false)
         )
     }, [props.showText])
 
