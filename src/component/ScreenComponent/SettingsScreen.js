@@ -18,7 +18,7 @@ const mapStateToProps = state => {
 }
 
 function SettingsScreen(props) {
-    const textPreview = "ecusandae repellendus reprehenderit sit soluta tempora voluptatem voluptates, voluptatibus."
+    const textPreview = "现在预览的是文本框字体大小和播放速度的情况，您可以根据您的观感调整上面的选项。"
     const playSpeedMap = {slow: 75, medium: 50, fast: 30}
     const fontSizeMap = {small: '16px', medium: '24px', large: '32px'}
 
@@ -34,11 +34,13 @@ function SettingsScreen(props) {
 
     useEffect(() => {
         clearInterval(textPreviewInterval)
-        let time = textPreview.length * playSpeedMap[props.playSpeed]
 
-        showTextPreview()
-        setTextPreviewInterval(setInterval(showTextPreview, time + 2000))
-    }, [props.playSpeed])
+        if (props.display) {
+            let time = textPreview.length * playSpeedMap[props.playSpeed]
+            showTextPreview()
+            setTextPreviewInterval(setInterval(showTextPreview, time + 2000))
+        }
+    }, [props.playSpeed, props.display])
 
     function closeSettings() {
         act(uiActions.SET_SETTINGS_SCREEN, false)
