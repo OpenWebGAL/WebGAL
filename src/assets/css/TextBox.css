@@ -60,6 +60,11 @@
     height: 60%;
 }
 
+#SceneText * {
+    animation: showSoftly .2s;
+    -webkit-animation: showSoftly .2s;
+}
+
 #controlBar {
     position: absolute;
     bottom: 5px;

@@ -1,5 +1,25 @@
 body {
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+@keyframes showSoftly /* Safari 与 Chrome */
+{
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 100%;
+    }
+}
+
+@-webkit-keyframes showSoftly /* Safari 与 Chrome */
+{
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 100%;
+    }
 }
