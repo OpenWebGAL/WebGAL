@@ -70,7 +70,7 @@ function KeyShortcut() {
                 const state = queryWidgetState();
                 // 「正在游戏」状态
                 if (AllHiddenIgnore(state, 'TextBox')) {
-                    act(actions.FAST_NEXT)
+                    // act(actions.FAST_NEXT) todo 未重构实现快进的逻辑
                     // fastNext();
                     ev.preventDefault();
                 }
@@ -101,7 +101,7 @@ function KeyShortcut() {
             case 'KeyA': {
                 const state = queryWidgetState();
                 if (AllHiddenIgnore(state, 'TextBox')) {
-                    act(actions.AUTO_NEXT)
+                    // act(actions.AUTO_NEXT) todo 未重构实现自动播放的逻辑
                     // autoNext();
                     ev.preventDefault();
                 }
@@ -112,7 +112,7 @@ function KeyShortcut() {
             case 'KeyF': {
                 const state = queryWidgetState();
                 if (AllHiddenIgnore(state, 'TextBox')) {
-                    act(actions.FAST_NEXT)
+                    // act(actions.FAST_NEXT) todo 未重构实现快进的逻辑
                     // fastNext();
                     ev.preventDefault();
                 }
@@ -123,7 +123,7 @@ function KeyShortcut() {
             case 'KeyV': {
                 const state = queryWidgetState();
                 if (AllHiddenIgnore(state, 'TextBox')) {
-                    act(actions.PLAY_VOCAL)
+                    // act(actions.PLAY_VOCAL) todo 未重构实现播放语音的逻辑
                     // playVocal();
                     ev.preventDefault();
                 }

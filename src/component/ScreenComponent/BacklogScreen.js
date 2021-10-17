@@ -27,7 +27,7 @@ const CurrentBacklog = [
 function BacklogScreen(props) {
 
     function backlogClick(index) {
-        act(actions.HANDLE_BACKLOG_SELECTED, index)
+        // act(actions.HANDLE_BACKLOG_SELECTED, index) todo 处理选中的backlog
     }
 
     function closeBacklog() {
