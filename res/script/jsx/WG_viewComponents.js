@@ -336,7 +336,7 @@ class SaveMainModel extends  React.Component{
     loadSaveButtons(){
         this.SaveButtons = [];
         this.ren_bg_list = [];
-        for (let i = currentSavePage*5+1; i <= currentSavePage*5+5; i++) {
+        for (let i = currentSavePage*6+1; i <= currentSavePage*6+6; i++) {
             if(Saves[i]){
                 let thisButtonName = Saves[i]["showName"];
                 let thisButtonText = Saves[i]["showText"];
