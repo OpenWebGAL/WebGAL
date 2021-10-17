@@ -1,4 +1,4 @@
-import Store, {act, actions} from "../store/Store";
+import Store, {act} from "../store/Store";
 import GamePlay from "../core/GamePlay";
 import {uiActions} from "../store/UiStore";
 
@@ -32,7 +32,7 @@ function KeyShortcut() {
             let query = name2query.get(key)
             if (query === undefined)
                 throw new RangeError(`No widget named ${key}.`);
-            state_map.set(key, Store.getState()[query]?.display || false)
+            state_map.set(key, Store.getState()["uiState"][query] || false)
         }
 
         if (reduce)
