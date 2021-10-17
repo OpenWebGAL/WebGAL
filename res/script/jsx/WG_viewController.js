@@ -60,6 +60,10 @@ function VC_choose(selection,mode){
     }
 }
 
+function VC_closeChoose(){
+    document.getElementById('chooseBox').style.display = 'none';
+}
+
 function VC_textShow(name,text){
     let changedName = <span>{name}</span>
     let textArray = text.split("");
