@@ -8,6 +8,7 @@ import {uiActions} from "../../store/UiStore";
 import {cActions} from "../../store/CurrentInfoStore";
 import {useEffect, useState} from "react";
 import ShowTextArrayUtil from "../../utils/ShowTextArrayUtil";
+import Config from "../../core/Config";
 
 const mapStateToProps = state => {
     return {
@@ -19,8 +20,6 @@ const mapStateToProps = state => {
 
 function SettingsScreen(props) {
     const textPreview = "现在预览的是文本框字体大小和播放速度的情况，您可以根据您的观感调整上面的选项。"
-    const playSpeedMap = {slow: 75, medium: 50, fast: 30}
-    const fontSizeMap = {small: '16px', medium: '24px', large: '32px'}
 
     const [textPreviewInterval, setTextPreviewInterval] = useState()
 
@@ -28,7 +27,7 @@ function SettingsScreen(props) {
         ShowTextArrayUtil.showIn(
             textPreview,
             document.getElementById("textPreview"),
-            playSpeedMap[props.playSpeed]
+            Config.playSpeedMap[props.playSpeed]
         )
     }
 
@@ -36,10 +35,11 @@ function SettingsScreen(props) {
         clearInterval(textPreviewInterval)
 
         if (props.display) {
-            let time = textPreview.length * playSpeedMap[props.playSpeed]
+            let time = textPreview.length * Config.playSpeedMap[props.playSpeed]
             showTextPreview()
             setTextPreviewInterval(setInterval(showTextPreview, time + 2000))
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [props.playSpeed, props.display])
 
     function closeSettings() {
@@ -101,7 +101,7 @@ function SettingsScreen(props) {
                         <div className='settingItemTitle'>效果预览</div>
                     </div>
                 </div>
-                <div id="textPreview" style={{fontSize: fontSizeMap[props.fontSize]}}/>
+                <div id="textPreview" style={{fontSize: Config.fontSizeMap[props.fontSize]}}/>
             </div>
         </div>
     );

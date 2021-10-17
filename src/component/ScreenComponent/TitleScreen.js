@@ -5,11 +5,11 @@ import AlertDialog from "../FunctionalComponent/AlertDialog";
 import GamePlay from "../../core/GamePlay";
 import {uiActions} from "../../store/UiStore";
 import {cActions} from "../../store/CurrentInfoStore";
+import Config from "../../core/Config";
 
 const mapStateToProps = state => {
     return {
         display: state.uiState.titleScreen,
-        titleBgUrl: state.runtime.bg_Name // todo
     }
 }
 
@@ -46,9 +46,7 @@ function TitleScreen(props) {
             title: "确认退出？",
             left: {
                 text: "确认",
-                callback: () => {
-                    act(cActions.CLEAR_RUNTIME)
-                }
+                callback: () => act(cActions.CLEAR_RUNTIME)
             },
             right: {
                 text: "取消"
@@ -56,15 +54,11 @@ function TitleScreen(props) {
         })
     }
 
-    function checkDisplay() {
-        return {
-            display: props.display ? 'block' : 'none',
-            backgroundImage: `url(${props?.titleBgUrl})`
-        }
-    }
-
     return (
-        <div id="TitlePage" style={checkDisplay()}>
+        <div id="TitlePage" style={{
+            display: props.display ? 'block' : 'none',
+            backgroundImage: `url(/game/background/${Config.GameInfo.Title_img})`
+        }}>
             <div id="TitleModel">
                 <div id="setButtonBottom">
                     <div className="TitleSingleButton" id="leftTitleButton" onClick={startGame}>开始游戏</div>

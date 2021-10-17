@@ -5,6 +5,7 @@ import GamePlay from "../../core/GamePlay";
 import {useEffect} from "react";
 import {uiActions} from "../../store/UiStore";
 import ShowTextArrayUtil from "../../utils/ShowTextArrayUtil";
+import Config from "../../core/Config";
 
 const mapStateToProps = state => {
     return {
@@ -17,27 +18,17 @@ const mapStateToProps = state => {
 }
 
 function TextBox(props) {
-    const playSpeedMap = {
-        slow: 75,
-        medium: 50,
-        fast: 30
-    }
-
-    const fontSizeMap = {
-        small: '16px',
-        medium: '24px',
-        large: '32px'
-    }
 
     useEffect(() => {
         ShowTextArrayUtil.showIn(
             props.showText,
             document.getElementById("SceneText"),
-            playSpeedMap[props.playSpeed],
+            Config.playSpeedMap[props.playSpeed],
             () => !Store.getState()["temp"].isShowingText,
             () => act(actions.SET_TEMP_IS_SHOWING_TEXT, true),
             () => act(actions.SET_TEMP_IS_SHOWING_TEXT, false)
         )
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [props.showText])
 
     function hideTextBox() {
@@ -91,7 +82,7 @@ function TextBox(props) {
                 <div id="pName">
                     <span>{props.showName}</span>
                 </div>
-                <div id="SceneText" style={{fontSize: fontSizeMap[props.fontSize]}}/>
+                <div id="SceneText" style={{fontSize: Config.fontSizeMap[props.fontSize]}}/>
             </div>
             <div id="controlBar">
                 <div className="controlButton" onClick={playVocal}>重播</div>

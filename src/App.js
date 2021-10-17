@@ -17,9 +17,7 @@ const mapStateToProps = state => {
 
 function App(props) {
 
-    function clickBackGround() {
-        GamePlay.nextSentenceProcessor()
-    }
+    const clickBackGround = () => GamePlay.nextSentenceProcessor()
 
     return (
         <div className="App">
