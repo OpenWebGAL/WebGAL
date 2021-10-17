@@ -43,6 +43,7 @@
 }
 
 #textPreview * {
+    transition: all .5s ease-in-out;
     animation: showSoftly .2s;
     -webkit-animation: showSoftly .2s;
 }
