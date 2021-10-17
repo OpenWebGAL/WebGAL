@@ -1,18 +1,32 @@
 function LocalStorageUtil() {
     const STORAGE_KEY = 'WebGAL'
 
-    function loadData() {
-        if (localStorage.getItem(STORAGE_KEY)) {
-            return JSON.parse(localStorage.getItem(STORAGE_KEY))
+    /**
+     * 根据 key 读取 data
+     * @param {string?} key
+     * @returns {any}
+     */
+    function loadData(key = STORAGE_KEY) {
+        if (localStorage.getItem(key)) {
+            return JSON.parse(localStorage.getItem(key))
         }
     }
 
-    function saveData(state) {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    /**
+     * 保存 data 至 LocalStorage 中，可按 key 保存
+     * @param {Object} data
+     * @param {string?} key
+     */
+    function saveData(data, key = STORAGE_KEY) {
+        localStorage.setItem(key, JSON.stringify(data));
     }
 
-    function clearData() {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(null));
+    /**
+     * 清空 key 对应的 data
+     * @param {string?} key
+     */
+    function clearData(key = STORAGE_KEY) {
+        localStorage.setItem(key, null);
     }
 
     return {loadData, saveData, clearData}
