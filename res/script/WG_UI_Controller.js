@@ -1,3 +1,24 @@
+
+// 打开设置
+function onSetting(){
+    loadCookie();
+    VC_showSettings();
+}
+
+//打开读档菜单
+function onLoadGame() {
+    loadCookie();
+    document.getElementById('Load').style.display = 'block';
+    VC_showSave_Load('load');
+}
+
+//打开存档菜单
+function onSaveGame() {
+    loadCookie();
+    document.getElementById('Save').style.display = 'block';
+    VC_showSave_Load('save');
+}
+
 // 关闭设置
 function closeSettings(){
     document.getElementById("settings").style.display = "none"
@@ -125,4 +146,70 @@ function hideTextBox(){
 // 关闭柚子搜索
 function hidePanic() {
     document.querySelector('div#panic-overlay').style.display = 'none';
+}
+
+
+
+
+
+
+/**
+ * 查询当前组件状态
+ * @param {string | Array.<string> | undefined} widgets
+ * @returns {boolean | Map.<string, boolean>}
+ */
+function queryWidgetState(widgets) {
+    const name2query = new Map([
+        ['TitleScreen', 'div#Title'],
+        ['TextBox', 'div#bottomBox'],
+        ['SaveScreen', 'div#Save'],
+        ['LoadScreen', 'div#Load'],
+        ['SettingScreen', 'div#settings'],
+        ['BacklogScreen', 'div#backlog'],
+        ['PanicScreen', 'div#panic-overlay'],
+    ]);
+
+    let reduce = false;
+    if (typeof (widgets) === 'string') {
+        widgets = [widgets,];
+        reduce = true;
+    }
+    else if (widgets === undefined) {
+        widgets = Array.from(name2query.keys())
+    }
+
+    let state_map = new Map();
+    for (const wi of widgets) {
+        const query = name2query.get(wi);
+        if (query === undefined)
+            throw new RangeError(`No widget named ${wi}.`);
+        const ele = document.querySelector(query);
+        let disp = ele.style.display;
+        if (disp === '')
+            disp = window.getComputedStyle(ele).display;
+        state_map.set(wi, disp !== 'none');
+    }
+
+    if (reduce)
+        state_map = state_map.values().next().value
+    return state_map;
+}
+
+
+/**
+ * 略过 ignore，检测 states 中所有组件是否均隐藏
+ * @param {Map.<string, boolean>} states
+ * @param {string | Array.<string> | undefined} ignore
+ * @returns {boolean}
+ */
+function AllHiddenIgnore(states, ignore) {
+    if (typeof (ignore) === 'string')
+        ignore = [ignore,];
+    else if (ignore === undefined)
+        ignore = []
+    for (const [key, value] of states) {
+        if (value === true && !ignore.includes(key))
+            return false;
+    }
+    return true;
 }

@@ -207,39 +207,7 @@ function LoadSavedGame(index) {
     }
 }
 
-// 打开设置
-function onSetting(){
-    loadCookie();
-    VC_showSettings();
-}
-
-function hideTitle(ifRes) {
-    CurrentBacklog = [];
-    document.getElementById('Title').style.display = 'none';
-    if(ifRes !== 'non-restart'){
-        currentInfo["bgm"] = '';
-        loadBGM();
-        currentInfo["fig_Name"] = '';
-        currentInfo["fig_left"] = '';
-        currentInfo["fig_right"] = '';
-        VC_resetStage();
-        getScene("game/scene/start.txt");
-        currentInfo["SceneName"] = 'start.txt';
-    }
-}
-
-function onLoadGame() {
-    loadCookie();
-    document.getElementById('Load').style.display = 'block';
-    VC_showSave_Load('load');
-}
-
-function onSaveGame() {
-    loadCookie();
-    document.getElementById('Save').style.display = 'block';
-    VC_showSave_Load('save');
-}
-
+//从回溯读取
 function jumpFromBacklog(index) {
     closeBacklog();
     let save = CurrentBacklog[index];
@@ -281,68 +249,22 @@ function jumpFromBacklog(index) {
 
 }
 
-
-
-/**
- * 查询当前组件状态
- * @param {string | Array.<string> | undefined} widgets
- * @returns {boolean | Map.<string, boolean>}
- */
-function queryWidgetState(widgets) {
-    const name2query = new Map([
-        ['TitleScreen', 'div#Title'],
-        ['TextBox', 'div#bottomBox'],
-        ['SaveScreen', 'div#Save'],
-        ['LoadScreen', 'div#Load'],
-        ['SettingScreen', 'div#settings'],
-        ['BacklogScreen', 'div#backlog'],
-        ['PanicScreen', 'div#panic-overlay'],
-    ]);
-
-    let reduce = false;
-    if (typeof (widgets) === 'string') {
-        widgets = [widgets,];
-        reduce = true;
+//从头开始游戏
+function hideTitle(ifRes) {
+    CurrentBacklog = [];
+    document.getElementById('Title').style.display = 'none';
+    if(ifRes !== 'non-restart'){
+        currentInfo["bgm"] = '';
+        loadBGM();
+        currentInfo["fig_Name"] = '';
+        currentInfo["fig_left"] = '';
+        currentInfo["fig_right"] = '';
+        VC_resetStage();
+        getScene("game/scene/start.txt");
+        currentInfo["SceneName"] = 'start.txt';
     }
-    else if (widgets === undefined) {
-        widgets = Array.from(name2query.keys())
-    }
-
-    let state_map = new Map();
-    for (const wi of widgets) {
-        const query = name2query.get(wi);
-        if (query === undefined)
-            throw new RangeError(`No widget named ${wi}.`);
-        const ele = document.querySelector(query);
-        let disp = ele.style.display;
-        if (disp === '')
-            disp = window.getComputedStyle(ele).display;
-        state_map.set(wi, disp !== 'none');
-    }
-
-    if (reduce)
-        state_map = state_map.values().next().value
-    return state_map;
 }
 
-
-/**
- * 略过 ignore，检测 states 中所有组件是否均隐藏
- * @param {Map.<string, boolean>} states
- * @param {string | Array.<string> | undefined} ignore
- * @returns {boolean}
- */
-function AllHiddenIgnore(states, ignore) {
-    if (typeof (ignore) === 'string')
-        ignore = [ignore,];
-    else if (ignore === undefined)
-        ignore = []
-    for (const [key, value] of states) {
-        if (value === true && !ignore.includes(key))
-            return false;
-    }
-    return true;
-}
 
 
 
