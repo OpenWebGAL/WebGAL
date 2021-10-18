@@ -166,13 +166,13 @@ function VC_resetStage(){
 
 function loadButton(){
     let renNewButton =  <div className={"toCenter"}>
-        <ControlButton color = 'rgba(245,150,170,1)' fun={playVocal} name={"重复"} simpleName={"V"}/>
-        <ControlButton color = 'rgba(241,124,103,1)' fun={autoNext} name={"自动"} simpleName={"A"} id={"autoButton"}/>
-        <ControlButton color = 'rgba(214,84,85,1)' fun={fastNext} name={"快进"} simpleName={"F"}   id={"fastButton"}/>
-        <ControlButton color = 'rgba(142,53,74,1)' fun={onSaveGame} name={"存档"} simpleName={"S"}/>
-        <ControlButton color = 'rgba(0,92,175,1)' fun={onLoadGame} name={"读档"} simpleName={"L"}/>
-        <ControlButton color = 'rgba(138,107,190,1)' fun={onSetting} name={"设置"} simpleName={"C"}/>
-        <ControlButton color = 'rgba(145,152,159,1)' fun={Title} name={"标题"} simpleName={"T"}/>
+        <ControlButton color = '#FEDFE1' fun={playVocal} name={"重复"} simpleName={"V"}/>
+        <ControlButton color = '#FB966E' fun={autoNext} name={"自动"} simpleName={"A"} id={"autoButton"}/>
+        <ControlButton color = '#FBE251' fun={fastNext} name={"快进"} simpleName={"F"}   id={"fastButton"}/>
+        <ControlButton color = '#A5DEE4' fun={onSaveGame} name={"存档"} simpleName={"S"}/>
+        <ControlButton color = '#58B2DC' fun={onLoadGame} name={"读档"} simpleName={"L"}/>
+        <ControlButton color = '#B28FCE' fun={onSetting} name={"设置"} simpleName={"C"}/>
+        <ControlButton color = '#BDC0BA' fun={Title} name={"标题"} simpleName={"T"}/>
         {/*<ControlButton color = '#FEDFE1' fun={playVocal} name={"重复"} simpleName={"V"}/>*/}
         {/*<ControlButton color = '#FEDFE1' fun={autoNext} name={"自动"} simpleName={"A"} id={"autoButton"}/>*/}
         {/*<ControlButton color = '#FEDFE1' fun={fastNext} name={"快进"} simpleName={"F"}   id={"fastButton"}/>*/}
