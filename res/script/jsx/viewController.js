@@ -60,6 +60,10 @@ function VC_choose(selection,mode){
     }
 }
 
+function VC_closeChoose(){
+    document.getElementById('chooseBox').style.display = 'none';
+}
+
 function VC_textShow(name,text){
     let changedName = <span>{name}</span>
     let textArray = text.split("");
@@ -160,6 +164,26 @@ function VC_resetStage(){
     ReactDOM.render(<div/>,document.getElementById('figureImage_right'));
 }
 
+function loadButton(){
+    let renNewButton =  <div className={"toCenter"}>
+        <ControlButton color = '#FEDFE1' fun={playVocal} name={"重复"} simpleName={"V"}/>
+        <ControlButton color = '#FB966E' fun={autoNext} name={"自动"} simpleName={"A"} id={"autoButton"}/>
+        <ControlButton color = '#FBE251' fun={fastNext} name={"快进"} simpleName={"F"}   id={"fastButton"}/>
+        <ControlButton color = '#A5DEE4' fun={onSaveGame} name={"存档"} simpleName={"S"}/>
+        <ControlButton color = '#58B2DC' fun={onLoadGame} name={"读档"} simpleName={"L"}/>
+        <ControlButton color = '#B28FCE' fun={onSetting} name={"设置"} simpleName={"C"}/>
+        <ControlButton color = '#BDC0BA' fun={Title} name={"标题"} simpleName={"T"}/>
+        {/*<ControlButton color = '#FEDFE1' fun={playVocal} name={"重复"} simpleName={"V"}/>*/}
+        {/*<ControlButton color = '#FEDFE1' fun={autoNext} name={"自动"} simpleName={"A"} id={"autoButton"}/>*/}
+        {/*<ControlButton color = '#FEDFE1' fun={fastNext} name={"快进"} simpleName={"F"}   id={"fastButton"}/>*/}
+        {/*<ControlButton color = '#FEDFE1' fun={onSaveGame} name={"存档"} simpleName={"S"}/>*/}
+        {/*<ControlButton color = '#FEDFE1' fun={onLoadGame} name={"读档"} simpleName={"L"}/>*/}
+        {/*<ControlButton color = '#FEDFE1' fun={onSetting} name={"设置"} simpleName={"C"}/>*/}
+        {/*<ControlButton color = '#FEDFE1' fun={Title} name={"标题"} simpleName={"T"}/>*/}
+    </div>
+    ReactDOM.render(renNewButton,document.getElementById("controlBar"));
+}
+
 function loadBGM() {
     let bgmName = currentInfo["bgm"];
     if(bgmName === '' || bgmName === 'none'){
@@ -176,6 +200,9 @@ function loadBGM() {
 }
 
 function playVocal() {
+    if(document.getElementById('currentVocal')){
+        document.getElementById('currentVocal').pause();
+    }
     let vocalName = currentInfo["vocal"];
     let url = './game/vocal/'+vocalName;
     let vocal = <audio src={url} id={"currentVocal"}/>

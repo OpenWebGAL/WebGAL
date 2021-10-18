@@ -50,12 +50,12 @@
 
 .LS_singleElement{
     overflow: hidden;
-    margin: 15px 10px 5px 10px;
+    margin: 15px 5px 5px 5px;
     width: 600px;
     height: 100px;
     font-size: xx-large;
-    padding: 5px 5px 5px 10px;
-    border: 1px solid rgba(0,0,0,0.3);
+    padding: 5px 10px 5px 10px;
+    border: 2px solid rgba(0,0,0,0.15);
     background-color: rgba(255,255,255,0.95);
     box-shadow: 3px 3px 15px  rgba(0,0,0,0.05);
     display: flex;
@@ -63,7 +63,8 @@
 
 .LS_singleElement:hover{
     /*margin: 5px 10px 3px 10px;*/
-    background-color: rgba(0,0,0,0.05);
+    /*background-color: rgba(0,0,0,0.05);*/
+    box-shadow: 3px 3px 15px rgba(0,0,0,0.2);
 }
 
 .LS_ButtonList{
@@ -72,7 +73,7 @@
     overflow-scrolling: auto;
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
+    justify-content: space-around;
 }
 
 .LS_renderMain{
@@ -130,7 +131,7 @@
     color: #005CAF;
 }
 .LoadSingleElement:hover{
-    border-bottom: 1px solid #005CAF;
+    /*border-bottom: 1px solid #005CAF;*/
 }
 
 
@@ -160,5 +161,69 @@
 }
 
 .SaveSingleElement:hover{
-    border-bottom: 1px solid #77428D;
+    /*border-bottom: 1px solid #77428D;*/
+}
+
+.ren{
+    position: relative;
+    top: 7px;
+    width: 142px;
+    height: 80px;
+    background-color: white;
+    background-repeat: no-repeat;
+    background-size:cover;
+    margin: 0 12px 0 0;
+    border: 2px solid #8E354A;
+    border-radius: 5px;
+}
+
+.miniPic{
+    width: 142px;
+    height: 80px;
+    position: relative;
+    background-repeat: no-repeat;
+    background-size:cover;
+}
+
+.mini_fig_pic{
+    max-width: 142px;
+    max-height: 80px;
+    width: auto;
+    height: auto;
+}
+
+.mini_fig{
+    width: 142px;
+    height: 80px;
+    object-fit: cover;
+}
+
+.mini_fig_center{
+    position: absolute;
+    z-index: 21;
+    width: 142px;
+    height: 80px;
+    display: flex;
+    justify-content: center;
+    justify-items: center;
+}
+
+.mini_fig_left{
+    position: absolute;
+    z-index: 20;
+    width: 142px;
+    height: 80px;
+    display: flex;
+    justify-content: left;
+    justify-items: left;
+}
+
+.mini_fig_right{
+    position: absolute;
+    z-index: 22;
+    width: 142px;
+    height: 80px;
+    display: flex;
+    justify-content: right;
+    justify-items: right;
 }
