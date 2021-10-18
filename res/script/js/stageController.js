@@ -1,6 +1,5 @@
 // 读取下一条脚本
 function nextSentenceProcessor() {
-
     if(showingText){
         showingText = false;
         return;
@@ -158,113 +157,20 @@ function nextSentenceProcessor() {
 
     function autoPlay(active){
         if(auto === 1 && active === 'on'){
-            let interval = setInterval(jumpNext,autoWaitTime);
+            setTimeout(jumpNext,autoWaitTime);
             function jumpNext(){
                 if(auto === 1)
                     nextSentenceProcessor();
-                clearInterval(interval);
             }
 
         }
     }
 }
 
-// 读取游戏存档
-function LoadSavedGame(index) {
-    closeLoad();
-    hideTitle('non-restart');
-    let save = Saves[index];
-    let url = 'game/scene/'
-    url = url + save['SceneName'];
-    currentScene ='';
-    let getScReq = null;
-    getScReq = new XMLHttpRequest();
-    if (getScReq != null) {
-        getScReq.open("get",url , true);
-        getScReq.send();
-        getScReq.onreadystatechange = doResult; //设置回调函数
-    }
-    function doResult() {
-        if (getScReq.readyState === 4) { //4表示执行完成
-            if (getScReq.status === 200) { //200表示执行成功
-                currentScene = getScReq.responseText;
-                currentScene = currentScene.split('\n');
-                for (let i = 0;i<currentScene.length;i++){
-                    let tempSentence = currentScene[i].split(";")[0];
-                    let commandLength = tempSentence.split(":")[0].length;
-                    let command = currentScene[i].split(":")[0];
-                    let content = tempSentence.slice(commandLength+1);
-                    currentScene[i] = currentScene[i].split(":");
-                    currentScene[i][0] = command;
-                    currentScene[i][1] = content;
-                }
-                SyncCurrentStatus('SentenceID',save["SentenceID"]);
-                VC_restoreStatus(save);
-                CurrentBacklog = SaveBacklog[index];
-                SyncCurrentStatus('all',save);
-            }
-        }
-    }
+//sentenceID+1
+function increaseSentence(){
+    SyncCurrentStatus('SentenceID',getStatus('SentenceID')+1);
 }
-
-//从回溯读取
-function jumpFromBacklog(index) {
-    closeBacklog();
-    let save = CurrentBacklog[index];
-    for (let i = CurrentBacklog.length - 1 ; i > index-1 ; i--){
-        CurrentBacklog.pop();
-    }
-    //get Scene:
-    let url = 'game/scene/'
-    url = url + save['SceneName'];
-    currentScene ='';
-    let getScReq = null;
-    getScReq = new XMLHttpRequest();
-    if (getScReq != null) {
-        getScReq.open("get",url , true);
-        getScReq.send();
-        getScReq.onreadystatechange = doResult; //设置回调函数
-    }
-    function doResult() {
-        if (getScReq.readyState === 4) { //4表示执行完成
-            if (getScReq.status === 200) { //200表示执行成功
-                currentScene = getScReq.responseText;
-                currentScene = currentScene.split('\n');
-                for (let i = 0;i<currentScene.length;i++){
-                    let tempSentence = currentScene[i].split(";")[0];
-                    let commandLength = tempSentence.split(":")[0].length;
-                    let command = currentScene[i].split(":")[0];
-                    let content = tempSentence.slice(commandLength+1);
-                    currentScene[i] = currentScene[i].split(":");
-                    currentScene[i][0] = command;
-                    currentScene[i][1] = content;
-                }
-                SyncCurrentStatus('SentenceID',save["SentenceID"]);
-                VC_restoreStatus(save);
-                SyncCurrentStatus('all',save);
-                CurrentBacklog[CurrentBacklog.length] = JSON.parse(JSON.stringify(currentInfo));
-            }
-        }
-    }
-
-}
-
-//从头开始游戏
-function hideTitle(ifRes) {
-    CurrentBacklog = [];
-    document.getElementById('Title').style.display = 'none';
-    if(ifRes !== 'non-restart'){
-        currentInfo["bgm"] = '';
-        loadBGM();
-        currentInfo["fig_Name"] = '';
-        currentInfo["fig_left"] = '';
-        currentInfo["fig_right"] = '';
-        VC_resetStage();
-        getScene("game/scene/start.txt");
-        currentInfo["SceneName"] = 'start.txt';
-    }
-}
-
 
 
 
