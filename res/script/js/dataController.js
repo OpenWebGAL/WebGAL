@@ -102,24 +102,6 @@ function clearCookie(){
     localStorage.setItem(GameInfo['Game_key'],JSON.stringify(toCookie));
 }
 
-function loadSettings(){
-    if(Settings["font_size"] === 'small'){
-        document.getElementById('SceneText').style.fontSize = '150%';
-    }else if(Settings["font_size"] === 'medium'){
-        document.getElementById('SceneText').style.fontSize = '200%';
-    }else if(Settings["font_size"] === 'large'){
-        document.getElementById('SceneText').style.fontSize = '250%';
-    }
-
-    if(Settings["play_speed"] === 'low'){
-        textShowWatiTime = 150;
-    } else if(Settings["play_speed"] === 'medium'){
-        textShowWatiTime = 50;
-    }else if(Settings["play_speed"] === 'fast'){
-        textShowWatiTime = 10;
-    }
-}
-
 function SyncCurrentStatus(statusKey,newStatus) {
     if(statusKey ==='all')
         currentInfo = newStatus;
