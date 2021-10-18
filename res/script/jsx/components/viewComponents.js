@@ -427,3 +427,21 @@ class SaveMainModel extends  React.Component{
         );
     }
 }
+
+function ControlButton(props){
+    if(props.id){
+        return <div className={"newButton"} id={props.id} onClick={()=>{
+            props.fun();
+        }}>
+            <span className={"nB_left"} style={{backgroundColor:`${props.color}`}}>{props.simpleName}</span>
+            <span className={"nB_right"}>{props.name}</span>
+        </div>
+    }
+
+    return <div className={"newButton"} onClick={()=>{
+        props.fun();
+    }}>
+        <span className={"nB_left"} style={{backgroundColor:`${props.color}`}}>{props.simpleName}</span>
+        <span className={"nB_right"}>{props.name}</span>
+    </div>
+}

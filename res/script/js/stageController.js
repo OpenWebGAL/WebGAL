@@ -1,6 +1,5 @@
 // 读取下一条脚本
 function nextSentenceProcessor() {
-
     if(showingText){
         showingText = false;
         return;
@@ -158,11 +157,10 @@ function nextSentenceProcessor() {
 
     function autoPlay(active){
         if(auto === 1 && active === 'on'){
-            let interval = setInterval(jumpNext,autoWaitTime);
+            setTimeout(jumpNext,autoWaitTime);
             function jumpNext(){
                 if(auto === 1)
                     nextSentenceProcessor();
-                clearInterval(interval);
             }
 
         }

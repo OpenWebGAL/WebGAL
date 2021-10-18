@@ -164,6 +164,26 @@ function VC_resetStage(){
     ReactDOM.render(<div/>,document.getElementById('figureImage_right'));
 }
 
+function loadButton(){
+    let renNewButton =  <div className={"toCenter"}>
+        <ControlButton color = 'rgba(245,150,170,1)' fun={playVocal} name={"重复"} simpleName={"V"}/>
+        <ControlButton color = 'rgba(241,124,103,1)' fun={autoNext} name={"自动"} simpleName={"A"} id={"autoButton"}/>
+        <ControlButton color = 'rgba(214,84,85,1)' fun={fastNext} name={"快进"} simpleName={"F"}   id={"fastButton"}/>
+        <ControlButton color = 'rgba(142,53,74,1)' fun={onSaveGame} name={"存档"} simpleName={"S"}/>
+        <ControlButton color = 'rgba(0,92,175,1)' fun={onLoadGame} name={"读档"} simpleName={"L"}/>
+        <ControlButton color = 'rgba(138,107,190,1)' fun={onSetting} name={"设置"} simpleName={"C"}/>
+        <ControlButton color = 'rgba(145,152,159,1)' fun={Title} name={"标题"} simpleName={"T"}/>
+        {/*<ControlButton color = '#FEDFE1' fun={playVocal} name={"重复"} simpleName={"V"}/>*/}
+        {/*<ControlButton color = '#FEDFE1' fun={autoNext} name={"自动"} simpleName={"A"} id={"autoButton"}/>*/}
+        {/*<ControlButton color = '#FEDFE1' fun={fastNext} name={"快进"} simpleName={"F"}   id={"fastButton"}/>*/}
+        {/*<ControlButton color = '#FEDFE1' fun={onSaveGame} name={"存档"} simpleName={"S"}/>*/}
+        {/*<ControlButton color = '#FEDFE1' fun={onLoadGame} name={"读档"} simpleName={"L"}/>*/}
+        {/*<ControlButton color = '#FEDFE1' fun={onSetting} name={"设置"} simpleName={"C"}/>*/}
+        {/*<ControlButton color = '#FEDFE1' fun={Title} name={"标题"} simpleName={"T"}/>*/}
+    </div>
+    ReactDOM.render(renNewButton,document.getElementById("controlBar"));
+}
+
 function loadBGM() {
     let bgmName = currentInfo["bgm"];
     if(bgmName === '' || bgmName === 'none'){
@@ -180,6 +200,9 @@ function loadBGM() {
 }
 
 function playVocal() {
+    if(document.getElementById('currentVocal')){
+        document.getElementById('currentVocal').pause();
+    }
     let vocalName = currentInfo["vocal"];
     let url = './game/vocal/'+vocalName;
     let vocal = <audio src={url} id={"currentVocal"}/>

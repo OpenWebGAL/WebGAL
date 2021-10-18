@@ -20,6 +20,7 @@ function processSentence(i){
             if(currentScene[i][0].split('vocal-').length > 1){
                 vocal = currentScene[i][0].split('vocal-')[1].split(',')[0];
                 text = currentScene[i][0].split('vocal-')[1].slice(currentScene[i][0].split('vocal-')[1].split(',')[0].length+1);
+                text = text.split(";")[0];
             }
             return {name:getStatus('showName'),text:text,vocal:vocal};
         }

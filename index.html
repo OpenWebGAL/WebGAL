@@ -10,6 +10,7 @@
     <link rel="stylesheet" type="text/css" href="res/style/Load_Save.css">
     <link rel="stylesheet" type="text/css" href="res/style/panic.css">
     <link rel="stylesheet" type="text/css" href="res/style/window.css">
+    <link rel="stylesheet" type="text/css" href="res/style/UI_component.css">
 </head>
 <body>
 <script src="res/script/React_Environment/babel.min.js"></script>
@@ -82,8 +83,12 @@
 </div>
 <div id="bottomBox">
     <div id="top_control" onclick="nextSentenceProcessor()">
-        <span class="top_button" onclick="hideTextBox()">隐藏</span>
-        <span class="top_button" onclick="showBacklog()" >回溯</span>
+        <span class="top_button" onclick="hideTextBox()">
+            <img src="res/img/cross.svg" style="width: 22px;height: 22px">
+        </span>
+        <span class="top_button" onclick="showBacklog()" >
+            <img src="res/img/up.svg" style="width: 25px;height: 25px">
+        </span>
     </div>
     <div id="mainTextWindow" onclick="nextSentenceProcessor()">
             <div id="pName"></div>
@@ -102,10 +107,11 @@
 <div id="bgm"></div>
 <div id="vocal"></div>
 <div id="panic-overlay"></div>
-<script src="res/script/js/dataController.js"></script>
 <script src="res/script/js/core.js"></script>
+<script src="res/script/js/dataController.js"></script>
 <script src="res/script/js/util.js"></script>
 <script src="res/script/js/stageController.js"></script>
+<script src="res/script/js/InteractProcess.js"></script>
 <script src="res/script/jsx/components/viewComponents.js" type="text/babel"></script>
 <script src="res/script/jsx/viewController.js" type="text/babel"></script>
 </body>
