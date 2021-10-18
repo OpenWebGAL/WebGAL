@@ -59,6 +59,7 @@ var Settings = {
     play_speed:'medium'
 };
 
+//其实是从localStorage读
 function loadCookie(){
     if(localStorage.getItem(GameInfo['Game_key'])){
         // let pre_process = document.cookie;
@@ -73,6 +74,7 @@ function loadCookie(){
     }
 }
 
+//其实是写localStorage
 function writeCookie(){
     // var expire = new Date((new Date()).getTime() + 20000 * 24 * 60 * 60000);//有效期20000天
     // expire = ";expires=" + expire.toGMTString();
@@ -88,6 +90,7 @@ function writeCookie(){
     // document.cookie = JSON.stringify(toCookie);
 }
 
+//其实是初始化localStorage
 function clearCookie(){
     let toCookie = {
         SavedGame:[],
@@ -102,24 +105,7 @@ function clearCookie(){
     localStorage.setItem(GameInfo['Game_key'],JSON.stringify(toCookie));
 }
 
-function loadSettings(){
-    if(Settings["font_size"] === 'small'){
-        document.getElementById('SceneText').style.fontSize = '150%';
-    }else if(Settings["font_size"] === 'medium'){
-        document.getElementById('SceneText').style.fontSize = '200%';
-    }else if(Settings["font_size"] === 'large'){
-        document.getElementById('SceneText').style.fontSize = '250%';
-    }
-
-    if(Settings["play_speed"] === 'low'){
-        textShowWatiTime = 150;
-    } else if(Settings["play_speed"] === 'medium'){
-        textShowWatiTime = 50;
-    }else if(Settings["play_speed"] === 'fast'){
-        textShowWatiTime = 10;
-    }
-}
-
+//替代全局变量读写
 function SyncCurrentStatus(statusKey,newStatus) {
     if(statusKey ==='all')
         currentInfo = newStatus;
@@ -134,10 +120,44 @@ function getStatus(statusKey){
         return currentInfo[statusKey];
 }
 
-function increaseSentence(){
-    SyncCurrentStatus('SentenceID',getStatus('SentenceID')+1);
+// 获取场景脚本
+function getScene(url) {
+    currentScene ='';
+
+    let getScReq = null;
+    getScReq = new XMLHttpRequest();
+    console.log('now read scene')
+    if (getScReq != null) {
+        getScReq.open("get",url , true);
+        getScReq.send();
+        getScReq.onreadystatechange = doResult; //设置回调函数
+    }
+    function doResult() {
+        if (getScReq.readyState === 4) { //4表示执行完成
+            if (getScReq.status === 200) { //200表示执行成功
+                currentScene = getScReq.responseText;
+                currentScene = currentScene.split('\n');
+                for (let i = 0;i<currentScene.length;i++){
+                    let tempSentence = currentScene[i].split(";")[0];
+                    let commandLength = tempSentence.split(":")[0].length;
+                    let command = currentScene[i].split(":")[0];
+                    command = command.split(';')[0];
+                    let content = tempSentence.slice(commandLength+1);
+                    currentScene[i] = currentScene[i].split(":");
+                    currentScene[i][0] = command;
+                    currentScene[i][1] = content;
+                }
+                // console.log('Read scene complete.');
+                // console.log(currentScene);
+                SyncCurrentStatus('SentenceID',0);
+                nextSentenceProcessor();
+            }
+        }
+    }
+
 }
 
+//读取游戏信息
 function getGameInfo() {
     let getInfoCon = new XMLHttpRequest();
     getInfoCon.onreadystatechange = function (){
