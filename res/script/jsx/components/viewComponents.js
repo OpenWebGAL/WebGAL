@@ -433,7 +433,7 @@ function ControlButton(props){
         return <div className={"newButton"} id={props.id} onClick={()=>{
             props.fun();
         }}>
-            <span className={"nB_left"} style={{backgroundColor:`${props.color}`}}>{props.simpleName}</span>
+            <span className={"nB_left"} style={{borderBottom:`3px solid ${props.color}`}}>{props.simpleName}</span>
             <span className={"nB_right"}>{props.name}</span>
         </div>
     }
@@ -441,7 +441,7 @@ function ControlButton(props){
     return <div className={"newButton"} onClick={()=>{
         props.fun();
     }}>
-        <span className={"nB_left"} style={{backgroundColor:`${props.color}`}}>{props.simpleName}</span>
+        <span className={"nB_left"} style={{borderBottom:`3px solid ${props.color}`}}>{props.simpleName}</span>
         <span className={"nB_right"}>{props.name}</span>
     </div>
 }
