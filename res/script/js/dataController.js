@@ -59,6 +59,7 @@ var Settings = {
     play_speed:'medium'
 };
 
+//其实是从localStorage读
 function loadCookie(){
     if(localStorage.getItem(GameInfo['Game_key'])){
         // let pre_process = document.cookie;
@@ -73,6 +74,7 @@ function loadCookie(){
     }
 }
 
+//其实是写localStorage
 function writeCookie(){
     // var expire = new Date((new Date()).getTime() + 20000 * 24 * 60 * 60000);//有效期20000天
     // expire = ";expires=" + expire.toGMTString();
@@ -88,6 +90,7 @@ function writeCookie(){
     // document.cookie = JSON.stringify(toCookie);
 }
 
+//其实是初始化localStorage
 function clearCookie(){
     let toCookie = {
         SavedGame:[],
@@ -102,6 +105,7 @@ function clearCookie(){
     localStorage.setItem(GameInfo['Game_key'],JSON.stringify(toCookie));
 }
 
+//替代全局变量读写
 function SyncCurrentStatus(statusKey,newStatus) {
     if(statusKey ==='all')
         currentInfo = newStatus;
@@ -153,6 +157,7 @@ function getScene(url) {
 
 }
 
+//读取游戏信息
 function getGameInfo() {
     let getInfoCon = new XMLHttpRequest();
     getInfoCon.onreadystatechange = function (){

@@ -6,12 +6,12 @@
 
 #mainTextWindow{
     /*background-color: rgba(86,108,115,0.8);*/
-    background-color: rgba(0,0,0,0.5);
+    /*background-color: rgba(0,0,0,0.5);*/
     padding: 15px 10% 15px 10%;
     width: 100%;
     margin: 0 0 0 0;
     z-index: 3;
-    background-image: linear-gradient(rgba(255,255,255,0) 0%,rgba(255,255,255,0) 75%,rgba(255,255,255,0.3)100%);
+    background-image: linear-gradient(rgba(0,0,0,0.5) 0%,rgba(0,0,0,0.5) 40% ,rgba(0,0,0,0.5)100%);
     /*box-shadow: 5px 5px 10px rgba(0,0,0,0.3);*/
     /*border-radius: 10px;*/
 }
@@ -41,6 +41,8 @@
     /*border-radius: 5px;*/
     border-bottom: 2px solid rgba(255,255,255,0.5);
     width: 30%;
+    /*background-color: rgba(0,0,0,0.5);*/
+    /*border-radius: 5px;*/
 }
 
 #mainBackground{
@@ -69,7 +71,7 @@
     display: flex;
     justify-content: center;
     top:5px;
-    bottom: 5px;
+    bottom: 0;
     z-index:2;
     -webkit-animation: showSoftly 0.5s;
     /*min-width: 600px;*/
@@ -204,24 +206,25 @@
     top: 35%;
     left:35%;
     width: 30%;
-    height: 30%;
+    /*height: 30%;*/
     border-radius: 10px;
     box-shadow: 5px 5px 15px rgba(0,0,0,0.3);
 }
 .MesTitle{
     text-align: center;
-    padding: 30px 5px 5px 5px;
+    padding: 20px 5px 5px 5px;
     font-size: 125%;
 }
 
 .MesChooseContainer{
     font-weight: bold;
-    position: absolute;
+    position: relative;
     bottom: 15px;
     text-align: center;
     display: flex;
     justify-content: center;
     width: 100%;
+    margin: 20px 0 0 0;
 }
 
 .MesChoose{
@@ -266,7 +269,7 @@ a:visited{
     display: flex;
     justify-content: left;
     top:5px;
-    bottom: 5px;
+    bottom: 0;
     z-index:2;
     -webkit-animation: showSoftly 0.5s;
     /*min-width: 600px;*/
@@ -289,7 +292,7 @@ a:visited{
     display: flex;
     justify-content: right;
     top:5px;
-    bottom: 5px;
+    bottom: 0;
     z-index:2;
     -webkit-animation: showSoftly 0.5s;
     /*min-width: 600px;*/
@@ -350,79 +353,8 @@ a:visited{
 
 #top_control{
     position: absolute;
-    top:5px;
+    top:26px;
     z-index: 4;
     width: 100%;
     padding: 0 35px 0 0;
-}
-
-.top_button{
-    float: right;
-    padding: 5px 10px 5px 10px;
-    color: white;
-    border: 1px solid rgba(255,255,255,0.2);
-}
-.top_button:hover{
-    background-color: rgba(255,255,255,0.2);
-}
-
-.ren{
-    width: 142px;
-    height: 80px;
-    background-color: white;
-    background-repeat: no-repeat;
-    background-size:cover;
-    margin: 0 12px 0 0;
-    border: 1px solid #8E354A;
-}
-
-.miniPic{
-    width: 142px;
-    height: 80px;
-    position: relative;
-    background-repeat: no-repeat;
-    background-size:cover;
-}
-
-.mini_fig_pic{
-    max-width: 142px;
-    max-height: 80px;
-    width: auto;
-    height: auto;
-}
-
-.mini_fig{
-    width: 142px;
-    height: 80px;
-    object-fit: cover;
-}
-
-.mini_fig_center{
-    position: absolute;
-    z-index: 21;
-    width: 142px;
-    height: 80px;
-    display: flex;
-    justify-content: center;
-    justify-items: center;
-}
-
-.mini_fig_left{
-    position: absolute;
-    z-index: 20;
-    width: 142px;
-    height: 80px;
-    display: flex;
-    justify-content: left;
-    justify-items: left;
-}
-
-.mini_fig_right{
-    position: absolute;
-    z-index: 22;
-    width: 142px;
-    height: 80px;
-    display: flex;
-    justify-content: right;
-    justify-items: right;
 }

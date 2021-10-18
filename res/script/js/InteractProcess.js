@@ -103,6 +103,7 @@ function hideTitle(ifRes) {
         getScene("game/scene/start.txt");
         currentInfo["SceneName"] = 'start.txt';
     }
+    loadButton();
 }
 
 // 分支选择（请求getScene）
@@ -181,22 +182,28 @@ function autoNext(){
         textShowWatiTime = 35
         fast = 0;
         auto = 0;
-        document.getElementById('fastButton').style.backgroundColor = 'rgba(255,255,255,0)';
-        document.getElementById('fastButton').style.color = 'white';
+        document.getElementById('autoButton').style.backgroundColor = 'rgba(255,255,255,0)';
+        document.getElementById('autoButton').style.boxShadow = 'none';
         // console.log("notFast");
         autoWaitTime = setAutoWaitTime;
         auto = 1;
-        // console.log("auto");
-        document.getElementById('autoButton').style.backgroundColor = 'rgba(255,255,255,0.8)';
-        document.getElementById('autoButton').style.color = '#8E354A';
-        nextSentenceProcessor();
-
+        document.getElementById('autoButton').style.backgroundColor = 'rgba(255,255,255,0.195)';
+        document.getElementById('autoButton').style.boxShadow = '0 0 25px rgba(255,255,255,0.5)';
+        if(document.getElementById('currentVocal')&&fast === 0){
+            let interval2 = setInterval(playNext,30)
+            function playNext(){
+                if(document.getElementById('currentVocal').ended){
+                    nextSentenceProcessor();
+                    clearInterval(interval2)
+                }
+            }
+        }else nextSentenceProcessor();
     }
     else if(auto === 1){
         autoWaitTime = setAutoWaitTime;
         auto = 0;
         document.getElementById('autoButton').style.backgroundColor = 'rgba(255,255,255,0)';
-        document.getElementById('autoButton').style.color = 'white';
+        document.getElementById('autoButton').style.boxShadow = 'none';
         // console.log("notAuto");
     }
 }
@@ -207,15 +214,15 @@ function fastNext(){
         autoWaitTime = setAutoWaitTime;
         auto = 0;
         document.getElementById('autoButton').style.backgroundColor = 'rgba(255,255,255,0)';
-        document.getElementById('autoButton').style.color = 'white';
+        document.getElementById('autoButton').style.boxShadow = 'none';
         // console.log("notAuto");
         autoWaitTime = 500;
         textShowWatiTime = 5;
         fast = 1;
         auto = 1;
         // console.log("fast");
-        document.getElementById('fastButton').style.backgroundColor = 'rgba(255,255,255,0.8)';
-        document.getElementById('fastButton').style.color = '#8E354A';
+        document.getElementById('fastButton').style.backgroundColor = 'rgba(255,255,255,0.195)';
+        document.getElementById('fastButton').style.boxShadow = '0 0 25px rgba(255,255,255,0.5)';
         nextSentenceProcessor();
 
     }
@@ -225,7 +232,7 @@ function fastNext(){
         fast = 0;
         auto = 0;
         document.getElementById('fastButton').style.backgroundColor = 'rgba(255,255,255,0)';
-        document.getElementById('fastButton').style.color = 'white';
+        document.getElementById('fastButton').style.boxShadow = 'none';
         // console.log("notFast");
     }
 }
@@ -252,6 +259,7 @@ function continueGame(){
         currentInfo["SceneName"] = 'start.txt';
     }
     document.getElementById('Title').style.display = 'none';
+    loadButton();
 }
 
 // 关闭存档界面
@@ -473,6 +481,20 @@ document.addEventListener('keyup', function (ev) {
             // 已经打开 backlog 后不再拦截上键
             if (AllHiddenIgnore(state, 'TextBox')) {
                 showBacklog();
+                ev.preventDefault();
+            }
+        }
+            break;
+
+        // open title
+        case 'KeyT':
+        {
+            const state = queryWidgetState();
+            if (AllHiddenIgnore(state, ['TextBox', 'Title'])) {
+                if (state.get('Title'))
+                    continueGame();
+                else
+                    Title();
                 ev.preventDefault();
             }
         }
