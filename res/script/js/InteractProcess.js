@@ -189,15 +189,16 @@ function autoNext(){
         auto = 1;
         document.getElementById('autoButton').style.backgroundColor = 'rgba(255,255,255,0.195)';
         document.getElementById('autoButton').style.boxShadow = '0 0 25px rgba(255,255,255,0.5)';
-        if(document.getElementById('currentVocal')&&fast === 0){
-            let interval2 = setInterval(playNext,30)
-            function playNext(){
-                if(document.getElementById('currentVocal').ended){
-                    nextSentenceProcessor();
-                    clearInterval(interval2)
-                }
-            }
-        }else nextSentenceProcessor();
+        // if(document.getElementById('currentVocal')&&fast === 0){
+        //     let interval2 = setInterval(playNext,30)
+        //     function playNext(){
+        //         if(document.getElementById('currentVocal').ended){
+        //             nextSentenceProcessor();
+        //             clearInterval(interval2)
+        //         }
+        //     }
+        // }else
+            nextSentenceProcessor();
     }
     else if(auto === 1){
         autoWaitTime = setAutoWaitTime;
