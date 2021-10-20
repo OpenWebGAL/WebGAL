@@ -204,12 +204,18 @@ function playVocal() {
         document.getElementById('currentVocal').pause();
     }
     let vocalName = currentInfo["vocal"];
+    if(vocalName === ''){
+        ReactDOM.render(<div/>,document.getElementById('vocal'));
+        return;
+    }
     let url = './game/vocal/'+vocalName;
     let vocal = <audio src={url} id={"currentVocal"}/>
     ReactDOM.render(vocal,document.getElementById('vocal'));
     let VocalControl = document.getElementById("currentVocal");
     VocalControl.currentTime = 0;
-    VocalControl.play();
+    VocalControl.oncanplay = function (){
+        VocalControl.play();
+    }
 }
 
 function showIntro(text){
@@ -274,9 +280,8 @@ function showTextArray(textArray){
             showingText = false;
         }
         if(i > textArray.length +(autoWaitTime/35)){
-
             if(auto === 1){
-                if(document.getElementById('currentVocal')&&fast === 0){
+                if(document.getElementById('currentVocal') && fast === 0){
                     if(document.getElementById('currentVocal').ended)
                     {
                         clearInterval(interval);
