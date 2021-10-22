@@ -184,6 +184,7 @@ class WG_ViewControl {
     }
 
     static loadBGM() {
+        console.log("loadingBGM")
         let bgmName = getRuntime().currentInfo["bgm"];
         if(bgmName === '' || bgmName === 'none'){
             ReactDOM.render(<div/>,document.getElementById("bgm"));

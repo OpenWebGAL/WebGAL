@@ -89,7 +89,7 @@ function nextSentenceProcessor() {
         return;
     }
     else if(command === 'bgm'){
-        getStatus("all")["bgm"] = thisSentence[1];
+        SyncCurrentStatus('bgm',S_content);
         WG_ViewControl.loadBGM();
         increaseSentence();
         nextSentenceProcessor();
