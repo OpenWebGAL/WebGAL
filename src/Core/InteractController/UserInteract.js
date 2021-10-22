@@ -4,10 +4,10 @@ import {
     Saves, SaveBacklog, CurrentBacklog,
     writeCookie,
     SyncCurrentStatus, getScene, loadCookie, getRuntime, getStatus, GameInfo
-} from "../storeControl/storeControl";
+} from "../StoreControl/StoreControl";
 import {AllHiddenIgnore, queryWidgetState} from "../util/WG_util";
 import * as core from "../WG_core"
-import {WG_ViewControl} from "../viewController/viewControl";
+import {WG_ViewControl} from "../ViewController/ViewControl";
 
 
 

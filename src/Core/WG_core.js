@@ -3,8 +3,8 @@ import {
     getScene,
     getStatus,
     SyncCurrentStatus
-} from "./storeControl/storeControl"
-import {WG_ViewControl} from "./viewController/viewControl";
+} from "./StoreControl/StoreControl"
+import {WG_ViewControl} from "./ViewController/ViewControl";
 import {processSentence} from "./util/WG_util";
 
 // 读取下一条脚本

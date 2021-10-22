@@ -1,11 +1,11 @@
 import './App.css';
-import Stage from "./components/Stage/mainStage";
+import Stage from "./Components/Stage/mainStage";
 import {
     setAutoWaitTime,autoWaitTime,textShowWaitTime,
     GameInfo,currentScene,auto,fast,onTextPreview,showingText,hideTextStatus,
     currentInfo,Saves,SaveBacklog,CurrentBacklog,currentSavePage,currentLoadPage,Settings,
     loadCookie,writeCookie,clearCookie,loadSettings,getStatus,getScene,getGameInfo,SyncCurrentStatus
-} from "./core/storeControl/storeControl"
+} from "./Core/StoreControl/StoreControl"
 
 function App() {
   return (
