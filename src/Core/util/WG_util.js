@@ -1,5 +1,5 @@
-import {getRuntime} from "../storeControl/storeControl";
-import {SyncCurrentStatus,getStatus} from "../storeControl/storeControl";
+import {getRuntime} from "../StoreControl/StoreControl";
+import {SyncCurrentStatus,getStatus} from "../StoreControl/StoreControl";
 
 // 处理脚本
 

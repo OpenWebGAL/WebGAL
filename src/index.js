@@ -8,8 +8,8 @@ import {
     GameInfo,currentScene,auto,fast,onTextPreview,showingText,hideTextStatus,
     currentInfo,Saves,SaveBacklog,CurrentBacklog,currentSavePage,currentLoadPage,Settings,
     loadCookie,writeCookie,clearCookie,loadSettings,getStatus,getScene,getGameInfo,SyncCurrentStatus
-} from "./core/storeControl/storeControl"
-import {WG_ViewControl} from "./core/viewController/viewControl";
+} from "./Core/StoreControl/StoreControl"
+import {WG_ViewControl} from "./Core/ViewController/ViewControl";
 
 ReactDOM.render(
   <React.StrictMode>

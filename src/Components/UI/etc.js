@@ -7,9 +7,9 @@ import {
     Settings,
     writeCookie,
     getRuntime
-} from "../../core/storeControl/storeControl";
-import {userInteract} from "../../core/interactController/userInteract";
-import {WG_ViewControl} from "../../core/viewController/viewControl";
+} from "../../Core/StoreControl/StoreControl";
+import {userInteract} from "../../Core/InteractController/UserInteract";
+import {WG_ViewControl} from "../../Core/ViewController/ViewControl";
 
 function ren_miniPic(i){
     let leftFigUrl = "./game/figure/"+Saves[i]["fig_Name_left"];

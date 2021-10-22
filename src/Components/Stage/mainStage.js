@@ -4,15 +4,15 @@
 // import '../../assests/css/Load_Save.css'
 // import '../../assests/css/settings.css'
 // import "../../assests/css/UI_component.css"
-// import '../../core/storeControl/storeControl'
+// import '../../Core/StoreControl/StoreControl'
 import {setAutoWaitTime,autoWaitTime,textShowWatiTime,
     GameInfo,currentScene,auto,fast,onTextPreview,showingText,hideTextStatus,
     currentInfo,Saves,SaveBacklog,CurrentBacklog,currentSavePage,currentLoadPage,Settings,
     loadCookie,writeCookie,clearCookie,loadSettings,getStatus,getScene,getGameInfo}
-    from "../../core/storeControl/storeControl";
-import {userInteract} from "../../core/interactController/userInteract";
-import {nextSentenceProcessor,increaseSentence} from "../../core/WG_core";
-import {WG_ViewControl} from "../../core/viewController/viewControl";
+    from "../../Core/StoreControl/StoreControl";
+import {userInteract} from "../../Core/InteractController/UserInteract";
+import {nextSentenceProcessor,increaseSentence} from "../../Core/WG_core";
+import {WG_ViewControl} from "../../Core/ViewController/ViewControl";
 import closeB from "../../assests/img/closeBlack.svg"
 import closeW from "../../assests/img/closeWhite.svg"
 import up from "../../assests/img/up.svg";

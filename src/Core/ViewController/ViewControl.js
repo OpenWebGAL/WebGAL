@@ -1,9 +1,9 @@
 import ReactDOM from "react-dom";
 import {
 CurrentBacklog, SyncCurrentStatus, getStatus, clearCookie, fast, getRuntime
-} from "../storeControl/storeControl";
+} from "../StoreControl/StoreControl";
 
-import {userInteract} from "../interactController/userInteract";
+import {userInteract} from "../InteractController/UserInteract";
 import {
     ControlButton,
     ImporterExporter,
@@ -11,7 +11,7 @@ import {
     SaveMainModel,
     SettingButtons_font,
     SettingButtons_speed
-} from "../../components/UI/etc";
+} from "../../Components/UI/etc";
 import {nextSentenceProcessor} from "../WG_core";
 
 class WG_ViewControl {
