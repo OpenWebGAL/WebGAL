@@ -22,6 +22,7 @@ window.onload = function () {
     loadCookie();
     loadSettings();
     getGameInfo();
+    WG_ViewControl.loadBGM();
 }
 
 function Stage() {
