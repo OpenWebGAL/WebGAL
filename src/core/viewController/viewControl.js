@@ -89,6 +89,8 @@ class WG_ViewControl {
     }
 
     static VC_restoreStatus(savedStatus) {
+        console.log("restoring")
+        console.log(savedStatus)
         let command = savedStatus["command"];
         if(savedStatus["bg_Name"]!=='')
             document.getElementById('mainBackground').style.backgroundImage = "url('game/background/" + savedStatus["bg_Name"] + "')";
@@ -193,15 +195,18 @@ class WG_ViewControl {
         let playControl = document.getElementById("currentBGM");
         playControl.currentTime = 0;
         playControl.volume = 0.25;
-        playControl.play();
+        playControl.oncanplay = function (){
+            playControl.play();
+        }
     }
 
     static playVocal() {
+        console.log("Playing vocal:")
+        let runtimeTemp = getStatus("all")
         if(document.getElementById('currentVocal')){
             document.getElementById('currentVocal').pause();
         }
-        console.log(getRuntime().currentInfo);
-        let vocalName = getRuntime().currentInfo["vocal"];
+        let vocalName = runtimeTemp.vocal;
         if(vocalName === ''){
             ReactDOM.render(<div/>,document.getElementById('vocal'));
             return;

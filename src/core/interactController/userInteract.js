@@ -1,9 +1,9 @@
 import React from 'react';
 import ReactDOM from "react-dom";
 import {
-    Saves,SaveBacklog,CurrentBacklog,
+    Saves, SaveBacklog, CurrentBacklog,
     writeCookie,
-    SyncCurrentStatus, getScene, loadCookie, getRuntime, getStatus
+    SyncCurrentStatus, getScene, loadCookie, getRuntime, getStatus, GameInfo
 } from "../storeControl/storeControl";
 import {AllHiddenIgnore, queryWidgetState} from "../util/WG_util";
 import * as core from "../WG_core"
@@ -100,7 +100,7 @@ class userInteract {
                         getRuntime().currentScene[i][1] = content;
                     }
                     SyncCurrentStatus('SentenceID',save["SentenceID"]);
-                    console.log(save)
+                    console.log("restore command sent")
                     WG_ViewControl.VC_restoreStatus(save);
                     SyncCurrentStatus('all',save);
                     getRuntime().CurrentBacklog[getRuntime().CurrentBacklog.length] = JSON.parse(JSON.stringify(getStatus("all")));
@@ -272,7 +272,11 @@ class userInteract {
 
 // 回到标题界面
     static Title() {
-        WG_ViewControl.showMesModel('要返回到标题界面吗','是','不要',function (){document.getElementById('Title').style.display = 'block';})
+        WG_ViewControl.showMesModel('要返回到标题界面吗','是','不要',function (){
+            document.getElementById('Title').style.display = 'block';
+            SyncCurrentStatus('bgm',getRuntime().GameInfo['Title_bgm']);
+            WG_ViewControl.loadBGM();
+        })
     }
 
 // Title页继续游戏
