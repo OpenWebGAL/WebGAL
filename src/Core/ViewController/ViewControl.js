@@ -194,8 +194,10 @@ class WG_ViewControl {
         let audio = <audio src={url} id={"currentBGM"} loop="loop"/>
         ReactDOM.render(audio,document.getElementById("bgm"));
         let playControl = document.getElementById("currentBGM");
-        playControl.currentTime = 0;
-        playControl.volume = 0.25;
+        playControl.onloadeddata = function (){
+            playControl.currentTime = 0;
+            playControl.volume = 0.25;
+        }
         playControl.oncanplay = function (){
             playControl.play();
         }
