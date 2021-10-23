@@ -6,7 +6,8 @@ import {
     Saves,
     Settings,
     writeCookie,
-    getRuntime
+    getRuntime,
+    GameInfo
 } from "../../Core/StoreControl/StoreControl";
 import {userInteract} from "../../Core/InteractController/UserInteract";
 import {WG_ViewControl} from "../../Core/ViewController/ViewControl";
@@ -413,7 +414,7 @@ class ImporterExporter extends React.Component {
         const reader = new FileReader();
         reader.onload = (evR) => {
             const saves = evR.target.result;
-            localStorage.setItem('WebGAL', saves);
+            localStorage.setItem(GameInfo['Game_key'], saves);
             loadCookie();
             window.location.reload();  // dirty: 强制刷新 UI
         };
@@ -422,7 +423,7 @@ class ImporterExporter extends React.Component {
 
 
     exportSaves() {
-        const saves = localStorage.getItem('WebGAL');
+        const saves = localStorage.getItem(GameInfo['Game_key']);
         if (saves === null) {
             // no saves
             return false;
