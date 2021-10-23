@@ -1,7 +1,7 @@
 /*清除默认边距*/
 *{
-    margin: 0;
-    padding: 0;
+    margin: 0 0 0 0;
+    padding: 0 0 0 0;
     text-align: left;
 }
 
@@ -29,13 +29,13 @@
 }
 #SceneText{
     padding: 15px 0 0 0;
-    color: white;
+    color: #f5f5f7;
     font-size: 200%;
     overflow: hidden;
     height: 60%;
 }
 #pName{
-    color: white;
+    color: #f5f5f7;
     font-size: x-large;
     /*background-color: rgba(255,255,255,0.7);*/
     padding: 3px 7px 3px 7px;
@@ -94,7 +94,7 @@
     padding: 3px 7px 3px 7px;
     margin: 0 5px 0 5px;
     /*border-radius: 5px;*/
-    color: white;
+    color: #f5f5f7;
     text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
 }
 .controlButton:hover{
@@ -145,48 +145,87 @@
 }
 
 #Title{
-    width: 100%;
-    height: 100%;
+    /*width: 100vw;*/
+    /*height: 100%;*/
     position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
     z-index: 11;
     background-repeat: no-repeat;
     background-size:cover;
-    background-color: white;
+    background-color: #f5f5f7;
 }
 
 #TitleModel{
     position: absolute;
     bottom: 0;
-    width: 100%;
-    height: 13%;
-    background-color: rgba(0,0,0,0.7);
+    left: 0;
+    right: 0;
+    /*width: 100vw;*/
+    /*height: 13%;*/
+    background-color: rgba(0,0,0,0.6);
     /*background-image: linear-gradient(rgba(255,255,255,1) 0%,rgba(255,255,255,0) 30%,rgba(255,255,255,0)100%);*/
     z-index: 12;
 }
 
 .TitleSingleButton{
     padding: 10px 10px 10px 10px;
-    border-right: 2px solid #FEDFE1;
-    color: white;
-    width: 50%;
+    text-shadow: 2px 2px 8px rgba(255,255,255,0.5);
+    margin: 0 0 20px 0;
+    border-left: 2px solid #FEDFE1;
+    /*background-color: #f5f5f7;*/
+    color: #f5f5f7;
+    width: 15%;
     text-align: center;
+    -webkit-animation: TitleButtonNoneChoose 0.75s;
+    /*border: 1px solid rgba(0,0,0,0.2);*/
+    /*border-radius: 7px;*/
+    /*box-shadow: 2px 2px 7px rgba(0,0,0,0.3);*/
 }
 
 .TitleSingleButton:hover{
     background-color: rgba(255,255,255,0.2);
+    box-shadow: 3px 3px 15px rgba(0,0,0,0.5);
+    -webkit-animation: TitleButtonOnChoose 0.75s;
+}
+
+@-webkit-keyframes TitleButtonOnChoose {
+    from {
+        background-color: rgba(0,0,0,0);
+        box-shadow: none;
+    }
+
+    to {
+        background-color: rgba(255,255,255,0.2);
+        box-shadow: 3px 3px 15px rgba(0,0,0,0.5);
+    }
+}
+
+@-webkit-keyframes TitleButtonNoneChoose {
+    from {
+        background-color: rgba(255,255,255,0.2);
+        box-shadow: 3px 3px 15px rgba(0,0,0,0.5);
+    }
+
+    to {
+        background-color: rgba(0,0,0,0);
+        box-shadow: none;
+    }
 }
 
 #leftTitleButton{
-    border-left: 2px solid #FEDFE1;
+    border-left: none;
 }
 
 #setButtonBottom{
-    position: absolute;
+    position: relative;
     display: flex;
     justify-content: center;
     top: 15px;
     width: 100%;
-    font-size: xx-large;
+    font-size: 188%;
 }
 
 #MesModel{
@@ -301,7 +340,7 @@ a:visited{
 }
 
 #backlog{
-    color: white;
+    color: #f5f5f7;
     position: absolute;
     top: 0;
     bottom: 0;
@@ -317,7 +356,7 @@ a:visited{
 }
 
 #blTitle{
-    color: white;
+    color: #f5f5f7;
     padding: 5px 5px 5px 5px;
     font-size: xx-large;
 }
