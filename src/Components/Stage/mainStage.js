@@ -74,7 +74,6 @@ function Stage() {
                         读档
                     </div>
                     <div id="LoadItems" className="LS_Items">
-
                     </div>
                 </div>
             </div>

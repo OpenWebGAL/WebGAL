@@ -329,17 +329,7 @@ class userInteract {
         // let even = window.event || arguments.callee.caller.arguments[0];
         // even.preventDefault();
         // even.stopPropagation();//阻止事件冒泡
-        document.getElementById('backlog').style.display = 'block';
-        document.getElementById('bottomBox').style.display = 'none';
-        let showBacklogList = [];
-        for (let i = 0 ; i<getRuntime().CurrentBacklog.length ; i++){
-            let temp = <div className={'backlog_singleElement'} key={i} onClick={()=>{userInteract.jumpFromBacklog(i)}}>
-                <div className={"backlog_name"}>{getRuntime().CurrentBacklog[i].showName}</div>
-                <div className={"backlog_text"}>{getRuntime().CurrentBacklog[i].showText}</div>
-            </div>
-            showBacklogList.push(temp)
-        }
-        ReactDOM.render(<div>{showBacklogList}</div>,document.getElementById('backlogContent'));
+        WG_ViewControl.showBacklog();
     }
 }
 
