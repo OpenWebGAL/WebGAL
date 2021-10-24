@@ -1,21 +1,252 @@
-'use strict';
+import { getStatus } from '../StoreControl/StoreControl';
 
-// import { getStatus } from '../StoreControl/StoreControl';
+
+const cacheVersion = 1;
+const cacheNamePrefix = 'webgal-cache-v';
+const cacheName = cacheNamePrefix + cacheVersion;
+
+const startSceneUrl = 'game/scene/start.txt';
+
+
+
+/**
+ * 在 ServiceWorker activate 后使用，场景级预加载
+ *
+ * 有 ServiceWorker 负责 cache，Wrapper 只管 fetch
+ *
+ * @see getScene()
+ * @see LoadSavedGame()
+ * @see jumpFromBacklog()
+ */
+class PrefetchWrapperSW {
+    constructor() {
+        /**
+         * 每批次加载的最大请求数，防止 HTTP 429
+         * @type {Number}
+         */
+        this.maxRequestBatch = 6;
+
+        /**
+         * 两批次加载间的最小时间间隔（毫秒），防止 HTTP 429
+         * @type {Number}
+         */
+        this.minRequestInterval = 3000;
+
+        /** @type {Array.<String>} */
+        this._prefetchPipeline = [];
+
+        this._batchID = undefined;
+
+        /** @type {Set.<String>} */
+        this._cachedAssets = new Set();
+
+        this._currentCursor = { scene: '', idx: 0 };
+    }
+
+
+    /**
+     * 变换场景时回调，基于当前场景更新预加载管线
+     * @param {String} newSceneUrl 新场景文件的 URL
+     * @param {Number} startIdx 开始行索引（从 0 开始）
+     */
+    async onSceneChange(newSceneUrl, startIdx = 0) {
+        const syncCachePromise = this._syncCacheInfo();
+        if (newSceneUrl === this._currentCursor.scene && startIdx === this._currentCursor.idx)
+            return;
+
+        this._currentCursor.scene = newSceneUrl;
+        this._currentCursor.idx = startIdx;
+
+        // clear pipeline
+        this.signalPause();
+        this.flushPipeline();
+
+        const resp = await fetch(newSceneUrl);
+        if (!resp.ok)
+            throw new Error(`[prefetcher] request for ${newSceneUrl} failed with status ${resp.status}`);
+
+        // todo: consider moving to worker
+        const newAssets = extractAssetUrl(await resp.text(), { sceneUrl: newSceneUrl, startLine: 1 + startIdx });
+
+        // start urgent fetch
+        const urgentPromises = newAssets.urgent.map((asset) => fetch(asset));
+
+        // discard cached assets from prefetch list
+        await syncCachePromise;
+        newAssets.all.forEach((asset) => {
+            if (this._cachedAssets.has(asset) || newAssets.urgent.includes(asset))
+                newAssets.all.delete(asset);
+        });
+
+        this.flushPipeline();  // flush again
+        this._addToPipeline(newAssets);
+        this.signalResume();
+
+        newAssets.map.get('scene').forEach((scene) => this.suggestNextScene(scene));
+
+        return Promise.allSettled(urgentPromises);
+    }
+
+
+    /**
+     * 将 `assets.all` 中的资源加入预加载管线
+     * @param {{all: Set.<String>, map: Map.<String, Array.<String>>}} assets
+     * @private
+     */
+    _addToPipeline(assets) {
+        // Set() preserves insertion order
+        this._prefetchPipeline.push(...assets.all);  // simple non-heuristic approach
+    }
+
+
+    /**
+     * 扩展可能的下一场景，只有急用资源加入预加载管线
+     * @param {String} nextSceneUrl 下一场景文件的 URL
+     * @param {Number} startIdx 开始行索引（从 0 开始）
+     */
+    suggestNextScene(nextSceneUrl, startIdx = 0) {
+        const fakeQuery = new URLSearchParams([['expand', true], ['start-idx', startIdx]]).toString();
+        // re-fetching a scene is cheap, especially given the caches
+        this._prefetchPipeline.push(`${nextSceneUrl}?${fakeQuery}`);
+        this.signalResume();
+    }
+
+
+    /** 清空预加载管线 */
+    flushPipeline() {
+        this._prefetchPipeline.length = 0;
+    }
+
+
+    /**
+     * 暂停预加载，并不清空管线
+     * @see flushPipeline()
+     */
+    signalPause() {
+        if (this._batchID !== undefined)
+            clearTimeout(this._batchID);
+        this._batchID = undefined;
+    }
+
+
+    /** 恢复预加载，多次调用*不会*产生多个请求 */
+    signalResume() {
+        if (this._batchID !== undefined)
+            return;
+
+        const tryBatch = (selfID) => {
+            if (selfID !== this._batchID)
+                return;
+            if (this._prefetchPipeline.length > 0) {
+                this._fetchBatch(selfID).then(() => {
+                    if (selfID === this._batchID) {
+                        this._syncCacheInfo();
+                        const id = setTimeout(() => tryBatch(id), this.minRequestInterval);
+                        this._batchID = id;
+                    }
+                });
+            }
+            else {
+                this._syncCacheInfo();
+                const id = setTimeout(() => tryBatch(id), this.minRequestInterval);
+                this._batchID = id;
+            }
+        };
+
+        this._syncCacheInfo();
+        const id = setTimeout(() => tryBatch(id), 100);
+        this._batchID = id;
+    }
+
+
+    /** @private */
+    _fetchBatch(selfID) {
+        const promises = [];
+        for (let budget = this.maxRequestBatch; budget > 0;) {
+            const assetUrl = this._prefetchPipeline.shift();
+            if (assetUrl === undefined)
+                break;
+
+            if (this._cachedAssets.has(assetUrl))
+                continue;
+
+            // check the (fake) query string of scene
+            if (assetUrl.split('/', 2)[1] === 'scene')
+                promises.push(this._tryExpandScene(assetUrl, selfID));
+            else
+                promises.push(fetch(assetUrl));
+
+            budget--;
+        }
+        return Promise.allSettled(promises);
+    }
+
+
+    /**
+     * @param {String} sceneUrl
+     * @param selfID
+     * @private
+     */
+    _tryExpandScene(sceneUrl, selfID) {
+        const qsIdx = sceneUrl.lastIndexOf('?');
+        // todo: handle existing query strings and hashes
+        if (qsIdx < 0)
+            // no query string
+            return fetch(sceneUrl);
+
+        const qsParam = new URLSearchParams(sceneUrl.substring(qsIdx));
+        sceneUrl = sceneUrl.substring(0, qsIdx);  // cut query string for now
+        if (qsParam.get('expand') !== `${true}`)
+            return fetch(sceneUrl);
+
+        const startIdx = Number(qsParam.get('start-idx'));
+        return fetch(sceneUrl).then((resp) => {
+            if (resp.ok) {
+                resp.clone().text().then((sceneText) => {
+                    const nextAssets = extractAssetUrl(sceneText, {
+                        sceneUrl: sceneUrl,
+                        startLine: 1 + startIdx,
+                        urgentLine: 6,
+                        maxLine: 6
+                    });
+                    for (const asset of nextAssets.urgent) {
+                        if (!this._cachedAssets.has(asset) && !this._prefetchPipeline.includes(asset))
+                            this._prefetchPipeline.push(asset)
+                    }
+                });
+            }
+            return resp;
+        });
+    }
+
+
+    /**
+     * 同步真正 CacheStorage 被缓存的资源
+     * @private
+     */
+    async _syncCacheInfo() {
+        if (caches === undefined)
+            return;
+        const cache = await caches.open(cacheName);
+        const keys = await cache.keys();
+        this._cachedAssets = new Set(keys.map((req) => req.url.substring(window.location.href.length)));
+    }
+}
 
 
 
 /**
  * 解析场景中用到的资源
  * @param {String} sceneText 场景文本
- * @param {{sceneUrl: String, startLine: Number, endLine: Number, urgentLine: Number}} options <br/>
- *      `sceneUrl` 场景文件 URL，以去自引用<br/>
- *      `startLine` 开始解析的自然行（从 1 开始，含）<br/>
- *      `urgentLine` 最大急用行数<br/>
- *      `maxLine` 最大解析行数<br/>
- * @returns {{all: Set.<String>, map: Map.<String, Array.<String>>, urgent: Array.<String>}} 去重、去自引用的资源<br/>
- *      `all` 全部；常用于存放剔除已缓存后的所需资源<br/>
- *      `map` 分类后；键: `background`, `bgm`, `figure`, `scene`, `vocal`<br/>
- *      `urgent` 急用<br/>
+ * @param {{sceneUrl: String, startLine: Number, urgentLine: Number, maxLine: Number}} options <br/>
+ *      `sceneUrl` 场景文件 URL，用以去除自引用；<br/>
+ *      `startLine` 开始解析的自然行（从 1 开始，含）；<br/>
+ *      `urgentLine` 最大急用行数；<br/>
+ *      `maxLine` 最大解析行数；<br/>
+ * @returns {{all: Set.<String>, map: Map.<String, Array.<String>>, urgent: Array.<String>}} 去重、去自引用的资源，格式 `game/type/name`<br/>
+ *      `all` 全部；<br/>
+ *      `map` 分类后，键: `background`, `bgm`, `figure`, `scene`, `vocal`；<br/>
+ *      `urgent` 急用；<br/>
  */
 function extractAssetUrl(sceneText, { sceneUrl = '', startLine = 1, urgentLine = 8, maxLine = Number.POSITIVE_INFINITY } = {}) {
     /** @type {Set.<String>} */
@@ -142,4 +373,59 @@ function extractAssetUrl(sceneText, { sceneUrl = '', startLine = 1, urgentLine =
 
 
 
-export { extractAssetUrl }
+let prefetcher = new PrefetchWrapperSW();
+
+if (window.isSecureContext) {
+    if (navigator.serviceWorker !== undefined) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('webgal-sw.js')
+                .then((reg) => {
+                    // on a new service worker being installing
+                    reg.onupdatefound = () => {
+                        // hack: re-register every time
+                        // the service worker is for prefetching rather than offline storage
+                        window.addEventListener('beforeunload', () => { reg.unregister(); });
+
+                        reg.installing.onstatechange = (ev) => {
+                            if (ev.target.state === 'activated') {
+                                console.log('[service worker] claimed');
+                                initServiceWorkerPrefetchWrapper();
+                            }
+                        };
+                    };
+                })
+                .catch((err) => {
+                    // reject usually indicates a typo in the filename of service worker
+                    // redundant service worker is NOT rejected
+                    console.error('[service worker] registration failed: ' + err);
+                });
+        });
+    }
+    else {
+        console.log('ServiceWorker not supported.');
+    }
+}
+else {
+    console.warn('Context not secure. Requiring HTTPS to enable CacheStorage and ServiceWorker.');
+
+    window.addEventListener('load', () => {
+        // current implementation is somewhat compatible with browser cache
+        // initBrowserCachePrefetchWrapper();
+        initServiceWorkerPrefetchWrapper();
+        prefetcher.maxRequestBatch = 6;
+        prefetcher.minRequestInterval = 5000;
+    });
+}
+
+
+
+function initServiceWorkerPrefetchWrapper() {
+    prefetcher.suggestNextScene(startSceneUrl);
+    const contScene = getStatus('SceneName');
+    if (contScene && (contScene !== 'start.txt' || getStatus('SentenceID')))
+        prefetcher.suggestNextScene(`game/scene/${contScene}`, getStatus('SentenceID'));
+}
+
+
+
+export { prefetcher, startSceneUrl, extractAssetUrl };
