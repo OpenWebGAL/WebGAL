@@ -340,7 +340,7 @@ a:visited{
 }
 
 #backlog{
-    color: #f5f5f7;
+    color: #1d1d1f;
     position: absolute;
     top: 0;
     bottom: 0;
@@ -348,11 +348,11 @@ a:visited{
     right: 0;
     display: none;
     z-index: 14;
-    background-color: rgba(0,0,0,0.5);
-    background-image: linear-gradient(rgba(255,255,255,0) 0%,rgba(255,255,255,0) 75%,rgba(255,255,255,0.3)100%);
+    /*background-color: rgba(0,0,0,0.5);*/
+    background-image: linear-gradient(to right,rgba(0,0,0,0) 0%, rgba(0,0,0,0.55) 15%,rgba(0,0,0,0.55) 82%,rgba(0,0,0,0)100%);
     /*border-radius: 15px;*/
     -webkit-animation: showSoftly 0.5s;
-    padding: 15px 1% 15px 1%;
+    padding: 0 0 0 0;
 }
 
 #blTitle{
@@ -361,34 +361,102 @@ a:visited{
     font-size: xx-large;
 }
 
+#closeBl{
+    padding: 10px 10px 10px 10px;
+}
+
 #backlogContent{
     position: absolute;
     bottom: 5px;
     display: flex;
     flex-flow: column-reverse;
-    width: 88%;
-    padding: 0 5% 0 5%;
-    height: 86%;
+    width: 100%;
+    padding: 0 5% 0 0;
+    height: 85%;
     overflow: scroll;
 }
 
 .backlog_singleElement{
     font-size: larger;
-    border-top: 1px solid rgba(255,255,255,1);
     padding: 10px 0 10px 0;
-    width: 100%;
+    width: 70%;
+    height: 120px;
+    display: flex;
+    /*background-image: linear-gradient(to right, rgba(255,255,255,0.7) 0%,rgba(255,255,255,0.6) 60%,rgba(0,0,0,0) 100%);*/
+    margin: 0 15% 20px 15%;
+    border-top: 2px solid #FEDFE1;
+    /*border-bottom: 3px solid #8E354A;*/
+    /*box-shadow: 0 2px 15px rgba(255,255,255,0.3);*/
+}
+
+.backlog_interact{
+    width: 15%;
+    padding: 15px 0 0 0;
+    float: left;
+}
+
+.backlog_content{
+    /*border-top: 1px solid rgba(255,255,255,1);*/
+    width: 60%;
+}
+
+.backlog_interact_button{
+    padding: 5px 15px 5px 15px;
+    margin: 0 15px 10px 0;
+    border: 1px solid #f5f5f7;
+    box-shadow: 3px 3px 10px rgba(0,0,0,0.3);
+    background: rgba(254,223,225,0.2);
+    color: #f5f5f7;
+    border-radius: 5px;
+    text-align: center;
+    float: right;
+    font-size: 85%;
+}
+
+.vocalIcon{
+    padding: 2px 0 0 0;
+    height: 25px;
+    width: 25px;
+}
+
+.returnIcon{
+    padding: 5px 0 0 0;
+    height: 22px;
+    width: 22px;
+}
+
+.backlog_interact_button:hover{
+    /*background: #FEDFE1;*/
+    /*color: #8E354A;*/
+    border: 1px solid #8E354A;
 }
 
 .backlog_singleElement:hover{
-    background-color: rgba(255,255,255,0.2);
+    /*background-color: rgba(255,255,255,0.2);*/
 }
 
 .backlog_name{
-    font-size: larger;
+    font-size: 150%;
+    width: 25%;
+    position: relative;
+    bottom: 2px;
+    height: 30px;
+    /*color: #8E354A;*/
+    color: #f5f5f7;
+    padding: 15px 0 0 25px;
+    text-shadow: 2px 2px 7px rgba(0,0,0,0.2);
+    text-align: left;
 }
 
 .backlog_text{
-    padding: 0 0 0 15px;
+    /*font-weight: bold;*/
+    padding: 15px 0 0 15px;
+    /*color: #0F2540;*/
+    color: #f5f5f7;
+    font-size: 135%;
+    text-shadow: 2px 2px 13px rgba(0,0,0,0.3);
+    /*text-shadow: 2px 2px 5px rgba(255,255,255,0.55);*/
+    /*-webkit-text-stroke: 0.15px #f5f5f7;*/
 }
 
 #top_control{

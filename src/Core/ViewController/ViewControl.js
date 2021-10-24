@@ -13,6 +13,9 @@ import {
     SettingButtons_speed
 } from "../../Components/UI/etc";
 import {nextSentenceProcessor} from "../WG_core";
+import React from "react";
+import returnIcon from "../../assests/img/return.svg";
+import vocalIcon from "../../assests/img/vocal.svg"
 
 class WG_ViewControl {
     static VC_changeBG(bg_name){
@@ -270,7 +273,34 @@ class WG_ViewControl {
         ReactDOM.render(renNewButton,document.getElementById("controlBar"));
     }
 
+    static showBacklog(){
+        document.getElementById('backlog').style.display = 'block';
+        document.getElementById('bottomBox').style.display = 'none';
+        let showBacklogList = [];
+        for (let i = 0 ; i<getRuntime().CurrentBacklog.length ; i++){
+            let temp = <div className={'backlog_singleElement'} key={i} onClick={()=>{
+                // userInteract.jumpFromBacklog(i);
+            }}>
+                <div className={"backlog_interact"}>
+                    <div className={"backlog_interact_button"}>
+                        <img src={vocalIcon} alt={"vi"} className={"vocalIcon"}/>
+                    </div>
+                    <div className={"backlog_interact_button"}>
+                        <img src={returnIcon} alt={"ri"} className={"returnIcon"}/>
+                    </div>
+                </div>
+                <div className={"backlog_name"}>{getRuntime().CurrentBacklog[i].showName}</div>
 
+                <div className={"backlog_content"}>
+
+                    <div className={"backlog_text"}>{getRuntime().CurrentBacklog[i].showText}</div>
+                </div>
+
+            </div>
+            showBacklogList.push(temp)
+        }
+        ReactDOM.render(<div>{showBacklogList}</div>,document.getElementById('backlogContent'));
+    }
 
 // 渐显文字
     static showTextArray(textArray){
