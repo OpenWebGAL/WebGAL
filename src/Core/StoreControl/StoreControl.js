@@ -2,6 +2,7 @@
 //初始化常量表
 // eslint-disable-next-line no-lone-blocks
 import {nextSentenceProcessor} from "../WG_core";
+import { prefetcher } from '../util/PrefetchWrapper';
 
 {
     var setAutoWaitTime = 1500;
@@ -182,6 +183,7 @@ function getScene(url) {
                 getRuntime().currentScene = currentScene
                 SyncCurrentStatus('SentenceID',0);
                 nextSentenceProcessor();
+                prefetcher.onSceneChange(url);
             }
         }
     }
