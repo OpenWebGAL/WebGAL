@@ -4,6 +4,8 @@
 
 Demo: http://msfasr.com/WebGAL_Demo_Page/
 
+Bilibili 演示视频： https://www.bilibili.com/video/BV1nh411n7vt/
+
 ## 如果你是想要开发属于自己的 Galgame 的开发者，请下载发行版：
 
 https://github.com/MakinoharaShoko/WebGAL/releases/
