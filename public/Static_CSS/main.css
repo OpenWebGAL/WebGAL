@@ -89,17 +89,44 @@
 }
 
 .controlButton{
-    border-bottom: 3px solid #FEDFE1;
+    /*border-bottom: 3px solid #FEDFE1;*/
     /*background-color: #FEDFE1;*/
     padding: 3px 7px 3px 7px;
-    margin: 0 5px 0 5px;
+    margin: 0 10px 0 10px;
     /*border-radius: 5px;*/
     color: #f5f5f7;
     text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+    border-radius: 8px;
+    -webkit-animation: controlButtonHoverBack 0.5s;
 }
 .controlButton:hover{
-    background-color: rgba(0,0,0,0.3);
+    -webkit-animation: controlButtonHover 0.5s;
+    background-color: rgba(255,255,255,0.25);
+    box-shadow: 5px 5px 15px rgba(0,0,0,0.65);
 }
+
+@-webkit-keyframes controlButtonHover {
+    from{
+        background-color: rgba(0,0,0,0);
+        box-shadow: none;
+    }
+    to{
+        background-color: rgba(255,255,255,0.25);
+        box-shadow: 5px 5px 15px rgba(0,0,0,0.65);
+    }
+}
+
+@-webkit-keyframes controlButtonHoverBack {
+    from{
+        background-color: rgba(255,255,255,0.25);
+        box-shadow: 5px 5px 15px rgba(0,0,0,0.65);
+    }
+    to{
+
+    }
+}
+
+
 .singleWord{
     -webkit-animation: showSoftly 0.5s;
 }
@@ -159,24 +186,27 @@
 }
 
 #TitleModel{
+    padding: 60px 0 0 0 ;
     position: absolute;
     bottom: 0;
     left: 0;
     right: 0;
     /*width: 100vw;*/
     /*height: 13%;*/
-    background-color: rgba(0,0,0,0.6);
-    /*background-image: linear-gradient(rgba(255,255,255,1) 0%,rgba(255,255,255,0) 30%,rgba(255,255,255,0)100%);*/
+    /*background-color: rgba(255,255,255,0.3);*/
+    background-image: linear-gradient(rgba(255,255,255,0) 0%,rgba(255,255,255,0.35) 50%,rgba(255,255,255,0.5)100%);
     z-index: 12;
 }
 
 .TitleSingleButton{
+    font-family: Georgia;
+    /*font-weight: bold;*/
     padding: 10px 10px 10px 10px;
-    text-shadow: 2px 2px 8px rgba(255,255,255,0.5);
+    text-shadow: 0 0 5px rgba(255,255,255,1);
     margin: 0 0 20px 0;
-    border-left: 2px solid #FEDFE1;
+    border-left: 2px solid #8E354A;
     /*background-color: #f5f5f7;*/
-    color: #f5f5f7;
+    color: #8E354A;
     width: 15%;
     text-align: center;
     -webkit-animation: TitleButtonNoneChoose 0.75s;
@@ -413,6 +443,12 @@ a:visited{
     font-size: 85%;
 }
 
+.backlog_interact_button:hover{
+    background:  #8E354A;
+    /*color: #8E354A;*/
+    border: 1px solid #FEDFE1;
+}
+
 .vocalIcon{
     padding: 2px 0 0 0;
     height: 25px;
@@ -425,11 +461,7 @@ a:visited{
     width: 22px;
 }
 
-.backlog_interact_button:hover{
-    /*background: #FEDFE1;*/
-    /*color: #8E354A;*/
-    border: 1px solid #8E354A;
-}
+
 
 .backlog_singleElement:hover{
     /*background-color: rgba(255,255,255,0.2);*/

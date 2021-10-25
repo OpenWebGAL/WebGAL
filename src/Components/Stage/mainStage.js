@@ -17,6 +17,17 @@ import closeB from "../../assests/img/closeBlack.svg"
 import closeW from "../../assests/img/closeWhite.svg"
 import up from "../../assests/img/up.svg";
 import cross from "../../assests/img/cross.svg";
+import '@icon-park/react/styles/index.css';
+import {
+    DoubleRight,
+    FolderDownload,
+    FolderUpload,
+    Home,
+    PlayOne,
+    ReplayMusic,
+    Save,
+    SettingTwo
+} from "@icon-park/react";
 
 window.onload = function () {
     loadCookie();
@@ -33,11 +44,11 @@ function Stage() {
             <div id="Title">
                 <div id="TitleModel">
                     <div id="setButtonBottom">
-                        <div className="TitleSingleButton" id="leftTitleButton" onClick={userInteract.hideTitle}>开始游戏</div>
-                        <div className="TitleSingleButton" onClick={userInteract.continueGame}>继续游戏</div>
-                        <div className="TitleSingleButton" onClick={userInteract.onLoadGame}>读取存档</div>
-                        <div className="TitleSingleButton" onClick={userInteract.onSetting}>设置界面</div>
-                        <div className="TitleSingleButton" onClick={userInteract.exit}>退出游戏</div>
+                        <div className="TitleSingleButton" id="leftTitleButton" onClick={userInteract.hideTitle}>START</div>
+                        <div className="TitleSingleButton" onClick={userInteract.continueGame}>CONTINUE</div>
+                        <div className="TitleSingleButton" onClick={userInteract.onLoadGame}>LOAD</div>
+                        <div className="TitleSingleButton" onClick={userInteract.onSetting}>CONFIG</div>
+                        <div className="TitleSingleButton" onClick={userInteract.exit}>EXIT</div>
                     </div>
 
                 </div>
@@ -105,13 +116,27 @@ function Stage() {
                     <div id="SceneText"/>
                 </div>
                 <div id="controlBar">
-                    <div className="controlButton" onClick={WG_ViewControl.playVocal}>重播</div>
-                    <div className="controlButton" onClick={userInteract.autoNext} id="autoButton">自动</div>
-                    <div className="controlButton" onClick={userInteract.fastNext} id="fastButton">快进</div>
-                    <div className="controlButton" onClick={userInteract.onSaveGame} id="saveButton">存档</div>
-                    <div className="controlButton" onClick={userInteract.onLoadGame} id="loadButton">读档</div>
-                    <div className="controlButton" onClick={userInteract.onSetting}>设置</div>
-                    <div className="controlButton" onClick={userInteract.Title} id="titleButton">标题</div>
+                    <div className="controlButton" onClick={WG_ViewControl.playVocal}>
+                        <ReplayMusic theme="outline" size="28" fill="#f5f5f7"/>
+                    </div>
+                    <div className="controlButton" onClick={userInteract.autoNext} id="autoButton">
+                        <PlayOne theme="outline" size="28" fill="#f5f5f7"/>
+                    </div>
+                    <div className="controlButton" onClick={userInteract.fastNext} id="fastButton">
+                        <DoubleRight theme="outline" size="28" fill="#f5f5f7"/>
+                    </div>
+                    <div className="controlButton" onClick={userInteract.onSaveGame} id="saveButton">
+                        <FolderDownload theme="outline" size="28" fill="#f5f5f7"/>
+                    </div>
+                    <div className="controlButton" onClick={userInteract.onLoadGame} id="loadButton">
+                        <FolderUpload theme="outline" size="28" fill="#f5f5f7"/>
+                    </div>
+                    <div className="controlButton" onClick={userInteract.onSetting}>
+                        <SettingTwo theme="outline" size="28" fill="#f5f5f7"/>
+                    </div>
+                    <div className="controlButton" onClick={userInteract.Title} id="titleButton">
+                        <Home theme="outline" size="28" fill="#f5f5f7"/>
+                    </div>
                 </div>
             </div>
             <div id="bgm"/>

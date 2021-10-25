@@ -125,7 +125,7 @@ class userInteract {
             getScene("game/scene/start.txt");
             getStatus("all")["SceneName"] = 'start.txt';
         }
-        WG_ViewControl.loadButton();
+        // WG_ViewControl.loadButton();
     }
 
 // 分支选择（请求getScene）
@@ -286,7 +286,7 @@ class userInteract {
             getStatus("all")["SceneName"] = 'start.txt';
         }
         document.getElementById('Title').style.display = 'none';
-        WG_ViewControl.loadButton();
+        // WG_ViewControl.loadButton();
     }
 
 // 关闭存档界面
