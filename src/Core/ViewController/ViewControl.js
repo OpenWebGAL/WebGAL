@@ -156,7 +156,7 @@ class WG_ViewControl {
 
     static VC_showSettings(){
         let settingInterface = <div>
-            <div className="singleSettingItem">
+            <div className={"settingsItemsList"}>
                 <SettingButtons_font/>
                 <SettingButtons_speed/>
                 <div className={"deleteCookie"} onClick={()=>{WG_ViewControl.showMesModel('你确定要清除缓存吗','要','不要',clearCookie)}}>清除所有设置选项以及存档</div>

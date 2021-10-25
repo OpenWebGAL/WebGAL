@@ -1,9 +1,9 @@
 #settings{
     position: absolute;
-    top: 20px;
-    bottom: 20px;
-    left: 45px;
-    right: 45px;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
     display: none;
     z-index: 15;
     background-color: rgba(255,255,255,0.95);
@@ -12,6 +12,7 @@
     -webkit-animation: showSoftly 0.5s;
     padding: 30px 30px 30px 30px;
     box-shadow: 5px 5px 15px rgba(0,0,0,0.5);
+    font-size: 135%;
 }
 
 #settingsMainBox{
@@ -36,14 +37,20 @@
 }
 
 .settingItemTitle{
-    font-size: xx-large;
+    font-size: 125%;
     border-bottom: 2px solid #8E354A;
 }
 
+.settingsItemsList{
+    display: flex;
+    flex-flow: column;
+}
+
 .singleSettingItem{
-    margin: 15px 45px 0 0;
+    position: relative;
+    margin: 10px 10px 0 0;
     padding: 5px 0 5px 0;
-    font-size: x-large;
+    font-size: 125%;
 }
 
 .closeSVG{
@@ -87,7 +94,7 @@
 #textPreview{
     color: #f5f5f7;
     background-color: rgba(0,0,0,0.4);
-    font-size: medium;
+    font-size: 100%;
     padding: 10px 10px 10px 10px;
     margin: 10px 10px 10px 10px;
     border: 3px solid rgba(255,255,255,1);

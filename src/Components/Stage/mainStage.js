@@ -28,13 +28,15 @@ import {
     Save,
     SettingTwo
 } from "@icon-park/react";
+import {isMobile} from "../../Core/util/WG_util";
 
-window.onload = function () {
-    loadCookie();
-    loadSettings();
-    getGameInfo();
-    WG_ViewControl.loadBGM();
-}
+// window.onload = function () {
+//     loadCookie();
+//     loadSettings();
+//     getGameInfo();
+//     WG_ViewControl.loadBGM();
+//
+// }
 
 function Stage() {
     return (
