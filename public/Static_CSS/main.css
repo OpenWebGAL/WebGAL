@@ -163,7 +163,7 @@
     border: 2px solid #8E354A;
     text-align: center;
     border-radius: 15px;
-    font-size: xx-large;
+    font-size: 175%;
 }
 
 .singleChoose:hover{
@@ -204,8 +204,8 @@
     /*font-weight: bold;*/
     padding: 5px 30px 5px 30px;
     text-shadow: 0 0 10px rgba(255,255,255,1);
-    margin: 0 0 10px 0;
-    /*border-left: 2px solid #8E354A;*/
+    margin: 0 0 7px 0;
+    /*border-top: 2px solid #8E354A;*/
     /*background-color: #f5f5f7;*/
     color: #8E354A;
     /*width: 15%;*/
@@ -214,6 +214,10 @@
     /*border: 1px solid rgba(0,0,0,0.2);*/
     /*border-radius: 7px;*/
     /*box-shadow: 2px 2px 7px rgba(0,0,0,0.3);*/
+}
+
+#leftTitleButton{
+    border-top: none;
 }
 
 .TitleSingleButton:hover{
@@ -259,9 +263,7 @@
     }
 }
 
-#leftTitleButton{
-    border-left: none;
-}
+
 
 
 
