@@ -100,12 +100,12 @@ class SettingButtons_font extends React.Component{
     render(){
 
         return(
-            <span className="singleSettingItem">
+            <div className="singleSettingItem">
                 <span className="settingItemTitle">字体大小</span>
                 <span className={'settingItemButton'+this.state.buttonState[0]} onClick={()=>{this.changeButtonState(0)}}>小</span>
                 <span className={'settingItemButton'+this.state.buttonState[1]} onClick={()=>{this.changeButtonState(1)}}>中</span>
                 <span className={'settingItemButton'+this.state.buttonState[2]} onClick={()=>{this.changeButtonState(2)}}>大</span>
-            </span>
+            </div>
         );
     }
 
@@ -168,12 +168,12 @@ class SettingButtons_speed extends React.Component{
     render(){
 
         return(
-            <span className="singleSettingItem">
+            <div className="singleSettingItem">
                 <span className="settingItemTitle">播放速度</span>
                 <span className={'settingItemButton'+this.state.buttonState[0]} onClick={()=>{this.changeButtonState(0)}}>慢</span>
                 <span className={'settingItemButton'+this.state.buttonState[1]} onClick={()=>{this.changeButtonState(1)}}>中</span>
                 <span className={'settingItemButton'+this.state.buttonState[2]} onClick={()=>{this.changeButtonState(2)}}>快</span>
-            </span>
+            </div>
         );
     }
 

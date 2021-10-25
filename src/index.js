@@ -10,6 +10,7 @@ import {
     loadCookie,writeCookie,clearCookie,loadSettings,getStatus,getScene,getGameInfo,SyncCurrentStatus
 } from "./Core/StoreControl/StoreControl"
 import {WG_ViewControl} from "./Core/ViewController/ViewControl";
+import {isMobile, MobileChangeStyle} from "./Core/util/WG_util";
 
 ReactDOM.render(
   <React.StrictMode>
@@ -27,3 +28,6 @@ loadCookie();
 loadSettings();
 getGameInfo();
 WG_ViewControl.loadBGM();
+if(isMobile()){
+    MobileChangeStyle();
+}
