@@ -3,6 +3,7 @@
 // eslint-disable-next-line no-lone-blocks
 import {nextSentenceProcessor} from "../WG_core";
 import { prefetcher } from '../util/PrefetchWrapper';
+import {WG_ViewControl} from "../ViewController/ViewControl";
 
 {
     var setAutoWaitTime = 1500;
@@ -217,6 +218,7 @@ function getGameInfo() {
             }
             document.getElementById('Title').style.backgroundImage = 'url("./game/background/'+GameInfo["Title_img"]+'")';
             SyncCurrentStatus('bgm',GameInfo['Title_bgm']);
+            WG_ViewControl.loadBGM();
             document.title = GameInfo['Game_name'];
         }
 

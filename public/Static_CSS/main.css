@@ -36,7 +36,7 @@
 }
 #pName{
     color: #f5f5f7;
-    font-size: 125%;
+    font-size: 165%;
     /*background-color: rgba(255,255,255,0.7);*/
     padding: 3px 7px 3px 7px;
     /*border-radius: 5px;*/
@@ -91,8 +91,8 @@
 .controlButton{
     /*border-bottom: 3px solid #FEDFE1;*/
     /*background-color: #FEDFE1;*/
-    padding: 3px 7px 3px 7px;
-    margin: 0 10px 0 10px;
+    padding: 3px 5px 3px 5px;
+    margin: 0 7px 0 7px;
     /*border-radius: 5px;*/
     color: #f5f5f7;
     text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
