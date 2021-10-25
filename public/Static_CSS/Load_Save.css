@@ -5,6 +5,7 @@
 }
 
 .LS_indexButtonOn{
+    font-size: large;
     font-weight: bold;
     padding: 5px 20px 5px 20px;
     margin: 0 5px 5px 5px;
@@ -57,7 +58,7 @@
     padding: 5px 10px 5px 10px;
     border: 2px solid rgba(0,0,0,0.15);
     background-color: rgba(255,255,255,0.95);
-    box-shadow: 3px 3px 15px  rgba(0,0,0,0.05);
+    box-shadow: 4px 4px 12px  rgba(0,0,0,0.1);
     display: flex;
 }
 
@@ -97,7 +98,7 @@
 }
 .LSE_bottom{
     height: 39px;
-    color: rgba(0,0,0,0.8);
+    color: #6e6e73;
     margin: 3px 0 0 0;
     text-align: left;
     font-size: 60%;
@@ -169,7 +170,7 @@
     top: 7px;
     width: 142px;
     height: 80px;
-    background-color: white;
+    background-color: #f5f5f7;
     background-repeat: no-repeat;
     background-size:cover;
     margin: 0 12px 0 0;
