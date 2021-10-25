@@ -10,6 +10,7 @@
     background-color: rgba(0,0,0,0.9);
     -webkit-animation: showSoftly 1s;
     padding: 15px 1% 15px 1%;
+    text-align: center;
 }
 
 .skipIntro{
@@ -22,6 +23,7 @@
     justify-content: center;
     font-size: 250%;
     padding: 10% 0 0 0;
+    text-align: center;
 }
 
 @-webkit-keyframes showSoftly /* Safari 与 Chrome */
