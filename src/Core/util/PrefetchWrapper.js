@@ -225,7 +225,7 @@ class PrefetchWrapperSW {
      * @private
      */
     async _syncCacheInfo() {
-        if (caches === undefined)
+        if (window.caches === undefined)
             return;
         const cache = await caches.open(cacheName);
         const keys = await cache.keys();
