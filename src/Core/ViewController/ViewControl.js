@@ -150,13 +150,16 @@ class WG_ViewControl {
             getRuntime().currentInfo['bgm'] = savedStatus['bgm'];
             WG_ViewControl.loadBGM();
         }
+        if(savedStatus['miniAvatar']!=='' || savedStatus['miniAvatar'] !== 'none'){
+            WG_ViewControl.VC_showMiniAvatar(savedStatus['miniAvatar']);
+        }
         WG_ViewControl.playVocal();
         WG_ViewControl.showTextArray(textArray);
     }
 
     static VC_showSettings(){
         let settingInterface = <div>
-            <div className="singleSettingItem">
+            <div className={"settingsItemsList"}>
                 <SettingButtons_font/>
                 <SettingButtons_speed/>
                 <div className={"deleteCookie"} onClick={()=>{WG_ViewControl.showMesModel('你确定要清除缓存吗','要','不要',clearCookie)}}>清除所有设置选项以及存档</div>
@@ -191,6 +194,8 @@ class WG_ViewControl {
     static loadBGM() {
         console.log("loadingBGM")
         let bgmName = getRuntime().currentInfo["bgm"];
+        console.log("now playing "+bgmName);
+        console.log(getRuntime().currentInfo);
         if(bgmName === '' || bgmName === 'none'){
             ReactDOM.render(<div/>,document.getElementById("bgm"));
             return;
@@ -199,11 +204,21 @@ class WG_ViewControl {
         let audio = <audio src={url} id={"currentBGM"} loop="loop"/>
         ReactDOM.render(audio,document.getElementById("bgm"));
         let playControl = document.getElementById("currentBGM");
-        playControl.onloadeddata = function (){
+        let played = false;
+        playControl.oncanplay = function (){
+            if(played === false)
+            {
+                playControl.currentTime = 0;
+                playControl.volume = 0.25;
+                played = true;
+            }
+            playControl.play();
+        }
+        if(played === false && document.getElementById("currentBGM"))
+        {
             playControl.currentTime = 0;
             playControl.volume = 0.25;
-        }
-        playControl.oncanplay = function (){
+            played = true;
             playControl.play();
         }
     }
@@ -290,7 +305,19 @@ class WG_ViewControl {
                             console.log("Playing! now url is"+url);
                             ReactDOM.render(elementAudio,document.getElementById("backlogVocal-"+i));
                             let singleControlBacklogAudio = document.getElementById("backlogVocalAudio-"+i);
+                            let played = false;
+                            played = false;
                             singleControlBacklogAudio.oncanplay = function (){
+                                if(!played){
+                                    singleControlBacklogAudio.currentTime = 0;
+                                    played = true;
+                                    singleControlBacklogAudio.play();
+                                }
+                                singleControlBacklogAudio.play();
+                            }
+                            if(!played){
+                                singleControlBacklogAudio.currentTime = 0;
+                                played = true;
                                 singleControlBacklogAudio.play();
                             }
                         }
@@ -428,6 +455,16 @@ class WG_ViewControl {
                 </div>
             </div>
         ReactDOM.render(element,document.getElementById('MesModel'))
+    }
+
+    static VC_showMiniAvatar(name){
+        if(name === '' || name === 'none'){
+            ReactDOM.render(<div/>,document.getElementById("miniAvatar"))
+            return;
+        }
+        let url = "game/figure/"+name;
+        let pic = <img src={url} className={"miniAvatar_pic"} alt={"miniAvatar"}/>
+        ReactDOM.render(pic,document.getElementById("miniAvatar"));
     }
 
 // -------- 紧急回避 --------

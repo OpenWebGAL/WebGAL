@@ -2,6 +2,8 @@
 //初始化常量表
 // eslint-disable-next-line no-lone-blocks
 import {nextSentenceProcessor} from "../WG_core";
+import { prefetcher } from '../util/PrefetchWrapper';
+import {WG_ViewControl} from "../ViewController/ViewControl";
 
 {
     var setAutoWaitTime = 1500;
@@ -45,7 +47,10 @@ var currentInfo ={
     command:'',//语句指令
     choose:'',//选项列表
     vocal:'',//语音 文件名
-    bgm:''//背景音乐 文件名
+    bgm:'',//背景音乐 文件名
+    miniAvatar:'',//小头像
+    GameVar:{
+    }
 }
 
 // 初始化存档系统
@@ -137,8 +142,13 @@ function loadSettings(){
 }
 
 function SyncCurrentStatus(statusKey,newStatus) {
-    if(statusKey ==='all')
-        currentInfo = newStatus;
+    if(statusKey ==='all'){
+        for (let StatusProp in newStatus){
+            if(currentInfo.hasOwnProperty(StatusProp)){
+                currentInfo[StatusProp] = newStatus[StatusProp];
+            }
+        }
+    }
     else
         currentInfo[statusKey] = newStatus;
 }
@@ -182,6 +192,7 @@ function getScene(url) {
                 getRuntime().currentScene = currentScene
                 SyncCurrentStatus('SentenceID',0);
                 nextSentenceProcessor();
+                prefetcher.onSceneChange(url);
             }
         }
     }
@@ -215,6 +226,7 @@ function getGameInfo() {
             }
             document.getElementById('Title').style.backgroundImage = 'url("./game/background/'+GameInfo["Title_img"]+'")';
             SyncCurrentStatus('bgm',GameInfo['Title_bgm']);
+            WG_ViewControl.loadBGM();
             document.title = GameInfo['Game_name'];
         }
 
