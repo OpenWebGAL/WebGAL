@@ -149,6 +149,10 @@ function nextSentenceProcessor() {
         nextSentenceProcessor();
         return;
     }
+    else if(command.substr(0,3) === "var" || command.substr(0,8) === "jump_var"){
+        varProcess(command,S_content);
+        return;
+    }
     else {
         SyncCurrentStatus('command',processSentence(getStatus("SentenceID"))['name']);
         SyncCurrentStatus('showName',processSentence(getStatus("SentenceID"))['name']);
@@ -187,6 +191,101 @@ function nextSentenceProcessor() {
 //sentenceID+1
 function increaseSentence(){
     SyncCurrentStatus('SentenceID',getStatus('SentenceID')+1);
+}
+
+function varProcess(command,content){
+    if(command === 'varSet'){
+        content = content.split(';')[0];
+        console.log(content);
+        content = content.split(',');
+        console.log(content)
+        for (let i = 0; i < content.length; i++) {
+            let singleSet = content[i];
+            singleSet = singleSet.split(':');
+            console.log(singleSet)
+            getRuntime().currentInfo.GameVar[singleSet[0]] = parseInt(singleSet[1]);
+        }
+    }else if(command === 'varUp'){
+        content = content.split(';')[0];
+        console.log(content);
+        content = content.split(',');
+        for (let i = 0; i < content.length; i++) {
+            let singleSet = content[i];
+            singleSet = singleSet.split(':');
+            getRuntime().currentInfo.GameVar[singleSet[0]] = getRuntime().currentInfo.GameVar[singleSet[0]]+parseInt(singleSet[1]);
+        }
+    }else if(command === 'varDrop'){
+        content = content.split(';')[0];
+        console.log(content);
+        content = content.split(',');
+        for (let i = 0; i < content.length; i++) {
+            let singleSet = content[i];
+            singleSet = singleSet.split(':');
+            getRuntime().currentInfo.GameVar[singleSet[0]] = getRuntime().currentInfo.GameVar[singleSet[0]]-parseInt(singleSet[1]);
+        }
+    }else if(command === 'jump_varReach'){
+        content = content.split(';')[0];
+        console.log(content);
+        content = content.split(',');
+        let varArea = content[0];
+        varArea = varArea.split(':');
+        let JumpArea = content[1];
+        console.log("var data is"+parseInt(varArea[1])+getRuntime().currentInfo.GameVar[varArea[0]])
+        if(getRuntime().currentInfo.GameVar[varArea[0]]>=parseInt(varArea[1])){
+            let lab_name = JumpArea;
+            //find the line of the label:
+            let find = false;
+            let jmp_sentence = 0;
+            for (let i = 0; i < getRuntime().currentScene.length; i++) {
+                if(getRuntime().currentScene[i][0] === 'label' && getRuntime().currentScene[i][1] === lab_name){
+                    find = true;
+                    jmp_sentence = i;
+                }
+            }
+            if(find){
+                SyncCurrentStatus("SentenceID",jmp_sentence);
+                nextSentenceProcessor();
+                return;
+            }else
+            {
+                increaseSentence();
+                nextSentenceProcessor();
+                return;
+            }
+        }
+    }else if(command === 'jump_varBelow'){
+        content = content.split(';')[0];
+        console.log(content);
+        content = content.split(',');
+        let varArea = content[0];
+        varArea = varArea.split(':');
+        let JumpArea = content[1];
+        if(getRuntime().currentInfo.GameVar[varArea[0]]<parseInt(varArea[1])){
+            let lab_name = JumpArea;
+            //find the line of the label:
+            let find = false;
+            let jmp_sentence = 0;
+            for (let i = 0; i < getRuntime().currentScene.length; i++) {
+                if(getRuntime().currentScene[i][0] === 'label' && getRuntime().currentScene[i][1] === lab_name){
+                    find = true;
+                    jmp_sentence = i;
+                }
+            }
+            if(find){
+                SyncCurrentStatus("SentenceID",jmp_sentence);
+                nextSentenceProcessor();
+                return;
+            }else
+            {
+                increaseSentence();
+                nextSentenceProcessor();
+                return;
+            }
+        }
+    }
+    console.log(getRuntime().currentInfo.GameVar);
+    increaseSentence();
+    nextSentenceProcessor();
 }
 
 export {nextSentenceProcessor,increaseSentence}
