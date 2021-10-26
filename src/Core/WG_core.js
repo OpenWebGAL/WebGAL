@@ -9,6 +9,7 @@ import {processSentence} from "./util/WG_util";
 
 // 读取下一条脚本
 function nextSentenceProcessor() {
+
     if(getRuntime().showingText){
         getRuntime().showingText = false;
         return;
@@ -19,7 +20,8 @@ function nextSentenceProcessor() {
     }//如果超过场景文本行数，停止处理语句。
     let thisSentence = getRuntime().currentScene[getStatus('SentenceID')];//此条语句的内容
     let command = thisSentence[0];//此条语句的控制文本（也可能是省略人物对话的语句）
-    let S_content = thisSentence[1]
+    let S_content = thisSentence[1];
+    console.log("------now running NSP------"+thisSentence);
     if (command === 'changeBG') {
         WG_ViewControl.VC_changeBG(S_content);//界面控制：换背景
         SyncCurrentStatus("bg_Name",S_content);//同步当前状态
@@ -70,7 +72,6 @@ function nextSentenceProcessor() {
     }
     else if(command === 'changeScene'){
         let sUrl = "game/scene/"+thisSentence[1];
-        let SceneName =  thisSentence[1];
         getScene(sUrl);
         SyncCurrentStatus('SceneName',S_content);
         return;
@@ -90,6 +91,7 @@ function nextSentenceProcessor() {
     }
     else if(command === 'bgm'){
         SyncCurrentStatus('bgm',S_content);
+        // getRuntime().currentInfo["bgm"] =  S_content;
         WG_ViewControl.loadBGM();
         increaseSentence();
         nextSentenceProcessor();

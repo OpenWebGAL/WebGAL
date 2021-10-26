@@ -191,6 +191,8 @@ class WG_ViewControl {
     static loadBGM() {
         console.log("loadingBGM")
         let bgmName = getRuntime().currentInfo["bgm"];
+        console.log("now playing "+bgmName);
+        console.log(getRuntime().currentInfo);
         if(bgmName === '' || bgmName === 'none'){
             ReactDOM.render(<div/>,document.getElementById("bgm"));
             return;
@@ -207,6 +209,13 @@ class WG_ViewControl {
                 playControl.volume = 0.25;
                 played = true;
             }
+            playControl.play();
+        }
+        if(played === false && document.getElementById("currentBGM"))
+        {
+            playControl.currentTime = 0;
+            playControl.volume = 0.25;
+            played = true;
             playControl.play();
         }
     }
@@ -293,7 +302,19 @@ class WG_ViewControl {
                             console.log("Playing! now url is"+url);
                             ReactDOM.render(elementAudio,document.getElementById("backlogVocal-"+i));
                             let singleControlBacklogAudio = document.getElementById("backlogVocalAudio-"+i);
+                            let played = false;
+                            played = false;
                             singleControlBacklogAudio.oncanplay = function (){
+                                if(!played){
+                                    singleControlBacklogAudio.currentTime = 0;
+                                    played = true;
+                                    singleControlBacklogAudio.play();
+                                }
+                                singleControlBacklogAudio.play();
+                            }
+                            if(!played){
+                                singleControlBacklogAudio.currentTime = 0;
+                                played = true;
                                 singleControlBacklogAudio.play();
                             }
                         }

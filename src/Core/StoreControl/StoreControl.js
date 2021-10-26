@@ -139,8 +139,13 @@ function loadSettings(){
 }
 
 function SyncCurrentStatus(statusKey,newStatus) {
-    if(statusKey ==='all')
-        currentInfo = newStatus;
+    if(statusKey ==='all'){
+        for (let StatusProp in newStatus){
+            if(currentInfo.hasOwnProperty(StatusProp)){
+                currentInfo[StatusProp] = newStatus[StatusProp];
+            }
+        }
+    }
     else
         currentInfo[statusKey] = newStatus;
 }
