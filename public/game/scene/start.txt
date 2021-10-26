@@ -1,11 +1,6 @@
 changeBG_next:testBG03.png;
 changeP_left_next:testFigure03.png;
 miniAvatar:minipic_test.png;
-varSet:a:1,b:2,c:3;
-varUp:a:1,b:1;
-varDrop:c:1,b:1;
-jump_varReach:a:2,label5;
-jump_varBelow:c:3,label6;
 雪之下雪乃:vocal-V1.ogg,你到得真早;
 vocal-V2.ogg,对不起，等很久了吗？;
 intro:独角戏之所以空虚，,并非因为只有一个演员，,而是观众的目光，,刺的好痛。;
@@ -20,8 +15,17 @@ miniAvatar:none;
 不调试overflow，整个界面就会发生异常
 比如一下子把页面拉伸得很长之类的事情
 但是想要调节好，还是一件很难的事情，我们都不清楚应该把高度定为多少。
+要不要测试变量？
+choose_label:{测试:label1,不了:label2};
+label:label2;
 接下来来测试一下带分支的情况怎么样
 choose:{测试jump:C1.txt,测试 choose jump:C2.txt};
+label:label1;
+varSet:a:1,b:2,c:3;
+varUp:a:1,b:1;
+varDrop:c:1,b:1;
+jump_varReach:a:2,label5;
+jump_varBelow:c:3,label6;
 label:label5;
 现在a是大于等于2的;
 jump_label:end;
