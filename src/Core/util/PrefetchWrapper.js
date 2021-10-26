@@ -138,7 +138,7 @@ class PrefetchWrapperSW {
             if (selfID !== this._batchID)
                 return;
             if (this._prefetchPipeline.length > 0) {
-                this._fetchBatch(selfID).then(() => {
+                this._fetchBatch(selfID).catch(() => { }).then(() => {
                     if (selfID === this._batchID) {
                         this._syncCacheInfo();
                         const id = setTimeout(() => tryBatch(id), this.minRequestInterval);
@@ -206,8 +206,8 @@ class PrefetchWrapperSW {
                     const nextAssets = extractAssetUrl(sceneText, {
                         sceneUrl: sceneUrl,
                         startLine: 1 + startIdx,
-                        urgentLine: 6,
-                        maxLine: 6
+                        urgentBudget: 6,  // todo: move this arg to param
+                        urgentOnly: true,
                     });
                     for (const asset of nextAssets.urgent) {
                         if (!this._cachedAssets.has(asset) && !this._prefetchPipeline.includes(asset))
@@ -227,9 +227,12 @@ class PrefetchWrapperSW {
     async _syncCacheInfo() {
         if (window.caches === undefined)
             return;
-        const cache = await caches.open(cacheName);
-        const keys = await cache.keys();
-        this._cachedAssets = new Set(keys.map((req) => req.url.substring(window.location.href.length)));
+        try {
+            const cache = await caches.open(cacheName);
+            const keys = await cache.keys();
+            this._cachedAssets = new Set(keys.map((req) => req.url.substring(window.location.href.length)));
+        }
+        catch { }
     }
 }
 
@@ -238,17 +241,27 @@ class PrefetchWrapperSW {
 /**
  * 解析场景中用到的资源
  * @param {String} sceneText 场景文本
- * @param {{sceneUrl: String, startLine: Number, urgentLine: Number, maxLine: Number}} options <br/>
+ * @param {{sceneUrl: String, startLine: Number, maxLine: Number, urgentBudget: Number, urgentOnly: Boolean}} options <br/>
  *      `sceneUrl` 场景文件 URL，用以去除自引用；<br/>
  *      `startLine` 开始解析的自然行（从 1 开始，含）；<br/>
- *      `urgentLine` 最大急用行数；<br/>
  *      `maxLine` 最大解析行数；<br/>
+ *      `urgentBudget` 最大急用资源数；<br/>
+ *      `urgentOnly` 只解析到急用资源预算耗尽；<br/>
  * @returns {{all: Set.<String>, map: Map.<String, Array.<String>>, urgent: Array.<String>}} 去重、去自引用的资源，格式 `game/type/name`<br/>
  *      `all` 全部；<br/>
  *      `map` 分类后，键: `background`, `bgm`, `figure`, `scene`, `vocal`；<br/>
  *      `urgent` 急用；<br/>
  */
-function extractAssetUrl(sceneText, { sceneUrl = '', startLine = 1, urgentLine = 8, maxLine = Number.POSITIVE_INFINITY } = {}) {
+function extractAssetUrl(
+    sceneText,
+    {
+        sceneUrl = '',
+        startLine = 1,
+        maxLine = Number.POSITIVE_INFINITY,
+        urgentBudget = 6,
+        urgentOnly = false
+    } = {}
+) {
     /** @type {Set.<String>} */
     const assetAll = new Set();
 
@@ -273,22 +286,23 @@ function extractAssetUrl(sceneText, { sceneUrl = '', startLine = 1, urgentLine =
     /**
      * @param {String} filetype
      * @param {String} filename
-     * @param {Number} currLineIdx start from 0
      */
-    const addToAssets = (filetype, filename, currLineIdx) => {
+    const addToAssets = (filetype, filename) => {
         const url = `game/${filetype}/${filename}`;
         if (assetAll.has(url) || (filetype === 'scene' && url === sceneUrl))
             return false;
         assetAll.add(url);
         assetMap.get(filetype).push(url);
-        if (currLineIdx + 1 - startLine < urgentLine)
+        if (urgentBudget > 0) {
             assetUrgent.push(url);
+            urgentBudget--;
+        }
         return true;
     };
 
     const lines = sceneText.split('\n');
     for (const [lineIdx, lineData] of lines.entries()) {
-        if (lineIdx + 1 - startLine >= maxLine)
+        if (lineIdx + 1 - startLine >= maxLine || (urgentOnly && urgentBudget <= 0))
             break;
 
         if (lineIdx + 1 < startLine)
@@ -312,7 +326,7 @@ function extractAssetUrl(sceneText, { sceneUrl = '', startLine = 1, urgentLine =
                 case 'changeBG':
                 case 'changeBG_next':
                     if (argOrDlg !== 'none')
-                        addToAssets('background', argOrDlg, lineIdx);
+                        addToAssets('background', argOrDlg);
                     break;
 
                 case 'changeP':
@@ -321,12 +335,13 @@ function extractAssetUrl(sceneText, { sceneUrl = '', startLine = 1, urgentLine =
                 case 'changeP_next':
                 case 'changeP_left_next':
                 case 'changeP_right_next':
+                case 'miniAvatar':
                     if (argOrDlg !== 'none')
-                        addToAssets('figure', argOrDlg, lineIdx);
+                        addToAssets('figure', argOrDlg);
                     break;
 
                 case 'changeScene':
-                    addToAssets('scene', argOrDlg, lineIdx);
+                    addToAssets('scene', argOrDlg);
                     // DO NOT return, the command may be skipped
                     break;
 
@@ -335,13 +350,13 @@ function extractAssetUrl(sceneText, { sceneUrl = '', startLine = 1, urgentLine =
                     for (const choice of choices) {
                         const args = choice.split(':');
                         if (args.length === 2 && args[1])
-                            addToAssets('scene', args[1], lineIdx);
+                            addToAssets('scene', args[1]);
                     }
                 }
                     break;
 
                 case 'bgm':
-                    addToAssets('bgm', argOrDlg, lineIdx);
+                    addToAssets('bgm', argOrDlg);
                     break;
 
                 // ignore these commands
@@ -349,13 +364,18 @@ function extractAssetUrl(sceneText, { sceneUrl = '', startLine = 1, urgentLine =
                 case 'label':
                 case 'jump_label':
                 case 'choose_label':
+                case 'varSet':
+                case 'varUp':
+                case 'varDrop':
+                case 'jump_varReach':
+                case 'jump_varBelow':
                     break;
 
                 // `cmdOrDlg` is name of character, `argOrDlg` is dialogue
                 default: {
                     const vocal = extractVocal(argOrDlg);
                     if (vocal)
-                        addToAssets('vocal', vocal, lineIdx);
+                        addToAssets('vocal', vocal);
                 }
                     break;
             }
@@ -364,7 +384,7 @@ function extractAssetUrl(sceneText, { sceneUrl = '', startLine = 1, urgentLine =
             // `cmdOrDlg` is continued dialogue
             const vocal = extractVocal(cmdOrDlg);
             if (vocal)
-                addToAssets('vocal', vocal, lineIdx);
+                addToAssets('vocal', vocal);
         }
     }
 
@@ -402,7 +422,10 @@ if (window.isSecureContext) {
         });
     }
     else {
+        // only private mode in Firefox falls in this category
         console.log('ServiceWorker not supported.');
+        // no ServiceWorker, no CacheStorage
+        // could be threated as BrowserCache
     }
 }
 else {
