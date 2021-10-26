@@ -2,7 +2,7 @@
 
 ### 一次编写，处处运行，无需网页开发基础，3分钟即可学会所有的语法，只要你有灵感，就可以立刻开始开始创作你自己的Galgame！
 
-Demo: http://msfasr.com/WebGAL_Demo_Page/
+Demo: https://msfasr.com/WebGAL_Demo_Page/
 
 ## 如果你是想要开发属于自己的 Galgame 的开发者，请下载发行版：
 

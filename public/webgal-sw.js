@@ -41,7 +41,7 @@ self.addEventListener('fetch', (ev) => {
         if (cacheResponse)
             return cacheResponse;
         const netResponse = await fetch(ev.request.clone());
-        if (netResponse.status ===200)
+        if (netResponse.status === 200)  // Response().ok is NOT HTTP OK
             await cache.put(ev.request, netResponse.clone());
         return netResponse;
     })());
