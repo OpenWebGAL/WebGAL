@@ -8,7 +8,7 @@ import {
 import {AllHiddenIgnore, queryWidgetState} from "../util/WG_util";
 import * as core from "../WG_core"
 import {WG_ViewControl} from "../ViewController/ViewControl";
-// import { prefetcher } from '../util/PrefetchWrapper';
+import { prefetcher } from '../util/PrefetchWrapper';
 
 
 
@@ -62,7 +62,7 @@ class userInteract {
                     getRuntime().CurrentBacklog = SaveBacklog[index];
                     console.log(CurrentBacklog);
                     SyncCurrentStatus('all',save);
-                    // prefetcher.onSceneChange(url, getStatus('SentenceID'));
+                    prefetcher.onSceneChange(url, getStatus('SentenceID'));
                 }
             }
         }
@@ -107,7 +107,7 @@ class userInteract {
                     WG_ViewControl.VC_restoreStatus(save);
                     SyncCurrentStatus('all',save);
                     getRuntime().CurrentBacklog[getRuntime().CurrentBacklog.length] = JSON.parse(JSON.stringify(getStatus("all")));
-                    // prefetcher.onSceneChange(url, getStatus('SentenceID'));
+                    prefetcher.onSceneChange(url, getStatus('SentenceID'));
                 }
             }
         }
