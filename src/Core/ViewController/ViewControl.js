@@ -150,6 +150,9 @@ class WG_ViewControl {
             getRuntime().currentInfo['bgm'] = savedStatus['bgm'];
             WG_ViewControl.loadBGM();
         }
+        if(savedStatus['miniAvatar']!=='' || savedStatus['miniAvatar'] !== 'none'){
+            WG_ViewControl.VC_showMiniAvatar(savedStatus['miniAvatar']);
+        }
         WG_ViewControl.playVocal();
         WG_ViewControl.showTextArray(textArray);
     }
@@ -452,6 +455,16 @@ class WG_ViewControl {
                 </div>
             </div>
         ReactDOM.render(element,document.getElementById('MesModel'))
+    }
+
+    static VC_showMiniAvatar(name){
+        if(name === '' || name === 'none'){
+            ReactDOM.render(<div/>,document.getElementById("miniAvatar"))
+            return;
+        }
+        let url = "game/figure/"+name;
+        let pic = <img src={url} className={"miniAvatar_pic"} alt={"miniAvatar"}/>
+        ReactDOM.render(pic,document.getElementById("miniAvatar"));
     }
 
 // -------- 紧急回避 --------

@@ -47,7 +47,8 @@ var currentInfo ={
     command:'',//语句指令
     choose:'',//选项列表
     vocal:'',//语音 文件名
-    bgm:''//背景音乐 文件名
+    bgm:'',//背景音乐 文件名
+    miniAvatar:''//小头像
 }
 
 // 初始化存档系统

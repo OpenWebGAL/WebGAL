@@ -142,6 +142,13 @@ function nextSentenceProcessor() {
         WG_ViewControl.showIntro(introText);
         return;
     }
+    else if(command === 'miniAvatar'){
+        WG_ViewControl.VC_showMiniAvatar(S_content);
+        SyncCurrentStatus('miniAvatar',S_content);
+        increaseSentence();
+        nextSentenceProcessor();
+        return;
+    }
     else {
         SyncCurrentStatus('command',processSentence(getStatus("SentenceID"))['name']);
         SyncCurrentStatus('showName',processSentence(getStatus("SentenceID"))['name']);

@@ -103,6 +103,7 @@ function Stage() {
                     </div>
                 </div>
             </div>
+
             <div id="chooseBox"/>
             <div id="bottomBox">
                 <div id="top_control">
@@ -140,6 +141,7 @@ function Stage() {
                         <Home theme="outline" size="28" fill="#f5f5f7"/>
                     </div>
                 </div>
+                <div id={"miniAvatar"}/>
             </div>
             <div id="bgm"/>
             <div id="vocal"/>
