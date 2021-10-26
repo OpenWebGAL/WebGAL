@@ -47,3 +47,23 @@
     background-color: rgba(255,255,255,0.15);
     box-shadow: 0 0 25px rgba(255,255,255,0.5);
 }
+
+#miniAvatar{
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 210px;
+    width: 210px;
+    z-index: 3;
+    padding: 0 0 0 0;
+    margin: 0 0 0 0 ;
+}
+
+.miniAvatar_pic{
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    max-height: 20vw;
+    max-width: 20vw;
+    object-fit: cover;
+}
