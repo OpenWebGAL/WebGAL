@@ -10,7 +10,7 @@ Bilibili 演示视频： https://www.bilibili.com/video/BV1nh411n7vt/
 
 https://github.com/MakinoharaShoko/WebGAL/releases/
 
-如果下载速度过慢，请尝试通过蓝奏云网盘下载： https://www.lanzouw.com/iRcdzvj3c8d
+如果下载速度过慢，请尝试通过蓝奏云网盘下载（链接已过期，3.5版本请在 Release 下载）： https://www.lanzouw.com/iRcdzvj3c8d
 
 ## 想要参与引擎开发的开发者请先阅读 DEV_NOTE
 
