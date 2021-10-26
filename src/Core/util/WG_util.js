@@ -125,7 +125,7 @@ function isMobile(){
 function MobileChangeStyle(){
     console.log("now is mobile view");
     document.getElementById('bottomBox').style.height = '45%';
-    document.getElementById('TitleModel').style.height = '20%';
+    document.getElementById('ReactRoot').style.fontSize = '65%';
 }
 
 export {processSentence,queryWidgetState,loadSettings,AllHiddenIgnore,isMobile,MobileChangeStyle}

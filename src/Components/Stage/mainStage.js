@@ -28,13 +28,15 @@ import {
     Save,
     SettingTwo
 } from "@icon-park/react";
+import {isMobile} from "../../Core/util/WG_util";
 
-window.onload = function () {
-    loadCookie();
-    loadSettings();
-    getGameInfo();
-    WG_ViewControl.loadBGM();
-}
+// window.onload = function () {
+//     loadCookie();
+//     loadSettings();
+//     getGameInfo();
+//     WG_ViewControl.loadBGM();
+//
+// }
 
 function Stage() {
     return (
@@ -101,6 +103,7 @@ function Stage() {
                     </div>
                 </div>
             </div>
+
             <div id="chooseBox"/>
             <div id="bottomBox">
                 <div id="top_control">
@@ -138,6 +141,7 @@ function Stage() {
                         <Home theme="outline" size="28" fill="#f5f5f7"/>
                     </div>
                 </div>
+                <div id={"miniAvatar"}/>
             </div>
             <div id="bgm"/>
             <div id="vocal"/>

@@ -8,11 +8,12 @@
 #mainTextWindow{
     /*background-color: rgba(86,108,115,0.8);*/
     /*background-color: rgba(0,0,0,0.5);*/
-    padding: 15px 10% 15px 10%;
+    padding: 15px 20% 15px 20%;
     width: 100%;
     margin: 0 0 0 0;
     z-index: 3;
-    background-image: linear-gradient(rgba(0,0,0,0.5) 0%,rgba(0,0,0,0.5) 40% ,rgba(0,0,0,0.5)100%);
+    background-image: linear-gradient(rgba(0,0,0,0) 0%,rgba(0,0,0,0.25) 35% ,rgba(0,0,0,0.25)80%,rgba(0,0,0,0.5)100%)
+    ,linear-gradient(to right,rgba(0,0,0,0) 0%,rgba(0,0,0,0.35) 25% ,rgba(0,0,0,0.35)75%,rgba(0,0,0,0)100%);
     /*box-shadow: 5px 5px 10px rgba(0,0,0,0.3);*/
     /*border-radius: 10px;*/
 }
@@ -36,12 +37,12 @@
 }
 #pName{
     color: #f5f5f7;
-    font-size: x-large;
+    font-size: 165%;
     /*background-color: rgba(255,255,255,0.7);*/
     padding: 3px 7px 3px 7px;
     /*border-radius: 5px;*/
     border-bottom: 2px solid rgba(255,255,255,0.5);
-    width: 30%;
+    width: 45%;
     /*background-color: rgba(0,0,0,0.5);*/
     /*border-radius: 5px;*/
 }
@@ -91,8 +92,8 @@
 .controlButton{
     /*border-bottom: 3px solid #FEDFE1;*/
     /*background-color: #FEDFE1;*/
-    padding: 3px 7px 3px 7px;
-    margin: 0 10px 0 10px;
+    padding: 3px 5px 3px 5px;
+    margin: 0 7px 0 7px;
     /*border-radius: 5px;*/
     color: #f5f5f7;
     text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
@@ -163,7 +164,7 @@
     border: 2px solid #8E354A;
     text-align: center;
     border-radius: 15px;
-    font-size: xx-large;
+    font-size: 175%;
 }
 
 .singleChoose:hover{
@@ -186,28 +187,29 @@
 }
 
 #TitleModel{
-    padding: 60px 0 0 0 ;
+    padding: 30px 0 20px 0 ;
     position: absolute;
     bottom: 0;
-    left: 0;
-    right: 0;
+    left: 25%;
+    right: 25%;
     /*width: 100vw;*/
     /*height: 13%;*/
     /*background-color: rgba(255,255,255,0.3);*/
-    background-image: linear-gradient(rgba(255,255,255,0) 0%,rgba(255,255,255,0.35) 50%,rgba(255,255,255,0.5)100%);
+    /*background-image: linear-gradient(rgba(255,255,255,0) 0%,rgba(255,255,255,0.35) 50%,rgba(255,255,255,0.5)100%);*/
     z-index: 12;
+    width: 50%;
 }
 
 .TitleSingleButton{
     font-family: Georgia;
     /*font-weight: bold;*/
-    padding: 10px 10px 10px 10px;
-    text-shadow: 0 0 5px rgba(255,255,255,1);
-    margin: 0 0 20px 0;
-    border-left: 2px solid #8E354A;
+    padding: 5px 30px 5px 30px;
+    text-shadow: 0 0 3px rgba(255,255,255,1);
+    margin: 0 0 7px 0;
+    /*border-top: 2px solid #8E354A;*/
     /*background-color: #f5f5f7;*/
     color: #8E354A;
-    width: 15%;
+    /*width: 15%;*/
     text-align: center;
     -webkit-animation: TitleButtonNoneChoose 0.75s;
     /*border: 1px solid rgba(0,0,0,0.2);*/
@@ -215,10 +217,27 @@
     /*box-shadow: 2px 2px 7px rgba(0,0,0,0.3);*/
 }
 
+#leftTitleButton{
+    border-top: none;
+}
+
 .TitleSingleButton:hover{
     background-color: rgba(255,255,255,0.2);
     box-shadow: 3px 3px 15px rgba(0,0,0,0.5);
     -webkit-animation: TitleButtonOnChoose 0.75s;
+}
+
+#setButtonBottom{
+    position: relative;
+    display: flex;
+    justify-content: center;
+    justify-items: center;
+    justify-self: center;
+    text-align: center;
+    top: 15px;
+    width: 100%;
+    font-size: 188%;
+    flex-flow: column;
 }
 
 @-webkit-keyframes TitleButtonOnChoose {
@@ -245,18 +264,9 @@
     }
 }
 
-#leftTitleButton{
-    border-left: none;
-}
 
-#setButtonBottom{
-    position: relative;
-    display: flex;
-    justify-content: center;
-    top: 15px;
-    width: 100%;
-    font-size: 188%;
-}
+
+
 
 #MesModel{
     width: 100%;
