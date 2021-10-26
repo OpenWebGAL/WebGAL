@@ -41,7 +41,7 @@ self.addEventListener('fetch', (ev) => {
         if (cacheResponse)
             return cacheResponse;
         const netResponse = await fetch(ev.request.clone());
-        if (netResponse.ok)
+        if (netResponse.status ===200)
             await cache.put(ev.request, netResponse.clone());
         return netResponse;
     })());
