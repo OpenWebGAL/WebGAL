@@ -48,30 +48,30 @@ function nextSentenceProcessor() {
             SyncCurrentStatus('fig_Name',S_content);
             increaseSentence();
             nextSentenceProcessor();
-            break;  
+            return;  
         case 'changeP_left_next':
             WG_ViewControl.VC_changeP(S_content,'left');
             SyncCurrentStatus('fig_Name_left',S_content);
             increaseSentence();
             nextSentenceProcessor();
-            break; 
+            return; 
         case 'changeP_right_next':
             WG_ViewControl.VC_changeP(S_content,'right')
             SyncCurrentStatus('fig_Name_right',S_content);
             increaseSentence();
             nextSentenceProcessor();
-            break;  
+            return;  
         case 'changeBG_next':  
             WG_ViewControl.VC_changeBG(S_content);
             increaseSentence();
             SyncCurrentStatus("bg_Name",S_content);
             nextSentenceProcessor();
-            break;    
+            return;    
         case 'changeScene':  
             let sUrl = "game/scene/"+thisSentence[1];
             getScene(sUrl);
             SyncCurrentStatus('SceneName',S_content);
-            break;  
+            return;  
         case 'choose':  
             SyncCurrentStatus('command',command);
             SyncCurrentStatus('choose',S_content);
@@ -83,13 +83,13 @@ function nextSentenceProcessor() {
             selection[i] = selection[i].split(":");
             }
             WG_ViewControl.VC_choose(selection,'scene');
-            break; 
+            return; 
         case 'bgm':  
             SyncCurrentStatus('bgm',S_content);
             WG_ViewControl.loadBGM();
             increaseSentence();
             nextSentenceProcessor();
-            break;
+            return;
         case 'choose_label':  
             SyncCurrentStatus('command',command);
             SyncCurrentStatus('choose',S_content);
@@ -101,7 +101,7 @@ function nextSentenceProcessor() {
             selection2[i] = selection2[i].split(":");
             }
             WG_ViewControl.VC_choose(selection2,'label')
-            break; 
+            return; 
         case 'jump_label':  
             let lab_name = thisSentence[1];
             //find the line of the label:
@@ -125,20 +125,20 @@ function nextSentenceProcessor() {
         case 'label':  
             increaseSentence();
             nextSentenceProcessor();
-            break;
+            return;
         case 'intro':  
             let introText = thisSentence[1];
             WG_ViewControl.showIntro(introText);
-            break;
+            return;
         case 'miniAvatar':  
             WG_ViewControl.VC_showMiniAvatar(S_content);
             SyncCurrentStatus('miniAvatar',S_content);
             increaseSentence();
             nextSentenceProcessor();
-            break;
+            return;
         case command.substr(0,3) === "var" || command.substr(0,8) === "jump_var":
             varProcess(command,S_content);
-            break;        
+            return;        
         default:
             SyncCurrentStatus('command',processSentence(getStatus("SentenceID"))['name']);
             SyncCurrentStatus('showName',processSentence(getStatus("SentenceID"))['name']);
