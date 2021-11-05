@@ -364,19 +364,22 @@ a:visited{
     /*overflow: hidden;*/
     object-fit: cover;
     -webkit-animation: showSoftly 0.5s;
+    float: right;
 }
 #figureImage_right{
     right: 2%;
-    width: 98%;
+    /*width: 98%;*/
     position: absolute;
     display: flex;
-    justify-content: right;
+    /*justify-content: right;*/
     top:5px;
     bottom: 0;
     z-index:2;
     -webkit-animation: showSoftly 0.5s;
+    float: right;
     /*min-width: 600px;*/
     /*overflow: hidden;*/
+    padding: 0 0 0 0;
 }
 
 #backlog{
