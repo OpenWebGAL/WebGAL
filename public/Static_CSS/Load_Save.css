@@ -262,11 +262,15 @@
 }
 
 .mini_fig_right{
+    display: block;
+    right: 2%;
     position: absolute;
     z-index: 22;
-    width: 100%;
+    /*width: 100%;*/
     height: 100%;
-    display: flex;
-    justify-content: right;
-    justify-items: right;
+    /*display: flex;*/
+    /*justify-content: right;*/
+    /*justify-items: right;*/
+    float: right;
+    text-align: right;
 }
