@@ -4,13 +4,11 @@
 
 Demo: https://msfasr.com/WebGAL_Demo_Page/
 
-Bilibili 演示视频： https://www.bilibili.com/video/BV1nh411n7vt/
-
 ## 如果你是想要开发属于自己的 Galgame 的开发者，请下载发行版：
 
 https://github.com/MakinoharaShoko/WebGAL/releases/
 
-如果下载速度过慢，请尝试通过蓝奏云网盘下载： https://www.lanzouw.com/in3Z3vvr0ih
+如果下载速度过慢，请尝试通过蓝奏云网盘下载： https://www.lanzouw.com/iRcdzvj3c8d
 
 ## 想要参与引擎开发的开发者请先阅读 DEV_NOTE
 
