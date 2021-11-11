@@ -382,7 +382,7 @@ class WG_ViewControl {
             }
             if(i > textArray.length +(getRuntime().autoWaitTime/35)){
                 if(getRuntime().auto === 1){
-                    if(document.getElementById('currentVocal') && fast === 0){
+                    if(document.getElementById('currentVocal') && getRuntime().fast === 0){
                         if(document.getElementById('currentVocal').ended)
                         {
                             clearInterval(interval);

@@ -210,23 +210,29 @@ class LoadMainModel extends  React.Component{
                 let miniPic = ren_miniPic(i);
                 let backUrl = "game/background/"+Saves[i]["bg_Name"];
                 let temp = <div className="LoadSingleElement LS_singleElement" key={i} onClick={()=>{userInteract.LoadSavedGame(i)}}>
-                    <div className={"ren"} key={i} style={{backgroundImage: `url(${backUrl})`}}>
-                        {miniPic}
+                    <div className={"LS_Title"}>
+                        <span className={"LS_Title_index"}>{i}</span>
+                        <span className={"LS_Title_time"}>{"2021/10/28 21:20:00"}</span>
                     </div>
-                    <div>
-                        <div className="LSE_top">
-                            <span className={"LSE_index"}>{i}</span>
-                            <span className={"LSE_name"}>{thisButtonName}</span>
+                    <div className={"LS_infoArea"}>
+                        <div className={"ren"} key={i} style={{backgroundImage: `url(${backUrl})`}}>
+                            {miniPic}
                         </div>
-                        <div className="LSE_bottom">
-                            {thisButtonText}
+                        <div className={"LS_textArea"}>
+                            <div className="LSE_top">
+                                <span className={"LSE_index"}>{i}</span>
+                                <span className={"LSE_name"}>{thisButtonName}</span>
+                            </div>
+                            <div className="LSE_bottom">
+                                {thisButtonText}
+                            </div>
                         </div>
                     </div>
                 </div>
                 this.SaveButtons.push(temp);
             }else
             {
-                let temp = <div className="LoadSingleElement LS_singleElement" key={i}>空</div>
+                let temp = <div className="LoadSingleElement LS_singleElement" key={i}> </div>
                 this.SaveButtons.push(temp);
                 // console.log(i)
             }
@@ -300,23 +306,29 @@ class SaveMainModel extends  React.Component{
                 let miniPic = ren_miniPic(i);
                 let backUrl = "game/background/"+Saves[i]["bg_Name"];
                 let temp = <div className="SaveSingleElement LS_singleElement" key={i} onClick={()=>{this.save_onSaved(i)}}>
-                    <div className={"ren"} key={i} style={{backgroundImage: `url(${backUrl})`}}>
-                        {miniPic}
+                    <div className={"LS_Title"}>
+                        <span className={"LS_Title_index S_Title_index"}>{i}</span>
+                        <span className={"LS_Title_time S_Title_time"}>{"2021/10/28 21:20:00"}</span>
                     </div>
-                    <div>
-                        <div className="LSE_top">
-                            <span className={"LSE_index"}>{i}</span>
-                            <span className={"LSE_name"}>{thisButtonName}</span>
+                    <div className={"LS_infoArea"}>
+                        <div className={"ren"} key={i} style={{backgroundImage: `url(${backUrl})`}}>
+                            {miniPic}
                         </div>
-                        <div className="LSE_bottom">
-                            {thisButtonText}
+                        <div className={"LS_textArea"}>
+                            <div className="LSE_top">
+                                <span className={"LSE_index"}>{i}</span>
+                                <span className={"LSE_name"}>{thisButtonName}</span>
+                            </div>
+                            <div className="LSE_bottom">
+                                {thisButtonText}
+                            </div>
                         </div>
                     </div>
                 </div>
                 this.SaveButtons.push(temp);
             }else
             {
-                let temp = <div className="SaveSingleElement LS_singleElement" key={i} onClick={()=>{this.save_NonSaved(i)}}>空</div>
+                let temp = <div className="SaveSingleElement LS_singleElement" key={i} onClick={()=>{this.save_NonSaved(i)}}> </div>
                 this.SaveButtons.push(temp);
                 // console.log(i)
             }
