@@ -202,6 +202,8 @@ class WG_ViewControl {
         }
         let url = "./game/bgm/"+bgmName;
         let audio = <audio src={url} id={"currentBGM"} loop="loop"/>
+        console.log("replace old bgm with an empty div")
+        ReactDOM.render(<div/>,document.getElementById("bgm"));
         ReactDOM.render(audio,document.getElementById("bgm"));
         let playControl = document.getElementById("currentBGM");
         let played = false;
