@@ -12,7 +12,7 @@ https://github.com/MakinoharaShoko/WebGAL/releases/
 
 如果下载速度过慢，请尝试通过蓝奏云网盘下载： https://www.lanzouw.com/in3Z3vvr0ih
 
-## 想要参与引擎开发的开发者请先阅读 DEV_NOTE
+> 想要参与引擎开发的开发者请先阅读 DEV_NOTE
 
 ## 如何在本地运行WebGAL？
 
@@ -34,7 +34,15 @@ node app.js
 
 即可开始调试你的游戏。
 
-# 快速上手教程：
+### 如何将我的Galgame部署到互联网上，并使他人能够访问？
+
+首先，请知悉，可以部署到互联网的引擎应该是**发行版**，而不是源代码。
+
+复制/WebGAL 下的文件(不是文件夹，是/WebGAL 文件夹下的文件)到你想要部署的云服务器的指定目录下，或是部署到GitHub Pages。
+
+如果你使用源代码进行调试，你可以通过 npm run build 或 yarn run build 来创建一个静态网页（在/build 文件夹），然后将这个文件夹内的内容部署到 GitHub Pages 或你的云服务器上。
+
+# 游戏制作快速上手教程：
 
 现在，你应该已经运行起来了一个调试服务器，接下来让我来教你如何编写你自己的剧本
 
