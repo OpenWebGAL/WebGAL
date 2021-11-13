@@ -132,6 +132,7 @@ class WG_ViewControl {
                 selection[i] = selection[i].split(":");
             }
             let choose_mode = '';
+            // eslint-disable-next-line default-case
             switch (command){
                 case 'choose':
                     choose_mode = 'scene';
@@ -160,7 +161,9 @@ class WG_ViewControl {
     static VC_showSettings(){
         let settingInterface = <div>
             <div className={"settingsItemsList"}>
+                {/* eslint-disable-next-line react/jsx-pascal-case */}
                 <SettingButtons_font/>
+                {/* eslint-disable-next-line react/jsx-pascal-case */}
                 <SettingButtons_speed/>
                 <div className={"deleteCookie"} onClick={()=>{WG_ViewControl.showMesModel('你确定要清除缓存吗','要','不要',clearCookie)}}>清除所有设置选项以及存档</div>
                 <ImporterExporter />
