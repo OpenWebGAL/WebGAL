@@ -152,6 +152,16 @@ function nextSentenceProcessor() {
     else if(command.substr(0,3) === "var" || command.substr(0,8) === "jump_var"){
         varProcess(command,S_content);
         return;
+    }else if(command === 'showVar'){
+        console.log("showing var");
+        SyncCurrentStatus('command', command);
+        SyncCurrentStatus('showName',command);
+        SyncCurrentStatus('showText',JSON.stringify(getRuntime().currentInfo.GameVar));
+        WG_ViewControl.VC_textShow(getStatus('showName'),getStatus('showText'));
+        saveBacklogNow = true;
+    }else if(command.substr(0,2) === 'if'){
+        ifJump(command,S_content);
+        return;
     }
     else {
         SyncCurrentStatus('command',processSentence(getStatus("SentenceID"))['name']);
@@ -286,6 +296,75 @@ function varProcess(command,content){
     console.log(getRuntime().currentInfo.GameVar);
     increaseSentence();
     nextSentenceProcessor();
+}
+
+function ifJump(command,content){
+    let judgeBody=command.split(')')[0].split('(')[1];
+    console.log("judgeBody is: ");
+    console.log(judgeBody);
+    console.log(judgeBody.split('<=')[1]);
+    let jumpActivated = false;
+    if(judgeBody.split('<=')[1]){
+        console.log("case <=")
+        if(getRuntime().currentInfo.GameVar[judgeBody.split('<=')[0]] <= parseInt(judgeBody.split('<=')[1])){
+            console.log("jump to"+content);
+            jumpSentence(content);
+            jumpActivated = true;
+        }
+    }else if(judgeBody.split('>=')[1]){
+        console.log("case >=")
+        if(getRuntime().currentInfo.GameVar[judgeBody.split('>=')[0]] >= parseInt(judgeBody.split('>=')[1])){
+            console.log("jump to"+content);
+            jumpSentence(content);
+            jumpActivated = true;
+        }
+    }else if(judgeBody.split('<')[1]){
+        console.log("case <")
+        if(getRuntime().currentInfo.GameVar[judgeBody.split('<')[0]] < parseInt(judgeBody.split('<')[1])){
+            console.log("jump to"+content);
+            jumpSentence(content);
+            jumpActivated = true;
+        }
+    }else if(judgeBody.split('>')[1]){
+        console.log("case >")
+        if(getRuntime().currentInfo.GameVar[judgeBody.split('>')[0]] > parseInt(judgeBody.split('>')[1])){
+            console.log("jump to"+content);
+            jumpSentence(content);
+            jumpActivated = true;
+        }
+    }else if(judgeBody.split('=')[1]){
+        console.log("case = ")
+        if(getRuntime().currentInfo.GameVar[judgeBody.split('=')[0]] === parseInt(judgeBody.split('=')[1])){
+            console.log("jump to"+content);
+            jumpSentence(content);
+            jumpActivated = true;
+        }
+    }
+    if(!jumpActivated){
+        increaseSentence();
+        nextSentenceProcessor();
+    }
+}
+function jumpSentence(lab_name){
+    //find the line of the label:
+    let find = false;
+    let jmp_sentence = 0;
+    for (let i = 0; i < getRuntime().currentScene.length; i++) {
+        if(getRuntime().currentScene[i][0] === 'label' && getRuntime().currentScene[i][1] === lab_name){
+            find = true;
+            jmp_sentence = i;
+        }
+    }
+    if(find){
+        SyncCurrentStatus("SentenceID",jmp_sentence);
+        nextSentenceProcessor();
+
+    }else
+    {
+        increaseSentence();
+        nextSentenceProcessor();
+
+    }
 }
 
 export {nextSentenceProcessor,increaseSentence}
