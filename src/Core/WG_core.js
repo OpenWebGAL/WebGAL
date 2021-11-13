@@ -162,6 +162,11 @@ function nextSentenceProcessor() {
     }else if(command.substr(0,2) === 'if'){
         ifJump(command,S_content);
         return;
+    }else if(command === 'setVar'){
+        setVar(S_content)
+        increaseSentence();
+        nextSentenceProcessor();
+        return;
     }
     else {
         SyncCurrentStatus('command',processSentence(getStatus("SentenceID"))['name']);
@@ -365,6 +370,44 @@ function jumpSentence(lab_name){
         nextSentenceProcessor();
 
     }
+}
+
+function setVar(content) {
+    let setList = content.split(',');
+    for (let i = 0; i < setList.length; i++) {
+        let setSent = setList[i];
+        setSent = setSent.split('=');
+        let setVarName = setSent[0];
+        let setVarValue = setSent[1];
+        if(setVarValue.split('+')[1]){
+            console.log("case +")
+            let valueLeft = getRuntime().currentInfo.GameVar[setVarValue.split('+')[0]];
+            let valueRight = parseInt(setVarValue.split('+')[1]);
+            getRuntime().currentInfo.GameVar[setVarName] = valueLeft+valueRight;
+        }
+        else if(setVarValue.split('-')[1]){
+            console.log("case -")
+            let valueLeft = getRuntime().currentInfo.GameVar[setVarValue.split('-')[0]];
+            let valueRight = parseInt(setVarValue.split('-')[1]);
+            getRuntime().currentInfo.GameVar[setVarName] = valueLeft-valueRight;
+        }
+        else if(setVarValue.split('*')[1]){
+            console.log("case *")
+            let valueLeft = getRuntime().currentInfo.GameVar[setVarValue.split('*')[0]];
+            let valueRight = parseInt(setVarValue.split('*')[1]);
+            getRuntime().currentInfo.GameVar[setVarName] = valueLeft*valueRight;
+        }
+        else if(setVarValue.split('/')[1]){
+            console.log("case /")
+            let valueLeft = getRuntime().currentInfo.GameVar[setVarValue.split('/')[0]];
+            let valueRight = parseInt(setVarValue.split('/')[1]);
+            getRuntime().currentInfo.GameVar[setVarName] = valueLeft/valueRight;
+        }else {
+            console.log("case value")
+            getRuntime().currentInfo.GameVar[setVarName] = parseInt(setVarValue);
+        }
+    }
+    console.log(getRuntime().currentInfo.GameVar);
 }
 
 export {nextSentenceProcessor,increaseSentence}

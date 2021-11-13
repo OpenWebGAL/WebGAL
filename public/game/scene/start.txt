@@ -20,9 +20,10 @@ label:label2;
 接下来来测试一下带分支的情况怎么样
 choose:{测试jump:C1.txt,测试 choose jump:C2.txt};
 label:label1;
-varSet:a:1,b:2,c:3;
-varUp:a:1,b:1;
-varDrop:c:1,b:1;
+setVar:a=2;
+setVar:a=a+2;
+setVar:b=3;
+setVar:b=a+3;
 showVar;
 if(a>=3):label5;
 没有发生跳转
