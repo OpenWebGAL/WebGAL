@@ -325,7 +325,7 @@ setVar:a=3,b=2;//a的值是3，b的值是2
 setVar:a=a+1;//a的值+1
 setVar:a=b+3;//a的值是b的值+3
 setVar:a=1+a;//错误：不支持这种写法，+的前面应该是一个变量。
-showVar;//该语句没有参数，直接输入 showVar; 即可在文本框里打印出所有的变量及其值。
+showVar:all;//该语句没有参数，直接输入 showVar:all; 即可在文本框里打印出所有的变量及其值。
 if(a>=3):label1;//当a>=3时，跳转到label1
 if(c=3):label2;//当c=3时，跳转到label2
 if(a=c):label2;//错误：不支持这种写法

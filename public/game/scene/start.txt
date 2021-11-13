@@ -24,7 +24,7 @@ setVar:a=2;
 setVar:a=a+2;
 setVar:b=3;
 setVar:b=a+3;
-showVar;
+showVar:all;
 if(a>=3):label5;
 没有发生跳转
 label:label5;
