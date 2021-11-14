@@ -23,6 +23,7 @@ class userInteract {
         let tempBacklog = JSON.stringify(getRuntime().CurrentBacklog);
         console.log(tempBacklog)
         SaveBacklog[index]= JSON.parse(tempBacklog);
+        Saves[index].saveTime = new Date().toLocaleDateString() +' '+ new Date().toLocaleTimeString('chinese',{hour12:false});
         writeCookie();
     }
 
