@@ -3,7 +3,6 @@ changeP_left_next:testFigure03.png;
 miniAvatar:minipic_test.png;
 雪之下雪乃:vocal-V1.ogg,你到得真早;
 vocal-V2.ogg,对不起，等很久了吗？;
-intro:独角戏之所以空虚，,并非因为只有一个演员，,而是观众的目光，,刺的好痛。;
 bgm:夏影.mp3;
 changeP_right_next:testFigure04.png;
 miniAvatar:none;
@@ -21,11 +20,13 @@ label:label2;
 接下来来测试一下带分支的情况怎么样
 choose:{测试jump:C1.txt,测试 choose jump:C2.txt};
 label:label1;
-varSet:a:1,b:2,c:3;
-varUp:a:1,b:1;
-varDrop:c:1,b:1;
-jump_varReach:a:2,label5;
-jump_varBelow:c:3,label6;
+setVar:a=2;
+setVar:a=a+2;
+setVar:b=3;
+setVar:b=a+3;
+showVar:all;
+if(a>=3):label5;
+没有发生跳转
 label:label5;
 现在a是大于等于2的;
 jump_label:end;
