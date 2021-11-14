@@ -419,13 +419,13 @@ class WG_ViewControl {
     static showTextPreview(text){
         getRuntime().onTextPreview = getRuntime().onTextPreview+1;
         let textArray = text.split("");
-        if(getRuntime().Settings["font_size"] === 'small'){
-            document.getElementById('previewDiv').style.fontSize = '150%';
-        }else if(getRuntime().Settings["font_size"] === 'medium'){
-            document.getElementById('previewDiv').style.fontSize = '200%';
-        }else if(getRuntime().Settings["font_size"] === 'large'){
-            document.getElementById('previewDiv').style.fontSize = '250%';
-        }
+        // if(getRuntime().Settings["font_size"] === 'small'){
+        //     document.getElementById('previewDiv').style.fontSize = '150%';
+        // }else if(getRuntime().Settings["font_size"] === 'medium'){
+        //     document.getElementById('previewDiv').style.fontSize = '200%';
+        // }else if(getRuntime().Settings["font_size"] === 'large'){
+        //     document.getElementById('previewDiv').style.fontSize = '250%';
+        // }
         ReactDOM.render(<span> </span>, document.getElementById('previewDiv'));
         let elementArray = [];
         let i = 0;
@@ -446,13 +446,13 @@ class WG_ViewControl {
                 interval2 = setInterval(showSingle,getRuntime().textShowWaitTime);
                 i = 0;
                 elementArray = [];
-                if(getRuntime().Settings["font_size"] === 'small'){
-                    document.getElementById('previewDiv').style.fontSize = '150%';
-                }else if(getRuntime().Settings["font_size"] === 'medium'){
-                    document.getElementById('previewDiv').style.fontSize = '200%';
-                }else if(getRuntime().Settings["font_size"] === 'large'){
-                    document.getElementById('previewDiv').style.fontSize = '250%';
-                }
+                // if(getRuntime().Settings["font_size"] === 'small'){
+                //     document.getElementById('previewDiv').style.fontSize = '150%';
+                // }else if(getRuntime().Settings["font_size"] === 'medium'){
+                //     document.getElementById('previewDiv').style.fontSize = '200%';
+                // }else if(getRuntime().Settings["font_size"] === 'large'){
+                //     document.getElementById('previewDiv').style.fontSize = '250%';
+                // }
             }
         }
     }
