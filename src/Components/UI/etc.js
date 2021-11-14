@@ -212,7 +212,7 @@ class LoadMainModel extends  React.Component{
                 let temp = <div className="LoadSingleElement LS_singleElement" key={i} onClick={()=>{userInteract.LoadSavedGame(i)}}>
                     <div className={"LS_Title"}>
                         <span className={"LS_Title_index"}>{i}</span>
-                        <span className={"LS_Title_time"}>{"2021/10/28 21:20:00"}</span>
+                        <span className={"LS_Title_time"}>{" "}</span>
                     </div>
                     <div className={"LS_infoArea"}>
                         <div className={"ren"} key={i} style={{backgroundImage: `url(${backUrl})`}}>
@@ -308,7 +308,7 @@ class SaveMainModel extends  React.Component{
                 let temp = <div className="SaveSingleElement LS_singleElement" key={i} onClick={()=>{this.save_onSaved(i)}}>
                     <div className={"LS_Title"}>
                         <span className={"LS_Title_index S_Title_index"}>{i}</span>
-                        <span className={"LS_Title_time S_Title_time"}>{"2021/10/28 21:20:00"}</span>
+                        <span className={"LS_Title_time S_Title_time"}>{" "}</span>
                     </div>
                     <div className={"LS_infoArea"}>
                         <div className={"ren"} key={i} style={{backgroundImage: `url(${backUrl})`}}>
