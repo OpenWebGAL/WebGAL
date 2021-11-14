@@ -321,11 +321,14 @@ label:label_2;
 #### 语句介绍：
 
 ```
-varSet:a:1,b:1;//声明两个变量，a的值为1，b的值为1
-varUp:a:2,b:3;//a的值提升2，b的值提升3
-varDrop:a:1,b:3;//a的值降低1，b的值降低3
-jump_varReach:a:3,label1;//当a>=3时，跳转到label1
-jump_varBelow:a:3,label2;//当a<3时，跳转到label2
+setVar:a=3,b=2;//a的值是3，b的值是2
+setVar:a=a+1;//a的值+1
+setVar:a=b+3;//a的值是b的值+3
+setVar:a=1+a;//错误：不支持这种写法，+的前面应该是一个变量。
+showVar:all;//该语句没有参数，直接输入 showVar:all; 即可在文本框里打印出所有的变量及其值。
+if(a>=3):label1;//当a>=3时，跳转到label1
+if(c=3):label2;//当c=3时，跳转到label2
+if(a=c):label2;//错误：不支持这种写法
 label:label1;
 ......
 ......
@@ -336,6 +339,29 @@ label:label2;
 jump_label:end;
 label:end;
 ......
+......
+
+//备注：
+//以下是旧的写法，在现在的版本中仍然生效，并且与if语句的执行效果相同，但是不建议使用。
+//保留这种写法是为了能够向下兼容旧的脚本，但是如果你正在写新的脚本，你可以直接用上面的新脚本。
+jump_varReach:a:3,label1;//当a>=3时，跳转到label1
+jump_varBelow:a:3,label2;//当a<3时，跳转到label2
+varSet:a:1,b:1;//声明两个变量，a的值为1，b的值为1
+varUp:a:2,b:3;//a的值提升2，b的值提升3
+varDrop:a:1,b:3;//a的值降低1，b的值降低3
+```
+
+#### 如果我希望用if跳转到其他场景（也就是其他txt文件），我该怎么做？
+
+**示例：**
+
+```
+varSet:a:0;//设置一个变量a（现在是0）
+varUp:a:1;//现在a=1
+if(a=1):label1;//a=1时跳到label1
+label:label1;//以下是label1的执行内容
+changeScene:Ch2.txt;//在label1执行的语句内跳到Ch2.txt
+......现在执行的是Ch2.txt的脚本了.......
 ......
 ```
 
