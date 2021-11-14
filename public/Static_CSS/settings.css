@@ -12,7 +12,7 @@
     -webkit-animation: showSoftly 0.5s;
     padding: 30px 30px 30px 30px;
     box-shadow: 5px 5px 15px rgba(0,0,0,0.5);
-    font-size: 135%;
+    font-size: 100%;
 }
 
 #settingsMainBox{
@@ -24,7 +24,7 @@
 }
 
 #settingsTitle{
-    font-size: 250%;
+    font-size: 275%;
 }
 
 #close{
@@ -34,6 +34,10 @@
 {
     from {opacity: 0;}
     to {opacity: 100%;}
+}
+
+div#settingItems{
+    font-size: 135%;
 }
 
 .settingItemTitle{
@@ -94,7 +98,7 @@
 #textPreview{
     color: #f5f5f7;
     background-color: rgba(0,0,0,0.4);
-    font-size: 100%;
+    font-size: unset;
     padding: 10px 10px 10px 10px;
     margin: 10px 10px 10px 10px;
     border: 3px solid rgba(255,255,255,1);
