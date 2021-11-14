@@ -179,6 +179,13 @@ class userInteract {
     static onSetting(){
         loadCookie();
         WG_ViewControl.VC_showSettings();
+        if(getRuntime().Settings["font_size"] === 'small'){
+            document.getElementById('previewDiv').style.fontSize = '150%';
+        }else if(getRuntime().Settings["font_size"] === 'medium'){
+            document.getElementById('previewDiv').style.fontSize = '200%';
+        }else if(getRuntime().Settings["font_size"] === 'large'){
+            document.getElementById('previewDiv').style.fontSize = '250%';
+        }
     }
 
 //打开读档菜单

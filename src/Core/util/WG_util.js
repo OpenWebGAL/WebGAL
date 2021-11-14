@@ -126,6 +126,8 @@ function MobileChangeStyle(){
     console.log("now is mobile view");
     document.getElementById('bottomBox').style.height = '45%';
     document.getElementById('ReactRoot').style.fontSize = '65%';
+    document.getElementById('mainTextWindow').style.padding = '5px 20% 5px 20%';
+    document.getElementById('SceneText').style.padding = '5px 0 0 0';
 }
 
 export {processSentence,queryWidgetState,loadSettings,AllHiddenIgnore,isMobile,MobileChangeStyle}
