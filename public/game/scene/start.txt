@@ -11,6 +11,7 @@ setFigAni:right,upIn,1s;
 miniAvatar:none;
 比企谷八幡:vocal-V3.ogg,刚到而已;
 雪之下雪乃:vocal-V4.ogg,方便帮我开门吗;
+setFigAni:right,shake,0.5s;
 setBgAni:bg_down,5s;
 changeBG_next:0000e.png;
 接下来水一些内容

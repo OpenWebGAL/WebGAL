@@ -53,3 +53,21 @@
         opacity: 0;
     }
 }
+
+@-webkit-keyframes shake {
+    0%{
+        transform: translate(0,0);
+    }
+
+    25%{
+        transform: translate(-2%,0);
+    }
+
+    75%{
+        transform: translate(2%,0);
+    }
+
+    100%{
+        transform: translate(0,0);
+    }
+}
