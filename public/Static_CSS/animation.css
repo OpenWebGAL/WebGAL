@@ -1,0 +1,55 @@
+@-webkit-keyframes centerIn {
+    0%{
+        opacity: 0;
+        transform: scale(1,1);
+    }
+
+    100%{
+        opacity: 1;
+        transform: scale(1,1);
+    }
+}
+
+@-webkit-keyframes upIn {
+    0%{
+        opacity: 0;
+        transform: scale(1,1) translate(0,20%);
+    }
+
+    100%{
+        opacity: 1;
+        transform: scale(1,1) translate(0,0);
+    }
+}
+
+@-webkit-keyframes bg_down {
+    0%{
+        opacity: 0;
+        transform: scale(1.1,1.1) translate(0,-5%);
+    }
+
+    100%{
+        opacity: 1;
+        transform: scale(1,1) translate(0,0);
+    }
+}
+
+@-webkit-keyframes bg_softIn {
+    0%{
+        opacity: 0;
+    }
+
+    100%{
+        opacity: 1;
+    }
+}
+
+@-webkit-keyframes hideBG {
+    0%{
+        opacity: 1;
+    }
+
+    100%{
+        opacity: 0;
+    }
+}

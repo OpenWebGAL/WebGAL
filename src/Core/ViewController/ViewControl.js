@@ -21,7 +21,25 @@ import '@icon-park/react/styles/index.css';
 
 class WG_ViewControl {
     static VC_changeBG(bg_name){
-        document.getElementById('mainBackground').style.backgroundImage = "url('game/background/" + bg_name + "')";
+        //把背景复制一份成为旧背景，方便做渐变动画
+        let BG = document.getElementById('mainBackground');
+        let oldBG = BG.cloneNode(true);
+        //如果有旧背景节点，删除之
+        if(document.getElementById('oldBG')){
+            document.getElementById('oldBG').parentNode.removeChild(
+                document.getElementById('oldBG')
+            )
+        }
+        oldBG.setAttribute('id','oldBG');
+        oldBG.style.webkitAnimation = 'hideBG 5s';
+        oldBG.style.animationFillMode = 'forwards';
+        console.log(oldBG);
+        BG.parentNode.appendChild(oldBG);
+        BG.style.backgroundImage = "url('game/background/" + bg_name + "')";
+        let newBG=BG.cloneNode(true);
+        let parentNodeBG = BG.parentNode;
+        parentNodeBG.removeChild(BG);
+        parentNodeBG.appendChild(newBG);
     }
 
     static VC_changeP(P_name,pos) {
@@ -478,6 +496,20 @@ class WG_ViewControl {
         let url = "game/figure/"+name;
         let pic = <img src={url} className={"miniAvatar_pic"} alt={"miniAvatar"}/>
         ReactDOM.render(pic,document.getElementById("miniAvatar"));
+    }
+
+    static VC_setAnimationByClass(name,animate,time){
+        console.log('setting animate by class on: '+name+'set to '+animate);
+        let aniString = '-webkit-animation: '+animate+' '+time;
+        let editList = document.getElementsByClassName(name);
+        for (let i = 0; i < editList.length; i++) {
+            editList[i].setAttribute('style',aniString)
+        }
+    }
+
+    static VC_setAnimationById(id,animate,time){
+        let aniString = animate+' '+time;
+        document.getElementById(id).style.webkitAnimation = aniString;
     }
 
 // -------- 紧急回避 --------
