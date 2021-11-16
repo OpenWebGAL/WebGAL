@@ -167,6 +167,21 @@ function nextSentenceProcessor() {
         increaseSentence();
         nextSentenceProcessor();
         return;
+    }else if(command === 'setFigAni'){
+        let pos = S_content.split(',')[0];
+        let aniName = S_content.split(',')[1];
+        let aniTime = S_content.split(',')[2];
+        WG_ViewControl.VC_setAnimationByClass('figureContainer'+pos,aniName,aniTime);
+        increaseSentence();
+        nextSentenceProcessor();
+        return;
+    }else if(command === 'setBgAni'){
+        let aniName = S_content.split(',')[0];
+        let aniTime = S_content.split(',')[1];
+        WG_ViewControl.VC_setAnimationById('mainBackground',aniName,aniTime);
+        increaseSentence();
+        nextSentenceProcessor();
+        return;
     }
     else {
         SyncCurrentStatus('command',processSentence(getStatus("SentenceID"))['name']);
