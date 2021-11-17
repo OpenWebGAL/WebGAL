@@ -55,11 +55,13 @@ function Stage() {
 
                 </div>
             </div>
-            <div id="mainBackground" onClick={userInteract.clickOnBack}>
+            <div id="BackgroundContainer" onClick={userInteract.clickOnBack}>
+                <div id={'oldBG'}/>
+                <div id={'mainBackground'}/>
             </div>
-            <div id="figureImage" onClick={userInteract.clickOnBack}/>
-            <div id="figureImage_left" onClick={userInteract.clickOnBack}/>
-            <div id="figureImage_right" onClick={userInteract.clickOnBack}/>
+            <div id="figureImage" className={"figureContainercenter"} onClick={userInteract.clickOnBack}/>
+            <div id="figureImage_left" className={"figureContainerleft"} onClick={userInteract.clickOnBack}/>
+            <div id="figureImage_right" className={"figureContainerright"} onClick={userInteract.clickOnBack}/>
             <div id="settings">
                 <div id="settingsMainBox">
                     <div id="close" onClick={userInteract.closeSettings}>
