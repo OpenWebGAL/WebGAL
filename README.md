@@ -8,7 +8,7 @@ Demo: https://msfasr.com/WebGAL_Demo_Page/
 
 https://github.com/MakinoharaShoko/WebGAL/releases/
 
-如果下载速度过慢，请尝试通过蓝奏云网盘下载： https://www.lanzouw.com/iRcdzvj3c8d
+如果下载速度过慢，请尝试通过蓝奏云网盘下载(版本不一定是最新的，建议在 GitHub Release 下载）： https://www.lanzouw.com/iRcdzvj3c8d
 
 > 想要参与引擎开发的开发者请先阅读 DEV_NOTE
 
@@ -356,12 +356,12 @@ varDrop:a:1,b:3;//a的值降低1，b的值降低3
 **示例：**
 
 ```
-varSet:a:0;//设置一个变量a（现在是0）
-varUp:a:1;//现在a=1
+setVar:a=0;//设置一个变量a（现在是0）
+setVar:a=a+1;;//现在a=1
 if(a=1):label1;//a=1时跳到label1
 label:label1;//以下是label1的执行内容
 changeScene:Ch2.txt;//在label1执行的语句内跳到Ch2.txt
 ......现在执行的是Ch2.txt的脚本了.......
-......
+......Ch2.txt......
 ```
 
