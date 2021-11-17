@@ -121,6 +121,8 @@ class userInteract {
         // CurrentBacklog = [];
         document.getElementById('Title').style.display = 'none';
         if(ifRes !== 'non-restart'){
+            //隐藏选项界面
+            document.getElementById("chooseBox").style.display="none";
             getStatus("all")["bgm"] = '';
             WG_ViewControl.loadBGM();
             getStatus("all")["fig_Name"] = '';
