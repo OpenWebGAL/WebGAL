@@ -139,21 +139,14 @@ function clearCookie(){
 }
 
 function loadSettings(){
-    if(Settings["font_size"] === 'small'){
-        document.getElementById('SceneText').style.fontSize = '150%';
-    }else if(Settings["font_size"] === 'medium'){
-        document.getElementById('SceneText').style.fontSize = '200%';
-    }else if(Settings["font_size"] === 'large'){
-        document.getElementById('SceneText').style.fontSize = '250%';
-    }
+    let fontSizeKey = Settings.font_size;
+    let fontSize = SettingsMap.font_size[fontSizeKey];
 
-    if(Settings["play_speed"] === 'low'){
-        textShowWaitTime = 150;
-    } else if(Settings["play_speed"] === 'medium'){
-        textShowWaitTime = 50;
-    }else if(Settings["play_speed"] === 'fast'){
-        textShowWaitTime = 10;
-    }
+    let playSpeedKey = Settings.play_speed;
+    let playSpeed = SettingsMap.play_speed[playSpeedKey];
+
+    document.getElementById('SceneText').style.fontSize = fontSize;
+    textShowWaitTime = playSpeed;
 }
 
 function SyncCurrentStatus(statusKey,newStatus) {
