@@ -21,6 +21,20 @@ import {WG_ViewControl} from "../ViewController/ViewControl";
             Title_img:'Title.png',
             Title_bgm:'夏影.mp3'
         }
+
+    var SettingsMap =
+        {
+            font_size: {
+                'small': '150%',
+                'medium': '200%',
+                'large': '250%',
+            },
+            play_speed:{
+                'low': 55,
+                'medium': 35,
+                'fast': 20
+            }
+        }
 }
 
 //初始化运行时变量表
@@ -239,6 +253,6 @@ function getGameInfo() {
 export {
     setAutoWaitTime,autoWaitTime,textShowWaitTime,
     GameInfo,currentScene,auto,fast,onTextPreview,showingText,hideTextStatus,
-    currentInfo,Saves,SaveBacklog,CurrentBacklog,currentSavePage,currentLoadPage,Settings,
+    currentInfo,Saves,SaveBacklog,CurrentBacklog,currentSavePage,currentLoadPage,Settings,SettingsMap,
     loadCookie,writeCookie,clearCookie,loadSettings,getStatus,getScene,getGameInfo,SyncCurrentStatus,getRuntime
 }
