@@ -21,6 +21,20 @@ import {WG_ViewControl} from "../ViewController/ViewControl";
             Title_img:'Title.png',
             Title_bgm:'夏影.mp3'
         }
+
+    var SettingsMap =
+        {
+            font_size: {
+                'small': '150%',
+                'medium': '200%',
+                'large': '250%',
+            },
+            play_speed:{
+                'low': 55,
+                'medium': 35,
+                'fast': 20
+            }
+        }
 }
 
 //初始化运行时变量表
@@ -125,21 +139,14 @@ function clearCookie(){
 }
 
 function loadSettings(){
-    if(Settings["font_size"] === 'small'){
-        document.getElementById('SceneText').style.fontSize = '150%';
-    }else if(Settings["font_size"] === 'medium'){
-        document.getElementById('SceneText').style.fontSize = '200%';
-    }else if(Settings["font_size"] === 'large'){
-        document.getElementById('SceneText').style.fontSize = '250%';
-    }
+    let fontSizeKey = Settings.font_size;
+    let fontSize = SettingsMap.font_size[fontSizeKey];
 
-    if(Settings["play_speed"] === 'low'){
-        textShowWaitTime = 150;
-    } else if(Settings["play_speed"] === 'medium'){
-        textShowWaitTime = 50;
-    }else if(Settings["play_speed"] === 'fast'){
-        textShowWaitTime = 10;
-    }
+    let playSpeedKey = Settings.play_speed;
+    let playSpeed = SettingsMap.play_speed[playSpeedKey];
+
+    document.getElementById('SceneText').style.fontSize = fontSize;
+    textShowWaitTime = playSpeed;
 }
 
 function SyncCurrentStatus(statusKey,newStatus) {
@@ -239,6 +246,6 @@ function getGameInfo() {
 export {
     setAutoWaitTime,autoWaitTime,textShowWaitTime,
     GameInfo,currentScene,auto,fast,onTextPreview,showingText,hideTextStatus,
-    currentInfo,Saves,SaveBacklog,CurrentBacklog,currentSavePage,currentLoadPage,Settings,
+    currentInfo,Saves,SaveBacklog,CurrentBacklog,currentSavePage,currentLoadPage,Settings,SettingsMap,
     loadCookie,writeCookie,clearCookie,loadSettings,getStatus,getScene,getGameInfo,SyncCurrentStatus,getRuntime
 }
