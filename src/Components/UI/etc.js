@@ -7,7 +7,7 @@ import {
     Settings,
     writeCookie,
     getRuntime,
-    GameInfo
+    GameInfo, SettingsMap
 } from "../../Core/StoreControl/StoreControl";
 import {userInteract} from "../../Core/InteractController/UserInteract";
 import {WG_ViewControl} from "../../Core/ViewController/ViewControl";
@@ -48,13 +48,10 @@ class SettingButtons_font extends React.Component{
 
     componentDidMount() {
         let buttonStateNow = ['','',''];
-        if(Settings['font_size'] === 'small'){
-            buttonStateNow[0] = 'On';
-        }else if (Settings['font_size'] === 'medium'){
-            buttonStateNow[1] = 'On';
-        }else if (Settings['font_size'] === 'large'){
-            buttonStateNow[2] = 'On';
-        }
+        let fontsize = Settings.font_size;
+        let index = Object.keys(SettingsMap.font_size).indexOf(fontsize);
+
+        buttonStateNow[index] = 'On';
         this.setState(
             {
                 buttonState:buttonStateNow
@@ -67,27 +64,14 @@ class SettingButtons_font extends React.Component{
     }
 
     changeButtonState(i){
-        if(i === 0){
-            getRuntime().Settings['font_size'] = 'small';
-            document.getElementById('SceneText').style.fontSize = '150%';
-            document.getElementById('previewDiv').style.fontSize = '150%';
-        }else if(i === 1){
-            getRuntime().Settings["font_size"] = 'medium';
-            document.getElementById('SceneText').style.fontSize = '200%';
-            document.getElementById('previewDiv').style.fontSize = '200%';
-        }else if(i === 2){
-            getRuntime().Settings["font_size"] = 'large';
-            document.getElementById('SceneText').style.fontSize = '250%';
-            document.getElementById('previewDiv').style.fontSize = '250%';
-        }
+        let key = Object.keys(SettingsMap.font_size)[i]
+        let value = SettingsMap.font_size[key]
         let buttonStateNow = ['','',''];
-        if(getRuntime().Settings['font_size'] === 'small'){
-            buttonStateNow[0] = 'On';
-        }else if (getRuntime().Settings['font_size'] === 'medium'){
-            buttonStateNow[1] = 'On';
-        }else if (getRuntime().Settings['font_size'] === 'large'){
-            buttonStateNow[2] = 'On';
-        }
+
+        document.getElementById('SceneText').style.fontSize = value;
+        document.getElementById('previewDiv').style.fontSize = value;
+        buttonStateNow[i] = 'On';
+
         writeCookie();
         this.setState(
             {
@@ -119,13 +103,10 @@ class SettingButtons_speed extends React.Component{
 
     componentDidMount() {
         let buttonStateNow = ['','',''];
-        if(Settings['play_speed'] === 'low'){
-            buttonStateNow[0] = 'On';
-        }else if (Settings['play_speed'] === 'medium'){
-            buttonStateNow[1] = 'On';
-        }else if (Settings['play_speed'] === 'fast'){
-            buttonStateNow[2] = 'On';
-        }
+        let playSpeed = Settings.play_speed;
+        let index = Object.keys(SettingsMap.play_speed).indexOf(playSpeed);
+
+        buttonStateNow[index] = 'On';
         this.setState(
             {
                 buttonState:buttonStateNow
@@ -138,24 +119,12 @@ class SettingButtons_speed extends React.Component{
     }
 
     changeButtonState(i){
-        if(i === 0){
-            Settings['play_speed'] = 'low';
-            getRuntime().textShowWaitTime = 55;
-        }else if(i === 1){
-            Settings["play_speed"] = 'medium';
-            getRuntime().textShowWaitTime = 35;
-        }else if(i === 2){
-            Settings["play_speed"] = 'fast';
-            getRuntime().textShowWaitTime = 20;
-        }
+        let key = Object.keys(SettingsMap.play_speed)[i]
+        let value = SettingsMap.play_speed[key]
         let buttonStateNow = ['','',''];
-        if(Settings['play_speed'] === 'low'){
-            buttonStateNow[0] = 'On';
-        }else if (Settings['play_speed'] === 'medium'){
-            buttonStateNow[1] = 'On';
-        }else if (Settings['play_speed'] === 'fast'){
-            buttonStateNow[2] = 'On';
-        }
+
+        getRuntime().textShowWaitTime = value;
+        buttonStateNow[i] = 'On';
         writeCookie();
         this.setState(
             {
