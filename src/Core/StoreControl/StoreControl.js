@@ -1,7 +1,8 @@
+
 //初始化常量表
 // eslint-disable-next-line no-lone-blocks
 import {nextSentenceProcessor} from "../WG_core";
-import {prefetcher} from '../util/PrefetchWrapper';
+import { prefetcher } from '../util/PrefetchWrapper';
 import {WG_ViewControl} from "../ViewController/ViewControl";
 
 {
@@ -215,13 +216,20 @@ function getGameInfo() {
             for (let i = 0; i < textList.length; i++) {
                 let tempStr = textList[i].split(";")[0];
                 let temp = tempStr.split(':');
-
-                if (temp[0] == null || temp[0] === '') continue;
-
-                if (GameInfo.hasOwnProperty(temp[0])) {
-                    GameInfo[temp[0]] = temp[1];
-                } else {
-                    console.warn('[GameInfo]', `\'${temp[0]}\' key in GameInfo is not exist.`);
+                // eslint-disable-next-line default-case
+                switch (temp[0]) {
+                    case 'Game_name':
+                        GameInfo['Game_name'] = temp[1];
+                        break;
+                    case 'Game_key':
+                        GameInfo['Game_key'] = temp[1];
+                        break;
+                    case 'Title_img':
+                        GameInfo['Title_img'] = temp[1];
+                        break;
+                    case 'Title_bgm':
+                        GameInfo['Title_bgm'] = temp[1];
+                        break;
                 }
             }
             document.getElementById('Title').style.backgroundImage = 'url("./game/background/'+GameInfo["Title_img"]+'")';
