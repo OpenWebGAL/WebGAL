@@ -46,6 +46,7 @@ import {WG_ViewControl} from "../ViewController/ViewControl";
     var onTextPreview = 0;
     var showingText = false;
     var hideTextStatus = false;
+    var temp_bgm_TitleToGameplay = '';
 }
 
 // 初始化状态表
@@ -88,7 +89,7 @@ var Settings = {
 var runtime = {
     setAutoWaitTime,autoWaitTime,textShowWaitTime,
     GameInfo,currentScene,auto,fast,onTextPreview,showingText,hideTextStatus,
-    currentInfo,Saves,SaveBacklog,CurrentBacklog,currentSavePage,currentLoadPage,Settings
+    currentInfo,Saves,SaveBacklog,CurrentBacklog,currentSavePage,currentLoadPage,Settings,temp_bgm_TitleToGameplay
 }
 
 function getRuntime(){
