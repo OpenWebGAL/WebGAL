@@ -294,6 +294,7 @@ class userInteract {
     static Title() {
         WG_ViewControl.showMesModel('要返回到标题界面吗','是','不要',function (){
             document.getElementById('Title').style.display = 'block';
+            getRuntime().temp_bgm_TitleToGameplay = getRuntime().currentInfo.bgm;
             SyncCurrentStatus('bgm',getRuntime().GameInfo['Title_bgm']);
             WG_ViewControl.loadBGM();
         })
@@ -307,6 +308,8 @@ class userInteract {
         }
         document.getElementById('Title').style.display = 'none';
         // WG_ViewControl.loadButton();
+        getRuntime().currentInfo.bgm = getRuntime().temp_bgm_TitleToGameplay;
+        WG_ViewControl.loadBGM();
     }
 
 // 关闭存档界面
