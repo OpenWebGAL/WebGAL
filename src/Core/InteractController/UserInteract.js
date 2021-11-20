@@ -9,6 +9,7 @@ import {AllHiddenIgnore, isMobile, MobileChangeStyle, queryWidgetState} from "..
 import * as core from "../WG_core"
 import {WG_ViewControl} from "../ViewController/ViewControl";
 import { prefetcher } from '../util/PrefetchWrapper';
+// import AudioController from "../util/AudioController";
 
 
 
@@ -131,6 +132,11 @@ class userInteract {
             WG_ViewControl.VC_resetStage();
             getScene("game/scene/start.txt");
             getStatus("all")["SceneName"] = 'start.txt';
+            getRuntime().currentInfo.bg_Name = 'none';
+            //临时解决重新开始游戏后背景不清除的问题
+            document.getElementById('mainBackground').style.backgroundImage = 'none';
+            //在开始游戏时清除TITLE BGM(临时解决方案）
+            // AudioController.loadAudioFile(AudioController.MAIN_BGM, null, true);
         }
         // WG_ViewControl.loadButton();
     }
