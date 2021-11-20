@@ -41,6 +41,9 @@ import {isMobile} from "../../Core/util/WG_util";
 function Stage() {
     return (
         <div className="Stage">
+            <div id={"WG_startPage"} onClick={()=>{userInteract.hideStartPage()}}>
+                {/*点击屏幕以继续*/}
+            </div>
             <div id="intro" className="intro_styl"/>
             <div id="MesModel"/>
             <div id="Title">

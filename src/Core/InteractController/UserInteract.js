@@ -3,9 +3,9 @@ import ReactDOM from "react-dom";
 import {
     Saves, SaveBacklog, CurrentBacklog,
     writeCookie,
-    SyncCurrentStatus, getScene, loadCookie, getRuntime, getStatus, GameInfo
+    SyncCurrentStatus, getScene, loadCookie, getRuntime, getStatus, GameInfo, loadSettings, getGameInfo
 } from "../StoreControl/StoreControl";
-import {AllHiddenIgnore, queryWidgetState} from "../util/WG_util";
+import {AllHiddenIgnore, isMobile, MobileChangeStyle, queryWidgetState} from "../util/WG_util";
 import * as core from "../WG_core"
 import {WG_ViewControl} from "../ViewController/ViewControl";
 import { prefetcher } from '../util/PrefetchWrapper';
@@ -344,6 +344,19 @@ class userInteract {
         // even.preventDefault();
         // even.stopPropagation();//阻止事件冒泡
         WG_ViewControl.showBacklog();
+    }
+
+    static hideStartPage(){
+        document.getElementById("WG_startPage").style.display = 'none';
+        WG_ViewControl.loadBGM();
+        if(isMobile()){
+            MobileChangeStyle();
+        }
+        //设置默认动画
+        WG_ViewControl.VC_setAnimationById('mainBackground','bg_softIn','2s');
+        WG_ViewControl.VC_setAnimationByClass('figureContainerleft','centerIn','1s');
+        WG_ViewControl.VC_setAnimationByClass('figureContainercenter','centerIn','1s');
+        WG_ViewControl.VC_setAnimationByClass('figureContainerright','centerIn','1s');
     }
 }
 
