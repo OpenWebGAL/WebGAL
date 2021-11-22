@@ -14,8 +14,8 @@ import {
 } from "../../Components/UI/etc";
 import {nextSentenceProcessor} from "../WG_core";
 import React from "react";
-import returnIcon from "../../assests/img/return.svg";
-import vocalIcon from "../../assests/img/vocal.svg"
+import returnIcon from "../../assets/img/return.svg";
+import vocalIcon from "../../assets/img/vocal.svg"
 import {Return, VolumeNotice} from "@icon-park/react";
 import '@icon-park/react/styles/index.css';
 
