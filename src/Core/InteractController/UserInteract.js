@@ -1,9 +1,7 @@
-import React from 'react';
-import ReactDOM from "react-dom";
 import {
     Saves, SaveBacklog, CurrentBacklog,
     writeCookie,
-    SyncCurrentStatus, getScene, loadCookie, getRuntime, getStatus, GameInfo, loadSettings, getGameInfo
+    SyncCurrentStatus, getScene, loadCookie, getRuntime, getStatus
 } from "../StoreControl/StoreControl";
 import {AllHiddenIgnore, isMobile, MobileChangeStyle, queryWidgetState} from "../util/WG_util";
 import * as core from "../WG_core"
