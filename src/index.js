@@ -27,7 +27,3 @@ reportWebVitals();
 loadCookie();
 loadSettings();
 getGameInfo();
-WG_ViewControl.loadBGM();
-if(isMobile()){
-    MobileChangeStyle();
-}

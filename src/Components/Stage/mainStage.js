@@ -1,22 +1,22 @@
-// import '../../assests/css/main.css';
-// import '../../assests/css/panic.css'
-// import '../../assests/css/window.css'
-// import '../../assests/css/Load_Save.css'
-// import '../../assests/css/settings.css'
-// import "../../assests/css/UI_component.css"
+// import '../../assets/css/main.css';
+// import '../../assets/css/panic.css'
+// import '../../assets/css/window.css'
+// import '../../assets/css/Load_Save.css'
+// import '../../assets/css/settings.css'
+// import "../../assets/css/UI_component.css"
 // import '../../Core/StoreControl/StoreControl'
-import {setAutoWaitTime,autoWaitTime,textShowWatiTime,
-    GameInfo,currentScene,auto,fast,onTextPreview,showingText,hideTextStatus,
-    currentInfo,Saves,SaveBacklog,CurrentBacklog,currentSavePage,currentLoadPage,Settings,
-    loadCookie,writeCookie,clearCookie,loadSettings,getStatus,getScene,getGameInfo}
-    from "../../Core/StoreControl/StoreControl";
+// import {setAutoWaitTime,autoWaitTime,textShowWaitTime,
+//     GameInfo,currentScene,auto,fast,onTextPreview,showingText,hideTextStatus,
+//     currentInfo,Saves,SaveBacklog,CurrentBacklog,currentSavePage,currentLoadPage,Settings,
+//     loadCookie,writeCookie,clearCookie,loadSettings,getStatus,getScene,getGameInfo}
+//     from "../../Core/StoreControl/StoreControl";
 import {userInteract} from "../../Core/InteractController/UserInteract";
-import {nextSentenceProcessor,increaseSentence} from "../../Core/WG_core";
+import {nextSentenceProcessor} from "../../Core/WG_core";
 import {WG_ViewControl} from "../../Core/ViewController/ViewControl";
-import closeB from "../../assests/img/closeBlack.svg"
-import closeW from "../../assests/img/closeWhite.svg"
-import up from "../../assests/img/up.svg";
-import cross from "../../assests/img/cross.svg";
+import closeB from "../../assets/img/closeBlack.svg"
+import closeW from "../../assets/img/closeWhite.svg"
+import up from "../../assets/img/up.svg";
+import cross from "../../assets/img/cross.svg";
 import '@icon-park/react/styles/index.css';
 import {
     DoubleRight,
@@ -25,10 +25,9 @@ import {
     Home,
     PlayOne,
     ReplayMusic,
-    Save,
     SettingTwo
 } from "@icon-park/react";
-import {isMobile} from "../../Core/util/WG_util";
+// import {isMobile} from "../../Core/util/WG_util";
 
 // window.onload = function () {
 //     loadCookie();
@@ -41,6 +40,9 @@ import {isMobile} from "../../Core/util/WG_util";
 function Stage() {
     return (
         <div className="Stage">
+            <div id={"WG_startPage"} onClick={()=>{userInteract.hideStartPage()}}>
+                {/*点击屏幕以继续*/}
+            </div>
             <div id="intro" className="intro_styl"/>
             <div id="MesModel"/>
             <div id="Title">
@@ -110,10 +112,10 @@ function Stage() {
             <div id="bottomBox">
                 <div id="top_control">
                     <span className="top_button" onClick={userInteract.hideTextBox}>
-                        <img src={cross} style={{width: "22px",height: "22px"}}/>
+                        <img alt={"cross"} src={cross} style={{width: "22px",height: "22px"}}/>
                     </span>
                     <span className="top_button" onClick={userInteract.showBacklog}>
-                        <img src={up} style={{width: "25px",height: "25px"}}/>
+                        <img alt={"up"} src={up} style={{width: "25px",height: "25px"}}/>
                     </span>
                 </div>
                 <div id="mainTextWindow" onClick={nextSentenceProcessor}>

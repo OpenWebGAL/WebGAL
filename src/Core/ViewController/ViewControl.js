@@ -14,8 +14,8 @@ import {
 } from "../../Components/UI/etc";
 import {nextSentenceProcessor} from "../WG_core";
 import React from "react";
-import returnIcon from "../../assests/img/return.svg";
-import vocalIcon from "../../assests/img/vocal.svg"
+import returnIcon from "../../assets/img/return.svg";
+import vocalIcon from "../../assets/img/vocal.svg"
 import {Return, VolumeNotice} from "@icon-park/react";
 import '@icon-park/react/styles/index.css';
 
@@ -500,11 +500,17 @@ class WG_ViewControl {
 
     static VC_setAnimationByClass(name,animate,time){
         console.log('setting animate by class on: '+name+'set to '+animate);
-        let aniString = '-webkit-animation: '+animate+' '+time;
+        let aniString = animate+' '+time;
         let editList = document.getElementsByClassName(name);
         for (let i = 0; i < editList.length; i++) {
-            editList[i].setAttribute('style',aniString)
+            editList[i].style.webkitAnimation = 'none';
         }
+        setTimeout(function ()
+        {
+            for (let i = 0; i < editList.length; i++) {
+                editList[i].style.webkitAnimation = aniString;
+            }
+        }, 1);
     }
 
     static VC_setAnimationById(id,animate,time){

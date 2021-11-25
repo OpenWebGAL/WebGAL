@@ -1,14 +1,13 @@
-import React from 'react';
-import ReactDOM from "react-dom";
 import {
     Saves, SaveBacklog, CurrentBacklog,
     writeCookie,
-    SyncCurrentStatus, getScene, loadCookie, getRuntime, getStatus, GameInfo
+    SyncCurrentStatus, getScene, loadCookie, getRuntime, getStatus
 } from "../StoreControl/StoreControl";
-import {AllHiddenIgnore, queryWidgetState} from "../util/WG_util";
+import {AllHiddenIgnore, isMobile, MobileChangeStyle, queryWidgetState} from "../util/WG_util";
 import * as core from "../WG_core"
 import {WG_ViewControl} from "../ViewController/ViewControl";
 import { prefetcher } from '../util/PrefetchWrapper';
+// import AudioController from "../util/AudioController";
 
 
 
@@ -131,6 +130,11 @@ class userInteract {
             WG_ViewControl.VC_resetStage();
             getScene("game/scene/start.txt");
             getStatus("all")["SceneName"] = 'start.txt';
+            getRuntime().currentInfo.bg_Name = 'none';
+            //临时解决重新开始游戏后背景不清除的问题
+            document.getElementById('mainBackground').style.backgroundImage = 'none';
+            //在开始游戏时清除TITLE BGM(临时解决方案）
+            // AudioController.loadAudioFile(AudioController.MAIN_BGM, null, true);
         }
         // WG_ViewControl.loadButton();
     }
@@ -288,6 +292,7 @@ class userInteract {
     static Title() {
         WG_ViewControl.showMesModel('要返回到标题界面吗','是','不要',function (){
             document.getElementById('Title').style.display = 'block';
+            getRuntime().temp_bgm_TitleToGameplay = getRuntime().currentInfo.bgm;
             SyncCurrentStatus('bgm',getRuntime().GameInfo['Title_bgm']);
             WG_ViewControl.loadBGM();
         })
@@ -301,6 +306,8 @@ class userInteract {
         }
         document.getElementById('Title').style.display = 'none';
         // WG_ViewControl.loadButton();
+        getRuntime().currentInfo.bgm = getRuntime().temp_bgm_TitleToGameplay;
+        WG_ViewControl.loadBGM();
     }
 
 // 关闭存档界面
@@ -344,6 +351,19 @@ class userInteract {
         // even.preventDefault();
         // even.stopPropagation();//阻止事件冒泡
         WG_ViewControl.showBacklog();
+    }
+
+    static hideStartPage(){
+        document.getElementById("WG_startPage").style.display = 'none';
+        WG_ViewControl.loadBGM();
+        if(isMobile()){
+            MobileChangeStyle();
+        }
+        //设置默认动画
+        WG_ViewControl.VC_setAnimationById('mainBackground','bg_softIn','2s');
+        WG_ViewControl.VC_setAnimationByClass('figureContainerleft','centerIn','1s');
+        WG_ViewControl.VC_setAnimationByClass('figureContainercenter','centerIn','1s');
+        WG_ViewControl.VC_setAnimationByClass('figureContainerright','centerIn','1s');
     }
 }
 
