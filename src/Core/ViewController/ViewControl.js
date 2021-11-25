@@ -500,11 +500,17 @@ class WG_ViewControl {
 
     static VC_setAnimationByClass(name,animate,time){
         console.log('setting animate by class on: '+name+'set to '+animate);
-        let aniString = '-webkit-animation: '+animate+' '+time;
+        let aniString = animate+' '+time;
         let editList = document.getElementsByClassName(name);
         for (let i = 0; i < editList.length; i++) {
-            editList[i].setAttribute('style',aniString)
+            editList[i].style.webkitAnimation = 'none';
         }
+        setTimeout(function ()
+        {
+            for (let i = 0; i < editList.length; i++) {
+                editList[i].style.webkitAnimation = aniString;
+            }
+        }, 1);
     }
 
     static VC_setAnimationById(id,animate,time){

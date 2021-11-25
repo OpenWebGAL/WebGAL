@@ -1,3 +1,13 @@
+.leftFigAni{
+
+}
+.centerFigAni{
+
+}
+.rightFigAni{
+    
+}
+
 @-webkit-keyframes centerIn {
     0%{
         opacity: 0;
@@ -14,6 +24,30 @@
     0%{
         opacity: 0;
         transform: scale(1,1) translate(0,5%);
+    }
+
+    100%{
+        opacity: 1;
+        transform: scale(1,1) translate(0,0);
+    }
+}
+
+@-webkit-keyframes leftIn {
+    0%{
+        opacity: 0;
+        transform: scale(1,1) translate(-5%,0);
+    }
+
+    100%{
+        opacity: 1;
+        transform: scale(1,1) translate(0,0);
+    }
+}
+
+@-webkit-keyframes rightIn {
+    0%{
+        opacity: 0;
+        transform: scale(1,1) translate(5%,0);
     }
 
     100%{
@@ -69,5 +103,19 @@
 
     100%{
         transform: translate(0,0);
+    }
+}
+
+@-webkit-keyframes moveBaF {
+    0%{
+        transform: scale(1,1);
+    }
+
+    50%{
+        transform: scale(1.1,1.1);
+    }
+
+    100%{
+        transform: scale(1,1);
     }
 }
