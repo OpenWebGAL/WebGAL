@@ -255,6 +255,94 @@ bgm:夏影.mp3;
 vocal-V2.ogg,对不起，等很久了吗？;
 ```
 
+### 使用动画效果
+
+#### 为背景设置动画
+
+使用语句 `setBgAni:动画名,时间(多少秒);`
+
+背景动画设置之后会在每次替换背景时生效，除非再次使用`setBgAni`改变。
+
+**示例：**
+
+```
+setBgAni:bg_softIn,5s;//渐入背景，执行5秒
+```
+
+目前，预制的动画只有两个：渐入和缩放渐入，使用的动画预设名分别为：
+
+| 动画效果 | 动画名    |
+| -------- | --------- |
+| 渐入     | bg_softIn |
+| 缩放渐入 | bg_down   |
+
+#### 为人物设置动画
+
+使用语句`setFigAni:位置,动画名,时间（多少秒）;`
+
+```
+setFigAni:right,rightIn,1s;//对右侧立绘设置动画rightIn，执行1秒
+```
+
+人物动画不像背景动画。每次设置动画时，这个动画都会立刻执行，且只执行一遍（因为你可能会设置一些例如摇晃之类的效果，但是不想让这个动画一直在切换人物时生效）
+
+所以，你每次切换人物立绘，或是想要执行动画时，都要使用`setFigAni`:
+
+```
+changeP_left_next:testFigure03.png;
+setFigAni:left,leftIn,1s;
+//这个动画只对这一次changeP生效
+changeP_left_next:testFigure04.png;
+setFigAni:left,rightIn,1s;
+//现在你改变了左侧立绘，如果你需要一个动画，你需要再重新设置
+```
+
+同时，在你没有改变立绘的时候，你也可以在某句对话前加上`setFigAni`，这样在播放这句对话的时候，动画会同时执行。
+
+```
+setFigAni:right,shake,0.5s;
+右侧人物:现在我正在摇晃。//动画与这句对话同时执行
+```
+
+预制动画：
+
+| 动画效果     | 动画名   |
+| ------------ | -------- |
+| 摇晃         | shake    |
+| 从下向上进入 | upIn     |
+| 从左向右进入 | leftIn   |
+| 从右向左进入 | rightIn  |
+| 渐显         | centerIn |
+| 前后移动     | moveBaF  |
+
+### 自定义动画
+
+动画文件在`/StaticCSS/animation.css`，你可以学习CSS动画来自己写你想要的动画效果，然后添加到这个CSS里，在游戏脚本里用这个动画。
+
+如：
+
+```
+@-webkit-keyframes leftIn {
+    0%{
+        opacity: 0;
+        transform: scale(1,1) translate(-5%,0);
+    }
+
+    100%{
+        opacity: 1;
+        transform: scale(1,1) translate(0,0);
+    }
+}
+```
+
+然后，你就可以使用
+
+```
+setFigAni:left,leftIn,1s;
+```
+
+调用这个动画。
+
 ## 进阶教程：
 
 ### 在同一个场景（TXT文件）内实现语句跳转、分支跳转
