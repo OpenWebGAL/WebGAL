@@ -1,6 +1,5 @@
 setBgAni:bg_softIn,5s;
 changeBG_next:0000.png;
-playVideo:2021-11-21_15-35-12.mp4;
 changeP_left_next:testFigure03.png;
 setFigAni:left,leftIn,1s;
 miniAvatar:minipic_test.png;

@@ -529,7 +529,9 @@ a:visited{
     line-height: 100%;
     position: absolute;
     z-index: 25;
-    background-color: rgba(0,0,0,0.5);
+    /*background-color: rgba(0,0,0,0.5);*/
+    background-image: url("/game/background/Loading_img.jpg");
+    background-size:cover;
     color: #FEDFE1;
     font-size: 225%;
     padding: 45vh 0 0 0;
@@ -542,6 +544,7 @@ a:visited{
     height: 100vh;
     display: none;
     background-color: rgba(0,0,0,1);
+    justify-content: center;
 }
 
 #video_show{
