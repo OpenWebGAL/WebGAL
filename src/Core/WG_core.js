@@ -182,6 +182,8 @@ function nextSentenceProcessor() {
         increaseSentence();
         nextSentenceProcessor();
         return;
+    }else if(command === 'playVideo'){
+        WG_ViewControl.showVideo(S_content);
     }
     else {
         SyncCurrentStatus('command',processSentence(getStatus("SentenceID"))['name']);
