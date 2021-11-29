@@ -237,6 +237,8 @@ function getGameInfo() {
                 }
             }
             document.getElementById('Title').style.backgroundImage = 'url("./game/background/'+GameInfo["Title_img"]+'")';
+            if(GameInfo["Loading_img"]!=='none')
+                document.getElementById('WG_startPage').style.backgroundImage = 'url("./game/background/'+GameInfo["Loading_img"]+'")';
             SyncCurrentStatus('bgm',GameInfo['Title_bgm']);
             // WG_ViewControl.loadBGM();
             document.title = GameInfo['Game_name'];
