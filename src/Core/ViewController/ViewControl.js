@@ -302,7 +302,7 @@ class WG_ViewControl {
     }
 
     static showVideo(videoName){
-        let videoTag = <video autoPlay={true} id={"video_show"} src={`/game/video/${videoName}`}/>
+        let videoTag = <video autoPlay={true} id={"video_show"} src={`./game/video/${videoName}`}/>
         ReactDOM.render(videoTag,document.getElementById("videoContainer"),playVideo);
         document.getElementById("videoContainer").style.display = 'flex'
         function playVideo(){

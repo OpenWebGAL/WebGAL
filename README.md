@@ -55,6 +55,7 @@ node app.js
 | scene      | 用于存放用户剧本             |
 | bgm        | 用于存放背景音乐             |
 | vocal      | 用于存放配音文件             |
+| video      | 用于存放视频                 |
 
 ## 定制你的游戏信息
 
@@ -65,6 +66,7 @@ Game_name:WebGAL;//你的游戏名称
 Game_key:0f33fdGr;//一串识别码，你应该尽可能随机地输入一串不容易与别人重复的字符，长度最好在6-10字符之间，否则可能会引发bug
 Title_img:Title2.png;//标题的图片名称，图片放在/background 文件夹
 Title_bgm:夏影.mp3;//标题的背景音乐，音乐文件应该放在/bgm文件夹
+Loading_img:Loading_img.jpg//游戏进入时Logo，放在/background 文件夹
 ```
 
 ## 用户剧本的编写语法：
@@ -238,6 +240,12 @@ choose:{叫住她:Chapter-2.txt,回家:Chapter-3.txt};
 
 ```
 bgm:夏影.mp3;
+```
+
+### 播放一小段视频
+
+```
+playVideo:OP.mp4//视频应该放在/game/video/ 文件夹内
 ```
 
 ### 在显示对话时同时播放语音
