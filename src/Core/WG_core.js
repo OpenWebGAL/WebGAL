@@ -149,7 +149,7 @@ function nextSentenceProcessor() {
         nextSentenceProcessor();
         return;
     }
-    else if(command.substr(0,3) === "var" || command.substr(0,8) === "jump_var"){
+    else if(command.substring(0,3) === "var" || command.substring(0,8) === "jump_var"){
         varProcess(command,S_content);
         return;
     }else if(command === 'showVar'){
@@ -159,7 +159,7 @@ function nextSentenceProcessor() {
         SyncCurrentStatus('showText',JSON.stringify(getRuntime().currentInfo.GameVar));
         WG_ViewControl.VC_textShow(getStatus('showName'),getStatus('showText'));
         saveBacklogNow = true;
-    }else if(command.substr(0,2) === 'if'){
+    }else if(command.substring(0,2) === 'if'){
         ifJump(command,S_content);
         return;
     }else if(command === 'setVar'){
