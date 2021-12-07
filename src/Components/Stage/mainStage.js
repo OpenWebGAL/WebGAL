@@ -44,6 +44,7 @@ function Stage() {
                 {/*点击屏幕以继续*/}
             </div>
             <div id="intro" className="intro_styl"/>
+            <div id={"videoContainer"} className={"videoContainer_styl"} onClick={WG_ViewControl.closeVideo}/>
             <div id="MesModel"/>
             <div id="Title">
                 <div id="TitleModel">

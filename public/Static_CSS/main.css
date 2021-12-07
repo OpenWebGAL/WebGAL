@@ -530,7 +530,25 @@ a:visited{
     position: absolute;
     z-index: 25;
     background-color: rgba(0,0,0,0.5);
+    /*background-image: url("./game/background/Loading_img.jpg");*/
+    background-size:cover;
     color: #FEDFE1;
     font-size: 225%;
     padding: 45vh 0 0 0;
+}
+
+.videoContainer_styl{
+    position: absolute;
+    z-index: 25;
+    width: 100vw;
+    height: 100vh;
+    display: none;
+    background-color: rgba(0,0,0,1);
+    justify-content: center;
+}
+
+#video_show{
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: fill;
 }

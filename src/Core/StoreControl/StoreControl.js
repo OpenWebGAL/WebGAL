@@ -19,7 +19,8 @@ import {WG_ViewControl} from "../ViewController/ViewControl";
             Game_name:'WebGAL Demo',
             Game_key:'WG_default',
             Title_img:'Title.png',
-            Title_bgm:'夏影.mp3'
+            Title_bgm:'夏影.mp3',
+            Loading_img:'none'
         }
 
     var SettingsMap =
@@ -231,11 +232,15 @@ function getGameInfo() {
                     case 'Title_bgm':
                         GameInfo['Title_bgm'] = temp[1];
                         break;
+                    case 'Loading_img':
+                        GameInfo['Loading_img'] = temp[1];
                 }
             }
             document.getElementById('Title').style.backgroundImage = 'url("./game/background/'+GameInfo["Title_img"]+'")';
+            if(GameInfo["Loading_img"]!=='none')
+                document.getElementById('WG_startPage').style.backgroundImage = 'url("./game/background/'+GameInfo["Loading_img"]+'")';
             SyncCurrentStatus('bgm',GameInfo['Title_bgm']);
-            WG_ViewControl.loadBGM();
+            // WG_ViewControl.loadBGM();
             document.title = GameInfo['Game_name'];
         }
 
