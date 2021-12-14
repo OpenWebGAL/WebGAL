@@ -462,3 +462,7 @@ changeScene:Ch2.txt;//在label1执行的语句内跳到Ch2.txt
 ......Ch2.txt......
 ```
 
+
+## Stargazers over time
+
+[![Stargazers over time](https://starchart.cc/MakinoharaShoko/WebGAL.svg)](https://starchart.cc/MakinoharaShoko/WebGAL)
