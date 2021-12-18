@@ -4,6 +4,8 @@
 
 Demo: https://msfasr.com/WebGAL_Demo_Page/
 
+另一个Demo链接（国内访问可能会稍快）：https://webgal-demo.vercel.app/
+
 ## 如果你是想要开发属于自己的 Galgame 的开发者，请下载发行版：
 
 https://github.com/MakinoharaShoko/WebGAL/releases/
