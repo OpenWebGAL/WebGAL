@@ -4,11 +4,14 @@
 
 Demo: https://msfasr.com/WebGAL_Demo_Page/
 
+另一个Demo链接（国内访问可能会稍快）：https://webgal-demo.vercel.app/
+
 ## 如果你是想要开发属于自己的 Galgame 的开发者，请下载发行版：
 
 https://github.com/MakinoharaShoko/WebGAL/releases/
 
-如果下载速度过慢，请尝试通过蓝奏云网盘下载(版本不一定是最新的，建议在 GitHub Release 下载）： https://www.lanzouw.com/iRcdzvj3c8d
+如果下载速度过慢，请尝试通过蓝奏云网盘下载(版本不一定是最新的，建议在 GitHub Release 下载）： https://www.lanzouw.com/iRTYixccq5i
+
 
 > 想要参与引擎开发的开发者请先阅读 DEV_NOTE
 
@@ -461,3 +464,7 @@ changeScene:Ch2.txt;//在label1执行的语句内跳到Ch2.txt
 ......Ch2.txt......
 ```
 
+
+## Stargazers over time
+
+[![Stargazers over time](https://starchart.cc/MakinoharaShoko/WebGAL.svg)](https://starchart.cc/MakinoharaShoko/WebGAL)
