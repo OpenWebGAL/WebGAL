@@ -310,12 +310,14 @@ class WG_ViewControl {
             videoSelector.onended = ()=>{
                 ReactDOM.render(<div> </div>,document.getElementById("videoContainer"));
                 document.getElementById("videoContainer").style.display = 'none'
+                nextSentenceProcessor();
             }
         }
     }
     static closeVideo(){
         ReactDOM.render(<div> </div>,document.getElementById("videoContainer"));
         document.getElementById("videoContainer").style.display = 'none'
+        nextSentenceProcessor();
     }
 
     static loadButton(){
