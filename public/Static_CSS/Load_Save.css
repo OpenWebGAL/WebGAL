@@ -18,7 +18,8 @@
 .LS_indexButtonOn{
     text-shadow: 2px 2px 15px rgba(255,255,255,1);
     font-size: 125%;
-    font-family: "思源宋体 SemiBold",Georgia,serif;
+    font-family: 思源宋体,Georgia,serif;
+    font-weight: bold;
     padding: 5px 20px 5px 20px;
     margin: 0 5px 5px 5px;
     text-align: center;
@@ -147,7 +148,8 @@
     font-size: 95%;
     text-align: left;
     border-bottom: 1px solid rgba(255,255,255,0.8);
-    font-family: "思源宋体 SemiBold",serif;
+    font-family: 思源宋体,serif;
+    font-weight: bold;
 }
 
 /*.L_name{*/
@@ -181,7 +183,8 @@
 #LoadTitle{
     color: rgba(200,235,255,1);
     text-shadow: 2px 2px 12px rgba(255,255,255,0.5);
-    font-family: "思源宋体 SemiBold",serif;
+    font-family: 思源宋体,serif;
+    font-weight: bold;
     font-size: 300%;
     /*padding: 5px 10px 5px 10px ;*/
     min-width: 100px;
@@ -190,7 +193,8 @@
 #SaveTitle{
     color: rgba(255,235,255,1);
     text-shadow: 2px 2px 12px rgba(255,255,255,0.5);
-    font-family: "思源宋体 SemiBold",serif;
+    font-family: 思源宋体,serif;
+    font-weight: bold;
     font-size: 300%;
     padding: 0 10px 5px 10px ;
     min-width: 100px;
