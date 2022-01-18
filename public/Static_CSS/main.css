@@ -183,12 +183,14 @@
     background-color: #FEDFE1;
     color: #8E354A;
     padding: 20px 15px 20px 15px;
-    width: 30vw;
+    min-width: 30vw;
     margin: 10px 0 10px 0;
     border: 2px solid #8E354A;
+    box-shadow: 0 0 15px rgba(255,255,255,0.8);
     text-align: center;
     border-radius: 15px;
-    font-size: 175%;
+    font-size: 185%;
+    cursor: pointer;
 }
 
 .singleChoose:hover{
@@ -263,6 +265,7 @@
     width: 100%;
     font-size: 188%;
     flex-flow: column;
+    background: linear-gradient(to right,rgba(255,255,255,0) 0%,rgba(255,255,255,0.1) 15%,rgba(255,255,255,0.3) 35%,rgba(255,255,255,0.3) 65%,rgba(255,255,255,0.1) 85%,rgba(255,255,255,0) 100%);
 }
 
 @-webkit-keyframes TitleButtonOnChoose {
