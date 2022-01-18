@@ -1,18 +1,33 @@
+.LS_Title_and_Button{
+    display: flex;
+}
+
+
 .LS_indexButton{
+    font-family: 思源宋体,Georgia,serif;
     font-size: 125%;
     padding: 5px 20px 5px 20px;
     margin: 0 5px 5px 5px;
+    background-color: rgba(255,255,255,0.08);
+    display: inline-block;
+    text-align: center;
+    width: 25px;
+    cursor: pointer;
 }
 
 .LS_indexButtonOn{
+    text-shadow: 2px 2px 15px rgba(255,255,255,1);
     font-size: 125%;
-    font-weight: bold;
+    font-family: "思源宋体 SemiBold",Georgia,serif;
     padding: 5px 20px 5px 20px;
     margin: 0 5px 5px 5px;
+    text-align: center;
+    width: 25px;
 }
 
 .LS_indexButton:hover{
     font-weight: bold;
+    text-shadow: 2px 2px 15px rgba(255,255,255,1);
 }
 
 .LS_Main{
@@ -23,12 +38,16 @@
     right: 0;
     display: none;
     z-index: 14;
-    background-color: rgba(255,255,255,0.95);
+    background-color: rgba(11,52,110,0.95);
     /*background-image: linear-gradient(rgba(255,255,255,0) 0%,rgba(255,255,255,0) 75%,rgba(255,255,255,0.3)100%);*/
     /*border-radius: 15px;*/
     -webkit-animation: showSoftly 0.5s;
-    padding: 30px 30px 30px 30px;
+    padding: 30px 80px 10px 80px;
     box-shadow: 5px 5px 15px rgba(0,0,0,0.5);
+}
+
+#Save{
+    background-color: rgba(74,34,93,0.95);
 }
 
 .LS_Items{
@@ -44,30 +63,41 @@
 }
 
 .LS_Index{
-    padding: 5px 5px 7px 5px;
+    padding: 17px 5px 7px 5px;
     width: 100%;
-    border-bottom: 1px solid rgba(0,0,0,0.3);
+    /*border-bottom: 1px solid rgba(255,255,255,0.8);*/
 }
 
 .LS_singleElement{
     overflow: hidden;
-    margin: 15px 5px 5px 5px;
-    width: 650px;
-    height: 166px;
+    margin:15px 5px 5px 5px;
+    width: 600px;
+    height: 170px;
     font-size: 150%;
     /*padding: 10px 15px 10px 15px;*/
     /*border: 2px solid rgba(0,0,0,0.15);*/
-    background-color: rgba(255,255,255,0.95);
-    box-shadow: 4px 4px 12px  rgba(0,0,0,0.25);
+    /*background-color: rgba(255,255,255,0.2);*/
+    background: linear-gradient(225deg, rgba(255,255,255,0.3), rgba(255,255,255,0.5));
+    box-shadow: 4px 4px 12px  rgba(255,255,255,0.2);
+    border: 2px solid rgba(255,255,255,0.6);
+    cursor: pointer;
     /*display: flex;*/
-    border-radius: 10px;
+    /*border-radius: 10px;*/
+}
+
+.LS_singleElement:hover{
+    /*margin: 5px 10px 3px 10px;*/
+    /*background-color: rgba(0,0,0,0.05);*/
+    box-shadow: 3px 3px 15px rgba(255,255,255,0.8);
 }
 
 .LS_Title{
     height: 40px;
-    font-family: "Times New Roman";
+    font-family: Optima,思源宋体,serif;
     width: 650px;
     line-height: 40px;
+    border-bottom: 2px solid rgba(255,255,255,0.6);
+
 }
 .LS_Title_index{
     display:inline-block;
@@ -81,7 +111,7 @@
     display:inline-block;
     text-align: left;
     width: 85%;
-    padding: 0 0 0 5%;
+    padding: 0 0 0 3%;
     background-color: #005CAF;
     color: #f5f5f7;
 }
@@ -90,36 +120,50 @@
     display: flex;
 }
 
-.LS_singleElement:hover{
-    /*margin: 5px 10px 3px 10px;*/
-    /*background-color: rgba(0,0,0,0.05);*/
-    box-shadow: 3px 3px 15px rgba(0,0,0,0.5);
-}
+
 
 .LS_ButtonList{
-    height: 100%;
+    height: calc(100vh - 180px);
     overflow: scroll;
     overflow-scrolling: auto;
     display: flex;
     flex-wrap: wrap;
     justify-content: space-around;
+    padding: 0 0 20px 0;
 }
 
 .LS_renderMain{
-    width: 100%;
-    height: 90%;
+    /*width: 100%;*/
+    /*height: 100%*/
 }
 
 .LS_textArea{
-    width: 400px;
+    /*width: 400px;*/
     padding: 5px 16px 0 10px;
 }
 
 .LSE_top{
-    padding: 0 0 0 0;
+    padding: 0 0 3px 0;
     font-size: 95%;
     text-align: left;
-    border-bottom: 1px solid rgba(0,0,0,0.25);
+    border-bottom: 1px solid rgba(255,255,255,0.8);
+    font-family: "思源宋体 SemiBold",serif;
+}
+
+/*.L_name{*/
+/*    color: white;*/
+/*    text-shadow: 2px 2px 7px rgba(0,0,0,0.2);*/
+/*}*/
+
+.LSE_bottom{
+    height: 50px;
+    color: white;
+    margin: 3px 0 0 0;
+    text-align: left;
+    font-size: 85%;
+    overflow: hidden;
+    padding: 0 0 10px 0;
+    font-family: 思源宋体,serif;
 }
 
 .LSE_index{
@@ -130,69 +174,75 @@
     border-radius: 5px;
 
 }
-.LSE_bottom{
-    height: 50px;
-    color: #6e6e73;
-    margin: 3px 0 0 0;
-    text-align: left;
-    font-size: 80%;
-    overflow: hidden;
-    padding: 0 0 10px 0;
-}
+
 
 ::-webkit-scrollbar {display:none}
 
 #LoadTitle{
-    color: #005CAF;
-    font-size: 250%;
-    padding: 5px 10px 5px 10px ;
+    color: rgba(200,235,255,1);
+    text-shadow: 2px 2px 12px rgba(255,255,255,0.5);
+    font-family: "思源宋体 SemiBold",serif;
+    font-size: 300%;
+    /*padding: 5px 10px 5px 10px ;*/
+    min-width: 100px;
+}
+
+#SaveTitle{
+    color: rgba(255,235,255,1);
+    text-shadow: 2px 2px 12px rgba(255,255,255,0.5);
+    font-family: "思源宋体 SemiBold",serif;
+    font-size: 300%;
+    padding: 0 10px 5px 10px ;
+    min-width: 100px;
 }
 
 .LoadIndexButton{
-    color:#005CAF;
+    color: rgba(185,225,255,1);
 }
 
 .LoadIndexButton:hover{
-    border-bottom: 2px solid #005CAF;
+    /*border-bottom: 2px solid #005CAF;*/
 }
 
 .LoadIndexButtonOn{
-    border-bottom: 3px solid #005CAF;
-    color:#005CAF;
-    background-color: rgba(0,92,175,0.07);
+    display: inline-block;
+    border-bottom: 3px solid rgba(185,225,255,1);
+    width: 25px;
+    color: rgba(185,225,255,1);
+    background-color: rgba(255,255,255,0.3);
 }
 
 .LoadSingleElement{
-    color: #005CAF;
+    color: white;
+    text-shadow: 2px 2px 7px rgba(0,0,0,0.2);
 }
 .LoadSingleElement:hover{
     /*border-bottom: 1px solid #005CAF;*/
 }
 
 
-#SaveTitle{
-    color: #77428D;
-    font-size: 250%;
-    padding: 5px 10px 5px 10px ;
-}
+
 
 .SaveIndexButton{
-    color:#77428D;
+    color: rgba(255,235,255,1);
 }
 
 .SaveIndexButton:hover{
-    font-weight: bold;
-    border-bottom: 2px solid #77428D;
+    /*font-weight: bold;*/
+    /*border-bottom: 2px solid #77428D;*/
 }
 
 .SaveIndexButtonOn{
-    border-bottom: 3px solid #77428D;
-    color:#77428D;
-    background-color: rgba(119,66,141,0.07);
+    display: inline-block;
+    border-bottom: 3px solid rgba(255,235,255,1);
+    width: 25px;
+    color: rgba(255,235,255,1);
+    background-color: rgba(255,255,255,0.3);
 }
 
 .SaveSingleElement{
-    color: #77428D;
+    color: white;
+    text-shadow: 2px 2px 7px rgba(0,0,0,0.2);
 }
 
 .SaveSingleElement:hover{
@@ -210,12 +260,13 @@
 .ren{
     position: relative;
     /*top: 10px;*/
-    width: 224px;
-    height: 126px;
+    /*width: 180px;*/
+    min-width: 230px;
+    height: 129px;
     background-color: #f5f5f7;
     background-repeat: no-repeat;
     background-size:cover;
-    margin: 0 12px 0 0;
+    margin: 0 3px 0 0;
     /*border: 2px solid #8E354A;*/
     /*border-radius: 5px;*/
 }
