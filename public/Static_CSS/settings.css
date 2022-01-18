@@ -60,6 +60,16 @@ div#settingItems{
 .closeSVG{
     width: 45px;
     height:45px;
+    cursor: pointer;
+    padding: 5px 5px 5px 5px;
+    border-radius: 50px;
+    position: absolute;
+    left: 15px;
+    top: 40px;
+}
+
+.closeSVG:hover{
+    background-color: rgba(175,175,175,0.3);
 }
 
 .settingItemButton{
