@@ -189,8 +189,8 @@ class LoadMainModel extends  React.Component{
                         </div>
                         <div className={"LS_textArea"}>
                             <div className="LSE_top">
-                                <span className={"LSE_index"}>{i}</span>
-                                <span className={"LSE_name"}>{thisButtonName}</span>
+                                {/*<span className={"LSE_index"}>{i}</span>*/}
+                                <span className={"L_name"}>{thisButtonName}</span>
                             </div>
                             <div className="LSE_bottom">
                                 {thisButtonText}
@@ -230,9 +230,15 @@ class LoadMainModel extends  React.Component{
         this.loadSaveButtons();
         return(
             <div id="LoadMain" className={"LS_renderMain"}>
-                <div id="LoadIndex" className={"LS_Index"}>
-                    {this.Buttons}
+                <div className={'LS_Title_and_Button'}>
+                    <div id="LoadTitle">
+                        读档
+                    </div>
+                    <div id="LoadIndex" className={"LS_Index"}>
+                        {this.Buttons}
+                    </div>
                 </div>
+
                 <div id="LoadButtonList" className={"LS_ButtonList"}>
                     {this.SaveButtons}
                 </div>
@@ -345,8 +351,13 @@ class SaveMainModel extends  React.Component{
         this.loadSaveButtons();
         return(
             <div id="SaveMain" className={"LS_renderMain"}>
-                <div id="SaveIndex" className={"LS_Index"}>
-                    {this.Buttons}
+                <div className={'LS_Title_and_Button'}>
+                    <div id="SaveTitle">
+                        存档
+                    </div>
+                    <div id="SaveIndex" className={"LS_Index"}>
+                        {this.Buttons}
+                    </div>
                 </div>
                 <div id="SaveButtonList" className={"LS_ButtonList"}>
                     {this.SaveButtons}

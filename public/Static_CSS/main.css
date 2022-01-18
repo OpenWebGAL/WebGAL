@@ -1,4 +1,10 @@
 /*清除默认边距*/
+@font-face {
+    font-family: "思源宋体";
+    /*noinspection CssUnknownTarget*/
+    src: url("./fonts/SourceHanSerifSC-Regular.otf");
+}
+
 *{
     margin: 0 0 0 0;
     padding: 0 0 0 0;
@@ -16,6 +22,7 @@
     ,linear-gradient(to right,rgba(0,0,0,0) 0%,rgba(0,0,0,0.35) 25% ,rgba(0,0,0,0.35)75%,rgba(0,0,0,0)100%);
     /*box-shadow: 5px 5px 10px rgba(0,0,0,0.3);*/
     /*border-radius: 10px;*/
+    cursor: default;
 }
 
 
@@ -34,8 +41,12 @@
     font-size: 200%;
     overflow: hidden;
     height: 60%;
+    font-family: 思源宋体,serif;
+    letter-spacing: 2px;
+    text-shadow: 2px 2px 7px rgba(255,255,255,0.5);
 }
 #pName{
+    letter-spacing: 3px;
     color: #f5f5f7;
     font-size: 165%;
     /*background-color: rgba(255,255,255,0.7);*/
@@ -43,6 +54,8 @@
     /*border-radius: 5px;*/
     border-bottom: 2px solid rgba(255,255,255,0.5);
     width: 45%;
+    font-family: 思源宋体,serif;
+    text-shadow: 2px 2px 7px rgba(255,255,255,0.5);
     /*background-color: rgba(0,0,0,0.5);*/
     /*border-radius: 5px;*/
 }
@@ -109,6 +122,7 @@
     text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
     border-radius: 8px;
     -webkit-animation: controlButtonHoverBack 0.5s;
+    cursor: pointer;
 }
 .controlButton:hover{
     -webkit-animation: controlButtonHover 0.5s;
@@ -169,12 +183,14 @@
     background-color: #FEDFE1;
     color: #8E354A;
     padding: 20px 15px 20px 15px;
-    width: 30vw;
+    min-width: 30vw;
     margin: 10px 0 10px 0;
     border: 2px solid #8E354A;
+    box-shadow: 0 0 15px rgba(255,255,255,0.8);
     text-align: center;
     border-radius: 15px;
-    font-size: 175%;
+    font-size: 185%;
+    cursor: pointer;
 }
 
 .singleChoose:hover{
@@ -225,6 +241,7 @@
     /*border: 1px solid rgba(0,0,0,0.2);*/
     /*border-radius: 7px;*/
     /*box-shadow: 2px 2px 7px rgba(0,0,0,0.3);*/
+    cursor: pointer;
 }
 
 #leftTitleButton{
@@ -248,6 +265,7 @@
     width: 100%;
     font-size: 188%;
     flex-flow: column;
+    background: linear-gradient(to right,rgba(255,255,255,0) 0%,rgba(255,255,255,0.1) 15%,rgba(255,255,255,0.3) 35%,rgba(255,255,255,0.3) 65%,rgba(255,255,255,0.1) 85%,rgba(255,255,255,0) 100%);
 }
 
 @-webkit-keyframes TitleButtonOnChoose {
@@ -464,6 +482,7 @@ a:visited{
     text-align: center;
     float: right;
     font-size: 85%;
+    cursor: pointer;
 }
 
 .backlog_interact_button:hover{
@@ -501,6 +520,8 @@ a:visited{
     padding: 15px 0 0 25px;
     text-shadow: 2px 2px 7px rgba(0,0,0,0.2);
     text-align: left;
+    font-family: 思源宋体,serif;
+    font-weight: bold;
 }
 
 .backlog_text{
@@ -510,6 +531,7 @@ a:visited{
     color: #f5f5f7;
     font-size: 135%;
     text-shadow: 2px 2px 13px rgba(0,0,0,0.3);
+    font-family: 思源宋体,serif;
     /*text-shadow: 2px 2px 5px rgba(255,255,255,0.55);*/
     /*-webkit-text-stroke: 0.15px #f5f5f7;*/
 }

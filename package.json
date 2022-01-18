@@ -1,7 +1,7 @@
 {
   "homepage": "./",
   "name": "webgal",
-  "version": "0.1.0",
+  "version": "3.8.5",
   "private": true,
   "dependencies": {
     "@icon-park/react": "^1.3.5",

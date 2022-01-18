@@ -86,10 +86,7 @@ function Stage() {
             <div id="Load" className="LS_Main">
                 <div id="loadMainBox" className="LS_mainBox">
                     <div id="closeLoad" onClick={userInteract.closeLoad}>
-                        <img src={closeB} className="closeSVG" id="LoadClose" alt="close"/>
-                    </div>
-                    <div id="LoadTitle">
-                        读档
+                        <img src={closeW} className="closeSVG" id="LoadClose" alt="close"/>
                     </div>
                     <div id="LoadItems" className="LS_Items">
                     </div>
@@ -98,10 +95,7 @@ function Stage() {
             <div id="Save" className="LS_Main">
                 <div id="saveMainBox" className="LS_mainBox">
                     <div id="closeSave" onClick={userInteract.closeSave}>
-                        <img src={closeB} className="closeSVG" alt="close"/>
-                    </div>
-                    <div id="SaveTitle">
-                        存档
+                        <img src={closeW} className="closeSVG" alt="close"/>
                     </div>
                     <div id="SaveItems" className="LS_Items">
 
