@@ -1,5 +1,6 @@
 #settings{
     position: absolute;
+    font-family: 思源宋体,serif;
     top: 0;
     bottom: 0;
     left: 0;
@@ -10,7 +11,7 @@
     background-image: linear-gradient(rgba(255,255,255,0) 0%,rgba(255,255,255,0) 75%,rgba(255,255,255,0.3)100%);
     /*border-radius: 15px;*/
     -webkit-animation: showSoftly 0.5s;
-    padding: 30px 30px 30px 30px;
+    padding: 30px 80px 30px 80px;
     box-shadow: 5px 5px 15px rgba(0,0,0,0.5);
     font-size: 100%;
 }
@@ -25,6 +26,7 @@
 
 #settingsTitle{
     font-size: 275%;
+    font-weight: bold;
 }
 
 #close{
@@ -60,6 +62,16 @@ div#settingItems{
 .closeSVG{
     width: 45px;
     height:45px;
+    cursor: pointer;
+    padding: 5px 5px 5px 5px;
+    border-radius: 50px;
+    position: absolute;
+    left: 15px;
+    top: 40px;
+}
+
+.closeSVG:hover{
+    background-color: rgba(175,175,175,0.3);
 }
 
 .settingItemButton{
@@ -70,6 +82,7 @@ div#settingItems{
     /*border-bottom: 2px solid #FEDFE1;*/
     /*border-radius: 5px;*/
     text-align: center;
+    cursor: pointer;
 }
 
 .settingItemButton:hover{
@@ -89,6 +102,7 @@ div#settingItems{
     border-bottom: 2px solid #8E354A;
     /*border-radius: 5px;*/
     text-align: center;
+    cursor: pointer;
 }
 
 #previewDiv{
@@ -109,6 +123,7 @@ div#settingItems{
 .deleteCookie{
     margin: 15px 0 15px 0;
     width: auto;
+    cursor: pointer;
  }
 
 .deleteCookie:hover{
@@ -127,4 +142,12 @@ div.importer-exporter span {
 div.importer-exporter span:hover {
     color: #6e6e73 ;
     /*background-color: rgba(0, 0, 0, 0.1);*/
+}
+
+.label-saves-exporter{
+    cursor: pointer;
+}
+
+.label-saves-importer{
+    cursor: pointer;
 }
