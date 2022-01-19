@@ -340,7 +340,7 @@
 @keyframes elementFadeIn {
     0%{
         transform: translate(-15px,-20px) scale(1.03,1.03);
-        opacity: 0.4;
+        opacity: 0;
     }
     100%{
         opacity: 1;
