@@ -27,6 +27,7 @@
 #settingsTitle{
     font-size: 275%;
     font-weight: bold;
+    animation: elementFadeIn 1s;
 }
 
 #close{
@@ -40,6 +41,7 @@
 
 div#settingItems{
     font-size: 135%;
+    animation: elementFadeIn 1s;
 }
 
 .settingItemTitle{
@@ -68,6 +70,7 @@ div#settingItems{
     position: absolute;
     left: 15px;
     top: 40px;
+    animation: elementFadeIn 1s;
 }
 
 .closeSVG:hover{
@@ -118,6 +121,7 @@ div#settingItems{
     border: 3px solid rgba(255,255,255,1);
     width: 95%;
     min-height: 20vh;
+    animation: elementFadeIn 1s;
 }
 
 .deleteCookie{

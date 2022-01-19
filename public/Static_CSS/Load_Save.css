@@ -1,5 +1,6 @@
 .LS_Title_and_Button{
     display: flex;
+    animation: elementFadeIn 1.2s;
 }
 
 
@@ -131,6 +132,7 @@
     flex-wrap: wrap;
     justify-content: space-around;
     padding: 0 0 20px 0;
+    animation: elementFadeIn 1.2s;
 }
 
 .LS_renderMain{
@@ -181,7 +183,10 @@
 ::-webkit-scrollbar {display:none}
 
 #LoadTitle{
-    color: rgba(200,235,255,1);
+    /*color: rgba(200,235,255,1);*/
+    color: transparent;
+    background: linear-gradient(135deg,rgba(185,225,255,1)0%,rgba(200,235,255,1) 45%,rgba(255,255,255,1)100%);
+    -webkit-background-clip: text;
     text-shadow: 2px 2px 12px rgba(255,255,255,0.5);
     font-family: 思源宋体,serif;
     font-weight: bold;
@@ -191,7 +196,9 @@
 }
 
 #SaveTitle{
-    color: rgba(255,235,255,1);
+    color: transparent;
+    background: linear-gradient(135deg,rgba(215,175,235,1) 0%,rgba(255,235,255,1) 45%,rgba(255,255,255,1)100%);
+    -webkit-background-clip: text;
     text-shadow: 2px 2px 12px rgba(255,255,255,0.5);
     font-family: 思源宋体,serif;
     font-weight: bold;
@@ -328,4 +335,14 @@
     /*justify-items: right;*/
     float: right;
     text-align: right;
+}
+
+@keyframes elementFadeIn {
+    0%{
+        transform: translate(-15px,-20px) scale(1.03,1.03);
+        opacity: 0.4;
+    }
+    100%{
+        opacity: 1;
+    }
 }
