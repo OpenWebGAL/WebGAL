@@ -344,8 +344,9 @@ class WG_ViewControl {
         document.getElementById('backlog').style.display = 'block';
         document.getElementById('bottomBox').style.display = 'none';
         let showBacklogList = [];
+        console.log(getRuntime().CurrentBacklog)
         for (let i = 0 ; i<getRuntime().CurrentBacklog.length ; i++){
-            let temp = <div className={'backlog_singleElement'} key={i}>
+            let temp = <div className={'backlog_singleElement'} key={i} style={{opacity:0,animationFillMode:'forwards',animationDelay:''+0.07*(getRuntime().CurrentBacklog.length-i)+'s'}}>
                 <div className={"backlog_interact"}>
                     <div className={"backlog_interact_button"} onClick={()=>{
                         let vocalName = getRuntime().CurrentBacklog[i].vocal;
