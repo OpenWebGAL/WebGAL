@@ -455,7 +455,8 @@ a:visited{
     display: flex;
     /*background-image: linear-gradient(to right, rgba(255,255,255,0.7) 0%,rgba(255,255,255,0.6) 60%,rgba(0,0,0,0) 100%);*/
     margin: 0 15% 20px 15%;
-    border-top: 2px solid #FEDFE1;
+    border-top: 2px solid rgba(255,255,255,0.8);
+    animation: elementFadeIn 1s;
     /*border-bottom: 3px solid #8E354A;*/
     /*box-shadow: 0 2px 15px rgba(255,255,255,0.3);*/
 }
@@ -474,8 +475,8 @@ a:visited{
 .backlog_interact_button{
     padding: 5px 15px 5px 15px;
     margin: 0 15px 10px 0;
-    border: 1px solid #f5f5f7;
-    box-shadow: 3px 3px 10px rgba(0,0,0,0.3);
+    border: 2px solid #f5f5f7;
+    box-shadow: 3px 3px 10px rgba(255,255,255,0.4);
     background: rgba(254,223,225,0.2);
     color: #f5f5f7;
     border-radius: 5px;
@@ -488,7 +489,8 @@ a:visited{
 .backlog_interact_button:hover{
     background:  #8E354A;
     /*color: #8E354A;*/
-    border: 1px solid #FEDFE1;
+    border: 2px solid #FEDFE1;
+    box-shadow: 3px 3px 10px rgba(255,255,255,0.6);
 }
 
 .vocalIcon{
