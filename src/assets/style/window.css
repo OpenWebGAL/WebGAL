@@ -8,7 +8,7 @@
     display: none;
     z-index: 20;
     background-color: rgba(0,0,0,0.9);
-    -webkit-animation: showSoftly 1s;
+    animation: showSoftly 1s;
     padding: 15px 1% 15px 1%;
     text-align: center;
 }
@@ -26,7 +26,7 @@
     text-align: center;
 }
 
-@-webkit-keyframes showSoftly /* Safari 与 Chrome */
+@keyframes showSoftly /* Safari 与 Chrome */
 {
     from {opacity: 0;}
     to {opacity: 100%;}
@@ -34,7 +34,7 @@
 
 .introSingleRow{
     padding: 10px 15px 10px 15px;
-    -webkit-animation: showSoftly 1.25s;
+    animation: showSoftly 1.25s;
 }
 
 .skipIntro:hover{
