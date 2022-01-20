@@ -252,18 +252,22 @@ function getGameInfo() {
     getInfoCon.open('GET','game/config.txt');
     getInfoCon.send();
 }
-// 解压
-function unzipStr(jData) {
-    const binData = JSON.parse(jData);
+
+function unzipStr(b64Data) {
+    let strData = atob(b64Data);
+    const charData = strData.split('').map(function (x) {
+        return x.charCodeAt(0);
+    });
+    const binData = new Uint8Array(charData);
     const data = pako.inflate(binData);
-    const strData = String.fromCharCode.apply(null, new Uint16Array(data));
+    strData = String.fromCharCode.apply(null, new Uint16Array(data));
     return decodeURIComponent(strData);
 }
 
 // 压缩
 function zipStr(str) {
-    const binaryString = pako.gzip(encodeURIComponent(str), {to: 'string'});
-    return(JSON.stringify(binaryString));
+    const binaryString = pako.gzip(encodeURIComponent(str), {to: 'string'})
+    return btoa(binaryString);
 }
 
 export {
