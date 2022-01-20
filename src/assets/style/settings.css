@@ -33,12 +33,6 @@
 #close{
 }
 
-@keyframes showSoftly /* Safari 与 Chrome */
-{
-    from {opacity: 0;}
-    to {opacity: 100%;}
-}
-
 div#settingItems{
     font-size: 135%;
     animation: elementFadeIn 1s;

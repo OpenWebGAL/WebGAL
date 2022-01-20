@@ -1,121 +1,188 @@
-.leftFigAni{
+.leftFigAni {
 
 }
-.centerFigAni{
+
+.centerFigAni {
 
 }
-.rightFigAni{
-    
+
+.rightFigAni {
+
 }
 
 @keyframes centerIn {
-    0%{
+    0% {
         opacity: 0;
-        transform: scale(1,1);
+        transform: scale(1, 1);
     }
 
-    100%{
+    100% {
         opacity: 1;
-        transform: scale(1,1);
+        transform: scale(1, 1);
     }
 }
 
 @keyframes upIn {
-    0%{
+    0% {
         opacity: 0;
-        transform: scale(1,1) translate(0,5%);
+        transform: scale(1, 1) translate(0, 5%);
     }
 
-    100%{
+    100% {
         opacity: 1;
-        transform: scale(1,1) translate(0,0);
+        transform: scale(1, 1) translate(0, 0);
     }
 }
 
 @keyframes leftIn {
-    0%{
+    0% {
         opacity: 0;
-        transform: scale(1,1) translate(-5%,0);
+        transform: scale(1, 1) translate(-5%, 0);
     }
 
-    100%{
+    100% {
         opacity: 1;
-        transform: scale(1,1) translate(0,0);
+        transform: scale(1, 1) translate(0, 0);
     }
 }
 
 @keyframes rightIn {
-    0%{
+    0% {
         opacity: 0;
-        transform: scale(1,1) translate(5%,0);
+        transform: scale(1, 1) translate(5%, 0);
     }
 
-    100%{
+    100% {
         opacity: 1;
-        transform: scale(1,1) translate(0,0);
+        transform: scale(1, 1) translate(0, 0);
     }
 }
 
 @keyframes bg_down {
-    0%{
+    0% {
         opacity: 0;
-        transform: scale(1.1,1.1) translate(0,-5%);
+        transform: scale(1.1, 1.1) translate(0, -5%);
     }
 
-    100%{
+    100% {
         opacity: 1;
-        transform: scale(1,1) translate(0,0);
+        transform: scale(1, 1) translate(0, 0);
     }
 }
 
 @keyframes bg_softIn {
-    0%{
+    0% {
         opacity: 0;
     }
 
-    100%{
+    100% {
         opacity: 1;
     }
 }
 
 @keyframes hideBG {
-    0%{
+    0% {
         opacity: 1;
     }
 
-    100%{
+    100% {
         opacity: 0;
     }
 }
 
 @keyframes shake {
-    0%{
-        transform: translate(0,0);
+    0% {
+        transform: translate(0, 0);
     }
 
-    25%{
-        transform: translate(-2%,0);
+    25% {
+        transform: translate(-2%, 0);
     }
 
-    75%{
-        transform: translate(2%,0);
+    75% {
+        transform: translate(2%, 0);
     }
 
-    100%{
-        transform: translate(0,0);
+    100% {
+        transform: translate(0, 0);
     }
 }
 
 @keyframes moveBaF {
-    0%{
-        transform: scale(1,1);
+    0% {
+        transform: scale(1, 1);
     }
 
-    50%{
-        transform: scale(1.1,1.1);
+    50% {
+        transform: scale(1.1, 1.1);
     }
 
-    100%{
-        transform: scale(1,1);
+    100% {
+        transform: scale(1, 1);
+    }
+}
+
+@keyframes showSoftly /* Safari 与 Chrome */
+{
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes elementFadeIn {
+    0% {
+        transform: translate(-15px, -20px) scale(1.03, 1.03);
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes controlButtonHover {
+    0% {
+        background-color: rgba(0, 0, 0, 0);
+        box-shadow: none;
+    }
+    100% {
+        background-color: rgba(255, 255, 255, 0.25);
+        box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.65);
+    }
+}
+
+@keyframes controlButtonHoverBack {
+    0% {
+        background-color: rgba(255, 255, 255, 0.25);
+        box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.65);
+    }
+    100% {
+
+    }
+}
+
+@keyframes TitleButtonOnChoose {
+    0% {
+        background-color: rgba(0, 0, 0, 0);
+        box-shadow: none;
+    }
+
+    100% {
+        background-color: rgba(255, 255, 255, 0.2);
+        box-shadow: 3px 3px 15px rgba(0, 0, 0, 0.5);
+    }
+}
+
+@keyframes TitleButtonNoneChoose {
+    0% {
+        background-color: rgba(255, 255, 255, 0.2);
+        box-shadow: 3px 3px 15px rgba(0, 0, 0, 0.5);
+    }
+
+    100% {
+        background-color: rgba(0, 0, 0, 0);
+        box-shadow: none;
     }
 }

@@ -26,12 +26,6 @@
     text-align: center;
 }
 
-@keyframes showSoftly /* Safari 与 Chrome */
-{
-    from {opacity: 0;}
-    to {opacity: 100%;}
-}
-
 .introSingleRow{
     padding: 10px 15px 10px 15px;
     animation: showSoftly 1.25s;

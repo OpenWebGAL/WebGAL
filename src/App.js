@@ -1,4 +1,3 @@
-import './App.css';
 import Stage from "./Components/Stage/mainStage";
 // import {
 //     setAutoWaitTime,autoWaitTime,textShowWaitTime,
