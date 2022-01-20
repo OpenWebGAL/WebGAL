@@ -31,7 +31,7 @@ class WG_ViewControl {
             )
         }
         oldBG.setAttribute('id','oldBG');
-        oldBG.style.webkitAnimation = 'hideBG 5s';
+        oldBG.style.animation = 'hideBG 5s';
         oldBG.style.animationFillMode = 'forwards';
         console.log(oldBG);
         BG.parentNode.appendChild(oldBG);
@@ -523,19 +523,19 @@ class WG_ViewControl {
         let aniString = animate+' '+time;
         let editList = document.getElementsByClassName(name);
         for (let i = 0; i < editList.length; i++) {
-            editList[i].style.webkitAnimation = 'none';
+            editList[i].style.animation = 'none';
         }
         setTimeout(function ()
         {
             for (let i = 0; i < editList.length; i++) {
-                editList[i].style.webkitAnimation = aniString;
+                editList[i].style.animation = aniString;
             }
         }, 1);
     }
 
     static VC_setAnimationById(id,animate,time){
         let aniString = animate+' '+time;
-        document.getElementById(id).style.webkitAnimation = aniString;
+        document.getElementById(id).style.animation = aniString;
     }
 
 // -------- 紧急回避 --------

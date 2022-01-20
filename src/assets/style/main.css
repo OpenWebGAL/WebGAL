@@ -67,7 +67,7 @@
     z-index: 1;
     background-repeat: no-repeat;
     background-size:cover;
-    /*-webkit-animation: showSoftly 0.5s;*/
+    /*animation: showSoftly 0.5s;*/
 }
 
 #oldBG{
@@ -88,7 +88,7 @@
     height: auto;
     /*overflow: hidden;*/
     object-fit: cover;
-    /*-webkit-animation: showSoftly 0.5s;*/
+    /*animation: showSoftly 0.5s;*/
 }
 #figureImage{
     width: 100%;
@@ -98,7 +98,7 @@
     top:5px;
     bottom: 0;
     z-index:2;
-    /*-webkit-animation: showSoftly 0.5s;*/
+    /*animation: showSoftly 0.5s;*/
     /*min-width: 600px;*/
     /*overflow: hidden;*/
 }
@@ -121,16 +121,16 @@
     color: #f5f5f7;
     text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
     border-radius: 8px;
-    -webkit-animation: controlButtonHoverBack 0.5s;
+    animation: controlButtonHoverBack 0.5s;
     cursor: pointer;
 }
 .controlButton:hover{
-    -webkit-animation: controlButtonHover 0.5s;
+    animation: controlButtonHover 0.5s;
     background-color: rgba(255,255,255,0.25);
     box-shadow: 5px 5px 15px rgba(0,0,0,0.65);
 }
 
-@-webkit-keyframes controlButtonHover {
+@keyframes controlButtonHover {
     from{
         background-color: rgba(0,0,0,0);
         box-shadow: none;
@@ -141,7 +141,7 @@
     }
 }
 
-@-webkit-keyframes controlButtonHoverBack {
+@keyframes controlButtonHoverBack {
     from{
         background-color: rgba(255,255,255,0.25);
         box-shadow: 5px 5px 15px rgba(0,0,0,0.65);
@@ -153,11 +153,11 @@
 
 
 .singleWord{
-    -webkit-animation: showSoftly 0.5s;
+    animation: showSoftly 0.5s;
 }
 
 
-@-webkit-keyframes showSoftly /* Safari 与 Chrome */
+@keyframes showSoftly /* Safari 与 Chrome */
 {
     from {opacity: 0;}
     to {opacity: 100%;}
@@ -174,7 +174,7 @@
     /*background-color: rgba(0, 0, 0, 0.1);*/
     /*background-image: linear-gradient(rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0) 75%, rgba(255, 255, 255, 0.3) 100%);*/
     /*border-radius: 15px;*/
-    -webkit-animation: showSoftly 0.5s;
+    animation: showSoftly 0.5s;
     justify-content: center;
 
 }
@@ -228,7 +228,7 @@
 
 .TitleSingleButton{
     font-family: Georgia;
-    /*font-weight: bold;*/
+    /*fonts-weight: bold;*/
     padding: 5px 30px 5px 30px;
     text-shadow: 0 0 3px rgba(255,255,255,1);
     margin: 0 0 7px 0;
@@ -237,7 +237,7 @@
     color: #8E354A;
     /*width: 15%;*/
     text-align: center;
-    -webkit-animation: TitleButtonNoneChoose 0.75s;
+    animation: TitleButtonNoneChoose 0.75s;
     /*border: 1px solid rgba(0,0,0,0.2);*/
     /*border-radius: 7px;*/
     /*box-shadow: 2px 2px 7px rgba(0,0,0,0.3);*/
@@ -251,7 +251,7 @@
 .TitleSingleButton:hover{
     background-color: rgba(255,255,255,0.2);
     box-shadow: 3px 3px 15px rgba(0,0,0,0.5);
-    -webkit-animation: TitleButtonOnChoose 0.75s;
+    animation: TitleButtonOnChoose 0.75s;
 }
 
 #setButtonBottom{
@@ -268,7 +268,7 @@
     background: linear-gradient(to right,rgba(255,255,255,0) 0%,rgba(255,255,255,0.1) 15%,rgba(255,255,255,0.3) 35%,rgba(255,255,255,0.3) 65%,rgba(255,255,255,0.1) 85%,rgba(255,255,255,0) 100%);
 }
 
-@-webkit-keyframes TitleButtonOnChoose {
+@keyframes TitleButtonOnChoose {
     from {
         background-color: rgba(0,0,0,0);
         box-shadow: none;
@@ -280,7 +280,7 @@
     }
 }
 
-@-webkit-keyframes TitleButtonNoneChoose {
+@keyframes TitleButtonNoneChoose {
     from {
         background-color: rgba(255,255,255,0.2);
         box-shadow: 3px 3px 15px rgba(0,0,0,0.5);
@@ -368,7 +368,7 @@ a:visited{
     height: auto;
     /*overflow: hidden;*/
     object-fit: cover;
-    /*-webkit-animation: showSoftly 0.5s;*/
+    /*animation: showSoftly 0.5s;*/
 }
 #figureImage_left{
     left: 2%;
@@ -379,7 +379,7 @@ a:visited{
     top:5px;
     bottom: 0;
     z-index:2;
-    /*-webkit-animation: showSoftly 0.5s;*/
+    /*animation: showSoftly 0.5s;*/
     /*min-width: 600px;*/
     /*overflow: hidden;*/
 }
@@ -391,7 +391,7 @@ a:visited{
     height: auto;
     /*overflow: hidden;*/
     object-fit: cover;
-    /*-webkit-animation: showSoftly 0.5s;*/
+    /*animation: showSoftly 0.5s;*/
     float: right;
 }
 #figureImage_right{
@@ -403,7 +403,7 @@ a:visited{
     top:5px;
     bottom: 0;
     z-index:2;
-    /*-webkit-animation: showSoftly 0.5s;*/
+    /*animation: showSoftly 0.5s;*/
     float: right;
     /*min-width: 600px;*/
     /*overflow: hidden;*/
@@ -422,7 +422,7 @@ a:visited{
     /*background-color: rgba(0,0,0,0.5);*/
     background-image: linear-gradient(to right,rgba(0,0,0,0) 0%, rgba(0,0,0,0.55) 15%,rgba(0,0,0,0.55) 82%,rgba(0,0,0,0)100%);
     /*border-radius: 15px;*/
-    -webkit-animation: showSoftly 0.5s;
+    animation: showSoftly 0.5s;
     padding: 0 0 0 0;
 }
 
@@ -527,7 +527,7 @@ a:visited{
 }
 
 .backlog_text{
-    /*font-weight: bold;*/
+    /*fonts-weight: bold;*/
     padding: 15px 0 0 15px;
     /*color: #0F2540;*/
     color: #f5f5f7;

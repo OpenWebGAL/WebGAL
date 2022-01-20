@@ -8,7 +8,7 @@
     
 }
 
-@-webkit-keyframes centerIn {
+@keyframes centerIn {
     0%{
         opacity: 0;
         transform: scale(1,1);
@@ -20,7 +20,7 @@
     }
 }
 
-@-webkit-keyframes upIn {
+@keyframes upIn {
     0%{
         opacity: 0;
         transform: scale(1,1) translate(0,5%);
@@ -32,7 +32,7 @@
     }
 }
 
-@-webkit-keyframes leftIn {
+@keyframes leftIn {
     0%{
         opacity: 0;
         transform: scale(1,1) translate(-5%,0);
@@ -44,7 +44,7 @@
     }
 }
 
-@-webkit-keyframes rightIn {
+@keyframes rightIn {
     0%{
         opacity: 0;
         transform: scale(1,1) translate(5%,0);
@@ -56,7 +56,7 @@
     }
 }
 
-@-webkit-keyframes bg_down {
+@keyframes bg_down {
     0%{
         opacity: 0;
         transform: scale(1.1,1.1) translate(0,-5%);
@@ -68,7 +68,7 @@
     }
 }
 
-@-webkit-keyframes bg_softIn {
+@keyframes bg_softIn {
     0%{
         opacity: 0;
     }
@@ -78,7 +78,7 @@
     }
 }
 
-@-webkit-keyframes hideBG {
+@keyframes hideBG {
     0%{
         opacity: 1;
     }
@@ -88,7 +88,7 @@
     }
 }
 
-@-webkit-keyframes shake {
+@keyframes shake {
     0%{
         transform: translate(0,0);
     }
@@ -106,7 +106,7 @@
     }
 }
 
-@-webkit-keyframes moveBaF {
+@keyframes moveBaF {
     0%{
         transform: scale(1,1);
     }
