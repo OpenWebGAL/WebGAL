@@ -65,6 +65,7 @@ div#settingItems{
     left: 15px;
     top: 40px;
     animation: elementFadeIn 1s;
+    z-index: 10;
 }
 
 .closeSVG:hover{
