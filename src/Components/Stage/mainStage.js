@@ -49,7 +49,7 @@ function Stage() {
             <div id="Title">
                 <div id="TitleModel">
                     <div id="setButtonBottom">
-                        <div className="TitleSingleButton" id="leftTitleButton" onClick={userInteract.hideTitle}>START</div>
+                        <div className="TitleSingleButton" onClick={userInteract.hideTitle}>START</div>
                         <div className="TitleSingleButton" onClick={userInteract.continueGame}>CONTINUE</div>
                         <div className="TitleSingleButton" onClick={userInteract.onLoadGame}>LOAD</div>
                         <div className="TitleSingleButton" onClick={userInteract.onSetting}>CONFIG</div>
@@ -102,7 +102,6 @@ function Stage() {
                     </div>
                 </div>
             </div>
-
             <div id="chooseBox"/>
             <div id="bottomBox">
                 <div id="top_control">
