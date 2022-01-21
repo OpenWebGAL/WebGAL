@@ -190,27 +190,26 @@
 }
 
 #TitleModel{
-    padding: 30px 0 20px 0 ;
+    padding: 30px 0 0 0 ;
     position: absolute;
     bottom: 0;
-    left: 25%;
-    right: 25%;
+    left:30%;
     /*width: 100vw;*/
     /*height: 13%;*/
     /*background-color: rgba(255,255,255,0.3);*/
     /*background-image: linear-gradient(rgba(255,255,255,0) 0%,rgba(255,255,255,0.35) 50%,rgba(255,255,255,0.5)100%);*/
     z-index: 12;
-    width: 50%;
+    width: 40%;
 }
 
 .TitleSingleButton{
-    font-family: Georgia;
+    font-family: Georgia,serif;
     /*fonts-weight: bold;*/
-    padding: 5px 30px 5px 30px;
+    padding: 10px 30px 10px 30px;
     text-shadow: 0 0 3px rgba(255,255,255,1);
-    margin: 0 0 7px 0;
+    margin: 3px 0 3px 0;
     /*border-top: 2px solid #8E354A;*/
-    /*background-color: #f5f5f7;*/
+    background-color: rgba(255,255,255,0.5);
     color: #8E354A;
     /*width: 15%;*/
     text-align: center;
@@ -219,6 +218,9 @@
     /*border-radius: 7px;*/
     /*box-shadow: 2px 2px 7px rgba(0,0,0,0.3);*/
     cursor: pointer;
+    border-right: 4px solid #8E354A;
+    border-left: 4px solid #8E354A;
+    box-shadow: 3px 3px 15px rgba(0, 0, 0, 0.2);
 }
 
 #leftTitleButton{
@@ -226,9 +228,11 @@
 }
 
 .TitleSingleButton:hover{
-    background-color: rgba(255,255,255,0.2);
+    /*background-color: rgba(255,255,255,0.2);*/
     box-shadow: 3px 3px 15px rgba(0,0,0,0.5);
     animation: TitleButtonOnChoose 0.75s;
+    transform: scale(1.15,1.15) translateY(-25%);
+    background-color: rgba(255,255,255,1);
 }
 
 #setButtonBottom{
@@ -238,11 +242,11 @@
     justify-items: center;
     justify-self: center;
     text-align: center;
-    top: 15px;
+    /*top: 15px;*/
     width: 100%;
-    font-size: 188%;
+    font-size: 200%;
     flex-flow: column;
-    background: linear-gradient(to right,rgba(255,255,255,0) 0%,rgba(255,255,255,0.1) 15%,rgba(255,255,255,0.3) 35%,rgba(255,255,255,0.3) 65%,rgba(255,255,255,0.1) 85%,rgba(255,255,255,0) 100%);
+    /*background: linear-gradient(to right,rgba(255,255,255,0) 0%,rgba(255,255,255,0.1) 15%,rgba(255,255,255,0.3) 35%,rgba(255,255,255,0.3) 65%,rgba(255,255,255,0.1) 85%,rgba(255,255,255,0) 100%);*/
 }
 
 
