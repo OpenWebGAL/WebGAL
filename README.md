@@ -333,7 +333,7 @@ setFigAni:right,shake,0.5s;
 如：
 
 ```
-@-webkit-keyframes leftIn {
+@keyframes leftIn {
     0%{
         opacity: 0;
         transform: scale(1,1) translate(-5%,0);

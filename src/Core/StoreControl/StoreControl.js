@@ -4,6 +4,7 @@
 import {nextSentenceProcessor} from "../WG_core";
 import { prefetcher } from '../util/PrefetchWrapper';
 import {WG_ViewControl} from "../ViewController/ViewControl";
+import pako from 'pako';
 
 {
     var setAutoWaitTime = 1500;
@@ -102,7 +103,8 @@ function loadCookie(){
         // let pre_process = document.cookie;
         // let fst = pre_process.split(';')[0];
         // let scd = document.cookie.slice(fst.length+1);
-        let data = JSON.parse(localStorage.getItem(GameInfo['Game_key']));
+        let unzip = unzipStr(localStorage.getItem(GameInfo['Game_key']));
+        let data = JSON.parse(unzip);
         Saves = data.SavedGame;
         SaveBacklog = data.SavedBacklog;
         currentSavePage = data.SP;
@@ -122,7 +124,8 @@ function writeCookie(){
         cSettings:Settings
     }
     // console.log(JSON.stringify(toCookie));
-    localStorage.setItem(GameInfo['Game_key'],JSON.stringify(toCookie));
+    let gzip = zipStr(JSON.stringify(toCookie),{to:'string'});
+    localStorage.setItem(GameInfo['Game_key'],gzip);
     // document.cookie = JSON.stringify(toCookie);
 }
 
@@ -137,7 +140,8 @@ function clearCookie(){
             play_speed:'medium'
         }
     }
-    localStorage.setItem(GameInfo['Game_key'],JSON.stringify(toCookie));
+    let gzip = zipStr(JSON.stringify(toCookie),{to:'string'});
+    localStorage.setItem(GameInfo['Game_key'],gzip);
 }
 
 function loadSettings(){
@@ -247,6 +251,23 @@ function getGameInfo() {
     }
     getInfoCon.open('GET','game/config.txt');
     getInfoCon.send();
+}
+
+function unzipStr(b64Data) {
+    let strData = atob(b64Data);
+    const charData = strData.split('').map(function (x) {
+        return x.charCodeAt(0);
+    });
+    const binData = new Uint8Array(charData);
+    const data = pako.inflate(binData);
+    strData = String.fromCharCode.apply(null, new Uint16Array(data));
+    return decodeURIComponent(strData);
+}
+
+// 压缩
+function zipStr(str) {
+    const binaryString = pako.gzip(encodeURIComponent(str), {to: 'string'})
+    return btoa(binaryString);
 }
 
 export {
