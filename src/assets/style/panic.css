@@ -1,0 +1,91 @@
+div#panic-overlay {
+    margin: 0;
+    position: absolute;
+    display: none;
+    width: 100%;
+    height: 100%;
+    background-color: white;
+    z-index: 256;
+}
+
+.yoozle-gl-blue {
+    color: #4285f4;
+}
+
+.yoozle-gl-red {
+    color: #db4437;
+}
+
+.yoozle-gl-yellow {
+    color: #f4b400;
+}
+
+.yoozle-gl-green {
+    color: #0f9d58;
+}
+
+.yoozle-e-rotate {
+    display: inline-block;
+    transform: rotate(-12deg);
+}
+
+.yoozle-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.yoozle-title {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 150px;
+    font-family: arial, sans-serif;
+    font-size: 100px;
+}
+
+.yoozle-search {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px 10px;
+}
+
+.yoozle-search-bar {
+    width: 40%;
+    line-height: 32px;
+    font-family: arial, sans-serif;
+    font-size: 18px;
+}
+
+.yoozle-search-buttons {
+    padding-top: 13px;
+}
+
+.yoozle-btn {
+    background-color: #f8f9fa;
+    border: 1px solid #f8f9fa;
+    border-radius: 4px;
+    color: #3c4043;
+    font-family: arial, sans-serif;
+    font-size: 14px;
+    margin: 11px 4px;
+    padding: 0 16px;
+    line-height: 27px;
+    height: 36px;
+    min-width: 54px;
+    text-align: center;
+    cursor: pointer;
+    user-select: none;
+}
+
+.yoozle-btn:hover {
+    box-shadow: 0 1px 1px rgba(0, 0, 0, .1);
+    border: 1px solid #dadce0;
+    color: #202124;
+}
+
+.yoozle-btn:focus {
+    border: 1px solid #4285f4;
+    outline: none;
+}

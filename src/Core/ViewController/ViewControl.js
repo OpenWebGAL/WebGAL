@@ -31,7 +31,7 @@ class WG_ViewControl {
             )
         }
         oldBG.setAttribute('id','oldBG');
-        oldBG.style.webkitAnimation = 'hideBG 5s';
+        oldBG.style.animation = 'hideBG 5s';
         oldBG.style.animationFillMode = 'forwards';
         console.log(oldBG);
         BG.parentNode.appendChild(oldBG);
@@ -344,8 +344,9 @@ class WG_ViewControl {
         document.getElementById('backlog').style.display = 'block';
         document.getElementById('bottomBox').style.display = 'none';
         let showBacklogList = [];
+        console.log(getRuntime().CurrentBacklog)
         for (let i = 0 ; i<getRuntime().CurrentBacklog.length ; i++){
-            let temp = <div className={'backlog_singleElement'} key={i}>
+            let temp = <div className={'backlog_singleElement'} key={i} style={{opacity:0,animationFillMode:'forwards',animationDelay:''+0.07*(getRuntime().CurrentBacklog.length-i)+'s'}}>
                 <div className={"backlog_interact"}>
                     <div className={"backlog_interact_button"} onClick={()=>{
                         let vocalName = getRuntime().CurrentBacklog[i].vocal;
@@ -522,19 +523,19 @@ class WG_ViewControl {
         let aniString = animate+' '+time;
         let editList = document.getElementsByClassName(name);
         for (let i = 0; i < editList.length; i++) {
-            editList[i].style.webkitAnimation = 'none';
+            editList[i].style.animation = 'none';
         }
         setTimeout(function ()
         {
             for (let i = 0; i < editList.length; i++) {
-                editList[i].style.webkitAnimation = aniString;
+                editList[i].style.animation = aniString;
             }
         }, 1);
     }
 
     static VC_setAnimationById(id,animate,time){
         let aniString = animate+' '+time;
-        document.getElementById(id).style.webkitAnimation = aniString;
+        document.getElementById(id).style.animation = aniString;
     }
 
 // -------- 紧急回避 --------
