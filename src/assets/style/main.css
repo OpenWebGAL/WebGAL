@@ -301,6 +301,7 @@
     color: #8E354A;
     margin: 0 10px 0 10px;
     border-bottom: 2px solid #8E354A;
+    cursor: pointer;
 }
 
 .MesChoose:hover{
