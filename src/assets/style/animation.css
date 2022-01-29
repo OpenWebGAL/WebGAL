@@ -155,8 +155,8 @@
 
 @keyframes controlButtonHoverBack {
     0% {
-        background-color: rgba(255, 255, 255, 0.25);
-        box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.65);
+        /*background-color: rgba(255, 255, 255, 0.25);*/
+        /*box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.65);*/
     }
     100% {
 
@@ -171,16 +171,16 @@
 
     100% {
         /*box-shadow: 3px 3px 15px rgba(0, 0, 0, 0.5);*/
-        transform: scale(1.15,1.15) translateY(-10%);
-        background-color: rgba(0,0,0,0.15);
+        transform: scale(1.35,1.35) translateY(-5%);
+        /*background-color: rgba(0,0,0,0.15);*/
     }
 }
 
 @keyframes TitleButtonNoneChoose {
     0% {
         /*box-shadow: 3px 3px 15px rgba(0, 0, 0, 0.5);*/
-        transform: scale(1.15,1.15) translateY(-10%);
-        background-color: rgba(0,0,0,0.15);
+        transform: scale(1.35,1.35) translateY(-5%);
+        /*background-color: rgba(0,0,0,0.15);*/
     }
 
     100% {
