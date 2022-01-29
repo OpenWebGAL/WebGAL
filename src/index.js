@@ -23,13 +23,14 @@ import './assets/style/panic.css';
 import './assets/style/settings.css';
 import './assets/style/window.css'
 import './assets/style/UI_component.css';
+import {isMobile, MobileChangeStyle} from "./Core/util/WG_util";
 
 
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('ReactRoot')
+    <React.StrictMode>
+        <App/>
+    </React.StrictMode>,
+    document.getElementById('ReactRoot')
 );
 
 // If you want to start measuring performance in your app, pass a function
@@ -40,3 +41,6 @@ reportWebVitals();
 loadCookie();
 loadSettings();
 getGameInfo();
+
+if (isMobile())
+    MobileChangeStyle();

@@ -356,9 +356,9 @@ class userInteract {
     static hideStartPage(){
         document.getElementById("WG_startPage").style.display = 'none';
         WG_ViewControl.loadBGM();
-        if(isMobile()){
-            MobileChangeStyle();
-        }
+        // if(isMobile()){
+        //     MobileChangeStyle();
+        // }
         //设置默认动画
         WG_ViewControl.VC_setAnimationById('mainBackground','bg_softIn','2s');
         WG_ViewControl.VC_setAnimationByClass('figureContainerleft','centerIn','1s');
