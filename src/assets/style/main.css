@@ -206,11 +206,11 @@
     font-family: Georgia,serif;
     /*fonts-weight: bold;*/
     padding: 10px 30px 10px 30px;
-    text-shadow: 0 0 3px rgba(255,255,255,1);
+    text-shadow: 0 0 15px rgba(0,0,0,0.6);
     margin: 3px 0 3px 0;
     /*border-top: 2px solid #8E354A;*/
-    background-color: rgba(255,255,255,0.8);
-    color: #8E354A;
+    /*background-color: rgba(0,0,0,0.1);*/
+    color: white;
     /*width: 15%;*/
     text-align: center;
     animation: TitleButtonNoneChoose 0.75s;
@@ -218,22 +218,25 @@
     /*border-radius: 7px;*/
     /*box-shadow: 2px 2px 7px rgba(0,0,0,0.3);*/
     cursor: pointer;
-    border-right: 4px solid #8E354A;
-    border-left: 4px solid #8E354A;
-    box-shadow: 3px 3px 15px rgba(0, 0, 0, 0.2);
+    /*border-right: 4px solid #8E354A;*/
+    /*border-left: 4px solid #8E354A;*/
+    /*box-shadow: 3px 3px 15px rgba(0, 0, 0, 0.1);*/
+    background-image: linear-gradient(to right,rgba(0,0,0,0) 0% ,rgba(0,0,0,0) 25% ,rgba(0,0,0,0.12) 40%,rgba(0,0,0,0.12) 60%,rgba(0,0,0,0) 75% ,rgba(0,0,0,0) 100%);
+}
+
+.TitleSingleButton:hover{
+    /*background-color: rgba(255,255,255,0.2);*/
+    box-shadow: 3px 3px 15px rgba(255,255,255,0.5);
+    animation: TitleButtonOnChoose 0.75s;
+    transform: scale(1.15,1.15) translateY(-10%);
+    background-color: rgba(0,0,0,0.15);
 }
 
 #leftTitleButton{
     border-top: none;
 }
 
-.TitleSingleButton:hover{
-    /*background-color: rgba(255,255,255,0.2);*/
-    box-shadow: 3px 3px 15px rgba(0,0,0,0.5);
-    animation: TitleButtonOnChoose 0.75s;
-    transform: scale(1.15,1.15) translateY(-25%);
-    background-color: rgba(255,255,255,1);
-}
+
 
 #setButtonBottom{
     position: relative;
