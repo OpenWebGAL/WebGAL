@@ -193,7 +193,7 @@
     padding: 0 0 0 0 ;
     position: absolute;
     bottom: 0;
-    background-color: rgba(0,0,0,0.5);
+    background-color: rgba(0,0,0,0.6);
     /*left:30%;*/
     /*width: 100vw;*/
     /*height: 13%;*/
@@ -240,7 +240,7 @@
 #setButtonBottom{
     position: relative;
     display: flex;
-    justify-content: space-around;
+    justify-content: center;
     text-align: center;
     /*top: 15px;*/
     width: 100%;
