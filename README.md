@@ -10,7 +10,7 @@ Demo: https://msfasr.com/WebGAL_Demo_Page/
 
 https://github.com/MakinoharaShoko/WebGAL/releases/
 
-如果下载速度过慢，请尝试通过蓝奏云网盘下载(版本不一定是最新的，建议在 GitHub Release 下载）： https://www.lanzouw.com/iRTYixccq5i
+如果下载速度过慢，请尝试通过蓝奏云网盘下载(版本不一定是最新的，建议在 GitHub Release 下载）： https://wwm.lanzouw.com/iWGiJzehoni
 
 
 > 想要参与引擎开发的开发者请先阅读 DEV_NOTE
@@ -42,6 +42,8 @@ node app.js
 复制/WebGAL 下的文件(不是文件夹，是/WebGAL 文件夹下的文件)到你想要部署的云服务器的指定目录下，或是部署到GitHub Pages。
 
 如果你使用源代码进行调试，你可以通过 npm run build 或 yarn run build 来创建一个静态网页（在/build 文件夹），然后将这个文件夹内的内容部署到 GitHub Pages 或你的云服务器上。
+
+*如果你需要避免程序被破解，可解除UserInteract.js中373~378行的注释，从而使别人无法打开F12（使用npm/yarn build时无须这么做）*
 
 # 游戏制作快速上手教程：
 
