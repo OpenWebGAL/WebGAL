@@ -1,28 +1,27 @@
 import {
     Saves, SaveBacklog, CurrentBacklog,
     writeCookie,
-    SyncCurrentStatus, getScene, loadCookie, getRuntime, getStatus
+    SyncCurrentStatus, getScene, loadCookie, getRuntime, getStatus, currentScene
 } from "../StoreControl/StoreControl";
 import {AllHiddenIgnore, queryWidgetState} from "../util/WG_util";
 import * as core from "../WG_core"
 import {WG_ViewControl} from "../ViewController/ViewControl";
-import { prefetcher } from '../util/PrefetchWrapper';
+import {prefetcher} from '../util/PrefetchWrapper';
 // import AudioController from "../util/AudioController";
-
 
 
 // eslint-disable-next-line no-self-assign
 
 class userInteract {
 // 保存当前游戏状态
-    static saveGame(index){
+    static saveGame(index) {
         console.log("saving")
         let tempInfo = JSON.stringify(getStatus("all"));
         Saves[index] = JSON.parse(tempInfo);
         let tempBacklog = JSON.stringify(getRuntime().CurrentBacklog);
         console.log(tempBacklog)
-        SaveBacklog[index]= JSON.parse(tempBacklog);
-        Saves[index].saveTime = new Date().toLocaleDateString() +' '+ new Date().toLocaleTimeString('chinese',{hour12:false});
+        SaveBacklog[index] = JSON.parse(tempBacklog);
+        Saves[index].saveTime = new Date().toLocaleDateString() + ' ' + new Date().toLocaleTimeString('chinese', {hour12: false});
         writeCookie();
     }
 
@@ -34,34 +33,35 @@ class userInteract {
         let save = Saves[index];
         let url = 'game/scene/'
         url = url + save['SceneName'];
-        getRuntime().currentScene ='';
+        getRuntime().currentScene = '';
         let getScReq = null;
         getScReq = new XMLHttpRequest();
         if (getScReq != null) {
-            getScReq.open("get",url , true);
+            getScReq.open("get", url, true);
             getScReq.send();
             getScReq.onreadystatechange = doResult; //设置回调函数
         }
+
         function doResult() {
             if (getScReq.readyState === 4) { //4表示执行完成
                 if (getScReq.status === 200) { //200表示执行成功
                     getRuntime().currentScene = getScReq.responseText;
                     getRuntime().currentScene = getRuntime().currentScene.split('\n');
-                    for (let i = 0;i<getRuntime().currentScene.length;i++){
+                    for (let i = 0; i < getRuntime().currentScene.length; i++) {
                         let tempSentence = getRuntime().currentScene[i].split(";")[0];
                         let commandLength = tempSentence.split(":")[0].length;
                         let command = getRuntime().currentScene[i].split(":")[0];
-                        let content = tempSentence.slice(commandLength+1);
+                        let content = tempSentence.slice(commandLength + 1);
                         getRuntime().currentScene[i] = getRuntime().currentScene[i].split(":");
                         getRuntime().currentScene[i][0] = command;
                         getRuntime().currentScene[i][1] = content;
                     }
-                    SyncCurrentStatus('SentenceID',save["SentenceID"]);
+                    SyncCurrentStatus('SentenceID', save["SentenceID"]);
                     WG_ViewControl.VC_restoreStatus(save);
                     console.log(SaveBacklog)
                     getRuntime().CurrentBacklog = SaveBacklog[index];
                     console.log(CurrentBacklog);
-                    SyncCurrentStatus('all',save);
+                    SyncCurrentStatus('all', save);
                     prefetcher.onSceneChange(url, getStatus('SentenceID'));
                 }
             }
@@ -73,39 +73,42 @@ class userInteract {
         this.closeBacklog();
         WG_ViewControl.VC_closeChoose();
         let save = getRuntime().CurrentBacklog[index];
-        for (let i = getRuntime().CurrentBacklog.length - 1 ; i > index-1 ; i--){
+        for (let i = getRuntime().CurrentBacklog.length - 1; i > index - 1; i--) {
             getRuntime().CurrentBacklog.pop();
         }
         //get Scene:
         let url = 'game/scene/'
         url = url + save['SceneName'];
-        getRuntime().currentScene ='';
+        getRuntime().currentScene = '';
         let getScReq = null;
         getScReq = new XMLHttpRequest();
         if (getScReq != null) {
-            getScReq.open("get",url , true);
+            getScReq.open("get", url, true);
             getScReq.send();
             getScReq.onreadystatechange = doResult; //设置回调函数
         }
+
         function doResult() {
             if (getScReq.readyState === 4) { //4表示执行完成
                 if (getScReq.status === 200) { //200表示执行成功
                     getRuntime().currentScene = getScReq.responseText;
                     getRuntime().currentScene = getRuntime().currentScene.split('\n');
-                    for (let i = 0;i<getRuntime().currentScene.length;i++){
+                    for (let i = 0; i < getRuntime().currentScene.length; i++) {
                         let tempSentence = getRuntime().currentScene[i].split(";")[0];
                         let commandLength = tempSentence.split(":")[0].length;
                         let command = getRuntime().currentScene[i].split(":")[0];
-                        let content = tempSentence.slice(commandLength+1);
+                        let content = tempSentence.slice(commandLength + 1);
+                        content = content.split(';')[0];
+                        command = command.split(';')[0];
                         getRuntime().currentScene[i] = getRuntime().currentScene[i].split(":");
                         getRuntime().currentScene[i][0] = command;
                         getRuntime().currentScene[i][1] = content;
                     }
-                    SyncCurrentStatus('SentenceID',save["SentenceID"]);
+                    SyncCurrentStatus('SentenceID', save["SentenceID"]);
                     console.log("restore command sent")
-                    console.log("restoring:"+save)
+                    console.log("restoring:" + save)
                     WG_ViewControl.VC_restoreStatus(save);
-                    SyncCurrentStatus('all',save);
+                    SyncCurrentStatus('all', save);
                     getRuntime().CurrentBacklog[getRuntime().CurrentBacklog.length] = JSON.parse(JSON.stringify(getStatus("all")));
                     prefetcher.onSceneChange(url, getStatus('SentenceID'));
                 }
@@ -119,9 +122,9 @@ class userInteract {
         getRuntime().CurrentBacklog = [];
         // CurrentBacklog = [];
         document.getElementById('Title').style.display = 'none';
-        if(ifRes !== 'non-restart'){
+        if (ifRes !== 'non-restart') {
             //隐藏选项界面
-            document.getElementById("chooseBox").style.display="none";
+            document.getElementById("chooseBox").style.display = "none";
             getStatus("all")["bgm"] = '';
             WG_ViewControl.loadBGM();
             getStatus("all")["fig_Name"] = '';
@@ -140,57 +143,56 @@ class userInteract {
     }
 
 // 分支选择（请求getScene）
-    static chooseScene(url){
+    static chooseScene(url) {
         // console.log(url);
         getStatus("all")["SceneName"] = url;
-        let sUrl = "game/scene/"+url;
+        let sUrl = "game/scene/" + url;
         getScene(sUrl);
-        document.getElementById("chooseBox").style.display="none"
+        document.getElementById("chooseBox").style.display = "none"
     }
 
 //通过label跳分支
-    static chooseJumpFun(label){
+    static chooseJumpFun(label) {
         let lab_name = label;
         //find the line of the label:
         let find = false;
         let jmp_sentence = 0;
         for (let i = 0; i < getRuntime().currentScene.length; i++) {
-            if(getRuntime().currentScene[i][0] === 'label' && getRuntime().currentScene[i][1] === lab_name){
+            if (getRuntime().currentScene[i][0] === 'label' && getRuntime().currentScene[i][1] === lab_name) {
                 find = true;
                 jmp_sentence = i;
             }
         }
-        if(find){
-            SyncCurrentStatus('SentenceID',jmp_sentence);
+        if (find) {
+            SyncCurrentStatus('SentenceID', jmp_sentence);
             core.nextSentenceProcessor();
-            document.getElementById("chooseBox").style.display="none"
-        }else
-        {
+            document.getElementById("chooseBox").style.display = "none"
+        } else {
             core.increaseSentence();
             core.nextSentenceProcessor();
-            document.getElementById("chooseBox").style.display="none"
+            document.getElementById("chooseBox").style.display = "none"
         }
     }
 
 //点击背景
-    static clickOnBack(){
-        if(getRuntime().hideTextStatus){
+    static clickOnBack() {
+        if (getRuntime().hideTextStatus) {
             document.getElementById('bottomBox').style.display = 'flex';
             getRuntime().hideTextStatus = false;
-        }else {
+        } else {
             core.nextSentenceProcessor();
         }
     }
 
 // 打开设置
-    static onSetting(){
+    static onSetting() {
         loadCookie();
         WG_ViewControl.VC_showSettings();
-        if(getRuntime().Settings["font_size"] === 'small'){
+        if (getRuntime().Settings["font_size"] === 'small') {
             document.getElementById('previewDiv').style.fontSize = '150%';
-        }else if(getRuntime().Settings["font_size"] === 'medium'){
+        } else if (getRuntime().Settings["font_size"] === 'medium') {
             document.getElementById('previewDiv').style.fontSize = '200%';
-        }else if(getRuntime().Settings["font_size"] === 'large'){
+        } else if (getRuntime().Settings["font_size"] === 'large') {
             document.getElementById('previewDiv').style.fontSize = '250%';
         }
     }
@@ -210,14 +212,14 @@ class userInteract {
     }
 
 // 关闭设置
-    static closeSettings(){
+    static closeSettings() {
         document.getElementById("settings").style.display = "none"
         document.getElementById("bottomBox").style.display = "flex"
     }
 
 //自动播放
-    static autoNext(){
-        if(getRuntime().auto === 0){
+    static autoNext() {
+        if (getRuntime().auto === 0) {
             getRuntime().autoWaitTime = getRuntime().setAutoWaitTime;
             getRuntime().textShowWaitTime = 35
             getRuntime().fast = 0;
@@ -239,8 +241,7 @@ class userInteract {
             //     }
             // }else
             core.nextSentenceProcessor();
-        }
-        else if(getRuntime().auto === 1){
+        } else if (getRuntime().auto === 1) {
             getRuntime().autoWaitTime = getRuntime().setAutoWaitTime;
             getRuntime().auto = 0;
             document.getElementById('autoButton').style.backgroundColor = 'rgba(255,255,255,0)';
@@ -250,8 +251,8 @@ class userInteract {
     }
 
 // 快进
-    static fastNext(){
-        if(getRuntime().fast === 0){
+    static fastNext() {
+        if (getRuntime().fast === 0) {
             getRuntime().autoWaitTime = getRuntime().setAutoWaitTime;
             getRuntime().auto = 0;
             document.getElementById('autoButton').style.backgroundColor = 'rgba(255,255,255,0)';
@@ -266,8 +267,7 @@ class userInteract {
             document.getElementById('fastButton').style.boxShadow = '0 0 25px rgba(255,255,255,0.5)';
             core.nextSentenceProcessor();
 
-        }
-        else if(getRuntime().fast === 1){
+        } else if (getRuntime().fast === 1) {
             getRuntime().autoWaitTime = getRuntime().setAutoWaitTime;
             getRuntime().textShowWaitTime = 35
             getRuntime().fast = 0;
@@ -284,23 +284,25 @@ class userInteract {
     }
 
 // 退出（试验中）
-    static exit(){
-        WG_ViewControl.showMesModel('你确定要退出吗','退出','留在本页',function (){window.close()})
+    static exit() {
+        WG_ViewControl.showMesModel('你确定要退出吗', '退出', '留在本页', function () {
+            window.close()
+        })
     }
 
 // 回到标题界面
     static Title() {
-        WG_ViewControl.showMesModel('要返回到标题界面吗','是','不要',function (){
+        WG_ViewControl.showMesModel('要返回到标题界面吗', '是', '不要', function () {
             document.getElementById('Title').style.display = 'block';
             getRuntime().temp_bgm_TitleToGameplay = getRuntime().currentInfo.bgm;
-            SyncCurrentStatus('bgm',getRuntime().GameInfo['Title_bgm']);
+            SyncCurrentStatus('bgm', getRuntime().GameInfo['Title_bgm']);
             WG_ViewControl.loadBGM();
         })
     }
 
 // Title页继续游戏
-    static continueGame(){
-        if(getRuntime().currentScene === ''){
+    static continueGame() {
+        if (getRuntime().currentScene === '') {
             getScene("game/scene/start.txt");
             getStatus("all")["SceneName"] = 'start.txt';
         }
@@ -316,24 +318,24 @@ class userInteract {
     }
 
 // 关闭回溯界面
-    static closeBacklog(){
+    static closeBacklog() {
         document.getElementById('backlog').style.display = 'none';
         document.getElementById('bottomBox').style.display = 'flex';
     }
 
 // 关闭intro界面
-    static clearIntro(){
+    static clearIntro() {
         document.getElementById("intro").style.display = 'none';
         core.increaseSentence();
         core.nextSentenceProcessor();
     }
 
 // 隐藏文本框
-    static hideTextBox(){
+    static hideTextBox() {
         // let even = window.event || arguments.callee.caller.arguments[0];
         // even.preventDefault();
         // even.stopPropagation();//阻止事件冒泡
-        if(!getRuntime().hideTextStatus){
+        if (!getRuntime().hideTextStatus) {
             document.getElementById('bottomBox').style.display = 'none';
             getRuntime().hideTextStatus = true;
         }
@@ -345,25 +347,23 @@ class userInteract {
     }
 
 
-
-    static showBacklog(){
+    static showBacklog() {
         // let even = window.event || arguments.callee.caller.arguments[0];
         // even.preventDefault();
         // even.stopPropagation();//阻止事件冒泡
         WG_ViewControl.showBacklog();
     }
 
-    static hideStartPage(){
+    static hideStartPage() {
         document.getElementById("WG_startPage").style.display = 'none';
         WG_ViewControl.loadBGM();
         //设置默认动画
-        WG_ViewControl.VC_setAnimationById('mainBackground','bg_softIn','2s');
-        WG_ViewControl.VC_setAnimationByClass('figureContainerleft','centerIn','1s');
-        WG_ViewControl.VC_setAnimationByClass('figureContainercenter','centerIn','1s');
-        WG_ViewControl.VC_setAnimationByClass('figureContainerright','centerIn','1s');
+        WG_ViewControl.VC_setAnimationById('mainBackground', 'bg_softIn', '2s');
+        WG_ViewControl.VC_setAnimationByClass('figureContainerleft', 'centerIn', '1s');
+        WG_ViewControl.VC_setAnimationByClass('figureContainercenter', 'centerIn', '1s');
+        WG_ViewControl.VC_setAnimationByClass('figureContainerright', 'centerIn', '1s');
     }
 }
-
 
 
 // 禁止F12
@@ -375,10 +375,10 @@ class userInteract {
 //     }
 
 // 禁止右键菜单以及选择文字
-document.addEventListener('contextmenu', function(e) {
+document.addEventListener('contextmenu', function (e) {
     e.preventDefault();
 });
-document.addEventListener('selectstart', function(e) {
+document.addEventListener('selectstart', function (e) {
     e.preventDefault();
 });
 
@@ -387,7 +387,7 @@ document.addEventListener('selectstart', function(e) {
 document.addEventListener('mouseup', function (ev) {
     if (ev.button === 2) {
         // 目前等功能同于 delete 键
-        const evt = new KeyboardEvent('keyup', { key: 'Delete', code: 'Delete' });
+        const evt = new KeyboardEvent('keyup', {key: 'Delete', code: 'Delete'});
         document.dispatchEvent(evt);
         ev.preventDefault();
     }
@@ -403,8 +403,7 @@ document.addEventListener('wheel', function (ev) {
     if (ev.deltaY > 0) {
         core.nextSentenceProcessor();
         ev.preventDefault();
-    }
-    else if (ev.deltaY < 0) {
+    } else if (ev.deltaY < 0) {
         WG_ViewControl.showBacklog();
         ev.preventDefault();
     }
@@ -418,8 +417,7 @@ document.addEventListener('keydown', function (ev) {
     switch (ev.code) {
         // begin ctrl skip
         case 'ControlLeft':
-        case 'ControlRight':
-        {
+        case 'ControlRight': {
             const state = queryWidgetState();
             // 「正在游戏」状态
             if (AllHiddenIgnore(state, 'TextBox')) {
@@ -440,8 +438,7 @@ document.addEventListener('keyup', function (ev) {
     switch (ev.code) {
         // end ctrl skip
         case 'ControlLeft':
-        case 'ControlRight':
-        {
+        case 'ControlRight': {
             const state = queryWidgetState();
             // 「正在游戏」状态
             if (AllHiddenIgnore(state, 'TextBox')) {
@@ -454,8 +451,7 @@ document.addEventListener('keyup', function (ev) {
         // advance text / confirm
         case 'Space':
         case 'Enter':
-        case 'NumpadEnter':
-        {
+        case 'NumpadEnter': {
             const state = queryWidgetState();
             if (AllHiddenIgnore(state, 'TextBox')) {
                 // 文本框显示
@@ -471,8 +467,7 @@ document.addEventListener('keyup', function (ev) {
             break;
 
         // auto mode
-        case 'KeyA':
-        {
+        case 'KeyA': {
             const state = queryWidgetState();
             if (AllHiddenIgnore(state, 'TextBox')) {
                 userInteract.autoNext();
@@ -482,8 +477,7 @@ document.addEventListener('keyup', function (ev) {
             break;
 
         // skip mode
-        case 'KeyF':
-        {
+        case 'KeyF': {
             const state = queryWidgetState();
             if (AllHiddenIgnore(state, 'TextBox')) {
                 userInteract.fastNext();
@@ -493,8 +487,7 @@ document.addEventListener('keyup', function (ev) {
             break;
 
         // replay voice
-        case 'KeyV':
-        {
+        case 'KeyV': {
             const state = queryWidgetState();
             if (AllHiddenIgnore(state, 'TextBox')) {
                 WG_ViewControl.playVocal();
@@ -504,8 +497,7 @@ document.addEventListener('keyup', function (ev) {
             break;
 
         // save dialog
-        case 'KeyS':
-        {
+        case 'KeyS': {
             const state = queryWidgetState();
             if (AllHiddenIgnore(state, ['TextBox', 'SaveScreen'])) {
                 if (state.get('SaveScreen'))
@@ -518,8 +510,7 @@ document.addEventListener('keyup', function (ev) {
             break;
 
         // load dialog
-        case 'KeyL':
-        {
+        case 'KeyL': {
             const state = queryWidgetState();
             if (AllHiddenIgnore(state, ['TextBox', 'LoadScreen'])) {
                 if (state.get('LoadScreen'))
@@ -532,8 +523,7 @@ document.addEventListener('keyup', function (ev) {
             break;
 
         // settings dialog
-        case 'KeyC':
-        {
+        case 'KeyC': {
             const state = queryWidgetState();
             if (AllHiddenIgnore(state, ['TextBox', 'SettingScreen'])) {
                 if (state.get('SettingScreen'))
@@ -546,8 +536,7 @@ document.addEventListener('keyup', function (ev) {
             break;
 
         // open backlog
-        case 'ArrowUp':
-        {
+        case 'ArrowUp': {
             const state = queryWidgetState();
             // 已经打开 backlog 后不再拦截上键
             if (AllHiddenIgnore(state, 'TextBox')) {
@@ -558,8 +547,7 @@ document.addEventListener('keyup', function (ev) {
             break;
 
         // open title
-        case 'KeyT':
-        {
+        case 'KeyT': {
             const state = queryWidgetState();
             if (AllHiddenIgnore(state, ['TextBox', 'Title'])) {
                 if (state.get('Title'))
@@ -572,8 +560,7 @@ document.addEventListener('keyup', function (ev) {
             break;
 
         // hide window
-        case 'Delete':
-        {
+        case 'Delete': {
             if (AllHiddenIgnore(queryWidgetState(['TitleScreen', 'PanicScreen']))) {
                 const state = queryWidgetState(['TextBox', 'SaveScreen', 'LoadScreen', 'SettingScreen', 'BacklogScreen']);
                 // 「正在游戏」状态
@@ -581,8 +568,7 @@ document.addEventListener('keyup', function (ev) {
                     if (state.get('TextBox')) {
                         document.querySelector('div#bottomBox').style.display = 'none';
                         getRuntime().hideTextStatus = true;
-                    }
-                    else {
+                    } else {
                         document.querySelector('div#bottomBox').style.display = 'flex';
                         getRuntime().hideTextStatus = false;
                     }
@@ -605,8 +591,7 @@ document.addEventListener('keyup', function (ev) {
             break;
 
         // panic button
-        case 'Escape':
-        {
+        case 'Escape': {
             if (queryWidgetState('PanicScreen'))
                 userInteract.hidePanic();
             else
