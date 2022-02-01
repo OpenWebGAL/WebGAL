@@ -1,15 +1,3 @@
-// import '../../assets/css/main.css';
-// import '../../assets/css/panic.css'
-// import '../../assets/css/window.css'
-// import '../../assets/css/Load_Save.css'
-// import '../../assets/css/settings.css'
-// import "../../assets/css/UI_component.css"
-// import '../../Core/StoreControl/StoreControl'
-// import {setAutoWaitTime,autoWaitTime,textShowWaitTime,
-//     GameInfo,currentScene,auto,fast,onTextPreview,showingText,hideTextStatus,
-//     currentInfo,Saves,SaveBacklog,CurrentBacklog,currentSavePage,currentLoadPage,Settings,
-//     loadCookie,writeCookie,clearCookie,loadSettings,getStatus,getScene,getGameInfo}
-//     from "../../Core/StoreControl/StoreControl";
 import {userInteract} from "../../Core/InteractController/UserInteract";
 import {nextSentenceProcessor} from "../../Core/WG_core";
 import {WG_ViewControl} from "../../Core/ViewController/ViewControl";
@@ -27,15 +15,6 @@ import {
     ReplayMusic,
     SettingTwo
 } from "@icon-park/react";
-// import {isMobile} from "../../Core/util/WG_util";
-
-// window.onload = function () {
-//     loadCookie();
-//     loadSettings();
-//     getGameInfo();
-//     WG_ViewControl.loadBGM();
-//
-// }
 
 function Stage() {
     return (
