@@ -179,8 +179,7 @@ function nextSentenceProcessor() {
             setTimeout(jumpNext, getRuntime().autoWaitTime);
 
             function jumpNext() {
-                if (getRuntime().auto === 1)
-                    nextSentenceProcessor();
+                if (getRuntime().auto === 1) nextSentenceProcessor();
             }
 
         }

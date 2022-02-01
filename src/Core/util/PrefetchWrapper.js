@@ -1,4 +1,4 @@
-import { getStatus } from '../StoreControl/StoreControl';
+import {getStatus} from '../StoreControl/StoreControl';
 
 
 const cacheVersion = 1;
@@ -6,7 +6,6 @@ const cacheNamePrefix = 'webgal-cache-v';
 const cacheName = cacheNamePrefix + cacheVersion;
 
 const startSceneUrl = 'game/scene/start.txt';
-
 
 
 /**
@@ -40,7 +39,7 @@ class PrefetchWrapperSW {
         /** @type {Set.<String>} */
         this._cachedAssets = new Set();
 
-        this._currentCursor = { scene: '', idx: 0 };
+        this._currentCursor = {scene: '', idx: 0};
     }
 
 
@@ -51,8 +50,7 @@ class PrefetchWrapperSW {
      */
     async onSceneChange(newSceneUrl, startIdx = 0) {
         const syncCachePromise = this._syncCacheInfo();
-        if (newSceneUrl === this._currentCursor.scene && startIdx === this._currentCursor.idx)
-            return;
+        if (newSceneUrl === this._currentCursor.scene && startIdx === this._currentCursor.idx) return;
 
         this._currentCursor.scene = newSceneUrl;
         this._currentCursor.idx = startIdx;
@@ -62,11 +60,10 @@ class PrefetchWrapperSW {
         this.flushPipeline();
 
         const resp = await fetch(newSceneUrl);
-        if (!resp.ok)
-            throw new Error(`[prefetcher] request for ${newSceneUrl} failed with status ${resp.status}`);
+        if (!resp.ok) throw new Error(`[prefetcher] request for ${newSceneUrl} failed with status ${resp.status}`);
 
         // todo: consider moving to worker
-        const newAssets = extractAssetUrl(await resp.text(), { sceneUrl: newSceneUrl, startLine: 1 + startIdx });
+        const newAssets = extractAssetUrl(await resp.text(), {sceneUrl: newSceneUrl, startLine: 1 + startIdx});
 
         // start urgent fetch
         const urgentPromises = newAssets.urgent.map((asset) => fetch(asset));
@@ -74,8 +71,7 @@ class PrefetchWrapperSW {
         // discard cached assets from prefetch list
         await syncCachePromise;
         newAssets.all.forEach((asset) => {
-            if (this._cachedAssets.has(asset) || newAssets.urgent.includes(asset))
-                newAssets.all.delete(asset);
+            if (this._cachedAssets.has(asset) || newAssets.urgent.includes(asset)) newAssets.all.delete(asset);
         });
 
         this.flushPipeline();  // flush again
@@ -123,30 +119,27 @@ class PrefetchWrapperSW {
      * @see flushPipeline()
      */
     signalPause() {
-        if (this._batchID !== undefined)
-            clearTimeout(this._batchID);
+        if (this._batchID !== undefined) clearTimeout(this._batchID);
         this._batchID = undefined;
     }
 
 
     /** 恢复预加载，多次调用*不会*产生多个请求 */
     signalResume() {
-        if (this._batchID !== undefined)
-            return;
+        if (this._batchID !== undefined) return;
 
         const tryBatch = (selfID) => {
-            if (selfID !== this._batchID)
-                return;
+            if (selfID !== this._batchID) return;
             if (this._prefetchPipeline.length > 0) {
-                this._fetchBatch(selfID).catch(() => { }).then(() => {
+                this._fetchBatch(selfID).catch(() => {
+                }).then(() => {
                     if (selfID === this._batchID) {
                         this._syncCacheInfo();
                         const id = setTimeout(() => tryBatch(id), this.minRequestInterval);
                         this._batchID = id;
                     }
                 });
-            }
-            else {
+            } else {
                 this._syncCacheInfo();
                 const id = setTimeout(() => tryBatch(id), this.minRequestInterval);
                 this._batchID = id;
@@ -164,17 +157,12 @@ class PrefetchWrapperSW {
         const promises = [];
         for (let budget = this.maxRequestBatch; budget > 0;) {
             const assetUrl = this._prefetchPipeline.shift();
-            if (assetUrl === undefined)
-                break;
+            if (assetUrl === undefined) break;
 
-            if (this._cachedAssets.has(assetUrl))
-                continue;
+            if (this._cachedAssets.has(assetUrl)) continue;
 
             // check the (fake) query string of scene
-            if (assetUrl.split('/', 2)[1] === 'scene')
-                promises.push(this._tryExpandScene(assetUrl, selfID));
-            else
-                promises.push(fetch(assetUrl));
+            if (assetUrl.split('/', 2)[1] === 'scene') promises.push(this._tryExpandScene(assetUrl, selfID)); else promises.push(fetch(assetUrl));
 
             budget--;
         }
@@ -196,22 +184,18 @@ class PrefetchWrapperSW {
 
         const qsParam = new URLSearchParams(sceneUrl.substring(qsIdx));
         sceneUrl = sceneUrl.substring(0, qsIdx);  // cut query string for now
-        if (qsParam.get('expand') !== `${true}`)
-            return fetch(sceneUrl);
+        if (qsParam.get('expand') !== `${true}`) return fetch(sceneUrl);
 
         const startIdx = Number(qsParam.get('start-idx'));
         return fetch(sceneUrl).then((resp) => {
             if (resp.ok) {
                 resp.clone().text().then((sceneText) => {
                     const nextAssets = extractAssetUrl(sceneText, {
-                        sceneUrl: sceneUrl,
-                        startLine: 1 + startIdx,
-                        urgentBudget: 6,  // todo: move this arg to param
+                        sceneUrl: sceneUrl, startLine: 1 + startIdx, urgentBudget: 6,  // todo: move this arg to param
                         urgentOnly: true,
                     });
                     for (const asset of nextAssets.urgent) {
-                        if (!this._cachedAssets.has(asset) && !this._prefetchPipeline.includes(asset))
-                            this._prefetchPipeline.push(asset)
+                        if (!this._cachedAssets.has(asset) && !this._prefetchPipeline.includes(asset)) this._prefetchPipeline.push(asset)
                     }
                 });
             }
@@ -225,17 +209,15 @@ class PrefetchWrapperSW {
      * @private
      */
     async _syncCacheInfo() {
-        if (window.caches === undefined)
-            return;
+        if (window.caches === undefined) return;
         try {
             const cache = await caches.open(cacheName);
             const keys = await cache.keys();
             this._cachedAssets = new Set(keys.map((req) => req.url.substring(window.location.href.length)));
+        } catch {
         }
-        catch { }
     }
 }
-
 
 
 /**
@@ -252,16 +234,9 @@ class PrefetchWrapperSW {
  *      `map` 分类后，键: `background`, `bgm`, `figure`, `scene`, `vocal`；<br/>
  *      `urgent` 急用；<br/>
  */
-function extractAssetUrl(
-    sceneText,
-    {
-        sceneUrl = '',
-        startLine = 1,
-        maxLine = Number.POSITIVE_INFINITY,
-        urgentBudget = 6,
-        urgentOnly = false
-    } = {}
-) {
+function extractAssetUrl(sceneText, {
+    sceneUrl = '', startLine = 1, maxLine = Number.POSITIVE_INFINITY, urgentBudget = 6, urgentOnly = false
+} = {}) {
     /** @type {Set.<String>} */
     const assetAll = new Set();
 
@@ -278,8 +253,7 @@ function extractAssetUrl(
     const extractVocal = (dialogue) => {
         const vocalPrefix = 'vocal-';
         const vocal = dialogue.split(',', 1)[0];
-        if (vocal.length < dialogue.length && vocal.length > vocalPrefix.length && vocal.startsWith(vocalPrefix))
-            return vocal.substring(vocalPrefix.length);
+        if (vocal.length < dialogue.length && vocal.length > vocalPrefix.length && vocal.startsWith(vocalPrefix)) return vocal.substring(vocalPrefix.length);
         return '';
     };
 
@@ -289,8 +263,7 @@ function extractAssetUrl(
      */
     const addToAssets = (filetype, filename) => {
         const url = `game/${filetype}/${filename}`;
-        if (assetAll.has(url) || (filetype === 'scene' && url === sceneUrl))
-            return false;
+        if (assetAll.has(url) || (filetype === 'scene' && url === sceneUrl)) return false;
         assetAll.add(url);
         assetMap.get(filetype).push(url);
         if (urgentBudget > 0) {
@@ -302,31 +275,26 @@ function extractAssetUrl(
 
     const lines = sceneText.split('\n');
     for (const [lineIdx, lineData] of lines.entries()) {
-        if (lineIdx + 1 - startLine >= maxLine || (urgentOnly && urgentBudget <= 0))
-            break;
+        if (lineIdx + 1 - startLine >= maxLine || (urgentOnly && urgentBudget <= 0)) break;
 
-        if (lineIdx + 1 < startLine)
-            continue;
+        if (lineIdx + 1 < startLine) continue;
 
         const tokens = lineData.split(';', 1)[0];
-        if (!tokens)
-            continue;
+        if (!tokens) continue;
 
         const cmdOrDlg = tokens.split(':', 1)[0];
         if (cmdOrDlg.length < tokens.length) {
             // `cmdOrDlg` is command (or name of character)
 
             const argOrDlg = tokens.substring(cmdOrDlg.length + 1);
-            if (!argOrDlg)
-                continue;
+            if (!argOrDlg) continue;
 
             switch (cmdOrDlg) {
                 // if hit, then `cmdOrDlg` is command and `argOrDlg` is argument
 
                 case 'changeBG':
                 case 'changeBG_next':
-                    if (argOrDlg !== 'none')
-                        addToAssets('background', argOrDlg);
+                    if (argOrDlg !== 'none') addToAssets('background', argOrDlg);
                     break;
 
                 case 'changeP':
@@ -336,8 +304,7 @@ function extractAssetUrl(
                 case 'changeP_left_next':
                 case 'changeP_right_next':
                 case 'miniAvatar':
-                    if (argOrDlg !== 'none')
-                        addToAssets('figure', argOrDlg);
+                    if (argOrDlg !== 'none') addToAssets('figure', argOrDlg);
                     break;
 
                 case 'changeScene':
@@ -349,8 +316,7 @@ function extractAssetUrl(
                     const choices = argOrDlg.trim().slice(1, -1).split(',');
                     for (const choice of choices) {
                         const args = choice.split(':');
-                        if (args.length === 2 && args[1])
-                            addToAssets('scene', args[1]);
+                        if (args.length === 2 && args[1]) addToAssets('scene', args[1]);
                     }
                 }
                     break;
@@ -374,23 +340,19 @@ function extractAssetUrl(
                 // `cmdOrDlg` is name of character, `argOrDlg` is dialogue
                 default: {
                     const vocal = extractVocal(argOrDlg);
-                    if (vocal)
-                        addToAssets('vocal', vocal);
+                    if (vocal) addToAssets('vocal', vocal);
                 }
                     break;
             }
-        }
-        else {
+        } else {
             // `cmdOrDlg` is continued dialogue
             const vocal = extractVocal(cmdOrDlg);
-            if (vocal)
-                addToAssets('vocal', vocal);
+            if (vocal) addToAssets('vocal', vocal);
         }
     }
 
-    return { all: assetAll, map: assetMap, urgent: assetUrgent };
+    return {all: assetAll, map: assetMap, urgent: assetUrgent};
 }
-
 
 
 let prefetcher = new PrefetchWrapperSW();
@@ -404,7 +366,9 @@ if (window.isSecureContext) {
                     reg.onupdatefound = () => {
                         // hack: re-register every time
                         // the service worker is for prefetching rather than offline storage
-                        window.addEventListener('beforeunload', () => { reg.unregister(); });
+                        window.addEventListener('beforeunload', () => {
+                            reg.unregister();
+                        });
 
                         reg.installing.onstatechange = (ev) => {
                             if (ev.target.state === 'activated') {
@@ -420,15 +384,13 @@ if (window.isSecureContext) {
                     console.error('[service worker] registration failed: ' + err);
                 });
         });
-    }
-    else {
+    } else {
         // only private mode in Firefox falls in this category
         console.log('ServiceWorker not supported.');
         // no ServiceWorker, no CacheStorage
         // could be threated as BrowserCache
     }
-}
-else {
+} else {
     console.warn('Context not secure. Requiring HTTPS to enable CacheStorage and ServiceWorker.');
 
     window.addEventListener('load', () => {
@@ -441,14 +403,11 @@ else {
 }
 
 
-
 function initServiceWorkerPrefetchWrapper() {
     prefetcher.suggestNextScene(startSceneUrl);
     const contScene = getStatus('SceneName');
-    if (contScene && (contScene !== 'start.txt' || getStatus('SentenceID')))
-        prefetcher.suggestNextScene(`game/scene/${contScene}`, getStatus('SentenceID'));
+    if (contScene && (contScene !== 'start.txt' || getStatus('SentenceID'))) prefetcher.suggestNextScene(`game/scene/${contScene}`, getStatus('SentenceID'));
 }
 
 
-
-export { prefetcher, startSceneUrl, extractAssetUrl };
+export {prefetcher, startSceneUrl, extractAssetUrl};
