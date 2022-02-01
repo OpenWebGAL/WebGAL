@@ -2,9 +2,9 @@
 
 ### 一次编写，处处运行，无需网页开发基础，3分钟即可学会所有的语法，只要你有灵感，就可以立刻开始开始创作你自己的Galgame！
 
-Demo: https://msfasr.com/WebGAL_Demo_Page/
+## 在线演示
 
-另一个Demo链接（国内访问可能会稍快）：https://webgal-demo.vercel.app/
+https://wg.msfasr.com
 
 ## 如果你是想要开发属于自己的 Galgame 的开发者，请下载发行版：
 
