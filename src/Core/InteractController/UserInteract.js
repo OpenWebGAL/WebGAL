@@ -3,7 +3,7 @@ import {
     writeCookie,
     SyncCurrentStatus, getScene, loadCookie, getRuntime, getStatus
 } from "../StoreControl/StoreControl";
-import {AllHiddenIgnore, isMobile, MobileChangeStyle, queryWidgetState} from "../util/WG_util";
+import {AllHiddenIgnore, queryWidgetState} from "../util/WG_util";
 import * as core from "../WG_core"
 import {WG_ViewControl} from "../ViewController/ViewControl";
 import { prefetcher } from '../util/PrefetchWrapper';
@@ -356,9 +356,6 @@ class userInteract {
     static hideStartPage(){
         document.getElementById("WG_startPage").style.display = 'none';
         WG_ViewControl.loadBGM();
-        // if(isMobile()){
-        //     MobileChangeStyle();
-        // }
         //设置默认动画
         WG_ViewControl.VC_setAnimationById('mainBackground','bg_softIn','2s');
         WG_ViewControl.VC_setAnimationByClass('figureContainerleft','centerIn','1s');
@@ -376,6 +373,7 @@ class userInteract {
 //             return false
 //         }
 //     }
+
 // 禁止右键菜单以及选择文字
 document.addEventListener('contextmenu', function(e) {
     e.preventDefault();

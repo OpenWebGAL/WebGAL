@@ -1,7 +1,5 @@
 import ReactDOM from "react-dom";
-import {
-CurrentBacklog, SyncCurrentStatus, getStatus, clearCookie, fast, getRuntime
-} from "../StoreControl/StoreControl";
+import {clearCookie, getRuntime, getStatus, SyncCurrentStatus} from "../StoreControl/StoreControl";
 
 import {userInteract} from "../InteractController/UserInteract";
 import {
@@ -14,8 +12,6 @@ import {
 } from "../../Components/UI/etc";
 import {nextSentenceProcessor} from "../WG_core";
 import React from "react";
-import returnIcon from "../../assets/img/return.svg";
-import vocalIcon from "../../assets/img/vocal.svg"
 import {Return, VolumeNotice} from "@icon-park/react";
 import '@icon-park/react/styles/index.css';
 
@@ -534,8 +530,7 @@ class WG_ViewControl {
     }
 
     static VC_setAnimationById(id,animate,time){
-        let aniString = animate+' '+time;
-        document.getElementById(id).style.animation = aniString;
+        document.getElementById(id).style.animation = animate + ' ' + time;
     }
 
 // -------- 紧急回避 --------

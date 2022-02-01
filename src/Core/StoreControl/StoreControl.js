@@ -3,19 +3,18 @@
 // eslint-disable-next-line no-lone-blocks
 import {nextSentenceProcessor} from "../WG_core";
 import { prefetcher } from '../util/PrefetchWrapper';
-import {WG_ViewControl} from "../ViewController/ViewControl";
 import pako from 'pako';
 
-{
-    var setAutoWaitTime = 1500;
-    var autoWaitTime = 1500;
-    var textShowWaitTime = 35;
-}
+
+    let setAutoWaitTime = 1500;
+    let autoWaitTime = 1500;
+    let textShowWaitTime = 35;
+
 
 //初始化游戏信息表
 // eslint-disable-next-line no-lone-blocks
-{
-    var GameInfo =
+
+    let GameInfo =
         {
             Game_name:'WebGAL Demo',
             Game_key:'WG_default',
@@ -24,7 +23,7 @@ import pako from 'pako';
             Loading_img:'none'
         }
 
-    var SettingsMap =
+    let SettingsMap =
         {
             font_size: {
                 'small': '150%',
@@ -37,22 +36,22 @@ import pako from 'pako';
                 'fast': 20
             }
         }
-}
+
 
 //初始化运行时变量表
 // eslint-disable-next-line no-lone-blocks
-{
-    var currentScene ='';
-    var auto = 0;
-    var fast = 0;
-    var onTextPreview = 0;
-    var showingText = false;
-    var hideTextStatus = false;
-    var temp_bgm_TitleToGameplay = '';
-}
+
+    let currentScene ='';
+    let auto = 0;
+    let fast = 0;
+    let onTextPreview = 0;
+    let showingText = false;
+    let hideTextStatus = false;
+    let temp_bgm_TitleToGameplay = '';
+
 
 // 初始化状态表
-var currentInfo ={
+let currentInfo ={
     SceneName:'',//场景文件名
     SentenceID:0,//语句ID
     bg_Name:'',//背景文件名
@@ -72,23 +71,23 @@ var currentInfo ={
 }
 
 // 初始化存档系统
-var Saves=[];
-var SaveBacklog=[];
+let Saves=[];
+let SaveBacklog=[];
 
 // 初始化backlog存储表
-var CurrentBacklog=[];
+let CurrentBacklog=[];
 
 //初始化存读档页面记录
-var currentSavePage = 0;
-var currentLoadPage = 0;
+let currentSavePage = 0;
+let currentLoadPage = 0;
 
 // 初始化设置表
-var Settings = {
+let Settings = {
     font_size: 'medium',
     play_speed:'medium'
 };
 
-var runtime = {
+let runtime = {
     setAutoWaitTime,autoWaitTime,textShowWaitTime,
     GameInfo,currentScene,auto,fast,onTextPreview,showingText,hideTextStatus,
     currentInfo,Saves,SaveBacklog,CurrentBacklog,currentSavePage,currentLoadPage,Settings,temp_bgm_TitleToGameplay
@@ -114,8 +113,6 @@ function loadCookie(){
 }
 
 function writeCookie(){
-    // var expire = new Date((new Date()).getTime() + 20000 * 24 * 60 * 60000);//有效期20000天
-    // expire = ";expires=" + expire.toGMTString();
     let toCookie = {
         SavedGame:Saves,
         SavedBacklog:SaveBacklog,
