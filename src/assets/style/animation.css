@@ -171,7 +171,7 @@
 
     100% {
         /*box-shadow: 3px 3px 15px rgba(0, 0, 0, 0.5);*/
-        transform: scale(1.35,1.35) translateY(-5%);
+        transform: scale(1.1,1.1);
         /*background-color: rgba(0,0,0,0.15);*/
     }
 }
@@ -179,11 +179,29 @@
 @keyframes TitleButtonNoneChoose {
     0% {
         /*box-shadow: 3px 3px 15px rgba(0, 0, 0, 0.5);*/
-        transform: scale(1.35,1.35) translateY(-5%);
+        transform: scale(1.1,1.1);
         /*background-color: rgba(0,0,0,0.15);*/
     }
 
     100% {
 
+    }
+}
+
+@keyframes TitleModelHover {
+    0%{
+        background-color: rgba(0,0,0,0.35);
+    }
+    100%{
+        background-color: rgba(0,0,0,0.65);
+    }
+}
+
+@keyframes TitleModelNoneHover {
+    0%{
+        background-color: rgba(0,0,0,0.65);
+    }
+    100%{
+        background-color: rgba(0,0,0,0.35);
     }
 }
