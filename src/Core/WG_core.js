@@ -303,6 +303,7 @@ function ifJump(command, content) {
 
 function jumpSentence(lab_name) {
     //find the line of the label:
+    // noinspection DuplicatedCode
     let find = false;
     let jmp_sentence = 0;
     for (let i = 0; i < getRuntime().currentScene.length; i++) {
