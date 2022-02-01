@@ -1,7 +1,14 @@
 import {
-    Saves, SaveBacklog, CurrentBacklog,
+    Saves,
+    SaveBacklog,
+    CurrentBacklog,
     writeCookie,
-    SyncCurrentStatus, getScene, loadCookie, getRuntime, getStatus, currentScene
+    SyncCurrentStatus,
+    getScene,
+    loadCookie,
+    getRuntime,
+    getStatus,
+    currentScene
 } from "../StoreControl/StoreControl";
 import {AllHiddenIgnore, queryWidgetState} from "../util/WG_util";
 import * as core from "../WG_core"
@@ -397,8 +404,7 @@ document.addEventListener('mouseup', function (ev) {
 
 document.addEventListener('wheel', function (ev) {
     const state = queryWidgetState();
-    if (!(AllHiddenIgnore(state, 'TextBox') && state.get('TextBox')))
-        return;
+    if (!(AllHiddenIgnore(state, 'TextBox') && state.get('TextBox'))) return;
     // 「正在游戏」状态
     if (ev.deltaY > 0) {
         core.nextSentenceProcessor();
@@ -411,8 +417,7 @@ document.addEventListener('wheel', function (ev) {
 
 // -------- 快捷键 --------
 document.addEventListener('keydown', function (ev) {
-    if (ev.isComposing || ev.defaultPrevented || ev.repeat)
-        return;
+    if (ev.isComposing || ev.defaultPrevented || ev.repeat) return;
 
     switch (ev.code) {
         // begin ctrl skip
@@ -432,8 +437,7 @@ document.addEventListener('keydown', function (ev) {
     }
 });
 document.addEventListener('keyup', function (ev) {
-    if (ev.isComposing || ev.defaultPrevented)
-        return;
+    if (ev.isComposing || ev.defaultPrevented) return;
 
     switch (ev.code) {
         // end ctrl skip
@@ -455,9 +459,7 @@ document.addEventListener('keyup', function (ev) {
             const state = queryWidgetState();
             if (AllHiddenIgnore(state, 'TextBox')) {
                 // 文本框显示
-                if (state.get('TextBox'))
-                    core.nextSentenceProcessor();
-                else {
+                if (state.get('TextBox')) core.nextSentenceProcessor(); else {
                     document.querySelector('div#bottomBox').style.display = 'flex';
                     getRuntime().hideTextStatus = false;
                 }
@@ -500,10 +502,7 @@ document.addEventListener('keyup', function (ev) {
         case 'KeyS': {
             const state = queryWidgetState();
             if (AllHiddenIgnore(state, ['TextBox', 'SaveScreen'])) {
-                if (state.get('SaveScreen'))
-                    userInteract.closeSave();
-                else
-                    userInteract.onSaveGame();
+                if (state.get('SaveScreen')) userInteract.closeSave(); else userInteract.onSaveGame();
                 ev.preventDefault();
             }
         }
@@ -513,10 +512,7 @@ document.addEventListener('keyup', function (ev) {
         case 'KeyL': {
             const state = queryWidgetState();
             if (AllHiddenIgnore(state, ['TextBox', 'LoadScreen'])) {
-                if (state.get('LoadScreen'))
-                    userInteract.closeLoad();
-                else
-                    userInteract.onLoadGame();
+                if (state.get('LoadScreen')) userInteract.closeLoad(); else userInteract.onLoadGame();
                 ev.preventDefault();
             }
         }
@@ -526,10 +522,7 @@ document.addEventListener('keyup', function (ev) {
         case 'KeyC': {
             const state = queryWidgetState();
             if (AllHiddenIgnore(state, ['TextBox', 'SettingScreen'])) {
-                if (state.get('SettingScreen'))
-                    userInteract.closeSettings();
-                else
-                    userInteract.onSetting();
+                if (state.get('SettingScreen')) userInteract.closeSettings(); else userInteract.onSetting();
                 ev.preventDefault();
             }
         }
@@ -550,10 +543,7 @@ document.addEventListener('keyup', function (ev) {
         case 'KeyT': {
             const state = queryWidgetState();
             if (AllHiddenIgnore(state, ['TextBox', 'Title'])) {
-                if (state.get('Title'))
-                    userInteract.continueGame();
-                else
-                    userInteract.Title();
+                if (state.get('Title')) userInteract.continueGame(); else userInteract.Title();
                 ev.preventDefault();
             }
         }
@@ -575,14 +565,10 @@ document.addEventListener('keyup', function (ev) {
                 }
                 // 有其他窗口
                 else {
-                    if (state.get('SaveScreen'))
-                        userInteract.closeSave();
-                    if (state.get('LoadScreen'))
-                        userInteract.closeLoad();
-                    if (state.get('SettingScreen'))
-                        userInteract.closeSettings();
-                    if (state.get('BacklogScreen'))
-                        userInteract.closeBacklog()
+                    if (state.get('SaveScreen')) userInteract.closeSave();
+                    if (state.get('LoadScreen')) userInteract.closeLoad();
+                    if (state.get('SettingScreen')) userInteract.closeSettings();
+                    if (state.get('BacklogScreen')) userInteract.closeBacklog()
                     // 紧急回避专用 ESC 键控制
                 }
                 ev.preventDefault();
@@ -592,10 +578,7 @@ document.addEventListener('keyup', function (ev) {
 
         // panic button
         case 'Escape': {
-            if (queryWidgetState('PanicScreen'))
-                userInteract.hidePanic();
-            else
-                WG_ViewControl.showPanic('Yoozle');
+            if (queryWidgetState('PanicScreen')) userInteract.hidePanic(); else WG_ViewControl.showPanic('Yoozle');
             ev.preventDefault();
         }
             break;
