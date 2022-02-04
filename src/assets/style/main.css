@@ -212,7 +212,7 @@
 .TitleSingleButton{
     font-family: Georgia,serif;
     /*fonts-weight: bold;*/
-    padding: 10px 30px 10px 30px;
+    padding: 10px 15px 10px 15px;
     text-shadow: 0 0 15px rgba(0,0,0,0.8);
     margin: 3px 0 3px 0;
     /*border-top: 2px solid #8E354A;*/
@@ -242,7 +242,7 @@
 
 .TitleButtonENG{
     padding: 0 10px 0 10px;
-    font-size: 105%;
+    font-size: 90%;
     text-align: center;
     border-bottom: 2px solid rgba(255,255,255,1);
 }
@@ -253,7 +253,7 @@
 
 .TitleButtonCHN{
     font-weight: bolder;
-    font-size: 100%;
+    font-size: 80%;
     font-family: 思源宋体,serif;
     text-align: center;
 }
