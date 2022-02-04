@@ -128,7 +128,7 @@ function Stage() {
                     <Home theme="outline" size="28" fill="#f5f5f7"/>
                 </div>
             </div>
-            <div id={"miniAvatar"}/>
+            <div id={"miniAvatar"} onClick={nextSentenceProcessor}/>
         </div>
         <div id="bgm"/>
         <div id="vocal"/>
