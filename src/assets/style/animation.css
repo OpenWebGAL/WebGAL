@@ -25,7 +25,7 @@
 @keyframes upIn {
     0% {
         opacity: 0;
-        transform: scale(1, 1) translate(0, 5%);
+        transform: scale(1, 1) translate(0, 3%);
     }
 
     100% {
@@ -37,7 +37,7 @@
 @keyframes leftIn {
     0% {
         opacity: 0;
-        transform: scale(1, 1) translate(-5%, 0);
+        transform: scale(1, 1) translate(-3%, 0);
     }
 
     100% {
@@ -49,7 +49,7 @@
 @keyframes rightIn {
     0% {
         opacity: 0;
-        transform: scale(1, 1) translate(5%, 0);
+        transform: scale(1, 1) translate(3%, 0);
     }
 
     100% {
@@ -61,7 +61,7 @@
 @keyframes bg_down {
     0% {
         opacity: 0;
-        transform: scale(1.1, 1.1) translate(0, -5%);
+        transform: scale(1.1, 1.1) translate(0, -3%);
     }
 
     100% {
@@ -165,13 +165,13 @@
 
 @keyframes TitleButtonOnChoose {
     0% {
-        transform: scale(1,1);
+        transform: scale(1, 1);
         /*background-color: rgba(255,255,255,0.8);*/
     }
 
     100% {
         /*box-shadow: 3px 3px 15px rgba(0, 0, 0, 0.5);*/
-        transform: scale(1.1,1.1);
+        transform: scale(1.1, 1.1);
         /*background-color: rgba(0,0,0,0.15);*/
     }
 }
@@ -179,7 +179,7 @@
 @keyframes TitleButtonNoneChoose {
     0% {
         /*box-shadow: 3px 3px 15px rgba(0, 0, 0, 0.5);*/
-        transform: scale(1.1,1.1);
+        transform: scale(1.1, 1.1);
         /*background-color: rgba(0,0,0,0.15);*/
     }
 
@@ -189,19 +189,83 @@
 }
 
 @keyframes TitleModelHover {
-    0%{
-        background-color: rgba(0,0,0,0.35);
+    0% {
+        background-color: rgba(0, 0, 0, 0.35);
     }
-    100%{
-        background-color: rgba(0,0,0,0.65);
+    100% {
+        background-color: rgba(0, 0, 0, 0.65);
     }
 }
 
 @keyframes TitleModelNoneHover {
-    0%{
-        background-color: rgba(0,0,0,0.65);
+    0% {
+        background-color: rgba(0, 0, 0, 0.65);
     }
-    100%{
-        background-color: rgba(0,0,0,0.35);
+    100% {
+        background-color: rgba(0, 0, 0, 0.35);
+    }
+}
+
+
+/*背景的演出效果*/
+@keyframes bg_focusLeft {
+    0% {
+
+    }
+    100% {
+        transform: scale(1.15, 1.15) translate(5%, 0);
+        filter: blur(1px);
+    }
+}
+
+@keyframes bg_focusRight {
+    0% {
+
+    }
+    100% {
+        transform: scale(1.35, 1.35) translate(-5%, 0);
+        filter: blur(1px);
+    }
+}
+
+@keyframes bg_LtoR {
+    0% {
+        transform: scale(1.15, 1.15) translate(5%, 0);
+        filter: blur(1px);
+    }
+    100% {
+        transform: scale(1.35, 1.35) translate(-5%, 0);
+        filter: blur(1px);
+    }
+}
+
+@keyframes bg_RtoL {
+    0% {
+        transform: scale(1.35, 1.35) translate(-5%, 0);
+        filter: blur(1px);
+    }
+    100% {
+        transform: scale(1.15, 1.15) translate(5%, 0);
+        filter: blur(1px);
+    }
+}
+
+@keyframes bg_LtoC {
+    0% {
+        transform: scale(1.15, 1.15) translate(5%, 0);
+        filter: blur(1px);
+    }
+    100% {
+
+    }
+}
+
+@keyframes bg_RtoC {
+    0% {
+        transform: scale(1.35, 1.35) translate(-5%, 0);
+        filter: blur(1px);
+    }
+    100% {
+
     }
 }
