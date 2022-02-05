@@ -531,13 +531,16 @@ class WG_ViewControl {
         }
         setTimeout(function () {
             for (let i = 0; i < editList.length; i++) {
-                editList[i].style.animation = aniString;
+                editList[i].style.animation = aniString + ' ease forwards';
             }
         }, 1);
     }
 
     static VC_setAnimationById(id, animate, time) {
-        document.getElementById(id).style.animation = animate + ' ' + time;
+        document.getElementById(id).style.animation = 'none';
+        setTimeout(() => {
+            document.getElementById(id).style.animation = animate + ' ' + time + ' ease forwards';
+        }, 1)
     }
 
 // -------- 紧急回避 --------
