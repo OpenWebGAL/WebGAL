@@ -223,7 +223,7 @@
 
     }
     100% {
-        transform: scale(1.35, 1.35) translate(-5%, 0);
+        transform: scale(1.15, 1.15) translate(-5%, 0);
         filter: blur(1px);
     }
 }
@@ -234,14 +234,14 @@
         filter: blur(1px);
     }
     100% {
-        transform: scale(1.35, 1.35) translate(-5%, 0);
+        transform: scale(1.15, 1.15) translate(-5%, 0);
         filter: blur(1px);
     }
 }
 
 @keyframes bg_RtoL {
     0% {
-        transform: scale(1.35, 1.35) translate(-5%, 0);
+        transform: scale(1.15, 1.15) translate(-5%, 0);
         filter: blur(1px);
     }
     100% {
@@ -262,7 +262,71 @@
 
 @keyframes bg_RtoC {
     0% {
-        transform: scale(1.35, 1.35) translate(-5%, 0);
+        transform: scale(1.15, 1.15) translate(-5%, 0);
+        filter: blur(1px);
+    }
+    100% {
+
+    }
+}
+
+@keyframes bg_focus {
+    0% {
+
+    }
+    100% {
+        transform: scale(1.15, 1.15);
+        filter: blur(1px);
+    }
+}
+
+@keyframes bg_LtoF {
+    0% {
+        transform: scale(1.15, 1.15) translate(5%, 0);
+        filter: blur(1px);
+    }
+    100% {
+        transform: scale(1.15, 1.15);
+        filter: blur(1px);
+    }
+}
+
+@keyframes bg_RtoF {
+    0% {
+        transform: scale(1.15, 1.15) translate(-5%, 0);
+        filter: blur(1px);
+    }
+    100% {
+        transform: scale(1.15, 1.15);
+        filter: blur(1px);
+    }
+}
+
+@keyframes bg_FtoL {
+    0% {
+        transform: scale(1.15, 1.15);
+        filter: blur(1px);
+    }
+    100% {
+        transform: scale(1.15, 1.15) translate(5%, 0);
+        filter: blur(1px);
+    }
+}
+
+@keyframes bg_FtoR {
+    0% {
+        transform: scale(1.15, 1.15);
+        filter: blur(1px);
+    }
+    100% {
+        transform: scale(1.15, 1.15) translate(-5%, 0);
+        filter: blur(1px);
+    }
+}
+
+@keyframes bg_FtoC {
+    0% {
+        transform: scale(1.15, 1.15);
         filter: blur(1px);
     }
     100% {
