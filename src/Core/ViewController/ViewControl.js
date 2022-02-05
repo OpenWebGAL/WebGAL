@@ -104,10 +104,25 @@ class WG_ViewControl {
         WG_ViewControl.showTextArray(textArray);
     }
 
+    static VC_setBGtransform(transform) {
+        document.getElementById('mainBackground').style.transform = transform;
+    }
+
+    static VC_setBGfilter(filter) {
+        document.getElementById('mainBackground').style.filter = filter;
+    }
+
     static VC_restoreStatus(savedStatus) {
         console.log("restoring")
         console.log(savedStatus)
         let command = savedStatus["command"];
+        //恢复背景的移动和效果
+        if (savedStatus['bg_transform'] !== '') {
+            document.getElementById('mainBackground').style.transform = savedStatus['bg_transform'];
+        }
+        if (savedStatus['bg_filter'] !== '') {
+            document.getElementById('mainBackground').style.filter = savedStatus['bg_filter'];
+        }
         if (savedStatus["bg_Name"] !== '') document.getElementById('mainBackground').style.backgroundImage = "url('game/background/" + savedStatus["bg_Name"] + "')";
         if (savedStatus["fig_Name"] === '' || savedStatus["fig_Name"] === 'none') {
             ReactDOM.render(<div/>, document.getElementById('figureImage'));
@@ -531,13 +546,16 @@ class WG_ViewControl {
         }
         setTimeout(function () {
             for (let i = 0; i < editList.length; i++) {
-                editList[i].style.animation = aniString;
+                editList[i].style.animation = aniString + ' ease';
             }
         }, 1);
     }
 
     static VC_setAnimationById(id, animate, time) {
-        document.getElementById(id).style.animation = animate + ' ' + time;
+        document.getElementById(id).style.animation = 'none';
+        setTimeout(() => {
+            document.getElementById(id).style.animation = animate + ' ' + time + ' ease';
+        }, 1)
     }
 
 // -------- 紧急回避 --------
