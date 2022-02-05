@@ -129,6 +129,22 @@ function nextSentenceProcessor() {
     } else if (command.substring(0, 2) === 'if') {
         ifJump(command, S_content);
         return;
+    } else if (command === 'setBgTransform') {
+        setTimeout(() => {
+            WG_ViewControl.VC_setBGtransform(S_content);
+        }, 100);
+        SyncCurrentStatus('bg_transform', S_content);
+        increaseSentence();
+        nextSentenceProcessor();
+        return;
+    } else if (command === 'setBgFilter') {
+        setTimeout(() => {
+            WG_ViewControl.VC_setBGfilter(S_content);
+        }, 100);
+        SyncCurrentStatus('bg_filter', S_content);
+        increaseSentence();
+        nextSentenceProcessor();
+        return;
     } else if (command === 'setVar') {
         setVar(S_content)
         increaseSentence();

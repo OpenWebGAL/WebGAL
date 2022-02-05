@@ -53,7 +53,10 @@ let currentInfo = {
     vocal: '',//语音 文件名
     bgm: '',//背景音乐 文件名
     miniAvatar: '',//小头像
-    saveTime: '', GameVar: {}
+    saveTime: '',
+    GameVar: {},
+    bg_filter: '',
+    bg_transform: '',
 }
 
 // 初始化存档系统
