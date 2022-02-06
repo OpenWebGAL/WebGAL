@@ -6,6 +6,8 @@
 
 https://wg.msfasr.com
 
+国内访问这个链接可能会更快： https://webgal.loveshan.pw/
+
 ## 如果你是想要开发属于自己的 Galgame 的开发者，请下载发行版：
 
 https://github.com/MakinoharaShoko/WebGAL/releases/
