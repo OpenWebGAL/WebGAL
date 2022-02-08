@@ -19,11 +19,13 @@ https://github.com/MakinoharaShoko/WebGAL/releases/
 
 ## 如何在本地运行WebGAL？
 
-## 新手可以尝试使用 WebGAL Terre 编辑器，这是一个图形化的 Galgame 脚本编辑器，但是功能有限，如果你需要更高级的演出，请学习下面的脚本。
+## 新手可以尝试使用 WebGAL Terre 编辑器技术预览版，这是一个图形化的 Galgame 脚本编辑器。
 
 [图形化编辑器](https://github.com/MakinoharaShoko/WebGAL_Terre)
 
 [图形化编辑器的前端代码仓库](https://github.com/MakinoharaShoko/WebGAL_Origine)
+
+**注意：图形化编辑器的功能有限，如果你需要更高级的演出，请学习本文档的脚本。**
 
 #### Windows用户可以使用以下方式快速打开调试界面:
 
