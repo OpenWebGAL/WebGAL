@@ -163,12 +163,13 @@ class WG_ViewControl {
         }
         let url = './game/vocal/' + vocalName;
         let vocal = <audio src={url} id={"currentVocal"}/>
-        ReactDOM.render(vocal, document.getElementById('vocal'));
-        let VocalControl = document.getElementById("currentVocal");
-        VocalControl.currentTime = 0;
-        VocalControl.oncanplay = function () {
-            VocalControl.play();
-        }
+        ReactDOM.render(vocal, document.getElementById('vocal'),()=>{
+            let VocalControl = document.getElementById("currentVocal");
+            VocalControl.currentTime = 0;
+            VocalControl.oncanplay = function () {
+                VocalControl.play();
+            }
+        });
     }
 
     static showIntro(text) {

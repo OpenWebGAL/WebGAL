@@ -1,7 +1,7 @@
-const Figure =(props)=>{
+const Figure = (props) => {
     const P_name = props.P_name;
     let changedP;
-    if (P_name === 'none') {
+    if (P_name === 'none' || P_name === '') {
         changedP = <div/>;
     } else {
         let pUrl = "game/figure/" + P_name;
