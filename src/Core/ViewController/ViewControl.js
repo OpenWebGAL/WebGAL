@@ -317,7 +317,7 @@ class WG_ViewControl {
         function playVideo() {
             let videoSelector = document.getElementById("video_show");
             videoSelector.onended = () => {
-                ReactDOM.render(<div></div>, document.getElementById("videoContainer"));
+                ReactDOM.render(<div/>, document.getElementById("videoContainer"));
                 document.getElementById("videoContainer").style.display = 'none'
                 nextSentenceProcessor();
             }
@@ -325,7 +325,7 @@ class WG_ViewControl {
     }
 
     static closeVideo() {
-        ReactDOM.render(<div></div>, document.getElementById("videoContainer"));
+        ReactDOM.render(<div/>, document.getElementById("videoContainer"));
         document.getElementById("videoContainer").style.display = 'none'
         nextSentenceProcessor();
     }
@@ -416,6 +416,7 @@ class WG_ViewControl {
         ReactDOM.render(<span> </span>, document.getElementById('SceneText'));
         let elementArray = [];
         let i = 0;
+        // eslint-disable-next-line no-use-before-define
         clearInterval(interval);
         var interval = setInterval(showSingle, getRuntime().textShowWaitTime);
         getRuntime().showingText = true;
@@ -481,6 +482,7 @@ class WG_ViewControl {
         ReactDOM.render(<span> </span>, document.getElementById('previewDiv'));
         let elementArray = [];
         let i = 0;
+        // eslint-disable-next-line no-use-before-define
         clearInterval(interval2);
         var interval2 = setInterval(showSingle, getRuntime().textShowWaitTime);
 
