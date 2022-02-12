@@ -2,8 +2,7 @@ import {userInteract} from "../../Core/InteractController/UserInteract";
 import cross from "../../assets/img/cross.svg";
 import up from "../../assets/img/up.svg";
 import {nextSentenceProcessor} from "../../Core/WG_core";
-import {WG_ViewControl} from "../../Core/ViewController/ViewControl";
-import {DoubleRight, FolderDownload, FolderUpload, Home, PlayOne, ReplayMusic, SettingTwo} from "@icon-park/react";
+import ControlBar from "./controlBar";
 
 const BottomBox = ()=>{
     return <div id="bottomBox">
@@ -19,29 +18,7 @@ const BottomBox = ()=>{
             <div id="pName"/>
             <div id="SceneText"/>
         </div>
-        <div id="controlBar">
-            <div className="controlButton" onClick={WG_ViewControl.playVocal}>
-                <ReplayMusic theme="outline" size="28" fill="#f5f5f7"/>
-            </div>
-            <div className="controlButton" onClick={userInteract.autoNext} id="autoButton">
-                <PlayOne theme="outline" size="28" fill="#f5f5f7"/>
-            </div>
-            <div className="controlButton" onClick={userInteract.fastNext} id="fastButton">
-                <DoubleRight theme="outline" size="28" fill="#f5f5f7"/>
-            </div>
-            <div className="controlButton" onClick={userInteract.onSaveGame} id="saveButton">
-                <FolderDownload theme="outline" size="28" fill="#f5f5f7"/>
-            </div>
-            <div className="controlButton" onClick={userInteract.onLoadGame} id="loadButton">
-                <FolderUpload theme="outline" size="28" fill="#f5f5f7"/>
-            </div>
-            <div className="controlButton" onClick={userInteract.onSetting}>
-                <SettingTwo theme="outline" size="28" fill="#f5f5f7"/>
-            </div>
-            <div className="controlButton" onClick={userInteract.Title} id="titleButton">
-                <Home theme="outline" size="28" fill="#f5f5f7"/>
-            </div>
-        </div>
+        <ControlBar/>
         <div id={"miniAvatar"} onClick={nextSentenceProcessor}/>
     </div>
 }

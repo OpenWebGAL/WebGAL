@@ -9,6 +9,10 @@ import {nextSentenceProcessor} from "../WG_core";
 import React from "react";
 import {Return, VolumeNotice} from "@icon-park/react";
 import '@icon-park/react/styles/index.css';
+import Figure from "../../Components/UI/figure";
+import ChooseBox from "../../Components/UI/chooseBox";
+import restoreStatus from "./functions/restoreStatus";
+import SettingsModel from "../../Components/UI/settingsModel";
 
 class WG_ViewControl {
     static VC_changeBG(bg_name) {
@@ -32,65 +36,30 @@ class WG_ViewControl {
     }
 
     static VC_changeP(P_name, pos) {
-        if (pos === 'center') {
-            if (P_name === 'none') {
-                ReactDOM.render(<div/>, document.getElementById('figureImage'));
-                getRuntime().currentInfo["fig_Name"] = 'none';
-            } else {
-                let pUrl = "game/figure/" + P_name;
-                let changedP = <img src={pUrl} alt='figure' className='p_center'/>
-                // console.log('now changing person');
+        const changedP = <Figure P_name={P_name}/>;
+        switch (pos){
+            case 'center':
                 ReactDOM.render(changedP, document.getElementById('figureImage'));
                 getRuntime().currentInfo["fig_Name"] = P_name;
-            }
-        } else if (pos === 'left') {
-            if (P_name === 'none') {
-                ReactDOM.render(<div/>, document.getElementById('figureImage_left'));
-                getRuntime().currentInfo["fig_Name_left"] = 'none';
-            } else {
-                let pUrl = "game/figure/" + P_name;
-                let changedP = <img src={pUrl} alt='figure' className='p_center'/>
-                // console.log('now changing person');
+                break;
+            case 'left':
                 ReactDOM.render(changedP, document.getElementById('figureImage_left'));
                 getRuntime().currentInfo["fig_Name_left"] = P_name;
-            }
-        } else if (pos === 'right') {
-            if (P_name === 'none') {
-                ReactDOM.render(<div/>, document.getElementById('figureImage_right'));
-                getRuntime().currentInfo["fig_Name_right"] = 'none';
-            } else {
-                let pUrl = "game/figure/" + P_name;
-                let changedP = <img src={pUrl} alt='figure' className='p_center'/>
-                // console.log('now changing person');
+                break;
+            case 'right':
                 ReactDOM.render(changedP, document.getElementById('figureImage_right'));
                 getRuntime().currentInfo["fig_Name_right"] = P_name;
-            }
+                break;
+            default:
+                console.log('立绘位置参数错误');
+                break;
         }
     }
 
     static VC_choose(selection, mode) {
-        if (mode === 'scene') {
-            document.getElementById('chooseBox').style.display = 'flex';
-            let elements = []
-            for (let i = 0; i < selection.length; i++) {
-                let temp = <div className='singleChoose' key={i} onClick={() => {
-                    userInteract.chooseScene(selection[i][1]);
-                }}>{selection[i][0]}</div>
-                elements.push(temp)
-            }
-            ReactDOM.render(<div>{elements}</div>, document.getElementById('chooseBox'))
-        }
-        if (mode === 'label') {
-            document.getElementById('chooseBox').style.display = 'flex';
-            let elements = []
-            for (let i = 0; i < selection.length; i++) {
-                let temp = <div className='singleChoose' key={i} onClick={() => {
-                    userInteract.chooseJumpFun(selection[i][1]);
-                }}>{selection[i][0]}</div>
-                elements.push(temp)
-            }
-            ReactDOM.render(<div>{elements}</div>, document.getElementById('chooseBox'))
-        }
+        document.getElementById('chooseBox').style.display = 'flex';
+        const Choose = <ChooseBox mode={mode} selection={selection}/>
+        ReactDOM.render(Choose, document.getElementById('chooseBox'));
     }
 
     static VC_closeChoose() {
@@ -113,93 +82,11 @@ class WG_ViewControl {
     }
 
     static VC_restoreStatus(savedStatus) {
-        console.log("restoring")
-        console.log(savedStatus)
-        let command = savedStatus["command"];
-        //恢复背景的移动和效果
-        if (savedStatus['bg_transform'] !== '') {
-            document.getElementById('mainBackground').style.transform = savedStatus['bg_transform'];
-        }
-        if (savedStatus['bg_filter'] !== '') {
-            document.getElementById('mainBackground').style.filter = savedStatus['bg_filter'];
-        }
-        if (savedStatus["bg_Name"] !== '') document.getElementById('mainBackground').style.backgroundImage = "url('game/background/" + savedStatus["bg_Name"] + "')";
-        if (savedStatus["fig_Name"] === '' || savedStatus["fig_Name"] === 'none') {
-            ReactDOM.render(<div/>, document.getElementById('figureImage'));
-        } else {
-            let pUrl = "game/figure/" + savedStatus["fig_Name"];
-            let changedP = <img src={pUrl} alt='figure' className='p_center'/>
-            // console.log('now changing person');
-            ReactDOM.render(changedP, document.getElementById('figureImage'));
-        }
-        if (savedStatus["fig_Name_left"] === '' || savedStatus["fig_Name_left"] === 'none') {
-            ReactDOM.render(<div/>, document.getElementById('figureImage_left'));
-        } else {
-            let pUrl = "game/figure/" + savedStatus["fig_Name_left"];
-            let changedP = <img src={pUrl} alt='figure' className='p_center'/>
-            // console.log('now changing person');
-            ReactDOM.render(changedP, document.getElementById('figureImage_left'));
-        }
-        if (savedStatus["fig_Name_right"] === '' || savedStatus["fig_Name_right"] === 'none') {
-            ReactDOM.render(<div/>, document.getElementById('figureImage_right'));
-        } else {
-            let pUrl = "game/figure/" + savedStatus["fig_Name_right"];
-            let changedP = <img src={pUrl} alt='figure' className='p_center'/>
-            // console.log('now changing person');
-            ReactDOM.render(changedP, document.getElementById('figureImage_right'));
-        }
-        if (command === 'choose' || command === 'choose_label') {
-            let chooseItems = savedStatus["choose"];
-            chooseItems = chooseItems.split("}")[0];
-            chooseItems = chooseItems.split("{")[1];
-            let selection = chooseItems.split(',')
-            for (let i = 0; i < selection.length; i++) {
-                selection[i] = selection[i].split(":");
-            }
-            let choose_mode = '';
-            // eslint-disable-next-line default-case
-            switch (command) {
-                case 'choose':
-                    choose_mode = 'scene';
-                    break;
-                case 'choose_label':
-                    choose_mode = 'label';
-                    break;
-            }
-            WG_ViewControl.VC_choose(selection, choose_mode);
-        }
-        let changedName = <span>{savedStatus["showName"]}</span>
-        let textArray = savedStatus["showText"].split("");
-        ReactDOM.render(changedName, document.getElementById('pName'));
-        SyncCurrentStatus('vocal', savedStatus['vocal']);
-        if (getStatus('bgm') !== savedStatus['bgm']) {
-            getRuntime().currentInfo['bgm'] = savedStatus['bgm'];
-            WG_ViewControl.loadBGM();
-        }
-        if (savedStatus['miniAvatar'] !== '' || savedStatus['miniAvatar'] !== 'none') {
-            WG_ViewControl.VC_showMiniAvatar(savedStatus['miniAvatar']);
-        }
-        WG_ViewControl.playVocal();
-        WG_ViewControl.showTextArray(textArray);
+        restoreStatus(savedStatus);
     }
 
     static VC_showSettings() {
-        let settingInterface = <div>
-            <div className={"settingsItemsList"}>
-                {/* eslint-disable-next-line react/jsx-pascal-case */}
-                <SettingButtons_font/>
-                {/* eslint-disable-next-line react/jsx-pascal-case */}
-                <SettingButtons_speed/>
-                <div className={"deleteCookie"} onClick={() => {
-                    WG_ViewControl.showMesModel('你确定要清除缓存吗', '要', '不要', clearCookie)
-                }}>清除所有设置选项以及存档
-                </div>
-                <ImporterExporter/>
-                <div>本作品由 WebGAL 强力驱动，<a href={"https://github.com/MakinoharaShoko/WebGAL"}>了解 WebGAL</a>。</div>
-                <br/>
-                <div className='settingItemTitle'>效果预览</div>
-            </div>
-        </div>
+        let settingInterface = <SettingsModel/>
         document.getElementById("settings").style.display = "flex";
         document.getElementById("bottomBox").style.display = "none";
         ReactDOM.render(settingInterface, document.getElementById("settingItems"));
@@ -328,26 +215,6 @@ class WG_ViewControl {
         ReactDOM.render(<div/>, document.getElementById("videoContainer"));
         document.getElementById("videoContainer").style.display = 'none'
         nextSentenceProcessor();
-    }
-
-    static loadButton() {
-        let renNewButton = <div className={"toCenter"}>
-            <ControlButton color='#FEDFE1' fun={this.playVocal} name={"重复"} simpleName={"V"}/>
-            <ControlButton color='#FB966E' fun={userInteract.autoNext} name={"自动"} simpleName={"A"} id={"autoButton"}/>
-            <ControlButton color='#FBE251' fun={userInteract.fastNext} name={"快进"} simpleName={"F"} id={"fastButton"}/>
-            <ControlButton color='#A5DEE4' fun={userInteract.onSaveGame} name={"存档"} simpleName={"S"}/>
-            <ControlButton color='#58B2DC' fun={userInteract.onLoadGame} name={"读档"} simpleName={"L"}/>
-            <ControlButton color='#B28FCE' fun={userInteract.onSetting} name={"设置"} simpleName={"C"}/>
-            <ControlButton color='#BDC0BA' fun={userInteract.Title} name={"标题"} simpleName={"T"}/>
-            {/*<ControlButton color = '#FEDFE1' fun={playVocal} name={"重复"} simpleName={"V"}/>*/}
-            {/*<ControlButton color = '#FEDFE1' fun={autoNext} name={"自动"} simpleName={"A"} id={"autoButton"}/>*/}
-            {/*<ControlButton color = '#FEDFE1' fun={fastNext} name={"快进"} simpleName={"F"}   id={"fastButton"}/>*/}
-            {/*<ControlButton color = '#FEDFE1' fun={onSaveGame} name={"存档"} simpleName={"S"}/>*/}
-            {/*<ControlButton color = '#FEDFE1' fun={onLoadGame} name={"读档"} simpleName={"L"}/>*/}
-            {/*<ControlButton color = '#FEDFE1' fun={onSetting} name={"设置"} simpleName={"C"}/>*/}
-            {/*<ControlButton color = '#FEDFE1' fun={Title} name={"标题"} simpleName={"T"}/>*/}
-        </div>
-        ReactDOM.render(renNewButton, document.getElementById("controlBar"));
     }
 
     static showBacklog() {
