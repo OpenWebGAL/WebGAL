@@ -1,9 +1,9 @@
 import ReactDOM from "react-dom";
-import {clearCookie, getRuntime, getStatus, SyncCurrentStatus} from "../StoreControl/StoreControl";
+import {getRuntime, getStatus} from "../StoreControl/StoreControl";
 
 import {userInteract} from "../InteractController/UserInteract";
 import {
-    ControlButton, ImporterExporter, LoadMainModel, SaveMainModel, SettingButtons_font, SettingButtons_speed
+    LoadMainModel, SaveMainModel
 } from "../../Components/UI/etc";
 import {nextSentenceProcessor} from "../WG_core";
 import React from "react";
