@@ -13,26 +13,12 @@ import Figure from "../../Components/UI/figure";
 import ChooseBox from "../../Components/UI/chooseBox";
 import restoreStatus from "./functions/restoreStatus";
 import SettingsModel from "../../Components/UI/settingsModel";
+import changeBG from "./functions/changeBG";
+import loadBGM from "./functions/loadBGM";
 
 class WG_ViewControl {
     static VC_changeBG(bg_name) {
-        //把背景复制一份成为旧背景，方便做渐变动画
-        let BG = document.getElementById('mainBackground');
-        let oldBG = BG.cloneNode(true);
-        //如果有旧背景节点，删除之
-        if (document.getElementById('oldBG')) {
-            document.getElementById('oldBG').parentNode.removeChild(document.getElementById('oldBG'))
-        }
-        oldBG.setAttribute('id', 'oldBG');
-        oldBG.style.animation = 'hideBG 5s';
-        oldBG.style.animationFillMode = 'forwards';
-        console.log(oldBG);
-        BG.parentNode.appendChild(oldBG);
-        BG.style.backgroundImage = "url('game/background/" + bg_name + "')";
-        let newBG = BG.cloneNode(true);
-        let parentNodeBG = BG.parentNode;
-        parentNodeBG.removeChild(BG);
-        parentNodeBG.appendChild(newBG);
+        changeBG(bg_name);
     }
 
     static VC_changeP(P_name, pos) {
@@ -110,44 +96,7 @@ class WG_ViewControl {
     }
 
     static loadBGM() {
-        console.log("loadingBGM")
-        let bgmName = getRuntime().currentInfo["bgm"];
-        console.log("now playing " + bgmName);
-        // console.log(getRuntime().currentInfo);
-        if (bgmName === '' || bgmName === 'none') {
-            console.log("set bgm none");
-            if (document.getElementById("currentBGM")) {
-                document.getElementById("currentBGM").autoplay = false;
-                document.getElementById("currentBGM").pause();
-            }
-            ReactDOM.render(<div/>, document.getElementById("bgm"));
-            return;
-        }
-        let url = "./game/bgm/" + bgmName;
-        let audio = <audio src={url} id={"currentBGM"} loop="loop"/>
-        // console.log("replace old bgm with an empty div")
-        // ReactDOM.render(<div/>,document.getElementById("bgm"));
-        ReactDOM.render(audio, document.getElementById("bgm"), audioRendered);
-
-        function audioRendered() {
-            let playControl = document.getElementById("currentBGM");
-            let played = false;
-            console.log(playControl)
-            playControl.oncanplay = function () {
-                if (played === false) {
-                    playControl.currentTime = 0;
-                    playControl.volume = 0.25;
-                    played = true;
-                    playControl.play();
-                }
-            }
-            if (played === false && document.getElementById("currentBGM")) {
-                playControl.currentTime = 0;
-                playControl.volume = 0.25;
-                played = true;
-                playControl.play();
-            }
-        }
+        loadBGM();
     }
 
     static playVocal() {
