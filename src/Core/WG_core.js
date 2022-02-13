@@ -1,6 +1,6 @@
 import {getRuntime, getScene, getStatus, SyncCurrentStatus} from "./StoreControl/StoreControl"
 import {WG_ViewControl} from "./ViewController/ViewControl";
-import {processSentence} from "./util/WG_util";
+import {processSelection, processSentence} from "./util/WG_util";
 
 // 读取下一条脚本
 function nextSentenceProcessor() {
@@ -68,13 +68,7 @@ function nextSentenceProcessor() {
         // noinspection DuplicatedCode
         SyncCurrentStatus('command', command);
         SyncCurrentStatus('choose', S_content);
-        let chooseItems = S_content;
-        chooseItems = chooseItems.split("}")[0];
-        chooseItems = chooseItems.split("{")[1];
-        let selection = chooseItems.split(',')
-        for (let i = 0; i < selection.length; i++) {
-            selection[i] = selection[i].split(":");
-        }
+        const selection = processSelection(S_content);
         WG_ViewControl.VC_choose(selection, 'scene');
         return;
     } else if (command === 'bgm') {
@@ -88,13 +82,7 @@ function nextSentenceProcessor() {
         // noinspection DuplicatedCode
         SyncCurrentStatus('command', command);
         SyncCurrentStatus('choose', S_content);
-        let chooseItems = S_content;
-        chooseItems = chooseItems.split("}")[0];
-        chooseItems = chooseItems.split("{")[1];
-        let selection = chooseItems.split(',')
-        for (let i = 0; i < selection.length; i++) {
-            selection[i] = selection[i].split(":");
-        }
+        const selection = processSelection(S_content);
         WG_ViewControl.VC_choose(selection, 'label')
         return;
     } else if (command === 'jump_label') {

@@ -148,4 +148,14 @@ function forceRotate() {
     }, false);
 }
 
-export {processSentence, queryWidgetState, loadSettings, AllHiddenIgnore, isMobile, MobileChangeStyle}
+function processSelection(chooseItems) {
+    chooseItems = chooseItems.split("}")[0];
+    chooseItems = chooseItems.split("{")[1];
+    let selection = chooseItems.split(',')
+    for (let i = 0; i < selection.length; i++) {
+        selection[i] = selection[i].split(":");
+    }
+    return selection;
+}
+
+export {processSentence, queryWidgetState, loadSettings, AllHiddenIgnore, isMobile, MobileChangeStyle,processSelection}
