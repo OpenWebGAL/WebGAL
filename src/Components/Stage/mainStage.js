@@ -1,12 +1,12 @@
 import '@icon-park/react/styles/index.css';
-import Title from "./title";
-import StartPage from "./startPage";
+import Title from "../UI/title";
+import StartPage from "../UI/startPage";
 import AssetsContainer from "./assetsContainer";
-import Settings from "./settings";
-import Backlog from "./backlog";
-import Load from "./load";
-import Save from "./save";
-import BottomBox from "./bottomBox";
+import Settings from "../UI/settings";
+import BacklogContainer from "./backlogContainer";
+import Load from "../UI/load";
+import Save from "../UI/save";
+import BottomBox from "../UI/bottomBox";
 
 function Stage() {
     return (<div className="Stage">
@@ -14,7 +14,7 @@ function Stage() {
         <Title/>
         <AssetsContainer/>
         <Settings/>
-        <Backlog/>
+        <BacklogContainer/>
         <Load/>
         <Save/>
         <BottomBox/>

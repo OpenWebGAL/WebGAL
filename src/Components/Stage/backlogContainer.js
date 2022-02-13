@@ -1,7 +1,7 @@
 import {userInteract} from "../../Core/InteractController/UserInteract";
 import closeW from "../../assets/img/closeWhite.svg";
 
-const Backlog = ()=>{
+const BacklogContainer = ()=>{
     return <div id="backlog">
         <div id="closeBl" onClick={userInteract.closeBacklog}>
             <img src={closeW} className="closeSVG" alt="close"/>
@@ -10,4 +10,4 @@ const Backlog = ()=>{
     </div>
 }
 
-export default Backlog;
+export default BacklogContainer;

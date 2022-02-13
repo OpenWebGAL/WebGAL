@@ -8,7 +8,7 @@ import {
 import {nextSentenceProcessor} from "../WG_core";
 import React from "react";
 import '@icon-park/react/styles/index.css';
-import Figure from "../../Components/UI/figure";
+import Figure from "../../Components/Stage/figure";
 import ChooseBox from "../../Components/UI/chooseBox";
 import restoreStatus from "./functions/restoreStatus";
 import SettingsModel from "../../Components/UI/settingsModel";
