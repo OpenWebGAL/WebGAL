@@ -30,7 +30,7 @@ ReactDOM.render(
     <React.StrictMode>
         <App/>
     </React.StrictMode>,
-    document.getElementById('ReactRoot')
+    document.getElementById('ReactRoot')|| document.createElement('div')
 );
 
 // If you want to start measuring performance in your app, pass a function
