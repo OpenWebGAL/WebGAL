@@ -15,6 +15,10 @@ import restoreStatus from "./functions/restoreStatus";
 import SettingsModel from "../../Components/UI/settingsModel";
 import changeBG from "./functions/changeBG";
 import loadBGM from "./functions/loadBGM";
+import BackLog from "../../Components/UI/backLog";
+import Yoozle from "../../Components/UI/yoozle";
+import showTextPreview from "./functions/showTextPreview";
+import showTextArary from "./functions/showTextArray";
 
 class WG_ViewControl {
     static VC_changeBG(bg_name) {
@@ -23,7 +27,7 @@ class WG_ViewControl {
 
     static VC_changeP(P_name, pos) {
         const changedP = <Figure P_name={P_name}/>;
-        switch (pos){
+        switch (pos) {
             case 'center':
                 ReactDOM.render(changedP, document.getElementById('figureImage'));
                 getRuntime().currentInfo["fig_Name"] = P_name;
@@ -112,7 +116,7 @@ class WG_ViewControl {
         }
         let url = './game/vocal/' + vocalName;
         let vocal = <audio src={url} id={"currentVocal"}/>
-        ReactDOM.render(vocal, document.getElementById('vocal'),()=>{
+        ReactDOM.render(vocal, document.getElementById('vocal'), () => {
             let VocalControl = document.getElementById("currentVocal");
             VocalControl.currentTime = 0;
             VocalControl.oncanplay = function () {
@@ -170,163 +174,16 @@ class WG_ViewControl {
     static showBacklog() {
         document.getElementById('backlog').style.display = 'block';
         document.getElementById('bottomBox').style.display = 'none';
-        let showBacklogList = [];
-        console.log(getRuntime().CurrentBacklog)
-        for (let i = 0; i < getRuntime().CurrentBacklog.length; i++) {
-            let temp = <div className={'backlog_singleElement'} key={i} style={{
-                opacity: 0,
-                animationFillMode: 'forwards',
-                animationDelay: '' + 0.07 * (getRuntime().CurrentBacklog.length - i) + 's'
-            }}>
-                <div className={"backlog_interact"}>
-                    <div className={"backlog_interact_button"} onClick={() => {
-                        let vocalName = getRuntime().CurrentBacklog[i].vocal;
-                        if (vocalName !== '') {
-                            let url = './game/vocal/' + vocalName;
-                            let elementAudio = <audio src={url} id={"backlogVocalAudio-" + i}/>
-                            console.log("Playing! now url is" + url);
-                            ReactDOM.render(elementAudio, document.getElementById("backlogVocal-" + i));
-                            let singleControlBacklogAudio = document.getElementById("backlogVocalAudio-" + i);
-                            let played = false;
-                            played = false;
-                            singleControlBacklogAudio.oncanplay = function () {
-                                if (!played) {
-                                    singleControlBacklogAudio.currentTime = 0;
-                                    played = true;
-                                    singleControlBacklogAudio.play();
-                                }
-                                singleControlBacklogAudio.play();
-                            }
-                            if (!played) {
-                                singleControlBacklogAudio.currentTime = 0;
-                                played = true;
-                                singleControlBacklogAudio.play();
-                            }
-                        }
-                    }}>
-                        <VolumeNotice theme="outline" size="24" fill="#f5f5f7"/>
-                    </div>
-                    <div className={"backlog_interact_button"} onClick={() => {
-                        userInteract.jumpFromBacklog(i);
-                    }}>
-                        <Return theme="outline" size="24" fill="#f5f5f7"/>
-                    </div>
-                </div>
-                <div className={"backlog_name"}>{getRuntime().CurrentBacklog[i].showName}</div>
-
-                <div className={"backlog_content"}>
-
-                    <div className={"backlog_text"}>{getRuntime().CurrentBacklog[i].showText}</div>
-                </div>
-                <div id={"backlogVocal-" + i}>
-
-                </div>
-            </div>
-            showBacklogList.push(temp)
-        }
-        ReactDOM.render(<div>{showBacklogList}</div>, document.getElementById('backlogContent'));
+        ReactDOM.render(<BackLog/>, document.getElementById('backlogContent'));
     }
 
 // 渐显文字
     static showTextArray(textArray) {
-        getRuntime().showingText = false;
-        ReactDOM.render(<span> </span>, document.getElementById('SceneText'));
-        let elementArray = [];
-        let i = 0;
-        // eslint-disable-next-line no-use-before-define
-        clearInterval(interval);
-        var interval = setInterval(showSingle, getRuntime().textShowWaitTime);
-        getRuntime().showingText = true;
-
-        function showSingle() {
-            if (!getRuntime().showingText) {
-                let textFull = '';
-                for (let j = 0; j < textArray.length; j++) {
-                    textFull = textFull + textArray[j];
-                }
-                ReactDOM.render(<div>{textFull}</div>, document.getElementById('SceneText'));
-                if (getRuntime().auto === 1) {
-                    if (i < textArray.length + 1) {
-                        i = textArray.length + 1;
-                    } else {
-                        i = i + 1;
-                    }
-                } else {
-                    i = textArray.length + 1 + (getRuntime().autoWaitTime / 35);
-                }
-
-            } else {
-                let tempElement = <span key={i} className='singleWord'>{textArray[i]}</span>
-                elementArray.push(tempElement);
-                ReactDOM.render(<div>{elementArray}</div>, document.getElementById('SceneText'));
-                i = i + 1;
-            }
-            if (i > textArray.length && getRuntime().auto !== 1) {
-                getRuntime().showingText = false;
-            }
-            if (i > textArray.length + (getRuntime().autoWaitTime / 35)) {
-                if (getRuntime().auto === 1) {
-                    if (document.getElementById('currentVocal') && getRuntime().fast === 0) {
-                        if (document.getElementById('currentVocal').ended) {
-                            clearInterval(interval);
-                            getRuntime().showingText = false;
-                            nextSentenceProcessor();
-                        }
-                    } else {
-                        clearInterval(interval);
-                        getRuntime().showingText = false;
-                        nextSentenceProcessor();
-                    }
-                } else {
-                    getRuntime().showingText = false;
-                    clearInterval(interval);
-                }
-
-            }
-        }
+        showTextArary(textArray);
     }
 
     static showTextPreview(text) {
-        getRuntime().onTextPreview = getRuntime().onTextPreview + 1;
-        let textArray = text.split("");
-        // if(getRuntime().Settings["font_size"] === 'small'){
-        //     document.getElementById('previewDiv').style.fontSize = '150%';
-        // }else if(getRuntime().Settings["font_size"] === 'medium'){
-        //     document.getElementById('previewDiv').style.fontSize = '200%';
-        // }else if(getRuntime().Settings["font_size"] === 'large'){
-        //     document.getElementById('previewDiv').style.fontSize = '250%';
-        // }
-        ReactDOM.render(<span> </span>, document.getElementById('previewDiv'));
-        let elementArray = [];
-        let i = 0;
-        // eslint-disable-next-line no-use-before-define
-        clearInterval(interval2);
-        var interval2 = setInterval(showSingle, getRuntime().textShowWaitTime);
-
-        function showSingle() {
-            if (getRuntime().onTextPreview > 1) {
-                getRuntime().onTextPreview = getRuntime().onTextPreview - 1;
-                clearInterval(interval2);
-                return;
-            }
-            let tempElement = <span key={i} className='singleWord'>{textArray[i]}</span>
-            elementArray.push(tempElement);
-            ReactDOM.render(<div>{elementArray}</div>, document.getElementById('previewDiv'));
-            i = i + 1;
-            if (i > textArray.length + (1000 / 35)) {
-                clearInterval(interval2);
-                interval2 = setInterval(showSingle, getRuntime().textShowWaitTime);
-                i = 0;
-                elementArray = [];
-                // if(getRuntime().Settings["font_size"] === 'small'){
-                //     document.getElementById('previewDiv').style.fontSize = '150%';
-                // }else if(getRuntime().Settings["font_size"] === 'medium'){
-                //     document.getElementById('previewDiv').style.fontSize = '200%';
-                // }else if(getRuntime().Settings["font_size"] === 'large'){
-                //     document.getElementById('previewDiv').style.fontSize = '250%';
-                // }
-            }
-        }
+        showTextPreview(text);
     }
 
     static showMesModel(Title, Left, Right, func) {
@@ -382,22 +239,7 @@ class WG_ViewControl {
     static showPanic(showType) {
         document.querySelector('div#panic-overlay').style.display = 'block';
         if (showType === 'Yoozle') {
-            let ele = <div className="yoozle-container">
-                <div className="yoozle-title">
-                    <span>
-                        <span className="yoozle-gl-blue">Y</span><span className="yoozle-gl-red">o</span><span
-                        className="yoozle-gl-yellow">o</span><span className="yoozle-gl-blue">z</span><span
-                        className="yoozle-gl-green">l</span><span className="yoozle-gl-red yoozle-e-rotate">e</span>
-                    </span>
-                </div>
-                <div className="yoozle-search">
-                    <input className="yoozle-search-bar" type="text" defaultValue=""/>
-                    <div className="yoozle-search-buttons">
-                        <input className="yoozle-btn" type="submit" value="Yoozle Search"/>
-                        <input className="yoozle-btn" type="submit" value="I'm Feeling Lucky"/>
-                    </div>
-                </div>
-            </div>
+            let ele = <Yoozle/>
             ReactDOM.render(ele, document.querySelector('div#panic-overlay'));
             document.querySelector('input.yoozle-search-bar').value = '';
         }
