@@ -10,7 +10,7 @@ const BackLog = (props) => {
         let temp = <div className={'backlog_singleElement'} key={i} style={{
             opacity: 0,
             animationFillMode: 'forwards',
-            animationDelay: '' + 0.07 * (getRuntime().CurrentBacklog.length - i) + 's'
+            animationDelay: '' + 20 * (getRuntime().CurrentBacklog.length - i) + 'ms'
         }}>
             <div className={"backlog_interact"}>
                 <div className={"backlog_interact_button"} onClick={() => {
