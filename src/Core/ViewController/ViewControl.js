@@ -7,7 +7,6 @@ import {
 } from "../../Components/UI/etc";
 import {nextSentenceProcessor} from "../WG_core";
 import React from "react";
-import {Return, VolumeNotice} from "@icon-park/react";
 import '@icon-park/react/styles/index.css';
 import Figure from "../../Components/UI/figure";
 import ChooseBox from "../../Components/UI/chooseBox";
@@ -19,6 +18,7 @@ import BackLog from "../../Components/UI/backLog";
 import Yoozle from "../../Components/UI/yoozle";
 import showTextPreview from "./functions/showTextPreview";
 import showTextArary from "./functions/showTextArray";
+import MessageModel from "../../Components/UI/messageModel";
 
 class WG_ViewControl {
     static VC_changeBG(bg_name) {
@@ -188,18 +188,7 @@ class WG_ViewControl {
 
     static showMesModel(Title, Left, Right, func) {
         document.getElementById('MesModel').style.display = 'block';
-        let element = <div className={'MesMainWindow'}>
-            <div className={"MesTitle"}>{Title}</div>
-            <div className={'MesChooseContainer'}>
-                <div className={'MesChoose'} onClick={() => {
-                    func();
-                    document.getElementById('MesModel').style.display = 'none';
-                }}>{Left}</div>
-                <div className={'MesChoose'} onClick={() => {
-                    document.getElementById('MesModel').style.display = 'none';
-                }}>{Right}</div>
-            </div>
-        </div>
+        let element = <MessageModel titleText={Title} Left={Left} Right={Right} func={func}/>;
         ReactDOM.render(element, document.getElementById('MesModel'))
     }
 

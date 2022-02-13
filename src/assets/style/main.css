@@ -131,12 +131,18 @@
     border-radius: 8px;
     animation: controlButtonHoverBack 0.5s;
     cursor: pointer;
+    text-align: center;
 }
 
 .controlButton:hover {
     animation: controlButtonHover 0.5s;
     background-color: rgba(255, 255, 255, 0.25);
     box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.65);
+}
+
+.controlButtonText{
+    font-size: 70%;
+    text-align: center;
 }
 
 
@@ -533,7 +539,7 @@ a:visited {
     top: 26px;
     z-index: 4;
     width: 100%;
-    padding: 0 35px 0 0;
+    padding: 0 150px 0 0;
 }
 
 #WG_startPage {
