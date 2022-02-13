@@ -435,12 +435,12 @@ a:visited {
 
 #backlogContent {
     position: absolute;
-    bottom: 5px;
+    bottom: 15px;
     display: flex;
     flex-flow: column-reverse;
     width: 100%;
     padding: 0 5% 0 0;
-    height: 85%;
+    height: calc(100vh - 15px - 55px);
     overflow: scroll;
 }
 
