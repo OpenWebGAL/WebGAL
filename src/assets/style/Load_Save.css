@@ -53,8 +53,8 @@
 }
 
 .LS_Items{
-    padding: 5px 10px 10px 10px;
-    height: 75%;
+    padding: 5px 10px 5px 10px;
+    height: 100%;
     display: flex;
     justify-items: center;
     justify-content: center;
@@ -125,7 +125,7 @@
 
 
 .LS_ButtonList{
-    height: calc(100vh - 180px);
+    height: calc(100% - 80px);
     overflow: scroll;
     overflow-scrolling: auto;
     display: flex;
