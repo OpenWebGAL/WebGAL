@@ -30,6 +30,19 @@ const pixiRain = (rainSpeed) => {
         if (container.y >= 2000) {
             container.y = app.screen.height / 2;
         }
+
+        //设置透明度
+        let randNum = Math.random() / 10;
+        let upOrDown = Math.random() <= 0.5;
+        if (upOrDown) {
+            container.alpha = container.alpha + randNum;
+        } else {
+            container.alpha = container.alpha - randNum;
+        }
+        if (container.alpha > 1 || container.alpha <= 0.7) {
+            container.alpha = 0.85;
+        }
+
     });
 }
 
