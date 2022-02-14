@@ -1,4 +1,5 @@
-pixiTest:;
+pixiInit:init;
+pixiPerform:rain;
 setBgAni:bg_focusLeft,1.5s;
 setBgTransform:scale(1.15, 1.15) translate(5%, 0);
 setBgFilter:blur(1px);
@@ -15,6 +16,7 @@ setBgAni:bg_LtoR,1.5s;
 setBgTransform:scale(1.15, 1.15) translate(-5%, 0);
 setBgFilter:blur(1px);
 setFigAni:right,rightIn,1s;
+pixiInit:init;
 比企谷八幡:vocal-V3.ogg,刚到而已;
 setBgAni:bg_RtoC,1.5s;
 setBgTransform:scale(1, 1) translate(0, 0);

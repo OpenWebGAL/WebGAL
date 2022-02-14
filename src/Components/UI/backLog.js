@@ -2,6 +2,7 @@ import {getRuntime} from "../../Core/StoreControl/StoreControl";
 import ReactDOM from "react-dom";
 import {Return, VolumeNotice} from "@icon-park/react";
 import {userInteract} from "../../Core/InteractController/UserInteract";
+import logger from "../../Core/util/logger";
 
 const BackLog = (props) => {
     let showBacklogList = [];
@@ -18,7 +19,7 @@ const BackLog = (props) => {
                     if (vocalName !== '') {
                         let url = './game/vocal/' + vocalName;
                         let elementAudio = <audio src={url} id={"backlogVocalAudio-" + i}/>
-                        console.log("Playing! now url is" + url);
+                        logger.info("播放回溯语音" + url);
                         ReactDOM.render(elementAudio, document.getElementById("backlogVocal-" + i));
                         let singleControlBacklogAudio = document.getElementById("backlogVocalAudio-" + i);
                         let played = false;
