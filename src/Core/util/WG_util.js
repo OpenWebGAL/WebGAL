@@ -1,5 +1,6 @@
 import {getRuntime} from "../StoreControl/StoreControl";
 import {SyncCurrentStatus, getStatus} from "../StoreControl/StoreControl";
+import logger from "./logger";
 
 // 处理脚本
 
@@ -103,7 +104,7 @@ function isMobile() {
 }
 
 function MobileChangeStyle() {
-    console.log("now is mobile view");
+    logger.warn("手机视图");
     document.getElementById('bottomBox').style.height = '45%';
     document.getElementById('ReactRoot').style.fontSize = '65%';
     document.getElementById('mainTextWindow').style.padding = '5px 20% 5px 20%';

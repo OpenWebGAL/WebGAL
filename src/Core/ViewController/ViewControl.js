@@ -19,17 +19,15 @@ import Yoozle from "../../Components/UI/yoozle";
 import showTextPreview from "./functions/showTextPreview";
 import showTextArary from "./functions/showTextArray";
 import MessageModel from "../../Components/UI/messageModel";
+import PixiControl from "../PixiController/PixiControl";
+import logger from "../util/logger";
 
 class WG_ViewControl {
 
     static VC_PIXI_Create() {
         let app = new PIXI.Application({
-            // width: 256,
-            // height: 256,
-            // backgroundColor:'ox1099bb',
-            transparent: true
+            backgroundAlpha: 0
         });
-        //Add the canvas that Pixi automatically created for you to the HTML document
         //清空原节点
         document.getElementById('pixiContianer').innerHTML = '';
         document.getElementById('pixiContianer').appendChild(app.view);
@@ -39,32 +37,10 @@ class WG_ViewControl {
         app.renderer.resize(document.getElementById('ReactRoot').clientWidth, document.getElementById('ReactRoot').clientHeight);
         app.renderer.view.style.zIndex = '2';
         currentPIXI['app'] = app;
-        const container = new PIXI.Container();
-        app.stage.addChild(container);
-        const texture = PIXI.Texture.from('./game/tex/rain_min.png');
-        // 创建5x5兔子网格
-        for (let i = 0; i < 25; i++) {
-            const bunny = new PIXI.Sprite(texture);
-            bunny.anchor.set(0.5);
-            bunny.x = (i % 5) * 300;
-            bunny.y = Math.floor(i / 5) * 300;
-            container.addChild(bunny);
-        }
-        // 将容器移到中心
-        container.x = app.screen.width / 2;
-        container.y = app.screen.height / 2;
-        // 本地container坐标系中的兔子雪碧中心
-        container.pivot.x = container.width / 2;
-        container.pivot.y = container.height / 2;
-        // 监听动画更新
-        app.ticker.add((delta) => {
-            // 下降容器！
-            // 使用delta创建与帧无关的转换
-            container.y += 5 * delta;
-            if (container.y >= 800) {
-                container.y = 0;
-            }
-        });
+    }
+
+    static VC_PIXI_perform(performType, option) {
+        PixiControl(performType, option);
     }
 
     static VC_changeBG(bg_name) {
@@ -87,7 +63,7 @@ class WG_ViewControl {
                 getRuntime().currentInfo["fig_Name_right"] = P_name;
                 break;
             default:
-                console.log('立绘位置参数错误');
+                logger.error('立绘位置参数错误');
                 break;
         }
     }
@@ -150,7 +126,7 @@ class WG_ViewControl {
     }
 
     static playVocal() {
-        console.log("Playing vocal:")
+        logger.info("正在播放语音")
         let runtimeTemp = getStatus("all")
         if (document.getElementById('currentVocal')) {
             document.getElementById('currentVocal').pause();
@@ -218,6 +194,7 @@ class WG_ViewControl {
     }
 
     static showBacklog() {
+        logger.info('显示回溯', getRuntime().CurrentBacklog);
         document.getElementById('backlog').style.display = 'block';
         document.getElementById('bottomBox').style.display = 'none';
         ReactDOM.render(<BackLog/>, document.getElementById('backlogContent'));
@@ -249,7 +226,7 @@ class WG_ViewControl {
     }
 
     static VC_setAnimationByClass(name, animate, time) {
-        console.log('setting animate by class on: ' + name + 'set to ' + animate);
+        logger.info('设置' + name + '的动画为' + animate);
         let aniString = animate + ' ' + time;
         let editList = document.getElementsByClassName(name);
         for (let i = 0; i < editList.length; i++) {

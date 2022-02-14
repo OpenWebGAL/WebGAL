@@ -1,6 +1,7 @@
 import {getRuntime, getScene, getStatus, SyncCurrentStatus} from "./StoreControl/StoreControl"
 import {WG_ViewControl} from "./ViewController/ViewControl";
 import {processSelection, processSentence} from "./util/WG_util";
+import logger from "./util/logger";
 
 // 读取下一条脚本
 function nextSentenceProcessor() {
@@ -16,7 +17,7 @@ function nextSentenceProcessor() {
     let thisSentence = getRuntime().currentScene[getStatus('SentenceID')];//此条语句的内容
     let command = thisSentence[0];//此条语句的控制文本（也可能是省略人物对话的语句）
     let S_content = thisSentence[1];
-    console.log("------now running NSP------" + thisSentence);
+    logger.info('读取脚本',thisSentence);
     if (command === 'changeBG') {
         WG_ViewControl.VC_changeBG(S_content);//界面控制：换背景
         SyncCurrentStatus("bg_Name", S_content);//同步当前状态
@@ -108,7 +109,7 @@ function nextSentenceProcessor() {
         varProcess(command, S_content);
         return;
     } else if (command === 'showVar') {
-        console.log("showing var");
+        logger.info("显示变量");
         SyncCurrentStatus('command', command);
         SyncCurrentStatus('showName', command);
         SyncCurrentStatus('showText', JSON.stringify(getRuntime().currentInfo.GameVar));
@@ -155,8 +156,21 @@ function nextSentenceProcessor() {
         return;
     } else if (command === 'playVideo') {
         WG_ViewControl.showVideo(S_content);
-    } else if (command === 'pixiTest') {
+    } else if (command === 'pixiInit') {
+        getRuntime().currentInfo['pixiPerformList'] = [];
         WG_ViewControl.VC_PIXI_Create();
+        increaseSentence();
+        nextSentenceProcessor();
+        return;
+    } else if (command === 'pixiPerform') {
+        const performType = S_content;
+        const option = {};
+        const pixiOption = {performType: performType, option: option};
+        getRuntime().currentInfo['pixiPerformList'].push(pixiOption);
+        WG_ViewControl.VC_PIXI_perform(performType, option);
+        increaseSentence();
+        nextSentenceProcessor();
+        return;
     } else {
         SyncCurrentStatus('command', processSentence(getStatus("SentenceID"))['name']);
         SyncCurrentStatus('showName', processSentence(getStatus("SentenceID"))['name']);
@@ -200,18 +214,14 @@ function increaseSentence() {
 function varProcess(command, content) {
     if (command === 'varSet') {
         content = content.split(';')[0];
-        console.log(content);
         content = content.split(',');
-        console.log(content)
         for (let i = 0; i < content.length; i++) {
             let singleSet = content[i];
             singleSet = singleSet.split(':');
-            console.log(singleSet)
             getRuntime().currentInfo.GameVar[singleSet[0]] = parseInt(singleSet[1]);
         }
     } else if (command === 'varUp') {
         content = content.split(';')[0];
-        console.log(content);
         content = content.split(',');
         for (let i = 0; i < content.length; i++) {
             let singleSet = content[i];
@@ -220,7 +230,6 @@ function varProcess(command, content) {
         }
     } else if (command === 'varDrop') {
         content = content.split(';')[0];
-        console.log(content);
         content = content.split(',');
         for (let i = 0; i < content.length; i++) {
             let singleSet = content[i];
@@ -229,12 +238,10 @@ function varProcess(command, content) {
         }
     } else if (command === 'jump_varReach') {
         content = content.split(';')[0];
-        console.log(content);
         content = content.split(',');
         let varArea = content[0];
         varArea = varArea.split(':');
         let JumpArea = content[1];
-        console.log("var data is" + parseInt(varArea[1]) + getRuntime().currentInfo.GameVar[varArea[0]])
         if (getRuntime().currentInfo.GameVar[varArea[0]] >= parseInt(varArea[1])) {
             //find the line of the label:
             jumpSentence(JumpArea);
@@ -242,7 +249,6 @@ function varProcess(command, content) {
         }
     } else if (command === 'jump_varBelow') {
         content = content.split(';')[0];
-        console.log(content);
         content = content.split(',');
         let varArea = content[0];
         varArea = varArea.split(':');
@@ -253,49 +259,45 @@ function varProcess(command, content) {
             return;
         }
     }
-    console.log(getRuntime().currentInfo.GameVar);
     increaseSentence();
     nextSentenceProcessor();
 }
 
 function ifJump(command, content) {
     let judgeBody = command.split(')')[0].split('(')[1];
-    console.log("judgeBody is: ");
-    console.log(judgeBody);
-    console.log(judgeBody.split('<=')[1]);
     let jumpActivated = false;
     if (judgeBody.split('<=')[1]) {
-        console.log("case <=")
+        logger.debug("case <=")
         if (getRuntime().currentInfo.GameVar[judgeBody.split('<=')[0]] <= parseInt(judgeBody.split('<=')[1])) {
-            console.log("jump to" + content);
+            logger.debug("jump to" + content);
             jumpSentence(content);
             jumpActivated = true;
         }
     } else if (judgeBody.split('>=')[1]) {
-        console.log("case >=")
+        logger.debug("case >=")
         if (getRuntime().currentInfo.GameVar[judgeBody.split('>=')[0]] >= parseInt(judgeBody.split('>=')[1])) {
-            console.log("jump to" + content);
+            logger.debug("jump to" + content);
             jumpSentence(content);
             jumpActivated = true;
         }
     } else if (judgeBody.split('<')[1]) {
-        console.log("case <")
+        logger.debug("case <")
         if (getRuntime().currentInfo.GameVar[judgeBody.split('<')[0]] < parseInt(judgeBody.split('<')[1])) {
-            console.log("jump to" + content);
+            logger.debug("jump to" + content);
             jumpSentence(content);
             jumpActivated = true;
         }
     } else if (judgeBody.split('>')[1]) {
-        console.log("case >")
+        logger.debug("case >")
         if (getRuntime().currentInfo.GameVar[judgeBody.split('>')[0]] > parseInt(judgeBody.split('>')[1])) {
-            console.log("jump to" + content);
+            logger.debug("jump to" + content);
             jumpSentence(content);
             jumpActivated = true;
         }
     } else if (judgeBody.split('=')[1]) {
-        console.log("case = ")
+        logger.debug("case = ")
         if (getRuntime().currentInfo.GameVar[judgeBody.split('=')[0]] === parseInt(judgeBody.split('=')[1])) {
-            console.log("jump to" + content);
+            logger.debug("jump to" + content);
             jumpSentence(content);
             jumpActivated = true;
         }
@@ -336,31 +338,30 @@ function setVar(content) {
         let setVarName = setSent[0];
         let setVarValue = setSent[1];
         if (setVarValue.split('+')[1]) {
-            console.log("case +")
+            logger.debug("case +")
             let valueLeft = getRuntime().currentInfo.GameVar[setVarValue.split('+')[0]];
             let valueRight = parseInt(setVarValue.split('+')[1]);
             getRuntime().currentInfo.GameVar[setVarName] = valueLeft + valueRight;
         } else if (setVarValue.split('-')[1]) {
-            console.log("case -")
+            logger.debug("case -")
             let valueLeft = getRuntime().currentInfo.GameVar[setVarValue.split('-')[0]];
             let valueRight = parseInt(setVarValue.split('-')[1]);
             getRuntime().currentInfo.GameVar[setVarName] = valueLeft - valueRight;
         } else if (setVarValue.split('*')[1]) {
-            console.log("case *")
+            logger.debug("case *")
             let valueLeft = getRuntime().currentInfo.GameVar[setVarValue.split('*')[0]];
             let valueRight = parseInt(setVarValue.split('*')[1]);
             getRuntime().currentInfo.GameVar[setVarName] = valueLeft * valueRight;
         } else if (setVarValue.split('/')[1]) {
-            console.log("case /")
+            logger.debug("case /")
             let valueLeft = getRuntime().currentInfo.GameVar[setVarValue.split('/')[0]];
             let valueRight = parseInt(setVarValue.split('/')[1]);
             getRuntime().currentInfo.GameVar[setVarName] = valueLeft / valueRight;
         } else {
-            console.log("case value")
+            logger.debug("case value")
             getRuntime().currentInfo.GameVar[setVarName] = parseInt(setVarValue);
         }
     }
-    console.log(getRuntime().currentInfo.GameVar);
 }
 
 export {nextSentenceProcessor, increaseSentence}

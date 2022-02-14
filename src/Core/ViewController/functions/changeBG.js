@@ -9,7 +9,6 @@ const changeBG = (bg_name)=>{
     oldBG.setAttribute('id', 'oldBG');
     oldBG.style.animation = 'hideBG 5s';
     oldBG.style.animationFillMode = 'forwards';
-    console.log(oldBG);
     BG.parentNode.appendChild(oldBG);
     BG.style.backgroundImage = "url('game/background/" + bg_name + "')";
     let newBG = BG.cloneNode(true);

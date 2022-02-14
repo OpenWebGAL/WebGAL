@@ -3,6 +3,7 @@
 import {nextSentenceProcessor} from "../WG_core";
 import {prefetcher} from '../util/PrefetchWrapper';
 import pako from 'pako';
+import logger from "../util/logger";
 
 
 let setAutoWaitTime = 1500;
@@ -58,6 +59,7 @@ let currentInfo = {
     GameVar: {},
     bg_filter: '',
     bg_transform: '',
+    pixiPerformList: []
 }
 
 // 初始化存档系统
@@ -167,7 +169,7 @@ function getScene(url) {
 
     let getScReq = null;
     getScReq = new XMLHttpRequest();
-    console.log('now read scene')
+    logger.info('开始获取场景脚本')
     if (getScReq != null) {
         getScReq.open("get", url, true);
         getScReq.send();
@@ -189,8 +191,7 @@ function getScene(url) {
                     currentScene[i][0] = command;
                     currentScene[i][1] = content;
                 }
-                console.log('Read scene complete.');
-                console.log(currentScene);
+                logger.info('读取脚本完成',currentScene);
                 getRuntime().currentScene = currentScene
                 SyncCurrentStatus('SentenceID', 0);
                 nextSentenceProcessor();

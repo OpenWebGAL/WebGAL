@@ -14,6 +14,7 @@ import {AllHiddenIgnore, queryWidgetState} from "../util/WG_util";
 import * as core from "../WG_core"
 import {WG_ViewControl} from "../ViewController/ViewControl";
 import {prefetcher} from '../util/PrefetchWrapper';
+import logger from "../util/logger";
 // import AudioController from "../util/AudioController";
 
 
@@ -22,11 +23,10 @@ import {prefetcher} from '../util/PrefetchWrapper';
 class userInteract {
 // 保存当前游戏状态
     static saveGame(index) {
-        console.log("saving")
+        logger.info("保存游戏，档位为 "+index);
         let tempInfo = JSON.stringify(getStatus("all"));
         Saves[index] = JSON.parse(tempInfo);
         let tempBacklog = JSON.stringify(getRuntime().CurrentBacklog);
-        console.log(tempBacklog)
         SaveBacklog[index] = JSON.parse(tempBacklog);
         Saves[index].saveTime = new Date().toLocaleDateString() + ' ' + new Date().toLocaleTimeString('chinese', {hour12: false});
         writeCookie();
@@ -65,9 +65,8 @@ class userInteract {
                     }
                     SyncCurrentStatus('SentenceID', save["SentenceID"]);
                     WG_ViewControl.VC_restoreStatus(save);
-                    console.log(SaveBacklog)
+                    logger.info('读取的backlog为：',SaveBacklog)
                     getRuntime().CurrentBacklog = SaveBacklog[index];
-                    console.log(CurrentBacklog);
                     SyncCurrentStatus('all', save);
                     prefetcher.onSceneChange(url, getStatus('SentenceID'));
                 }
@@ -107,13 +106,13 @@ class userInteract {
                         let content = tempSentence.slice(commandLength + 1);
                         content = content.split(';')[0];
                         command = command.split(';')[0];
+                        // noinspection JSValidateTypes
                         getRuntime().currentScene[i] = getRuntime().currentScene[i].split(":");
                         getRuntime().currentScene[i][0] = command;
                         getRuntime().currentScene[i][1] = content;
                     }
                     SyncCurrentStatus('SentenceID', save["SentenceID"]);
-                    console.log("restore command sent")
-                    console.log("restoring:" + save)
+                    logger.info("从backlog中读取状态：",save);
                     WG_ViewControl.VC_restoreStatus(save);
                     SyncCurrentStatus('all', save);
                     getRuntime().CurrentBacklog[getRuntime().CurrentBacklog.length] = JSON.parse(JSON.stringify(getStatus("all")));

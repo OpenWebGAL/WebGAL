@@ -2785,6 +2785,13 @@ axe-core@^4.0.2:
   resolved "https://registry.npmmirror.com/axe-core/download/axe-core-4.3.3.tgz?cache=0&sync_timestamp=1634911314483&other_urls=https%3A%2F%2Fregistry.npmmirror.com%2Faxe-core%2Fdownload%2Faxe-core-4.3.3.tgz#b55cd8e8ddf659fe89b064680e1c6a4dceab0325"
   integrity sha1-tVzY6N32Wf6JsGRoDhxqTc6rAyU=
 
+axios@^0.24.0:
+  version "0.24.0"
+  resolved "https://registry.npmmirror.com/axios/-/axios-0.24.0.tgz#804e6fa1e4b9c5288501dd9dff56a7a0940d20d6"
+  integrity sha512-Q6cWsys88HoPgAaFAVUb0WpPk0O8iTeisR9IMqy9G8AbO4NlpVknrnQS03zzF9PGAWgO3cgletO3VjV/P7VztA==
+  dependencies:
+    follow-redirects "^1.14.4"
+
 axobject-query@^2.2.0:
   version "2.2.0"
   resolved "https://registry.npmmirror.com/axobject-query/download/axobject-query-2.2.0.tgz?cache=0&sync_timestamp=1633308562244&other_urls=https%3A%2F%2Fregistry.npmmirror.com%2Faxobject-query%2Fdownload%2Faxobject-query-2.2.0.tgz#943d47e10c0b704aa42275e20edf3722648989be"
@@ -3538,6 +3545,13 @@ cliui@^6.0.0:
     string-width "^4.2.0"
     strip-ansi "^6.0.0"
     wrap-ansi "^6.2.0"
+
+cloudlogjs@^1.0.9:
+  version "1.0.9"
+  resolved "https://registry.npmmirror.com/cloudlogjs/-/cloudlogjs-1.0.9.tgz#8d569979d7ddefe6e13905f7ea3cce4dcd78b3d7"
+  integrity sha512-aUc51uTNoLQlLWXwsT7++/7Gc/ZHr5BwlzDbgqi+JdwdtNel4rxrOM/gATd4xmYWHzs2nIr3C7QRNyCBy65hQg==
+  dependencies:
+    axios "^0.24.0"
 
 co@^4.6.0:
   version "4.6.0"
@@ -5303,6 +5317,11 @@ follow-redirects@^1.0.0:
   version "1.14.4"
   resolved "https://registry.nlark.com/follow-redirects/download/follow-redirects-1.14.4.tgz?cache=0&sync_timestamp=1631622129411&other_urls=https%3A%2F%2Fregistry.nlark.com%2Ffollow-redirects%2Fdownload%2Ffollow-redirects-1.14.4.tgz#838fdf48a8bbdd79e52ee51fb1c94e3ed98b9379"
   integrity sha1-g4/fSKi73XnlLuUfsclOPtmLk3k=
+
+follow-redirects@^1.14.4:
+  version "1.14.8"
+  resolved "https://registry.npmmirror.com/follow-redirects/-/follow-redirects-1.14.8.tgz#016996fb9a11a100566398b1c6839337d7bfa8fc"
+  integrity sha512-1x0S9UVJHsQprFcEC/qnNzBLcIxsjAV905f/UkQxbclCsoTWlacCNOpQa/anodLl2uaEKFhfWOvM2Qg77+15zA==
 
 for-in@^1.0.2:
   version "1.0.2"
