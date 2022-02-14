@@ -105,7 +105,7 @@
     justify-content: center;
     top: 5px;
     bottom: 0;
-    z-index: 2;
+    z-index: 3;
     /*animation: showSoftly 0.5s;*/
     /*min-width: 600px;*/
     /*overflow: hidden;*/
@@ -373,7 +373,7 @@ a:visited {
     justify-content: left;
     top: 5px;
     bottom: 0;
-    z-index: 2;
+    z-index: 3;
     /*animation: showSoftly 0.5s;*/
     /*min-width: 600px;*/
     /*overflow: hidden;*/
@@ -399,7 +399,7 @@ a:visited {
     /*justify-content: right;*/
     top: 5px;
     bottom: 0;
-    z-index: 2;
+    z-index: 3;
     /*animation: showSoftly 0.5s;*/
     float: right;
     /*min-width: 600px;*/

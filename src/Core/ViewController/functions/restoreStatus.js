@@ -40,6 +40,11 @@ const restoreStatus = (savedStatus) => {
     SyncCurrentStatus('vocal', savedStatus['vocal']);
     WG_ViewControl.playVocal();
 
+    //还原演出效果
+    for(const perform of savedStatus.pixiPerformList){
+        WG_ViewControl.VC_PIXI_Create();
+        WG_ViewControl.VC_PIXI_perform(perform.performType,perform.option);
+    }
 }
 
 export default restoreStatus;

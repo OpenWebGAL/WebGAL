@@ -1,13 +1,13 @@
 import {getRuntime} from "../../StoreControl/StoreControl";
 import ReactDOM from "react-dom";
+import logger from "../../util/logger";
 
 const loadBGM = () => {
-    console.log("loadingBGM")
     let bgmName = getRuntime().currentInfo["bgm"];
-    console.log("now playing " + bgmName);
+    logger.info("正在播放 " + bgmName);
     // console.log(getRuntime().currentInfo);
     if (bgmName === '' || bgmName === 'none') {
-        console.log("set bgm none");
+        logger.warn("清除bgm");
         if (document.getElementById("currentBGM")) {
             document.getElementById("currentBGM").autoplay = false;
             document.getElementById("currentBGM").pause();
@@ -24,7 +24,6 @@ const loadBGM = () => {
     function audioRendered() {
         let playControl = document.getElementById("currentBGM");
         let played = false;
-        console.log(playControl)
         playControl.oncanplay = function () {
             if (played === false) {
                 playControl.currentTime = 0;

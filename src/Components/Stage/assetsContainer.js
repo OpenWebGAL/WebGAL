@@ -13,6 +13,7 @@ const AssetsContainer = ()=>{
         <div id="figureImage" className={"figureContainercenter"} onClick={userInteract.clickOnBack}/>
         <div id="figureImage_left" className={"figureContainerleft"} onClick={userInteract.clickOnBack}/>
         <div id="figureImage_right" className={"figureContainerright"} onClick={userInteract.clickOnBack}/>
+        <div id={'pixiContianer'}/>
         <div id="chooseBox"/>
         <div id="bgm"/>
         <div id="vocal"/>
