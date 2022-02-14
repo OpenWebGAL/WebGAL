@@ -1,6 +1,6 @@
 import ReactDOM from "react-dom";
-import {getRuntime, getStatus} from "../StoreControl/StoreControl";
-
+import {currentPIXI, getRuntime, getStatus} from "../StoreControl/StoreControl";
+import * as PIXI from 'pixi.js';
 import {userInteract} from "../InteractController/UserInteract";
 import {
     LoadMainModel, SaveMainModel
@@ -21,6 +21,52 @@ import showTextArary from "./functions/showTextArray";
 import MessageModel from "../../Components/UI/messageModel";
 
 class WG_ViewControl {
+
+    static VC_PIXI_Create() {
+        let app = new PIXI.Application({
+            // width: 256,
+            // height: 256,
+            // backgroundColor:'ox1099bb',
+            transparent: true
+        });
+        //Add the canvas that Pixi automatically created for you to the HTML document
+        //清空原节点
+        document.getElementById('pixiContianer').innerHTML = '';
+        document.getElementById('pixiContianer').appendChild(app.view);
+        app.renderer.view.style.position = "absolute";
+        app.renderer.view.style.display = "block";
+        app.renderer.autoResize = true;
+        app.renderer.resize(document.getElementById('ReactRoot').clientWidth, document.getElementById('ReactRoot').clientHeight);
+        app.renderer.view.style.zIndex = '2';
+        currentPIXI['app'] = app;
+        const container = new PIXI.Container();
+        app.stage.addChild(container);
+        const texture = PIXI.Texture.from('./game/tex/rain_min.png');
+        // 创建5x5兔子网格
+        for (let i = 0; i < 25; i++) {
+            const bunny = new PIXI.Sprite(texture);
+            bunny.anchor.set(0.5);
+            bunny.x = (i % 5) * 300;
+            bunny.y = Math.floor(i / 5) * 300;
+            container.addChild(bunny);
+        }
+        // 将容器移到中心
+        container.x = app.screen.width / 2;
+        container.y = app.screen.height / 2;
+        // 本地container坐标系中的兔子雪碧中心
+        container.pivot.x = container.width / 2;
+        container.pivot.y = container.height / 2;
+        // 监听动画更新
+        app.ticker.add((delta) => {
+            // 下降容器！
+            // 使用delta创建与帧无关的转换
+            container.y += 5 * delta;
+            if (container.y >= 800) {
+                container.y = 0;
+            }
+        });
+    }
+
     static VC_changeBG(bg_name) {
         changeBG(bg_name);
     }
