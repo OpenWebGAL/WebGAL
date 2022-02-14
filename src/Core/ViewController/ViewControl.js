@@ -1,6 +1,6 @@
 import ReactDOM from "react-dom";
-import {getRuntime, getStatus} from "../StoreControl/StoreControl";
-
+import {currentPIXI, getRuntime, getStatus} from "../StoreControl/StoreControl";
+import * as PIXI from 'pixi.js';
 import {userInteract} from "../InteractController/UserInteract";
 import {
     LoadMainModel, SaveMainModel
@@ -19,8 +19,30 @@ import Yoozle from "../../Components/UI/yoozle";
 import showTextPreview from "./functions/showTextPreview";
 import showTextArary from "./functions/showTextArray";
 import MessageModel from "../../Components/UI/messageModel";
+import PixiControl from "../PixiController/PixiControl";
+import logger from "../util/logger";
 
 class WG_ViewControl {
+
+    static VC_PIXI_Create() {
+        let app = new PIXI.Application({
+            backgroundAlpha: 0
+        });
+        //清空原节点
+        document.getElementById('pixiContianer').innerHTML = '';
+        document.getElementById('pixiContianer').appendChild(app.view);
+        app.renderer.view.style.position = "absolute";
+        app.renderer.view.style.display = "block";
+        app.renderer.autoResize = true;
+        app.renderer.resize(document.getElementById('ReactRoot').clientWidth, document.getElementById('ReactRoot').clientHeight);
+        app.renderer.view.style.zIndex = '2';
+        currentPIXI['app'] = app;
+    }
+
+    static VC_PIXI_perform(performType, option) {
+        PixiControl(performType, option);
+    }
+
     static VC_changeBG(bg_name) {
         changeBG(bg_name);
     }
@@ -41,7 +63,7 @@ class WG_ViewControl {
                 getRuntime().currentInfo["fig_Name_right"] = P_name;
                 break;
             default:
-                console.log('立绘位置参数错误');
+                logger.error('立绘位置参数错误');
                 break;
         }
     }
@@ -104,7 +126,7 @@ class WG_ViewControl {
     }
 
     static playVocal() {
-        console.log("Playing vocal:")
+        logger.info("正在播放语音")
         let runtimeTemp = getStatus("all")
         if (document.getElementById('currentVocal')) {
             document.getElementById('currentVocal').pause();
@@ -172,6 +194,7 @@ class WG_ViewControl {
     }
 
     static showBacklog() {
+        logger.info('显示回溯', getRuntime().CurrentBacklog);
         document.getElementById('backlog').style.display = 'block';
         document.getElementById('bottomBox').style.display = 'none';
         ReactDOM.render(<BackLog/>, document.getElementById('backlogContent'));
@@ -203,7 +226,7 @@ class WG_ViewControl {
     }
 
     static VC_setAnimationByClass(name, animate, time) {
-        console.log('setting animate by class on: ' + name + 'set to ' + animate);
+        logger.info('设置' + name + '的动画为' + animate);
         let aniString = animate + ' ' + time;
         let editList = document.getElementsByClassName(name);
         for (let i = 0; i < editList.length; i++) {

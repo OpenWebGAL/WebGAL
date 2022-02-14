@@ -1,4 +1,5 @@
 import {getStatus} from '../StoreControl/StoreControl';
+import logger from "./logger";
 
 
 const cacheVersion = 1;
@@ -372,7 +373,7 @@ if (window.isSecureContext) {
 
                         reg.installing.onstatechange = (ev) => {
                             if (ev.target.state === 'activated') {
-                                console.log('[service worker] claimed');
+                                logger.info('[service worker] claimed');
                                 initServiceWorkerPrefetchWrapper();
                             }
                         };
@@ -386,7 +387,7 @@ if (window.isSecureContext) {
         });
     } else {
         // only private mode in Firefox falls in this category
-        console.log('ServiceWorker not supported.');
+        logger.warn('ServiceWorker not supported.');
         // no ServiceWorker, no CacheStorage
         // could be threated as BrowserCache
     }

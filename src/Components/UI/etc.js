@@ -267,11 +267,11 @@ class SaveMainModel extends React.Component {
         for (let i = 0; i < this.LoadPageQty; i++) {
             let temp = <span className="SaveIndexButton LS_indexButton" onClick={() => {
                 this.setCurrentPage(i)
-            }} key={i}>{i + 1}</span>
+            }} key={i+'saveListButton'}>{i + 1}</span>
             if (i === getRuntime().currentSavePage) temp =
                 <span className="SaveIndexButtonOn LS_indexButtonOn" onClick={() => {
                     this.setCurrentPage(i)
-                }} key={i}>{i + 1}</span>
+                }} key={i+'saceListButtonOn'}>{i + 1}</span>
             this.Buttons.push(temp);
         }
     }
@@ -285,21 +285,21 @@ class SaveMainModel extends React.Component {
                 let thisButtonText = Saves[i]["showText"];
                 let miniPic = ren_miniPic(i);
                 let backUrl = "game/background/" + Saves[i]["bg_Name"];
-                let temp = <div className="SaveSingleElement LS_singleElement" key={i} onClick={() => {
+                let temp = <div className="SaveSingleElement LS_singleElement" key={i+'save'} onClick={() => {
                     this.save_onSaved(i)
                 }}>
                     <div className={"LS_Title"}>
-                        <span className={"LS_Title_index S_Title_index"}>{i}</span>
-                        <span className={"LS_Title_time S_Title_time"}>{Saves[i].saveTime}</span>
+                        <span key={i+'LS_TitleIndex'} className={"LS_Title_index S_Title_index"}>{i}</span>
+                        <span key={i+'LS_Time'} className={"LS_Title_time S_Title_time"}>{Saves[i].saveTime}</span>
                     </div>
                     <div className={"LS_infoArea"}>
-                        <div className={"ren"} key={i} style={{backgroundImage: `url(${backUrl})`}}>
+                        <div className={"ren"} key={i+'miniRen'} style={{backgroundImage: `url(${backUrl})`}}>
                             {miniPic}
                         </div>
                         <div className={"LS_textArea"}>
                             <div className="LSE_top">
-                                <span className={"LSE_index"}>{i}</span>
-                                <span className={"LSE_name"}>{thisButtonName}</span>
+                                <span key={i+'LSEIndex'} className={"LSE_index"}>{i}</span>
+                                <span key={i+'LSEneme'} className={"LSE_name"}>{thisButtonName}</span>
                             </div>
                             <div className="LSE_bottom">
                                 {thisButtonText}
@@ -309,9 +309,9 @@ class SaveMainModel extends React.Component {
                 </div>
                 this.SaveButtons.push(temp);
             } else {
-                let temp = <div className="SaveSingleElement LS_singleElement" key={i} onClick={() => {
+                let temp = <div className="SaveSingleElement LS_singleElement" key={i+'save_non'} onClick={() => {
                     this.save_NonSaved(i)
-                }}></div>
+                }}/>
                 this.SaveButtons.push(temp);
                 // console.log(i)
             }
