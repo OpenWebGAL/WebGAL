@@ -1,12 +1,12 @@
 import * as PIXI from "pixi.js";
 import {currentPIXI} from "../../StoreControl/StoreControl";
 
-const pixiRain = () => {
+const pixiRain = (rainSpeed) => {
     const app = currentPIXI['app'];
     const container = new PIXI.Container();
     app.stage.addChild(container);
     const texture = PIXI.Texture.from('./game/tex/rain_min.png');
-    // 创建5x5兔子网格
+    // 创建网格
     for (let i = 0; i < 400; i++) {
         const bunny = new PIXI.Sprite(texture);
         bunny.anchor.set(0.5);
@@ -25,9 +25,8 @@ const pixiRain = () => {
     container.rotation = -0.2;
     // 监听动画更新
     app.ticker.add((delta) => {
-        // 下降容器！
-        // 使用delta创建与帧无关的转换
-        container.y += 5 * delta;
+        // 控制下雨速度
+        container.y += rainSpeed * delta;
         if (container.y >= 2000) {
             container.y = app.screen.height / 2;
         }

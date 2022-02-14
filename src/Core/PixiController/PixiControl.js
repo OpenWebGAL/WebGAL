@@ -2,7 +2,7 @@ import pixiRain from "./presets/rain";
 
 const PixiControl = (performType, option) => {
     if (performType === 'rain') {
-        pixiRain();
+        pixiRain(7);
     }
 }
 
