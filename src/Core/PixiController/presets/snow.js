@@ -2,6 +2,11 @@ import * as PIXI from "pixi.js";
 import {currentPIXI} from "../../StoreControl/StoreControl";
 
 const pixiSnow = (snowSpeed) => {
+    //动画参数
+    //设置缩放的系数
+    const scalePreset = 0.09
+
+
     const app = currentPIXI['app'];
     const container = new PIXI.Container();
     app.stage.addChild(container);
@@ -25,33 +30,39 @@ const pixiSnow = (snowSpeed) => {
         //创建对象
         const bunny = new PIXI.Sprite(texture);
         // 随机雪花大小
-        const scaleRand = Math.random() * 1.05;
-        bunny.scale.x = 0.1 * scaleRand;
-        bunny.scale.y = 0.1 * scaleRand;
+        let scaleRand = Math.random();
+        if (scaleRand <= 0.5) {
+            scaleRand = 0.5;
+        }
+        bunny.scale.x = scalePreset * scaleRand;
+        bunny.scale.y = scalePreset * scaleRand;
         //设置锚点
         bunny.anchor.set(0.5);
         //随机雪花位置
         bunny.x = Math.random() * stageWidth - 0.5 * stageWidth;
         bunny.y = 0 - 0.5 * stageHeight;
+        bunny['dropSpeed'] = Math.random() * 2;
+        bunny['acc'] = Math.random();
         container.addChild(bunny);
         //控制每片雪花
         bunnyList.push(bunny);
         let count = 0;//用于判断雪花往左还是往右飘，是2的倍数则往左
         for (const e of bunnyList) {
             count++;
-            e.y += delta * snowSpeed;
             const randomNumber = Math.random();
+            e['dropSpeed'] = e['acc'] *0.01 + e['dropSpeed'];
+            e.y += delta * snowSpeed * e['dropSpeed'] * 0.3 + 0.7;
             const addX = count % 2 === 0;
             if (addX) {
                 e.x += delta * randomNumber * 0.5;
-                e.rotation += delta * randomNumber * 0.05;
+                e.rotation += delta * randomNumber * 0.03;
             } else {
                 e.x -= delta * randomNumber * 0.5;
-                e.rotation -= delta * randomNumber * 0.05;
+                e.rotation -= delta * randomNumber * 0.03;
             }
         }
         //控制同屏雪花数
-        if (bunnyList.length >= 400) {
+        if (bunnyList.length >= 500) {
             bunnyList.unshift();
             container.removeChild(container.children[0]);
         }
