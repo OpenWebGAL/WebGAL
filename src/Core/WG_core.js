@@ -155,6 +155,8 @@ function nextSentenceProcessor() {
         return;
     } else if (command === 'playVideo') {
         WG_ViewControl.showVideo(S_content);
+    } else if (command === 'pixiTest') {
+        WG_ViewControl.VC_PIXI_Create();
     } else {
         SyncCurrentStatus('command', processSentence(getStatus("SentenceID"))['name']);
         SyncCurrentStatus('showName', processSentence(getStatus("SentenceID"))['name']);

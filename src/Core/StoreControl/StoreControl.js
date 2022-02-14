@@ -36,6 +36,7 @@ let onTextPreview = 0;
 let showingText = false;
 let hideTextStatus = false;
 let temp_bgm_TitleToGameplay = '';
+let currentPIXI = {};
 
 
 // 初始化状态表
@@ -272,5 +273,6 @@ export {
     getScene,
     getGameInfo,
     SyncCurrentStatus,
-    getRuntime
+    getRuntime,
+    currentPIXI
 }
