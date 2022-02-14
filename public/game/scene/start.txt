@@ -1,5 +1,5 @@
 pixiInit;
-pixiPerform:rain;
+pixiPerform:snow;
 setBgAni:bg_focusLeft,1.5s;
 setBgTransform:scale(1.15, 1.15) translate(5%, 0);
 setBgFilter:blur(1px);

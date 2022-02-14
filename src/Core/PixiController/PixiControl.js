@@ -1,8 +1,16 @@
 import pixiRain from "./presets/rain";
+import pixiSnow from "./presets/snow";
 
 const PixiControl = (performType, option) => {
-    if (performType === 'rain') {
-        pixiRain(7);
+    switch (performType){
+        case 'rain':
+            pixiRain(3);
+            break;
+        case 'snow':
+            pixiSnow(3);
+            break;
+        default:
+            break;
     }
 }
 
