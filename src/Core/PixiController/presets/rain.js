@@ -5,13 +5,13 @@ const pixiRain = (rainSpeed) => {
     const app = currentPIXI['app'];
     const container = new PIXI.Container();
     app.stage.addChild(container);
-    const texture = PIXI.Texture.from('./game/tex/rain_min.png');
+    const texture = PIXI.Texture.from('./game/tex/rain_2.png');
     // 创建网格
     for (let i = 0; i < 400; i++) {
         const bunny = new PIXI.Sprite(texture);
         bunny.anchor.set(0.5);
-        bunny.x = (i % 20) * 300;
-        bunny.y = Math.floor(i / 20) * 300;
+        bunny.x = (i % 20) * 900; //多少行
+        bunny.y = Math.floor(i / 20) * 600; //多少列
         container.addChild(bunny);
     }
     // 将容器移到中心
@@ -22,7 +22,7 @@ const pixiRain = (rainSpeed) => {
     //调整缩放
     container.scale.x = 0.7;
     container.scale.y = 0.7;
-    container.rotation = -0.2;
+    container.rotation = -0.1;
     // 监听动画更新
     app.ticker.add((delta) => {
         // 控制下雨速度
