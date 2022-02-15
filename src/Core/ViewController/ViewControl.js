@@ -21,6 +21,7 @@ import showTextArary from "./functions/showTextArray";
 import MessageModel from "../../Components/UI/messageModel";
 import PixiControl from "../PixiController/PixiControl";
 import logger from "../util/logger";
+import resetP from "./functions/resetP";
 
 class WG_ViewControl {
 
@@ -49,6 +50,7 @@ class WG_ViewControl {
 
     static VC_changeP(P_name, pos) {
         const changedP = <Figure P_name={P_name}/>;
+        resetP();
         switch (pos) {
             case 'center':
                 ReactDOM.render(changedP, document.getElementById('figureImage'));
