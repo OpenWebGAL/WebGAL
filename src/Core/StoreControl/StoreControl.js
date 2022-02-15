@@ -4,6 +4,7 @@ import {nextSentenceProcessor} from "../WG_core";
 import {prefetcher} from '../util/PrefetchWrapper';
 import pako from 'pako';
 import logger from "../util/logger";
+import axios from "axios";
 
 
 let setAutoWaitTime = 1500;
