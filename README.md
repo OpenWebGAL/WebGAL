@@ -6,7 +6,7 @@
 
 https://wg.msfasr.com
 
-国内访问这个链接可能会更快： https://webgal.loveshan.pw/ （感谢大佬提供的CDN）
+国内访问这个链接可能会更快： https://webgal.xjqxz.top/ （感谢大佬提供的CDN）
 
 ## 如果你是想要开发属于自己的 Galgame 的开发者，请下载发行版：
 
