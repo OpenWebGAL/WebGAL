@@ -5,6 +5,7 @@ import {prefetcher} from '../util/PrefetchWrapper';
 import pako from 'pako';
 import logger from "../util/logger";
 import axios from "axios";
+import fetchScene from "./fetchScene";
 
 
 let setAutoWaitTime = 1500;
@@ -167,40 +168,15 @@ function getStatus(statusKey) {
 // 获取场景脚本
 function getScene(url) {
     currentScene = '';
-
-    let getScReq = null;
-    getScReq = new XMLHttpRequest();
     logger.info('开始获取场景脚本')
-    if (getScReq != null) {
-        getScReq.open("get", url, true);
-        getScReq.send();
-        getScReq.onreadystatechange = doResult; //设置回调函数
-    }
-
-    function doResult() {
-        if (getScReq.readyState === 4) { //4表示执行完成
-            if (getScReq.status === 200) { //200表示执行成功
-                currentScene = getScReq.responseText;
-                currentScene = currentScene.split('\n');
-                for (let i = 0; i < currentScene.length; i++) {
-                    let tempSentence = currentScene[i].split(";")[0];
-                    let commandLength = tempSentence.split(":")[0].length;
-                    let command = currentScene[i].split(":")[0];
-                    command = command.split(';')[0];
-                    let content = tempSentence.slice(commandLength + 1);
-                    currentScene[i] = currentScene[i].split(":");
-                    currentScene[i][0] = command;
-                    currentScene[i][1] = content;
-                }
-                logger.info('读取脚本完成',currentScene);
-                getRuntime().currentScene = currentScene
-                SyncCurrentStatus('SentenceID', 0);
-                nextSentenceProcessor();
-                prefetcher.onSceneChange(url);
-            }
-        }
-    }
-
+    fetchScene(url).then(newScene => {
+        currentScene = newScene;
+        logger.info('读取脚本完成', currentScene);
+        getRuntime().currentScene = currentScene;
+        SyncCurrentStatus('SentenceID', 0);
+        nextSentenceProcessor();
+        prefetcher.onSceneChange(url);
+    })
 }
 
 function getGameInfo() {

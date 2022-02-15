@@ -1,7 +1,5 @@
 import axios from "axios";
 import logger from "../util/logger";
-import {getRuntime, getStatus} from "./StoreControl";
-import {prefetcher} from "../util/PrefetchWrapper";
 
 const parseScene = (sceneText) => {
     let newScene = sceneText.split('\n');
@@ -12,7 +10,7 @@ const parseScene = (sceneText) => {
         let content = tempSentence.slice(commandLength + 1);
         content = content.split(';')[0];
         command = command.split(';')[0];
-        newScene[i] = getRuntime().currentScene[i].split(":");
+        newScene[i] = newScene[i].split(":");
         newScene[i][0] = command;
         newScene[i][1] = content;
     }
@@ -20,14 +18,15 @@ const parseScene = (sceneText) => {
 }
 
 const fetchScene = (url) => {
-    axios.get(url).then(r => {
-        logger.info('请求场景结果：', r);
-        prefetcher.onSceneChange(url, getStatus('SentenceID'));
-        return parseScene(r.data);
-    }).catch(e => {
-        logger.error('读取场景失败', e);
-        return [['error', '读取场景失败']];
-    });
+    return new Promise(resolve => {
+        axios.get(url).then(r => {
+            logger.info('请求场景完成');
+            resolve(parseScene(r.data));
+        }).catch(e => {
+            logger.error('读取场景失败', e);
+            resolve([['错误', '读取场景失败']]);
+        });
+    })
 }
 
 
