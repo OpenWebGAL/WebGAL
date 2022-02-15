@@ -45,11 +45,11 @@ const pixiRain2 = (rainSpeed,number) => {
             bunny['dropSpeed'] = Math.random() * 2;
             bunny['acc'] = Math.random();
             bunny['alpha'] = Math.random();
-            if(bunny['alpha']>=0.6){
-                bunny["alpha"] = 0.6
+            if(bunny['alpha']>=0.5){
+                bunny["alpha"] = 0.5
             }
-            if(bunny['alpha']<= 0.3){
-                bunny['alpha'] = 0.3;
+            if(bunny['alpha']<= 0.2){
+                bunny['alpha'] = 0.2;
             }
             container.addChild(bunny);
             //控制每片雨点

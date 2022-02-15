@@ -5,7 +5,7 @@ import pixiRain2 from "./presets/rain2";
 const PixiControl = (performType, option) => {
     switch (performType){
         case 'rain':
-            pixiRain2(3,10);
+            pixiRain2(6,10);
             break;
         case 'snow':
             pixiSnow(3);
