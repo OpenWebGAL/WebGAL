@@ -8,6 +8,8 @@
 
 https://wg.msfasr.com
 
+https://webgal.xjqxz.top/ （国内）
+
 ## 如果你是想要开发属于自己的 Galgame 的开发者，请下载发行版：
 
 https://github.com/MakinoharaShoko/WebGAL/releases/
