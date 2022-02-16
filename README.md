@@ -2,20 +2,21 @@
 
 ### 一次编写，处处运行，无需网页开发基础，3分钟即可学会所有的语法，只要你有灵感，就可以立刻开始开始创作你自己的Galgame！
 
+> 想要参与引擎开发的开发者请先阅读 [此项目的参与指南](/DEV_NOTE.md)
+
+**当前主要开发重点：使用PixiJS实现更多特效，现在已经实现下雨下雪特效。**
+
 ## 在线演示
 
 https://wg.msfasr.com
 
-国内访问这个链接可能会更快： https://webgal.loveshan.pw/ （感谢大佬提供的CDN）
+https://webgal.xjqxz.top/ （国内镜像，但功能演示可能稍稍滞后，建议使用上面的主要链接）
 
 ## 如果你是想要开发属于自己的 Galgame 的开发者，请下载发行版：
 
 https://github.com/MakinoharaShoko/WebGAL/releases/
 
 如果下载速度过慢，请尝试通过蓝奏云网盘下载(版本不一定是最新的，建议在 GitHub Release 下载）： https://wwm.lanzouw.com/iWGiJzehoni
-
-
-> 想要参与引擎开发的开发者请先阅读 [此项目的参与指南](/DEV_NOTE.md)
 
 ## 如何在本地运行WebGAL？
 
