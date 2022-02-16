@@ -53,11 +53,7 @@ let currentInfo = {
     vocal: '',//语音 文件名
     bgm: '',//背景音乐 文件名
     miniAvatar: '',//小头像
-    saveTime: '',
-    GameVar: {},
-    bg_filter: '',
-    bg_transform: '',
-    pixiPerformList: []
+    saveTime: '', GameVar: {}, bg_filter: '', bg_transform: '', pixiPerformList: []
 }
 
 // 初始化存档系统
@@ -102,31 +98,38 @@ function getRuntime() {
 }
 
 function loadStorage() {
-    if (localStorage.getItem(GameInfo['Game_key'])) {
-        // let pre_process = document.cookie;
-        // let fst = pre_process.split(';')[0];
-        // let scd = document.cookie.slice(fst.length+1);
-        let unzip = unzipStr(localStorage.getItem(GameInfo['Game_key']));
-        let data = JSON.parse(unzip);
-        Saves = data.SavedGame;
-        SaveBacklog = data.SavedBacklog;
-        currentSavePage = data.SP;
-        currentLoadPage = data.LP;
-        Settings = data.cSettings;
+    try {
+        if (localStorage.getItem(GameInfo['Game_key'])) {
+            // let pre_process = document.cookie;
+            // let fst = pre_process.split(';')[0];
+            // let scd = document.cookie.slice(fst.length+1);
+            let unzip = unzipStr(localStorage.getItem(GameInfo['Game_key']));
+            let data = JSON.parse(unzip);
+            Saves = data.SavedGame;
+            SaveBacklog = data.SavedBacklog;
+            currentSavePage = data.SP;
+            currentLoadPage = data.LP;
+            Settings = data.cSettings;
+        }
+    } catch (error) {
+        logger.error('读取存储错误，清除存档与设置选项');
+        alert('读取存储错误，即将清除存档与设置选项！');
+        clearStorage();
     }
+
 }
 
 function writeStorage() {
-    let toCookie = {
+    let toStoreage = {
         SavedGame: Saves, SavedBacklog: SaveBacklog, SP: currentSavePage, LP: currentLoadPage, cSettings: Settings
     }
     // console.log(JSON.stringify(toCookie));
-    let gzip = zipStr(JSON.stringify(toCookie), {to: 'string'});
+    let gzip = zipStr(JSON.stringify(toStoreage), {to: 'string'});
     localStorage.setItem(GameInfo['Game_key'], gzip);
     // document.cookie = JSON.stringify(toCookie);
 }
 
-function clearCookie() {
+function clearStorage() {
     let toCookie = {
         SavedGame: [], SavedBacklog: [], SP: 0, LP: 0, cSettings: {
             font_size: 'medium', play_speed: 'medium'
@@ -190,8 +193,7 @@ function getGameInfo() {
             }
         }
         document.getElementById('Title').style.backgroundImage = 'url("./game/background/' + GameInfo["Title_img"] + '")';
-        if (GameInfo["Loading_img"] !== 'none')
-            document.getElementById('WG_startPage').style.backgroundImage = 'url("./game/background/' + GameInfo["Loading_img"] + '")';
+        if (GameInfo["Loading_img"] !== 'none') document.getElementById('WG_startPage').style.backgroundImage = 'url("./game/background/' + GameInfo["Loading_img"] + '")';
         SyncCurrentStatus('bgm', GameInfo['Title_bgm']);
         // WG_ViewControl.loadBGM(); 这行不需要，因为没有交互前不能播放声音
         document.title = GameInfo['Game_name'];
@@ -236,7 +238,7 @@ export {
     SettingsMap,
     loadStorage,
     writeStorage,
-    clearCookie,
+    clearStorage,
     loadSettings,
     getStatus,
     getScene,
