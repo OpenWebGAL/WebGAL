@@ -4,7 +4,8 @@ import {nextSentenceProcessor} from "../WG_core";
 import {prefetcher} from '../util/PrefetchWrapper';
 import pako from 'pako';
 import logger from "../util/logger";
-
+import axios from "axios";
+import fetchScene from "./fetchScene";
 
 let setAutoWaitTime = 1500;
 let autoWaitTime = 1500;
@@ -26,10 +27,8 @@ let SettingsMap = {
     }
 }
 
-
 //初始化运行时变量表
 // eslint-disable-next-line no-lone-blocks
-
 let currentScene = '';
 let auto = 0;
 let fast = 0;
@@ -38,7 +37,6 @@ let showingText = false;
 let hideTextStatus = false;
 let temp_bgm_TitleToGameplay = '';
 let currentPIXI = {};
-
 
 // 初始化状态表
 let currentInfo = {
@@ -103,7 +101,7 @@ function getRuntime() {
     return runtime;
 }
 
-function loadCookie() {
+function loadStorage() {
     if (localStorage.getItem(GameInfo['Game_key'])) {
         // let pre_process = document.cookie;
         // let fst = pre_process.split(';')[0];
@@ -118,7 +116,7 @@ function loadCookie() {
     }
 }
 
-function writeCookie() {
+function writeStorage() {
     let toCookie = {
         SavedGame: Saves, SavedBacklog: SaveBacklog, SP: currentSavePage, LP: currentLoadPage, cSettings: Settings
     }
@@ -166,68 +164,38 @@ function getStatus(statusKey) {
 // 获取场景脚本
 function getScene(url) {
     currentScene = '';
-
-    let getScReq = null;
-    getScReq = new XMLHttpRequest();
     logger.info('开始获取场景脚本')
-    if (getScReq != null) {
-        getScReq.open("get", url, true);
-        getScReq.send();
-        getScReq.onreadystatechange = doResult; //设置回调函数
-    }
-
-    function doResult() {
-        if (getScReq.readyState === 4) { //4表示执行完成
-            if (getScReq.status === 200) { //200表示执行成功
-                currentScene = getScReq.responseText;
-                currentScene = currentScene.split('\n');
-                for (let i = 0; i < currentScene.length; i++) {
-                    let tempSentence = currentScene[i].split(";")[0];
-                    let commandLength = tempSentence.split(":")[0].length;
-                    let command = currentScene[i].split(":")[0];
-                    command = command.split(';')[0];
-                    let content = tempSentence.slice(commandLength + 1);
-                    currentScene[i] = currentScene[i].split(":");
-                    currentScene[i][0] = command;
-                    currentScene[i][1] = content;
-                }
-                logger.info('读取脚本完成',currentScene);
-                getRuntime().currentScene = currentScene
-                SyncCurrentStatus('SentenceID', 0);
-                nextSentenceProcessor();
-                prefetcher.onSceneChange(url);
-            }
-        }
-    }
-
+    fetchScene(url).then(newScene => {
+        currentScene = newScene;
+        logger.info('读取脚本完成', currentScene);
+        getRuntime().currentScene = currentScene;
+        SyncCurrentStatus('SentenceID', 0);
+        nextSentenceProcessor();
+        prefetcher.onSceneChange(url);
+    })
 }
 
 function getGameInfo() {
-    let getInfoCon = new XMLHttpRequest();
-    getInfoCon.onreadystatechange = function () {
-        if (getInfoCon.status === 200) {
-            let textList = getInfoCon.responseText;
-            textList = textList.split('\n');
-            for (let i = 0; i < textList.length; i++) {
-                let tempStr = textList[i].split(";")[0];
-                let temp = tempStr.split(':');
-                if (temp[0] == null || temp[0] === '') continue;
-                if (GameInfo.hasOwnProperty(temp[0])) {
-                    GameInfo[temp[0]] = temp[1];
-                } else {
-                    console.warn('[GameInfo]', `\'${temp[0]}\' key in GameInfo is not exist.`);
-                }
+    axios.get('game/config.txt').then(r => {
+        let textList = r.data;
+        textList = textList.split('\n');
+        for (let i = 0; i < textList.length; i++) {
+            let tempStr = textList[i].split(";")[0];
+            let temp = tempStr.split(':');
+            if (temp[0] == null || temp[0] === '') continue;
+            if (GameInfo.hasOwnProperty(temp[0])) {
+                GameInfo[temp[0]] = temp[1];
+            } else {
+                logger.warn(`\'${temp[0]}\' key in GameInfo is not exist.`, GameInfo);
             }
-            document.getElementById('Title').style.backgroundImage = 'url("./game/background/' + GameInfo["Title_img"] + '")';
-            if (GameInfo["Loading_img"] !== 'none') document.getElementById('WG_startPage').style.backgroundImage = 'url("./game/background/' + GameInfo["Loading_img"] + '")';
-            SyncCurrentStatus('bgm', GameInfo['Title_bgm']);
-            // WG_ViewControl.loadBGM();
-            document.title = GameInfo['Game_name'];
         }
-
-    }
-    getInfoCon.open('GET', 'game/config.txt');
-    getInfoCon.send();
+        document.getElementById('Title').style.backgroundImage = 'url("./game/background/' + GameInfo["Title_img"] + '")';
+        if (GameInfo["Loading_img"] !== 'none')
+            document.getElementById('WG_startPage').style.backgroundImage = 'url("./game/background/' + GameInfo["Loading_img"] + '")';
+        SyncCurrentStatus('bgm', GameInfo['Title_bgm']);
+        // WG_ViewControl.loadBGM(); 这行不需要，因为没有交互前不能播放声音
+        document.title = GameInfo['Game_name'];
+    })
 }
 
 function unzipStr(b64Data) {
@@ -266,8 +234,8 @@ export {
     currentLoadPage,
     Settings,
     SettingsMap,
-    loadCookie,
-    writeCookie,
+    loadStorage,
+    writeStorage,
     clearCookie,
     loadSettings,
     getStatus,
