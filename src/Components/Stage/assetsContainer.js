@@ -1,7 +1,7 @@
 import {WG_ViewControl} from "../../Core/ViewController/ViewControl";
 import {userInteract} from "../../Core/InteractController/UserInteract";
 
-const AssetsContainer = ()=>{
+const AssetsContainer = () => {
     return <>
         <div id="intro" className="intro_styl"/>
         <div id={"videoContainer"} className={"videoContainer_styl"} onClick={WG_ViewControl.closeVideo}/>
@@ -13,7 +13,7 @@ const AssetsContainer = ()=>{
         <div id="figureImage" className={"figureContainercenter"} onClick={userInteract.clickOnBack}/>
         <div id="figureImage_left" className={"figureContainerleft"} onClick={userInteract.clickOnBack}/>
         <div id="figureImage_right" className={"figureContainerright"} onClick={userInteract.clickOnBack}/>
-        <div id={'pixiContianer'}/>
+        <div id={'pixiContianer'} onClick={userInteract.clickOnBack}/>
         <div id="chooseBox"/>
         <div id="bgm"/>
         <div id="vocal"/>
