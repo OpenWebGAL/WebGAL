@@ -2,10 +2,10 @@ import {
     Saves,
     SaveBacklog,
     CurrentBacklog,
-    writeCookie,
+    writeStorage,
     SyncCurrentStatus,
     getScene,
-    loadCookie,
+    loadStorage,
     getRuntime,
     getStatus,
     currentScene
@@ -30,7 +30,7 @@ class userInteract {
         let tempBacklog = JSON.stringify(getRuntime().CurrentBacklog);
         SaveBacklog[index] = JSON.parse(tempBacklog);
         Saves[index].saveTime = new Date().toLocaleDateString() + ' ' + new Date().toLocaleTimeString('chinese', {hour12: false});
-        writeCookie();
+        writeStorage();
     }
 
 // 读取游戏存档
@@ -145,7 +145,7 @@ class userInteract {
 
 // 打开设置
     static onSetting() {
-        loadCookie();
+        loadStorage();
         WG_ViewControl.VC_showSettings();
         if (getRuntime().Settings["font_size"] === 'small') {
             document.getElementById('previewDiv').style.fontSize = '150%';
@@ -158,14 +158,14 @@ class userInteract {
 
 //打开读档菜单
     static onLoadGame() {
-        loadCookie();
+        loadStorage();
         document.getElementById('Load').style.display = 'block';
         WG_ViewControl.VC_showSave_Load('load');
     }
 
 //打开存档菜单
     static onSaveGame() {
-        loadCookie();
+        loadStorage();
         document.getElementById('Save').style.display = 'block';
         WG_ViewControl.VC_showSave_Load('save');
     }

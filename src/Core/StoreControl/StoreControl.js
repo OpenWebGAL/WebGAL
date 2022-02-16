@@ -7,7 +7,6 @@ import logger from "../util/logger";
 import axios from "axios";
 import fetchScene from "./fetchScene";
 
-
 let setAutoWaitTime = 1500;
 let autoWaitTime = 1500;
 let textShowWaitTime = 35;
@@ -28,10 +27,8 @@ let SettingsMap = {
     }
 }
 
-
 //初始化运行时变量表
 // eslint-disable-next-line no-lone-blocks
-
 let currentScene = '';
 let auto = 0;
 let fast = 0;
@@ -40,7 +37,6 @@ let showingText = false;
 let hideTextStatus = false;
 let temp_bgm_TitleToGameplay = '';
 let currentPIXI = {};
-
 
 // 初始化状态表
 let currentInfo = {
@@ -105,7 +101,7 @@ function getRuntime() {
     return runtime;
 }
 
-function loadCookie() {
+function loadStorage() {
     if (localStorage.getItem(GameInfo['Game_key'])) {
         // let pre_process = document.cookie;
         // let fst = pre_process.split(';')[0];
@@ -120,7 +116,7 @@ function loadCookie() {
     }
 }
 
-function writeCookie() {
+function writeStorage() {
     let toCookie = {
         SavedGame: Saves, SavedBacklog: SaveBacklog, SP: currentSavePage, LP: currentLoadPage, cSettings: Settings
     }
@@ -238,8 +234,8 @@ export {
     currentLoadPage,
     Settings,
     SettingsMap,
-    loadCookie,
-    writeCookie,
+    loadStorage,
+    writeStorage,
     clearCookie,
     loadSettings,
     getStatus,
