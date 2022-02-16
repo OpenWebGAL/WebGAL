@@ -2,7 +2,7 @@
 import React from "react";
 // eslint-disable-next-line no-unused-vars
 import {
-    loadCookie, Saves, Settings, writeCookie, getRuntime, GameInfo, SettingsMap
+    loadStorage, Saves, Settings, writeStorage, getRuntime, GameInfo, SettingsMap
 } from "../../Core/StoreControl/StoreControl";
 import {userInteract} from "../../Core/InteractController/UserInteract";
 import {WG_ViewControl} from "../../Core/ViewController/ViewControl";
@@ -65,7 +65,7 @@ class SettingButtons_font extends React.Component {
         document.getElementById('previewDiv').style.fontSize = value;
         buttonStateNow[i] = 'On';
 
-        writeCookie();
+        writeStorage();
         this.setState({
             buttonState: buttonStateNow
         })
@@ -118,7 +118,7 @@ class SettingButtons_speed extends React.Component {
 
         getRuntime().textShowWaitTime = value;
         buttonStateNow[i] = 'On';
-        writeCookie();
+        writeStorage();
         this.setState({
             buttonState: buttonStateNow
         })
@@ -153,7 +153,7 @@ class LoadMainModel extends React.Component {
         this.setState({
             currentPage: getRuntime().currentLoadPage
         })
-        writeCookie();
+        writeStorage();
     }
 
     loadButtons() {
@@ -259,7 +259,7 @@ class SaveMainModel extends React.Component {
         this.setState({
             currentPage: getRuntime().currentSavePage
         })
-        writeCookie();
+        writeStorage();
     }
 
     loadButtons() {
@@ -321,7 +321,7 @@ class SaveMainModel extends React.Component {
 
     save_NonSaved(index) {
         userInteract.saveGame(index);
-        writeCookie();
+        writeStorage();
         this.setState({
             currentPage: getRuntime().currentSavePage
         });
@@ -330,7 +330,7 @@ class SaveMainModel extends React.Component {
     save_onSaved(index) {
         WG_ViewControl.showMesModel('你要覆盖这个存档吗', '覆盖', '不', function () {
             userInteract.saveGame(index);
-            writeCookie();
+            writeStorage();
             userInteract.closeSave();
         })
         this.setState({
@@ -414,7 +414,7 @@ class ImporterExporter extends React.Component {
         reader.onload = (evR) => {
             const saves = evR.target.result;
             localStorage.setItem(GameInfo['Game_key'], saves);
-            loadCookie();
+            loadStorage();
             window.location.reload();  // dirty: 强制刷新 UI
         };
         reader.readAsText(file, 'UTF-8');

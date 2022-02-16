@@ -7,7 +7,7 @@ import {
     // setAutoWaitTime,autoWaitTime,textShowWaitTime,
     // GameInfo,currentScene,auto,fast,onTextPreview,showingText,hideTextStatus,
     // currentInfo,Saves,SaveBacklog,CurrentBacklog,currentSavePage,currentLoadPage,Settings,
-    loadCookie,
+    loadStorage,
     // writeCookie,clearCookie,
     loadSettings,
     // getStatus,getScene,
@@ -38,7 +38,7 @@ ReactDOM.render(
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();
 
-loadCookie();
+loadStorage();
 loadSettings();
 getGameInfo();
 
