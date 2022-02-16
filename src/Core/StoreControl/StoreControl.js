@@ -180,31 +180,26 @@ function getScene(url) {
 }
 
 function getGameInfo() {
-    let getInfoCon = new XMLHttpRequest();
-    getInfoCon.onreadystatechange = function () {
-        if (getInfoCon.status === 200) {
-            let textList = getInfoCon.responseText;
-            textList = textList.split('\n');
-            for (let i = 0; i < textList.length; i++) {
-                let tempStr = textList[i].split(";")[0];
-                let temp = tempStr.split(':');
-                if (temp[0] == null || temp[0] === '') continue;
-                if (GameInfo.hasOwnProperty(temp[0])) {
-                    GameInfo[temp[0]] = temp[1];
-                } else {
-                    console.warn('[GameInfo]', `\'${temp[0]}\' key in GameInfo is not exist.`);
-                }
+    axios.get('game/config.txt').then(r => {
+        let textList = r.data;
+        textList = textList.split('\n');
+        for (let i = 0; i < textList.length; i++) {
+            let tempStr = textList[i].split(";")[0];
+            let temp = tempStr.split(':');
+            if (temp[0] == null || temp[0] === '') continue;
+            if (GameInfo.hasOwnProperty(temp[0])) {
+                GameInfo[temp[0]] = temp[1];
+            } else {
+                logger.warn(`\'${temp[0]}\' key in GameInfo is not exist.`, GameInfo);
             }
-            document.getElementById('Title').style.backgroundImage = 'url("./game/background/' + GameInfo["Title_img"] + '")';
-            if (GameInfo["Loading_img"] !== 'none') document.getElementById('WG_startPage').style.backgroundImage = 'url("./game/background/' + GameInfo["Loading_img"] + '")';
-            SyncCurrentStatus('bgm', GameInfo['Title_bgm']);
-            // WG_ViewControl.loadBGM();
-            document.title = GameInfo['Game_name'];
         }
-
-    }
-    getInfoCon.open('GET', 'game/config.txt');
-    getInfoCon.send();
+        document.getElementById('Title').style.backgroundImage = 'url("./game/background/' + GameInfo["Title_img"] + '")';
+        if (GameInfo["Loading_img"] !== 'none')
+            document.getElementById('WG_startPage').style.backgroundImage = 'url("./game/background/' + GameInfo["Loading_img"] + '")';
+        SyncCurrentStatus('bgm', GameInfo['Title_bgm']);
+        // WG_ViewControl.loadBGM(); 这行不需要，因为没有交互前不能播放声音
+        document.title = GameInfo['Game_name'];
+    })
 }
 
 function unzipStr(b64Data) {

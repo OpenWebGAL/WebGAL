@@ -15,6 +15,7 @@ import * as core from "../WG_core"
 import {WG_ViewControl} from "../ViewController/ViewControl";
 import {prefetcher} from '../util/PrefetchWrapper';
 import logger from "../util/logger";
+import fetchScene from "../StoreControl/fetchScene";
 // import AudioController from "../util/AudioController";
 
 
@@ -23,7 +24,7 @@ import logger from "../util/logger";
 class userInteract {
 // 保存当前游戏状态
     static saveGame(index) {
-        logger.info("保存游戏，档位为 "+index);
+        logger.info("保存游戏，档位为 " + index);
         let tempInfo = JSON.stringify(getStatus("all"));
         Saves[index] = JSON.parse(tempInfo);
         let tempBacklog = JSON.stringify(getRuntime().CurrentBacklog);
@@ -41,86 +42,38 @@ class userInteract {
         let url = 'game/scene/'
         url = url + save['SceneName'];
         getRuntime().currentScene = '';
-        let getScReq = null;
-        getScReq = new XMLHttpRequest();
-        if (getScReq != null) {
-            getScReq.open("get", url, true);
-            getScReq.send();
-            getScReq.onreadystatechange = doResult; //设置回调函数
-        }
-
-        function doResult() {
-            if (getScReq.readyState === 4) { //4表示执行完成
-                if (getScReq.status === 200) { //200表示执行成功
-                    getRuntime().currentScene = getScReq.responseText;
-                    getRuntime().currentScene = getRuntime().currentScene.split('\n');
-                    for (let i = 0; i < getRuntime().currentScene.length; i++) {
-                        let tempSentence = getRuntime().currentScene[i].split(";")[0];
-                        let commandLength = tempSentence.split(":")[0].length;
-                        let command = getRuntime().currentScene[i].split(":")[0];
-                        let content = tempSentence.slice(commandLength + 1);
-                        getRuntime().currentScene[i] = getRuntime().currentScene[i].split(":");
-                        getRuntime().currentScene[i][0] = command;
-                        getRuntime().currentScene[i][1] = content;
-                    }
-                    SyncCurrentStatus('SentenceID', save["SentenceID"]);
-                    WG_ViewControl.VC_restoreStatus(save);
-                    logger.info('读取的backlog为：',SaveBacklog)
-                    getRuntime().CurrentBacklog = SaveBacklog[index];
-                    SyncCurrentStatus('all', save);
-                    prefetcher.onSceneChange(url, getStatus('SentenceID'));
-                }
-            }
-        }
+        fetchScene(url).then(newScene => {
+            getRuntime().currentScene = newScene;
+            SyncCurrentStatus('SentenceID', save["SentenceID"]);
+            WG_ViewControl.VC_restoreStatus(save);
+            logger.info('读取的backlog为：', SaveBacklog)
+            getRuntime().CurrentBacklog = SaveBacklog[index];
+            SyncCurrentStatus('all', save);
+            prefetcher.onSceneChange(url, getStatus('SentenceID'));
+        })
     }
 
 //从回溯读取
     static jumpFromBacklog(index) {
         this.closeBacklog();
+        //关闭选项以免影响跳转
         WG_ViewControl.VC_closeChoose();
         let save = getRuntime().CurrentBacklog[index];
         for (let i = getRuntime().CurrentBacklog.length - 1; i > index - 1; i--) {
             getRuntime().CurrentBacklog.pop();
         }
         //get Scene:
-        let url = 'game/scene/'
-        url = url + save['SceneName'];
+        const url = 'game/scene/' + save['SceneName'];
         getRuntime().currentScene = '';
-        let getScReq = null;
-        getScReq = new XMLHttpRequest();
-        if (getScReq != null) {
-            getScReq.open("get", url, true);
-            getScReq.send();
-            getScReq.onreadystatechange = doResult; //设置回调函数
-        }
-
-        function doResult() {
-            if (getScReq.readyState === 4) { //4表示执行完成
-                if (getScReq.status === 200) { //200表示执行成功
-                    getRuntime().currentScene = getScReq.responseText;
-                    getRuntime().currentScene = getRuntime().currentScene.split('\n');
-                    for (let i = 0; i < getRuntime().currentScene.length; i++) {
-                        let tempSentence = getRuntime().currentScene[i].split(";")[0];
-                        let commandLength = tempSentence.split(":")[0].length;
-                        let command = getRuntime().currentScene[i].split(":")[0];
-                        let content = tempSentence.slice(commandLength + 1);
-                        content = content.split(';')[0];
-                        command = command.split(';')[0];
-                        // noinspection JSValidateTypes
-                        getRuntime().currentScene[i] = getRuntime().currentScene[i].split(":");
-                        getRuntime().currentScene[i][0] = command;
-                        getRuntime().currentScene[i][1] = content;
-                    }
-                    SyncCurrentStatus('SentenceID', save["SentenceID"]);
-                    logger.info("从backlog中读取状态：",save);
-                    WG_ViewControl.VC_restoreStatus(save);
-                    SyncCurrentStatus('all', save);
-                    getRuntime().CurrentBacklog[getRuntime().CurrentBacklog.length] = JSON.parse(JSON.stringify(getStatus("all")));
-                    prefetcher.onSceneChange(url, getStatus('SentenceID'));
-                }
-            }
-        }
-
+        fetchScene(url).then(newScene => {
+            getRuntime().currentScene = newScene;
+            SyncCurrentStatus('SentenceID', save["SentenceID"]);
+            logger.info("从backlog中读取状态：", save);
+            WG_ViewControl.VC_restoreStatus(save);
+            SyncCurrentStatus('all', save);
+            getRuntime().CurrentBacklog[getRuntime().CurrentBacklog.length] = JSON.parse(JSON.stringify(getStatus("all")));
+            prefetcher.onSceneChange(url, getStatus('SentenceID'));
+        })
     }
 
 //从头开始游戏
