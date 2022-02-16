@@ -1,5 +1,5 @@
 import {ImporterExporter, SettingButtons_font, SettingButtons_speed} from "./etc";
-import {clearCookie} from "../../Core/StoreControl/StoreControl";
+import {clearStorage} from "../../Core/StoreControl/StoreControl";
 import {WG_ViewControl} from "../../Core/ViewController/ViewControl";
 
 const SettingsModel = ()=>{
@@ -10,7 +10,7 @@ const SettingsModel = ()=>{
             {/* eslint-disable-next-line react/jsx-pascal-case */}
             <SettingButtons_speed/>
             <div className={"deleteCookie"} onClick={() => {
-                WG_ViewControl.showMesModel('你确定要清除缓存吗', '要', '不要', clearCookie)
+                WG_ViewControl.showMesModel('你确定要清除缓存吗', '要', '不要', clearStorage)
             }}>清除所有设置选项以及存档
             </div>
             <ImporterExporter/>
