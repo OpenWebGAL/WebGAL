@@ -10,7 +10,7 @@
 
 https://wg.msfasr.com
 
-https://webgal.xjqxz.top/ （国内）
+https://webgal.xjqxz.top/ （国内镜像，但功能演示可能稍稍滞后，建议使用上面的主要链接）
 
 ## 如果你是想要开发属于自己的 Galgame 的开发者，请下载发行版：
 
