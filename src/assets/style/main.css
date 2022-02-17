@@ -575,3 +575,11 @@ a:visited {
     max-height: 100%;
     object-fit: fill;
 }
+
+#clickOnBackHandler{
+    position: absolute;
+    z-index: 2;
+    width: 1000vh;
+    height: 1000vw;
+    /*background-color: rgba(0,0,0,0.3);*/
+}
