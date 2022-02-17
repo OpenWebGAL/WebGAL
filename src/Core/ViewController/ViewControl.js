@@ -33,11 +33,6 @@ class WG_ViewControl {
         document.getElementById('pixiContianer').innerHTML = '';
         document.getElementById('pixiContianer').appendChild(app.view);
 
-        //在手机上，clickOnBack会失效，所以在pixi上添加这个事件
-        app.stage.interactive = true;
-        app.stage.on("tap", (event) => {
-            userInteract.clickOnBack();
-        })
         app.renderer.view.style.position = "absolute";
         app.renderer.view.style.display = "block";
         app.renderer.autoResize = true;
