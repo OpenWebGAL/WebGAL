@@ -1,5 +1,3 @@
-pixiInit;
-pixiPerform:rain;
 setBgAni:bg_focusLeft,1.5s;
 setBgTransform:scale(1.15, 1.15) translate(5%, 0);
 setBgFilter:blur(1px);
@@ -7,6 +5,8 @@ changeBG_next:0000.png;
 changeP_left_next:testFigure03.png;
 setFigAni:left,leftIn,1.5s;
 miniAvatar:minipic_test.png;
+pixiInit;
+pixiPerform:rain;
 雪之下雪乃:测试下雨特效。;
 pixiInit;
 pixiPerform:snow;
