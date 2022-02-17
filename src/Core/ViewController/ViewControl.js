@@ -32,6 +32,7 @@ class WG_ViewControl {
         //清空原节点
         document.getElementById('pixiContianer').innerHTML = '';
         document.getElementById('pixiContianer').appendChild(app.view);
+
         app.renderer.view.style.position = "absolute";
         app.renderer.view.style.display = "block";
         app.renderer.autoResize = true;
