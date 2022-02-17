@@ -55,7 +55,7 @@ function varProcess(command, content) {
     nextSentenceProcessor();
 }
 
-function setVar(content) {
+function setVarFunc(content) {
     let setList = content.split(',');
     for (let i = 0; i < setList.length; i++) {
         let setSent = setList[i];
@@ -89,4 +89,4 @@ function setVar(content) {
     }
 }
 
-export {setVar, varProcess};
+export {setVarFunc, varProcess};
