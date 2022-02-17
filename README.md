@@ -16,7 +16,7 @@ https://webgal.xjqxz.top/ （国内镜像，但功能演示可能稍稍滞后，
 
 https://github.com/MakinoharaShoko/WebGAL/releases/
 
-如果下载速度过慢，请尝试通过蓝奏云网盘下载(版本不一定是最新的，建议在 GitHub Release 下载）： https://wwm.lanzouw.com/iWGiJzehoni
+如果下载速度过慢，请尝试通过蓝奏云网盘下载(版本不一定是最新的，建议在 GitHub Release 下载）： https://wwm.lanzouw.com/i6LbZ008iwnc
 
 ## 如何在本地运行WebGAL？
 
