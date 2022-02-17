@@ -16,7 +16,7 @@ https://webgal.xjqxz.top/ （国内镜像，但功能演示可能稍稍滞后，
 
 https://github.com/MakinoharaShoko/WebGAL/releases/
 
-如果下载速度过慢，请尝试通过蓝奏云网盘下载(版本不一定是最新的，建议在 GitHub Release 下载）： https://wwm.lanzouw.com/iWGiJzehoni
+如果下载速度过慢，请尝试通过蓝奏云网盘下载(版本不一定是最新的，建议在 GitHub Release 下载）： https://wwm.lanzouw.com/i6LbZ008iwnc
 
 ## 如何在本地运行WebGAL？
 
@@ -341,7 +341,7 @@ setFigAni:right,shake,0.5s;
 
 ### 自定义动画
 
-动画文件在`/StaticCSS/animation.css`，你可以学习CSS动画来自己写你想要的动画效果，然后添加到这个CSS里，在游戏脚本里用这个动画。
+动画文件在`/game/userAnimation.css`，你可以学习CSS动画来自己写你想要的动画效果，然后添加到这个CSS里，在游戏脚本里用这个动画。
 
 如：
 
@@ -366,6 +366,76 @@ setFigAni:left,leftIn,1s;
 ```
 
 调用这个动画。
+
+### 为背景设置变换与效果
+
+#### 设置变换
+
+`setBgTransform`
+
+```
+setBgTransform:scale(1.15, 1.15) translate(-5%, 0);//设置一个放大1.15倍，向左移动5%的变换
+```
+
+有关变换的CSS语法，请参见： https://developer.mozilla.org/zh-CN/docs/Web/CSS/transform
+
+#### 设置效果
+
+`setBgFilter`
+
+```
+setBgFilter:blur(1px);//设置一个模糊效果
+```
+
+有关效果的CSS语法，请参见： https://developer.mozilla.org/zh-CN/docs/Web/CSS/filter
+
+### 添加特效
+
+目前，WebGAL的特效系统由PixiJS实现。
+
+#### 初始化Pixi
+
+`pixiInit`
+
+```
+pixiInit;
+```
+
+**注意：**
+
+**1.如果你要使用特效，那么你必须先运行这个命令来初始化Pixi。**
+
+**2.如果你想要消除已经作用的效果，你可以使用这个语法来清空效果。**
+
+#### 添加特效
+
+`pixiPerform`
+
+```
+pixiPerform:rain;//添加一个下雨的特效
+```
+
+注意：特效作用后，如果没有初始化，特效会一直运行。
+
+#### 预制特效列表
+
+| 效果 | 指令              |
+| ---- | ----------------- |
+| 下雨 | pixiPerform:rain; |
+| 下雪 | pixiPerform:snow; |
+
+#### 叠加特效
+
+如果你想要叠加两种及以上效果，你可以在不使用`pixiInit`指令的情况下叠加不同的效果。
+
+```
+pixiPerform:rain;
+pixiPerform:snow;
+```
+
+#### 清除已叠加的特效
+
+使用 `pixiInit`来初始化，这样可以消除所有已经应用的效果。
 
 ## 进阶教程：
 
