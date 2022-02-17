@@ -2,6 +2,9 @@ import {getRuntime, getScene, getStatus, SyncCurrentStatus} from "./StoreControl
 import {WG_ViewControl} from "./ViewController/ViewControl";
 import {processSelection, processSentence} from "./util/WG_util";
 import logger from "./util/logger";
+import {setVar, varProcess} from "./Core-functions/varProcess";
+import {ifJump, jumpSentence} from "./Core-functions/sentenceJump";
+import scriptMap from "./Core-functions/scriptMap";
 
 // 读取下一条脚本
 function nextSentenceProcessor() {
@@ -17,7 +20,21 @@ function nextSentenceProcessor() {
     let thisSentence = getRuntime().currentScene[getStatus('SentenceID')];//此条语句的内容
     let command = thisSentence[0];//此条语句的控制文本（也可能是省略人物对话的语句）
     let S_content = thisSentence[1];
-    logger.info('读取脚本',thisSentence);
+    logger.info('读取脚本', thisSentence);
+    const scriptType = scriptMap(command);
+
+
+    //处理特殊脚本
+    if (command.substring(0, 3) === "var" || command.substring(0, 8) === "jump_var") {
+        varProcess(command, S_content);
+        return;
+    }
+    if (command.substring(0, 2) === 'if') {
+        ifJump(command, S_content);
+        return;
+    }
+
+
     if (command === 'changeBG') {
         WG_ViewControl.VC_changeBG(S_content);//界面控制：换背景
         SyncCurrentStatus("bg_Name", S_content);//同步当前状态
@@ -201,7 +218,6 @@ function nextSentenceProcessor() {
             function jumpNext() {
                 if (getRuntime().auto === 1) nextSentenceProcessor();
             }
-
         }
     }
 }
@@ -209,159 +225,6 @@ function nextSentenceProcessor() {
 //sentenceID+1
 function increaseSentence() {
     SyncCurrentStatus('SentenceID', getStatus('SentenceID') + 1);
-}
-
-function varProcess(command, content) {
-    if (command === 'varSet') {
-        content = content.split(';')[0];
-        content = content.split(',');
-        for (let i = 0; i < content.length; i++) {
-            let singleSet = content[i];
-            singleSet = singleSet.split(':');
-            getRuntime().currentInfo.GameVar[singleSet[0]] = parseInt(singleSet[1]);
-        }
-    } else if (command === 'varUp') {
-        content = content.split(';')[0];
-        content = content.split(',');
-        for (let i = 0; i < content.length; i++) {
-            let singleSet = content[i];
-            singleSet = singleSet.split(':');
-            getRuntime().currentInfo.GameVar[singleSet[0]] = getRuntime().currentInfo.GameVar[singleSet[0]] + parseInt(singleSet[1]);
-        }
-    } else if (command === 'varDrop') {
-        content = content.split(';')[0];
-        content = content.split(',');
-        for (let i = 0; i < content.length; i++) {
-            let singleSet = content[i];
-            singleSet = singleSet.split(':');
-            getRuntime().currentInfo.GameVar[singleSet[0]] = getRuntime().currentInfo.GameVar[singleSet[0]] - parseInt(singleSet[1]);
-        }
-    } else if (command === 'jump_varReach') {
-        content = content.split(';')[0];
-        content = content.split(',');
-        let varArea = content[0];
-        varArea = varArea.split(':');
-        let JumpArea = content[1];
-        if (getRuntime().currentInfo.GameVar[varArea[0]] >= parseInt(varArea[1])) {
-            //find the line of the label:
-            jumpSentence(JumpArea);
-            return;
-        }
-    } else if (command === 'jump_varBelow') {
-        content = content.split(';')[0];
-        content = content.split(',');
-        let varArea = content[0];
-        varArea = varArea.split(':');
-        let JumpArea = content[1];
-        if (getRuntime().currentInfo.GameVar[varArea[0]] < parseInt(varArea[1])) {
-            //find the line of the label:
-            jumpSentence(JumpArea);
-            return;
-        }
-    }
-    increaseSentence();
-    nextSentenceProcessor();
-}
-
-function ifJump(command, content) {
-    let judgeBody = command.split(')')[0].split('(')[1];
-    let jumpActivated = false;
-    if (judgeBody.split('<=')[1]) {
-        logger.debug("case <=")
-        if (getRuntime().currentInfo.GameVar[judgeBody.split('<=')[0]] <= parseInt(judgeBody.split('<=')[1])) {
-            logger.debug("jump to" + content);
-            jumpSentence(content);
-            jumpActivated = true;
-        }
-    } else if (judgeBody.split('>=')[1]) {
-        logger.debug("case >=")
-        if (getRuntime().currentInfo.GameVar[judgeBody.split('>=')[0]] >= parseInt(judgeBody.split('>=')[1])) {
-            logger.debug("jump to" + content);
-            jumpSentence(content);
-            jumpActivated = true;
-        }
-    } else if (judgeBody.split('<')[1]) {
-        logger.debug("case <")
-        if (getRuntime().currentInfo.GameVar[judgeBody.split('<')[0]] < parseInt(judgeBody.split('<')[1])) {
-            logger.debug("jump to" + content);
-            jumpSentence(content);
-            jumpActivated = true;
-        }
-    } else if (judgeBody.split('>')[1]) {
-        logger.debug("case >")
-        if (getRuntime().currentInfo.GameVar[judgeBody.split('>')[0]] > parseInt(judgeBody.split('>')[1])) {
-            logger.debug("jump to" + content);
-            jumpSentence(content);
-            jumpActivated = true;
-        }
-    } else if (judgeBody.split('=')[1]) {
-        logger.debug("case = ")
-        if (getRuntime().currentInfo.GameVar[judgeBody.split('=')[0]] === parseInt(judgeBody.split('=')[1])) {
-            logger.debug("jump to" + content);
-            jumpSentence(content);
-            jumpActivated = true;
-        }
-    }
-    if (!jumpActivated) {
-        increaseSentence();
-        nextSentenceProcessor();
-    }
-}
-
-function jumpSentence(lab_name) {
-    //find the line of the label:
-    // noinspection DuplicatedCode
-    let find = false;
-    let jmp_sentence = 0;
-    for (let i = 0; i < getRuntime().currentScene.length; i++) {
-        if (getRuntime().currentScene[i][0] === 'label' && getRuntime().currentScene[i][1] === lab_name) {
-            find = true;
-            jmp_sentence = i;
-        }
-    }
-    if (find) {
-        SyncCurrentStatus("SentenceID", jmp_sentence);
-        nextSentenceProcessor();
-
-    } else {
-        increaseSentence();
-        nextSentenceProcessor();
-
-    }
-}
-
-function setVar(content) {
-    let setList = content.split(',');
-    for (let i = 0; i < setList.length; i++) {
-        let setSent = setList[i];
-        setSent = setSent.split('=');
-        let setVarName = setSent[0];
-        let setVarValue = setSent[1];
-        if (setVarValue.split('+')[1]) {
-            logger.debug("case +")
-            let valueLeft = getRuntime().currentInfo.GameVar[setVarValue.split('+')[0]];
-            let valueRight = parseInt(setVarValue.split('+')[1]);
-            getRuntime().currentInfo.GameVar[setVarName] = valueLeft + valueRight;
-        } else if (setVarValue.split('-')[1]) {
-            logger.debug("case -")
-            let valueLeft = getRuntime().currentInfo.GameVar[setVarValue.split('-')[0]];
-            let valueRight = parseInt(setVarValue.split('-')[1]);
-            getRuntime().currentInfo.GameVar[setVarName] = valueLeft - valueRight;
-        } else if (setVarValue.split('*')[1]) {
-            logger.debug("case *")
-            let valueLeft = getRuntime().currentInfo.GameVar[setVarValue.split('*')[0]];
-            let valueRight = parseInt(setVarValue.split('*')[1]);
-            getRuntime().currentInfo.GameVar[setVarName] = valueLeft * valueRight;
-        } else if (setVarValue.split('/')[1]) {
-            logger.debug("case /")
-            let valueLeft = getRuntime().currentInfo.GameVar[setVarValue.split('/')[0]];
-            let valueRight = parseInt(setVarValue.split('/')[1]);
-            getRuntime().currentInfo.GameVar[setVarName] = valueLeft / valueRight;
-        } else {
-            logger.debug("case value")
-            getRuntime().currentInfo.GameVar[setVarName] = parseInt(setVarValue);
-        }
-    }
 }
 
 export {nextSentenceProcessor, increaseSentence}
