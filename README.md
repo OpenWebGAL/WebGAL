@@ -547,6 +547,39 @@ changeScene:Ch2.txt;//在label1执行的语句内跳到Ch2.txt
 ......Ch2.txt......
 ```
 
+### 添加自定义特效
+
+你可以下载源代码，然后找到 /Core/PixiController/presets 然后新建一个 `PIXI.Container`用于制作你所需要的特效。
+
+```js
+const app = currentPIXI['app'];//获取当前的Pixi
+const container = new PIXI.Container();//创建自定义特效的container
+app.stage.addChild(container);//添加特效
+```
+
+纹理文件可以放在 /game/tex 目录下。
+
+然后，在 /Core/PixiController/PixiMap.js 中加上你写的新特效。
+
+```js
+const presetMap = {
+    'snow': () => pixiSnow(3),
+    'rain': () => pixiRain2(6, 10),
+    '你的新特效': () => yourEffect()
+}
+```
+
+最后，编译出支持你自定义特效的 WebAPP
+
+```shell
+yarn run build;
+```
+
+这样，你就可以在脚本中调用你的特效了
+
+```
+pixiPerform:你的新特效;
+```
 
 ## Stargazers over time
 
