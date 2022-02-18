@@ -6,6 +6,10 @@
 
 **当前主要开发重点：使用PixiJS实现更多特效，现在已经实现下雨下雪特效。**
 
+## 演出效果
+
+![image](https://user-images.githubusercontent.com/30483415/154741325-0f1d198a-a4f1-49d2-bb64-a244198aefc1.png)
+
 ## 在线演示
 
 https://wg.msfasr.com
