@@ -8,7 +8,7 @@
 
 ## 演出效果
 
-![image](https://user-images.githubusercontent.com/30483415/154741325-0f1d198a-a4f1-49d2-bb64-a244198aefc1.png)(https://wg.msfasr.com/)
+[![image](https://user-images.githubusercontent.com/30483415/154741325-0f1d198a-a4f1-49d2-bb64-a244198aefc1.png)](https://wg.msfasr.com/)
 
 ## 在线演示
 
