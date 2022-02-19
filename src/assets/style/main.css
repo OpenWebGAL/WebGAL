@@ -153,33 +153,41 @@
 
 #chooseBox {
     position: absolute;
-    top: 30%;
-    bottom: 30%;
-    left: 15px;
-    right: 15px;
+    width: 100%;
+    height: 100%;
+    /*top: 30%;*/
+    /*bottom: 30%;*/
+    /*left: 15px;*/
+    /*right: 15px;*/
     display: none;
     z-index: 5;
     /*background-color: rgba(0, 0, 0, 0.1);*/
-    /*background-image: linear-gradient(rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0) 75%, rgba(255, 255, 255, 0.3) 100%);*/
+    background-image: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.2) 25%, rgba(0, 0, 0, 0.2) 75%, rgba(255, 255, 255, 0) 100%);
     /*border-radius: 15px;*/
     animation: showSoftly 0.5s;
     justify-content: center;
-
+    align-items: center;
+    flex-flow: column;
+    pointer-events: none;
 }
 
 .singleChoose {
+    position: relative;
     font-family: 思源宋体, serif;
     background-color: #FEDFE1;
     color: #8E354A;
-    padding: 15px 15px 15px 15px;
+    padding: 10px 10px 10px 10px;
     min-width: max(30vw, 30vh);
-    margin: 10px 0 10px 0;
+    max-width: min(60vw, 60vh);
+    margin: 5px 0 5px 0;
     border: 2px solid #8E354A;
     box-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
     text-align: center;
     border-radius: 15px;
-    font-size: 200%;
+    font-size: 185%;
     cursor: pointer;
+    pointer-events: auto;
+    /*z-index: 5;*/
 }
 
 .singleChoose:hover {
@@ -484,7 +492,7 @@ a:visited {
     cursor: pointer;
 }
 
-.backlog_interact_button_mobile{
+.backlog_interact_button_mobile {
     padding: 3px 7px 2px 7px;
     margin: 0 5px 5px 0;
     border: 2px solid #f5f5f7;
