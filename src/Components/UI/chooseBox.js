@@ -17,7 +17,7 @@ const ChooseBox = (props)=>{
 
         elements.push(temp)
     }
-    return <div>{elements}</div>
+    return <>{elements}</>
 }
 
 export default ChooseBox;
