@@ -1,3 +1,9 @@
+/**
+ * @author MakinoharaShoko
+ * @file WebGAL核心函数，用于读取脚本并推进游戏进程
+ */
+
+
 import {getRuntime, getStatus, SyncCurrentStatus} from "./StoreControl/StoreControl"
 import logger from "./util/logger";
 import scriptMap from "./Core-functions/scriptMap";
@@ -6,7 +12,9 @@ import {varProcess} from "./Core-functions/varProcess";
 import {ifJump} from "./Core-functions/sentenceJump";
 import pushSentenceToBacklog from "./Core-functions/pushSentenceToBacklog";
 
-// 读取下一条脚本
+/**
+ * 读取下一条脚本
+ */
 function nextSentenceProcessor() {
     if (getRuntime().showingText) {
         getRuntime().showingText = false;
