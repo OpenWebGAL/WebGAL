@@ -248,10 +248,30 @@ class WG_ViewControl {
         }, 1);
     }
 
+    static VC_setAnimationByClass2(name, animate) {
+        logger.info('设置' + name + '的动画为' + animate);
+        let editList = document.getElementsByClassName(name);
+        for (let i = 0; i < editList.length; i++) {
+            editList[i].style.animation = 'none';
+        }
+        setTimeout(function () {
+            for (let i = 0; i < editList.length; i++) {
+                editList[i].style.animation = animate;
+            }
+        }, 1);
+    }
+
     static VC_setAnimationById(id, animate, time) {
         document.getElementById(id).style.animation = 'none';
         setTimeout(() => {
             document.getElementById(id).style.animation = animate + ' ' + time + ' ease';
+        }, 1)
+    }
+
+    static VC_setAnimationById2(id, animate) {
+        document.getElementById(id).style.animation = 'none';
+        setTimeout(() => {
+            document.getElementById(id).style.animation = animate;
         }, 1)
     }
 
