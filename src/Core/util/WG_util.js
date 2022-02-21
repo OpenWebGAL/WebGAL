@@ -10,7 +10,15 @@ function processSentence(i) {
         let vocal = '';
         if (getRuntime().currentScene[i][1] !== '') {
             let text = getRuntime().currentScene[i][1];
-            if (getRuntime().currentScene[i][1].split('vocal-').length > 1) {
+            //语音作为参数的情况，最优先考虑
+            if (text.match(/ -/)) {
+                const args = text.split(' ');
+                const vocalArg = args[args.length - 1]
+                const vocalName = vocalArg.replace(/-/);//语音参数是最后一个参数
+                const showText = text.replace(vocalArg, '')//去除语句中的语音参数
+                vocal = vocalName;
+                text = showText;
+            } else if (getRuntime().currentScene[i][1].split('vocal-').length > 1) {  //语音参数前置的情况
                 vocal = getRuntime().currentScene[i][1].split('vocal-')[1].split(',')[0];
                 text = getRuntime().currentScene[i][1].split('vocal-')[1].slice(getRuntime().currentScene[i][1].split('vocal-')[1].split(',')[0].length + 1);
             }
