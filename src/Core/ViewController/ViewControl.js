@@ -159,7 +159,13 @@ class WG_ViewControl {
         ReactDOM.render(IntroView, document.getElementById("intro"));
         ReactDOM.render(<div>{" "}</div>, document.getElementById("textShowArea"));
         document.getElementById("intro").style.display = 'block';
-        let textArray = text.split(',');
+        let textArray;
+        //优先使用|作为分隔符
+        if(text.match('|')){
+            textArray = text.split('|');
+        }else {
+            textArray = text.split(',');
+        }
         let introInterval = setInterval(textShow, 1500);
         let introAll = [];
 

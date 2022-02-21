@@ -150,6 +150,17 @@ function forceRotate() {
 }
 
 function processSelection(chooseItems) {
+    //使用|作为分隔的情况
+    if (chooseItems.match('|')) {
+        chooseItems = chooseItems.split("}")[0];
+        chooseItems = chooseItems.split("{")[1];
+        let selection = chooseItems.split('|')
+        for (let i = 0; i < selection.length; i++) {
+            selection[i] = selection[i].split(":");
+        }
+        return selection;
+    }
+    //以下是使用逗号分隔的情况
     chooseItems = chooseItems.split("}")[0];
     chooseItems = chooseItems.split("{")[1];
     let selection = chooseItems.split(',')
@@ -159,4 +170,4 @@ function processSelection(chooseItems) {
     return selection;
 }
 
-export {processSentence, queryWidgetState, loadSettings, AllHiddenIgnore, isMobile, MobileChangeStyle,processSelection}
+export {processSentence, queryWidgetState, loadSettings, AllHiddenIgnore, isMobile, MobileChangeStyle, processSelection}
