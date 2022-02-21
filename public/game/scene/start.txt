@@ -26,7 +26,7 @@ pixiInit;
 setBgAni:bg_RtoC,1.5s;
 setBgTransform:scale(1, 1) translate(0, 0);
 setBgFilter:blur(0);
-雪之下雪乃:方便帮我开门吗 -V4.ogg;
+雪之下雪乃:方便帮我开门吗？ -V4.ogg;
 setFigAni:right,shake,0.5s;
 setBgAni:bg_down,3s;
 changeBG:0000e.png -next;
