@@ -1,8 +1,8 @@
 setBgAni:bg_focusLeft,1.5s;
 setBgTransform:scale(1.15, 1.15) translate(5%, 0);
 setBgFilter:blur(1px);
-changeBG_next:0000.png;
-changeP_left_next:testFigure03.png;
+changeBG:0000.png -next;
+changeP:testFigure03.png -left -next;
 setFigAni:left,leftIn,1.5s;
 miniAvatar:minipic_test.png;
 pixiInit;
@@ -12,24 +12,24 @@ pixiInit;
 pixiPerform:snow;
 雪之下雪乃:测试下雪特效;
 pixiInit;
-雪之下雪乃:vocal-V1.ogg,你到得真早;
-vocal-V2.ogg,对不起，等很久了吗？;
+雪之下雪乃:你到得真早 -V1.ogg;
+对不起，等很久了吗？ -V2.ogg;
 bgm:夏影.mp3;
-changeP_right_next:testFigure04.png;
+changeP:testFigure04.png -right -next;
 miniAvatar:none;
 setBgAni:bg_LtoR,1.5s;
 setBgTransform:scale(1.15, 1.15) translate(-5%, 0);
 setBgFilter:blur(1px);
 setFigAni:right,rightIn,1s;
 pixiInit;
-比企谷八幡:vocal-V3.ogg,刚到而已;
+比企谷八幡:刚到而已 -V3.ogg;
 setBgAni:bg_RtoC,1.5s;
 setBgTransform:scale(1, 1) translate(0, 0);
 setBgFilter:blur(0);
-雪之下雪乃:vocal-V4.ogg,方便帮我开门吗;
+雪之下雪乃:方便帮我开门吗 -V4.ogg;
 setFigAni:right,shake,0.5s;
 setBgAni:bg_down,3s;
-changeBG_next:0000e.png;
+changeBG:0000e.png -next;
 接下来水一些内容
 setFigAni:left,moveBaF,0.5s;
 为什么要水呢？当然是为了测试backlog的界面
@@ -38,7 +38,7 @@ setFigAni:left,moveBaF,0.5s;
 比如一下子把页面拉伸得很长之类的事情
 但是想要调节好，还是一件很难的事情，我们都不清楚应该把高度定为多少。
 要不要测试变量？
-choose_label:{测试:label1,不了:label2};
+chooseLabel:{测试:label1|不了:label2};
 label:label2;
 接下来来测试一下带分支的情况怎么样
 choose:{测试jump:C1.txt,测试 choose jump:C2.txt};
@@ -52,9 +52,9 @@ if(a>=3):label5;
 没有发生跳转
 label:label5;
 现在a是大于等于2的;
-jump_label:end;
+jumpLabel:end;
 label:label6;
 现在c是小于3的;
-jump_label:end;
+jumpLabel:end;
 label:end;
 结束。
