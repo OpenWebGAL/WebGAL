@@ -24,8 +24,7 @@ const setFigAni = (S_content) => {
 }
 const setBgAni = (S_content) => {
     if (S_content.match(/ /)) {
-        const aniArg = S_content.split(/ -/)[0];
-        WG_ViewControl.VC_setAnimationById2('mainBackground', aniArg);
+        WG_ViewControl.VC_setAnimationById2('mainBackground', S_content);
         increaseSentence();
         nextSentenceProcessor();
         return {'ret': true, 'autoPlay': false};

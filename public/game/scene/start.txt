@@ -28,7 +28,7 @@ setBgTransform:scale(1, 1) translate(0, 0);
 setBgFilter:blur(0);
 雪之下雪乃:方便帮我开门吗？ -V4.ogg;
 setFigAni:right,shake,0.5s;
-setBgAni:bg_down,3s;
+setBgAni:bg_down 3s;
 changeBG:0000e.png -next;
 接下来水一些内容
 setFigAni:left,moveBaF,0.5s;
