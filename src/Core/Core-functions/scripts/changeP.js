@@ -1,11 +1,43 @@
 import {WG_ViewControl} from "../../ViewController/ViewControl";
 import {SyncCurrentStatus} from "../../StoreControl/StoreControl";
 import {increaseSentence, nextSentenceProcessor} from "../../WG_core";
+import logger from "../../util/logger";
 
 const changeP = (S_content) => {
-    WG_ViewControl.VC_changeP(S_content, 'center');
-    SyncCurrentStatus('fig_Name', S_content);
-    return {'ret': false, 'autoPlay': true};
+    let pos = 'center';
+    let next = false;
+    let fileName = S_content;
+    //含参的情况
+    if (S_content.match(/ -/)) {
+        const args = S_content.split(' ');
+        // logger.debug('立绘参数',args);
+        for (const e of args) {
+            if (e.match(/-left/)) {
+                pos = 'left';
+            }
+            if (e.match(/-right/)) {
+                pos = 'right';
+            }
+            if (e.match(/-next/)) {
+                next = true;
+            }
+        }
+        fileName = args[0];
+    }
+    WG_ViewControl.VC_changeP(fileName, pos);
+    if(pos ==='center'){
+        SyncCurrentStatus('fig_Name', fileName);
+    }
+    else {
+        SyncCurrentStatus(`fig_Name_${pos}`, fileName);
+    }
+    //参数里有next
+    if (next) {
+        increaseSentence();
+        nextSentenceProcessor();
+        return {'ret': true, 'autoPlay': false};
+    } else
+        return {'ret': false, 'autoPlay': true};
 }
 const changeP_left = (S_content) => {
     WG_ViewControl.VC_changeP(S_content, 'left');
@@ -39,4 +71,4 @@ const changeP_right_next = (S_content) => {
     return {'ret': true, 'autoPlay': false};
 }
 
-export {changeP,changeP_left,changeP_right,changeP_next,changeP_left_next,changeP_right_next}
+export {changeP, changeP_left, changeP_right, changeP_next, changeP_left_next, changeP_right_next}

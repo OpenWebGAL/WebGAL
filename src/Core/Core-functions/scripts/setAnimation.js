@@ -2,15 +2,33 @@ import {WG_ViewControl} from "../../ViewController/ViewControl";
 import {increaseSentence, nextSentenceProcessor} from "../../WG_core";
 
 const setFigAni = (S_content) => {
-    let pos = S_content.split(',')[0];
-    let aniName = S_content.split(',')[1];
-    let aniTime = S_content.split(',')[2];
-    WG_ViewControl.VC_setAnimationByClass('figureContainer' + pos, aniName, aniTime);
-    increaseSentence();
-    nextSentenceProcessor();
-    return {'ret': true, 'autoPlay': false};
+    let pos;
+    let aniName;
+    let aniTime;
+    if (S_content.match(/ -/)) {
+        const aniArg = S_content.split(/ -/)[0];
+        const posArg = S_content.split(/ -/)[1];
+        WG_ViewControl.VC_setAnimationByClass2('figureContainer' + posArg, aniArg);
+        increaseSentence();
+        nextSentenceProcessor();
+        return {'ret': true, 'autoPlay': false};
+    } else {
+        pos = S_content.split(',')[0];
+        aniName = S_content.split(',')[1];
+        aniTime = S_content.split(',')[2];
+        WG_ViewControl.VC_setAnimationByClass('figureContainer' + pos, aniName, aniTime);
+        increaseSentence();
+        nextSentenceProcessor();
+        return {'ret': true, 'autoPlay': false};
+    }
 }
 const setBgAni = (S_content) => {
+    if (S_content.match(/ /)) {
+        WG_ViewControl.VC_setAnimationById2('mainBackground', S_content);
+        increaseSentence();
+        nextSentenceProcessor();
+        return {'ret': true, 'autoPlay': false};
+    }
     let aniName = S_content.split(',')[0];
     let aniTime = S_content.split(',')[1];
     WG_ViewControl.VC_setAnimationById('mainBackground', aniName, aniTime);
@@ -19,5 +37,5 @@ const setBgAni = (S_content) => {
     return {'ret': true, 'autoPlay': false};
 }
 
-export {setFigAni,setBgAni};
+export {setFigAni, setBgAni};
 
