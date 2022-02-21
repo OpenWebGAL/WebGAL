@@ -6,11 +6,27 @@ import logger from "./logger";
 
 
 function processSentence(i) {
+    const getVocalFromArgs = (text)=>{
+        const args = text.split(' ');
+        const vocalArg = args[args.length - 1];
+        const vocalName = vocalArg.replace(/-/,'');//语音参数是最后一个参数
+        const showText = text.replace(vocalArg, '')//去除语句中的语音参数
+        logger.debug('say参数', args);
+        const returnVocal = vocalName;
+        // noinspection UnnecessaryLocalVariableJS
+        const returnText = showText;
+        return{vocal:returnVocal,text:returnText};
+    }
+
     if (i < getRuntime().currentScene.length) {
         let vocal = '';
         if (getRuntime().currentScene[i][1] !== '') {
             let text = getRuntime().currentScene[i][1];
-            if (getRuntime().currentScene[i][1].split('vocal-').length > 1) {
+            //语音作为参数的情况，最优先考虑
+            if (text.match(/ -/)) {
+                vocal = getVocalFromArgs(text).vocal;
+                text = getVocalFromArgs(text).text;
+            } else if (getRuntime().currentScene[i][1].split('vocal-').length > 1) {  //语音参数前置的情况
                 vocal = getRuntime().currentScene[i][1].split('vocal-')[1].split(',')[0];
                 text = getRuntime().currentScene[i][1].split('vocal-')[1].slice(getRuntime().currentScene[i][1].split('vocal-')[1].split(',')[0].length + 1);
             }
@@ -18,7 +34,11 @@ function processSentence(i) {
             return {name: getStatus('showName'), text: text, vocal: vocal};
         } else {
             let text = getRuntime().currentScene[i][0];
-            if (getRuntime().currentScene[i][0].split('vocal-').length > 1) {
+            //语音作为参数的情况，最优先考虑
+            if (text.match(/ -/)) {
+                vocal = getVocalFromArgs(text).vocal;
+                text = getVocalFromArgs(text).text;
+            } else if (getRuntime().currentScene[i][0].split('vocal-').length > 1) {
                 vocal = getRuntime().currentScene[i][0].split('vocal-')[1].split(',')[0];
                 text = getRuntime().currentScene[i][0].split('vocal-')[1].slice(getRuntime().currentScene[i][0].split('vocal-')[1].split(',')[0].length + 1);
                 text = text.split(";")[0];
@@ -150,13 +170,26 @@ function forceRotate() {
 }
 
 function processSelection(chooseItems) {
+    //使用|作为分隔的情况
+    if (chooseItems.match(/\|/)) {
+        chooseItems = chooseItems.split("}")[0];
+        chooseItems = chooseItems.split("{")[1];
+        let selection = chooseItems.split(/\|/);
+        for (let i = 0; i < selection.length; i++) {
+            selection[i] = selection[i].split(":");
+        }
+        logger.debug('selection by |:',selection);
+        return selection;
+    }
+    //以下是使用逗号分隔的情况
     chooseItems = chooseItems.split("}")[0];
     chooseItems = chooseItems.split("{")[1];
     let selection = chooseItems.split(',')
+    logger.debug('selection:',selection);
     for (let i = 0; i < selection.length; i++) {
         selection[i] = selection[i].split(":");
     }
     return selection;
 }
 
-export {processSentence, queryWidgetState, loadSettings, AllHiddenIgnore, isMobile, MobileChangeStyle,processSelection}
+export {processSentence, queryWidgetState, loadSettings, AllHiddenIgnore, isMobile, MobileChangeStyle, processSelection}

@@ -3,6 +3,12 @@ import {increaseSentence, nextSentenceProcessor} from "../WG_core";
 import logger from "../util/logger";
 import {jumpSentence} from "./sentenceJump";
 
+/**
+ * 用于处理变量并存储到游戏变量存储区
+ * @param {string} command
+ * @param {string} content
+ */
+
 function varProcess(command, content) {
     if (command === 'varSet') {
         content = content.split(';')[0];

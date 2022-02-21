@@ -6,15 +6,11 @@
 
 **当前主要开发重点：使用PixiJS实现更多特效，现在已经实现下雨下雪特效。**
 
-## 演出效果
-
-[![image](https://user-images.githubusercontent.com/30483415/154741325-0f1d198a-a4f1-49d2-bb64-a244198aefc1.png)](https://wg.msfasr.com/)
-
 ## 在线演示
 
 https://wg.msfasr.com
 
-https://webgal.xjqxz.top/ （国内镜像）
+https://webgal.xjqxz.top/ （国内镜像，但功能演示可能稍稍滞后，建议使用上面的主要链接）
 
 ## 如果你是想要开发属于自己的 Galgame 的开发者，请下载发行版：
 
@@ -144,7 +140,11 @@ intro:回忆不需要适合的剧本，,反正一说出口，,都成了戏言。
 都成了戏言。
 ```
 
-具体的情况还请在游戏中自行试验。
+现在，你可以使用`|`来分割换行。这也是更推荐的做法
+
+```
+intro:回忆不需要适合的剧本，|反正一说出口，|都成了戏言。;
+```
 
 ### 改变背景/人物立绘：
 
@@ -162,12 +162,38 @@ changeP:none;//关闭人物立绘
 你有可能会发现，在你改变背景图片或人物立绘后，你需要再点击一下鼠标才能显示下一条对话，如果你希望在改变背景图片/立绘后立即执行下一条语句的内容，请使用：
 
 ```
-changeBG_next:testBG03.jpg;
-changeP_next:testFigure02.png;//改变人物立绘
+changeBG:testBG03.jpg -next;
+changeP:testFigure02.png -next;//改变人物立绘
 一色:谢谢学姐！;
 ```
 
 如果你这样做，那么在背景图片/立绘替换后，程序会立刻执行下一条语句。
+
+### 将立绘放在不同的位置
+
+现在，你可以在页面的三个不同位置放置不同的立绘，只需要在放置立绘的语句处加上你要放置的位置就可以了，示例如下：
+
+```
+changeP:testFigure03.png -left;
+changeP:testFigure04.png;
+changeP:testFigure03.png -right;
+```
+
+以上三行分别对应着左、中、右三个不同的位置。三个不同位置的立绘是相互独立的，所以如果你需要清除立绘，必须分别独立清除：
+
+```
+changeP:none -left;
+changeP:none;
+changeP:none -right;
+```
+
+如果你想要在立绘改变后立刻执行下一条语句，操作方法与之前一样，即加上参数 `-next` :
+
+```
+changeP:testFigure03.png -left -next;
+changeP:testFigure04.png -next;
+changeP:testFigure03.png -right -next;
+```
 
 ### 放置小头像：
 
@@ -176,41 +202,6 @@ changeP_next:testFigure02.png;//改变人物立绘
 ```
 miniAvatar:minipic_test.png;//在左下角显示minipic_test.png
 miniAvatar:none;//关闭这个小头像
-```
-
-
-
-### 将立绘放在不同的位置
-
-现在，你可以在页面的三个不同位置放置不同的立绘，只需要在放置立绘的语句处加上你要放置的位置就可以了，示例如下：
-
-```
-changeP_left:testFigure03.png;
-changeP:testFigure04.png;
-changeP_right:testFigure03.png;
-```
-
-以上三行分别对应着左、中、右三个不同的位置。三个不同位置的立绘是相互独立的，所以如果你需要清除立绘，必须分别独立清除：
-
-```
-changeP_left:none;
-changeP:none;
-changeP_right:none;
-```
-
-如果你想要在立绘改变后立刻执行下一条语句，操作方法与之前一样，即在命令后加上 `_next` :
-
-```
-changeP_left_next:testFigure03.png;
-changeP_next:testFigure04.png;
-changeP_right_next:testFigure03.png;
-```
-
-注意命令的书写顺序，如果你这样写（先写next后写位置），那么将是无效的：
-
-```
-changeP_next_left:testFigure03.png;
-changeP_next_right:testFigure03.png;
 ```
 
 ### 跳转场景与分支选择：
@@ -248,8 +239,10 @@ changeScene:Chapter-2.txt;
 
 如果你的剧本存在分支选项，你希望通过选择不同的选项进入不同的章节，请使用以下语句：
 
+其中，`|`是分隔符。
+
 ```
-choose:{叫住她:Chapter-2.txt,回家:Chapter-3.txt};
+choose:{叫住她:Chapter-2.txt|回家:Chapter-3.txt};
 ```
 
 你只需要将选项的文本与选择选项后要进入的剧本名称一一对应起来，就可以实现分支选择的功能了。
@@ -270,31 +263,31 @@ playVideo:OP.mp4//视频应该放在/game/video/ 文件夹内
 
 ### 在显示对话时同时播放语音
 
-众所周知，Galgame 最吸引人的地方往往在于其有优秀的配音。在此版本中，你可以为对话引入配音了，将你的配音放入vocal文件夹，然后在对话的前面，人物名称的后面加入 `vocal-语音文件名,`即可引入，语法示例如下：
+众所周知，Galgame 最吸引人的地方往往在于其有优秀的配音。在此版本中，你可以为对话引入配音了，将你的配音放入vocal文件夹，然后在参数加上语音文件名即可引入，语法示例如下：
 
 ```
-比企谷八幡:vocal-V3.ogg,刚到而已;
+比企谷八幡:刚到而已 -V3.ogg;
 ```
 
 在连续对话时，语音的引入方式也是一样的：
 
 ```
-雪之下雪乃:vocal-V1.ogg,你到得真早;
-vocal-V2.ogg,对不起，等很久了吗？;
+雪之下雪乃:你到得真早 -V1.ogg;
+对不起，等很久了吗？ -V2.ogg;
 ```
 
 ### 使用动画效果
 
 #### 为背景设置动画
 
-使用语句 `setBgAni:动画名,时间(多少秒);`
+使用语句 `setBgAni:动画名 时间(多少秒);`
 
 背景动画设置之后会在每次替换背景时生效，除非再次使用`setBgAni`改变。
 
 **示例：**
 
 ```
-setBgAni:bg_softIn,5s;//渐入背景，执行5秒
+setBgAni:bg_softIn 5s;//渐入背景，执行5秒
 ```
 
 目前，预制的动画只有两个：渐入和缩放渐入，使用的动画预设名分别为：
@@ -306,10 +299,10 @@ setBgAni:bg_softIn,5s;//渐入背景，执行5秒
 
 #### 为人物设置动画
 
-使用语句`setFigAni:位置,动画名,时间（多少秒）;`
+使用语句`setFigAni:动画名 时间（多少秒） -位置;`
 
 ```
-setFigAni:right,rightIn,1s;//对右侧立绘设置动画rightIn，执行1秒
+setFigAni:rightIn 1s -right;//对右侧立绘设置动画rightIn，执行1秒
 ```
 
 人物动画不像背景动画。每次设置动画时，这个动画都会立刻执行，且只执行一遍（因为你可能会设置一些例如摇晃之类的效果，但是不想让这个动画一直在切换人物时生效）
@@ -317,20 +310,26 @@ setFigAni:right,rightIn,1s;//对右侧立绘设置动画rightIn，执行1秒
 所以，你每次切换人物立绘，或是想要执行动画时，都要使用`setFigAni`:
 
 ```
-changeP_left_next:testFigure03.png;
-setFigAni:left,leftIn,1s;
+changeP:testFigure03.png -left -next;
+setFigAni:leftIn 1s -left;
 //这个动画只对这一次changeP生效
-changeP_left_next:testFigure04.png;
-setFigAni:left,rightIn,1s;
+changeP:testFigure04.png -left -next;
+setFigAni:rightIn 1s -left;
 //现在你改变了左侧立绘，如果你需要一个动画，你需要再重新设置
 ```
 
 同时，在你没有改变立绘的时候，你也可以在某句对话前加上`setFigAni`，这样在播放这句对话的时候，动画会同时执行。
 
 ```
-setFigAni:right,shake,0.5s;
+setFigAni:shake 0.5s -right;
 右侧人物:现在我正在摇晃。//动画与这句对话同时执行
 ```
+
+动画的语句遵循CSS语法，因此，如果你需要更多参数，你可以参照
+
+https://developer.mozilla.org/zh-CN/docs/Web/CSS/animation
+
+**注意：-right 这样的参数是WebGAL 语法的参数，与CSS语法无关。请在参数之前书写CSS语句。**
 
 预制动画：
 
@@ -453,7 +452,7 @@ pixiPerform:snow;
 
 ```
 ......
-jump_label:label_1;
+jumpLabel:label_1;
 //以下这些行会被忽略:
 ......
 ......
@@ -465,30 +464,30 @@ label:label_1;
 ......
 ```
 
-简而言之， jump_label 类似于 goto 语句，能够立刻让你的剧本跳到场景（TXT文件）中的任意一个位置，而这个位置需要你用label创建。
+简而言之， jumpLabel 类似于 goto 语句，能够立刻让你的剧本跳到场景（TXT文件）中的任意一个位置，而这个位置需要你用label创建。
 
-如果把jump_label 比作任意门，那么这个任意门的终点就是 label 所在的位置。
+如果把jumpLabel 比作任意门，那么这个任意门的终点就是 label 所在的位置。
 
-#### 有了上面的基础，你就可以通过 choose_label 的方式来实现用分支来跳转到 label 所在的位置了：
+#### 有了上面的基础，你就可以通过 chooseLabel 的方式来实现用分支来跳转到 label 所在的位置了：
 
 ```
 WebGAL:让我们来测试分支跳转到label！;
-choose_label:{测试1:label_1,测试2:label_2};
+chooseLabel:{测试1:label_1,测试2:label_2};
 label:label_1;
 现在应该是1号分支;
-jump_label:end;
+jumpLabel:end;
 label:label_2;
 现在应该是2号分支;
-jump_label:end;
+jumpLabel:end;
 label:end;
 现在是统一的结束;
 ```
 
-注意，在每个分支的结尾，你应该用 jump_label 来跳转到你希望的位置。由于程序是线性执行的，所以如果你没有在分支的结束跳转，那么程序会继续往下运行，比如说：
+注意，在每个分支的结尾，你应该用 jumpLabel 来跳转到你希望的位置。由于程序是线性执行的，所以如果你没有在分支的结束跳转，那么程序会继续往下运行，比如说：
 
 ```
 WebGAL:让我们来测试分支跳转到label！;
-choose_label:{测试1:label_1,测试2:label_2};
+chooseLabel:{测试1:label_1,测试2:label_2};
 label:label_1;
 现在应该是1号分支;
 label:label_2;
@@ -518,11 +517,11 @@ if(a=c):label2;//错误：不支持这种写法
 label:label1;
 ......
 ......
-jump_label:end;
+jumpLabel:end;
 label:label2;
 ......
 ......
-jump_label:end;
+jumpLabel:end;
 label:end;
 ......
 ......
