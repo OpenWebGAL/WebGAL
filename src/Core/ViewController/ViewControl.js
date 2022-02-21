@@ -161,8 +161,8 @@ class WG_ViewControl {
         document.getElementById("intro").style.display = 'block';
         let textArray;
         //优先使用|作为分隔符
-        if(text.match('|')){
-            textArray = text.split('|');
+        if(text.match(/\|/)){
+            textArray = text.split(/\|/);
         }else {
             textArray = text.split(',');
         }
