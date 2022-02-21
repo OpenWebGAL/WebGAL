@@ -27,20 +27,12 @@ import setVar from "./scripts/setVar";
 const scriptToFunction = {
     'say': say,
     'changeBG': changeBG,
-    'changeBG_next': changeBG_next,
     'changeP': changeP,
-    'changeP_left': changeP_left,
-    'changeP_right': changeP_right,
-    'changeP_next': changeP_next,
-    'changeP_left_next': changeP_left_next,
-    'changeP_right_next': changeP_right_next,
     'pixiInit': pixiInit,
     'pixiPerform': pixiPerform,
     'changeScene': changeScene,
     'choose': choose,
     'bgm': bgm,
-    'choose_label': choose_label,
-    'jump_label': jump_label,
     'label': label,
     'intro': intro,
     'miniAvatar': miniAvatar,
@@ -51,6 +43,17 @@ const scriptToFunction = {
     'setBgAni': setBgAni,
     'setFigAni': setFigAni,
     'playVideo': playVideo,
+    'chooseLabel':choose_label,
+    'jumpLabel':jump_label,
+    //以下是历史遗留命令
+    'changeBG_next': changeBG_next,
+    'choose_label': choose_label,
+    'jump_label': jump_label,
+    'changeP_left': changeP_left,
+    'changeP_right': changeP_right,
+    'changeP_next': changeP_next,
+    'changeP_left_next': changeP_left_next,
+    'changeP_right_next': changeP_right_next,
 }
 
 const runScript = (scriptType, S_content) => {
