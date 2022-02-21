@@ -179,7 +179,7 @@ function getScene(url) {
 }
 
 function getGameInfo() {
-    logger.info('WebGAL 3.9.3');
+    logger.info('WebGAL 3.9.5');
     logger.info('Github: https://github.com/MakinoharaShoko/WebGAL ');
     logger.info('Made with ❤ by MakinoharaShoko')
     axios.get('game/config.txt').then(r => {
