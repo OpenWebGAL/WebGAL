@@ -6,11 +6,15 @@
 
 **当前主要开发重点：使用PixiJS实现更多特效，现在已经实现下雨下雪特效。**
 
+## 演出效果
+
+[![image](https://user-images.githubusercontent.com/30483415/154741325-0f1d198a-a4f1-49d2-bb64-a244198aefc1.png)](https://wg.msfasr.com/)
+
 ## 在线演示
 
 https://wg.msfasr.com
 
-https://webgal.xjqxz.top/ （国内镜像，但功能演示可能稍稍滞后，建议使用上面的主要链接）
+https://webgal.xjqxz.top/ （国内镜像）
 
 ## 如果你是想要开发属于自己的 Galgame 的开发者，请下载发行版：
 
