@@ -39,7 +39,7 @@ let temp_bgm_TitleToGameplay = '';
 let currentPIXI = {};
 
 // 初始化状态表
-let currentInfo = {
+const initcurrentInfo = {
     SceneName: '',//场景文件名
     SentenceID: 0,//语句ID
     bg_Name: '',//背景文件名
@@ -55,6 +55,8 @@ let currentInfo = {
     miniAvatar: '',//小头像
     saveTime: '', GameVar: {}, bg_filter: '', bg_transform: '', pixiPerformList: []
 }
+
+let currentInfo = JSON.parse(JSON.stringify(initcurrentInfo));
 
 // 初始化存档系统
 let Saves = [];
@@ -239,6 +241,7 @@ export {
     currentLoadPage,
     Settings,
     SettingsMap,
+    initcurrentInfo,
     loadStorage,
     writeStorage,
     clearStorage,
