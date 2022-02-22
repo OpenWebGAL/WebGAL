@@ -22,6 +22,7 @@ import {setBgFilter, setBgTransform} from "./scripts/setBgConfig";
 import {setBgAni, setFigAni} from "./scripts/setAnimation";
 import playVideo from "./scripts/playVideo";
 import setVar from "./scripts/setVar";
+import gameEnd from "./scripts/end";
 
 //这里是每一种script对应的动作
 const scriptToFunction = {
@@ -45,6 +46,7 @@ const scriptToFunction = {
     'playVideo': playVideo,
     'chooseLabel':choose_label,
     'jumpLabel':jump_label,
+    'end':gameEnd,
     //以下是历史遗留命令
     'changeBG_next': changeBG_next,
     'choose_label': choose_label,
