@@ -584,6 +584,22 @@ yarn run build;
 pixiPerform:你的新特效;
 ```
 
+## 可能遇到的问题与解决方案
+
+#### 问题
+
+Node.js 17.x 版本运行 `npm run build` 或 `yarn run build` 时会报 'error:03000086:digital envelope routines::initialization error' 错误。
+
+#### 参考解决方案
+
+参考链接 [Node.js 17.0.1 Gatsby error - "digital envelope routines::unsupported ... ERR_OSSL_EVP_UNSUPPORTED"](https://stackoverflow.com/a/69746387/12002560)。需要在 `package.json` 的 `"scripts"` 字段作如下修改：
+
+```
+"build": "react-scripts --openssl-legacy-provider build"
+```
+
+之后再执行 `npm run build`。
+
 ## Stargazers over time
 
 [![Stargazers over time](https://starchart.cc/MakinoharaShoko/WebGAL.svg)](https://starchart.cc/MakinoharaShoko/WebGAL)
