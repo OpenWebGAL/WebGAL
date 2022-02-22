@@ -22,6 +22,7 @@ import MessageModel from "../../Components/UI/messageModel";
 import PixiControl from "../PixiController/PixiControl";
 import logger from "../util/logger";
 import resetP from "./functions/resetP";
+import resetStage from "./functions/resetStage";
 
 class WG_ViewControl {
 
@@ -118,10 +119,7 @@ class WG_ViewControl {
     }
 
     static VC_resetStage() {
-        // document.getElementById('mainBackground').style.backgroundImage = 'none';
-        ReactDOM.render(<div/>, document.getElementById('figureImage'));
-        ReactDOM.render(<div/>, document.getElementById('figureImage_left'));
-        ReactDOM.render(<div/>, document.getElementById('figureImage_right'));
+        resetStage();
     }
 
     static loadBGM() {
