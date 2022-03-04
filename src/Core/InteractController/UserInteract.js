@@ -89,7 +89,8 @@ class userInteract {
             getStatus("all")["fig_Name"] = '';
             getStatus("all")["fig_left"] = '';
             getStatus("all")["fig_right"] = '';
-            WG_ViewControl.VC_resetStage();
+            //在开始游戏时不能重置场景，因为这样会导致和第一个渐显文字冲突
+            // WG_ViewControl.VC_resetStage();
             getScene("game/scene/start.txt");
             getStatus("all")["SceneName"] = 'start.txt';
             getRuntime().currentInfo.bg_Name = 'none';
