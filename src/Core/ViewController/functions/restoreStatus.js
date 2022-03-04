@@ -1,11 +1,16 @@
 import {getRuntime, getStatus, SyncCurrentStatus} from "../../StoreControl/StoreControl";
 import {WG_ViewControl} from "../ViewControl";
 import {processSelection} from "../../util/WG_util";
+import ReactDOM from "react-dom";
 
-const restoreStatus = (savedStatus) => {
+const restoreStatus = (savedStatus, hard) => {
     const command = savedStatus["command"];
     //恢复对话
-    WG_ViewControl.VC_textShow(savedStatus['showName'], savedStatus['showText']);
+    if (hard) {
+        ReactDOM.render(savedStatus['showName'], document.getElementById('pName'));
+        ReactDOM.render(<div>{savedStatus['showText']}</div>, document.getElementById('SceneText'))
+    } else
+        WG_ViewControl.VC_textShow(savedStatus['showName'], savedStatus['showText']);
     //恢复背景的移动和效果
     if (savedStatus['bg_transform'] !== '') {
         document.getElementById('mainBackground').style.transform = savedStatus['bg_transform'];
