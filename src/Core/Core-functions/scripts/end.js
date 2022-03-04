@@ -6,6 +6,8 @@ import logger from "../../util/logger";
 const gameEnd = () => {
     //首先初始化状态列表
     logger.debug('初始化场景',initcurrentInfo)
+    //重置场景
+    WG_ViewControl.VC_resetStage();
     getRuntime().CurrentBacklog = [];
     getRuntime().currentScene = '';
     WG_ViewControl.VC_resetStage();
