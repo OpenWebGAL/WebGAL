@@ -67,7 +67,7 @@ class PrefetchWrapperSW {
         const newAssets = extractAssetUrl(await resp.text(), {sceneUrl: newSceneUrl, startLine: 1 + startIdx});
 
         // start urgent fetch
-        const urgentPromises = newAssets.urgent.map((asset) => fetch(asset));
+        const urgentPromises = newAssets.urgent.map((asset) => fetch(asset.replace(/\s*(-left|-right|-next)\s*/g, '')));
 
         // discard cached assets from prefetch list
         await syncCachePromise;
@@ -163,7 +163,7 @@ class PrefetchWrapperSW {
             if (this._cachedAssets.has(assetUrl)) continue;
 
             // check the (fake) query string of scene
-            if (assetUrl.split('/', 2)[1] === 'scene') promises.push(this._tryExpandScene(assetUrl, selfID)); else promises.push(fetch(assetUrl));
+            if (assetUrl.split('/', 2)[1] === 'scene') promises.push(this._tryExpandScene(assetUrl, selfID)); else promises.push(fetch(assetUrl.replace(/\s*(-left|-right|-next)\s*/g, '')));
 
             budget--;
         }
