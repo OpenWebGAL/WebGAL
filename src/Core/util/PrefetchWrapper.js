@@ -67,7 +67,7 @@ class PrefetchWrapperSW {
         const newAssets = extractAssetUrl(await resp.text(), {sceneUrl: newSceneUrl, startLine: 1 + startIdx});
 
         // start urgent fetch
-        const urgentPromises = newAssets.urgent.map((asset) => fetch(asset));
+        const urgentPromises = newAssets.urgent.map((asset) => fetch(asset.replace(/\s*(-left|-right|-next)\s*/g, '')));
 
         // discard cached assets from prefetch list
         await syncCachePromise;
@@ -163,7 +163,7 @@ class PrefetchWrapperSW {
             if (this._cachedAssets.has(assetUrl)) continue;
 
             // check the (fake) query string of scene
-            if (assetUrl.split('/', 2)[1] === 'scene') promises.push(this._tryExpandScene(assetUrl, selfID)); else promises.push(fetch(assetUrl));
+            if (assetUrl.split('/', 2)[1] === 'scene') promises.push(this._tryExpandScene(assetUrl, selfID)); else promises.push(fetch(assetUrl.replace(/\s*(-left|-right|-next)\s*/g, '')));
 
             budget--;
         }
@@ -196,7 +196,7 @@ class PrefetchWrapperSW {
                         urgentOnly: true,
                     });
                     for (const asset of nextAssets.urgent) {
-                        if (!this._cachedAssets.has(asset) && !this._prefetchPipeline.includes(asset)) this._prefetchPipeline.push(asset)
+                        if (!this._cachedAssets.has(asset) && !this._prefetchPipeline.includes(asset)) this._prefetchPipeline.push(asset.replace(/\s*(-left|-right|-next)\s*/g, ''))
                     }
                 });
             }
@@ -255,6 +255,10 @@ function extractAssetUrl(sceneText, {
         const vocalPrefix = 'vocal-';
         const vocal = dialogue.split(',', 1)[0];
         if (vocal.length < dialogue.length && vocal.length > vocalPrefix.length && vocal.startsWith(vocalPrefix)) return vocal.substring(vocalPrefix.length);
+        if (/-.+\.(ogg|mp3|aac|cd|wav|wma|flac|ape)/i.test(dialogue)) {
+            const match = dialogue.match(/-.+\.(ogg|mp3|aac|cd|wav|wma|flac|ape)/i)
+            return match[0].replace(/-/, '')
+        }
         return '';
     };
 
