@@ -1,0 +1,350 @@
+.leftFigAni {
+
+}
+
+.centerFigAni {
+
+}
+
+.rightFigAni {
+
+}
+
+@keyframes centerIn {
+    0% {
+        opacity: 0;
+        transform: scale(1, 1);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1, 1);
+    }
+}
+
+@keyframes upIn {
+    0% {
+        opacity: 0;
+        transform: scale(1, 1) translate(0, 3%);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1, 1) translate(0, 0);
+    }
+}
+
+@keyframes leftIn {
+    0% {
+        opacity: 0;
+        transform: scale(1, 1) translate(-3%, 0);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1, 1) translate(0, 0);
+    }
+}
+
+@keyframes rightIn {
+    0% {
+        opacity: 0;
+        transform: scale(1, 1) translate(3%, 0);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1, 1) translate(0, 0);
+    }
+}
+
+@keyframes bg_down {
+    0% {
+        opacity: 0;
+        transform: scale(1.1, 1.1) translate(0, -3%);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1, 1) translate(0, 0);
+    }
+}
+
+@keyframes bg_softIn {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes hideBG {
+    0% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
+
+@keyframes shake {
+    0% {
+        transform: translate(0, 0);
+    }
+
+    25% {
+        transform: translate(-2%, 0);
+    }
+
+    75% {
+        transform: translate(2%, 0);
+    }
+
+    100% {
+        transform: translate(0, 0);
+    }
+}
+
+@keyframes moveBaF {
+    0% {
+        transform: scale(1, 1);
+    }
+
+    50% {
+        transform: scale(1.1, 1.1);
+    }
+
+    100% {
+        transform: scale(1, 1);
+    }
+}
+
+@keyframes showSoftly /* Safari 与 Chrome */
+{
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes elementFadeIn {
+    0% {
+        transform: translate(-15px, -20px) scale(1.03, 1.03);
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes controlButtonHover {
+    0% {
+        background-color: rgba(0, 0, 0, 0);
+        box-shadow: none;
+    }
+    100% {
+        background-color: rgba(255, 255, 255, 0.25);
+        box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.65);
+    }
+}
+
+@keyframes controlButtonHoverBack {
+    0% {
+        /*background-color: rgba(255, 255, 255, 0.25);*/
+        /*box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.65);*/
+    }
+    100% {
+
+    }
+}
+
+@keyframes TitleButtonOnChoose {
+    0% {
+        transform: scale(1, 1);
+        /*background-color: rgba(255,255,255,0.8);*/
+    }
+
+    100% {
+        /*box-shadow: 3px 3px 15px rgba(0, 0, 0, 0.5);*/
+        transform: scale(1.1, 1.1);
+        /*background-color: rgba(0,0,0,0.15);*/
+    }
+}
+
+@keyframes TitleButtonNoneChoose {
+    0% {
+        /*box-shadow: 3px 3px 15px rgba(0, 0, 0, 0.5);*/
+        transform: scale(1.1, 1.1);
+        /*background-color: rgba(0,0,0,0.15);*/
+    }
+
+    100% {
+
+    }
+}
+
+@keyframes TitleModelHover {
+    0% {
+        background-color: rgba(0, 0, 0, 0.35);
+    }
+    100% {
+        background-color: rgba(0, 0, 0, 0.65);
+    }
+}
+
+@keyframes TitleModelNoneHover {
+    0% {
+        background-color: rgba(0, 0, 0, 0.65);
+    }
+    100% {
+        background-color: rgba(0, 0, 0, 0.35);
+    }
+}
+
+
+/*背景的演出效果*/
+@keyframes bg_focusLeft {
+    0% {
+        transform: scale(1, 1) translate(0, 0);
+        filter: blur(0);
+    }
+    100% {
+        transform: scale(1.15, 1.15) translate(5%, 0);
+        filter: blur(1px);
+    }
+}
+
+@keyframes bg_focusRight {
+    0% {
+        transform: scale(1, 1) translate(0, 0);
+        filter: blur(0);
+    }
+    100% {
+        transform: scale(1.15, 1.15) translate(-5%, 0);
+        filter: blur(1px);
+    }
+}
+
+@keyframes bg_LtoR {
+    0% {
+        transform: scale(1.15, 1.15) translate(5%, 0);
+        filter: blur(1px);
+    }
+    100% {
+        transform: scale(1.15, 1.15) translate(-5%, 0);
+        filter: blur(1px);
+    }
+}
+
+@keyframes bg_RtoL {
+    0% {
+        transform: scale(1.15, 1.15) translate(-5%, 0);
+        filter: blur(1px);
+    }
+    100% {
+        transform: scale(1.15, 1.15) translate(5%, 0);
+        filter: blur(1px);
+    }
+}
+
+@keyframes bg_LtoC {
+    0% {
+        transform: scale(1.15, 1.15) translate(5%, 0);
+        filter: blur(1px);
+    }
+    100% {
+        transform: scale(1, 1) translate(0, 0);
+        filter: blur(0);
+    }
+}
+
+@keyframes bg_RtoC {
+    0% {
+        transform: scale(1.15, 1.15) translate(-5%, 0);
+        filter: blur(1px);
+    }
+    100% {
+        transform: scale(1, 1) translate(0, 0);
+        filter: blur(0);
+    }
+}
+
+@keyframes bg_focus {
+    0% {
+        transform: scale(1, 1) translate(0, 0);
+        filter: blur(0);
+    }
+    100% {
+        transform: scale(1.15, 1.15);
+        filter: blur(1px);
+    }
+}
+
+@keyframes bg_LtoF {
+    0% {
+        transform: scale(1.15, 1.15) translate(5%, 0);
+        filter: blur(1px);
+    }
+    100% {
+        transform: scale(1.15, 1.15);
+        filter: blur(1px);
+    }
+}
+
+@keyframes bg_RtoF {
+    0% {
+        transform: scale(1.15, 1.15) translate(-5%, 0);
+        filter: blur(1px);
+    }
+    100% {
+        transform: scale(1.15, 1.15);
+        filter: blur(1px);
+    }
+}
+
+@keyframes bg_FtoL {
+    0% {
+        transform: scale(1.15, 1.15);
+        filter: blur(1px);
+    }
+    100% {
+        transform: scale(1.15, 1.15) translate(5%, 0);
+        filter: blur(1px);
+    }
+}
+
+@keyframes bg_FtoR {
+    0% {
+        transform: scale(1.15, 1.15);
+        filter: blur(1px);
+    }
+    100% {
+        transform: scale(1.15, 1.15) translate(-5%, 0);
+        filter: blur(1px);
+    }
+}
+
+@keyframes bg_FtoC {
+    0% {
+        transform: scale(1.15, 1.15);
+        filter: blur(1px);
+    }
+    100% {
+        transform: scale(1, 1) translate(0, 0);
+        filter: blur(0);
+    }
+}
+
+@keyframes textFade {
+    from{
+        opacity: 0;
+    }
+    to{
+        opacity: 1;
+    }
+}

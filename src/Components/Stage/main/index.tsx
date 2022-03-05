@@ -1,0 +1,6 @@
+export { Background } from './background'
+export { ChooseBox } from './chooseBox'
+export { FigureImage } from './figureImage'
+export { Intro } from './intro'
+export { BackLog } from './backlog'
+export { Pixi } from './pixiContainer'

@@ -1,0 +1,45 @@
+.intro_styl{
+    color: white;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: none;
+    z-index: 20;
+    background-color: rgba(0,0,0,0.8);
+    animation: showSoftly 1s;
+    padding: 15px 1% 15px 1%;
+    text-align: center;
+}
+
+.skipIntro{
+    color: white;
+    font-size: 125%;
+}
+
+.textShowArea_styl{
+    display: flex;
+    justify-content: center;
+    font-size: 250%;
+    padding: 5% 0 0 25%;
+    width: 50%;
+    text-align: center;
+    flex-direction: column;
+    align-items: center;
+}
+
+.introSingleRow{
+    font-weight: bold;
+    font-family: 思源宋体,serif;
+    /*background-color: white;*/
+    background: linear-gradient(135deg,rgba(215,235,255,1)0%,rgba(235,245,255,1) 45%,rgba(255,255,255,1)100%);
+    -webkit-background-clip: text;
+    color: transparent;
+    padding: 10px 15px 10px 15px;
+    animation: showSoftly 1.25s;
+}
+
+.skipIntro:hover{
+    text-shadow: 1px 1px 3px rgba(255,255,255,0.5);
+}
