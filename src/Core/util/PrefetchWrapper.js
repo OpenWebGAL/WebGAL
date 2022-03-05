@@ -196,7 +196,7 @@ class PrefetchWrapperSW {
                         urgentOnly: true,
                     });
                     for (const asset of nextAssets.urgent) {
-                        if (!this._cachedAssets.has(asset) && !this._prefetchPipeline.includes(asset)) this._prefetchPipeline.push(asset)
+                        if (!this._cachedAssets.has(asset) && !this._prefetchPipeline.includes(asset)) this._prefetchPipeline.push(asset.replace(/\s*(-left|-right|-next)\s*/g, ''))
                     }
                 });
             }
@@ -255,6 +255,10 @@ function extractAssetUrl(sceneText, {
         const vocalPrefix = 'vocal-';
         const vocal = dialogue.split(',', 1)[0];
         if (vocal.length < dialogue.length && vocal.length > vocalPrefix.length && vocal.startsWith(vocalPrefix)) return vocal.substring(vocalPrefix.length);
+        if (/-.+\.(ogg|mp3|aac|cd|wav|wma|flac|ape)/i.test(dialogue)) {
+            const match = dialogue.match(/-.+\.(ogg|mp3|aac|cd|wav|wma|flac|ape)/i)
+            return match[0].replace(/-/, '')
+        }
         return '';
     };
 
