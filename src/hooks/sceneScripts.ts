@@ -284,7 +284,7 @@ export const useSceneScripts = (runtime: Runtime) => {
         const match = command.match(/(?<=if\().+(?=\))/)
         if (match) {
             let expression = match[0]
-            let list = compact(expression.split(/=|>|<|>=|<=/))
+            let list = compact(expression.split(/=|>|<|>=|<=|\(|\)/))
             list = list.map(o => {
                 if (runtime.GameVar[o]) {
                     expression = expression.replace(o, runtime.GameVar[o] + '')
