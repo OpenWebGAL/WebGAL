@@ -1,6 +1,6 @@
 import { FunctionComponent, MouseEvent, useState } from 'react'
 import closeW from "@assets/img/closeWhite.svg";
-import { Close } from '.';
+import { Close } from '../ui';
 import { useStore } from 'reto';
 import { runtime, sceneStore } from '@/store';
 import { deepClone, getSaveState, getTime, getUrl, saveGame, stopPropagation } from '@/utils';

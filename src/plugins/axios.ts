@@ -14,9 +14,10 @@ const parseScene = (sceneText: string) => {
     });
 }
 
+const _axios = axios.create()
 const fetchScene = (url: string) => {
     return new Promise(resolve => {
-        axios.get(url).then(r => {
+        _axios.get(url).then(r => {
             logger.info('请求场景完成');
             resolve(parseScene(r.data));
         }).catch(e => {

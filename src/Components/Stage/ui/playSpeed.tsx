@@ -3,7 +3,7 @@ import { PlaySpeed } from '@/types'
 import { FunctionComponent } from 'react'
 import { useStore } from 'reto'
 const PlaySpeedSetting: FunctionComponent<{}> = () => {
-    const { setting, setSetting } = useStore(settingStore)
+    const { setting, setSetting } = useStore(settingStore, ({ setting }) => [setting.playSpeed])
 
     return (
         <div className="singleSettingItem">

@@ -247,7 +247,7 @@ export const getSaveState: (runtime: Runtime, obj: SceneState) => SaveState = (r
         GameVar: obj.GameVar,
         bg_filter: obj.bg_filter,
         bg_transform: obj.bg_transform,
-        pixiPerformList: [],
+        pixiPerformList: obj.pixiPerformList,
     }
 }
 

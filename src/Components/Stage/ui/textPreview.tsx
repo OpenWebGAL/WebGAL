@@ -5,14 +5,14 @@ import { useStore } from 'reto'
 
 const TextPreview: FunctionComponent<{ text: string }> = ({ text }) => {
     const textArray = text.split('')
-    const { setting } = useStore(sceneStore, ({ setting }) => [setting])
+    const { setting } = useStore(sceneStore, ({ setting }) => [...Object.values(setting)])
     const textContent = showText(textArray, setting.playSpeed)()
     const [textVisible, setTextVisible] = useState(false)
     useEffect(() => {
         const t = setInterval(() => {
             setTextVisible(false)
             setTextVisible(true)
-        }, setting.playSpeed * textArray.length + 3000)
+        }, setting.playSpeed * textArray.length + setting.autoPlayWaitTime)
         return () => {
             clearInterval(t)
         }

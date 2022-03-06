@@ -59,13 +59,13 @@ export const startGame = async (url: string = 'start.txt') => {
  * @param {string} url 场景路径
  * @return {*}
  */
-export const getScene = async (url: string) => {
+export const getScene = async (url: string, SentenceID?: number) => {
     logger.info('开始获取场景脚本')
     try {
         const currentScene = await fetchScene(url) as [string, string][]
         logger.info('读取脚本完成', currentScene);
         // 场景级预加载
-        prefetcher.onSceneChange(url);
+        prefetcher.onSceneChange(url, SentenceID);
         return currentScene
     } catch (e) {
         throw e

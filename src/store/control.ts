@@ -10,7 +10,8 @@ const initState = () => ({
     autoPlay: false,
     fastPlay: false,
     settingVisible: false,
-    bottomBoxVisible: true
+    bottomBoxVisible: true,
+    panicOverlayVisible: false
 })
 
 const state = initState()

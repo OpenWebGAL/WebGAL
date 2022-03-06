@@ -1,4 +1,5 @@
 import { PerformType, PixiRef, presetMap } from "@/Components/Stage/main/pixiContainer"
+import type { State as SceneState } from "@/hooks/sceneScripts"
 import type { ChooseMode, Runtime, Script } from "@/types"
 import { Calculater, exit, getUrl, humpToLine } from "@/utils"
 import { compact } from "lodash"
@@ -113,12 +114,21 @@ export const varList = new Map([
     }],
 ])
 
-export const pixiList = new Map([
+export const pixiList = new Map<RegExp, ({ command, content, pixiRef }: Script & {
+    pixiRef: MutableRefObject<PixiRef | null>;
+}) => Partial<SceneState>>([
     [/^pixiInit$/, ({ command, content, pixiRef }: Script & { pixiRef: MutableRefObject<PixiRef | null> }) => {
-        pixiRef.current?.pixiInit()
+        // pixiRef.current?.pixiInit()
+        return {}
     }],
     [/^pixiPerform$/, ({ command, content, pixiRef }: Script & { pixiRef: MutableRefObject<PixiRef | null> }) => {
-        if (!(content in presetMap)) return
-        pixiRef.current?.pixiPerform({ performType: content as PerformType, option: {} })
+        if (!(content in presetMap)) return {}
+        // pixiRef.current?.pixiPerform({ performType: content as PerformType, option: {} })
+        return {
+            pixiPerformList: [{
+                performType: content,
+                option: {}
+            }]
+        }
     }]
 ])

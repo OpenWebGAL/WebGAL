@@ -1,11 +1,12 @@
 import { sceneStore } from '@/store'
 import { getUrl } from '@/utils'
-import { FunctionComponent, useEffect, useRef } from 'react'
+import { FunctionComponent, useEffect, useRef, MouseEvent } from 'react'
 import { useStore } from 'reto'
 export const Video: FunctionComponent<{}> = () => {
     const { scene, setScene } = useStore(sceneStore, ({ scene }) => [scene.video])
     const videoRef = useRef<HTMLVideoElement | null>(null)
-    const closeVideo = () => {
+    const closeVideo = (e: MouseEvent<HTMLDivElement>) => {
+        e.nativeEvent.stopImmediatePropagation()
         setScene(scene => ({ ...scene, video: '' }))
     }
     useEffect(() => {

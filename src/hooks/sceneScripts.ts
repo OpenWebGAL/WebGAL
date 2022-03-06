@@ -2,9 +2,9 @@ import { PixiRef } from "@/Components/Stage/main/pixiContainer"
 import { autoList, chooseList, getScene, manualList, setCompatibility, startGame, varList } from "@/scripts"
 import { pixiList } from "@/scripts/scriptsMap"
 import { controlStore, gameInfoStore, settingStore } from "@/store"
-import type { ChooseMode, Runtime, SaveState } from "@/types"
+import type { ChooseMode, PixiPerform, Runtime, SaveState } from "@/types"
 import { deepClone, exit, getSaveState, getUrl, humpToLine, loadGame } from "@/utils"
-import { compact } from "lodash"
+import { compact, last } from "lodash"
 import { useEffect, useRef, useState } from "react"
 import { useStore } from "reto"
 
@@ -33,6 +33,7 @@ export type State = {
     video: string
     intro: string
     saveTime: string
+    pixiPerformList: PixiPerform[]
     Saves: SaveState[]
     CurrentBacklog: SaveState[]
 }
@@ -60,6 +61,7 @@ const initState: () => State = () => ({
     bg_ani: '',
     video: '',
     intro: '',
+    pixiPerformList: [],
     saveTime: '',
     Saves: []
 })
@@ -200,11 +202,11 @@ export const useSceneScripts = (runtime: Runtime) => {
         // console.log('setting', setting)
         // console.log('playSpeed', setting.playSpeed)
         // console.log('autoPlayWaitTime', setting.autoPlayWaitTime)
-        if (!control.fastPlay) nextProcessor({ showingText: true })
+        if (!isFastPlay.current) nextProcessor({ showingText: true })
         else nextProcessor({ showingText: false })
         nextProcessor(undefined, true)
-        !control.fastPlay && await startShowingText(len)
-        control.autoPlay && startAutoPlay()
+        !isFastPlay.current && await startShowingText(len)
+        isAutoPlay.current && startAutoPlay()
     }
 
     const startAutoPlay = () => {
@@ -245,7 +247,7 @@ export const useSceneScripts = (runtime: Runtime) => {
     }
 
     const showChoose = async () => {
-        control.autoPlay && stopAutoPlay()
+        isAutoPlay.current && stopAutoPlay()
         const [command, content] = runtime.sceneScripts[runtime.SentenceID++];
         for (const [key, handleFn] of chooseList) {
             if (key.test(humpToLine(command))) {
@@ -259,8 +261,13 @@ export const useSceneScripts = (runtime: Runtime) => {
     const runVar = () => {
         const [command, content] = runtime.sceneScripts[runtime.SentenceID++];
         if (command === 'showVar' && content === 'all') {
-            setScene(scene => ({ ...scene, gameVar: runtime.GameVar, showName: command, showText: JSON.stringify(runtime.GameVar) }))
-            next()
+            // setScene(scene => ({ ...scene, GameVar: runtime.GameVar, showName: command, showText: JSON.stringify(runtime.GameVar) }))
+            const showText = JSON.stringify(runtime.GameVar)
+            nextProcessor({ GameVar: runtime.GameVar, showName: command, showText, showingText: true })
+            nextProcessor(undefined, true)
+            !isFastPlay.current && startShowingText(showText.length)
+            isAutoPlay.current && startAutoPlay()
+            // next()
             return
         }
         for (const [key, handleFn] of varList) {
@@ -289,7 +296,6 @@ export const useSceneScripts = (runtime: Runtime) => {
                 return
             }
             if (eval(expression)) {
-                console.log(111)
                 jumpLabel(content)
                 next()
             } else {
@@ -336,21 +342,31 @@ export const useSceneScripts = (runtime: Runtime) => {
         const [command, content] = runtime.sceneScripts[runtime.SentenceID++]
         for (const [key, handleFn] of pixiList) {
             if (key.test(command)) {
-                handleFn({ command, content, pixiRef })
+                const state = handleFn({ command, content, pixiRef })
+                if (Object.keys(state).length) {
+                    setScene(scene => {
+                        return {
+                            ...scene,
+                            ...state
+                        }
+                    })
+                } else {
+                    setScene(scene => ({ ...scene, pixiPerformList: [] }))
+                }
                 break
             }
         }
         next()
     }
 
-    const list: Partial<State>[] = []
+    const list = useRef<Partial<State>[]>([])
     const nextProcessor = (o?: Partial<State>, setBackLog: boolean = false) => {
         if (o) {
-            list.push(o)
+            list.current.push(o)
         } else {
             setScene(scene => {
-                let obj: State = scene
-                list.forEach(o1 => {
+                let obj: State = deepClone(scene)
+                list.current.forEach(o1 => {
                     obj = { ...obj, ...o1 }
                 })
                 if (setBackLog) {
@@ -359,10 +375,17 @@ export const useSceneScripts = (runtime: Runtime) => {
                 return obj
             })
             setControl(control => ({ ...control, bottomBoxVisible: true }))
+            list.current = []
         }
     }
 
     const jumpFromBacklog = (i: number) => {
+        // const o = scene.CurrentBacklog[i]
+        // runtime.SentenceID = o.SentenceID - 1
+        // console.log(o)
+        // getScene(getUrl(o.SceneName, 'scene')).then((scripts) => {
+        //     runtime.sceneScripts = scripts
+        // })
         setScene(scene => {
             const o = scene.CurrentBacklog[i]
             runtime.SentenceID = o.SentenceID
@@ -371,12 +394,13 @@ export const useSceneScripts = (runtime: Runtime) => {
             keys.forEach(key => {
                 obj[key] = o[key as keyof SaveState] as State ?? obj[key]
             })
-            getScene(getUrl(o.SceneName, 'scene')).then((scripts) => {
+            getScene(getUrl(o.SceneName, 'scene'), runtime.SentenceID + 1).then((scripts) => {
                 runtime.sceneScripts = scripts
             })
             return { ...scene, ...obj, CurrentBacklog: scene.CurrentBacklog.slice(0, i + 1) }
         })
         setControl(control => ({ ...control, backlogVisible: false }))
+        // next()
     }
 
     return {

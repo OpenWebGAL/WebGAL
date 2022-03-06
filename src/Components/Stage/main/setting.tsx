@@ -1,15 +1,15 @@
 import { ChangeEvent, FunctionComponent, useCallback, useRef } from 'react'
 import closeB from "@assets/img/closeBlack.svg";
-import TextPreview from './textPreview';
-import FontSizeSetting from './fontSize';
-import PlaySpeedSetting from './playSpeed';
+import TextPreview from '../ui/textPreview';
+import FontSizeSetting from '../ui/fontSize';
+import PlaySpeedSetting from '../ui/playSpeed';
 import { Close } from '../ui';
 import { useStore } from 'reto';
 import { sceneStore } from '@/store';
 import { stopPropagation } from '@/utils';
 import logger from '@/utils/logger';
 
-const Setting: FunctionComponent<{}> = () => {
+export const Setting: FunctionComponent<{}> = () => {
     const { StartGame, control, setControl, gameInfo } = useStore(sceneStore, ({ control }) => [control.settingVisible])
     const saveFileRef = useRef<HTMLAnchorElement | null>(null)
     const loadFileRef = useRef<HTMLInputElement | null>(null)
@@ -80,4 +80,3 @@ const Setting: FunctionComponent<{}> = () => {
         </div>
     )
 }
-export default Setting

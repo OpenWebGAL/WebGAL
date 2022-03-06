@@ -3,7 +3,7 @@ import { FontSize } from '@/types'
 import { FunctionComponent } from 'react'
 import { useStore } from 'reto'
 const FontSizeSetting: FunctionComponent<{}> = () => {
-    const { setting, setSetting } = useStore(settingStore)
+    const { setting, setSetting } = useStore(settingStore, ({ setting }) => [setting.fontSize])
 
     return (
         <div className="singleSettingItem">

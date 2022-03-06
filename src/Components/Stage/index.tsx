@@ -1,10 +1,8 @@
 import '@icon-park/react/styles/index.css';
 import { FunctionComponent, useEffect, useMemo } from 'react'
-import Setting from './setting'
 import BottomBox from './main/bottomBox'
-import Bgm from "./ui/bgm";
-import { Background, BackLog, ChooseBox, FigureImage, Intro, Pixi } from './main';
-import { Load, MesModal, PanicOverlay, StartPage, Title, Video, Vocal } from './ui';
+import { Background, BackLog, ChooseBox, FigureImage, Intro, Pixi, Load, Setting } from './main';
+import { MesModal, PanicOverlay, StartPage, Title, Video, Vocal, Bgm } from './ui';
 import { useStore } from 'reto'
 import { sceneStore } from '@/store';
 import { throttle } from 'lodash';
@@ -20,7 +18,7 @@ const Stage: FunctionComponent<Props> = () => {
       }
       if (control.autoPlay) {
         stopAutoPlay()
-        setControl(control => ({ ...control, autoPlay: false }))
+        setControl(control => ({ ...control, autoPlay: false, fastPlay: false }))
       }
       next()
     }
