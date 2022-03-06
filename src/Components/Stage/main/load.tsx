@@ -7,6 +7,7 @@ import { deepClone, getSaveState, getTime, getUrl, saveGame, stopPropagation } f
 import type { SaveState } from '@/types';
 import { getRuntime } from '@/store';
 import { State } from '@/hooks/sceneScripts';
+import { getScene } from '@/scripts';
 
 const MiniPic: FunctionComponent<{ save: SaveState, i: number }> = ({ save, i }) => {
     const leftFigUrl = getUrl(save["fig_Name_left"], 'figure')
@@ -98,6 +99,9 @@ const LoadItem: FunctionComponent<{ currentPage: number }> = ({ currentPage }) =
                     })
                     // Saves.splice(i, 1, getSaveState(getRuntime(), scene))
                     runtime.SentenceID = Saves[i].SentenceID - 1
+                    getScene(getUrl(Saves[i].SceneName, 'scene'), runtime.SentenceID + 1).then((scripts) => {
+                        runtime.sceneScripts = scripts
+                    })
                     return { ...scene, ...obj, CurrentBacklog: getRuntime().SavedBacklog[i] }
                 })
                 setControl(control => ({ ...control, loadVisible: false }))
