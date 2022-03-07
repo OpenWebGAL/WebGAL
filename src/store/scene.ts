@@ -19,24 +19,13 @@ export const getRuntime = () => runtime
 export function sceneStore() {
     // const setting = useStore(settingStore)
     // console.log('playSpeed1',setting.setting.playSpeed)
-    const control = useStore(controlStore)
+    // const control = useStore(controlStore)
     // console.log('autoPlay1',control.control.autoPlay)
     const modal = useStore(modalStore)
-    const { scene, setScene, StartGame, isPlayDone, pixiRef, jumpFromBacklog, next, setting, jump, stopAutoPlay, startAutoPlay } = useSceneScripts(runtime)
+    const scene = useSceneScripts(runtime)
 
     return {
-        scene,
-        setScene,
-        StartGame,
-        next,
-        jump,
-        jumpFromBacklog,
-        isPlayDone,
-        pixiRef,
-        stopAutoPlay,
-        startAutoPlay,
-        ...control,
-        ...setting,
+        ...scene,
         ...modal
     }
 }

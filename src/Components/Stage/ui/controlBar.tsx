@@ -7,6 +7,7 @@ import { useStore } from 'reto';
 import { sceneStore } from '@/store';
 import { runtime } from '@/store/scene'
 import { AutoPlayWaitTime, PlaySpeed } from '@/types';
+import { useAction } from '@/hooks';
 
 const ControlBar: FunctionComponent<{}> = () => {
     const { control, setControl, setSetting, setScene, gameInfo, setModal, modalCallback, startAutoPlay, stopAutoPlay } = useStore(sceneStore, ({ control }) => [...Object.values(control)])
@@ -14,7 +15,7 @@ const ControlBar: FunctionComponent<{}> = () => {
     const showBacklog = useCallback(
         (e: MouseEvent<HTMLElement>) => {
             e.nativeEvent.stopImmediatePropagation()
-            setControl(control => ({ ...control, backlogVisible: true }))
+            setControl(control => ({ ...control, backlogVisible: true, fastPlay: false, autoPlay: false }))
         },
         [control.autoPlay, control.fastPlay],
     )
@@ -36,7 +37,7 @@ const ControlBar: FunctionComponent<{}> = () => {
         },
         [control.autoPlay, control.fastPlay],
     )
-    useEffect(() => {
+    useAction(() => {
         if (control.autoPlay) startAutoPlay()
         else stopAutoPlay()
     }, [control.autoPlay])

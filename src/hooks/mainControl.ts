@@ -1,19 +1,21 @@
 import { sceneStore } from "@/store"
+import { exit } from "@/utils"
 import { throttle } from "lodash"
 import { useEffect } from "react"
 import { useStore } from "reto"
 
 export const useMainControl = () => {
-    const { scene, setScene, stopAutoPlay, setControl, next, control } = useStore(sceneStore, ({ scene, control }) => [scene.showingText, control.autoPlay, control.panicOverlayVisible])
+    const { scene, setScene, stopAutoPlay, setControl, next, control } = useStore(sceneStore, ({ scene, control }) => [scene.showingText, control.autoPlay, control.panicOverlayVisible, scene.choose])
     useEffect(() => {
         function click(e: MouseEvent) {
+            if (exit(scene.choose)) return
             if (scene.showingText) {
                 setScene(scene => ({ ...scene, showingText: false }))
                 return
             }
             if (control.autoPlay) {
                 stopAutoPlay()
-                setControl(control => ({ ...control, autoPlay: false }))
+                setControl(control => ({ ...control, autoPlay: false, fastPlay: false }))
             }
             next()
         }
@@ -23,19 +25,28 @@ export const useMainControl = () => {
         return () => {
             document.removeEventListener('click', cb)
         }
-    }, [scene.showingText, control.autoPlay])
+    }, [scene.showingText, control.autoPlay, scene.choose])
 
     useEffect(() => {
-        const cb = (e: KeyboardEvent) => {
-            console.log(e)
-            if (e.key.toLowerCase() === 'escape') {
-                setControl(control => ({ ...control, panicOverlayVisible: !control.panicOverlayVisible }))
+        const cb = throttle((e: KeyboardEvent) => {
+            switch (e.code.toLowerCase()) {
+                case 'escape':
+                    setControl(control => ({ ...control, panicOverlayVisible: !control.panicOverlayVisible }))
+                    break
+                case 'arrowup':
+                    if (!control.titleVisible && !control.backlogVisible) setControl(control => ({ ...control, backlogVisible: true }))
+                    break
+                case 'arrowright':
+                case 'enter':
+                case 'space':
+                    if (!control.titleVisible) document.body.click()
+                    break
             }
-        }
+        }, 1000, { leading: true })
         document.addEventListener('keyup', cb)
         return () => {
             document.removeEventListener('keyup', cb)
         }
-    }, [control.panicOverlayVisible])
+    }, [control.backlogVisible, control.titleVisible, control.panicOverlayVisible])
 
 }

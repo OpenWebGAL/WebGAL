@@ -1,35 +1,13 @@
 import '@icon-park/react/styles/index.css';
-import { FunctionComponent, useEffect, useMemo } from 'react'
+import { FunctionComponent, useMemo } from 'react'
 import BottomBox from './main/bottomBox'
 import { Background, BackLog, ChooseBox, FigureImage, Intro, Pixi, Load, Setting } from './main';
 import { MesModal, PanicOverlay, StartPage, Title, Video, Vocal, Bgm } from './ui';
-import { useStore } from 'reto'
-import { sceneStore } from '@/store';
-import { throttle } from 'lodash';
+import { useMainControl } from '@/hooks';
 
 type Props = {}
 const Stage: FunctionComponent<Props> = () => {
-  const { scene, setScene, stopAutoPlay, setControl, next, control } = useStore(sceneStore, ({ scene, control }) => [scene.showingText, control.autoPlay])
-  useEffect(() => {
-    function click(e: MouseEvent) {
-      if (scene.showingText) {
-        setScene(scene => ({ ...scene, showingText: false }))
-        return
-      }
-      if (control.autoPlay) {
-        stopAutoPlay()
-        setControl(control => ({ ...control, autoPlay: false, fastPlay: false }))
-      }
-      next()
-    }
-    const cb = throttle(click, 1000, { leading: true })
-    document.addEventListener('click', cb)
-
-    return () => {
-      document.removeEventListener('click', cb)
-    }
-  }, [scene.showingText, control.autoPlay])
-
+  useMainControl()
   return (
     <div className="Stage">
       {

@@ -1,6 +1,6 @@
 import { controlStore } from '@/store'
 import { stopPropagation } from '@/utils'
-import { FunctionComponent, useEffect, useMemo } from 'react'
+import { FunctionComponent, useMemo } from 'react'
 import { useStore } from 'reto'
 
 const Yoozle: FunctionComponent<{}> = () => {
@@ -27,19 +27,7 @@ const Yoozle: FunctionComponent<{}> = () => {
     )
 }
 export const PanicOverlay: FunctionComponent<{}> = () => {
-    const { control, setControl } = useStore(controlStore, ({ control }) => [control.panicOverlayVisible])
-    useEffect(() => {
-        const cb = (e: KeyboardEvent) => {
-            console.log(e)
-            if (e.key.toLowerCase() === 'escape') {
-                setControl(control => ({ ...control, panicOverlayVisible: !control.panicOverlayVisible }))
-            }
-        }
-        document.addEventListener('keyup', cb)
-        return () => {
-            document.removeEventListener('keyup', cb)
-        }
-    }, [control.panicOverlayVisible])
+    const { control } = useStore(controlStore, ({ control }) => [control.panicOverlayVisible])
 
     return (
         <div onClick={stopPropagation} id="panic-overlay" style={{ display: control.panicOverlayVisible ? 'block' : 'none' }}>

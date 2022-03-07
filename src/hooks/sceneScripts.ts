@@ -7,6 +7,7 @@ import { deepClone, exit, getSaveState, getUrl, humpToLine, loadGame } from "@/u
 import { compact, last } from "lodash"
 import { useEffect, useRef, useState } from "react"
 import { useStore } from "reto"
+import { useAction } from "."
 
 export type State = {
     showingText: boolean,// 是否正在渐显文字
@@ -80,8 +81,11 @@ export const useSceneScripts = (runtime: Runtime) => {
     // const { setting, setSetting } = setting
     const [scene, setScene] = useState(state)
     const { gameInfo } = useStore(gameInfoStore)
-
-    useEffect(() => {
+    const settingRef = useRef<typeof setting>(setting)
+    useAction(() => {
+        settingRef.current = setting
+    }, [setting])
+    useAction(() => {
         const saves = loadGame(gameInfo)
         runtime.SavedBacklog = saves.SavedBacklog ?? []
         setScene(scene => ({ ...scene, Saves: saves.SavedGame ?? [] }))
@@ -99,7 +103,6 @@ export const useSceneScripts = (runtime: Runtime) => {
         runtime.SceneName = url
         next()
     }
-
     const next = async () => {
         // debugger
         let currentScript = runtime.sceneScripts[runtime.SentenceID]
@@ -121,7 +124,7 @@ export const useSceneScripts = (runtime: Runtime) => {
         } else if (Array.from(varList).some(o => o[0].test(currentScript[0]))) {
             runVar()
             // if判断脚本
-        } else if (/^if\([a-zA-Z\d]+(=|>|<|>=|<=)[a-zA-Z\d]+\)$/.test(currentScript[0])) {
+        } else if (/^if\([a-zA-Z\d\(\)\+\-\*\/]+(=|>|<|>=|<=)[a-zA-Z\d\(\)\+\-\*\/]+\)$/.test(currentScript[0])) {
             ifJump()
             // label脚本
         } else if (currentScript[0] === 'label') {
@@ -135,9 +138,9 @@ export const useSceneScripts = (runtime: Runtime) => {
                 return { ...initState(), bgm: gameInfo.Title_bgm, Saves: scene.Saves }
             })
             setControl(control => ({ ...control, titleVisible: true, autoPlay: false, fastPlay: false }))
-            // 默认执行手动脚本
         } else if (Array.from(pixiList).some(o => o[0].test(currentScript[0]))) {
             runPixi()
+            // 默认执行手动脚本
         } else {
             runManual()
         }
@@ -202,8 +205,7 @@ export const useSceneScripts = (runtime: Runtime) => {
         // console.log('setting', setting)
         // console.log('playSpeed', setting.playSpeed)
         // console.log('autoPlayWaitTime', setting.autoPlayWaitTime)
-        if (!isFastPlay.current) nextProcessor({ showingText: true })
-        else nextProcessor({ showingText: false })
+        nextProcessor({ showingText: !isFastPlay.current })
         nextProcessor(undefined, true)
         !isFastPlay.current && await startShowingText(len)
         isAutoPlay.current && startAutoPlay()
@@ -217,13 +219,13 @@ export const useSceneScripts = (runtime: Runtime) => {
                 return
             }
             isAutoPlay.current && next()
-        }, setting.autoPlayWaitTime);
+        }, settingRef.current.autoPlayWaitTime);
     }
 
-    useEffect(() => {
+    useAction(() => {
         isAutoPlay.current = control.autoPlay
     }, [control.autoPlay])
-    useEffect(() => {
+    useAction(() => {
         isFastPlay.current = control.fastPlay
     }, [control.fastPlay])
 
@@ -237,7 +239,7 @@ export const useSceneScripts = (runtime: Runtime) => {
             try {
                 showingTextTimeOut.current && clearTimeout(showingTextTimeOut.current)
                 showingTextTimeOut.current = setTimeout(() => {
-                    !control.autoPlay && setScene(scene => ({ ...scene, showingText: false }))
+                    !isAutoPlay.current && setScene(scene => ({ ...scene, showingText: false }))
                     res()
                 }, setting.playSpeed * len + 3000);
             } catch (e) {
@@ -258,14 +260,14 @@ export const useSceneScripts = (runtime: Runtime) => {
         }
     }
 
-    const runVar = () => {
+    const runVar = async () => {
         const [command, content] = runtime.sceneScripts[runtime.SentenceID++];
         if (command === 'showVar' && content === 'all') {
             // setScene(scene => ({ ...scene, GameVar: runtime.GameVar, showName: command, showText: JSON.stringify(runtime.GameVar) }))
             const showText = JSON.stringify(runtime.GameVar)
             nextProcessor({ GameVar: runtime.GameVar, showName: command, showText, showingText: true })
             nextProcessor(undefined, true)
-            !isFastPlay.current && startShowingText(showText.length)
+            !isFastPlay.current && await startShowingText(showText.length)
             isAutoPlay.current && startAutoPlay()
             // next()
             return
@@ -284,7 +286,7 @@ export const useSceneScripts = (runtime: Runtime) => {
         const match = command.match(/(?<=if\().+(?=\))/)
         if (match) {
             let expression = match[0]
-            let list = compact(expression.split(/=|>|<|>=|<=|\(|\)/))
+            let list = compact(expression.split(/=|>|<|>=|<=|\(|\)|\+|\-|\*|\//))
             list = list.map(o => {
                 if (runtime.GameVar[o]) {
                     expression = expression.replace(o, runtime.GameVar[o] + '')
@@ -424,6 +426,10 @@ export const useSceneScripts = (runtime: Runtime) => {
         setScene,
         isPlayDone,
         pixiRef,
-        setting: { setting, setSetting }
+        setting,
+        setSetting,
+        control,
+        setControl,
+        gameInfo
     }
 }

@@ -167,7 +167,7 @@
     justify-content: center;
     align-items: center;
     flex-flow: column;
-    /* pointer-events: none; */
+    pointer-events: none;
 }
 
 .singleChoose {

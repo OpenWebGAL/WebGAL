@@ -48,7 +48,7 @@ setVar:a=a+2;
 setVar:b=3;
 setVar:b=a+3;
 showVar:all;
-if((a+4))>=3):label5;
+if((a+3)>=3):label5;
 没有发生跳转
 label:label5;
 现在a是大于等于2的;
