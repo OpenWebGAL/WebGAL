@@ -10,7 +10,7 @@ import { AutoPlayWaitTime, PlaySpeed } from '@/types';
 import { useAction } from '@/hooks';
 
 const ControlBar: FunctionComponent<{}> = () => {
-    const { control, setControl, setSetting, setScene, gameInfo, setModal, modalCallback, startAutoPlay, stopAutoPlay,vocalControl } = useStore(sceneStore, ({ control }) => [...Object.values(control)])
+    const { control, setControl, setSetting, setScene, gameInfo, setModal, modalCallback, startAutoPlay, stopAutoPlay, vocalControl, bgmControl } = useStore(sceneStore, ({ control }) => [...Object.values(control)])
 
     const showBacklog = useCallback(
         (e: MouseEvent<HTMLElement>) => {
@@ -91,6 +91,7 @@ const ControlBar: FunctionComponent<{}> = () => {
             (control.fastPlay || control.autoPlay) && setControl(control => ({ ...control, fastPlay: false, autoPlay: false }))
             modalCallback.current = () => {
                 setScene(scene => ({ ...scene, bgm: gameInfo.Title_bgm }))
+                bgmControl.current?.replay()
                 setControl(control => ({ ...control, titleVisible: true }))
             }
             setModal(modal => ({ ...modal, titleText: '要返回到标题界面吗?', visible: true }))

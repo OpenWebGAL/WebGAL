@@ -27,6 +27,7 @@ export type Runtime = {
     GameVar: Record<string, number>
     SavedBacklog: SaveState[][]
     pixiApp: Application | null
+    goBackBgm: string
 }
 export type ChooseMode = 'label' | 'scene'
 

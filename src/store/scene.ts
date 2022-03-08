@@ -11,7 +11,8 @@ export const runtime: Runtime = {
     content: '',
     GameVar: {},
     SavedBacklog: [],
-    pixiApp: null
+    pixiApp: null,
+    goBackBgm: ''
 }
 
 export const getRuntime = () => runtime
