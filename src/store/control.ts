@@ -2,7 +2,7 @@ import { useCallback, useState } from "react"
 import { useStore } from "reto"
 import { gameInfoStore } from "."
 const initState = () => ({
-    playVocalSign: 0,
+    // playVocalSign: 0,
     titleVisible: true,
     saveVisible: false,
     backlogVisible: false,

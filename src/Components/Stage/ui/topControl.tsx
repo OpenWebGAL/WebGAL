@@ -1,4 +1,4 @@
-import { FunctionComponent } from 'react'
+import { FunctionComponent, useCallback } from 'react'
 import up from "@assets/img/up.svg";
 import cross from "@assets/img/cross.svg";
 import { useStore } from 'reto';
@@ -6,9 +6,13 @@ import { sceneStore } from '@/store';
 
 const TopControl: FunctionComponent<{}> = () => {
     const { control, setControl } = useStore(sceneStore, ({ control }) => [control.bottomBoxVisible])
-    const hideTextBox = () => {
-        setControl(control => ({ ...control, bottomBoxVisible: false }))
-    }
+    const hideTextBox = useCallback(
+        () => {
+            setControl(control => ({ ...control, bottomBoxVisible: false }))
+        },
+        [],
+    )
+
     // const showBacklog = () => { }
     return (
         <div id="top_control">

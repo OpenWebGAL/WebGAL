@@ -15,6 +15,11 @@ export const showText = (textArray: string[], playSpeed: PlaySpeed = PlaySpeed.l
     }
 }
 
+/**
+ * @description: intro文字渐显
+ * @param {string} paragraphArray 文字数组
+ * @return {*}
+ */
 export const showParagraph = (paragraphArray: string[]) => {
     const list = paragraphArray
     return list.map((o, i) => {

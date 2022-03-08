@@ -1,11 +1,18 @@
+import { useMediaHandle } from '@/hooks/mediaControl'
 import { controlStore, sceneStore } from '@/store'
 import { getUrl } from '@/utils'
 import { FunctionComponent, useEffect, useRef } from 'react'
 import { useStore } from 'reto'
 
 export const Vocal: FunctionComponent<{}> = () => {
-    const { scene, control, isPlayDone } = useStore(sceneStore, ({ scene, control }) => [scene.vocal, control.playVocalSign])
+    const { scene, isPlayDone, vocalControl } = useStore(sceneStore, ({ scene }) => [scene.vocal])
     const audio = useRef<HTMLAudioElement | null>(null)
+    const src = getUrl(scene.vocal, 'vocal')
+    useMediaHandle({
+        control: vocalControl,
+        mediaRef: audio,
+        src
+    })
     useEffect(() => {
         const cb = () => {
             isPlayDone.current = true
@@ -20,8 +27,8 @@ export const Vocal: FunctionComponent<{}> = () => {
         return () => {
             audio.current?.removeEventListener('ended', cb)
         }
-    }, [scene.vocal, control.playVocalSign])
+    }, [scene.vocal])
     return (
-        <audio ref={audio} src={getUrl(scene.vocal, 'vocal')} id="vocal"></audio>
+        <audio ref={audio} src={src} id="vocal"></audio>
     )
 }

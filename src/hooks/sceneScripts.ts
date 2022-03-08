@@ -8,6 +8,7 @@ import { compact, last } from "lodash"
 import { useEffect, useRef, useState } from "react"
 import { useStore } from "reto"
 import { useAction } from "."
+import { useMediaControl } from "./mediaControl"
 
 export type State = {
     showingText: boolean,// 是否正在渐显文字
@@ -78,13 +79,16 @@ export const useSceneScripts = (runtime: Runtime) => {
     const isPlayDone = useRef<boolean>(true)
     const pixiRef = useRef<PixiRef | null>(null)
     const { setting, setSetting } = useStore(settingStore)
+    const { bgmControl, videoControl, vocalControl } = useMediaControl()
     // const { setting, setSetting } = setting
     const [scene, setScene] = useState(state)
     const { gameInfo } = useStore(gameInfoStore)
     const settingRef = useRef<typeof setting>(setting)
+
     useAction(() => {
         settingRef.current = setting
     }, [setting])
+
     useAction(() => {
         const saves = loadGame(gameInfo)
         runtime.SavedBacklog = saves.SavedBacklog ?? []
@@ -430,6 +434,9 @@ export const useSceneScripts = (runtime: Runtime) => {
         setSetting,
         control,
         setControl,
-        gameInfo
+        gameInfo,
+        bgmControl,
+        videoControl,
+        vocalControl
     }
 }
