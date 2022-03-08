@@ -26,7 +26,6 @@ export const Title: FunctionComponent<{}> = () => {
     const ContinueGame = useCallback(
         () => {
             setControl(control => ({ ...control, titleVisible: false }))
-            console.log(runtime.SceneName)
             if (!exit(runtime.SceneName)) {
                 StartGame()
                 return

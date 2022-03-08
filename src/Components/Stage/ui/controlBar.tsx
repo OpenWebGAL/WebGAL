@@ -90,7 +90,10 @@ const ControlBar: FunctionComponent<{}> = () => {
             control.fastPlay && setSetting(setting => ({ ...setting, playSpeed: PlaySpeed.medium, autoPlayWaitTime: AutoPlayWaitTime.normal }));
             (control.fastPlay || control.autoPlay) && setControl(control => ({ ...control, fastPlay: false, autoPlay: false }))
             modalCallback.current = () => {
-                setScene(scene => ({ ...scene, bgm: gameInfo.Title_bgm }))
+                setScene(scene => {
+                    runtime.goBackBgm = scene.bgm
+                    return { ...scene, bgm: gameInfo.Title_bgm }
+                })
                 bgmControl.current?.replay()
                 setControl(control => ({ ...control, titleVisible: true }))
             }
