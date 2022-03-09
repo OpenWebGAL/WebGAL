@@ -7,8 +7,7 @@ import { deepClone, exit, getSaveState, getUrl, humpToLine, loadGame } from "@/u
 import { compact } from "lodash"
 import { useRef, useState } from "react"
 import { useStore } from "reto"
-import { useAction } from "."
-import { useMediaControl } from "./mediaControl"
+import { useAction, useMediaControl } from "."
 
 export type State = {
     showingText: boolean,// 是否正在渐显文字

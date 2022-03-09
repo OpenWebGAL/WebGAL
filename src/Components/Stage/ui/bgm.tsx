@@ -1,4 +1,4 @@
-import { useMediaHandle } from '@/hooks/mediaControl';
+import { useMediaHandle } from '@/hooks';
 import { sceneStore } from '@/store';
 import { getUrl } from '@/utils';
 import { FunctionComponent, useRef, useEffect } from 'react'

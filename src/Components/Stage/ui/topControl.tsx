@@ -1,5 +1,5 @@
 import { FunctionComponent, useCallback } from 'react'
-import up from "@assets/img/up.svg";
+// import up from "@assets/img/up.svg";
 import cross from "@assets/img/cross.svg";
 import { useStore } from 'reto';
 import { sceneStore } from '@/store';

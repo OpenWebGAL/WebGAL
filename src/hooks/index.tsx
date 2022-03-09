@@ -1,4 +1,5 @@
 export { useMesModal } from "./mesModal"
 export { useSceneScripts } from "./sceneScripts"
 export { useMainControl } from "./mainControl"
+export { useMediaControl, useMediaHandle } from "./mediaControl"
 export { useAction } from "./useAction"
