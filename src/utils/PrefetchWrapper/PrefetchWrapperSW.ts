@@ -270,19 +270,32 @@ export function extractAssetUrl(sceneText: string, {
     urgentBudget = 6,
     urgentOnly = false
 } = {}) {
-    /** @type {Set.<String>} */
+    /** 
+     * 所有资源的set数组
+     * @type {Set.<String>}
+     */
     const assetAll: Set<string> = new Set();
 
-    /** @type {Map.<String, Array.<String>>} */
+    /** 
+     * 所有资源的map对象
+     * @type {Map.<String, Array.<String>>} key 文件前缀 value 资源列表
+     */
     const assetMap: Map<string, Array<string>> = new Map();
-    ['background', 'bgm', 'figure', 'scene', 'vocal'].forEach((key) => {
+    ['background', 'bgm', 'figure', 'scene', 'vocal', 'video'].forEach((key) => {
         assetMap.set(key, []);
     });
 
-    /** @type {Array.<String>} */
+    /** 
+     * 急用资源列表
+     * @type {Array.<String>} 
+     */
     const assetUrgent: string[] = [];
 
-    /** @param {String} dialogue */
+    /**
+     * @description: 对脚本中的语音文件进行解析
+     * @param {string} dialogue 文件路径
+     * @return {*} 语音文件名
+     */
     const extractVocal = (dialogue: string) => {
         const vocalPrefix = 'vocal-';
         const vocal = dialogue.split(',', 1)[0];
@@ -295,8 +308,10 @@ export function extractAssetUrl(sceneText: string, {
     };
 
     /**
-     * @param {String} filetype
-     * @param {String} filename
+     * @description: 将场景中需要预加载的文件提取出来存入assetAll和assetMap
+     * @param {string} filetype 文件前缀
+     * @param {string} filename 文件名称
+     * @return {boolean} 是否添加完成
      */
     const addToAssets = (filetype: string, filename: string) => {
         const url = getUrl(filename, filetype);
@@ -387,6 +402,6 @@ export function extractAssetUrl(sceneText: string, {
             if (vocal) addToAssets('vocal', vocal);
         }
     }
-
+    // console.log(assetAll, assetMap, assetUrgent)
     return { all: assetAll, map: assetMap, urgent: assetUrgent };
 }
