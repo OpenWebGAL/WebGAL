@@ -1,8 +1,11 @@
+import { sortBy } from "lodash";
 import { getUrl } from "..";
 
 const cacheVersion = 1;
 const cacheNamePrefix = 'webgal-cache-v';
 const cacheName = cacheNamePrefix + cacheVersion;
+
+type Weight = 'scene' | 'background' | 'figure' | 'bgm' | 'vocal' | 'video'
 /**
  * 在 ServiceWorker activate 后使用，场景级预加载
  *
@@ -29,25 +32,31 @@ export class PrefetchWrapperSW {
      * 预加载管线
      * @type {Array.<String>} 
      */
-    _prefetchPipeline: string[] = [];
+    private _prefetchPipeline: string[] = [];
+
+    /** 
+     * 权重列表
+     * @type {Array.<Weight>} 
+     */
+    private _weightList: Weight[] = ['scene', 'background', 'figure', 'bgm', 'vocal', 'video']
 
     /**
      * 定时器id
      * @type {NodeJS.Timeout|null}
      */
-    _batchID: NodeJS.Timeout | null = null;
+    private _batchID: NodeJS.Timeout | null = null;
 
     /** 
      * 缓存列表
      * @type {Set.<String>} 
      */
-    _cachedAssets: Set<string> = new Set();
+    private _cachedAssets: Set<string> = new Set();
 
     /**
      * 当前场景与索引
      * @type {{scene:string,idx:number}}
      */
-    _currentCursor = { scene: '', idx: 0 };
+    private _currentCursor = { scene: '', idx: 0 };
 
     /**
      * 变换场景时回调，基于当前场景更新预加载管线
@@ -97,7 +106,8 @@ export class PrefetchWrapperSW {
      */
     private _addToPipeline(assets: { all: Set<string>, map: Map<string, Array<string>> }) {
         // Set() preserves insertion order
-        this._prefetchPipeline.push(...assets.all);  // simple non-heuristic approach
+        // this._prefetchPipeline.push(...assets.all);  // simple non-heuristic approach
+        this.addPipeline(...assets.all)
     }
 
     /**
@@ -117,40 +127,44 @@ export class PrefetchWrapperSW {
      * @param {*}
      * @return {*}
      */
-    flushPipeline() {
+    private flushPipeline() {
         this._prefetchPipeline.length = 0;
+    }
+
+    /**
+     * @description: 添加预加载管线
+     * @param {string} url
+     * @return {*}
+     */
+    private addPipeline(...urls: string[]) {
+        this._prefetchPipeline = sortBy(this._prefetchPipeline.concat(...urls.map(url => url.replace(/\s*(-left|-right|-next)\s*/g, ''))), url => this._weightList.indexOf(url.split('/')[1] as Weight))
     }
 
     /**
      * 暂停预加载，并不清空管线
      * @see flushPipeline()
      */
-    signalPause() {
+    private signalPause() {
         if (this._batchID !== null) clearTimeout(this._batchID);
         this._batchID = null;
     }
 
     /**
-     * @description: 恢复预加载，多次调用*不会*产生多个请求
+     * @description: 恢复预加载，多次调用*不会*产生多个请求(预加载心跳，监听预加载管线的变化，如果发生变化，则进行预加载，之后同步缓存)
      * @param {*}
      * @return {*}
      */
-    signalResume() {
+    private signalResume() {
         if (this._batchID !== null) return;
         const tryBatch = async (selfID: NodeJS.Timeout) => {
             if (selfID !== this._batchID) return;
             if (this._prefetchPipeline.length > 0) {
                 await this._fetchBatch(selfID)
-                if (selfID === this._batchID) {
-                    this._syncCacheInfo();
-                    const id: NodeJS.Timeout = setTimeout(() => tryBatch(id), this.minRequestInterval);
-                    this._batchID = id;
-                }
-            } else {
-                this._syncCacheInfo();
-                const id: NodeJS.Timeout = setTimeout(() => tryBatch(id), this.minRequestInterval);
-                this._batchID = id;
+                if (selfID !== this._batchID) return
             }
+            this._syncCacheInfo();
+            const id: NodeJS.Timeout = setTimeout(() => tryBatch(id), this.minRequestInterval);
+            this._batchID = id;
         };
         this._syncCacheInfo();
         const id: NodeJS.Timeout = setTimeout(() => tryBatch(id), 100);
@@ -186,7 +200,7 @@ export class PrefetchWrapperSW {
      * @param {NodeJS.Timeout} selfID
      * @return {*}
      */
-    _tryExpandScene(sceneUrl: string, selfID: NodeJS.Timeout) {
+    private _tryExpandScene(sceneUrl: string, selfID: NodeJS.Timeout) {
         const qsIdx = sceneUrl.lastIndexOf('?');
         // todo: handle existing query strings and hashes
         if (qsIdx < 0)
@@ -210,7 +224,7 @@ export class PrefetchWrapperSW {
                     for (const asset of nextAssets.urgent) {
                         // 如果在缓存和预加载管线中都不存在对应的文件，则将文件加入预加载管线
                         if (!this._cachedAssets.has(asset) && !this._prefetchPipeline.includes(asset))
-                            this._prefetchPipeline.push(asset.replace(/\s*(-left|-right|-next)\s*/g, ''))
+                            this.addPipeline(asset)
                     }
                 });
             }
