@@ -5,7 +5,7 @@ import { controlStore, gameInfoStore, settingStore } from "@/store"
 import type { ChooseMode, PixiPerform, Runtime, SaveState } from "@/types"
 import { deepClone, exit, getSaveState, getUrl, humpToLine, loadGame } from "@/utils"
 import { compact } from "lodash"
-import { useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { useStore } from "reto"
 import { useAction, useMediaControl } from "."
 
@@ -88,8 +88,9 @@ export const useSceneScripts = (runtime: Runtime) => {
         settingRef.current = setting
     }, [setting])
 
-    useAction(() => {
+    useEffect(() => {
         const saves = loadGame(gameInfo)
+        if (!Object.keys(saves).length) return
         runtime.SavedBacklog = saves.SavedBacklog ?? []
         setScene(scene => ({ ...scene, Saves: saves.SavedGame ?? [] }))
     }, [gameInfo.Game_key])
@@ -372,24 +373,22 @@ export const useSceneScripts = (runtime: Runtime) => {
         }
     }
 
-    const jumpFromBacklog = (i: number) => {
-        // const o = scene.CurrentBacklog[i]
-        // runtime.SentenceID = o.SentenceID - 1
-        // console.log(o)
-        // getScene(getUrl(o.SceneName, 'scene')).then((scripts) => {
-        //     runtime.sceneScripts = scripts
-        // })
+    const jumpFromBacklog = async (i: number) => {
+        const o = scene.CurrentBacklog[i]
+        runtime.SentenceID = o.SentenceID
+        const scripts = await getScene(getUrl(o.SceneName, 'scene'))
+        runtime.sceneScripts = scripts
         setScene(scene => {
             const o = scene.CurrentBacklog[i]
-            runtime.SentenceID = o.SentenceID
+            // runtime.SentenceID = o.SentenceID
             let obj: Record<string, unknown> = deepClone(scene)
             const keys = Object.keys(scene) as Array<keyof State>
             keys.forEach(key => {
                 obj[key] = o[key as keyof SaveState] as State ?? obj[key]
             })
-            getScene(getUrl(o.SceneName, 'scene'), runtime.SentenceID + 1).then((scripts) => {
-                runtime.sceneScripts = scripts
-            })
+            // getScene(getUrl(o.SceneName, 'scene'), runtime.SentenceID + 1).then((scripts) => {
+            //     runtime.sceneScripts = scripts
+            // })
             return { ...scene, ...obj, CurrentBacklog: scene.CurrentBacklog.slice(0, i + 1) }
         })
         setControl(control => ({ ...control, backlogVisible: false }))

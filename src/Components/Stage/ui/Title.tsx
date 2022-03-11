@@ -6,13 +6,13 @@ import { useStore } from 'reto'
 
 export const Title: FunctionComponent<{}> = () => {
     // const { setModal, modalCallback } = useStore(modalStore, () => [])
-    const { gameInfo, setScene, next, control, setControl, setModal, modalCallback,bgmControl } = useStore(sceneStore, ({ control, gameInfo }) => [control.titleVisible, gameInfo.Title_img])
+    const { gameInfo, setScene, next, control, setControl, setModal, modalCallback, bgmControl } = useStore(sceneStore, ({ control, gameInfo }) => [control.titleVisible, gameInfo.Title_img])
 
     const StartGame = useCallback(
         async () => {
             setControl(control => ({ ...control, titleVisible: false }))
             runtime.SentenceID = 0
-            setScene(scene => ({ ...scene, bgm: '' }))
+            setScene(scene => ({ ...scene, bgm: '', CurrentBacklog: [] }))
             const { url, currentScene } = await startGame()
             // console.log(currentScene)
             runtime.sceneScripts = currentScene

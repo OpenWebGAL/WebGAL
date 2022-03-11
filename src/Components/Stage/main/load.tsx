@@ -64,7 +64,7 @@ const LoadItem: FunctionComponent<{ currentPage: number }> = ({ currentPage }) =
     const saveBtns: JSX.Element[] = []
     for (let i = currentPage * 6 + 1; i <= currentPage * 6 + 6; i++) {
         const Save = Saves[i]
-        const msgClick = () => {
+        const msgClick = async () => {
             if (control.saveVisible && !control.loadVisible) {
                 modalCallback.current = () => {
                     setScene(scene => {
@@ -90,6 +90,10 @@ const LoadItem: FunctionComponent<{ currentPage: number }> = ({ currentPage }) =
                 }
                 setModal(modal => ({ ...modal, visible: true, titleText: '你要覆盖这个存档吗？', Left: '覆盖', Right: '不' }))
             } else if (!control.saveVisible && control.loadVisible) {
+                const o = scene.Saves[i]
+                runtime.SentenceID = o.SentenceID - 1
+                const scripts = await getScene(getUrl(o.SceneName, 'scene'))
+                runtime.sceneScripts = scripts
                 setScene(scene => {
                     const Saves = deepClone(scene.Saves)
                     let obj: Record<string, unknown> = deepClone(scene)
@@ -99,12 +103,12 @@ const LoadItem: FunctionComponent<{ currentPage: number }> = ({ currentPage }) =
                     })
                     // Saves.splice(i, 1, getSaveState(getRuntime(), scene))
                     runtime.SentenceID = Saves[i].SentenceID - 1
-                    getScene(getUrl(Saves[i].SceneName, 'scene'), runtime.SentenceID + 1).then((scripts) => {
-                        runtime.sceneScripts = scripts
-                    })
+                    // getScene(getUrl(Saves[i].SceneName, 'scene'), runtime.SentenceID + 1).then((scripts) => {
+                    //     runtime.sceneScripts = scripts
+                    // })
                     return { ...scene, ...obj, CurrentBacklog: getRuntime().SavedBacklog[i] }
                 })
-                setControl(control => ({ ...control, loadVisible: false }))
+                setControl(control => ({ ...control, loadVisible: false, titleVisible: false }))
             }
         }
         const emptyClick = () => {
