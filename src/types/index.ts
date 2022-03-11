@@ -38,6 +38,7 @@ export type MediaState = {
 
 export type MediaControl = {
     replay: () => void
+    play: () => void
     pause: () => void
     setMeidaState?: (mediaState: Partial<MediaState>) => void
 }

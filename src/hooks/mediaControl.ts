@@ -28,6 +28,11 @@ export const useMediaHandle = ({ control, mediaRef, src }: MediaHandle) => {
                     mediaRef.current.play();
                 }
             },
+            play: () => {
+                if (src && mediaRef.current) {
+                    mediaRef.current.play();
+                }
+            },
             pause: () => {
                 if (src && mediaRef.current) {
                     mediaRef.current.pause();
