@@ -66,14 +66,17 @@
 
 .LS_Index{
     padding: 17px 5px 7px 5px;
-    width: 100%;
+    /* width: 100%; */
+    flex: 1;
+    overflow-x: auto;
+    display: flex;
     /*border-bottom: 1px solid rgba(255,255,255,0.8);*/
 }
 
 .LS_singleElement{
     overflow: hidden;
     margin:15px 5px 5px 5px;
-    width: 600px;
+    width: 47%;
     height: 170px;
     font-size: 150%;
     /*padding: 10px 15px 10px 15px;*/
@@ -136,8 +139,8 @@
 }
 
 .LS_renderMain{
-    /*width: 100%;*/
-    /*height: 100%*/
+    width: 100%;
+    height: 100%
 }
 
 .LS_textArea{
@@ -190,9 +193,12 @@
     text-shadow: 2px 2px 12px rgba(255,255,255,0.5);
     font-family: 思源宋体,serif;
     font-weight: bold;
-    font-size: 300%;
+    font-size: 24px;
+    line-height: 24px;
+    padding-top: 18px;
     /*padding: 5px 10px 5px 10px ;*/
-    min-width: 100px;
+    /* min-width: 100px; */
+    width: 60px;
 }
 
 #SaveTitle{
@@ -202,9 +208,12 @@
     text-shadow: 2px 2px 12px rgba(255,255,255,0.5);
     font-family: 思源宋体,serif;
     font-weight: bold;
-    font-size: 300%;
-    padding: 0 10px 5px 10px ;
-    min-width: 100px;
+    font-size: 24px;
+    line-height: 24px;
+    padding-top: 18px;
+    /* padding: 0 10px 5px 10px ; */
+    /* min-width: 100px; */
+    width: 60px;
 }
 
 .LoadIndexButton{

@@ -639,6 +639,10 @@ a:visited {
     #SceneText {
         padding: 5px 0 0 0;
     }
+
+    .closeSVG, .top_button {
+        transform: scale(.6);
+    }
 }
 
 @media screen and (max-width:767px) {
