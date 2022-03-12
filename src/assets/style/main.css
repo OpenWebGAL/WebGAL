@@ -629,7 +629,7 @@ a:visited {
 
 @media screen and (max-width:960px) {
     #root {
-        font-size: 65%;
+        font-size: 50%;
     }
 
     #mainTextWindow {

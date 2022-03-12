@@ -2,14 +2,16 @@ import { sceneStore } from "@/store"
 import { exit, isMobile } from "@/utils"
 import logger from "@/utils/logger"
 import { throttle } from "lodash"
-import { useEffect } from "react"
+import { useEffect, useRef } from "react"
 import { useStore } from "reto"
+import { useAction } from "."
 
 export const useMainControl = () => {
     const { scene, setScene, stopAutoPlay, setControl, next, control, videoControl, vocalControl, bgmControl } = useStore(sceneStore, ({ scene, control }) => [scene.showingText, control.autoPlay, control.panicOverlayVisible, scene.choose])
+    const touchFlag = useRef(false)
     useEffect(() => {
         function click(e: MouseEvent) {
-            if (exit(scene.choose)) return
+            if (exit(scene.choose) || touchFlag.current) return
             if (scene.showingText) {
                 setScene(scene => ({ ...scene, showingText: false }))
                 return
@@ -60,5 +62,25 @@ export const useMainControl = () => {
             document.removeEventListener('keyup', cb)
         }
     }, [control.backlogVisible, control.titleVisible, control.panicOverlayVisible])
+
+    // 添加手势操作
+    useEffect(() => {
+        const cb = (e: TouchEvent) => {
+            if (e.touches.length === 2) {
+                touchFlag.current = true
+                setControl(control => ({ ...control, bottomBoxVisible: !control.bottomBoxVisible }))
+            } else if (e.touches.length === 3) {
+                touchFlag.current = true
+                setControl(control => ({ ...control, settingVisible: true }))
+            } else {
+                touchFlag.current = false
+            }
+        }
+        document.addEventListener('touchstart', cb)
+
+        return () => {
+            document.removeEventListener('touchstart', cb)
+        }
+    }, [])
 
 }
