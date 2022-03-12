@@ -86,3 +86,12 @@ export type SaveOption = {
         playSpeed: PlaySpeed
     }
 }
+
+export type SaveTemporaryOption = {
+    SaveTemporaryGame: SaveState
+    SaveTemporaryBackLog: SaveState[]
+    cSettings: {
+        fontSize: FontSize,
+        playSpeed: PlaySpeed
+    }
+}

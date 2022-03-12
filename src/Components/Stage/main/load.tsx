@@ -3,7 +3,7 @@ import closeW from "@assets/img/closeWhite.svg";
 import { Close } from '../ui';
 import { useStore } from 'reto';
 import { runtime, sceneStore } from '@/store';
-import { deepClone, getSaveState, getTime, getUrl, saveGame, stopPropagation } from '@/utils';
+import { deepClone, exit, getSaveState, getTime, getUrl, saveGame, stopPropagation } from '@/utils';
 import type { SaveState } from '@/types';
 import { getRuntime } from '@/store';
 import { State } from '@/hooks/sceneScripts';
@@ -108,7 +108,7 @@ const LoadItem: FunctionComponent<{ currentPage: number }> = ({ currentPage }) =
                     // })
                     return { ...scene, ...obj, CurrentBacklog: getRuntime().SavedBacklog[i] }
                 })
-                setControl(control => ({ ...control, loadVisible: false, titleVisible: false }))
+                setControl(control => ({ ...control, loadVisible: false, titleVisible: false, bottomBoxVisible: exit(o.choose) || o.command === 'showVar' }))
             }
         }
         const emptyClick = () => {

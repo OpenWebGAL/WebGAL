@@ -1,5 +1,6 @@
 import { sceneStore } from "@/store"
-import { exit } from "@/utils"
+import { exit, isMobile } from "@/utils"
+import logger from "@/utils/logger"
 import { throttle } from "lodash"
 import { useEffect } from "react"
 import { useStore } from "reto"
@@ -32,11 +33,11 @@ export const useMainControl = () => {
             switch (e.code.toLowerCase()) {
                 case 'escape':
                     setControl(control => {
-                        if(!control.panicOverlayVisible){
+                        if (!control.panicOverlayVisible) {
                             videoControl.current?.pause()
                             bgmControl.current?.pause()
                             vocalControl.current?.pause()
-                        }else{
+                        } else {
                             videoControl.current?.play()
                             bgmControl.current?.play()
                             vocalControl.current?.play()

@@ -1,6 +1,6 @@
 import { State as SceneState } from "@/hooks/sceneScripts"
 import type { GameInfo } from "@/store/gameInfo"
-import { PlaySpeed, Runtime, SaveOption, SaveState } from "@/types"
+import { PlaySpeed, Runtime, SaveOption, SaveState, SaveTemporaryOption } from "@/types"
 import pako from 'pako'
 import type { MouseEvent } from 'react'
 /**
@@ -202,7 +202,7 @@ export const zipStr = (str: string) => {
 /**
  * @description: 保存游戏进度
  * @param {GameInfo} gameInfo 游戏基本信息
- * @param {*} opt 要保存的信息
+ * @param {SaveOption} toStoreage 要保存的信息
  * @return {*}
  */
 export const saveGame = (gameInfo: GameInfo, toStoreage: SaveOption) => {
@@ -217,6 +217,27 @@ export const saveGame = (gameInfo: GameInfo, toStoreage: SaveOption) => {
  */
 export const loadGame = (gameInfo: GameInfo) => {
     const storage = localStorage.getItem(gameInfo.Game_key)
+    return storage ? JSON.parse(unzipStr(storage)) : {}
+}
+
+/**
+ * @description: 创建临时存档
+ * @param {GameInfo} gameInfo 游戏基本信息
+ * @param {SaveTemporaryOption} toStoreage 游戏基本信息
+ * @return {*}
+ */
+export const saveTemporaryGame = (gameInfo: GameInfo, toStoreage: SaveTemporaryOption) => {
+    const gzip = zipStr(JSON.stringify(toStoreage));
+    localStorage.setItem(gameInfo.Game_key + '_temporary', gzip)
+}
+
+/**
+ * @description: 读取临时存档
+ * @param {GameInfo} gameInfo 游戏基本信息
+ * @return {*}
+ */
+export const loadTemporaryGame = (gameInfo: GameInfo) => {
+    const storage = localStorage.getItem(gameInfo.Game_key + '_temporary')
     return storage ? JSON.parse(unzipStr(storage)) : {}
 }
 

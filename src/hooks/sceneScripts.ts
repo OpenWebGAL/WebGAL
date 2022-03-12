@@ -197,6 +197,7 @@ export const useSceneScripts = (runtime: Runtime) => {
         // console.log('setting', setting)
         // console.log('playSpeed', setting.playSpeed)
         // console.log('autoPlayWaitTime', setting.autoPlayWaitTime)
+        setControl(control => ({ ...control, bottomBoxVisible: true }))
         nextProcessor({ showingText: !isFastPlay.current })
         nextProcessor(undefined, true)
         !isFastPlay.current && await startShowingText(len)
@@ -247,6 +248,7 @@ export const useSceneScripts = (runtime: Runtime) => {
             if (key.test(humpToLine(command))) {
                 nextProcessor(await handleFn({ content, command }))
                 nextProcessor()
+                setControl(control => ({ ...control, bottomBoxVisible: true }))
                 break
             }
         }
@@ -259,6 +261,7 @@ export const useSceneScripts = (runtime: Runtime) => {
             const showText = JSON.stringify(runtime.GameVar)
             nextProcessor({ GameVar: runtime.GameVar, showName: command, showText, showingText: true })
             nextProcessor(undefined, true)
+            setControl(control => ({ ...control, bottomBoxVisible: true }))
             !isFastPlay.current && await startShowingText(showText.length)
             isAutoPlay.current && startAutoPlay()
             // next()
@@ -368,7 +371,7 @@ export const useSceneScripts = (runtime: Runtime) => {
                 }
                 return obj
             })
-            setControl(control => ({ ...control, bottomBoxVisible: true }))
+            // setControl(control => ({ ...control, bottomBoxVisible: true }))
             list.current = []
         }
     }

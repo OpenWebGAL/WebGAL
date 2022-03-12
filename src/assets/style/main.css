@@ -12,10 +12,15 @@
     user-select: none;
 }
 
+body {
+    width: 100vw;
+    height: 100vh;
+}
+
 #ReactRoot, #root {
     position: relative;
-    height: 100vh;
-    width: 100vw;
+    height: 100%;
+    width: 100%;
     overflow: hidden;
 }
 
@@ -604,4 +609,49 @@ a:visited {
     width: 1000vh;
     height: 1000vw;
     /*background-color: rgba(0,0,0,0.3);*/
+}
+
+
+@media screen and (orientation: portrait) {
+
+    /*竖屏 css*/
+    #root {
+        font-size: 65%;
+        transform: rotate(90deg);
+        transform-origin: calc(100vw /2) calc(100vw/2);
+        width: 100vh !important;
+        height: 100vw !important;
+    }
+
+    #bottomBox {
+        height: 45%;
+    }
+
+    #mainTextWindow {
+        padding: 5px 20% 5px 20%;
+    }
+
+    #SceneText {
+        padding: 5px 0 0 0;
+    }
+}
+
+@media screen and (orientation: landscape) {
+
+    /*横屏 css*/
+    #root {
+        font-size: 65%;
+    }
+
+    #bottomBox {
+        height: 45%;
+    }
+
+    #mainTextWindow {
+        padding: 5px 20% 5px 20%;
+    }
+
+    #SceneText {
+        padding: 5px 0 0 0;
+    }
 }
