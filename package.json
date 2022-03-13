@@ -4,12 +4,13 @@
   "version": "4.0.0",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "tsc && vite build --base=./",
     "preview": "vite preview"
   },
   "dependencies": {
     "react": "^17.0.2",
-    "react-dom": "^17.0.2"
+    "react-dom": "^17.0.2",
+    "reto": "^0.9.3"
   },
   "devDependencies": {
     "@types/react": "^17.0.33",
