@@ -10,7 +10,9 @@ enum playSpeed{
 }
 
 interface OptionData{
-    volume:number,
+    volumeMain:number,
     textSpeed:playSpeed,
     autoSpeed:playSpeed,
+    vocalVolume:number,
+    bgmVolume:number
 }
