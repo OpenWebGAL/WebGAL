@@ -1,12 +1,14 @@
 import {FC} from 'react'
 import styles from './title.module.scss'
+import {useStore} from 'reto'
+import {GuiStateStore} from "../../Core/store/GUI";
 
 const Title: FC = () => {
+    const state = useStore(GuiStateStore);
     return <>
-        {<div className={styles.Title_main}
-              style={{backgroundImage: `url("")`}}>
+        {state.GuiState.showTitle && <div className={styles.Title_main}>
             Title
-            <div>
+            <div onClick={() => state.setVisibility('showTitle', false)}>
                 closeTitle
             </div>
         </div>}
