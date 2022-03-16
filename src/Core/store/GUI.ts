@@ -4,21 +4,30 @@
 import {useState} from "react"
 
 
-//当前Menu页面显示的Tag
+/**
+ * @enum
+ * 当前Menu页面显示的Tag
+ */
 enum MenuPanelTag {
     Save,//“保存”选项卡
     Load,//“读取”选项卡
     Option//“设置”选项卡
 }
 
-//GUI状态类型
+/**
+ * @interface
+ * GUI状态类型
+ */
 interface IGuiState {
     showTitle: boolean, //是否显示标题界面
     showMenuPanel: boolean, //是否显示Menu界面
     currentMenuTag: MenuPanelTag,//当前Menu界面的选项卡
 }
 
-//初始GUI状态表
+/**
+ * @interface
+ * 初始GUI状态表
+ */
 const initState: IGuiState = {
     showTitle: true,
     showMenuPanel: false,
