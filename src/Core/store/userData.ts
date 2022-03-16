@@ -6,14 +6,20 @@
 import {IStageState} from "./stage";
 import {useState} from "react";
 
-//播放速度的枚举类型
+/**
+ * @enum
+ * 播放速度的枚举类型
+ */
 export enum playSpeed{
     slow,//慢
     normal,//中
     fast//快
 }
 
-//用户设置数据接口
+/**
+ * @interface
+ * 用户设置数据接口
+ */
 interface IOptionData{
     volumeMain:number,//主音量
     textSpeed:playSpeed,//文字速度
@@ -22,19 +28,26 @@ interface IOptionData{
     bgmVolume:number//背景音乐音量
 }
 
-//存档文件接口
+/**
+ * @interface
+ * 存档文件接口
+ */
 interface ISaveData{
     stageStage:IStageState, //舞台数据
     index:number,//存档的序号
     saveTime:string,//保存时间
 }
 
-//用户数据接口
+/**
+ * @interface
+ * 用户数据接口
+ */
 export interface IUserData{
     saveData:Array<ISaveData>,//用户存档数据
     optionData:IOptionData//用户设置选项数据
 }
 
+//初始化用户数据
 const initState:IUserData = {
     saveData:[],
     optionData:{

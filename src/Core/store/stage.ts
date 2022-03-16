@@ -13,7 +13,10 @@ interface IGameVar {
     [propName: string]: string | boolean | number //游戏内变量可以是字符串、布尔值、数字
 }
 
-//游戏舞台数据接口
+/**
+ * @interface
+ * 游戏舞台数据接口
+ */
 export interface IStageState {
     SceneName: string,//场景文件名
     SentenceID: number,//语句ID
@@ -34,6 +37,7 @@ export interface IStageState {
     pixiPerformList: Array<any> //作为背景的 pixi 演出
 }
 
+//初始化舞台数据
 const initState:IStageState = {
     SceneName: '',//场景文件名
     SentenceID: 0,//语句ID
