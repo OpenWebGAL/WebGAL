@@ -1,7 +1,7 @@
 import axios from "axios";
 import {logger} from "../util/logger";
 import {assetSetter, fileType} from "../util/assetSetter";
-import {storeGlobal} from "../store/storeRef";
+import {storeRef} from "../store/storeRef";
 
 export const infoFetcher = (url: string) => {
     axios.get(url).then(r => {
@@ -13,7 +13,7 @@ export const infoFetcher = (url: string) => {
         gameConfig.forEach(e => {
             if (e[0] === 'Title_img') {
                 const url: string = assetSetter(e[1], fileType.background);
-                storeGlobal.GuiRef.current.setGuiAsset('titleBg', url);
+                storeRef.GuiRef.current.setGuiAsset('titleBg', url);
             }
         })
     })
