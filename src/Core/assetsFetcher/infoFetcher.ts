@@ -13,7 +13,7 @@ export const infoFetcher = (url: string) => {
         gameConfig.forEach(e => {
             if (e[0] === 'Title_img') {
                 const url: string = assetSetter(e[1], fileType.background);
-                storeGlobal.GUI.current.setVisibility('showTitle', false);
+                storeGlobal.GuiRef.current.setGuiAsset('titleBg', url);
             }
         })
     })
