@@ -22,8 +22,6 @@ interface IGuiState {
     showTitle: boolean, //是否显示标题界面
     showMenuPanel: boolean, //是否显示Menu界面
     currentMenuTag: MenuPanelTag,//当前Menu界面的选项卡
-    titleBackground: string,
-    titleBgm: string,
 }
 
 /**
@@ -33,14 +31,12 @@ interface IGuiState {
 const initState: IGuiState = {
     showTitle: true,
     showMenuPanel: false,
-    currentMenuTag: MenuPanelTag.Option,
-    titleBackground: '',
-    titleBgm: ''
+    currentMenuTag: MenuPanelTag.Option
 }
 
 //GUI各组件是否显示
-type componentsVisibility = Pick<IGuiState, Exclude<keyof IGuiState, 'currentMenuTag' | 'titleBackground' | 'titleBgm'>>
-type titleAssetKey = Pick<IGuiState, 'titleBackground' | 'titleBgm'>
+type componentsVisibility = Pick<IGuiState, Exclude<keyof IGuiState, 'currentMenuTag'>>
+
 
 /**
  * 创建GUI的状态管理
@@ -60,14 +56,9 @@ export function GuiStateStore() {
         setGuiState({...GuiState});
     }
 
-    const setTitleAsset = <K extends keyof titleAssetKey>(key: K, value: string) => {
-        GuiState[key] = value;
-    }
-
     return {
         GuiState,
         setVisibility,
-        setMenuPanelTag,
-        setTitleAsset
+        setMenuPanelTag
     }
 }
