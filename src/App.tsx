@@ -3,11 +3,13 @@ import {GuiStateStore} from "./Core/store/GUI";
 import Title from "./Components/UI/Title";
 import {useEffect, useRef} from "react";
 import {storeGlobal} from "./Core/store/storeRef";
+import {initializeScript} from "./Core/controller/initializeScript";
 
 function App() {
-    const GuiStoreRef = useRef<ReturnType<any>>();
+    const GuiStoreRef = useRef<ReturnType<typeof GuiStateStore> | null>(null);
     useEffect(() => {
-        storeGlobal.GUI = GuiStoreRef;
+        storeGlobal.GuiRef = GuiStoreRef;
+        initializeScript();
     }, [])
     return (
         <div className="App" style={{height: '100%', width: '100%'}}>
