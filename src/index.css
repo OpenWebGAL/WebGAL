@@ -1,6 +1,12 @@
+@font-face {
+    font-family: "思源宋体";
+    /*noinspection CssUnknownTarget*/
+    src: url("./fonts/SourceHanSerifSC-Regular.otf");
+}
+
 body {
     margin: 0;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    font-family: "思源宋体",-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
     -webkit-font-smoothing: antialiased;
