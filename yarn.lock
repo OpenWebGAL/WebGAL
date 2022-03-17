@@ -243,6 +243,11 @@
     "@babel/helper-validator-identifier" "^7.16.7"
     to-fast-properties "^2.0.0"
 
+"@icon-park/react@^1.3.5":
+  version "1.3.5"
+  resolved "https://registry.npmmirror.com/@icon-park/react/-/react-1.3.5.tgz#d0b94b39021c54f7cb45d0bce7d3f42994ce8dc0"
+  integrity sha512-FL3+BcYfFbRRl6DA6V2yA/QEoRRrhaDvMXLbFz0uW9lIsstQB6au/8aQxthB1G+eiqLxcw6yVULbmbBySn4Paw==
+
 "@jridgewell/resolve-uri@^3.0.3":
   version "3.0.5"
   resolved "https://registry.npmmirror.com/@jridgewell/resolve-uri/-/resolve-uri-3.0.5.tgz#68eb521368db76d040a6315cdb24bf2483037b9c"
