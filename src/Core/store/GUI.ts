@@ -32,7 +32,7 @@ interface IGuiState {
  */
 const initState: IGuiState = {
     showTitle: true,
-    showMenuPanel: false,
+    showMenuPanel: true,
     currentMenuTag: MenuPanelTag.Option,
     titleBg: '',
     titleBgm: ''
@@ -52,16 +52,30 @@ type GuiAsset = Pick<IGuiState, 'titleBgm' | 'titleBg'>
  */
 export function GuiStateStore() {
     const [GuiState, setGuiState] = useState(initState);
+    /**
+     * 设置各组件的可见性
+     * @param key 设置的组件
+     * @param value 可见性，true or false
+     */
     const setVisibility = <K extends keyof componentsVisibility>(key: K, value: boolean) => {
         GuiState[key] = value;
         setGuiState({...GuiState});
     }
 
+    /**
+     * 设置Menu组件显示的标签页
+     * @param value 标签页
+     */
     const setMenuPanelTag = (value: MenuPanelTag) => {
         GuiState.currentMenuTag = value;
         setGuiState({...GuiState});
     }
 
+    /**
+     * 设置标题页的资源路径
+     * @param key 资源名
+     * @param value 资源路径
+     */
     const setGuiAsset = <K extends keyof GuiAsset>(key: K, value: string) => {
         GuiState[key] = value;
         setGuiState({...GuiState});
