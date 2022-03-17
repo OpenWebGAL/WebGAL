@@ -2,10 +2,10 @@ import {FC} from "react";
 import {useStore} from "reto";
 import {GuiStateStore, MenuPanelTag} from "../../../Core/store/GUI";
 import styles from './menu.module.scss'
-import {MenuPanel} from "./MenuPanel";
-import {Save} from "./Save";
-import {Load} from "./Load";
-import {Options} from "./Options";
+import {MenuPanel} from "./MenuPanel/MenuPanel";
+import {Save} from "./Save/Save";
+import {Load} from "./Load/Load";
+import {Options} from "./Options/Options";
 
 const Menu: FC = () => {
     const GuiStore = useStore(GuiStateStore);
