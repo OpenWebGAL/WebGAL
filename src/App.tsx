@@ -7,6 +7,7 @@ import {initializeScript} from "./Core/controller/initializeScript";
 import {stageStateStore} from "./Core/store/stage";
 import {userDataStateStore} from "./Core/store/userData";
 import Menu from "./Components/UI/Menu/Menu";
+import {MainStage} from "./Components/Stage/MainStage";
 
 function App() {
     // 建立对所有状态存储的引用，方便管理
@@ -29,6 +30,7 @@ function App() {
                     <Provider of={GuiStateStore} storeRef={GuiStoreRef}>
                         <Title/>
                         <Menu/>
+                        <MainStage/>
                     </Provider>
                 </Provider>
             </Provider>

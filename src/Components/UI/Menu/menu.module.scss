@@ -3,6 +3,7 @@
   height: 100%;
   position: absolute;
   z-index: 13;
+  backdrop-filter: blur(1px);
 }
 
 .Menu_TagContent{
