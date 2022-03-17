@@ -8,7 +8,7 @@ import {useState} from "react"
  * @enum
  * 当前Menu页面显示的Tag
  */
-enum MenuPanelTag {
+export enum MenuPanelTag {
     Save,//“保存”选项卡
     Load,//“读取”选项卡
     Option//“设置”选项卡
