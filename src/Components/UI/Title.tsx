@@ -4,16 +4,16 @@ import {useStore} from 'reto'
 import {GuiStateStore} from "../../Core/store/GUI";
 
 const Title: FC = () => {
-    const GUIstate = useStore(GuiStateStore);
+    const GuiStore = useStore(GuiStateStore);
     return <>
-        {GUIstate.GuiState.showTitle &&
+        {GuiStore.GuiState.showTitle &&
             <div className={styles.Title_main}
                  style={{
-                     backgroundImage: `url("${GUIstate.GuiState.titleBg}")`,
+                     backgroundImage: `url("${GuiStore.GuiState.titleBg}")`,
                      backgroundSize: "cover"
                  }}>
                 Title
-                <div onClick={() => GUIstate.setVisibility('showTitle', false)}>
+                <div onClick={() => GuiStore.setVisibility('showTitle', false)}>
                     closeTitle
                 </div>
             </div>}

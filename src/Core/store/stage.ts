@@ -66,6 +66,11 @@ const initState:IStageState = {
 export function stageStateStore() {
     const [stageState, setStageState] = useState(initState);
 
+    /**
+     * 设置舞台状态，以后会改
+     * @param key
+     * @param value
+     */
     const setStage = <K extends keyof IStageState>(key: K, value: any) => {
         stageState[key] = value;
         setStageState({...stageState});
