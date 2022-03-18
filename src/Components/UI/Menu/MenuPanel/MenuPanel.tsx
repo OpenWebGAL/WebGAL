@@ -1,7 +1,6 @@
 import styles from './menuPanel.module.scss'
 import {useStore} from "reto";
 import {GuiStateStore, MenuPanelTag} from "../../../../Core/store/GUI";
-import {Save, SettingTwo, FolderOpen, Home, Logout} from "@icon-park/react";
 import {MenuPanelButton} from "./MenuPanelButton";
 
 export const MenuPanel = () => {
