@@ -1,0 +1,28 @@
+.Save_main {
+  height: 100%;
+  position: absolute;
+  cursor: default;
+}
+
+.Save_top {
+  height: 10%;
+  width: 100%;
+}
+
+.Save_title {
+  width: auto;
+  font-size: 225%;
+  margin: 0.5em 0 0.5em 0;
+  padding: 0.2em 2em 0.2em 1.5em;
+  box-sizing: border-box;
+  background-color: rgba(255, 255, 255, 0.99);
+  border-right: 0.2em solid rgba(74, 34, 93, 0.9);
+  box-shadow: .1em .1em .8em .2em rgba(255, 255, 255, 0.35);
+}
+
+.Save_title_text {
+  font-weight: bold;
+  color: transparent;
+  background: linear-gradient(135deg, rgba(74, 34, 93, 0.2) 0%, rgba(74, 34, 93, 0.6) 45%, rgba(74, 34, 93, 0.9) 100%);
+  -webkit-background-clip: text;
+}
