@@ -1,18 +1,26 @@
-import {FolderOpen} from "@icon-park/react";
 import styles from "./menuPanel.module.scss";
-import {FC} from "react";
+import {MenuIconMap} from "./MenuIconMap";
+import {IMenuPanel} from "./menuPanelInterface";
 
-export const MenuPanelButton: FC = (props: any) => {
-    return <div className={styles.MenuPanel_button + props.buttonOnClass}
+/**
+ * 菜单标签页切换按钮
+ * @param props
+ * @constructor
+ */
+export const MenuPanelButton = (props: IMenuPanel) => {
+    let buttonClassName = styles.MenuPanel_button;
+    if (props.hasOwnProperty('buttonOnClassName')) {
+        buttonClassName = buttonClassName + props.buttonOnClassName;
+    }
+    return <div className={buttonClassName}
                 onClick={() => {
-                    props.ClickFunc();
+                    props.clickFunc();
                 }}
                 style={{color: props.tagColor}}
     >
         <div className={styles.MenuPanel_button_icon}>
-            <FolderOpen theme="outline" size="1.2em" fill={props.iconColor}
-                        strokeWidth={2}/>
+            <MenuIconMap iconName={props.iconName} iconColor={props.iconColor}/>
         </div>
-        读档
+        {props.tagName}
     </div>
 }
