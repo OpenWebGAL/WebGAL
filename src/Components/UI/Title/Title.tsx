@@ -1,7 +1,7 @@
 import {FC} from 'react'
 import styles from './title.module.scss'
 import {useStore} from 'reto'
-import {GuiStateStore} from "../../Core/store/GUI";
+import {GuiStateStore} from "../../../Core/store/GUI";
 
 /**
  * 标题页
