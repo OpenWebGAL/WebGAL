@@ -36,7 +36,14 @@ code {
     }
 }
 
-@media screen and (max-width: 960px) {
+@media screen and (max-width: 1100px) {
+    /*手机端视图*/
+    #root {
+        font-size: 50%;
+    }
+}
+
+@media screen and (max-height: 650px) {
     /*手机端视图*/
     #root {
         font-size: 50%;

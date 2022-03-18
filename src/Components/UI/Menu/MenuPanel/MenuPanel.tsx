@@ -2,6 +2,7 @@ import styles from './menuPanel.module.scss'
 import {useStore} from "reto";
 import {GuiStateStore, MenuPanelTag} from "../../../../Core/store/GUI";
 import {MenuPanelButton} from "./MenuPanelButton";
+import {logger} from '../../../../Core/util/logger';
 
 export const MenuPanel = () => {
     const GuiStore = useStore(GuiStateStore);
@@ -39,7 +40,18 @@ export const MenuPanel = () => {
                              GuiStore.setMenuPanelTag(MenuPanelTag.Option)
                          }}
                          tagName={'选项'} key={'optionButton'}/>
-        <MenuPanelButton iconName={'title'} tagName={'标题'} key={'titleIcon'}/>
-        <MenuPanelButton iconName={'exit'} tagName={'结束'} key={'exitIcon'}/>
+        <MenuPanelButton iconName={'title'}
+                         clickFunc={() => {
+                             GuiStore.setVisibility('showTitle', true);
+                             GuiStore.setVisibility('showMenuPanel', false);
+                         }
+                         }
+                         tagName={'标题'} key={'titleIcon'}/>
+        <MenuPanelButton iconName={'exit'}
+                         clickFunc={() => {
+                             logger.info('退出');
+                         }
+                         }
+                         tagName={'结束'} key={'exitIcon'}/>
     </div>
 }
