@@ -6,16 +6,14 @@
 import {useState} from "react";
 
 /**
- * @interface
- * 游戏内变量
+ * @interface IGameVar 游戏内变量
  */
 interface IGameVar {
     [propName: string]: string | boolean | number //游戏内变量可以是字符串、布尔值、数字
 }
 
 /**
- * @interface
- * 游戏舞台数据接口
+ * @interface IStageState 游戏舞台数据接口
  */
 export interface IStageState {
     SceneName: string,//场景文件名
@@ -38,7 +36,7 @@ export interface IStageState {
 }
 
 //初始化舞台数据
-const initState:IStageState = {
+const initState: IStageState = {
     SceneName: '',//场景文件名
     SentenceID: 0,//语句ID
     bg_Name: '',//背景文件地址（相对或绝对）

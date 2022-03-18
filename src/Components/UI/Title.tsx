@@ -3,6 +3,10 @@ import styles from './title.module.scss'
 import {useStore} from 'reto'
 import {GuiStateStore} from "../../Core/store/GUI";
 
+/**
+ * 标题页
+ * @constructor
+ */
 const Title: FC = () => {
     const GuiStore = useStore(GuiStateStore);
     return <>

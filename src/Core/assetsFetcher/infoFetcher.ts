@@ -3,6 +3,10 @@ import {logger} from "../util/logger";
 import {assetSetter, fileType} from "../util/assetSetter";
 import {storeRef} from "../store/storeRef";
 
+/**
+ * 获取游戏信息
+ * @param url 游戏信息路径
+ */
 export const infoFetcher = (url: string) => {
     axios.get(url).then(r => {
         let gameConfigRaw: Array<string> = r.data.split('\n'); //游戏配置原始数据

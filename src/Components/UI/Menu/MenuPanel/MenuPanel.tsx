@@ -4,6 +4,10 @@ import {GuiStateStore, MenuPanelTag} from "../../../../Core/store/GUI";
 import {MenuPanelButton} from "./MenuPanelButton";
 import {logger} from '../../../../Core/util/logger';
 
+/**
+ * Menu页的底栏
+ * @constructor
+ */
 export const MenuPanel = () => {
     const GuiStore = useStore(GuiStateStore);
     //设置Menu按钮的高亮
