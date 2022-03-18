@@ -1,11 +1,13 @@
 /**
- * @file
- * 引擎初始化时会执行的脚本，包括获取游戏信息，初始化运行时变量，初始化用户数据存储
+ * @file 引擎初始化时会执行的脚本，包括获取游戏信息，初始化运行时变量，初始化用户数据存储
  */
 
 import {logger} from "../util/logger";
 import {infoFetcher} from "../assetsFetcher/infoFetcher";
 
+/**
+ * 引擎初始化函数
+ */
 export const initializeScript = (): void => {
     //打印初始log信息
     logger.info('WebGAL 3.9.7');

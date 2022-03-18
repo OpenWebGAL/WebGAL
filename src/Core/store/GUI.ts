@@ -1,11 +1,11 @@
 /**
- * 记录当前GUI的状态信息，引擎初始化时会重置。
+ * @file 记录当前GUI的状态信息，引擎初始化时会重置。
+ * @author Mahiru
  */
 import {useState} from "react"
 
 
 /**
- * @enum
  * 当前Menu页面显示的Tag
  */
 export enum MenuPanelTag {
@@ -15,8 +15,7 @@ export enum MenuPanelTag {
 }
 
 /**
- * @interface
- * GUI状态类型
+ * @interface IGuiState GUI状态接口
  */
 interface IGuiState {
     showTitle: boolean, //是否显示标题界面
@@ -27,7 +26,6 @@ interface IGuiState {
 }
 
 /**
- * @interface
  * 初始GUI状态表
  */
 const initState: IGuiState = {

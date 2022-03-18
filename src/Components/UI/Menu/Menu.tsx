@@ -7,6 +7,10 @@ import {Save} from "./Save/Save";
 import {Load} from "./Load/Load";
 import {Options} from "./Options/Options";
 
+/**
+ * Menu 页面，包括存读档、选项等
+ * @constructor
+ */
 const Menu: FC = () => {
     const GuiStore = useStore(GuiStateStore);
     let currentTag;
