@@ -1,16 +1,18 @@
 .Options_main {
-  height: 100%;
   position: absolute;
   cursor: default;
-}
-
-.Options_top {
-  height: 10%;
+  height: 90%;
   width: 100%;
 }
 
+.Options_top {
+  height: 15%;
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+}
+
 .Options_title {
-  width: auto;
   font-size: 225%;
   margin: 0.5em 0 0.5em 0;
   padding: 0.2em 2em 0.2em 1.5em;
@@ -25,4 +27,19 @@
   color: transparent;
   background: linear-gradient(135deg, rgba(81, 110, 65, 0.4) 0%, rgba(81, 110, 65, 0.6) 45%, rgba(81, 110, 65, 0.9) 100%);
   -webkit-background-clip: text;
+}
+
+.Options_main_content {
+  height: 85%;
+  display: flex;
+}
+
+.Options_main_content_half {
+  width: 50%;
+  display: flex;
+  flex-flow: row;
+  align-items: flex-start;
+  align-content: flex-start;
+  flex-wrap: wrap;
+  padding: 1em 1em 1em 1em;
 }
