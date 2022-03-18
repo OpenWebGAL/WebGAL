@@ -15,7 +15,7 @@ export enum fileType {
 }
 
 /**
- *
+ * 获取资源路径
  * @param fileName 资源的名称或地址
  * @param assetType 资源类型
  * @return {string} 处理后的资源路径（绝对或相对）
