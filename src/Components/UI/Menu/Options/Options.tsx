@@ -37,13 +37,13 @@ export const Options: FC = () => {
 
             </div>
             <div className={styles.Options_main_content_half}>
-                <NormalOption key={'option2'} title={'主音量'}>
+                <NormalOption key={'option4'} title={'主音量'}>
                     <OptionSlider/>
                 </NormalOption>
-                <NormalOption key={'option2'} title={'语音音量'}>
+                <NormalOption key={'option5'} title={'语音音量'}>
                     <OptionSlider/>
                 </NormalOption>
-                <NormalOption key={'option2'} title={'背景音乐音量'}>
+                <NormalOption key={'option6'} title={'背景音乐音量'}>
                     <OptionSlider/>
                 </NormalOption>
             </div>
