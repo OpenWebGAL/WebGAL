@@ -3,7 +3,7 @@
  */
 
 import {logger} from "../util/logger";
-import {infoFetcher} from "../assetsFetcher/infoFetcher";
+import {infoFetcher} from "../util/infoFetcher";
 import {resize} from "../util/resize";
 
 /**

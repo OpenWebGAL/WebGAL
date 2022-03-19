@@ -1,6 +1,6 @@
 import axios from "axios";
-import {logger} from "../util/logger";
-import {assetSetter, fileType} from "../util/assetSetter";
+import {logger} from "./logger";
+import {assetSetter, fileType} from "./assetSetter";
 import {storeRef} from "../store/storeRef";
 
 /**
