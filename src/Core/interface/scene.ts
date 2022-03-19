@@ -22,7 +22,7 @@ export interface arg {
 /**
  * 资源类型
  */
-enum assetType{
+enum assetType {
     audio, //音频
     video, //视频
     image, //图片
@@ -32,11 +32,11 @@ enum assetType{
  * 资源接口
  * @interface IAsset
  */
-export interface IAsset{
-    name:string, //资源名称
-    type:assetType, //资源类型
-    url:string, //资源url
-    lineNumber:number, //触发资源语句的行号
+export interface IAsset {
+    name: string, //资源名称
+    type: assetType, //资源类型
+    url: string, //资源url
+    lineNumber: number, //触发资源语句的行号
 }
 
 /**
@@ -46,7 +46,9 @@ export interface IAsset{
 export interface ISentence {
     command: commandType, //语句类型
     content: string, //语句内容
-    args: Array<arg> //参数列表
+    args: Array<arg>, //参数列表
+    sentenceAssets: Array<IAsset>, // 语句携带的资源列表
+    subScene: string // 语句包含子场景
 }
 
 /**
