@@ -1,7 +1,7 @@
 /**
  * 语句类型
  */
-enum commandType {
+export enum commandType {
     say, //对话
     changeBg, //更改背景
     changeFigure, //更改立绘
@@ -14,7 +14,7 @@ enum commandType {
  * 单个参数接口
  * @interface arg
  */
-interface arg {
+export interface arg {
     key: string, //参数键
     value: string | boolean | number //参数值
 }
@@ -32,7 +32,7 @@ enum assetType{
  * 资源接口
  * @interface IAsset
  */
-interface IAsset{
+export interface IAsset{
     name:string, //资源名称
     type:assetType, //资源类型
     url:string, //资源url
@@ -43,7 +43,7 @@ interface IAsset{
  * 单条语句接口
  * @interface ISentence
  */
-interface ISentence {
+export interface ISentence {
     command: commandType, //语句类型
     content: string, //语句内容
     args: Array<arg> //参数列表
