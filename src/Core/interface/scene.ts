@@ -35,6 +35,7 @@ enum assetType{
 interface IAsset{
     type:assetType, //资源类型
     url:string, //资源url
+    lineNumber:number, //触发资源语句的行号
 }
 
 /**
