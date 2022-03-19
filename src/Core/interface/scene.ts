@@ -20,6 +20,24 @@ interface arg {
 }
 
 /**
+ * 资源类型
+ */
+enum assetType{
+    audio, //音频
+    video, //视频
+    image, //图片
+}
+
+/**
+ * 资源接口
+ * @interface IAsset
+ */
+interface IAsset{
+    type:assetType, //资源类型
+    url:string, //资源url
+}
+
+/**
  * 单条语句接口
  * @interface ISentence
  */
@@ -36,6 +54,6 @@ interface ISentence {
 export interface IScene {
     sceneName: string, //场景名称
     sentenceList: Array<ISentence>, //语句列表
-    assetsList: Array<string>, //资源列表
+    assetsList: Array<IAsset>, //资源列表
     subSceneList: Array<string> //子场景列表
 }
