@@ -3,7 +3,8 @@
  * @interface IPerform
  */
 export interface IPerform {
-    performName: string,//演出名称
-    duration: number, //持续时间，单位为ms
-    stopFunction: any //结束演出的函数
+    performName: string,// 演出名称
+    duration: number, // 持续时间，单位为ms
+    stopFunction: any, // 结束演出的函数
+    interruptable : boolean //演出是否可以被打断
 }
