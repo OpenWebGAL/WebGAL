@@ -2,6 +2,7 @@ import {IAsset, IScene, ISentence} from "../interface/scene";
 import {scriptParser} from "./scriptParser/scriptParser";
 import {assetsPrefetcher} from "../util/assetsPrefetcher";
 import {scenePrefetcher} from "../util/scenePrefetcher";
+import {logger} from "../util/logger";
 
 
 /**
@@ -25,11 +26,13 @@ export const sceneParser = (rawScene: string, sceneName: string, sceneUrl: strin
     assetsPrefetcher(assetsList);
     //开始场景的预加载
     scenePrefetcher(subSceneList);
-    return {
+    const parsedScene: IScene = {
         sceneName: sceneName, //场景名称
         sceneUrl: sceneUrl,
         sentenceList: sentenceList, //语句列表
         assetsList: assetsList, //资源列表
         subSceneList: subSceneList  //子场景列表
-    };
+    }
+    logger.info('解析后的场景', parsedScene)
+    return parsedScene;
 }
