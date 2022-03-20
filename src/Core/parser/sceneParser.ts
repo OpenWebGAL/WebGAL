@@ -20,7 +20,7 @@ export const sceneParser = (rawScene: string, sceneName: string, sceneUrl: strin
         const returnSentence: ISentence = scriptParser(sentence);
         //在这里解析出语句可能携带的资源和场景，合并到 assetsList 和 subSceneList
         assetsList = [...assetsList, ...returnSentence.sentenceAssets];
-        subSceneList = [...subSceneList, returnSentence.subScene];
+        subSceneList = [...subSceneList, ...returnSentence.subScene];
         return returnSentence;
     });
     //开始资源的预加载
