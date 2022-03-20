@@ -1,7 +1,7 @@
 /**
- * @interface InormalButton 普通按钮的参数
+ * @interface INormalButton 普通按钮的参数
  */
-export interface InormalButton {
+export interface INormalButton {
     textList: Array<string>,
     functionList: Array<any>,
     currentChecked: number,

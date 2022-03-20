@@ -1,8 +1,8 @@
 import {ReactElement} from "react";
-import {InormalButton} from "./OptionInterface";
+import {INormalButton} from "./OptionInterface";
 import styles from './normalButton.module.scss';
 
-export const NormalButton = (props: InormalButton) => {
+export const NormalButton = (props: INormalButton) => {
     const len: number = props.textList.length;
     const buttonList: Array<ReactElement> = [];
     for (let i = 0; i < len; i++) {
