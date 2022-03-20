@@ -1,47 +1,29 @@
 {
-  "homepage": "./",
   "name": "webgal",
-  "version": "3.9.7",
   "private": true,
+  "version": "4.0.0",
+  "scripts": {
+    "dev": "vite --host 3000",
+    "build": "tsc && vite build --base=./",
+    "preview": "vite preview"
+  },
   "dependencies": {
     "@icon-park/react": "^1.3.5",
-    "axios": "^0.26.0",
+    "axios": "^0.26.1",
     "cloudlogjs": "^1.0.9",
     "localforage": "^1.10.0",
-    "pako": "1.0.10",
+    "lodash": "^4.17.21",
     "pixi.js": "^6.2.2",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
-    "react-scripts": "4.0.3",
-    "web-vitals": "^1.1.2"
-  },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+    "reto": "^0.9.3",
+    "sass": "^1.49.9"
   },
   "devDependencies": {
-    "@testing-library/jest-dom": "^5.16.2",
-    "@testing-library/react": "^12.1.3",
-    "@testing-library/user-event": "^13.5.0"
+    "@types/react": "^17.0.33",
+    "@types/react-dom": "^17.0.10",
+    "@vitejs/plugin-react": "^1.0.7",
+    "typescript": "^4.5.4",
+    "vite": "^2.8.0"
   }
 }

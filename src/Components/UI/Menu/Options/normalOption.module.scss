@@ -1,0 +1,20 @@
+.NormalOption {
+  margin: 0.2em 1em 0.2em 1em;
+  padding: 0.2em 0.2em 0.2em 0.2em;
+  display: flex;
+  flex-flow: column;
+  align-items: flex-start;
+}
+
+.NormalOption_title {
+  color: rgba(81, 110, 65, 0.9);
+  font-size: 175%;
+  border-bottom: 2px solid rgba(81, 110, 65, 0.9);
+  padding: 0.15em 0.5em 0.15em 0.5em;
+  font-weight: bold;
+}
+
+.NormalOption_buttonList {
+  padding: 1em 0 1em 0;
+  display: flex;
+}

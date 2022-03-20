@@ -4,6 +4,8 @@
 
 ```
 main:稳定版
+4.X:下一代 WebGAL
+4.X-dev:下一代 WebGAL 开发版
 Dev_App_Version:正在开发的主要开发版，不保证稳定性
 Dev_Static_Version:留档，旧的静态网页开发版，请不要使用此分支
 ```
