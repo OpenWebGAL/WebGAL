@@ -2,6 +2,12 @@ import {arg} from "../../interface/scene";
 import {logger} from "../../util/logger";
 import {assetSetter, fileType} from "../../util/assetSetter";
 
+
+/**
+ * 参数解析器
+ * @param argsRaw 原始参数字符串
+ * @return {Array<arg>} 解析后的参数列表
+ */
 export const argsParser = (argsRaw: string): Array<arg> => {
     const returnArrayList: Array<arg> = [];
     //处理参数
