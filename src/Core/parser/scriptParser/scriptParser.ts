@@ -4,6 +4,7 @@ import {commandParser} from "./commandParser";
 import {argsParser} from "./argsParser";
 import {contentParser} from "./contentParser";
 import {assetsScanner} from "./assetsScanner";
+import {subSceneScanner} from "./subSceneScanner";
 
 
 /**
