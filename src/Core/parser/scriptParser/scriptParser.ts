@@ -2,6 +2,7 @@ import {arg, commandType, IAsset, ISentence, parsedCommand} from "../../interfac
 import {logger} from "../../util/logger";
 import {commandParser} from "./commandParser";
 import {argsParser} from "./argsParser";
+import {contentParser} from "./contentParser";
 
 
 /**
@@ -9,12 +10,12 @@ import {argsParser} from "./argsParser";
  * @param sentenceRaw 原始语句
  */
 export const scriptParser = (sentenceRaw: string): ISentence => {
-    let command = commandType.say;//默认为对话
-    let content: string = ''; //语句内容
+    let command: commandType;//默认为对话
+    let content: string; //语句内容
     let subScene: string = ''; //语句携带的子场景（可能没有）
     const args: Array<arg> = [];//语句参数列表
     const sentenceAssets: Array<IAsset> = [];//语句携带的资源列表
-    let parsedCommand: parsedCommand;
+    let parsedCommand: parsedCommand;//解析后的命令
 
     //正式开始解析
 
@@ -22,14 +23,14 @@ export const scriptParser = (sentenceRaw: string): ISentence => {
     sentenceRaw = sentenceRaw.split(';')[0];
     logger.info('当前句子：', sentenceRaw);
     //截取命令
-    const getCommandRedult = /:/.exec(sentenceRaw);
+    const getCommandResult = /:/.exec(sentenceRaw);
     //没有command，说明这是一条连续对话
-    if (!getCommandRedult) {
+    if (!getCommandResult) {
         command = commandType.say;
     } else {
-        const commandRaw: string = sentenceRaw.substring(0, getCommandRedult.index);
+        const commandRaw: string = sentenceRaw.substring(0, getCommandResult.index);
         logger.info('命令信息', commandRaw);
-        sentenceRaw = sentenceRaw.substring(getCommandRedult.index + 1, sentenceRaw.length);
+        sentenceRaw = sentenceRaw.substring(getCommandResult.index + 1, sentenceRaw.length);
         parsedCommand = commandParser(commandRaw);
         command = parsedCommand.type;
         for (const e of parsedCommand.additionalArgs) {
@@ -47,11 +48,11 @@ export const scriptParser = (sentenceRaw: string): ISentence => {
             args.push(e);
         }
     }
-    const contentRaw = sentenceRaw;
-    logger.info('语句内容', contentRaw);
+    content = contentParser(sentenceRaw);
+    logger.info('语句内容', content);
     const parsedSentence: ISentence = {
         command: command, //语句类型
-        content: contentRaw, //语句内容
+        content: content, //语句内容
         args: args, //参数列表
         sentenceAssets: sentenceAssets, //语句携带的资源列表
         subScene: subScene //语句携带的子场景
