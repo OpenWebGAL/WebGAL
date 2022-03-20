@@ -7,14 +7,12 @@ export const argsParser = (argsRaw: string): Array<arg> => {
     //处理参数
     //去空格
     argsRaw = argsRaw.replace(/ /g, '');
-    logger.info('去完空格', argsRaw);
     // 分割参数列表
     let rawArgsList: Array<string> = argsRaw.split('-');
     //去除空字符串
     rawArgsList = rawArgsList.filter(e => {
         return e !== ''
     });
-    logger.info('分割完后', rawArgsList);
     rawArgsList.forEach(e => {
         const argName = e.split('=')[0];
         const argValue = e.split('=')[1];
@@ -43,7 +41,7 @@ export const argsParser = (argsRaw: string): Array<arg> => {
                     if (!isNaN(Number(argValue))) {
                         returnArrayList.push({
                             key: argName,
-                            value: argValue
+                            value: Number(argValue)
                         })
                     } else {//是普通参数
                         returnArrayList.push({
