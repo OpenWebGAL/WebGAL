@@ -1,5 +1,4 @@
 import {arg} from "../../interface/scene";
-import {logger} from "../../util/logger";
 import {assetSetter, fileType} from "../../util/assetSetter";
 
 

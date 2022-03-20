@@ -2,14 +2,13 @@
  * @file 引擎初始化时会执行的脚本，包括获取游戏信息，初始化运行时变量，初始化用户数据存储
  */
 
-import {logger} from "../util/logger";
-import {infoFetcher} from "../util/infoFetcher";
-import {resize} from "../util/resize";
-import {assetSetter, fileType} from "../util/assetSetter";
-import {sceneFetcher} from "../util/sceneFetcher";
-import {runtime_currentSceneData} from "../runtime/sceneData";
-import {IScene} from "../interface/scene";
-import {sceneParser} from "../parser/sceneParser";
+import {logger} from "./util/logger";
+import {infoFetcher} from "./util/infoFetcher";
+import {resize} from "./util/resize";
+import {assetSetter, fileType} from "./util/assetSetter";
+import {sceneFetcher} from "./util/sceneFetcher";
+import {runtime_currentSceneData} from "./runtime/sceneData";
+import {sceneParser} from "./parser/sceneParser";
 
 /**
  * 引擎初始化函数

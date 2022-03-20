@@ -3,7 +3,7 @@ import {GuiStateStore} from "./Core/store/GUI";
 import Title from "./Components/UI/Title/Title";
 import {useEffect, useRef} from "react";
 import {storeRef} from "./Core/store/storeRef";
-import {initializeScript} from "./Core/controller/initializeScript";
+import {initializeScript} from "./Core/initializeScript";
 import {stageStateStore} from "./Core/store/stage";
 import {userDataStateStore} from "./Core/store/userData";
 import Menu from "./Components/UI/Menu/Menu";
