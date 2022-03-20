@@ -1,0 +1,45 @@
+.Options_main {
+  position: absolute;
+  cursor: default;
+  height: 90%;
+  width: 100%;
+}
+
+.Options_top {
+  height: 15%;
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+}
+
+.Options_title {
+  font-size: 225%;
+  margin: 0.5em 0 0.5em 0;
+  padding: 0.2em 2em 0.2em 1.5em;
+  box-sizing: border-box;
+  background-color: rgba(255, 255, 255, 0.99);
+  border-right: .2em solid rgba(81, 110, 65, 0.9);
+  box-shadow: .1em .1em .8em .2em rgba(0, 0, 0, 0.07);
+}
+
+.Option_title_text {
+  font-weight: bold;
+  color: transparent;
+  background: linear-gradient(135deg, rgba(81, 110, 65, 0.4) 0%, rgba(81, 110, 65, 0.6) 45%, rgba(81, 110, 65, 0.9) 100%);
+  -webkit-background-clip: text;
+}
+
+.Options_main_content {
+  height: 85%;
+  display: flex;
+}
+
+.Options_main_content_half {
+  width: 50%;
+  display: flex;
+  flex-flow: row;
+  align-items: flex-start;
+  align-content: flex-start;
+  flex-wrap: wrap;
+  padding: 1em 1em 1em 1em;
+}
