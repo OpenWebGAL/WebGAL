@@ -6,9 +6,7 @@
 
 ## 在线演示
 
-https://wg.msfasr.com
-
-https://webgal.xjqxz.top/ （国内镜像）
+https://demo.msfasr.com
 
 ## 如果你是想要开发属于自己的 Galgame 的开发者，请下载发行版：
 
