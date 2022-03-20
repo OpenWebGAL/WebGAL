@@ -10,6 +10,7 @@ import {logger} from "../util/logger";
  * @param rawScene 原始场景
  * @param sceneName 场景名称
  * @param sceneUrl 场景url
+ * @return {IScene} 解析后的场景
  */
 export const sceneParser = (rawScene: string, sceneName: string, sceneUrl: string): IScene => {
     const rawSentenceList = rawScene.split('\n');//原始句子列表
