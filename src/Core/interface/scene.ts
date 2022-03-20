@@ -57,7 +57,8 @@ export interface ISentence {
  */
 export interface IScene {
     sceneName: string, //场景名称
+    sceneUrl:string, //场景url
     sentenceList: Array<ISentence>, //语句列表
     assetsList: Array<IAsset>, //资源列表
-    subSceneList: Array<string> //子场景列表
+    subSceneList: Array<string> //子场景的url列表
 }

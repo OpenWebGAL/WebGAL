@@ -1,6 +1,6 @@
+import {ISentence} from "../interface/scene";
+
 /**
  * 当前的backlog
  */
-
-const currentBacklog: any = [];
-export default currentBacklog;
+export const runtime_currentBacklog: Array<ISentence> = [];
