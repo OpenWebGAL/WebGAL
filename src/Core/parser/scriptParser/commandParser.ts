@@ -5,7 +5,7 @@ import {commandType, parsedCommand} from "../../interface/scene";
  * @param commandRaw
  * @return {parsedCommand} 处理后的命令
  */
-const commandParser = (commandRaw: string): parsedCommand => {
+export const commandParser = (commandRaw: string): parsedCommand => {
     const returnCommand: parsedCommand = {
         type: commandType.say, //默认是say
         additionalArgs: []

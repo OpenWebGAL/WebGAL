@@ -1,5 +1,7 @@
-import {arg, commandType, IAsset, ISentence} from "../../interface/scene";
+import {arg, commandType, IAsset, ISentence, parsedCommand} from "../../interface/scene";
 import {logger} from "../../util/logger";
+import {commandParser} from "./commandParser";
+import {argsParser} from "./argsParser";
 
 
 /**
@@ -12,6 +14,7 @@ export const scriptParser = (sentenceRaw: string): ISentence => {
     let subScene: string = ''; //语句携带的子场景（可能没有）
     const args: Array<arg> = [];//语句参数列表
     const sentenceAssets: Array<IAsset> = [];//语句携带的资源列表
+    let parsedCommand: parsedCommand;
 
     //正式开始解析
 
@@ -27,6 +30,11 @@ export const scriptParser = (sentenceRaw: string): ISentence => {
         const commandRaw: string = sentenceRaw.substring(0, getCommandRedult.index);
         logger.info('命令信息', commandRaw);
         sentenceRaw = sentenceRaw.substring(getCommandRedult.index + 1, sentenceRaw.length);
+        parsedCommand = commandParser(commandRaw);
+        command = parsedCommand.type;
+        for (const e of parsedCommand.additionalArgs) {
+            args.push(e);
+        }
     }
     //截取参数区域
     const getArgsResult = / -/.exec(sentenceRaw);
@@ -35,6 +43,9 @@ export const scriptParser = (sentenceRaw: string): ISentence => {
         const argsRaw = sentenceRaw.substring(getArgsResult.index, sentenceRaw.length);
         logger.info('参数信息', argsRaw);
         sentenceRaw = sentenceRaw.substring(0, getArgsResult.index);
+        for (const e of argsParser(argsRaw)) {
+            args.push(e);
+        }
     }
     const contentRaw = sentenceRaw;
     logger.info('语句内容', contentRaw);

@@ -34,6 +34,9 @@ export const assetSetter = (fileName: string, assetType: fileType): string => {
             case fileType.scene:
                 returnFilePath = `./game/scene/${fileName}`;
                 break;
+            case fileType.vocal:
+                returnFilePath = `./game/vocal/${fileName}`;
+                break;
             default:
                 returnFilePath = ``;
                 break;
