@@ -31,6 +31,9 @@ export const assetSetter = (fileName: string, assetType: fileType): string => {
             case fileType.background:
                 returnFilePath = `./game/background/${fileName}`;
                 break;
+            case fileType.scene:
+                returnFilePath = `./game/scene/${fileName}`;
+                break;
             default:
                 returnFilePath = ``;
                 break;

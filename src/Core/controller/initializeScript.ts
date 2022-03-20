@@ -5,6 +5,11 @@
 import {logger} from "../util/logger";
 import {infoFetcher} from "../util/infoFetcher";
 import {resize} from "../util/resize";
+import {assetSetter, fileType} from "../util/assetSetter";
+import {sceneFetcher} from "../util/sceneFetcher";
+import {runtime_currentSceneData} from "../runtime/sceneData";
+import {IScene} from "../interface/scene";
+import {sceneParser} from "../parser/sceneParser";
 
 /**
  * 引擎初始化函数
@@ -19,8 +24,9 @@ export const initializeScript = (): void => {
     setTimeout(resize, 100)
     resize();
     window.onresize = resize;
+    //监听键盘 F11 事件，全屏时触发页面调整
     document.onkeydown = function (event) {
-        const e = event  || arguments.callee.caller.arguments[0];
+        const e = event || arguments.callee.caller.arguments[0];
         if (e && e.keyCode == 122) {
             setTimeout(() => {
                 resize();
@@ -29,5 +35,10 @@ export const initializeScript = (): void => {
     };
     //获取游戏信息
     infoFetcher('./game/config.txt');
-
+    //获取start场景
+    const sceneUrl: string = assetSetter('start.txt', fileType.scene);
+    //场景写入到运行时
+    sceneFetcher(sceneUrl).then(rawScene => {
+        runtime_currentSceneData.currentScene = sceneParser(rawScene, 'start.txt', sceneUrl);
+    })
 }
