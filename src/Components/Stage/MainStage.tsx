@@ -2,6 +2,7 @@ import {FC} from "react";
 import styles from './mainStage.module.scss'
 import {useStore} from "reto";
 import {GuiStateStore} from "../../Core/store/GUI";
+import {TextBox} from "./TextBox/TextBox";
 
 export const MainStage: FC = () => {
     const GuiStore = useStore(GuiStateStore);
@@ -11,6 +12,6 @@ export const MainStage: FC = () => {
                     backgroundSize: "cover"
                 }}
     >
-
+        <TextBox/>
     </div>
 }

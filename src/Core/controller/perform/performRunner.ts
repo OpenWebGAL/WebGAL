@@ -16,7 +16,8 @@ const performRunner = (perform: IRunPerform) => {
         stopFunction: () => {
         },
         blockingNext: () => false,
-        blockingAuto: () => true
+        blockingAuto: () => true,
+        stopTimeout: undefined
     }
     //TODO：启动演出，改变performController
 
