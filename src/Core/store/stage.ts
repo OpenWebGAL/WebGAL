@@ -4,19 +4,34 @@
  */
 
 import {useState} from "react";
+import {IRunPerform} from "../interface/perform";
 
 /**
- * @interface IGameVar 游戏内变量
+ * 游戏内变量
+ * @interface IGameVar
  */
 interface IGameVar {
     [propName: string]: string | boolean | number //游戏内变量可以是字符串、布尔值、数字
 }
+
+
+/**
+ * 基本效果接口
+ * @interface IEffect
+ */
+export interface IEffect {
+    target: string, //作用目标
+    transform: string,//变换
+    filter: string,//效果
+}
+
 
 /**
  * @interface IStageState 游戏舞台数据接口
  */
 export interface IStageState {
     SceneName: string,//场景文件名
+    sceneUrl: string,//场景路径
     SentenceID: number,//语句ID
     bg_Name: string,//背景文件地址（相对或绝对）
     fig_Name: string,//立绘_中 文件地址（相对或绝对）
@@ -30,14 +45,14 @@ export interface IStageState {
     bgm: string,//背景音乐 文件地址（相对或绝对）
     miniAvatar: string,//小头像 文件地址（相对或绝对）
     GameVar: IGameVar, //游戏内变量
-    bg_filter: string, //背景效果，是CSS语句
-    bg_transform: string, //背景变换，是CSS语句
-    pixiPerformList: Array<any> //作为背景的 pixi 演出
+    effects: Array<IEffect>,//应用的变换
+    PerformList: Array<IRunPerform> //要启动的演出列表
 }
 
 //初始化舞台数据
 const initState: IStageState = {
     SceneName: '',//场景文件名
+    sceneUrl: '',//场景url
     SentenceID: 0,//语句ID
     bg_Name: '',//背景文件地址（相对或绝对）
     fig_Name: '',//立绘_中 文件地址（相对或绝对）
@@ -51,9 +66,8 @@ const initState: IStageState = {
     bgm: '',//背景音乐 文件地址（相对或绝对）
     miniAvatar: '',//小头像 文件地址（相对或绝对）
     GameVar: {}, //游戏内变量
-    bg_filter: '', //背景效果，是CSS语句
-    bg_transform: '', //背景变换，是CSS语句
-    pixiPerformList: [] //作为背景的 pixi 演出
+    effects: [], //应用的效果
+    PerformList: [] //要启动的演出列表
 }
 
 /**
@@ -74,8 +88,13 @@ export function stageStateStore() {
         setStageState({...stageState});
     }
 
+    const getStageState = () => {
+        return stageState;
+    }
+
     return {
         stageState,
         setStage,
+        getStageState
     }
 }
