@@ -2,15 +2,20 @@ import {commandType, ISentence} from "../../interface/scene";
 import {runtime_currentBacklog} from "../../runtime/backlog";
 import {storeRef} from "../../store/storeRef";
 import {runtime_currentSceneData} from "../../runtime/sceneData";
+import {logger} from "../../util/logger";
+import {runScript} from "./runScript";
 
 /**
  * 语句执行器
  * 执行语句并根据情况立即执行下一句或者加入backlog
  */
 export const scriptExecutor = () => {
+    if (runtime_currentSceneData.currentSentenceId > runtime_currentSceneData.currentScene.sentenceList.length - 1)
+        return;
     const currentScript: ISentence = runtime_currentSceneData
         .currentScene
         .sentenceList[runtime_currentSceneData.currentSentenceId];
+    runScript(currentScript);
     let isNext = false;//是否要进行下一句
     currentScript.args.forEach(e => {
         if (e.key === 'next' && e.value) {

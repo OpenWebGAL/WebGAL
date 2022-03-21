@@ -8,8 +8,9 @@ export interface IPerform {
     isOver: boolean, //演出是否已经结束
     isHoldOn: boolean, //演出是不是一个保持类型的演出
     stopFunction: Function, // 卸载演出的函数
-    blockingNext: Function // 演出是否阻塞游戏流程继续（一个函数，返回 boolean类型的结果，判断要不要阻塞）
+    blockingNext: Function, // 演出是否阻塞游戏流程继续（一个函数，返回 boolean类型的结果，判断要不要阻塞）
     blockingAuto: Function //演出是否阻塞自动模式（一个函数，返回 boolean类型的结果，判断要不要阻塞）
+    stopTimeout: any,
 }
 
 //next之后，可以被打断的演出会被打断，不能被打断的演出会继续，阻塞next的演出会阻止next被响应。
@@ -20,8 +21,8 @@ export interface IPerform {
  * 启动演出接口
  * @interface IRunPerform
  */
-export interface IRunPerform{
-    type:string, //演出类型
-    script:string, //演出脚本
-    duration:number, //演出时间（单位是ms）
+export interface IRunPerform {
+    type: string, //演出类型
+    script: string, //演出脚本
+    duration: number, //演出时间（单位是ms）
 }

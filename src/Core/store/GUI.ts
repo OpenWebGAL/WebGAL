@@ -30,7 +30,7 @@ interface IGuiState {
  */
 const initState: IGuiState = {
     showTitle: true,
-    showMenuPanel: true,
+    showMenuPanel: false,
     currentMenuTag: MenuPanelTag.Option,
     titleBg: '',
     titleBgm: ''
