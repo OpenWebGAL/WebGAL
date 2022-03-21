@@ -22,7 +22,7 @@ export interface IPerform {
  * @interface IRunPerform
  */
 export interface IRunPerform {
-    type: string, //演出类型
+    isHoldOn: boolean, //演出类型
     script: string, //演出脚本
     duration: number, //演出时间（单位是ms）
 }

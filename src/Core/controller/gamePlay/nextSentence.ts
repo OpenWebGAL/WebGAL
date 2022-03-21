@@ -1,6 +1,7 @@
 import {scriptExecutor} from "./scriptExecutor";
 import {runtime_gamePlay} from "../../runtime/gamePlay";
 import {storeRef} from "../../store/storeRef";
+import {IRunPerform} from "../../interface/perform";
 
 export const nextSentence = () => {
     //检查是否存在 blockNext 的演出
@@ -23,7 +24,13 @@ export const nextSentence = () => {
         //清除演出序列（因为这时候已经准备进行下一句了）
         if (storeRef.stageRef) {
             const stageStore: any = storeRef.stageRef.current;
-
+            for (let i = 0; i < stageStore.stageState.PerformList.length; i++) {
+                const e: IRunPerform = stageStore.stageState.PerformList[i];
+                if (!e.isHoldOn) {
+                    stageStore.stageState.PerformList.splice(i, 1);
+                    i--;
+                }
+            }
         }
         scriptExecutor();
         return;
