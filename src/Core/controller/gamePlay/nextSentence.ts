@@ -1,8 +1,9 @@
 import {scriptExecutor} from "./scriptExecutor";
 import {runtime_gamePlay} from "../../runtime/gamePlay";
+import {storeRef} from "../../store/storeRef";
 
 export const nextSentence = () => {
-    //检查是否存在blockNext 的演出
+    //检查是否存在 blockNext 的演出
     let isBlockingNext = false;
     runtime_gamePlay.performList.forEach(e => {
         if (e.blockingNext() && !e.isOver) //阻塞且没有结束
@@ -19,6 +20,11 @@ export const nextSentence = () => {
             allsettled = false;
     })
     if (allsettled) {
+        //清除演出序列（因为这时候已经准备进行下一句了）
+        if (storeRef.stageRef) {
+            const stageStore: any = storeRef.stageRef.current;
+
+        }
         scriptExecutor();
         return;
     }
