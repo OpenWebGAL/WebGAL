@@ -3,11 +3,12 @@
  * 舞台状态是演出结束后的“终态”，在读档时不发生演出，只是将舞台状态替换为读取的状态。
  */
 
-import { useState } from "react";
+import {useState} from "react";
+import {IRunPerform} from "../interface/perform";
 
 /**
  * 游戏内变量
- * @interface IGameVar 
+ * @interface IGameVar
  */
 interface IGameVar {
     [propName: string]: string | boolean | number //游戏内变量可以是字符串、布尔值、数字
@@ -22,16 +23,6 @@ export interface IEffect {
     target: string, //作用目标
     transform: string,//变换
     filter: string,//效果
-}
-
-/**
- * 启动演出接口
- * @interface IRunPerform
- */
-export interface IRunPerform{
-    type:string, //演出类型
-    script:string, //演出脚本
-    duration:number, //演出时间（单位是ms）
 }
 
 
@@ -94,11 +85,16 @@ export function stageStateStore() {
      */
     const setStage = <K extends keyof IStageState>(key: K, value: any) => {
         stageState[key] = value;
-        setStageState({ ...stageState });
+        setStageState({...stageState});
+    }
+
+    const getStageState = () => {
+        return stageState;
     }
 
     return {
         stageState,
         setStage,
+        getStageState
     }
 }
