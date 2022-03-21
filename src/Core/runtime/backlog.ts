@@ -1,6 +1,6 @@
-import {ISentence} from "../interface/scene";
+import {IStageState} from "../store/stage";
 
 /**
  * 当前的backlog
  */
-export const runtime_currentBacklog: Array<ISentence> = [];
+export const runtime_currentBacklog: Array<any> = [];
