@@ -1,4 +1,4 @@
-import {commandType, parsedCommand} from "../../interface/scene";
+import { commandType, parsedCommand } from "../../interface/scene";
 
 /**
  * 处理命令
@@ -29,8 +29,55 @@ export const commandParser = (commandRaw: string): parsedCommand => {
  * @return {commandType} 得到的command类型
  */
 function getCommandType(command: string): commandType {
+    if (command.match(/if/)) {
+        return commandType.if;
+    }
+    switch (command) {
+        case 'intro':
+            return commandType.intro;
+        case 'changeBg':
+            return commandType.changeBg;
+        case 'changeFigure':
+            return commandType.changeFigure;
+        case 'miniAvatar':
+            return commandType.miniAvatar;
+        case 'changeScene':
+            return commandType.changeScene;
+        case 'choose':
+            return commandType.choose;
+        case 'end':
+            return commandType.end;
+        case 'bgm':
+            return commandType.bgm;
+        case 'playVideo':
+            return commandType.video;
+        case 'setBgAni':
+            return commandType.perform_bgAni;
+        case 'setFigAni':
+            return commandType.perform_FigAni;
+        case 'setBgTransform':
+            return commandType.setBgTransform;
+        case 'setBgFilter':
+            return commandType.setBgFilter;
+        case 'setFigTransform':
+            return commandType.setFigTransform;
+        case 'setFigFilter':
+            return commandType.setFigFilter;
+        case 'pixiInit':
+            return commandType.pixiInit;
+        case 'pixiPerform':
+            return commandType.pixi;
+        case 'label':
+            return commandType.label;
+        case 'jumpLabel':
+            return commandType.jumpLabel;
+        case 'chooseLabel':
+            return commandType.chooseLabel;
+        case 'setVar':
+            return commandType.setVar;
+        default:
+            //默认是对话
+            return commandType.say;
+    }
 
-
-    //默认是对话
-    return commandType.say;
 }

@@ -1,8 +1,9 @@
-import {IAsset, IScene, ISentence} from "../interface/scene";
-import {scriptParser} from "./scriptParser/scriptParser";
-import {assetsPrefetcher} from "../util/assetsPrefetcher";
-import {scenePrefetcher} from "../util/scenePrefetcher";
-import {logger} from "../util/logger";
+import { IAsset, IScene, ISentence } from "../interface/scene";
+import { scriptParser } from "./scriptParser/scriptParser";
+import { assetsPrefetcher } from "../util/assetsPrefetcher";
+import { scenePrefetcher } from "../util/scenePrefetcher";
+import { logger } from "../util/logger";
+import _ from 'lodash';
 
 
 /**
@@ -24,9 +25,12 @@ export const sceneParser = (rawScene: string, sceneName: string, sceneUrl: strin
         return returnSentence;
     });
     //开始资源的预加载
+    assetsList = _.uniqWith(assetsList); //去重
     assetsPrefetcher(assetsList);
     //开始场景的预加载
+    subSceneList = _.uniqWith(subSceneList); //去重
     scenePrefetcher(subSceneList);
+
     const parsedScene: IScene = {
         sceneName: sceneName, //场景名称
         sceneUrl: sceneUrl,
