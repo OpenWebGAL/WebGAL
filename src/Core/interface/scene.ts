@@ -7,7 +7,24 @@ export enum commandType {
     changeFigure, //更改立绘
     bgm, //更改背景音乐
     video, //播放视频
-    pixi //pixi演出
+    pixi, //pixi演出
+    pixiInit, //pixi初始化
+    intro, //黑屏文字演示
+    miniAvatar, //小头像
+    changeScene,// 切换场景
+    choose,//分支选择
+    end,//结束游戏
+    perform_bgAni, //背景动画演出
+    perform_FigAni, //人物动画演出
+    setBgTransform,// 背景变换
+    setFigTransform,//人物变换
+    setBgFilter,//背景效果
+    setFigFilter,//人物效果
+    label,//标签
+    jumpLabel,//跳转标签
+    chooseLabel,//选择标签
+    setVar,//设置变量
+    if,//条件跳转
 }
 
 /**
@@ -45,6 +62,7 @@ export interface IAsset {
  */
 export interface ISentence {
     command: commandType, //语句类型
+    commandRaw:string,//命令的原始内容，方便调试
     content: string, //语句内容
     args: Array<arg>, //参数列表
     sentenceAssets: Array<IAsset>, // 语句携带的资源列表

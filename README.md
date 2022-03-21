@@ -151,17 +151,17 @@ intro:回忆不需要适合的剧本，|反正一说出口，|都成了戏言。
 接下来，你可以通过以下简单的语句来改变当前显示的背景图片和人物立绘：
 
 ```
-changeBG:testBG03.jpg;//改变背景
-changeP:testFigure02.png;//改变人物立绘
-changeBG:none;//关闭背景
-changeP:none;//关闭人物立绘
+changeBg:testBG03.jpg;//改变背景
+changeFigure:testFigure02.png;//改变人物立绘
+changeBg:none;//关闭背景
+changeFigure:none;//关闭人物立绘
 ```
 
 你有可能会发现，在你改变背景图片或人物立绘后，你需要再点击一下鼠标才能显示下一条对话，如果你希望在改变背景图片/立绘后立即执行下一条语句的内容，请使用：
 
 ```
-changeBG:testBG03.jpg -next;
-changeP:testFigure02.png -next;//改变人物立绘
+changeBg:testBG03.jpg -next;
+changeFigure:testFigure02.png -next;//改变人物立绘
 一色:谢谢学姐！;
 ```
 
@@ -172,25 +172,25 @@ changeP:testFigure02.png -next;//改变人物立绘
 现在，你可以在页面的三个不同位置放置不同的立绘，只需要在放置立绘的语句处加上你要放置的位置就可以了，示例如下：
 
 ```
-changeP:testFigure03.png -left;
-changeP:testFigure04.png;
-changeP:testFigure03.png -right;
+changeFigure:testFigure03.png -left;
+changeFigure:testFigure04.png;
+changeFigure:testFigure03.png -right;
 ```
 
 以上三行分别对应着左、中、右三个不同的位置。三个不同位置的立绘是相互独立的，所以如果你需要清除立绘，必须分别独立清除：
 
 ```
-changeP:none -left;
-changeP:none;
-changeP:none -right;
+changeFigure:none -left;
+changeFigure:none;
+changeFigure:none -right;
 ```
 
 如果你想要在立绘改变后立刻执行下一条语句，操作方法与之前一样，即加上参数 `-next` :
 
 ```
-changeP:testFigure03.png -left -next;
-changeP:testFigure04.png -next;
-changeP:testFigure03.png -right -next;
+changeFigure:testFigure03.png -left -next;
+changeFigure:testFigure04.png -next;
+changeFigure:testFigure03.png -right -next;
 ```
 
 ### 放置小头像：
@@ -240,7 +240,7 @@ changeScene:Chapter-2.txt;
 其中，`|`是分隔符。
 
 ```
-choose:{叫住她:Chapter-2.txt|回家:Chapter-3.txt};
+choose:叫住她:Chapter-2.txt|回家:Chapter-3.txt;
 ```
 
 你只需要将选项的文本与选择选项后要进入的剧本名称一一对应起来，就可以实现分支选择的功能了。
@@ -318,10 +318,10 @@ setFigAni:rightIn 1s -right;//对右侧立绘设置动画rightIn，执行1秒
 所以，你每次切换人物立绘，或是想要执行动画时，都要使用`setFigAni`:
 
 ```
-changeP:testFigure03.png -left -next;
+changeFigure:testFigure03.png -left -next;
 setFigAni:leftIn 1s -left;
-//这个动画只对这一次changeP生效
-changeP:testFigure04.png -left -next;
+//这个动画只对这一次changeFigure生效
+changeFigure:testFigure04.png -left -next;
 setFigAni:rightIn 1s -left;
 //现在你改变了左侧立绘，如果你需要一个动画，你需要再重新设置
 ```
@@ -480,7 +480,7 @@ label:label_1;
 
 ```
 WebGAL:让我们来测试分支跳转到label！;
-chooseLabel:{测试1:label_1,测试2:label_2};
+chooseLabel:测试1:label_1|测试2:label_2;
 label:label_1;
 现在应该是1号分支;
 jumpLabel:end;
@@ -495,7 +495,7 @@ label:end;
 
 ```
 WebGAL:让我们来测试分支跳转到label！;
-chooseLabel:{测试1:label_1,测试2:label_2};
+chooseLabel:测试1:label_1|测试2:label_2;
 label:label_1;
 现在应该是1号分支;
 label:label_2;
