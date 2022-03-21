@@ -2,7 +2,6 @@ import {commandType, ISentence} from "../../interface/scene";
 import {runtime_currentBacklog} from "../../runtime/backlog";
 import {storeRef} from "../../store/storeRef";
 import {runtime_currentSceneData} from "../../runtime/sceneData";
-import {logger} from "../../util/logger";
 import {runScript} from "./runScript";
 
 /**
