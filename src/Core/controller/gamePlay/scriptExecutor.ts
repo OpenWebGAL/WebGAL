@@ -3,6 +3,8 @@ import {runtime_currentBacklog} from "../../runtime/backlog";
 import {storeRef} from "../../store/storeRef";
 import {runtime_currentSceneData} from "../../runtime/sceneData";
 import {runScript} from "./runScript";
+import {logger} from "../../util/logger";
+import _ from 'lodash';
 
 /**
  * 语句执行器
@@ -28,7 +30,7 @@ export const scriptExecutor = () => {
     //同步当前舞台数据
     if (storeRef.stageRef) {
         const currentStageStoreRef: any = storeRef.stageRef.current;
-        currentStageStoreRef.setStage('SentenceID', runtime_currentSceneData.currentSentenceId);
+        currentStageStoreRef.setStage('sceneData', _.cloneDeep(runtime_currentSceneData));
         currentStageState = currentStageStoreRef.getStageState();
     }
     //执行“下一句”
@@ -42,4 +44,5 @@ export const scriptExecutor = () => {
         runtime_currentBacklog.push(currentStageState);
     }
     runtime_currentSceneData.currentSentenceId++;
+    logger.info('当前执行结果', currentStageState);
 }
