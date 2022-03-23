@@ -5,14 +5,13 @@ import {IScene} from "../interface/scene";
  * 当前的场景数据
  * @interface ISceneData
  */
-interface ISceneData {
+export interface ISceneData {
     currentSentenceId: number,//当前语句ID
     sceneStack: Array<sceneEntry>, //场景栈
     currentScene: IScene, //当前场景数据
 }
 
-//场景数据
-export const runtime_currentSceneData: ISceneData = {
+export const initSceneData = {
     currentSentenceId: 0,//当前语句ID
     sceneStack: [],
     //初始场景，没有数据
@@ -24,3 +23,5 @@ export const runtime_currentSceneData: ISceneData = {
         subSceneList: [] //子场景列表
     },
 }
+//场景数据
+export const runtime_currentSceneData: ISceneData = initSceneData;

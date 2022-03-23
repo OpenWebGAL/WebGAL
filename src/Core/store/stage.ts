@@ -5,6 +5,7 @@
 
 import {useState} from "react";
 import {IRunPerform} from "../interface/perform";
+import {initSceneData, ISceneData } from "../runtime/sceneData";
 
 /**
  * 游戏内变量
@@ -39,9 +40,7 @@ export interface IEffect {
  * @interface IStageState 游戏舞台数据接口
  */
 export interface IStageState {
-    SceneName: string,//场景文件名
-    sceneUrl: string,//场景路径
-    SentenceID: number,//语句ID
+    sceneData:ISceneData,
     bg_Name: string,//背景文件地址（相对或绝对）
     fig_Name: string,//立绘_中 文件地址（相对或绝对）
     fig_Name_left: string,//立绘_左 文件地址（相对或绝对）
@@ -60,9 +59,7 @@ export interface IStageState {
 
 //初始化舞台数据
 const initState: IStageState = {
-    SceneName: '',//场景文件名
-    sceneUrl: '',//场景url
-    SentenceID: 0,//语句ID
+    sceneData: initSceneData,
     bg_Name: '',//背景文件地址（相对或绝对）
     fig_Name: '',//立绘_中 文件地址（相对或绝对）
     fig_Name_left: '',//立绘_左 文件地址（相对或绝对）
