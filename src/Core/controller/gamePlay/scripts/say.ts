@@ -1,17 +1,15 @@
 import {ISentence} from "../../../interface/scene";
 import {storeRef} from "../../../store/storeRef";
-import {runtime_gamePlay} from "../../../runtime/gamePlay";
 import {IPerform} from "../../../interface/perform";
 import styles from '../../../../Components/Stage/TextBox/textbox.module.scss'
 
-export const say = (sentence: ISentence) => {
-    console.log(sentence.content)
+export const say = (sentence: ISentence):IPerform => {
     if (storeRef.stageRef) {
         const stageStore: any = storeRef.stageRef.current;
         stageStore.setStage('showText', sentence.content);
     }
     const performInitName: string = Math.random().toString();
-    const performController: IPerform = {
+    return {
         performName: performInitName,
         duration: sentence.content.length * 35 + 1500,
         isOver: false,
@@ -25,9 +23,6 @@ export const say = (sentence: ISentence) => {
         },
         blockingNext: () => false,
         blockingAuto: () => true,
-        stopTimeout: undefined
-    }
-    performController.stopTimeout = setTimeout(performController.stopFunction, performController.duration);
-    runtime_gamePlay.performList.push(performController)
-    console.log(runtime_gamePlay.performList)
+        stopTimeout: undefined,//暂时不用，后面会交给自动清除
+    };
 }

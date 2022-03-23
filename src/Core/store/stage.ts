@@ -14,6 +14,15 @@ interface IGameVar {
     [propName: string]: string | boolean | number //游戏内变量可以是字符串、布尔值、数字
 }
 
+/**
+ * 单个选项
+ * @interface IChooseItem
+ */
+interface IChooseItem {
+    key: string, //选项名称
+    targetScene: string, // 选项target
+    isSubScene: boolean, // 是否是子场景调用
+}
 
 /**
  * 基本效果接口
@@ -40,7 +49,7 @@ export interface IStageState {
     showText: string,//文字
     showName: string,//人物名
     command: string,//语句指令
-    choose: Array<any>,//选项列表
+    choose: Array<IChooseItem>,//选项列表
     vocal: string,//语音 文件地址（相对或绝对）
     bgm: string,//背景音乐 文件地址（相对或绝对）
     miniAvatar: string,//小头像 文件地址（相对或绝对）
