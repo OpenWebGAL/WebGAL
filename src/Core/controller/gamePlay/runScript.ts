@@ -5,6 +5,10 @@ import {unmountPerform} from "../perform/unmountPerform";
 import {storeRef} from "../../store/storeRef";
 import {runtime_gamePlay} from "../../runtime/gamePlay";
 
+/**
+ * 语句调用器，真正执行语句的调用，并自动将演出在指定时间卸载
+ * @param script 调用的语句
+ */
 export const runScript = (script: ISentence) => {
     let perform: IPerform = {
         performName: 'init',
