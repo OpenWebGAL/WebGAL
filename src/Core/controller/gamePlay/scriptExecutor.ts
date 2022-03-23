@@ -31,11 +31,13 @@ export const scriptExecutor = () => {
         currentStageStoreRef.setStage('SentenceID', runtime_currentSceneData.currentSentenceId);
         currentStageState = currentStageStoreRef.getStageState();
     }
+    //执行“下一句”
     if (isNext) {
         runtime_currentSceneData.currentSentenceId++;
         scriptExecutor();
         return;
     }
+    //保存 backlog
     if (isSaveBacklog) {
         runtime_currentBacklog.push(currentStageState);
     }
