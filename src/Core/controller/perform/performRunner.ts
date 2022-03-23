@@ -10,7 +10,7 @@ const performRunner = (perform: IRunPerform) => {
     const performInitName: string = Math.random().toString();
     const performController: IPerform = {
         performName: performInitName,
-        duration: perform.duration,
+        duration: 100,
         isOver: false,
         isHoldOn: false,
         stopFunction: () => {
