@@ -39,7 +39,7 @@ export const nextSentence = () => {
         return;
     }
 
-    //清除所有普通演出
+    //不处于 allsettled 状态，清除所有普通演出，强制进入settled。
     logger.info('清除普通演出')
     for (let i = 0; i < runtime_gamePlay.performList.length; i++) {
         const e = runtime_gamePlay.performList[i];
