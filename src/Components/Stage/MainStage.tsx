@@ -7,10 +7,10 @@ import {stageStateStore} from "../../Core/store/stage";
 export const MainStage: FC = () => {
     const stageStore = useStore(stageStateStore);
     return <div className={styles.MainStage_main}>
-        <div key={'bgMain'+stageStore.stageState.bg_Name}
+        <div key={'bgMain'+stageStore.stageState.bgName}
             id={'MainStage_bg_MainContainer'}
              className={styles.MainStage_bgContainer_onChange} style={{
-            backgroundImage: `url("${stageStore.stageState.bg_Name}")`,
+            backgroundImage: `url("${stageStore.stageState.bgName}")`,
             backgroundSize: "cover"
         }}/>
         <div key={'bgOld'+stageStore.stageState.oldBgName}
