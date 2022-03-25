@@ -53,9 +53,10 @@ export const MenuPanel = () => {
                          tagName={'标题'} key={'titleIcon'}/>
         <MenuPanelButton iconName={'exit'}
                          clickFunc={() => {
-                             logger.info('退出');
+                             logger.info('返回');
+                             GuiStore.setVisibility('showMenuPanel',false);
                          }
                          }
-                         tagName={'结束'} key={'exitIcon'}/>
+                         tagName={'返回'} key={'exitIcon'}/>
     </div>
 }
