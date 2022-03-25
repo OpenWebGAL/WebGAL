@@ -8,7 +8,7 @@ export const TextBox = () => {
     //拆字
     const textArray: Array<string> = StageStore.stageState.showText.split('');
     const textElementList = textArray.map((e, index) => {
-        return <span className={styles.TextBox_textElement}
+        return <span className={styles.TextBox_textElement_Settled}
                      key={index + 'textElement' + e}
                      style={{animationDelay: '' + index * 35 + 'ms'}}>{e}</span>;
     })
