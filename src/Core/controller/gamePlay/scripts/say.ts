@@ -7,6 +7,13 @@ import {getRandomPerformName} from "../../../util/getRandomPerformName";
 export const say = (sentence: ISentence): IPerform => {
     const stageStore: any = getRef('stageRef');
     stageStore.setStage('showText', sentence.content);
+    setTimeout(()=>{
+        const textElements = document.querySelectorAll('.' + styles.TextBox_textElement_Settled);
+        const textArray = [...textElements];
+        textArray.forEach(e => {
+            e.className = styles.TextBox_textElement;
+        })
+    },0);
     const performInitName: string = getRandomPerformName();
     return {
         performName: performInitName,
