@@ -1,14 +1,14 @@
 import {commandType, ISentence} from "../../interface/scene";
 import {runtime_currentBacklog} from "../../runtime/backlog";
-import {storeRef} from "../../store/storeRef";
+import {getRef} from "../../store/storeRef";
 import {runtime_currentSceneData} from "../../runtime/sceneData";
 import {runScript} from "./runScript";
 import {logger} from "../../util/logger";
-import _ from 'lodash';
+import {ISaveSceneData} from "../../store/stage";
 
 /**
  * 语句执行器
- * 执行语句并根据情况立即执行下一句或者加入backlog
+ * 执行语句，同步场景状态，并根据情况立即执行下一句或者加入backlog
  */
 export const scriptExecutor = () => {
     //超过总语句数量，则不继续流程
@@ -28,11 +28,14 @@ export const scriptExecutor = () => {
     const isSaveBacklog = currentScript.command === commandType.say; //是否在本句保存backlog（一般遇到对话保存）
     let currentStageState: any;
     //同步当前舞台数据
-    if (storeRef.stageRef) {
-        const currentStageStoreRef: any = storeRef.stageRef.current;
-        currentStageStoreRef.setStage('sceneData', _.cloneDeep(runtime_currentSceneData));
-        currentStageState = currentStageStoreRef.getStageState();
+    const currentStageStoreRef = getRef('stageRef');
+    const newSceneData: ISaveSceneData = {
+        name: runtime_currentSceneData.currentScene.sceneName,
+        url: runtime_currentSceneData.currentScene.sceneUrl,
+        currentSentence: runtime_currentSceneData.currentSentenceId,
     }
+    currentStageStoreRef.setStage('sceneData', newSceneData);
+    currentStageState = currentStageStoreRef.getStageState();
     //执行“下一句”
     if (isNext) {
         runtime_currentSceneData.currentSentenceId++;

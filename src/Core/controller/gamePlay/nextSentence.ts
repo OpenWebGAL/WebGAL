@@ -1,6 +1,6 @@
 import {scriptExecutor} from "./scriptExecutor";
 import {runtime_gamePlay} from "../../runtime/gamePlay";
-import {storeRef} from "../../store/storeRef";
+import {getRef} from "../../store/storeRef";
 import {IRunPerform} from "../../interface/perform";
 import {logger} from "../../util/logger";
 
@@ -18,28 +18,27 @@ export const nextSentence = () => {
     }
 
     //检查是否处于演出完成状态，不是则结束所有普通演出（保持演出不算做普通演出）
-    let allsettled = true;
+    let allSettled = true;
     runtime_gamePlay.performList.forEach(e => {
         if (!e.isHoldOn)
-            allsettled = false;
+            allSettled = false;
     })
-    if (allsettled) { // 所有普通演出已经结束
+    if (allSettled) { // 所有普通演出已经结束
         //清除状态表的演出序列（因为这时候已经准备进行下一句了）
-        if (storeRef.stageRef) {
-            const stageStore: any = storeRef.stageRef.current;
-            for (let i = 0; i < stageStore.stageState.PerformList.length; i++) {
-                const e: IRunPerform = stageStore.stageState.PerformList[i];
-                if (!e.isHoldOn) {
-                    stageStore.stageState.PerformList.splice(i, 1);
-                    i--;
-                }
+        const stageStore: any = getRef('stageRef');
+        for (let i = 0; i < stageStore.stageState.PerformList.length; i++) {
+            const e: IRunPerform = stageStore.stageState.PerformList[i];
+            if (!e.isHoldOn) {
+                stageStore.stageState.PerformList.splice(i, 1);
+                i--;
             }
         }
+
         scriptExecutor();
         return;
     }
 
-    //清除所有普通演出
+    //不处于 allSettled 状态，清除所有普通演出，强制进入settled。
     logger.info('清除普通演出')
     for (let i = 0; i < runtime_gamePlay.performList.length; i++) {
         const e = runtime_gamePlay.performList[i];

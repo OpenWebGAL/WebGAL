@@ -1,9 +1,9 @@
+import {ISentence} from "./scene";
+
 /**
  * 描述演出的接口，主要用于控制演出，而不是执行（在演出开始时被调用演出的执行器返回）
  * @interface IPerform
  */
-import {ISentence} from "./scene";
-
 export interface IPerform {
     performName: string,// 演出名称，用于在后面手动清除演出，如果没有标识，则代表不是保持演出，给予一个随机字符串
     duration: number, // 持续时间，单位为ms，持续时间到后强制设置该演出为“已经结束”状态
@@ -26,4 +26,19 @@ export interface IPerform {
 export interface IRunPerform {
     isHoldOn: boolean, //演出类型
     script: ISentence, //演出脚本
+}
+
+/**
+ * 初始化的演出
+ */
+export const initPerform:IPerform = {
+    performName: '',
+    duration: 100,
+    isOver: false,
+    isHoldOn: false,
+    stopFunction: () => {
+    },
+    blockingNext: () => false,
+    blockingAuto: () => true,
+    stopTimeout: undefined
 }

@@ -1,5 +1,4 @@
 import { arg, commandType, IAsset, ISentence, parsedCommand } from "../../interface/scene";
-import { logger } from "../../util/logger";
 import { commandParser } from "./commandParser";
 import { argsParser } from "./argsParser";
 import { contentParser } from "./contentParser";
@@ -24,11 +23,10 @@ export const scriptParser = (sentenceRaw: string): ISentence => {
 
     //去分号
     sentenceRaw = sentenceRaw.split(';')[0];
-    logger.info('当前句子：', sentenceRaw);
     //截取命令
     const getCommandResult = /:/.exec(sentenceRaw);
     //没有command，说明这是一条连续对话
-    if (!getCommandResult) {
+    if (getCommandResult === null) {
         command = commandType.say;
         commandRaw = '';
     } else {
@@ -61,6 +59,5 @@ export const scriptParser = (sentenceRaw: string): ISentence => {
         sentenceAssets: sentenceAssets, //语句携带的资源列表
         subScene: subScene //语句携带的子场景
     };
-    logger.info('处理后句子：', parsedSentence);
     return parsedSentence;
 }
