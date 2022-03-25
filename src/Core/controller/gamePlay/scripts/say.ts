@@ -1,5 +1,5 @@
 import {ISentence} from "../../../interface/scene";
-import {getRef, storeRef} from "../../../store/storeRef";
+import {getRef} from "../../../store/storeRef";
 import {IPerform} from "../../../interface/perform";
 import styles from '../../../../Components/Stage/TextBox/textbox.module.scss'
 

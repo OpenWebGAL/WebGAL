@@ -2,7 +2,7 @@ import {commandType, ISentence} from "../../interface/scene";
 import {say} from "./scripts/say";
 import {IPerform} from "../../interface/perform";
 import {unmountPerform} from "../perform/unmountPerform";
-import {getRef, storeRef} from "../../store/storeRef";
+import {getRef} from "../../store/storeRef";
 import {runtime_gamePlay} from "../../runtime/gamePlay";
 
 /**
