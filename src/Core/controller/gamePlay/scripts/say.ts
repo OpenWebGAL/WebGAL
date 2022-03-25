@@ -2,11 +2,12 @@ import {ISentence} from "../../../interface/scene";
 import {getRef} from "../../../store/storeRef";
 import {IPerform} from "../../../interface/perform";
 import styles from '../../../../Components/Stage/TextBox/textbox.module.scss'
+import {getRandomPerformName} from "../../../util/getRandomPerformName";
 
 export const say = (sentence: ISentence): IPerform => {
     const stageStore: any = getRef('stageRef');
     stageStore.setStage('showText', sentence.content);
-    const performInitName: string = Math.random().toString();
+    const performInitName: string = getRandomPerformName();
     return {
         performName: performInitName,
         duration: sentence.content.length * 35 + 1500,

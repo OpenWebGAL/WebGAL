@@ -12,7 +12,7 @@ export const commandParser = (commandRaw: string): parsedCommand => {
     }
     //开始处理命令内容
     const type: commandType = getCommandType(commandRaw);
-
+    returnCommand.type = type;
     //如果是对话，加上额外的参数
     if (type === commandType.say) {
         returnCommand.additionalArgs.push({
