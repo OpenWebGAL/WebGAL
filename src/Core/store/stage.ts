@@ -34,12 +34,19 @@ export interface IEffect {
     filter: string,//效果
 }
 
+/**
+ * 状态对当前场景的存储
+ * @interface ISaveSceneData
+ */
 export interface ISaveSceneData {
     name:string,
     url:string,
     currentSentence:number
 }
 
+/**
+ * 初始化场景状态存储
+ */
 const initSaveSceneData:ISaveSceneData = {
     name:'',
     url:'',
@@ -51,6 +58,7 @@ const initSaveSceneData:ISaveSceneData = {
  */
 export interface IStageState {
     sceneData:ISaveSceneData,
+    oldBgName:string,//旧背景的文件路径
     bg_Name: string,//背景文件地址（相对或绝对）
     fig_Name: string,//立绘_中 文件地址（相对或绝对）
     fig_Name_left: string,//立绘_左 文件地址（相对或绝对）
@@ -70,6 +78,7 @@ export interface IStageState {
 //初始化舞台数据
 const initState: IStageState = {
     sceneData: initSaveSceneData,
+    oldBgName:'',
     bg_Name: '',//背景文件地址（相对或绝对）
     fig_Name: '',//立绘_中 文件地址（相对或绝对）
     fig_Name_left: '',//立绘_左 文件地址（相对或绝对）

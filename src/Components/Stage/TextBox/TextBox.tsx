@@ -9,7 +9,7 @@ export const TextBox = () => {
     const textArray: Array<string> = StageStore.stageState.showText.split('');
     const textElementList = textArray.map((e, index) => {
         return <span className={styles.TextBox_textElement}
-                     key={index + 'textElement'+StageStore.stageState.sceneData.currentSentence}
+                     key={index + 'textElement' + e}
                      style={{animationDelay: '' + index * 35 + 'ms'}}>{e}</span>;
     })
     return <div className={styles.TextBox_main} onClick={nextSentence}>

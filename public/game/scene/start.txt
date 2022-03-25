@@ -1,3 +1,5 @@
 WebGAL:这是一条测试语句。 -v1.ogg -测试参数 -a=1 -b=true -c=参数值 ;
+changeBg:0000.png;
+changeBg:0000e.png;
 WebGAL:22222222222222222 -v1.ogg -测试参数 -a=1 -b=true -c=参数值 ;
 WebGAL:33333333333333333 -v1.ogg -测试参数 -a=1 -b=true -c=参数值 ;
