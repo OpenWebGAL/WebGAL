@@ -2,7 +2,7 @@ import {commandType, ISentence} from "../../interface/scene";
 import {say} from "./scripts/say";
 import {IPerform} from "../../interface/perform";
 import {unmountPerform} from "../perform/unmountPerform";
-import {storeRef} from "../../store/storeRef";
+import {getRef, storeRef} from "../../store/storeRef";
 import {runtime_gamePlay} from "../../runtime/gamePlay";
 
 /**
@@ -28,10 +28,8 @@ export const runScript = (script: ISentence) => {
     }
 
     //同步演出状态
-    if (storeRef.stageRef) {
-        const stageStore: any = storeRef.stageRef.current;
-        stageStore.stageState.PerformList.push({isHoldOn: perform.isHoldOn, script: script});
-    }
+    const stageStore: any = getRef('stageRef');
+    stageStore.stageState.PerformList.push({isHoldOn: perform.isHoldOn, script: script});
 
     //时间到后自动清理演出
     if (perform.performName !== 'init') {

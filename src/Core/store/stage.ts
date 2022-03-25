@@ -35,12 +35,23 @@ export interface IEffect {
     filter: string,//效果
 }
 
+export interface ISaveSceneData {
+    name:string,
+    url:string,
+    currentSentence:number
+}
+
+const initSaveSceneData:ISaveSceneData = {
+    name:'',
+    url:'',
+    currentSentence:0
+}
 
 /**
  * @interface IStageState 游戏舞台数据接口
  */
 export interface IStageState {
-    sceneData:ISceneData,
+    sceneData:ISaveSceneData,
     bg_Name: string,//背景文件地址（相对或绝对）
     fig_Name: string,//立绘_中 文件地址（相对或绝对）
     fig_Name_left: string,//立绘_左 文件地址（相对或绝对）
@@ -59,7 +70,7 @@ export interface IStageState {
 
 //初始化舞台数据
 const initState: IStageState = {
-    sceneData: initSceneData,
+    sceneData: initSaveSceneData,
     bg_Name: '',//背景文件地址（相对或绝对）
     fig_Name: '',//立绘_中 文件地址（相对或绝对）
     fig_Name_left: '',//立绘_左 文件地址（相对或绝对）
