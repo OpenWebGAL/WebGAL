@@ -5,7 +5,6 @@
 
 import {useState} from "react";
 import {IRunPerform} from "../interface/perform";
-import {initSceneData, ISceneData } from "../runtime/sceneData";
 
 /**
  * 游戏内变量

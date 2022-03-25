@@ -1,15 +1,14 @@
 import {commandType, ISentence} from "../../interface/scene";
 import {runtime_currentBacklog} from "../../runtime/backlog";
-import {getRef, storeRef} from "../../store/storeRef";
+import {getRef} from "../../store/storeRef";
 import {runtime_currentSceneData} from "../../runtime/sceneData";
 import {runScript} from "./runScript";
 import {logger} from "../../util/logger";
-import _ from 'lodash';
 import {ISaveSceneData} from "../../store/stage";
 
 /**
  * 语句执行器
- * 执行语句并根据情况立即执行下一句或者加入backlog
+ * 执行语句，同步场景状态，并根据情况立即执行下一句或者加入backlog
  */
 export const scriptExecutor = () => {
     //超过总语句数量，则不继续流程
