@@ -1,13 +1,11 @@
 import {ISentence} from "../../../interface/scene";
-import {storeRef} from "../../../store/storeRef";
+import {getRef, storeRef} from "../../../store/storeRef";
 import {IPerform} from "../../../interface/perform";
 import styles from '../../../../Components/Stage/TextBox/textbox.module.scss'
 
-export const say = (sentence: ISentence):IPerform => {
-    if (storeRef.stageRef) {
-        const stageStore: any = storeRef.stageRef.current;
-        stageStore.setStage('showText', sentence.content);
-    }
+export const say = (sentence: ISentence): IPerform => {
+    const stageStore: any = getRef('stageRef');
+    stageStore.setStage('showText', sentence.content);
     const performInitName: string = Math.random().toString();
     return {
         performName: performInitName,

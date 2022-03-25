@@ -1,6 +1,6 @@
 import {scriptExecutor} from "./scriptExecutor";
 import {runtime_gamePlay} from "../../runtime/gamePlay";
-import {storeRef} from "../../store/storeRef";
+import {getRef, storeRef} from "../../store/storeRef";
 import {IRunPerform} from "../../interface/perform";
 import {logger} from "../../util/logger";
 
@@ -25,16 +25,15 @@ export const nextSentence = () => {
     })
     if (allSettled) { // 所有普通演出已经结束
         //清除状态表的演出序列（因为这时候已经准备进行下一句了）
-        if (storeRef.stageRef) {
-            const stageStore: any = storeRef.stageRef.current;
-            for (let i = 0; i < stageStore.stageState.PerformList.length; i++) {
-                const e: IRunPerform = stageStore.stageState.PerformList[i];
-                if (!e.isHoldOn) {
-                    stageStore.stageState.PerformList.splice(i, 1);
-                    i--;
-                }
+        const stageStore: any = getRef('stageRef');
+        for (let i = 0; i < stageStore.stageState.PerformList.length; i++) {
+            const e: IRunPerform = stageStore.stageState.PerformList[i];
+            if (!e.isHoldOn) {
+                stageStore.stageState.PerformList.splice(i, 1);
+                i--;
             }
         }
+
         scriptExecutor();
         return;
     }
