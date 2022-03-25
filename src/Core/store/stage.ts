@@ -59,10 +59,10 @@ const initSaveSceneData:ISaveSceneData = {
 export interface IStageState {
     sceneData:ISaveSceneData,
     oldBgName:string,//旧背景的文件路径
-    bg_Name: string,//背景文件地址（相对或绝对）
-    fig_Name: string,//立绘_中 文件地址（相对或绝对）
-    fig_Name_left: string,//立绘_左 文件地址（相对或绝对）
-    fig_Name_right: string,//立绘_右 文件地址（相对或绝对）
+    bgName: string,//背景文件地址（相对或绝对）
+    figName: string,//立绘_中 文件地址（相对或绝对）
+    figNameLeft: string,//立绘_左 文件地址（相对或绝对）
+    figNameRight: string,//立绘_右 文件地址（相对或绝对）
     showText: string,//文字
     showName: string,//人物名
     command: string,//语句指令
@@ -79,10 +79,10 @@ export interface IStageState {
 const initState: IStageState = {
     sceneData: initSaveSceneData,
     oldBgName:'',
-    bg_Name: '',//背景文件地址（相对或绝对）
-    fig_Name: '',//立绘_中 文件地址（相对或绝对）
-    fig_Name_left: '',//立绘_左 文件地址（相对或绝对）
-    fig_Name_right: '',//立绘_右 文件地址（相对或绝对）
+    bgName: '',//背景文件地址（相对或绝对）
+    figName: '',//立绘_中 文件地址（相对或绝对）
+    figNameLeft: '',//立绘_左 文件地址（相对或绝对）
+    figNameRight: '',//立绘_右 文件地址（相对或绝对）
     showText: '',//文字
     showName: '',//人物名
     command: '',//语句指令

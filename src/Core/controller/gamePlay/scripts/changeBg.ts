@@ -7,7 +7,7 @@ import {getRef} from "../../../store/storeRef";
 export const changeBg = (sentence: ISentence): IPerform => {
     const oldBgName = getRef('stageRef').stageState.bg_Name;
     getRef('stageRef').setStage('oldBgName', oldBgName); //改变旧背景，使其渐变消失
-    getRef('stageRef').setStage('bg_Name', sentence.content);//改变新背景，使其呈现
+    getRef('stageRef').setStage('bgName', sentence.content);//改变新背景，使其呈现
     const performInitName: string = getRandomPerformName();
     return {
         performName: performInitName,
