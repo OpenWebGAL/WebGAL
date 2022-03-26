@@ -2,6 +2,8 @@ import axios from "axios";
 import {logger} from "./logger";
 import {assetSetter, fileType} from "./assetSetter";
 import {storeRef} from "../store/storeRef";
+import {gameInfo} from "../runtime/etc";
+import {getStorage} from "../controller/storage/storageController";
 
 /**
  * 获取游戏信息
@@ -27,6 +29,15 @@ export const infoFetcher = (url: string) => {
                 if (e[0] === 'Title_bgm') {
                     const url: string = assetSetter(e[1], fileType.background);
                     GuiState.setGuiAsset('titleBgm', url);
+                }
+                if (e[0] === 'Game_name') {
+                    gameInfo.gameName = e[1];
+                    document.title = e[1];
+
+                }
+                if (e[0] === 'Game_key') {
+                    gameInfo.gameKey = e[1];
+                    getStorage();
                 }
             })
         }
