@@ -9,6 +9,7 @@ import {getStorage, setStorage} from "../../../../Core/controller/storage/storag
 
 export const Options: FC = () => {
     const userDataStorage = useStore(userDataStateStore);
+    useEffect(getStorage, []);
     return <div className={styles.Options_main}>
         <div className={styles.Options_top}>
             <div className={styles.Options_title}>
@@ -84,13 +85,29 @@ export const Options: FC = () => {
             </div>
             <div className={styles.Options_main_content_half}>
                 <NormalOption key={'option4'} title={'主音量'}>
-                    <OptionSlider/>
+                    <OptionSlider initValue={userDataStorage.userDataState.optionData.volumeMain}
+                                  uniqueID={'主音量'} onChange={(event) => {
+                        const newValue = event.target.value;
+                        userDataStorage.setOptionData('volumeMain', Number(newValue));
+                        setStorage();
+                    }}
+                    />
                 </NormalOption>
                 <NormalOption key={'option5'} title={'语音音量'}>
-                    <OptionSlider/>
+                    <OptionSlider initValue={userDataStorage.userDataState.optionData.vocalVolume}
+                                  uniqueID={'语音音量'} onChange={(event) => {
+                        const newValue = event.target.value;
+                        userDataStorage.setOptionData('vocalVolume', Number(newValue));
+                        setStorage();
+                    }}/>
                 </NormalOption>
                 <NormalOption key={'option6'} title={'背景音乐音量'}>
-                    <OptionSlider/>
+                    <OptionSlider initValue={userDataStorage.userDataState.optionData.bgmVolume}
+                                  uniqueID={'背景音乐音量'} onChange={(event) => {
+                        const newValue = event.target.value;
+                        userDataStorage.setOptionData('bgmVolume', Number(newValue));
+                        setStorage();
+                    }}/>
                 </NormalOption>
             </div>
         </div>
