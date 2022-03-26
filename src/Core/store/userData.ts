@@ -15,6 +15,12 @@ export enum playSpeed {
     fast//快
 }
 
+export enum textSize {
+    small,
+    midium,
+    large
+}
+
 /**
  * @interface IOptionData 用户设置数据接口
  */
@@ -22,6 +28,7 @@ interface IOptionData {
     volumeMain: number,//主音量
     textSpeed: playSpeed,//文字速度
     autoSpeed: playSpeed,//自动播放速度
+    textSize: textSize,
     vocalVolume: number,//语音音量
     bgmVolume: number//背景音乐音量
 }
@@ -30,7 +37,7 @@ interface IOptionData {
  * @interface ISaveData 存档文件接口
  */
 interface ISaveData {
-    stageStage: IStageState, //舞台数据
+    backlog: Array<IStageState>, //舞台数据
     index: number,//存档的序号
     saveTime: string,//保存时间
 }
@@ -50,6 +57,7 @@ const initState: IUserData = {
         volumeMain: 100,//主音量
         textSpeed: playSpeed.normal,//文字速度
         autoSpeed: playSpeed.normal,//自动播放速度
+        textSize: textSize.midium,
         vocalVolume: 100,//语音音量
         bgmVolume: 50//背景音乐音量
     }
@@ -74,9 +82,15 @@ export function userDataStateStore() {
         setUserDataState({...newUserData});
     }
 
+    const setOptionData = <K extends keyof IOptionData>(key: K, value: any) => {
+        userDataState.optionData[key] = value;
+        setUserDataState({...userDataState});
+    }
+
     return {
         userDataState,
         setUserData,
-        replaceUserData
+        replaceUserData,
+        setOptionData
     }
 }
