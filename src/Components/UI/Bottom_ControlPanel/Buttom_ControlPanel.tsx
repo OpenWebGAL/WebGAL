@@ -2,6 +2,8 @@ import {AlignTextLeftOne, DoubleRight, FolderOpen, Home, PlayOne, ReplayMusic, S
 import styles from './bottom_controlPanel.module.scss'
 import {useStore} from "reto";
 import {GuiStateStore, MenuPanelTag} from "../../../Core/store/GUI";
+import {switchAuto} from "../../../Core/controller/gamePlay/autoPlay";
+import { switchFast } from '../../../Core/controller/gamePlay/fastSkip';
 
 export const Bottom_ControlPanel = () => {
     const GUIstore = useStore(GuiStateStore);
@@ -9,8 +11,8 @@ export const Bottom_ControlPanel = () => {
     return <div className={styles.main}>
         <AlignTextLeftOne theme="outline" size="36" fill="#f5f5f7" strokeWidth={3.5}/>
         <ReplayMusic theme="outline" size="36" fill="#f5f5f7" strokeWidth={3.5}/>
-        <PlayOne theme="outline" size="36" fill="#f5f5f7" strokeWidth={3.5}/>
-        <DoubleRight theme="outline" size="36" fill="#f5f5f7" strokeWidth={3.5}/>
+        <PlayOne onClick={switchAuto} theme="outline" size="36" fill="#f5f5f7" strokeWidth={3.5}/>
+        <DoubleRight onClick={switchFast} theme="outline" size="36" fill="#f5f5f7" strokeWidth={3.5}/>
         <Save onClick={() => {
             GUIstore.setMenuPanelTag(MenuPanelTag.Save);
             GUIstore.setVisibility('showMenuPanel', true);
