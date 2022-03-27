@@ -42,7 +42,18 @@ export const loadGame = (index: number) => {
     getRef('stageRef').restoreStage(newStageState);
 
     //恢复演出
-    
+    setTimeout(() => {
+        const event = new MouseEvent('click', {
+            'view': window,
+            'bubbles': true,
+            'cancelable': true,
+            'clientX': 0,
+        });
+        const textBox = document.getElementById('restorePerform_target');
+        if (textBox !== null) {
+            textBox.dispatchEvent(event);
+        }
+    }, 1);
 
     const GUIstate = getRef('GuiRef');
     GUIstate.setVisibility('showTitle', false);
