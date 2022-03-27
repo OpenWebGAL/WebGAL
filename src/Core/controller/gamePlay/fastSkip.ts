@@ -12,6 +12,16 @@ export const switchFast = () => {
         }
     } else { //当前不在快进
         runtime_gamePlay.isFast = true;
-        runtime_gamePlay.fastInterval = setInterval(nextSentence, 100);
+        runtime_gamePlay.fastInterval = setInterval(() => {
+            const event = new MouseEvent('click', {
+                'view': window,
+                'bubbles': true,
+                'cancelable': true
+            });
+            const textBox = document.getElementById('textBoxMain');
+            if (textBox !== null) {
+                textBox.dispatchEvent(event);
+            }
+        }, 100);
     }
 }

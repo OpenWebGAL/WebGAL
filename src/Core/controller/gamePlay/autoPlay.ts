@@ -25,5 +25,14 @@ const autoPlay = () => {
     if (isBlockingAuto) { //有阻塞，提前结束
         return;
     }
-    nextSentence();
+    // nextSentence();
+    const event = new MouseEvent('click', {
+        'view': window,
+        'bubbles': true,
+        'cancelable': true
+    });
+    const textBox = document.getElementById('textBoxMain');
+    if (textBox !== null) {
+        textBox.dispatchEvent(event);
+    }
 }

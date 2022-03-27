@@ -12,7 +12,7 @@ export const TextBox = () => {
                      key={index + 'textElement' + e}
                      style={{animationDelay: '' + index * 35 + 'ms'}}>{e}</span>;
     })
-    return <div className={styles.TextBox_main} onClick={nextSentence}>
+    return <div id={'textBoxMain'} className={styles.TextBox_main} onClick={nextSentence}>
         {textElementList}
     </div>
 }
