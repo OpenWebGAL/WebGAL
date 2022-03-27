@@ -1,5 +1,13 @@
 import {runtime_gamePlay} from "../../runtime/gamePlay";
 
+export const stopAuto = ()=>{
+    runtime_gamePlay.isAuto = false;
+    if (runtime_gamePlay.autoInterval !== null) {
+        clearInterval(runtime_gamePlay.autoInterval);
+        runtime_gamePlay.autoInterval = null;
+    }
+}
+
 //切换自动播放状态
 export const switchAuto = () => {
     //现在正在自动播放
@@ -25,7 +33,7 @@ const autoPlay = () => {
         return;
     }
     // nextSentence();
-    const event = new MouseEvent('click', {
+    const event = new MouseEvent('auxclick', {
         'view': window,
         'bubbles': true,
         'cancelable': true
