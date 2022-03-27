@@ -6,6 +6,7 @@
 import {useState} from "react";
 import {IRunPerform} from "../interface/perform";
 import * as _ from 'lodash'
+import {logger} from "../util/logger";
 
 /**
  * 游戏内变量
@@ -118,9 +119,14 @@ export function stageStateStore() {
         return stageState;
     }
 
+    const restoreStage = (newState: IStageState) => {
+        setStageState(state=>({...state,...newState}));
+    }
+
     return {
         stageState,
         setStage,
-        getStageState
+        getStageState,
+        restoreStage
     }
 }

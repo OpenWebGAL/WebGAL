@@ -3,6 +3,7 @@
  * @author Mahiru
  */
 import {useState} from "react"
+import {getStorage} from "../controller/storage/storageController";
 
 
 /**
@@ -56,6 +57,7 @@ export function GuiStateStore() {
      * @param value 可见性，true or false
      */
     const setVisibility = <K extends keyof componentsVisibility>(key: K, value: boolean) => {
+        getStorage();
         GuiState[key] = value;
         setGuiState({...GuiState});
     }
@@ -65,6 +67,7 @@ export function GuiStateStore() {
      * @param value 标签页
      */
     const setMenuPanelTag = (value: MenuPanelTag) => {
+        getStorage();
         GuiState.currentMenuTag = value;
         setGuiState({...GuiState});
     }
