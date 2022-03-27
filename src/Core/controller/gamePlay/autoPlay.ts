@@ -1,5 +1,4 @@
 import {runtime_gamePlay} from "../../runtime/gamePlay";
-import {nextSentence} from "./nextSentence";
 
 //切换自动播放状态
 export const switchAuto = () => {
