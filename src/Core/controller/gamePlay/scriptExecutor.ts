@@ -5,6 +5,7 @@ import {runtime_currentSceneData} from "../../runtime/sceneData";
 import {runScript} from "./runScript";
 import {logger} from "../../util/logger";
 import {ISaveSceneData} from "../../store/stage";
+import * as _ from 'lodash';
 
 /**
  * 语句执行器
@@ -42,10 +43,12 @@ export const scriptExecutor = () => {
         scriptExecutor();
         return;
     }
+    logger.info('当前执行结果', currentStageState);
     //保存 backlog
     if (isSaveBacklog) {
-        runtime_currentBacklog.push(currentStageState);
+        runtime_currentBacklog.push(_.cloneDeep(currentStageState));
+        logger.info('当前backlog',_.cloneDeep(runtime_currentBacklog));
     }
     runtime_currentSceneData.currentSentenceId++;
-    logger.info('当前执行结果', currentStageState);
+
 }
