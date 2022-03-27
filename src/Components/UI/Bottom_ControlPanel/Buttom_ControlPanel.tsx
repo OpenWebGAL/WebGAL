@@ -3,7 +3,7 @@ import styles from './bottom_controlPanel.module.scss'
 import {useStore} from "reto";
 import {GuiStateStore, MenuPanelTag} from "../../../Core/store/GUI";
 import {switchAuto} from "../../../Core/controller/gamePlay/autoPlay";
-import { switchFast } from '../../../Core/controller/gamePlay/fastSkip';
+import {switchFast} from '../../../Core/controller/gamePlay/fastSkip';
 
 export const Bottom_ControlPanel = () => {
     const GUIstore = useStore(GuiStateStore);
