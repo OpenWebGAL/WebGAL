@@ -1,6 +1,5 @@
 //切换自动播放状态
 import {runtime_gamePlay} from "../../runtime/gamePlay";
-import {nextSentence} from "./nextSentence";
 
 export const switchFast = () => {
     //现在正在快进
