@@ -17,14 +17,12 @@ const Title: FC = () => {
                      backgroundImage: `url("${GuiStore.GuiState.titleBg}")`,
                      backgroundSize: "cover"
                  }}>
-                <div id={'Title_starter'} className={styles.Title_starter}
-                     onClick={() => {
-                         playBgm(GuiStore.GuiState.titleBgm);
-                         const titleStarter = document.getElementById('Title_starter');
-                         if (titleStarter !== null) {
-                             titleStarter.style.display = 'none';
-                         }
-                     }}/>
+                {GuiStore.GuiState.showStarter &&
+                    <div id={'Title_starter'} className={styles.Title_starter}
+                         onClick={() => {
+                             playBgm(GuiStore.GuiState.titleBgm);
+                             GuiStore.setVisibility('showStarter', false);
+                         }}/>}
                 <div className={styles.Title_buttonList}>
                     <div className={styles.Title_button} onClick={() => GuiStore.setVisibility('showTitle', false)}>
                         开始游戏
