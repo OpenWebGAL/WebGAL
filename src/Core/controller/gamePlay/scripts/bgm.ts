@@ -1,7 +1,5 @@
 import {ISentence} from "../../../interface/scene";
 import {IPerform} from "../../../interface/perform";
-import {logger} from "../../../util/logger";
-import {getRef} from "../../../store/storeRef";
 import {playBgm} from "../../../util/playBgm";
 
 export const bgm = (sentence: ISentence): IPerform => {
