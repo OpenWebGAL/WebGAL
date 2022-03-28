@@ -4,19 +4,29 @@ import {getRef} from "../../store/storeRef";
 import {logger} from "../../util/logger";
 import {IUserData} from "../../store/userData";
 
-
+/**
+ * 写入本地存储
+ */
 export const setStorage = debounce(() => {
     localforage.setItem(gameInfo.gameKey, getRef('userDataRef').userDataState).then(() => {
         logger.info('写入本地存储');
     });
 }, 100);
 
+/**
+ * 从本地存储获取数据
+ */
 export const getStorage = debounce(() => {
     localforage.getItem(gameInfo.gameKey).then(newUserData => {
         getRef('userDataRef').replaceUserData(<IUserData>newUserData);
     })
 }, 100);
 
+/**
+ * 防抖函数
+ * @param func 要执行的函数
+ * @param wait 防抖等待时间
+ */
 function debounce(func: Function, wait: number) {
     let timeout: any;
 

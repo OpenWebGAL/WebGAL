@@ -1,5 +1,9 @@
 import {runtime_gamePlay} from "../../runtime/gamePlay";
 
+
+/**
+ * 停止自动播放
+ */
 export const stopAuto = () => {
     runtime_gamePlay.isAuto = false;
     if (runtime_gamePlay.autoInterval !== null) {
@@ -12,7 +16,9 @@ export const stopAuto = () => {
     }
 }
 
-//切换自动播放状态
+/**
+ * 切换自动播放状态
+ */
 export const switchAuto = () => {
     //现在正在自动播放
     if (runtime_gamePlay.isAuto) {
