@@ -13,6 +13,8 @@ export const contentParser = (contentRaw: string, type: commandType) => {
             return assetSetter(contentRaw, fileType.background);
         case commandType.changeFigure:
             return assetSetter(contentRaw, fileType.figure);
+        case commandType.bgm:
+            return assetSetter(contentRaw, fileType.bgm);
         default:
             return contentRaw;
     }

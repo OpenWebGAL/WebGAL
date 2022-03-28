@@ -20,7 +20,7 @@ export const TextBox = () => {
     return <div id={'textBoxMain'} className={styles.TextBox_main} onClick={() => {
         stopAll();
         nextSentence();
-    }} onAuxClick={nextSentence}>
+    }}>
         {StageStore.stageState.showName !== '' &&
             <div className={styles.TextBox_showName}>{StageStore.stageState.showName}</div>}
         <div>

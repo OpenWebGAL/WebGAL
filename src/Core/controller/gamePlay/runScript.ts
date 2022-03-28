@@ -6,6 +6,7 @@ import {getRef} from "../../store/storeRef";
 import {runtime_gamePlay} from "../../runtime/gamePlay";
 import {changeBg} from "./scripts/changeBg";
 import {changeFigure} from "./scripts/changeFigure";
+import {bgm} from "./scripts/bgm";
 
 /**
  * 规范函数的类型
@@ -31,6 +32,9 @@ export const runScript = (script: ISentence) => {
             break;
         case commandType.changeFigure:
             funcToRun = changeFigure;
+            break;
+        case commandType.bgm:
+            funcToRun = bgm;
             break;
     }
 

@@ -40,6 +40,9 @@ export const assetSetter = (fileName: string, assetType: fileType): string => {
             case fileType.figure:
                 returnFilePath = `./game/figure/${fileName}`;
                 break;
+            case fileType.bgm:
+                returnFilePath = `./game/bgm/${fileName}`;
+                break;
             default:
                 returnFilePath = ``;
                 break;

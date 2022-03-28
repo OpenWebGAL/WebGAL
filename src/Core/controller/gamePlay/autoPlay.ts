@@ -1,4 +1,6 @@
 import {runtime_gamePlay} from "../../runtime/gamePlay";
+import {eventSender} from "../eventBus/eventSender";
+import {logger} from "../../util/logger";
 
 
 /**
@@ -43,18 +45,8 @@ const autoPlay = () => {
         return;
     }
     // nextSentence();
-    if(runtime_gamePlay.autoTimeout === null){
-        runtime_gamePlay.autoTimeout = setTimeout(() => {
-            const event = new MouseEvent('auxclick', {
-                'view': window,
-                'bubbles': true,
-                'cancelable': true
-            });
-            const textBox = document.getElementById('textBoxMain');
-            if (textBox !== null) {
-                textBox.dispatchEvent(event);
-            }
-            runtime_gamePlay.autoTimeout = null;
-        }, 500);
+    if (runtime_gamePlay.autoTimeout === null) {
+        logger.warn('nextSentenceEvent Sended')
+        runtime_gamePlay.autoTimeout = eventSender('nextSentence_target', 0, 500);
     }
 }
