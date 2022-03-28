@@ -3,6 +3,7 @@ import styles from './mainStage.module.scss'
 import {useStore} from "reto";
 import {TextBox} from "./TextBox/TextBox";
 import {stageStateStore} from "../../Core/store/stage"
+import {FigureContainer} from "./FigureContainer/FigureContainer";
 
 export const MainStage: FC = () => {
     const stageStore = useStore(stageStateStore);
@@ -18,6 +19,7 @@ export const MainStage: FC = () => {
             backgroundImage: `url("${stageStore.stageState.oldBgName}")`,
             backgroundSize: "cover"
         }}/>
+        <FigureContainer/>
         <TextBox/>
     </div>
 }

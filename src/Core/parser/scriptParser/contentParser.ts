@@ -11,6 +11,8 @@ export const contentParser = (contentRaw: string, type: commandType) => {
     switch (type) {
         case commandType.changeBg:
             return assetSetter(contentRaw, fileType.background);
+        case commandType.changeFigure:
+            return assetSetter(contentRaw, fileType.figure);
         default:
             return contentRaw;
     }
