@@ -24,6 +24,14 @@
   animation: MainStage_oldBgFadeout 3s forwards;
 }
 
+.MainStage_oldBgContainer_Settled {
+  top: 0;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+}
+
 @keyframes MainStage_showBgSoftly {
   0% {
     opacity: 0;

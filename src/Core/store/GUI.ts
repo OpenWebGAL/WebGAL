@@ -3,6 +3,7 @@
  * @author Mahiru
  */
 import {useState} from "react"
+import {getStorage} from "../controller/storage/storageController";
 
 
 /**
@@ -18,6 +19,7 @@ export enum MenuPanelTag {
  * @interface IGuiState GUI状态接口
  */
 interface IGuiState {
+    showStarter:boolean,//是否显示初始界面（用于使得bgm可以播放)
     showTitle: boolean, //是否显示标题界面
     showMenuPanel: boolean, //是否显示Menu界面
     currentMenuTag: MenuPanelTag,//当前Menu界面的选项卡
@@ -29,6 +31,7 @@ interface IGuiState {
  * 初始GUI状态表
  */
 const initState: IGuiState = {
+    showStarter:true,
     showTitle: true,
     showMenuPanel: false,
     currentMenuTag: MenuPanelTag.Option,
@@ -56,6 +59,7 @@ export function GuiStateStore() {
      * @param value 可见性，true or false
      */
     const setVisibility = <K extends keyof componentsVisibility>(key: K, value: boolean) => {
+        getStorage();
         GuiState[key] = value;
         setGuiState({...GuiState});
     }
@@ -65,6 +69,7 @@ export function GuiStateStore() {
      * @param value 标签页
      */
     const setMenuPanelTag = (value: MenuPanelTag) => {
+        getStorage();
         GuiState.currentMenuTag = value;
         setGuiState({...GuiState});
     }

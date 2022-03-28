@@ -5,6 +5,8 @@ import {unmountPerform} from "../perform/unmountPerform";
 import {getRef} from "../../store/storeRef";
 import {runtime_gamePlay} from "../../runtime/gamePlay";
 import {changeBg} from "./scripts/changeBg";
+import {changeFigure} from "./scripts/changeFigure";
+import {bgm} from "./scripts/bgm";
 
 /**
  * 规范函数的类型
@@ -28,10 +30,21 @@ export const runScript = (script: ISentence) => {
         case commandType.changeBg:
             funcToRun = changeBg;
             break;
+        case commandType.changeFigure:
+            funcToRun = changeFigure;
+            break;
+        case commandType.bgm:
+            funcToRun = bgm;
+            break;
     }
 
     //调用脚本对应的函数
     perform = funcToRun(script);
+
+    //语句不执行演出
+    if (perform.performName === 'none') {
+        return;
+    }
 
     //同步演出状态
     const stageStore: any = getRef('stageRef');

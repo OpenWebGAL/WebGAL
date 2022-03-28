@@ -3,6 +3,7 @@ import {useStore} from "reto";
 import {GuiStateStore, MenuPanelTag} from "../../../../Core/store/GUI";
 import {MenuPanelButton} from "./MenuPanelButton";
 import {logger} from '../../../../Core/util/logger';
+import {playBgm} from "../../../../Core/util/playBgm";
 
 /**
  * Menu页的底栏
@@ -48,13 +49,14 @@ export const MenuPanel = () => {
                          clickFunc={() => {
                              GuiStore.setVisibility('showTitle', true);
                              GuiStore.setVisibility('showMenuPanel', false);
+                             playBgm(GuiStore.GuiState.titleBgm);
                          }
                          }
                          tagName={'标题'} key={'titleIcon'}/>
         <MenuPanelButton iconName={'exit'}
                          clickFunc={() => {
                              logger.info('返回');
-                             GuiStore.setVisibility('showMenuPanel',false);
+                             GuiStore.setVisibility('showMenuPanel', false);
                          }
                          }
                          tagName={'返回'} key={'exitIcon'}/>

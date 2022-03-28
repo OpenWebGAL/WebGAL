@@ -39,26 +39,26 @@ export interface IEffect {
  * @interface ISaveSceneData
  */
 export interface ISaveSceneData {
-    name:string,
-    url:string,
-    currentSentence:number
+    name: string,
+    url: string,
+    currentSentence: number
 }
 
 /**
  * 初始化场景状态存储
  */
-const initSaveSceneData:ISaveSceneData = {
-    name:'',
-    url:'',
-    currentSentence:0
+const initSaveSceneData: ISaveSceneData = {
+    name: '',
+    url: '',
+    currentSentence: 0
 }
 
 /**
  * @interface IStageState 游戏舞台数据接口
  */
 export interface IStageState {
-    sceneData:ISaveSceneData,
-    oldBgName:string,//旧背景的文件路径
+    sceneData: ISaveSceneData,
+    oldBgName: string,//旧背景的文件路径
     bgName: string,//背景文件地址（相对或绝对）
     figName: string,//立绘_中 文件地址（相对或绝对）
     figNameLeft: string,//立绘_左 文件地址（相对或绝对）
@@ -78,7 +78,7 @@ export interface IStageState {
 //初始化舞台数据
 const initState: IStageState = {
     sceneData: initSaveSceneData,
-    oldBgName:'',
+    oldBgName: '',
     bgName: '',//背景文件地址（相对或绝对）
     figName: '',//立绘_中 文件地址（相对或绝对）
     figNameLeft: '',//立绘_左 文件地址（相对或绝对）
@@ -110,16 +110,21 @@ export function stageStateStore() {
      */
     const setStage = <K extends keyof IStageState>(key: K, value: any) => {
         stageState[key] = value;
-        setStageState({...stageState});
+        setStageState(state => ({...state, ...stageState}));
     }
 
     const getStageState = () => {
         return stageState;
     }
 
+    const restoreStage = (newState: IStageState) => {
+        setStageState(state=>({...state,...newState}));
+    }
+
     return {
         stageState,
         setStage,
-        getStageState
+        getStageState,
+        restoreStage
     }
 }
