@@ -24,6 +24,10 @@ export const changeBg = (sentence: ISentence): IPerform => {
             const bgContainer = document.getElementById('MainStage_bg_MainContainer');
             if (bgContainer)
                 bgContainer.className = styles.MainStage_bgContainer;
+            const oldBgContainer = document.getElementById('MainStage_bg_OldContainer');
+            if (oldBgContainer) {
+                oldBgContainer.className = styles.MainStage_oldBgContainer_Settled;
+            }
         },
         blockingNext: () => false,
         blockingAuto: () => true,

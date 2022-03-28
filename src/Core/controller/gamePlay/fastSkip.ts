@@ -1,6 +1,7 @@
 //切换自动播放状态
 import {runtime_gamePlay} from "../../runtime/gamePlay";
 import {stopAuto} from "./autoPlay";
+import {eventSender} from "../eventBus/eventSender";
 
 /**
  * 停止快进模式
@@ -36,15 +37,7 @@ export const switchFast = () => {
     } else { //当前不在快进
         runtime_gamePlay.isFast = true;
         runtime_gamePlay.fastInterval = setInterval(() => {
-            const event = new MouseEvent('auxclick', {
-                'view': window,
-                'bubbles': true,
-                'cancelable': true
-            });
-            const textBox = document.getElementById('textBoxMain');
-            if (textBox !== null) {
-                textBox.dispatchEvent(event);
-            }
+            eventSender('nextSentence_target', 0, 0);
         }, 100);
     }
 }
