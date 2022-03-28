@@ -12,14 +12,26 @@ import {getRandomPerformName} from "../../../util/getRandomPerformName";
  */
 export const say = (sentence: ISentence): IPerform => {
     const stageStore: any = getRef('stageRef');
+    //设置文本显示
     stageStore.setStage('showText', sentence.content);
-    setTimeout(()=>{
+    //设置显示的角色名称
+    let showName = stageStore.stageState.showName;//先默认继承
+    for (const e of sentence.args) {
+        if (e.key === 'speaker') {
+            showName = e.value;
+        }
+        if (e.key === 'clear' && e.value === true) {
+            showName = '';
+        }
+    }
+    stageStore.setStage('showName', showName);
+    setTimeout(() => {
         const textElements = document.querySelectorAll('.' + styles.TextBox_textElement_Settled);
         const textArray = [...textElements];
         textArray.forEach(e => {
             e.className = styles.TextBox_textElement;
         })
-    },0);
+    }, 0);
     const performInitName: string = getRandomPerformName();
     return {
         performName: performInitName,

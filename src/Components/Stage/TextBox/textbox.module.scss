@@ -6,9 +6,13 @@
   background-color: rgba(0, 0, 0, 0.5);
   bottom: 0;
   color: white;
-  padding: 1.5em 5.5em 1.5em 5.5em;
+  padding: 1em 5.5em 1em 5.5em;
   font-size: 250%;
   box-sizing: border-box;
+  overflow: hidden;
+  display: flex;
+  flex-flow: column;
+  align-items: flex-start;
 }
 
 @keyframes showSoftly {
@@ -25,6 +29,14 @@
   animation: showSoftly 1000ms forwards;
 }
 
-.TextBox_textElement_Settled{
+.TextBox_textElement_Settled {
   opacity: 1;
+}
+
+.TextBox_showName {
+  font-size: 85%;
+  border-bottom: 3px solid rgba(255, 255, 255, 0.5);
+  min-width: 50%;
+  padding: 0 0.2em 0.2em 0.2em;
+  margin: 0 0 0.2em 0;
 }

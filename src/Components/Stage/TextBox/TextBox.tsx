@@ -21,6 +21,10 @@ export const TextBox = () => {
         stopAll();
         nextSentence();
     }} onAuxClick={nextSentence}>
-        {textElementList}
+        {StageStore.stageState.showName !== '' &&
+            <div className={styles.TextBox_showName}>{StageStore.stageState.showName}</div>}
+        <div>
+            {textElementList}
+        </div>
     </div>
 }
