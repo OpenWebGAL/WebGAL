@@ -14,6 +14,7 @@ export const saveGame = (index: number) => {
     const userDataRef = getRef('userDataRef');
     const saveBacklog = _.cloneDeep(runtime_currentBacklog);
     const saveData: ISaveData = {
+        nowStageState: _.cloneDeep(getRef('stageRef').stageState),
         backlog: saveBacklog, //舞台数据
         index: index,//存档的序号
         saveTime: (new Date).toString(),//保存时间

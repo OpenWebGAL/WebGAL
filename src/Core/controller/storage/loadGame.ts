@@ -38,7 +38,7 @@ export const loadGame = (index: number) => {
     }
 
     //恢复舞台状态
-    const newStageState = runtime_currentBacklog[runtime_currentBacklog.length - 1];
+    const newStageState = _.cloneDeep(loadFile.nowStageState);
     getRef('stageRef').restoreStage(newStageState);
 
     //恢复演出
