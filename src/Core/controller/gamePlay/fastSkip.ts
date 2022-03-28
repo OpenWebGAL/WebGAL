@@ -2,6 +2,9 @@
 import {runtime_gamePlay} from "../../runtime/gamePlay";
 import {stopAuto} from "./autoPlay";
 
+/**
+ * 停止快进模式
+ */
 export const stopFast = () => {
     runtime_gamePlay.isFast = false;
     if (runtime_gamePlay.fastInterval !== null) {
@@ -10,11 +13,18 @@ export const stopFast = () => {
     }
 }
 
+/**
+ * 停止快进模式与自动播放
+ */
 export const stopAll = () => {
     stopFast();
     stopAuto();
 }
 
+
+/**
+ * 切换快进模式
+ */
 export const switchFast = () => {
     //现在正在快进
     if (runtime_gamePlay.isFast) {

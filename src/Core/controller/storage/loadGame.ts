@@ -1,16 +1,16 @@
 import {getRef} from "../../store/storeRef";
 import {runtime_currentBacklog} from "../../runtime/backlog";
-import {runScript} from "../gamePlay/runScript";
-import {assetSetter, fileType} from "../../util/assetSetter";
-import {sceneFetcher} from "../../util/sceneFetcher";
-import {ISceneData, runtime_currentSceneData} from "../../runtime/sceneData";
-import {sceneParser} from "../../parser/sceneParser";
+import {runtime_currentSceneData} from "../../runtime/sceneData";
 import {ISaveData} from "../../store/userData";
 import {runtime_gamePlay} from "../../runtime/gamePlay";
 import * as _ from 'lodash'
 import {logger} from "../../util/logger";
-import {get, set} from "lodash";
 
+
+/**
+ * 读取游戏存档
+ * @param index 要读取的存档的档位
+ */
 export const loadGame = (index: number) => {
     //获得存档文件
     const loadFile: ISaveData = getRef('userDataRef').userDataState.saveData[index];

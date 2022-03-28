@@ -3,10 +3,13 @@ import * as _ from 'lodash'
 import {runtime_currentBacklog} from "../../runtime/backlog";
 import {logger} from "../../util/logger";
 import {ISaveData} from "../../store/userData";
-import {IStageState} from "../../store/stage";
-import {ISceneData, runtime_currentSceneData} from "../../runtime/sceneData";
+import {runtime_currentSceneData} from "../../runtime/sceneData";
 import {setStorage} from "./storageController";
 
+/**
+ * 保存游戏
+ * @param index 游戏的档位
+ */
 export const saveGame = (index: number) => {
     const userDataRef = getRef('userDataRef');
     const saveBacklog = _.cloneDeep(runtime_currentBacklog);

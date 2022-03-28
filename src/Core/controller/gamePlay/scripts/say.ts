@@ -4,6 +4,12 @@ import {IPerform} from "../../../interface/perform";
 import styles from '../../../../Components/Stage/TextBox/textbox.module.scss'
 import {getRandomPerformName} from "../../../util/getRandomPerformName";
 
+
+/**
+ * 进行普通对话的显示
+ * @param sentence 语句
+ * @return {IPerform} 执行的演出
+ */
 export const say = (sentence: ISentence): IPerform => {
     const stageStore: any = getRef('stageRef');
     stageStore.setStage('showText', sentence.content);

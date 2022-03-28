@@ -4,6 +4,12 @@ import {getRandomPerformName} from "../../../util/getRandomPerformName";
 import styles from '../../../../Components/Stage/mainStage.module.scss'
 import {getRef} from "../../../store/storeRef";
 
+
+/**
+ * 进行背景图片的切换
+ * @param sentence 语句
+ * @return {IPerform}
+ */
 export const changeBg = (sentence: ISentence): IPerform => {
     const oldBgName = getRef('stageRef').stageState.bgName;
     getRef('stageRef').setStage('oldBgName', oldBgName); //改变旧背景，使其渐变消失
