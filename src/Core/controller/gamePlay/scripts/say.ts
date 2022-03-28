@@ -15,6 +15,8 @@ export const say = (sentence: ISentence): IPerform => {
     const stageStore: any = getRef('stageRef');
     //设置文本显示
     stageStore.setStage('showText', sentence.content);
+    //清除语音
+    stageStore.setStage('vocal', '');
     //设置显示的角色名称
     let showName = stageStore.stageState.showName;//先默认继承
     for (const e of sentence.args) {
@@ -24,7 +26,7 @@ export const say = (sentence: ISentence): IPerform => {
         if (e.key === 'clear' && e.value === true) {
             showName = '';
         }
-        if(e.key === 'vocal'){
+        if (e.key === 'vocal') {
             playVocal(sentence);
         }
     }
