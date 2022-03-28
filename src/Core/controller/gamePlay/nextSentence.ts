@@ -4,6 +4,10 @@ import {getRef} from "../../store/storeRef";
 import {IRunPerform} from "../../interface/perform";
 import {logger} from "../../util/logger";
 
+
+/**
+ * 进行下一句
+ */
 export const nextSentence = () => {
 
     //第一步，检查是否存在 blockNext 的演出

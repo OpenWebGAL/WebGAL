@@ -23,3 +23,13 @@
   color: rgba(255,255,255,0.9);
   cursor: pointer;
 }
+
+.Title_starter{
+  height: 100%;
+  width: 100%;
+  background: rgba(0,0,0,0.2);
+  position: absolute;
+  top: 0;
+  display: block;
+  z-index: 14;
+}

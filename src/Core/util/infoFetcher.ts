@@ -27,13 +27,12 @@ export const infoFetcher = (url: string) => {
                 }
                 //设置标题背景音乐
                 if (e[0] === 'Title_bgm') {
-                    const url: string = assetSetter(e[1], fileType.background);
+                    const url: string = assetSetter(e[1], fileType.bgm);
                     GuiState.setGuiAsset('titleBgm', url);
                 }
                 if (e[0] === 'Game_name') {
                     gameInfo.gameName = e[1];
                     document.title = e[1];
-
                 }
                 if (e[0] === 'Game_key') {
                     gameInfo.gameKey = e[1];

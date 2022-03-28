@@ -5,6 +5,8 @@
  */
 import {IStageState} from "./stage";
 import {useState} from "react";
+import {ISceneData} from "../runtime/sceneData";
+import {logger} from "../util/logger";
 
 /**
  * 播放速度的枚举类型
@@ -36,10 +38,12 @@ interface IOptionData {
 /**
  * @interface ISaveData 存档文件接口
  */
-interface ISaveData {
+export interface ISaveData {
+    nowStageState: IStageState,
     backlog: Array<IStageState>, //舞台数据
     index: number,//存档的序号
     saveTime: string,//保存时间
+    sceneData: ISceneData,//场景数据
 }
 
 /**
@@ -79,6 +83,7 @@ export function userDataStateStore() {
 
     //替换用户数据（多用于与本地存储交互）
     const replaceUserData = (newUserData: IUserData) => {
+        logger.warn('正在替换数据', newUserData);
         setUserDataState({...newUserData});
     }
 
