@@ -1,4 +1,4 @@
-import { commandType, parsedCommand } from "../../interface/scene";
+import {commandType, parsedCommand} from "../../interface/scene";
 
 /**
  * 处理命令
@@ -18,6 +18,12 @@ export const commandParser = (commandRaw: string): parsedCommand => {
         returnCommand.additionalArgs.push({
             key: 'speaker',
             value: commandRaw,
+        })
+    }
+    if (type === commandType.bgm) {
+        returnCommand.additionalArgs.push({
+            key: 'next',
+            value: true,
         })
     }
     return returnCommand;

@@ -4,11 +4,11 @@ import {useStore} from "reto";
 import {TextBox} from "./TextBox/TextBox";
 import {stageStateStore} from "../../Core/store/stage"
 import {FigureContainer} from "./FigureContainer/FigureContainer";
+import {EventHandler} from "./EventHandler/EventHandler";
 
 export const MainStage: FC = () => {
     const stageStore = useStore(stageStateStore);
     return <div className={styles.MainStage_main}>
-        <audio id={'currentVocal'} src={stageStore.stageState.vocal}/>
         <div key={'bgMain' + stageStore.stageState.bgName}
              id={'MainStage_bg_MainContainer'}
              className={styles.MainStage_bgContainer_onChange} style={{
@@ -22,5 +22,6 @@ export const MainStage: FC = () => {
         }}/>
         <FigureContainer/>
         <TextBox/>
+        <EventHandler/>
     </div>
 }

@@ -3,6 +3,7 @@ import {getRef} from "../../../store/storeRef";
 import {IPerform} from "../../../interface/perform";
 import styles from '../../../../Components/Stage/TextBox/textbox.module.scss'
 import {getRandomPerformName} from "../../../util/getRandomPerformName";
+import {playVocal} from "./playVocal";
 
 
 /**
@@ -22,6 +23,9 @@ export const say = (sentence: ISentence): IPerform => {
         }
         if (e.key === 'clear' && e.value === true) {
             showName = '';
+        }
+        if(e.key === 'vocal'){
+            playVocal(sentence);
         }
     }
     stageStore.setStage('showName', showName);

@@ -1,8 +1,9 @@
-WebGAL:这是一条测试语句。 -v1.ogg -测试参数 -a=1 -b=true -c=参数值 ;
+bgm:夏影.mp3;
+WebGAL:这是一条测试语句。 -V1.ogg;
 changeBg:0000.png -next;
-22222222222222222 -v1.ogg -测试参数 -a=1 -b=true -c=参数值 ;
+22222222222222222;
 changeBg:0000e.png -next;
-33333333333333333 -v1.ogg -clear ;
+33333333333333333;
 changeFigure:testFigure04.png -left;
-changeFigure:testFigure04.png -left -clear -next;
+changeFigure:none -left -clear -next;
 changeFigure:testFigure04.png -right;
