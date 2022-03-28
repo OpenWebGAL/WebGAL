@@ -1,6 +1,4 @@
 import {ISentence} from "../../../interface/scene";
-import {IPerform} from "../../../interface/perform";
-import styles from "../../../../Components/Stage/mainStage.module.scss";
 import {getRandomPerformName} from "../../../util/getRandomPerformName";
 import {getRef} from "../../../store/storeRef";
 import {runtime_gamePlay} from "../../../runtime/gamePlay";
