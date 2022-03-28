@@ -35,6 +35,9 @@ export const switchAuto = () => {
     }
 }
 
+/**
+ * 自动播放的执行函数
+ */
 const autoPlay = () => {
     let isBlockingAuto = false;
     runtime_gamePlay.performList.forEach(e => {

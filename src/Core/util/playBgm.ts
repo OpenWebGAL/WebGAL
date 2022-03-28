@@ -1,6 +1,10 @@
 import {logger} from "./logger";
 import {getRef} from "../store/storeRef";
 
+/**
+ * 播放bgm的实际执行函数
+ * @param url bgm的路径
+ */
 export const playBgm = (url: string) => {
     logger.debug('播放bgm');
     //先停止之前的bgm

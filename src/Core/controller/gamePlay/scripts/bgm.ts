@@ -2,6 +2,10 @@ import {ISentence} from "../../../interface/scene";
 import {IPerform} from "../../../interface/perform";
 import {playBgm} from "../../../util/playBgm";
 
+/**
+ * 播放一段bgm
+ * @param sentence
+ */
 export const bgm = (sentence: ISentence): IPerform => {
     let url: string = sentence.content;//获取bgm的url
     playBgm(url);
