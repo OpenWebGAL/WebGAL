@@ -2,6 +2,10 @@ import {ISentence} from "../../../interface/scene";
 import {IPerform} from "../../../interface/perform";
 import {getRef} from "../../../store/storeRef";
 
+/**
+ * 更改立绘
+ * @param sentence 语句
+ */
 export const changeFigure = (sentence: ISentence): IPerform => {
     //根据参数设置指定位置
     let pos = 'center';
