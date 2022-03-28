@@ -8,6 +8,7 @@ import {FigureContainer} from "./FigureContainer/FigureContainer";
 export const MainStage: FC = () => {
     const stageStore = useStore(stageStateStore);
     return <div className={styles.MainStage_main}>
+        <audio id={'currentVocal'} src={stageStore.stageState.vocal}/>
         <div key={'bgMain' + stageStore.stageState.bgName}
              id={'MainStage_bg_MainContainer'}
              className={styles.MainStage_bgContainer_onChange} style={{
