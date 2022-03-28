@@ -16,6 +16,7 @@ export const MainStage: FC = () => {
             backgroundSize: "cover"
         }}/>
         <div key={'bgOld' + stageStore.stageState.oldBgName}
+             id={'MainStage_bg_OldContainer'}
              className={styles.MainStage_oldBgContainer} style={{
             backgroundImage: `url("${stageStore.stageState.oldBgName}")`,
             backgroundSize: "cover"
