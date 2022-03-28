@@ -1,10 +1,14 @@
 import {runtime_gamePlay} from "../../runtime/gamePlay";
 
-export const stopAuto = ()=>{
+export const stopAuto = () => {
     runtime_gamePlay.isAuto = false;
     if (runtime_gamePlay.autoInterval !== null) {
         clearInterval(runtime_gamePlay.autoInterval);
         runtime_gamePlay.autoInterval = null;
+    }
+    if (runtime_gamePlay.autoTimeout !== null) {
+        clearTimeout(runtime_gamePlay.autoTimeout);
+        runtime_gamePlay.autoTimeout = null;
     }
 }
 
@@ -33,13 +37,18 @@ const autoPlay = () => {
         return;
     }
     // nextSentence();
-    const event = new MouseEvent('auxclick', {
-        'view': window,
-        'bubbles': true,
-        'cancelable': true
-    });
-    const textBox = document.getElementById('textBoxMain');
-    if (textBox !== null) {
-        textBox.dispatchEvent(event);
+    if(runtime_gamePlay.autoTimeout === null){
+        runtime_gamePlay.autoTimeout = setTimeout(() => {
+            const event = new MouseEvent('auxclick', {
+                'view': window,
+                'bubbles': true,
+                'cancelable': true
+            });
+            const textBox = document.getElementById('textBoxMain');
+            if (textBox !== null) {
+                textBox.dispatchEvent(event);
+            }
+            runtime_gamePlay.autoTimeout = null;
+        }, 500);
     }
 }

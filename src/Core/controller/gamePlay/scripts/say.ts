@@ -17,7 +17,7 @@ export const say = (sentence: ISentence): IPerform => {
     const performInitName: string = getRandomPerformName();
     return {
         performName: performInitName,
-        duration: sentence.content.length * 35 + 500,
+        duration: sentence.content.length * 35,
         isOver: false,
         isHoldOn: false,
         stopFunction: () => {

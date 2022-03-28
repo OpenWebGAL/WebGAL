@@ -6,7 +6,8 @@ interface IGamePlay {
     isAuto: boolean,
     isFast: boolean,
     autoInterval: ReturnType<typeof setInterval> | null,
-    fastInterval: ReturnType<typeof setInterval> | null
+    fastInterval: ReturnType<typeof setInterval> | null,
+    autoTimeout: ReturnType<typeof setTimeout> | null
 }
 
 /**
@@ -18,5 +19,6 @@ export const runtime_gamePlay: IGamePlay = {
     isAuto: false,
     isFast: false,
     autoInterval: null,
-    fastInterval: null
+    fastInterval: null,
+    autoTimeout: null
 }

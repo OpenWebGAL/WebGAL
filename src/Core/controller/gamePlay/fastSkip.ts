@@ -1,5 +1,6 @@
 //切换自动播放状态
 import {runtime_gamePlay} from "../../runtime/gamePlay";
+import {stopAuto} from "./autoPlay";
 
 export const stopFast = () => {
     runtime_gamePlay.isFast = false;
@@ -10,17 +11,8 @@ export const stopFast = () => {
 }
 
 export const stopAll = () => {
-    runtime_gamePlay.isFast = false;
-    if (runtime_gamePlay.fastInterval !== null) {
-        clearInterval(runtime_gamePlay.fastInterval);
-        runtime_gamePlay.fastInterval = null;
-    }
-
-    runtime_gamePlay.isAuto = false;
-    if (runtime_gamePlay.autoInterval !== null) {
-        clearInterval(runtime_gamePlay.autoInterval);
-        runtime_gamePlay.autoInterval = null;
-    }
+    stopFast();
+    stopAuto();
 }
 
 export const switchFast = () => {
