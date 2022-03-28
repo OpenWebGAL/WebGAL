@@ -32,7 +32,7 @@ export const EventHandler = () => {
     }
 
     return <div>
-        <audio id={'currentBgm'} src={stageStore.stageState.bgm} loop/>
+        <audio id={'currentBgm'} src={stageStore.stageState.bgm} loop={true} autoPlay={true}/>
         <audio id={'currentVocal'} src={stageStore.stageState.vocal}/>
         <div id={'nextSentence_target'} onClick={autoNextSentence}/>
         <div id={'restoreOne_target'} style={{display: 'none'}} onClick={(event) => restoreOne(event.clientX)}/>

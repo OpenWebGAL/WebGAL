@@ -4,8 +4,6 @@ import {assetSetter, fileType} from "./assetSetter";
 import {storeRef} from "../store/storeRef";
 import {gameInfo} from "../runtime/etc";
 import {getStorage} from "../controller/storage/storageController";
-import {bgm} from "../controller/gamePlay/scripts/bgm";
-import {playBgm} from "./playBgm";
 
 /**
  * 获取游戏信息

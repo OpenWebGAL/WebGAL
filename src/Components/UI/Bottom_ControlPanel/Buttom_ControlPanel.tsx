@@ -4,6 +4,7 @@ import {useStore} from "reto";
 import {GuiStateStore, MenuPanelTag} from "../../../Core/store/GUI";
 import {switchAuto} from "../../../Core/controller/gamePlay/autoPlay";
 import {switchFast} from '../../../Core/controller/gamePlay/fastSkip';
+import {playBgm} from "../../../Core/util/playBgm";
 
 export const Bottom_ControlPanel = () => {
     const GUIstore = useStore(GuiStateStore);
@@ -27,6 +28,7 @@ export const Bottom_ControlPanel = () => {
         }} theme="outline" size="36" fill="#f5f5f7" strokeWidth={3.5}/>
         <Home onClick={() => {
             GUIstore.setVisibility('showTitle', true);
+            playBgm(GUIstore.GuiState.titleBgm);
         }} theme="outline" size="36" fill="#f5f5f7" strokeWidth={3.5}/>
     </div>
 }
