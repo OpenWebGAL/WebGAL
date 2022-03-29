@@ -1,4 +1,6 @@
 /**
  * 当前的backlog
  */
-export const runtime_currentBacklog: Array<any> = [];
+import {IBacklogItem} from "../interface/runtime";
+
+export const runtime_currentBacklog: Array<IBacklogItem> = [];
