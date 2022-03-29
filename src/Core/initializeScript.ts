@@ -15,7 +15,7 @@ import {sceneParser} from "./parser/sceneParser";
  */
 export const initializeScript = (): void => {
     //打印初始log信息
-    logger.info('WebGAL 4.0.0 beta');
+    logger.info('WebGAL 4.0.1 beta');
     logger.info('Github: https://github.com/MakinoharaShoko/WebGAL ');
     logger.info('Made with ❤ by MakinoharaShoko');
     //激活强制缩放

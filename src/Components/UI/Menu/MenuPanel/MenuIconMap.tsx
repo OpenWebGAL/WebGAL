@@ -1,4 +1,4 @@
-import {IMenuPanel} from "./menuPanelInterface";
+import {IMenuPanel} from "../../../../Core/interface/componentsInterface/menuPanelInterface";
 import {FolderOpen, Home, Logout, Save, SettingTwo} from "@icon-park/react";
 
 /**
