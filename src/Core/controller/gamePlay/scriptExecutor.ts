@@ -4,10 +4,10 @@ import {getRef} from "../../store/storeRef";
 import {runtime_currentSceneData} from "../../runtime/sceneData";
 import {runScript} from "./runScript";
 import {logger} from "../../util/logger";
-import {ISaveSceneData} from "../../store/stage";
+import {ISaveSceneData, IStageState} from "../../store/stage";
 import * as _ from 'lodash';
 import {restoreScene} from "../scene/restoreScene";
-import {sceneEntry} from "../../interface/runtime";
+import {IBacklogItem, sceneEntry} from "../../interface/runtime";
 
 /**
  * 语句执行器
@@ -36,7 +36,7 @@ export const scriptExecutor = () => {
         }
     })
     const isSaveBacklog = currentScript.command === commandType.say; //是否在本句保存backlog（一般遇到对话保存）
-    let currentStageState: any;
+    let currentStageState: IStageState;
     //同步当前舞台数据
     const currentStageStoreRef = getRef('stageRef');
     const newSceneData: ISaveSceneData = {
@@ -55,7 +55,16 @@ export const scriptExecutor = () => {
     logger.info('当前执行结果', currentStageState);
     //保存 backlog
     if (isSaveBacklog) {
-        runtime_currentBacklog.push(_.cloneDeep(currentStageState));
+        const backlogElement: IBacklogItem = {
+            currentStageState: _.cloneDeep(currentStageState),
+            saveScene: {
+                currentSentenceId: runtime_currentSceneData.currentSentenceId,//当前语句ID
+                sceneStack: _.cloneDeep(runtime_currentSceneData.sceneStack), //场景栈
+                sceneName: runtime_currentSceneData.currentScene.sceneName, //场景名称
+                sceneUrl: runtime_currentSceneData.currentScene.sceneUrl, //场景url
+            }
+        }
+        runtime_currentBacklog.push(backlogElement);
         logger.info('当前backlog', _.cloneDeep(runtime_currentBacklog));
     }
     runtime_currentSceneData.currentSentenceId++;

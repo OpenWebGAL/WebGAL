@@ -7,7 +7,7 @@ import {IStageState} from "./stage";
 import {useState} from "react";
 import {ISceneData} from "../runtime/sceneData";
 import {logger} from "../util/logger";
-import {sceneEntry} from "../interface/runtime";
+import {IBacklogItem, sceneEntry} from "../interface/runtime";
 
 /**
  * 播放速度的枚举类型
@@ -40,7 +40,7 @@ interface IOptionData {
  * 场景存档接口
  * @interface ISaveScene
  */
-interface ISaveScene{
+export interface ISaveScene{
     currentSentenceId: number,//当前语句ID
     sceneStack: Array<sceneEntry>, //场景栈
     sceneName: string, //场景名称
@@ -52,7 +52,7 @@ interface ISaveScene{
  */
 export interface ISaveData {
     nowStageState: IStageState,
-    backlog: Array<IStageState>, //舞台数据
+    backlog: Array<IBacklogItem>, //舞台数据
     index: number,//存档的序号
     saveTime: string,//保存时间
     sceneData: ISaveScene,//场景数据
