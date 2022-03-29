@@ -1,15 +1,6 @@
-import {sceneEntry} from "../interface/runtime";
-import {IScene} from "../interface/scene";
+import {ISceneData} from "../interface/coreInterface/sceneInterface";
 
-/**
- * 当前的场景数据
- * @interface ISceneData
- */
-export interface ISceneData {
-    currentSentenceId: number,//当前语句ID
-    sceneStack: Array<sceneEntry>, //场景栈
-    currentScene: IScene, //当前场景数据
-}
+
 
 export const initSceneData = {
     currentSentenceId: 0,//当前语句ID

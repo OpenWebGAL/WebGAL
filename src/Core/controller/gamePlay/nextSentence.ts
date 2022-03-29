@@ -1,7 +1,7 @@
 import {scriptExecutor} from "./scriptExecutor";
 import {runtime_gamePlay} from "../../runtime/gamePlay";
 import {getRef} from "../../store/storeRef";
-import {IRunPerform} from "../../interface/perform";
+import {IRunPerform} from "../../interface/coreInterface/performInterface";
 import {logger} from "../../util/logger";
 
 

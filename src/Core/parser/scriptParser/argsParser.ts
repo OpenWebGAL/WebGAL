@@ -1,4 +1,4 @@
-import {arg} from "../../interface/scene";
+import {arg} from "../../interface/coreInterface/sceneInterface";
 import {assetSetter, fileType} from "../../util/assetSetter";
 
 

@@ -1,13 +1,13 @@
-import {commandType, ISentence} from "../../interface/scene";
+import {commandType, ISentence} from "../../interface/coreInterface/sceneInterface";
 import {runtime_currentBacklog} from "../../runtime/backlog";
 import {getRef} from "../../store/storeRef";
 import {runtime_currentSceneData} from "../../runtime/sceneData";
 import {runScript} from "./runScript";
 import {logger} from "../../util/logger";
-import {IStageState} from "../../store/stage";
+import {IStageState} from "../../interface/stateInterface/stageInterface";
 import * as _ from 'lodash';
 import {restoreScene} from "../scene/restoreScene";
-import {IBacklogItem, sceneEntry} from "../../interface/runtime";
+import {IBacklogItem, sceneEntry} from "../../interface/coreInterface/runtimeInterface";
 
 /**
  * 语句执行器

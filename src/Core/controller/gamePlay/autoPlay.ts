@@ -49,7 +49,7 @@ const autoPlay = () => {
     }
     // nextSentence();
     if (runtime_gamePlay.autoTimeout === null) {
-        logger.warn('nextSentenceEvent Sended')
+        logger.warn('nextSentenceEvent Sent')
         runtime_gamePlay.autoTimeout = eventSender('nextSentence_target', 0, 500);
     }
 }
