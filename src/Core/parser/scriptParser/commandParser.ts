@@ -1,4 +1,4 @@
-import {commandType, parsedCommand} from "../../interface/scene";
+import {commandType, parsedCommand} from "../../interface/coreInterface/sceneInterface";
 
 /**
  * 处理命令

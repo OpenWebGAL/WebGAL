@@ -1,5 +1,5 @@
-import {ISentence} from "../../../interface/scene";
-import {IPerform} from "../../../interface/perform";
+import {ISentence} from "../../../interface/coreInterface/sceneInterface";
+import {IPerform} from "../../../interface/coreInterface/performInterface";
 import {getRandomPerformName} from "../../../util/getRandomPerformName";
 import styles from '../../../../Components/Stage/mainStage.module.scss'
 import {getRef} from "../../../store/storeRef";
