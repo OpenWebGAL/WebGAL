@@ -6,15 +6,24 @@ import {runScript} from "./runScript";
 import {logger} from "../../util/logger";
 import {ISaveSceneData} from "../../store/stage";
 import * as _ from 'lodash';
+import {restoreScene} from "../scene/restoreScene";
+import {sceneEntry} from "../../interface/runtime";
 
 /**
  * 语句执行器
  * 执行语句，同步场景状态，并根据情况立即执行下一句或者加入backlog
  */
 export const scriptExecutor = () => {
-    //超过总语句数量，则不继续流程
-    if (runtime_currentSceneData.currentSentenceId > runtime_currentSceneData.currentScene.sentenceList.length - 1)
+    //超过总语句数量，则从场景栈拿出一个需要继续的场景，然后继续流程。若场景栈清空，则停止流程
+    if (runtime_currentSceneData.currentSentenceId > runtime_currentSceneData.currentScene.sentenceList.length - 1) {
+        if (runtime_currentSceneData.sceneStack.length !== 0) {
+            const sceneToRestore: sceneEntry | undefined = runtime_currentSceneData.sceneStack.pop();
+            if (sceneToRestore !== undefined) {
+                restoreScene(sceneToRestore);
+            }
+        }
         return;
+    }
     const currentScript: ISentence = runtime_currentSceneData
         .currentScene
         .sentenceList[runtime_currentSceneData.currentSentenceId];
@@ -47,7 +56,7 @@ export const scriptExecutor = () => {
     //保存 backlog
     if (isSaveBacklog) {
         runtime_currentBacklog.push(_.cloneDeep(currentStageState));
-        logger.info('当前backlog',_.cloneDeep(runtime_currentBacklog));
+        logger.info('当前backlog', _.cloneDeep(runtime_currentBacklog));
     }
     runtime_currentSceneData.currentSentenceId++;
 

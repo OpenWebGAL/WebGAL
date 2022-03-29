@@ -5,7 +5,6 @@
 
 import {useState} from "react";
 import {IRunPerform} from "../interface/perform";
-import {logger} from "../util/logger";
 import * as _ from 'lodash'
 
 /**
