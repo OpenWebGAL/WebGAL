@@ -1,4 +1,4 @@
-import {sceneEntry} from "../../interface/runtime";
+import {sceneEntry} from "../../interface/coreInterface/runtimeInterface";
 import {runtime_currentSceneData} from "../../runtime/sceneData";
 import {sceneFetcher} from "../../util/sceneFetcher";
 import {sceneParser} from "../../parser/sceneParser";

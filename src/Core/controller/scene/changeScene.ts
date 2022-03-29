@@ -1,6 +1,4 @@
-import {IScene} from "../../interface/scene";
 import {runtime_currentSceneData} from "../../runtime/sceneData";
-import {nextSentence} from "../gamePlay/nextSentence";
 import {eventSender} from "../eventBus/eventSender";
 import {sceneFetcher} from "../../util/sceneFetcher";
 import {sceneParser} from "../../parser/sceneParser";

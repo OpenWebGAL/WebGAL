@@ -1,13 +1,7 @@
+import { IStoreRef } from "../interface/stateInterface/storeRefInterface";
 
 
-/**
- * @interface IStoreRef 全局存储的引用接口
- */
-interface IStoreRef {
-    GuiRef: any,
-    stageRef: any,
-    userDataRef: any
-}
+
 
 //初始化全局存储引用
 export const storeRef: IStoreRef = {

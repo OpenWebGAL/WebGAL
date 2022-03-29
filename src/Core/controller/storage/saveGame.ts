@@ -2,7 +2,7 @@ import {getRef} from "../../store/storeRef";
 import * as _ from 'lodash'
 import {runtime_currentBacklog} from "../../runtime/backlog";
 import {logger} from "../../util/logger";
-import {ISaveData} from "../../store/userData";
+import {ISaveData} from "../../interface/stateInterface/userDataInterface";
 import {runtime_currentSceneData} from "../../runtime/sceneData";
 import {setStorage} from "./storageController";
 

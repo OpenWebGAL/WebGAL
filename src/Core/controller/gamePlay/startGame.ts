@@ -7,7 +7,8 @@ import {sceneFetcher} from "../../util/sceneFetcher";
 import {sceneParser} from "../../parser/sceneParser";
 import {nextSentence} from "./nextSentence";
 import * as _ from 'lodash'
-import {initState, IStageState} from "../../store/stage";
+import {initState} from "../../store/stage";
+import { IStageState } from "../../interface/stateInterface/stageInterface";
 
 export const startGame = () => {
     /*

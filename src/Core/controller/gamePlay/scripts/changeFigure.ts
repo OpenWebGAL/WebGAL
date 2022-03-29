@@ -1,5 +1,5 @@
-import {ISentence} from "../../../interface/scene";
-import {IPerform} from "../../../interface/perform";
+import {ISentence} from "../../../interface/coreInterface/sceneInterface";
+import {IPerform} from "../../../interface/coreInterface/performInterface";
 import {getRef} from "../../../store/storeRef";
 
 /**
@@ -24,16 +24,16 @@ export const changeFigure = (sentence: ISentence): IPerform => {
             content = '';
         }
     }
-    const stageStrore = getRef('stageRef');
+    const stageStore = getRef('stageRef');
     switch (pos) {
         case 'center':
-            stageStrore.setStage('figName', content);
+            stageStore.setStage('figName', content);
             break;
         case 'left':
-            stageStrore.setStage('figNameLeft', content);
+            stageStore.setStage('figNameLeft', content);
             break;
         case 'right':
-            stageStrore.setStage('figNameRight', content);
+            stageStore.setStage('figNameRight', content);
             break;
     }
     return {

@@ -1,8 +1,8 @@
-import {ISentence} from "../../../interface/scene";
-import {IPerform} from "../../../interface/perform";
+import {ISentence} from "../../../interface/coreInterface/sceneInterface";
+import {IPerform} from "../../../interface/coreInterface/performInterface";
 import {changeScene} from "../../scene/changeScene";
 
-const changeSceneScript = (sentence: ISentence): IPerform => {
+export const changeSceneScript = (sentence: ISentence): IPerform => {
     const sceneNameArray: Array<string> = sentence.content.split('/');
     const sceneName = sceneNameArray[sceneNameArray.length - 1];
     changeScene(sentence.content, sceneName);
