@@ -1,6 +1,9 @@
 /**
  * 语句类型
  */
+import {sceneEntry} from "./runtimeInterface";
+import {fileType} from "../../util/assetSetter";
+
 export enum commandType {
     say, //对话
     changeBg, //更改背景
@@ -25,6 +28,7 @@ export enum commandType {
     chooseLabel,//选择标签
     setVar,//设置变量
     if,//条件跳转
+    callScene,//调用场景
 }
 
 /**
@@ -36,14 +40,7 @@ export interface arg {
     value: string | boolean | number //参数值
 }
 
-/**
- * 资源类型
- */
-enum assetType {
-    audio, //音频
-    video, //视频
-    image, //图片
-}
+
 
 /**
  * 资源接口
@@ -51,7 +48,7 @@ enum assetType {
  */
 export interface IAsset {
     name: string, //资源名称
-    type: assetType, //资源类型
+    type: fileType, //资源类型
     url: string, //资源url
     lineNumber: number, //触发资源语句的行号
 }
@@ -79,6 +76,15 @@ export interface IScene {
     sentenceList: Array<ISentence>, //语句列表
     assetsList: Array<IAsset>, //资源列表
     subSceneList: Array<string> //子场景的url列表
+}
+/**
+ * 当前的场景数据
+ * @interface ISceneData
+ */
+export interface ISceneData {
+    currentSentenceId: number,//当前语句ID
+    sceneStack: Array<sceneEntry>, //场景栈
+    currentScene: IScene, //当前场景数据
 }
 
 /**

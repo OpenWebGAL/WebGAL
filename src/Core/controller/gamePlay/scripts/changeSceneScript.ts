@@ -1,14 +1,11 @@
 import {ISentence} from "../../../interface/coreInterface/sceneInterface";
 import {IPerform} from "../../../interface/coreInterface/performInterface";
-import {playBgm} from "../../../util/playBgm";
+import {changeScene} from "../../scene/changeScene";
 
-/**
- * 播放一段bgm
- * @param sentence
- */
-export const bgm = (sentence: ISentence): IPerform => {
-    let url: string = sentence.content;//获取bgm的url
-    playBgm(url);
+export const changeSceneScript = (sentence: ISentence): IPerform => {
+    const sceneNameArray: Array<string> = sentence.content.split('/');
+    const sceneName = sceneNameArray[sceneNameArray.length - 1];
+    changeScene(sentence.content, sceneName);
     return {
         performName: 'none',
         duration: 0,

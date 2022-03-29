@@ -1,4 +1,4 @@
-import {ISentence} from "../../../interface/scene";
+import {ISentence} from "../../../interface/coreInterface/sceneInterface";
 import {getRandomPerformName} from "../../../util/getRandomPerformName";
 import {getRef} from "../../../store/storeRef";
 import {runtime_gamePlay} from "../../../runtime/gamePlay";

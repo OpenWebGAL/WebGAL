@@ -1,4 +1,4 @@
-import {commandType} from "../../interface/scene";
+import {commandType} from "../../interface/coreInterface/sceneInterface";
 import {assetSetter, fileType} from "../../util/assetSetter";
 
 /**
@@ -15,6 +15,8 @@ export const contentParser = (contentRaw: string, type: commandType) => {
             return assetSetter(contentRaw, fileType.figure);
         case commandType.bgm:
             return assetSetter(contentRaw, fileType.bgm);
+        case commandType.callScene:
+            return assetSetter(contentRaw, fileType.scene);
         default:
             return contentRaw;
     }

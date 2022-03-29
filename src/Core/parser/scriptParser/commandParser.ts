@@ -1,4 +1,4 @@
-import {commandType, parsedCommand} from "../../interface/scene";
+import {commandType, parsedCommand} from "../../interface/coreInterface/sceneInterface";
 
 /**
  * 处理命令
@@ -81,6 +81,8 @@ function getCommandType(command: string): commandType {
             return commandType.chooseLabel;
         case 'setVar':
             return commandType.setVar;
+        case 'callScene':
+            return commandType.callScene;
         default:
             //默认是对话
             return commandType.say;

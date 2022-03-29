@@ -1,4 +1,4 @@
-import { IAsset, IScene, ISentence } from "../interface/scene";
+import { IAsset, IScene, ISentence } from "../interface/coreInterface/sceneInterface";
 import { scriptParser } from "./scriptParser/scriptParser";
 import { assetsPrefetcher } from "../util/assetsPrefetcher";
 import { scenePrefetcher } from "../util/scenePrefetcher";
