@@ -45,20 +45,11 @@ export interface ISaveSceneData {
     currentSentence: number
 }
 
-/**
- * 初始化场景状态存储
- */
-const initSaveSceneData: ISaveSceneData = {
-    name: '',
-    url: '',
-    currentSentence: 0
-}
 
 /**
  * @interface IStageState 游戏舞台数据接口
  */
 export interface IStageState {
-    sceneData: ISaveSceneData,
     oldBgName: string,//旧背景的文件路径
     bgName: string,//背景文件地址（相对或绝对）
     figName: string,//立绘_中 文件地址（相对或绝对）
@@ -78,7 +69,6 @@ export interface IStageState {
 
 //初始化舞台数据
 export const initState: IStageState = {
-    sceneData: initSaveSceneData,
     oldBgName: '',
     bgName: '',//背景文件地址（相对或绝对）
     figName: '',//立绘_中 文件地址（相对或绝对）

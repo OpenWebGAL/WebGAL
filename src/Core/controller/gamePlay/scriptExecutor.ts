@@ -4,7 +4,7 @@ import {getRef} from "../../store/storeRef";
 import {runtime_currentSceneData} from "../../runtime/sceneData";
 import {runScript} from "./runScript";
 import {logger} from "../../util/logger";
-import {ISaveSceneData, IStageState} from "../../store/stage";
+import {IStageState} from "../../store/stage";
 import * as _ from 'lodash';
 import {restoreScene} from "../scene/restoreScene";
 import {IBacklogItem, sceneEntry} from "../../interface/runtime";
@@ -39,12 +39,6 @@ export const scriptExecutor = () => {
     let currentStageState: IStageState;
     //同步当前舞台数据
     const currentStageStoreRef = getRef('stageRef');
-    const newSceneData: ISaveSceneData = {
-        name: runtime_currentSceneData.currentScene.sceneName,
-        url: runtime_currentSceneData.currentScene.sceneUrl,
-        currentSentence: runtime_currentSceneData.currentSentenceId,
-    }
-    currentStageStoreRef.setStage('sceneData', newSceneData);
     currentStageState = currentStageStoreRef.getStageState();
     //执行“下一句”
     if (isNext) {
