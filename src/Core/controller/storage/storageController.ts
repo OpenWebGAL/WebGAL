@@ -1,5 +1,5 @@
 import * as localforage from "localforage";
-import { IUserData } from "../../interface/stateInterface/userDataInterface";
+import {IUserData} from "../../interface/stateInterface/userDataInterface";
 import {gameInfo} from "../../runtime/etc";
 import {getRef} from "../../store/storeRef";
 import {logger} from "../../util/logger";
@@ -18,6 +18,11 @@ export const setStorage = debounce(() => {
  */
 export const getStorage = debounce(() => {
     localforage.getItem(gameInfo.gameKey).then(newUserData => {
+        //如果没有数据，初始化
+        if (!newUserData) {
+            setStorage();
+            return;
+        }
         getRef('userDataRef').replaceUserData(<IUserData>newUserData);
     })
 }, 100);
