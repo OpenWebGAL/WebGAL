@@ -18,7 +18,12 @@ export const saveGame = (index: number) => {
         backlog: saveBacklog, //舞台数据
         index: index,//存档的序号
         saveTime: (new Date).toString(),//保存时间
-        sceneData: _.cloneDeep(runtime_currentSceneData),//场景数据
+        sceneData: {
+            currentSentenceId: runtime_currentSceneData.currentSentenceId,//当前语句ID
+            sceneStack: _.cloneDeep(runtime_currentSceneData.sceneStack), //场景栈
+            sceneName: runtime_currentSceneData.currentScene.sceneName, //场景名称
+            sceneUrl: runtime_currentSceneData.currentScene.sceneUrl, //场景url
+        },//场景数据
     }
     const newSaveData = userDataRef.userDataState.saveData;
     newSaveData[index] = saveData;

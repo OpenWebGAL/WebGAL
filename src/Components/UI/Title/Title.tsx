@@ -3,6 +3,7 @@ import styles from './title.module.scss'
 import {useStore} from 'reto'
 import {GuiStateStore, MenuPanelTag} from "../../../Core/store/GUI";
 import {playBgm} from "../../../Core/util/playBgm";
+import {startGame} from "../../../Core/controller/gamePlay/startGame";
 
 /**
  * 标题页
@@ -24,7 +25,7 @@ const Title: FC = () => {
                              GuiStore.setVisibility('showStarter', false);
                          }}/>}
                 <div className={styles.Title_buttonList}>
-                    <div className={styles.Title_button} onClick={() => GuiStore.setVisibility('showTitle', false)}>
+                    <div className={styles.Title_button} onClick={startGame}>
                         开始游戏
                     </div>
                     <div className={styles.Title_button} onClick={() => GuiStore.setVisibility('showTitle', false)}>

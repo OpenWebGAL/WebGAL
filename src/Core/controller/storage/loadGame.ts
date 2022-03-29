@@ -6,6 +6,8 @@ import {runtime_gamePlay} from "../../runtime/gamePlay";
 import * as _ from 'lodash'
 import {logger} from "../../util/logger";
 import {eventSender} from "../eventBus/eventSender";
+import {sceneFetcher} from "../../util/sceneFetcher";
+import {sceneParser} from "../../parser/sceneParser";
 
 
 /**
@@ -17,7 +19,11 @@ export const loadGame = (index: number) => {
     const loadFile: ISaveData = getRef('userDataRef').userDataState.saveData[index];
     logger.debug('读取的存档数据', loadFile);
     //重新获取并同步场景状态
-    runtime_currentSceneData.currentScene = loadFile.sceneData.currentScene;
+    sceneFetcher(loadFile.sceneData.sceneUrl).then(rawScene => {
+        runtime_currentSceneData.currentScene = sceneParser(rawScene,
+            loadFile.sceneData.sceneName,
+            loadFile.sceneData.sceneUrl);
+    })
     runtime_currentSceneData.currentSentenceId = loadFile.sceneData.currentSentenceId;
     runtime_currentSceneData.sceneStack = _.cloneDeep(loadFile.sceneData.sceneStack);
 

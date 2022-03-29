@@ -5,6 +5,8 @@
 
 import {useState} from "react";
 import {IRunPerform} from "../interface/perform";
+import {logger} from "../util/logger";
+import * as _ from 'lodash'
 
 /**
  * 游戏内变量
@@ -76,7 +78,7 @@ export interface IStageState {
 }
 
 //初始化舞台数据
-const initState: IStageState = {
+export const initState: IStageState = {
     sceneData: initSaveSceneData,
     oldBgName: '',
     bgName: '',//背景文件地址（相对或绝对）
@@ -101,7 +103,7 @@ const initState: IStageState = {
  * @return {function} 改变舞台状态
  */
 export function stageStateStore() {
-    const [stageState, setStageState] = useState(initState);
+    const [stageState, setStageState] = useState(_.cloneDeep(initState));
 
     /**
      * 设置舞台状态，以后会改
@@ -118,7 +120,7 @@ export function stageStateStore() {
     }
 
     const restoreStage = (newState: IStageState) => {
-        setStageState(state=>({...state,...newState}));
+        setStageState(state => ({...state, ...newState}));
     }
 
     return {
