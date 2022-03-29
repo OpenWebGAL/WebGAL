@@ -1,4 +1,4 @@
-import {commandType} from "../../interface/scene";
+import {commandType} from "../../interface/coreInterface/sceneInterface";
 import {assetSetter, fileType} from "../../util/assetSetter";
 
 /**

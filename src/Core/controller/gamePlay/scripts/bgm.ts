@@ -1,5 +1,5 @@
-import {ISentence} from "../../../interface/scene";
-import {IPerform} from "../../../interface/perform";
+import {ISentence} from "../../../interface/coreInterface/sceneInterface";
+import {IPerform} from "../../../interface/coreInterface/performInterface";
 import {playBgm} from "../../../util/playBgm";
 
 /**

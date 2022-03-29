@@ -1,7 +1,7 @@
 import {getRef} from "../../store/storeRef";
 import {runtime_currentBacklog} from "../../runtime/backlog";
 import {runtime_currentSceneData} from "../../runtime/sceneData";
-import {ISaveData} from "../../store/userData";
+import {ISaveData} from "../../interface/stateInterface/userDataInterface";
 import {runtime_gamePlay} from "../../runtime/gamePlay";
 import * as _ from 'lodash'
 import {logger} from "../../util/logger";

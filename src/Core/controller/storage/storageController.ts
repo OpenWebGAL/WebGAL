@@ -1,8 +1,8 @@
 import * as localforage from "localforage";
+import { IUserData } from "../../interface/stateInterface/userDataInterface";
 import {gameInfo} from "../../runtime/etc";
 import {getRef} from "../../store/storeRef";
 import {logger} from "../../util/logger";
-import {IUserData} from "../../store/userData";
 
 /**
  * 写入本地存储

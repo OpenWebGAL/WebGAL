@@ -1,4 +1,4 @@
-import {IAsset} from "../interface/scene";
+import {IAsset} from "../interface/coreInterface/sceneInterface";
 
 /**
  * 预加载函数

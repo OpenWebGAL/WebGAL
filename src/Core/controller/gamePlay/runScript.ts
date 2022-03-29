@@ -1,6 +1,6 @@
-import {commandType, ISentence} from "../../interface/scene";
+import {commandType, ISentence} from "../../interface/coreInterface/sceneInterface";
 import {say} from "./scripts/say";
-import {initPerform, IPerform} from "../../interface/perform";
+import {initPerform, IPerform} from "../../interface/coreInterface/performInterface";
 import {unmountPerform} from "../perform/unmountPerform";
 import {getRef} from "../../store/storeRef";
 import {runtime_gamePlay} from "../../runtime/gamePlay";

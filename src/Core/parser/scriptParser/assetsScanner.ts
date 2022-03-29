@@ -1,4 +1,4 @@
-import {arg, commandType, IAsset} from "../../interface/scene";
+import {arg, commandType, IAsset} from "../../interface/coreInterface/sceneInterface";
 
 /**
  * 根据语句类型、语句内容、参数列表，扫描该语句可能携带的资源
