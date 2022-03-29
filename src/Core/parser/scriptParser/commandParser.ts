@@ -81,6 +81,8 @@ function getCommandType(command: string): commandType {
             return commandType.chooseLabel;
         case 'setVar':
             return commandType.setVar;
+        case 'callScene':
+            return commandType.callScene;
         default:
             //默认是对话
             return commandType.say;

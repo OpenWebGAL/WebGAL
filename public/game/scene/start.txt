@@ -1,5 +1,8 @@
 bgm:夏影.mp3;
 WebGAL:这是一条测试语句。 -V1.ogg;
+callScene:test2.txt;
+back;
+back;
 changeBg:0000.png -next;
 这是测试场景的第二条语句;
 changeBg:0000e.png -next;
