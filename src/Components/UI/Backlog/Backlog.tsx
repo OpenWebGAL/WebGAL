@@ -3,16 +3,18 @@ import {useStore} from "reto";
 import {GuiStateStore} from "../../../Core/store/GUI";
 import {runtime_currentBacklog} from "../../../Core/runtime/backlog";
 import {CloseSmall} from '@icon-park/react';
+import {jumpFromBacklog} from "../../../Core/controller/storage/jumpFromBacklog";
 
 export const Backlog = () => {
     const GUIStore = useStore(GuiStateStore)
     const backlogList = [];
     for (let i = 0; i < runtime_currentBacklog.length; i++) {
         const backlogItem = runtime_currentBacklog[i];
-        const singleBacklogView = <div className={styles.backlog_item}
-                                       key={'backlogItem' +
-                                           backlogItem.currentStageState.showText +
-                                           backlogItem.saveScene.currentSentenceId}>
+        const singleBacklogView = <div onClick={() => {
+            jumpFromBacklog(i);
+        }} className={styles.backlog_item} key={'backlogItem' +
+            backlogItem.currentStageState.showText +
+            backlogItem.saveScene.currentSentenceId}>
             {backlogItem.currentStageState.showText}
         </div>
         backlogList.unshift(singleBacklogView);
