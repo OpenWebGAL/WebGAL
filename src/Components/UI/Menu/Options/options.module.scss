@@ -15,17 +15,18 @@
 .Options_title {
   font-size: 225%;
   margin: 0.5em 0 0.5em 0;
-  padding: 0.2em 2em 0.2em 1.5em;
+  padding: 0.2em 2em 0.2em 1.1em;
   box-sizing: border-box;
-  background-color: rgba(255, 255, 255, 0.99);
-  border-right: .2em solid rgba(81, 110, 65, 0.9);
-  box-shadow: .1em .1em .8em .2em rgba(0, 0, 0, 0.07);
+  //background-color: rgba(255, 255, 255, 0.99);
+  //border-right: .2em solid rgba(81, 110, 65, 0.9);
+  //box-shadow: .1em .1em .8em .2em rgba(0, 0, 0, 0.07);
 }
 
 .Option_title_text {
+  font-size: 165%;
   font-weight: bold;
   color: transparent;
-  background: linear-gradient(135deg, rgba(81, 110, 65, 0.4) 0%, rgba(81, 110, 65, 0.6) 45%, rgba(81, 110, 65, 0.9) 100%);
+  background: linear-gradient(135deg, rgba(81, 110, 65, 0.05) 0%, rgba(81, 110, 65, 0.7) 45%, rgba(81, 110, 65, 1) 100%);
   -webkit-background-clip: text;
 }
 

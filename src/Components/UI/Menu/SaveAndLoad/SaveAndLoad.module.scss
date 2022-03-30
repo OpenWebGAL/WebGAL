@@ -1,0 +1,39 @@
+.Save_Load_main {
+  height: 100%;
+  position: absolute;
+  cursor: default;
+}
+
+.Save_Load_top {
+  height: 10%;
+  width: 100%;
+}
+
+.Save_Load_title {
+  width: auto;
+  font-size: 225%;
+  margin: 0.5em 0 0.5em 0;
+  padding: 0.2em 2em 0.2em 1.1em;
+  box-sizing: border-box;
+  //background-color: rgba(255, 255, 255, 0.99);
+  //border-right: 0.2em solid rgba(74, 34, 93, 0.9);
+  //box-shadow: .1em .1em .8em .2em rgba(255, 255, 255, 0.35);
+}
+
+.Save_title_text {
+  font-size: 165%;
+  font-weight: bold;
+  color: transparent;
+  background: linear-gradient(135deg, #d7afeb 0%, #ffebff 45%, rgba(255, 255, 255, 1) 100%);
+  text-shadow: 2px 2px 15px rgba(255,255,255,0.5);
+  -webkit-background-clip: text;
+}
+
+.Load_title_text {
+  font-size: 165%;
+  font-weight: bold;
+  color: transparent;
+  background: linear-gradient(135deg, rgb(150, 200, 255) 0%, rgba(215,255,255,1) 65%, rgba(255, 255, 255, 1) 100%);
+  text-shadow: 2px 2px 15px rgba(255,255,255,0.5);
+  -webkit-background-clip: text;
+}
