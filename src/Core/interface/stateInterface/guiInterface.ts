@@ -8,6 +8,7 @@ export interface IGuiState {
     showTitle: boolean, //是否显示标题界面
     showMenuPanel: boolean, //是否显示Menu界面
     currentMenuTag: MenuPanelTag,//当前Menu界面的选项卡
+    showBacklog:boolean,
     titleBgm: string,//标题背景音乐
     titleBg: string//标题背景图片
 }
