@@ -28,6 +28,7 @@
   color: transparent;
   background: linear-gradient(135deg, rgba(81, 110, 65, 0.05) 0%, rgba(81, 110, 65, 0.7) 45%, rgba(81, 110, 65, 1) 100%);
   -webkit-background-clip: text;
+  animation: Elements_in ease-out 0.7s forwards;
 }
 
 .Options_main_content {
@@ -43,4 +44,15 @@
   align-content: flex-start;
   flex-wrap: wrap;
   padding: 1em 1em 1em 1em;
+}
+
+@keyframes Elements_in {
+  0% {
+    opacity: 0;
+    transform: scale(1.03,1.03) translate(-25px,-20px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1,1) translate(0,0);
+  }
 }

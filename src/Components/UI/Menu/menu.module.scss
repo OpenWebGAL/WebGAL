@@ -1,12 +1,23 @@
-.Menu_main{
+.Menu_main {
   width: 100%;
   height: 100%;
   position: absolute;
   z-index: 16;
   //backdrop-filter: blur(1px);
+  animation: Menu_ShowSoftly 0.5s forwards;
 }
 
-.Menu_TagContent{
+.Menu_TagContent {
   width: 100%;
   height: 90%;
+}
+
+
+@keyframes Menu_ShowSoftly {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
