@@ -9,6 +9,7 @@ import {userDataStateStore} from "./Core/store/userData";
 import Menu from "./Components/UI/Menu/Menu";
 import {MainStage} from "./Components/Stage/MainStage";
 import {Bottom_ControlPanel} from "./Components/UI/Bottom_ControlPanel/Buttom_ControlPanel";
+import {Backlog} from "./Components/UI/Backlog/Backlog";
 
 function App() {
     // 建立对所有状态存储的引用，方便管理
@@ -33,6 +34,7 @@ function App() {
                         <Menu/>
                         <MainStage/>
                         <Bottom_ControlPanel/>
+                        <Backlog/>
                     </Provider>
                 </Provider>
             </Provider>
