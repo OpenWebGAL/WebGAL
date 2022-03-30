@@ -5,6 +5,7 @@
 import {useState} from "react"
 import {getStorage} from "../controller/storage/storageController";
 import {IGuiState} from "../interface/stateInterface/guiInterface";
+import {getRef} from "./storeRef";
 
 
 /**
@@ -25,6 +26,7 @@ const initState: IGuiState = {
     showStarter: true,
     showTitle: true,
     showMenuPanel: false,
+    showTextBox: true,
     currentMenuTag: MenuPanelTag.Option,
     titleBg: '',
     titleBgm: ''
@@ -52,6 +54,9 @@ export function GuiStateStore() {
     const setVisibility = <K extends keyof componentsVisibility>(key: K, value: boolean) => {
         getStorage();
         GuiState[key] = value;
+        if (key === 'showMenuPanel') {
+            GuiState['showTextBox'] = !value;
+        }
         setGuiState({...GuiState});
     }
 
