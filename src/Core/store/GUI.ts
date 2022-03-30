@@ -4,7 +4,7 @@
  */
 import {useState} from "react"
 import {getStorage} from "../controller/storage/storageController";
-import { IGuiState } from "../interface/stateInterface/guiInterface";
+import {IGuiState} from "../interface/stateInterface/guiInterface";
 
 
 /**
@@ -17,12 +17,12 @@ export enum MenuPanelTag {
 }
 
 
-
 /**
  * 初始GUI状态表
  */
 const initState: IGuiState = {
-    showStarter:true,
+    showBacklog: false,
+    showStarter: true,
     showTitle: true,
     showMenuPanel: false,
     currentMenuTag: MenuPanelTag.Option,
