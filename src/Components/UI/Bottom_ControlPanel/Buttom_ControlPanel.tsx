@@ -10,7 +10,10 @@ export const Bottom_ControlPanel = () => {
     const GUIstore = useStore(GuiStateStore);
 
     return <div className={styles.main}>
-        <AlignTextLeftOne theme="outline" size="36" fill="#f5f5f7" strokeWidth={3.5}/>
+        <AlignTextLeftOne onClick={() => {
+            GUIstore.setVisibility('showBacklog', true);
+        }
+        } theme="outline" size="36" fill="#f5f5f7" strokeWidth={3.5}/>
         <ReplayMusic theme="outline" size="36" fill="#f5f5f7" strokeWidth={3.5}/>
         <PlayOne onClick={switchAuto} theme="outline" size="36" fill="#f5f5f7" strokeWidth={3.5}/>
         <DoubleRight onClick={switchFast} theme="outline" size="36" fill="#f5f5f7" strokeWidth={3.5}/>

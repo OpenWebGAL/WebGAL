@@ -4,4 +4,37 @@
   width: 100%;
   height: 100%;
   z-index: 10;
+  background: rgba(0,0,0,0.6);
+  padding: 2em 0 2em 0;
+}
+
+.backlog_item{
+  display: flex;
+  color: white;
+  font-size: 200%;
+}
+
+.backlog_top{
+  padding: 0 0 0 1em;
+  display: flex;
+  height: 10%;
+}
+
+.backlog_title{
+  height: 100%;
+  line-height: 100%;
+  font-size: 360%;
+  font-weight: bold;
+  color: transparent;
+  background: linear-gradient(150deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 1) 35%, rgba(165, 222, 228, 1) 100%);
+  -webkit-background-clip: text;
+}
+
+.backlog_content{
+  position: absolute;
+  height: 70%;
+  padding: 1em 5em 2em 5em;
+  overflow: auto;
+  display: flex;
+  flex-flow: column-reverse;
 }
