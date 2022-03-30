@@ -54,7 +54,7 @@ export function GuiStateStore() {
     const setVisibility = <K extends keyof componentsVisibility>(key: K, value: boolean) => {
         getStorage();
         GuiState[key] = value;
-        if (key === 'showMenuPanel') {
+        if (key === 'showMenuPanel' || key === 'showBacklog') {
             GuiState['showTextBox'] = !value;
         }
         setGuiState({...GuiState});
