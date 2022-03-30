@@ -15,6 +15,7 @@
   margin: 0.5em 0 0.5em 0;
   padding: 0.2em 2em 0.2em 1.1em;
   box-sizing: border-box;
+  animation: Elements_in ease-out 0.7s forwards;
   //background-color: rgba(255, 255, 255, 0.99);
   //border-right: 0.2em solid rgba(74, 34, 93, 0.9);
   //box-shadow: .1em .1em .8em .2em rgba(255, 255, 255, 0.35);
@@ -36,4 +37,15 @@
   background: linear-gradient(135deg, rgb(150, 200, 255) 0%, rgba(215,255,255,1) 65%, rgba(255, 255, 255, 1) 100%);
   text-shadow: 2px 2px 15px rgba(255,255,255,0.5);
   -webkit-background-clip: text;
+}
+
+@keyframes Elements_in {
+  0% {
+    opacity: 0;
+    transform: scale(1.03,1.03) translate(-25px,-20px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1,1) translate(0,0);
+  }
 }
