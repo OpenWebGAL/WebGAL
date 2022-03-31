@@ -2,7 +2,7 @@ import styles from './backlog.module.scss'
 import {useStore} from "reto";
 import {GuiStateStore} from "../../../Core/store/GUI";
 import {runtime_currentBacklog} from "../../../Core/runtime/backlog";
-import {CloseSmall} from '@icon-park/react';
+import {CloseSmall, Return, VolumeNotice} from '@icon-park/react';
 import {jumpFromBacklog} from "../../../Core/controller/storage/jumpFromBacklog";
 
 export const Backlog = () => {
@@ -10,21 +10,39 @@ export const Backlog = () => {
     const backlogList = [];
     for (let i = 0; i < runtime_currentBacklog.length; i++) {
         const backlogItem = runtime_currentBacklog[i];
-        const singleBacklogView = <div onClick={() => {
-            jumpFromBacklog(i);
-        }} className={styles.backlog_item} key={'backlogItem' +
-            backlogItem.currentStageState.showText +
-            backlogItem.saveScene.currentSentenceId}>
-            {backlogItem.currentStageState.showText}
+        const singleBacklogView = <div className={styles.backlog_item}
+                                       style={{animationDelay: `${20 * (runtime_currentBacklog.length - i)}ms`}}
+                                       key={'backlogItem' +
+                                           backlogItem.currentStageState.showText +
+                                           backlogItem.saveScene.currentSentenceId}>
+            <div className={styles.backlog_item_button_list}>
+                <div onClick={() => {
+                    jumpFromBacklog(i);
+                }} className={styles.backlog_item_button_element}>
+                    <Return theme="outline" size="36" fill="#ffffff" strokeWidth={3}/>
+                </div>
+                <div className={styles.backlog_item_button_element}>
+                    <VolumeNotice theme="outline" size="36" fill="#ffffff" strokeWidth={3}/>
+                </div>
+            </div>
+            <div className={styles.backlog_item_content}>
+                <span className={styles.backlog_item_content_name}>
+                    {backlogItem.currentStageState.showName + '：'}
+                </span>
+                <span className={styles.backlog_item_content_text}>
+                    {backlogItem.currentStageState.showText}
+                </span>
+
+            </div>
         </div>
         backlogList.unshift(singleBacklogView);
     }
     return <>
         {GUIStore.GuiState.showBacklog && < div className={styles.Backlog_main}>
             <div className={styles.backlog_top}>
-                <CloseSmall
-                    onClick={() => GUIStore.setVisibility('showBacklog', false)} theme="outline" size="4em"
-                    fill="#ffffff" strokeWidth={3}/>
+                <CloseSmall className={styles.backlog_top_icon}
+                            onClick={() => GUIStore.setVisibility('showBacklog', false)} theme="outline" size="4em"
+                            fill="#ffffff" strokeWidth={3}/>
                 <div className={styles.backlog_title}>回想</div>
             </div>
             <div className={styles.backlog_content}>
