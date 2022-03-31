@@ -43,3 +43,17 @@ function debounce(func: Function, wait: number) {
         }, wait);
     }
 }
+
+export const syncStorageFast = () => {
+    localforage.setItem(gameInfo.gameKey, getRef('userDataRef').userDataState).then(() => {
+        localforage.getItem(gameInfo.gameKey).then(newUserData => {
+            //如果没有数据，初始化
+            if (!newUserData) {
+                setStorage();
+                return;
+            }
+            getRef('userDataRef').replaceUserData(<IUserData>newUserData);
+        })
+        logger.info('同步本地存储');
+    });
+}
