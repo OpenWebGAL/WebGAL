@@ -4,7 +4,7 @@ import {runtime_currentBacklog} from "../../runtime/backlog";
 import {logger} from "../../util/logger";
 import {ISaveData} from "../../interface/stateInterface/userDataInterface";
 import {runtime_currentSceneData} from "../../runtime/sceneData";
-import {setStorage} from "./storageController";
+import {setStorage, syncStorageFast} from "./storageController";
 
 /**
  * 保存游戏
@@ -29,5 +29,5 @@ export const saveGame = (index: number) => {
     newSaveData[index] = saveData;
     userDataRef.setUserData('saveData', [...newSaveData]);
     logger.debug('存档完成', userDataRef.userDataState);
-    setStorage();
+    syncStorageFast();
 }
