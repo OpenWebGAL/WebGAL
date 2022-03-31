@@ -12,7 +12,7 @@ body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     overflow: hidden;
-    user-select:none;
+    user-select: none;
 }
 
 code {
@@ -24,6 +24,29 @@ code {
     width: 1600px;
     height: 900px;
     overflow: hidden;
+}
+
+/* 设置滚动条的样式 */
+::-webkit-scrollbar {
+    width: 12px;
+}
+
+/* 滚动槽 */
+::-webkit-scrollbar-track {
+    -webkit-box-shadow:0 0 10px rgba(255,255,255,0.2);
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+}
+
+/* 滚动条滑块 */
+::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background: rgba(255,255,255,0.5);
+    -webkit-box-shadow:0 0 10px rgba(0,0,0,0.5);
+}
+
+::-webkit-scrollbar-thumb:window-inactive {
+    /*background:rgba(255,0,0,0.4);*/
 }
 
 /*@media screen and (orientation: portrait) {*/
