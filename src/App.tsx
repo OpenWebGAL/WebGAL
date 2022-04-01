@@ -26,7 +26,7 @@ function App() {
 
     // Provider用于对各组件提供存储
     return (
-        <div className="App" style={{height: '100%', width: '100%'}}>
+        <div className="App" style={{height: '100%', width: '100%', background: 'rgba(0, 0, 0, 0.6)'}}>
             <Provider of={userDataStateStore} storeRef={userDataStoreRef}>
                 <Provider of={stageStateStore} storeRef={stageStoreRef}>
                     <Provider of={GuiStateStore} storeRef={GuiStoreRef}>

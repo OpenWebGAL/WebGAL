@@ -12,5 +12,5 @@ WebGAL4x_Build_4.0.2:这是测试场景的第六条语句;
 WebGAL4x_Build_4.0.2:这是测试场景的第七条语句;
 WebGAL4x_Build_4.0.2:这是测试场景的第八条语句;
 changeFigure:testFigure04.png -left;
-changeFigure:none -left -clear -next;
+changeFigure: -left -clear -next;
 changeFigure:testFigure04.png -right;
