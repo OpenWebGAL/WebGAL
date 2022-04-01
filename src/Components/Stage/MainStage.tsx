@@ -5,9 +5,11 @@ import {TextBox} from "./TextBox/TextBox";
 import {stageStateStore} from "../../Core/store/stage"
 import {FigureContainer} from "./FigureContainer/FigureContainer";
 import {EventHandler} from "./EventHandler/EventHandler";
+import {GuiStateStore} from "../../Core/store/GUI";
 
 export const MainStage: FC = () => {
     const stageStore = useStore(stageStateStore);
+    const GuiState = useStore(GuiStateStore)
     return <div className={styles.MainStage_main}>
         <div key={'bgMain' + stageStore.stageState.bgName}
              id={'MainStage_bg_MainContainer'}
@@ -22,7 +24,7 @@ export const MainStage: FC = () => {
             backgroundSize: "cover"
         }}/>
         <FigureContainer/>
-        <TextBox/>
+        {GuiState.GuiState.showTextBox && <TextBox/>}
         <EventHandler/>
     </div>
 }

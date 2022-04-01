@@ -5,7 +5,7 @@
  */
 import {useState} from "react";
 import {logger} from "../util/logger";
-import {IOptionData, IUserData } from "../interface/stateInterface/userDataInterface";
+import {IOptionData, IUserData} from "../interface/stateInterface/userDataInterface";
 
 /**
  * 播放速度的枚举类型
@@ -23,11 +23,11 @@ export enum textSize {
 }
 
 
-
 //初始化用户数据
 const initState: IUserData = {
     saveData: [],
     optionData: {
+        slPage: 1,
         volumeMain: 100,//主音量
         textSpeed: playSpeed.normal,//文字速度
         autoSpeed: playSpeed.normal,//自动播放速度
@@ -53,7 +53,6 @@ export function userDataStateStore() {
 
     //替换用户数据（多用于与本地存储交互）
     const replaceUserData = (newUserData: IUserData) => {
-        logger.warn('正在替换数据', newUserData);
         setUserDataState({...newUserData});
     }
 
@@ -62,10 +61,16 @@ export function userDataStateStore() {
         setUserDataState({...userDataState});
     }
 
+    const setSlPage = (index: number) => {
+        userDataState.optionData.slPage = index;
+        setUserDataState(state => ({...state, ...userDataState}));
+    }
+
     return {
         userDataState,
         setUserData,
         replaceUserData,
-        setOptionData
+        setOptionData,
+        setSlPage
     }
 }

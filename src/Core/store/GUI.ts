@@ -4,8 +4,7 @@
  */
 import {useState} from "react"
 import {getStorage} from "../controller/storage/storageController";
-import { IGuiState } from "../interface/stateInterface/guiInterface";
-
+import {IGuiState} from "../interface/stateInterface/guiInterface";
 
 /**
  * 当前Menu页面显示的Tag
@@ -17,14 +16,15 @@ export enum MenuPanelTag {
 }
 
 
-
 /**
  * 初始GUI状态表
  */
 const initState: IGuiState = {
-    showStarter:true,
+    showBacklog: false,
+    showStarter: true,
     showTitle: true,
     showMenuPanel: false,
+    showTextBox: true,
     currentMenuTag: MenuPanelTag.Option,
     titleBg: '',
     titleBgm: ''
@@ -52,6 +52,9 @@ export function GuiStateStore() {
     const setVisibility = <K extends keyof componentsVisibility>(key: K, value: boolean) => {
         getStorage();
         GuiState[key] = value;
+        if (key === 'showMenuPanel' || key === 'showBacklog') {
+            GuiState['showTextBox'] = !value;
+        }
         setGuiState({...GuiState});
     }
 
