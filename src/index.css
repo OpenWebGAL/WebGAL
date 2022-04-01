@@ -33,7 +33,7 @@ code {
 
 /* 滚动槽 */
 ::-webkit-scrollbar-track {
-    -webkit-box-shadow:0 0 10px rgba(255,255,255,0.2);
+    -webkit-box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
     background: rgba(255, 255, 255, 0.2);
     border-radius: 10px;
 }
@@ -41,8 +41,8 @@ code {
 /* 滚动条滑块 */
 ::-webkit-scrollbar-thumb {
     border-radius: 10px;
-    background: rgba(255,255,255,0.5);
-    -webkit-box-shadow:0 0 10px rgba(0,0,0,0.5);
+    background: rgba(255, 255, 255, 0.5);
+    -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
 
 ::-webkit-scrollbar-thumb:window-inactive {
