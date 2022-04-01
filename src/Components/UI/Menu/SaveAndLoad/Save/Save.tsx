@@ -3,7 +3,6 @@ import styles from "../SaveAndLoad.module.scss";
 import {saveGame} from "../../../../../Core/controller/storage/saveGame";
 import {useStore} from "reto";
 import {userDataStateStore} from "../../../../../Core/store/userData";
-import {syncStorageFast} from "../../../../../Core/controller/storage/storageController";
 
 export const Save: FC = () => {
     const userData = useStore(userDataStateStore);
@@ -15,13 +14,48 @@ export const Save: FC = () => {
         }
         const element = <div onClick={() => {
             userData.setSlPage(i);
-            syncStorageFast();
         }} key={'Save_element_page' + i} className={classNameOfElement}>
             <div className={styles.Save_Load_top_button_text}>
                 {i}
             </div>
         </div>
         page.push(element);
+    }
+
+    const showSaves = [];
+    //现在尝试设置10个存档每页
+    const start = (userData.userDataState.optionData.slPage - 1) * 10 + 1;
+    const end = start + 9;
+    for (let i = start; i <= end; i++) {
+        const saveData = userData.userDataState.saveData[i];
+        let saveElementContent = <div/>;
+        if (saveData) {
+            const speaker = saveData.nowStageState.showName === '' ? '' : `${saveData.nowStageState.showName}：`
+            saveElementContent = <>
+                <div className={styles.Save_Load_content_element_top}>
+                    <div className={styles.Save_Load_content_element_top_index}>
+                        {saveData.index}
+                    </div>
+                    <div className={styles.Save_Load_content_element_top_date}>
+                        {saveData.saveTime}
+                    </div>
+                </div>
+                <div className={styles.Save_Load_content_miniRen}>
+                    <img className={styles.Save_Load_content_miniRen_bg} alt={'Save_img_preview'}
+                         src={saveData.nowStageState.bgName}/>
+                </div>
+                <div className={styles.Save_Load_content_text}>
+                    {speaker + saveData.nowStageState.showText}
+                </div>
+            </>
+        } else {
+
+        }
+        const saveElement = <div onClick={() => saveGame(i)} key={'saveElement_' + i}
+                                 className={styles.Save_Load_content_element}>
+            {saveElementContent}
+        </div>
+        showSaves.push(saveElement);
     }
 
     return <div className={styles.Save_Load_main}>
@@ -35,6 +69,8 @@ export const Save: FC = () => {
                 {page}
             </div>
         </div>
-        <div onClick={() => saveGame(1)}>测试存档</div>
+        <div className={styles.Save_Load_content} id={'Save_content_page_' + userData.userDataState.optionData.slPage}>
+            {showSaves}
+        </div>
     </div>
 }
