@@ -26,7 +26,9 @@ export const Save: FC = () => {
     //现在尝试设置10个存档每页
     const start = (userData.userDataState.optionData.slPage - 1) * 10 + 1;
     const end = start + 9;
+    let animationIndex = 0;
     for (let i = start; i <= end; i++) {
+        animationIndex++;
         const saveData = userData.userDataState.saveData[i];
         let saveElementContent = <div/>;
         if (saveData) {
@@ -77,7 +79,8 @@ export const Save: FC = () => {
 
         }
         const saveElement = <div onClick={() => saveGame(i)} key={'saveElement_' + i}
-                                 className={styles.Save_Load_content_element}>
+                                 className={styles.Save_Load_content_element}
+                                 style={{animationDelay: `${animationIndex * 30}ms`}}>
             {saveElementContent}
         </div>
         showSaves.push(saveElement);
