@@ -17,7 +17,7 @@ export const saveGame = (index: number) => {
         nowStageState: _.cloneDeep(getRef('stageRef').stageState),
         backlog: saveBacklog, //舞台数据
         index: index,//存档的序号
-        saveTime: (new Date).toString(),//保存时间
+        saveTime: (new Date().toLocaleDateString() + ' ' + new Date().toLocaleTimeString('chinese', {hour12: false})),//保存时间
         sceneData: {
             currentSentenceId: runtime_currentSceneData.currentSentenceId,//当前语句ID
             sceneStack: _.cloneDeep(runtime_currentSceneData.sceneStack), //场景栈

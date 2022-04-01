@@ -63,6 +63,7 @@ export function userDataStateStore() {
 
     const setSlPage = (index: number) => {
         userDataState.optionData.slPage = index;
+        setUserDataState(state => ({...state, ...userDataState}));
     }
 
     return {
