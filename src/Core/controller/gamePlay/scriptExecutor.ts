@@ -59,7 +59,6 @@ export const scriptExecutor = () => {
             }
         }
         runtime_currentBacklog.push(backlogElement);
-        logger.info('当前backlog', _.cloneDeep(runtime_currentBacklog));
     }
     runtime_currentSceneData.currentSentenceId++;
 

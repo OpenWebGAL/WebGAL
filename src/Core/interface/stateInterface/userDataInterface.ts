@@ -11,7 +11,8 @@ export interface IOptionData {
     autoSpeed: playSpeed,//自动播放速度
     textSize: textSize,
     vocalVolume: number,//语音音量
-    bgmVolume: number//背景音乐音量
+    bgmVolume: number,//背景音乐音量
+    slPage:number //存读档界面所在页面
 }
 
 /**
