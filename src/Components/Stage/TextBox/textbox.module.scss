@@ -2,11 +2,11 @@
   position: absolute;
   z-index: 6;
   width: 100%;
-  height: 40%;
-  background-color: rgba(0, 0, 0, 0.5);
+  height: 36.5%;
+  background-color: rgba(0, 0, 0, 0.4);
   bottom: 0;
   color: white;
-  padding: 1em 5.5em 1em 5.5em;
+  padding: 0.5em 5.5em 1em 5.5em;
   font-size: 250%;
   box-sizing: border-box;
   overflow: hidden;
@@ -14,6 +14,7 @@
   flex-flow: column;
   align-items: flex-start;
   animation: showSoftly 0.7s ease-out forwards;
+  letter-spacing: 0.07em;
 }
 
 @keyframes showSoftly {
@@ -30,14 +31,28 @@
   animation: showSoftly 1000ms forwards;
 }
 
+.TextBox_textElement_start {
+  animation: TextDelayShow 700ms ease-out forwards;
+  opacity: 0;
+}
+
 .TextBox_textElement_Settled {
   opacity: 1;
 }
 
 .TextBox_showName {
   font-size: 85%;
-  border-bottom: 3px solid rgba(255, 255, 255, 0.5);
+  border-bottom: 2px solid rgba(255, 255, 255, 0.3);
   min-width: 50%;
-  padding: 0 0.2em 0.2em 0.2em;
+  padding: 0 0.2em 0.2em 0.3em;
   margin: 0 0 0.2em 0;
+}
+
+@keyframes TextDelayShow {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
