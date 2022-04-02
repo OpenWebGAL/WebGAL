@@ -74,7 +74,7 @@ export const Load: FC = () => {
                                 src={saveData.nowStageState.figName}/></div>
                     }
                 </div>
-                <div className={styles.Save_Load_content_text}>
+                <div className={styles.Save_Load_content_text + ' ' + styles.Load_content_text}>
                     {speaker + saveData.nowStageState.showText}
                 </div>
             </>

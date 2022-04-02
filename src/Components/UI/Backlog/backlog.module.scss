@@ -20,7 +20,7 @@
 .backlog_top_icon {
   padding: 10px 10px 0 10px;
   border-radius: 50px;
-  transform: translate(0,-11px);
+  transform: translate(0, -11px);
 }
 
 .backlog_top_icon:hover {
@@ -44,14 +44,14 @@
   font-size: 360%;
   font-weight: bold;
   color: transparent;
-  background: linear-gradient(150deg, rgba(255, 255, 255, 1) 0%, rgba(165, 212, 228, 1) 100%);
+  background: linear-gradient(150deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 1) 35%, rgba(165, 212, 228, 1) 100%);
   -webkit-background-clip: text;
 }
 
 .backlog_content {
   position: absolute;
   height: 82%;
-  padding: 1em 4.5em 1em 4.5em;
+  padding: 1em 5em 1em 5em;
   overflow: auto;
   display: flex;
   flex-flow: column-reverse;
@@ -64,10 +64,10 @@
 .backlog_item {
   display: flex;
   color: white;
-  font-size: 200%;
+  font-size: 165%;
   opacity: 0;
   animation: backlog_item_in 0.5s ease-out forwards;
-  margin: 1em 0 0 0;
+  margin: 1.25em 0 0 0;
   width: 100%;
 }
 
@@ -85,7 +85,7 @@
 }
 
 .backlog_item_button_element {
-  padding: 6px 17px 0 17px;
+  padding: 3px 17px 0 17px;
   margin: 0 0.3em 0 0.3em;
   background: rgba(255, 255, 255, 0.1);
   border-radius: 7px;

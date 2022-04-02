@@ -19,10 +19,10 @@ export const Backlog = () => {
                 <div onClick={() => {
                     jumpFromBacklog(i);
                 }} className={styles.backlog_item_button_element}>
-                    <Return theme="outline" size="36" fill="#ffffff" strokeWidth={3}/>
+                    <Return theme="outline" size="26" fill="#ffffff" strokeWidth={3}/>
                 </div>
                 <div className={styles.backlog_item_button_element}>
-                    <VolumeNotice theme="outline" size="36" fill="#ffffff" strokeWidth={3}/>
+                    <VolumeNotice theme="outline" size="26" fill="#ffffff" strokeWidth={3}/>
                 </div>
             </div>
             <div className={styles.backlog_item_content}>
