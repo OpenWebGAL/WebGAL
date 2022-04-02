@@ -3,6 +3,7 @@ import styles from "../SaveAndLoad.module.scss";
 import {saveGame} from "../../../../../Core/controller/storage/saveGame";
 import {useStore} from "reto";
 import {userDataStateStore} from "../../../../../Core/store/userData";
+import {setStorage} from "../../../../../Core/controller/storage/storageController";
 
 export const Save: FC = () => {
     const userData = useStore(userDataStateStore);
@@ -14,6 +15,7 @@ export const Save: FC = () => {
         }
         const element = <div onClick={() => {
             userData.setSlPage(i);
+            setStorage();
         }} key={'Save_element_page' + i} className={classNameOfElement}>
             <div className={styles.Save_Load_top_button_text}>
                 {i}
