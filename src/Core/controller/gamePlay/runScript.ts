@@ -23,23 +23,20 @@ export const runScript = (script: ISentence) => {
     let perform: IPerform = initPerform;
     let funcToRun: scriptFunction = say; //默认是say
 
+    //建立语句类型到执行函数的映射
+    const scriptToFuncMap = new Map(
+        [
+            [commandType.say, say],
+            [commandType.changeBg, changeBg],
+            [commandType.changeFigure, changeFigure],
+            [commandType.bgm, bgm],
+            [commandType.callScene, callSceneScript]
+        ]
+    )
+
     //根据脚本类型切换函数
-    switch (script.command) {
-        case commandType.say:
-            funcToRun = say;
-            break;
-        case commandType.changeBg:
-            funcToRun = changeBg;
-            break;
-        case commandType.changeFigure:
-            funcToRun = changeFigure;
-            break;
-        case commandType.bgm:
-            funcToRun = bgm;
-            break;
-        case commandType.callScene:
-            funcToRun = callSceneScript;
-            break;
+    if (scriptToFuncMap.has(script.command)) {
+        funcToRun = scriptToFuncMap.get(script.command) as scriptFunction;
     }
 
     //调用脚本对应的函数
