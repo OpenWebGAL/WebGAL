@@ -8,6 +8,7 @@ import {changeBg} from "./scripts/changeBg";
 import {changeFigure} from "./scripts/changeFigure";
 import {bgm} from "./scripts/bgm";
 import {callSceneScript} from "./scripts/callSceneScript";
+import {changeSceneScript} from "./scripts/changeSceneScript";
 
 /**
  * 规范函数的类型
@@ -30,7 +31,9 @@ export const runScript = (script: ISentence) => {
             [commandType.changeBg, changeBg],
             [commandType.changeFigure, changeFigure],
             [commandType.bgm, bgm],
-            [commandType.callScene, callSceneScript]
+            [commandType.callScene, callSceneScript],
+            [commandType.changeScene, changeSceneScript],
+
         ]
     )
 
