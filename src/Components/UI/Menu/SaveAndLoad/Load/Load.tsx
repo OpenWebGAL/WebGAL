@@ -33,7 +33,7 @@ export const Load: FC = () => {
         const saveData = userData.userDataState.saveData[i];
         let saveElementContent = <div/>;
         if (saveData) {
-            const speaker = saveData.nowStageState.showName === '' ? '' : `${saveData.nowStageState.showName}：`
+            const speaker = saveData.nowStageState.showName === '' ? '' : `${saveData.nowStageState.showName}`
             saveElementContent = <>
                 <div className={styles.Save_Load_content_element_top}>
                     <div
@@ -74,8 +74,12 @@ export const Load: FC = () => {
                                 src={saveData.nowStageState.figName}/></div>
                     }
                 </div>
-                <div className={styles.Save_Load_content_text + ' ' + styles.Load_content_text}>
-                    {speaker + saveData.nowStageState.showText}
+                <div className={styles.Save_Load_content_text}>
+                    <div
+                        className={styles.Save_Load_content_speaker + ' ' + styles.Load_content_speaker}>{speaker}</div>
+                    <div className={styles.Save_Load_content_text_padding}>
+                        {saveData.nowStageState.showText}
+                    </div>
                 </div>
             </>
         } else {
