@@ -39,7 +39,7 @@
 
 .Load_title_text {
   height: 100%;
-  font-size: 125%;
+  font-size: 130%;
   font-weight: bold;
   color: transparent;
   background: linear-gradient(135deg, #005CAF 0%, #005CAF 45%, #005CAF 100%);
@@ -112,14 +112,15 @@
 }
 
 .Save_Load_content_element {
-  background-color: rgba(255, 255, 255, 0.35);
-  border: 3px solid rgba(255, 255, 255, 0.7);
+  background-color: rgba(255, 255, 255, 0.3);
+  border: 2px solid rgba(255, 255, 255, 0.5);
   width: 17.5%;
   height: 45%;
-  box-shadow: 0 0 15px 3px rgba(255, 255, 255, 0.35);
+  box-shadow: 0 0 15px 2px rgba(255, 255, 255, 0.35);
   overflow: hidden;
   animation: Elements_in 1s ease-out forwards;
   opacity: 0;
+  border-radius: 7px;
 }
 
 .Save_Load_content_element:hover {
@@ -147,10 +148,10 @@
 }
 
 .Save_Load_content_element_top_date {
-  padding: 0 0 0 0.5em;
+  padding: 0.2em 0 0 0.5em;
   background-color: #77428D;
   color: rgba(255, 255, 255, 1);
-  font-size: 155%;
+  font-size: 135%;
   height: 100%;
   width: 80%;
 }
@@ -160,20 +161,37 @@
 }
 
 .Save_Load_content_text {
-  letter-spacing: 0.07em;
-  font-weight: normal;
-  color: rgba(255, 255, 255, 1);
-  padding: 0.7em 0.7em 0.7em 0.7em;
-  text-shadow: 0 0 25px rgba(0, 0, 0, 0.5);
-  font-size: 115%;
+  font-family: serif;
+  letter-spacing: 0.05em;
+  color: rgba(45,52,46,1);
+  //padding: 0.7em 0.7em 0.7em 0.7em;
+  text-shadow: 0 0 15px rgba(255, 255, 255, 0.35);
+  font-size: 110%;
   height: 38%;
   width: 100%;
   box-sizing: border-box;
-  background-color: rgba(119,66,141,0.75);
+  background: radial-gradient(at 7.5% 10%, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.35));
 }
 
-.Load_content_text{
-  background-color: rgba(0,92,175,0.75);
+.Save_Load_content_text_padding {
+  padding: 0.3em 0.5em 0.3em 0.5em;
+}
+
+.Save_Load_content_speaker {
+  color: #77428D;
+  padding: 0.3em 0.5em 0.1em 0.5em;
+  width: 100%;
+  height: 20%;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.45);
+}
+
+.Load_content_speaker{
+  color: #005CAF;
+}
+
+
+.Load_content_text {
+  background-color: rgba(0, 92, 175, 0.75);
 }
 
 .Save_Load_content_miniRen {
