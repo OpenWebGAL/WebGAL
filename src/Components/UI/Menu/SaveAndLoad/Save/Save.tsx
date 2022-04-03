@@ -3,6 +3,7 @@ import styles from "../SaveAndLoad.module.scss";
 import {saveGame} from "../../../../../Core/controller/storage/saveGame";
 import {useStore} from "reto";
 import {userDataStateStore} from "../../../../../Core/store/userData";
+import {setStorage} from "../../../../../Core/controller/storage/storageController";
 
 export const Save: FC = () => {
     const userData = useStore(userDataStateStore);
@@ -14,6 +15,7 @@ export const Save: FC = () => {
         }
         const element = <div onClick={() => {
             userData.setSlPage(i);
+            setStorage();
         }} key={'Save_element_page' + i} className={classNameOfElement}>
             <div className={styles.Save_Load_top_button_text}>
                 {i}
@@ -32,7 +34,7 @@ export const Save: FC = () => {
         const saveData = userData.userDataState.saveData[i];
         let saveElementContent = <div/>;
         if (saveData) {
-            const speaker = saveData.nowStageState.showName === '' ? '' : `${saveData.nowStageState.showName}：`
+            const speaker = saveData.nowStageState.showName === '' ? '' : `${saveData.nowStageState.showName}`
             saveElementContent = <>
                 <div className={styles.Save_Load_content_element_top}>
                     <div className={styles.Save_Load_content_element_top_index}>
@@ -72,7 +74,10 @@ export const Save: FC = () => {
                     }
                 </div>
                 <div className={styles.Save_Load_content_text}>
-                    {speaker + saveData.nowStageState.showText}
+                    <div className={styles.Save_Load_content_speaker}>{speaker}</div>
+                    <div className={styles.Save_Load_content_text_padding}>
+                        {saveData.nowStageState.showText}
+                    </div>
                 </div>
             </>
         } else {

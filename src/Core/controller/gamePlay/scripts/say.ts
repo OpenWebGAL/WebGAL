@@ -32,7 +32,7 @@ export const say = (sentence: ISentence): IPerform => {
     }
     stageStore.setStage('showName', showName);
     setTimeout(() => {
-        const textElements = document.querySelectorAll('.' + styles.TextBox_textElement_Settled);
+        const textElements = document.querySelectorAll('.' + styles.TextBox_textElement_start);
         const textArray = [...textElements];
         textArray.forEach(e => {
             e.className = styles.TextBox_textElement;
