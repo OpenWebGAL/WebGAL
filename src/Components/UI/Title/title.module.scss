@@ -1,33 +1,36 @@
-.Title_main{
+.Title_main {
   width: 100%;
   height: 100%;
   position: absolute;
   z-index: 13;
 }
-.Title_buttonList{
+
+.Title_buttonList {
   display: flex;
   position: absolute;
   bottom: 0;
-  height: 15%;
-  background-color: rgba(0,0,0,0.5);
+  height: 12%;
+  background: linear-gradient(rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.5) 75%, rgba(0, 0, 0, 0.75) 100%);
   width: 100%;
   justify-content: space-evenly;
   justify-items: center;
   align-items: center;
   flex-flow: row;
+  letter-spacing: 0.25em;
 }
-.Title_button{
+
+.Title_button {
   text-align: center;
   font-size: 250%;
   flex: 1 1 auto;
-  color: rgba(255,255,255,0.9);
+  color: rgba(255, 255, 255, 0.9);
   cursor: pointer;
 }
 
-.Title_starter{
+.Title_starter {
   height: 100%;
   width: 100%;
-  background: rgba(0,0,0,0.2);
+  background: rgba(0, 0, 0, 0.2);
   position: absolute;
   top: 0;
   display: block;
