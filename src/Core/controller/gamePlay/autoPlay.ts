@@ -1,13 +1,23 @@
 import {runtime_gamePlay} from "../../runtime/gamePlay";
 import {eventSender} from "../eventBus/eventSender";
 import {logger} from "../../util/logger";
+import styles from '../../../Components/UI/Bottom_ControlPanel/bottom_controlPanel.module.scss'
 
+const setButton = (on: boolean) => {
+    const autoIcon = document.getElementById('Button_ControlPanel_auto');
+    if (autoIcon) {
+        if (on) {
+            autoIcon.className = styles.button_on;
+        } else autoIcon.className = '';
+    }
+}
 
 /**
  * 停止自动播放
  */
 export const stopAuto = () => {
     runtime_gamePlay.isAuto = false;
+    setButton(false);
     if (runtime_gamePlay.autoInterval !== null) {
         clearInterval(runtime_gamePlay.autoInterval);
         runtime_gamePlay.autoInterval = null;
@@ -25,12 +35,14 @@ export const switchAuto = () => {
     //现在正在自动播放
     if (runtime_gamePlay.isAuto) {
         runtime_gamePlay.isAuto = false;
+        setButton(false);
         if (runtime_gamePlay.autoInterval !== null) {
             clearInterval(runtime_gamePlay.autoInterval);
             runtime_gamePlay.autoInterval = null;
         }
     } else { //当前不在自动播放
         runtime_gamePlay.isAuto = true;
+        setButton(true);
         runtime_gamePlay.autoInterval = setInterval(autoPlay, 100);
     }
 }
