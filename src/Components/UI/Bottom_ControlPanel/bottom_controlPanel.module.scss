@@ -1,6 +1,6 @@
 .main {
   position: absolute;
-  bottom: 0;
+  bottom: 0.3em;
   z-index: 9;
   display: flex;
   flex-flow: row;
@@ -17,5 +17,10 @@
 }
 
 .main span:hover {
-  background:rgba(0,0,0,0.3);
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.button_on {
+  background: rgba(255, 255, 255, 0.3);
+  box-shadow: 0 0 15px 2px rgba(255, 255, 255, 0.5);
 }

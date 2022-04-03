@@ -165,12 +165,12 @@
   letter-spacing: 0.05em;
   color: rgba(45,52,46,1);
   //padding: 0.7em 0.7em 0.7em 0.7em;
-  text-shadow: 0 0 15px rgba(255, 255, 255, 0.35);
+  text-shadow: 1px 1px 7px rgba(0, 0, 0, 0.4);
   font-size: 110%;
   height: 38%;
   width: 100%;
   box-sizing: border-box;
-  background: radial-gradient(at 7.5% 10%, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.35));
+  background: radial-gradient(at 12.5% 10%, rgba(255, 255, 255, 0.75), rgba(255, 255, 255, 0.5));
 }
 
 .Save_Load_content_text_padding {
