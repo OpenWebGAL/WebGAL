@@ -16,8 +16,10 @@ export const Backlog = () => {
                                            backlogItem.currentStageState.showText +
                                            backlogItem.saveScene.currentSentenceId}>
             <div className={styles.backlog_item_button_list}>
-                <div onClick={() => {
+                <div onClick={(e) => {
                     jumpFromBacklog(i);
+                    e.preventDefault();
+                    e.stopPropagation();
                 }} className={styles.backlog_item_button_element}>
                     <Return theme="outline" size="26" fill="#ffffff" strokeWidth={3}/>
                 </div>

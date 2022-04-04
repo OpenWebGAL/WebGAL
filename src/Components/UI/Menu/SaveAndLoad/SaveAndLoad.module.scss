@@ -161,12 +161,12 @@
 }
 
 .Save_Load_content_text {
-  font-family: serif;
+  font-family: 思源宋体,sans-serif;
   letter-spacing: 0.05em;
   color: rgba(45,52,46,1);
   //padding: 0.7em 0.7em 0.7em 0.7em;
   text-shadow: 1px 1px 7px rgba(0, 0, 0, 0.4);
-  font-size: 110%;
+  font-size: 115%;
   height: 38%;
   width: 100%;
   box-sizing: border-box;
@@ -174,14 +174,13 @@
 }
 
 .Save_Load_content_text_padding {
-  padding: 0.3em 0.5em 0.3em 0.5em;
+  padding: 0.2em 1em 0.2em 1em;
 }
 
 .Save_Load_content_speaker {
   color: #77428D;
-  padding: 0.3em 0.5em 0.1em 0.5em;
+  padding: 0.2em 1em 0.2em 1em;
   width: 100%;
-  height: 20%;
   border-bottom: 2px solid rgba(255, 255, 255, 0.45);
 }
 
