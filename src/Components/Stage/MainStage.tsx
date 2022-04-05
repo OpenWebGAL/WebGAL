@@ -6,6 +6,7 @@ import {stageStateStore} from "../../Core/store/stage"
 import {FigureContainer} from "./FigureContainer/FigureContainer";
 import {EventHandler} from "./EventHandler/EventHandler";
 import {GuiStateStore} from "../../Core/store/GUI";
+import {FullScreenPerform} from "./FullScreenPerform/FullScreenPerform";
 
 export const MainStage: FC = () => {
     const stageStore = useStore(stageStateStore);
@@ -26,5 +27,6 @@ export const MainStage: FC = () => {
         <FigureContainer/>
         {GuiState.GuiState.showTextBox && <TextBox/>}
         <EventHandler/>
+        <FullScreenPerform/>
     </div>
 }

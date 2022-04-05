@@ -8,20 +8,39 @@
 }
 
 .NormalOption_title {
-  color: rgb(245, 255, 245);
+  color: rgb(250, 255, 250);
   font-size: 200%;
   //border-bottom: 2px solid rgba(81, 110, 65, 0.9);
   padding: 0.15em 0.5em 0.15em 0.1em;
   font-weight: bold;
-  text-shadow: 0em -0.01em rgba(0, 0, 0, 1), -0.01em 0em rgba(0, 0, 0, 1), 0.01em 0em rgba(0, 0, 0, 1), 0em 0.01em rgba(0, 0, 0, 1),
-  -0.01em -0.01em rgba(0, 0, 0, 1), -0.01em 0.01em rgba(0, 0, 0, 1), 0.01em -0.01em rgba(0, 0, 0, 1), 0.01em 0.01em rgba(0, 0, 0, 1),
-  0em -0.02em rgba(0, 0, 0, 1), -0.02em 0em rgba(0, 0, 0, 1), 0.02em 0em rgba(0, 0, 0, 1), 0em 0.02em rgba(0, 0, 0, 1),
-  -0.02em -0.02em rgba(0, 0, 0, 1), -0.02em 0.02em rgba(0, 0, 0, 1), 0.02em -0.02em rgba(0, 0, 0, 1), 0.02em 0.02em rgba(0, 0, 0, 1),
-  0em -0.03em rgba(0, 0, 0, 1), -0.03em 0em rgba(0, 0, 0, 1), 0.03em 0em rgba(0, 0, 0, 1), 0em 0.03em rgba(0, 0, 0, 1),
-  -0.03em -0.03em rgba(0, 0, 0, 1), -0.03em 0.03em rgba(0, 0, 0, 1), 0.03em -0.03em rgba(0, 0, 0, 1), 0.03em 0.03em rgba(0, 0, 0, 1),
-  0.04em 0.04em rgba(81, 110, 65, 0.9), 0.05em 0.05em rgba(81, 110, 65, 0.9), 0.06em 0.06em rgba(81, 110, 65, 0.9), 0.07em 0.07em rgba(81, 110, 65, 0.9),
-  0.08em 0.08em rgba(81, 110, 65, 0.9), 0.09em 0.09em rgba(81, 110, 65, 0.9), 0.1em 0.1em rgba(81, 110, 65, 0.9), 0.11em 0.11em rgba(81, 110, 65, 0.9),
-;
+}
+
+.NormalOption_title_bef {
+  font-weight: bold;
+  font-size: 200%;
+  content: attr(data-text);
+  position: absolute;
+  -webkit-text-stroke: 3px rgba(0, 0, 0, 1);
+  z-index: -1;
+  padding: 0.15em 0.5em 0.15em 0.1em;
+}
+
+.NormalOption_title_sd {
+  font-weight: bold;
+  color: rgba(0, 0, 0, 0);
+  font-size: 200%;
+  position: absolute;
+  z-index: -1;
+  padding: 0.15em 0.5em 0.15em 0.1em;
+  text-shadow: 0.04em 0.04em rgba(81, 110, 65, 0.9),
+  0.05em 0.05em rgba(81, 110, 65, 0.9),
+  0.06em 0.06em rgba(81, 110, 65, 0.9),
+  0.07em 0.07em rgba(81, 110, 65, 0.9),
+  0.08em 0.08em rgba(81, 110, 65, 0.9),
+  0.09em 0.09em rgba(81, 110, 65, 0.9),
+  0.10em 0.10em rgba(81, 110, 65, 0.9),
+  0.11em 0.11em rgba(81, 110, 65, 0.9),
+  0.12em 0.12em rgba(81, 110, 65, 0.9);
 }
 
 .NormalOption_buttonList {
