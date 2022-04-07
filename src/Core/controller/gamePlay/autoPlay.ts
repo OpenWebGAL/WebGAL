@@ -8,7 +8,7 @@ const setButton = (on: boolean) => {
     if (autoIcon) {
         if (on) {
             autoIcon.className = styles.button_on;
-        } else autoIcon.className = '';
+        } else autoIcon.className = styles.singleButton;
     }
 }
 

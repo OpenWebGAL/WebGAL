@@ -1,26 +1,47 @@
 .main {
   position: absolute;
-  bottom: 0.3em;
+  bottom: 0.7em;
+  right: 2em;
   z-index: 9;
   display: flex;
   flex-flow: row;
   justify-content: center;
   align-items: center;
-  width: 100%;
-  padding: 0 0 0 0;
+  background-color: rgba(0, 0, 0, 0.35);
+  padding: 0 1em 0 1em;
+  border-radius: 10px;
 }
 
-.main span {
-  border-radius: 5px;
-  padding: 6px 6px 2px 6px;
-  margin: 2px 8px 2px 8px;
+.button {
+  position: relative;
+  top: 2px;
+  padding: 0 3px 0 0;
 }
 
-.main span:hover {
-  background: rgba(0, 0, 0, 0.3);
+.button_text {
+  position: relative;
+  bottom: 7px;
 }
 
 .button_on {
+  height: 100%;
+  display: inline-block;
+  color: white;
+  font-size: 150%;
+  padding: 0.2em 0.35em 0 0.2em;
+  transition: background-color 0.5s;
   background: rgba(255, 255, 255, 0.3);
-  box-shadow: 0 0 15px 2px rgba(255, 255, 255, 0.5);
+}
+
+.singleButton {
+  height: 100%;
+  display: inline-block;
+  color: white;
+  font-size: 150%;
+  padding: 0.2em 0.35em 0 0.2em;
+  transition: background-color 0.5s;
+}
+
+.singleButton:hover {
+  background-color: rgba(255, 255, 255, 0.15);
 }
