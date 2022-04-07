@@ -10,21 +10,36 @@
   position: absolute;
   bottom: 0;
   height: 12%;
-  background: linear-gradient(rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.5) 75%, rgba(0, 0, 0, 0.75) 100%);
+  background: rgba(0, 0, 0, 0.4);
   width: 100%;
   justify-content: space-evenly;
   justify-items: center;
   align-items: center;
   flex-flow: row;
   letter-spacing: 0.25em;
+  transition: background 0.7s;
+}
+
+.Title_buttonList:hover {
+  background: rgba(0, 0, 0, 0.6);
 }
 
 .Title_button {
   text-align: center;
-  font-size: 250%;
-  flex: 1 1 auto;
+  font-size: 200%;
+  flex: 0 1 auto;
   color: rgba(255, 255, 255, 0.9);
   cursor: pointer;
+  margin: 0 2em 0 2em;
+  padding: 0.2em 1em 0.2em 1em;
+  transition: background-color 0.3s, transform 0.3s, text-shadow 0.3s;
+  text-shadow: 0 0 15px rgba(0,0,0,0.5);
+}
+
+.Title_button:hover {
+  //background-color: rgba(255, 255, 255, 0.1);
+  text-shadow: 0 0 15px rgba(255, 255, 255, 1);
+  transform: scale(1.05, 1.05);
 }
 
 .Title_starter {
@@ -35,4 +50,12 @@
   top: 0;
   display: block;
   z-index: 14;
+}
+
+.Title_button_text {
+  padding: 0 0.5em 0 0.5em;
+}
+
+.Title_button_text_up {
+  border-bottom: 2px solid rgba(255, 255, 255, 0.75);
 }

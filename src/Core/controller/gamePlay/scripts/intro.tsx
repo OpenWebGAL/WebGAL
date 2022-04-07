@@ -3,6 +3,7 @@ import {IPerform} from "../../../interface/coreInterface/performInterface";
 import React from "react";
 import ReactDOM from "react-dom";
 import styles from '../../../../Components/Stage/FullScreenPerform/fullScreenPerform.module.scss'
+import {eventSender} from "../../eventBus/eventSender";
 
 export const intro = (sentence: ISentence): IPerform => {
     const introArray: Array<string> = sentence.content.split(/\|/);
@@ -28,6 +29,7 @@ export const intro = (sentence: ISentence): IPerform => {
             if (introContainer) {
                 introContainer.style.display = 'none';
             }
+            eventSender('nextSentence_target', 0, 1);
         },
         blockingNext: () => false,
         blockingAuto: () => true,
