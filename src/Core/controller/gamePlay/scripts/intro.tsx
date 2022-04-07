@@ -29,7 +29,6 @@ export const intro = (sentence: ISentence): IPerform => {
             if (introContainer) {
                 introContainer.style.display = 'none';
             }
-            eventSender('nextSentence_target', 0, 1);
         },
         blockingNext: () => false,
         blockingAuto: () => true,
