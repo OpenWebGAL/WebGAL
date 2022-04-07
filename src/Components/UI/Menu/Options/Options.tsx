@@ -13,6 +13,8 @@ export const Options: FC = () => {
     return <div className={styles.Options_main}>
         <div className={styles.Options_top}>
             <div className={styles.Options_title}>
+                <div className={styles.Option_title_text_ts + ' ' + styles.Option_title_text}>选项</div>
+                <div className={styles.Option_title_text_shadow + ' ' + styles.Option_title_text}>选项</div>
                 <div className={styles.Option_title_text}>选项</div>
             </div>
         </div>
@@ -77,7 +79,7 @@ export const Options: FC = () => {
                         fontSize: '175%',
                         color: 'rgb(255,255,255)',
                         height: '5em',
-                        textShadow:'2px 2px 15px rgba(0,0,0,0.5)'
+                        textShadow: '2px 2px 15px rgba(0,0,0,0.5)'
                     }}>
                         模拟后期加上文字显示效果的预览，用于在用户调整设置时可以预览到文字显示的效果。
                     </div>

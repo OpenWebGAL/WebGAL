@@ -7,6 +7,8 @@ import {FigureContainer} from "./FigureContainer/FigureContainer";
 import {EventHandler} from "./EventHandler/EventHandler";
 import {GuiStateStore} from "../../Core/store/GUI";
 import {FullScreenPerform} from "./FullScreenPerform/FullScreenPerform";
+import {nextSentence} from "../../Core/controller/gamePlay/nextSentence";
+import {stopAll} from "../../Core/controller/gamePlay/fastSkip";
 
 export const MainStage: FC = () => {
     const stageStore = useStore(stageStateStore);
@@ -28,5 +30,10 @@ export const MainStage: FC = () => {
         {GuiState.GuiState.showTextBox && <TextBox/>}
         <EventHandler/>
         <FullScreenPerform/>
+        <div onClick={() => {
+            stopAll();
+            nextSentence();
+        }} id={'FullScreenClcck'}
+             style={{width: '100%', height: '100%', position: "absolute", zIndex: '12', top: '0'}}/>
     </div>
 }
