@@ -1,0 +1,40 @@
+.FullScreenPerform_main {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+}
+
+.FullScreenPerform_element {
+  position: absolute;
+  display: none;
+  width: 100%;
+  height: 100%;
+  z-index: 11;
+}
+
+.introContainer {
+  padding: 3em 4em 3em 4em;
+  font-size: 350%;
+  position: absolute;
+  z-index: 11;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 1);
+  color: white;
+  display: none;
+}
+
+.introElement {
+  opacity: 0;
+  animation: intro_showSoftly 1.5s ease-out forwards;
+}
+
+@keyframes intro_showSoftly {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}

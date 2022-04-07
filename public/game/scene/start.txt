@@ -1,6 +1,7 @@
 bgm:夏影.mp3;
 changeBg:0000.png -next;
 WebGAL:这是一条测试语句。 -V1.ogg;
+intro:慢慢地|慢慢地|如雪花一般|凋零;
 callScene:test2.txt;
 back;
 WebGAL4x:这是测试场景的第二条语句，这是测试场景的第二条语句，这是测试场景的第二条语句，这是测试场景的第二条语句;

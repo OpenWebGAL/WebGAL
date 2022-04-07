@@ -17,6 +17,8 @@ export const contentParser = (contentRaw: string, type: commandType) => {
             return assetSetter(contentRaw, fileType.bgm);
         case commandType.callScene:
             return assetSetter(contentRaw, fileType.scene);
+        case commandType.changeScene:
+            return assetSetter(contentRaw, fileType.scene);
         default:
             return contentRaw;
     }
