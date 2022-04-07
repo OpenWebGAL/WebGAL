@@ -1,9 +1,9 @@
-import { arg, commandType, IAsset, ISentence, parsedCommand } from "../../interface/coreInterface/sceneInterface";
-import { commandParser } from "./commandParser";
-import { argsParser } from "./argsParser";
-import { contentParser } from "./contentParser";
-import { assetsScanner } from "./assetsScanner";
-import { subSceneScanner } from "./subSceneScanner";
+import {arg, commandType, IAsset, ISentence, parsedCommand} from "../../interface/coreInterface/sceneInterface";
+import {commandParser} from "./commandParser";
+import {argsParser} from "./argsParser";
+import {contentParser} from "./contentParser";
+import {assetsScanner} from "./assetsScanner";
+import {subSceneScanner} from "./subSceneScanner";
 
 
 /**
@@ -50,7 +50,7 @@ export const scriptParser = (sentenceRaw: string): ISentence => {
     }
     content = contentParser(sentenceRaw, command); // 将语句内容里的文件名转为相对或绝对路径
     sentenceAssets = assetsScanner(command, content, args);//扫描语句携带资源
-    subScene = subSceneScanner(content);//扫描语句携带子场景
+    subScene = subSceneScanner(command, content);//扫描语句携带子场景
     const parsedSentence: ISentence = {
         command: command, //语句类型
         commandRaw: commandRaw,//命令原始内容，方便调试

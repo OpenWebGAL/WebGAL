@@ -1,9 +1,10 @@
-import { IAsset, IScene, ISentence } from "../interface/coreInterface/sceneInterface";
-import { scriptParser } from "./scriptParser/scriptParser";
-import { assetsPrefetcher } from "../util/assetsPrefetcher";
-import { scenePrefetcher } from "../util/scenePrefetcher";
-import { logger } from "../util/logger";
+import {IAsset, IScene, ISentence} from "../interface/coreInterface/sceneInterface";
+import {scriptParser} from "./scriptParser/scriptParser";
+import {assetsPrefetcher} from "../util/assetsPrefetcher";
+import {scenePrefetcher} from "../util/scenePrefetcher";
+import {logger} from "../util/logger";
 import _ from 'lodash';
+import {settledScene} from "../runtime/etc";
 
 
 /**
@@ -28,6 +29,7 @@ export const sceneParser = (rawScene: string, sceneName: string, sceneUrl: strin
     assetsList = _.uniqWith(assetsList); //去重
     assetsPrefetcher(assetsList);
     //开始场景的预加载
+    settledScene.push(sceneUrl);//放入已加载场景列表，避免递归加载相同场景
     subSceneList = _.uniqWith(subSceneList); //去重
     scenePrefetcher(subSceneList);
 
