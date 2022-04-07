@@ -10,28 +10,52 @@ export const Bottom_ControlPanel = () => {
     const GUIstore = useStore(GuiStateStore);
 
     return <div className={styles.main}>
-        <AlignTextLeftOne onClick={() => {
-            GUIstore.setVisibility('showBacklog', true);
-        }
-        } theme="outline" size="36" fill="#f5f5f7" strokeWidth={3.5}/>
-        <ReplayMusic theme="outline" size="36" fill="#f5f5f7" strokeWidth={3.5}/>
-        <PlayOne id={'Button_ControlPanel_auto'} onClick={switchAuto} theme="outline" size="36" fill="#f5f5f7" strokeWidth={3.5}/>
-        <DoubleRight id={'Button_ControlPanel_fast'} onClick={switchFast} theme="outline" size="36" fill="#f5f5f7" strokeWidth={3.5}/>
-        <Save onClick={() => {
+        <span className={styles.singleButton} onClick={() => GUIstore.setVisibility('showBacklog', true)}>
+            <AlignTextLeftOne className={styles.button} theme="outline" size="36" fill="#f5f5f7" strokeWidth={3.5}/>
+            <span className={styles.button_text}>回想</span>
+        </span>
+        <span className={styles.singleButton}>
+            <ReplayMusic className={styles.button} theme="outline" size="36" fill="#f5f5f7" strokeWidth={3.5}/>
+        <span className={styles.button_text}>重播</span>
+        </span>
+        <span id={'Button_ControlPanel_auto'} className={styles.singleButton} onClick={switchAuto}>
+        <PlayOne className={styles.button} theme="outline" size="36" fill="#f5f5f7"
+                 strokeWidth={3.5}/>
+            <span className={styles.button_text}>自动</span>
+        </span>
+        <span id={'Button_ControlPanel_fast'} className={styles.singleButton} onClick={switchFast}>
+        <DoubleRight className={styles.button} theme="outline" size="36" fill="#f5f5f7"
+                     strokeWidth={3.5}/>
+            <span className={styles.button_text}>快进</span>
+        </span>
+        <span className={styles.singleButton} onClick={() => {
             GUIstore.setMenuPanelTag(MenuPanelTag.Save);
             GUIstore.setVisibility('showMenuPanel', true);
-        }} theme="outline" size="36" fill="#f5f5f7" strokeWidth={3.5}/>
-        <FolderOpen onClick={() => {
+        }
+        }>
+        <Save className={styles.button} theme="outline" size="36" fill="#f5f5f7" strokeWidth={3.5}/>
+            <span className={styles.button_text}>存档</span>
+        </span>
+        <span className={styles.singleButton} onClick={() => {
             GUIstore.setMenuPanelTag(MenuPanelTag.Load);
             GUIstore.setVisibility('showMenuPanel', true);
-        }} theme="outline" size="36" fill="#f5f5f7" strokeWidth={3.5}/>
-        <SettingTwo onClick={() => {
+        }}>
+        <FolderOpen className={styles.button} theme="outline" size="36" fill="#f5f5f7" strokeWidth={3.5}/>
+            <span className={styles.button_text}>读档</span>
+        </span>
+        <span className={styles.singleButton} onClick={() => {
             GUIstore.setMenuPanelTag(MenuPanelTag.Option);
             GUIstore.setVisibility('showMenuPanel', true);
-        }} theme="outline" size="36" fill="#f5f5f7" strokeWidth={3.5}/>
-        <Home onClick={() => {
+        }}>
+            <SettingTwo className={styles.button} theme="outline" size="36" fill="#f5f5f7" strokeWidth={3.5}/>
+            <span className={styles.button_text}>选项</span>
+        </span>
+        <span className={styles.singleButton} onClick={() => {
             GUIstore.setVisibility('showTitle', true);
             playBgm(GUIstore.GuiState.titleBgm);
-        }} theme="outline" size="36" fill="#f5f5f7" strokeWidth={3.5}/>
+        }}>
+            <Home className={styles.button} theme="outline" size="36" fill="#f5f5f7" strokeWidth={3.5}/>
+            <span className={styles.button_text}>标题</span>
+        </span>
     </div>
 }
