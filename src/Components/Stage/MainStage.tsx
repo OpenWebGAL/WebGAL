@@ -15,13 +15,13 @@ export const MainStage: FC = () => {
     const GuiState = useStore(GuiStateStore)
     return <div className={styles.MainStage_main}>
         <div key={'bgMain' + stageStore.stageState.bgName}
-             id={'MainStage_bg_MainContainer'}
+             id="MainStage_bg_MainContainer"
              className={styles.MainStage_bgContainer_onChange} style={{
             backgroundImage: `url("${stageStore.stageState.bgName}")`,
             backgroundSize: "cover"
         }}/>
         <div key={'bgOld' + stageStore.stageState.oldBgName}
-             id={'MainStage_bg_OldContainer'}
+             id="MainStage_bg_OldContainer"
              className={styles.MainStage_oldBgContainer} style={{
             backgroundImage: `url("${stageStore.stageState.oldBgName}")`,
             backgroundSize: "cover"
@@ -33,7 +33,7 @@ export const MainStage: FC = () => {
         <div onClick={() => {
             stopAll();
             nextSentence();
-        }} id={'FullScreenClcck'}
+        }} id="FullScreenClcck"
              style={{width: '100%', height: '100%', position: "absolute", zIndex: '12', top: '0'}}/>
     </div>
 }

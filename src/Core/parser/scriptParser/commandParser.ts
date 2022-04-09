@@ -1,4 +1,4 @@
-import {commandType, parsedCommand} from "../../interface/coreInterface/sceneInterface";
+import { commandType, parsedCommand } from '../../interface/coreInterface/sceneInterface'
 
 /**
  * 处理命令
@@ -7,13 +7,13 @@ import {commandType, parsedCommand} from "../../interface/coreInterface/sceneInt
  */
 export const commandParser = (commandRaw: string): parsedCommand => {
     const returnCommand: parsedCommand = {
-        type: commandType.say, //默认是say
-        additionalArgs: []
+        type: commandType.say, // 默认是say
+        additionalArgs: [],
     }
-    //开始处理命令内容
-    const type: commandType = getCommandType(commandRaw);
-    returnCommand.type = type;
-    //如果是对话，加上额外的参数
+    // 开始处理命令内容
+    const type: commandType = getCommandType(commandRaw)
+    returnCommand.type = type
+    // 如果是对话，加上额外的参数
     if (type === commandType.say) {
         returnCommand.additionalArgs.push({
             key: 'speaker',
@@ -26,7 +26,7 @@ export const commandParser = (commandRaw: string): parsedCommand => {
             value: true,
         })
     }
-    return returnCommand;
+    return returnCommand
 }
 
 /**
@@ -36,56 +36,55 @@ export const commandParser = (commandRaw: string): parsedCommand => {
  */
 function getCommandType(command: string): commandType {
     if (command.match(/if/)) {
-        return commandType.if;
+        return commandType.if
     }
     switch (command) {
         case 'intro':
-            return commandType.intro;
+            return commandType.intro
         case 'changeBg':
-            return commandType.changeBg;
+            return commandType.changeBg
         case 'changeFigure':
-            return commandType.changeFigure;
+            return commandType.changeFigure
         case 'miniAvatar':
-            return commandType.miniAvatar;
+            return commandType.miniAvatar
         case 'changeScene':
-            return commandType.changeScene;
+            return commandType.changeScene
         case 'choose':
-            return commandType.choose;
+            return commandType.choose
         case 'end':
-            return commandType.end;
+            return commandType.end
         case 'bgm':
-            return commandType.bgm;
+            return commandType.bgm
         case 'playVideo':
-            return commandType.video;
+            return commandType.video
         case 'setBgAni':
-            return commandType.perform_bgAni;
+            return commandType.perform_bgAni
         case 'setFigAni':
-            return commandType.perform_FigAni;
+            return commandType.perform_FigAni
         case 'setBgTransform':
-            return commandType.setBgTransform;
+            return commandType.setBgTransform
         case 'setBgFilter':
-            return commandType.setBgFilter;
+            return commandType.setBgFilter
         case 'setFigTransform':
-            return commandType.setFigTransform;
+            return commandType.setFigTransform
         case 'setFigFilter':
-            return commandType.setFigFilter;
+            return commandType.setFigFilter
         case 'pixiInit':
-            return commandType.pixiInit;
+            return commandType.pixiInit
         case 'pixiPerform':
-            return commandType.pixi;
+            return commandType.pixi
         case 'label':
-            return commandType.label;
+            return commandType.label
         case 'jumpLabel':
-            return commandType.jumpLabel;
+            return commandType.jumpLabel
         case 'chooseLabel':
-            return commandType.chooseLabel;
+            return commandType.chooseLabel
         case 'setVar':
-            return commandType.setVar;
+            return commandType.setVar
         case 'callScene':
-            return commandType.callScene;
+            return commandType.callScene
         default:
-            //默认是对话
-            return commandType.say;
+            // 默认是对话
+            return commandType.say
     }
-
 }

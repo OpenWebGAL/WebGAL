@@ -20,7 +20,7 @@ export const Options: FC = () => {
         </div>
         <div className={styles.Options_main_content}>
             <div className={styles.Options_main_content_half}>
-                <NormalOption key={'option0'} title={'文字显示速度'}>
+                <NormalOption key="option0" title="文字显示速度">
                     <NormalButton textList={['慢', '中', '快']} functionList={[
                         () => {
                             userDataStorage.setOptionData('textSpeed', 0);
@@ -37,7 +37,7 @@ export const Options: FC = () => {
                     ]}
                                   currentChecked={userDataStorage.userDataState.optionData.textSpeed}/>
                 </NormalOption>
-                <NormalOption key={'option1'} title={'自动播放速度'}>
+                <NormalOption key="option1" title="自动播放速度">
                     <NormalButton textList={['慢', '中', '快']} functionList={[
                         () => {
                             userDataStorage.setOptionData('autoSpeed', 0);
@@ -54,7 +54,7 @@ export const Options: FC = () => {
                     ]}
                                   currentChecked={userDataStorage.userDataState.optionData.autoSpeed}/>
                 </NormalOption>
-                <NormalOption key={'option2'} title={'文本大小'}>
+                <NormalOption key="option2" title="文本大小">
                     <NormalButton textList={['小', '中', '大']} functionList={[
                         () => {
                             userDataStorage.setOptionData('textSize', 0);
@@ -71,8 +71,8 @@ export const Options: FC = () => {
                     ]}
                                   currentChecked={userDataStorage.userDataState.optionData.textSize}/>
                 </NormalOption>
-                <NormalOption key={'option3'} title={'文本显示预览'}>
-                    {/*这是一个临时的组件，用于模拟文本预览的效果*/}
+                <NormalOption key="option3" title="文本显示预览">
+                    {/* 这是一个临时的组件，用于模拟文本预览的效果 */}
                     <div style={{
                         padding: '0.5em 1em 0.5em 1em',
                         background: 'rgba(0,0,0,0.35)',
@@ -87,26 +87,26 @@ export const Options: FC = () => {
 
             </div>
             <div className={styles.Options_main_content_half}>
-                <NormalOption key={'option4'} title={'主音量'}>
+                <NormalOption key="option4" title="主音量">
                     <OptionSlider initValue={userDataStorage.userDataState.optionData.volumeMain}
-                                  uniqueID={'主音量'} onChange={(event) => {
+                                  uniqueID="主音量" onChange={(event) => {
                         const newValue = event.target.value;
                         userDataStorage.setOptionData('volumeMain', Number(newValue));
                         setStorage();
                     }}
                     />
                 </NormalOption>
-                <NormalOption key={'option5'} title={'语音音量'}>
+                <NormalOption key="option5" title="语音音量">
                     <OptionSlider initValue={userDataStorage.userDataState.optionData.vocalVolume}
-                                  uniqueID={'语音音量'} onChange={(event) => {
+                                  uniqueID="语音音量" onChange={(event) => {
                         const newValue = event.target.value;
                         userDataStorage.setOptionData('vocalVolume', Number(newValue));
                         setStorage();
                     }}/>
                 </NormalOption>
-                <NormalOption key={'option6'} title={'背景音乐音量'}>
+                <NormalOption key="option6" title="背景音乐音量">
                     <OptionSlider initValue={userDataStorage.userDataState.optionData.bgmVolume}
-                                  uniqueID={'背景音乐音量'} onChange={(event) => {
+                                  uniqueID="背景音乐音量" onChange={(event) => {
                         const newValue = event.target.value;
                         userDataStorage.setOptionData('bgmVolume', Number(newValue));
                         setStorage();
