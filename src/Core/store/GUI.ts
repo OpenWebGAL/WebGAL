@@ -48,12 +48,16 @@ export function GuiStateStore() {
      * @param value 可见性，true or false
      */
     const setVisibility = <K extends keyof componentsVisibility>(key: K, value: boolean) => {
-        getStorage()
-        GuiState[key] = value
-        if (key === 'showMenuPanel' || key === 'showBacklog') {
-            GuiState['showTextBox'] = !value
-        }
-        setGuiState({ ...GuiState })
+
+        setGuiState(state => {
+            getStorage();
+            state[key] = value;
+            if (key === 'showMenuPanel' || key === 'showBacklog') {
+                state['showTextBox'] = !value;
+            }
+            return {...state};
+        });
+
     }
 
     /**
@@ -61,9 +65,13 @@ export function GuiStateStore() {
      * @param value 标签页
      */
     const setMenuPanelTag = (value: MenuPanelTag) => {
-        getStorage()
-        GuiState.currentMenuTag = value
-        setGuiState({ ...GuiState })
+
+        setGuiState(state => {
+            getStorage();
+            state.currentMenuTag = value;
+            return {...state};
+        });
+
     }
 
     /**
@@ -72,8 +80,12 @@ export function GuiStateStore() {
      * @param value 资源路径
      */
     const setGuiAsset = <K extends keyof GuiAsset>(key: K, value: string) => {
-        GuiState[key] = value
-        setGuiState({ ...GuiState })
+
+        setGuiState(state => {
+            state[key] = value;
+            return {...state};
+        });
+
     }
 
     return {

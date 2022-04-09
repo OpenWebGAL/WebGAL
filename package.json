@@ -6,7 +6,7 @@
         "dev": "vite",
         "build": "tsc && vite build --base=./",
         "preview": "vite preview",
-        "lint:staged": "npx lint-staged"
+        "lint": "eslint src/** --fix"
     },
     "husky": {
         "hooks": {
