@@ -1,7 +1,9 @@
 import {ISceneData} from "../interface/coreInterface/sceneInterface";
 
 
-
+/**
+ * 初始化场景数据
+ */
 export const initSceneData = {
     currentSentenceId: 0,// 当前语句ID
     sceneStack: [],

@@ -10,6 +10,10 @@ import { eventSender } from '../eventBus/eventSender';
 import { IBacklogItem } from '../../interface/coreInterface/runtimeInterface';
 import { IStageState } from '../../interface/stateInterface/stageInterface';
 
+/**
+ * 从 backlog 跳转至一个先前的状态
+ * @param index
+ */
 export const jumpFromBacklog = (index: number) => {
     // 获得存档文件
     const backlogFile: IBacklogItem = runtime_currentBacklog[index];
