@@ -1,44 +1,44 @@
-import { FC } from 'react'
-import styles from '../SaveAndLoad.module.scss'
-import { saveGame } from '../../../../../Core/controller/storage/saveGame'
-import { useStore } from 'reto'
-import { userDataStateStore } from '../../../../../Core/store/userData'
-import { setStorage } from '../../../../../Core/controller/storage/storageController'
+import { FC } from 'react';
+import styles from '../SaveAndLoad.module.scss';
+import { saveGame } from '../../../../../Core/controller/storage/saveGame';
+import { useStore } from 'reto';
+import { userDataStateStore } from '../../../../../Core/store/userData';
+import { setStorage } from '../../../../../Core/controller/storage/storageController';
 
 export const Save: FC = () => {
-    const userData = useStore(userDataStateStore)
-    const page = []
+    const userData = useStore(userDataStateStore);
+    const page = [];
     for (let i = 1; i <= 20; i++) {
-        let classNameOfElement = styles.Save_Load_top_button
+        let classNameOfElement = styles.Save_Load_top_button;
         if (i === userData.userDataState.optionData.slPage) {
-            classNameOfElement = classNameOfElement + ' ' + styles.Save_Load_top_button_on
+            classNameOfElement = classNameOfElement + ' ' + styles.Save_Load_top_button_on;
         }
         const element = (
             <div
                 onClick={() => {
-                    userData.setSlPage(i)
-                    setStorage()
+                    userData.setSlPage(i);
+                    setStorage();
                 }}
                 key={'Save_element_page' + i}
                 className={classNameOfElement}
             >
                 <div className={styles.Save_Load_top_button_text}>{i}</div>
             </div>
-        )
-        page.push(element)
+        );
+        page.push(element);
     }
 
-    const showSaves = []
+    const showSaves = [];
     // 现在尝试设置10个存档每页
-    const start = (userData.userDataState.optionData.slPage - 1) * 10 + 1
-    const end = start + 9
-    let animationIndex = 0
+    const start = (userData.userDataState.optionData.slPage - 1) * 10 + 1;
+    const end = start + 9;
+    let animationIndex = 0;
     for (let i = start; i <= end; i++) {
-        animationIndex++
-        const saveData = userData.userDataState.saveData[i]
-        let saveElementContent = <div />
+        animationIndex++;
+        const saveData = userData.userDataState.saveData[i];
+        let saveElementContent = <div />;
         if (saveData) {
-            const speaker = saveData.nowStageState.showName === '' ? '' : `${saveData.nowStageState.showName}`
+            const speaker = saveData.nowStageState.showName === '' ? '' : `${saveData.nowStageState.showName}`;
             saveElementContent = (
                 <>
                     <div className={styles.Save_Load_content_element_top}>
@@ -102,7 +102,7 @@ export const Save: FC = () => {
                         <div className={styles.Save_Load_content_text_padding}>{saveData.nowStageState.showText}</div>
                     </div>
                 </>
-            )
+            );
         }
         // else {
 
@@ -116,8 +116,8 @@ export const Save: FC = () => {
             >
                 {saveElementContent}
             </div>
-        )
-        showSaves.push(saveElement)
+        );
+        showSaves.push(saveElement);
     }
 
     return (
@@ -135,5 +135,5 @@ export const Save: FC = () => {
                 {showSaves}
             </div>
         </div>
-    )
-}
+    );
+};

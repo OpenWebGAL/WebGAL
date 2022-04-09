@@ -13,6 +13,6 @@ export const initSceneData = {
         assetsList: [], // 资源列表
         subSceneList: [] // 子场景列表
     },
-}
+};
 // 场景数据
 export const runtime_currentSceneData: ISceneData = initSceneData;

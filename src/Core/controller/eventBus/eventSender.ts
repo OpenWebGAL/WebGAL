@@ -18,4 +18,4 @@ export const eventSender = (targetID: string, message: number, timeout: number):
             target.dispatchEvent(event);
         }
     }, timeout);
-}
+};

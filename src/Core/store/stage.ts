@@ -3,9 +3,9 @@
  * 舞台状态是演出结束后的“终态”，在读档时不发生演出，只是将舞台状态替换为读取的状态。
  */
 
-import { useState } from 'react'
-import * as _ from 'lodash'
-import { IStageState } from '../interface/stateInterface/stageInterface'
+import { useState } from 'react';
+import * as _ from 'lodash';
+import { IStageState } from '../interface/stateInterface/stageInterface';
 
 
 
@@ -27,7 +27,7 @@ export const initState: IStageState = {
     GameVar: {}, // 游戏内变量
     effects: [], // 应用的效果
     PerformList: [], // 要启动的演出列表
-}
+};
 
 /**
  * 创建舞台的状态管理
@@ -35,7 +35,7 @@ export const initState: IStageState = {
  * @return {function} 改变舞台状态
  */
 export function stageStateStore() {
-    const [stageState, setStageState] = useState(_.cloneDeep(initState))
+    const [stageState, setStageState] = useState(_.cloneDeep(initState));
 
     /**
      * 设置舞台状态，以后会改
@@ -49,20 +49,20 @@ export function stageStateStore() {
             return {...state};
         });
 
-    }
+    };
 
     const getStageState = () => {
-        return stageState
-    }
+        return stageState;
+    };
 
     const restoreStage = (newState: IStageState) => {
-        setStageState((state) => ({ ...state, ...newState }))
-    }
+        setStageState((state) => ({ ...state, ...newState }));
+    };
 
     return {
         stageState,
         setStage,
         getStageState,
         restoreStage,
-    }
+    };
 }

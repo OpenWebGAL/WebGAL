@@ -1,4 +1,4 @@
-import { MenuPanelTag } from '../../store/GUI'
+import { MenuPanelTag } from '../../store/GUI';
 
 /**
  * @interface IGuiState GUI状态接口

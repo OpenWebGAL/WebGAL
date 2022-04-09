@@ -1,4 +1,4 @@
-import styles from './figureContainer.module.scss'
+import styles from './figureContainer.module.scss';
 import {useStore} from "reto";
 import {stageStateStore} from "../../../Core/store/stage";
 
@@ -17,5 +17,5 @@ export const FigureContainer = () => {
             {stageStore.stageState.figNameRight !== '' &&
                 <img src={stageStore.stageState.figNameRight} alt="fig_right"/>}
         </div>
-    </div>
-}
+    </div>;
+};

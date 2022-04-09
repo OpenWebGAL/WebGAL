@@ -1,15 +1,15 @@
-import styles from './backlog.module.scss'
-import { useStore } from 'reto'
-import { GuiStateStore } from '../../../Core/store/GUI'
-import { runtime_currentBacklog } from '../../../Core/runtime/backlog'
-import { CloseSmall, Return, VolumeNotice } from '@icon-park/react'
-import { jumpFromBacklog } from '../../../Core/controller/storage/jumpFromBacklog'
+import styles from './backlog.module.scss';
+import { useStore } from 'reto';
+import { GuiStateStore } from '../../../Core/store/GUI';
+import { runtime_currentBacklog } from '../../../Core/runtime/backlog';
+import { CloseSmall, Return, VolumeNotice } from '@icon-park/react';
+import { jumpFromBacklog } from '../../../Core/controller/storage/jumpFromBacklog';
 
 export const Backlog = () => {
-    const GUIStore = useStore(GuiStateStore)
-    const backlogList = []
+    const GUIStore = useStore(GuiStateStore);
+    const backlogList = [];
     for (let i = 0; i < runtime_currentBacklog.length; i++) {
-        const backlogItem = runtime_currentBacklog[i]
+        const backlogItem = runtime_currentBacklog[i];
         const singleBacklogView = (
             <div
                 className={styles.backlog_item}
@@ -19,9 +19,9 @@ export const Backlog = () => {
                 <div className={styles.backlog_item_button_list}>
                     <div
                         onClick={(e) => {
-                            jumpFromBacklog(i)
-                            e.preventDefault()
-                            e.stopPropagation()
+                            jumpFromBacklog(i);
+                            e.preventDefault();
+                            e.stopPropagation();
                         }}
                         className={styles.backlog_item_button_element}
                     >
@@ -38,8 +38,8 @@ export const Backlog = () => {
                     <span className={styles.backlog_item_content_text}>{backlogItem.currentStageState.showText}</span>
                 </div>
             </div>
-        )
-        backlogList.unshift(singleBacklogView)
+        );
+        backlogList.unshift(singleBacklogView);
     }
     return (
         <>
@@ -60,5 +60,5 @@ export const Backlog = () => {
                 </div>
             )}
         </>
-    )
-}
+    );
+};

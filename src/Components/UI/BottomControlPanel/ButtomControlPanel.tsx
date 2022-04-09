@@ -7,16 +7,16 @@ import {
     ReplayMusic,
     Save,
     SettingTwo,
-} from '@icon-park/react'
-import styles from './bottomControlPanel.module.scss'
-import { useStore } from 'reto'
-import { GuiStateStore, MenuPanelTag } from '../../../Core/store/GUI'
-import { switchAuto } from '../../../Core/controller/gamePlay/autoPlay'
-import { switchFast } from '../../../Core/controller/gamePlay/fastSkip'
-import { playBgm } from '../../../Core/util/playBgm'
+} from '@icon-park/react';
+import styles from './bottomControlPanel.module.scss';
+import { useStore } from 'reto';
+import { GuiStateStore, MenuPanelTag } from '../../../Core/store/GUI';
+import { switchAuto } from '../../../Core/controller/gamePlay/autoPlay';
+import { switchFast } from '../../../Core/controller/gamePlay/fastSkip';
+import { playBgm } from '../../../Core/util/playBgm';
 
 export const BottomControlPanel = () => {
-    const GUIstore = useStore(GuiStateStore)
+    const GUIstore = useStore(GuiStateStore);
 
     return (
         <div className={styles.main}>
@@ -45,8 +45,8 @@ export const BottomControlPanel = () => {
             <span
                 className={styles.singleButton}
                 onClick={() => {
-                    GUIstore.setMenuPanelTag(MenuPanelTag.Save)
-                    GUIstore.setVisibility('showMenuPanel', true)
+                    GUIstore.setMenuPanelTag(MenuPanelTag.Save);
+                    GUIstore.setVisibility('showMenuPanel', true);
                 }}
             >
                 <Save className={styles.button} theme="outline" size="36" fill="#f5f5f7" strokeWidth={3.5} />
@@ -55,8 +55,8 @@ export const BottomControlPanel = () => {
             <span
                 className={styles.singleButton}
                 onClick={() => {
-                    GUIstore.setMenuPanelTag(MenuPanelTag.Load)
-                    GUIstore.setVisibility('showMenuPanel', true)
+                    GUIstore.setMenuPanelTag(MenuPanelTag.Load);
+                    GUIstore.setVisibility('showMenuPanel', true);
                 }}
             >
                 <FolderOpen className={styles.button} theme="outline" size="36" fill="#f5f5f7" strokeWidth={3.5} />
@@ -65,8 +65,8 @@ export const BottomControlPanel = () => {
             <span
                 className={styles.singleButton}
                 onClick={() => {
-                    GUIstore.setMenuPanelTag(MenuPanelTag.Option)
-                    GUIstore.setVisibility('showMenuPanel', true)
+                    GUIstore.setMenuPanelTag(MenuPanelTag.Option);
+                    GUIstore.setVisibility('showMenuPanel', true);
                 }}
             >
                 <SettingTwo className={styles.button} theme="outline" size="36" fill="#f5f5f7" strokeWidth={3.5} />
@@ -75,13 +75,13 @@ export const BottomControlPanel = () => {
             <span
                 className={styles.singleButton}
                 onClick={() => {
-                    GUIstore.setVisibility('showTitle', true)
-                    playBgm(GUIstore.GuiState.titleBgm)
+                    GUIstore.setVisibility('showTitle', true);
+                    playBgm(GUIstore.GuiState.titleBgm);
                 }}
             >
                 <Home className={styles.button} theme="outline" size="36" fill="#f5f5f7" strokeWidth={3.5} />
                 <span className={styles.button_text}>标题</span>
             </span>
         </div>
-    )
-}
+    );
+};

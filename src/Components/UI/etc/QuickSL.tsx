@@ -1,3 +1,3 @@
 export const QuickSL = () => {
-    return <div />
-}
+    return <div />;
+};

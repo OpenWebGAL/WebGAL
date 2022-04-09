@@ -1,16 +1,16 @@
-import { FC } from 'react'
-import styles from './title.module.scss'
-import { useStore } from 'reto'
-import { GuiStateStore, MenuPanelTag } from '../../../Core/store/GUI'
-import { playBgm } from '../../../Core/util/playBgm'
-import { startGame } from '../../../Core/controller/gamePlay/startGame'
+import { FC } from 'react';
+import styles from './title.module.scss';
+import { useStore } from 'reto';
+import { GuiStateStore, MenuPanelTag } from '../../../Core/store/GUI';
+import { playBgm } from '../../../Core/util/playBgm';
+import { startGame } from '../../../Core/controller/gamePlay/startGame';
 
 /**
  * 标题页
  * @constructor
  */
 const Title: FC = () => {
-    const GuiStore = useStore(GuiStateStore)
+    const GuiStore = useStore(GuiStateStore);
     return (
         <>
             {GuiStore.GuiState.showTitle && (
@@ -26,8 +26,8 @@ const Title: FC = () => {
                             id="Title_starter"
                             className={styles.Title_starter}
                             onClick={() => {
-                                playBgm(GuiStore.GuiState.titleBgm)
-                                GuiStore.setVisibility('showStarter', false)
+                                playBgm(GuiStore.GuiState.titleBgm);
+                                GuiStore.setVisibility('showStarter', false);
                             }}
                         />
                     )}
@@ -43,8 +43,8 @@ const Title: FC = () => {
                         <div
                             className={styles.Title_button}
                             onClick={() => {
-                                GuiStore.setVisibility('showMenuPanel', true)
-                                GuiStore.setMenuPanelTag(MenuPanelTag.Option)
+                                GuiStore.setVisibility('showMenuPanel', true);
+                                GuiStore.setMenuPanelTag(MenuPanelTag.Option);
                             }}
                         >
                             <div className={styles.Title_button_text + ' ' + styles.Title_button_text_up}>游戏选项</div>
@@ -53,8 +53,8 @@ const Title: FC = () => {
                         <div
                             className={styles.Title_button}
                             onClick={() => {
-                                GuiStore.setVisibility('showMenuPanel', true)
-                                GuiStore.setMenuPanelTag(MenuPanelTag.Load)
+                                GuiStore.setVisibility('showMenuPanel', true);
+                                GuiStore.setMenuPanelTag(MenuPanelTag.Load);
                             }}
                         >
                             <div className={styles.Title_button_text + ' ' + styles.Title_button_text_up}>读取存档</div>
@@ -64,7 +64,7 @@ const Title: FC = () => {
                 </div>
             )}
         </>
-    )
-}
+    );
+};
 
-export default Title
+export default Title;

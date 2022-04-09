@@ -1,6 +1,6 @@
-import { IBacklogItem, sceneEntry } from '../coreInterface/runtimeInterface'
-import { IStageState } from './stageInterface'
-import { playSpeed, textSize } from '../../store/userData'
+import { IBacklogItem, sceneEntry } from '../coreInterface/runtimeInterface';
+import { IStageState } from './stageInterface';
+import { playSpeed, textSize } from '../../store/userData';
 
 /**
  * @interface IOptionData 用户设置数据接口

@@ -2,9 +2,9 @@
  * @file 记录当前GUI的状态信息，引擎初始化时会重置。
  * @author Mahiru
  */
-import { useState } from 'react'
-import { getStorage } from '../controller/storage/storageController'
-import { IGuiState } from '../interface/stateInterface/guiInterface'
+import { useState } from 'react';
+import { getStorage } from '../controller/storage/storageController';
+import { IGuiState } from '../interface/stateInterface/guiInterface';
 
 /**
  * 当前Menu页面显示的Tag
@@ -27,7 +27,7 @@ const initState: IGuiState = {
     currentMenuTag: MenuPanelTag.Option,
     titleBg: '',
     titleBgm: '',
-}
+};
 
 // GUI各组件是否显示
 type componentsVisibility = Pick<IGuiState, Exclude<keyof IGuiState, 'currentMenuTag' | 'titleBg' | 'titleBgm'>>
@@ -41,7 +41,7 @@ type GuiAsset = Pick<IGuiState, 'titleBgm' | 'titleBg'>
  * @return {function} 改变Menu页面的选项卡
  */
 export function GuiStateStore() {
-    const [GuiState, setGuiState] = useState(initState)
+    const [GuiState, setGuiState] = useState(initState);
     /**
      * 设置各组件的可见性
      * @param key 设置的组件
@@ -58,7 +58,7 @@ export function GuiStateStore() {
             return {...state};
         });
 
-    }
+    };
 
     /**
      * 设置Menu组件显示的标签页
@@ -72,7 +72,7 @@ export function GuiStateStore() {
             return {...state};
         });
 
-    }
+    };
 
     /**
      * 设置标题页的资源路径
@@ -86,12 +86,12 @@ export function GuiStateStore() {
             return {...state};
         });
 
-    }
+    };
 
     return {
         GuiState,
         setGuiAsset,
         setVisibility,
         setMenuPanelTag,
-    }
+    };
 }

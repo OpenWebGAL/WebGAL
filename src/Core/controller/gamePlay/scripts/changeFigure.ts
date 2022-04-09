@@ -1,6 +1,6 @@
-import { ISentence } from '../../../interface/coreInterface/sceneInterface'
-import { IPerform } from '../../../interface/coreInterface/performInterface'
-import { getRef } from '../../../store/storeRef'
+import { ISentence } from '../../../interface/coreInterface/sceneInterface';
+import { IPerform } from '../../../interface/coreInterface/performInterface';
+import { getRef } from '../../../store/storeRef';
 
 /**
  * 更改立绘
@@ -8,33 +8,33 @@ import { getRef } from '../../../store/storeRef'
  */
 export const changeFigure = (sentence: ISentence): IPerform => {
     // 根据参数设置指定位置
-    let pos = 'center'
-    let content = sentence.content
+    let pos = 'center';
+    let content = sentence.content;
     for (const e of sentence.args) {
         if (e.key === 'left' && e.value === true) {
-            pos = 'left'
+            pos = 'left';
         }
         if (e.key === 'right' && e.value === true) {
-            pos = 'right'
+            pos = 'right';
         }
         if (e.key === 'clear' && e.value === true) {
-            content = ''
+            content = '';
         }
         if (content === 'none') {
-            content = ''
+            content = '';
         }
     }
-    const stageStore = getRef('stageRef')
+    const stageStore = getRef('stageRef');
     switch (pos) {
         case 'center':
-            stageStore.setStage('figName', content)
-            break
+            stageStore.setStage('figName', content);
+            break;
         case 'left':
-            stageStore.setStage('figNameLeft', content)
-            break
+            stageStore.setStage('figNameLeft', content);
+            break;
         case 'right':
-            stageStore.setStage('figNameRight', content)
-            break
+            stageStore.setStage('figNameRight', content);
+            break;
     }
     return {
         performName: 'none',
@@ -45,5 +45,5 @@ export const changeFigure = (sentence: ISentence): IPerform => {
         blockingNext: () => false,
         blockingAuto: () => false,
         stopTimeout: undefined, // 暂时不用，后面会交给自动清除
-    }
-}
+    };
+};

@@ -2,9 +2,9 @@
  * 子场景结束后回到父场景的入口
  * @interface sceneEntry
  */
-import { IStageState } from '../stateInterface/stageInterface'
-import { ISaveScene } from '../stateInterface/userDataInterface'
-import { IPerform } from './performInterface'
+import { IStageState } from '../stateInterface/stageInterface';
+import { ISaveScene } from '../stateInterface/userDataInterface';
+import { IPerform } from './performInterface';
 
 export interface sceneEntry {
     sceneName: string // 场景名称
