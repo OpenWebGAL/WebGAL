@@ -4,6 +4,7 @@ import {GuiStateStore} from "../../../Core/store/GUI";
 import {runtime_currentBacklog} from "../../../Core/runtime/backlog";
 import {CloseSmall, Return, VolumeNotice} from '@icon-park/react';
 import {jumpFromBacklog} from "../../../Core/controller/storage/jumpFromBacklog";
+import React from "react";
 
 export const Backlog = () => {
     const GUIStore = useStore(GuiStateStore)
