@@ -5,6 +5,10 @@ import { sceneParser } from '../../parser/sceneParser';
 import { eventSender } from '../eventBus/eventSender';
 import { logger } from '../../util/logger';
 
+/**
+ * 恢复场景
+ * @param entry 场景入口
+ */
 export const restoreScene = (entry: sceneEntry) => {
     logger.debug('正在准备恢复场景', entry);
     // 场景写入到运行时

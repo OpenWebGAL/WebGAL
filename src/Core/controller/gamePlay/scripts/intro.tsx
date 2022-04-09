@@ -4,7 +4,10 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import styles from '../../../../Components/Stage/FullScreenPerform/fullScreenPerform.module.scss';
 
-
+/**
+ * 显示一小段黑屏演示
+ * @param sentence
+ */
 export const intro = (sentence: ISentence): IPerform => {
     const introArray: Array<string> = sentence.content.split(/\|/);
     const showIntro = introArray.map((e, i) => <div key={'introtext' + i + Math.random().toString()}
