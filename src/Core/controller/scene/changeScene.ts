@@ -4,6 +4,11 @@ import { sceneFetcher } from '../../util/sceneFetcher';
 import { sceneParser } from '../../parser/sceneParser';
 import { logger } from '../../util/logger';
 
+/**
+ * 切换场景
+ * @param sceneUrl 场景路径
+ * @param sceneName 场景名称
+ */
 export const changeScene = (sceneUrl: string, sceneName: string) => {
     // 场景写入到运行时
     sceneFetcher(sceneUrl).then((rawScene) => {

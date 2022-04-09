@@ -4,6 +4,11 @@ import { sceneParser } from '../../parser/sceneParser';
 import { eventSender } from '../eventBus/eventSender';
 import { logger } from '../../util/logger';
 
+/**
+ * 调用场景
+ * @param sceneUrl 场景路径
+ * @param sceneName 场景名称
+ */
 export const callScene = (sceneUrl: string, sceneName: string) => {
     // 先将本场景压入场景栈
     runtime_currentSceneData.sceneStack.push({
