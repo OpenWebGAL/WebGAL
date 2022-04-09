@@ -4,7 +4,6 @@ import {getRef} from "../../../Core/store/storeRef";
 import {runtime_gamePlay} from "../../../Core/runtime/gamePlay";
 import {useStore} from "reto";
 import {stageStateStore} from "../../../Core/store/stage";
-import React from "react";
 
 export const EventHandler = () => {
     const stageStore = useStore(stageStateStore);
