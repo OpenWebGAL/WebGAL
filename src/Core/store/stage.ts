@@ -9,7 +9,7 @@ import { IStageState } from '../interface/stateInterface/stageInterface'
 
 
 
-//初始化舞台数据
+// 初始化舞台数据
 
 export const initState: IStageState = {
     oldBgName: '',
