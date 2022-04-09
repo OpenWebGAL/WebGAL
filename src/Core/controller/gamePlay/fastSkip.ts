@@ -4,6 +4,10 @@ import { stopAuto } from './autoPlay';
 import { eventSender } from '../eventBus/eventSender';
 import styles from '../../../Components/UI/BottomControlPanel/bottomControlPanel.module.scss';
 
+/**
+ * 设置 fast 按钮的激活与否
+ * @param on
+ */
 const setButton = (on: boolean) => {
     const autoIcon = document.getElementById('Button_ControlPanel_fast');
     if (autoIcon) {

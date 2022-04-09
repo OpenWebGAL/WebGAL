@@ -18,6 +18,7 @@ module.exports = {
         // 自定义你的规则
         // 最大圈复杂度
         complexity: ['error', 30],
+        "linebreak-style": ['error',"unix"],
         "semi": 2,
         "semi-style": ["error", "last"],
         'react/jsx-no-useless-fragment': [

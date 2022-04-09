@@ -10,6 +10,9 @@ import * as _ from 'lodash';
 import { initState } from '../../store/stage';
 import { IStageState } from '../../interface/stateInterface/stageInterface';
 
+/**
+ * 从头开始游戏
+ */
 export const startGame = () => {
     /*
     清空运行时

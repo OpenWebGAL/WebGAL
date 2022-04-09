@@ -3,6 +3,10 @@ import { eventSender } from '../eventBus/eventSender';
 import { logger } from '../../util/logger';
 import styles from '../../../Components/UI/BottomControlPanel/bottomControlPanel.module.scss';
 
+/**
+ * 设置 autoplay 按钮的激活与否
+ * @param on
+ */
 const setButton = (on: boolean) => {
     const autoIcon = document.getElementById('Button_ControlPanel_auto');
     if (autoIcon) {
