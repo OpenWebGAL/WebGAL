@@ -1,3 +1,1 @@
-export const util = () => {
-
-}
+export const util = () => {}

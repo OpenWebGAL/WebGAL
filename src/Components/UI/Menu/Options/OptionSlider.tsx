@@ -10,7 +10,7 @@ export const OptionSlider = (props: ISlider) => {
                 input.setAttribute('value', props.initValue.toString());
         }, 1)
     }, []);
-    return <div className={'Option_WebGAL_slider'}>
+    return <div className="Option_WebGAL_slider">
         <input id={props.uniqueID} type="range" onChange={props.onChange}/>
     </div>
 

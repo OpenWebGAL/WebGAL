@@ -3,28 +3,30 @@
  * 舞台状态是演出结束后的“终态”，在读档时不发生演出，只是将舞台状态替换为读取的状态。
  */
 
-import {useState} from "react";
+import { useState } from 'react'
 import * as _ from 'lodash'
-import {IStageState} from "../interface/stateInterface/stageInterface";
+import { IStageState } from '../interface/stateInterface/stageInterface'
+
 
 
 //初始化舞台数据
+
 export const initState: IStageState = {
     oldBgName: '',
-    bgName: '',//背景文件地址（相对或绝对）
-    figName: '',//立绘_中 文件地址（相对或绝对）
-    figNameLeft: '',//立绘_左 文件地址（相对或绝对）
-    figNameRight: '',//立绘_右 文件地址（相对或绝对）
-    showText: '',//文字
-    showName: '',//人物名
-    command: '',//语句指令
-    choose: [],//选项列表
-    vocal: '',//语音 文件地址（相对或绝对）
-    bgm: '',//背景音乐 文件地址（相对或绝对）
-    miniAvatar: '',//小头像 文件地址（相对或绝对）
-    GameVar: {}, //游戏内变量
-    effects: [], //应用的效果
-    PerformList: [] //要启动的演出列表
+    bgName: '', // 背景文件地址（相对或绝对）
+    figName: '', // 立绘_中 文件地址（相对或绝对）
+    figNameLeft: '', // 立绘_左 文件地址（相对或绝对）
+    figNameRight: '', // 立绘_右 文件地址（相对或绝对）
+    showText: '', // 文字
+    showName: '', // 人物名
+    command: '', // 语句指令
+    choose: [], // 选项列表
+    vocal: '', // 语音 文件地址（相对或绝对）
+    bgm: '', // 背景音乐 文件地址（相对或绝对）
+    miniAvatar: '', // 小头像 文件地址（相对或绝对）
+    GameVar: {}, // 游戏内变量
+    effects: [], // 应用的效果
+    PerformList: [], // 要启动的演出列表
 }
 
 /**
@@ -33,7 +35,7 @@ export const initState: IStageState = {
  * @return {function} 改变舞台状态
  */
 export function stageStateStore() {
-    const [stageState, setStageState] = useState(_.cloneDeep(initState));
+    const [stageState, setStageState] = useState(_.cloneDeep(initState))
 
     /**
      * 设置舞台状态，以后会改
@@ -41,24 +43,26 @@ export function stageStateStore() {
      * @param value
      */
     const setStage = <K extends keyof IStageState>(key: K, value: any) => {
+
         setStageState(state => {
             state[key] = value;
             return {...state};
         });
+
     }
 
     const getStageState = () => {
-        return stageState;
+        return stageState
     }
 
     const restoreStage = (newState: IStageState) => {
-        setStageState(state => ({...state, ...newState}));
+        setStageState((state) => ({ ...state, ...newState }))
     }
 
     return {
         stageState,
         setStage,
         getStageState,
-        restoreStage
+        restoreStage,
     }
 }

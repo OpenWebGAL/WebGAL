@@ -7,8 +7,8 @@
 body {
     margin: 0;
     font-family: "思源宋体", -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+        'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+        sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     overflow: hidden;
@@ -17,7 +17,7 @@ body {
 
 code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+        monospace;
 }
 
 #root {
@@ -33,6 +33,7 @@ code {
 
 /* 滚动槽 */
 ::-webkit-scrollbar-track {
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
     -webkit-box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
     background: rgba(255, 255, 255, 0.2);
     border-radius: 10px;
@@ -42,12 +43,13 @@ code {
 ::-webkit-scrollbar-thumb {
     border-radius: 10px;
     background: rgba(255, 255, 255, 0.5);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
     -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
 
-::-webkit-scrollbar-thumb:window-inactive {
-    /*background:rgba(255,0,0,0.4);*/
-}
+/* ::-webkit-scrollbar-thumb:window-inactive {
+    background:rgba(255,0,0,0.4);
+} */
 
 /*@media screen and (orientation: portrait) {*/
 /*    !*竖屏 css*!*/
