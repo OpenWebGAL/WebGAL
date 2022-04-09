@@ -1,21 +1,23 @@
-import {ISentence} from "../../../interface/coreInterface/sceneInterface";
-import {IPerform} from "../../../interface/coreInterface/performInterface";
-import React from "react";
-import ReactDOM from "react-dom";
-import styles from '../../../../Components/Stage/FullScreenPerform/fullScreenPerform.module.scss'
-import {eventSender} from "../../eventBus/eventSender";
+import { ISentence } from '../../../interface/coreInterface/sceneInterface';
+import { IPerform } from '../../../interface/coreInterface/performInterface';
+import React from 'react';
+import ReactDOM from 'react-dom';
+import styles from '../../../../Components/Stage/FullScreenPerform/fullScreenPerform.module.scss';
+
 
 export const intro = (sentence: ISentence): IPerform => {
     const introArray: Array<string> = sentence.content.split(/\|/);
-    const showIntro = introArray.map((e, i) => <div style={{animationDelay: `${1500 * i}ms`}}
+    const showIntro = introArray.map((e, i) => <div key={'introtext' + i + Math.random().toString()}
+                                                    style={{animationDelay: `${1500 * i}ms`}}
                                                     className={styles.introElement}>
         {e}
-    </div>)
+    </div>);
     const intro = <div>
         {showIntro}
-    </div>
+    </div>;
     ReactDOM.render(intro, document.getElementById('introContainer'));
     const introContainer = document.getElementById('introContainer');
+
     if (introContainer) {
         introContainer.style.display = 'block';
     }
@@ -29,10 +31,9 @@ export const intro = (sentence: ISentence): IPerform => {
             if (introContainer) {
                 introContainer.style.display = 'none';
             }
-            eventSender('nextSentence_target', 0, 1);
         },
         blockingNext: () => false,
         blockingAuto: () => true,
-        stopTimeout: undefined,//暂时不用，后面会交给自动清除
+        stopTimeout: undefined, // 暂时不用，后面会交给自动清除
     };
-}
+};

@@ -19,14 +19,14 @@ export const MenuIconMap = (props: IMenuPanel) => {
             returnIcon = <SettingTwo theme="outline" size="1.2em" fill={props.iconColor} strokeWidth={2}/>;
             break;
         case 'title':
-            returnIcon = <Home theme="outline" size="1.2em" fill={'rgba(185,185,185,1)'} strokeWidth={2}/>
+            returnIcon = <Home theme="outline" size="1.2em" fill="rgba(185,185,185,1)" strokeWidth={2}/>;
             break;
         case 'exit':
-            returnIcon = <Logout theme="outline" size="1.2em" fill={'rgba(185,185,185,1)'} strokeWidth={2}/>;
+            returnIcon = <Logout theme="outline" size="1.2em" fill="rgba(185,185,185,1)" strokeWidth={2}/>;
             break;
         default:
-            returnIcon = <div/>
+            returnIcon = <div/>;
     }
 
     return returnIcon;
-}
+};

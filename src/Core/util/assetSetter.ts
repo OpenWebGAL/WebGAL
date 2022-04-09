@@ -11,7 +11,7 @@ export enum fileType {
     figure,
     scene,
     tex,
-    vocal
+    vocal,
 }
 
 /**
@@ -21,11 +21,11 @@ export enum fileType {
  * @return {string} 处理后的资源路径（绝对或相对）
  */
 export const assetSetter = (fileName: string, assetType: fileType): string => {
-    //是绝对链接，直接返回
+    // 是绝对链接，直接返回
     if (fileName.match('http://') || fileName.match('https://')) {
         return fileName;
     } else {
-        //根据类型拼接资源的相对路径
+        // 根据类型拼接资源的相对路径
         let returnFilePath: string;
         switch (assetType) {
             case fileType.background:
@@ -49,4 +49,4 @@ export const assetSetter = (fileName: string, assetType: fileType): string => {
         }
         return returnFilePath;
     }
-}
+};

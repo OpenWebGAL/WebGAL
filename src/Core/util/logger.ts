@@ -1,4 +1,4 @@
-import Cloudlog from "cloudlogjs";
+import Cloudlog from 'cloudlogjs';
 
 /**
  * 日志打印工具
