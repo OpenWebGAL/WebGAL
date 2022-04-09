@@ -5,7 +5,8 @@
     "scripts": {
         "dev": "vite",
         "build": "tsc && vite build --base=./",
-        "preview": "vite preview"
+        "preview": "vite preview",
+        "lint:staged": "npx lint-staged"
     },
     "husky": {
         "hooks": {
