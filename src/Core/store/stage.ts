@@ -8,7 +8,6 @@ import * as _ from 'lodash'
 import {IStageState} from "../interface/stateInterface/stageInterface";
 
 
-
 //初始化舞台数据
 export const initState: IStageState = {
     oldBgName: '',
@@ -42,8 +41,10 @@ export function stageStateStore() {
      * @param value
      */
     const setStage = <K extends keyof IStageState>(key: K, value: any) => {
-        stageState[key] = value;
-        setStageState(state => ({...state, ...stageState}));
+        setStageState(state => {
+            state[key] = value;
+            return {...state};
+        });
     }
 
     const getStageState = () => {
