@@ -5,7 +5,8 @@
     "scripts": {
         "dev": "vite",
         "build": "tsc && vite build --base=./",
-        "preview": "vite preview"
+        "preview": "vite preview",
+        "lint": "eslint src/** --fix"
     },
     "husky": {
         "hooks": {
