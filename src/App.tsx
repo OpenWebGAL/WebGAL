@@ -1,7 +1,7 @@
 import {Provider} from "reto/provider";
 import {GuiStateStore} from "./Core/store/GUI";
 import Title from "./Components/UI/Title/Title";
-import React,{useEffect, useRef} from "react";
+import {useEffect, useRef} from "react";
 import {storeRef} from "./Core/store/storeRef";
 import {initializeScript} from "./Core/initializeScript";
 import {stageStateStore} from "./Core/store/stage";
