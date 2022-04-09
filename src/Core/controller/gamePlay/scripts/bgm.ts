@@ -7,7 +7,7 @@ import {playBgm} from "../../../util/playBgm";
  * @param sentence
  */
 export const bgm = (sentence: ISentence): IPerform => {
-    let url: string = sentence.content;//获取bgm的url
+    const url: string = sentence.content;//获取bgm的url
     playBgm(url);
     return {
         performName: 'none',
