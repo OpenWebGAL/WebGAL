@@ -7,7 +7,10 @@ import { useState } from 'react'
 import * as _ from 'lodash'
 import { IStageState } from '../interface/stateInterface/stageInterface'
 
-// 初始化舞台数据
+
+
+//初始化舞台数据
+
 export const initState: IStageState = {
     oldBgName: '',
     bgName: '', // 背景文件地址（相对或绝对）
@@ -40,8 +43,12 @@ export function stageStateStore() {
      * @param value
      */
     const setStage = <K extends keyof IStageState>(key: K, value: any) => {
-        stageState[key] = value
-        setStageState((state) => ({ ...state, ...stageState }))
+
+        setStageState(state => {
+            state[key] = value;
+            return {...state};
+        });
+
     }
 
     const getStageState = () => {
