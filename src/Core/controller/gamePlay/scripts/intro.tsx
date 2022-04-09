@@ -1,8 +1,9 @@
-import {ISentence} from "../../../interface/coreInterface/sceneInterface";
-import {IPerform} from "../../../interface/coreInterface/performInterface";
-import React from "react";
-import ReactDOM from "react-dom";
+import { ISentence } from '../../../interface/coreInterface/sceneInterface'
+import { IPerform } from '../../../interface/coreInterface/performInterface'
+import React from 'react'
+import ReactDOM from 'react-dom'
 import styles from '../../../../Components/Stage/FullScreenPerform/fullScreenPerform.module.scss'
+
 
 export const intro = (sentence: ISentence): IPerform => {
     const introArray: Array<string> = sentence.content.split(/\|/);
@@ -16,8 +17,9 @@ export const intro = (sentence: ISentence): IPerform => {
     </div>
     ReactDOM.render(intro, document.getElementById('introContainer'));
     const introContainer = document.getElementById('introContainer');
+
     if (introContainer) {
-        introContainer.style.display = 'block';
+        introContainer.style.display = 'block'
     }
     return {
         performName: 'introPerform',
@@ -25,13 +27,13 @@ export const intro = (sentence: ISentence): IPerform => {
         isOver: false,
         isHoldOn: false,
         stopFunction: () => {
-            const introContainer = document.getElementById('introContainer');
+            const introContainer = document.getElementById('introContainer')
             if (introContainer) {
-                introContainer.style.display = 'none';
+                introContainer.style.display = 'none'
             }
         },
         blockingNext: () => false,
         blockingAuto: () => true,
-        stopTimeout: undefined,//暂时不用，后面会交给自动清除
-    };
+        stopTimeout: undefined, // 暂时不用，后面会交给自动清除
+    }
 }
