@@ -47,23 +47,29 @@ export function userDataStateStore() {
 
     //设置用户数据
     const setUserData = <K extends keyof IUserData>(key: K, value: any) => {
-        userDataState[key] = value;
-        setUserDataState({...userDataState});
+        setUserDataState(state => {
+            state[key] = value;
+            return {...state};
+        });
     }
 
     //替换用户数据（多用于与本地存储交互）
     const replaceUserData = (newUserData: IUserData) => {
-        setUserDataState({...newUserData});
+        setUserDataState(state => ({...state, ...newUserData}));
     }
 
     const setOptionData = <K extends keyof IOptionData>(key: K, value: any) => {
-        userDataState.optionData[key] = value;
-        setUserDataState({...userDataState});
+        setUserDataState(state => {
+            state.optionData[key] = value;
+            return {...state};
+        });
     }
 
     const setSlPage = (index: number) => {
-        userDataState.optionData.slPage = index;
-        setUserDataState(state => ({...state, ...userDataState}));
+        setUserDataState(state => {
+            state.optionData.slPage = index;
+            return {...state};
+        });
     }
 
     return {

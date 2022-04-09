@@ -3,11 +3,11 @@ import {IPerform} from "../../../interface/coreInterface/performInterface";
 import React from "react";
 import ReactDOM from "react-dom";
 import styles from '../../../../Components/Stage/FullScreenPerform/fullScreenPerform.module.scss'
-import {eventSender} from "../../eventBus/eventSender";
 
 export const intro = (sentence: ISentence): IPerform => {
     const introArray: Array<string> = sentence.content.split(/\|/);
-    const showIntro = introArray.map((e, i) => <div style={{animationDelay: `${1500 * i}ms`}}
+    const showIntro = introArray.map((e, i) => <div key={'introtext' + i + Math.random().toString()}
+                                                    style={{animationDelay: `${1500 * i}ms`}}
                                                     className={styles.introElement}>
         {e}
     </div>)
