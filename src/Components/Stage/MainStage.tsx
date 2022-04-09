@@ -1,8 +1,8 @@
 import {FC} from "react";
-import styles from './mainStage.module.scss'
+import styles from './mainStage.module.scss';
 import {useStore} from "reto";
 import {TextBox} from "./TextBox/TextBox";
-import {stageStateStore} from "../../Core/store/stage"
+import {stageStateStore} from "../../Core/store/stage";
 import {FigureContainer} from "./FigureContainer/FigureContainer";
 import {EventHandler} from "./EventHandler/EventHandler";
 import {GuiStateStore} from "../../Core/store/GUI";
@@ -12,7 +12,7 @@ import {stopAll} from "../../Core/controller/gamePlay/fastSkip";
 
 export const MainStage: FC = () => {
     const stageStore = useStore(stageStateStore);
-    const GuiState = useStore(GuiStateStore)
+    const GuiState = useStore(GuiStateStore);
     return <div className={styles.MainStage_main}>
         <div key={'bgMain' + stageStore.stageState.bgName}
              id="MainStage_bg_MainContainer"
@@ -35,5 +35,5 @@ export const MainStage: FC = () => {
             nextSentence();
         }} id="FullScreenClcck"
              style={{width: '100%', height: '100%', position: "absolute", zIndex: '12', top: '0'}}/>
-    </div>
-}
+    </div>;
+};

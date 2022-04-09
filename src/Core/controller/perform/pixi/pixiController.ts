@@ -1,1 +1,1 @@
-export const pixiController = () => {}
+export const pixiController = () => {};

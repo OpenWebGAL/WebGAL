@@ -1,15 +1,15 @@
-import { commandType, ISentence } from '../../interface/coreInterface/sceneInterface'
-import { say } from './scripts/say'
-import { initPerform, IPerform } from '../../interface/coreInterface/performInterface'
-import { unmountPerform } from '../perform/unmountPerform'
-import { getRef } from '../../store/storeRef'
-import { runtime_gamePlay } from '../../runtime/gamePlay'
-import { changeBg } from './scripts/changeBg'
-import { changeFigure } from './scripts/changeFigure'
-import { bgm } from './scripts/bgm'
-import { callSceneScript } from './scripts/callSceneScript'
-import { changeSceneScript } from './scripts/changeSceneScript'
-import { intro } from './scripts/intro'
+import { commandType, ISentence } from '../../interface/coreInterface/sceneInterface';
+import { say } from './scripts/say';
+import { initPerform, IPerform } from '../../interface/coreInterface/performInterface';
+import { unmountPerform } from '../perform/unmountPerform';
+import { getRef } from '../../store/storeRef';
+import { runtime_gamePlay } from '../../runtime/gamePlay';
+import { changeBg } from './scripts/changeBg';
+import { changeFigure } from './scripts/changeFigure';
+import { bgm } from './scripts/bgm';
+import { callSceneScript } from './scripts/callSceneScript';
+import { changeSceneScript } from './scripts/changeSceneScript';
+import { intro } from './scripts/intro';
 
 /**
  * 规范函数的类型
@@ -22,8 +22,8 @@ type scriptFunction = (sentence: ISentence) => IPerform
  * @param script 调用的语句
  */
 export const runScript = (script: ISentence) => {
-    let perform: IPerform = initPerform
-    let funcToRun: scriptFunction = say // 默认是say
+    let perform: IPerform = initPerform;
+    let funcToRun: scriptFunction = say; // 默认是say
 
     // 建立语句类型到执行函数的映射
     const scriptToFuncMap = new Map([
@@ -34,32 +34,32 @@ export const runScript = (script: ISentence) => {
         [commandType.callScene, callSceneScript],
         [commandType.changeScene, changeSceneScript],
         [commandType.intro, intro],
-    ])
+    ]);
 
     // 根据脚本类型切换函数
     if (scriptToFuncMap.has(script.command)) {
-        funcToRun = scriptToFuncMap.get(script.command) as scriptFunction
+        funcToRun = scriptToFuncMap.get(script.command) as scriptFunction;
     }
 
     // 调用脚本对应的函数
-    perform = funcToRun(script)
+    perform = funcToRun(script);
 
     // 语句不执行演出
     if (perform.performName === 'none') {
-        return
+        return;
     }
 
     // 同步演出状态
-    const stageStore: any = getRef('stageRef')
-    stageStore.stageState.PerformList.push({ isHoldOn: perform.isHoldOn, script: script })
+    const stageStore: any = getRef('stageRef');
+    stageStore.stageState.PerformList.push({ isHoldOn: perform.isHoldOn, script: script });
 
     // 时间到后自动清理演出
     perform.stopTimeout = setTimeout(() => {
-        perform.stopFunction()
+        perform.stopFunction();
         if (!perform.isHoldOn)
             // 如果不是保持演出，清除
-            unmountPerform(perform.performName)
-    }, perform.duration)
+            unmountPerform(perform.performName);
+    }, perform.duration);
 
-    runtime_gamePlay.performList.push(perform)
-}
+    runtime_gamePlay.performList.push(perform);
+};

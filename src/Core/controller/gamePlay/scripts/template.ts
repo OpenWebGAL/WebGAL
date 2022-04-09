@@ -1,5 +1,5 @@
-import { ISentence } from '../../../interface/coreInterface/sceneInterface'
-import { IPerform } from '../../../interface/coreInterface/performInterface'
+import { ISentence } from '../../../interface/coreInterface/sceneInterface';
+import { IPerform } from '../../../interface/coreInterface/performInterface';
 
 /**
  * 语句执行的模板代码
@@ -15,5 +15,5 @@ export const template = (sentence: ISentence): IPerform => {
         blockingNext: () => false,
         blockingAuto: () => true,
         stopTimeout: undefined, // 暂时不用，后面会交给自动清除
-    }
-}
+    };
+};

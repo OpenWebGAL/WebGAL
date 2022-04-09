@@ -9,7 +9,7 @@ export const EventHandler = () => {
     const stageStore = useStore(stageStateStore);
     const restoreOne = (index: number) => {
         runScript(getRef('stageRef').stageState.PerformList[index].script);
-    }
+    };
     const restorePerform = () => {
         const len = getRef('stageRef').stageState.PerformList.length;
         for (let i = 0; i < len; i++) {
@@ -24,12 +24,12 @@ export const EventHandler = () => {
                 textBox.dispatchEvent(event);
             }
         }
-    }
+    };
 
     const autoNextSentence = () => {
         nextSentence();
         runtime_gamePlay.autoTimeout = null;
-    }
+    };
 
     return <div>
         <audio id="currentBgm" src={stageStore.stageState.bgm} loop={true} autoPlay={true}/>
@@ -37,5 +37,5 @@ export const EventHandler = () => {
         <div id="nextSentence_target" onClick={autoNextSentence}/>
         <div id="restoreOne_target" style={{display: 'none'}} onClick={(event) => restoreOne(event.clientX)}/>
         <div id="restorePerform_target" onClick={restorePerform} style={{display: 'none'}}/>
-    </div>
-}
+    </div>;
+};

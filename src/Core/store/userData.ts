@@ -3,9 +3,9 @@
  * 这些状态会在指定的生命周期与本地存储发生交换，比如打开存档界面、存档、修改设置时。
  * 在引擎初始化时会将这些状态从本地存储加载到运行时状态。
  */
-import { useState } from 'react'
-import { logger } from '../util/logger'
-import { IOptionData, IUserData } from '../interface/stateInterface/userDataInterface'
+import { useState } from 'react';
+import { logger } from '../util/logger';
+import { IOptionData, IUserData } from '../interface/stateInterface/userDataInterface';
 
 /**
  * 播放速度的枚举类型
@@ -34,7 +34,7 @@ const initState: IUserData = {
         vocalVolume: 100, // 语音音量
         bgmVolume: 50, // 背景音乐音量
     },
-}
+};
 
 /**
  * 创建用户数据的状态管理
@@ -42,7 +42,7 @@ const initState: IUserData = {
  * @return {function} 改变用户数据
  */
 export function userDataStateStore() {
-    const [userDataState, setUserDataState] = useState(initState)
+    const [userDataState, setUserDataState] = useState(initState);
 
     // 设置用户数据
     const setUserData = <K extends keyof IUserData>(key: K, value: any) => {
@@ -52,20 +52,20 @@ export function userDataStateStore() {
             return {...state};
         });
 
-    }
+    };
 
     // 替换用户数据（多用于与本地存储交互）
     const replaceUserData = (newUserData: IUserData) => {
 
         setUserDataState(state => ({...state, ...newUserData}));
-    }
+    };
 
     const setOptionData = <K extends keyof IOptionData>(key: K, value: any) => {
         setUserDataState(state => {
             state.optionData[key] = value;
             return {...state};
         });
-    }
+    };
 
     const setSlPage = (index: number) => {
         setUserDataState(state => {
@@ -73,7 +73,7 @@ export function userDataStateStore() {
             return {...state};
         });
 
-    }
+    };
 
     return {
         userDataState,
@@ -81,5 +81,5 @@ export function userDataStateStore() {
         replaceUserData,
         setOptionData,
         setSlPage,
-    }
+    };
 }

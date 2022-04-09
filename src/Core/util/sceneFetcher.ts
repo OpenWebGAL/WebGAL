@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios from 'axios';
 
 /**
  * 原始场景文件获取函数
@@ -7,8 +7,8 @@ import axios from 'axios'
 export const sceneFetcher = (sceneUrl: string) => {
     return new Promise<string>((resolve) => {
         axios.get(sceneUrl).then((response) => {
-            const rawScene: string = response.data.toString()
-            resolve(rawScene)
-        })
-    })
-}
+            const rawScene: string = response.data.toString();
+            resolve(rawScene);
+        });
+    });
+};

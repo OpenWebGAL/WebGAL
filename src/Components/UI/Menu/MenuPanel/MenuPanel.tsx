@@ -1,4 +1,4 @@
-import styles from './menuPanel.module.scss'
+import styles from './menuPanel.module.scss';
 import {useStore} from "reto";
 import {GuiStateStore, MenuPanelTag} from "../../../../Core/store/GUI";
 import {MenuPanelButton} from "./MenuPanelButton";
@@ -30,19 +30,19 @@ export const MenuPanel = () => {
         <MenuPanelButton iconName="save" buttonOnClassName={SaveTagOn} iconColor={SaveIconColor}
                          tagColor={SaveTagColor}
                          clickFunc={() => {
-                             GuiStore.setMenuPanelTag(MenuPanelTag.Save)
+                             GuiStore.setMenuPanelTag(MenuPanelTag.Save);
                          }}
                          tagName="存档" key="saveButton"/>
         <MenuPanelButton iconName="load" buttonOnClassName={LoadTagOn} iconColor={LoadIconColor}
                          tagColor={LoadTagColor}
                          clickFunc={() => {
-                             GuiStore.setMenuPanelTag(MenuPanelTag.Load)
+                             GuiStore.setMenuPanelTag(MenuPanelTag.Load);
                          }}
                          tagName="读档" key="loadButton"/>
         <MenuPanelButton iconName="option" buttonOnClassName={OptionTagOn} iconColor={OptionIconColor}
                          tagColor={OptionTagColor}
                          clickFunc={() => {
-                             GuiStore.setMenuPanelTag(MenuPanelTag.Option)
+                             GuiStore.setMenuPanelTag(MenuPanelTag.Option);
                          }}
                          tagName="选项" key="optionButton"/>
         <MenuPanelButton iconName="title"
@@ -60,5 +60,5 @@ export const MenuPanel = () => {
                          }
                          }
                          tagName="返回" key="exitIcon"/>
-    </div>
-}
+    </div>;
+};

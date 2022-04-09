@@ -1,5 +1,5 @@
 import {FC, useEffect} from "react";
-import styles from './options.module.scss'
+import styles from './options.module.scss';
 import {NormalButton} from "./NormalButton";
 import {NormalOption} from "./NormalOption";
 import {OptionSlider} from "./OptionSlider";
@@ -114,5 +114,5 @@ export const Options: FC = () => {
                 </NormalOption>
             </div>
         </div>
-    </div>
-}
+    </div>;
+};

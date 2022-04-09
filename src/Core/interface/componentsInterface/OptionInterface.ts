@@ -1,7 +1,7 @@
 /**
  * @interface INormalButton 普通按钮的参数
  */
-import { ChangeEvent } from 'react'
+import { ChangeEvent } from 'react';
 
 export interface INormalButton {
     textList: Array<string>
