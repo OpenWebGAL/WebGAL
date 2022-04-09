@@ -1,6 +1,6 @@
-import {ISentence} from "../../../interface/coreInterface/sceneInterface";
-import {IPerform} from "../../../interface/coreInterface/performInterface";
-import {changeScene} from "../../scene/changeScene";
+import { ISentence } from '../../../interface/coreInterface/sceneInterface';
+import { IPerform } from '../../../interface/coreInterface/performInterface';
+import { changeScene } from '../../scene/changeScene';
 
 export const changeSceneScript = (sentence: ISentence): IPerform => {
     const sceneNameArray: Array<string> = sentence.content.split('/');
@@ -11,10 +11,9 @@ export const changeSceneScript = (sentence: ISentence): IPerform => {
         duration: 0,
         isOver: false,
         isHoldOn: true,
-        stopFunction: () => {
-        },
+        stopFunction: () => {},
         blockingNext: () => false,
         blockingAuto: () => true,
-        stopTimeout: undefined,//暂时不用，后面会交给自动清除
+        stopTimeout: undefined, // 暂时不用，后面会交给自动清除
     };
-}
+};

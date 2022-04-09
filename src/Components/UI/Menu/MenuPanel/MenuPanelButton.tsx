@@ -22,5 +22,5 @@ export const MenuPanelButton = (props: IMenuPanel) => {
             <MenuIconMap iconName={props.iconName} iconColor={props.iconColor}/>
         </div>
         {props.tagName}
-    </div>
-}
+    </div>;
+};

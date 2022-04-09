@@ -2,19 +2,18 @@
  * @file 记录当前GUI的状态信息，引擎初始化时会重置。
  * @author Mahiru
  */
-import {useState} from "react"
-import {getStorage} from "../controller/storage/storageController";
-import {IGuiState} from "../interface/stateInterface/guiInterface";
+import { useState } from 'react';
+import { getStorage } from '../controller/storage/storageController';
+import { IGuiState } from '../interface/stateInterface/guiInterface';
 
 /**
  * 当前Menu页面显示的Tag
  */
 export enum MenuPanelTag {
-    Save,//“保存”选项卡
-    Load,//“读取”选项卡
-    Option//“设置”选项卡
+    Save, // “保存”选项卡
+    Load, // “读取”选项卡
+    Option, // “设置”选项卡
 }
-
 
 /**
  * 初始GUI状态表
@@ -27,14 +26,13 @@ const initState: IGuiState = {
     showTextBox: true,
     currentMenuTag: MenuPanelTag.Option,
     titleBg: '',
-    titleBgm: ''
-}
+    titleBgm: '',
+};
 
-//GUI各组件是否显示
+// GUI各组件是否显示
 type componentsVisibility = Pick<IGuiState, Exclude<keyof IGuiState, 'currentMenuTag' | 'titleBg' | 'titleBgm'>>
-//标题资源
+// 标题资源
 type GuiAsset = Pick<IGuiState, 'titleBgm' | 'titleBg'>
-
 
 /**
  * 创建GUI的状态管理
@@ -50,23 +48,31 @@ export function GuiStateStore() {
      * @param value 可见性，true or false
      */
     const setVisibility = <K extends keyof componentsVisibility>(key: K, value: boolean) => {
-        getStorage();
-        GuiState[key] = value;
-        if (key === 'showMenuPanel' || key === 'showBacklog') {
-            GuiState['showTextBox'] = !value;
-        }
-        setGuiState({...GuiState});
-    }
+
+        setGuiState(state => {
+            getStorage();
+            state[key] = value;
+            if (key === 'showMenuPanel' || key === 'showBacklog') {
+                state['showTextBox'] = !value;
+            }
+            return {...state};
+        });
+
+    };
 
     /**
      * 设置Menu组件显示的标签页
      * @param value 标签页
      */
     const setMenuPanelTag = (value: MenuPanelTag) => {
-        getStorage();
-        GuiState.currentMenuTag = value;
-        setGuiState({...GuiState});
-    }
+
+        setGuiState(state => {
+            getStorage();
+            state.currentMenuTag = value;
+            return {...state};
+        });
+
+    };
 
     /**
      * 设置标题页的资源路径
@@ -74,14 +80,18 @@ export function GuiStateStore() {
      * @param value 资源路径
      */
     const setGuiAsset = <K extends keyof GuiAsset>(key: K, value: string) => {
-        GuiState[key] = value;
-        setGuiState({...GuiState});
-    }
+
+        setGuiState(state => {
+            state[key] = value;
+            return {...state};
+        });
+
+    };
 
     return {
         GuiState,
         setGuiAsset,
         setVisibility,
-        setMenuPanelTag
-    }
+        setMenuPanelTag,
+    };
 }

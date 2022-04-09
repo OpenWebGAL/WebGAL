@@ -4,7 +4,7 @@
 
 export const gameInfo = {
     gameName: '',
-    gameKey: ''
-}
+    gameKey: '',
+};
 
 export const settledScene: Array<string> = [];

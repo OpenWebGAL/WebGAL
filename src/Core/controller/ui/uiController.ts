@@ -1,3 +1,1 @@
-export const uiController = () => {
-
-}
+export const uiController = () => {};

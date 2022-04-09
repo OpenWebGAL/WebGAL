@@ -1,4 +1,4 @@
-import {runtime_gamePlay} from "../../runtime/gamePlay";
+import { runtime_gamePlay } from '../../runtime/gamePlay';
 
 export const unmountPerform = (name: string) => {
     for (let i = 0; i < runtime_gamePlay.performList.length; i++) {
@@ -10,4 +10,4 @@ export const unmountPerform = (name: string) => {
             i--;
         }
     }
-}
+};

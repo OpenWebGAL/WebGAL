@@ -3,4 +3,4 @@
  */
 export const getRandomPerformName = (): string => {
     return Math.random().toString().substring(0, 10);
-}
+};

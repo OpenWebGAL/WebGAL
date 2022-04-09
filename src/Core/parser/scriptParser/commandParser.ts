@@ -1,4 +1,4 @@
-import {commandType, parsedCommand} from "../../interface/coreInterface/sceneInterface";
+import { commandType, parsedCommand } from '../../interface/coreInterface/sceneInterface';
 
 /**
  * 处理命令
@@ -7,27 +7,27 @@ import {commandType, parsedCommand} from "../../interface/coreInterface/sceneInt
  */
 export const commandParser = (commandRaw: string): parsedCommand => {
     const returnCommand: parsedCommand = {
-        type: commandType.say, //默认是say
-        additionalArgs: []
-    }
-    //开始处理命令内容
+        type: commandType.say, // 默认是say
+        additionalArgs: [],
+    };
+    // 开始处理命令内容
     const type: commandType = getCommandType(commandRaw);
     returnCommand.type = type;
-    //如果是对话，加上额外的参数
+    // 如果是对话，加上额外的参数
     if (type === commandType.say) {
         returnCommand.additionalArgs.push({
             key: 'speaker',
             value: commandRaw,
-        })
+        });
     }
     if (type === commandType.bgm) {
         returnCommand.additionalArgs.push({
             key: 'next',
             value: true,
-        })
+        });
     }
     return returnCommand;
-}
+};
 
 /**
  * 根据command原始值判断是什么命令
@@ -84,8 +84,7 @@ function getCommandType(command: string): commandType {
         case 'callScene':
             return commandType.callScene;
         default:
-            //默认是对话
+            // 默认是对话
             return commandType.say;
     }
-
 }

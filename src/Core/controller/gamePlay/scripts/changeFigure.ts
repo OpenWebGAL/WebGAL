@@ -1,13 +1,13 @@
-import {ISentence} from "../../../interface/coreInterface/sceneInterface";
-import {IPerform} from "../../../interface/coreInterface/performInterface";
-import {getRef} from "../../../store/storeRef";
+import { ISentence } from '../../../interface/coreInterface/sceneInterface';
+import { IPerform } from '../../../interface/coreInterface/performInterface';
+import { getRef } from '../../../store/storeRef';
 
 /**
  * 更改立绘
  * @param sentence 语句
  */
 export const changeFigure = (sentence: ISentence): IPerform => {
-    //根据参数设置指定位置
+    // 根据参数设置指定位置
     let pos = 'center';
     let content = sentence.content;
     for (const e of sentence.args) {
@@ -41,10 +41,9 @@ export const changeFigure = (sentence: ISentence): IPerform => {
         duration: 0,
         isOver: false,
         isHoldOn: false,
-        stopFunction: () => {
-        },
+        stopFunction: () => {},
         blockingNext: () => false,
         blockingAuto: () => false,
-        stopTimeout: undefined,//暂时不用，后面会交给自动清除
+        stopTimeout: undefined, // 暂时不用，后面会交给自动清除
     };
-}
+};
