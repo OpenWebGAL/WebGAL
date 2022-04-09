@@ -37,29 +37,34 @@ export const scriptExecutor = () => {
     })
     const isSaveBacklog = currentScript.command === commandType.say; //是否在本句保存backlog（一般遇到对话保存）
     let currentStageState: IStageState;
-    //同步当前舞台数据
-    const currentStageStoreRef = getRef('stageRef');
-    currentStageState = currentStageStoreRef.getStageState();
     //执行“下一句”
     if (isNext) {
         runtime_currentSceneData.currentSentenceId++;
         scriptExecutor();
         return;
     }
-    logger.info('当前执行结果', currentStageState);
-    //保存 backlog
-    if (isSaveBacklog) {
-        const backlogElement: IBacklogItem = {
-            currentStageState: _.cloneDeep(currentStageState),
-            saveScene: {
-                currentSentenceId: runtime_currentSceneData.currentSentenceId,//当前语句ID
-                sceneStack: _.cloneDeep(runtime_currentSceneData.sceneStack), //场景栈
-                sceneName: runtime_currentSceneData.currentScene.sceneName, //场景名称
-                sceneUrl: runtime_currentSceneData.currentScene.sceneUrl, //场景url
+    /**
+     * 为了让 backlog 拿到连续执行了多条语句后正确的数据，放到下一个宏任务中执行（我也不知道为什么这样能正常，有能力的可以研究一下
+     */
+    setTimeout(() => {
+        //同步当前舞台数据
+        const currentStageStoreRef = getRef('stageRef');
+        currentStageState = currentStageStoreRef.getStageState();
+        logger.info('当前执行结果', currentStageState);
+        //保存 backlog
+        if (isSaveBacklog) {
+            const backlogElement: IBacklogItem = {
+                currentStageState: _.cloneDeep(currentStageState),
+                saveScene: {
+                    currentSentenceId: runtime_currentSceneData.currentSentenceId,//当前语句ID
+                    sceneStack: _.cloneDeep(runtime_currentSceneData.sceneStack), //场景栈
+                    sceneName: runtime_currentSceneData.currentScene.sceneName, //场景名称
+                    sceneUrl: runtime_currentSceneData.currentScene.sceneUrl, //场景url
+                }
             }
+            runtime_currentBacklog.push(backlogElement);
         }
-        runtime_currentBacklog.push(backlogElement);
-    }
+    }, 0);
     runtime_currentSceneData.currentSentenceId++;
 
 }
