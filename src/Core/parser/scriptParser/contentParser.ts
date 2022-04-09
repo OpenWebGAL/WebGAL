@@ -1,5 +1,5 @@
-import {commandType} from "../../interface/coreInterface/sceneInterface";
-import {assetSetter, fileType} from "../../util/assetSetter";
+import { commandType } from '../../interface/coreInterface/sceneInterface'
+import { assetSetter, fileType } from '../../util/assetSetter'
 
 /**
  * 解析语句内容的函数，主要作用是把文件名改为绝对地址或相对地址（根据使用情况而定）
@@ -10,16 +10,16 @@ import {assetSetter, fileType} from "../../util/assetSetter";
 export const contentParser = (contentRaw: string, type: commandType) => {
     switch (type) {
         case commandType.changeBg:
-            return assetSetter(contentRaw, fileType.background);
+            return assetSetter(contentRaw, fileType.background)
         case commandType.changeFigure:
-            return assetSetter(contentRaw, fileType.figure);
+            return assetSetter(contentRaw, fileType.figure)
         case commandType.bgm:
-            return assetSetter(contentRaw, fileType.bgm);
+            return assetSetter(contentRaw, fileType.bgm)
         case commandType.callScene:
-            return assetSetter(contentRaw, fileType.scene);
+            return assetSetter(contentRaw, fileType.scene)
         case commandType.changeScene:
-            return assetSetter(contentRaw, fileType.scene);
+            return assetSetter(contentRaw, fileType.scene)
         default:
-            return contentRaw;
+            return contentRaw
     }
 }
