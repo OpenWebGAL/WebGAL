@@ -1,14 +1,14 @@
 .main {
   position: absolute;
   bottom: 0.7em;
-  right: 2em;
+  right: 2.5em;
   z-index: 9;
   display: flex;
   flex-flow: row;
   justify-content: center;
   align-items: center;
-  background-color: rgba(0, 0, 0, 0.35);
-  padding: 0 1em 0 1em;
+  background-color: rgba(150,150,150, 0.25);
+  padding: 0 1.5em 0 1.5em;
   border-radius: 10px;
 }
 
@@ -20,7 +20,7 @@
 
 .button_text {
   position: relative;
-  bottom: 7px;
+  bottom: 4px;
 }
 
 .button_on {
