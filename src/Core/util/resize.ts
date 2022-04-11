@@ -36,4 +36,30 @@ export const resize = () => {
             }
         }
     }
+
+    const title = document.getElementById('Title_enter_page');
+    mh = (targetHeight - h) / 2; // y轴移动距离
+    mw = (targetWidth - w) / 2; // x轴移动距离
+    mh2os = targetWidth / 2 - w / 2; // 竖屏时 y轴移动距离
+    mw2os = targetHeight / 2 - h / 2; // 竖屏时 x轴移动距离
+    if (title) {
+        if (w > h) {
+            mw = -mw;
+            mh = -mh;
+            if (w * (9 / 16) >= h) {
+                title.style.transform = `translate(${mw}px, ${mh}px) scale(${zoomH},${zoomH})`;
+            }
+            if (w * (9 / 16) < h) {
+                title.style.transform = `translate(${mw}px, ${mh}px) scale(${zoomW},${zoomW})`;
+            }
+        } else {
+            mw2os = -mw2os;
+            if (h * (9 / 16) >= w) {
+                title.style.transform = `rotate(90deg) translate(${mw2os}px, ${mh2os}px) scale(${zoomH2},${zoomH2})`;
+            }
+            if (h * (9 / 16) < w) {
+                title.style.transform = `rotate(90deg) translate(${mw2os}px, ${mh2os}px) scale(${zoomW2},${zoomW2})`;
+            }
+        }
+    }
 };

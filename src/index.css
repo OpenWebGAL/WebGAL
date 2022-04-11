@@ -24,6 +24,8 @@ code {
     width: 1600px;
     height: 900px;
     overflow: hidden;
+    position: absolute;
+    top: 0;
 }
 
 /* 设置滚动条的样式 */
