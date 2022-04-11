@@ -6,24 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>WebGAL NG</title>
     <style>
-        #Title_enter_page {
-            width: 1600px;
-            height: 900px;
-            overflow: hidden;
-            background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
-            position: absolute;
-            top: 0;
-            z-index: 14;
-            opacity: 1;
-            transition: opacity 2s, background 2s;
-        }
-
-        .toCenter {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+        a {
+            transition: color 1s;
         }
 
         a:link {
@@ -44,9 +28,29 @@
     </style>
 </head>
 <body>
-<div id="Title_enter_page" onclick="enter()">
-    <div id="Title_enter_text" style="width: 100%;height: 100%;opacity: 1;transition: opacity 1s">
-        <div class="toCenter">
+<div id="Title_enter_page" onclick="enter()" style="
+            width: 1600px;
+            height: 900px;
+            overflow: hidden;
+            background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+            position: absolute;
+            top: 0;
+            z-index: 14;
+            opacity: 1;
+            transition: opacity 2s, background 2s;
+">
+    <div id="Title_enter_text" style="width: 100%;
+    height: 100%;
+    opacity: 1;
+    transition: opacity 1s;
+    font-family: Georgia,serif">
+        <div class="toCenter" style="
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+">
             <div class="StartButton" style="font-size: xx-large;letter-spacing: 0.25em ;padding: 2em 2em 2em 2em">
                 PRESS THE SCREEN TO START
             </div>
