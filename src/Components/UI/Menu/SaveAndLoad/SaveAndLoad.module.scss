@@ -18,8 +18,8 @@
 .Save_Load_title {
     width: auto;
     height: 100%;
-    font-size: 250%;
-    margin: 0 0 0.8em 0.8em;
+    font-size: 275%;
+    margin: 0 0 0 0.8em;
     padding: 0 0.8em 0 0.8em;
     box-sizing: border-box;
     //border-bottom: 4px solid #77428D;
@@ -32,7 +32,7 @@
     font-size: 125%;
     font-weight: bold;
     color: transparent;
-    background: linear-gradient(135deg, #77428D 0%, #77428D 45%, #77428D 100%);
+    background: linear-gradient(135deg , #77428D 0%, #B28FCE 100%);
     text-shadow: 2px 2px 15px rgba(255, 255, 255, 0.5);
     -webkit-background-clip: text;
 }
@@ -43,7 +43,7 @@
     font-size: 130%;
     font-weight: bold;
     color: transparent;
-    background: linear-gradient(135deg, #005CAF 0%, #005CAF 45%, #005CAF 100%);
+    background: linear-gradient(135deg, #005CAF 0%,#2EA9DF 100%);
     text-shadow: 2px 2px 15px rgba(255, 255, 255, 0.5);
     -webkit-background-clip: text;
 }

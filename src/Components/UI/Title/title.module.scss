@@ -1,52 +1,56 @@
 .Title_main {
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  z-index: 13;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    z-index: 13;
 }
 
 .Title_buttonList {
-  display: flex;
-  position: absolute;
-  bottom: 0;
-  height: 12%;
-  background: rgba(0, 0, 0, 0.4);
-  width: 100%;
-  justify-content: space-evenly;
-  justify-items: center;
-  align-items: center;
-  flex-flow: row;
-  letter-spacing: 0.25em;
-  transition: background 0.7s;
+    display: flex;
+    position: absolute;
+    bottom: 0;
+    height: 12%;
+    background: rgba(0, 0, 0, 0.4);
+    width: 100%;
+    justify-content: space-evenly;
+    justify-items: center;
+    align-items: center;
+    flex-flow: row;
+    letter-spacing: 0.25em;
+    transition: background 0.7s;
 }
 
 .Title_buttonList:hover {
-  background: rgba(0, 0, 0, 0.6);
+    background: rgba(0, 0, 0, 0.6);
 }
 
 .Title_button {
-  text-align: center;
-  font-size: 200%;
-  flex: 0 1 auto;
-  color: rgba(255, 255, 255, 0.9);
-  cursor: pointer;
-  margin: 0 2em 0 2em;
-  padding: 0.2em 1em 0.2em 1em;
-  transition: background-color 0.3s, transform 0.3s, text-shadow 0.3s;
-  text-shadow: 0 0 15px rgba(0,0,0,0.5);
+    font-weight: bold;
+    text-align: center;
+    flex: 0 1 auto;
+    cursor: pointer;
+    //margin: 0 0.5em 0 0.5em;
+    padding: 0.2em 1em 0.2em 1em;
+    transition: background-color 0.3s, transform 0.3s, text-shadow 0.3s;
+    //text-shadow: 0 0 10px rgba(0, 0, 0, 0.75);
 }
 
 .Title_button:hover {
-  //background-color: rgba(255, 255, 255, 0.1);
-  text-shadow: 0 0 15px rgba(255, 255, 255, 1);
-  transform: scale(1.05, 1.05);
+    //background-color: rgba(255, 255, 255, 0.1);
+    text-shadow: 0 0 10px rgba(255, 255, 255, 1);
+    transform: scale(1.025, 1.025) translate(0, -0.05em);
 }
 
 
 .Title_button_text {
-  padding: 0 0.5em 0 0.5em;
+    font-size: 165%;
+    color: transparent;
+    background: linear-gradient(135deg, #fdfbfb 0%, #cdcfd0 100%);
+    -webkit-background-clip: text;
+    padding: 0 0.5em 0 0.5em;
 }
 
 .Title_button_text_up {
-  border-bottom: 2px solid rgba(255, 255, 255, 0.75);
+    font-size: 215%;
+    //border-bottom: 2px solid rgba(255, 255, 255, 0.75);
 }
