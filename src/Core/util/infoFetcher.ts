@@ -1,9 +1,10 @@
 import axios from 'axios';
-import { logger } from './logger';
-import { assetSetter, fileType } from './assetSetter';
-import { storeRef } from '../store/storeRef';
-import { gameInfo } from '../runtime/etc';
-import { getStorage } from '../controller/storage/storageController';
+import {logger} from './logger';
+import {assetSetter, fileType} from './assetSetter';
+import {storeRef} from '../store/storeRef';
+import {gameInfo} from '../runtime/etc';
+import {getStorage} from '../controller/storage/storageController';
+import {eventSender} from "../controller/eventBus/eventSender";
 
 /**
  * 获取游戏信息
@@ -40,5 +41,6 @@ export const infoFetcher = (url: string) => {
                 }
             });
         }
+        eventSender('play_title_bgm_target', 1, 0);
     });
 };

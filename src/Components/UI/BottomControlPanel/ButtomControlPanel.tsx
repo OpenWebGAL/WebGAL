@@ -24,22 +24,22 @@ export const BottomControlPanel = () => {
                 <AlignTextLeftOne
                     className={styles.button}
                     theme="outline"
-                    size="36"
+                    size="30"
                     fill="#f5f5f7"
                     strokeWidth={3.5}
                 />
                 <span className={styles.button_text}>回想</span>
             </span>
             <span className={styles.singleButton}>
-                <ReplayMusic className={styles.button} theme="outline" size="36" fill="#f5f5f7" strokeWidth={3.5} />
+                <ReplayMusic className={styles.button} theme="outline" size="30" fill="#f5f5f7" strokeWidth={3.5} />
                 <span className={styles.button_text}>重播</span>
             </span>
             <span id="Button_ControlPanel_auto" className={styles.singleButton} onClick={switchAuto}>
-                <PlayOne className={styles.button} theme="outline" size="36" fill="#f5f5f7" strokeWidth={3.5} />
+                <PlayOne className={styles.button} theme="outline" size="30" fill="#f5f5f7" strokeWidth={3.5} />
                 <span className={styles.button_text}>自动</span>
             </span>
             <span id="Button_ControlPanel_fast" className={styles.singleButton} onClick={switchFast}>
-                <DoubleRight className={styles.button} theme="outline" size="36" fill="#f5f5f7" strokeWidth={3.5} />
+                <DoubleRight className={styles.button} theme="outline" size="30" fill="#f5f5f7" strokeWidth={3.5} />
                 <span className={styles.button_text}>快进</span>
             </span>
             <span
@@ -49,7 +49,7 @@ export const BottomControlPanel = () => {
                     GUIstore.setVisibility('showMenuPanel', true);
                 }}
             >
-                <Save className={styles.button} theme="outline" size="36" fill="#f5f5f7" strokeWidth={3.5} />
+                <Save className={styles.button} theme="outline" size="30" fill="#f5f5f7" strokeWidth={3.5} />
                 <span className={styles.button_text}>存档</span>
             </span>
             <span
@@ -59,7 +59,7 @@ export const BottomControlPanel = () => {
                     GUIstore.setVisibility('showMenuPanel', true);
                 }}
             >
-                <FolderOpen className={styles.button} theme="outline" size="36" fill="#f5f5f7" strokeWidth={3.5} />
+                <FolderOpen className={styles.button} theme="outline" size="30" fill="#f5f5f7" strokeWidth={3.5} />
                 <span className={styles.button_text}>读档</span>
             </span>
             <span
@@ -69,7 +69,7 @@ export const BottomControlPanel = () => {
                     GUIstore.setVisibility('showMenuPanel', true);
                 }}
             >
-                <SettingTwo className={styles.button} theme="outline" size="36" fill="#f5f5f7" strokeWidth={3.5} />
+                <SettingTwo className={styles.button} theme="outline" size="30" fill="#f5f5f7" strokeWidth={3.5} />
                 <span className={styles.button_text}>选项</span>
             </span>
             <span
@@ -79,7 +79,7 @@ export const BottomControlPanel = () => {
                     playBgm(GUIstore.GuiState.titleBgm);
                 }}
             >
-                <Home className={styles.button} theme="outline" size="36" fill="#f5f5f7" strokeWidth={3.5} />
+                <Home className={styles.button} theme="outline" size="30" fill="#f5f5f7" strokeWidth={3.5} />
                 <span className={styles.button_text}>标题</span>
             </span>
         </div>

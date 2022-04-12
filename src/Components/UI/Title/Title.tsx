@@ -1,9 +1,9 @@
-import { FC } from 'react';
+import {FC} from 'react';
 import styles from './title.module.scss';
-import { useStore } from 'reto';
-import { GuiStateStore, MenuPanelTag } from '../../../Core/store/GUI';
-import { playBgm } from '../../../Core/util/playBgm';
-import { startGame } from '../../../Core/controller/gamePlay/startGame';
+import {useStore} from 'reto';
+import {GuiStateStore, MenuPanelTag} from '../../../Core/store/GUI';
+import {playBgm} from '../../../Core/util/playBgm';
+import {startGame} from '../../../Core/controller/gamePlay/startGame';
 
 /**
  * 标题页
@@ -13,6 +13,12 @@ const Title: FC = () => {
     const GuiStore = useStore(GuiStateStore);
     return (
         <>
+            <div
+                id="play_title_bgm_target"
+                onClick={() => {
+                    playBgm(GuiStore.GuiState.titleBgm);
+                }}
+            />
             {GuiStore.GuiState.showTitle && (
                 <div
                     className={styles.Title_main}
@@ -21,16 +27,6 @@ const Title: FC = () => {
                         backgroundSize: 'cover',
                     }}
                 >
-                    {GuiStore.GuiState.showStarter && (
-                        <div
-                            id="Title_starter"
-                            className={styles.Title_starter}
-                            onClick={() => {
-                                playBgm(GuiStore.GuiState.titleBgm);
-                                GuiStore.setVisibility('showStarter', false);
-                            }}
-                        />
-                    )}
                     <div className={styles.Title_buttonList}>
                         <div className={styles.Title_button} onClick={startGame}>
                             <div className={styles.Title_button_text + ' ' + styles.Title_button_text_up}>开始游戏</div>
