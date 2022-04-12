@@ -56,6 +56,17 @@ const Title: FC = () => {
                             <div className={styles.Title_button_text + ' ' + styles.Title_button_text_up}>读取存档</div>
                             <div className={styles.Title_button_text}>LOAD</div>
                         </div>
+                        <div
+                            className={styles.Title_button}
+                            onClick={() => {
+                                window.opener = null;
+                                window.open('', '_self');
+                                window.close();
+                            }}
+                        >
+                            <div className={styles.Title_button_text + ' ' + styles.Title_button_text_up}>退出游戏</div>
+                            <div className={styles.Title_button_text}>EXIT</div>
+                        </div>
                     </div>
                 </div>
             )}
