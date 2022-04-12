@@ -44,6 +44,7 @@
     </style>
 </head>
 <body>
+<!--快速显示落地页，让用户感知不到加载的过程-->
 <div id="Title_enter_page" onclick="enter()" style="
             width: 1600px;
             height: 900px;
@@ -54,6 +55,7 @@
             opacity: 1;
             transition: opacity 1.5s;
 ">
+<!--    落地页背景-->
     <div id="Title_bg_container" style="
     height: 100%;
     width: 100%;
@@ -63,6 +65,7 @@
     opacity: 1;
     transition: opacity 1s;
 "></div>
+<!--    点击后的白色渐变-->
     <div id="Title_white_container" style="
     width: 100%;
     height: 100%;
@@ -72,6 +75,7 @@
     background: linear-gradient(165deg,rgba(255,255,255,0.25)0%,rgba(255,255,255,1)50%,rgba(255,255,255,0.25)100%);
     transition: opacity 1s;
 "></div>
+<!--    落地页文字-->
     <div id="Title_enter_text" style="width: 100%;
     position: absolute;
     top: 0;
@@ -131,14 +135,17 @@
         }
     };
 
+    /**
+     * 点击屏幕，进入引擎主界面
+     */
     function enter() {
-        document.getElementById('Title_bg_container').style.opacity = '0';
-        document.getElementById('Title_enter_text').style.opacity = '0';
-        setTimeout(() => document.getElementById('Title_white_container').style.opacity = '1', 50);
+        document.getElementById('Title_bg_container').style.opacity = '0'; // 调整标题背景的透明度
+        document.getElementById('Title_enter_text').style.opacity = '0'; // 调整标题文字的透明度
+        setTimeout(() => document.getElementById('Title_white_container').style.opacity = '1', 50); // 在50ms后开始显示白色渐变
         const title = document.getElementById('Title_enter_page');
-        setTimeout(() => title.style.opacity = '0', 500);
-        title.style.pointerEvents = 'none';
-        title.style.background = 'linear-gradient( #a1c4fd 0%, #c2e9fb 100%)';
+        setTimeout(() => title.style.opacity = '0', 500); //500ms后开始降低落地页透明度
+        title.style.pointerEvents = 'none'; //落地页不再响应点击
+        title.style.background = 'linear-gradient( #a1c4fd 0%, #c2e9fb 100%)'; //改变标题渐变效果
         setTimeout(() => title.style.display = 'none', 2000) // 将落地页设置为不显示
         /**
          * 将播放bgm的事件发送出去
@@ -154,6 +161,9 @@
         }
     }
 
+    /**
+     * 对标题页进行自动强制缩放
+     */
     function resizeTitle() {
         const targetHeight = 900;
         const targetWidth = 1600;
