@@ -13,8 +13,8 @@ export const Options: FC = () => {
     return <div className={styles.Options_main}>
         <div className={styles.Options_top}>
             <div className={styles.Options_title}>
-                <div className={styles.Option_title_text_ts + ' ' + styles.Option_title_text}>选项</div>
-                <div className={styles.Option_title_text_shadow + ' ' + styles.Option_title_text}>选项</div>
+                {/* <div className={styles.Option_title_text_ts + ' ' + styles.Option_title_text}>选项</div> */}
+                {/* <div className={styles.Option_title_text_shadow + ' ' + styles.Option_title_text}>选项</div> */}
                 <div className={styles.Option_title_text}>选项</div>
             </div>
         </div>
