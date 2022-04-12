@@ -1,32 +1,37 @@
 .MenuPanel_main {
-  width: 100%;
-  height: 10%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: rgba(255, 255, 255, 0.9);
-  box-shadow: 0 0 45px 15px rgba(0, 0, 0, 0.05);
+    width: 100%;
+    height: 10%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 0 45px 15px rgba(0, 0, 0, 0.05);
 }
 
 .MenuPanel_button {
-  display: flex;
-  justify-content: center;
-  font-size: 200%;
-  text-align: center;
-  font-weight: bold;
-  width: 15%;
-  cursor: pointer;
-  color: rgba(8, 8, 8, 0.3);
-  overflow: hidden;
-  border-right: 1.5px solid rgba(0, 0, 0, 0.15);
+    display: flex;
+    justify-content: center;
+    font-size: 200%;
+    text-align: center;
+    font-weight: bold;
+    width: 15%;
+    cursor: pointer;
+    color: rgba(8, 8, 8, 0.3);
+    overflow: hidden;
+    border-right: 1.5px solid rgba(0, 0, 0, 0.15);
+    transition: text-shadow 0.7s, backgroud 0.7s;
+}
+
+.MenuPanel_button:hover {
+    background: radial-gradient(50% 50%, rgba(180, 181, 182, 0.25) 0%,rgba(180, 181, 182, 0.1) 75%, rgba(0, 0, 0, 0) 100%);
 }
 
 .MenuPanel_button:last-child {
-  border-right: none;
+    border-right: none;
 }
 
 .MenuPanel_button_icon {
-  transform: translate(0, 0.16em);
-  padding: 0 0.15em 0 0;
-  margin: 0 0.15em 0 0;
+    transform: translate(0, 0.16em);
+    padding: 0 0.15em 0 0;
+    margin: 0 0.15em 0 0;
 }
