@@ -10,7 +10,7 @@ import {sceneFetcher} from './util/sceneFetcher';
 import {runtime_currentSceneData} from './runtime/sceneData';
 import {sceneParser} from './parser/sceneParser';
 import {getRef} from "@/Core/store/storeRef";
-import {setVolume} from "@/Core/util/setVolume";
+import {setVolume} from "../Core/util/setVolume";
 
 /**
  * 引擎初始化函数
