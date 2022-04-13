@@ -32,7 +32,7 @@ const initState: IUserData = {
         autoSpeed: playSpeed.normal, // 自动播放速度
         textSize: textSize.medium,
         vocalVolume: 100, // 语音音量
-        bgmVolume: 50, // 背景音乐音量
+        bgmVolume: 25, // 背景音乐音量
     },
 };
 

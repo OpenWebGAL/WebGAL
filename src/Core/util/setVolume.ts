@@ -12,11 +12,11 @@ export const setVolume = ()=>{
     logger.info('设置音量',[vocalVol,bgmVol]);
     const bgmElement: any = document.getElementById('currentBgm');
     if (bgmElement) {
-        bgmElement.volume = bgmVol;
+        bgmElement.volume = bgmVol.toString();
         logger.info('当前的bgm音量',bgmElement.volume);
     }
-    const vocalElement: any = document.getElementById('currentBgm');
+    const vocalElement: any = document.getElementById('currentVocal');
     if (bgmElement) {
-        vocalElement.volume = vocalVol;
+        vocalElement.volume = vocalVol.toString();
     }
 };
