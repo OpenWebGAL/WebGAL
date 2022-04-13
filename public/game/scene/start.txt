@@ -9,6 +9,7 @@ callScene:test2.txt;
 back;
 pixiInit: -next;
 停止下雪。
+playVideo:OP.mp4 -next;
 WebGAL4x:这是测试场景的第二条语句，这是测试场景的第二条语句，这是测试场景的第二条语句，这是测试场景的第二条语句;
 changeBg:0000e.png -next;
 WebGAL4x_Build_4.0.2:这是测试场景的第三条语句;

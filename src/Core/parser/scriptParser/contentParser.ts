@@ -21,6 +21,8 @@ export const contentParser = (contentRaw: string, type: commandType) => {
             return assetSetter(contentRaw, fileType.scene);
         case commandType.miniAvatar:
             return assetSetter(contentRaw, fileType.figure);
+        case commandType.video:
+            return assetSetter(contentRaw,fileType.video);
         default:
             return contentRaw;
     }

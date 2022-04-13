@@ -12,6 +12,7 @@ export enum fileType {
     scene,
     tex,
     vocal,
+    video
 }
 
 /**
@@ -42,6 +43,9 @@ export const assetSetter = (fileName: string, assetType: fileType): string => {
                 break;
             case fileType.bgm:
                 returnFilePath = `./game/bgm/${fileName}`;
+                break;
+            case fileType.video:
+                returnFilePath = `./game/video/${fileName}`;
                 break;
             default:
                 returnFilePath = ``;
