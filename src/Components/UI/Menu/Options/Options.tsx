@@ -6,6 +6,8 @@ import {OptionSlider} from "./OptionSlider";
 import {useStore} from "reto";
 import {userDataStateStore} from "../../../../Core/store/userData";
 import {getStorage, setStorage} from "../../../../Core/controller/storage/storageController";
+import {TextPreview} from "./TextPreview/TextPreview";
+import {setVolume} from "../../../../Core/util/setVolume";
 
 export const Options: FC = () => {
     const userDataStorage = useStore(userDataStateStore);
@@ -73,16 +75,7 @@ export const Options: FC = () => {
                 </NormalOption>
                 <NormalOption key="option3" title="文本显示预览">
                     {/* 这是一个临时的组件，用于模拟文本预览的效果 */}
-                    <div style={{
-                        padding: '0.5em 1em 0.5em 1em',
-                        background: 'rgba(0,0,0,0.35)',
-                        fontSize: '175%',
-                        color: 'rgb(255,255,255)',
-                        height: '5em',
-                        textShadow: '2px 2px 15px rgba(0,0,0,0.5)'
-                    }}>
-                        模拟后期加上文字显示效果的预览，用于在用户调整设置时可以预览到文字显示的效果。
-                    </div>
+                    <TextPreview/>
                 </NormalOption>
 
             </div>
@@ -93,6 +86,7 @@ export const Options: FC = () => {
                         const newValue = event.target.value;
                         userDataStorage.setOptionData('volumeMain', Number(newValue));
                         setStorage();
+                        setVolume();
                     }}
                     />
                 </NormalOption>
@@ -102,6 +96,7 @@ export const Options: FC = () => {
                         const newValue = event.target.value;
                         userDataStorage.setOptionData('vocalVolume', Number(newValue));
                         setStorage();
+                        setVolume();
                     }}/>
                 </NormalOption>
                 <NormalOption key="option6" title="背景音乐音量">
@@ -110,6 +105,7 @@ export const Options: FC = () => {
                         const newValue = event.target.value;
                         userDataStorage.setOptionData('bgmVolume', Number(newValue));
                         setStorage();
+                        setVolume();
                     }}/>
                 </NormalOption>
             </div>
