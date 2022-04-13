@@ -2070,7 +2070,7 @@ pidtree@^0.5.0:
   resolved "https://registry.yarnpkg.com/pidtree/-/pidtree-0.5.0.tgz#ad5fbc1de78b8a5f99d6fbdd4f6e4eee21d1aca1"
   integrity sha512-9nxspIM7OpZuhBxPg73Zvyq7j1QMPMPsGKTqRc2XOaFQauDvoNz9fM1Wdkjmeo7l9GXOZiRs97sPkuayl39wjA==
 
-pixi.js@^6.2.2:
+pixi.js@^6.3.0:
   version "6.3.0"
   resolved "https://registry.yarnpkg.com/pixi.js/-/pixi.js-6.3.0.tgz#466f28a06d6263337c0f91275faf229a02f6a65b"
   integrity sha512-ayOmVagMSa5lPVvznDf2e4EppwzPEDnB/q3AYdjTM9Ksw+JKT3lbLuZFo/6U0HNYF9DsJRJL/4ebReZh1hnqLQ==
