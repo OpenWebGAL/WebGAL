@@ -30,7 +30,14 @@ export const BottomControlPanel = () => {
                 />
                 <span className={styles.button_text}>回想</span>
             </span>
-            <span className={styles.singleButton}>
+            <span className={styles.singleButton} onClick={()=>{
+                let VocalControl: any = document.getElementById('currentVocal');
+                if (VocalControl !== null) {
+                    VocalControl.currentTime = 0;
+                    VocalControl.pause();
+                    VocalControl.play();
+                }
+            }}>
                 <ReplayMusic className={styles.button} theme="outline" size="30" fill="#f5f5f7" strokeWidth={3.5} />
                 <span className={styles.button_text}>重播</span>
             </span>

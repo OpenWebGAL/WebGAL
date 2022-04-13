@@ -1,7 +1,8 @@
-import { runtime_gamePlay } from '../../runtime/gamePlay';
-import { eventSender } from '../eventBus/eventSender';
-import { logger } from '../../util/logger';
+import {runtime_gamePlay} from '../../runtime/gamePlay';
+import {eventSender} from '../eventBus/eventSender';
+import {logger} from '../../util/logger';
 import styles from '../../../Components/UI/BottomControlPanel/bottomControlPanel.module.scss';
+import {getRef} from "../../../Core/store/storeRef";
 
 /**
  * 设置 autoplay 按钮的激活与否
@@ -56,6 +57,7 @@ export const switchAuto = () => {
  * 自动播放的执行函数
  */
 const autoPlay = () => {
+    const autoPlayDelay = 750 - 250 * getRef('userDataRef').userDataState.optionData.autoSpeed;
     let isBlockingAuto = false;
     runtime_gamePlay.performList.forEach((e) => {
         if (e.blockingAuto() && !e.isOver)
@@ -69,6 +71,6 @@ const autoPlay = () => {
     // nextSentence();
     if (runtime_gamePlay.autoTimeout === null) {
         logger.warn('nextSentenceEvent Sent');
-        runtime_gamePlay.autoTimeout = eventSender('nextSentence_target', 0, 500);
+        runtime_gamePlay.autoTimeout = eventSender('nextSentence_target', 0, autoPlayDelay);
     }
 };
