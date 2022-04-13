@@ -10,7 +10,7 @@ export const template = (sentence: ISentence): IPerform => {
         performName: 'none',
         duration: 0,
         isOver: false,
-        isHoldOn: true,
+        isHoldOn: false,
         stopFunction: () => {},
         blockingNext: () => false,
         blockingAuto: () => true,
