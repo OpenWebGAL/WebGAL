@@ -1,9 +1,9 @@
-import { ISentence } from '../../../interface/coreInterface/sceneInterface';
-import { getRef } from '../../../store/storeRef';
-import { IPerform } from '../../../interface/coreInterface/performInterface';
+import {ISentence} from '../../../interface/coreInterface/sceneInterface';
+import {getRef} from '../../../store/storeRef';
+import {IPerform} from '../../../interface/coreInterface/performInterface';
 import styles from '../../../../Components/Stage/TextBox/textbox.module.scss';
-import { getRandomPerformName } from '../../../util/getRandomPerformName';
-import { playVocal } from './playVocal';
+import {getRandomPerformName} from '../../../util/getRandomPerformName';
+import {playVocal} from './playVocal';
 
 /**
  * 进行普通对话的显示
@@ -12,6 +12,7 @@ import { playVocal } from './playVocal';
  */
 export const say = (sentence: ISentence): IPerform => {
     const stageStore: any = getRef('stageRef');
+    const userDataStore: any = getRef('userDataRef');
     // 设置文本显示
     stageStore.setStage('showText', sentence.content);
     // 清除语音
@@ -38,9 +39,11 @@ export const say = (sentence: ISentence): IPerform => {
         });
     }, 0);
     const performInitName: string = getRandomPerformName();
+    const textDelay = 55 - 20 * userDataStore.userDataState.optionData.textSpeed;
+    const endDelay = 750 - userDataStore.userDataState.optionData.textSpeed * 250;
     return {
         performName: performInitName,
-        duration: sentence.content.length * 35 + 100,
+        duration: sentence.content.length * textDelay + endDelay,
         isOver: false,
         isHoldOn: false,
         stopFunction: () => {
