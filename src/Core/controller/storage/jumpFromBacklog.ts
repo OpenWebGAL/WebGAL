@@ -26,11 +26,11 @@ export const jumpFromBacklog = (index: number) => {
             backlogFile.saveScene.sceneUrl,
         );
     });
-    runtime_currentSceneData.currentSentenceId = backlogFile.saveScene.currentSentenceId + 1;
+    runtime_currentSceneData.currentSentenceId = backlogFile.saveScene.currentSentenceId;
     runtime_currentSceneData.sceneStack = _.cloneDeep(backlogFile.saveScene.sceneStack);
 
     // 强制停止所有演出
-    logger.info('清除所有普通演出');
+    logger.info('清除所有演出');
     for (let i = 0; i < runtime_gamePlay.performList.length; i++) {
         const e = runtime_gamePlay.performList[i];
         e.stopFunction();

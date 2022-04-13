@@ -21,6 +21,9 @@ export const TextBox = () => {
                      style={{animationDelay: String(index * textDelay) + 'ms'}}>{e}</span>;
     });
     return <div id="textBoxMain" className={styles.TextBox_main}>
+        <div id='miniAvatar' className={styles.miniAvatarContainer}>
+            {StageStore.stageState.miniAvatar !== '' && <img className={styles.miniAvatarImg} alt="miniAvatar" src={StageStore.stageState.miniAvatar}/>}
+        </div>
         {StageStore.stageState.showName !== '' &&
             <div className={styles.TextBox_showName} style={{fontSize: '200%'}}>{StageStore.stageState.showName}</div>}
         <div style={{fontSize: size}}>

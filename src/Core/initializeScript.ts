@@ -11,6 +11,7 @@ import {runtime_currentSceneData} from './runtime/sceneData';
 import {sceneParser} from './parser/sceneParser';
 import {getRef} from "@/Core/store/storeRef";
 import {setVolume} from "../Core/util/setVolume";
+import {pixiController} from "../Core/controller/perform/pixi/pixiController";
 
 /**
  * 引擎初始化函数
@@ -46,4 +47,8 @@ export const initializeScript = (): void => {
      * 设置音量
      */
     setVolume();
+    /**
+     * 启动Pixi
+     */
+    pixiController(true);
 };
