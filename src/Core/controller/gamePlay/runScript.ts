@@ -14,6 +14,7 @@ import {pixi} from "../../../Core/controller/gamePlay/scripts/pixi";
 import {miniAvatar} from "../../../Core/controller/gamePlay/scripts/miniAvatar";
 import {pixiInit} from "../../../Core/controller/gamePlay/scripts/pixiInit";
 import {logger} from "../../../Core/util/logger";
+import {playVideo} from "../../../Core/controller/gamePlay/scripts/playVideo";
 
 /**
  * 规范函数的类型
@@ -41,7 +42,8 @@ export const runScript = (script: ISentence) => {
         [commandType.intro, intro],
         [commandType.pixi,pixi],
         [commandType.miniAvatar,miniAvatar],
-        [commandType.pixiInit,pixiInit]
+        [commandType.pixiInit,pixiInit],
+        [commandType.video,playVideo]
     ]);
 
     // 根据脚本类型切换函数
