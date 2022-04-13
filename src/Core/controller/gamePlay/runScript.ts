@@ -1,15 +1,19 @@
-import { commandType, ISentence } from '../../interface/coreInterface/sceneInterface';
-import { say } from './scripts/say';
-import { initPerform, IPerform } from '../../interface/coreInterface/performInterface';
-import { unmountPerform } from '../perform/unmountPerform';
-import { getRef } from '../../store/storeRef';
-import { runtime_gamePlay } from '../../runtime/gamePlay';
-import { changeBg } from './scripts/changeBg';
-import { changeFigure } from './scripts/changeFigure';
-import { bgm } from './scripts/bgm';
-import { callSceneScript } from './scripts/callSceneScript';
-import { changeSceneScript } from './scripts/changeSceneScript';
-import { intro } from './scripts/intro';
+import {commandType, ISentence} from '../../interface/coreInterface/sceneInterface';
+import {say} from './scripts/say';
+import {initPerform, IPerform} from '../../interface/coreInterface/performInterface';
+import {unmountPerform} from '../perform/unmountPerform';
+import {getRef} from '../../store/storeRef';
+import {runtime_gamePlay} from '../../runtime/gamePlay';
+import {changeBg} from './scripts/changeBg';
+import {changeFigure} from './scripts/changeFigure';
+import {bgm} from './scripts/bgm';
+import {callSceneScript} from './scripts/callSceneScript';
+import {changeSceneScript} from './scripts/changeSceneScript';
+import {intro} from './scripts/intro';
+import {pixi} from "../../../Core/controller/gamePlay/scripts/pixi";
+import {miniAvatar} from "../../../Core/controller/gamePlay/scripts/miniAvatar";
+import {pixiInit} from "../../../Core/controller/gamePlay/scripts/pixiInit";
+import {logger} from "../../../Core/util/logger";
 
 /**
  * 规范函数的类型
@@ -22,6 +26,7 @@ type scriptFunction = (sentence: ISentence) => IPerform
  * @param script 调用的语句
  */
 export const runScript = (script: ISentence) => {
+    logger.debug('执行',script);
     let perform: IPerform = initPerform;
     let funcToRun: scriptFunction = say; // 默认是say
 
@@ -34,6 +39,9 @@ export const runScript = (script: ISentence) => {
         [commandType.callScene, callSceneScript],
         [commandType.changeScene, changeSceneScript],
         [commandType.intro, intro],
+        [commandType.pixi,pixi],
+        [commandType.miniAvatar,miniAvatar],
+        [commandType.pixiInit,pixiInit]
     ]);
 
     // 根据脚本类型切换函数
@@ -46,6 +54,7 @@ export const runScript = (script: ISentence) => {
 
     // 语句不执行演出
     if (perform.performName === 'none') {
+        logger.info('语句不执行演出');
         return;
     }
 
@@ -55,10 +64,12 @@ export const runScript = (script: ISentence) => {
 
     // 时间到后自动清理演出
     perform.stopTimeout = setTimeout(() => {
-        perform.stopFunction();
-        if (!perform.isHoldOn)
+        // perform.stopFunction();
+        perform.isOver = true;
+        if (!perform.isHoldOn){
             // 如果不是保持演出，清除
             unmountPerform(perform.performName);
+        }
     }, perform.duration);
 
     runtime_gamePlay.performList.push(perform);

@@ -1,13 +1,18 @@
 bgm:夏影.mp3;
 changeBg:0000.png -next;
 WebGAL:这是一条测试语句。 -V1.ogg;
+pixiPerform:snow -next;
+miniAvatar:minipic_test.png -next;
 intro:慢慢地|慢慢地|如雪花一般|凋零 -next;
 慢慢地，慢慢地，如雪花一般，凋零。
 callScene:test2.txt;
 back;
+pixiInit: -next;
+停止下雪。
 WebGAL4x:这是测试场景的第二条语句，这是测试场景的第二条语句，这是测试场景的第二条语句，这是测试场景的第二条语句;
 changeBg:0000e.png -next;
 WebGAL4x_Build_4.0.2:这是测试场景的第三条语句;
 changeFigure:testFigure04.png -left;
 changeFigure: -left -clear -next;
 changeFigure:testFigure04.png -right;
+测试结束;

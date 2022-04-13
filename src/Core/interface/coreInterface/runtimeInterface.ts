@@ -29,4 +29,5 @@ export interface IGamePlay {
     autoInterval: ReturnType<typeof setInterval> | null
     fastInterval: ReturnType<typeof setInterval> | null
     autoTimeout: ReturnType<typeof setTimeout> | null
+    currentPixi:any
 }
