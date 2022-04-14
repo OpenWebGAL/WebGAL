@@ -26,8 +26,26 @@ export const scriptParser = (sentenceRaw: string): ISentence => {
     const getCommandResult = /:/.exec(newSentenceRaw);
     // 没有command，说明这是一条连续对话
     if (getCommandResult === null) {
-        command = commandType.say;
-        commandRaw = '';
+        const getBlankResult = / /.exec(newSentenceRaw);
+        if (getBlankResult) {
+            commandRaw = newSentenceRaw.substring(0, getBlankResult.index);
+            newSentenceRaw = newSentenceRaw.substring(getBlankResult.index, newSentenceRaw.length);
+            parsedCommand = commandParser(commandRaw);
+            command = parsedCommand.type;
+            for (const e of parsedCommand.additionalArgs) {
+                args.push(e);
+            }
+        } else {
+            commandRaw = newSentenceRaw.substring(0, newSentenceRaw.length);
+            newSentenceRaw = newSentenceRaw.substring(0, newSentenceRaw.length);
+            parsedCommand = commandParser(commandRaw);
+            command = parsedCommand.type;
+            if (command !== commandType.say) {
+                for (const e of parsedCommand.additionalArgs) {
+                    args.push(e);
+                }
+            }
+        }
     } else {
         commandRaw = newSentenceRaw.substring(0, getCommandResult.index);
         newSentenceRaw = newSentenceRaw.substring(getCommandResult.index + 1, newSentenceRaw.length);

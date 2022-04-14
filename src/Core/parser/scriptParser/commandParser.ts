@@ -1,4 +1,4 @@
-import { commandType, parsedCommand } from '../../interface/coreInterface/sceneInterface';
+import {commandType, parsedCommand} from '../../interface/coreInterface/sceneInterface';
 
 /**
  * 处理命令
@@ -6,7 +6,7 @@ import { commandType, parsedCommand } from '../../interface/coreInterface/sceneI
  * @return {parsedCommand} 处理后的命令
  */
 export const commandParser = (commandRaw: string): parsedCommand => {
-    const returnCommand: parsedCommand = {
+    let returnCommand: parsedCommand = {
         type: commandType.say, // 默认是say
         additionalArgs: [],
     };
@@ -20,12 +20,7 @@ export const commandParser = (commandRaw: string): parsedCommand => {
             value: commandRaw,
         });
     }
-    if (type === commandType.bgm) {
-        returnCommand.additionalArgs.push({
-            key: 'next',
-            value: true,
-        });
-    }
+    returnCommand = addNextArg(returnCommand, type);
     return returnCommand;
 };
 
@@ -87,4 +82,22 @@ function getCommandType(command: string): commandType {
             // 默认是对话
             return commandType.say;
     }
+}
+
+function addNextArg(commandToParse: parsedCommand, thisCommandType: commandType) {
+    const nextList = [
+        commandType.bgm,
+        commandType.pixi,
+        commandType.pixiInit,
+        commandType.label,
+        commandType.if,
+        commandType.miniAvatar,
+    ];
+    if (nextList.includes(thisCommandType)) {
+        commandToParse.additionalArgs.push({
+            key: 'next',
+            value: true,
+        });
+    }
+    return commandToParse;
 }
