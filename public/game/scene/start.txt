@@ -1,6 +1,7 @@
 bgm:夏影.mp3;
 changeBg:0000.png -next;
 WebGAL:这是一条测试语句。 -V1.ogg;
+choose:测试:test2.txt|结束:end;
 jumpLabel:end;
 pixiPerform:snow;
 miniAvatar:minipic_test.png;

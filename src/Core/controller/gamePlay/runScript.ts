@@ -17,6 +17,7 @@ import {logger} from "../../../Core/util/logger";
 import {playVideo} from "../../../Core/controller/gamePlay/scripts/playVideo";
 import {jumpLabel} from "../../../Core/controller/gamePlay/scripts/jumpLabel";
 import {label} from "../../../Core/controller/gamePlay/scripts/label";
+import {choose} from "../../../Core/controller/gamePlay/scripts/choose";
 
 /**
  * 规范函数的类型
@@ -48,6 +49,7 @@ export const runScript = (script: ISentence) => {
         [commandType.video,playVideo],
         [commandType.jumpLabel,jumpLabel],
         [commandType.label,label],
+        [commandType.choose,choose]
     ]);
 
     // 根据脚本类型切换函数
