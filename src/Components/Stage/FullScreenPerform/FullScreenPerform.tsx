@@ -5,5 +5,6 @@ export const FullScreenPerform = () => {
         <div id="videoContainer"/>
         <div className={styles.introContainer} id="introContainer"/>
         <div id="pixiContianer"/>
+        <div id="chooseContainer"/>
     </div>;
 };

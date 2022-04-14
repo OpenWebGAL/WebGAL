@@ -4,8 +4,44 @@
     src: url("./assets/fonts/SourceHanSerifSC-Regular.otf");
 }
 
+.StartButton {
+    animation: StartButton_blink 4s infinite;
+}
+
+@keyframes StartButton_blink {
+    0% {
+        text-shadow: 0 0 15px rgba(0, 0, 0, 0.65);
+    }
+    50% {
+        text-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+    }
+    100% {
+        text-shadow: 0 0 15px rgba(0, 0, 0, 0.65);
+    }
+}
+
+a {
+    transition: color 1s;
+}
+
+a:link {
+    color: #434343;
+}
+
+a:visited {
+    color: #434343;
+}
+
+a:hover {
+    color: #434343;
+}
+
+a:active {
+    color: #434343;
+}
+
 body {
-    font-size: medium;
+    font-size: 16px;
     margin: 0;
     font-family: "思源宋体", -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
