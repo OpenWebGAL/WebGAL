@@ -31,7 +31,6 @@ type scriptFunction = (sentence: ISentence) => IPerform
  * @param script 调用的语句
  */
 export const runScript = (script: ISentence) => {
-    logger.debug('执行',script);
     let perform: IPerform = initPerform;
     let funcToRun: scriptFunction = say; // 默认是say
 
@@ -64,7 +63,7 @@ export const runScript = (script: ISentence) => {
 
     // 语句不执行演出
     if (perform.performName === 'none') {
-        logger.info('语句不执行演出');
+        logger.warn('本条语句不执行演出');
         return;
     }
 

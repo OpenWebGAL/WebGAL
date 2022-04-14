@@ -14,7 +14,7 @@ export const changeScene = (sceneUrl: string, sceneName: string) => {
     sceneFetcher(sceneUrl).then((rawScene) => {
         runtime_currentSceneData.currentScene = sceneParser(rawScene, sceneName, sceneUrl);
         runtime_currentSceneData.currentSentenceId = 0;
-        logger.debug('切换后的场景', runtime_currentSceneData);
+        logger.debug('现在切换场景，切换后的结果：', runtime_currentSceneData);
         eventSender('nextSentence_target', 0, 0); // 通过事件来发送下一句指令，防止拿到过期状态
     });
 };

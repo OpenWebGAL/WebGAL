@@ -29,7 +29,7 @@ export const loadGame = (index: number) => {
     runtime_currentSceneData.sceneStack = _.cloneDeep(loadFile.sceneData.sceneStack);
 
     // 强制停止所有演出
-    logger.info('清除所有演出');
+    logger.warn('清除所有演出');
     for (let i = 0; i < runtime_gamePlay.performList.length; i++) {
         const e = runtime_gamePlay.performList[i];
         e.stopFunction();

@@ -28,6 +28,6 @@ export const saveGame = (index: number) => {
     const newSaveData = userDataRef.userDataState.saveData;
     newSaveData[index] = saveData;
     userDataRef.setUserData('saveData', [...newSaveData]);
-    logger.debug('存档完成', userDataRef.userDataState);
+    logger.debug('存档完成，存档结果：', userDataRef.userDataState);
     syncStorageFast();
 };

@@ -17,7 +17,7 @@ export const nextSentence = () => {
     });
     if (isBlockingNext) {
         // 有阻塞，提前结束
-        logger.warn('next 被阻塞');
+        logger.warn('next 被阻塞！');
         return;
     }
 
@@ -43,7 +43,7 @@ export const nextSentence = () => {
     }
 
     // 不处于 allSettled 状态，清除所有普通演出，强制进入settled。
-    logger.info('清除普通演出');
+    logger.warn('提前结束被触发，现在清除普通演出');
     for (let i = 0; i < runtime_gamePlay.performList.length; i++) {
         const e = runtime_gamePlay.performList[i];
         if (!e.isHoldOn) {

@@ -6,7 +6,7 @@ import { getRef } from '../store/storeRef';
  * @param url bgm的路径
  */
 export const playBgm = (url: string) => {
-    logger.debug('播放bgm');
+    logger.debug(`播放bgm：${url}`);
     // 先停止之前的bgm
     let VocalControl: any = document.getElementById('currentBgm');
     if (VocalControl !== null) {
