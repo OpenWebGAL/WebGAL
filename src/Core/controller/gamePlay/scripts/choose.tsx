@@ -8,7 +8,7 @@ import {unmountPerform} from "../../../../Core/controller/perform/unmountPerform
 import styles from './performStyles/choose.module.scss';
 
 /**
- * 语句执行的模板代码
+ * 显示选择枝
  * @param sentence
  */
 export const choose = (sentence: ISentence): IPerform => {

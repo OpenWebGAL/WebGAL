@@ -9,7 +9,7 @@ import styles from '../../../../Components/Stage/FullScreenPerform/fullScreenPer
 import {getRef} from "../../../../Core/store/storeRef";
 
 /**
- * 语句执行的模板代码
+ * 播放一段视频
  * @param sentence
  */
 export const playVideo = (sentence: ISentence): IPerform => {

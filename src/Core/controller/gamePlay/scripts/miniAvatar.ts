@@ -3,7 +3,7 @@ import {IPerform} from '../../../interface/coreInterface/performInterface';
 import {getRef} from "../../../../Core/store/storeRef";
 
 /**
- * 语句执行的模板代码
+ * 显示小头像
  * @param sentence
  */
 export const miniAvatar = (sentence: ISentence): IPerform => {
