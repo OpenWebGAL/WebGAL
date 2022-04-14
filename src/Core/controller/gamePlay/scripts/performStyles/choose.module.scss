@@ -1,0 +1,35 @@
+.Choose_Main {
+    position: absolute;
+    width: 1600px;
+    height: 900px;
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 13;
+}
+
+.Choose_item {
+    cursor: pointer;
+    min-width: 50%;
+    padding: 0.25em 1em 0.25em 1em;
+    font-size: 300%;
+    color: #1C1C1C;
+    text-align: center;
+    background: linear-gradient(to right,
+        rgba(0, 0, 0, 0) 0%,
+        rgba(235, 237, 238, 0.5) 25%,
+        rgba(235, 237, 238, 0.75) 50%,
+        rgba(235, 237, 238, 0.5) 75%,
+        rgba(255, 255, 255, 0) 100%);
+    margin: 0.25em 0 0.25em 0;
+}
+.Choose_item:hover{
+    font-weight: bold;
+    background: linear-gradient(to right,
+        rgba(0, 0, 0, 0) 0%,
+        rgba(235, 237, 238, 0.75) 25%,
+        rgba(235, 237, 238, 1) 50%,
+        rgba(235, 237, 238, 0.75) 75%,
+        rgba(255, 255, 255, 0) 100%);
+}

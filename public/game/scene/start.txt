@@ -1,19 +1,27 @@
 bgm:夏影.mp3;
 changeBg:0000.png -next;
-WebGAL:这是一条测试语句。 -V1.ogg;
-pixiPerform:snow -next;
-miniAvatar:minipic_test.png -next;
+WebGAL:现在执行测试项目1：背景、bgm、语音的测试。 -V1.ogg;
+现在执行测试项目2：选项的测试，其中第一个选项将会切换场景。
+choose:测试:test2.txt|结束:end|继续:continue;
+label:continue;
+现在执行测试项目3：pixi特效、小头像、intro的测试;
+pixiPerform:snow;
+miniAvatar:minipic_test.png;
 intro:慢慢地|慢慢地|如雪花一般|凋零 -next;
 慢慢地，慢慢地，如雪花一般，凋零。
+现在执行测试项目4：场景调用。;
 callScene:test2.txt;
-back;
-pixiInit: -next;
-停止下雪。
+现在执行测试项目5：场景调用的回父场景。如果你看到这一句，那么就代表已经成功回父场景;
+pixiInit;
+现在执行测试项目6：停止Pixi演出;
+现在执行测试项目7：播放视频;
 playVideo:OP.mp4 -next;
-WebGAL4x:这是测试场景的第二条语句，这是测试场景的第二条语句，这是测试场景的第二条语句，这是测试场景的第二条语句;
+现在执行测试项目8：现在我们会更改背景，请留意背景切换的渐变情况，以及是否正确显示背景。;
 changeBg:0000e.png -next;
-WebGAL4x_Build_4.0.2:这是测试场景的第三条语句;
+现在执行测试项目9：现在我们将会测试立绘，立绘会出现在左边，然后在下一条语句被更新到右边，请留意位置的改变;
 changeFigure:testFigure04.png -left;
 changeFigure: -left -clear -next;
 changeFigure:testFigure04.png -right;
-测试结束;
+label:end;
+测试结束，现在我们即将回标题页，这也是我们的最后一个测试项目;
+end;
