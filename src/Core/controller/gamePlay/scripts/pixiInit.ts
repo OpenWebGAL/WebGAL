@@ -5,7 +5,7 @@ import {logger} from "../../../../Core/util/logger";
 import {getRef} from "../../../../Core/store/storeRef";
 
 /**
- * 语句执行的模板代码
+ * 初始化pixi
  * @param sentence
  */
 export const pixiInit = (sentence: ISentence): IPerform => {

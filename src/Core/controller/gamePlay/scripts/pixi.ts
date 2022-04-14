@@ -7,7 +7,7 @@ import {pixiController} from "../../../../Core/controller/perform/pixi/pixiContr
 import {logger} from "../../../../Core/util/logger";
 
 /**
- * 语句执行的模板代码
+ * 运行一段pixi演出
  * @param sentence
  */
 export const pixi = (sentence: ISentence): IPerform => {
