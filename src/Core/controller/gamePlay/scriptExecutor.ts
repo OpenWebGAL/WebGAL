@@ -52,7 +52,7 @@ export const scriptExecutor = () => {
         // 同步当前舞台数据
         const currentStageStoreRef = getRef('stageRef');
         currentStageState = currentStageStoreRef.getStageState();
-        logger.info('当前执行结果', currentStageState);
+        logger.debug('本条语句执行结果', currentStageState);
         // 保存 backlog
         if (isSaveBacklog) {
             const backlogElement: IBacklogItem = {

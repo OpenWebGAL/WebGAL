@@ -42,7 +42,7 @@ export const pixi = (sentence: ISentence): IPerform => {
         isOver: false,
         isHoldOn: true,
         stopFunction: () => {
-            logger.warn('卸载pixi演出');
+            logger.warn('现在正在卸载pixi演出');
             container.destroy({texture: true, baseTexture: true});
         },
         blockingNext: () => false,
