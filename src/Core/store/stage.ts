@@ -20,14 +20,14 @@ export const initState: IStageState = {
     showText: '', // 文字
     showName: '', // 人物名
     command: '', // 语句指令
-    choose: [], // 选项列表
+    choose: [], // 选项列表，现在不用，先预留
     vocal: '', // 语音 文件地址（相对或绝对）
     bgm: '', // 背景音乐 文件地址（相对或绝对）
     miniAvatar: '', // 小头像 文件地址（相对或绝对）
-    GameVar: {}, // 游戏内变量
+    GameVar: [], // 游戏内变量
     effects: [], // 应用的效果
-    bgFilter:'',
-    bgTransform:'',
+    bgFilter:'', // 现在不用，先预留
+    bgTransform:'', // 现在不用，先预留
     PerformList: [], // 要启动的演出列表
 };
 
