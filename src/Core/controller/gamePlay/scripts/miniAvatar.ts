@@ -3,11 +3,15 @@ import {IPerform} from '../../../interface/coreInterface/performInterface';
 import {getRef} from "../../../../Core/store/storeRef";
 
 /**
- * 语句执行的模板代码
+ * 显示小头像
  * @param sentence
  */
 export const miniAvatar = (sentence: ISentence): IPerform => {
-    getRef('stageRef').setStage('miniAvatar', sentence.content);
+    let content = sentence.content;
+    if(sentence.content ==='none'|| sentence.content ===''){
+        content = '';
+    }
+    getRef('stageRef').setStage('miniAvatar', content);
     return {
         performName: 'none',
         duration: 0,

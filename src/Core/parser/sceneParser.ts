@@ -39,6 +39,6 @@ export const sceneParser = (rawScene: string, sceneName: string, sceneUrl: strin
         assetsList: assetsList, // 资源列表
         subSceneList: subSceneList, // 子场景列表
     };
-    logger.info('解析后的场景', parsedScene);
+    logger.info(`解析场景：${sceneName}，数据为：`, parsedScene);
     return parsedScene;
 };

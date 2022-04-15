@@ -2,7 +2,7 @@ import { ISentence } from '../../../interface/coreInterface/sceneInterface';
 import { IPerform } from '../../../interface/coreInterface/performInterface';
 
 /**
- * 语句执行的模板代码
+ * 标签代码，什么也不做
  * @param sentence
  */
 export const label = (sentence: ISentence): IPerform => {

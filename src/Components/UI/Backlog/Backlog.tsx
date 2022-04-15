@@ -33,7 +33,8 @@ export const Backlog = () => {
                 </div>
                 <div className={styles.backlog_item_content}>
                     <span className={styles.backlog_item_content_name}>
-                        {backlogItem.currentStageState.showName + '：'}
+                        {backlogItem.currentStageState.showName}
+                        {backlogItem.currentStageState.showName === '' ? '':'：'}
                     </span>
                     <span className={styles.backlog_item_content_text}>{backlogItem.currentStageState.showText}</span>
                 </div>
