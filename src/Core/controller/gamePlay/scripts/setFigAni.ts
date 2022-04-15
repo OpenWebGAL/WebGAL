@@ -2,7 +2,7 @@ import {ISentence} from '@/Core/interface/coreInterface/sceneInterface';
 import {IPerform} from '@/Core/interface/coreInterface/performInterface';
 
 /**
- * 语句执行的模板代码
+ * 设置立绘动画
  * @param sentence
  */
 export const setFigAni = (sentence: ISentence): IPerform => {
