@@ -7,6 +7,7 @@ import {unmountPerform} from "../../../../Core/controller/perform/unmountPerform
 import {getRandomPerformName} from "../../../../Core/util/getRandomPerformName";
 import styles from '../../../../Components/Stage/FullScreenPerform/fullScreenPerform.module.scss';
 import {getRef} from "../../../../Core/store/storeRef";
+import {eventSender} from "@/Core/controller/eventBus/eventSender";
 
 /**
  * 播放一段视频
@@ -14,8 +15,10 @@ import {getRef} from "../../../../Core/store/storeRef";
  */
 export const playVideo = (sentence: ISentence): IPerform => {
     const performInitName: string = getRandomPerformName();
-    ReactDOM.render(<video className={styles.fullScreen_video} id="playVideoElement" src={sentence.content}
-                           autoPlay={true}/>
+    ReactDOM.render(<div className={styles.videoContainer}>
+            <video className={styles.fullScreen_video} id="playVideoElement" src={sentence.content}
+                   autoPlay={true}/>
+        </div>
         , document.getElementById('videoContainer'));
 
     /**
@@ -65,6 +68,7 @@ export const playVideo = (sentence: ISentence): IPerform => {
                         }
                         ReactDOM.render(<div/>
                             , document.getElementById('videoContainer'));
+                        eventSender('nextSentence_target',0,0);
                     },
                     blockingNext: () => false,
                     blockingAuto: () => true,
@@ -88,7 +92,8 @@ export const playVideo = (sentence: ISentence): IPerform => {
         duration: 0,
         isOver: false,
         isHoldOn: false,
-        stopFunction: () => {},
+        stopFunction: () => {
+        },
         blockingNext: () => false,
         blockingAuto: () => true,
         stopTimeout: undefined, // 暂时不用，后面会交给自动清除
