@@ -5,7 +5,8 @@ import { IRunPerform } from '../coreInterface/performInterface';
  * @interface IGameVar
  */
 export interface IGameVar {
-    [propName: string]: string | boolean | number // 游戏内变量可以是字符串、布尔值、数字
+    key:string // 变量名称是字符串
+    value: string | boolean | number // 游戏内变量可以是字符串、布尔值、数字
 }
 
 /**
@@ -44,7 +45,7 @@ export interface IStageState {
     vocal: string // 语音 文件地址（相对或绝对）
     bgm: string // 背景音乐 文件地址（相对或绝对）
     miniAvatar: string // 小头像 文件地址（相对或绝对）
-    GameVar: IGameVar // 游戏内变量
+    GameVar: Array<IGameVar> // 游戏内变量
     effects: Array<IEffect> // 应用的变换
     bgTransform:string,
     bgFilter:string,
