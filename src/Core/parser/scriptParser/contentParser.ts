@@ -8,6 +8,9 @@ import {assetSetter, fileType} from '../../util/assetSetter';
  * @return {string} 解析后的语句内容
  */
 export const contentParser = (contentRaw: string, type: commandType) => {
+    if (contentRaw === 'none' || contentRaw === '') {
+        return contentRaw;
+    }
     switch (type) {
         case commandType.changeBg:
             return assetSetter(contentRaw, fileType.background);

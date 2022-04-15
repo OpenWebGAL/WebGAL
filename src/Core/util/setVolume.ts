@@ -9,11 +9,10 @@ export const setVolume = ()=>{
     const mainVol = userDataStore.userDataState.optionData.volumeMain;
     const vocalVol = mainVol * 0.01 * userDataStore.userDataState.optionData.vocalVolume * 0.01;
     const bgmVol = mainVol * 0.01 * userDataStore.userDataState.optionData.bgmVolume * 0.01;
-    logger.info('设置音量',[vocalVol,bgmVol]);
+    logger.debug(`设置背景音量：${bgmVol},语音音量：${vocalVol}`);
     const bgmElement: any = document.getElementById('currentBgm');
     if (bgmElement) {
         bgmElement.volume = bgmVol.toString();
-        logger.info('当前的bgm音量',bgmElement.volume);
     }
     const vocalElement: any = document.getElementById('currentVocal');
     if (bgmElement) {

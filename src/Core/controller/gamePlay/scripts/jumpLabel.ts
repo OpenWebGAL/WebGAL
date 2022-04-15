@@ -3,7 +3,7 @@ import {IPerform} from '../../../interface/coreInterface/performInterface';
 import {jmp} from "../../../../Core/controller/gamePlay/scripts/function/jmp";
 
 /**
- * 语句执行的模板代码
+ * 跳转到指定标签
  * @param sentence
  */
 export const jumpLabel = (sentence: ISentence): IPerform => {

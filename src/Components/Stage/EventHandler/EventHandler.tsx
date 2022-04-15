@@ -4,6 +4,7 @@ import {getRef} from "../../../Core/store/storeRef";
 import {runtime_gamePlay} from "../../../Core/runtime/gamePlay";
 import {useStore} from "reto";
 import {stageStateStore} from "../../../Core/store/stage";
+import {setVolume} from "@/Core/util/setVolume";
 
 export const EventHandler = () => {
     const stageStore = useStore(stageStateStore);
@@ -37,5 +38,6 @@ export const EventHandler = () => {
         <div id="nextSentence_target" onClick={autoNextSentence}/>
         <div id="restoreOne_target" style={{display: 'none'}} onClick={(event) => restoreOne(event.clientX)}/>
         <div id="restorePerform_target" onClick={restorePerform} style={{display: 'none'}}/>
+        <div id="setVolume_target" onClick={setVolume}/>
     </div>;
 };

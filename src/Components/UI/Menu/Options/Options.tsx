@@ -8,6 +8,7 @@ import {userDataStateStore} from "../../../../Core/store/userData";
 import {getStorage, setStorage} from "../../../../Core/controller/storage/storageController";
 import {TextPreview} from "./TextPreview/TextPreview";
 import {setVolume} from "../../../../Core/util/setVolume";
+import {eventSender} from "@/Core/controller/eventBus/eventSender";
 
 export const Options: FC = () => {
     const userDataStorage = useStore(userDataStateStore);
@@ -86,7 +87,7 @@ export const Options: FC = () => {
                         const newValue = event.target.value;
                         userDataStorage.setOptionData('volumeMain', Number(newValue));
                         setStorage();
-                        setVolume();
+                        eventSender('setVolume_target',0,10);
                     }}
                     />
                 </NormalOption>
@@ -96,7 +97,7 @@ export const Options: FC = () => {
                         const newValue = event.target.value;
                         userDataStorage.setOptionData('vocalVolume', Number(newValue));
                         setStorage();
-                        setVolume();
+                        eventSender('setVolume_target',0,10);
                     }}/>
                 </NormalOption>
                 <NormalOption key="option6" title="背景音乐音量">
@@ -105,7 +106,7 @@ export const Options: FC = () => {
                         const newValue = event.target.value;
                         userDataStorage.setOptionData('bgmVolume', Number(newValue));
                         setStorage();
-                        setVolume();
+                        eventSender('setVolume_target',0,10);
                     }}/>
                 </NormalOption>
             </div>

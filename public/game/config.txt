@@ -1,4 +1,5 @@
-Game_name:WebGAL4.x Test;
-Game_key:0400test0;
-Title_img:Title.png;
-Title_bgm:夏影.mp3;
+Game_name:星光咖啡馆与死神之蝶;
+Game_key:0f35dst;
+Title_img:xgmain.jpeg;
+Title_bgm:s_Title.mp3;
+Loading_img:none;

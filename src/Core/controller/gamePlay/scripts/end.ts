@@ -12,7 +12,7 @@ import {sceneFetcher} from "@/Core/util/sceneFetcher";
 import {sceneParser} from "@/Core/parser/sceneParser";
 
 /**
- * 语句执行的模板代码
+ * 结束游戏
  * @param sentence
  */
 export const end = (sentence: ISentence): IPerform => {

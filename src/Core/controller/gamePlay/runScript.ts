@@ -19,6 +19,10 @@ import {jumpLabel} from "../../../Core/controller/gamePlay/scripts/jumpLabel";
 import {label} from "../../../Core/controller/gamePlay/scripts/label";
 import {choose} from "../../../Core/controller/gamePlay/scripts/choose";
 import {end} from "../../../Core/controller/gamePlay/scripts/end";
+import {setBgFilter} from "@/Core/controller/gamePlay/scripts/setBgFilter";
+import {setBgAni} from "@/Core/controller/gamePlay/scripts/setBgAni";
+import {setFigAni} from "@/Core/controller/gamePlay/scripts/setFigAni";
+import {setBgTransform} from "@/Core/controller/gamePlay/scripts/setBgTransform";
 
 /**
  * 规范函数的类型
@@ -31,7 +35,6 @@ type scriptFunction = (sentence: ISentence) => IPerform
  * @param script 调用的语句
  */
 export const runScript = (script: ISentence) => {
-    logger.debug('执行',script);
     let perform: IPerform = initPerform;
     let funcToRun: scriptFunction = say; // 默认是say
 
@@ -51,7 +54,11 @@ export const runScript = (script: ISentence) => {
         [commandType.jumpLabel,jumpLabel],
         [commandType.label,label],
         [commandType.choose,choose],
-        [commandType.end,end]
+        [commandType.end,end],
+        [commandType.setBgFilter,setBgFilter],
+        [commandType.perform_bgAni,setBgAni],
+        [commandType.perform_FigAni,setFigAni],
+        [commandType.setBgTransform,setBgTransform],
     ]);
 
     // 根据脚本类型切换函数
@@ -64,7 +71,7 @@ export const runScript = (script: ISentence) => {
 
     // 语句不执行演出
     if (perform.performName === 'none') {
-        logger.info('语句不执行演出');
+        logger.warn('本条语句不执行演出');
         return;
     }
 

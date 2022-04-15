@@ -26,6 +26,8 @@ export const initState: IStageState = {
     miniAvatar: '', // 小头像 文件地址（相对或绝对）
     GameVar: {}, // 游戏内变量
     effects: [], // 应用的效果
+    bgFilter:'',
+    bgTransform:'',
     PerformList: [], // 要启动的演出列表
 };
 

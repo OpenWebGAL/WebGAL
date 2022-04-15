@@ -1,7 +1,9 @@
+@charset "UTF-8";
+
 @font-face {
     font-family: "思源宋体";
     /*noinspection CssUnknownTarget*/
-    src: url("./assets/fonts/SourceHanSerifSC-Regular.otf");
+    src: url("./assets/fonts/SourceHanSerifCN-Regular.ttf") format("truetype");
 }
 
 .StartButton {
