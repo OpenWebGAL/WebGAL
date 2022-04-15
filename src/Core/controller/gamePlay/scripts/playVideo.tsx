@@ -29,6 +29,36 @@ export const playVideo = (sentence: ISentence): IPerform => {
         if (VocalControl !== null) {
             VocalControl.currentTime = 0;
             // 播放并作为一个特别演出加入
+            const perform = {
+                performName: performInitName,
+                duration: 1000 * 60 * 60,
+                isOver: false,
+                isHoldOn: false,
+                stopFunction: () => {
+                    /**
+                     * 恢复音量
+                     */
+                    const userDataStore = getRef('userDataRef');
+                    const mainVol = userDataStore.userDataState.optionData.volumeMain;
+                    const vocalVol = mainVol * 0.01 * userDataStore.userDataState.optionData.vocalVolume * 0.01;
+                    const bgmVol = mainVol * 0.01 * userDataStore.userDataState.optionData.bgmVolume * 0.01;
+                    const bgmElement: any = document.getElementById('currentBgm');
+                    if (bgmElement) {
+                        bgmElement.volume = bgmVol.toString();
+                    }
+                    const vocalElement: any = document.getElementById('currentVocal');
+                    if (bgmElement) {
+                        vocalElement.volume = vocalVol.toString();
+                    }
+                    ReactDOM.render(<div/>
+                        , document.getElementById('videoContainer'));
+                    eventSender('nextSentence_target',0,0);
+                },
+                blockingNext: () => false,
+                blockingAuto: () => true,
+                stopTimeout: undefined, // 暂时不用，后面会交给自动清除
+            };
+            runtime_gamePlay.performList.push(perform);
             VocalControl.oncanplay = () => {
                 /**
                  * 把bgm和语音的音量设为0
@@ -45,36 +75,6 @@ export const playVideo = (sentence: ISentence): IPerform => {
                 }
 
                 VocalControl.play();
-                const perform = {
-                    performName: performInitName,
-                    duration: 1000 * 60 * 60,
-                    isOver: false,
-                    isHoldOn: false,
-                    stopFunction: () => {
-                        /**
-                         * 恢复音量
-                         */
-                        const userDataStore = getRef('userDataRef');
-                        const mainVol = userDataStore.userDataState.optionData.volumeMain;
-                        const vocalVol = mainVol * 0.01 * userDataStore.userDataState.optionData.vocalVolume * 0.01;
-                        const bgmVol = mainVol * 0.01 * userDataStore.userDataState.optionData.bgmVolume * 0.01;
-                        const bgmElement: any = document.getElementById('currentBgm');
-                        if (bgmElement) {
-                            bgmElement.volume = bgmVol.toString();
-                        }
-                        const vocalElement: any = document.getElementById('currentVocal');
-                        if (bgmElement) {
-                            vocalElement.volume = vocalVol.toString();
-                        }
-                        ReactDOM.render(<div/>
-                            , document.getElementById('videoContainer'));
-                        eventSender('nextSentence_target',0,0);
-                    },
-                    blockingNext: () => false,
-                    blockingAuto: () => true,
-                    stopTimeout: undefined, // 暂时不用，后面会交给自动清除
-                };
-                runtime_gamePlay.performList.push(perform);
             };
             VocalControl.onended = () => {
                 for (const e of runtime_gamePlay.performList) {
