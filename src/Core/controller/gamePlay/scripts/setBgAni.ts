@@ -7,13 +7,17 @@ import {IPerform} from '../../../interface/coreInterface/performInterface';
  */
 export const setBgAni = (sentence: ISentence): IPerform => {
     const content = sentence.content;
-    const mainBg = document.getElementById('bgMain');
-    if (mainBg) {
-        mainBg.style.animation = content;
-    }
-
+    setTimeout(() => {
+        const mainBg = document.getElementById('MainStage_bg_MainContainer');
+        if (mainBg) {
+            mainBg.style.animation = 'none';
+            setTimeout(() => {
+                mainBg.style.animation = content;
+            }, 1);
+        }
+    }, 50);
     return {
-        performName: 'none',
+        performName: 'bgAni',
         duration: 0,
         isOver: false,
         isHoldOn: false,

@@ -3,6 +3,7 @@ import {IPerform} from '../../../interface/coreInterface/performInterface';
 import {getRef} from "@/Core/store/storeRef";
 import {IEffect} from "@/Core/interface/stateInterface/stageInterface";
 import * as __ from 'lodash';
+import { logger } from '@/Core/util/logger';
 
 /**
  * 设置背景效果
@@ -10,22 +11,23 @@ import * as __ from 'lodash';
  */
 export const setBgFilter = (sentence: ISentence): IPerform => {
     const stageStore = getRef('stageRef');
-    const effectList: Array<IEffect> = __.cloneDeep(stageStore.stageState.effects);
-    let isTargetSet = false;
-    effectList.forEach((e) => {
-        if (e.target === 'bgMain') {
-            isTargetSet = true;
-            e.filter = sentence.content;
-        }
-    });
-    if (!isTargetSet) {
-        effectList.push({
-            target: 'bgMain',
-            transform: '',
-            filter: sentence.content
-        });
-    }
-    stageStore.setStage('effects', effectList);
+    // const effectList: Array<IEffect> = __.cloneDeep(stageStore.stageState.effects);
+    // let isTargetSet = false;
+    // effectList.forEach((e) => {
+    //     if (e.target === 'MainStage_bg_MainContainer') {
+    //         logger.warn('已存在效果，正在修改');
+    //         isTargetSet = true;
+    //         e.filter = sentence.content;
+    //     }
+    // });
+    // if (!isTargetSet) {
+    //     effectList.push({
+    //         target: 'MainStage_bg_MainContainer',
+    //         transform: '',
+    //         filter: sentence.content
+    //     });
+    // }
+    stageStore.setStage('bgFilter', sentence.content);
     return {
         performName: 'none',
         duration: 0,

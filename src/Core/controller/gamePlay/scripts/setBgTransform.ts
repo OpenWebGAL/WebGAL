@@ -10,22 +10,23 @@ import * as __ from 'lodash';
  */
 export const setBgTransform = (sentence: ISentence): IPerform => {
     const stageStore = getRef('stageRef');
-    const effectList: Array<IEffect> = __.cloneDeep(stageStore.stageState.effects);
-    let isTargetSet = false;
-    effectList.forEach((e) => {
-        if (e.target === 'bgMain') {
-            isTargetSet = true;
-            e.transform = sentence.content;
-        }
-    });
-    if (!isTargetSet) {
-        effectList.push({
-            target: 'bgMain',
-            transform: sentence.content,
-            filter: ''
-        });
-    }
-    stageStore.setStage('effects', effectList);
+    // const effectList: Array<IEffect> = __.cloneDeep(stageStore.stageState.effects);
+    // let isTargetSet = false;
+    // effectList.forEach((e) => {
+    //     if (e.target === 'MainStage_bg_MainContainer') {
+    //         isTargetSet = true;
+    //         e.transform = sentence.content;
+    //     }
+    // });
+    // if (!isTargetSet) {
+    //     effectList.push({
+    //         target: 'MainStage_bg_MainContainer',
+    //         transform: sentence.content,
+    //         filter: ''
+    //     });
+    // }
+    // stageStore.setStage('effects', effectList);
+    stageStore.setStage('bgTransform',sentence.content);
     return {
         performName: 'none',
         duration: 0,
