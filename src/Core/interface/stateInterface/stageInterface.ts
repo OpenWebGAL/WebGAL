@@ -46,5 +46,7 @@ export interface IStageState {
     miniAvatar: string // 小头像 文件地址（相对或绝对）
     GameVar: IGameVar // 游戏内变量
     effects: Array<IEffect> // 应用的变换
+    bgTransform:string,
+    bgFilter:string,
     PerformList: Array<IRunPerform> // 要启动的演出列表
 }

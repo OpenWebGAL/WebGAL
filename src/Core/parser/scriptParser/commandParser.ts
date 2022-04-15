@@ -92,6 +92,12 @@ function addNextArg(commandToParse: parsedCommand, thisCommandType: commandType)
         commandType.label,
         commandType.if,
         commandType.miniAvatar,
+        commandType.setBgTransform,
+        commandType.setBgFilter,
+        commandType.setFigFilter,
+        commandType.setFigTransform,
+        commandType.perform_FigAni,
+        commandType.perform_bgAni
     ];
     if (nextList.includes(thisCommandType)) {
         commandToParse.additionalArgs.push({

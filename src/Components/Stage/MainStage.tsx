@@ -15,27 +15,38 @@ export const MainStage: FC = () => {
     const stageStore = useStore(stageStateStore);
     const GuiState = useStore(GuiStateStore);
     useEffect(() => {
-        const effectList: Array<IEffect> = stageStore.stageState.effects;
+        // const effectList: Array<IEffect> = stageStore.stageState.effects;
 
         // 设置效果
         setTimeout(() => {
-            effectList.forEach(effect => {
-                const target = document.getElementById(effect.target);
-                if (target) {
-                    if (effect.filter !== '') {
-                        target.style.filter = effect.filter;
-                    }
-                    if (effect.transform !== '') {
-                        target.style.transform = effect.transform;
-                    }
+            const bg = document.getElementById('MainStage_bg_MainContainer');
+            // effectList.forEach(effect => {
+            //     const target = document.getElementById(effect.target);
+            //     if (target) {
+            //         if (effect.filter !== '') {
+            //             target.style.filter = effect.filter;
+            //         }
+            //         if (effect.transform !== '') {
+            //             target.style.transform = effect.transform;
+            //         }
+            //     }
+            // });
+            if (stageStore.stageState.bgTransform !== '') {
+                if(bg){
+                    bg.style.transform = stageStore.stageState.bgTransform;
                 }
-            });
+            }
+            if (stageStore.stageState.bgFilter !== '') {
+                if(bg){
+                    bg.style.filter= stageStore.stageState.bgFilter;
+                }
+            }
         }, 100);
     });
     return <div className={styles.MainStage_main}>
         <div key={'bgMain' + stageStore.stageState.bgName}
              id="MainStage_bg_MainContainer"
-             className={styles.MainStage_bgContainer_onChange} style={{
+             className={styles.MainStage_bgContainer} style={{
             backgroundImage: `url("${stageStore.stageState.bgName}")`,
             backgroundSize: "cover"
         }}/>

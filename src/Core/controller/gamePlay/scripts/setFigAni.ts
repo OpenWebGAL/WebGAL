@@ -11,24 +11,33 @@ export const setFigAni = (sentence: ISentence): IPerform => {
         if (e.key === 'left' && e.value) {
             const figLeft = document.getElementById('figLeftContainer');
             if(figLeft){
-                figLeft.style.animation = content;
+                figLeft.style.animation = 'none';
+                setTimeout(()=>{
+                    figLeft.style.animation = content;
+                },1);
             }
         }
         if (e.key === 'center' && e.value) {
             const figCenter = document.getElementById('figCenterContainer');
             if(figCenter){
-                figCenter.style.animation = content;
+                figCenter.style.animation = 'none';
+                setTimeout(()=>{
+                    figCenter.style.animation = content;
+                },1);
             }
         }
         if (e.key === 'right' && e.value) {
             const figRight = document.getElementById('figRightContainer');
             if(figRight){
-                figRight.style.animation = content;
+                figRight.style.animation = 'none';
+                setTimeout(()=>{
+                    figRight.style.animation = content;
+                },1);
             }
         }
     });
     return {
-        performName: 'none',
+        performName: 'figAni',
         duration: 0,
         isOver: false,
         isHoldOn: false,

@@ -16,12 +16,12 @@ export const changeBg = (sentence: ISentence): IPerform => {
     const performInitName: string = getRandomPerformName();
     return {
         performName: performInitName,
-        duration: 3000,
+        duration: 1000,
         isOver: false,
         isHoldOn: false,
         stopFunction: () => {
-            const bgContainer = document.getElementById('MainStage_bg_MainContainer');
-            if (bgContainer) bgContainer.className = styles.MainStage_bgContainer;
+            // const bgContainer = document.getElementById('MainStage_bg_MainContainer');
+            // if (bgContainer) bgContainer.className = styles.MainStage_bgContainer;
             const oldBgContainer = document.getElementById('MainStage_bg_OldContainer');
             if (oldBgContainer) {
                 oldBgContainer.className = styles.MainStage_oldBgContainer_Settled;
