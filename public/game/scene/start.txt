@@ -102,7 +102,7 @@ changeFigure:n2.png -next;
 :她并没有无精打采，比想象中精神多了;
 昂晴:问道拿手菜谱，就听说四季同学泡的红茶味道不错，我也想品尝一下;
 夏目:明白了，那我们回去吧 -v14.ogg;
-jump_label:end;
+jumpLabel:end;
 label:end;
 changeFigure:none -next;
 WebGAL:基础演出的展示已经结束。;
