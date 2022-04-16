@@ -6,7 +6,11 @@
 
 https://demo.msfasr.com
 
-## The WebGAL Platform
+### 使用 WebGAL 制作游戏
+
+[WebGAL 开发文档](https://docs.msfasr.com/)
+
+## WebGAL 优势与特色
 
 一次编写，处处运行，无需网页开发基础，3 分钟即可学会所有的语法，只要你有灵感，就可以立刻开始开始创作你自己的 Galgame！
 
@@ -21,10 +25,6 @@ https://demo.msfasr.com
 ### 易于开发
 
 无论是使用 WebGAL 脚本还是使用可视化编辑器进行开发，一切都是那么简单自然。
-
-### 使用 WebGAL 制作游戏
-
-[WebGAL 开发文档](https://docs.msfasr.com/)
 
 ### 参与 WebGAL 的开发工作
 
