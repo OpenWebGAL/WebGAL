@@ -11,23 +11,23 @@ import { logger } from '@/Core/util/logger';
  */
 export const setBgFilter = (sentence: ISentence): IPerform => {
     const stageStore = getRef('stageRef');
-    // const effectList: Array<IEffect> = __.cloneDeep(stageStore.stageState.effects);
-    // let isTargetSet = false;
-    // effectList.forEach((e) => {
-    //     if (e.target === 'MainStage_bg_MainContainer') {
-    //         logger.warn('已存在效果，正在修改');
-    //         isTargetSet = true;
-    //         e.filter = sentence.content;
-    //     }
-    // });
-    // if (!isTargetSet) {
-    //     effectList.push({
-    //         target: 'MainStage_bg_MainContainer',
-    //         transform: '',
-    //         filter: sentence.content
-    //     });
-    // }
-    stageStore.setStage('bgFilter', sentence.content);
+    const effectList: Array<IEffect> =stageStore.stageState.effects;
+    let isTargetSet = false;
+    effectList.forEach((e) => {
+        if (e.target === 'MainStage_bg_MainContainer') {
+            logger.warn('已存在效果，正在修改');
+            isTargetSet = true;
+            e.filter = sentence.content;
+        }
+    });
+    if (!isTargetSet) {
+        effectList.push({
+            target: 'MainStage_bg_MainContainer',
+            transform: '',
+            filter: sentence.content
+        });
+    }
+    // stageStore.setStage('bgFilter', sentence.content);
     return {
         performName: 'none',
         duration: 0,
