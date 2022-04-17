@@ -1,53 +1,57 @@
 .MainStage_main {
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  z-index: 1;
-  animation: MainStage_showBgSoftly 100ms forwards;
-  opacity: 0;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    z-index: 1;
+    animation: MainStage_showBgSoftly 100ms forwards;
+    opacity: 0;
 }
 
 .MainStage_bgContainer {
-  width: 100%;
-  height: 100%;
+    background-size: cover;
+    width: 100%;
+    height: 100%;
 }
 
 .MainStage_bgContainer_onChange {
-  width: 100%;
-  height: 100%;
-  animation: MainStage_showBgSoftly 3000ms;
+    background-size: cover;
+    width: 100%;
+    height: 100%;
+    animation: MainStage_showBgSoftly 3000ms;
 }
 
 .MainStage_oldBgContainer {
-  top: 0;
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  animation: MainStage_oldBgFadeout 1s forwards;
+    background-size: cover;
+    top: 0;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    animation: MainStage_oldBgFadeout 1s forwards;
 }
 
 .MainStage_oldBgContainer_Settled {
-  top: 0;
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  opacity: 0;
+    background-size: cover;
+    top: 0;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
 }
 
 @keyframes MainStage_showBgSoftly {
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
 }
 
 @keyframes MainStage_oldBgFadeout {
-  0% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
-  }
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
 }

@@ -54,3 +54,11 @@
     font-size: 215%;
     //border-bottom: 2px solid rgba(255, 255, 255, 0.75);
 }
+
+.Title_backup_background{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    z-index: 13;
+    background: linear-gradient(135deg, #fdfbfb 0%, #dcddde 100%);
+}
