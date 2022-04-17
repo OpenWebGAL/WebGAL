@@ -11,8 +11,11 @@ import {startGame} from '../../../Core/controller/gamePlay/startGame';
  */
 const Title: FC = () => {
     const GuiStore = useStore(GuiStateStore);
+    const background = GuiStore.GuiState.titleBg;
+    const showBackground = background === '' ? 'rgba(0,0,0,1)' : `url("${background}")`;
     return (
         <>
+            {GuiStore.GuiState.showTitle &&<div className={styles.Title_backup_background}/>}
             <div
                 id="play_title_bgm_target"
                 onClick={() => {
@@ -23,7 +26,7 @@ const Title: FC = () => {
                 <div
                     className={styles.Title_main}
                     style={{
-                        backgroundImage: `url("${GuiStore.GuiState.titleBg}")`,
+                        backgroundImage: showBackground,
                         backgroundSize: 'cover',
                     }}
                 >
