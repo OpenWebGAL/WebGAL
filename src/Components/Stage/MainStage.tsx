@@ -61,6 +61,11 @@ export const MainStage: FC = () => {
         <EventHandler/>
         <FullScreenPerform/>
         <div onClick={() => {
+            // 如果文本框没有显示，则显示文本框
+            if(!GuiState.GuiState.showTextBox){
+                GuiState.setVisibility('showTextBox',true);
+                return;
+            }
             stopAll();
             nextSentence();
         }} id="FullScreenClcck"
