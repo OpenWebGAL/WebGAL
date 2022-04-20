@@ -1,8 +1,8 @@
-import { ISentence } from '../../../interface/coreInterface/sceneInterface';
-import { IPerform } from '../../../interface/coreInterface/performInterface';
-import { getRandomPerformName } from '../../../util/getRandomPerformName';
+import {ISentence} from '@/Core/interface/coreInterface/sceneInterface';
+import {IPerform} from '@/Core/interface/coreInterface/performInterface';
+// import {getRandomPerformName} from '../../../util/getRandomPerformName';
 import styles from '../../../../Components/Stage/mainStage.module.scss';
-import { getRef } from '../../../store/storeRef';
+import {getRef} from '@/Core/store/storeRef';
 
 /**
  * 进行背景图片的切换
@@ -13,18 +13,18 @@ export const changeBg = (sentence: ISentence): IPerform => {
     const oldBgName = getRef('stageRef').stageState.bgName;
     getRef('stageRef').setStage('oldBgName', oldBgName); // 改变旧背景，使其渐变消失
     getRef('stageRef').setStage('bgName', sentence.content); // 改变新背景，使其呈现
-    const performInitName: string = getRandomPerformName();
+    // const performInitName: string = getRandomPerformName();
     return {
-        performName: performInitName,
+        performName: 'none',
         duration: 1000,
         isOver: false,
         isHoldOn: false,
         stopFunction: () => {
             // const bgContainer = document.getElementById('MainStage_bg_MainContainer');
             // if (bgContainer) bgContainer.className = styles.MainStage_bgContainer;
-            const oldBgContainer = document.getElementById('MainStage_bg_OldContainer');
-            if (oldBgContainer) {
-                oldBgContainer.className = styles.MainStage_oldBgContainer_Settled;
+            const BgContainer = document.getElementById('MainStage_bg_MainContainer');
+            if (BgContainer) {
+                BgContainer.className = styles.MainStage_bgContainer_Settled;
             }
         },
         blockingNext: () => false,
