@@ -44,16 +44,16 @@ export const MainStage: FC = () => {
         }, 100);
     });
     return <div className={styles.MainStage_main}>
-        <div key={'bgMain' + stageStore.stageState.bgName}
-             id="MainStage_bg_MainContainer"
-             className={styles.MainStage_bgContainer} style={{
-            backgroundImage: `url("${stageStore.stageState.bgName}")`,
-            backgroundSize: "cover"
-        }}/>
         <div key={'bgOld' + stageStore.stageState.oldBgName}
              id="MainStage_bg_OldContainer"
              className={styles.MainStage_oldBgContainer} style={{
             backgroundImage: `url("${stageStore.stageState.oldBgName}")`,
+            backgroundSize: "cover"
+        }}/>
+        <div key={'bgMain' + stageStore.stageState.bgName}
+             id="MainStage_bg_MainContainer"
+             className={styles.MainStage_bgContainer} style={{
+            backgroundImage: `url("${stageStore.stageState.bgName}")`,
             backgroundSize: "cover"
         }}/>
         <FigureContainer/>

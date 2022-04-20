@@ -3,21 +3,27 @@
     height: 100%;
     position: absolute;
     z-index: 1;
-    animation: MainStage_showBgSoftly 100ms forwards;
-    opacity: 0;
+    //animation: MainStage_showBgSoftly 100ms forwards;
+    opacity: 1;
 }
 
 .MainStage_bgContainer {
+    top: 0;
+    position: absolute;
     background-size: cover;
     width: 100%;
     height: 100%;
+    z-index: 1;
 }
 
-.MainStage_bgContainer_onChange {
+.MainStage_bgContainer_Settled {
+    top: 0;
+    position: absolute;
     background-size: cover;
     width: 100%;
     height: 100%;
-    animation: MainStage_showBgSoftly 3000ms;
+    animation: MainStage_showBgSoftly 1ms forwards;
+    z-index: 1;
 }
 
 .MainStage_oldBgContainer {
@@ -26,7 +32,8 @@
     position: absolute;
     width: 100%;
     height: 100%;
-    animation: MainStage_oldBgFadeout 1s forwards;
+    z-index: 0;
+    animation: MainStage_oldBgFadeout 3s forwards;
 }
 
 .MainStage_oldBgContainer_Settled {
