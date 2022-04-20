@@ -12,28 +12,28 @@ import {
 } from '@icon-park/react';
 import styles from './bottomControlPanel.module.scss';
 import {useStore} from 'reto';
-import {GuiStateStore, MenuPanelTag} from '../../../Core/store/GUI';
-import {switchAuto} from '../../../Core/controller/gamePlay/autoPlay';
-import {switchFast} from '../../../Core/controller/gamePlay/fastSkip';
-import {playBgm} from '../../../Core/util/playBgm';
+import {GuiStateStore, MenuPanelTag} from '@/Core/store/GUI';
+import {switchAuto} from '@/Core/controller/gamePlay/autoPlay';
+import {switchFast} from '@/Core/controller/gamePlay/fastSkip';
+import {playBgm} from '@/Core/util/playBgm';
 
 export const BottomControlPanel = () => {
-    const GUIstore = useStore(GuiStateStore);
-    return (
-        <div className={styles.main}>
-            {GUIstore.GuiState.showTextBox && (
-                <span className={styles.singleButton} onClick={() => GUIstore.setVisibility('showTextBox', false)}>
+    const GUIStore = useStore(GuiStateStore);
+    return (<div className={styles.ToCenter}>
+        {GUIStore.GuiState.showTextBox && <div className={styles.main}>
+            {GUIStore.GuiState.showTextBox && (
+                <span className={styles.singleButton} onClick={() => GUIStore.setVisibility('showTextBox', false)}>
                 <PreviewCloseOne className={styles.button} theme="outline" size="30" fill="#f5f5f7" strokeWidth={3.5}/>
                 <span className={styles.button_text}>隐藏</span>
             </span>
             )}
-            {!GUIstore.GuiState.showTextBox && (
-                <span className={styles.singleButton} onClick={() => GUIstore.setVisibility('showTextBox', true)}>
+            {!GUIStore.GuiState.showTextBox && (
+                <span className={styles.singleButton} onClick={() => GUIStore.setVisibility('showTextBox', true)}>
                 <PreviewOpen className={styles.button} theme="outline" size="30" fill="#f5f5f7" strokeWidth={3.5}/>
                 <span className={styles.button_text}>显示</span>
             </span>
             )}
-            <span className={styles.singleButton} onClick={() => GUIstore.setVisibility('showBacklog', true)}>
+            <span className={styles.singleButton} onClick={() => GUIStore.setVisibility('showBacklog', true)}>
                 <AlignTextLeftOne className={styles.button} theme="outline" size="30" fill="#f5f5f7" strokeWidth={3.5}/>
                 <span className={styles.button_text}>回想</span>
             </span>
@@ -59,8 +59,8 @@ export const BottomControlPanel = () => {
             <span
                 className={styles.singleButton}
                 onClick={() => {
-                    GUIstore.setMenuPanelTag(MenuPanelTag.Save);
-                    GUIstore.setVisibility('showMenuPanel', true);
+                    GUIStore.setMenuPanelTag(MenuPanelTag.Save);
+                    GUIStore.setVisibility('showMenuPanel', true);
                 }}
             >
                 <Save className={styles.button} theme="outline" size="30" fill="#f5f5f7" strokeWidth={3.5}/>
@@ -69,8 +69,8 @@ export const BottomControlPanel = () => {
             <span
                 className={styles.singleButton}
                 onClick={() => {
-                    GUIstore.setMenuPanelTag(MenuPanelTag.Load);
-                    GUIstore.setVisibility('showMenuPanel', true);
+                    GUIStore.setMenuPanelTag(MenuPanelTag.Load);
+                    GUIStore.setVisibility('showMenuPanel', true);
                 }}
             >
                 <FolderOpen className={styles.button} theme="outline" size="30" fill="#f5f5f7" strokeWidth={3.5}/>
@@ -79,8 +79,8 @@ export const BottomControlPanel = () => {
             <span
                 className={styles.singleButton}
                 onClick={() => {
-                    GUIstore.setMenuPanelTag(MenuPanelTag.Option);
-                    GUIstore.setVisibility('showMenuPanel', true);
+                    GUIStore.setMenuPanelTag(MenuPanelTag.Option);
+                    GUIStore.setVisibility('showMenuPanel', true);
                 }}
             >
                 <SettingTwo className={styles.button} theme="outline" size="30" fill="#f5f5f7" strokeWidth={3.5}/>
@@ -89,13 +89,14 @@ export const BottomControlPanel = () => {
             <span
                 className={styles.singleButton}
                 onClick={() => {
-                    GUIstore.setVisibility('showTitle', true);
-                    playBgm(GUIstore.GuiState.titleBgm);
+                    GUIStore.setVisibility('showTitle', true);
+                    playBgm(GUIStore.GuiState.titleBgm);
                 }}
             >
                 <Home className={styles.button} theme="outline" size="30" fill="#f5f5f7" strokeWidth={3.5}/>
                 <span className={styles.button_text}>标题</span>
             </span>
+        </div>}
         </div>
     );
 };
