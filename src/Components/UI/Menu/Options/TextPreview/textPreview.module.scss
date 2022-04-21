@@ -1,4 +1,6 @@
 .textPreviewMain{
+    position: relative;
+    z-index: 1;
     padding: 1em 1.5em 1em 1.5em;
     background: rgba(0,0,0,0.35);
     color: rgb(255,255,255);
