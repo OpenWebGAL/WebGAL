@@ -16,6 +16,8 @@
 }
 
 .Save_Load_title {
+    font-family: "思源宋体", serif;
+    letter-spacing: 0.1em;
     width: auto;
     height: 100%;
     font-size: 275%;
@@ -40,7 +42,7 @@
 
 .Load_title_text {
     height: 100%;
-    font-size: 130%;
+    font-size: 120%;
     font-weight: bold;
     color: transparent;
     background: linear-gradient(135deg, #005CAF 0%,#2EA9DF 100%);
@@ -133,6 +135,7 @@
 
 
 .Save_Load_content_element_top {
+    font-family: "思源宋体", serif;
     width: 100%;
     height: 12%;
     display: flex;
@@ -152,10 +155,10 @@
 }
 
 .Save_Load_content_element_top_date {
-    padding: 0.2em 0 0 0.5em;
+    padding: 0.1em 0 0 0.5em;
     background-color: #77428D;
     color: rgba(255, 255, 255, 1);
-    font-size: 135%;
+    font-size: 145%;
     height: 100%;
     width: 80%;
 }
@@ -165,10 +168,10 @@
 }
 
 .Save_Load_content_text {
-    font-family: 思源宋体, sans-serif;
+    font-family: "WebgalUI", sans-serif;
     letter-spacing: 0.05em;
     color: #373C38;
-    background: linear-gradient(rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.5));
+    //background: linear-gradient(rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.5));
     font-size: 120%;
     height: 38%;
     width: 100%;
@@ -180,7 +183,7 @@
 }
 
 .Save_Load_content_speaker {
-    //font-weight: bold;
+    font-weight: bold;
     color: #77428D;
     padding: 0.2em 0.8em 0.2em 0.8em;
     width: 100%;
