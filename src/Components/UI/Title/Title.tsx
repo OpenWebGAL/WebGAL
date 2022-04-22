@@ -4,6 +4,8 @@ import {useStore} from 'reto';
 import {GuiStateStore, MenuPanelTag} from '../../../Core/store/GUI';
 import {playBgm} from '../../../Core/util/playBgm';
 import {startGame} from '../../../Core/controller/gamePlay/startGame';
+import {runtime_currentSceneData} from "@/Core/runtime/sceneData";
+import {eventSender} from "@/Core/controller/eventBus/eventSender";
 
 /**
  * 标题页
@@ -15,7 +17,7 @@ const Title: FC = () => {
     const showBackground = background === '' ? 'rgba(0,0,0,1)' : `url("${background}")`;
     return (
         <>
-            {GuiStore.GuiState.showTitle &&<div className={styles.Title_backup_background}/>}
+            {GuiStore.GuiState.showTitle && <div className={styles.Title_backup_background}/>}
             <div
                 id="play_title_bgm_target"
                 onClick={() => {
@@ -35,7 +37,14 @@ const Title: FC = () => {
                             <div className={styles.Title_button_text + ' ' + styles.Title_button_text_up}>开始游戏</div>
                             <div className={styles.Title_button_text}>START</div>
                         </div>
-                        <div className={styles.Title_button} onClick={() => GuiStore.setVisibility('showTitle', false)}>
+                        <div className={styles.Title_button} onClick={() => {
+                            GuiStore.setVisibility('showTitle', false);
+                            if (runtime_currentSceneData.currentSentenceId === 0 &&
+                                runtime_currentSceneData.currentScene.sceneName === 'start.txt') {
+                                // 如果游戏没有开始，开始游戏
+                                eventSender('nextSentence_target', 0, 0);
+                            }
+                        }}>
                             <div className={styles.Title_button_text + ' ' + styles.Title_button_text_up}>继续游戏</div>
                             <div className={styles.Title_button_text}>CONTINUE</div>
                         </div>

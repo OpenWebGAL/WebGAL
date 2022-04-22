@@ -9,6 +9,7 @@
 }
 
 .MenuPanel_button {
+    padding: 0.35em 0 0 0 ;
     display: flex;
     justify-content: center;
     font-size: 200%;
@@ -31,7 +32,7 @@
 }
 
 .MenuPanel_button_icon {
-    transform: translate(0, 0.16em);
+    transform: translate(0, 0.05em);
     padding: 0 0.15em 0 0;
     margin: 0 0.15em 0 0;
 }
