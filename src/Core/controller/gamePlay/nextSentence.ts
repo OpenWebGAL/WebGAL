@@ -38,7 +38,7 @@ export const nextSentence = () => {
             }
         }
 
-        scriptExecutor();
+        scriptExecutor(-1);
         return;
     }
 
