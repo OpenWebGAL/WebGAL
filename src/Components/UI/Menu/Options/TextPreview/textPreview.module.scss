@@ -1,11 +1,14 @@
 .textPreviewMain{
+    position: relative;
+    z-index: 1;
     padding: 1em 1.5em 1em 1.5em;
     background: rgba(0,0,0,0.35);
     color: rgb(255,255,255);
-    min-height: 150px;
+    min-height: 170px;
 }
 
 .singleText {
+    font-family: "思源宋体", serif;
     animation: TextDelayShow 1000ms forwards;
     opacity: 0;
     transition: font-size 1s;
