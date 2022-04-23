@@ -83,6 +83,23 @@
 <div id="root"></div>
 <script type="module" src="/src/main.tsx"></script>
 <script>
+    let enterPromise=new Promise(res=>window.enterPromise=res)
+    let renderPromise=new Promise(res=>window.renderPromise=res)
+       /**
+         * 将播放bgm的事件发送出去
+         */
+    Promise.all([enterPromise,renderPromise])
+    .then(()=>{
+        const event = new MouseEvent('click', {
+            'view': window,
+            'bubbles': true,
+            'cancelable': true,
+        });
+        const target = document.getElementById('play_title_bgm_target');
+        if (target !== null) {
+            target.dispatchEvent(event);
+        }
+    })
     // 激活强制缩放
     // 在调整窗口大小时重新计算宽高，设计稿按照 1600*900。
     setTimeout(resizeTitle, 100);
@@ -116,18 +133,8 @@
         title.style.pointerEvents = 'none'; //落地页不再响应点击
         title.style.background = 'linear-gradient( #a1c4fd 0%, #c2e9fb 100%)'; //改变标题渐变效果
         setTimeout(() => title.style.display = 'none', 2000) // 将落地页设置为不显示
-        /**
-         * 将播放bgm的事件发送出去
-         */
-        const event = new MouseEvent('click', {
-            'view': window,
-            'bubbles': true,
-            'cancelable': true,
-        });
-        const target = document.getElementById('play_title_bgm_target');
-        if (target !== null) {
-            target.dispatchEvent(event);
-        }
+        window.enterPromise()
+        delete window.enterPromise
     }
 
     /**
