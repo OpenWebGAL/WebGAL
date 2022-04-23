@@ -41,6 +41,5 @@ export const infoFetcher = (url: string) => {
                 }
             });
         }
-        eventSender('play_title_bgm_target', 1, 0);
     });
 };
