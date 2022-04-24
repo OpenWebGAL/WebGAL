@@ -26,20 +26,20 @@ export const getStorage = debounce(() => {
         getRef('userDataRef').replaceUserData(newUserData as IUserData);
     });
 }, 100);
-
 /**
  * 防抖函数
  * @param func 要执行的函数
  * @param wait 防抖等待时间
  */
-function debounce(func: Function, wait: number) {
-    let timeout: any;
-    function context(this: any, ...args: any[]) {
-        // let context: any = this // 保存this指向
+function debounce<T,K>(func: (...args: T[]) => K, wait: number) {
+    let timeout: ReturnType<typeof setTimeout>;
+    function context(...args: T[]):K{
         clearTimeout(timeout);
+        let ret!:K;
         timeout = setTimeout(() => {
-            func.apply(context, args);
+            ret=func.apply(context, args);
         }, wait);
+        return ret;
     }
     return context;
 }
