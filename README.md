@@ -10,7 +10,7 @@ https://demo.msfasr.com
 
 [WebGAL 开发文档](https://docs.msfasr.com/)
 
-[下载 WebGAL 图形化编辑器]
+[下载 WebGAL 图形化编辑器](https://github.com/MakinoharaShoko/WebGAL_Terre/releases)
 
 ## WebGAL 优势与特色
 
