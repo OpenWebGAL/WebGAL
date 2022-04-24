@@ -35,7 +35,7 @@
     position: absolute;
     top: 0;
     opacity: 0;
-    background: linear-gradient(165deg,rgba(255,255,255,0.25)0%,rgba(255,255,255,1)50%,rgba(255,255,255,0.25)100%);
+    background: linear-gradient(165deg,rgba(255,255,255,0.25) 0%,rgba(255,255,255,1) 50%,rgba(255,255,255,0.25) 100%);
     transition: opacity 1s;
 "></div>
     <!--    落地页文字-->
@@ -72,10 +72,10 @@
         flex-flow: column;
         align-items: center ">
             <div style="padding: 0 0 0.25em 0">
-                Powered by <a href="https://github.com/MakinoharaShoko/WebGAL">WebGAL</a> Framework
+                Powered by <a href="https://github.com/MakinoharaShoko/WebGAL" onclick="jump('https://github.com/MakinoharaShoko/WebGAL')">WebGAL</a> Framework
             </div>
             <div>
-                Made with ❤ by <a href="https://github.com/MakinoharaShoko">Mahiru</a>
+                Made with ❤ by <a href="https://github.com/MakinoharaShoko" onclick="jump('https://github.com/MakinoharaShoko')">Mahiru</a>
             </div>
         </div>
     </div>
@@ -83,10 +83,29 @@
 <div id="root"></div>
 <script type="module" src="/src/main.tsx"></script>
 <script>
+    let enterPromise=new Promise(res=>window.enterPromise=res)
+    let renderPromise=new Promise(res=>window.renderPromise=res)
+       /**
+         * 将播放bgm的事件发送出去
+         */
+    Promise.all([enterPromise,renderPromise])
+    .then(()=>{
+        const event = new MouseEvent('click', {
+            'view': window,
+            'bubbles': true,
+            'cancelable': true,
+        });
+        const target = document.getElementById('play_title_bgm_target');
+        if (target !== null) {
+            target.dispatchEvent(event);
+        }
+    })
     // 激活强制缩放
     // 在调整窗口大小时重新计算宽高，设计稿按照 1600*900。
     setTimeout(resizeTitle, 100);
     resizeTitle();
+    //判断是跳转操作还是enter操作
+    let tryToEnter=true;
     window.onresize = resizeTitle;
     // 监听键盘 F11 事件，全屏时触发页面调整
     document.onkeydown = function (event) {
@@ -97,11 +116,15 @@
             }, 100);
         }
     };
-
+     function jump(url){
+         tryToEnter=false;
+         window.location=url;
+     }
     /**
      * 点击屏幕，进入引擎主界面
      */
     function enter() {
+        if(!tryToEnter) return;
         document.getElementById('Title_bg_container').style.opacity = '0'; // 调整标题背景的透明度
         document.getElementById('Title_enter_text').style.opacity = '0'; // 调整标题文字的透明度
         setTimeout(() => document.getElementById('Title_white_container').style.opacity = '1', 50); // 在50ms后开始显示白色渐变
@@ -110,18 +133,8 @@
         title.style.pointerEvents = 'none'; //落地页不再响应点击
         title.style.background = 'linear-gradient( #a1c4fd 0%, #c2e9fb 100%)'; //改变标题渐变效果
         setTimeout(() => title.style.display = 'none', 2000) // 将落地页设置为不显示
-        /**
-         * 将播放bgm的事件发送出去
-         */
-        const event = new MouseEvent('click', {
-            'view': window,
-            'bubbles': true,
-            'cancelable': true,
-        });
-        const target = document.getElementById('play_title_bgm_target');
-        if (target !== null) {
-            target.dispatchEvent(event);
-        }
+        window.enterPromise()
+        delete window.enterPromise
     }
 
     /**
