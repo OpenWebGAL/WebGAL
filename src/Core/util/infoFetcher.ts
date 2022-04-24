@@ -4,8 +4,11 @@ import {assetSetter, fileType} from './assetSetter';
 import {storeRef} from '../store/storeRef';
 import {gameInfo} from '../runtime/etc';
 import {getStorage} from '../controller/storage/storageController';
-import {eventSender} from "../controller/eventBus/eventSender";
-
+declare global{
+    interface Window{
+        renderPromise?:Function
+    }
+}
 /**
  * 获取游戏信息
  * @param url 游戏信息路径
@@ -41,6 +44,7 @@ export const infoFetcher = (url: string) => {
                 }
             });
         }
-        eventSender('play_title_bgm_target', 1, 0);
+        window?.renderPromise?.();
+        delete window.renderPromise;
     });
 };
