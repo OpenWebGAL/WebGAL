@@ -57,7 +57,7 @@ export const switchAuto = () => {
  * 自动播放的执行函数
  */
 const autoPlay = () => {
-    const autoPlayDelay = 750 - 250 * getRef('userDataRef').userDataState.optionData.autoSpeed;
+    const autoPlayDelay = 750 - 250 * getRef('userDataRef')!.current!.userDataState.optionData.autoSpeed;
     let isBlockingAuto = false;
     runtime_gamePlay.performList.forEach((e) => {
         if (e.blockingAuto() && !e.isOver)

@@ -5,7 +5,7 @@
 
 import { useState } from 'react';
 import * as _ from 'lodash';
-import { IStageState } from '../interface/stateInterface/stageInterface';
+import { IStageState, StageStore } from '../interface/stateInterface/stageInterface';
 
 
 
@@ -36,7 +36,7 @@ export const initState: IStageState = {
  * @return {IStageState} 舞台状态
  * @return {function} 改变舞台状态
  */
-export function stageStateStore() {
+export function stageStateStore():StageStore {
     const [stageState, setStageState] = useState(_.cloneDeep(initState));
 
     /**

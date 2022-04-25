@@ -76,8 +76,8 @@ export const runScript = (script: ISentence) => {
     }
 
     // 同步演出状态
-    const stageStore: any = getRef('stageRef');
-    stageStore.stageState.PerformList.push({ isHoldOn: perform.isHoldOn, script: script });
+    const stageStore= getRef('stageRef')!.current;
+    stageStore!.stageState.PerformList.push({ isHoldOn: perform.isHoldOn, script: script });
 
     // 时间到后自动清理演出
     perform.stopTimeout = setTimeout(() => {

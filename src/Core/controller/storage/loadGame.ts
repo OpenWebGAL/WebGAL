@@ -15,7 +15,7 @@ import { sceneParser } from '../../parser/sceneParser';
  */
 export const loadGame = (index: number) => {
     // 获得存档文件
-    const loadFile: ISaveData = getRef('userDataRef').userDataState.saveData[index];
+    const loadFile: ISaveData = getRef('userDataRef')!.current!.userDataState.saveData[index];
     logger.debug('读取的存档数据', loadFile);
     // 重新获取并同步场景状态
     sceneFetcher(loadFile.sceneData.sceneUrl).then((rawScene) => {
@@ -47,12 +47,12 @@ export const loadGame = (index: number) => {
 
     // 恢复舞台状态
     const newStageState = _.cloneDeep(loadFile.nowStageState);
-    getRef('stageRef').restoreStage(newStageState);
+    getRef('stageRef')!.current!.restoreStage(newStageState);
 
     // 恢复演出
     eventSender('restorePerform_target', 0, 1);
 
-    const GUIstate = getRef('GuiRef');
-    GUIstate.setVisibility('showTitle', false);
-    GUIstate.setVisibility('showMenuPanel', false);
+    const GUIstate = getRef('GuiRef')!.current;
+    GUIstate!.setVisibility('showTitle', false);
+    GUIstate!.setVisibility('showMenuPanel', false);
 };

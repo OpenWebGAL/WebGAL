@@ -27,11 +27,11 @@ export const pixiInit = (sentence: ISentence): IPerform => {
                 /**
                  * 从状态表里清除演出
                  */
-                const stageStore: any = getRef('stageRef');
-                for (let i = 0; i < stageStore.stageState.PerformList.length; i++) {
-                    const e2: IRunPerform = stageStore.stageState.PerformList[i];
+                const stageStore = getRef('stageRef')!.current;
+                for (let i = 0; i < stageStore!.stageState.PerformList.length; i++) {
+                    const e2: IRunPerform = stageStore!.stageState.PerformList[i];
                     if (e2.script.command === commandType.pixi) {
-                        stageStore.stageState.PerformList.splice(i, 1);
+                        stageStore!.stageState.PerformList.splice(i, 1);
                         i--;
                     }
                 }

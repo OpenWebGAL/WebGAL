@@ -11,14 +11,14 @@ import {playVocal} from './playVocal';
  * @return {IPerform} 执行的演出
  */
 export const say = (sentence: ISentence): IPerform => {
-    const stageStore: any = getRef('stageRef');
-    const userDataStore: any = getRef('userDataRef');
+    const stageStore= getRef('stageRef')!.current;
+    const userDataStore = getRef('userDataRef')!.current;
     // 设置文本显示
-    stageStore.setStage('showText', sentence.content);
+    stageStore!.setStage('showText', sentence.content);
     // 清除语音
-    stageStore.setStage('vocal', '');
+    stageStore!.setStage('vocal', '');
     // 设置显示的角色名称
-    let showName = stageStore.stageState.showName; // 先默认继承
+    let showName :string | number | boolean = stageStore!.stageState.showName; // 先默认继承
     for (const e of sentence.args) {
         if (e.key === 'speaker') {
             showName = e.value;
@@ -30,7 +30,7 @@ export const say = (sentence: ISentence): IPerform => {
             playVocal(sentence);
         }
     }
-    stageStore.setStage('showName', showName);
+    stageStore!.setStage('showName', showName);
     setTimeout(() => {
         const textElements = document.querySelectorAll('.' + styles.TextBox_textElement_start);
         const textArray = [...textElements];
@@ -39,8 +39,8 @@ export const say = (sentence: ISentence): IPerform => {
         });
     }, 0);
     const performInitName: string = getRandomPerformName();
-    const textDelay = 55 - 20 * userDataStore.userDataState.optionData.textSpeed;
-    const endDelay = 750 - userDataStore.userDataState.optionData.textSpeed * 250;
+    const textDelay = 55 - 20 * userDataStore!.userDataState.optionData.textSpeed;
+    const endDelay = 750 - userDataStore!.userDataState.optionData.textSpeed * 250;
     return {
         performName: performInitName,
         duration: sentence.content.length * textDelay + endDelay,

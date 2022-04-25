@@ -20,7 +20,7 @@ export const end = (sentence: ISentence): IPerform => {
     sceneFetcher(sceneUrl).then((rawScene) => {
         runtime_currentSceneData.currentScene = sceneParser(rawScene, 'start.txt', sceneUrl);
     });
-    getRef('GuiRef').setVisibility('showTitle', true);
+    getRef('GuiRef')!.current!.setVisibility('showTitle', true);
     return {
         performName: 'none',
         duration: 0,

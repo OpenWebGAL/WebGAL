@@ -29,11 +29,11 @@ export const nextSentence = () => {
     if (allSettled) {
         // 所有普通演出已经结束
         // 清除状态表的演出序列（因为这时候已经准备进行下一句了）
-        const stageStore: any = getRef('stageRef');
-        for (let i = 0; i < stageStore.stageState.PerformList.length; i++) {
-            const e: IRunPerform = stageStore.stageState.PerformList[i];
+        const stageStore = getRef('stageRef')!.current;
+        for (let i = 0; i < stageStore!.stageState.PerformList.length; i++) {
+            const e: IRunPerform = stageStore!.stageState.PerformList[i];
             if (!e.isHoldOn) {
-                stageStore.stageState.PerformList.splice(i, 1);
+                stageStore!.stageState.PerformList.splice(i, 1);
                 i--;
             }
         }

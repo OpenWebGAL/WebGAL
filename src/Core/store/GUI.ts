@@ -4,7 +4,7 @@
  */
 import { useState } from 'react';
 import { getStorage } from '../controller/storage/storageController';
-import { IGuiState } from '../interface/stateInterface/guiInterface';
+import { IGuiState,componentsVisibility,GuiAsset, GuiStore } from '../interface/stateInterface/guiInterface';
 
 /**
  * 当前Menu页面显示的Tag
@@ -29,18 +29,13 @@ const initState: IGuiState = {
     titleBgm: '',
 };
 
-// GUI各组件是否显示
-type componentsVisibility = Pick<IGuiState, Exclude<keyof IGuiState, 'currentMenuTag' | 'titleBg' | 'titleBgm'>>
-// 标题资源
-type GuiAsset = Pick<IGuiState, 'titleBgm' | 'titleBg'>
-
 /**
  * 创建GUI的状态管理
  * @return {IGuiState} GUI状态
  * @return {function} 改变组件可见性
  * @return {function} 改变Menu页面的选项卡
  */
-export function GuiStateStore() {
+export function GuiStateStore():GuiStore{
     const [GuiState, setGuiState] = useState(initState);
     /**
      * 设置各组件的可见性

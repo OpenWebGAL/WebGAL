@@ -14,7 +14,7 @@ export const playBgm = (url: string) => {
         if (!VocalControl.paused) VocalControl.pause();
     }
     // 获得舞台状态并设置
-    getRef('stageRef').setStage('bgm', url);
+    getRef('stageRef')!.current!.setStage('bgm', url);
     // 播放语音
     setTimeout(() => {
         let VocalControl: any = document.getElementById('currentBgm');
