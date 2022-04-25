@@ -5,7 +5,7 @@
  */
 import { useState } from 'react';
 import { logger } from '../util/logger';
-import { IOptionData, IUserData } from '../interface/stateInterface/userDataInterface';
+import { IOptionData, IUserData, UserDataStore } from '../interface/stateInterface/userDataInterface';
 
 /**
  * 播放速度的枚举类型
@@ -41,7 +41,7 @@ const initState: IUserData = {
  * @return {IUserData} 用户数据
  * @return {function} 改变用户数据
  */
-export function userDataStateStore() {
+export function userDataStateStore():UserDataStore {
     const [userDataState, setUserDataState] = useState(initState);
 
     // 设置用户数据

@@ -38,10 +38,10 @@ export const playVideo = (sentence: ISentence): IPerform => {
                     /**
                      * 恢复音量
                      */
-                    const userDataStore = getRef('userDataRef');
-                    const mainVol = userDataStore.userDataState.optionData.volumeMain;
-                    const vocalVol = mainVol * 0.01 * userDataStore.userDataState.optionData.vocalVolume * 0.01;
-                    const bgmVol = mainVol * 0.01 * userDataStore.userDataState.optionData.bgmVolume * 0.01;
+                    const userDataStore = getRef('userDataRef')!.current;
+                    const mainVol = userDataStore!.userDataState.optionData.volumeMain;
+                    const vocalVol = mainVol * 0.01 * userDataStore!.userDataState.optionData.vocalVolume * 0.01;
+                    const bgmVol = mainVol * 0.01 * userDataStore!.userDataState.optionData.bgmVolume * 0.01;
                     const bgmElement: any = document.getElementById('currentBgm');
                     if (bgmElement) {
                         bgmElement.volume = bgmVol.toString();

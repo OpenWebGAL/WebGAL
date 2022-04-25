@@ -33,9 +33,9 @@ export const Backlog = () => {
                         const backlog_audio_element: any = document.getElementById('backlog_audio_play_element_' + i);
                         if (backlog_audio_element) {
                             backlog_audio_element.currentTime = 0;
-                            const userDataStore = getRef('userDataRef');
-                            const mainVol = userDataStore.userDataState.optionData.volumeMain;
-                            backlog_audio_element.volume = mainVol * 0.01 * userDataStore.userDataState.optionData.vocalVolume * 0.01;
+                            const userDataStore = getRef('userDataRef')!.current;
+                            const mainVol = userDataStore!.userDataState.optionData.volumeMain;
+                            backlog_audio_element.volume = mainVol * 0.01 * userDataStore!.userDataState.optionData.vocalVolume * 0.01;
                             backlog_audio_element.play();
                         }
                     }} className={styles.backlog_item_button_element}>

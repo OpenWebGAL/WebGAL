@@ -43,7 +43,7 @@ export const resetStage = (resetBacklog: boolean) => {
     const initSceneDataCopy = _.cloneDeep(initState);
     for (const k in initSceneDataCopy) {
         if (initSceneDataCopy.hasOwnProperty(k)) {
-            getRef('stageRef').setStage(k as keyof IStageState, initSceneDataCopy[k as keyof IStageState]);
+            getRef('stageRef')!.current!.setStage(k as keyof IStageState, initSceneDataCopy[k as keyof IStageState]);
         }
     }
 };

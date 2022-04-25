@@ -20,5 +20,5 @@ export const startGame = () => {
         // 开始第一条语句
         eventSender('nextSentence_target', 0, 0);
     });
-    getRef('GuiRef').setVisibility('showTitle', false);
+    getRef('GuiRef')!.current!.setVisibility('showTitle', false);
 };

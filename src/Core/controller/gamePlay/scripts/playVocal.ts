@@ -25,7 +25,7 @@ export const playVocal = (sentence: ISentence) => {
         VocalControl.pause();
     }
     // 获得舞台状态
-    getRef('stageRef').setStage('vocal', url);
+    getRef('stageRef')!.current!.setStage('vocal', url);
     // 播放语音
     setTimeout(() => {
         let VocalControl: any = document.getElementById('currentVocal');

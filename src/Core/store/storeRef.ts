@@ -1,5 +1,4 @@
 import { IStoreRef } from '../interface/stateInterface/storeRefInterface';
-
 // 初始化全局存储引用
 export const storeRef: IStoreRef = {
     GuiRef: null,
@@ -12,6 +11,11 @@ export const storeRef: IStoreRef = {
  * @param refKey 需要引用的状态类型
  * @return {object} 对状态存储的引用
  */
-export const getRef = <K extends keyof IStoreRef>(refKey: K): any => {
-    return storeRef[refKey].current;
+export const getRef = <K extends keyof IStoreRef>(refKey: K)=> {
+   
+    if(!storeRef[refKey]) {
+        throw(new Error());
+    }
+    return storeRef[refKey];
+ 
 };
