@@ -59,8 +59,8 @@ export const scriptExecutor = (runToSentence: number) => {
      */
     setTimeout(() => {
         // 同步当前舞台数据
-        const currentStageStoreRef = getRef('stageRef');
-        currentStageState = currentStageStoreRef.getStageState();
+        const currentStageStoreRef = getRef('stageRef')!.current;
+        currentStageState = currentStageStoreRef!.getStageState();
         logger.debug('本条语句执行结果', currentStageState);
         // 保存 backlog
         if (isSaveBacklog) {

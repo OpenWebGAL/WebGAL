@@ -12,9 +12,9 @@ export const syncWithOrigine = (str: string) => {
     const scene = strLst[1].replace(/json/g, 'txt');
     const sentenceID = parseInt(strLst[2], 10);
     logger.warn('正在跳转到' + scene + ':' + sentenceID);
-    const guiRef = getRef('GuiRef');
-    guiRef.setVisibility('showTitle', false);
-    guiRef.setVisibility('showMenuPanel', false);
+    const guiRef = getRef('GuiRef')!.current;
+    guiRef!.setVisibility('showTitle', false);
+    guiRef!.setVisibility('showMenuPanel', false);
     resetStage(true);
     // 重新获取初始场景
     const sceneUrl: string = assetSetter(scene, fileType.scene);

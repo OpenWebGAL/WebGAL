@@ -24,16 +24,16 @@ export const changeFigure = (sentence: ISentence): IPerform => {
             content = '';
         }
     }
-    const stageStore = getRef('stageRef');
+    const stageStore = getRef('stageRef')!.current;
     switch (pos) {
         case 'center':
-            stageStore.setStage('figName', content);
+            stageStore!.setStage('figName', content);
             break;
         case 'left':
-            stageStore.setStage('figNameLeft', content);
+            stageStore!.setStage('figNameLeft', content);
             break;
         case 'right':
-            stageStore.setStage('figNameRight', content);
+            stageStore!.setStage('figNameRight', content);
             break;
     }
     return {

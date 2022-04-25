@@ -51,3 +51,10 @@ export interface IStageState {
     bgFilter:string,
     PerformList: Array<IRunPerform> // 要启动的演出列表
 }
+export interface IStageStore {
+    stageState: IStageState;
+    setStage: <K extends keyof IStageState>(key: K, value: any) => void;
+    getStageState: () => IStageState;
+    restoreStage: (newState: IStageState) => void;
+}
+export type StageStore=IStageStore;
