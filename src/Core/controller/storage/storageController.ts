@@ -8,7 +8,7 @@ import { logger } from '../../util/logger';
  * 写入本地存储
  */
 export const setStorage = debounce(() => {
-    localforage.setItem(gameInfo.gameKey, getRef('userDataRef').userDataState).then(() => {
+    localforage.setItem(gameInfo.gameKey, getRef('userDataRef')?.current?.userDataState).then(() => {
         logger.info('写入本地存储');
     });
 }, 100);
@@ -23,7 +23,7 @@ export const getStorage = debounce(() => {
             setStorage();
             return;
         }
-        getRef('userDataRef').replaceUserData(newUserData as IUserData);
+        getRef('userDataRef')?.current?.replaceUserData(newUserData as IUserData);
     });
 }, 100);
 /**
@@ -45,14 +45,14 @@ function debounce<T,K>(func: (...args: T[]) => K, wait: number) {
 }
 
 export const syncStorageFast = () => {
-    localforage.setItem(gameInfo.gameKey, getRef('userDataRef').userDataState).then(() => {
+    localforage.setItem(gameInfo.gameKey, getRef('userDataRef')?.current?.userDataState).then(() => {
         localforage.getItem(gameInfo.gameKey).then((newUserData) => {
             // 如果没有数据，初始化
             if (!newUserData) {
                 setStorage();
                 return;
             }
-            getRef('userDataRef').replaceUserData(newUserData as IUserData);
+            getRef('userDataRef')?.current?.replaceUserData(newUserData as IUserData);
         });
         logger.info('同步本地存储');
     });

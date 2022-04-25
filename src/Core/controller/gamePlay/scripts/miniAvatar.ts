@@ -11,7 +11,7 @@ export const miniAvatar = (sentence: ISentence): IPerform => {
     if(sentence.content ==='none'|| sentence.content ===''){
         content = '';
     }
-    getRef('stageRef').setStage('miniAvatar', content);
+    getRef('stageRef')!.current!.setStage('miniAvatar', content);
     return {
         performName: 'none',
         duration: 0,

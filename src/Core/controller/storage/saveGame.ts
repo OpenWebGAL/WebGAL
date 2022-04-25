@@ -11,10 +11,10 @@ import { setStorage, syncStorageFast } from './storageController';
  * @param index 游戏的档位
  */
 export const saveGame = (index: number) => {
-    const userDataRef = getRef('userDataRef');
+    const userDataRef = getRef('userDataRef')!.current;
     const saveBacklog = _.cloneDeep(runtime_currentBacklog);
     const saveData: ISaveData = {
-        nowStageState: _.cloneDeep(getRef('stageRef').stageState),
+        nowStageState: _.cloneDeep(getRef('stageRef')!.current!.stageState),
         backlog: saveBacklog, // 舞台数据
         index: index, // 存档的序号
         saveTime: new Date().toLocaleDateString() + ' ' + new Date().toLocaleTimeString('chinese', { hour12: false }), // 保存时间
@@ -25,9 +25,9 @@ export const saveGame = (index: number) => {
             sceneUrl: runtime_currentSceneData.currentScene.sceneUrl, // 场景url
         }, // 场景数据
     };
-    const newSaveData = userDataRef.userDataState.saveData;
+    const newSaveData = userDataRef!.userDataState!.saveData;
     newSaveData[index] = saveData;
-    userDataRef.setUserData('saveData', [...newSaveData]);
-    logger.debug('存档完成，存档结果：', userDataRef.userDataState);
+    userDataRef!.setUserData('saveData', [...newSaveData]);
+    logger.debug('存档完成，存档结果：', userDataRef!.userDataState);
     syncStorageFast();
 };

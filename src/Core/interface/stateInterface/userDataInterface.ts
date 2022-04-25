@@ -44,3 +44,12 @@ export interface IUserData {
     saveData: Array<ISaveData> // 用户存档数据
     optionData: IOptionData // 用户设置选项数据
 }
+export interface IUserDataStore{
+    userDataState: IUserData;
+    setUserData: <K extends keyof IUserData>(key: K, value: any) => void;
+    replaceUserData: (newUserData: IUserData) => void;
+    setOptionData: <K extends keyof IOptionData>(key: K, value: any) => void;
+    setSlPage: (index: number) => void;
+}
+
+export type UserDataStore=IUserDataStore;

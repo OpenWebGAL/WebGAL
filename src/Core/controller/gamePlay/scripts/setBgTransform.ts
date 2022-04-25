@@ -9,8 +9,8 @@ import * as __ from 'lodash';
  * @param sentence
  */
 export const setBgTransform = (sentence: ISentence): IPerform => {
-    const stageStore = getRef('stageRef');
-    const effectList: Array<IEffect> = stageStore.stageState.effects;
+    const stageStore = getRef('stageRef')!.current;
+    const effectList: Array<IEffect> = stageStore!.stageState.effects;
     let isTargetSet = false;
     effectList.forEach((e) => {
         if (e.target === 'MainStage_bg_MainContainer') {

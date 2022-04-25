@@ -9,10 +9,10 @@ import {setVolume} from "@/Core/util/setVolume";
 export const EventHandler = () => {
     const stageStore = useStore(stageStateStore);
     const restoreOne = (index: number) => {
-        runScript(getRef('stageRef').stageState.PerformList[index].script);
+        runScript(getRef('stageRef')!.current!.stageState.PerformList[index].script);
     };
     const restorePerform = () => {
-        const len = getRef('stageRef').stageState.PerformList.length;
+        const len = getRef('stageRef')!.current!.stageState.PerformList.length;
         for (let i = 0; i < len; i++) {
             const event = new MouseEvent('click', {
                 'view': window,

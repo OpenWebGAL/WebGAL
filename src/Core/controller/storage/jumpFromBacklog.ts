@@ -46,11 +46,11 @@ export const jumpFromBacklog = (index: number) => {
 
     // 恢复舞台状态
     const newStageState: IStageState = _.cloneDeep(backlogFile.currentStageState);
-    getRef('stageRef').restoreStage(newStageState);
+    getRef('stageRef')!.current!.restoreStage(newStageState);
 
     // 恢复演出
     eventSender('restorePerform_target', 0, 1);
 
     // 关闭backlog界面
-    getRef('GuiRef').setVisibility('showBacklog', false);
+    getRef('GuiRef')!.current!.setVisibility('showBacklog', false);
 };
