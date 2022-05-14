@@ -1,5 +1,0 @@
-WebGAL:现在我们来到了C1分支，让我们来测试一下jump！;
-jumpLabel:label1;
-理论上说，这句没法出现;
-label:label1;
-理论上说，应该跳到这句。
