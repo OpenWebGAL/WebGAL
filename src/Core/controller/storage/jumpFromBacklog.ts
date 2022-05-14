@@ -57,4 +57,7 @@ export const jumpFromBacklog = (index: number) => {
 
     // 关闭backlog界面
     dispatch(setVisibility({component: 'showBacklog', visibility: false}));
+
+    // 重新显示Textbox
+    dispatch(setVisibility({component: 'showTextBox', visibility: true}));
 };
