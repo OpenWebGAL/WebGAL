@@ -62,7 +62,10 @@ export const Backlog = () => {
                     <div className={styles.backlog_top}>
                         <CloseSmall
                             className={styles.backlog_top_icon}
-                            onClick={() => dispatch(setVisibility({component: 'showBacklog', visibility: false}))}
+                            onClick={() => {
+                                dispatch(setVisibility({component: 'showBacklog', visibility: false}));
+                                dispatch(setVisibility({component: 'showTextBox', visibility: true}));
+                            }}
                             theme="outline"
                             size="4em"
                             fill="#ffffff"
