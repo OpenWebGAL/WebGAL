@@ -3,6 +3,8 @@ import {IPerform} from '@/Core/interface/coreInterface/performInterface';
 import {IEffect} from "@/Core/interface/stateInterface/stageInterface";
 import { logger } from '@/Core/util/logger';
 import {webgalStore} from "@/Core/store/store";
+import _ from "lodash";
+import {setStage} from "@/Core/store/stageReducer";
 
 /**
  * 设置背景效果
@@ -11,8 +13,9 @@ import {webgalStore} from "@/Core/store/store";
 export const setBgFilter = (sentence: ISentence): IPerform => {
     const stageState = webgalStore.getState().stage;
     const effectList: Array<IEffect> =stageState.effects;
+    const newEffectList = _.cloneDeep(effectList);
     let isTargetSet = false;
-    effectList.forEach((e) => {
+    newEffectList.forEach((e) => {
         if (e.target === 'MainStage_bg_MainContainer') {
             logger.warn('已存在效果，正在修改');
             isTargetSet = true;
@@ -20,12 +23,13 @@ export const setBgFilter = (sentence: ISentence): IPerform => {
         }
     });
     if (!isTargetSet) {
-        effectList.push({
+        newEffectList.push({
             target: 'MainStage_bg_MainContainer',
             transform: '',
             filter: sentence.content
         });
     }
+    webgalStore.dispatch(setStage({key: 'effects', value: newEffectList}));
     // stageStore.setStage('bgFilter', sentence.content);
     return {
         performName: 'none',

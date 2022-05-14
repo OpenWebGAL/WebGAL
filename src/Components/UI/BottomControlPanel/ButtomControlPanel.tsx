@@ -42,7 +42,10 @@ export const BottomControlPanel = () => {
                 <span className={styles.button_text}>显示</span>
             </span>
                 )}
-                <span className={styles.singleButton} onClick={() => setComponentVisibility('showBacklog', true)}>
+                <span className={styles.singleButton} onClick={() => {
+                    setComponentVisibility('showBacklog', true);
+                    setComponentVisibility('showTextBox', false);
+                }}>
                 <AlignTextLeftOne className={styles.button} theme="outline" size="30" fill="#f5f5f7" strokeWidth={3.5}/>
                 <span className={styles.button_text}>回想</span>
             </span>
