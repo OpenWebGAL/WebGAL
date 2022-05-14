@@ -1,5 +1,4 @@
 import { IAsset } from '../interface/coreInterface/sceneInterface';
-import { logger } from './logger';
 
 /**
  * 预加载函数

@@ -1,5 +1,5 @@
 import * as PIXI from "pixi.js";
-import {runtime_gamePlay} from "../../../../Core/runtime/gamePlay";
+import {runtime_gamePlay} from "@/Core/runtime/gamePlay";
 
 export const pixiController = (active: boolean) => {
     if (active) {

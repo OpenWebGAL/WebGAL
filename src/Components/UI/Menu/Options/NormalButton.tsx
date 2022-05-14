@@ -1,5 +1,5 @@
 import { ReactElement } from 'react';
-import { INormalButton } from '../../../../Core/interface/componentsInterface/OptionInterface';
+import { INormalButton } from '@/Core/interface/componentsInterface/OptionInterface';
 import styles from './normalButton.module.scss';
 
 export const NormalButton = (props: INormalButton) => {
