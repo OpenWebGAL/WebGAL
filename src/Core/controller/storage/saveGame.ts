@@ -27,9 +27,11 @@ export const saveGame = (index: number) => {
             sceneUrl: runtime_currentSceneData.currentScene.sceneUrl, // 场景url
         }, // 场景数据
     };
-    const newSaveData = userDataState.saveData;
+    logger.debug('存档数据：',saveData);
+    const newSaveData = _.cloneDeep(userDataState.saveData);
+    logger.debug('newSaveData:',newSaveData);
     newSaveData[index] = saveData;
     webgalStore.dispatch(setUserData({key: 'saveData', value: [...newSaveData]}));
-    logger.debug('存档完成，存档结果：', userDataState);
+    logger.debug('存档完成，存档结果：', newSaveData);
     syncStorageFast();
 };
