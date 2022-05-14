@@ -3,11 +3,11 @@ import styles from './title.module.scss';
 import {playBgm} from '@/Core/util/playBgm';
 import {startGame} from '@/Core/controller/gamePlay/startGame';
 import {runtime_currentSceneData} from "@/Core/runtime/sceneData";
-import {eventSender} from "@/Core/controller/eventBus/eventSender";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "@/Core/store/store";
 import {setMenuPanelTag, setVisibility} from "@/Core/store/GUIReducer";
 import {MenuPanelTag} from '@/Core/interface/stateInterface/guiInterface';
+import {nextSentence} from "@/Core/controller/gamePlay/nextSentence";
 
 /**
  * 标题页
@@ -45,7 +45,7 @@ const Title: FC = () => {
                             if (runtime_currentSceneData.currentSentenceId === 0 &&
                                 runtime_currentSceneData.currentScene.sceneName === 'start.txt') {
                                 // 如果游戏没有开始，开始游戏
-                                eventSender('nextSentence_target', 0, 0);
+                                nextSentence();
                             }
                         }}>
                             <div className={styles.Title_button_text + ' ' + styles.Title_button_text_up}>继续游戏</div>

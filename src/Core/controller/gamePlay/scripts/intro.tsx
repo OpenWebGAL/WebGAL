@@ -3,7 +3,7 @@ import { IPerform } from '@/Core/interface/coreInterface/performInterface';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import styles from '../../../../Components/Stage/FullScreenPerform/fullScreenPerform.module.scss';
-import {eventSender} from "@/Core/controller/eventBus/eventSender";
+import {nextSentence} from "@/Core/controller/gamePlay/nextSentence";
 
 /**
  * 显示一小段黑屏演示
@@ -35,7 +35,7 @@ export const intro = (sentence: ISentence): IPerform => {
             if (introContainer) {
                 introContainer.style.display = 'none';
             }
-            eventSender('nextSentence_target',0,0);
+            nextSentence();
         },
         blockingNext: () => false,
         blockingAuto: () => true,

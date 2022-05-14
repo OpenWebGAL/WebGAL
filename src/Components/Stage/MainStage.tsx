@@ -2,7 +2,7 @@ import {FC, useEffect} from "react";
 import styles from './mainStage.module.scss';
 import {TextBox} from "./TextBox/TextBox";
 import {FigureContainer} from "./FigureContainer/FigureContainer";
-import {EventHandler} from "./EventHandler/EventHandler";
+import {AudioContainer} from "./AudioContainer/AudioContainer";
 import {FullScreenPerform} from "./FullScreenPerform/FullScreenPerform";
 import {nextSentence} from "@/Core/controller/gamePlay/nextSentence";
 import {stopAll} from "@/Core/controller/gamePlay/fastSkip";
@@ -59,7 +59,7 @@ export const MainStage: FC = () => {
         }}/>
         <FigureContainer/>
         {GUIState.showTextBox && <TextBox/>}
-        <EventHandler/>
+        <AudioContainer/>
         <FullScreenPerform/>
         <div onClick={() => {
             // 如果文本框没有显示，则显示文本框

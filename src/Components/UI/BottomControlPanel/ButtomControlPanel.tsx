@@ -13,11 +13,11 @@ import {
 import styles from './bottomControlPanel.module.scss';
 import {switchAuto} from '@/Core/controller/gamePlay/autoPlay';
 import {switchFast} from '@/Core/controller/gamePlay/fastSkip';
-import {playBgm} from '@/Core/util/playBgm';
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from '@/Core/store/store';
 import {setMenuPanelTag, setVisibility} from "@/Core/store/GUIReducer";
 import {componentsVisibility, MenuPanelTag} from "@/Core/interface/stateInterface/guiInterface";
+import { backToTitle } from '@/Core/controller/gamePlay/backToTitle';
 
 export const BottomControlPanel = () => {
     const GUIStore = useSelector((state: RootState) => state.GUI);
@@ -101,8 +101,7 @@ export const BottomControlPanel = () => {
                 <span
                     className={styles.singleButton}
                     onClick={() => {
-                        setComponentVisibility('showTitle', true);
-                        playBgm(GUIStore.titleBgm);
+                        backToTitle();
                     }}
                 >
                 <Home className={styles.button} theme="outline" size="30" fill="#f5f5f7" strokeWidth={3.5}/>

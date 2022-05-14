@@ -1,8 +1,8 @@
 import { runtime_currentSceneData } from '../../runtime/sceneData';
 import { sceneFetcher } from '../../util/sceneFetcher';
 import { sceneParser } from '../../parser/sceneParser';
-import { eventSender } from '../eventBus/eventSender';
 import { logger } from '../../util/logger';
+import {nextSentence} from "@/Core/controller/gamePlay/nextSentence";
 
 /**
  * 调用场景
@@ -21,6 +21,6 @@ export const callScene = (sceneUrl: string, sceneName: string) => {
         runtime_currentSceneData.currentScene = sceneParser(rawScene, sceneName, sceneUrl);
         runtime_currentSceneData.currentSentenceId = 0;
         logger.debug('现在调用场景，调用结果：', runtime_currentSceneData);
-        eventSender('nextSentence_target', 0, 0); // 通过事件来发送下一句指令，防止拿到过期状态
+        nextSentence();
     });
 };

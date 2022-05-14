@@ -1,8 +1,8 @@
 // 切换自动播放状态
 import { runtime_gamePlay } from '../../runtime/gamePlay';
 import { stopAuto } from './autoPlay';
-import { eventSender } from '../eventBus/eventSender';
 import styles from '../../../Components/UI/BottomControlPanel/bottomControlPanel.module.scss';
+import {nextSentence} from "@/Core/controller/gamePlay/nextSentence";
 
 /**
  * 设置 fast 按钮的激活与否
@@ -54,7 +54,7 @@ export const switchFast = () => {
         runtime_gamePlay.isFast = true;
         setButton(true);
         runtime_gamePlay.fastInterval = setInterval(() => {
-            eventSender('nextSentence_target', 0, 0);
+            nextSentence();
         }, 100);
     }
 };
