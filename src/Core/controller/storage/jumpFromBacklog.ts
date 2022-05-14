@@ -1,20 +1,23 @@
-import { getRef } from '../../store/storeRef';
-import { logger } from '../../util/logger';
-import { sceneFetcher } from '../../util/sceneFetcher';
-import { runtime_currentSceneData } from '../../runtime/sceneData';
-import { sceneParser } from '../../parser/sceneParser';
+import {logger} from '../../util/logger';
+import {sceneFetcher} from '../../util/sceneFetcher';
+import {runtime_currentSceneData} from '../../runtime/sceneData';
+import {sceneParser} from '../../parser/sceneParser';
 import * as _ from 'lodash';
-import { runtime_gamePlay } from '../../runtime/gamePlay';
-import { runtime_currentBacklog } from '../../runtime/backlog';
-import { eventSender } from '../eventBus/eventSender';
-import { IBacklogItem } from '../../interface/coreInterface/runtimeInterface';
-import { IStageState } from '../../interface/stateInterface/stageInterface';
+import {runtime_gamePlay} from '../../runtime/gamePlay';
+import {runtime_currentBacklog} from '../../runtime/backlog';
+import {eventSender} from '../eventBus/eventSender';
+import {IBacklogItem} from '../../interface/coreInterface/runtimeInterface';
+import {IStageState} from '../../interface/stateInterface/stageInterface';
+import {webgalStore} from "@/Core/store/store";
+import {resetStageState} from "@/Core/store/stageReducer";
+import {setVisibility} from "@/Core/store/GUIReducer";
 
 /**
  * 从 backlog 跳转至一个先前的状态
  * @param index
  */
 export const jumpFromBacklog = (index: number) => {
+    const dispatch = webgalStore.dispatch;
     // 获得存档文件
     const backlogFile: IBacklogItem = runtime_currentBacklog[index];
     logger.debug('读取的backlog数据', backlogFile);
@@ -46,11 +49,12 @@ export const jumpFromBacklog = (index: number) => {
 
     // 恢复舞台状态
     const newStageState: IStageState = _.cloneDeep(backlogFile.currentStageState);
-    getRef('stageRef')!.current!.restoreStage(newStageState);
+
+    dispatch(resetStageState(newStageState));
 
     // 恢复演出
     eventSender('restorePerform_target', 0, 1);
 
     // 关闭backlog界面
-    getRef('GuiRef')!.current!.setVisibility('showBacklog', false);
+    dispatch(setVisibility({component: 'showBacklog', visibility: false}));
 };

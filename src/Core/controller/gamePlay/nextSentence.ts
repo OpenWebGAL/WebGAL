@@ -1,8 +1,10 @@
-import { scriptExecutor } from './scriptExecutor';
-import { runtime_gamePlay } from '../../runtime/gamePlay';
-import { getRef } from '../../store/storeRef';
-import { IRunPerform } from '../../interface/coreInterface/performInterface';
-import { logger } from '../../util/logger';
+import {scriptExecutor} from './scriptExecutor';
+import {runtime_gamePlay} from '../../runtime/gamePlay';
+import {IRunPerform} from '../../interface/coreInterface/performInterface';
+import {logger} from '../../util/logger';
+import {webgalStore} from "@/Core/store/store";
+import _ from 'lodash';
+import {resetStageState} from "@/Core/store/stageReducer";
 
 /**
  * 进行下一句
@@ -29,15 +31,16 @@ export const nextSentence = () => {
     if (allSettled) {
         // 所有普通演出已经结束
         // 清除状态表的演出序列（因为这时候已经准备进行下一句了）
-        const stageStore = getRef('stageRef')!.current;
-        for (let i = 0; i < stageStore!.stageState.PerformList.length; i++) {
-            const e: IRunPerform = stageStore!.stageState.PerformList[i];
+        const stageState = webgalStore.getState().stage;
+        const newStageState = _.cloneDeep(stageState);
+        for (let i = 0; i < newStageState.PerformList.length; i++) {
+            const e: IRunPerform = newStageState.PerformList[i];
             if (!e.isHoldOn) {
-                stageStore!.stageState.PerformList.splice(i, 1);
+                newStageState.PerformList.splice(i, 1);
                 i--;
             }
         }
-
+        webgalStore.dispatch(resetStageState(newStageState));
         scriptExecutor(-1);
         return;
     }

@@ -1,14 +1,15 @@
 import styles from './backlog.module.scss';
-import {useStore} from 'reto';
-import {GuiStateStore} from '../../../Core/store/GUI';
-import {runtime_currentBacklog} from '../../../Core/runtime/backlog';
+import {runtime_currentBacklog} from '@/Core/runtime/backlog';
 import {CloseSmall, Return, VolumeNotice} from '@icon-park/react';
-import {jumpFromBacklog} from '../../../Core/controller/storage/jumpFromBacklog';
-import {getRef} from "@/Core/store/storeRef";
+import {jumpFromBacklog} from '@/Core/controller/storage/jumpFromBacklog';
+import {useDispatch, useSelector} from "react-redux";
+import {RootState, webgalStore} from '@/Core/store/store';
+import {setVisibility} from "@/Core/store/GUIReducer";
 
 export const Backlog = () => {
-    const GUIStore = useStore(GuiStateStore);
+    const GUIStore = useSelector((state: RootState) => state.GUI);
     const backlogList = [];
+    const dispatch = useDispatch();
     for (let i = 0; i < runtime_currentBacklog.length; i++) {
         const backlogItem = runtime_currentBacklog[i];
         const singleBacklogView = (
@@ -33,9 +34,9 @@ export const Backlog = () => {
                         const backlog_audio_element: any = document.getElementById('backlog_audio_play_element_' + i);
                         if (backlog_audio_element) {
                             backlog_audio_element.currentTime = 0;
-                            const userDataStore = getRef('userDataRef')!.current;
-                            const mainVol = userDataStore!.userDataState.optionData.volumeMain;
-                            backlog_audio_element.volume = mainVol * 0.01 * userDataStore!.userDataState.optionData.vocalVolume * 0.01;
+                            const userDataStore = webgalStore.getState().userData;
+                            const mainVol = userDataStore.optionData.volumeMain;
+                            backlog_audio_element.volume = mainVol * 0.01 * userDataStore.optionData.vocalVolume * 0.01;
                             backlog_audio_element.play();
                         }
                     }} className={styles.backlog_item_button_element}>
@@ -56,12 +57,12 @@ export const Backlog = () => {
     }
     return (
         <>
-            {GUIStore.GuiState.showBacklog && (
+            {GUIStore.showBacklog && (
                 <div className={styles.Backlog_main}>
                     <div className={styles.backlog_top}>
                         <CloseSmall
                             className={styles.backlog_top_icon}
-                            onClick={() => GUIStore.setVisibility('showBacklog', false)}
+                            onClick={() => dispatch(setVisibility({component: 'showBacklog', visibility: false}))}
                             theme="outline"
                             size="4em"
                             fill="#ffffff"

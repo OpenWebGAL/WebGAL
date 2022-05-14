@@ -3,15 +3,17 @@ import styles from './options.module.scss';
 import {NormalButton} from "./NormalButton";
 import {NormalOption} from "./NormalOption";
 import {OptionSlider} from "./OptionSlider";
-import {useStore} from "reto";
-import {userDataStateStore} from "../../../../Core/store/userData";
-import {getStorage, setStorage} from "../../../../Core/controller/storage/storageController";
+import {getStorage, setStorage} from "@/Core/controller/storage/storageController";
 import {TextPreview} from "./TextPreview/TextPreview";
-import {setVolume} from "../../../../Core/util/setVolume";
 import {eventSender} from "@/Core/controller/eventBus/eventSender";
+import {useDispatch, useSelector} from "react-redux";
+import {RootState} from "@/Core/store/store";
+import {setOptionData} from "@/Core/store/userDataReducer";
+import {playSpeed, textSize} from "@/Core/interface/stateInterface/userDataInterface";
 
 export const Options: FC = () => {
-    const userDataStorage = useStore(userDataStateStore);
+    const userDataState = useSelector((state: RootState) => state.userData);
+    const dispatch = useDispatch();
     useEffect(getStorage, []);
     return <div className={styles.Options_main}>
         <div className={styles.Options_top}>
@@ -26,53 +28,53 @@ export const Options: FC = () => {
                 <NormalOption key="option0" title="文字显示速度">
                     <NormalButton textList={['慢', '中', '快']} functionList={[
                         () => {
-                            userDataStorage.setOptionData('textSpeed', 0);
+                            dispatch(setOptionData({key: 'textSpeed', value: playSpeed.slow}));
                             setStorage();
                         },
                         () => {
-                            userDataStorage.setOptionData('textSpeed', 1);
+                            dispatch(setOptionData({key: 'textSpeed', value: playSpeed.normal}));
                             setStorage();
                         },
                         () => {
-                            userDataStorage.setOptionData('textSpeed', 2);
+                            dispatch(setOptionData({key: 'textSpeed', value: playSpeed.fast}));
                             setStorage();
                         },
                     ]}
-                                  currentChecked={userDataStorage.userDataState.optionData.textSpeed}/>
+                                  currentChecked={userDataState.optionData.textSpeed}/>
                 </NormalOption>
                 <NormalOption key="option1" title="自动播放速度">
                     <NormalButton textList={['慢', '中', '快']} functionList={[
                         () => {
-                            userDataStorage.setOptionData('autoSpeed', 0);
+                            dispatch(setOptionData({key: 'autoSpeed', value: playSpeed.slow}));
                             setStorage();
                         },
                         () => {
-                            userDataStorage.setOptionData('autoSpeed', 1);
+                            dispatch(setOptionData({key: 'autoSpeed', value: playSpeed.normal}));
                             setStorage();
                         },
                         () => {
-                            userDataStorage.setOptionData('autoSpeed', 2);
+                            dispatch(setOptionData({key: 'autoSpeed', value: playSpeed.fast}));
                             setStorage();
                         },
                     ]}
-                                  currentChecked={userDataStorage.userDataState.optionData.autoSpeed}/>
+                                  currentChecked={userDataState.optionData.autoSpeed}/>
                 </NormalOption>
                 <NormalOption key="option2" title="文本大小">
                     <NormalButton textList={['小', '中', '大']} functionList={[
                         () => {
-                            userDataStorage.setOptionData('textSize', 0);
+                            dispatch(setOptionData({key: 'textSize', value: textSize.small}));
                             setStorage();
                         },
                         () => {
-                            userDataStorage.setOptionData('textSize', 1);
+                            dispatch(setOptionData({key: 'textSize', value: textSize.medium}));
                             setStorage();
                         },
                         () => {
-                            userDataStorage.setOptionData('textSize', 2);
+                            dispatch(setOptionData({key: 'textSize', value: textSize.large}));
                             setStorage();
                         },
                     ]}
-                                  currentChecked={userDataStorage.userDataState.optionData.textSize}/>
+                                  currentChecked={userDataState.optionData.textSize}/>
                 </NormalOption>
                 <NormalOption key="option3" title="文本显示预览">
                     {/* 这是一个临时的组件，用于模拟文本预览的效果 */}
@@ -82,31 +84,31 @@ export const Options: FC = () => {
             </div>
             <div className={styles.Options_main_content_half}>
                 <NormalOption key="option4" title="主音量">
-                    <OptionSlider initValue={userDataStorage.userDataState.optionData.volumeMain}
+                    <OptionSlider initValue={userDataState.optionData.volumeMain}
                                   uniqueID="主音量" onChange={(event) => {
                         const newValue = event.target.value;
-                        userDataStorage.setOptionData('volumeMain', Number(newValue));
+                        dispatch(setOptionData({key: 'volumeMain', value: Number(newValue)}));
                         setStorage();
-                        eventSender('setVolume_target',0,10);
+                        eventSender('setVolume_target', 0, 10);
                     }}
                     />
                 </NormalOption>
                 <NormalOption key="option5" title="语音音量">
-                    <OptionSlider initValue={userDataStorage.userDataState.optionData.vocalVolume}
+                    <OptionSlider initValue={userDataState.optionData.vocalVolume}
                                   uniqueID="语音音量" onChange={(event) => {
                         const newValue = event.target.value;
-                        userDataStorage.setOptionData('vocalVolume', Number(newValue));
+                        dispatch(setOptionData({key: 'vocalVolume', value: Number(newValue)}));
                         setStorage();
-                        eventSender('setVolume_target',0,10);
+                        eventSender('setVolume_target', 0, 10);
                     }}/>
                 </NormalOption>
                 <NormalOption key="option6" title="背景音乐音量">
-                    <OptionSlider initValue={userDataStorage.userDataState.optionData.bgmVolume}
+                    <OptionSlider initValue={userDataState.optionData.bgmVolume}
                                   uniqueID="背景音乐音量" onChange={(event) => {
                         const newValue = event.target.value;
-                        userDataStorage.setOptionData('bgmVolume', Number(newValue));
+                        dispatch(setOptionData({key: 'bgmVolume', value: Number(newValue)}));
                         setStorage();
-                        eventSender('setVolume_target',0,10);
+                        eventSender('setVolume_target', 0, 10);
                     }}/>
                 </NormalOption>
             </div>

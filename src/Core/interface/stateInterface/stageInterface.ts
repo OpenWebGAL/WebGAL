@@ -1,12 +1,12 @@
-import { IRunPerform } from '../coreInterface/performInterface';
+import {IRunPerform} from '../coreInterface/performInterface';
 
 /**
  * 游戏内变量
  * @interface IGameVar
  */
 export interface IGameVar {
-    key:string // 变量名称是字符串
-    value: string | boolean | number // 游戏内变量可以是字符串、布尔值、数字
+    key: string; // 变量名称是字符串
+    value: string | boolean | number; // 游戏内变量可以是字符串、布尔值、数字
 }
 
 /**
@@ -14,9 +14,9 @@ export interface IGameVar {
  * @interface IChooseItem
  */
 export interface IChooseItem {
-    key: string // 选项名称
-    targetScene: string // 选项target
-    isSubScene: boolean // 是否是子场景调用
+    key: string; // 选项名称
+    targetScene: string; // 选项target
+    isSubScene: boolean; // 是否是子场景调用
 }
 
 /**
@@ -24,9 +24,9 @@ export interface IChooseItem {
  * @interface IEffect
  */
 export interface IEffect {
-    target: string // 作用目标
-    transform: string // 变换
-    filter: string // 效果
+    target: string; // 作用目标
+    transform: string; // 变换
+    filter: string; // 效果
 }
 
 /**
@@ -47,14 +47,24 @@ export interface IStageState {
     miniAvatar: string // 小头像 文件地址（相对或绝对）
     GameVar: Array<IGameVar> // 游戏内变量
     effects: Array<IEffect> // 应用的变换
-    bgTransform:string,
-    bgFilter:string,
+    bgTransform: string,
+    bgFilter: string,
     PerformList: Array<IRunPerform> // 要启动的演出列表
 }
+
+/**
+ * @interface ISetStagePayload 设置舞台状态的Action的Payload的数据接口
+ */
+export interface ISetStagePayload {
+    key: keyof IStageState,
+    value: any
+}
+
 export interface IStageStore {
     stageState: IStageState;
     setStage: <K extends keyof IStageState>(key: K, value: any) => void;
     getStageState: () => IStageState;
     restoreStage: (newState: IStageState) => void;
 }
-export type StageStore=IStageStore;
+
+export type StageStore = IStageStore;
