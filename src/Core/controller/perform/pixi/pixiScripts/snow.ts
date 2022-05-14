@@ -1,5 +1,5 @@
 import * as PIXI from "pixi.js";
-import {runtime_gamePlay} from "../../../../../Core/runtime/gamePlay";
+import {runtime_gamePlay} from "@/Core/runtime/gamePlay";
 
 export const pixiSnow = (snowSpeed:number) => {
     // 动画参数

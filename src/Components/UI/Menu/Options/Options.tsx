@@ -5,11 +5,11 @@ import {NormalOption} from "./NormalOption";
 import {OptionSlider} from "./OptionSlider";
 import {getStorage, setStorage} from "@/Core/controller/storage/storageController";
 import {TextPreview} from "./TextPreview/TextPreview";
-import {eventSender} from "@/Core/controller/eventBus/eventSender";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "@/Core/store/store";
 import {setOptionData} from "@/Core/store/userDataReducer";
 import {playSpeed, textSize} from "@/Core/interface/stateInterface/userDataInterface";
+import {setVolume} from "@/Core/util/setVolume";
 
 export const Options: FC = () => {
     const userDataState = useSelector((state: RootState) => state.userData);
@@ -89,7 +89,7 @@ export const Options: FC = () => {
                         const newValue = event.target.value;
                         dispatch(setOptionData({key: 'volumeMain', value: Number(newValue)}));
                         setStorage();
-                        eventSender('setVolume_target', 0, 10);
+                        setVolume();
                     }}
                     />
                 </NormalOption>
@@ -99,7 +99,7 @@ export const Options: FC = () => {
                         const newValue = event.target.value;
                         dispatch(setOptionData({key: 'vocalVolume', value: Number(newValue)}));
                         setStorage();
-                        eventSender('setVolume_target', 0, 10);
+                        setVolume();
                     }}/>
                 </NormalOption>
                 <NormalOption key="option6" title="背景音乐音量">
@@ -108,7 +108,7 @@ export const Options: FC = () => {
                         const newValue = event.target.value;
                         dispatch(setOptionData({key: 'bgmVolume', value: Number(newValue)}));
                         setStorage();
-                        eventSender('setVolume_target', 0, 10);
+                        setVolume();
                     }}/>
                 </NormalOption>
             </div>

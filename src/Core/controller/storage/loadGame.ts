@@ -4,12 +4,13 @@ import {ISaveData} from '../../interface/stateInterface/userDataInterface';
 import {runtime_gamePlay} from '../../runtime/gamePlay';
 import * as _ from 'lodash';
 import {logger} from '../../util/logger';
-import {eventSender} from '../eventBus/eventSender';
 import {sceneFetcher} from '../../util/sceneFetcher';
 import {sceneParser} from '../../parser/sceneParser';
 import {webgalStore} from "@/Core/store/store";
 import {resetStageState} from "@/Core/store/stageReducer";
 import {setVisibility} from "@/Core/store/GUIReducer";
+import { restorePerform } from './jumpFromBacklog';
+import {stopAllPerform} from "@/Core/controller/gamePlay/stopAllPerform";
 
 /**
  * 读取游戏存档
@@ -32,14 +33,7 @@ export const loadGame = (index: number) => {
     runtime_currentSceneData.sceneStack = _.cloneDeep(loadFile.sceneData.sceneStack);
 
     // 强制停止所有演出
-    logger.warn('清除所有演出');
-    for (let i = 0; i < runtime_gamePlay.performList.length; i++) {
-        const e = runtime_gamePlay.performList[i];
-        e.stopFunction();
-        clearTimeout(e.stopTimeout);
-        runtime_gamePlay.performList.splice(i, 1);
-        i--;
-    }
+    stopAllPerform();
 
     // 恢复backlog
     const newBacklog = loadFile.backlog;
@@ -54,7 +48,7 @@ export const loadGame = (index: number) => {
     dispatch(resetStageState(newStageState));
 
     // 恢复演出
-    eventSender('restorePerform_target', 0, 1);
+    restorePerform();
 
     dispatch(setVisibility({component: 'showTitle', visibility: false}));
     dispatch(setVisibility({component: 'showMenuPanel', visibility: false}));
