@@ -1,13 +1,13 @@
-import {ISentence} from '../../../interface/coreInterface/sceneInterface';
-import {IPerform} from '../../../interface/coreInterface/performInterface';
+import {ISentence} from '@/Core/interface/coreInterface/sceneInterface';
+import {IPerform} from '@/Core/interface/coreInterface/performInterface';
 import React from "react";
 import ReactDOM from "react-dom";
-import {runtime_gamePlay} from "../../../../Core/runtime/gamePlay";
-import {unmountPerform} from "../../../../Core/controller/perform/unmountPerform";
-import {getRandomPerformName} from "../../../../Core/util/getRandomPerformName";
+import {runtime_gamePlay} from "@/Core/runtime/gamePlay";
+import {unmountPerform} from "@/Core/controller/perform/unmountPerform";
+import {getRandomPerformName} from "@/Core/util/getRandomPerformName";
 import styles from '../../../../Components/Stage/FullScreenPerform/fullScreenPerform.module.scss';
-import {getRef} from "../../../../Core/store/storeRef";
 import {eventSender} from "@/Core/controller/eventBus/eventSender";
+import {webgalStore} from "@/Core/store/store";
 
 /**
  * 播放一段视频
@@ -38,10 +38,10 @@ export const playVideo = (sentence: ISentence): IPerform => {
                     /**
                      * 恢复音量
                      */
-                    const userDataStore = getRef('userDataRef')!.current;
-                    const mainVol = userDataStore!.userDataState.optionData.volumeMain;
-                    const vocalVol = mainVol * 0.01 * userDataStore!.userDataState.optionData.vocalVolume * 0.01;
-                    const bgmVol = mainVol * 0.01 * userDataStore!.userDataState.optionData.bgmVolume * 0.01;
+                    const userDataState = webgalStore.getState().userData;
+                    const mainVol = userDataState.optionData.volumeMain;
+                    const vocalVol = mainVol * 0.01 * userDataState.optionData.vocalVolume * 0.01;
+                    const bgmVol = mainVol * 0.01 * userDataState.optionData.bgmVolume * 0.01;
                     const bgmElement: any = document.getElementById('currentBgm');
                     if (bgmElement) {
                         bgmElement.volume = bgmVol.toString();
@@ -52,7 +52,7 @@ export const playVideo = (sentence: ISentence): IPerform => {
                     }
                     ReactDOM.render(<div/>
                         , document.getElementById('videoContainer'));
-                    eventSender('nextSentence_target',0,0);
+                    eventSender('nextSentence_target', 0, 0);
                 },
                 blockingNext: () => false,
                 blockingAuto: () => true,

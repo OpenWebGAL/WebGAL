@@ -1,9 +1,10 @@
-import { ISentence } from '../../../interface/coreInterface/sceneInterface';
-import { getRandomPerformName } from '../../../util/getRandomPerformName';
-import { getRef } from '../../../store/storeRef';
-import { runtime_gamePlay } from '../../../runtime/gamePlay';
-import { unmountPerform } from '../../perform/unmountPerform';
-import { logger } from '../../../util/logger';
+import {ISentence} from '@/Core/interface/coreInterface/sceneInterface';
+import {getRandomPerformName} from '@/Core/util/getRandomPerformName';
+import {runtime_gamePlay} from '@/Core/runtime/gamePlay';
+import {unmountPerform} from '../../perform/unmountPerform';
+import {logger} from '@/Core/util/logger';
+import {webgalStore} from "@/Core/store/store";
+import {setStage} from "@/Core/store/stageReducer";
 
 /**
  * 播放一段语音
@@ -25,7 +26,7 @@ export const playVocal = (sentence: ISentence) => {
         VocalControl.pause();
     }
     // 获得舞台状态
-    getRef('stageRef')!.current!.setStage('vocal', url);
+    webgalStore.dispatch(setStage({key: 'vocal', value: url}));
     // 播放语音
     setTimeout(() => {
         let VocalControl: any = document.getElementById('currentVocal');
@@ -39,7 +40,8 @@ export const playVocal = (sentence: ISentence) => {
                     duration: 1000 * 60 * 60,
                     isOver: false,
                     isHoldOn: true,
-                    stopFunction: () => {},
+                    stopFunction: () => {
+                    },
                     blockingNext: () => false,
                     blockingAuto: () => true,
                     stopTimeout: undefined, // 暂时不用，后面会交给自动清除

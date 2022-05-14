@@ -1,9 +1,10 @@
 import {ISentence} from '../../../interface/coreInterface/sceneInterface';
-import {getRef} from '../../../store/storeRef';
 import {IPerform} from '../../../interface/coreInterface/performInterface';
 import styles from '../../../../Components/Stage/TextBox/textbox.module.scss';
 import {getRandomPerformName} from '../../../util/getRandomPerformName';
 import {playVocal} from './playVocal';
+import {webgalStore} from "@/Core/store/store";
+import {setStage} from "@/Core/store/stageReducer";
 
 /**
  * 进行普通对话的显示
@@ -11,14 +12,15 @@ import {playVocal} from './playVocal';
  * @return {IPerform} 执行的演出
  */
 export const say = (sentence: ISentence): IPerform => {
-    const stageStore= getRef('stageRef')!.current;
-    const userDataStore = getRef('userDataRef')!.current;
+    const stageState = webgalStore.getState().stage;
+    const userDataState = webgalStore.getState().userData;
+    const dispatch = webgalStore.dispatch;
     // 设置文本显示
-    stageStore!.setStage('showText', sentence.content);
+    dispatch(setStage({key: "showText", value: sentence.content}));
     // 清除语音
-    stageStore!.setStage('vocal', '');
+    dispatch(setStage({key: "vocal", value: ''}));
     // 设置显示的角色名称
-    let showName :string | number | boolean = stageStore!.stageState.showName; // 先默认继承
+    let showName: string | number | boolean = stageState.showName; // 先默认继承
     for (const e of sentence.args) {
         if (e.key === 'speaker') {
             showName = e.value;
@@ -30,7 +32,7 @@ export const say = (sentence: ISentence): IPerform => {
             playVocal(sentence);
         }
     }
-    stageStore!.setStage('showName', showName);
+    dispatch(setStage({key: "showName", value: showName}));
     setTimeout(() => {
         const textElements = document.querySelectorAll('.' + styles.TextBox_textElement_start);
         const textArray = [...textElements];
@@ -39,8 +41,8 @@ export const say = (sentence: ISentence): IPerform => {
         });
     }, 0);
     const performInitName: string = getRandomPerformName();
-    const textDelay = 55 - 20 * userDataStore!.userDataState.optionData.textSpeed;
-    const endDelay = 750 - userDataStore!.userDataState.optionData.textSpeed * 250;
+    const textDelay = 55 - 20 * userDataState.optionData.textSpeed;
+    const endDelay = 750 - userDataState.optionData.textSpeed * 250;
     return {
         performName: performInitName,
         duration: sentence.content.length * textDelay + endDelay,

@@ -1,6 +1,5 @@
 import {commandType, ISentence} from '../../interface/coreInterface/sceneInterface';
 import {runtime_currentBacklog} from '../../runtime/backlog';
-import {getRef} from '../../store/storeRef';
 import {runtime_currentSceneData} from '../../runtime/sceneData';
 import {runScript} from './runScript';
 import {logger} from '../../util/logger';
@@ -8,6 +7,7 @@ import {IStageState} from '../../interface/stateInterface/stageInterface';
 import * as _ from 'lodash';
 import {restoreScene} from '../scene/restoreScene';
 import {IBacklogItem, sceneEntry} from '../../interface/coreInterface/runtimeInterface';
+import {webgalStore} from "@/Core/store/store";
 
 /**
  * 语句执行器
@@ -59,8 +59,7 @@ export const scriptExecutor = (runToSentence: number) => {
      */
     setTimeout(() => {
         // 同步当前舞台数据
-        const currentStageStoreRef = getRef('stageRef')!.current;
-        currentStageState = currentStageStoreRef!.getStageState();
+        currentStageState = webgalStore.getState().stage;
         logger.debug('本条语句执行结果', currentStageState);
         // 保存 backlog
         if (isSaveBacklog) {
