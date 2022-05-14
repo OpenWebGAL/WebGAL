@@ -9,8 +9,8 @@ import {assetSetter, fileType} from './util/assetSetter';
 import {sceneFetcher} from './util/sceneFetcher';
 import {runtime_currentSceneData} from './runtime/sceneData';
 import {sceneParser} from './parser/sceneParser';
-import {setVolume} from "../Core/util/setVolume";
-import {pixiController} from "../Core/controller/perform/pixi/pixiController";
+import {setVolume} from "@/Core/util/setVolume";
+import {pixiController} from "@/Core/controller/perform/pixi/pixiController";
 import {bindExtraFunc} from "@/Core/util/bindExtraFunc";
 import {webSocketFunc} from "@/Core/util/webSocketFunc";
 
@@ -19,7 +19,7 @@ import {webSocketFunc} from "@/Core/util/webSocketFunc";
  */
 export const initializeScript = (): void => {
     // 打印初始log信息
-    logger.info('WebGAL 4.0.5');
+    logger.info('WebGAL 4.1.0');
     logger.info('Github: https://github.com/MakinoharaShoko/WebGAL ');
     logger.info('Made with ❤ by MakinoharaShoko');
     // 激活强制缩放

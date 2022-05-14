@@ -1,10 +1,10 @@
-import {ISentence} from '../../../interface/coreInterface/sceneInterface';
-import {IPerform} from '../../../interface/coreInterface/performInterface';
-import {changeScene} from "../../../../Core/controller/scene/changeScene";
-import {jmp} from "../../../../Core/controller/gamePlay/scripts/function/jmp";
+import {ISentence} from '@/Core/interface/coreInterface/sceneInterface';
+import {IPerform} from '@/Core/interface/coreInterface/performInterface';
+import {changeScene} from "@/Core/controller/scene/changeScene";
+import {jmp} from "@/Core/controller/gamePlay/scripts/function/jmp";
 import ReactDOM from "react-dom";
 import React from "react";
-import {unmountPerform} from "../../../../Core/controller/perform/unmountPerform";
+import {unmountPerform} from "@/Core/controller/perform/unmountPerform";
 import styles from './performStyles/choose.module.scss';
 
 /**

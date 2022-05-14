@@ -3,7 +3,7 @@ module.exports = {
     // 一行最多 120 字符
     printWidth: 120,
     // 使用 n 个空格缩进
-    tabWidth: 4,
+    tabWidth: 2,
     // 不使用缩进符，而使用空格
     useTabs: false,
     // 行尾需要有分号
