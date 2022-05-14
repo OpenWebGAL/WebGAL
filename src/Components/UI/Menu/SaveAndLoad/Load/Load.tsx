@@ -1,24 +1,26 @@
-import { FC } from 'react';
-import { loadGame } from '../../../../../Core/controller/storage/loadGame';
+import {FC} from 'react';
+import {loadGame} from '@/Core/controller/storage/loadGame';
 import styles from '../SaveAndLoad.module.scss';
-import { useStore } from 'reto';
-import { userDataStateStore } from '../../../../../Core/store/userData';
-import { saveGame } from '../../../../../Core/controller/storage/saveGame';
-import { setStorage } from '../../../../../Core/controller/storage/storageController';
+// import {saveGame} from '@/Core/controller/storage/saveGame';
+import {setStorage} from '@/Core/controller/storage/storageController';
+import {useDispatch, useSelector} from "react-redux";
+import {RootState} from "@/Core/store/store";
+import {setSlPage} from "@/Core/store/userDataReducer";
 
 export const Load: FC = () => {
-    const userData = useStore(userDataStateStore);
+    const userDataState = useSelector((state: RootState) => state.userData);
+    const dispatch = useDispatch();
     const page = [];
     for (let i = 1; i <= 20; i++) {
         let classNameOfElement = styles.Save_Load_top_button + ' ' + styles.Load_top_button;
-        if (i === userData.userDataState.optionData.slPage) {
+        if (i === userDataState.optionData.slPage) {
             classNameOfElement =
                 classNameOfElement + ' ' + styles.Save_Load_top_button_on + ' ' + styles.Load_top_button_on;
         }
         const element = (
             <div
                 onClick={() => {
-                    userData.setSlPage(i);
+                    dispatch(setSlPage(i));
                     setStorage();
                 }}
                 key={'Load_element_page' + i}
@@ -32,13 +34,13 @@ export const Load: FC = () => {
 
     const showSaves = [];
     // 现在尝试设置10个存档每页
-    const start = (userData.userDataState.optionData.slPage - 1) * 10 + 1;
+    const start = (userDataState.optionData.slPage - 1) * 10 + 1;
     const end = start + 9;
     let animationIndex = 0;
     for (let i = start; i <= end; i++) {
         animationIndex++;
-        const saveData = userData.userDataState.saveData[i];
-        let saveElementContent = <div />;
+        const saveData = userDataState.saveData[i];
+        let saveElementContent = <div/>;
         if (saveData) {
             const speaker = saveData.nowStageState.showName === '' ? '' : `${saveData.nowStageState.showName}`;
             saveElementContent = (
@@ -68,7 +70,7 @@ export const Load: FC = () => {
                             />
                         )}
                         {saveData.nowStageState.bgName === '' && (
-                            <div style={{ background: 'rgba(0,0,0,0.6)', width: '100%', height: '100%' }} />
+                            <div style={{background: 'rgba(0,0,0,0.6)', width: '100%', height: '100%'}}/>
                         )}
                         {saveData.nowStageState.figNameLeft !== '' && (
                             <img
@@ -128,7 +130,7 @@ export const Load: FC = () => {
                 onClick={() => loadGame(i)}
                 key={'loadElement_' + i}
                 className={styles.Save_Load_content_element}
-                style={{ animationDelay: `${animationIndex * 30}ms` }}
+                style={{animationDelay: `${animationIndex * 30}ms`}}
             >
                 {saveElementContent}
             </div>
@@ -146,7 +148,7 @@ export const Load: FC = () => {
             </div>
             <div
                 className={styles.Save_Load_content}
-                id={'Load_content_page_' + userData.userDataState.optionData.slPage}
+                id={'Load_content_page_' + userDataState.optionData.slPage}
             >
                 {showSaves}
             </div>

@@ -1,10 +1,11 @@
 import {runtime_currentSceneData} from '../../runtime/sceneData';
-import {getRef} from '../../store/storeRef';
 import {assetSetter, fileType} from '../../util/assetSetter';
 import {sceneFetcher} from '../../util/sceneFetcher';
 import {sceneParser} from '../../parser/sceneParser';
 import {eventSender} from "@/Core/controller/eventBus/eventSender";
 import {resetStage} from "@/Core/util/resetStage";
+import {webgalStore} from "@/Core/store/store";
+import {setVisibility} from "@/Core/store/GUIReducer";
 
 /**
  * 从头开始游戏
@@ -20,5 +21,5 @@ export const startGame = () => {
         // 开始第一条语句
         eventSender('nextSentence_target', 0, 0);
     });
-    getRef('GuiRef')!.current!.setVisibility('showTitle', false);
+    webgalStore.dispatch(setVisibility({component: "showTitle", visibility: false}));
 };

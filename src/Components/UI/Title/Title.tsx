@@ -1,30 +1,33 @@
 import {FC} from 'react';
 import styles from './title.module.scss';
-import {useStore} from 'reto';
-import {GuiStateStore, MenuPanelTag} from '../../../Core/store/GUI';
-import {playBgm} from '../../../Core/util/playBgm';
-import {startGame} from '../../../Core/controller/gamePlay/startGame';
+import {playBgm} from '@/Core/util/playBgm';
+import {startGame} from '@/Core/controller/gamePlay/startGame';
 import {runtime_currentSceneData} from "@/Core/runtime/sceneData";
 import {eventSender} from "@/Core/controller/eventBus/eventSender";
+import {useDispatch, useSelector} from "react-redux";
+import {RootState} from "@/Core/store/store";
+import {setMenuPanelTag, setVisibility} from "@/Core/store/GUIReducer";
+import {MenuPanelTag} from '@/Core/interface/stateInterface/guiInterface';
 
 /**
  * 标题页
  * @constructor
  */
 const Title: FC = () => {
-    const GuiStore = useStore(GuiStateStore);
-    const background = GuiStore.GuiState.titleBg;
+    const GUIState = useSelector((state: RootState) => state.GUI);
+    const dispatch = useDispatch();
+    const background = GUIState.titleBg;
     const showBackground = background === '' ? 'rgba(0,0,0,1)' : `url("${background}")`;
     return (
         <>
-            {GuiStore.GuiState.showTitle && <div className={styles.Title_backup_background}/>}
+            {GUIState.showTitle && <div className={styles.Title_backup_background}/>}
             <div
                 id="play_title_bgm_target"
                 onClick={() => {
-                    playBgm(GuiStore.GuiState.titleBgm);
+                    playBgm(GUIState.titleBgm);
                 }}
             />
-            {GuiStore.GuiState.showTitle && (
+            {GUIState.showTitle && (
                 <div
                     className={styles.Title_main}
                     style={{
@@ -38,7 +41,7 @@ const Title: FC = () => {
                             <div className={styles.Title_button_text}>START</div>
                         </div>
                         <div className={styles.Title_button} onClick={() => {
-                            GuiStore.setVisibility('showTitle', false);
+                            dispatch(setVisibility({component: "showTitle", visibility: false}));
                             if (runtime_currentSceneData.currentSentenceId === 0 &&
                                 runtime_currentSceneData.currentScene.sceneName === 'start.txt') {
                                 // 如果游戏没有开始，开始游戏
@@ -51,8 +54,8 @@ const Title: FC = () => {
                         <div
                             className={styles.Title_button}
                             onClick={() => {
-                                GuiStore.setVisibility('showMenuPanel', true);
-                                GuiStore.setMenuPanelTag(MenuPanelTag.Option);
+                                dispatch(setVisibility({component: 'showMenuPanel', visibility: true}));
+                                dispatch(setMenuPanelTag(MenuPanelTag.Option));
                             }}
                         >
                             <div className={styles.Title_button_text + ' ' + styles.Title_button_text_up}>游戏选项</div>
@@ -61,8 +64,8 @@ const Title: FC = () => {
                         <div
                             className={styles.Title_button}
                             onClick={() => {
-                                GuiStore.setVisibility('showMenuPanel', true);
-                                GuiStore.setMenuPanelTag(MenuPanelTag.Load);
+                                dispatch(setVisibility({component: 'showMenuPanel', visibility: true}));
+                                dispatch(setMenuPanelTag(MenuPanelTag.Load,));
                             }}
                         >
                             <div className={styles.Title_button_text + ' ' + styles.Title_button_text_up}>读取存档</div>

@@ -1,8 +1,10 @@
-import {commandType, ISentence} from '../../../interface/coreInterface/sceneInterface';
-import {IPerform, IRunPerform} from '../../../interface/coreInterface/performInterface';
-import {runtime_gamePlay} from "../../../../Core/runtime/gamePlay";
-import {logger} from "../../../../Core/util/logger";
-import {getRef} from "../../../../Core/store/storeRef";
+import {commandType, ISentence} from '@/Core/interface/coreInterface/sceneInterface';
+import {IPerform, IRunPerform} from '@/Core/interface/coreInterface/performInterface';
+import {runtime_gamePlay} from "@/Core/runtime/gamePlay";
+import {logger} from "@/Core/util/logger";
+import {webgalStore} from "@/Core/store/store";
+import _ from 'lodash';
+import {resetStageState} from "@/Core/store/stageReducer";
 
 /**
  * 初始化pixi
@@ -27,14 +29,16 @@ export const pixiInit = (sentence: ISentence): IPerform => {
                 /**
                  * 从状态表里清除演出
                  */
-                const stageStore = getRef('stageRef')!.current;
-                for (let i = 0; i < stageStore!.stageState.PerformList.length; i++) {
-                    const e2: IRunPerform = stageStore!.stageState.PerformList[i];
+                const stageState = webgalStore.getState().stage;
+                const newStageState = _.cloneDeep(stageState);
+                for (let i = 0; i < newStageState.PerformList.length; i++) {
+                    const e2: IRunPerform = newStageState.PerformList[i];
                     if (e2.script.command === commandType.pixi) {
-                        stageStore!.stageState.PerformList.splice(i, 1);
+                        newStageState.PerformList.splice(i, 1);
                         i--;
                     }
                 }
+                webgalStore.dispatch(resetStageState(newStageState));
             }
         }
     );

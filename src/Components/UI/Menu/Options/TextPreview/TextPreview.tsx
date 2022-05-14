@@ -1,15 +1,16 @@
 import React from "react";
 import styles from "./textPreview.module.scss";
-import {useStore} from "reto";
-import {playSpeed, userDataStateStore} from "../../../../../Core/store/userData";
+import {useSelector} from "react-redux";
+import {RootState} from "@/Core/store/store";
+import {playSpeed} from "@/Core/interface/stateInterface/userDataInterface";
 
 export const TextPreview = (props: any) => {
-    const userDataStorage = useStore(userDataStateStore);
-    const textDelay = 55 - 20 * userDataStorage.userDataState.optionData.textSpeed;
+    const userDataState = useSelector((state: RootState) => state.userData);
+    const textDelay = 55 - 20 * userDataState.optionData.textSpeed;
     const previewText = '现在预览的是文本框字体大小和播放速度的情况，您可以根据您的观感调整上面的选项。';
-    const size = userDataStorage.userDataState.optionData.textSize * 50 + 200 + '%';
+    const size = userDataState.optionData.textSize * 50 + 200 + '%';
     let classNameText = styles.singleText;
-    switch (userDataStorage.userDataState.optionData.textSpeed) {
+    switch (userDataState.optionData.textSpeed) {
         case playSpeed.normal:
             classNameText = styles.singleText;
             break;

@@ -1,18 +1,17 @@
-import {nextSentence} from "../../../Core/controller/gamePlay/nextSentence";
-import {runScript} from "../../../Core/controller/gamePlay/runScript";
-import {getRef} from "../../../Core/store/storeRef";
-import {runtime_gamePlay} from "../../../Core/runtime/gamePlay";
-import {useStore} from "reto";
-import {stageStateStore} from "../../../Core/store/stage";
+import {nextSentence} from "@/Core/controller/gamePlay/nextSentence";
+import {runScript} from "@/Core/controller/gamePlay/runScript";
+import {runtime_gamePlay} from "@/Core/runtime/gamePlay";
 import {setVolume} from "@/Core/util/setVolume";
+import {useSelector} from "react-redux";
+import {RootState} from "@/Core/store/store";
 
 export const EventHandler = () => {
-    const stageStore = useStore(stageStateStore);
+    const stageStore = useSelector((webgalStore: RootState) => webgalStore.stage);
     const restoreOne = (index: number) => {
-        runScript(getRef('stageRef')!.current!.stageState.PerformList[index].script);
+        runScript(stageStore.PerformList[index].script);
     };
     const restorePerform = () => {
-        const len = getRef('stageRef')!.current!.stageState.PerformList.length;
+        const len = stageStore.PerformList.length;
         for (let i = 0; i < len; i++) {
             const event = new MouseEvent('click', {
                 'view': window,
@@ -33,8 +32,8 @@ export const EventHandler = () => {
     };
 
     return <div>
-        <audio id="currentBgm" src={stageStore.stageState.bgm} loop={true} autoPlay={true}/>
-        <audio id="currentVocal" src={stageStore.stageState.vocal}/>
+        <audio id="currentBgm" src={stageStore.bgm} loop={true} autoPlay={true}/>
+        <audio id="currentVocal" src={stageStore.vocal}/>
         <div id="nextSentence_target" onClick={autoNextSentence}/>
         <div id="restoreOne_target" style={{display: 'none'}} onClick={(event) => restoreOne(event.clientX)}/>
         <div id="restorePerform_target" onClick={restorePerform} style={{display: 'none'}}/>
