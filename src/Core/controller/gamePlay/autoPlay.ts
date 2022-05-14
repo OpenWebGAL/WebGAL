@@ -1,8 +1,8 @@
 import {runtime_gamePlay} from '../../runtime/gamePlay';
 import {eventSender} from '../eventBus/eventSender';
-import {logger} from '../../util/logger';
+// import {logger} from '../../util/logger';
 import styles from '../../../Components/UI/BottomControlPanel/bottomControlPanel.module.scss';
-import {getRef} from "../../../Core/store/storeRef";
+import {webgalStore} from '@/Core/store/store';
 
 /**
  * 设置 autoplay 按钮的激活与否
@@ -57,7 +57,8 @@ export const switchAuto = () => {
  * 自动播放的执行函数
  */
 const autoPlay = () => {
-    const autoPlayDelay = 750 - 250 * getRef('userDataRef')!.current!.userDataState.optionData.autoSpeed;
+    const delay = webgalStore.getState().userData.optionData.autoSpeed;
+    const autoPlayDelay = 750 - 250 * delay;
     let isBlockingAuto = false;
     runtime_gamePlay.performList.forEach((e) => {
         if (e.blockingAuto() && !e.isOver)

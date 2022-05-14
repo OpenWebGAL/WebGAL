@@ -1,21 +1,22 @@
 import {FC, useEffect} from "react";
 import styles from './mainStage.module.scss';
-import {useStore} from "reto";
 import {TextBox} from "./TextBox/TextBox";
-import {stageStateStore} from "../../Core/store/stage";
 import {FigureContainer} from "./FigureContainer/FigureContainer";
 import {EventHandler} from "./EventHandler/EventHandler";
-import {GuiStateStore} from "../../Core/store/GUI";
 import {FullScreenPerform} from "./FullScreenPerform/FullScreenPerform";
-import {nextSentence} from "../../Core/controller/gamePlay/nextSentence";
-import {stopAll} from "../../Core/controller/gamePlay/fastSkip";
+import {nextSentence} from "@/Core/controller/gamePlay/nextSentence";
+import {stopAll} from "@/Core/controller/gamePlay/fastSkip";
 import {IEffect} from "@/Core/interface/stateInterface/stageInterface";
+import {useDispatch, useSelector} from "react-redux";
+import {RootState} from "@/Core/store/store";
+import {setVisibility} from "@/Core/store/GUIReducer";
 
 export const MainStage: FC = () => {
-    const stageStore = useStore(stageStateStore);
-    const GuiState = useStore(GuiStateStore);
+    const stageState = useSelector((state: RootState) => state.stage);
+    const GUIState = useSelector((state: RootState) => state.GUI);
+    const dispatch = useDispatch();
     useEffect(() => {
-        const effectList: Array<IEffect> = stageStore.stageState.effects;
+        const effectList: Array<IEffect> = stageState.effects;
 
         // 设置效果
         setTimeout(() => {
@@ -44,26 +45,26 @@ export const MainStage: FC = () => {
         }, 100);
     });
     return <div className={styles.MainStage_main}>
-        <div key={'bgOld' + stageStore.stageState.oldBgName}
+        <div key={'bgOld' + stageState.oldBgName}
              id="MainStage_bg_OldContainer"
              className={styles.MainStage_oldBgContainer} style={{
-            backgroundImage: `url("${stageStore.stageState.oldBgName}")`,
+            backgroundImage: `url("${stageState.oldBgName}")`,
             backgroundSize: "cover"
         }}/>
-        <div key={'bgMain' + stageStore.stageState.bgName}
+        <div key={'bgMain' + stageState.bgName}
              id="MainStage_bg_MainContainer"
              className={styles.MainStage_bgContainer} style={{
-            backgroundImage: `url("${stageStore.stageState.bgName}")`,
+            backgroundImage: `url("${stageState.bgName}")`,
             backgroundSize: "cover"
         }}/>
         <FigureContainer/>
-        {GuiState.GuiState.showTextBox && <TextBox/>}
+        {GUIState.showTextBox && <TextBox/>}
         <EventHandler/>
         <FullScreenPerform/>
         <div onClick={() => {
             // 如果文本框没有显示，则显示文本框
-            if(!GuiState.GuiState.showTextBox){
-                GuiState.setVisibility('showTextBox',true);
+            if (!GUIState.showTextBox) {
+                dispatch(setVisibility({component: 'showTextBox', visibility: true}));
                 return;
             }
             stopAll();
