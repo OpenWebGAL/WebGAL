@@ -140,6 +140,6 @@ src
 |     |   ├─FigureContainer
 |     |   |        ├─FigureContainer.tsx
 |     |   |        └figureContainer.module.scss
-|     |   ├─EventHandler
-|     |   |      └EventHandler.tsx
+|     |   ├─AudioContainer
+|     |   |      └AudioContainer.tsx
 ```
