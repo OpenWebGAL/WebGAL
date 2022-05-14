@@ -1,12 +1,14 @@
 import axios from 'axios';
 import {logger} from './logger';
 import {assetSetter, fileType} from './assetSetter';
-import {storeRef} from '../store/storeRef';
 import {gameInfo} from '../runtime/etc';
 import {getStorage} from '../controller/storage/storageController';
-declare global{
-    interface Window{
-        renderPromise?:Function
+import {webgalStore} from "@/Core/store/store";
+import {setGuiAsset} from "@/Core/store/GUIReducer";
+
+declare global {
+    interface Window {
+        renderPromise?: Function;
     }
 }
 /**
@@ -14,25 +16,25 @@ declare global{
  * @param url 游戏信息路径
  */
 export const infoFetcher = (url: string) => {
+    const GUIState = webgalStore.getState().GUI;
+    const dispatch = webgalStore.dispatch;
     axios.get(url).then((r) => {
         let gameConfigRaw: Array<string> = r.data.split('\n'); // 游戏配置原始数据
         gameConfigRaw = gameConfigRaw.map((e) => e.split(';')[0]);
         const gameConfig: Array<Array<string>> = gameConfigRaw.map((e) => e.split(':')); // 游戏配置数据
         logger.info('获取到游戏信息', gameConfig);
         // 按照游戏的配置开始设置对应的状态
-        if (storeRef.GuiRef) {
-            // GuiState 是对GUI状态存储的引用。
-            const GuiState: any = storeRef.GuiRef.current;
+        if (GUIState) {
             gameConfig.forEach((e) => {
                 // 设置标题背景
                 if (e[0] === 'Title_img') {
                     const url: string = assetSetter(e[1], fileType.background);
-                    GuiState.setGuiAsset('titleBg', url);
+                    dispatch(setGuiAsset({asset: 'titleBg', value: url}));
                 }
                 // 设置标题背景音乐
                 if (e[0] === 'Title_bgm') {
                     const url: string = assetSetter(e[1], fileType.bgm);
-                    GuiState.setGuiAsset('titleBgm', url);
+                    dispatch(setGuiAsset({asset: 'titleBgm', value: url}));
                 }
                 if (e[0] === 'Game_name') {
                     gameInfo.gameName = e[1];

@@ -1,18 +1,32 @@
-import { IBacklogItem, sceneEntry } from '../coreInterface/runtimeInterface';
-import { IStageState } from './stageInterface';
-import { playSpeed, textSize } from '../../store/userData';
+import {IBacklogItem, sceneEntry} from '../coreInterface/runtimeInterface';
+import {IStageState} from './stageInterface';
+
+/**
+ * 播放速度的枚举类型
+ */
+export enum playSpeed {
+    slow, // 慢
+    normal, // 中
+    fast, // 快
+}
+
+export enum textSize {
+    small,
+    medium,
+    large,
+}
 
 /**
  * @interface IOptionData 用户设置数据接口
  */
 export interface IOptionData {
-    volumeMain: number // 主音量
-    textSpeed: playSpeed // 文字速度
-    autoSpeed: playSpeed // 自动播放速度
-    textSize: textSize
-    vocalVolume: number // 语音音量
-    bgmVolume: number // 背景音乐音量
-    slPage: number // 存读档界面所在页面
+    volumeMain: number; // 主音量
+    textSpeed: playSpeed; // 文字速度
+    autoSpeed: playSpeed; // 自动播放速度
+    textSize: textSize;
+    vocalVolume: number; // 语音音量
+    bgmVolume: number; // 背景音乐音量
+    slPage: number; // 存读档界面所在页面
 }
 
 /**
@@ -20,31 +34,42 @@ export interface IOptionData {
  * @interface ISaveScene
  */
 export interface ISaveScene {
-    currentSentenceId: number // 当前语句ID
-    sceneStack: Array<sceneEntry> // 场景栈
-    sceneName: string // 场景名称
-    sceneUrl: string // 场景url
+    currentSentenceId: number; // 当前语句ID
+    sceneStack: Array<sceneEntry>; // 场景栈
+    sceneName: string; // 场景名称
+    sceneUrl: string; // 场景url
 }
 
 /**
  * @interface ISaveData 存档文件接口
  */
 export interface ISaveData {
-    nowStageState: IStageState
-    backlog: Array<IBacklogItem> // 舞台数据
-    index: number // 存档的序号
-    saveTime: string // 保存时间
-    sceneData: ISaveScene // 场景数据
+    nowStageState: IStageState;
+    backlog: Array<IBacklogItem>; // 舞台数据
+    index: number; // 存档的序号
+    saveTime: string; // 保存时间
+    sceneData: ISaveScene; // 场景数据
 }
 
 /**
  * @interface IUserData 用户数据接口
  */
 export interface IUserData {
-    saveData: Array<ISaveData> // 用户存档数据
-    optionData: IOptionData // 用户设置选项数据
+    saveData: Array<ISaveData>; // 用户存档数据
+    optionData: IOptionData; // 用户设置选项数据
 }
-export interface IUserDataStore{
+
+export interface ISetUserDataPayload {
+    key: keyof IUserData;
+    value: any;
+}
+
+export interface ISetOptionDataPayload {
+    key: keyof IOptionData;
+    value: any;
+}
+
+export interface IUserDataStore {
     userDataState: IUserData;
     setUserData: <K extends keyof IUserData>(key: K, value: any) => void;
     replaceUserData: (newUserData: IUserData) => void;
@@ -52,4 +77,4 @@ export interface IUserDataStore{
     setSlPage: (index: number) => void;
 }
 
-export type UserDataStore=IUserDataStore;
+export type UserDataStore = IUserDataStore;

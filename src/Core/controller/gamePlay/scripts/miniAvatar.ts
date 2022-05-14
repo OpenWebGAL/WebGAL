@@ -1,6 +1,7 @@
-import {ISentence} from '../../../interface/coreInterface/sceneInterface';
-import {IPerform} from '../../../interface/coreInterface/performInterface';
-import {getRef} from "../../../../Core/store/storeRef";
+import {ISentence} from '@/Core/interface/coreInterface/sceneInterface';
+import {IPerform} from '@/Core/interface/coreInterface/performInterface';
+import {webgalStore} from "@/Core/store/store";
+import {setStage} from "@/Core/store/stageReducer";
 
 /**
  * 显示小头像
@@ -8,10 +9,10 @@ import {getRef} from "../../../../Core/store/storeRef";
  */
 export const miniAvatar = (sentence: ISentence): IPerform => {
     let content = sentence.content;
-    if(sentence.content ==='none'|| sentence.content ===''){
+    if (sentence.content === 'none' || sentence.content === '') {
         content = '';
     }
-    getRef('stageRef')!.current!.setStage('miniAvatar', content);
+    webgalStore.dispatch(setStage({key: 'miniAvatar', value: content}));
     return {
         performName: 'none',
         duration: 0,

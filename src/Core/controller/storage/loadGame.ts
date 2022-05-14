@@ -1,21 +1,24 @@
-import { getRef } from '../../store/storeRef';
-import { runtime_currentBacklog } from '../../runtime/backlog';
-import { runtime_currentSceneData } from '../../runtime/sceneData';
-import { ISaveData } from '../../interface/stateInterface/userDataInterface';
-import { runtime_gamePlay } from '../../runtime/gamePlay';
+import {runtime_currentBacklog} from '../../runtime/backlog';
+import {runtime_currentSceneData} from '../../runtime/sceneData';
+import {ISaveData} from '../../interface/stateInterface/userDataInterface';
+import {runtime_gamePlay} from '../../runtime/gamePlay';
 import * as _ from 'lodash';
-import { logger } from '../../util/logger';
-import { eventSender } from '../eventBus/eventSender';
-import { sceneFetcher } from '../../util/sceneFetcher';
-import { sceneParser } from '../../parser/sceneParser';
+import {logger} from '../../util/logger';
+import {eventSender} from '../eventBus/eventSender';
+import {sceneFetcher} from '../../util/sceneFetcher';
+import {sceneParser} from '../../parser/sceneParser';
+import {webgalStore} from "@/Core/store/store";
+import {resetStageState} from "@/Core/store/stageReducer";
+import {setVisibility} from "@/Core/store/GUIReducer";
 
 /**
  * 读取游戏存档
  * @param index 要读取的存档的档位
  */
 export const loadGame = (index: number) => {
+    const userDataState = webgalStore.getState().userData;
     // 获得存档文件
-    const loadFile: ISaveData = getRef('userDataRef')!.current!.userDataState.saveData[index];
+    const loadFile: ISaveData = userDataState.saveData[index];
     logger.debug('读取的存档数据', loadFile);
     // 重新获取并同步场景状态
     sceneFetcher(loadFile.sceneData.sceneUrl).then((rawScene) => {
@@ -47,12 +50,12 @@ export const loadGame = (index: number) => {
 
     // 恢复舞台状态
     const newStageState = _.cloneDeep(loadFile.nowStageState);
-    getRef('stageRef')!.current!.restoreStage(newStageState);
+    const dispatch = webgalStore.dispatch;
+    dispatch(resetStageState(newStageState));
 
     // 恢复演出
     eventSender('restorePerform_target', 0, 1);
 
-    const GUIstate = getRef('GuiRef')!.current;
-    GUIstate!.setVisibility('showTitle', false);
-    GUIstate!.setVisibility('showMenuPanel', false);
+    dispatch(setVisibility({component: 'showTitle', visibility: false}));
+    dispatch(setVisibility({component: 'showMenuPanel', visibility: false}));
 };

@@ -1,30 +1,33 @@
-import {ISentence} from '../../../interface/coreInterface/sceneInterface';
-import {IPerform} from '../../../interface/coreInterface/performInterface';
-import {getRef} from "@/Core/store/storeRef";
+import {ISentence} from '@/Core/interface/coreInterface/sceneInterface';
+import {IPerform} from '@/Core/interface/coreInterface/performInterface';
 import {IEffect} from "@/Core/interface/stateInterface/stageInterface";
-import * as __ from 'lodash';
+import {webgalStore} from "@/Core/store/store";
+import _ from 'lodash';
+import {setStage} from "@/Core/store/stageReducer";
 
 /**
  * 设置背景变换
  * @param sentence
  */
 export const setBgTransform = (sentence: ISentence): IPerform => {
-    const stageStore = getRef('stageRef')!.current;
-    const effectList: Array<IEffect> = stageStore!.stageState.effects;
+    const stageState = webgalStore.getState().stage;
+    const effectList: Array<IEffect> = stageState.effects;
+    const newEffectList = _.cloneDeep(effectList);
     let isTargetSet = false;
-    effectList.forEach((e) => {
+    newEffectList.forEach((e) => {
         if (e.target === 'MainStage_bg_MainContainer') {
             isTargetSet = true;
             e.transform = sentence.content;
         }
     });
     if (!isTargetSet) {
-        effectList.push({
+        newEffectList.push({
             target: 'MainStage_bg_MainContainer',
             transform: sentence.content,
             filter: ''
         });
     }
+    webgalStore.dispatch(setStage({key: 'effects', value: newEffectList}));
     // stageStore.setStage('effects', effectList);
     // stageStore.setStage('bgTransform',sentence.content);
     return {
