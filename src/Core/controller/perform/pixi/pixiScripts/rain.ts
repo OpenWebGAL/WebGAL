@@ -1,5 +1,5 @@
 import * as PIXI from "pixi.js";
-import {runtime_gamePlay} from "../../../../../Core/runtime/gamePlay";
+import {runtime_gamePlay} from "@/Core/runtime/gamePlay";
 
 export const pixiRain = (rainSpeed: number, number: number) => {
     // 动画参数

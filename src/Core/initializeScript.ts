@@ -9,8 +9,8 @@ import {assetSetter, fileType} from './util/assetSetter';
 import {sceneFetcher} from './util/sceneFetcher';
 import {runtime_currentSceneData} from './runtime/sceneData';
 import {sceneParser} from './parser/sceneParser';
-import {setVolume} from "../Core/util/setVolume";
-import {pixiController} from "../Core/controller/perform/pixi/pixiController";
+import {setVolume} from "@/Core/util/setVolume";
+import {pixiController} from "@/Core/controller/perform/pixi/pixiController";
 import {bindExtraFunc} from "@/Core/util/bindExtraFunc";
 import {webSocketFunc} from "@/Core/util/webSocketFunc";
 

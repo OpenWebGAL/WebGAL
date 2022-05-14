@@ -1,5 +1,5 @@
-import { ISentence } from '../../../interface/coreInterface/sceneInterface';
-import { IPerform } from '../../../interface/coreInterface/performInterface';
+import { ISentence } from '@/Core/interface/coreInterface/sceneInterface';
+import { IPerform } from '@/Core/interface/coreInterface/performInterface';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import styles from '../../../../Components/Stage/FullScreenPerform/fullScreenPerform.module.scss';
