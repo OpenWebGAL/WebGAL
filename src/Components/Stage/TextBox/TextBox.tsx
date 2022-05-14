@@ -1,31 +1,31 @@
-import {useStore} from "reto";
-import {stageStateStore} from "../../../Core/store/stage";
 import styles from './textbox.module.scss';
 import {useEffect} from "react";
-import {userDataStateStore} from "../../../Core/store/userData";
+import {useSelector} from "react-redux";
+import {RootState} from "@/Core/store/store";
 
 export const TextBox = () => {
+    const stageState = useSelector((state: RootState) => state.stage);
+    const userDataState = useSelector((state: RootState) => state.userData);
     useEffect(() => {
 
     });
-    const StageStore = useStore(stageStateStore);
-    const userDataStore = useStore(userDataStateStore);
-    const textDelay = 55 - 20 * userDataStore.userDataState.optionData.textSpeed;
-    const size = userDataStore.userDataState.optionData.textSize * 50 + 200 + '%';
+    const textDelay = 55 - 20 * userDataState.optionData.textSpeed;
+    const size = userDataState.optionData.textSize * 50 + 200 + '%';
 
     // 拆字
-    const textArray: Array<string> = StageStore.stageState.showText.split('');
+    const textArray: Array<string> = stageState.showText.split('');
     const textElementList = textArray.map((e, index) => {
         return <span className={styles.TextBox_textElement_start}
-                     key={index + 'textElement' + e + StageStore.stageState.showText}
+                     key={index + 'textElement' + e + stageState.showText}
                      style={{animationDelay: String(index * textDelay) + 'ms'}}>{e}</span>;
     });
     return <div id="textBoxMain" className={styles.TextBox_main}>
-        <div id='miniAvatar' className={styles.miniAvatarContainer}>
-            {StageStore.stageState.miniAvatar !== '' && <img className={styles.miniAvatarImg} alt="miniAvatar" src={StageStore.stageState.miniAvatar}/>}
+        <div id="miniAvatar" className={styles.miniAvatarContainer}>
+            {stageState.miniAvatar !== '' &&
+                <img className={styles.miniAvatarImg} alt="miniAvatar" src={stageState.miniAvatar}/>}
         </div>
-        {StageStore.stageState.showName !== '' &&
-            <div className={styles.TextBox_showName} style={{fontSize: '200%'}}>{StageStore.stageState.showName}</div>}
+        {stageState.showName !== '' &&
+            <div className={styles.TextBox_showName} style={{fontSize: '200%'}}>{stageState.showName}</div>}
         <div style={{fontSize: size}}>
             {textElementList}
         </div>

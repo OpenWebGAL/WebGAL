@@ -2,9 +2,8 @@ import {runtime_currentBacklog} from "@/Core/runtime/backlog";
 import {initSceneData, runtime_currentSceneData} from "@/Core/runtime/sceneData";
 import {runtime_gamePlay} from "@/Core/runtime/gamePlay";
 import * as _ from "lodash";
-import {initState} from "@/Core/store/stage";
-import {getRef} from "@/Core/store/storeRef";
-import {IStageState} from "@/Core/interface/stateInterface/stageInterface";
+import {initState, resetStageState} from "@/Core/store/stageReducer";
+import {webgalStore} from "@/Core/store/store";
 
 export const resetStage = (resetBacklog: boolean) => {
     /**
@@ -41,9 +40,5 @@ export const resetStage = (resetBacklog: boolean) => {
 
     // 清空舞台状态表
     const initSceneDataCopy = _.cloneDeep(initState);
-    for (const k in initSceneDataCopy) {
-        if (initSceneDataCopy.hasOwnProperty(k)) {
-            getRef('stageRef')!.current!.setStage(k as keyof IStageState, initSceneDataCopy[k as keyof IStageState]);
-        }
-    }
+    webgalStore.dispatch(resetStageState(initSceneDataCopy));
 };
