@@ -36,9 +36,19 @@ const stageSlice = createSlice({
   name: 'stage',
   initialState: initState,
   reducers: {
+    /**
+     * 替换舞台状态
+     * @param state 当前状态
+     * @param action 替换的状态
+     */
     resetStageState: (state, action: PayloadAction<IStageState>) => {
       Object.assign(state, action.payload);
     },
+    /**
+     * 设置舞台状态
+     * @param state 当前状态
+     * @param action 要替换的键值对
+     */
     setStage: (state, action: PayloadAction<ISetStagePayload>) => {
       state[action.payload.key] = action.payload.value;
     }
