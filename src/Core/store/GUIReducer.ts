@@ -4,8 +4,8 @@
  */
 import {getStorage} from '../controller/storage/storageController';
 import {
-    IGuiState,
-    setVisibilityPayload, setAssetPayload, MenuPanelTag
+  IGuiState,
+  setVisibilityPayload, setAssetPayload, MenuPanelTag
 } from '../interface/stateInterface/guiInterface';
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 
@@ -14,14 +14,14 @@ import {createSlice, PayloadAction} from "@reduxjs/toolkit";
  * 初始GUI状态表
  */
 const initState: IGuiState = {
-    showBacklog: false,
-    showStarter: true,
-    showTitle: true,
-    showMenuPanel: false,
-    showTextBox: true,
-    currentMenuTag: MenuPanelTag.Option,
-    titleBg: '',
-    titleBgm: '',
+  showBacklog: false,
+  showStarter: true,
+  showTitle: true,
+  showMenuPanel: false,
+  showTextBox: true,
+  currentMenuTag: MenuPanelTag.Option,
+  titleBg: '',
+  titleBgm: '',
 };
 
 
@@ -29,38 +29,38 @@ const initState: IGuiState = {
  * GUI状态的Reducer
  */
 const GUISlice = createSlice({
-    name: 'gui',
-    initialState: initState,
-    reducers: {
-        /**
+  name: 'gui',
+  initialState: initState,
+  reducers: {
+    /**
          * 设置GUI的各组件的显示状态
          * @param state 当前GUI状态
          * @param action 改变显示状态的Action
          */
-        setVisibility: (state, action: PayloadAction<setVisibilityPayload>) => {
-            getStorage();
-            const {component, visibility} = action.payload;
-            state[component] = visibility;
-        },
-        /**
+    setVisibility: (state, action: PayloadAction<setVisibilityPayload>) => {
+      getStorage();
+      const {component, visibility} = action.payload;
+      state[component] = visibility;
+    },
+    /**
          * 设置MenuPanel的当前选中项
          * @param state 当前GUI状态
          * @param action 改变当前选中项的Action
          */
-        setMenuPanelTag: (state, action: PayloadAction<MenuPanelTag>) => {
-            getStorage();
-            state.currentMenuTag = action.payload;
-        },
-        /**
+    setMenuPanelTag: (state, action: PayloadAction<MenuPanelTag>) => {
+      getStorage();
+      state.currentMenuTag = action.payload;
+    },
+    /**
          * 设置GUI资源的值
          * @param state 当前GUI状态
          * @param action 改变资源的Action
          */
-        setGuiAsset: (state, action: PayloadAction<setAssetPayload>) => {
-            const {asset, value} = action.payload;
-            state[asset] = value;
-        },
+    setGuiAsset: (state, action: PayloadAction<setAssetPayload>) => {
+      const {asset, value} = action.payload;
+      state[asset] = value;
     },
+  },
 });
 
 export const {setVisibility, setMenuPanelTag, setGuiAsset} = GUISlice.actions;

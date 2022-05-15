@@ -10,35 +10,35 @@ import {setStage} from "@/Core/store/stageReducer";
  * @param sentence
  */
 export const setBgTransform = (sentence: ISentence): IPerform => {
-    const stageState = webgalStore.getState().stage;
-    const effectList: Array<IEffect> = stageState.effects;
-    const newEffectList = _.cloneDeep(effectList);
-    let isTargetSet = false;
-    newEffectList.forEach((e) => {
-        if (e.target === 'MainStage_bg_MainContainer') {
-            isTargetSet = true;
-            e.transform = sentence.content;
-        }
-    });
-    if (!isTargetSet) {
-        newEffectList.push({
-            target: 'MainStage_bg_MainContainer',
-            transform: sentence.content,
-            filter: ''
-        });
+  const stageState = webgalStore.getState().stage;
+  const effectList: Array<IEffect> = stageState.effects;
+  const newEffectList = _.cloneDeep(effectList);
+  let isTargetSet = false;
+  newEffectList.forEach((e) => {
+    if (e.target === 'MainStage_bg_MainContainer') {
+      isTargetSet = true;
+      e.transform = sentence.content;
     }
-    webgalStore.dispatch(setStage({key: 'effects', value: newEffectList}));
-    // stageStore.setStage('effects', effectList);
-    // stageStore.setStage('bgTransform',sentence.content);
-    return {
-        performName: 'none',
-        duration: 0,
-        isOver: false,
-        isHoldOn: false,
-        stopFunction: () => {
-        },
-        blockingNext: () => false,
-        blockingAuto: () => true,
-        stopTimeout: undefined, // 暂时不用，后面会交给自动清除
-    };
+  });
+  if (!isTargetSet) {
+    newEffectList.push({
+      target: 'MainStage_bg_MainContainer',
+      transform: sentence.content,
+      filter: ''
+    });
+  }
+  webgalStore.dispatch(setStage({key: 'effects', value: newEffectList}));
+  // stageStore.setStage('effects', effectList);
+  // stageStore.setStage('bgTransform',sentence.content);
+  return {
+    performName: 'none',
+    duration: 0,
+    isOver: false,
+    isHoldOn: false,
+    stopFunction: () => {
+    },
+    blockingNext: () => false,
+    blockingAuto: () => true,
+    stopTimeout: undefined, // 暂时不用，后面会交给自动清除
+  };
 };

@@ -5,10 +5,10 @@ import axios from 'axios';
  * @param sceneUrl 场景文件路径
  */
 export const sceneFetcher = (sceneUrl: string) => {
-    return new Promise<string>((resolve) => {
-        axios.get(sceneUrl).then((response) => {
-            const rawScene: string = response.data.toString();
-            resolve(rawScene);
-        });
+  return new Promise<string>((resolve) => {
+    axios.get(sceneUrl).then((response) => {
+      const rawScene: string = response.data.toString();
+      resolve(rawScene);
     });
+  });
 };

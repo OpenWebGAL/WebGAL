@@ -7,16 +7,16 @@ import {jmp} from "@/Core/controller/gamePlay/scripts/function/jmp";
  * @param sentence
  */
 export const jumpLabel = (sentence: ISentence): IPerform => {
-    jmp(sentence.content);
-    return {
-        performName: 'none',
-        duration: 0,
-        isOver: false,
-        isHoldOn: false,
-        stopFunction: () => {
-        },
-        blockingNext: () => false,
-        blockingAuto: () => true,
-        stopTimeout: undefined, // 暂时不用，后面会交给自动清除
-    };
+  jmp(sentence.content);
+  return {
+    performName: 'none',
+    duration: 0,
+    isOver: false,
+    isHoldOn: false,
+    stopFunction: () => {
+    },
+    blockingNext: () => false,
+    blockingAuto: () => true,
+    stopTimeout: undefined, // 暂时不用，后面会交给自动清除
+  };
 };
