@@ -37,61 +37,61 @@ type scriptFunction = (sentence: ISentence) => IPerform
  * @param script 调用的语句
  */
 export const runScript = (script: ISentence) => {
-    let perform: IPerform = initPerform;
-    let funcToRun: scriptFunction = say; // 默认是say
+  let perform: IPerform = initPerform;
+  let funcToRun: scriptFunction = say; // 默认是say
 
-    // 建立语句类型到执行函数的映射
-    const scriptToFuncMap = new Map([
-        [commandType.say, say],
-        [commandType.changeBg, changeBg],
-        [commandType.changeFigure, changeFigure],
-        [commandType.bgm, bgm],
-        [commandType.callScene, callSceneScript],
-        [commandType.changeScene, changeSceneScript],
-        [commandType.intro, intro],
-        [commandType.pixi, pixi],
-        [commandType.miniAvatar, miniAvatar],
-        [commandType.pixiInit, pixiInit],
-        [commandType.video, playVideo],
-        [commandType.jumpLabel, jumpLabel],
-        [commandType.label, label],
-        [commandType.choose, choose],
-        [commandType.end, end],
-        [commandType.setBgFilter, setBgFilter],
-        [commandType.perform_bgAni, setBgAni],
-        [commandType.perform_FigAni, setFigAni],
-        [commandType.setBgTransform, setBgTransform],
-    ]);
+  // 建立语句类型到执行函数的映射
+  const scriptToFuncMap = new Map([
+    [commandType.say, say],
+    [commandType.changeBg, changeBg],
+    [commandType.changeFigure, changeFigure],
+    [commandType.bgm, bgm],
+    [commandType.callScene, callSceneScript],
+    [commandType.changeScene, changeSceneScript],
+    [commandType.intro, intro],
+    [commandType.pixi, pixi],
+    [commandType.miniAvatar, miniAvatar],
+    [commandType.pixiInit, pixiInit],
+    [commandType.video, playVideo],
+    [commandType.jumpLabel, jumpLabel],
+    [commandType.label, label],
+    [commandType.choose, choose],
+    [commandType.end, end],
+    [commandType.setBgFilter, setBgFilter],
+    [commandType.perform_bgAni, setBgAni],
+    [commandType.perform_FigAni, setFigAni],
+    [commandType.setBgTransform, setBgTransform],
+  ]);
 
-    // 根据脚本类型切换函数
-    if (scriptToFuncMap.has(script.command)) {
-        funcToRun = scriptToFuncMap.get(script.command) as scriptFunction;
+  // 根据脚本类型切换函数
+  if (scriptToFuncMap.has(script.command)) {
+    funcToRun = scriptToFuncMap.get(script.command) as scriptFunction;
+  }
+
+  // 调用脚本对应的函数
+  perform = funcToRun(script);
+
+  // 语句不执行演出
+  if (perform.performName === 'none') {
+    logger.warn('本条语句不执行演出');
+    return;
+  }
+
+  // 同步演出状态
+  const stageState = webgalStore.getState().stage;
+  const newStageState = _.cloneDeep(stageState);
+  newStageState.PerformList.push({isHoldOn: perform.isHoldOn, script: script});
+  webgalStore.dispatch(resetStageState(newStageState));
+
+  // 时间到后自动清理演出
+  perform.stopTimeout = setTimeout(() => {
+    // perform.stopFunction();
+    perform.isOver = true;
+    if (!perform.isHoldOn) {
+      // 如果不是保持演出，清除
+      unmountPerform(perform.performName);
     }
+  }, perform.duration);
 
-    // 调用脚本对应的函数
-    perform = funcToRun(script);
-
-    // 语句不执行演出
-    if (perform.performName === 'none') {
-        logger.warn('本条语句不执行演出');
-        return;
-    }
-
-    // 同步演出状态
-    const stageState = webgalStore.getState().stage;
-    const newStageState = _.cloneDeep(stageState);
-    newStageState.PerformList.push({isHoldOn: perform.isHoldOn, script: script});
-    webgalStore.dispatch(resetStageState(newStageState));
-
-    // 时间到后自动清理演出
-    perform.stopTimeout = setTimeout(() => {
-        // perform.stopFunction();
-        perform.isOver = true;
-        if (!perform.isHoldOn) {
-            // 如果不是保持演出，清除
-            unmountPerform(perform.performName);
-        }
-    }, perform.duration);
-
-    runtime_gamePlay.performList.push(perform);
+  runtime_gamePlay.performList.push(perform);
 };

@@ -16,10 +16,10 @@ import {nextSentence} from "@/Core/controller/gamePlay/nextSentence";
 export const playVideo = (sentence: ISentence): IPerform => {
   const performInitName: string = getRandomPerformName();
   ReactDOM.render(<div className={styles.videoContainer}>
-      <video className={styles.fullScreen_video} id="playVideoElement" src={sentence.content}
-             autoPlay={true}/>
-    </div>
-    , document.getElementById('videoContainer'));
+    <video className={styles.fullScreen_video} id="playVideoElement" src={sentence.content}
+      autoPlay={true}/>
+  </div>
+  , document.getElementById('videoContainer'));
 
   /**
    * 启动视频播放

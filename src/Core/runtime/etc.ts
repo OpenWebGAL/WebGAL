@@ -3,8 +3,8 @@
  */
 
 export const gameInfo = {
-    gameName: '',
-    gameKey: '',
+  gameName: '',
+  gameKey: '',
 };
 
 export const settledScene: Array<string> = [];

@@ -17,39 +17,39 @@ import {stopAllPerform} from "@/Core/controller/gamePlay/stopAllPerform";
  * @param index 要读取的存档的档位
  */
 export const loadGame = (index: number) => {
-    const userDataState = webgalStore.getState().userData;
-    // 获得存档文件
-    const loadFile: ISaveData = userDataState.saveData[index];
-    logger.debug('读取的存档数据', loadFile);
-    // 重新获取并同步场景状态
-    sceneFetcher(loadFile.sceneData.sceneUrl).then((rawScene) => {
-        runtime_currentSceneData.currentScene = sceneParser(
-            rawScene,
-            loadFile.sceneData.sceneName,
-            loadFile.sceneData.sceneUrl,
-        );
-    });
-    runtime_currentSceneData.currentSentenceId = loadFile.sceneData.currentSentenceId;
-    runtime_currentSceneData.sceneStack = _.cloneDeep(loadFile.sceneData.sceneStack);
+  const userDataState = webgalStore.getState().userData;
+  // 获得存档文件
+  const loadFile: ISaveData = userDataState.saveData[index];
+  logger.debug('读取的存档数据', loadFile);
+  // 重新获取并同步场景状态
+  sceneFetcher(loadFile.sceneData.sceneUrl).then((rawScene) => {
+    runtime_currentSceneData.currentScene = sceneParser(
+      rawScene,
+      loadFile.sceneData.sceneName,
+      loadFile.sceneData.sceneUrl,
+    );
+  });
+  runtime_currentSceneData.currentSentenceId = loadFile.sceneData.currentSentenceId;
+  runtime_currentSceneData.sceneStack = _.cloneDeep(loadFile.sceneData.sceneStack);
 
-    // 强制停止所有演出
-    stopAllPerform();
+  // 强制停止所有演出
+  stopAllPerform();
 
-    // 恢复backlog
-    const newBacklog = loadFile.backlog;
-    runtime_currentBacklog.splice(0, runtime_currentBacklog.length); // 清空原backlog
-    for (const e of newBacklog) {
-        runtime_currentBacklog.push(e);
-    }
+  // 恢复backlog
+  const newBacklog = loadFile.backlog;
+  runtime_currentBacklog.splice(0, runtime_currentBacklog.length); // 清空原backlog
+  for (const e of newBacklog) {
+    runtime_currentBacklog.push(e);
+  }
 
-    // 恢复舞台状态
-    const newStageState = _.cloneDeep(loadFile.nowStageState);
-    const dispatch = webgalStore.dispatch;
-    dispatch(resetStageState(newStageState));
+  // 恢复舞台状态
+  const newStageState = _.cloneDeep(loadFile.nowStageState);
+  const dispatch = webgalStore.dispatch;
+  dispatch(resetStageState(newStageState));
 
-    // 恢复演出
-    restorePerform();
+  // 恢复演出
+  restorePerform();
 
-    dispatch(setVisibility({component: 'showTitle', visibility: false}));
-    dispatch(setVisibility({component: 'showMenuPanel', visibility: false}));
+  dispatch(setVisibility({component: 'showTitle', visibility: false}));
+  dispatch(setVisibility({component: 'showMenuPanel', visibility: false}));
 };

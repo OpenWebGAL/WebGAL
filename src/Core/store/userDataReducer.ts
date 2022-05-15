@@ -4,48 +4,68 @@
  * 在引擎初始化时会将这些状态从本地存储加载到运行时状态。
  */
 import {
-    ISetOptionDataPayload,
-    ISetUserDataPayload,
-    IUserData,
-    playSpeed,
-    textSize
+  ISetOptionDataPayload,
+  ISetUserDataPayload,
+  IUserData,
+  playSpeed,
+  textSize
 } from '../interface/stateInterface/userDataInterface';
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 
 
 // 初始化用户数据
 const initState: IUserData = {
-    saveData: [],
-    optionData: {
-        slPage: 1,
-        volumeMain: 100, // 主音量
-        textSpeed: playSpeed.normal, // 文字速度
-        autoSpeed: playSpeed.normal, // 自动播放速度
-        textSize: textSize.medium,
-        vocalVolume: 100, // 语音音量
-        bgmVolume: 25, // 背景音乐音量
-    },
+  saveData: [],
+  optionData: {
+    slPage: 1,
+    volumeMain: 100, // 主音量
+    textSpeed: playSpeed.normal, // 文字速度
+    autoSpeed: playSpeed.normal, // 自动播放速度
+    textSize: textSize.medium,
+    vocalVolume: 100, // 语音音量
+    bgmVolume: 25, // 背景音乐音量
+  },
 };
 
 const userDataSlice = createSlice({
-    name: 'userData',
-    initialState: initState,
-    reducers: {
-        setUserData: (state, action: PayloadAction<ISetUserDataPayload>) => {
-            const {key, value} = action.payload;
-            state[key] = value;
-        },
-        resetUserData: (state, action: PayloadAction<IUserData>) => {
-            Object.assign(state, action.payload);
-        },
-        setOptionData: (state, action: PayloadAction<ISetOptionDataPayload>) => {
-            const {key, value} = action.payload;
-            (state.optionData as any)[key] = value;
-        },
-        setSlPage: (state, action: PayloadAction<number>) => {
-            state.optionData.slPage = action.payload;
-        },
-    }
+  name: 'userData',
+  initialState: initState,
+  reducers: {
+    /**
+     * 设置用户数据
+     * @param state
+     * @param action
+     */
+    setUserData: (state, action: PayloadAction<ISetUserDataPayload>) => {
+      const {key, value} = action.payload;
+      state[key] = value;
+    },
+    /**
+     * 替换用户数据
+     * @param state
+     * @param action
+     */
+    resetUserData: (state, action: PayloadAction<IUserData>) => {
+      Object.assign(state, action.payload);
+    },
+    /**
+     * 设置选项数据
+     * @param state
+     * @param action
+     */
+    setOptionData: (state, action: PayloadAction<ISetOptionDataPayload>) => {
+      const {key, value} = action.payload;
+      (state.optionData as any)[key] = value;
+    },
+    /**
+     * 设置存档/读档页面
+     * @param state
+     * @param action
+     */
+    setSlPage: (state, action: PayloadAction<number>) => {
+      state.optionData.slPage = action.payload;
+    },
+  }
 });
 
 export const {setUserData, resetUserData, setOptionData, setSlPage} = userDataSlice.actions;
