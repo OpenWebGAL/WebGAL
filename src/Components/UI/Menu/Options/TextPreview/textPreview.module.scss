@@ -1,53 +1,24 @@
-.textPreviewMain{
-    position: relative;
-    z-index: 1;
-    padding: 1em 1.5em 1em 1.5em;
-    background: rgba(0,0,0,0.35);
-    color: rgb(255,255,255);
-    min-height: 170px;
+.textPreviewMain {
+  position: relative;
+  z-index: 1;
+  padding: 1em 1.5em 1em 1.5em;
+  background: rgba(0, 0, 0, 0.35);
+  color: rgb(255, 255, 255);
+  min-height: 170px;
 }
 
 .singleText {
-    font-family: "思源宋体", serif;
-    animation: TextDelayShow 1000ms forwards;
-    opacity: 0;
-    transition: font-size 1s;
-}
-
-.singleText1{
-    animation: TextDelayShow1 1000ms forwards;
-    opacity: 0;
-    transition: font-size 1s;
-}
-
-.singleText2{
-    animation: TextDelayShow2 1000ms forwards;
-    opacity: 0;
-    transition: font-size 1s;
+  font-family: "思源宋体", serif;
+  animation: TextDelayShow 1000ms forwards;
+  opacity: 0;
+  transition: font-size 1s;
 }
 
 @keyframes TextDelayShow {
-    0% {
-        opacity: 0;
-    }
-    100% {
-        opacity: 1;
-    }
-}
-
-@keyframes TextDelayShow1 {
-    0% {
-        opacity: 0;
-    }
-    100% {
-        opacity: 1;
-    }
-}
-@keyframes TextDelayShow2 {
-    0% {
-        opacity: 0;
-    }
-    100% {
-        opacity: 1;
-    }
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
