@@ -31,17 +31,37 @@ const userDataSlice = createSlice({
   name: 'userData',
   initialState: initState,
   reducers: {
+    /**
+     * 设置用户数据
+     * @param state
+     * @param action
+     */
     setUserData: (state, action: PayloadAction<ISetUserDataPayload>) => {
       const {key, value} = action.payload;
       state[key] = value;
     },
+    /**
+     * 替换用户数据
+     * @param state
+     * @param action
+     */
     resetUserData: (state, action: PayloadAction<IUserData>) => {
       Object.assign(state, action.payload);
     },
+    /**
+     * 设置选项数据
+     * @param state
+     * @param action
+     */
     setOptionData: (state, action: PayloadAction<ISetOptionDataPayload>) => {
       const {key, value} = action.payload;
       (state.optionData as any)[key] = value;
     },
+    /**
+     * 设置存档/读档页面
+     * @param state
+     * @param action
+     */
     setSlPage: (state, action: PayloadAction<number>) => {
       state.optionData.slPage = action.payload;
     },
