@@ -13,24 +13,24 @@ import {setVisibility} from "@/Core/store/GUIReducer";
  * @param sentence
  */
 export const end = (sentence: ISentence): IPerform => {
-    resetStage(true);
-    const dispatch = webgalStore.dispatch;
-    // 重新获取初始场景
-    const sceneUrl: string = assetSetter('start.txt', fileType.scene);
-    // 场景写入到运行时
-    sceneFetcher(sceneUrl).then((rawScene) => {
-        runtime_currentSceneData.currentScene = sceneParser(rawScene, 'start.txt', sceneUrl);
-    });
-    dispatch(setVisibility({component: 'showTitle', visibility: true}));
-    return {
-        performName: 'none',
-        duration: 0,
-        isOver: false,
-        isHoldOn: false,
-        stopFunction: () => {
-        },
-        blockingNext: () => false,
-        blockingAuto: () => true,
-        stopTimeout: undefined, // 暂时不用，后面会交给自动清除
-    };
+  resetStage(true);
+  const dispatch = webgalStore.dispatch;
+  // 重新获取初始场景
+  const sceneUrl: string = assetSetter('start.txt', fileType.scene);
+  // 场景写入到运行时
+  sceneFetcher(sceneUrl).then((rawScene) => {
+    runtime_currentSceneData.currentScene = sceneParser(rawScene, 'start.txt', sceneUrl);
+  });
+  dispatch(setVisibility({component: 'showTitle', visibility: true}));
+  return {
+    performName: 'none',
+    duration: 0,
+    isOver: false,
+    isHoldOn: false,
+    stopFunction: () => {
+    },
+    blockingNext: () => false,
+    blockingAuto: () => true,
+    stopTimeout: undefined, // 暂时不用，后面会交给自动清除
+  };
 };

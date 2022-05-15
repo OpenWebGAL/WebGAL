@@ -32,12 +32,12 @@ export interface IRunPerform {
  * 初始化的演出
  */
 export const initPerform: IPerform = {
-    performName: '',
-    duration: 100,
-    isOver: false,
-    isHoldOn: false,
-    stopFunction: () => {},
-    blockingNext: () => false,
-    blockingAuto: () => true,
-    stopTimeout: undefined,
+  performName: '',
+  duration: 100,
+  isOver: false,
+  isHoldOn: false,
+  stopFunction: () => {},
+  blockingNext: () => false,
+  blockingAuto: () => true,
+  stopTimeout: undefined,
 };

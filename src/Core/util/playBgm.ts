@@ -7,23 +7,23 @@ import {setStage} from "@/Core/store/stageReducer";
  * @param url bgm的路径
  */
 export const playBgm = (url: string) => {
-    logger.debug(`播放bgm：${url}`);
-    // 先停止之前的bgm
+  logger.debug(`播放bgm：${url}`);
+  // 先停止之前的bgm
+  let VocalControl: any = document.getElementById('currentBgm');
+  if (VocalControl !== null) {
+    VocalControl.currentTime = 0;
+    if (!VocalControl.paused) VocalControl.pause();
+  }
+  // 获得舞台状态并设置
+  webgalStore.dispatch(setStage({key: 'bgm', value: url}));
+  // 播放语音
+  setTimeout(() => {
     let VocalControl: any = document.getElementById('currentBgm');
     if (VocalControl !== null) {
-        VocalControl.currentTime = 0;
-        if (!VocalControl.paused) VocalControl.pause();
+      VocalControl.currentTime = 0;
+      VocalControl.oncanplay = () => {
+        VocalControl.play();
+      };
     }
-    // 获得舞台状态并设置
-    webgalStore.dispatch(setStage({key: 'bgm', value: url}));
-    // 播放语音
-    setTimeout(() => {
-        let VocalControl: any = document.getElementById('currentBgm');
-        if (VocalControl !== null) {
-            VocalControl.currentTime = 0;
-            VocalControl.oncanplay = () => {
-                VocalControl.play();
-            };
-        }
-    }, 1);
+  }, 1);
 };
