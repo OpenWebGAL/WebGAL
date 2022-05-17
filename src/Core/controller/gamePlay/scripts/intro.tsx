@@ -35,7 +35,7 @@ export const intro = (sentence: ISentence): IPerform => {
       if (introContainer) {
         introContainer.style.display = 'none';
       }
-      nextSentence();
+      setTimeout(nextSentence, 1);
     },
     blockingNext: () => false,
     blockingAuto: () => true,
