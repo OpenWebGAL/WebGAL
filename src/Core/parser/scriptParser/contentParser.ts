@@ -9,7 +9,7 @@ import {assetSetter, fileType} from '../../util/assetSetter';
  */
 export const contentParser = (contentRaw: string, type: commandType) => {
   if (contentRaw === 'none' || contentRaw === '') {
-    return contentRaw;
+    return '';
   }
   switch (type) {
   case commandType.changeBg:
