@@ -1,5 +1,5 @@
-import {scriptExecutor} from "@/Core/controller/gamePlay/scriptExecutor";
+import {syncFast} from "@/Core/util/syncWithOrigine";
 
 export const bindExtraFunc = () => {
-  (window as any).jmpToSentence = scriptExecutor;
+  (window as any).JMP = syncFast;
 };

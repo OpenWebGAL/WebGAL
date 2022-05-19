@@ -3,10 +3,10 @@ import {assetSetter, fileType} from "@/Core/util/assetSetter";
 import {sceneFetcher} from "@/Core/util/sceneFetcher";
 import {runtime_currentSceneData} from "@/Core/runtime/sceneData";
 import {sceneParser} from "@/Core/parser/sceneParser";
-import {scriptExecutor} from "@/Core/controller/gamePlay/scriptExecutor";
 import {logger} from "./logger";
 import {webgalStore} from "@/Core/store/store";
 import {setVisibility} from "@/Core/store/GUIReducer";
+import {nextSentence} from "@/Core/controller/gamePlay/nextSentence";
 
 export const syncWithOrigine = (str: string) => {
   const strLst = str.split(' ');
@@ -23,6 +23,13 @@ export const syncWithOrigine = (str: string) => {
   sceneFetcher(sceneUrl).then((rawScene) => {
     runtime_currentSceneData.currentScene = sceneParser(rawScene, 'start.txt', sceneUrl);
     // 开始快进到指定语句
-    scriptExecutor(sentenceID);
+    syncFast(sentenceID);
   });
 };
+
+export function syncFast(sentenceId: number) {
+  if (runtime_currentSceneData.currentSentenceId < sentenceId) {
+    nextSentence();
+    setTimeout(() => syncFast(sentenceId), 2);
+  }
+}
