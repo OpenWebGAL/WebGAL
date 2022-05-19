@@ -12,9 +12,8 @@ import {webgalStore} from "@/Core/store/store";
 /**
  * 语句执行器
  * 执行语句，同步场景状态，并根据情况立即执行下一句或者加入backlog
- * @param runToSentence 执行至 sentenceID = runToSentence, 小于0则为正常模式。
  */
-export const scriptExecutor = (runToSentence: number) => {
+export const scriptExecutor = () => {
   // 超过总语句数量，则从场景栈拿出一个需要继续的场景，然后继续流程。若场景栈清空，则停止流程
   if (runtime_currentSceneData.currentSentenceId > runtime_currentSceneData.currentScene.sentenceList.length - 1) {
     if (runtime_currentSceneData.sceneStack.length !== 0) {
@@ -41,16 +40,16 @@ export const scriptExecutor = (runToSentence: number) => {
   let currentStageState: IStageState;
 
   // 执行至指定 sentenceID
-  if (runToSentence >= 0 && runtime_currentSceneData.currentSentenceId < runToSentence) {
-    runtime_currentSceneData.currentSentenceId++;
-    scriptExecutor(runToSentence);
-    return;
-  }
+  // if (runToSentence >= 0 && runtime_currentSceneData.currentSentenceId < runToSentence) {
+  //   runtime_currentSceneData.currentSentenceId++;
+  //   scriptExecutor(runToSentence);
+  //   return;
+  // }
 
   // 执行“下一句”
   if (isNext) {
     runtime_currentSceneData.currentSentenceId++;
-    scriptExecutor(-1);
+    scriptExecutor();
     return;
   }
 
