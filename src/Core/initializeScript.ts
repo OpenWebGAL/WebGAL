@@ -19,7 +19,7 @@ import {webSocketFunc} from "@/Core/util/webSocketFunc";
  */
 export const initializeScript = (): void => {
   // 打印初始log信息
-  logger.info('WebGAL 4.1.2');
+  logger.info('WebGAL 4.1.4');
   logger.info('Github: https://github.com/MakinoharaShoko/WebGAL ');
   logger.info('Made with ❤ by MakinoharaShoko');
   // 激活强制缩放
