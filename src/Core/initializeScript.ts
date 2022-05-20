@@ -33,7 +33,7 @@ export const initializeScript = (): void => {
     if (e && e.keyCode === 122) {
       setTimeout(() => {
         resize();
-      }, 100);
+      }, 50);
     }
   };
   // 获取游戏信息
