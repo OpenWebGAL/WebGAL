@@ -1,7 +1,7 @@
 {
     "name": "webgal",
     "private": true,
-    "version": "4.1.2",
+    "version": "4.1.4",
     "scripts": {
         "dev": "vite",
         "build": "tsc && vite build --base=./",
