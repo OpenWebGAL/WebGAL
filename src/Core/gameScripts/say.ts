@@ -1,6 +1,6 @@
 import {ISentence} from '@/Core/interface/coreInterface/sceneInterface';
 import {IPerform} from '@/Core/interface/coreInterface/performInterface';
-import styles from '../../../../Components/Stage/TextBox/textbox.module.scss';
+import styles from '../../Components/Stage/TextBox/textbox.module.scss';
 import {getRandomPerformName} from '@/Core/util/getRandomPerformName';
 import {playVocal} from './playVocal';
 import {webgalStore} from "@/Core/store/store";

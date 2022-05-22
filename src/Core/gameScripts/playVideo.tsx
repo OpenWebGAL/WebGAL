@@ -5,7 +5,7 @@ import ReactDOM from "react-dom";
 import {runtime_gamePlay} from "@/Core/runtime/gamePlay";
 import {unmountPerform} from "@/Core/controller/perform/unmountPerform";
 import {getRandomPerformName} from "@/Core/util/getRandomPerformName";
-import styles from '../../../../Components/Stage/FullScreenPerform/fullScreenPerform.module.scss';
+import styles from '../../Components/Stage/FullScreenPerform/fullScreenPerform.module.scss';
 import {webgalStore} from "@/Core/store/store";
 import {nextSentence} from "@/Core/controller/gamePlay/nextSentence";
 
@@ -57,11 +57,11 @@ export const playVideo = (sentence: ISentence): IPerform => {
           }
           ReactDOM.render(<div/>
             , document.getElementById('videoContainer'));
-          setTimeout(nextSentence, 1);
         },
         blockingNext: () => false,
         blockingAuto: () => true,
         stopTimeout: undefined, // 暂时不用，后面会交给自动清除
+        goNextWhenOver: true
       };
       runtime_gamePlay.performList.push(perform);
       VocalControl.oncanplay = () => {
@@ -87,6 +87,7 @@ export const playVideo = (sentence: ISentence): IPerform => {
             e.isOver = true;
             e.stopFunction();
             unmountPerform(e.performName);
+            nextSentence();
           }
         }
       };
