@@ -2,8 +2,7 @@ import { ISentence } from '@/Core/interface/coreInterface/sceneInterface';
 import { IPerform } from '@/Core/interface/coreInterface/performInterface';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import styles from '../../../../Components/Stage/FullScreenPerform/fullScreenPerform.module.scss';
-import {nextSentence} from "@/Core/controller/gamePlay/nextSentence";
+import styles from '../../Components/Stage/FullScreenPerform/fullScreenPerform.module.scss';
 
 /**
  * 显示一小段黑屏演示
@@ -35,10 +34,10 @@ export const intro = (sentence: ISentence): IPerform => {
       if (introContainer) {
         introContainer.style.display = 'none';
       }
-      setTimeout(nextSentence, 1);
     },
     blockingNext: () => false,
     blockingAuto: () => true,
     stopTimeout: undefined, // 暂时不用，后面会交给自动清除
+    goNextWhenOver:true
   };
 };

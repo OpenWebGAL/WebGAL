@@ -1,7 +1,7 @@
 import {ISentence} from '@/Core/interface/coreInterface/sceneInterface';
 import {IPerform} from '@/Core/interface/coreInterface/performInterface';
 // import {getRandomPerformName} from '../../../util/getRandomPerformName';
-import styles from '../../../../Components/Stage/mainStage.module.scss';
+import styles from '../../Components/Stage/mainStage.module.scss';
 import {webgalStore} from '@/Core/store/store';
 import {setStage} from "@/Core/store/stageReducer";
 

@@ -1,15 +1,15 @@
 import { ISentence } from '@/Core/interface/coreInterface/sceneInterface';
 import { IPerform } from '@/Core/interface/coreInterface/performInterface';
-import { changeScene } from '../../scene/changeScene';
+import { callScene } from '../controller/scene/callScene';
 
 /**
- * 切换场景。在场景结束后不会回到父场景。
+ * 调用一个场景，在场景结束后回到调用这个场景的父场景。
  * @param sentence
  */
-export const changeSceneScript = (sentence: ISentence): IPerform => {
+export const callSceneScript = (sentence: ISentence): IPerform => {
   const sceneNameArray: Array<string> = sentence.content.split('/');
   const sceneName = sceneNameArray[sceneNameArray.length - 1];
-  changeScene(sentence.content, sceneName);
+  callScene(sentence.content, sceneName);
   return {
     performName: 'none',
     duration: 0,
