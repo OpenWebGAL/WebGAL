@@ -1,7 +1,7 @@
 import { IAsset, IScene, ISentence } from '../interface/coreInterface/sceneInterface';
 import { scriptParser } from './scriptParser/scriptParser';
-import { assetsPrefetcher } from '../util/assetsPrefetcher';
-import { scenePrefetcher } from '../util/scenePrefetcher';
+import { assetsPrefetcher } from '../util/prefetcher/assetsPrefetcher';
+import { scenePrefetcher } from '../util/prefetcher/scenePrefetcher';
 import { logger } from '../util/logger';
 import _ from 'lodash';
 import { settledScene } from '../runtime/etc';
