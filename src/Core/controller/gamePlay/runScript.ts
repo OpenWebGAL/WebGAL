@@ -26,6 +26,8 @@ import {webgalStore} from "@/Core/store/store";
 import _ from 'lodash';
 import {resetStageState} from '@/Core/store/stageReducer';
 import {nextSentence} from "@/Core/controller/gamePlay/nextSentence";
+import {setVar} from "@/Core/gameScripts/setVar";
+import {showVars} from "@/Core/gameScripts/showVars";
 
 /**
  * 规范函数的类型
@@ -62,6 +64,8 @@ export const runScript = (script: ISentence) => {
     [commandType.perform_bgAni, setBgAni],
     [commandType.perform_FigAni, setFigAni],
     [commandType.setBgTransform, setBgTransform],
+    [commandType.setVar, setVar],
+    [commandType.showVars, showVars]
   ]);
 
   // 根据脚本类型切换函数

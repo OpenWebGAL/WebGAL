@@ -2,6 +2,7 @@ import styles from './textbox.module.scss';
 import {useEffect} from "react";
 import {useSelector} from "react-redux";
 import {RootState} from "@/Core/store/store";
+import { runtime_currentSceneData } from '@/Core/runtime/sceneData';
 
 export const TextBox = () => {
   const stageState = useSelector((state: RootState) => state.stage);
@@ -16,7 +17,7 @@ export const TextBox = () => {
   const textArray: Array<string> = stageState.showText.split('');
   const textElementList = textArray.map((e, index) => {
     return <span className={styles.TextBox_textElement_start}
-      key={index + 'textElement' + e + stageState.showText}
+      key={index + 'textElement' + e + stageState.showText+runtime_currentSceneData.currentSentenceId}
       style={{animationDelay: String(index * textDelay) + 'ms'}}>{e}</span>;
   });
   return <div id="textBoxMain" className={styles.TextBox_main}>

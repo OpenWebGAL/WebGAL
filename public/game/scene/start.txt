@@ -1,3 +1,18 @@
+setVar:a=0;
+showVars;
+setVar:a=1+a;
+showVars;
+setVar:b=2;
+showVars;
+setVar:a=a+b;
+showVars;
+setVar:c=false;
+setVar:d=角色名称;
+showVars;
+WebGAL:这句会出现 -when=true;
+WebGAL:这句不会出现 -when=a<0;
+这句会出现 -when=b>1;
+这句不会出现 -when=(true&&(b-1<0))||false;
 changeBg:c4.jpg -next;
 WebGAL:特效系统是3.9.2版本新引入的系统，你想要看特效的演示吗？;
 choose:观看特效演示:demo|我不要看特效，直接来吧！:toStart;

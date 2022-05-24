@@ -1,5 +1,6 @@
 import { arg } from '../../interface/coreInterface/sceneInterface';
 import { assetSetter, fileType } from '../../util/assetSetter';
+import {logger} from "@/Core/util/logger";
 
 /**
  * 参数解析器
@@ -9,10 +10,10 @@ import { assetSetter, fileType } from '../../util/assetSetter';
 export const argsParser = (argsRaw: string): Array<arg> => {
   const returnArrayList: Array<arg> = [];
   // 处理参数
-  // 去空格
-  let newArgsRaw = argsRaw.replace(/ /g, '');
+  // 不要去空格
+  let newArgsRaw = argsRaw.replace(/ /g, ' ');
   // 分割参数列表
-  let rawArgsList: Array<string> = newArgsRaw.split('-');
+  let rawArgsList: Array<string> = newArgsRaw.split(' -');
   // 去除空字符串
   rawArgsList = rawArgsList.filter((e) => {
     return e !== '';
