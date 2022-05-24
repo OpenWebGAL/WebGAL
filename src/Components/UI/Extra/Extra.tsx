@@ -28,19 +28,34 @@ export function Extra() {
   const len = extraState.cg.length;
   console.log(len);
   for (let i = (currentPage - 1) * cgPerPage; i < Math.min(len, (currentPage - 1) * cgPerPage + cgPerPage); i++) {
-    const deg = Math.floor(Random(-5, 5));
+    const index = i - (currentPage - 1) * cgPerPage;
+    const deg = Random(-5, 5);
     const temp = <div style={{
-      transform: `rotate(${deg}deg)`
+      transform: `rotate(${deg}deg)`,
+      animationDelay: `${index * 50}ms`
     }} key={extraState.cg[i].name} className={styles.cgElement}>
       <div style={{
         backgroundImage: `url('${extraState.cg[i].url}')`,
         backgroundSize: `cover`,
         backgroundPosition: "center",
         width: '100%',
-        height: '100%'
+        height: '100%',
       }}/>
     </div>;
     showCgList.push(temp);
+  }
+
+  // 生成cg鉴赏的导航
+  const showNav = [];
+  for (let i = 1; i <= pageNumber; i++) {
+    let className = styles.cgNav;
+    if (currentPage === i) {
+      className = className + ' ' + styles.cgNav_active;
+    }
+    const temp = <div onClick={() => setCurrentPage(i)} key={'nav' + i} className={className}>
+      {i}
+    </div>;
+    showNav.push(temp);
   }
   return <>
     {showExtra && <div className={styles.extra}>
@@ -61,9 +76,15 @@ export function Extra() {
         <div className={styles.bgmContainer}>
           {showBgmList}
         </div>
-        <div className={styles.cgContainer}>
-          {showCgList}
+        <div className={styles.cgMain}>
+          <div className={styles.cgContainer}>
+            {showCgList}
+          </div>
+          <div className={styles.cgShowDiv}>
+            {showNav}
+          </div>
         </div>
+
       </div>
     </div>
     }</>;
