@@ -1,4 +1,17 @@
-unlockCg:c3.jpg -name=cafe -series=1;
+unlockCg:c3.jpg -name=cafe1 -series=1;
+unlockCg:c3.jpg -name=cafe2 -series=1;
+unlockCg:c3.jpg -name=cafe3 -series=1;
+unlockCg:c3.jpg -name=cafe4 -series=1;
+unlockCg:c3.jpg -name=cafe5 -series=1;
+unlockCg:c3.jpg -name=cafe6 -series=1;
+unlockCg:c3.jpg -name=cafe7 -series=1;
+unlockCg:c3.jpg -name=cafe8 -series=1;
+unlockCg:c3.jpg -name=cafe9 -series=1;
+unlockCg:c3.jpg -name=cafe10 -series=1;
+unlockBgm:cb1.mp3 -name=BGM1;
+unlockBgm:cb1.mp3 -name=BGM2;
+unlockBgm:cb1.mp3 -name=BGM3;
+unlockBgm:cb1.mp3 -name=BGM4;
 unlockBgm:cb1.mp3 -name=BGM1;
 setVar:a=0;
 showVars;
