@@ -29,6 +29,7 @@ export enum commandType {
     setVar, // 设置变量
     if, // 条件跳转
     callScene, // 调用场景
+    showVars
 }
 
 /**

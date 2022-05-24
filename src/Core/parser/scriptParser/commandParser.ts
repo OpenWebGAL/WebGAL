@@ -30,9 +30,9 @@ export const commandParser = (commandRaw: string): parsedCommand => {
  * @return {commandType} 得到的command类型
  */
 function getCommandType(command: string): commandType {
-  if (command.match(/if/)) {
-    return commandType.if;
-  }
+  // if (command.match(/if/)) {
+  //   return commandType.if;
+  // }
   switch (command) {
   case 'intro':
     return commandType.intro;
@@ -78,6 +78,8 @@ function getCommandType(command: string): commandType {
     return commandType.setVar;
   case 'callScene':
     return commandType.callScene;
+  case'showVars':
+    return commandType.showVars;
   default:
     // 默认是对话
     return commandType.say;
@@ -97,7 +99,8 @@ function addNextArg(commandToParse: parsedCommand, thisCommandType: commandType)
     commandType.setFigFilter,
     commandType.setFigTransform,
     commandType.perform_FigAni,
-    commandType.perform_bgAni
+    commandType.perform_bgAni,
+    commandType.setVar
   ];
   if (nextList.includes(thisCommandType)) {
     commandToParse.additionalArgs.push({
