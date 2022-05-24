@@ -1,3 +1,5 @@
+unlockCg:c3.jpg -name=cafe -series=1;
+unlockBgm:cb1.mp3 -name=BGM1;
 setVar:a=0;
 showVars;
 setVar:a=1+a;

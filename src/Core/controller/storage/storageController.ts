@@ -3,7 +3,7 @@ import {IUserData} from '../../interface/stateInterface/userDataInterface';
 import {gameInfo} from '../../runtime/etc';
 import {logger} from '../../util/logger';
 import {webgalStore} from "@/Core/store/store";
-import {resetUserData} from "@/Core/store/userDataReducer";
+import {initState, resetUserData} from "@/Core/store/userDataReducer";
 
 /**
  * 写入本地存储
@@ -20,8 +20,9 @@ export const setStorage = debounce(() => {
  */
 export const getStorage = debounce(() => {
   localforage.getItem(gameInfo.gameKey).then((newUserData) => {
-    // 如果没有数据，初始化
-    if (!newUserData) {
+    // 如果没有数据或者属性不完全，重新初始化
+    if (!newUserData || !checkUserDataProperty(newUserData)) {
+      logger.warn('现在重置数据');
       setStorage();
       return;
     }
@@ -63,3 +64,17 @@ export const syncStorageFast = () => {
     logger.info('同步本地存储');
   });
 };
+
+/**
+ * 检查用户数据属性是否齐全
+ * @param userData 需要检查的数据
+ */
+function checkUserDataProperty(userData: any) {
+  let result = true;
+  for (const key in initState) {
+    if (!userData.hasOwnProperty(key)) {
+      result = false;
+    }
+  }
+  return result;
+}
