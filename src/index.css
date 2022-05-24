@@ -90,8 +90,8 @@ code {
 ::-webkit-scrollbar-thumb {
     border-radius: 10px;
     background: rgba(255, 255, 255, 0.5);
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-    -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+    -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
 }
 
 /* ::-webkit-scrollbar-thumb:window-inactive {
