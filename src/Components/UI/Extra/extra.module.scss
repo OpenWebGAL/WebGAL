@@ -17,9 +17,9 @@
 }
 
 .extra_top_icon {
-  padding: 14px 14px 0 14px;
+  padding: 10px 10px 0 10px;
   border-radius: 50px;
-  transform: translate(0, -20px);
+  transform: translate(0, -13px);
 }
 
 .extra_top_icon:hover {
@@ -58,7 +58,9 @@
 .bgmContainer {
   overflow: auto;
   width: 30%;
-  padding: 1.25em 0 0 0;
+  margin: 1.25em 0 0 0;
+  padding: 0 1em 0 0;
+  box-sizing: border-box;
 }
 
 
