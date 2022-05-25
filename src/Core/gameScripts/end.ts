@@ -1,10 +1,10 @@
-import {ISentence} from '@/Core/interface/coreInterface/sceneInterface';
-import {IPerform} from '@/Core/interface/coreInterface/performInterface';
+import {ISentence} from '@/interface/coreInterface/sceneInterface';
+import {IPerform} from '@/interface/coreInterface/performInterface';
 import {runtime_currentSceneData} from "@/Core/runtime/sceneData";
-import {assetSetter, fileType} from "@/Core/util/assetSetter";
-import {sceneFetcher} from "@/Core/util/sceneFetcher";
+import {assetSetter, fileType} from "@/Core/util/gameAssetsAccess/assetSetter";
+import {sceneFetcher} from "@/Core/controller/scene/sceneFetcher";
 import {sceneParser} from "@/Core/parser/sceneParser";
-import {resetStage} from "@/Core/util/resetStage";
+import {resetStage} from "@/Core/controller/stage/resetStage";
 import {webgalStore} from "@/Core/store/store";
 import {setVisibility} from "@/Core/store/GUIReducer";
 

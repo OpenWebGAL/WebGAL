@@ -1,10 +1,10 @@
-import {ISentence} from '@/Core/interface/coreInterface/sceneInterface';
-import {IPerform} from '@/Core/interface/coreInterface/performInterface';
+import {ISentence} from '@/interface/coreInterface/sceneInterface';
+import {IPerform} from '@/interface/coreInterface/performInterface';
 import {evaluate} from 'mathjs';
 import {webgalStore} from "@/Core/store/store";
 import {setStageVar} from "@/Core/store/stageReducer";
-import {strIf} from "@/Core/util/strIf";
-import {logger} from "@/Core/util/logger";
+import {strIf} from "@/Core/gameScripts/function/strIf";
+import {logger} from "@/Core/util/etc/logger";
 
 /**
  * 设置变量
@@ -40,6 +40,7 @@ export const setVar = (sentence: ISentence): IPerform => {
       } else
         webgalStore.dispatch(setStageVar({key, value: valExp}));
     }
+    logger.debug('设置变量：', {key, value: webgalStore.getState().stage.GameVar[key]});
   }
   return {
     performName: 'none',

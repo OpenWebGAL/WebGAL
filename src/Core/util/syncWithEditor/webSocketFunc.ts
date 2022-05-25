@@ -1,5 +1,5 @@
-import {logger} from "./logger";
-import {syncWithOrigine} from "@/Core/util/syncWithOrigine";
+import {logger} from "../etc/logger";
+import {syncWithOrigine} from "@/Core/util/syncWithEditor/syncWithOrigine";
 
 export const webSocketFunc = () => {
   try {

@@ -1,7 +1,7 @@
-import {ISentence} from '@/Core/interface/coreInterface/sceneInterface';
-import {IPerform} from '@/Core/interface/coreInterface/performInterface';
-import {IEffect} from "@/Core/interface/stateInterface/stageInterface";
-import { logger } from '@/Core/util/logger';
+import {ISentence} from '@/interface/coreInterface/sceneInterface';
+import {IPerform} from '@/interface/coreInterface/performInterface';
+import {IEffect} from "@/interface/stateInterface/stageInterface";
+import { logger } from '@/Core/util/etc/logger';
 import {webgalStore} from "@/Core/store/store";
 import _ from "lodash";
 import {setStage} from "@/Core/store/stageReducer";

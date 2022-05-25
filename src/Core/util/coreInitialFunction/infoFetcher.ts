@@ -1,8 +1,8 @@
 import axios from 'axios';
-import {logger} from './logger';
-import {assetSetter, fileType} from './assetSetter';
-import {gameInfo} from '../runtime/etc';
-import {getStorage} from '../controller/storage/storageController';
+import {logger} from '../etc/logger';
+import {assetSetter, fileType} from '../gameAssetsAccess/assetSetter';
+import {gameInfo} from '../../runtime/etc';
+import {getStorage} from '../../controller/storage/storageController';
 import {webgalStore} from "@/Core/store/store";
 import {setGuiAsset} from "@/Core/store/GUIReducer";
 

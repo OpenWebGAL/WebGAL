@@ -1,7 +1,7 @@
-import {commandType, ISentence} from '@/Core/interface/coreInterface/sceneInterface';
-import {IPerform, IRunPerform} from '@/Core/interface/coreInterface/performInterface';
+import {commandType, ISentence} from '@/interface/coreInterface/sceneInterface';
+import {IPerform, IRunPerform} from '@/interface/coreInterface/performInterface';
 import {runtime_gamePlay} from "@/Core/runtime/gamePlay";
-import {logger} from "@/Core/util/logger";
+import {logger} from "@/Core/util/etc/logger";
 import {webgalStore} from "@/Core/store/store";
 import _ from 'lodash';
 import {resetStageState} from "@/Core/store/stageReducer";

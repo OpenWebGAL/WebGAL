@@ -1,8 +1,8 @@
-import {ISentence} from '@/Core/interface/coreInterface/sceneInterface';
-import {IPerform} from '@/Core/interface/coreInterface/performInterface';
+import {ISentence} from '@/interface/coreInterface/sceneInterface';
+import {IPerform} from '@/interface/coreInterface/performInterface';
 import {webgalStore} from "@/Core/store/store";
 import {unlockCgInUserData} from '../store/userDataReducer';
-import {logger} from "@/Core/util/logger";
+import {logger} from "@/Core/util/etc/logger";
 import localforage from "localforage";
 import {gameInfo} from "@/Core/runtime/etc";
 
@@ -11,7 +11,6 @@ import {gameInfo} from "@/Core/runtime/etc";
  * @param sentence
  */
 export const unlockCg = (sentence: ISentence): IPerform => {
-  logger.debug('解锁cg');
   const url = sentence.content;
   let name = sentence.content;
   let series = 'default';
@@ -23,11 +22,10 @@ export const unlockCg = (sentence: ISentence): IPerform => {
       series = e.value.toString();
     }
   });
+  logger.info(`解锁CG：${name}，路径：${url}，所属系列：${series}`);
   webgalStore.dispatch(unlockCgInUserData({name, url, series}));
   const userDataState = webgalStore.getState().userData;
-  localforage.setItem(gameInfo.gameKey, userDataState).then(() => {
-    logger.info('写入本地存储',userDataState);
-  });
+  localforage.setItem(gameInfo.gameKey, userDataState).then(() => {});
   return {
     performName: 'none',
     duration: 0,

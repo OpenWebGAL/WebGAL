@@ -2,7 +2,7 @@
  * 语句类型
  */
 import {sceneEntry} from './runtimeInterface';
-import {fileType} from '../../util/assetSetter';
+import {fileType} from '../../Core/util/gameAssetsAccess/assetSetter';
 
 export enum commandType {
   say, // 对话

@@ -1,8 +1,8 @@
-import {ISentence} from '@/Core/interface/coreInterface/sceneInterface';
-import {getRandomPerformName} from '@/Core/util/getRandomPerformName';
+import {ISentence} from '@/interface/coreInterface/sceneInterface';
+import {getRandomPerformName} from '@/Core/controller/perform/getRandomPerformName';
 import {runtime_gamePlay} from '@/Core/runtime/gamePlay';
 import {unmountPerform} from '../controller/perform/unmountPerform';
-import {logger} from '@/Core/util/logger';
+import {logger} from '@/Core/util/etc/logger';
 import {webgalStore} from "@/Core/store/store";
 import {setStage} from "@/Core/store/stageReducer";
 

@@ -1,9 +1,9 @@
-import {resetStage} from "@/Core/util/resetStage";
-import {assetSetter, fileType} from "@/Core/util/assetSetter";
-import {sceneFetcher} from "@/Core/util/sceneFetcher";
+import {resetStage} from "@/Core/controller/stage/resetStage";
+import {assetSetter, fileType} from "@/Core/util/gameAssetsAccess/assetSetter";
+import {sceneFetcher} from "@/Core/controller/scene/sceneFetcher";
 import {runtime_currentSceneData} from "@/Core/runtime/sceneData";
 import {sceneParser} from "@/Core/parser/sceneParser";
-import {logger} from "./logger";
+import {logger} from "../etc/logger";
 import {webgalStore} from "@/Core/store/store";
 import {setVisibility} from "@/Core/store/GUIReducer";
 import {nextSentence} from "@/Core/controller/gamePlay/nextSentence";

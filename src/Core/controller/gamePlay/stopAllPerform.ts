@@ -1,4 +1,4 @@
-import {logger} from "@/Core/util/logger";
+import {logger} from "@/Core/util/etc/logger";
 import {runtime_gamePlay} from "@/Core/runtime/gamePlay";
 
 export const stopAllPerform = ()=>{

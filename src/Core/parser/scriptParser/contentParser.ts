@@ -1,5 +1,5 @@
-import {commandType} from '../../interface/coreInterface/sceneInterface';
-import {assetSetter, fileType} from '../../util/assetSetter';
+import {commandType} from '../../../interface/coreInterface/sceneInterface';
+import {assetSetter, fileType} from '../../util/gameAssetsAccess/assetSetter';
 
 /**
  * 解析语句内容的函数，主要作用是把文件名改为绝对地址或相对地址（根据使用情况而定）

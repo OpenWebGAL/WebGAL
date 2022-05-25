@@ -1,6 +1,6 @@
 import styles from "./menuPanel.module.scss";
 import {MenuIconMap} from "./MenuIconMap";
-import {IMenuPanel} from "@/Core/interface/componentsInterface/menuPanelInterface";
+import {IMenuPanel} from "@/interface/componentsInterface/menuPanelInterface";
 
 /**
  * 菜单标签页切换按钮

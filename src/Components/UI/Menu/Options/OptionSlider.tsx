@@ -1,5 +1,5 @@
 import './slider.css';
-import {ISlider} from "@/Core/interface/componentsInterface/OptionInterface";
+import {ISlider} from "@/interface/componentsInterface/OptionInterface";
 import {useEffect} from "react";
 
 export const OptionSlider = (props: ISlider) => {

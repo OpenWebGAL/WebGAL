@@ -1,7 +1,7 @@
 import { runtime_currentSceneData } from '../../runtime/sceneData';
-import { sceneFetcher } from '../../util/sceneFetcher';
+import { sceneFetcher } from './sceneFetcher';
 import { sceneParser } from '../../parser/sceneParser';
-import { logger } from '../../util/logger';
+import { logger } from '../../util/etc/logger';
 import {nextSentence} from "@/Core/controller/gamePlay/nextSentence";
 
 /**

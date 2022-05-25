@@ -16,7 +16,7 @@ import {switchFast} from '@/Core/controller/gamePlay/fastSkip';
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from '@/Core/store/store';
 import {setMenuPanelTag, setVisibility} from "@/Core/store/GUIReducer";
-import {componentsVisibility, MenuPanelTag} from "@/Core/interface/stateInterface/guiInterface";
+import {componentsVisibility, MenuPanelTag} from "@/interface/stateInterface/guiInterface";
 import { backToTitle } from '@/Core/controller/gamePlay/backToTitle';
 
 export const BottomControlPanel = () => {
