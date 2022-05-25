@@ -6,7 +6,7 @@ import {getStorage} from '../controller/storage/storageController';
 import {
   IGuiState,
   setVisibilityPayload, setAssetPayload, MenuPanelTag
-} from '../interface/stateInterface/guiInterface';
+} from '../../interface/stateInterface/guiInterface';
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 
 
@@ -22,6 +22,7 @@ const initState: IGuiState = {
   currentMenuTag: MenuPanelTag.Option,
   titleBg: '',
   titleBgm: '',
+  showExtra: false,
 };
 
 
@@ -33,29 +34,29 @@ const GUISlice = createSlice({
   initialState: initState,
   reducers: {
     /**
-         * 设置GUI的各组件的显示状态
-         * @param state 当前GUI状态
-         * @param action 改变显示状态的Action
-         */
+     * 设置GUI的各组件的显示状态
+     * @param state 当前GUI状态
+     * @param action 改变显示状态的Action
+     */
     setVisibility: (state, action: PayloadAction<setVisibilityPayload>) => {
       getStorage();
       const {component, visibility} = action.payload;
       state[component] = visibility;
     },
     /**
-         * 设置MenuPanel的当前选中项
-         * @param state 当前GUI状态
-         * @param action 改变当前选中项的Action
-         */
+     * 设置MenuPanel的当前选中项
+     * @param state 当前GUI状态
+     * @param action 改变当前选中项的Action
+     */
     setMenuPanelTag: (state, action: PayloadAction<MenuPanelTag>) => {
       getStorage();
       state.currentMenuTag = action.payload;
     },
     /**
-         * 设置GUI资源的值
-         * @param state 当前GUI状态
-         * @param action 改变资源的Action
-         */
+     * 设置GUI资源的值
+     * @param state 当前GUI状态
+     * @param action 改变资源的Action
+     */
     setGuiAsset: (state, action: PayloadAction<setAssetPayload>) => {
       const {asset, value} = action.payload;
       state[asset] = value;

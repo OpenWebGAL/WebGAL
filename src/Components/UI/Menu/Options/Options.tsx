@@ -8,8 +8,8 @@ import {TextPreview} from "./TextPreview/TextPreview";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "@/Core/store/store";
 import {setOptionData} from "@/Core/store/userDataReducer";
-import {playSpeed, textSize} from "@/Core/interface/stateInterface/userDataInterface";
-import {setVolume} from "@/Core/util/setVolume";
+import {playSpeed, textSize} from "@/interface/stateInterface/userDataInterface";
+import {setVolume} from "@/Core/controller/stage/setVolume";
 
 export const Options: FC = () => {
   const userDataState = useSelector((state: RootState) => state.userData);

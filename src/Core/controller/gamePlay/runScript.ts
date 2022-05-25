@@ -1,30 +1,35 @@
-import {commandType, ISentence} from '../../interface/coreInterface/sceneInterface';
-import {say} from './scripts/say';
-import {initPerform, IPerform} from '../../interface/coreInterface/performInterface';
+import {commandType, ISentence} from '../../../interface/coreInterface/sceneInterface';
+import {say} from '../../gameScripts/say';
+import {initPerform, IPerform} from '../../../interface/coreInterface/performInterface';
 import {unmountPerform} from '../perform/unmountPerform';
 import {runtime_gamePlay} from '../../runtime/gamePlay';
-import {changeBg} from './scripts/changeBg';
-import {changeFigure} from './scripts/changeFigure';
-import {bgm} from './scripts/bgm';
-import {callSceneScript} from './scripts/callSceneScript';
-import {changeSceneScript} from './scripts/changeSceneScript';
-import {intro} from './scripts/intro';
-import {pixi} from "@/Core/controller/gamePlay/scripts/pixi";
-import {miniAvatar} from "@/Core/controller/gamePlay/scripts/miniAvatar";
-import {pixiInit} from "@/Core/controller/gamePlay/scripts/pixiInit";
-import {logger} from "@/Core/util/logger";
-import {playVideo} from "@/Core/controller/gamePlay/scripts/playVideo";
-import {jumpLabel} from "@/Core/controller/gamePlay/scripts/jumpLabel";
-import {label} from "@/Core/controller/gamePlay/scripts/label";
-import {choose} from "@/Core/controller/gamePlay/scripts/choose";
-import {end} from "@/Core/controller/gamePlay/scripts/end";
-import {setBgFilter} from "@/Core/controller/gamePlay/scripts/setBgFilter";
-import {setBgAni} from "@/Core/controller/gamePlay/scripts/setBgAni";
-import {setFigAni} from "@/Core/controller/gamePlay/scripts/setFigAni";
-import {setBgTransform} from "@/Core/controller/gamePlay/scripts/setBgTransform";
+import {changeBg} from '../../gameScripts/changeBg';
+import {changeFigure} from '../../gameScripts/changeFigure';
+import {bgm} from '../../gameScripts/bgm';
+import {callSceneScript} from '../../gameScripts/callSceneScript';
+import {changeSceneScript} from '../../gameScripts/changeSceneScript';
+import {intro} from '../../gameScripts/intro';
+import {pixi} from "@/Core/gameScripts/pixi";
+import {miniAvatar} from "@/Core/gameScripts/miniAvatar";
+import {pixiInit} from "@/Core/gameScripts/pixiInit";
+import {logger} from "@/Core/util/etc/logger";
+import {playVideo} from "@/Core/gameScripts/playVideo";
+import {jumpLabel} from "@/Core/gameScripts/jumpLabel";
+import {label} from "@/Core/gameScripts/label";
+import {choose} from "@/Core/gameScripts/choose";
+import {end} from "@/Core/gameScripts/end";
+import {setBgFilter} from "@/Core/gameScripts/setBgFilter";
+import {setBgAni} from "@/Core/gameScripts/setBgAni";
+import {setFigAni} from "@/Core/gameScripts/setFigAni";
+import {setBgTransform} from "@/Core/gameScripts/setBgTransform";
 import {webgalStore} from "@/Core/store/store";
 import _ from 'lodash';
-import { resetStageState } from '@/Core/store/stageReducer';
+import {resetStageState} from '@/Core/store/stageReducer';
+import {nextSentence} from "@/Core/controller/gamePlay/nextSentence";
+import {setVar} from "@/Core/gameScripts/setVar";
+import {showVars} from "@/Core/gameScripts/showVars";
+import {unlockCg} from "@/Core/gameScripts/unlockCg";
+import {unlockBgm} from "@/Core/gameScripts/unlockBgm";
 
 /**
  * 规范函数的类型
@@ -61,6 +66,10 @@ export const runScript = (script: ISentence) => {
     [commandType.perform_bgAni, setBgAni],
     [commandType.perform_FigAni, setFigAni],
     [commandType.setBgTransform, setBgTransform],
+    [commandType.setVar, setVar],
+    [commandType.showVars, showVars],
+    [commandType.unlockCg, unlockCg],
+    [commandType.unlockBgm, unlockBgm]
   ]);
 
   // 根据脚本类型切换函数
@@ -73,7 +82,6 @@ export const runScript = (script: ISentence) => {
 
   // 语句不执行演出
   if (perform.performName === 'none') {
-    logger.warn('本条语句不执行演出');
     return;
   }
 
@@ -90,6 +98,9 @@ export const runScript = (script: ISentence) => {
     if (!perform.isHoldOn) {
       // 如果不是保持演出，清除
       unmountPerform(perform.performName);
+      if (perform.goNextWhenOver) {
+        nextSentence();
+      }
     }
   }, perform.duration);
 

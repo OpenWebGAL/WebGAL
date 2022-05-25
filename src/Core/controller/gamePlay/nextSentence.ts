@@ -1,7 +1,7 @@
 import {scriptExecutor} from './scriptExecutor';
 import {runtime_gamePlay} from '../../runtime/gamePlay';
-import {IRunPerform} from '../../interface/coreInterface/performInterface';
-import {logger} from '../../util/logger';
+import {IRunPerform} from '../../../interface/coreInterface/performInterface';
+import {logger} from '../../util/etc/logger';
 import {webgalStore} from "@/Core/store/store";
 import _ from 'lodash';
 import {resetStageState} from "@/Core/store/stageReducer";
@@ -53,13 +53,20 @@ export const nextSentence = () => {
 
   // 不处于 allSettled 状态，清除所有普通演出，强制进入settled。
   logger.warn('提前结束被触发，现在清除普通演出');
+  let isGoNext = false;
   for (let i = 0; i < runtime_gamePlay.performList.length; i++) {
     const e = runtime_gamePlay.performList[i];
     if (!e.isHoldOn) {
+      if (e.goNextWhenOver) {
+        isGoNext = true;
+      }
       e.stopFunction();
       clearTimeout(e.stopTimeout);
       runtime_gamePlay.performList.splice(i, 1);
       i--;
     }
+  }
+  if (isGoNext) {
+    nextSentence();
   }
 };

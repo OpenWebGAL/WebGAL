@@ -1,4 +1,4 @@
-import {playBgm} from "@/Core/util/playBgm";
+import {playBgm} from "@/Core/controller/stage/playBgm";
 import {webgalStore} from "@/Core/store/store";
 import {setVisibility} from "@/Core/store/GUIReducer";
 import {stopAllPerform} from "@/Core/controller/gamePlay/stopAllPerform";

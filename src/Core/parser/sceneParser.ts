@@ -1,8 +1,8 @@
-import { IAsset, IScene, ISentence } from '../interface/coreInterface/sceneInterface';
+import { IAsset, IScene, ISentence } from '../../interface/coreInterface/sceneInterface';
 import { scriptParser } from './scriptParser/scriptParser';
-import { assetsPrefetcher } from '../util/assetsPrefetcher';
-import { scenePrefetcher } from '../util/scenePrefetcher';
-import { logger } from '../util/logger';
+import { assetsPrefetcher } from '../util/prefetcher/assetsPrefetcher';
+import { scenePrefetcher } from '../util/prefetcher/scenePrefetcher';
+import { logger } from '../util/etc/logger';
 import _ from 'lodash';
 import { settledScene } from '../runtime/etc';
 

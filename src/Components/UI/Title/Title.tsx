@@ -1,12 +1,12 @@
 import {FC} from 'react';
 import styles from './title.module.scss';
-import {playBgm} from '@/Core/util/playBgm';
+import {playBgm} from '@/Core/controller/stage/playBgm';
 import {startGame} from '@/Core/controller/gamePlay/startGame';
 import {runtime_currentSceneData} from "@/Core/runtime/sceneData";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "@/Core/store/store";
 import {setMenuPanelTag, setVisibility} from "@/Core/store/GUIReducer";
-import {MenuPanelTag} from '@/Core/interface/stateInterface/guiInterface';
+import {MenuPanelTag} from '@/interface/stateInterface/guiInterface';
 import {nextSentence} from "@/Core/controller/gamePlay/nextSentence";
 
 /**
@@ -43,7 +43,7 @@ const Title: FC = () => {
             <div className={styles.Title_button} onClick={() => {
               dispatch(setVisibility({component: "showTitle", visibility: false}));
               if (runtime_currentSceneData.currentSentenceId === 0 &&
-                                runtime_currentSceneData.currentScene.sceneName === 'start.txt') {
+                runtime_currentSceneData.currentScene.sceneName === 'start.txt') {
                 // 如果游戏没有开始，开始游戏
                 nextSentence();
               }
@@ -71,16 +71,25 @@ const Title: FC = () => {
               <div className={styles.Title_button_text + ' ' + styles.Title_button_text_up}>读取存档</div>
               <div className={styles.Title_button_text}>LOAD</div>
             </div>
+            {/* <div */}
+            {/*   className={styles.Title_button} */}
+            {/*   onClick={() => { */}
+            {/*     window.opener = null; */}
+            {/*     window.open('', '_self'); */}
+            {/*     window.close(); */}
+            {/*   }} */}
+            {/* > */}
+            {/*   <div className={styles.Title_button_text + ' ' + styles.Title_button_text_up}>退出游戏</div> */}
+            {/*   <div className={styles.Title_button_text}>EXIT</div> */}
+            {/* </div> */}
             <div
               className={styles.Title_button}
               onClick={() => {
-                window.opener = null;
-                window.open('', '_self');
-                window.close();
+                dispatch(setVisibility({component: "showExtra", visibility: true}));
               }}
             >
-              <div className={styles.Title_button_text + ' ' + styles.Title_button_text_up}>退出游戏</div>
-              <div className={styles.Title_button_text}>EXIT</div>
+              <div className={styles.Title_button_text + ' ' + styles.Title_button_text_up}>鉴赏模式</div>
+              <div className={styles.Title_button_text}>EXTRA</div>
             </div>
           </div>
         </div>
