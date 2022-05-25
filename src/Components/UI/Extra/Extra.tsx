@@ -1,5 +1,4 @@
 import styles from './extra.module.scss';
-import React, {useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "@/Core/store/store";
 import {setVisibility} from '@/Core/store/GUIReducer';
