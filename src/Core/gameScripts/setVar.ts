@@ -1,10 +1,9 @@
 import {ISentence} from '@/interface/coreInterface/sceneInterface';
 import {IPerform} from '@/interface/coreInterface/performInterface';
-import {evaluate} from 'mathjs';
 import {webgalStore} from "@/Core/store/store";
 import {setStageVar} from "@/Core/store/stageReducer";
-import {strIf} from "@/Core/gameScripts/function/strIf";
 import {logger} from "@/Core/util/etc/logger";
+import {compile} from "angular-expressions";
 
 /**
  * 设置变量
@@ -25,7 +24,8 @@ export const setVar = (sentence: ISentence): IPerform => {
           return getValueFromState(e).toString();
         } else return e;
       }).reduce((pre, curr) => pre + curr, '');
-      const result = evaluate(valExp2);
+      const exp = compile(valExp2);
+      const result = exp();
       webgalStore.dispatch(setStageVar({key, value: result}));
     } else if (valExp.match(/true|false/)) {
       if (valExp.match(/true/)) {
