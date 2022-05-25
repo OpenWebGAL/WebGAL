@@ -1,4 +1,4 @@
-import {logger} from './logger';
+import {logger} from '../../util/etc/logger';
 import {webgalStore} from "@/Core/store/store";
 import {setStage} from "@/Core/store/stageReducer";
 

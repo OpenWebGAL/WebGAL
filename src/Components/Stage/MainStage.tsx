@@ -6,7 +6,7 @@ import {AudioContainer} from "./AudioContainer/AudioContainer";
 import {FullScreenPerform} from "./FullScreenPerform/FullScreenPerform";
 import {nextSentence} from "@/Core/controller/gamePlay/nextSentence";
 import {stopAll} from "@/Core/controller/gamePlay/fastSkip";
-import {IEffect} from "@/Core/interface/stateInterface/stageInterface";
+import {IEffect} from "@/interface/stateInterface/stageInterface";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "@/Core/store/store";
 import {setVisibility} from "@/Core/store/GUIReducer";

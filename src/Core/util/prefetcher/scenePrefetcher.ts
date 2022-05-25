@@ -2,7 +2,7 @@
  * 场景预加载
  * @param sceneList 需要预加载的场景文件列表
  */
-import { sceneFetcher } from '../sceneFetcher';
+import { sceneFetcher } from '../../controller/scene/sceneFetcher';
 import { sceneParser } from '../../parser/sceneParser';
 import { settledScene } from '../../runtime/etc';
 

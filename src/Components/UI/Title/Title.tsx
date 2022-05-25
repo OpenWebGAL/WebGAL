@@ -1,12 +1,12 @@
 import {FC} from 'react';
 import styles from './title.module.scss';
-import {playBgm} from '@/Core/util/playBgm';
+import {playBgm} from '@/Core/controller/stage/playBgm';
 import {startGame} from '@/Core/controller/gamePlay/startGame';
 import {runtime_currentSceneData} from "@/Core/runtime/sceneData";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "@/Core/store/store";
 import {setMenuPanelTag, setVisibility} from "@/Core/store/GUIReducer";
-import {MenuPanelTag} from '@/Core/interface/stateInterface/guiInterface';
+import {MenuPanelTag} from '@/interface/stateInterface/guiInterface';
 import {nextSentence} from "@/Core/controller/gamePlay/nextSentence";
 
 /**

@@ -1,15 +1,15 @@
-import {commandType, ISentence} from '../../interface/coreInterface/sceneInterface';
+import {commandType, ISentence} from '../../../interface/coreInterface/sceneInterface';
 import {runtime_currentBacklog} from '../../runtime/backlog';
 import {runtime_currentSceneData} from '../../runtime/sceneData';
 import {runScript} from './runScript';
-import {logger} from '../../util/logger';
-import {IStageState} from '../../interface/stateInterface/stageInterface';
+import {logger} from '../../util/etc/logger';
+import {IStageState} from '../../../interface/stateInterface/stageInterface';
 import * as _ from 'lodash';
 import {restoreScene} from '../scene/restoreScene';
-import {IBacklogItem, sceneEntry} from '../../interface/coreInterface/runtimeInterface';
+import {IBacklogItem, sceneEntry} from '../../../interface/coreInterface/runtimeInterface';
 import {webgalStore} from "@/Core/store/store";
 import {getValueFromState} from "@/Core/gameScripts/setVar";
-import {strIf} from "@/Core/util/strIf";
+import {strIf} from "@/Core/gameScripts/function/strIf";
 import {nextSentence} from "@/Core/controller/gamePlay/nextSentence";
 
 /**

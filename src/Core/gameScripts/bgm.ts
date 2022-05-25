@@ -1,6 +1,6 @@
-import { ISentence } from '@/Core/interface/coreInterface/sceneInterface';
-import { IPerform } from '@/Core/interface/coreInterface/performInterface';
-import { playBgm } from '@/Core/util/playBgm';
+import { ISentence } from '@/interface/coreInterface/sceneInterface';
+import { IPerform } from '@/interface/coreInterface/performInterface';
+import { playBgm } from '@/Core/controller/stage/playBgm';
 
 /**
  * 播放一段bgm

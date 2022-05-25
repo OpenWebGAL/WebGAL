@@ -1,5 +1,5 @@
-import {ISentence} from '@/Core/interface/coreInterface/sceneInterface';
-import {IPerform} from '@/Core/interface/coreInterface/performInterface';
+import {ISentence} from '@/interface/coreInterface/sceneInterface';
+import {IPerform} from '@/interface/coreInterface/performInterface';
 
 /**
  * 设置背景动画

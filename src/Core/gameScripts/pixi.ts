@@ -1,9 +1,9 @@
-import {ISentence} from '@/Core/interface/coreInterface/sceneInterface';
-import {IPerform} from '@/Core/interface/coreInterface/performInterface';
+import {ISentence} from '@/interface/coreInterface/sceneInterface';
+import {IPerform} from '@/interface/coreInterface/performInterface';
 import {runtime_gamePlay} from "@/Core/runtime/gamePlay";
 import pixiRain from "../controller/perform/pixi/pixiScripts/rain";
 import {pixiSnow} from "@/Core/controller/perform/pixi/pixiScripts/snow";
-import {logger} from "@/Core/util/logger";
+import {logger} from "@/Core/util/etc/logger";
 
 /**
  * 运行一段pixi演出

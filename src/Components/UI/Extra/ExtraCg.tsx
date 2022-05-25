@@ -13,7 +13,6 @@ export function ExtraCg() {
   // 开始生成立绘鉴赏的图片
   const showCgList = [];
   const len = extraState.cg.length;
-  console.log(len);
   for (let i = (currentPage.value - 1) * cgPerPage; i < Math.min(len, (currentPage.value - 1) * cgPerPage + cgPerPage); i++) {
     const index = i - (currentPage.value - 1) * cgPerPage;
     const deg = Random(-5, 5);

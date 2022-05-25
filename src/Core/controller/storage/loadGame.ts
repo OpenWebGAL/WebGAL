@@ -1,10 +1,10 @@
 import {runtime_currentBacklog} from '../../runtime/backlog';
 import {runtime_currentSceneData} from '../../runtime/sceneData';
-import {ISaveData} from '../../interface/stateInterface/userDataInterface';
+import {ISaveData} from '../../../interface/stateInterface/userDataInterface';
 import {runtime_gamePlay} from '../../runtime/gamePlay';
 import * as _ from 'lodash';
-import {logger} from '../../util/logger';
-import {sceneFetcher} from '../../util/sceneFetcher';
+import {logger} from '../../util/etc/logger';
+import {sceneFetcher} from '../scene/sceneFetcher';
 import {sceneParser} from '../../parser/sceneParser';
 import {webgalStore} from "@/Core/store/store";
 import {resetStageState} from "@/Core/store/stageReducer";

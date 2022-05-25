@@ -1,7 +1,7 @@
 import * as localforage from 'localforage';
-import {IUserData} from '../../interface/stateInterface/userDataInterface';
+import {IUserData} from '../../../interface/stateInterface/userDataInterface';
 import {gameInfo} from '../../runtime/etc';
-import {logger} from '../../util/logger';
+import {logger} from '../../util/etc/logger';
 import {webgalStore} from "@/Core/store/store";
 import {initState, resetUserData} from "@/Core/store/userDataReducer";
 

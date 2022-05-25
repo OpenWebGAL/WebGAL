@@ -1,6 +1,6 @@
-import {commandType, ISentence} from '../../interface/coreInterface/sceneInterface';
+import {commandType, ISentence} from '../../../interface/coreInterface/sceneInterface';
 import {say} from '../../gameScripts/say';
-import {initPerform, IPerform} from '../../interface/coreInterface/performInterface';
+import {initPerform, IPerform} from '../../../interface/coreInterface/performInterface';
 import {unmountPerform} from '../perform/unmountPerform';
 import {runtime_gamePlay} from '../../runtime/gamePlay';
 import {changeBg} from '../../gameScripts/changeBg';
@@ -12,7 +12,7 @@ import {intro} from '../../gameScripts/intro';
 import {pixi} from "@/Core/gameScripts/pixi";
 import {miniAvatar} from "@/Core/gameScripts/miniAvatar";
 import {pixiInit} from "@/Core/gameScripts/pixiInit";
-import {logger} from "@/Core/util/logger";
+import {logger} from "@/Core/util/etc/logger";
 import {playVideo} from "@/Core/gameScripts/playVideo";
 import {jumpLabel} from "@/Core/gameScripts/jumpLabel";
 import {label} from "@/Core/gameScripts/label";
@@ -82,7 +82,6 @@ export const runScript = (script: ISentence) => {
 
   // 语句不执行演出
   if (perform.performName === 'none') {
-    logger.warn('本条语句不执行演出');
     return;
   }
 

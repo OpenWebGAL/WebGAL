@@ -1,5 +1,5 @@
 import {runtime_currentSceneData} from "@/Core/runtime/sceneData";
-import {commandType} from "@/Core/interface/coreInterface/sceneInterface";
+import {commandType} from "@/interface/coreInterface/sceneInterface";
 import {nextSentence} from "@/Core/controller/gamePlay/nextSentence";
 
 export const jmp = (labelName: string) => {
