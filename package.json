@@ -1,7 +1,7 @@
 {
     "name": "webgal",
     "private": true,
-    "version": "4.1.4",
+    "version": "4.2.1",
     "scripts": {
         "dev": "vite",
         "build": "tsc && vite build --base=./",
@@ -27,10 +27,12 @@
         "@icon-park/react": "^1.3.5",
         "@reduxjs/toolkit": "^1.8.1",
         "@types/lodash": "^4.14.180",
+        "angular-expressions": "^1.1.5",
         "axios": "^0.26.1",
         "cloudlogjs": "^1.0.9",
         "localforage": "^1.10.0",
         "lodash": "^4.17.21",
+        "mathjs": "^10.5.3",
         "pixi.js": "^6.3.0",
         "react": "^17.0.2",
         "react-dom": "^17.0.2",

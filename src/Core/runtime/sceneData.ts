@@ -1,4 +1,4 @@
-import {ISceneData} from "../interface/coreInterface/sceneInterface";
+import {ISceneData} from "../../interface/coreInterface/sceneInterface";
 
 
 /**

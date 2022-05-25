@@ -1,7 +1,7 @@
 import styles from './menuPanel.module.scss';
 import {MenuPanelButton} from "./MenuPanelButton";
-import {playBgm} from "@/Core/util/playBgm";
-import {MenuPanelTag} from '@/Core/interface/stateInterface/guiInterface';
+import {playBgm} from "@/Core/controller/stage/playBgm";
+import {MenuPanelTag} from '@/interface/stateInterface/guiInterface';
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "@/Core/store/store";
 import {setMenuPanelTag, setVisibility} from "@/Core/store/GUIReducer";

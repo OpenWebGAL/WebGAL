@@ -1,13 +1,16 @@
-import {commandType, ISentence} from '../../interface/coreInterface/sceneInterface';
+import {commandType, ISentence} from '../../../interface/coreInterface/sceneInterface';
 import {runtime_currentBacklog} from '../../runtime/backlog';
 import {runtime_currentSceneData} from '../../runtime/sceneData';
 import {runScript} from './runScript';
-import {logger} from '../../util/logger';
-import {IStageState} from '../../interface/stateInterface/stageInterface';
+import {logger} from '../../util/etc/logger';
+import {IStageState} from '../../../interface/stateInterface/stageInterface';
 import * as _ from 'lodash';
 import {restoreScene} from '../scene/restoreScene';
-import {IBacklogItem, sceneEntry} from '../../interface/coreInterface/runtimeInterface';
+import {IBacklogItem, sceneEntry} from '../../../interface/coreInterface/runtimeInterface';
 import {webgalStore} from "@/Core/store/store";
+import {getValueFromState} from "@/Core/gameScripts/setVar";
+import {strIf} from "@/Core/gameScripts/function/strIf";
+import {nextSentence} from "@/Core/controller/gamePlay/nextSentence";
 
 /**
  * 语句执行器
@@ -25,8 +28,38 @@ export const scriptExecutor = () => {
     return;
   }
   const currentScript: ISentence =
-        runtime_currentSceneData.currentScene.sentenceList[runtime_currentSceneData.currentSentenceId];
-    // 执行语句
+    runtime_currentSceneData.currentScene.sentenceList[runtime_currentSceneData.currentSentenceId];
+  // 判断这个脚本要不要执行
+  let runThis = true;
+  let isHasWhenArg = false;
+  let whenValue = '';
+  currentScript.args.forEach(e => {
+    if (e.key === 'when') {
+      isHasWhenArg = true;
+      whenValue = e.value.toString();
+    }
+  });
+  // 如果语句有 when
+  if (isHasWhenArg) {
+    // 先把变量解析出来
+    const valExpArr = whenValue.split(/([+\-*\/()><=!]|>=|<=)/g);
+    const valExp = valExpArr.map(e => {
+      if (e.match(/[a-zA-Z]/)) {
+        if (e.match(/true/) || e.match(/false/)) {
+          return e;
+        }
+        return getValueFromState(e).toString();
+      } else return e;
+    }).reduce((pre, curr) => pre + curr, '');
+    runThis = strIf(valExp);
+  }
+  // 执行语句
+  if (!runThis) {
+    logger.warn('不满足条件，跳过本句！');
+    runtime_currentSceneData.currentSentenceId++;
+    nextSentence();
+    return;
+  }
   runScript(currentScript);
   let isNext = false; // 是否要进行下一句
   currentScript.args.forEach((e) => {
@@ -54,8 +87,8 @@ export const scriptExecutor = () => {
   }
 
   /**
-     * 为了让 backlog 拿到连续执行了多条语句后正确的数据，放到下一个宏任务中执行（我也不知道为什么这样能正常，有能力的可以研究一下
-     */
+   * 为了让 backlog 拿到连续执行了多条语句后正确的数据，放到下一个宏任务中执行（我也不知道为什么这样能正常，有能力的可以研究一下
+   */
   setTimeout(() => {
     // 同步当前舞台数据
     currentStageState = webgalStore.getState().stage;

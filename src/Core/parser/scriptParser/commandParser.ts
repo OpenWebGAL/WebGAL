@@ -1,4 +1,4 @@
-import {commandType, parsedCommand} from '../../interface/coreInterface/sceneInterface';
+import {commandType, parsedCommand} from '../../../interface/coreInterface/sceneInterface';
 
 /**
  * 处理命令
@@ -10,7 +10,7 @@ export const commandParser = (commandRaw: string): parsedCommand => {
     type: commandType.say, // 默认是say
     additionalArgs: [],
   };
-    // 开始处理命令内容
+  // 开始处理命令内容
   const type: commandType = getCommandType(commandRaw);
   returnCommand.type = type;
   // 如果是对话，加上额外的参数
@@ -30,9 +30,9 @@ export const commandParser = (commandRaw: string): parsedCommand => {
  * @return {commandType} 得到的command类型
  */
 function getCommandType(command: string): commandType {
-  if (command.match(/if/)) {
-    return commandType.if;
-  }
+  // if (command.match(/if/)) {
+  //   return commandType.if;
+  // }
   switch (command) {
   case 'intro':
     return commandType.intro;
@@ -78,6 +78,12 @@ function getCommandType(command: string): commandType {
     return commandType.setVar;
   case 'callScene':
     return commandType.callScene;
+  case 'showVars':
+    return commandType.showVars;
+  case 'unlockCg':
+    return commandType.unlockCg;
+  case 'unlockBgm':
+    return commandType.unlockBgm;
   default:
     // 默认是对话
     return commandType.say;
@@ -97,7 +103,10 @@ function addNextArg(commandToParse: parsedCommand, thisCommandType: commandType)
     commandType.setFigFilter,
     commandType.setFigTransform,
     commandType.perform_FigAni,
-    commandType.perform_bgAni
+    commandType.perform_bgAni,
+    commandType.setVar,
+    commandType.unlockBgm,
+    commandType.unlockCg,
   ];
   if (nextList.includes(thisCommandType)) {
     commandToParse.additionalArgs.push({

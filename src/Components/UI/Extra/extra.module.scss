@@ -1,0 +1,159 @@
+.extra {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 14;
+  background-image: linear-gradient(135deg, #93a5cf 0%, #e4efe9 100%);;
+  padding: 2em 2em 2em 2em;
+  box-sizing: border-box;
+}
+
+.extra_top {
+  padding: 0 0 0 0;
+  display: flex;
+  height: 10%;
+}
+
+.extra_top_icon {
+  padding: 10px 10px 0 10px;
+  border-radius: 50px;
+  transform: translate(0, -13px);
+}
+
+.extra_top_icon:hover {
+  background: rgba(255, 255, 255, 0.25);
+  animation: extra_icon_softin 0.25s ease-out forwards;
+}
+
+@keyframes extra_icon_softin {
+  0% {
+    background: rgba(255, 255, 255, 0);
+  }
+  100% {
+    background: rgba(0, 0, 0, 0.25);
+  }
+}
+
+
+.extra_title {
+  font-family: "思源宋体", serif;
+  height: 100%;
+  line-height: 100%;
+  font-size: 325%;
+  font-weight: bold;
+  color: transparent;
+  background: linear-gradient(150deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 1) 75%, #51A8DD 100%);
+  -webkit-background-clip: text;
+}
+
+.mainContainer {
+  box-sizing: border-box;
+  padding: 0 2em 0 2em;
+  display: flex;
+  height: 92%;
+}
+
+.bgmContainer {
+  overflow: auto;
+  width: 30%;
+  margin: 1.25em 0 2.65em 0;
+  padding: 0 1em 0 0;
+  box-sizing: border-box;
+}
+
+
+.bgmElement {
+  font-family: "思源宋体", serif;
+  padding: 0.5em 1em 0.5em 1em;
+  overflow: hidden;
+  background-color: rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  color: white;
+  font-size: 150%;
+  margin: 0 0 0.5em 0;
+  transition: background-color 1s, color 1s;
+}
+
+.bgmElement:hover {
+  background-color: rgba(255, 255, 255, 0.65);
+  color: #666;
+  transition: background-color 0.5s, color 0.5s;
+}
+
+.bgmElement_active {
+  background-color: rgba(255, 255, 255, 0.85) !important;
+  color: #666;
+}
+
+.cgMain {
+  width: 100%;
+  height: 100%;
+}
+
+.cgContainer {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: flex-start;
+  align-content: flex-start;
+  height: 90%;
+  box-sizing: border-box;
+  padding: 0 0 0 2em;
+}
+
+.cgElement {
+  width: 30%;
+  height: 30%;
+  background-color: rgba(255, 255, 255, 0.75);
+  box-shadow: 0 0 15px 5px rgba(0, 0, 0, 0.35);
+  box-sizing: border-box;
+  padding: 0.75em 0.75em 0.75em 0.75em;
+  opacity: 0;
+  animation: cg_softIn 3s forwards ease-out;
+  margin: 1em 1em 1em 1em;
+}
+
+.cgShowDiv {
+  height: 10%;
+  width: 100%;
+  display: flex;
+  flex-flow: row;
+  justify-content: center;
+  align-items: flex-end;
+}
+
+@keyframes cg_softIn {
+  0% {
+    opacity: 0;
+    //transform: translate(0, -50px);
+  }
+  100% {
+    opacity: 1;
+    //transform: translate(0, 0);
+  }
+}
+
+.cgNav {
+  font-size: 150%;
+  background-color: rgba(0, 0, 0, 0.2);
+  color: white;
+  padding: 0.25em 1em 0.25em 1em;
+  margin: 0 0.5em 0 0.5em;
+  width: 20px;
+  text-align: center;
+  transition: background-color 1s, color 1s;
+}
+
+.cgNav_active {
+  background-color: rgba(255, 255, 255, 0.85) !important;
+  color: #666;
+}
+
+.cgNav:hover {
+  background-color: rgba(255, 255, 255, 0.65);
+  color: #666;
+  transition: background-color 0.5s, color 0.5s;
+}

@@ -7,6 +7,7 @@ import {BottomControlPanel} from './Components/UI/BottomControlPanel/ButtomContr
 import {Backlog} from './Components/UI/Backlog/Backlog';
 import {Provider} from 'react-redux';
 import {webgalStore} from './Core/store/store';
+import {Extra} from "@/Components/UI/Extra/Extra";
 
 function App() {
   useEffect(() => {
@@ -17,6 +18,7 @@ function App() {
   return (
     <div className="App" style={{height: '100%', width: '100%', background: 'rgba(0, 0, 0, 0.6)'}}>
       <Provider store={webgalStore}>
+        <Extra/>
         <Title/>
         <Menu/>
         <MainStage/>

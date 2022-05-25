@@ -4,17 +4,18 @@
  * 在引擎初始化时会将这些状态从本地存储加载到运行时状态。
  */
 import {
+  IAppreciationAsset,
   ISetOptionDataPayload,
   ISetUserDataPayload,
   IUserData,
   playSpeed,
   textSize
-} from '../interface/stateInterface/userDataInterface';
+} from '../../interface/stateInterface/userDataInterface';
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 
 
 // 初始化用户数据
-const initState: IUserData = {
+export const initState: IUserData = {
   saveData: [],
   optionData: {
     slPage: 1,
@@ -25,6 +26,10 @@ const initState: IUserData = {
     vocalVolume: 100, // 语音音量
     bgmVolume: 25, // 背景音乐音量
   },
+  appreciationData: {
+    bgm: [],
+    cg: []
+  }
 };
 
 const userDataSlice = createSlice({
@@ -39,6 +44,36 @@ const userDataSlice = createSlice({
     setUserData: (state, action: PayloadAction<ISetUserDataPayload>) => {
       const {key, value} = action.payload;
       state[key] = value;
+    },
+    unlockCgInUserData: (state, action: PayloadAction<IAppreciationAsset>) => {
+      const {name, url, series} = action.payload;
+      // 检查是否存在
+      let isExist = false;
+      state.appreciationData.cg.forEach(e => {
+        if (name === e.name) {
+          isExist = true;
+          e.url = url;
+          e.series = series;
+        }
+      });
+      if (!isExist) {
+        state.appreciationData.cg.push(action.payload);
+      }
+    },
+    unlockBgmInUserData: (state, action: PayloadAction<IAppreciationAsset>) => {
+      const {name, url, series} = action.payload;
+      // 检查是否存在
+      let isExist = false;
+      state.appreciationData.bgm.forEach(e => {
+        if (name === e.name) {
+          isExist = true;
+          e.url = url;
+          e.series = series;
+        }
+      });
+      if (!isExist) {
+        state.appreciationData.bgm.push(action.payload);
+      }
     },
     /**
      * 替换用户数据
@@ -68,7 +103,14 @@ const userDataSlice = createSlice({
   }
 });
 
-export const {setUserData, resetUserData, setOptionData, setSlPage} = userDataSlice.actions;
+export const {
+  setUserData,
+  resetUserData,
+  setOptionData,
+  setSlPage,
+  unlockCgInUserData,
+  unlockBgmInUserData
+} = userDataSlice.actions;
 export default userDataSlice.reducer;
 
 // /**
