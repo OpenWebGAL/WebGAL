@@ -114,6 +114,8 @@
   opacity: 0;
   margin: 1em 1em 1em 1em;
   animation-delay: 100ms;
+  z-index: 1;
+  position: relative;
 }
 
 .cgShowDiv {

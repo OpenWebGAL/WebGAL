@@ -1,4 +1,5 @@
-$initialTransform: scale(1.15, 1.15) translate(-50px, -125px) rotateX(-15deg) rotateY(15deg);
+$initialTransform: scale(1.15, 1.15) translate(-50px, -125px) rotateX(-25deg) rotateY(25deg);
+$endTransform: scale(1, 1) translate3d(0, 0, 0);
 
 @keyframes cg_softIn_-5 {
   0% {
@@ -7,7 +8,7 @@ $initialTransform: scale(1.15, 1.15) translate(-50px, -125px) rotateX(-15deg) ro
   }
   100% {
     opacity: 1;
-    transform: translate(0, 0) rotate(-5deg);
+    transform: $endTransform +  rotate(-5deg);
   }
 }
 
@@ -18,7 +19,7 @@ $initialTransform: scale(1.15, 1.15) translate(-50px, -125px) rotateX(-15deg) ro
   }
   100% {
     opacity: 1;
-    transform: translate(0, 0) rotate(-4deg);
+    transform: $endTransform +  rotate(-4deg);
   }
 }
 
@@ -29,7 +30,7 @@ $initialTransform: scale(1.15, 1.15) translate(-50px, -125px) rotateX(-15deg) ro
   }
   100% {
     opacity: 1;
-    transform: translate(0, 0) rotate(-3deg);
+    transform: $endTransform +  rotate(-3deg);
   }
 }
 
@@ -40,7 +41,7 @@ $initialTransform: scale(1.15, 1.15) translate(-50px, -125px) rotateX(-15deg) ro
   }
   100% {
     opacity: 1;
-    transform: translate(0, 0) rotate(-2deg);
+    transform: $endTransform +  rotate(-2deg);
   }
 }
 
@@ -51,7 +52,7 @@ $initialTransform: scale(1.15, 1.15) translate(-50px, -125px) rotateX(-15deg) ro
   }
   100% {
     opacity: 1;
-    transform: translate(0, 0) rotate(-1deg);
+    transform: $endTransform +  rotate(-1deg);
   }
 }
 
@@ -62,7 +63,7 @@ $initialTransform: scale(1.15, 1.15) translate(-50px, -125px) rotateX(-15deg) ro
   }
   100% {
     opacity: 1;
-    transform: translate(0, 0) rotate(0);
+    transform: $endTransform +  rotate(0);
   }
 }
 
@@ -73,7 +74,7 @@ $initialTransform: scale(1.15, 1.15) translate(-50px, -125px) rotateX(-15deg) ro
   }
   100% {
     opacity: 1;
-    transform: translate(0, 0) rotate(1deg);
+    transform: $endTransform +  rotate(1deg);
   }
 }
 
@@ -84,7 +85,7 @@ $initialTransform: scale(1.15, 1.15) translate(-50px, -125px) rotateX(-15deg) ro
   }
   100% {
     opacity: 1;
-    transform: translate(0, 0) rotate(2deg);
+    transform: $endTransform +  rotate(2deg);
   }
 }
 
@@ -95,7 +96,7 @@ $initialTransform: scale(1.15, 1.15) translate(-50px, -125px) rotateX(-15deg) ro
   }
   100% {
     opacity: 1;
-    transform: translate(0, 0) rotate(3deg);
+    transform: $endTransform +  rotate(3deg);
   }
 }
 
@@ -106,7 +107,7 @@ $initialTransform: scale(1.15, 1.15) translate(-50px, -125px) rotateX(-15deg) ro
   }
   100% {
     opacity: 1;
-    transform: translate(0, 0) rotate(4deg);
+    transform: $endTransform +  rotate(4deg);
   }
 }
 
@@ -117,6 +118,6 @@ $initialTransform: scale(1.15, 1.15) translate(-50px, -125px) rotateX(-15deg) ro
   }
   100% {
     opacity: 1;
-    transform: translate(0, 0) rotate(5deg);
+    transform: $endTransform +  rotate(5deg);
   }
 }
