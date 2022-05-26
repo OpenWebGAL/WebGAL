@@ -15,9 +15,11 @@ import { settledScene } from '../runtime/etc';
  */
 export const sceneParser = (rawScene: string, sceneName: string, sceneUrl: string): IScene => {
   const rawSentenceList = rawScene.split('\n'); // 原始句子列表
+  // 去除空行
+  const rawSentenceListWithoutEmpty = rawSentenceList.filter(sentence => sentence.trim() !== ''); 
   let assetsList: Array<IAsset> = []; // 场景资源列表
   let subSceneList: Array<string> = []; // 子场景列表
-  const sentenceList: Array<ISentence> = rawSentenceList.map((sentence) => {
+  const sentenceList: Array<ISentence> = rawSentenceListWithoutEmpty.map((sentence) => {
     const returnSentence: ISentence = scriptParser(sentence);
     // 在这里解析出语句可能携带的资源和场景，合并到 assetsList 和 subSceneList
     assetsList = [...assetsList, ...returnSentence.sentenceAssets];
