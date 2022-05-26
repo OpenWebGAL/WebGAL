@@ -20,7 +20,7 @@ export function ExtraBgm() {
     currentPlayingBgmName.set(foundCurrentBgmName);
   }
   const dispatch = useDispatch();
-  const showBgmList = extraState.bgm.map(e => {
+  const showBgmList = extraState.bgm.map((e, i) => {
     let className = styles.bgmElement;
     if (e.name === currentPlayingBgmName.value) {
       className = className + ' ' + styles.bgmElement_active;
@@ -28,7 +28,9 @@ export function ExtraBgm() {
     return <div onClick={() => {
       currentPlayingBgmName.set(e.name);
       dispatch(setStage({key: 'bgm', value: e.url}));
-    }} key={e.name} className={className}>
+    }} key={e.name} className={className} style={{
+      animationDelay: `${i * 150}ms`
+    }}>
       {e.name}
     </div>;
   });
