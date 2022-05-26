@@ -148,7 +148,8 @@
 @keyframes backlog_item_in {
   0% {
     opacity: 0;
-    transform: scale(1.05, 1.05) translate(-25px, -15px);
+    transform: scale(1.05, 1.05) translate(-15px, 10px) rotateX(-5deg) rotateY(-5deg);
+    background-color: rgba(255, 255, 255, 0.2);
   }
   100% {
     opacity: 1;

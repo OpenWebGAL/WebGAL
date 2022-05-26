@@ -74,6 +74,19 @@
   font-size: 150%;
   margin: 0 0 0.5em 0;
   transition: background-color 1s, color 1s;
+  opacity: 0;
+  animation: bgmElement_In 0.5s forwards ease-out;
+  cursor: pointer;
+}
+
+@keyframes bgmElement_In {
+  0% {
+    opacity: 0;
+    transform: translate(-50px, 0);
+  }
+  100% {
+    opacity: 1;
+  }
 }
 
 .bgmElement:hover {
@@ -116,6 +129,7 @@
   animation-delay: 100ms;
   z-index: 1;
   position: relative;
+  cursor: pointer;
 }
 
 .cgShowDiv {
@@ -137,6 +151,7 @@
   width: 20px;
   text-align: center;
   transition: background-color 1s, color 1s;
+  cursor: pointer;
 }
 
 .cgNav_active {
