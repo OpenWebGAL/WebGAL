@@ -112,8 +112,8 @@
   box-sizing: border-box;
   padding: 0.75em 0.75em 0.75em 0.75em;
   opacity: 0;
-  //animation: cg_softIn 2s forwards ease-out;
   margin: 1em 1em 1em 1em;
+  animation-delay: 100ms;
 }
 
 .cgShowDiv {

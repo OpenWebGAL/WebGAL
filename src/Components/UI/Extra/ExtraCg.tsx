@@ -19,7 +19,7 @@ export function ExtraCg() {
     const deg = Random(-5, 5);
     const temp = <div style={{
       // transform: `rotate(${deg}deg)`,
-      animation: `cg_softIn_${deg} 1s ease-out ${index * 150}ms forwards `
+      animation: `cg_softIn_${deg} 1.5s ease-out ${100 + index * 100}ms forwards `
     }} key={extraState.cg[i].name} className={styles.cgElement}>
       <div style={{
         backgroundImage: `url('${extraState.cg[i].url}')`,
