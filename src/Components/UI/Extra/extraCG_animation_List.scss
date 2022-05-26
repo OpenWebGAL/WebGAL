@@ -1,0 +1,123 @@
+$initialTransform: scale(1.15, 1.15) translate(-50px, -125px) rotateX(-25deg) rotateY(25deg);
+$endTransform: scale(1, 1) translate3d(0, 0, 0);
+
+@keyframes cg_softIn_-5 {
+  0% {
+    opacity: 0;
+    transform: $initialTransform;
+  }
+  100% {
+    opacity: 1;
+    transform: $endTransform +  rotate(-5deg);
+  }
+}
+
+@keyframes cg_softIn_-4 {
+  0% {
+    opacity: 0;
+    transform: $initialTransform;
+  }
+  100% {
+    opacity: 1;
+    transform: $endTransform +  rotate(-4deg);
+  }
+}
+
+@keyframes cg_softIn_-3 {
+  0% {
+    opacity: 0;
+    transform: $initialTransform;
+  }
+  100% {
+    opacity: 1;
+    transform: $endTransform +  rotate(-3deg);
+  }
+}
+
+@keyframes cg_softIn_-2 {
+  0% {
+    opacity: 0;
+    transform: $initialTransform;
+  }
+  100% {
+    opacity: 1;
+    transform: $endTransform +  rotate(-2deg);
+  }
+}
+
+@keyframes cg_softIn_-1 {
+  0% {
+    opacity: 0;
+    transform: $initialTransform;
+  }
+  100% {
+    opacity: 1;
+    transform: $endTransform +  rotate(-1deg);
+  }
+}
+
+@keyframes cg_softIn_0 {
+  0% {
+    opacity: 0;
+    transform: $initialTransform;
+  }
+  100% {
+    opacity: 1;
+    transform: $endTransform +  rotate(0);
+  }
+}
+
+@keyframes cg_softIn_1 {
+  0% {
+    opacity: 0;
+    transform: $initialTransform;
+  }
+  100% {
+    opacity: 1;
+    transform: $endTransform +  rotate(1deg);
+  }
+}
+
+@keyframes cg_softIn_2 {
+  0% {
+    opacity: 0;
+    transform: $initialTransform;
+  }
+  100% {
+    opacity: 1;
+    transform: $endTransform +  rotate(2deg);
+  }
+}
+
+@keyframes cg_softIn_3 {
+  0% {
+    opacity: 0;
+    transform: $initialTransform;
+  }
+  100% {
+    opacity: 1;
+    transform: $endTransform +  rotate(3deg);
+  }
+}
+
+@keyframes cg_softIn_4 {
+  0% {
+    opacity: 0;
+    transform: $initialTransform;
+  }
+  100% {
+    opacity: 1;
+    transform: $endTransform +  rotate(4deg);
+  }
+}
+
+@keyframes cg_softIn_5 {
+  0% {
+    opacity: 0;
+    transform: $initialTransform;
+  }
+  100% {
+    opacity: 1;
+    transform: $endTransform +  rotate(5deg);
+  }
+}

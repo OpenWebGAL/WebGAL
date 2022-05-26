@@ -15,7 +15,7 @@ import {MenuPanelTag} from '@/interface/stateInterface/guiInterface';
 const Menu: FC = () => {
   const GUIState = useSelector((state: RootState) => state.GUI);
   let currentTag;
-  let menuBgColor = 'linear-gradient(135deg, rgba(253,251,251,0.95) 0%, rgba(235,237,238,1) 100%)';
+  // let menuBgColor = 'linear-gradient(135deg, rgba(253,251,251,0.95) 0%, rgba(235,237,238,1) 100%)';
   switch (GUIState.currentMenuTag) {
   case MenuPanelTag.Save:
     currentTag = <Save/>;
@@ -33,7 +33,7 @@ const Menu: FC = () => {
   return (
     <>
       {GUIState.showMenuPanel && (
-        <div className={styles.Menu_main} style={{background: menuBgColor}}>
+        <div className={styles.Menu_main}>
           <div className={styles.Menu_TagContent}>{currentTag}</div>
           <MenuPanel/>
         </div>
