@@ -112,7 +112,7 @@
   box-sizing: border-box;
   padding: 0.75em 0.75em 0.75em 0.75em;
   opacity: 0;
-  animation: cg_softIn 3s forwards ease-out;
+  //animation: cg_softIn 2s forwards ease-out;
   margin: 1em 1em 1em 1em;
 }
 
@@ -125,16 +125,6 @@
   align-items: flex-end;
 }
 
-@keyframes cg_softIn {
-  0% {
-    opacity: 0;
-    //transform: translate(0, -50px);
-  }
-  100% {
-    opacity: 1;
-    //transform: translate(0, 0);
-  }
-}
 
 .cgNav {
   font-size: 150%;
