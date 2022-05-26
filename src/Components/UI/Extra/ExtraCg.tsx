@@ -3,6 +3,7 @@ import React from "react";
 import {useSelector} from "react-redux";
 import {RootState} from "@/Core/store/store";
 import {useObject} from "@/hooks/useObject";
+import './extraCG_animation_List.scss';
 
 export function ExtraCg() {
   const cgPerPage = 9;
@@ -17,8 +18,8 @@ export function ExtraCg() {
     const index = i - (currentPage.value - 1) * cgPerPage;
     const deg = Random(-5, 5);
     const temp = <div style={{
-      transform: `rotate(${deg}deg)`,
-      animationDelay: `${index * 50}ms`
+      // transform: `rotate(${deg}deg)`,
+      animation: `cg_softIn_${deg} 1s ease-out ${index * 150}ms forwards `
     }} key={extraState.cg[i].name} className={styles.cgElement}>
       <div style={{
         backgroundImage: `url('${extraState.cg[i].url}')`,

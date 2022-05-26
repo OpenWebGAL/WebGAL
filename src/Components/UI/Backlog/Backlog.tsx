@@ -18,36 +18,38 @@ export const Backlog = () => {
         style={{animationDelay: `${20 * (runtime_currentBacklog.length - i)}ms`}}
         key={'backlogItem' + backlogItem.currentStageState.showText + backlogItem.saveScene.currentSentenceId}
       >
-        <div className={styles.backlog_item_button_list}>
-          <div
-            onClick={(e) => {
-              jumpFromBacklog(i);
-              e.preventDefault();
-              e.stopPropagation();
-            }}
-            className={styles.backlog_item_button_element}
-          >
-            <Return theme="outline" size="26" fill="#ffffff" strokeWidth={3}/>
-          </div>
-          <div onClick={() => {
-            // 获取到播放 backlog 语音的元素
-            const backlog_audio_element: any = document.getElementById('backlog_audio_play_element_' + i);
-            if (backlog_audio_element) {
-              backlog_audio_element.currentTime = 0;
-              const userDataStore = webgalStore.getState().userData;
-              const mainVol = userDataStore.optionData.volumeMain;
-              backlog_audio_element.volume = mainVol * 0.01 * userDataStore.optionData.vocalVolume * 0.01;
-              backlog_audio_element.play();
-            }
-          }} className={styles.backlog_item_button_element}>
-            <VolumeNotice theme="outline" size="26" fill="#ffffff" strokeWidth={3}/>
+        <div className={styles.backlog_func_area}>
+          {backlogItem.currentStageState.showName !== '' && <div className={styles.backlog_item_content_name}>
+            {backlogItem.currentStageState.showName}
+            {/* {backlogItem.currentStageState.showName === '' ? '' : '：'} */}
+          </div>}
+          <div className={styles.backlog_item_button_list}>
+            <div
+              onClick={(e) => {
+                jumpFromBacklog(i);
+                e.preventDefault();
+                e.stopPropagation();
+              }}
+              className={styles.backlog_item_button_element}
+            >
+              <Return theme="outline" size="23" fill="#ffffff" strokeWidth={3}/>
+            </div>
+            <div onClick={() => {
+              // 获取到播放 backlog 语音的元素
+              const backlog_audio_element: any = document.getElementById('backlog_audio_play_element_' + i);
+              if (backlog_audio_element) {
+                backlog_audio_element.currentTime = 0;
+                const userDataStore = webgalStore.getState().userData;
+                const mainVol = userDataStore.optionData.volumeMain;
+                backlog_audio_element.volume = mainVol * 0.01 * userDataStore.optionData.vocalVolume * 0.01;
+                backlog_audio_element.play();
+              }
+            }} className={styles.backlog_item_button_element}>
+              <VolumeNotice theme="outline" size="23" fill="#ffffff" strokeWidth={3}/>
+            </div>
           </div>
         </div>
         <div className={styles.backlog_item_content}>
-          <span className={styles.backlog_item_content_name}>
-            {backlogItem.currentStageState.showName}
-            {backlogItem.currentStageState.showName === '' ? '' : '：'}
-          </span>
           <span className={styles.backlog_item_content_text}>{backlogItem.currentStageState.showText}</span>
         </div>
         <audio id={'backlog_audio_play_element_' + i} src={backlogItem.currentStageState.vocal}/>
