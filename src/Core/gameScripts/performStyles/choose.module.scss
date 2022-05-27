@@ -16,17 +16,19 @@
   min-width: 50%;
   padding: 0.25em 1em 0.25em 1em;
   font-size: 265%;
-  color: #fff;
+  color: #8E354A;
   text-align: center;
   border-radius: 4px;
-  background: linear-gradient(to right,
-    rgba(0, 0, 0, 0.15) 0%,
-    rgba(0, 0, 0, 0.45) 50%,
-    rgba(0, 0, 0, 0.15) 100%);
+  border: 3px solid rgba(0, 0, 0, 0);
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.25);
+  background: rgba(255, 255, 255, 0.65);
   margin: 0.25em 0 0.25em 0;
+  transition: background-color 0.5s, border 0.5s, font-weight 0.5s, box-shadow 0.5s;
 }
 
 .Choose_item:hover {
-  background: rgba(0, 0, 0, 0.45);
-  box-shadow: 0 0 25px rgba(255, 255, 255, 0.65);
+  //font-weight: bold;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.35);
+  border: 3px solid #8E354A;
 }
