@@ -17,7 +17,7 @@ import {webSocketFunc} from "@/Core/util/syncWithEditor/webSocketFunc";
 /**
  * 引擎初始化函数
  */
-const initializeScript = (): void => {
+export const initializeScript = (): void => {
   // 打印初始log信息
   logger.info('WebGAL 4.2.1');
   logger.info('Github: https://github.com/MakinoharaShoko/WebGAL ');
