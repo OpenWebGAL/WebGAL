@@ -17,7 +17,7 @@ import {webSocketFunc} from "@/Core/util/syncWithEditor/webSocketFunc";
 /**
  * 引擎初始化函数
  */
-export const initializeScript = (): void => {
+const initializeScript = (): void => {
   // 打印初始log信息
   logger.info('WebGAL 4.2.1');
   logger.info('Github: https://github.com/MakinoharaShoko/WebGAL ');
@@ -45,17 +45,27 @@ export const initializeScript = (): void => {
     runtime_currentSceneData.currentScene = sceneParser(rawScene, 'start.txt', sceneUrl);
   });
   /**
-     * 设置音量
-     */
+   * 设置音量
+   */
   setVolume();
   /**
-     * 启动Pixi
-     */
+   * 启动Pixi
+   */
   pixiController(true);
 
   /**
-     * 绑定工具函数
-     */
+   * 绑定工具函数
+   */
   bindExtraFunc();
   webSocketFunc();
 };
+
+export function initWebGAL() {
+  let isWebGalInit = false;
+  return () => {
+    if (!isWebGalInit) {
+      initializeScript();
+      isWebGalInit = true;
+    }
+  };
+}
