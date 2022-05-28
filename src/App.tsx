@@ -1,6 +1,6 @@
 import Title from './Components/UI/Title/Title';
 import {useEffect} from 'react';
-import {initWebGAL} from './Core/initializeScript';
+import {initializeScript} from './Core/initializeScript';
 import Menu from './Components/UI/Menu/Menu';
 import {MainStage} from './Components/Stage/MainStage';
 import {BottomControlPanel} from './Components/UI/BottomControlPanel/ButtomControlPanel';
@@ -11,8 +11,7 @@ import {Extra} from "@/Components/UI/Extra/Extra";
 
 function App() {
   useEffect(() => {
-    const initialFunction = initWebGAL();
-    initialFunction();
+    initializeScript();
   }, []);
 
   // Provider用于对各组件提供状态

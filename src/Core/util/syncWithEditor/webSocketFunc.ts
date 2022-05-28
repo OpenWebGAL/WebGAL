@@ -3,6 +3,10 @@ import {syncWithOrigine} from "@/Core/util/syncWithEditor/syncWithOrigine";
 
 export const webSocketFunc = () => {
   const loc: string = window.location.hostname;
+  const protocol: string = window.location.protocol;
+  if (protocol === "https:") {
+    return;
+  }
   const wsUrl = `ws://${loc}:9999`;
   logger.info('正在启动socket连接位于：' + wsUrl);
   const socket = new WebSocket(wsUrl);
