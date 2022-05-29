@@ -1,6 +1,12 @@
 unlockCg:xgmain.jpeg -name=星光咖啡馆与死神之蝶;
 unlockBgm:s_Title.mp3 -name=Smiling-Swinging!!;
 changeBg:c4.jpg -next;
+WebGAL:测试语句插演出！马上切换立绘...... -notend;
+changeFigure:k1.png -next;
+切换立绘！马上切换表情...... -notend -concat;
+changeFigure:k2.png -next;
+切换表情！ -concat;
+changeBg:c4.jpg -next;
 unlockCg:c4.jpg -name=街前;
 WebGAL:特效系统是3.9.2版本新引入的系统，你想要看特效的演示吗？;
 choose:观看特效演示:demo|我不要看特效，直接来吧！:toStart;

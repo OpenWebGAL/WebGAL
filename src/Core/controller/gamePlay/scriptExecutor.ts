@@ -69,7 +69,13 @@ export const scriptExecutor = () => {
     }
   });
 
-  const isSaveBacklog = currentScript.command === commandType.say; // 是否在本句保存backlog（一般遇到对话保存）
+  let isSaveBacklog = currentScript.command === commandType.say; // 是否在本句保存backlog（一般遇到对话保存）
+  // 检查当前对话是否有 notend 参数
+  currentScript.args.forEach(e => {
+    if (e.key === 'notend' && e.value === true) {
+      isSaveBacklog = false;
+    }
+  });
   let currentStageState: IStageState;
 
   // 执行至指定 sentenceID
@@ -95,8 +101,17 @@ export const scriptExecutor = () => {
     logger.debug('本条语句执行结果', currentStageState);
     // 保存 backlog
     if (isSaveBacklog) {
+      const newStageState = _.cloneDeep(currentStageState);
+      newStageState.PerformList.forEach(ele=>{
+        ele.script.args.forEach(argelement=>{
+          if(argelement.key === 'concat'){
+            argelement.value = false;
+            ele.script.content = newStageState.showText;
+          }
+        });
+      });
       const backlogElement: IBacklogItem = {
-        currentStageState: _.cloneDeep(currentStageState),
+        currentStageState: newStageState,
         saveScene: {
           currentSentenceId: runtime_currentSceneData.currentSentenceId,// 当前语句ID
           sceneStack: _.cloneDeep(runtime_currentSceneData.sceneStack), // 场景栈
