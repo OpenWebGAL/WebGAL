@@ -1,4 +1,4 @@
-import {arg, commandType, IAsset, ISentence, parsedCommand} from '../../../interface/coreInterface/sceneInterface';
+import {arg, commandType, IAsset, ISentence, parsedCommand} from '@/interface/coreInterface/sceneInterface';
 import {commandParser} from './commandParser';
 import {argsParser} from './argsParser';
 import {contentParser} from './contentParser';
@@ -17,7 +17,6 @@ export const scriptParser = (sentenceRaw: string): ISentence => {
   let sentenceAssets: Array<IAsset>; // 语句携带的资源列表
   let parsedCommand: parsedCommand; // 解析后的命令
   let commandRaw: string;
-  let inheritSaying = '';
 
   // 正式开始解析
 
@@ -25,33 +24,24 @@ export const scriptParser = (sentenceRaw: string): ISentence => {
   let newSentenceRaw = sentenceRaw.split(';')[0];
   // 截取命令
   const getCommandResult = /:/.exec(newSentenceRaw);
-  // 没有command，说明这是一条连续对话
+  /**
+   * 拆分命令和语句，同时处理连续对话。
+   */
+  // 没有command，说明这是一条连续对话或单条语句
   if (getCommandResult === null) {
-    const getBlankResult = / /.exec(newSentenceRaw);
-    if (getBlankResult) {
-      commandRaw = newSentenceRaw.substring(0, getBlankResult.index);
-      newSentenceRaw = newSentenceRaw.substring(getBlankResult.index, newSentenceRaw.length);
-      parsedCommand = commandParser(commandRaw);
-      command = parsedCommand.type;
-      for (const e of parsedCommand.additionalArgs) {
-        if (command === commandType.say && e.key === 'speaker') {
-          inheritSaying = e.value.toString();
-        } else
-          args.push(e);
+    commandRaw = newSentenceRaw;
+    parsedCommand = commandParser(commandRaw);
+    command = parsedCommand.type;
+    for (const e of parsedCommand.additionalArgs) {
+      // 由于是连续对话，所以我们去除 speaker 参数。
+      if(command === commandType.say&& e.key === 'speaker'){
+        continue;
       }
-    } else {
-      commandRaw = newSentenceRaw.substring(0, newSentenceRaw.length);
-      newSentenceRaw = newSentenceRaw.substring(0, newSentenceRaw.length);
-      parsedCommand = commandParser(commandRaw);
-      command = parsedCommand.type;
-      if (command !== commandType.say) {
-        for (const e of parsedCommand.additionalArgs) {
-          args.push(e);
-        }
-      }
+      args.push(e);
     }
   } else {
     commandRaw = newSentenceRaw.substring(0, getCommandResult.index);
+    // 划分命令区域和content区域
     newSentenceRaw = newSentenceRaw.substring(getCommandResult.index + 1, newSentenceRaw.length);
     parsedCommand = commandParser(commandRaw);
     command = parsedCommand.type;
@@ -70,9 +60,6 @@ export const scriptParser = (sentenceRaw: string): ISentence => {
     }
   }
   content = contentParser(newSentenceRaw, command); // 将语句内容里的文件名转为相对或绝对路径
-  if (inheritSaying !== '') {
-    content = inheritSaying;
-  }
   sentenceAssets = assetsScanner(command, content, args); // 扫描语句携带资源
   subScene = subSceneScanner(command, content); // 扫描语句携带子场景
   return {
