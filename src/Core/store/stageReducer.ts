@@ -27,6 +27,9 @@ export const initState: IStageState = {
   bgFilter: '', // 现在不用，先预留
   bgTransform: '', // 现在不用，先预留
   PerformList: [], // 要启动的演出列表
+  currentDialogKey: 'initial',
+  // currentPerformDelay: 0
+  currentConcatDialogPrev:'',
 };
 
 /**

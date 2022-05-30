@@ -54,6 +54,10 @@ export interface IStageState {
   bgTransform: string,
   bgFilter: string,
   PerformList: Array<IRunPerform> // 要启动的演出列表
+  currentDialogKey: string // 当前对话的key
+  // 当前演出的延迟，用于做对话插演出！
+  // currentPerformDelay:number
+  currentConcatDialogPrev:string,
 }
 
 /**
