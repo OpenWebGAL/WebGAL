@@ -3,8 +3,8 @@ import {IPerform, IRunPerform} from '@/interface/coreInterface/performInterface'
 import {runtime_gamePlay} from "@/Core/runtime/gamePlay";
 import {logger} from "@/Core/util/etc/logger";
 import {webgalStore} from "@/Core/store/store";
-import _ from 'lodash';
 import {resetStageState} from "@/Core/store/stageReducer";
+import  cloneDeep  from 'lodash/cloneDeep';
 
 /**
  * 初始化pixi
@@ -30,7 +30,7 @@ export const pixiInit = (sentence: ISentence): IPerform => {
                  * 从状态表里清除演出
                  */
       const stageState = webgalStore.getState().stage;
-      const newStageState = _.cloneDeep(stageState);
+      const newStageState = cloneDeep(stageState);
       for (let i = 0; i < newStageState.PerformList.length; i++) {
         const e2: IRunPerform = newStageState.PerformList[i];
         if (e2.script.command === commandType.pixi) {
