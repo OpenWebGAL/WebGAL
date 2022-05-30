@@ -23,13 +23,13 @@ import {setBgAni} from "@/Core/gameScripts/setBgAni";
 import {setFigAni} from "@/Core/gameScripts/setFigAni";
 import {setBgTransform} from "@/Core/gameScripts/setBgTransform";
 import {webgalStore} from "@/Core/store/store";
-import _ from 'lodash';
 import {resetStageState} from '@/Core/store/stageReducer';
 import {nextSentence} from "@/Core/controller/gamePlay/nextSentence";
 import {setVar} from "@/Core/gameScripts/setVar";
 import {showVars} from "@/Core/gameScripts/showVars";
 import {unlockCg} from "@/Core/gameScripts/unlockCg";
 import {unlockBgm} from "@/Core/gameScripts/unlockBgm";
+import cloneDeep from 'lodash/cloneDeep';
 
 /**
  * 规范函数的类型
@@ -87,7 +87,7 @@ export const runScript = (script: ISentence) => {
 
   // 同步演出状态
   const stageState = webgalStore.getState().stage;
-  const newStageState = _.cloneDeep(stageState);
+  const newStageState = cloneDeep(stageState);
   newStageState.PerformList.push({isHoldOn: perform.isHoldOn, script: script});
   webgalStore.dispatch(resetStageState(newStageState));
 
