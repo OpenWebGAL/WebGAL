@@ -6,6 +6,7 @@ import {playVocal} from './playVocal';
 import {webgalStore} from "@/Core/store/store";
 import {setStage} from "@/Core/store/stageReducer";
 import {logger} from "@/Core/util/etc/logger";
+import {webgal_env} from "@/env/webgal-env";
 
 /**
  * 进行普通对话的显示
@@ -28,7 +29,7 @@ export const showVars = (sentence: ISentence): IPerform => {
     });
   }, 0);
   const performInitName: string = getRandomPerformName();
-  const textDelay = 55 - 20 * userDataState.optionData.textSpeed;
+  const textDelay = webgal_env.textInitialDelay - 20 * userDataState.optionData.textSpeed;
   const endDelay = 750 - userDataState.optionData.textSpeed * 250;
   return {
     performName: performInitName,
