@@ -8,3 +8,4 @@ export const gameInfo = {
 };
 
 export const settledScene: Array<string> = [];
+export const settledAssets: Array<string> = [];
