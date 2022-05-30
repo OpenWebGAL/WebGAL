@@ -19,7 +19,7 @@ export function ExtraCg() {
     const index = i - (currentPage.value - 1) * cgPerPage;
     const deg = Random(-5, 5);
     const temp = <ExtraCgElement name={extraState.cg[i].name} imgUrl={extraState.cg[i].url} transformDeg={deg}
-      index={index}/>;
+      index={index} key={index.toString() + extraState.cg[i].url}/>;
     showCgList.push(temp);
   }
 
