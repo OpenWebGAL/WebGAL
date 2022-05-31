@@ -4,13 +4,13 @@ import {runtime_currentSceneData} from '../../runtime/sceneData';
 import {runScript} from './runScript';
 import {logger} from '../../util/etc/logger';
 import {IStageState} from '../../../interface/stateInterface/stageInterface';
-import * as _ from 'lodash';
 import {restoreScene} from '../scene/restoreScene';
 import {IBacklogItem, sceneEntry} from '../../../interface/coreInterface/runtimeInterface';
 import {webgalStore} from "@/Core/store/store";
 import {getValueFromState} from "@/Core/gameScripts/setVar";
 import {strIf} from "@/Core/gameScripts/function/strIf";
 import {nextSentence} from "@/Core/controller/gamePlay/nextSentence";
+import cloneDeep from 'lodash/cloneDeep';
 
 /**
  * 语句执行器
@@ -101,10 +101,10 @@ export const scriptExecutor = () => {
     logger.debug('本条语句执行结果', currentStageState);
     // 保存 backlog
     if (isSaveBacklog) {
-      const newStageState = _.cloneDeep(currentStageState);
-      newStageState.PerformList.forEach(ele=>{
-        ele.script.args.forEach(argelement=>{
-          if(argelement.key === 'concat'){
+      const newStageState = cloneDeep(currentStageState);
+      newStageState.PerformList.forEach(ele => {
+        ele.script.args.forEach(argelement => {
+          if (argelement.key === 'concat') {
             argelement.value = false;
             ele.script.content = newStageState.showText;
           }
@@ -114,7 +114,7 @@ export const scriptExecutor = () => {
         currentStageState: newStageState,
         saveScene: {
           currentSentenceId: runtime_currentSceneData.currentSentenceId,// 当前语句ID
-          sceneStack: _.cloneDeep(runtime_currentSceneData.sceneStack), // 场景栈
+          sceneStack: cloneDeep(runtime_currentSceneData.sceneStack), // 场景栈
           sceneName: runtime_currentSceneData.currentScene.sceneName, // 场景名称
           sceneUrl: runtime_currentSceneData.currentScene.sceneUrl, // 场景url
         }

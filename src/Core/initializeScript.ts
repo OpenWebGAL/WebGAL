@@ -19,7 +19,7 @@ import {webSocketFunc} from "@/Core/util/syncWithEditor/webSocketFunc";
  */
 export const initializeScript = (): void => {
   // 打印初始log信息
-  logger.info('WebGAL 4.2.2');
+  logger.info('WebGAL 4.2.5');
   logger.info('Github: https://github.com/MakinoharaShoko/WebGAL ');
   logger.info('Made with ❤ by MakinoharaShoko');
   // 激活强制缩放
@@ -52,6 +52,19 @@ export const initializeScript = (): void => {
    * 启动Pixi
    */
   pixiController(true);
+
+  /**
+   * 如果有 Service Worker ，则卸载所有 Service Worker
+   */
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.getRegistrations().then((registrations) => {
+      for (const registration of registrations) {
+        registration.unregister().then(() => {
+          logger.info('已卸载 Service Worker');
+        });
+      }
+    });
+  }
 
   /**
    * 绑定工具函数

@@ -1,14 +1,14 @@
 import {runtime_currentBacklog} from "@/Core/runtime/backlog";
 import {initSceneData, runtime_currentSceneData} from "@/Core/runtime/sceneData";
 import {runtime_gamePlay} from "@/Core/runtime/gamePlay";
-import * as _ from "lodash";
 import {initState, resetStageState} from "@/Core/store/stageReducer";
 import {webgalStore} from "@/Core/store/store";
+import cloneDeep from "lodash/cloneDeep";
 
 export const resetStage = (resetBacklog: boolean) => {
   /**
-     * 清空运行时
-     */
+   * 清空运行时
+   */
   if (resetBacklog) {
     runtime_currentBacklog.splice(0, runtime_currentBacklog.length); // 清空backlog
   }
@@ -39,6 +39,6 @@ export const resetStage = (resetBacklog: boolean) => {
   runtime_gamePlay.autoTimeout = null;
 
   // 清空舞台状态表
-  const initSceneDataCopy = _.cloneDeep(initState);
+  const initSceneDataCopy = cloneDeep(initState);
   webgalStore.dispatch(resetStageState(initSceneDataCopy));
 };

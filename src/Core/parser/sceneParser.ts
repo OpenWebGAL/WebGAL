@@ -3,8 +3,8 @@ import { scriptParser } from './scriptParser/scriptParser';
 import { assetsPrefetcher } from '../util/prefetcher/assetsPrefetcher';
 import { scenePrefetcher } from '../util/prefetcher/scenePrefetcher';
 import { logger } from '../util/etc/logger';
-import _ from 'lodash';
 import { settledScene } from '../runtime/etc';
+import  uniqWith  from 'lodash/uniqWith';
 
 /**
  * 场景解析器
@@ -16,7 +16,7 @@ import { settledScene } from '../runtime/etc';
 export const sceneParser = (rawScene: string, sceneName: string, sceneUrl: string): IScene => {
   const rawSentenceList = rawScene.split('\n'); // 原始句子列表
   // 去除空行
-  const rawSentenceListWithoutEmpty = rawSentenceList.filter(sentence => sentence.trim() !== ''); 
+  const rawSentenceListWithoutEmpty = rawSentenceList.filter(sentence => sentence.trim() !== '');
   let assetsList: Array<IAsset> = []; // 场景资源列表
   let subSceneList: Array<string> = []; // 子场景列表
   const sentenceList: Array<ISentence> = rawSentenceListWithoutEmpty.map((sentence) => {
@@ -27,11 +27,11 @@ export const sceneParser = (rawScene: string, sceneName: string, sceneUrl: strin
     return returnSentence;
   });
     // 开始资源的预加载
-  assetsList = _.uniqWith(assetsList); // 去重
+  assetsList = uniqWith(assetsList); // 去重
   assetsPrefetcher(assetsList);
   // 开始场景的预加载
   settledScene.push(sceneUrl); // 放入已加载场景列表，避免递归加载相同场景
-  subSceneList = _.uniqWith(subSceneList); // 去重
+  subSceneList = uniqWith(subSceneList); // 去重
   scenePrefetcher(subSceneList);
 
   const parsedScene: IScene = {

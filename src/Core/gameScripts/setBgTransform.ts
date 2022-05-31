@@ -2,8 +2,8 @@ import {ISentence} from '@/interface/coreInterface/sceneInterface';
 import {IPerform} from '@/interface/coreInterface/performInterface';
 import {IEffect} from "@/interface/stateInterface/stageInterface";
 import {webgalStore} from "@/Core/store/store";
-import _ from 'lodash';
 import {setStage} from "@/Core/store/stageReducer";
+import  cloneDeep  from 'lodash/cloneDeep';
 
 /**
  * 设置背景变换
@@ -12,7 +12,7 @@ import {setStage} from "@/Core/store/stageReducer";
 export const setBgTransform = (sentence: ISentence): IPerform => {
   const stageState = webgalStore.getState().stage;
   const effectList: Array<IEffect> = stageState.effects;
-  const newEffectList = _.cloneDeep(effectList);
+  const newEffectList = cloneDeep(effectList);
   let isTargetSet = false;
   newEffectList.forEach((e) => {
     if (e.target === 'MainStage_bg_MainContainer') {

@@ -20,7 +20,6 @@ export const MainStage: FC = () => {
 
     // 设置效果
     setTimeout(() => {
-      // const bg = document.getElementById('MainStage_bg_MainContainer');
       effectList.forEach(effect => {
         const target = document.getElementById(effect.target);
         if (target) {
@@ -32,16 +31,6 @@ export const MainStage: FC = () => {
           }
         }
       });
-      // if (stageStore.stageState.bgTransform !== '') {
-      //     if(bg){
-      //         bg.style.transform = stageStore.stageState.bgTransform;
-      //     }
-      // }
-      // if (stageStore.stageState.bgFilter !== '') {
-      //     if(bg){
-      //         bg.style.filter= stageStore.stageState.bgFilter;
-      //     }
-      // }
     }, 100);
   });
   return <div className={styles.MainStage_main}>

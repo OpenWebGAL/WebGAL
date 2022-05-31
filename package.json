@@ -1,7 +1,7 @@
 {
     "name": "webgal",
     "private": true,
-    "version": "4.2.2",
+    "version": "4.2.5",
     "scripts": {
         "dev": "vite",
         "build": "tsc && vite build --base=./",
@@ -51,6 +51,7 @@
         "eslint-plugin-react": "^7.29.4",
         "lint-staged": "^12.3.7",
         "prettier": "^2.6.2",
+        "rollup-plugin-visualizer": "^5.6.0",
         "typescript": "^4.5.4",
         "vite": "^2.8.0"
     }

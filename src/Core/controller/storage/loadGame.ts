@@ -1,8 +1,6 @@
 import {runtime_currentBacklog} from '../../runtime/backlog';
 import {runtime_currentSceneData} from '../../runtime/sceneData';
 import {ISaveData} from '../../../interface/stateInterface/userDataInterface';
-import {runtime_gamePlay} from '../../runtime/gamePlay';
-import * as _ from 'lodash';
 import {logger} from '../../util/etc/logger';
 import {sceneFetcher} from '../scene/sceneFetcher';
 import {sceneParser} from '../../parser/sceneParser';
@@ -11,6 +9,7 @@ import {resetStageState} from "@/Core/store/stageReducer";
 import {setVisibility} from "@/Core/store/GUIReducer";
 import { restorePerform } from './jumpFromBacklog';
 import {stopAllPerform} from "@/Core/controller/gamePlay/stopAllPerform";
+import  cloneDeep  from 'lodash/cloneDeep';
 
 /**
  * 读取游戏存档
@@ -30,7 +29,7 @@ export const loadGame = (index: number) => {
     );
   });
   runtime_currentSceneData.currentSentenceId = loadFile.sceneData.currentSentenceId;
-  runtime_currentSceneData.sceneStack = _.cloneDeep(loadFile.sceneData.sceneStack);
+  runtime_currentSceneData.sceneStack = cloneDeep(loadFile.sceneData.sceneStack);
 
   // 强制停止所有演出
   stopAllPerform();
@@ -43,7 +42,7 @@ export const loadGame = (index: number) => {
   }
 
   // 恢复舞台状态
-  const newStageState = _.cloneDeep(loadFile.nowStageState);
+  const newStageState = cloneDeep(loadFile.nowStageState);
   const dispatch = webgalStore.dispatch;
   dispatch(resetStageState(newStageState));
 
