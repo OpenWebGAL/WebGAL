@@ -30,6 +30,8 @@ import {showVars} from "@/Core/gameScripts/showVars";
 import {unlockCg} from "@/Core/gameScripts/unlockCg";
 import {unlockBgm} from "@/Core/gameScripts/unlockBgm";
 import cloneDeep from 'lodash/cloneDeep';
+import { setFigTransform } from '@/Core/gameScripts/setFigTransform';
+import { setFigFilter } from '@/Core/gameScripts/setFigFilter';
 
 /**
  * 规范函数的类型
@@ -69,7 +71,9 @@ export const runScript = (script: ISentence) => {
     [commandType.setVar, setVar],
     [commandType.showVars, showVars],
     [commandType.unlockCg, unlockCg],
-    [commandType.unlockBgm, unlockBgm]
+    [commandType.unlockBgm, unlockBgm],
+    [commandType.setFigTransform, setFigTransform],
+    [commandType.setFigFilter, setFigFilter],
   ]);
 
   // 根据脚本类型切换函数
