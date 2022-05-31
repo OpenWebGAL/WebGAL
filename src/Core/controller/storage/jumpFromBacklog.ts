@@ -2,16 +2,15 @@ import {logger} from '../../util/etc/logger';
 import {sceneFetcher} from '../scene/sceneFetcher';
 import {runtime_currentSceneData} from '../../runtime/sceneData';
 import {sceneParser} from '../../parser/sceneParser';
-import * as _ from 'lodash';
-import {runtime_gamePlay} from '../../runtime/gamePlay';
 import {runtime_currentBacklog} from '../../runtime/backlog';
-import {IBacklogItem} from '../../../interface/coreInterface/runtimeInterface';
-import {IStageState} from '../../../interface/stateInterface/stageInterface';
+import {IBacklogItem} from '@/interface/coreInterface/runtimeInterface';
+import {IStageState} from '@/interface/stateInterface/stageInterface';
 import {webgalStore} from "@/Core/store/store";
 import {resetStageState} from "@/Core/store/stageReducer";
 import {setVisibility} from "@/Core/store/GUIReducer";
 import {runScript} from "@/Core/controller/gamePlay/runScript";
 import {stopAllPerform} from "@/Core/controller/gamePlay/stopAllPerform";
+import  cloneDeep  from 'lodash/cloneDeep';
 
 /**
  * 恢复演出
@@ -42,7 +41,7 @@ export const jumpFromBacklog = (index: number) => {
     );
   });
   runtime_currentSceneData.currentSentenceId = backlogFile.saveScene.currentSentenceId;
-  runtime_currentSceneData.sceneStack = _.cloneDeep(backlogFile.saveScene.sceneStack);
+  runtime_currentSceneData.sceneStack = cloneDeep(backlogFile.saveScene.sceneStack);
 
   // 强制停止所有演出
   stopAllPerform();
@@ -53,7 +52,7 @@ export const jumpFromBacklog = (index: number) => {
   }
 
   // 恢复舞台状态
-  const newStageState: IStageState = _.cloneDeep(backlogFile.currentStageState);
+  const newStageState: IStageState = cloneDeep(backlogFile.currentStageState);
 
   dispatch(resetStageState(newStageState));
 

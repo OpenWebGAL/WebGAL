@@ -1,36 +1,44 @@
 import {ISentence} from '@/interface/coreInterface/sceneInterface';
 import {IPerform} from '@/interface/coreInterface/performInterface';
 import {IEffect} from "@/interface/stateInterface/stageInterface";
-import { logger } from '@/Core/util/etc/logger';
 import {webgalStore} from "@/Core/store/store";
 import {setStage} from "@/Core/store/stageReducer";
 import  cloneDeep  from 'lodash/cloneDeep';
 
 /**
- * 设置背景效果
+ * 设置立绘变换
  * @param sentence
  */
-export const setBgFilter = (sentence: ISentence): IPerform => {
+export const setFigTransform = (sentence: ISentence): IPerform => {
   const stageState = webgalStore.getState().stage;
-  const effectList: Array<IEffect> =stageState.effects;
+  const effectList: Array<IEffect> = stageState.effects;
   const newEffectList = cloneDeep(effectList);
+  let target = 'figCenterContainer';
+  sentence.args.forEach(e => {
+    if (e.key === 'left' && e.value) {
+      target = 'figLeftContainer';
+    }
+    if (e.key === 'right' && e.value) {
+      target = 'figRightContainer';
+    }
+  });
   let isTargetSet = false;
   newEffectList.forEach((e) => {
-    if (e.target === 'MainStage_bg_MainContainer') {
-      logger.warn('已存在效果，正在修改');
+    if (e.target === target) {
       isTargetSet = true;
-      e.filter = sentence.content;
+      e.transform = sentence.content;
     }
   });
   if (!isTargetSet) {
     newEffectList.push({
-      target: 'MainStage_bg_MainContainer',
-      transform: '',
-      filter: sentence.content
+      target: target,
+      transform: sentence.content,
+      filter: ''
     });
   }
   webgalStore.dispatch(setStage({key: 'effects', value: newEffectList}));
-  // stageStore.setStage('bgFilter', sentence.content);
+  // stageStore.setStage('effects', effectList);
+  // stageStore.setStage('bgTransform',sentence.content);
   return {
     performName: 'none',
     duration: 0,

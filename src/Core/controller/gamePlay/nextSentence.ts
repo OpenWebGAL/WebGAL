@@ -3,8 +3,8 @@ import {runtime_gamePlay} from '../../runtime/gamePlay';
 import {IRunPerform} from '../../../interface/coreInterface/performInterface';
 import {logger} from '../../util/etc/logger';
 import {webgalStore} from "@/Core/store/store";
-import _ from 'lodash';
 import {resetStageState} from "@/Core/store/stageReducer";
+import cloneDeep from 'lodash/cloneDeep';
 
 /**
  * 进行下一句
@@ -38,7 +38,7 @@ export const nextSentence = () => {
     // 所有普通演出已经结束
     // 清除状态表的演出序列（因为这时候已经准备进行下一句了）
     const stageState = webgalStore.getState().stage;
-    const newStageState = _.cloneDeep(stageState);
+    const newStageState = cloneDeep(stageState);
     for (let i = 0; i < newStageState.PerformList.length; i++) {
       const e: IRunPerform = newStageState.PerformList[i];
       if (!e.isHoldOn) {
