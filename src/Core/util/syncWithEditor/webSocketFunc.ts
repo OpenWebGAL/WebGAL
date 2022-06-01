@@ -4,7 +4,7 @@ import {syncWithOrigine} from "@/Core/util/syncWithEditor/syncWithOrigine";
 export const webSocketFunc = () => {
   const loc: string = window.location.hostname;
   const protocol: string = window.location.protocol;
-  if (protocol === "https:") {
+  if (protocol !== "http:") {
     return;
   }
   const wsUrl = `ws://${loc}:9999`;
