@@ -1,8 +1,12 @@
+![wgfav-new-min](https://user-images.githubusercontent.com/30483415/172886841-d61ac4e1-a0ac-4b3a-8a75-e586837ffb9a.png)
+
 # WebGAL
 
 界面美观、功能强大、易于开发的全新网页端视觉小说引擎
 
-## 在线演示
+演示视频： https://www.bilibili.com/video/BV1jS4y1i7Wz/
+
+## 在线体验
 
 https://demo.msfasr.com
 
