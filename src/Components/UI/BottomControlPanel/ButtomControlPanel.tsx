@@ -30,7 +30,7 @@ export const BottomControlPanel = () => {
     dispatch(setMenuPanelTag(menuPanel));
   };
   return (<div className={styles.ToCenter}>
-    {GUIStore.showTextBox && stageState.enableFilm ==='' && <div className={styles.main}>
+    {GUIStore.showTextBox &&stageState.enableFilm ==='' && <div className={styles.main}>
       {GUIStore.showTextBox && (
         <span className={styles.singleButton} onClick={() => setComponentVisibility('showTextBox', false)}>
           <PreviewCloseOne className={styles.button} theme="outline" size="30" fill="#f5f5f7" strokeWidth={3.5}/>
