@@ -30,6 +30,7 @@ export const initState: IStageState = {
   currentDialogKey: 'initial',
   // currentPerformDelay: 0
   currentConcatDialogPrev:'',
+  enableFilm:'',
 };
 
 /**

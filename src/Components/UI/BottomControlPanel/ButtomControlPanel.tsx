@@ -21,6 +21,7 @@ import { backToTitle } from '@/Core/controller/gamePlay/backToTitle';
 
 export const BottomControlPanel = () => {
   const GUIStore = useSelector((state: RootState) => state.GUI);
+  const stageState = useSelector((state:RootState)=>state.stage);
   const dispatch = useDispatch();
   const setComponentVisibility = (component: (keyof componentsVisibility), visibility: boolean) => {
     dispatch(setVisibility({component, visibility}));
@@ -29,7 +30,7 @@ export const BottomControlPanel = () => {
     dispatch(setMenuPanelTag(menuPanel));
   };
   return (<div className={styles.ToCenter}>
-    {GUIStore.showTextBox && <div className={styles.main}>
+    {GUIStore.showTextBox && stageState.enableFilm ==='' && <div className={styles.main}>
       {GUIStore.showTextBox && (
         <span className={styles.singleButton} onClick={() => setComponentVisibility('showTextBox', false)}>
           <PreviewCloseOne className={styles.button} theme="outline" size="30" fill="#f5f5f7" strokeWidth={3.5}/>

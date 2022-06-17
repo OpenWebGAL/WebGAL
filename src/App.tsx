@@ -16,7 +16,7 @@ function App() {
 
   // Provider用于对各组件提供状态
   return (
-    <div className="App" style={{height: '100%', width: '100%', background: 'rgba(0, 0, 0, 0.6)'}}>
+    <div className="App" style={{height: '100%', width: '100%', background: 'rgba(0, 0, 0, 1)'}}>
       <Provider store={webgalStore}>
         <Extra/>
         <Title/>
