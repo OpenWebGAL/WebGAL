@@ -1,3 +1,4 @@
 export const webgal_env = {
-  textInitialDelay:100,
+  // 不能小于50
+  textInitialDelay:80,
 };
