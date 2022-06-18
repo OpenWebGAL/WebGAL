@@ -36,6 +36,8 @@ export const initializeScript = (): void => {
       }, 50);
     }
   };
+  // 获得 userAnimation
+  loadStyle('./game/userAnimation.css');
   // 获取游戏信息
   infoFetcher('./game/config.txt');
   // 获取start场景
@@ -81,4 +83,13 @@ export function initWebGAL() {
       isWebGalInit = true;
     }
   };
+}
+
+function loadStyle(url: string) {
+  const link = document.createElement('link');
+  link.type = 'text/css';
+  link.rel = 'stylesheet';
+  link.href = url;
+  const head = document.getElementsByTagName('head')[0];
+  head.appendChild(link);
 }
