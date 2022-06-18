@@ -2,7 +2,7 @@
  * 语句类型
  */
 import {sceneEntry} from './runtimeInterface';
-import {fileType} from '../../Core/util/gameAssetsAccess/assetSetter';
+import {fileType} from '@/Core/util/gameAssetsAccess/assetSetter';
 
 export enum commandType {
   say, // 对话
@@ -31,7 +31,8 @@ export enum commandType {
   callScene, // 调用场景
   showVars,
   unlockCg,
-  unlockBgm
+  unlockBgm,
+  filmMode,
 }
 
 /**

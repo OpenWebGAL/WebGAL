@@ -1,4 +1,5 @@
-import {commandType, parsedCommand} from '../../../interface/coreInterface/sceneInterface';
+import {commandType, parsedCommand} from '@/interface/coreInterface/sceneInterface';
+import {addNextArgList, scriptConfig} from "@/Core/config/scriptConfig";
 
 /**
  * 处理命令
@@ -33,82 +34,17 @@ function getCommandType(command: string): commandType {
   // if (command.match(/if/)) {
   //   return commandType.if;
   // }
-  switch (command) {
-  case 'intro':
-    return commandType.intro;
-  case 'changeBg':
-    return commandType.changeBg;
-  case 'changeFigure':
-    return commandType.changeFigure;
-  case 'miniAvatar':
-    return commandType.miniAvatar;
-  case 'changeScene':
-    return commandType.changeScene;
-  case 'choose':
-    return commandType.choose;
-  case 'end':
-    return commandType.end;
-  case 'bgm':
-    return commandType.bgm;
-  case 'playVideo':
-    return commandType.video;
-  case 'setBgAni':
-    return commandType.perform_bgAni;
-  case 'setFigAni':
-    return commandType.perform_FigAni;
-  case 'setBgTransform':
-    return commandType.setBgTransform;
-  case 'setBgFilter':
-    return commandType.setBgFilter;
-  case 'setFigTransform':
-    return commandType.setFigTransform;
-  case 'setFigFilter':
-    return commandType.setFigFilter;
-  case 'pixiInit':
-    return commandType.pixiInit;
-  case 'pixiPerform':
-    return commandType.pixi;
-  case 'label':
-    return commandType.label;
-  case 'jumpLabel':
-    return commandType.jumpLabel;
-  case 'chooseLabel':
-    return commandType.chooseLabel;
-  case 'setVar':
-    return commandType.setVar;
-  case 'callScene':
-    return commandType.callScene;
-  case 'showVars':
-    return commandType.showVars;
-  case 'unlockCg':
-    return commandType.unlockCg;
-  case 'unlockBgm':
-    return commandType.unlockBgm;
-  default:
-    // 默认是对话
-    return commandType.say;
-  }
+  const commandMap = new Map();
+  scriptConfig.forEach(e=>{
+    commandMap.set(e.scriptString,e.scriptType);
+  });
+  if(commandMap.has(command)){
+    return commandMap.get(command);
+  }else return commandType.say;
 }
 
 function addNextArg(commandToParse: parsedCommand, thisCommandType: commandType) {
-  const nextList = [
-    commandType.bgm,
-    commandType.pixi,
-    commandType.pixiInit,
-    commandType.label,
-    commandType.if,
-    commandType.miniAvatar,
-    commandType.setBgTransform,
-    commandType.setBgFilter,
-    commandType.setFigFilter,
-    commandType.setFigTransform,
-    commandType.perform_FigAni,
-    commandType.perform_bgAni,
-    commandType.setVar,
-    commandType.unlockBgm,
-    commandType.unlockCg,
-  ];
-  if (nextList.includes(thisCommandType)) {
+  if (addNextArgList.includes(thisCommandType)) {
     commandToParse.additionalArgs.push({
       key: 'next',
       value: true,

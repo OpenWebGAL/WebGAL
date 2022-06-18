@@ -10,6 +10,7 @@ import {IEffect} from "@/interface/stateInterface/stageInterface";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "@/Core/store/store";
 import {setVisibility} from "@/Core/store/GUIReducer";
+import {TextBoxFilm} from "@/Components/Stage/TextBox/TextBoxFilm";
 
 export const MainStage: FC = () => {
   const stageState = useSelector((state: RootState) => state.stage);
@@ -33,23 +34,33 @@ export const MainStage: FC = () => {
       });
     }, 100);
   });
+  let stageWidth = '100%';
+  let stageHeight = '100%';
+  let top = '0';
+  if (stageState.enableFilm !== '') {
+    stageHeight = '76%';
+    top = '12%';
+  }
   return <div className={styles.MainStage_main}>
-    <div key={'bgOld' + stageState.oldBgName}
-      id="MainStage_bg_OldContainer"
-      className={styles.MainStage_oldBgContainer} style={{
-        backgroundImage: `url("${stageState.oldBgName}")`,
-        backgroundSize: "cover"
-      }}/>
-    <div key={'bgMain' + stageState.bgName}
-      id="MainStage_bg_MainContainer"
-      className={styles.MainStage_bgContainer} style={{
-        backgroundImage: `url("${stageState.bgName}")`,
-        backgroundSize: "cover"
-      }}/>
-    <FigureContainer/>
-    {GUIState.showTextBox && <TextBox/>}
-    <AudioContainer/>
+    <div className={styles.MainStage_main_container} style={{width: stageWidth, height: stageHeight, top: top}}>
+      <div key={'bgOld' + stageState.oldBgName}
+        id="MainStage_bg_OldContainer"
+        className={styles.MainStage_oldBgContainer} style={{
+          backgroundImage: `url("${stageState.oldBgName}")`,
+          backgroundSize: "cover"
+        }}/>
+      <div key={'bgMain' + stageState.bgName}
+        id="MainStage_bg_MainContainer"
+        className={styles.MainStage_bgContainer} style={{
+          backgroundImage: `url("${stageState.bgName}")`,
+          backgroundSize: "cover"
+        }}/>
+      <FigureContainer/>
+    </div>
     <FullScreenPerform/>
+    {GUIState.showTextBox && stageState.enableFilm === '' && <TextBox/>}
+    {GUIState.showTextBox && stageState.enableFilm !== '' && <TextBoxFilm/>}
+    <AudioContainer/>
     <div onClick={() => {
       // 如果文本框没有显示，则显示文本框
       if (!GUIState.showTextBox) {
@@ -58,7 +69,7 @@ export const MainStage: FC = () => {
       }
       stopAll();
       nextSentence();
-    }} id="FullScreenClcck"
+    }} id="FullScreenClick"
     style={{width: '100%', height: '100%', position: "absolute", zIndex: '12', top: '0'}}/>
   </div>;
 };

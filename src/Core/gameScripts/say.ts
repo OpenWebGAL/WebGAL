@@ -1,6 +1,7 @@
 import {ISentence} from '@/interface/coreInterface/sceneInterface';
 import {IPerform} from '@/interface/coreInterface/performInterface';
-import styles from '../../Components/Stage/TextBox/textbox.module.scss';
+import styles1 from '../../Components/Stage/TextBox/textbox.module.scss';
+import styles2 from '../../Components/Stage/TextBox/textboxFilm.module.scss';
 import {getRandomPerformName} from '@/Core/controller/perform/getRandomPerformName';
 import {playVocal} from './playVocal';
 import {webgalStore} from "@/Core/store/store";
@@ -14,6 +15,7 @@ import {webgal_env} from "@/env/webgal-env";
  */
 export const say = (sentence: ISentence): IPerform => {
   const stageState = webgalStore.getState().stage;
+  const styles = stageState.enableFilm === '' ? styles1 : styles2;
   const userDataState = webgalStore.getState().userData;
   const dispatch = webgalStore.dispatch;
   let dialogToShow = sentence.content;
@@ -33,10 +35,10 @@ export const say = (sentence: ISentence): IPerform => {
       isNotend = true;
     }
   });
-  if(isConcat){
-    dispatch(setStage({key:'currentConcatDialogPrev',value:stageState.showText}));
-  }else{
-    dispatch(setStage({key:'currentConcatDialogPrev',value:''}));
+  if (isConcat) {
+    dispatch(setStage({key: 'currentConcatDialogPrev', value: stageState.showText}));
+  } else {
+    dispatch(setStage({key: 'currentConcatDialogPrev', value: ''}));
   }
   // 设置文本显示
   dispatch(setStage({key: "showText", value: dialogToShow}));
@@ -77,7 +79,7 @@ export const say = (sentence: ISentence): IPerform => {
   }, 0);
   const performInitName: string = getRandomPerformName();
   let endDelay = 750 - userDataState.optionData.textSpeed * 250;
-  if(isNotend){
+  if (isNotend) {
     endDelay = 0;
   }
   return {
@@ -95,6 +97,6 @@ export const say = (sentence: ISentence): IPerform => {
     blockingNext: () => false,
     blockingAuto: () => true,
     stopTimeout: undefined, // 暂时不用，后面会交给自动清除
-    goNextWhenOver:isNotend,
+    goNextWhenOver: isNotend,
   };
 };

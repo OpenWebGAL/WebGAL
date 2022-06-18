@@ -58,6 +58,8 @@ export interface IStageState {
   // 当前演出的延迟，用于做对话插演出！
   // currentPerformDelay:number
   currentConcatDialogPrev:string,
+  // 测试：电影叙事
+  enableFilm:string,
 }
 
 /**

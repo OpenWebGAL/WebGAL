@@ -1,6 +1,5 @@
-import { arg } from '../../../interface/coreInterface/sceneInterface';
+import { arg } from '@/interface/coreInterface/sceneInterface';
 import { assetSetter, fileType } from '../../util/gameAssetsAccess/assetSetter';
-import {logger} from "@/Core/util/etc/logger";
 
 /**
  * 参数解析器

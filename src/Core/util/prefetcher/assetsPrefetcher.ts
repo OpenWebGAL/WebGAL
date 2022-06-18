@@ -1,4 +1,4 @@
-import {IAsset} from '../../../interface/coreInterface/sceneInterface';
+import {IAsset} from '@/interface/coreInterface/sceneInterface';
 import {logger} from '../etc/logger';
 import {settledAssets} from "@/Core/runtime/etc";
 
