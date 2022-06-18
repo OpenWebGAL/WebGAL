@@ -3,7 +3,7 @@
  * 舞台状态是演出结束后的“终态”，在读档时不发生演出，只是将舞台状态替换为读取的状态。
  */
 
-import {IGameVar, ISetGameVar, ISetStagePayload, IStageState} from '../../interface/stateInterface/stageInterface';
+import {ISetGameVar, ISetStagePayload, IStageState} from '@/interface/stateInterface/stageInterface';
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 
 
@@ -30,7 +30,7 @@ export const initState: IStageState = {
   currentDialogKey: 'initial',
   // currentPerformDelay: 0
   currentConcatDialogPrev:'',
-  enableFilm:'e',
+  enableFilm:'',
 };
 
 /**

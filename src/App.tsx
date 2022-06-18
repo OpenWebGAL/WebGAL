@@ -5,8 +5,8 @@ import Menu from './Components/UI/Menu/Menu';
 import {MainStage} from './Components/Stage/MainStage';
 import {BottomControlPanel} from './Components/UI/BottomControlPanel/ButtomControlPanel';
 import {Backlog} from './Components/UI/Backlog/Backlog';
-import {Provider, useSelector} from 'react-redux';
-import {RootState, webgalStore} from './Core/store/store';
+import {Provider} from 'react-redux';
+import {webgalStore} from './Core/store/store';
 import {Extra} from "@/Components/UI/Extra/Extra";
 import { BottomControlPanelFilm } from './Components/UI/BottomControlPanel/BottomControlPanelFilm';
 

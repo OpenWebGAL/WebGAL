@@ -1,37 +1,13 @@
-import {commandType, ISentence} from '../../../interface/coreInterface/sceneInterface';
+import {ISentence} from '@/interface/coreInterface/sceneInterface';
 import {say} from '../../gameScripts/say';
-import {initPerform, IPerform} from '../../../interface/coreInterface/performInterface';
+import {initPerform, IPerform} from '@/interface/coreInterface/performInterface';
 import {unmountPerform} from '../perform/unmountPerform';
 import {runtime_gamePlay} from '../../runtime/gamePlay';
-import {changeBg} from '../../gameScripts/changeBg';
-import {changeFigure} from '../../gameScripts/changeFigure';
-import {bgm} from '../../gameScripts/bgm';
-import {callSceneScript} from '../../gameScripts/callSceneScript';
-import {changeSceneScript} from '../../gameScripts/changeSceneScript';
-import {intro} from '../../gameScripts/intro';
-import {pixi} from "@/Core/gameScripts/pixi";
-import {miniAvatar} from "@/Core/gameScripts/miniAvatar";
-import {pixiInit} from "@/Core/gameScripts/pixiInit";
-import {logger} from "@/Core/util/etc/logger";
-import {playVideo} from "@/Core/gameScripts/playVideo";
-import {jumpLabel} from "@/Core/gameScripts/jumpLabel";
-import {label} from "@/Core/gameScripts/label";
-import {choose} from "@/Core/gameScripts/choose";
-import {end} from "@/Core/gameScripts/end";
-import {setBgFilter} from "@/Core/gameScripts/setBgFilter";
-import {setBgAni} from "@/Core/gameScripts/setBgAni";
-import {setFigAni} from "@/Core/gameScripts/setFigAni";
-import {setBgTransform} from "@/Core/gameScripts/setBgTransform";
 import {webgalStore} from "@/Core/store/store";
 import {resetStageState} from '@/Core/store/stageReducer';
 import {nextSentence} from "@/Core/controller/gamePlay/nextSentence";
-import {setVar} from "@/Core/gameScripts/setVar";
-import {showVars} from "@/Core/gameScripts/showVars";
-import {unlockCg} from "@/Core/gameScripts/unlockCg";
-import {unlockBgm} from "@/Core/gameScripts/unlockBgm";
 import cloneDeep from 'lodash/cloneDeep';
-import { setFigTransform } from '@/Core/gameScripts/setFigTransform';
-import { setFigFilter } from '@/Core/gameScripts/setFigFilter';
+import {scriptConfig} from "@/Core/config/scriptConfig";
 
 /**
  * 规范函数的类型
@@ -48,33 +24,10 @@ export const runScript = (script: ISentence) => {
   let funcToRun: scriptFunction = say; // 默认是say
 
   // 建立语句类型到执行函数的映射
-  const scriptToFuncMap = new Map([
-    [commandType.say, say],
-    [commandType.changeBg, changeBg],
-    [commandType.changeFigure, changeFigure],
-    [commandType.bgm, bgm],
-    [commandType.callScene, callSceneScript],
-    [commandType.changeScene, changeSceneScript],
-    [commandType.intro, intro],
-    [commandType.pixi, pixi],
-    [commandType.miniAvatar, miniAvatar],
-    [commandType.pixiInit, pixiInit],
-    [commandType.video, playVideo],
-    [commandType.jumpLabel, jumpLabel],
-    [commandType.label, label],
-    [commandType.choose, choose],
-    [commandType.end, end],
-    [commandType.setBgFilter, setBgFilter],
-    [commandType.perform_bgAni, setBgAni],
-    [commandType.perform_FigAni, setFigAni],
-    [commandType.setBgTransform, setBgTransform],
-    [commandType.setVar, setVar],
-    [commandType.showVars, showVars],
-    [commandType.unlockCg, unlockCg],
-    [commandType.unlockBgm, unlockBgm],
-    [commandType.setFigTransform, setFigTransform],
-    [commandType.setFigFilter, setFigFilter],
-  ]);
+  const scriptToFuncMap = new Map();
+  scriptConfig.forEach(e => {
+    scriptToFuncMap.set(e.scriptType, e.scriptFunction);
+  });
 
   // 根据脚本类型切换函数
   if (scriptToFuncMap.has(script.command)) {

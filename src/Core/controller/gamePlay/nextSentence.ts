@@ -1,6 +1,6 @@
 import {scriptExecutor} from './scriptExecutor';
 import {runtime_gamePlay} from '../../runtime/gamePlay';
-import {IRunPerform} from '../../../interface/coreInterface/performInterface';
+import {IRunPerform} from '@/interface/coreInterface/performInterface';
 import {logger} from '../../util/etc/logger';
 import {webgalStore} from "@/Core/store/store";
 import {resetStageState} from "@/Core/store/stageReducer";

@@ -2,9 +2,7 @@ import styles from './textboxFilm.module.scss';
 import {useEffect} from "react";
 import {useSelector} from "react-redux";
 import {RootState} from "@/Core/store/store";
-import {runtime_currentSceneData} from '@/Core/runtime/sceneData';
 import {webgal_env} from "@/env/webgal-env";
-import {logger} from "@/Core/util/etc/logger";
 
 export const TextBoxFilm = () => {
   const stageState = useSelector((state: RootState) => state.stage);
