@@ -6,7 +6,7 @@ import {getStorage} from '../controller/storage/storageController';
 import {
   IGuiState,
   setVisibilityPayload, setAssetPayload, MenuPanelTag
-} from '../../interface/stateInterface/guiInterface';
+} from '@/interface/stateInterface/guiInterface';
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 
 

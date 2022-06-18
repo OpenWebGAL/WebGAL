@@ -1,6 +1,6 @@
 import {runtime_currentBacklog} from '../../runtime/backlog';
 import {logger} from '../../util/etc/logger';
-import {ISaveData} from '../../../interface/stateInterface/userDataInterface';
+import {ISaveData} from '@/interface/stateInterface/userDataInterface';
 import {runtime_currentSceneData} from '../../runtime/sceneData';
 import {syncStorageFast} from './storageController';
 import {webgalStore} from "@/Core/store/store";

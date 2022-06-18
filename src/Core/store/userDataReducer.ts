@@ -10,7 +10,7 @@ import {
   IUserData,
   playSpeed,
   textSize
-} from '../../interface/stateInterface/userDataInterface';
+} from '@/interface/stateInterface/userDataInterface';
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 
 
