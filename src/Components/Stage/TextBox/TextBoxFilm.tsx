@@ -1,10 +1,10 @@
-import styles from './textbox.module.scss';
+import styles from './textboxFilm.module.scss';
 import {useEffect} from "react";
 import {useSelector} from "react-redux";
 import {RootState} from "@/Core/store/store";
 import {webgal_env} from "@/env/webgal-env";
 
-export const TextBox = () => {
+export const TextBoxFilm = () => {
   const stageState = useSelector((state: RootState) => state.stage);
   const userDataState = useSelector((state: RootState) => state.userData);
   useEffect(() => {
@@ -31,12 +31,12 @@ export const TextBox = () => {
       style={{animationDelay: `${delay}ms`}}>{e}</span>;
   });
   return <div id="textBoxMain" className={styles.TextBox_main}>
-    <div id="miniAvatar" className={styles.miniAvatarContainer}>
-      {stageState.miniAvatar !== '' &&
-        <img className={styles.miniAvatarImg} alt="miniAvatar" src={stageState.miniAvatar}/>}
-    </div>
-    {stageState.showName !== '' &&
-      <div className={styles.TextBox_showName} style={{fontSize: '200%'}}>{stageState.showName}</div>}
+    {/* <div id="miniAvatar" className={styles.miniAvatarContainer}> */}
+    {/*   {stageState.miniAvatar !== '' && */}
+    {/*     <img className={styles.miniAvatarImg} alt="miniAvatar" src={stageState.miniAvatar}/>} */}
+    {/* </div> */}
+    {/* {stageState.showName !== '' && */}
+    {/*   <div className={styles.TextBox_showName} style={{fontSize: '200%'}}>{stageState.showName}</div>} */}
     <div style={{fontSize: size}}>
       {textElementList}
     </div>

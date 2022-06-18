@@ -5,6 +5,14 @@
   z-index: 1;
   //animation: MainStage_showBgSoftly 100ms forwards;
   opacity: 1;
+  overflow: hidden;
+}
+
+.MainStage_main_container {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  overflow: hidden;
 }
 
 .MainStage_bgContainer {

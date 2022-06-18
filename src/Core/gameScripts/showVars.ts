@@ -2,7 +2,6 @@ import {ISentence} from '@/interface/coreInterface/sceneInterface';
 import {IPerform} from '@/interface/coreInterface/performInterface';
 import styles from '../../Components/Stage/TextBox/textbox.module.scss';
 import {getRandomPerformName} from '@/Core/controller/perform/getRandomPerformName';
-import {playVocal} from './playVocal';
 import {webgalStore} from "@/Core/store/store";
 import {setStage} from "@/Core/store/stageReducer";
 import {logger} from "@/Core/util/etc/logger";

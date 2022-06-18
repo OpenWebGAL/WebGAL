@@ -1,6 +1,6 @@
 import {runtime_currentBacklog} from '../../runtime/backlog';
 import {runtime_currentSceneData} from '../../runtime/sceneData';
-import {ISaveData} from '../../../interface/stateInterface/userDataInterface';
+import {ISaveData} from '@/interface/stateInterface/userDataInterface';
 import {logger} from '../../util/etc/logger';
 import {sceneFetcher} from '../scene/sceneFetcher';
 import {sceneParser} from '../../parser/sceneParser';
