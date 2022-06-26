@@ -8,6 +8,8 @@ filmMode:none;
 label:scriptStart;
 changeBg:c4.jpg -next;
 unlockCg:c4.jpg -name=街前;
+unlockCg:xgmain.jpeg -name=星光咖啡馆与死神之蝶;
+unlockBgm:s_Title.mp3 -name=Smiling-Swinging!!;
 WebGAL:特效系统是3.9.2版本新引入的系统，你想要看特效的演示吗？;
 choose:观看特效演示:demo|我不要看特效，直接来吧！:toStart;
 label:demo;
