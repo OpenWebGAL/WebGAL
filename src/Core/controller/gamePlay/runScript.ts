@@ -56,10 +56,26 @@ export const runScript = (script: ISentence) => {
       // 如果不是保持演出，清除
       unmountPerform(perform.performName);
       if (perform.goNextWhenOver) {
-        nextSentence();
+        // nextSentence();
+        goNextWhenOver();
       }
     }
   }, perform.duration);
 
   runtime_gamePlay.performList.push(perform);
 };
+
+function goNextWhenOver() {
+  let isBlockingAuto = false;
+  runtime_gamePlay.performList.forEach((e) => {
+    if (e.blockingAuto() && !e.isOver)
+      // 阻塞且没有结束的演出
+      isBlockingAuto = true;
+  });
+  if (isBlockingAuto) {
+    // 有阻塞，提前结束
+    setTimeout(goNextWhenOver, 100);
+  } else {
+    nextSentence();
+  }
+}
