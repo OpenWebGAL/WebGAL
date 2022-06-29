@@ -8,7 +8,13 @@
 
 ## 在线体验
 
+一个简短的示例：
+
 https://demo.msfasr.com
+
+一个完整的游戏：
+
+[铃色☆记忆](http://hoshinasuzu.cn/) by 星奈组
 
 ### 使用 WebGAL 制作游戏
 
