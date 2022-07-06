@@ -13,6 +13,21 @@ import  cloneDeep  from 'lodash/cloneDeep';
  */
 export const saveGame = (index: number) => {
   const userDataState = webgalStore.getState().userData;
+  const saveData: ISaveData = generateCurrentStageData(index);
+  logger.debug('存档数据：',saveData);
+  const newSaveData = cloneDeep(userDataState.saveData);
+  logger.debug('newSaveData:',newSaveData);
+  newSaveData[index] = saveData;
+  webgalStore.dispatch(setUserData({key: 'saveData', value: [...newSaveData]}));
+  logger.debug('存档完成，存档结果：', newSaveData);
+  syncStorageFast();
+};
+
+/**
+ * 生成现在游戏的数据快照
+ * @param index 游戏的档位
+ */
+export function generateCurrentStageData(index: number) {
   const stageState = webgalStore.getState().stage;
   const saveBacklog = cloneDeep(runtime_currentBacklog);
   const saveData: ISaveData = {
@@ -27,11 +42,5 @@ export const saveGame = (index: number) => {
       sceneUrl: runtime_currentSceneData.currentScene.sceneUrl, // 场景url
     }, // 场景数据
   };
-  logger.debug('存档数据：',saveData);
-  const newSaveData = cloneDeep(userDataState.saveData);
-  logger.debug('newSaveData:',newSaveData);
-  newSaveData[index] = saveData;
-  webgalStore.dispatch(setUserData({key: 'saveData', value: [...newSaveData]}));
-  logger.debug('存档完成，存档结果：', newSaveData);
-  syncStorageFast();
-};
+  return saveData;
+}
