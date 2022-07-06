@@ -18,7 +18,6 @@ import {RootState} from '@/Core/store/store';
 import {setMenuPanelTag, setVisibility} from "@/Core/store/GUIReducer";
 import {componentsVisibility, MenuPanelTag} from "@/interface/stateInterface/guiInterface";
 import { backToTitle } from '@/Core/controller/gamePlay/backToTitle';
-import {useSkip} from "@/hooks/useSkip";
 
 export const BottomControlPanel = () => {
   const GUIStore = useSelector((state: RootState) => state.GUI);
@@ -30,7 +29,6 @@ export const BottomControlPanel = () => {
   const setMenuPanel = (menuPanel: MenuPanelTag) => {
     dispatch(setMenuPanelTag(menuPanel));
   };
-  useSkip();
   return (<div className={styles.ToCenter}>
     {GUIStore.showTextBox &&stageState.enableFilm ==='' && <div className={styles.main}>
       {GUIStore.showTextBox && (
