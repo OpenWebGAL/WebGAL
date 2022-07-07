@@ -21,12 +21,34 @@ const setButton = (on: boolean) => {
  * 停止快进模式
  */
 export const stopFast = () => {
+  if (!isFast()) {
+    return;
+  }
   runtime_gamePlay.isFast = false;
   setButton(false);
   if (runtime_gamePlay.fastInterval !== null) {
     clearInterval(runtime_gamePlay.fastInterval);
     runtime_gamePlay.fastInterval = null;
   }
+};
+
+/**
+ * 开启快进
+ */
+export const startFast = () => {
+  if (isFast()) {
+    return;
+  }
+  runtime_gamePlay.isFast = true;
+  setButton(true);
+  runtime_gamePlay.fastInterval = setInterval(() => {
+    nextSentence();
+  }, 100);
+};
+
+// 判断是否是快进模式
+export const isFast = function () {
+  return runtime_gamePlay.isFast;
 };
 
 /**
@@ -43,18 +65,11 @@ export const stopAll = () => {
 export const switchFast = () => {
   // 现在正在快进
   if (runtime_gamePlay.isFast) {
-    runtime_gamePlay.isFast = false;
-    setButton(false);
-    if (runtime_gamePlay.fastInterval !== null) {
-      clearInterval(runtime_gamePlay.fastInterval);
-      runtime_gamePlay.fastInterval = null;
-    }
+    stopFast();
   } else {
     // 当前不在快进
-    runtime_gamePlay.isFast = true;
-    setButton(true);
-    runtime_gamePlay.fastInterval = setInterval(() => {
-      nextSentence();
-    }, 100);
+    startFast();
   }
 };
+
+
