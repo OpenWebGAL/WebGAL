@@ -5,6 +5,7 @@ import {gameInfo} from '../../runtime/etc';
 import {getStorage} from '../../controller/storage/storageController';
 import {webgalStore} from "@/Core/store/store";
 import {setGuiAsset} from "@/Core/store/GUIReducer";
+import {initKey} from "@/hooks/useHotkey";
 
 declare global {
     interface Window {
@@ -48,5 +49,6 @@ export const infoFetcher = (url: string) => {
     }
     window?.renderPromise?.();
     delete window.renderPromise;
+    initKey();
   });
 };

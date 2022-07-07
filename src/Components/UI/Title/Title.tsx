@@ -8,6 +8,7 @@ import {RootState} from "@/Core/store/store";
 import {setMenuPanelTag, setVisibility} from "@/Core/store/GUIReducer";
 import {MenuPanelTag} from '@/interface/stateInterface/guiInterface';
 import {nextSentence} from "@/Core/controller/gamePlay/nextSentence";
+import {hasFastSaveRecord, loadFastSaveGame} from "@/hooks/useHotkey";
 
 /**
  * 标题页
@@ -40,8 +41,15 @@ const Title: FC = () => {
               <div className={styles.Title_button_text + ' ' + styles.Title_button_text_up}>开始游戏</div>
               <div className={styles.Title_button_text}>START</div>
             </div>
-            <div className={styles.Title_button} onClick={() => {
+            <div className={styles.Title_button} onClick={async () => {
               dispatch(setVisibility({component: "showTitle", visibility: false}));
+              // 当且仅当游戏未开始时使用快速存档
+              // 当游戏开始后 使用原来的逻辑
+              if (await hasFastSaveRecord() && runtime_currentSceneData.currentSentenceId === 0) {
+                // 恢复记录
+                await loadFastSaveGame();
+                return;
+              }
               if (runtime_currentSceneData.currentSentenceId === 0 &&
                 runtime_currentSceneData.currentScene.sceneName === 'start.txt') {
                 // 如果游戏没有开始，开始游戏

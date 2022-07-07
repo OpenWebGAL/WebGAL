@@ -3,7 +3,7 @@
     "private": true,
     "version": "4.2.5",
     "scripts": {
-        "dev": "vite",
+        "dev": "vite --host 3000",
         "build": "tsc && vite build --base=./",
         "preview": "vite preview",
         "lint": "eslint src/** --fix"

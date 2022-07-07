@@ -20,6 +20,12 @@ export const loadGame = (index: number) => {
   // 获得存档文件
   const loadFile: ISaveData = userDataState.saveData[index];
   logger.debug('读取的存档数据', loadFile);
+  // 加载存档
+  loadGameFromStageData(loadFile);
+};
+
+export function loadGameFromStageData(stageData: ISaveData) {
+  const loadFile = stageData;
   // 重新获取并同步场景状态
   sceneFetcher(loadFile.sceneData.sceneUrl).then((rawScene) => {
     runtime_currentSceneData.currentScene = sceneParser(
@@ -51,4 +57,4 @@ export const loadGame = (index: number) => {
 
   dispatch(setVisibility({component: 'showTitle', visibility: false}));
   dispatch(setVisibility({component: 'showMenuPanel', visibility: false}));
-};
+}

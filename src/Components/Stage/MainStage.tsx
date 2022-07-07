@@ -11,6 +11,8 @@ import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "@/Core/store/store";
 import {setVisibility} from "@/Core/store/GUIReducer";
 import {TextBoxFilm} from "@/Components/Stage/TextBox/TextBoxFilm";
+import {useHotkey} from "@/hooks/useHotkey";
+
 
 export const MainStage: FC = () => {
   const stageState = useSelector((state: RootState) => state.stage);
@@ -41,6 +43,7 @@ export const MainStage: FC = () => {
     stageHeight = '76%';
     top = '12%';
   }
+  useHotkey();
   return <div className={styles.MainStage_main}>
     <div className={styles.MainStage_main_container} style={{width: stageWidth, height: stageHeight, top: top}}>
       <div key={'bgOld' + stageState.oldBgName}
