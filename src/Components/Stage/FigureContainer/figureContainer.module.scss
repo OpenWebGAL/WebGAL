@@ -25,6 +25,7 @@
   top: 5px;
   bottom: 0;
   z-index: 4;
+  animation: fig_default_animation 0.3s;
 }
 
 .figContainerLeft {
@@ -37,4 +38,16 @@
 
 .figContainerRight {
   justify-content: right;
+}
+
+@keyframes fig_default_animation {
+  0% {
+    opacity: 0;
+  }
+  30% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
