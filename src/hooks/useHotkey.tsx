@@ -5,7 +5,7 @@ import {useCallback, useRef} from "react";
 import {componentsVisibility, MenuPanelTag} from "@/interface/stateInterface/guiInterface";
 import {setVisibility} from "@/Core/store/GUIReducer";
 import {useDispatch} from "react-redux";
-import {startFast, stopFast} from "@/Core/controller/gamePlay/fastSkip";
+import {startFast, stopAll, stopFast} from "@/Core/controller/gamePlay/fastSkip";
 import localforage from "localforage";
 import cloneDeep from "lodash/cloneDeep";
 import {ISaveData} from "@/interface/stateInterface/userDataInterface";
@@ -14,6 +14,7 @@ import {loadGameFromStageData} from "@/Core/controller/storage/loadGame";
 import {gameInfo} from "@/Core/runtime/etc";
 import {logger} from "@/Core/util/etc/logger";
 import {runtime_currentSceneData} from "@/Core/runtime/sceneData";
+import {nextSentence} from "@/Core/controller/gamePlay/nextSentence";
 
 // options备用
 export interface HotKeyType {
@@ -51,6 +52,8 @@ export function useHotkey(opt?: HotKeyType) {
   useSkip();
   useEscape();
   useFastSaveBeforeUnloadPage();
+  useSpaceAndEnter();
+
 }
 
 /**
@@ -304,5 +307,48 @@ export async function removeFastSaveGameRecord() {
   await localforage.setItem(fastSaveGameKey, null);
 }
 
-
-
+/**
+ * 空格 & 回车 跳转到下一条
+ */
+export function useSpaceAndEnter() {
+  const GUIStore = useGenSyncRef((state: RootState) => state.GUI);
+  const isGameActive = useGameActive(GUIStore);
+  const setComponentVisibility = useSetComponentVisibility();
+  // 防止一直触发keydown导致快进
+  const lockRef = useRef(false);
+  // 判断按键是否为空格 & 回车
+  const isSpaceOrEnter = useCallback((e) => {
+    return (e.keyCode === 32) || (e.keyCode === 13);
+  }, []);
+  const handleKeydown = useCallback((e) => {
+    if (isSpaceOrEnter(e) && isGameActive() && !lockRef.current) {
+      if (!GUIStore.current.showTextBox) {
+        setComponentVisibility('showTextBox',true);
+        return;
+      }
+      stopAll();
+      nextSentence();
+      lockRef.current = true;
+    }
+  }, []);
+  const handleKeyup = useCallback((e) => {
+    if (isSpaceOrEnter(e) && isGameActive()) {
+      lockRef.current = false;
+    }
+  }, []);
+  const handleWindowBlur = useCallback((e) => {
+    lockRef.current = false;
+  }, []);
+  // mounted时绑定事件
+  useMounted(() => {
+    document.addEventListener('keydown', handleKeydown);
+    document.addEventListener('keyup', handleKeyup);
+    document.addEventListener('blur', handleWindowBlur);
+  });
+  // unmounted解绑
+  useUnMounted(() => {
+    document.removeEventListener('keydown', handleKeydown);
+    document.removeEventListener('keyup',handleKeyup);
+    document.removeEventListener('blur',handleWindowBlur);
+  });
+}
