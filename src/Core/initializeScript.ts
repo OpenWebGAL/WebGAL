@@ -75,16 +75,6 @@ export const initializeScript = (): void => {
   webSocketFunc();
 };
 
-export function initWebGAL() {
-  let isWebGalInit = false;
-  return () => {
-    if (!isWebGalInit) {
-      initializeScript();
-      isWebGalInit = true;
-    }
-  };
-}
-
 function loadStyle(url: string) {
   const link = document.createElement('link');
   link.type = 'text/css';

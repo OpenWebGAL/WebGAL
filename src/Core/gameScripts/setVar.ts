@@ -1,7 +1,7 @@
 import {ISentence} from '@/interface/coreInterface/sceneInterface';
 import {IPerform} from '@/interface/coreInterface/performInterface';
-import {webgalStore} from "@/Core/store/store";
-import {setStageVar} from "@/Core/store/stageReducer";
+import {webgalStore} from "@/store/store";
+import {setStageVar} from "@/store/stageReducer";
 import {logger} from "@/Core/util/etc/logger";
 import {compile} from "angular-expressions";
 

@@ -2,7 +2,7 @@
  * @file 记录当前GUI的状态信息，引擎初始化时会重置。
  * @author Mahiru
  */
-import {getStorage} from '../controller/storage/storageController';
+import {getStorage} from '@/Core/controller/storage/storageController';
 import {
   IGuiState,
   setVisibilityPayload, setAssetPayload, MenuPanelTag

@@ -1,7 +1,7 @@
 import {configureStore} from "@reduxjs/toolkit";
-import stageReducer from "@/Core/store/stageReducer";
-import GUIReducer from "@/Core/store/GUIReducer";
-import userDataReducer from "@/Core/store/userDataReducer";
+import stageReducer from "@/store/stageReducer";
+import GUIReducer from "@/store/GUIReducer";
+import userDataReducer from "@/store/userDataReducer";
 
 /**
  * WebGAL 全局状态管理

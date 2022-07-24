@@ -4,8 +4,8 @@ import styles1 from '../../Components/Stage/TextBox/textbox.module.scss';
 import styles2 from '../../Components/Stage/TextBox/textboxFilm.module.scss';
 import {getRandomPerformName} from '@/Core/controller/perform/getRandomPerformName';
 import {playVocal} from './playVocal';
-import {webgalStore} from "@/Core/store/store";
-import {setStage} from "@/Core/store/stageReducer";
+import {webgalStore} from "@/store/store";
+import {setStage} from "@/store/stageReducer";
 import {webgal_env} from "@/env/webgal-env";
 
 /**

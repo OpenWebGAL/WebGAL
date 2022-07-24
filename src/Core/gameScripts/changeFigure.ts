@@ -1,7 +1,7 @@
 import {ISentence} from '@/interface/coreInterface/sceneInterface';
 import {IPerform} from '@/interface/coreInterface/performInterface';
-import {webgalStore} from '@/Core/store/store';
-import {setStage} from "@/Core/store/stageReducer";
+import {webgalStore} from '@/store/store';
+import {setStage} from "@/store/stageReducer";
 
 /**
  * 更改立绘

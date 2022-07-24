@@ -4,7 +4,7 @@
  * 在引擎初始化时会将这些状态从本地存储加载到运行时状态。
  */
 import {
-  IAppreciationAsset,
+  IAppreciationAsset, ISaveData,
   ISetOptionDataPayload,
   ISetUserDataPayload,
   IUserData,
@@ -29,7 +29,8 @@ export const initState: IUserData = {
   appreciationData: {
     bgm: [],
     cg: []
-  }
+  },
+  quickSaveData: null
 };
 
 const userDataSlice = createSlice({
@@ -100,6 +101,9 @@ const userDataSlice = createSlice({
     setSlPage: (state, action: PayloadAction<number>) => {
       state.optionData.slPage = action.payload;
     },
+    setFastSave: (state, action: PayloadAction<ISaveData | null>) => {
+      state.quickSaveData = action.payload;
+    }
   }
 });
 
@@ -109,7 +113,8 @@ export const {
   setOptionData,
   setSlPage,
   unlockCgInUserData,
-  unlockBgmInUserData
+  unlockBgmInUserData,
+  setFastSave
 } = userDataSlice.actions;
 export default userDataSlice.reducer;
 

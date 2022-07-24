@@ -2,8 +2,8 @@ import * as localforage from 'localforage';
 import {IUserData} from '@/interface/stateInterface/userDataInterface';
 import {gameInfo} from '../../runtime/etc';
 import {logger} from '../../util/etc/logger';
-import {webgalStore} from "@/Core/store/store";
-import {initState, resetUserData} from "@/Core/store/userDataReducer";
+import {webgalStore} from "@/store/store";
+import {initState, resetUserData} from "@/store/userDataReducer";
 
 /**
  * 写入本地存储
@@ -77,4 +77,20 @@ function checkUserDataProperty(userData: any) {
     }
   }
   return result;
+}
+
+export async function setStorageAsync() {
+  const userDataState = webgalStore.getState().userData;
+  return await localforage.setItem(gameInfo.gameKey, userDataState);
+}
+
+export async function getStorageAsync() {
+  const newUserData = await localforage.getItem(gameInfo.gameKey);
+  if (!newUserData || !checkUserDataProperty(newUserData)) {
+    const userDataState = webgalStore.getState().userData;
+    logger.warn('现在重置数据');
+    return await localforage.setItem(gameInfo.gameKey, userDataState);
+  } else
+    webgalStore.dispatch(resetUserData(newUserData as IUserData));
+  return;
 }

@@ -3,8 +3,8 @@ import {runtime_currentBacklog} from '@/Core/runtime/backlog';
 import {CloseSmall, Return, VolumeNotice} from '@icon-park/react';
 import {jumpFromBacklog} from '@/Core/controller/storage/jumpFromBacklog';
 import {useDispatch, useSelector} from "react-redux";
-import {RootState, webgalStore} from '@/Core/store/store';
-import {setVisibility} from "@/Core/store/GUIReducer";
+import {RootState, webgalStore} from '@/store/store';
+import {setVisibility} from "@/store/GUIReducer";
 
 export const Backlog = () => {
   const GUIStore = useSelector((state: RootState) => state.GUI);

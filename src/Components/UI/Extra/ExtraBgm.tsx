@@ -1,9 +1,9 @@
 import {useDispatch, useSelector} from "react-redux";
-import {RootState} from "@/Core/store/store";
+import {RootState} from "@/store/store";
 import React from "react";
 import styles from "@/Components/UI/Extra/extra.module.scss";
 import {useObject} from "@/hooks/useObject";
-import {setStage} from "@/Core/store/stageReducer";
+import {setStage} from "@/store/stageReducer";
 
 export function ExtraBgm() {
   // 检查当前正在播放的bgm是否在bgm列表内

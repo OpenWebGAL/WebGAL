@@ -25,6 +25,7 @@ import {unlockCg} from "@/Core/gameScripts/unlockCg";
 import {unlockBgm} from "@/Core/gameScripts/unlockBgm";
 import { say } from "../gameScripts/say";
 import {filmMode} from "@/Core/gameScripts/filmMode";
+import {callSceneScript} from "@/Core/gameScripts/callSceneScript";
 
 export const scriptConfig: IConfigInterface[] = [
   {scriptString:'intro',scriptType:commandType.intro,scriptFunction:intro},
@@ -54,6 +55,7 @@ export const scriptConfig: IConfigInterface[] = [
   {scriptString:'unlockBgm',scriptType:commandType.unlockBgm,scriptFunction:unlockBgm},
   {scriptString:'say',scriptType:commandType.say,scriptFunction:say},
   {scriptString:'filmMode',scriptType:commandType.filmMode,scriptFunction:filmMode},
+  {scriptString:'callScene',scriptType:commandType.callScene,scriptFunction:callSceneScript},
 ];
 export const addNextArgList = [
   commandType.bgm,

@@ -2,8 +2,8 @@ import {ISentence} from '@/interface/coreInterface/sceneInterface';
 import {IPerform} from '@/interface/coreInterface/performInterface';
 import {IEffect} from "@/interface/stateInterface/stageInterface";
 import { logger } from '@/Core/util/etc/logger';
-import {webgalStore} from "@/Core/store/store";
-import {setStage} from "@/Core/store/stageReducer";
+import {webgalStore} from "@/store/store";
+import {setStage} from "@/store/stageReducer";
 import  cloneDeep  from 'lodash/cloneDeep';
 
 /**

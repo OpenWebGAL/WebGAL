@@ -1,12 +1,11 @@
 import {useGenSyncRef} from "@/hooks/useGenSyncRef";
-import {RootState} from "@/Core/store/store";
+import {RootState, webgalStore} from "@/store/store";
 import {useMounted, useUnMounted, useUpdated} from "@/hooks/useLifeCycle";
 import {useCallback, useRef} from "react";
 import {componentsVisibility, MenuPanelTag} from "@/interface/stateInterface/guiInterface";
-import {setVisibility} from "@/Core/store/GUIReducer";
+import {setVisibility} from "@/store/GUIReducer";
 import {useDispatch} from "react-redux";
 import {startFast, stopAll, stopFast} from "@/Core/controller/gamePlay/fastSkip";
-import localforage from "localforage";
 import cloneDeep from "lodash/cloneDeep";
 import {ISaveData} from "@/interface/stateInterface/userDataInterface";
 import {generateCurrentStageData} from "@/Core/controller/storage/saveGame";
@@ -15,23 +14,19 @@ import {gameInfo} from "@/Core/runtime/etc";
 import {logger} from "@/Core/util/etc/logger";
 import {runtime_currentSceneData} from "@/Core/runtime/sceneData";
 import {nextSentence} from "@/Core/controller/gamePlay/nextSentence";
+import {setFastSave} from "@/store/userDataReducer";
+import {getStorageAsync, setStorageAsync} from "@/Core/controller/storage/storageController";
 
 // options备用
 export interface HotKeyType {
-  MouseRight: {
-
-  } | boolean,
-  MouseWheel: {
-
-  } | boolean,
+  MouseRight: {} | boolean,
+  MouseWheel: {} | boolean,
   Ctrl: boolean,
   Esc: {
     href: string,
     nav: 'replace' | 'push'
   } | boolean,
-  AutoSave: {
-
-  } | boolean
+  AutoSave: {} | boolean
 }
 
 export let fastSaveGameKey = '';
@@ -43,6 +38,7 @@ export function initKey() {
   fastSaveGameKey = `FastSaveKey-${gameInfo.gameName}-${gameInfo.gameKey}`;
   isFastSaveKey = `FastSaveActive-${gameInfo.gameName}-${gameInfo.gameKey}`;
 }
+
 // export const fastSaveGameKey = `FastSaveKey`;
 // export const isFastSaveKey = `FastSaveActive`;
 
@@ -78,7 +74,7 @@ export function useMouseRightClickHotKey() {
     }
     ev.preventDefault();
     return false;
-  },[]);
+  }, []);
   useMounted(() => {
     document.addEventListener('contextmenu', handleContextMenu);
   });
@@ -100,7 +96,7 @@ export function useMouseWheel() {
     if (isGameActive() && (direction === 'up') && !ctrlKey) {
       setComponentVisibility('showBacklog', true);
     }
-  },[]);
+  }, []);
   useMounted(() => {
     document.addEventListener('wheel', handleMouseWheel);
   });
@@ -135,7 +131,7 @@ export function useEscape() {
           try {
             document.body.innerText = '';
             await fastSaveGame();
-          }catch (e) {
+          } catch (e) {
             logger.error('保存失败', e);
           }
           logger.info('保存完成');
@@ -209,7 +205,7 @@ export function useFastSaveBeforeUnloadPage() {
       // 游戏启动了才保存数据 防止无效数据覆盖现在的数据
       await fastSaveGame();
     }
-  },[]);
+  }, []);
   useMounted(() => {
     window.addEventListener('beforeunload', handleWindowUnload);
   });
@@ -219,7 +215,7 @@ export function useFastSaveBeforeUnloadPage() {
 }
 
 // 判断游戏是否激活
-function useGameActive<T = any>(GUIStore:T & any): () => boolean {
+function useGameActive<T = any>(GUIStore: T & any): () => boolean {
   return useCallback(() => {
     return (!GUIStore.current.showTitle)
       && (!GUIStore.current.showMenuPanel)
@@ -228,14 +224,14 @@ function useGameActive<T = any>(GUIStore:T & any): () => boolean {
 }
 
 // 判断是否打开backlog
-function useIsInBackLog<T = any>(GUIStore:T & any) : () => boolean {
+function useIsInBackLog<T = any>(GUIStore: T & any): () => boolean {
   return useCallback(() => {
     return (GUIStore.current.showBacklog);
   }, [GUIStore]);
 }
 
 // 验证是否在存档 / 读档 / 选项页面
-function useValidMenuPanelTag<T = any>(GUIStore:T & any) : () => boolean {
+function useValidMenuPanelTag<T = any>(GUIStore: T & any): () => boolean {
   return useCallback(() => {
     return [MenuPanelTag.Save, MenuPanelTag.Load, MenuPanelTag.Option].includes(GUIStore.current.currentMenuTag);
   }, [GUIStore]);
@@ -249,7 +245,7 @@ function useValidMenuGameStart() {
   }, [runtime_currentSceneData]);
 }
 
-function useSetComponentVisibility() : (component: (keyof componentsVisibility), visibility: boolean) => void {
+function useSetComponentVisibility(): (component: (keyof componentsVisibility), visibility: boolean) => void {
   const dispatch = useDispatch();
   return (component: (keyof componentsVisibility), visibility: boolean) => {
     dispatch(setVisibility({component, visibility}));
@@ -276,15 +272,19 @@ export async function fastSaveGame() {
   // localStorage.setItem(fastSaveGameKey, JSON.stringify(newSaveData));
   // localStorage.setItem(isFastSaveKey, JSON.stringify(true));
   // localStorage.setItem('currentSentenceId', JSON.stringify(runtime_currentSceneData.currentSentenceId));
-  await localforage.setItem(fastSaveGameKey, newSaveData);
-  await localforage.setItem(isFastSaveKey, true);
+  // await localforage.setItem(fastSaveGameKey, newSaveData);
+  // await localforage.setItem(isFastSaveKey, true);
+  webgalStore.dispatch(setFastSave(newSaveData));
+  await setStorageAsync();
 }
 
 /**
  * 判断是否有无存储紧急回避时的数据
  */
 export async function hasFastSaveRecord() {
-  return await localforage.getItem(isFastSaveKey);
+  // return await localforage.getItem(isFastSaveKey);
+  await getStorageAsync();
+  return webgalStore.getState().userData.quickSaveData !== null;
 }
 
 /**
@@ -292,7 +292,9 @@ export async function hasFastSaveRecord() {
  */
 export async function loadFastSaveGame() {
   // 获得存档文件
-  const loadFile: ISaveData | null = await localforage.getItem(fastSaveGameKey);
+  // const loadFile: ISaveData | null = await localforage.getItem(fastSaveGameKey);
+  await getStorageAsync();
+  const loadFile: ISaveData | null = webgalStore.getState().userData.quickSaveData;
   if (!loadFile) {
     return;
   }
@@ -303,8 +305,10 @@ export async function loadFastSaveGame() {
  * 移除紧急回避的数据
  */
 export async function removeFastSaveGameRecord() {
-  await localforage.setItem(isFastSaveKey, false);
-  await localforage.setItem(fastSaveGameKey, null);
+  webgalStore.dispatch(setFastSave(null));
+  await setStorageAsync();
+  // await localforage.setItem(isFastSaveKey, false);
+  // await localforage.setItem(fastSaveGameKey, null);
 }
 
 /**
@@ -323,7 +327,7 @@ export function useSpaceAndEnter() {
   const handleKeydown = useCallback((e) => {
     if (isSpaceOrEnter(e) && isGameActive() && !lockRef.current) {
       if (!GUIStore.current.showTextBox) {
-        setComponentVisibility('showTextBox',true);
+        setComponentVisibility('showTextBox', true);
         return;
       }
       stopAll();
@@ -348,7 +352,7 @@ export function useSpaceAndEnter() {
   // unmounted解绑
   useUnMounted(() => {
     document.removeEventListener('keydown', handleKeydown);
-    document.removeEventListener('keyup',handleKeyup);
-    document.removeEventListener('blur',handleWindowBlur);
+    document.removeEventListener('keyup', handleKeyup);
+    document.removeEventListener('blur', handleWindowBlur);
   });
 }

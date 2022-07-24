@@ -1,7 +1,7 @@
 import styles from './textboxFilm.module.scss';
 import {useEffect} from "react";
 import {useSelector} from "react-redux";
-import {RootState} from "@/Core/store/store";
+import {RootState} from "@/store/store";
 import {webgal_env} from "@/env/webgal-env";
 
 export const TextBoxFilm = () => {

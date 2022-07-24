@@ -3,8 +3,8 @@ import {MenuPanelButton} from "./MenuPanelButton";
 import {playBgm} from "@/Core/controller/stage/playBgm";
 import {MenuPanelTag} from '@/interface/stateInterface/guiInterface';
 import {useDispatch, useSelector} from "react-redux";
-import {RootState} from "@/Core/store/store";
-import {setMenuPanelTag, setVisibility} from "@/Core/store/GUIReducer";
+import {RootState} from "@/store/store";
+import {setMenuPanelTag, setVisibility} from "@/store/GUIReducer";
 
 /**
  * Menu页的底栏

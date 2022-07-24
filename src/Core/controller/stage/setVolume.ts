@@ -1,5 +1,5 @@
 import {logger} from "../../util/etc/logger";
-import {webgalStore} from "@/Core/store/store";
+import {webgalStore} from "@/store/store";
 
 /**
  * 设置音量
