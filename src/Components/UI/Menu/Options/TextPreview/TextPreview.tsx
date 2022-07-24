@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "./textPreview.module.scss";
 import {useSelector} from "react-redux";
-import {RootState} from "@/Core/store/store";
+import {RootState} from "@/store/store";
 import {webgal_env} from "@/env/webgal-env";
 
 export const TextPreview = (props: any) => {

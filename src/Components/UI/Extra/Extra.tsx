@@ -1,7 +1,7 @@
 import styles from './extra.module.scss';
 import {useDispatch, useSelector} from "react-redux";
-import {RootState} from "@/Core/store/store";
-import {setVisibility} from '@/Core/store/GUIReducer';
+import {RootState} from "@/store/store";
+import {setVisibility} from '@/store/GUIReducer';
 import {CloseSmall} from "@icon-park/react";
 import {ExtraBgm} from "@/Components/UI/Extra/ExtraBgm";
 import {ExtraCg} from './ExtraCg';

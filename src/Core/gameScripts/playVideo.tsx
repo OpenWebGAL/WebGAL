@@ -6,7 +6,7 @@ import {runtime_gamePlay} from "@/Core/runtime/gamePlay";
 import {unmountPerform} from "@/Core/controller/perform/unmountPerform";
 import {getRandomPerformName} from "@/Core/controller/perform/getRandomPerformName";
 import styles from '../../Components/Stage/FullScreenPerform/fullScreenPerform.module.scss';
-import {webgalStore} from "@/Core/store/store";
+import {webgalStore} from "@/store/store";
 import {nextSentence} from "@/Core/controller/gamePlay/nextSentence";
 
 /**

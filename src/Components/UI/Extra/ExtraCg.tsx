@@ -1,7 +1,7 @@
 import styles from "@/Components/UI/Extra/extra.module.scss";
 import React from "react";
 import {useSelector} from "react-redux";
-import {RootState} from "@/Core/store/store";
+import {RootState} from "@/store/store";
 import {useObject} from "@/hooks/useObject";
 import './extraCG_animation_List.scss';
 import {ExtraCgElement} from "@/Components/UI/Extra/ExtraCgElement";

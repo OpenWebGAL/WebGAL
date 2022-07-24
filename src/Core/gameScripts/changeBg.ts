@@ -2,8 +2,8 @@ import {ISentence} from '@/interface/coreInterface/sceneInterface';
 import {IPerform} from '@/interface/coreInterface/performInterface';
 // import {getRandomPerformName} from '../../../util/getRandomPerformName';
 import styles from '../../Components/Stage/mainStage.module.scss';
-import {webgalStore} from '@/Core/store/store';
-import {setStage} from "@/Core/store/stageReducer";
+import {webgalStore} from '@/store/store';
+import {setStage} from "@/store/stageReducer";
 
 /**
  * 进行背景图片的切换

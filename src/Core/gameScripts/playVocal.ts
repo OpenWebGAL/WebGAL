@@ -3,8 +3,8 @@ import {getRandomPerformName} from '@/Core/controller/perform/getRandomPerformNa
 import {runtime_gamePlay} from '@/Core/runtime/gamePlay';
 import {unmountPerform} from '../controller/perform/unmountPerform';
 import {logger} from '@/Core/util/etc/logger';
-import {webgalStore} from "@/Core/store/store";
-import {setStage} from "@/Core/store/stageReducer";
+import {webgalStore} from "@/store/store";
+import {setStage} from "@/store/stageReducer";
 
 /**
  * 播放一段语音

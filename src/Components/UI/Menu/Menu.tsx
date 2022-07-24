@@ -5,7 +5,7 @@ import {Save} from './SaveAndLoad/Save/Save';
 import {Load} from './SaveAndLoad/Load/Load';
 import {Options} from './Options/Options';
 import {useSelector} from "react-redux";
-import {RootState} from "@/Core/store/store";
+import {RootState} from "@/store/store";
 import {MenuPanelTag} from '@/interface/stateInterface/guiInterface';
 
 /**

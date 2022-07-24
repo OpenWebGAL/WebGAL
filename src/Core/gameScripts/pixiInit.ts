@@ -2,8 +2,8 @@ import {commandType, ISentence} from '@/interface/coreInterface/sceneInterface';
 import {IPerform, IRunPerform} from '@/interface/coreInterface/performInterface';
 import {runtime_gamePlay} from "@/Core/runtime/gamePlay";
 import {logger} from "@/Core/util/etc/logger";
-import {webgalStore} from "@/Core/store/store";
-import {resetStageState} from "@/Core/store/stageReducer";
+import {webgalStore} from "@/store/store";
+import {resetStageState} from "@/store/stageReducer";
 import  cloneDeep  from 'lodash/cloneDeep';
 
 /**

@@ -6,8 +6,8 @@ import {OptionSlider} from "./OptionSlider";
 import {getStorage, setStorage} from "@/Core/controller/storage/storageController";
 import {TextPreview} from "./TextPreview/TextPreview";
 import {useDispatch, useSelector} from "react-redux";
-import {RootState} from "@/Core/store/store";
-import {setOptionData} from "@/Core/store/userDataReducer";
+import {RootState} from "@/store/store";
+import {setOptionData} from "@/store/userDataReducer";
 import {playSpeed, textSize} from "@/interface/stateInterface/userDataInterface";
 import {setVolume} from "@/Core/controller/stage/setVolume";
 

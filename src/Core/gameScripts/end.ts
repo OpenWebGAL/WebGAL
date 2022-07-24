@@ -5,8 +5,8 @@ import {assetSetter, fileType} from "@/Core/util/gameAssetsAccess/assetSetter";
 import {sceneFetcher} from "@/Core/controller/scene/sceneFetcher";
 import {sceneParser} from "@/Core/parser/sceneParser";
 import {resetStage} from "@/Core/controller/stage/resetStage";
-import {webgalStore} from "@/Core/store/store";
-import {setVisibility} from "@/Core/store/GUIReducer";
+import {webgalStore} from "@/store/store";
+import {setVisibility} from "@/store/GUIReducer";
 
 /**
  * 结束游戏

@@ -54,7 +54,7 @@ export interface ISaveData {
 export interface IAppreciationAsset {
   name: string;
   url: string;
-  series:string;
+  series: string;
 }
 
 export interface IAppreciation {
@@ -67,6 +67,7 @@ export interface IAppreciation {
  */
 export interface IUserData {
   saveData: Array<ISaveData>; // 用户存档数据
+  quickSaveData: ISaveData | null;
   optionData: IOptionData; // 用户设置选项数据
   appreciationData: IAppreciation;
 }

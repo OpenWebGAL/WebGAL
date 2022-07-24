@@ -4,8 +4,8 @@ import {sceneFetcher} from "@/Core/controller/scene/sceneFetcher";
 import {runtime_currentSceneData} from "@/Core/runtime/sceneData";
 import {sceneParser} from "@/Core/parser/sceneParser";
 import {logger} from "../etc/logger";
-import {webgalStore} from "@/Core/store/store";
-import {setVisibility} from "@/Core/store/GUIReducer";
+import {webgalStore} from "@/store/store";
+import {setVisibility} from "@/store/GUIReducer";
 import {nextSentence} from "@/Core/controller/gamePlay/nextSentence";
 
 export const syncWithOrigine = (str: string) => {

@@ -4,8 +4,8 @@ import styles from '../SaveAndLoad.module.scss';
 // import {saveGame} from '@/Core/controller/storage/saveGame';
 import {setStorage} from '@/Core/controller/storage/storageController';
 import {useDispatch, useSelector} from "react-redux";
-import {RootState} from "@/Core/store/store";
-import {setSlPage} from "@/Core/store/userDataReducer";
+import {RootState} from "@/store/store";
+import {setSlPage} from "@/store/userDataReducer";
 
 export const Load: FC = () => {
   const userDataState = useSelector((state: RootState) => state.userData);

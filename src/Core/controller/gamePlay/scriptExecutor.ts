@@ -6,7 +6,7 @@ import {logger} from '../../util/etc/logger';
 import {IStageState} from '@/interface/stateInterface/stageInterface';
 import {restoreScene} from '../scene/restoreScene';
 import {IBacklogItem, sceneEntry} from '@/interface/coreInterface/runtimeInterface';
-import {webgalStore} from "@/Core/store/store";
+import {webgalStore} from "@/store/store";
 import {getValueFromState} from "@/Core/gameScripts/setVar";
 import {strIf} from "@/Core/gameScripts/function/strIf";
 import {nextSentence} from "@/Core/controller/gamePlay/nextSentence";

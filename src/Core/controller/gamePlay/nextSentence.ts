@@ -2,8 +2,8 @@ import {scriptExecutor} from './scriptExecutor';
 import {runtime_gamePlay} from '../../runtime/gamePlay';
 import {IRunPerform} from '@/interface/coreInterface/performInterface';
 import {logger} from '../../util/etc/logger';
-import {webgalStore} from "@/Core/store/store";
-import {resetStageState} from "@/Core/store/stageReducer";
+import {webgalStore} from "@/store/store";
+import {resetStageState} from "@/store/stageReducer";
 import cloneDeep from 'lodash/cloneDeep';
 
 /**

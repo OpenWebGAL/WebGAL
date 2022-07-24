@@ -2,8 +2,8 @@ import {ISentence} from '@/interface/coreInterface/sceneInterface';
 import {IPerform} from '@/interface/coreInterface/performInterface';
 import styles from '../../Components/Stage/TextBox/textbox.module.scss';
 import {getRandomPerformName} from '@/Core/controller/perform/getRandomPerformName';
-import {webgalStore} from "@/Core/store/store";
-import {setStage} from "@/Core/store/stageReducer";
+import {webgalStore} from "@/store/store";
+import {setStage} from "@/store/stageReducer";
 import {logger} from "@/Core/util/etc/logger";
 import {webgal_env} from "@/env/webgal-env";
 

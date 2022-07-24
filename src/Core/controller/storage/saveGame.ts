@@ -3,8 +3,8 @@ import {logger} from '../../util/etc/logger';
 import {ISaveData} from '@/interface/stateInterface/userDataInterface';
 import {runtime_currentSceneData} from '../../runtime/sceneData';
 import {syncStorageFast} from './storageController';
-import {webgalStore} from "@/Core/store/store";
-import {setUserData} from "@/Core/store/userDataReducer";
+import {webgalStore} from "@/store/store";
+import {setUserData} from "@/store/userDataReducer";
 import  cloneDeep  from 'lodash/cloneDeep';
 
 /**

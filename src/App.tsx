@@ -6,7 +6,7 @@ import {MainStage} from './Components/Stage/MainStage';
 import {BottomControlPanel} from './Components/UI/BottomControlPanel/ButtomControlPanel';
 import {Backlog} from './Components/UI/Backlog/Backlog';
 import {Provider} from 'react-redux';
-import {webgalStore} from './Core/store/store';
+import {webgalStore} from './store/store';
 import {Extra} from "@/Components/UI/Extra/Extra";
 import { BottomControlPanelFilm } from './Components/UI/BottomControlPanel/BottomControlPanelFilm';
 

@@ -3,8 +3,8 @@ import {logger} from '../etc/logger';
 import {assetSetter, fileType} from '../gameAssetsAccess/assetSetter';
 import {gameInfo} from '../../runtime/etc';
 import {getStorage} from '../../controller/storage/storageController';
-import {webgalStore} from "@/Core/store/store";
-import {setGuiAsset} from "@/Core/store/GUIReducer";
+import {webgalStore} from "@/store/store";
+import {setGuiAsset} from "@/store/GUIReducer";
 import {initKey} from "@/hooks/useHotkey";
 
 declare global {

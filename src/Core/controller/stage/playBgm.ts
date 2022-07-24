@@ -1,5 +1,5 @@
-import {webgalStore} from "@/Core/store/store";
-import {setStage} from "@/Core/store/stageReducer";
+import {webgalStore} from "@/store/store";
+import {setStage} from "@/store/stageReducer";
 
 // /**
 //  * 停止bgm

@@ -1,7 +1,7 @@
 import {runtime_gamePlay} from '../../runtime/gamePlay';
 // import {logger} from '../../util/logger';
 import styles from '../../../Components/UI/BottomControlPanel/bottomControlPanel.module.scss';
-import {webgalStore} from '@/Core/store/store';
+import {webgalStore} from '@/store/store';
 import {nextSentence} from "@/Core/controller/gamePlay/nextSentence";
 
 /**

@@ -1,5 +1,5 @@
 import {useSelector} from "react-redux";
-import {RootState} from "@/Core/store/store";
+import {RootState} from "@/store/store";
 
 export const AudioContainer = () => {
   const stageStore = useSelector((webgalStore: RootState) => webgalStore.stage);
