@@ -23,13 +23,14 @@ export const syncWithOrigine = (str: string) => {
   sceneFetcher(sceneUrl).then((rawScene) => {
     runtime_currentSceneData.currentScene = sceneParser(rawScene, 'start.txt', sceneUrl);
     // 开始快进到指定语句
-    syncFast(sentenceID);
+    const currentSceneName = runtime_currentSceneData.currentScene.sceneName;
+    syncFast(sentenceID,currentSceneName);
   });
 };
 
-export function syncFast(sentenceId: number) {
-  if (runtime_currentSceneData.currentSentenceId < sentenceId) {
+export function syncFast(sentenceId: number,currentSceneName:string) {
+  if (runtime_currentSceneData.currentSentenceId < sentenceId&& runtime_currentSceneData.currentScene.sceneName === currentSceneName) {
     nextSentence();
-    setTimeout(() => syncFast(sentenceId), 2);
+    setTimeout(() => syncFast(sentenceId,currentSceneName), 2);
   }
 }
