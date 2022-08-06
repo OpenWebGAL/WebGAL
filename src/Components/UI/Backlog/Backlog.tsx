@@ -15,7 +15,7 @@ export const Backlog = () => {
   const dispatch = useDispatch();
   const [indexHide, setIndexHide] = useState(false);
   const [isDisableScroll, setIsDisableScroll] = useState(false);
-  let timeRef = useRef<NodeJS.Timeout>();
+  let timeRef = useRef<ReturnType<typeof setTimeout>>();
   // 缓存一下vdom
   const backlogList = useMemo<any>(() => {
     let backlogs = [];
@@ -87,7 +87,7 @@ export const Backlog = () => {
       // nextTick开启滚动
       setTimeout(() => {
         setIsDisableScroll(false);
-      }, 0)
+      }, 0);
     } else {
       /* 隐藏历史记录触发 */
       // 这里是为了让backlog的z-index降低
@@ -98,7 +98,7 @@ export const Backlog = () => {
         timeRef.current = undefined;
         // 700是和动画一样的延时 保险起见多个80ms
         // 不加也没啥 问题不大
-      }, 700 + 80)
+      }, 700 + 80);
     }
   }, [GUIStore.showBacklog]);
   return (
