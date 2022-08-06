@@ -5,11 +5,36 @@ import {jumpFromBacklog} from '@/Core/controller/storage/jumpFromBacklog';
 import {useDispatch, useSelector} from "react-redux";
 import {RootState, webgalStore} from '@/store/store';
 import {setVisibility} from "@/store/GUIReducer";
+import {logger} from "@/Core/util/etc/logger";
+import React, {useEffect, useMemo, useRef, useState} from "react";
+import {NodeJS} from "timers";
+
 
 export const Backlog = () => {
+  // logger.info('Backlog render');
   const GUIStore = useSelector((state: RootState) => state.GUI);
   const backlogList = [];
   const dispatch = useDispatch();
+  const [indexHide, setIndexHide] = useState(false);
+  let timeRef = useRef<NodeJS.Timeout>();
+  useEffect(() => {
+    // 切换为展示历史记录
+    if (GUIStore.showBacklog) {
+      // 立即清除 防止快速切换后定时器还会执行
+      if (timeRef.current) {
+        clearTimeout(timeRef.current);
+      }
+      setIndexHide(false);
+    } else {
+      // 隐藏历史记录
+      timeRef.current = setTimeout(() => {
+        setIndexHide(true);
+        timeRef.current = null;
+        // 700是和动画一样的延时 保险起见多个80ms
+      }, 700 + 80)
+    }
+  }, [GUIStore.showBacklog]);
+  // @todo lazy-load
   for (let i = 0; i < runtime_currentBacklog.length; i++) {
     const backlogItem = runtime_currentBacklog[i];
     const singleBacklogView = (
@@ -59,8 +84,9 @@ export const Backlog = () => {
   }
   return (
     <>
-      {GUIStore.showBacklog && (
-        <div className={styles.Backlog_main}>
+      {(
+        // ${indexHide ? styles.Backlog_main_out_IndexHide : ''}
+        <div className={`${GUIStore.showBacklog ? styles.Backlog_main : styles.Backlog_main_out} ${indexHide ? styles.Backlog_main_out_IndexHide : ''}`}>
           <div className={styles.backlog_top}>
             <CloseSmall
               className={styles.backlog_top_icon}
@@ -73,7 +99,9 @@ export const Backlog = () => {
               fill="#ffffff"
               strokeWidth={3}
             />
-            <div className={styles.backlog_title}>回想</div>
+            <div className={styles.backlog_title} onClick={() => {
+              logger.info('Rua! Testing');
+            }}>回想</div>
           </div>
           <div className={styles.backlog_content}>{backlogList}</div>
         </div>
