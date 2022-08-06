@@ -99,12 +99,20 @@ export function useMouseWheel() {
   const handleMouseWheel = useCallback((ev) => {
     const direction = (ev.wheelDelta && (ev.wheelDelta > 0 ? "up" : "down")) || (ev.detail && (ev.detail < 0 ? "up" : "down")) || "down";
     const ctrlKey = ev.ctrlKey;
+    const dom = document.querySelector(`.${styles.backlog_content}`);
     if (isGameActive() && (direction === 'up') && !ctrlKey) {
+      // logger.info('useMouseWheel up');
+      // if (dom) {
+      //   console.log('dom');
+      //   dom.scrollTo({
+      //     top: 0,
+      //     behavior: 'smooth'
+      //   })
+      // }
       setComponentVisibility('showBacklog', true);
       setComponentVisibility('showTextBox', false);
     }
     if (isInBackLog() && (direction === 'down') && !ctrlKey) {
-      const dom = document.querySelector(`.${styles.backlog_content}`);
       if (dom) {
         let flag = hasScrollToBottom(dom);
         let curTime = new Date().getTime();

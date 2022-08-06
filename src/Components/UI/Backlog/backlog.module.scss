@@ -29,6 +29,11 @@
   z-index: -10;
 }
 
+// 暂时禁用滚动
+.Backlog_main_DisableScroll {
+  overflow: hidden!important;
+}
+
 
 .backlog_top {
   padding: 0 0 0 1em;
