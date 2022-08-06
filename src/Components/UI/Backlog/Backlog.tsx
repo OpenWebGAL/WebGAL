@@ -44,19 +44,21 @@ export const Backlog = () => {
               >
                 <Return theme="outline" size="23" fill="#ffffff" strokeWidth={3}/>
               </div>
-              <div onClick={() => {
-                // 获取到播放 backlog 语音的元素
-                const backlog_audio_element: any = document.getElementById('backlog_audio_play_element_' + i);
-                if (backlog_audio_element) {
-                  backlog_audio_element.currentTime = 0;
-                  const userDataStore = webgalStore.getState().userData;
-                  const mainVol = userDataStore.optionData.volumeMain;
-                  backlog_audio_element.volume = mainVol * 0.01 * userDataStore.optionData.vocalVolume * 0.01;
-                  backlog_audio_element.play();
-                }
-              }} className={styles.backlog_item_button_element}>
-                <VolumeNotice theme="outline" size="23" fill="#ffffff" strokeWidth={3}/>
-              </div>
+              {
+                backlogItem.currentStageState.vocal ? <div onClick={() => {
+                  // 获取到播放 backlog 语音的元素
+                  const backlog_audio_element: any = document.getElementById('backlog_audio_play_element_' + i);
+                  if (backlog_audio_element) {
+                    backlog_audio_element.currentTime = 0;
+                    const userDataStore = webgalStore.getState().userData;
+                    const mainVol = userDataStore.optionData.volumeMain;
+                    backlog_audio_element.volume = mainVol * 0.01 * userDataStore.optionData.vocalVolume * 0.01;
+                    backlog_audio_element.play();
+                  }
+                }} className={styles.backlog_item_button_element}>
+                  <VolumeNotice theme="outline" size="23" fill="#ffffff" strokeWidth={3}/>
+                </div> : null
+              }
             </div>
           </div>
           <div className={styles.backlog_item_content}>
