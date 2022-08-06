@@ -16,6 +16,8 @@ import {runtime_currentSceneData} from "@/Core/runtime/sceneData";
 import {nextSentence} from "@/Core/controller/gamePlay/nextSentence";
 import {setFastSave} from "@/store/userDataReducer";
 import {getStorageAsync, setStorageAsync} from "@/Core/controller/storage/storageController";
+import styles from '@/Components/UI/Backlog/backlog.module.scss';
+import {throttle} from "lodash";
 
 // options备用
 export interface HotKeyType {
@@ -85,17 +87,43 @@ export function useMouseRightClickHotKey() {
 
 /**
  * 滚轮向上打开历史记录
+ * 滚轮向下关闭历史记录
+ * 滚轮向下下一句
  */
 export function useMouseWheel() {
   const GUIStore = useGenSyncRef((state: RootState) => state.GUI);
   const setComponentVisibility = useSetComponentVisibility();
   const isGameActive = useGameActive(GUIStore);
+  const isInBackLog = useIsInBackLog(GUIStore);
+  const next = useCallback(throttle(() => {
+    nextSentence();
+  }, 100), [])
+  // 防止一直往下滚的时候顺着滚出历史记录
+  // 问就是抄的999
+  const prevDownWheelTimeRef = useRef(0);
   const handleMouseWheel = useCallback((ev) => {
     const direction = (ev.wheelDelta && (ev.wheelDelta > 0 ? "up" : "down")) || (ev.detail && (ev.detail < 0 ? "up" : "down")) || "down";
     const ctrlKey = ev.ctrlKey;
+    const dom = document.querySelector(`.${styles.backlog_content}`);
     if (isGameActive() && (direction === 'up') && !ctrlKey) {
       setComponentVisibility('showBacklog', true);
+      setComponentVisibility('showTextBox', false);
+    } else if (isInBackLog() && (direction === 'down') && !ctrlKey) {
+      if (dom) {
+        let flag = hasScrollToBottom(dom);
+        let curTime = new Date().getTime();
+        // 滚动到底部 & 非连续滚动
+        if (flag && ((curTime - prevDownWheelTimeRef.current) > 100)) {
+          setComponentVisibility('showBacklog', false);
+          setComponentVisibility('showTextBox', true);
+        }
+        prevDownWheelTimeRef.current = curTime;
+      }
+      // setComponentVisibility('showBacklog', false);
+    } else if (isGameActive() && (direction === 'down') && !ctrlKey) {
+      next();
     }
+
   }, []);
   useMounted(() => {
     document.addEventListener('wheel', handleMouseWheel);
@@ -355,4 +383,13 @@ export function useSpaceAndEnter() {
     document.removeEventListener('keyup', handleKeyup);
     document.removeEventListener('blur', handleWindowBlur);
   });
+}
+
+/**
+ * 是否滚动到底部
+ * @param dom
+ */
+function hasScrollToBottom(dom: Element) {
+  const {scrollTop, clientHeight, scrollHeight} = dom;
+  return scrollTop === 0;
 }
