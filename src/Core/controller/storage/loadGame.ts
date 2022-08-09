@@ -25,6 +25,10 @@ export const loadGame = (index: number) => {
 };
 
 export function loadGameFromStageData(stageData: ISaveData) {
+  if (!stageData) {
+    logger.info('暂无存档');
+    return;
+  }
   const loadFile = stageData;
   // 重新获取并同步场景状态
   sceneFetcher(loadFile.sceneData.sceneUrl).then((rawScene) => {
