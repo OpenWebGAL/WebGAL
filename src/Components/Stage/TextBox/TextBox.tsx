@@ -22,11 +22,11 @@ export const TextBox = () => {
       delay = delay - prevLength * textDelay;
     }
     if(index<prevLength){
-      return <span id={`${delay}`} className={styles.TextBox_textElement_Settled}
+      return <span data-text={e} id={`${delay}`} className={styles.TextBox_textElement_Settled}
         key={stageState.currentDialogKey + index}
         style={{animationDelay: `${delay}ms`}}>{e}</span>;
     }
-    return <span id={`${delay}`} className={styles.TextBox_textElement_start}
+    return <span data-text={e} id={`${delay}`} className={styles.TextBox_textElement_start}
       key={stageState.currentDialogKey + index}
       style={{animationDelay: `${delay}ms`}}>{e}</span>;
   });
