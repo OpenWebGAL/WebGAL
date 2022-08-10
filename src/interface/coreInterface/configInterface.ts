@@ -1,7 +1,7 @@
-import {commandType} from "@/interface/coreInterface/sceneInterface";
+import { commandType } from '@/interface/coreInterface/sceneInterface';
 
 export interface IConfigInterface {
-  scriptString: string,
-  scriptType: commandType,
-  scriptFunction: Function
+  scriptString: string;
+  scriptType: commandType;
+  scriptFunction: Function;
 }

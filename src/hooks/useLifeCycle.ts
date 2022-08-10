@@ -1,4 +1,4 @@
-import {useEffect} from "react";
+import { useEffect } from 'react';
 
 // 挂载
 export function useMounted(callback: Function) {

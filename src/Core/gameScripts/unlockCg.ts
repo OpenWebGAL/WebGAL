@@ -1,10 +1,10 @@
-import {ISentence} from '@/interface/coreInterface/sceneInterface';
-import {IPerform} from '@/interface/coreInterface/performInterface';
-import {webgalStore} from "@/store/store";
-import {unlockCgInUserData} from '@/store/userDataReducer';
-import {logger} from "@/Core/util/etc/logger";
-import localforage from "localforage";
-import {gameInfo} from "@/Core/runtime/etc";
+import { ISentence } from '@/interface/coreInterface/sceneInterface';
+import { IPerform } from '@/interface/coreInterface/performInterface';
+import { webgalStore } from '@/store/store';
+import { unlockCgInUserData } from '@/store/userDataReducer';
+import { logger } from '@/Core/util/etc/logger';
+import localforage from 'localforage';
+import { gameInfo } from '@/Core/runtime/etc';
 
 /**
  * 解锁cg
@@ -14,7 +14,7 @@ export const unlockCg = (sentence: ISentence): IPerform => {
   const url = sentence.content;
   let name = sentence.content;
   let series = 'default';
-  sentence.args.forEach(e => {
+  sentence.args.forEach((e) => {
     if (e.key === 'name') {
       name = e.value.toString();
     }
@@ -23,7 +23,7 @@ export const unlockCg = (sentence: ISentence): IPerform => {
     }
   });
   logger.info(`解锁CG：${name}，路径：${url}，所属系列：${series}`);
-  webgalStore.dispatch(unlockCgInUserData({name, url, series}));
+  webgalStore.dispatch(unlockCgInUserData({ name, url, series }));
   const userDataState = webgalStore.getState().userData;
   localforage.setItem(gameInfo.gameKey, userDataState).then(() => {});
   return {
@@ -31,8 +31,7 @@ export const unlockCg = (sentence: ISentence): IPerform => {
     duration: 0,
     isOver: false,
     isHoldOn: false,
-    stopFunction: () => {
-    },
+    stopFunction: () => {},
     blockingNext: () => false,
     blockingAuto: () => true,
     stopTimeout: undefined, // 暂时不用，后面会交给自动清除

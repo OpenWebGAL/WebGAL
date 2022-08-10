@@ -1,10 +1,10 @@
-import styles from "@/Components/UI/Extra/extra.module.scss";
-import React from "react";
-import {useSelector} from "react-redux";
-import {RootState} from "@/store/store";
-import {useObject} from "@/hooks/useObject";
+import styles from '@/Components/UI/Extra/extra.module.scss';
+import React from 'react';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/store/store';
+import { useObject } from '@/hooks/useObject';
 import './extraCG_animation_List.scss';
-import {ExtraCgElement} from "@/Components/UI/Extra/ExtraCgElement";
+import { ExtraCgElement } from '@/Components/UI/Extra/ExtraCgElement';
 
 export function ExtraCg() {
   const cgPerPage = 9;
@@ -15,11 +15,22 @@ export function ExtraCg() {
   // 开始生成立绘鉴赏的图片
   const showCgList = [];
   const len = extraState.cg.length;
-  for (let i = (currentPage.value - 1) * cgPerPage; i < Math.min(len, (currentPage.value - 1) * cgPerPage + cgPerPage); i++) {
+  for (
+    let i = (currentPage.value - 1) * cgPerPage;
+    i < Math.min(len, (currentPage.value - 1) * cgPerPage + cgPerPage);
+    i++
+  ) {
     const index = i - (currentPage.value - 1) * cgPerPage;
     const deg = Random(-5, 5);
-    const temp = <ExtraCgElement name={extraState.cg[i].name} imgUrl={extraState.cg[i].url} transformDeg={deg}
-      index={index} key={index.toString() + extraState.cg[i].url}/>;
+    const temp = (
+      <ExtraCgElement
+        name={extraState.cg[i].name}
+        imgUrl={extraState.cg[i].url}
+        transformDeg={deg}
+        index={index}
+        key={index.toString() + extraState.cg[i].url}
+      />
+    );
     showCgList.push(temp);
   }
 
@@ -30,20 +41,20 @@ export function ExtraCg() {
     if (currentPage.value === i) {
       className = className + ' ' + styles.cgNav_active;
     }
-    const temp = <div onClick={() => currentPage.set(i)} key={'nav' + i} className={className}>
-      {i}
-    </div>;
+    const temp = (
+      <div onClick={() => currentPage.set(i)} key={'nav' + i} className={className}>
+        {i}
+      </div>
+    );
     showNav.push(temp);
   }
 
-  return <div className={styles.cgMain}>
-    <div className={styles.cgContainer}>
-      {showCgList}
+  return (
+    <div className={styles.cgMain}>
+      <div className={styles.cgContainer}>{showCgList}</div>
+      <div className={styles.cgShowDiv}>{showNav}</div>
     </div>
-    <div className={styles.cgShowDiv}>
-      {showNav}
-    </div>
-  </div>;
+  );
 }
 
 function Random(min: number, max: number) {

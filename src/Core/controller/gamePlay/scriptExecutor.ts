@@ -1,15 +1,15 @@
-import {commandType, ISentence} from '@/interface/coreInterface/sceneInterface';
-import {runtime_currentBacklog} from '../../runtime/backlog';
-import {runtime_currentSceneData} from '../../runtime/sceneData';
-import {runScript} from './runScript';
-import {logger} from '../../util/etc/logger';
-import {IStageState} from '@/interface/stateInterface/stageInterface';
-import {restoreScene} from '../scene/restoreScene';
-import {IBacklogItem, sceneEntry} from '@/interface/coreInterface/runtimeInterface';
-import {webgalStore} from "@/store/store";
-import {getValueFromState} from "@/Core/gameScripts/setVar";
-import {strIf} from "@/Core/gameScripts/function/strIf";
-import {nextSentence} from "@/Core/controller/gamePlay/nextSentence";
+import { commandType, ISentence } from '@/interface/coreInterface/sceneInterface';
+import { runtime_currentBacklog } from '../../runtime/backlog';
+import { runtime_currentSceneData } from '../../runtime/sceneData';
+import { runScript } from './runScript';
+import { logger } from '../../util/etc/logger';
+import { IStageState } from '@/interface/stateInterface/stageInterface';
+import { restoreScene } from '../scene/restoreScene';
+import { IBacklogItem, sceneEntry } from '@/interface/coreInterface/runtimeInterface';
+import { webgalStore } from '@/store/store';
+import { getValueFromState } from '@/Core/gameScripts/setVar';
+import { strIf } from '@/Core/gameScripts/function/strIf';
+import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
 import cloneDeep from 'lodash/cloneDeep';
 
 /**
@@ -33,7 +33,7 @@ export const scriptExecutor = () => {
   let runThis = true;
   let isHasWhenArg = false;
   let whenValue = '';
-  currentScript.args.forEach(e => {
+  currentScript.args.forEach((e) => {
     if (e.key === 'when') {
       isHasWhenArg = true;
       whenValue = e.value.toString();
@@ -43,14 +43,16 @@ export const scriptExecutor = () => {
   if (isHasWhenArg) {
     // 先把变量解析出来
     const valExpArr = whenValue.split(/([+\-*\/()><=!]|>=|<=)/g);
-    const valExp = valExpArr.map(e => {
-      if (e.match(/[a-zA-Z]/)) {
-        if (e.match(/true/) || e.match(/false/)) {
-          return e;
-        }
-        return getValueFromState(e).toString();
-      } else return e;
-    }).reduce((pre, curr) => pre + curr, '');
+    const valExp = valExpArr
+      .map((e) => {
+        if (e.match(/[a-zA-Z]/)) {
+          if (e.match(/true/) || e.match(/false/)) {
+            return e;
+          }
+          return getValueFromState(e).toString();
+        } else return e;
+      })
+      .reduce((pre, curr) => pre + curr, '');
     runThis = strIf(valExp);
   }
   // 执行语句
@@ -71,7 +73,7 @@ export const scriptExecutor = () => {
 
   let isSaveBacklog = currentScript.command === commandType.say; // 是否在本句保存backlog（一般遇到对话保存）
   // 检查当前对话是否有 notend 参数
-  currentScript.args.forEach(e => {
+  currentScript.args.forEach((e) => {
     if (e.key === 'notend' && e.value === true) {
       isSaveBacklog = false;
     }
@@ -102,8 +104,8 @@ export const scriptExecutor = () => {
     // 保存 backlog
     if (isSaveBacklog) {
       const newStageState = cloneDeep(currentStageState);
-      newStageState.PerformList.forEach(ele => {
-        ele.script.args.forEach(argelement => {
+      newStageState.PerformList.forEach((ele) => {
+        ele.script.args.forEach((argelement) => {
           if (argelement.key === 'concat') {
             argelement.value = false;
             ele.script.content = newStageState.showText;
@@ -113,16 +115,14 @@ export const scriptExecutor = () => {
       const backlogElement: IBacklogItem = {
         currentStageState: newStageState,
         saveScene: {
-          currentSentenceId: runtime_currentSceneData.currentSentenceId,// 当前语句ID
+          currentSentenceId: runtime_currentSceneData.currentSentenceId, // 当前语句ID
           sceneStack: cloneDeep(runtime_currentSceneData.sceneStack), // 场景栈
           sceneName: runtime_currentSceneData.currentScene.sceneName, // 场景名称
           sceneUrl: runtime_currentSceneData.currentScene.sceneUrl, // 场景url
-        }
+        },
       };
       runtime_currentBacklog.push(backlogElement);
     }
   }, 0);
   runtime_currentSceneData.currentSentenceId++;
-
 };
-

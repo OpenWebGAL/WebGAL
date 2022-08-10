@@ -1,12 +1,12 @@
-import {ISentence} from '@/interface/coreInterface/sceneInterface';
-import {IPerform} from '@/interface/coreInterface/performInterface';
+import { ISentence } from '@/interface/coreInterface/sceneInterface';
+import { IPerform } from '@/interface/coreInterface/performInterface';
 import styles1 from '../../Components/Stage/TextBox/textbox.module.scss';
 import styles2 from '../../Components/Stage/TextBox/textboxFilm.module.scss';
-import {getRandomPerformName} from '@/Core/controller/perform/getRandomPerformName';
-import {playVocal} from './playVocal';
-import {webgalStore} from "@/store/store";
-import {setStage} from "@/store/stageReducer";
-import {webgal_env} from "@/env/webgal-env";
+import { getRandomPerformName } from '@/Core/controller/perform/getRandomPerformName';
+import { playVocal } from './playVocal';
+import { webgalStore } from '@/store/store';
+import { setStage } from '@/store/stageReducer';
+import { webgal_env } from '@/env/webgal-env';
 
 /**
  * 进行普通对话的显示
@@ -25,7 +25,7 @@ export const say = (sentence: ISentence): IPerform => {
   // 是否有 notend 参数
   let isNotend = false;
   // 如果是concat，那么就继承上一句的key，并且继承上一句对话。
-  sentence.args.forEach(e => {
+  sentence.args.forEach((e) => {
     if (e.key === 'concat' && e.value === true) {
       dialogKey = stageState.currentDialogKey;
       dialogToShow = stageState.showText + dialogToShow;
@@ -36,16 +36,16 @@ export const say = (sentence: ISentence): IPerform => {
     }
   });
   if (isConcat) {
-    dispatch(setStage({key: 'currentConcatDialogPrev', value: stageState.showText}));
+    dispatch(setStage({ key: 'currentConcatDialogPrev', value: stageState.showText }));
   } else {
-    dispatch(setStage({key: 'currentConcatDialogPrev', value: ''}));
+    dispatch(setStage({ key: 'currentConcatDialogPrev', value: '' }));
   }
   // 设置文本显示
-  dispatch(setStage({key: "showText", value: dialogToShow}));
+  dispatch(setStage({ key: 'showText', value: dialogToShow }));
   // 清除语音
-  dispatch(setStage({key: "vocal", value: ''}));
+  dispatch(setStage({ key: 'vocal', value: '' }));
   // 设置key
-  dispatch(setStage({key: 'currentDialogKey', value: dialogKey}));
+  dispatch(setStage({ key: 'currentDialogKey', value: dialogKey }));
   // 计算延迟
   const textDelay = webgal_env.textInitialDelay - 20 * userDataState.optionData.textSpeed;
   // 本句延迟
@@ -69,7 +69,7 @@ export const say = (sentence: ISentence): IPerform => {
       playVocal(sentence);
     }
   }
-  dispatch(setStage({key: "showName", value: showName}));
+  dispatch(setStage({ key: 'showName', value: showName }));
   setTimeout(() => {
     const textElements = document.querySelectorAll('.' + styles.TextBox_textElement_start);
     const textArray = [...textElements];

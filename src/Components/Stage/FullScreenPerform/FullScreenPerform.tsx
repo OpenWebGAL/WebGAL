@@ -1,6 +1,6 @@
 import styles from './fullScreenPerform.module.scss';
-import {useSelector} from "react-redux";
-import {RootState} from "@/store/store";
+import { useSelector } from 'react-redux';
+import { RootState } from '@/store/store';
 
 export const FullScreenPerform = () => {
   const stageState = useSelector((state: RootState) => state.stage);
@@ -11,10 +11,12 @@ export const FullScreenPerform = () => {
     stageHeight = '76%';
     top = '12%';
   }
-  return <div className={styles.FullScreenPerform_main} style={{width: stageWidth, height: stageHeight, top: top}}>
-    <div id="videoContainer"/>
-    <div className={styles.introContainer} id="introContainer"/>
-    <div id="pixiContianer"/>
-    <div id="chooseContainer"/>
-  </div>;
+  return (
+    <div className={styles.FullScreenPerform_main} style={{ width: stageWidth, height: stageHeight, top: top }}>
+      <div id="videoContainer" />
+      <div className={styles.introContainer} id="introContainer" />
+      <div id="pixiContianer" />
+      <div id="chooseContainer" />
+    </div>
+  );
 };

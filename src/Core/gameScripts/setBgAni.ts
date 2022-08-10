@@ -1,5 +1,5 @@
-import {ISentence} from '@/interface/coreInterface/sceneInterface';
-import {IPerform} from '@/interface/coreInterface/performInterface';
+import { ISentence } from '@/interface/coreInterface/sceneInterface';
+import { IPerform } from '@/interface/coreInterface/performInterface';
 
 /**
  * 设置背景动画
@@ -21,8 +21,7 @@ export const setBgAni = (sentence: ISentence): IPerform => {
     duration: 0,
     isOver: false,
     isHoldOn: false,
-    stopFunction: () => {
-    },
+    stopFunction: () => {},
     blockingNext: () => false,
     blockingAuto: () => true,
     stopTimeout: undefined, // 暂时不用，后面会交给自动清除

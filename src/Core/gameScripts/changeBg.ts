@@ -1,9 +1,9 @@
-import {ISentence} from '@/interface/coreInterface/sceneInterface';
-import {IPerform} from '@/interface/coreInterface/performInterface';
+import { ISentence } from '@/interface/coreInterface/sceneInterface';
+import { IPerform } from '@/interface/coreInterface/performInterface';
 // import {getRandomPerformName} from '../../../util/getRandomPerformName';
 import styles from '../../Components/Stage/mainStage.module.scss';
-import {webgalStore} from '@/store/store';
-import {setStage} from "@/store/stageReducer";
+import { webgalStore } from '@/store/store';
+import { setStage } from '@/store/stageReducer';
 
 /**
  * 进行背景图片的切换
@@ -14,8 +14,8 @@ export const changeBg = (sentence: ISentence): IPerform => {
   const stageState = webgalStore.getState().stage;
   const oldBgName = stageState.bgName;
   const dispatch = webgalStore.dispatch;
-  dispatch(setStage({key: 'oldBgName', value: oldBgName}));
-  dispatch(setStage({key: 'bgName', value: sentence.content}));
+  dispatch(setStage({ key: 'oldBgName', value: oldBgName }));
+  dispatch(setStage({ key: 'bgName', value: sentence.content }));
   // const performInitName: string = getRandomPerformName();
   return {
     performName: 'none',

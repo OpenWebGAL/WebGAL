@@ -1,8 +1,8 @@
-import {runtime_currentSceneData} from '../../runtime/sceneData';
-import {sceneFetcher} from './sceneFetcher';
-import {sceneParser} from '../../parser/sceneParser';
-import {logger} from '../../util/etc/logger';
-import {nextSentence} from "@/Core/controller/gamePlay/nextSentence";
+import { runtime_currentSceneData } from '../../runtime/sceneData';
+import { sceneFetcher } from './sceneFetcher';
+import { sceneParser } from '../../parser/sceneParser';
+import { logger } from '../../util/etc/logger';
+import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
 
 /**
  * 切换场景

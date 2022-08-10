@@ -1,15 +1,15 @@
-import {runtime_currentBacklog} from '../../runtime/backlog';
-import {runtime_currentSceneData} from '../../runtime/sceneData';
-import {ISaveData} from '@/interface/stateInterface/userDataInterface';
-import {logger} from '../../util/etc/logger';
-import {sceneFetcher} from '../scene/sceneFetcher';
-import {sceneParser} from '../../parser/sceneParser';
-import {webgalStore} from "@/store/store";
-import {resetStageState} from "@/store/stageReducer";
-import {setVisibility} from "@/store/GUIReducer";
+import { runtime_currentBacklog } from '../../runtime/backlog';
+import { runtime_currentSceneData } from '../../runtime/sceneData';
+import { ISaveData } from '@/interface/stateInterface/userDataInterface';
+import { logger } from '../../util/etc/logger';
+import { sceneFetcher } from '../scene/sceneFetcher';
+import { sceneParser } from '../../parser/sceneParser';
+import { webgalStore } from '@/store/store';
+import { resetStageState } from '@/store/stageReducer';
+import { setVisibility } from '@/store/GUIReducer';
 import { restorePerform } from './jumpFromBacklog';
-import {stopAllPerform} from "@/Core/controller/gamePlay/stopAllPerform";
-import  cloneDeep  from 'lodash/cloneDeep';
+import { stopAllPerform } from '@/Core/controller/gamePlay/stopAllPerform';
+import cloneDeep from 'lodash/cloneDeep';
 
 /**
  * 读取游戏存档
@@ -59,6 +59,6 @@ export function loadGameFromStageData(stageData: ISaveData) {
   // 恢复演出
   restorePerform();
 
-  dispatch(setVisibility({component: 'showTitle', visibility: false}));
-  dispatch(setVisibility({component: 'showMenuPanel', visibility: false}));
+  dispatch(setVisibility({ component: 'showTitle', visibility: false }));
+  dispatch(setVisibility({ component: 'showMenuPanel', visibility: false }));
 }

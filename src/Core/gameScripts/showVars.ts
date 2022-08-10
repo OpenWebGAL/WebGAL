@@ -1,11 +1,11 @@
-import {ISentence} from '@/interface/coreInterface/sceneInterface';
-import {IPerform} from '@/interface/coreInterface/performInterface';
+import { ISentence } from '@/interface/coreInterface/sceneInterface';
+import { IPerform } from '@/interface/coreInterface/performInterface';
 import styles from '../../Components/Stage/TextBox/textbox.module.scss';
-import {getRandomPerformName} from '@/Core/controller/perform/getRandomPerformName';
-import {webgalStore} from "@/store/store";
-import {setStage} from "@/store/stageReducer";
-import {logger} from "@/Core/util/etc/logger";
-import {webgal_env} from "@/env/webgal-env";
+import { getRandomPerformName } from '@/Core/controller/perform/getRandomPerformName';
+import { webgalStore } from '@/store/store';
+import { setStage } from '@/store/stageReducer';
+import { logger } from '@/Core/util/etc/logger';
+import { webgal_env } from '@/env/webgal-env';
 
 /**
  * 进行普通对话的显示
@@ -17,8 +17,8 @@ export const showVars = (sentence: ISentence): IPerform => {
   const userDataState = webgalStore.getState().userData;
   const dispatch = webgalStore.dispatch;
   // 设置文本显示
-  dispatch(setStage({key: "showText", value: JSON.stringify(stageState.GameVar)}));
-  dispatch(setStage({key: "showName", value: '展示变量'}));
+  dispatch(setStage({ key: 'showText', value: JSON.stringify(stageState.GameVar) }));
+  dispatch(setStage({ key: 'showName', value: '展示变量' }));
   logger.debug('展示变量：', stageState.GameVar);
   setTimeout(() => {
     const textElements = document.querySelectorAll('.' + styles.TextBox_textElement_start);

@@ -1,34 +1,36 @@
-import {useGenSyncRef} from "@/hooks/useGenSyncRef";
-import {RootState, webgalStore} from "@/store/store";
-import {useMounted, useUnMounted, useUpdated} from "@/hooks/useLifeCycle";
-import {useCallback, useRef} from "react";
-import {componentsVisibility, MenuPanelTag} from "@/interface/stateInterface/guiInterface";
-import {setVisibility} from "@/store/GUIReducer";
-import {useDispatch} from "react-redux";
-import {startFast, stopAll, stopFast} from "@/Core/controller/gamePlay/fastSkip";
-import cloneDeep from "lodash/cloneDeep";
-import {ISaveData} from "@/interface/stateInterface/userDataInterface";
-import {generateCurrentStageData} from "@/Core/controller/storage/saveGame";
-import {loadGameFromStageData} from "@/Core/controller/storage/loadGame";
-import {gameInfo} from "@/Core/runtime/etc";
-import {logger} from "@/Core/util/etc/logger";
-import {runtime_currentSceneData} from "@/Core/runtime/sceneData";
-import {nextSentence} from "@/Core/controller/gamePlay/nextSentence";
-import {setFastSave} from "@/store/userDataReducer";
-import {getStorageAsync, setStorageAsync} from "@/Core/controller/storage/storageController";
+import { useGenSyncRef } from '@/hooks/useGenSyncRef';
+import { RootState, webgalStore } from '@/store/store';
+import { useMounted, useUnMounted, useUpdated } from '@/hooks/useLifeCycle';
+import { useCallback, useRef } from 'react';
+import { componentsVisibility, MenuPanelTag } from '@/interface/stateInterface/guiInterface';
+import { setVisibility } from '@/store/GUIReducer';
+import { useDispatch } from 'react-redux';
+import { startFast, stopAll, stopFast } from '@/Core/controller/gamePlay/fastSkip';
+import cloneDeep from 'lodash/cloneDeep';
+import { ISaveData } from '@/interface/stateInterface/userDataInterface';
+import { generateCurrentStageData } from '@/Core/controller/storage/saveGame';
+import { loadGameFromStageData } from '@/Core/controller/storage/loadGame';
+import { gameInfo } from '@/Core/runtime/etc';
+import { logger } from '@/Core/util/etc/logger';
+import { runtime_currentSceneData } from '@/Core/runtime/sceneData';
+import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
+import { setFastSave } from '@/store/userDataReducer';
+import { getStorageAsync, setStorageAsync } from '@/Core/controller/storage/storageController';
 import styles from '@/Components/UI/Backlog/backlog.module.scss';
-import {throttle} from "lodash";
+import { throttle } from 'lodash';
 
 // options备用
 export interface HotKeyType {
-  MouseRight: {} | boolean,
-  MouseWheel: {} | boolean,
-  Ctrl: boolean,
-  Esc: {
-    href: string,
-    nav: 'replace' | 'push'
-  } | boolean,
-  AutoSave: {} | boolean
+  MouseRight: {} | boolean;
+  MouseWheel: {} | boolean;
+  Ctrl: boolean;
+  Esc:
+    | {
+        href: string;
+        nav: 'replace' | 'push';
+      }
+    | boolean;
+  AutoSave: {} | boolean;
 }
 
 export let fastSaveGameKey = '';
@@ -51,7 +53,6 @@ export function useHotkey(opt?: HotKeyType) {
   useEscape();
   useFastSaveBeforeUnloadPage();
   useSpaceAndEnter();
-
 }
 
 /**
@@ -95,35 +96,40 @@ export function useMouseWheel() {
   const setComponentVisibility = useSetComponentVisibility();
   const isGameActive = useGameActive(GUIStore);
   const isInBackLog = useIsInBackLog(GUIStore);
-  const next = useCallback(throttle(() => {
-    nextSentence();
-  }, 100), [])
+  const next = useCallback(
+    throttle(() => {
+      nextSentence();
+    }, 100),
+    [],
+  );
   // 防止一直往下滚的时候顺着滚出历史记录
   // 问就是抄的999
   const prevDownWheelTimeRef = useRef(0);
   const handleMouseWheel = useCallback((ev) => {
-    const direction = (ev.wheelDelta && (ev.wheelDelta > 0 ? "up" : "down")) || (ev.detail && (ev.detail < 0 ? "up" : "down")) || "down";
+    const direction =
+      (ev.wheelDelta && (ev.wheelDelta > 0 ? 'up' : 'down')) ||
+      (ev.detail && (ev.detail < 0 ? 'up' : 'down')) ||
+      'down';
     const ctrlKey = ev.ctrlKey;
     const dom = document.querySelector(`.${styles.backlog_content}`);
-    if (isGameActive() && (direction === 'up') && !ctrlKey) {
+    if (isGameActive() && direction === 'up' && !ctrlKey) {
       setComponentVisibility('showBacklog', true);
       setComponentVisibility('showTextBox', false);
-    } else if (isInBackLog() && (direction === 'down') && !ctrlKey) {
+    } else if (isInBackLog() && direction === 'down' && !ctrlKey) {
       if (dom) {
         let flag = hasScrollToBottom(dom);
         let curTime = new Date().getTime();
         // 滚动到底部 & 非连续滚动
-        if (flag && ((curTime - prevDownWheelTimeRef.current) > 100)) {
+        if (flag && curTime - prevDownWheelTimeRef.current > 100) {
           setComponentVisibility('showBacklog', false);
           setComponentVisibility('showTextBox', true);
         }
         prevDownWheelTimeRef.current = curTime;
       }
       // setComponentVisibility('showBacklog', false);
-    } else if (isGameActive() && (direction === 'down') && !ctrlKey) {
+    } else if (isGameActive() && direction === 'down' && !ctrlKey) {
       next();
     }
-
   }, []);
   useMounted(() => {
     document.addEventListener('wheel', handleMouseWheel);
@@ -245,16 +251,14 @@ export function useFastSaveBeforeUnloadPage() {
 // 判断游戏是否激活
 function useGameActive<T = any>(GUIStore: T & any): () => boolean {
   return useCallback(() => {
-    return (!GUIStore.current.showTitle)
-      && (!GUIStore.current.showMenuPanel)
-      && (!GUIStore.current.showBacklog);
+    return !GUIStore.current.showTitle && !GUIStore.current.showMenuPanel && !GUIStore.current.showBacklog;
   }, [GUIStore]);
 }
 
 // 判断是否打开backlog
 function useIsInBackLog<T = any>(GUIStore: T & any): () => boolean {
   return useCallback(() => {
-    return (GUIStore.current.showBacklog);
+    return GUIStore.current.showBacklog;
   }, [GUIStore]);
 }
 
@@ -273,10 +277,10 @@ function useValidMenuGameStart() {
   }, [runtime_currentSceneData]);
 }
 
-function useSetComponentVisibility(): (component: (keyof componentsVisibility), visibility: boolean) => void {
+function useSetComponentVisibility(): (component: keyof componentsVisibility, visibility: boolean) => void {
   const dispatch = useDispatch();
-  return (component: (keyof componentsVisibility), visibility: boolean) => {
-    dispatch(setVisibility({component, visibility}));
+  return (component: keyof componentsVisibility, visibility: boolean) => {
+    dispatch(setVisibility({ component, visibility }));
   };
 }
 
@@ -350,7 +354,7 @@ export function useSpaceAndEnter() {
   const lockRef = useRef(false);
   // 判断按键是否为空格 & 回车
   const isSpaceOrEnter = useCallback((e) => {
-    return (e.keyCode === 32) || (e.keyCode === 13);
+    return e.keyCode === 32 || e.keyCode === 13;
   }, []);
   const handleKeydown = useCallback((e) => {
     if (isSpaceOrEnter(e) && isGameActive() && !lockRef.current) {
@@ -390,6 +394,6 @@ export function useSpaceAndEnter() {
  * @param dom
  */
 function hasScrollToBottom(dom: Element) {
-  const {scrollTop, clientHeight, scrollHeight} = dom;
+  const { scrollTop, clientHeight, scrollHeight } = dom;
   return scrollTop === 0;
 }

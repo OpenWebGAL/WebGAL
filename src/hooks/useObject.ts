@@ -1,4 +1,4 @@
-import {useState} from "react";
+import { useState } from 'react';
 
 export function useObject(initialState: any) {
   const [value, setValue] = useState(initialState);
@@ -7,6 +7,6 @@ export function useObject(initialState: any) {
     set: function (newValue: any) {
       this.value = newValue;
       setValue(newValue);
-    }
+    },
   };
 }
