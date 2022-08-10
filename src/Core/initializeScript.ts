@@ -13,6 +13,9 @@ import { setVolume } from '@/Core/controller/stage/setVolume';
 import { pixiController } from '@/Core/controller/stage/pixi/pixiController';
 import { bindExtraFunc } from '@/Core/util/coreInitialFunction/bindExtraFunc';
 import { webSocketFunc } from '@/Core/util/syncWithEditor/webSocketFunc';
+import uniqWith from 'lodash/uniqWith';
+import { RUNTIME_SETTLED_SCENES } from './runtime/etc';
+import { scenePrefetcher } from './util/prefetcher/scenePrefetcher';
 
 /**
  * 引擎初始化函数
@@ -45,6 +48,11 @@ export const initializeScript = (): void => {
   // 场景写入到运行时
   sceneFetcher(sceneUrl).then((rawScene) => {
     RUNTIME_SCENE_DATA.currentScene = sceneParser(rawScene, 'start.txt', sceneUrl);
+    // 开始场景的预加载
+    const subSceneList = RUNTIME_SCENE_DATA.currentScene.subSceneList;
+    RUNTIME_SETTLED_SCENES.push(sceneUrl); // 放入已加载场景列表，避免递归加载相同场景
+    const subSceneListUniq = uniqWith(subSceneList); // 去重
+    scenePrefetcher(subSceneListUniq);
   });
   /**
    * 设置音量

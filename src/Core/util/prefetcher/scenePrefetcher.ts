@@ -8,9 +8,9 @@ import { RUNTIME_SETTLED_SCENES } from '../../runtime/etc';
 import { logger } from '@/Core/util/etc/logger';
 
 export const scenePrefetcher = (sceneList: Array<string>): void => {
-  // TODO: 实现场景预加载（主要是解析出子场景的资源，并预加载）
   for (const e of sceneList) {
     if (!RUNTIME_SETTLED_SCENES.includes(e)) {
+      logger.info(`现在预加载场景${e}`);
       sceneFetcher(e).then((r) => {
         sceneParser(r, e, e);
       });

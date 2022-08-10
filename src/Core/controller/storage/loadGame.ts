@@ -10,6 +10,9 @@ import { setVisibility } from '@/store/GUIReducer';
 import { restorePerform } from './jumpFromBacklog';
 import { stopAllPerform } from '@/Core/controller/gamePlay/stopAllPerform';
 import cloneDeep from 'lodash/cloneDeep';
+import { RUNTIME_SETTLED_SCENES } from '@/Core/runtime/etc';
+import uniqWith from 'lodash/uniqWith';
+import { scenePrefetcher } from '@/Core/util/prefetcher/scenePrefetcher';
 
 /**
  * 读取游戏存档
@@ -32,11 +35,12 @@ export function loadGameFromStageData(stageData: ISaveData) {
   const loadFile = stageData;
   // 重新获取并同步场景状态
   sceneFetcher(loadFile.sceneData.sceneUrl).then((rawScene) => {
-    RUNTIME_SCENE_DATA.currentScene = sceneParser(
-      rawScene,
-      loadFile.sceneData.sceneName,
-      loadFile.sceneData.sceneUrl,
-    );
+    RUNTIME_SCENE_DATA.currentScene = sceneParser(rawScene, loadFile.sceneData.sceneName, loadFile.sceneData.sceneUrl);
+    // 开始场景的预加载
+    const subSceneList = RUNTIME_SCENE_DATA.currentScene.subSceneList;
+    RUNTIME_SETTLED_SCENES.push(RUNTIME_SCENE_DATA.currentScene.sceneUrl); // 放入已加载场景列表，避免递归加载相同场景
+    const subSceneListUniq = uniqWith(subSceneList); // 去重
+    scenePrefetcher(subSceneListUniq);
   });
   RUNTIME_SCENE_DATA.currentSentenceId = loadFile.sceneData.currentSentenceId;
   RUNTIME_SCENE_DATA.sceneStack = cloneDeep(loadFile.sceneData.sceneStack);

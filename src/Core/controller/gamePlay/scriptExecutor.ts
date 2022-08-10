@@ -27,8 +27,7 @@ export const scriptExecutor = () => {
     }
     return;
   }
-  const currentScript: ISentence =
-    RUNTIME_SCENE_DATA.currentScene.sentenceList[RUNTIME_SCENE_DATA.currentSentenceId];
+  const currentScript: ISentence = RUNTIME_SCENE_DATA.currentScene.sentenceList[RUNTIME_SCENE_DATA.currentSentenceId];
   // 判断这个脚本要不要执行
   let runThis = true;
   let isHasWhenArg = false;
