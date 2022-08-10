@@ -10,9 +10,9 @@ import cloneDeep from 'lodash/cloneDeep';
 import { ISaveData } from '@/interface/stateInterface/userDataInterface';
 import { generateCurrentStageData } from '@/Core/controller/storage/saveGame';
 import { loadGameFromStageData } from '@/Core/controller/storage/loadGame';
-import { gameInfo } from '@/Core/runtime/etc';
+import { RUNTIME_GAME_INFO } from '@/Core/runtime/etc';
 import { logger } from '@/Core/util/etc/logger';
-import { runtime_currentSceneData } from '@/Core/runtime/sceneData';
+import { RUNTIME_SCENE_DATA } from '@/Core/runtime/sceneData';
 import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
 import { setFastSave } from '@/store/userDataReducer';
 import { getStorageAsync, setStorageAsync } from '@/Core/controller/storage/storageController';
@@ -39,8 +39,8 @@ let lock = true;
 
 export function initKey() {
   lock = false;
-  fastSaveGameKey = `FastSaveKey-${gameInfo.gameName}-${gameInfo.gameKey}`;
-  isFastSaveKey = `FastSaveActive-${gameInfo.gameName}-${gameInfo.gameKey}`;
+  fastSaveGameKey = `FastSaveKey-${RUNTIME_GAME_INFO.gameName}-${RUNTIME_GAME_INFO.gameKey}`;
+  isFastSaveKey = `FastSaveActive-${RUNTIME_GAME_INFO.gameName}-${RUNTIME_GAME_INFO.gameKey}`;
 }
 
 // export const fastSaveGameKey = `FastSaveKey`;
@@ -273,8 +273,8 @@ function useValidMenuGameStart() {
   return useCallback(() => {
     // return !(runtime_currentSceneData.currentSentenceId === 0 &&
     //   runtime_currentSceneData.currentScene.sceneName === 'start.txt');
-    return !(runtime_currentSceneData.currentSentenceId === 0);
-  }, [runtime_currentSceneData]);
+    return !(RUNTIME_SCENE_DATA.currentSentenceId === 0);
+  }, [RUNTIME_SCENE_DATA]);
 }
 
 function useSetComponentVisibility(): (component: keyof componentsVisibility, visibility: boolean) => void {

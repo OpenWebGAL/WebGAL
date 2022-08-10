@@ -1,4 +1,4 @@
-import { runtime_gamePlay } from '../../runtime/gamePlay';
+import { RUNTIME_GAMEPLAY } from '../../runtime/gamePlay';
 // import {logger} from '../../util/logger';
 import styles from '../../../Components/UI/BottomControlPanel/bottomControlPanel.module.scss';
 import { webgalStore } from '@/store/store';
@@ -21,15 +21,15 @@ const setButton = (on: boolean) => {
  * 停止自动播放
  */
 export const stopAuto = () => {
-  runtime_gamePlay.isAuto = false;
+  RUNTIME_GAMEPLAY.isAuto = false;
   setButton(false);
-  if (runtime_gamePlay.autoInterval !== null) {
-    clearInterval(runtime_gamePlay.autoInterval);
-    runtime_gamePlay.autoInterval = null;
+  if (RUNTIME_GAMEPLAY.autoInterval !== null) {
+    clearInterval(RUNTIME_GAMEPLAY.autoInterval);
+    RUNTIME_GAMEPLAY.autoInterval = null;
   }
-  if (runtime_gamePlay.autoTimeout !== null) {
-    clearTimeout(runtime_gamePlay.autoTimeout);
-    runtime_gamePlay.autoTimeout = null;
+  if (RUNTIME_GAMEPLAY.autoTimeout !== null) {
+    clearTimeout(RUNTIME_GAMEPLAY.autoTimeout);
+    RUNTIME_GAMEPLAY.autoTimeout = null;
   }
 };
 
@@ -38,24 +38,24 @@ export const stopAuto = () => {
  */
 export const switchAuto = () => {
   // 现在正在自动播放
-  if (runtime_gamePlay.isAuto) {
-    runtime_gamePlay.isAuto = false;
+  if (RUNTIME_GAMEPLAY.isAuto) {
+    RUNTIME_GAMEPLAY.isAuto = false;
     setButton(false);
-    if (runtime_gamePlay.autoInterval !== null) {
-      clearInterval(runtime_gamePlay.autoInterval);
-      runtime_gamePlay.autoInterval = null;
+    if (RUNTIME_GAMEPLAY.autoInterval !== null) {
+      clearInterval(RUNTIME_GAMEPLAY.autoInterval);
+      RUNTIME_GAMEPLAY.autoInterval = null;
     }
   } else {
     // 当前不在自动播放
-    runtime_gamePlay.isAuto = true;
+    RUNTIME_GAMEPLAY.isAuto = true;
     setButton(true);
-    runtime_gamePlay.autoInterval = setInterval(autoPlay, 100);
+    RUNTIME_GAMEPLAY.autoInterval = setInterval(autoPlay, 100);
   }
 };
 
 export const autoNextSentence = () => {
   nextSentence();
-  runtime_gamePlay.autoTimeout = null;
+  RUNTIME_GAMEPLAY.autoTimeout = null;
 };
 
 /**
@@ -65,7 +65,7 @@ const autoPlay = () => {
   const delay = webgalStore.getState().userData.optionData.autoSpeed;
   const autoPlayDelay = 750 - 250 * delay;
   let isBlockingAuto = false;
-  runtime_gamePlay.performList.forEach((e) => {
+  RUNTIME_GAMEPLAY.performList.forEach((e) => {
     if (e.blockingAuto() && !e.isOver)
       // 阻塞且没有结束的演出
       isBlockingAuto = true;
@@ -75,7 +75,7 @@ const autoPlay = () => {
     return;
   }
   // nextSentence();
-  if (runtime_gamePlay.autoTimeout === null) {
-    runtime_gamePlay.autoTimeout = setTimeout(autoNextSentence, autoPlayDelay);
+  if (RUNTIME_GAMEPLAY.autoTimeout === null) {
+    RUNTIME_GAMEPLAY.autoTimeout = setTimeout(autoNextSentence, autoPlayDelay);
   }
 };

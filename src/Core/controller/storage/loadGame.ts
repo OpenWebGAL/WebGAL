@@ -1,5 +1,5 @@
-import { runtime_currentBacklog } from '../../runtime/backlog';
-import { runtime_currentSceneData } from '../../runtime/sceneData';
+import { RUNTIME_CURRENT_BACKLOG } from '../../runtime/backlog';
+import { RUNTIME_SCENE_DATA } from '../../runtime/sceneData';
 import { ISaveData } from '@/interface/stateInterface/userDataInterface';
 import { logger } from '../../util/etc/logger';
 import { sceneFetcher } from '../scene/sceneFetcher';
@@ -32,23 +32,23 @@ export function loadGameFromStageData(stageData: ISaveData) {
   const loadFile = stageData;
   // 重新获取并同步场景状态
   sceneFetcher(loadFile.sceneData.sceneUrl).then((rawScene) => {
-    runtime_currentSceneData.currentScene = sceneParser(
+    RUNTIME_SCENE_DATA.currentScene = sceneParser(
       rawScene,
       loadFile.sceneData.sceneName,
       loadFile.sceneData.sceneUrl,
     );
   });
-  runtime_currentSceneData.currentSentenceId = loadFile.sceneData.currentSentenceId;
-  runtime_currentSceneData.sceneStack = cloneDeep(loadFile.sceneData.sceneStack);
+  RUNTIME_SCENE_DATA.currentSentenceId = loadFile.sceneData.currentSentenceId;
+  RUNTIME_SCENE_DATA.sceneStack = cloneDeep(loadFile.sceneData.sceneStack);
 
   // 强制停止所有演出
   stopAllPerform();
 
   // 恢复backlog
   const newBacklog = loadFile.backlog;
-  runtime_currentBacklog.splice(0, runtime_currentBacklog.length); // 清空原backlog
+  RUNTIME_CURRENT_BACKLOG.splice(0, RUNTIME_CURRENT_BACKLOG.length); // 清空原backlog
   for (const e of newBacklog) {
-    runtime_currentBacklog.push(e);
+    RUNTIME_CURRENT_BACKLOG.push(e);
   }
 
   // 恢复舞台状态

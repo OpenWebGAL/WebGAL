@@ -3,7 +3,7 @@ import { scriptParser } from './scriptParser/scriptParser';
 import { assetsPrefetcher } from '../util/prefetcher/assetsPrefetcher';
 import { scenePrefetcher } from '../util/prefetcher/scenePrefetcher';
 import { logger } from '../util/etc/logger';
-import { settledScene } from '../runtime/etc';
+import { RUNTIME_SETTLED_SCENES } from '../runtime/etc';
 import uniqWith from 'lodash/uniqWith';
 
 /**
@@ -30,7 +30,7 @@ export const sceneParser = (rawScene: string, sceneName: string, sceneUrl: strin
   assetsList = uniqWith(assetsList); // 去重
   assetsPrefetcher(assetsList);
   // 开始场景的预加载
-  settledScene.push(sceneUrl); // 放入已加载场景列表，避免递归加载相同场景
+  RUNTIME_SETTLED_SCENES.push(sceneUrl); // 放入已加载场景列表，避免递归加载相同场景
   subSceneList = uniqWith(subSceneList); // 去重
   scenePrefetcher(subSceneList);
 

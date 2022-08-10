@@ -4,7 +4,7 @@ import { webgalStore } from '@/store/store';
 import { unlockCgInUserData } from '@/store/userDataReducer';
 import { logger } from '@/Core/util/etc/logger';
 import localforage from 'localforage';
-import { gameInfo } from '@/Core/runtime/etc';
+import { RUNTIME_GAME_INFO } from '@/Core/runtime/etc';
 
 /**
  * 解锁cg
@@ -25,7 +25,7 @@ export const unlockCg = (sentence: ISentence): IPerform => {
   logger.info(`解锁CG：${name}，路径：${url}，所属系列：${series}`);
   webgalStore.dispatch(unlockCgInUserData({ name, url, series }));
   const userDataState = webgalStore.getState().userData;
-  localforage.setItem(gameInfo.gameKey, userDataState).then(() => {});
+  localforage.setItem(RUNTIME_GAME_INFO.gameKey, userDataState).then(() => {});
   return {
     performName: 'none',
     duration: 0,

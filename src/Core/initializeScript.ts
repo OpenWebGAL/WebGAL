@@ -7,7 +7,7 @@ import { infoFetcher } from './util/coreInitialFunction/infoFetcher';
 import { resize } from './util/coreInitialFunction/resize';
 import { assetSetter, fileType } from './util/gameAssetsAccess/assetSetter';
 import { sceneFetcher } from './controller/scene/sceneFetcher';
-import { runtime_currentSceneData } from './runtime/sceneData';
+import { RUNTIME_SCENE_DATA } from './runtime/sceneData';
 import { sceneParser } from './parser/sceneParser';
 import { setVolume } from '@/Core/controller/stage/setVolume';
 import { pixiController } from '@/Core/controller/stage/pixi/pixiController';
@@ -44,7 +44,7 @@ export const initializeScript = (): void => {
   const sceneUrl: string = assetSetter('start.txt', fileType.scene);
   // 场景写入到运行时
   sceneFetcher(sceneUrl).then((rawScene) => {
-    runtime_currentSceneData.currentScene = sceneParser(rawScene, 'start.txt', sceneUrl);
+    RUNTIME_SCENE_DATA.currentScene = sceneParser(rawScene, 'start.txt', sceneUrl);
   });
   /**
    * 设置音量

@@ -2,12 +2,12 @@ import { ISentence } from '@/interface/coreInterface/sceneInterface';
 import { say } from '../../gameScripts/say';
 import { initPerform, IPerform } from '@/interface/coreInterface/performInterface';
 import { unmountPerform } from '../perform/unmountPerform';
-import { runtime_gamePlay } from '../../runtime/gamePlay';
+import { RUNTIME_GAMEPLAY } from '../../runtime/gamePlay';
 import { webgalStore } from '@/store/store';
 import { resetStageState } from '@/store/stageReducer';
 import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
 import cloneDeep from 'lodash/cloneDeep';
-import { scriptConfig } from '@/Core/config/scriptConfig';
+import { SCRIPT_CONFIG } from '@/Core/config/scriptConfig';
 
 /**
  * 规范函数的类型
@@ -25,7 +25,7 @@ export const runScript = (script: ISentence) => {
 
   // 建立语句类型到执行函数的映射
   const scriptToFuncMap = new Map();
-  scriptConfig.forEach((e) => {
+  SCRIPT_CONFIG.forEach((e) => {
     scriptToFuncMap.set(e.scriptType, e.scriptFunction);
   });
 
@@ -62,12 +62,12 @@ export const runScript = (script: ISentence) => {
     }
   }, perform.duration);
 
-  runtime_gamePlay.performList.push(perform);
+  RUNTIME_GAMEPLAY.performList.push(perform);
 };
 
 function goNextWhenOver() {
   let isBlockingAuto = false;
-  runtime_gamePlay.performList.forEach((e) => {
+  RUNTIME_GAMEPLAY.performList.forEach((e) => {
     if (e.blockingAuto() && !e.isOver)
       // 阻塞且没有结束的演出
       isBlockingAuto = true;

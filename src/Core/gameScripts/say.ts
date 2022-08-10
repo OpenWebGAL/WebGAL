@@ -6,7 +6,7 @@ import { getRandomPerformName } from '@/Core/controller/perform/getRandomPerform
 import { playVocal } from './playVocal';
 import { webgalStore } from '@/store/store';
 import { setStage } from '@/store/stageReducer';
-import { webgal_env } from '@/env/webgal-env';
+import { PERFORM_CONFIG } from '@/Core/config/performConfig';
 
 /**
  * 进行普通对话的显示
@@ -47,7 +47,7 @@ export const say = (sentence: ISentence): IPerform => {
   // 设置key
   dispatch(setStage({ key: 'currentDialogKey', value: dialogKey }));
   // 计算延迟
-  const textDelay = webgal_env.textInitialDelay - 20 * userDataState.optionData.textSpeed;
+  const textDelay = PERFORM_CONFIG.textInitialDelay - 20 * userDataState.optionData.textSpeed;
   // 本句延迟
   const sentenceDelay = textDelay * sentence.content.length;
   // // 设置延迟

@@ -16,4 +16,4 @@ export const initSceneData = {
   },
 };
 // 场景数据
-export const runtime_currentSceneData: ISceneData = initSceneData;
+export const RUNTIME_SCENE_DATA: ISceneData = initSceneData;

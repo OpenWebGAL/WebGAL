@@ -1,6 +1,6 @@
 import { ISentence } from '@/interface/coreInterface/sceneInterface';
 import { getRandomPerformName } from '@/Core/controller/perform/getRandomPerformName';
-import { runtime_gamePlay } from '@/Core/runtime/gamePlay';
+import { RUNTIME_GAMEPLAY } from '@/Core/runtime/gamePlay';
 import { unmountPerform } from '../controller/perform/unmountPerform';
 import { logger } from '@/Core/util/etc/logger';
 import { webgalStore } from '@/store/store';
@@ -47,12 +47,12 @@ export const playVocal = (sentence: ISentence) => {
         blockingAuto: () => true,
         stopTimeout: undefined, // 暂时不用，后面会交给自动清除
       };
-      runtime_gamePlay.performList.push(perform);
+      RUNTIME_GAMEPLAY.performList.push(perform);
       VocalControl.oncanplay = () => {
         VocalControl.play();
       };
       VocalControl.onended = () => {
-        for (const e of runtime_gamePlay.performList) {
+        for (const e of RUNTIME_GAMEPLAY.performList) {
           if (e.performName === performInitName) {
             e.isOver = true;
             e.stopFunction();

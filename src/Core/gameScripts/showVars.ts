@@ -5,7 +5,7 @@ import { getRandomPerformName } from '@/Core/controller/perform/getRandomPerform
 import { webgalStore } from '@/store/store';
 import { setStage } from '@/store/stageReducer';
 import { logger } from '@/Core/util/etc/logger';
-import { webgal_env } from '@/env/webgal-env';
+import { PERFORM_CONFIG } from '@/Core/config/performConfig';
 
 /**
  * 进行普通对话的显示
@@ -28,7 +28,7 @@ export const showVars = (sentence: ISentence): IPerform => {
     });
   }, 0);
   const performInitName: string = getRandomPerformName();
-  const textDelay = webgal_env.textInitialDelay - 20 * userDataState.optionData.textSpeed;
+  const textDelay = PERFORM_CONFIG.textInitialDelay - 20 * userDataState.optionData.textSpeed;
   const endDelay = 750 - userDataState.optionData.textSpeed * 250;
   return {
     performName: performInitName,

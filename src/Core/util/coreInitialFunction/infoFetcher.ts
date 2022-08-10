@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { logger } from '../etc/logger';
 import { assetSetter, fileType } from '../gameAssetsAccess/assetSetter';
-import { gameInfo } from '../../runtime/etc';
+import { RUNTIME_GAME_INFO } from '../../runtime/etc';
 import { getStorage } from '../../controller/storage/storageController';
 import { webgalStore } from '@/store/store';
 import { setGuiAsset } from '@/store/GUIReducer';
@@ -38,11 +38,11 @@ export const infoFetcher = (url: string) => {
           dispatch(setGuiAsset({ asset: 'titleBgm', value: url }));
         }
         if (e[0] === 'Game_name') {
-          gameInfo.gameName = e[1];
+          RUNTIME_GAME_INFO.gameName = e[1];
           document.title = e[1];
         }
         if (e[0] === 'Game_key') {
-          gameInfo.gameKey = e[1];
+          RUNTIME_GAME_INFO.gameKey = e[1];
           getStorage();
         }
       });

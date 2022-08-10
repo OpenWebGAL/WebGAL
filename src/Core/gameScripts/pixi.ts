@@ -1,6 +1,6 @@
 import { ISentence } from '@/interface/coreInterface/sceneInterface';
 import { IPerform } from '@/interface/coreInterface/performInterface';
-import { runtime_gamePlay } from '@/Core/runtime/gamePlay';
+import { RUNTIME_GAMEPLAY } from '@/Core/runtime/gamePlay';
 import pixiRain from './pixiScripts/rain';
 import { pixiSnow } from '@/Core/gameScripts/pixiScripts/snow';
 import { logger } from '@/Core/util/etc/logger';
@@ -11,7 +11,7 @@ import { logger } from '@/Core/util/etc/logger';
  */
 export const pixi = (sentence: ISentence): IPerform => {
   const pixiPerformName = 'PixiPerform' + sentence.content;
-  runtime_gamePlay.performList.forEach((e) => {
+  RUNTIME_GAMEPLAY.performList.forEach((e) => {
     if (e.performName === pixiPerformName) {
       return {
         performName: 'none',

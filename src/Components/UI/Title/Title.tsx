@@ -2,7 +2,7 @@ import { FC } from 'react';
 import styles from './title.module.scss';
 import { playBgm } from '@/Core/controller/stage/playBgm';
 import { startGame } from '@/Core/controller/gamePlay/startGame';
-import { runtime_currentSceneData } from '@/Core/runtime/sceneData';
+import { RUNTIME_SCENE_DATA } from '@/Core/runtime/sceneData';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import { setMenuPanelTag, setVisibility } from '@/store/GUIReducer';
@@ -48,14 +48,14 @@ const Title: FC = () => {
                 playBgm('/');
                 // 当且仅当游戏未开始时使用快速存档
                 // 当游戏开始后 使用原来的逻辑
-                if ((await hasFastSaveRecord()) && runtime_currentSceneData.currentSentenceId === 0) {
+                if ((await hasFastSaveRecord()) && RUNTIME_SCENE_DATA.currentSentenceId === 0) {
                   // 恢复记录
                   await loadFastSaveGame();
                   return;
                 }
                 if (
-                  runtime_currentSceneData.currentSentenceId === 0 &&
-                  runtime_currentSceneData.currentScene.sceneName === 'start.txt'
+                  RUNTIME_SCENE_DATA.currentSentenceId === 0 &&
+                  RUNTIME_SCENE_DATA.currentScene.sceneName === 'start.txt'
                 ) {
                   // 如果游戏没有开始，开始游戏
                   nextSentence();

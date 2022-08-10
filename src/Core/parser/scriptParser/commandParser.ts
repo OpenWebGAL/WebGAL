@@ -1,5 +1,5 @@
 import { commandType, parsedCommand } from '@/interface/coreInterface/sceneInterface';
-import { addNextArgList, scriptConfig } from '@/Core/config/scriptConfig';
+import { ADD_NEXT_ARG_LIST, SCRIPT_CONFIG } from '@/Core/config/scriptConfig';
 
 /**
  * 处理命令
@@ -35,7 +35,7 @@ function getCommandType(command: string): commandType {
   //   return commandType.if;
   // }
   const commandMap = new Map();
-  scriptConfig.forEach((e) => {
+  SCRIPT_CONFIG.forEach((e) => {
     commandMap.set(e.scriptString, e.scriptType);
   });
   if (commandMap.has(command)) {
@@ -44,7 +44,7 @@ function getCommandType(command: string): commandType {
 }
 
 function addNextArg(commandToParse: parsedCommand, thisCommandType: commandType) {
-  if (addNextArgList.includes(thisCommandType)) {
+  if (ADD_NEXT_ARG_LIST.includes(thisCommandType)) {
     commandToParse.additionalArgs.push({
       key: 'next',
       value: true,

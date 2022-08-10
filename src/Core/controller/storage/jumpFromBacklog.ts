@@ -1,8 +1,8 @@
 import { logger } from '../../util/etc/logger';
 import { sceneFetcher } from '../scene/sceneFetcher';
-import { runtime_currentSceneData } from '../../runtime/sceneData';
+import { RUNTIME_SCENE_DATA } from '../../runtime/sceneData';
 import { sceneParser } from '../../parser/sceneParser';
-import { runtime_currentBacklog } from '../../runtime/backlog';
+import { RUNTIME_CURRENT_BACKLOG } from '../../runtime/backlog';
 import { IBacklogItem } from '@/interface/coreInterface/runtimeInterface';
 import { IStageState } from '@/interface/stateInterface/stageInterface';
 import { webgalStore } from '@/store/store';
@@ -29,25 +29,25 @@ export const restorePerform = () => {
 export const jumpFromBacklog = (index: number) => {
   const dispatch = webgalStore.dispatch;
   // 获得存档文件
-  const backlogFile: IBacklogItem = runtime_currentBacklog[index];
+  const backlogFile: IBacklogItem = RUNTIME_CURRENT_BACKLOG[index];
   logger.debug('读取的backlog数据', backlogFile);
   // 重新获取并同步场景状态
   sceneFetcher(backlogFile.saveScene.sceneUrl).then((rawScene) => {
-    runtime_currentSceneData.currentScene = sceneParser(
+    RUNTIME_SCENE_DATA.currentScene = sceneParser(
       rawScene,
       backlogFile.saveScene.sceneName,
       backlogFile.saveScene.sceneUrl,
     );
   });
-  runtime_currentSceneData.currentSentenceId = backlogFile.saveScene.currentSentenceId;
-  runtime_currentSceneData.sceneStack = cloneDeep(backlogFile.saveScene.sceneStack);
+  RUNTIME_SCENE_DATA.currentSentenceId = backlogFile.saveScene.currentSentenceId;
+  RUNTIME_SCENE_DATA.sceneStack = cloneDeep(backlogFile.saveScene.sceneStack);
 
   // 强制停止所有演出
   stopAllPerform();
 
   // 弹出backlog项目到指定状态
-  for (let i = runtime_currentBacklog.length - 1; i > index; i--) {
-    runtime_currentBacklog.pop();
+  for (let i = RUNTIME_CURRENT_BACKLOG.length - 1; i > index; i--) {
+    RUNTIME_CURRENT_BACKLOG.pop();
   }
 
   // 恢复舞台状态
