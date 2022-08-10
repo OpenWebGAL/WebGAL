@@ -1,9 +1,9 @@
-import {arg, commandType, IAsset, ISentence, parsedCommand} from '@/interface/coreInterface/sceneInterface';
-import {commandParser} from './commandParser';
-import {argsParser} from './argsParser';
-import {contentParser} from './contentParser';
-import {assetsScanner} from './assetsScanner';
-import {subSceneScanner} from './subSceneScanner';
+import { arg, commandType, IAsset, ISentence, parsedCommand } from '@/interface/coreInterface/sceneInterface';
+import { commandParser } from './commandParser';
+import { argsParser } from './argsParser';
+import { contentParser } from './contentParser';
+import { assetsScanner } from './assetsScanner';
+import { subSceneScanner } from './subSceneScanner';
 
 /**
  * 语句解析器
@@ -34,7 +34,7 @@ export const scriptParser = (sentenceRaw: string): ISentence => {
     command = parsedCommand.type;
     for (const e of parsedCommand.additionalArgs) {
       // 由于是连续对话，所以我们去除 speaker 参数。
-      if(command === commandType.say&& e.key === 'speaker'){
+      if (command === commandType.say && e.key === 'speaker') {
         continue;
       }
       args.push(e);

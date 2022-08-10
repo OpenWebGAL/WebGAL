@@ -1,5 +1,5 @@
-import {webgalStore} from "@/store/store";
-import {setStage} from "@/store/stageReducer";
+import { webgalStore } from '@/store/store';
+import { setStage } from '@/store/stageReducer';
 
 // /**
 //  * 停止bgm
@@ -21,5 +21,5 @@ import {setStage} from "@/store/stageReducer";
  * @param url bgm路径
  */
 export function playBgm(url: string): void {
-  webgalStore.dispatch(setStage({key: 'bgm', value: url}));
+  webgalStore.dispatch(setStage({ key: 'bgm', value: url }));
 }

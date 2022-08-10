@@ -1,14 +1,14 @@
-import {FC} from 'react';
+import { FC } from 'react';
 import styles from './title.module.scss';
-import {playBgm} from '@/Core/controller/stage/playBgm';
-import {startGame} from '@/Core/controller/gamePlay/startGame';
-import {runtime_currentSceneData} from "@/Core/runtime/sceneData";
-import {useDispatch, useSelector} from "react-redux";
-import {RootState} from "@/store/store";
-import {setMenuPanelTag, setVisibility} from "@/store/GUIReducer";
-import {MenuPanelTag} from '@/interface/stateInterface/guiInterface';
-import {nextSentence} from "@/Core/controller/gamePlay/nextSentence";
-import {hasFastSaveRecord, loadFastSaveGame} from "@/hooks/useHotkey";
+import { playBgm } from '@/Core/controller/stage/playBgm';
+import { startGame } from '@/Core/controller/gamePlay/startGame';
+import { RUNTIME_SCENE_DATA } from '@/Core/runtime/sceneData';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '@/store/store';
+import { setMenuPanelTag, setVisibility } from '@/store/GUIReducer';
+import { MenuPanelTag } from '@/interface/stateInterface/guiInterface';
+import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
+import { hasFastSaveRecord, loadFastSaveGame } from '@/hooks/useHotkey';
 
 /**
  * 标题页
@@ -21,7 +21,7 @@ const Title: FC = () => {
   const showBackground = background === '' ? 'rgba(0,0,0,1)' : `url("${background}")`;
   return (
     <>
-      {GUIState.showTitle && <div className={styles.Title_backup_background}/>}
+      {GUIState.showTitle && <div className={styles.Title_backup_background} />}
       <div
         id="play_title_bgm_target"
         onClick={() => {
@@ -41,29 +41,34 @@ const Title: FC = () => {
               <div className={styles.Title_button_text + ' ' + styles.Title_button_text_up}>开始游戏</div>
               <div className={styles.Title_button_text}>START</div>
             </div>
-            <div className={styles.Title_button} onClick={async () => {
-              dispatch(setVisibility({component: "showTitle", visibility: false}));
-              playBgm('/');
-              // 当且仅当游戏未开始时使用快速存档
-              // 当游戏开始后 使用原来的逻辑
-              if (await hasFastSaveRecord() && runtime_currentSceneData.currentSentenceId === 0) {
-                // 恢复记录
-                await loadFastSaveGame();
-                return;
-              }
-              if (runtime_currentSceneData.currentSentenceId === 0 &&
-                runtime_currentSceneData.currentScene.sceneName === 'start.txt') {
-                // 如果游戏没有开始，开始游戏
-                nextSentence();
-              }
-            }}>
+            <div
+              className={styles.Title_button}
+              onClick={async () => {
+                dispatch(setVisibility({ component: 'showTitle', visibility: false }));
+                playBgm('/');
+                // 当且仅当游戏未开始时使用快速存档
+                // 当游戏开始后 使用原来的逻辑
+                if ((await hasFastSaveRecord()) && RUNTIME_SCENE_DATA.currentSentenceId === 0) {
+                  // 恢复记录
+                  await loadFastSaveGame();
+                  return;
+                }
+                if (
+                  RUNTIME_SCENE_DATA.currentSentenceId === 0 &&
+                  RUNTIME_SCENE_DATA.currentScene.sceneName === 'start.txt'
+                ) {
+                  // 如果游戏没有开始，开始游戏
+                  nextSentence();
+                }
+              }}
+            >
               <div className={styles.Title_button_text + ' ' + styles.Title_button_text_up}>继续游戏</div>
               <div className={styles.Title_button_text}>CONTINUE</div>
             </div>
             <div
               className={styles.Title_button}
               onClick={() => {
-                dispatch(setVisibility({component: 'showMenuPanel', visibility: true}));
+                dispatch(setVisibility({ component: 'showMenuPanel', visibility: true }));
                 dispatch(setMenuPanelTag(MenuPanelTag.Option));
               }}
             >
@@ -73,8 +78,8 @@ const Title: FC = () => {
             <div
               className={styles.Title_button}
               onClick={() => {
-                dispatch(setVisibility({component: 'showMenuPanel', visibility: true}));
-                dispatch(setMenuPanelTag(MenuPanelTag.Load,));
+                dispatch(setVisibility({ component: 'showMenuPanel', visibility: true }));
+                dispatch(setMenuPanelTag(MenuPanelTag.Load));
               }}
             >
               <div className={styles.Title_button_text + ' ' + styles.Title_button_text_up}>读取存档</div>
@@ -94,7 +99,7 @@ const Title: FC = () => {
             <div
               className={styles.Title_button}
               onClick={() => {
-                dispatch(setVisibility({component: "showExtra", visibility: true}));
+                dispatch(setVisibility({ component: 'showExtra', visibility: true }));
               }}
             >
               <div className={styles.Title_button_text + ' ' + styles.Title_button_text_up}>鉴赏模式</div>

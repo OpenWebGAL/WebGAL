@@ -1,10 +1,10 @@
-import {ISentence} from '@/interface/coreInterface/sceneInterface';
-import {getRandomPerformName} from '@/Core/controller/perform/getRandomPerformName';
-import {runtime_gamePlay} from '@/Core/runtime/gamePlay';
-import {unmountPerform} from '../controller/perform/unmountPerform';
-import {logger} from '@/Core/util/etc/logger';
-import {webgalStore} from "@/store/store";
-import {setStage} from "@/store/stageReducer";
+import { ISentence } from '@/interface/coreInterface/sceneInterface';
+import { getRandomPerformName } from '@/Core/controller/perform/getRandomPerformName';
+import { RUNTIME_GAMEPLAY } from '@/Core/runtime/gamePlay';
+import { unmountPerform } from '../controller/perform/unmountPerform';
+import { logger } from '@/Core/util/etc/logger';
+import { webgalStore } from '@/store/store';
+import { setStage } from '@/store/stageReducer';
 
 /**
  * 播放一段语音
@@ -26,7 +26,7 @@ export const playVocal = (sentence: ISentence) => {
     VocalControl.pause();
   }
   // 获得舞台状态
-  webgalStore.dispatch(setStage({key: 'vocal', value: url}));
+  webgalStore.dispatch(setStage({ key: 'vocal', value: url }));
   // 播放语音
   setTimeout(() => {
     let VocalControl: any = document.getElementById('currentVocal');
@@ -40,20 +40,19 @@ export const playVocal = (sentence: ISentence) => {
         isHoldOn: true,
         stopFunction: () => {
           // 演出已经结束了，所以不用播放语音了
-          VocalControl.oncanplay = () => {
-          };
+          VocalControl.oncanplay = () => {};
           VocalControl.pause();
         },
         blockingNext: () => false,
         blockingAuto: () => true,
         stopTimeout: undefined, // 暂时不用，后面会交给自动清除
       };
-      runtime_gamePlay.performList.push(perform);
+      RUNTIME_GAMEPLAY.performList.push(perform);
       VocalControl.oncanplay = () => {
         VocalControl.play();
       };
       VocalControl.onended = () => {
-        for (const e of runtime_gamePlay.performList) {
+        for (const e of RUNTIME_GAMEPLAY.performList) {
           if (e.performName === performInitName) {
             e.isOver = true;
             e.stopFunction();

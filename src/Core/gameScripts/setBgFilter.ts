@@ -1,10 +1,10 @@
-import {ISentence} from '@/interface/coreInterface/sceneInterface';
-import {IPerform} from '@/interface/coreInterface/performInterface';
-import {IEffect} from "@/interface/stateInterface/stageInterface";
+import { ISentence } from '@/interface/coreInterface/sceneInterface';
+import { IPerform } from '@/interface/coreInterface/performInterface';
+import { IEffect } from '@/interface/stateInterface/stageInterface';
 import { logger } from '@/Core/util/etc/logger';
-import {webgalStore} from "@/store/store";
-import {setStage} from "@/store/stageReducer";
-import  cloneDeep  from 'lodash/cloneDeep';
+import { webgalStore } from '@/store/store';
+import { setStage } from '@/store/stageReducer';
+import cloneDeep from 'lodash/cloneDeep';
 
 /**
  * 设置背景效果
@@ -12,7 +12,7 @@ import  cloneDeep  from 'lodash/cloneDeep';
  */
 export const setBgFilter = (sentence: ISentence): IPerform => {
   const stageState = webgalStore.getState().stage;
-  const effectList: Array<IEffect> =stageState.effects;
+  const effectList: Array<IEffect> = stageState.effects;
   const newEffectList = cloneDeep(effectList);
   let isTargetSet = false;
   newEffectList.forEach((e) => {
@@ -26,18 +26,17 @@ export const setBgFilter = (sentence: ISentence): IPerform => {
     newEffectList.push({
       target: 'MainStage_bg_MainContainer',
       transform: '',
-      filter: sentence.content
+      filter: sentence.content,
     });
   }
-  webgalStore.dispatch(setStage({key: 'effects', value: newEffectList}));
+  webgalStore.dispatch(setStage({ key: 'effects', value: newEffectList }));
   // stageStore.setStage('bgFilter', sentence.content);
   return {
     performName: 'none',
     duration: 0,
     isOver: false,
     isHoldOn: false,
-    stopFunction: () => {
-    },
+    stopFunction: () => {},
     blockingNext: () => false,
     blockingAuto: () => true,
     stopTimeout: undefined, // 暂时不用，后面会交给自动清除

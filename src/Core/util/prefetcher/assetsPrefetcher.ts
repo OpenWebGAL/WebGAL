@@ -1,18 +1,17 @@
-import {IAsset} from '@/interface/coreInterface/sceneInterface';
-import {logger} from '../etc/logger';
-import {settledAssets} from "@/Core/runtime/etc";
+import { IAsset } from '@/interface/coreInterface/sceneInterface';
+import { logger } from '../etc/logger';
+import { RUNTIME_SETTLED_ASSETS } from '@/Core/runtime/etc';
 
 /**
  * 预加载函数
  * @param assetList 场景资源列表
  */
 export const assetsPrefetcher = (assetList: Array<IAsset>) => {
-
   for (const asset of assetList) {
     // 是否要插入这个标签
     let isInsert = true;
     // 判断是否已经存在
-    settledAssets.forEach(settledAssetUrl => {
+    RUNTIME_SETTLED_ASSETS.forEach((settledAssetUrl) => {
       if (settledAssetUrl === asset.url) {
         isInsert = false;
       }
@@ -27,7 +26,7 @@ export const assetsPrefetcher = (assetList: Array<IAsset>) => {
       if (head.length) {
         head[0].appendChild(newLink);
       }
-      settledAssets.push(asset.url);
+      RUNTIME_SETTLED_ASSETS.push(asset.url);
     }
   }
 };

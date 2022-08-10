@@ -1,16 +1,16 @@
-import {runtime_currentSceneData} from "@/Core/runtime/sceneData";
-import {commandType} from "@/interface/coreInterface/sceneInterface";
-import {nextSentence} from "@/Core/controller/gamePlay/nextSentence";
+import { RUNTIME_SCENE_DATA } from '@/Core/runtime/sceneData';
+import { commandType } from '@/interface/coreInterface/sceneInterface';
+import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
 
 export const jmp = (labelName: string) => {
   // 在当前场景中找到指定的标签。
-  const currentLine = runtime_currentSceneData.currentSentenceId;
+  const currentLine = RUNTIME_SCENE_DATA.currentSentenceId;
   let result = currentLine;
-  runtime_currentSceneData.currentScene.sentenceList.forEach((sentence, index) => {
+  RUNTIME_SCENE_DATA.currentScene.sentenceList.forEach((sentence, index) => {
     if (sentence.command === commandType.label && sentence.content === labelName && index >= currentLine) {
       result = index;
     }
   });
-  runtime_currentSceneData.currentSentenceId = result;
+  RUNTIME_SCENE_DATA.currentSentenceId = result;
   setTimeout(nextSentence, 1);
 };

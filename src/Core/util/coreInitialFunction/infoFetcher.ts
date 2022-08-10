@@ -1,16 +1,16 @@
 import axios from 'axios';
-import {logger} from '../etc/logger';
-import {assetSetter, fileType} from '../gameAssetsAccess/assetSetter';
-import {gameInfo} from '../../runtime/etc';
-import {getStorage} from '../../controller/storage/storageController';
-import {webgalStore} from "@/store/store";
-import {setGuiAsset} from "@/store/GUIReducer";
-import {initKey} from "@/hooks/useHotkey";
+import { logger } from '../etc/logger';
+import { assetSetter, fileType } from '../gameAssetsAccess/assetSetter';
+import { RUNTIME_GAME_INFO } from '../../runtime/etc';
+import { getStorage } from '../../controller/storage/storageController';
+import { webgalStore } from '@/store/store';
+import { setGuiAsset } from '@/store/GUIReducer';
+import { initKey } from '@/hooks/useHotkey';
 
 declare global {
-    interface Window {
-        renderPromise?: Function;
-    }
+  interface Window {
+    renderPromise?: Function;
+  }
 }
 /**
  * 获取游戏信息
@@ -30,19 +30,19 @@ export const infoFetcher = (url: string) => {
         // 设置标题背景
         if (e[0] === 'Title_img') {
           const url: string = assetSetter(e[1], fileType.background);
-          dispatch(setGuiAsset({asset: 'titleBg', value: url}));
+          dispatch(setGuiAsset({ asset: 'titleBg', value: url }));
         }
         // 设置标题背景音乐
         if (e[0] === 'Title_bgm') {
           const url: string = assetSetter(e[1], fileType.bgm);
-          dispatch(setGuiAsset({asset: 'titleBgm', value: url}));
+          dispatch(setGuiAsset({ asset: 'titleBgm', value: url }));
         }
         if (e[0] === 'Game_name') {
-          gameInfo.gameName = e[1];
+          RUNTIME_GAME_INFO.gameName = e[1];
           document.title = e[1];
         }
         if (e[0] === 'Game_key') {
-          gameInfo.gameKey = e[1];
+          RUNTIME_GAME_INFO.gameKey = e[1];
           getStorage();
         }
       });

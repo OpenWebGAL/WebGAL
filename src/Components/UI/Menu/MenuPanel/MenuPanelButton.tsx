@@ -1,6 +1,6 @@
-import styles from "./menuPanel.module.scss";
-import {MenuIconMap} from "./MenuIconMap";
-import {IMenuPanel} from "@/interface/componentsInterface/menuPanelInterface";
+import styles from './menuPanel.module.scss';
+import { MenuIconMap } from './MenuIconMap';
+import { IMenuPanel } from '@/interface/componentsInterface/menuPanelInterface';
 
 /**
  * 菜单标签页切换按钮
@@ -12,15 +12,18 @@ export const MenuPanelButton = (props: IMenuPanel) => {
   if (props.hasOwnProperty('buttonOnClassName')) {
     buttonClassName = buttonClassName + props.buttonOnClassName;
   }
-  return <div className={buttonClassName}
-    onClick={() => {
-      props.clickFunc();
-    }}
-    style={{color: props.tagColor}}
-  >
-    <div className={styles.MenuPanel_button_icon}>
-      <MenuIconMap iconName={props.iconName} iconColor={props.iconColor}/>
+  return (
+    <div
+      className={buttonClassName}
+      onClick={() => {
+        props.clickFunc();
+      }}
+      style={{ color: props.tagColor }}
+    >
+      <div className={styles.MenuPanel_button_icon}>
+        <MenuIconMap iconName={props.iconName} iconColor={props.iconColor} />
+      </div>
+      {props.tagName}
     </div>
-    {props.tagName}
-  </div>;
+  );
 };

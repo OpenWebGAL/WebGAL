@@ -1,5 +1,5 @@
-import {IBacklogItem, sceneEntry} from '../coreInterface/runtimeInterface';
-import {IStageState} from './stageInterface';
+import { IBacklogItem, sceneEntry } from '../coreInterface/runtimeInterface';
+import { IStageState } from './stageInterface';
 
 /**
  * 播放速度的枚举类型

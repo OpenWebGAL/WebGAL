@@ -1,5 +1,5 @@
 module.exports = {
-  extends: ['alloy', 'alloy/react', 'alloy/typescript'],
+  extends: ['alloy', 'alloy/react', 'alloy/typescript', 'plugin:prettier/recommended'],
   env: {
     // 你的环境变量（包含多个预定义的全局变量）
     //
@@ -18,10 +18,10 @@ module.exports = {
     // 自定义你的规则
     // 最大圈复杂度
     complexity: ['error', 30],
-    "linebreak-style": ['off', "unix"],
-    "semi": 2,
-    "indent": ["error", 2],
-    "semi-style": ["error", "last"],
+    'linebreak-style': ['error', 'unix'],
+    semi: 2,
+    // indent: ['error', 2],
+    'semi-style': ['error', 'last'],
     'react/jsx-no-useless-fragment': [
       'error',
       {
