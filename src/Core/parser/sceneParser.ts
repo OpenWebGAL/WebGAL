@@ -1,9 +1,7 @@
 import { IAsset, IScene, ISentence } from '@/interface/coreInterface/sceneInterface';
 import { scriptParser } from './scriptParser/scriptParser';
 import { assetsPrefetcher } from '../util/prefetcher/assetsPrefetcher';
-import { scenePrefetcher } from '../util/prefetcher/scenePrefetcher';
 import { logger } from '../util/etc/logger';
-import { RUNTIME_SETTLED_SCENES } from '../runtime/etc';
 import uniqWith from 'lodash/uniqWith';
 
 /**
@@ -26,13 +24,10 @@ export const sceneParser = (rawScene: string, sceneName: string, sceneUrl: strin
     subSceneList = [...subSceneList, ...returnSentence.subScene];
     return returnSentence;
   });
+
   // 开始资源的预加载
   assetsList = uniqWith(assetsList); // 去重
   assetsPrefetcher(assetsList);
-  // 开始场景的预加载
-  RUNTIME_SETTLED_SCENES.push(sceneUrl); // 放入已加载场景列表，避免递归加载相同场景
-  subSceneList = uniqWith(subSceneList); // 去重
-  scenePrefetcher(subSceneList);
 
   const parsedScene: IScene = {
     sceneName: sceneName, // 场景名称

@@ -11,6 +11,9 @@ import { setVisibility } from '@/store/GUIReducer';
 import { runScript } from '@/Core/controller/gamePlay/runScript';
 import { stopAllPerform } from '@/Core/controller/gamePlay/stopAllPerform';
 import cloneDeep from 'lodash/cloneDeep';
+import { RUNTIME_SETTLED_SCENES } from '@/Core/runtime/etc';
+import uniqWith from 'lodash/uniqWith';
+import { scenePrefetcher } from '@/Core/util/prefetcher/scenePrefetcher';
 
 /**
  * 恢复演出
@@ -38,6 +41,11 @@ export const jumpFromBacklog = (index: number) => {
       backlogFile.saveScene.sceneName,
       backlogFile.saveScene.sceneUrl,
     );
+    // 开始场景的预加载
+    const subSceneList = RUNTIME_SCENE_DATA.currentScene.subSceneList;
+    RUNTIME_SETTLED_SCENES.push(RUNTIME_SCENE_DATA.currentScene.sceneUrl); // 放入已加载场景列表，避免递归加载相同场景
+    const subSceneListUniq = uniqWith(subSceneList); // 去重
+    scenePrefetcher(subSceneListUniq);
   });
   RUNTIME_SCENE_DATA.currentSentenceId = backlogFile.saveScene.currentSentenceId;
   RUNTIME_SCENE_DATA.sceneStack = cloneDeep(backlogFile.saveScene.sceneStack);
