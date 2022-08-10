@@ -3,7 +3,7 @@
  * @param content 语句内容
  * @return {Array<string>} 子场景列表
  */
-import {commandType} from '@/interface/coreInterface/sceneInterface';
+import { commandType } from '@/interface/coreInterface/sceneInterface';
 
 export const subSceneScanner = (command: commandType, content: string): Array<string> => {
   const subSceneList: Array<string> = [];
@@ -12,14 +12,12 @@ export const subSceneScanner = (command: commandType, content: string): Array<st
   }
   if (command === commandType.choose) {
     const chooseList = content.split('|');
-    const chooseValue = chooseList.map(e => e.split(':')[1]);
+    const chooseValue = chooseList.map((e) => e.split(':')[1]);
     chooseValue.forEach((e) => {
       if (e.match(/\./)) {
         subSceneList.push(e);
       }
-    }
-    );
+    });
   }
   return subSceneList;
 };
-

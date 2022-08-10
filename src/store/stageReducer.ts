@@ -3,9 +3,8 @@
  * 舞台状态是演出结束后的“终态”，在读档时不发生演出，只是将舞台状态替换为读取的状态。
  */
 
-import {ISetGameVar, ISetStagePayload, IStageState} from '@/interface/stateInterface/stageInterface';
-import {createSlice, PayloadAction} from "@reduxjs/toolkit";
-
+import { ISetGameVar, ISetStagePayload, IStageState } from '@/interface/stateInterface/stageInterface';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 // 初始化舞台数据
 
@@ -29,8 +28,8 @@ export const initState: IStageState = {
   PerformList: [], // 要启动的演出列表
   currentDialogKey: 'initial',
   // currentPerformDelay: 0
-  currentConcatDialogPrev:'',
-  enableFilm:'',
+  currentConcatDialogPrev: '',
+  enableFilm: '',
 };
 
 /**
@@ -41,36 +40,34 @@ const stageSlice = createSlice({
   initialState: initState,
   reducers: {
     /**
-       * 替换舞台状态
-       * @param state 当前状态
-       * @param action 替换的状态
-       */
+     * 替换舞台状态
+     * @param state 当前状态
+     * @param action 替换的状态
+     */
     resetStageState: (state, action: PayloadAction<IStageState>) => {
       Object.assign(state, action.payload);
     },
     /**
-       * 设置舞台状态
-       * @param state 当前状态
-       * @param action 要替换的键值对
-       */
+     * 设置舞台状态
+     * @param state 当前状态
+     * @param action 要替换的键值对
+     */
     setStage: (state, action: PayloadAction<ISetStagePayload>) => {
       state[action.payload.key] = action.payload.value;
     },
     /**
-       * 修改舞台状态变量
-       * @param state 当前状态
-       * @param action 要改变或添加的变量
-       */
+     * 修改舞台状态变量
+     * @param state 当前状态
+     * @param action 要改变或添加的变量
+     */
     setStageVar: (state, action: PayloadAction<ISetGameVar>) => {
       state.GameVar[action.payload.key] = action.payload.value;
-    }
-  }
-}
-);
+    },
+  },
+});
 
-export const {resetStageState, setStage, setStageVar} = stageSlice.actions;
+export const { resetStageState, setStage, setStageVar } = stageSlice.actions;
 export default stageSlice.reducer;
-
 
 // /**
 //  * 创建舞台的状态管理

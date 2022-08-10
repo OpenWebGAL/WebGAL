@@ -1,6 +1,6 @@
-import {ISentence} from '@/interface/coreInterface/sceneInterface';
-import {IPerform} from '@/interface/coreInterface/performInterface';
-import {jmp} from "@/Core/gameScripts/function/jmp";
+import { ISentence } from '@/interface/coreInterface/sceneInterface';
+import { IPerform } from '@/interface/coreInterface/performInterface';
+import { jmp } from '@/Core/gameScripts/function/jmp';
 
 /**
  * 跳转到指定标签
@@ -13,8 +13,7 @@ export const jumpLabel = (sentence: ISentence): IPerform => {
     duration: 0,
     isOver: false,
     isHoldOn: false,
-    stopFunction: () => {
-    },
+    stopFunction: () => {},
     blockingNext: () => false,
     blockingAuto: () => true,
     stopTimeout: undefined, // 暂时不用，后面会交给自动清除

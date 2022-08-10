@@ -1,13 +1,12 @@
-import * as PIXI from "pixi.js";
-import {runtime_gamePlay} from "@/Core/runtime/gamePlay";
+import * as PIXI from 'pixi.js';
+import { RUNTIME_GAMEPLAY } from '@/Core/runtime/gamePlay';
 
 export const pixiRain = (rainSpeed: number, number: number) => {
   // 动画参数
   // 设置缩放的系数
   const scalePreset = 0.3;
 
-
-  const app = runtime_gamePlay.currentPixi;
+  const app = RUNTIME_GAMEPLAY.currentPixi;
   const container = new PIXI.Container();
   app.stage.addChild(container);
   // 创建纹理
@@ -48,7 +47,7 @@ export const pixiRain = (rainSpeed: number, number: number) => {
       bunny['acc'] = Math.random();
       bunny['alpha'] = Math.random();
       if (bunny['alpha'] >= 0.5) {
-        bunny["alpha"] = 0.5;
+        bunny['alpha'] = 0.5;
       }
       if (bunny['alpha'] <= 0.2) {
         bunny['alpha'] = 0.2;
@@ -70,6 +69,5 @@ export const pixiRain = (rainSpeed: number, number: number) => {
   });
   return container;
 };
-
 
 export default pixiRain;

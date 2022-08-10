@@ -1,9 +1,9 @@
-import {ISentence} from '@/interface/coreInterface/sceneInterface';
-import {IPerform} from '@/interface/coreInterface/performInterface';
-import {IEffect} from "@/interface/stateInterface/stageInterface";
-import {webgalStore} from "@/store/store";
-import {setStage} from "@/store/stageReducer";
-import  cloneDeep  from 'lodash/cloneDeep';
+import { ISentence } from '@/interface/coreInterface/sceneInterface';
+import { IPerform } from '@/interface/coreInterface/performInterface';
+import { IEffect } from '@/interface/stateInterface/stageInterface';
+import { webgalStore } from '@/store/store';
+import { setStage } from '@/store/stageReducer';
+import cloneDeep from 'lodash/cloneDeep';
 
 /**
  * 设置立绘变换
@@ -14,7 +14,7 @@ export const setFigTransform = (sentence: ISentence): IPerform => {
   const effectList: Array<IEffect> = stageState.effects;
   const newEffectList = cloneDeep(effectList);
   let target = 'figCenterContainer';
-  sentence.args.forEach(e => {
+  sentence.args.forEach((e) => {
     if (e.key === 'left' && e.value) {
       target = 'figLeftContainer';
     }
@@ -33,10 +33,10 @@ export const setFigTransform = (sentence: ISentence): IPerform => {
     newEffectList.push({
       target: target,
       transform: sentence.content,
-      filter: ''
+      filter: '',
     });
   }
-  webgalStore.dispatch(setStage({key: 'effects', value: newEffectList}));
+  webgalStore.dispatch(setStage({ key: 'effects', value: newEffectList }));
   // stageStore.setStage('effects', effectList);
   // stageStore.setStage('bgTransform',sentence.content);
   return {
@@ -44,8 +44,7 @@ export const setFigTransform = (sentence: ISentence): IPerform => {
     duration: 0,
     isOver: false,
     isHoldOn: false,
-    stopFunction: () => {
-    },
+    stopFunction: () => {},
     blockingNext: () => false,
     blockingAuto: () => true,
     stopTimeout: undefined, // 暂时不用，后面会交给自动清除

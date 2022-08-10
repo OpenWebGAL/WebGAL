@@ -48,6 +48,8 @@
         "@vitejs/plugin-react": "^1.0.7",
         "eslint": "^8.13.0",
         "eslint-config-alloy": "^4.5.1",
+        "eslint-config-prettier": "^8.5.0",
+        "eslint-plugin-prettier": "^4.2.1",
         "eslint-plugin-react": "^7.29.4",
         "lint-staged": "^12.3.7",
         "prettier": "^2.6.2",

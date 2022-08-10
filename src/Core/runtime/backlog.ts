@@ -3,4 +3,4 @@
  */
 import { IBacklogItem } from '@/interface/coreInterface/runtimeInterface';
 
-export const runtime_currentBacklog: Array<IBacklogItem> = [];
+export const RUNTIME_CURRENT_BACKLOG: Array<IBacklogItem> = [];

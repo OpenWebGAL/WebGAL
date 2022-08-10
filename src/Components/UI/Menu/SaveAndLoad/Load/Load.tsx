@@ -1,11 +1,11 @@
-import {FC} from 'react';
-import {loadGame} from '@/Core/controller/storage/loadGame';
+import { FC } from 'react';
+import { loadGame } from '@/Core/controller/storage/loadGame';
 import styles from '../SaveAndLoad.module.scss';
 // import {saveGame} from '@/Core/controller/storage/saveGame';
-import {setStorage} from '@/Core/controller/storage/storageController';
-import {useDispatch, useSelector} from "react-redux";
-import {RootState} from "@/store/store";
-import {setSlPage} from "@/store/userDataReducer";
+import { setStorage } from '@/Core/controller/storage/storageController';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '@/store/store';
+import { setSlPage } from '@/store/userDataReducer';
 
 export const Load: FC = () => {
   const userDataState = useSelector((state: RootState) => state.userData);
@@ -14,8 +14,7 @@ export const Load: FC = () => {
   for (let i = 1; i <= 20; i++) {
     let classNameOfElement = styles.Save_Load_top_button + ' ' + styles.Load_top_button;
     if (i === userDataState.optionData.slPage) {
-      classNameOfElement =
-                classNameOfElement + ' ' + styles.Save_Load_top_button_on + ' ' + styles.Load_top_button_on;
+      classNameOfElement = classNameOfElement + ' ' + styles.Save_Load_top_button_on + ' ' + styles.Load_top_button_on;
     }
     const element = (
       <div
@@ -40,24 +39,16 @@ export const Load: FC = () => {
   for (let i = start; i <= end; i++) {
     animationIndex++;
     const saveData = userDataState.saveData[i];
-    let saveElementContent = <div/>;
+    let saveElementContent = <div />;
     if (saveData) {
       const speaker = saveData.nowStageState.showName === '' ? '' : `${saveData.nowStageState.showName}`;
       saveElementContent = (
         <>
           <div className={styles.Save_Load_content_element_top}>
-            <div
-              className={
-                styles.Save_Load_content_element_top_index + ' ' + styles.Load_content_elememt_top_index
-              }
-            >
+            <div className={styles.Save_Load_content_element_top_index + ' ' + styles.Load_content_elememt_top_index}>
               {saveData.index}
             </div>
-            <div
-              className={
-                styles.Save_Load_content_element_top_date + ' ' + styles.Load_content_element_top_date
-              }
-            >
+            <div className={styles.Save_Load_content_element_top_date + ' ' + styles.Load_content_element_top_date}>
               {saveData.saveTime}
             </div>
           </div>
@@ -70,26 +61,18 @@ export const Load: FC = () => {
               />
             )}
             {saveData.nowStageState.bgName === '' && (
-              <div style={{background: 'rgba(0,0,0,0.6)', width: '100%', height: '100%'}}/>
+              <div style={{ background: 'rgba(0,0,0,0.6)', width: '100%', height: '100%' }} />
             )}
             {saveData.nowStageState.figNameLeft !== '' && (
               <img
-                className={
-                  styles.Save_Load_content_miniRen_figure +
-                                    ' ' +
-                                    styles.Save_Load_content_miniRen_figLeft
-                }
+                className={styles.Save_Load_content_miniRen_figure + ' ' + styles.Save_Load_content_miniRen_figLeft}
                 alt="Save_img_previewLeft"
                 src={saveData.nowStageState.figNameLeft}
               />
             )}
             {saveData.nowStageState.figNameRight !== '' && (
               <img
-                className={
-                  styles.Save_Load_content_miniRen_figure +
-                                    ' ' +
-                                    styles.Save_Load_content_miniRen_figRight
-                }
+                className={styles.Save_Load_content_miniRen_figure + ' ' + styles.Save_Load_content_miniRen_figRight}
                 alt="Save_img_preview"
                 src={saveData.nowStageState.figNameRight}
               />
@@ -114,9 +97,7 @@ export const Load: FC = () => {
             )}
           </div>
           <div className={styles.Save_Load_content_text}>
-            <div className={styles.Save_Load_content_speaker + ' ' + styles.Load_content_speaker}>
-              {speaker}
-            </div>
+            <div className={styles.Save_Load_content_speaker + ' ' + styles.Load_content_speaker}>{speaker}</div>
             <div className={styles.Save_Load_content_text_padding}>{saveData.nowStageState.showText}</div>
           </div>
         </>
@@ -130,7 +111,7 @@ export const Load: FC = () => {
         onClick={() => loadGame(i)}
         key={'loadElement_' + i}
         className={styles.Save_Load_content_element}
-        style={{animationDelay: `${animationIndex * 30}ms`}}
+        style={{ animationDelay: `${animationIndex * 30}ms` }}
       >
         {saveElementContent}
       </div>
@@ -146,10 +127,7 @@ export const Load: FC = () => {
         </div>
         <div className={styles.Save_Load_top_buttonList}>{page}</div>
       </div>
-      <div
-        className={styles.Save_Load_content}
-        id={'Load_content_page_' + userDataState.optionData.slPage}
-      >
+      <div className={styles.Save_Load_content} id={'Load_content_page_' + userDataState.optionData.slPage}>
         {showSaves}
       </div>
     </div>

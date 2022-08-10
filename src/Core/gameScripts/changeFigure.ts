@@ -1,7 +1,7 @@
-import {ISentence} from '@/interface/coreInterface/sceneInterface';
-import {IPerform} from '@/interface/coreInterface/performInterface';
-import {webgalStore} from '@/store/store';
-import {setStage} from "@/store/stageReducer";
+import { ISentence } from '@/interface/coreInterface/sceneInterface';
+import { IPerform } from '@/interface/coreInterface/performInterface';
+import { webgalStore } from '@/store/store';
+import { setStage } from '@/store/stageReducer';
 
 /**
  * 更改立绘
@@ -27,23 +27,22 @@ export const changeFigure = (sentence: ISentence): IPerform => {
   }
   const dispatch = webgalStore.dispatch;
   switch (pos) {
-  case 'center':
-    dispatch(setStage({key: 'figName', value: content}));
-    break;
-  case 'left':
-    dispatch(setStage({key: 'figNameLeft', value: content}));
-    break;
-  case 'right':
-    dispatch(setStage({key: 'figNameRight', value: content}));
-    break;
+    case 'center':
+      dispatch(setStage({ key: 'figName', value: content }));
+      break;
+    case 'left':
+      dispatch(setStage({ key: 'figNameLeft', value: content }));
+      break;
+    case 'right':
+      dispatch(setStage({ key: 'figNameRight', value: content }));
+      break;
   }
   return {
     performName: 'none',
     duration: 0,
     isOver: false,
     isHoldOn: false,
-    stopFunction: () => {
-    },
+    stopFunction: () => {},
     blockingNext: () => false,
     blockingAuto: () => false,
     stopTimeout: undefined, // 暂时不用，后面会交给自动清除

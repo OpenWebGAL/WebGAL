@@ -10,14 +10,16 @@ import styles from '../../Components/Stage/FullScreenPerform/fullScreenPerform.m
  */
 export const intro = (sentence: ISentence): IPerform => {
   const introArray: Array<string> = sentence.content.split(/\|/);
-  const showIntro = introArray.map((e, i) => <div key={'introtext' + i + Math.random().toString()}
-    style={{animationDelay: `${1500 * i}ms`}}
-    className={styles.introElement}>
-    {e}
-  </div>);
-  const intro = <div>
-    {showIntro}
-  </div>;
+  const showIntro = introArray.map((e, i) => (
+    <div
+      key={'introtext' + i + Math.random().toString()}
+      style={{ animationDelay: `${1500 * i}ms` }}
+      className={styles.introElement}
+    >
+      {e}
+    </div>
+  ));
+  const intro = <div>{showIntro}</div>;
   ReactDOM.render(intro, document.getElementById('introContainer'));
   const introContainer = document.getElementById('introContainer');
 
@@ -38,6 +40,6 @@ export const intro = (sentence: ISentence): IPerform => {
     blockingNext: () => false,
     blockingAuto: () => true,
     stopTimeout: undefined, // 暂时不用，后面会交给自动清除
-    goNextWhenOver:true
+    goNextWhenOver: true,
   };
 };

@@ -2,17 +2,20 @@
  * @file 引擎初始化时会执行的脚本，包括获取游戏信息，初始化运行时变量，初始化用户数据存储
  */
 
-import {logger} from './util/etc/logger';
-import {infoFetcher} from './util/coreInitialFunction/infoFetcher';
-import {resize} from './util/coreInitialFunction/resize';
-import {assetSetter, fileType} from './util/gameAssetsAccess/assetSetter';
-import {sceneFetcher} from './controller/scene/sceneFetcher';
-import {runtime_currentSceneData} from './runtime/sceneData';
-import {sceneParser} from './parser/sceneParser';
-import {setVolume} from "@/Core/controller/stage/setVolume";
-import {pixiController} from "@/Core/controller/perform/pixi/pixiController";
-import {bindExtraFunc} from "@/Core/util/coreInitialFunction/bindExtraFunc";
-import {webSocketFunc} from "@/Core/util/syncWithEditor/webSocketFunc";
+import { logger } from './util/etc/logger';
+import { infoFetcher } from './util/coreInitialFunction/infoFetcher';
+import { resize } from './util/coreInitialFunction/resize';
+import { assetSetter, fileType } from './util/gameAssetsAccess/assetSetter';
+import { sceneFetcher } from './controller/scene/sceneFetcher';
+import { RUNTIME_SCENE_DATA } from './runtime/sceneData';
+import { sceneParser } from './parser/sceneParser';
+import { setVolume } from '@/Core/controller/stage/setVolume';
+import { pixiController } from '@/Core/controller/stage/pixi/pixiController';
+import { bindExtraFunc } from '@/Core/util/coreInitialFunction/bindExtraFunc';
+import { webSocketFunc } from '@/Core/util/syncWithEditor/webSocketFunc';
+import uniqWith from 'lodash/uniqWith';
+import { RUNTIME_SETTLED_SCENES } from './runtime/etc';
+import { scenePrefetcher } from './util/prefetcher/scenePrefetcher';
 
 /**
  * 引擎初始化函数
@@ -44,7 +47,12 @@ export const initializeScript = (): void => {
   const sceneUrl: string = assetSetter('start.txt', fileType.scene);
   // 场景写入到运行时
   sceneFetcher(sceneUrl).then((rawScene) => {
-    runtime_currentSceneData.currentScene = sceneParser(rawScene, 'start.txt', sceneUrl);
+    RUNTIME_SCENE_DATA.currentScene = sceneParser(rawScene, 'start.txt', sceneUrl);
+    // 开始场景的预加载
+    const subSceneList = RUNTIME_SCENE_DATA.currentScene.subSceneList;
+    RUNTIME_SETTLED_SCENES.push(sceneUrl); // 放入已加载场景列表，避免递归加载相同场景
+    const subSceneListUniq = uniqWith(subSceneList); // 去重
+    scenePrefetcher(subSceneListUniq);
   });
   /**
    * 设置音量

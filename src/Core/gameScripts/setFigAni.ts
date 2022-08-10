@@ -1,5 +1,5 @@
-import {ISentence} from '@/interface/coreInterface/sceneInterface';
-import {IPerform} from '@/interface/coreInterface/performInterface';
+import { ISentence } from '@/interface/coreInterface/sceneInterface';
+import { IPerform } from '@/interface/coreInterface/performInterface';
 
 /**
  * 设置立绘动画
@@ -7,32 +7,32 @@ import {IPerform} from '@/interface/coreInterface/performInterface';
  */
 export const setFigAni = (sentence: ISentence): IPerform => {
   const content = sentence.content;
-  sentence.args.forEach(e => {
+  sentence.args.forEach((e) => {
     if (e.key === 'left' && e.value) {
       const figLeft = document.getElementById('figLeftContainer');
-      if(figLeft){
+      if (figLeft) {
         figLeft.style.animation = 'none';
-        setTimeout(()=>{
+        setTimeout(() => {
           figLeft.style.animation = content;
-        },1);
+        }, 1);
       }
     }
     if (e.key === 'center' && e.value) {
       const figCenter = document.getElementById('figCenterContainer');
-      if(figCenter){
+      if (figCenter) {
         figCenter.style.animation = 'none';
-        setTimeout(()=>{
+        setTimeout(() => {
           figCenter.style.animation = content;
-        },1);
+        }, 1);
       }
     }
     if (e.key === 'right' && e.value) {
       const figRight = document.getElementById('figRightContainer');
-      if(figRight){
+      if (figRight) {
         figRight.style.animation = 'none';
-        setTimeout(()=>{
+        setTimeout(() => {
           figRight.style.animation = content;
-        },1);
+        }, 1);
       }
     }
   });
@@ -41,8 +41,7 @@ export const setFigAni = (sentence: ISentence): IPerform => {
     duration: 0,
     isOver: false,
     isHoldOn: false,
-    stopFunction: () => {
-    },
+    stopFunction: () => {},
     blockingNext: () => false,
     blockingAuto: () => true,
     stopTimeout: undefined, // 暂时不用，后面会交给自动清除

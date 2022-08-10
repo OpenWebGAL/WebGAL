@@ -1,13 +1,12 @@
-import * as PIXI from "pixi.js";
-import {runtime_gamePlay} from "@/Core/runtime/gamePlay";
+import * as PIXI from 'pixi.js';
+import { RUNTIME_GAMEPLAY } from '@/Core/runtime/gamePlay';
 
-export const pixiSnow = (snowSpeed:number) => {
+export const pixiSnow = (snowSpeed: number) => {
   // 动画参数
   // 设置缩放的系数
   const scalePreset = 0.09;
 
-
-  const app = runtime_gamePlay.currentPixi;
+  const app = RUNTIME_GAMEPLAY.currentPixi;
   const container = new PIXI.Container();
   app.stage.addChild(container);
   // 创建纹理
@@ -21,9 +20,9 @@ export const pixiSnow = (snowSpeed:number) => {
   container.scale.x = 1;
   container.scale.y = 1;
   // container.rotation = -0.2;
-  const bunnyList:any = [];
+  const bunnyList: any = [];
   // 监听动画更新
-  app.ticker.add((delta:number) => {
+  app.ticker.add((delta: number) => {
     // 获取长宽，用于控制雪花出现位置
     const stageWidth = 1600;
     const stageHeight = 900;
@@ -48,11 +47,11 @@ export const pixiSnow = (snowSpeed:number) => {
     container.addChild(bunny);
     // 控制每片雪花
     bunnyList.push(bunny);
-    let count = 0;// 用于判断雪花往左还是往右飘，是2的倍数则往左
+    let count = 0; // 用于判断雪花往左还是往右飘，是2的倍数则往左
     for (const e of bunnyList) {
       count++;
       const randomNumber = Math.random();
-      e['dropSpeed'] = e['acc'] *0.01 + e['dropSpeed'];
+      e['dropSpeed'] = e['acc'] * 0.01 + e['dropSpeed'];
       e.y += delta * snowSpeed * e['dropSpeed'] * 0.3 + 0.7;
       const addX = count % 2 === 0;
       if (addX) {

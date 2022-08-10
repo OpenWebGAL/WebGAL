@@ -1,9 +1,9 @@
-import {ISentence} from '@/interface/coreInterface/sceneInterface';
-import {IPerform} from '@/interface/coreInterface/performInterface';
-import {IEffect} from "@/interface/stateInterface/stageInterface";
-import {webgalStore} from "@/store/store";
-import {setStage} from "@/store/stageReducer";
-import  cloneDeep  from 'lodash/cloneDeep';
+import { ISentence } from '@/interface/coreInterface/sceneInterface';
+import { IPerform } from '@/interface/coreInterface/performInterface';
+import { IEffect } from '@/interface/stateInterface/stageInterface';
+import { webgalStore } from '@/store/store';
+import { setStage } from '@/store/stageReducer';
+import cloneDeep from 'lodash/cloneDeep';
 
 /**
  * 设置背景变换
@@ -24,10 +24,10 @@ export const setBgTransform = (sentence: ISentence): IPerform => {
     newEffectList.push({
       target: 'MainStage_bg_MainContainer',
       transform: sentence.content,
-      filter: ''
+      filter: '',
     });
   }
-  webgalStore.dispatch(setStage({key: 'effects', value: newEffectList}));
+  webgalStore.dispatch(setStage({ key: 'effects', value: newEffectList }));
   // stageStore.setStage('effects', effectList);
   // stageStore.setStage('bgTransform',sentence.content);
   return {
@@ -35,8 +35,7 @@ export const setBgTransform = (sentence: ISentence): IPerform => {
     duration: 0,
     isOver: false,
     isHoldOn: false,
-    stopFunction: () => {
-    },
+    stopFunction: () => {},
     blockingNext: () => false,
     blockingAuto: () => true,
     stopTimeout: undefined, // 暂时不用，后面会交给自动清除

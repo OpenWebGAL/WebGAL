@@ -4,15 +4,15 @@
  * 在引擎初始化时会将这些状态从本地存储加载到运行时状态。
  */
 import {
-  IAppreciationAsset, ISaveData,
+  IAppreciationAsset,
+  ISaveData,
   ISetOptionDataPayload,
   ISetUserDataPayload,
   IUserData,
   playSpeed,
-  textSize
+  textSize,
 } from '@/interface/stateInterface/userDataInterface';
-import {createSlice, PayloadAction} from "@reduxjs/toolkit";
-
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 // 初始化用户数据
 export const initState: IUserData = {
@@ -28,9 +28,9 @@ export const initState: IUserData = {
   },
   appreciationData: {
     bgm: [],
-    cg: []
+    cg: [],
   },
-  quickSaveData: null
+  quickSaveData: null,
 };
 
 const userDataSlice = createSlice({
@@ -43,14 +43,14 @@ const userDataSlice = createSlice({
      * @param action
      */
     setUserData: (state, action: PayloadAction<ISetUserDataPayload>) => {
-      const {key, value} = action.payload;
+      const { key, value } = action.payload;
       state[key] = value;
     },
     unlockCgInUserData: (state, action: PayloadAction<IAppreciationAsset>) => {
-      const {name, url, series} = action.payload;
+      const { name, url, series } = action.payload;
       // 检查是否存在
       let isExist = false;
-      state.appreciationData.cg.forEach(e => {
+      state.appreciationData.cg.forEach((e) => {
         if (name === e.name) {
           isExist = true;
           e.url = url;
@@ -62,10 +62,10 @@ const userDataSlice = createSlice({
       }
     },
     unlockBgmInUserData: (state, action: PayloadAction<IAppreciationAsset>) => {
-      const {name, url, series} = action.payload;
+      const { name, url, series } = action.payload;
       // 检查是否存在
       let isExist = false;
-      state.appreciationData.bgm.forEach(e => {
+      state.appreciationData.bgm.forEach((e) => {
         if (name === e.name) {
           isExist = true;
           e.url = url;
@@ -90,7 +90,7 @@ const userDataSlice = createSlice({
      * @param action
      */
     setOptionData: (state, action: PayloadAction<ISetOptionDataPayload>) => {
-      const {key, value} = action.payload;
+      const { key, value } = action.payload;
       (state.optionData as any)[key] = value;
     },
     /**
@@ -103,8 +103,8 @@ const userDataSlice = createSlice({
     },
     setFastSave: (state, action: PayloadAction<ISaveData | null>) => {
       state.quickSaveData = action.payload;
-    }
-  }
+    },
+  },
 });
 
 export const {
@@ -114,7 +114,7 @@ export const {
   setSlPage,
   unlockCgInUserData,
   unlockBgmInUserData,
-  setFastSave
+  setFastSave,
 } = userDataSlice.actions;
 export default userDataSlice.reducer;
 
