@@ -17,7 +17,7 @@ import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
 import { setFastSave } from '@/store/userDataReducer';
 import { getStorageAsync, setStorageAsync } from '@/Core/controller/storage/storageController';
 import styles from '@/Components/UI/Backlog/backlog.module.scss';
-import { throttle } from 'lodash';
+import throttle from 'lodash/throttle';
 
 // options备用
 export interface HotKeyType {
