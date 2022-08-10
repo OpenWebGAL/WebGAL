@@ -1,11 +1,11 @@
-import {runtime_currentSceneData} from '../../runtime/sceneData';
-import {assetSetter, fileType} from '../../util/gameAssetsAccess/assetSetter';
-import {sceneFetcher} from '../scene/sceneFetcher';
-import {sceneParser} from '../../parser/sceneParser';
-import {resetStage} from "@/Core/controller/stage/resetStage";
-import {webgalStore} from "@/store/store";
-import {setVisibility} from "@/store/GUIReducer";
-import {nextSentence} from "@/Core/controller/gamePlay/nextSentence";
+import { runtime_currentSceneData } from '../../runtime/sceneData';
+import { assetSetter, fileType } from '../../util/gameAssetsAccess/assetSetter';
+import { sceneFetcher } from '../scene/sceneFetcher';
+import { sceneParser } from '../../parser/sceneParser';
+import { resetStage } from '@/Core/controller/stage/resetStage';
+import { webgalStore } from '@/store/store';
+import { setVisibility } from '@/store/GUIReducer';
+import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
 
 /**
  * 从头开始游戏
@@ -21,5 +21,5 @@ export const startGame = () => {
     // 开始第一条语句
     nextSentence();
   });
-  webgalStore.dispatch(setVisibility({component: "showTitle", visibility: false}));
+  webgalStore.dispatch(setVisibility({ component: 'showTitle', visibility: false }));
 };

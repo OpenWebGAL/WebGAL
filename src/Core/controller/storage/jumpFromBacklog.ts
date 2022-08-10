@@ -1,27 +1,26 @@
-import {logger} from '../../util/etc/logger';
-import {sceneFetcher} from '../scene/sceneFetcher';
-import {runtime_currentSceneData} from '../../runtime/sceneData';
-import {sceneParser} from '../../parser/sceneParser';
-import {runtime_currentBacklog} from '../../runtime/backlog';
-import {IBacklogItem} from '@/interface/coreInterface/runtimeInterface';
-import {IStageState} from '@/interface/stateInterface/stageInterface';
-import {webgalStore} from "@/store/store";
-import {resetStageState} from "@/store/stageReducer";
-import {setVisibility} from "@/store/GUIReducer";
-import {runScript} from "@/Core/controller/gamePlay/runScript";
-import {stopAllPerform} from "@/Core/controller/gamePlay/stopAllPerform";
-import  cloneDeep  from 'lodash/cloneDeep';
+import { logger } from '../../util/etc/logger';
+import { sceneFetcher } from '../scene/sceneFetcher';
+import { runtime_currentSceneData } from '../../runtime/sceneData';
+import { sceneParser } from '../../parser/sceneParser';
+import { runtime_currentBacklog } from '../../runtime/backlog';
+import { IBacklogItem } from '@/interface/coreInterface/runtimeInterface';
+import { IStageState } from '@/interface/stateInterface/stageInterface';
+import { webgalStore } from '@/store/store';
+import { resetStageState } from '@/store/stageReducer';
+import { setVisibility } from '@/store/GUIReducer';
+import { runScript } from '@/Core/controller/gamePlay/runScript';
+import { stopAllPerform } from '@/Core/controller/gamePlay/stopAllPerform';
+import cloneDeep from 'lodash/cloneDeep';
 
 /**
  * 恢复演出
  */
 export const restorePerform = () => {
   const stageState = webgalStore.getState().stage;
-  stageState.PerformList.forEach(e => {
+  stageState.PerformList.forEach((e) => {
     runScript(e.script);
   });
 };
-
 
 /**
  * 从 backlog 跳转至一个先前的状态
@@ -60,8 +59,8 @@ export const jumpFromBacklog = (index: number) => {
   restorePerform();
 
   // 关闭backlog界面
-  dispatch(setVisibility({component: 'showBacklog', visibility: false}));
+  dispatch(setVisibility({ component: 'showBacklog', visibility: false }));
 
   // 重新显示Textbox
-  dispatch(setVisibility({component: 'showTextBox', visibility: true}));
+  dispatch(setVisibility({ component: 'showTextBox', visibility: true }));
 };

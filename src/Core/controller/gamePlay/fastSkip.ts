@@ -2,7 +2,7 @@
 import { runtime_gamePlay } from '../../runtime/gamePlay';
 import { stopAuto } from './autoPlay';
 import styles from '../../../Components/UI/BottomControlPanel/bottomControlPanel.module.scss';
-import {nextSentence} from "@/Core/controller/gamePlay/nextSentence";
+import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
 
 /**
  * 设置 fast 按钮的激活与否
@@ -71,5 +71,3 @@ export const switchFast = () => {
     startFast();
   }
 };
-
-

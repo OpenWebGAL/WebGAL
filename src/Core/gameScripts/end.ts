@@ -1,12 +1,12 @@
-import {ISentence} from '@/interface/coreInterface/sceneInterface';
-import {IPerform} from '@/interface/coreInterface/performInterface';
-import {runtime_currentSceneData} from "@/Core/runtime/sceneData";
-import {assetSetter, fileType} from "@/Core/util/gameAssetsAccess/assetSetter";
-import {sceneFetcher} from "@/Core/controller/scene/sceneFetcher";
-import {sceneParser} from "@/Core/parser/sceneParser";
-import {resetStage} from "@/Core/controller/stage/resetStage";
-import {webgalStore} from "@/store/store";
-import {setVisibility} from "@/store/GUIReducer";
+import { ISentence } from '@/interface/coreInterface/sceneInterface';
+import { IPerform } from '@/interface/coreInterface/performInterface';
+import { runtime_currentSceneData } from '@/Core/runtime/sceneData';
+import { assetSetter, fileType } from '@/Core/util/gameAssetsAccess/assetSetter';
+import { sceneFetcher } from '@/Core/controller/scene/sceneFetcher';
+import { sceneParser } from '@/Core/parser/sceneParser';
+import { resetStage } from '@/Core/controller/stage/resetStage';
+import { webgalStore } from '@/store/store';
+import { setVisibility } from '@/store/GUIReducer';
 
 /**
  * 结束游戏
@@ -21,14 +21,13 @@ export const end = (sentence: ISentence): IPerform => {
   sceneFetcher(sceneUrl).then((rawScene) => {
     runtime_currentSceneData.currentScene = sceneParser(rawScene, 'start.txt', sceneUrl);
   });
-  dispatch(setVisibility({component: 'showTitle', visibility: true}));
+  dispatch(setVisibility({ component: 'showTitle', visibility: true }));
   return {
     performName: 'none',
     duration: 0,
     isOver: false,
     isHoldOn: false,
-    stopFunction: () => {
-    },
+    stopFunction: () => {},
     blockingNext: () => false,
     blockingAuto: () => true,
     stopTimeout: undefined, // 暂时不用，后面会交给自动清除

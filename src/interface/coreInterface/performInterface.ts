@@ -1,4 +1,4 @@
-import {ISentence} from './sceneInterface';
+import { ISentence } from './sceneInterface';
 
 /**
  * 描述演出的接口，主要用于控制演出，而不是执行（在演出开始时被调用演出的执行器返回）
@@ -38,8 +38,7 @@ export const initPerform: IPerform = {
   duration: 100,
   isOver: false,
   isHoldOn: false,
-  stopFunction: () => {
-  },
+  stopFunction: () => {},
   blockingNext: () => false,
   blockingAuto: () => true,
   stopTimeout: undefined,

@@ -2,13 +2,14 @@
  * @file 记录当前GUI的状态信息，引擎初始化时会重置。
  * @author Mahiru
  */
-import {getStorage} from '@/Core/controller/storage/storageController';
+import { getStorage } from '@/Core/controller/storage/storageController';
 import {
   IGuiState,
-  setVisibilityPayload, setAssetPayload, MenuPanelTag
+  setVisibilityPayload,
+  setAssetPayload,
+  MenuPanelTag,
 } from '@/interface/stateInterface/guiInterface';
-import {createSlice, PayloadAction} from "@reduxjs/toolkit";
-
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 /**
  * 初始GUI状态表
@@ -25,7 +26,6 @@ const initState: IGuiState = {
   showExtra: false,
 };
 
-
 /**
  * GUI状态的Reducer
  */
@@ -40,7 +40,7 @@ const GUISlice = createSlice({
      */
     setVisibility: (state, action: PayloadAction<setVisibilityPayload>) => {
       getStorage();
-      const {component, visibility} = action.payload;
+      const { component, visibility } = action.payload;
       state[component] = visibility;
     },
     /**
@@ -58,13 +58,13 @@ const GUISlice = createSlice({
      * @param action 改变资源的Action
      */
     setGuiAsset: (state, action: PayloadAction<setAssetPayload>) => {
-      const {asset, value} = action.payload;
+      const { asset, value } = action.payload;
       state[asset] = value;
     },
   },
 });
 
-export const {setVisibility, setMenuPanelTag, setGuiAsset} = GUISlice.actions;
+export const { setVisibility, setMenuPanelTag, setGuiAsset } = GUISlice.actions;
 export default GUISlice.reducer;
 
 // export function GuiStateStore(): GuiStore {

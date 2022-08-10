@@ -1,9 +1,9 @@
-import {runtime_currentBacklog} from "@/Core/runtime/backlog";
-import {initSceneData, runtime_currentSceneData} from "@/Core/runtime/sceneData";
-import {runtime_gamePlay} from "@/Core/runtime/gamePlay";
-import {initState, resetStageState} from "@/store/stageReducer";
-import {webgalStore} from "@/store/store";
-import cloneDeep from "lodash/cloneDeep";
+import { runtime_currentBacklog } from '@/Core/runtime/backlog';
+import { initSceneData, runtime_currentSceneData } from '@/Core/runtime/sceneData';
+import { runtime_gamePlay } from '@/Core/runtime/gamePlay';
+import { initState, resetStageState } from '@/store/stageReducer';
+import { webgalStore } from '@/store/store';
+import cloneDeep from 'lodash/cloneDeep';
 
 export const resetStage = (resetBacklog: boolean) => {
   /**

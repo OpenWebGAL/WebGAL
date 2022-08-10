@@ -1,6 +1,6 @@
-import {runtime_currentSceneData} from "@/Core/runtime/sceneData";
-import {commandType} from "@/interface/coreInterface/sceneInterface";
-import {nextSentence} from "@/Core/controller/gamePlay/nextSentence";
+import { runtime_currentSceneData } from '@/Core/runtime/sceneData';
+import { commandType } from '@/interface/coreInterface/sceneInterface';
+import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
 
 export const jmp = (labelName: string) => {
   // 在当前场景中找到指定的标签。

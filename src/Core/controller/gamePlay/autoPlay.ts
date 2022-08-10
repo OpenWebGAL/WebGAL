@@ -1,8 +1,8 @@
-import {runtime_gamePlay} from '../../runtime/gamePlay';
+import { runtime_gamePlay } from '../../runtime/gamePlay';
 // import {logger} from '../../util/logger';
 import styles from '../../../Components/UI/BottomControlPanel/bottomControlPanel.module.scss';
-import {webgalStore} from '@/store/store';
-import {nextSentence} from "@/Core/controller/gamePlay/nextSentence";
+import { webgalStore } from '@/store/store';
+import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
 
 /**
  * 设置 autoplay 按钮的激活与否
