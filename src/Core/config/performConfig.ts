@@ -1,4 +1,4 @@
-export const webgal_env = {
+export const PERFORM_CONFIG = {
   // 不能小于50
   textInitialDelay: 80,
 };

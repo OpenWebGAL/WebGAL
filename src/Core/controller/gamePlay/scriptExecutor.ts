@@ -1,6 +1,6 @@
 import { commandType, ISentence } from '@/interface/coreInterface/sceneInterface';
-import { runtime_currentBacklog } from '../../runtime/backlog';
-import { runtime_currentSceneData } from '../../runtime/sceneData';
+import { RUNTIME_CURRENT_BACKLOG } from '../../runtime/backlog';
+import { RUNTIME_SCENE_DATA } from '../../runtime/sceneData';
 import { runScript } from './runScript';
 import { logger } from '../../util/etc/logger';
 import { IStageState } from '@/interface/stateInterface/stageInterface';
@@ -18,9 +18,9 @@ import cloneDeep from 'lodash/cloneDeep';
  */
 export const scriptExecutor = () => {
   // 超过总语句数量，则从场景栈拿出一个需要继续的场景，然后继续流程。若场景栈清空，则停止流程
-  if (runtime_currentSceneData.currentSentenceId > runtime_currentSceneData.currentScene.sentenceList.length - 1) {
-    if (runtime_currentSceneData.sceneStack.length !== 0) {
-      const sceneToRestore: sceneEntry | undefined = runtime_currentSceneData.sceneStack.pop();
+  if (RUNTIME_SCENE_DATA.currentSentenceId > RUNTIME_SCENE_DATA.currentScene.sentenceList.length - 1) {
+    if (RUNTIME_SCENE_DATA.sceneStack.length !== 0) {
+      const sceneToRestore: sceneEntry | undefined = RUNTIME_SCENE_DATA.sceneStack.pop();
       if (sceneToRestore !== undefined) {
         restoreScene(sceneToRestore);
       }
@@ -28,7 +28,7 @@ export const scriptExecutor = () => {
     return;
   }
   const currentScript: ISentence =
-    runtime_currentSceneData.currentScene.sentenceList[runtime_currentSceneData.currentSentenceId];
+    RUNTIME_SCENE_DATA.currentScene.sentenceList[RUNTIME_SCENE_DATA.currentSentenceId];
   // 判断这个脚本要不要执行
   let runThis = true;
   let isHasWhenArg = false;
@@ -58,7 +58,7 @@ export const scriptExecutor = () => {
   // 执行语句
   if (!runThis) {
     logger.warn('不满足条件，跳过本句！');
-    runtime_currentSceneData.currentSentenceId++;
+    RUNTIME_SCENE_DATA.currentSentenceId++;
     nextSentence();
     return;
   }
@@ -89,7 +89,7 @@ export const scriptExecutor = () => {
 
   // 执行“下一句”
   if (isNext) {
-    runtime_currentSceneData.currentSentenceId++;
+    RUNTIME_SCENE_DATA.currentSentenceId++;
     scriptExecutor();
     return;
   }
@@ -115,14 +115,14 @@ export const scriptExecutor = () => {
       const backlogElement: IBacklogItem = {
         currentStageState: newStageState,
         saveScene: {
-          currentSentenceId: runtime_currentSceneData.currentSentenceId, // 当前语句ID
-          sceneStack: cloneDeep(runtime_currentSceneData.sceneStack), // 场景栈
-          sceneName: runtime_currentSceneData.currentScene.sceneName, // 场景名称
-          sceneUrl: runtime_currentSceneData.currentScene.sceneUrl, // 场景url
+          currentSentenceId: RUNTIME_SCENE_DATA.currentSentenceId, // 当前语句ID
+          sceneStack: cloneDeep(RUNTIME_SCENE_DATA.sceneStack), // 场景栈
+          sceneName: RUNTIME_SCENE_DATA.currentScene.sceneName, // 场景名称
+          sceneUrl: RUNTIME_SCENE_DATA.currentScene.sceneUrl, // 场景url
         },
       };
-      runtime_currentBacklog.push(backlogElement);
+      RUNTIME_CURRENT_BACKLOG.push(backlogElement);
     }
   }, 0);
-  runtime_currentSceneData.currentSentenceId++;
+  RUNTIME_SCENE_DATA.currentSentenceId++;
 };

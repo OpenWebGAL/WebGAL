@@ -1,5 +1,5 @@
 import styles from './backlog.module.scss';
-import { runtime_currentBacklog } from '@/Core/runtime/backlog';
+import { RUNTIME_CURRENT_BACKLOG } from '@/Core/runtime/backlog';
 import { CloseSmall, Return, VolumeNotice } from '@icon-park/react';
 import { jumpFromBacklog } from '@/Core/controller/storage/jumpFromBacklog';
 import { useDispatch, useSelector } from 'react-redux';
@@ -19,12 +19,12 @@ export const Backlog = () => {
   const backlogList = useMemo<any>(() => {
     let backlogs = [];
     // logger.info('backlogList render');
-    for (let i = 0; i < runtime_currentBacklog.length; i++) {
-      const backlogItem = runtime_currentBacklog[i];
+    for (let i = 0; i < RUNTIME_CURRENT_BACKLOG.length; i++) {
+      const backlogItem = RUNTIME_CURRENT_BACKLOG[i];
       const singleBacklogView = (
         <div
           className={styles.backlog_item}
-          style={{ animationDelay: `${20 * (runtime_currentBacklog.length - i)}ms` }}
+          style={{ animationDelay: `${20 * (RUNTIME_CURRENT_BACKLOG.length - i)}ms` }}
           key={'backlogItem' + backlogItem.currentStageState.showText + backlogItem.saveScene.currentSentenceId}
         >
           <div className={styles.backlog_func_area}>
@@ -74,7 +74,7 @@ export const Backlog = () => {
       backlogs.unshift(singleBacklogView);
     }
     return backlogs;
-  }, [runtime_currentBacklog.length]);
+  }, [RUNTIME_CURRENT_BACKLOG.length]);
   useEffect(() => {
     /* 切换为展示历史记录时触发 */
     if (GUIStore.showBacklog) {

@@ -27,7 +27,7 @@ import { say } from '../gameScripts/say';
 import { filmMode } from '@/Core/gameScripts/filmMode';
 import { callSceneScript } from '@/Core/gameScripts/callSceneScript';
 
-export const scriptConfig: IConfigInterface[] = [
+export const SCRIPT_CONFIG: IConfigInterface[] = [
   { scriptString: 'intro', scriptType: commandType.intro, scriptFunction: intro },
   { scriptString: 'changeBg', scriptType: commandType.changeBg, scriptFunction: changeBg },
   { scriptString: 'changeFigure', scriptType: commandType.changeFigure, scriptFunction: changeFigure },
@@ -57,7 +57,7 @@ export const scriptConfig: IConfigInterface[] = [
   { scriptString: 'filmMode', scriptType: commandType.filmMode, scriptFunction: filmMode },
   { scriptString: 'callScene', scriptType: commandType.callScene, scriptFunction: callSceneScript },
 ];
-export const addNextArgList = [
+export const ADD_NEXT_ARG_LIST = [
   commandType.bgm,
   commandType.pixi,
   commandType.pixiInit,

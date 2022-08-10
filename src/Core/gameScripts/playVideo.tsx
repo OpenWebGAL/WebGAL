@@ -2,7 +2,7 @@ import { ISentence } from '@/interface/coreInterface/sceneInterface';
 import { IPerform } from '@/interface/coreInterface/performInterface';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { runtime_gamePlay } from '@/Core/runtime/gamePlay';
+import { RUNTIME_GAMEPLAY } from '@/Core/runtime/gamePlay';
 import { unmountPerform } from '@/Core/controller/perform/unmountPerform';
 import { getRandomPerformName } from '@/Core/controller/perform/getRandomPerformName';
 import styles from '../../Components/Stage/FullScreenPerform/fullScreenPerform.module.scss';
@@ -62,7 +62,7 @@ export const playVideo = (sentence: ISentence): IPerform => {
         stopTimeout: undefined, // 暂时不用，后面会交给自动清除
         goNextWhenOver: true,
       };
-      runtime_gamePlay.performList.push(perform);
+      RUNTIME_GAMEPLAY.performList.push(perform);
       VocalControl.oncanplay = () => {
         /**
          * 把bgm和语音的音量设为0
@@ -81,7 +81,7 @@ export const playVideo = (sentence: ISentence): IPerform => {
         VocalControl.play();
       };
       VocalControl.onended = () => {
-        for (const e of runtime_gamePlay.performList) {
+        for (const e of RUNTIME_GAMEPLAY.performList) {
           if (e.performName === performInitName) {
             e.isOver = true;
             e.stopFunction();

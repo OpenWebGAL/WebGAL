@@ -1,6 +1,6 @@
-import { runtime_currentBacklog } from '@/Core/runtime/backlog';
-import { initSceneData, runtime_currentSceneData } from '@/Core/runtime/sceneData';
-import { runtime_gamePlay } from '@/Core/runtime/gamePlay';
+import { RUNTIME_CURRENT_BACKLOG } from '@/Core/runtime/backlog';
+import { initSceneData, RUNTIME_SCENE_DATA } from '@/Core/runtime/sceneData';
+import { RUNTIME_GAMEPLAY } from '@/Core/runtime/gamePlay';
 import { initState, resetStageState } from '@/store/stageReducer';
 import { webgalStore } from '@/store/store';
 import cloneDeep from 'lodash/cloneDeep';
@@ -10,33 +10,33 @@ export const resetStage = (resetBacklog: boolean) => {
    * 清空运行时
    */
   if (resetBacklog) {
-    runtime_currentBacklog.splice(0, runtime_currentBacklog.length); // 清空backlog
+    RUNTIME_CURRENT_BACKLOG.splice(0, RUNTIME_CURRENT_BACKLOG.length); // 清空backlog
   }
   // 清空sceneData，并重新获取
-  runtime_currentSceneData.currentSentenceId = 0;
-  runtime_currentSceneData.sceneStack = [];
-  runtime_currentSceneData.currentScene = initSceneData.currentScene;
+  RUNTIME_SCENE_DATA.currentSentenceId = 0;
+  RUNTIME_SCENE_DATA.sceneStack = [];
+  RUNTIME_SCENE_DATA.currentScene = initSceneData.currentScene;
 
   // 清空所有演出和timeOut
-  for (const e of runtime_gamePlay.performList) {
+  for (const e of RUNTIME_GAMEPLAY.performList) {
     e.stopFunction();
   }
-  runtime_gamePlay.performList = [];
-  for (const e of runtime_gamePlay.timeoutList) {
+  RUNTIME_GAMEPLAY.performList = [];
+  for (const e of RUNTIME_GAMEPLAY.timeoutList) {
     clearTimeout(e);
   }
-  runtime_gamePlay.timeoutList = [];
-  runtime_gamePlay.isAuto = false;
-  runtime_gamePlay.isFast = false;
-  const autoInterval = runtime_gamePlay.autoInterval;
+  RUNTIME_GAMEPLAY.timeoutList = [];
+  RUNTIME_GAMEPLAY.isAuto = false;
+  RUNTIME_GAMEPLAY.isFast = false;
+  const autoInterval = RUNTIME_GAMEPLAY.autoInterval;
   if (autoInterval !== null) clearInterval(autoInterval);
-  runtime_gamePlay.autoInterval = null;
-  const fastInterval = runtime_gamePlay.fastInterval;
+  RUNTIME_GAMEPLAY.autoInterval = null;
+  const fastInterval = RUNTIME_GAMEPLAY.fastInterval;
   if (fastInterval !== null) clearInterval(fastInterval);
-  runtime_gamePlay.fastInterval = null;
-  const autoTimeout = runtime_gamePlay.autoTimeout;
+  RUNTIME_GAMEPLAY.fastInterval = null;
+  const autoTimeout = RUNTIME_GAMEPLAY.autoTimeout;
   if (autoTimeout !== null) clearInterval(autoTimeout);
-  runtime_gamePlay.autoTimeout = null;
+  RUNTIME_GAMEPLAY.autoTimeout = null;
 
   // 清空舞台状态表
   const initSceneDataCopy = cloneDeep(initState);

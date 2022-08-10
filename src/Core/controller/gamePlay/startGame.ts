@@ -1,4 +1,4 @@
-import { runtime_currentSceneData } from '../../runtime/sceneData';
+import { RUNTIME_SCENE_DATA } from '../../runtime/sceneData';
 import { assetSetter, fileType } from '../../util/gameAssetsAccess/assetSetter';
 import { sceneFetcher } from '../scene/sceneFetcher';
 import { sceneParser } from '../../parser/sceneParser';
@@ -17,7 +17,7 @@ export const startGame = () => {
   const sceneUrl: string = assetSetter('start.txt', fileType.scene);
   // 场景写入到运行时
   sceneFetcher(sceneUrl).then((rawScene) => {
-    runtime_currentSceneData.currentScene = sceneParser(rawScene, 'start.txt', sceneUrl);
+    RUNTIME_SCENE_DATA.currentScene = sceneParser(rawScene, 'start.txt', sceneUrl);
     // 开始第一条语句
     nextSentence();
   });

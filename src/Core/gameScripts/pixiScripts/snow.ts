@@ -1,12 +1,12 @@
 import * as PIXI from 'pixi.js';
-import { runtime_gamePlay } from '@/Core/runtime/gamePlay';
+import { RUNTIME_GAMEPLAY } from '@/Core/runtime/gamePlay';
 
 export const pixiSnow = (snowSpeed: number) => {
   // 动画参数
   // 设置缩放的系数
   const scalePreset = 0.09;
 
-  const app = runtime_gamePlay.currentPixi;
+  const app = RUNTIME_GAMEPLAY.currentPixi;
   const container = new PIXI.Container();
   app.stage.addChild(container);
   // 创建纹理

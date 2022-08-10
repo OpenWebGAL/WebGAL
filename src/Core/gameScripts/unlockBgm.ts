@@ -3,7 +3,7 @@ import { IPerform } from '@/interface/coreInterface/performInterface';
 import { webgalStore } from '@/store/store';
 import { unlockBgmInUserData } from '@/store/userDataReducer';
 import localforage from 'localforage';
-import { gameInfo } from '@/Core/runtime/etc';
+import { RUNTIME_GAME_INFO } from '@/Core/runtime/etc';
 import { logger } from '@/Core/util/etc/logger';
 
 /**
@@ -25,7 +25,7 @@ export const unlockBgm = (sentence: ISentence): IPerform => {
   logger.info(`解锁BGM：${name}，路径：${url}，所属系列：${series}`);
   webgalStore.dispatch(unlockBgmInUserData({ name, url, series }));
   const userDataState = webgalStore.getState().userData;
-  localforage.setItem(gameInfo.gameKey, userDataState).then(() => {});
+  localforage.setItem(RUNTIME_GAME_INFO.gameKey, userDataState).then(() => {});
   return {
     performName: 'none',
     duration: 0,

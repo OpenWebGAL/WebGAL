@@ -1,5 +1,5 @@
 // 切换自动播放状态
-import { runtime_gamePlay } from '../../runtime/gamePlay';
+import { RUNTIME_GAMEPLAY } from '../../runtime/gamePlay';
 import { stopAuto } from './autoPlay';
 import styles from '../../../Components/UI/BottomControlPanel/bottomControlPanel.module.scss';
 import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
@@ -24,11 +24,11 @@ export const stopFast = () => {
   if (!isFast()) {
     return;
   }
-  runtime_gamePlay.isFast = false;
+  RUNTIME_GAMEPLAY.isFast = false;
   setButton(false);
-  if (runtime_gamePlay.fastInterval !== null) {
-    clearInterval(runtime_gamePlay.fastInterval);
-    runtime_gamePlay.fastInterval = null;
+  if (RUNTIME_GAMEPLAY.fastInterval !== null) {
+    clearInterval(RUNTIME_GAMEPLAY.fastInterval);
+    RUNTIME_GAMEPLAY.fastInterval = null;
   }
 };
 
@@ -39,16 +39,16 @@ export const startFast = () => {
   if (isFast()) {
     return;
   }
-  runtime_gamePlay.isFast = true;
+  RUNTIME_GAMEPLAY.isFast = true;
   setButton(true);
-  runtime_gamePlay.fastInterval = setInterval(() => {
+  RUNTIME_GAMEPLAY.fastInterval = setInterval(() => {
     nextSentence();
   }, 100);
 };
 
 // 判断是否是快进模式
 export const isFast = function () {
-  return runtime_gamePlay.isFast;
+  return RUNTIME_GAMEPLAY.isFast;
 };
 
 /**
@@ -64,7 +64,7 @@ export const stopAll = () => {
  */
 export const switchFast = () => {
   // 现在正在快进
-  if (runtime_gamePlay.isFast) {
+  if (RUNTIME_GAMEPLAY.isFast) {
     stopFast();
   } else {
     // 当前不在快进

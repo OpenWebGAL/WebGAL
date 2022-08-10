@@ -2,13 +2,13 @@ import styles from './textbox.module.scss';
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
-import { webgal_env } from '@/env/webgal-env';
+import { PERFORM_CONFIG } from '@/Core/config/performConfig';
 
 export const TextBox = () => {
   const stageState = useSelector((state: RootState) => state.stage);
   const userDataState = useSelector((state: RootState) => state.userData);
   useEffect(() => {});
-  const textDelay = webgal_env.textInitialDelay - 20 * userDataState.optionData.textSpeed;
+  const textDelay = PERFORM_CONFIG.textInitialDelay - 20 * userDataState.optionData.textSpeed;
   const size = userDataState.optionData.textSize * 50 + 200 + '%';
 
   // 拆字
