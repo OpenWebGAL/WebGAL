@@ -24,7 +24,8 @@
 }
 
 .MenuPanel_button:hover {
-    background: radial-gradient(50% 50%, rgba(180, 181, 182, 0.25) 0%,rgba(180, 181, 182, 0.1) 75%, rgba(0, 0, 0, 0) 100%);
+    //background: radial-gradient(50% 50%, rgba(180, 181, 182, 0.25) 0%,rgba(180, 181, 182, 0.1) 75%, rgba(0, 0, 0, 0) 100%);
+  background: linear-gradient(rgba(180, 181, 182, 0.2) 0%,rgba(180, 181, 182, 0.05) 50%, rgba(180, 181, 182, 0.2) 100%);
 }
 
 .MenuPanel_button:last-child {
