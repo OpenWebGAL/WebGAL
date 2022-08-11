@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState, webgalStore } from '@/store/store';
 import { setVisibility } from '@/store/GUIReducer';
 import { logger } from '@/Core/util/etc/logger';
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 
 export const Backlog = () => {
   // logger.info('Backlog render');
@@ -35,16 +35,6 @@ export const Backlog = () => {
               </div>
             )}
             <div className={styles.backlog_item_button_list}>
-              <div
-                onClick={(e) => {
-                  jumpFromBacklog(i);
-                  e.preventDefault();
-                  e.stopPropagation();
-                }}
-                className={styles.backlog_item_button_element}
-              >
-                <Return theme="outline" size="23" fill="#ffffff" strokeWidth={3} />
-              </div>
               {backlogItem.currentStageState.vocal ? (
                 <div
                   onClick={() => {
@@ -63,6 +53,16 @@ export const Backlog = () => {
                   <VolumeNotice theme="outline" size="23" fill="#ffffff" strokeWidth={3} />
                 </div>
               ) : null}
+              <div
+                onClick={(e) => {
+                  jumpFromBacklog(i);
+                  e.preventDefault();
+                  e.stopPropagation();
+                }}
+                className={styles.backlog_item_button_element}
+              >
+                <Return theme="outline" size="23" fill="#ffffff" strokeWidth={3} />
+              </div>
             </div>
           </div>
           <div className={styles.backlog_item_content}>
