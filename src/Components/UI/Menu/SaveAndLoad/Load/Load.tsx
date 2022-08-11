@@ -41,7 +41,7 @@ export const Load: FC = () => {
     const saveData = userDataState.saveData[i];
     let saveElementContent = <div />;
     if (saveData) {
-      const speaker = saveData.nowStageState.showName === '' ? '' : `${saveData.nowStageState.showName}`;
+      const speaker = saveData.nowStageState.showName === '' ? '\u00A0' : `${saveData.nowStageState.showName}`;
       saveElementContent = (
         <>
           <div className={styles.Save_Load_content_element_top}>

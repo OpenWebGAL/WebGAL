@@ -8,10 +8,11 @@
 }
 
 .singleText {
-  font-family: "思源宋体", serif;
+  font-family: "WebgalUI", serif;
   animation: TextDelayShow 1000ms forwards;
   opacity: 0;
   transition: font-size 1s;
+  letter-spacing: 0.05em;
 }
 
 @keyframes TextDelayShow {
