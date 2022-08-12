@@ -51,7 +51,9 @@ export function ExtraCg() {
 
   return (
     <div className={styles.cgMain}>
-      <div className={styles.cgShowDiv}>{showNav}</div>
+      <div className={styles.cgShowDiv}>
+        <div className={styles.cgShowDivWarpper}>{showNav}</div>
+      </div>
       <div className={styles.cgContainer}>{showCgList}</div>
     </div>
   );
