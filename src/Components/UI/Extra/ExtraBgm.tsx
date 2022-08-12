@@ -4,15 +4,22 @@ import React from 'react';
 import styles from '@/Components/UI/Extra/extra.module.scss';
 import { useObject } from '@/hooks/useObject';
 import { setStage } from '@/store/stageReducer';
+import { GoEnd, GoStart, MusicList, PlayOne, SquareSmall } from '@icon-park/react';
 
 export function ExtraBgm() {
   // 检查当前正在播放的bgm是否在bgm列表内
   const currentBgm = useSelector((state: RootState) => state.stage.bgm);
   const extraState = useSelector((state: RootState) => state.userData.appreciationData);
+  // 是否展示 bgm 列表
+  const isShowBgmList = useObject(false);
   let foundCurrentBgmName = 'init_bgm_find_var_WebGAL_4.2.1';
+  let foundCurrentBgmIndex = -1;
+  const bgmPlayerHeight = isShowBgmList.value ? '80%' : '10%';
+  const bgmListLen = extraState.bgm.length;
   extraState.bgm.forEach((e, i) => {
     if (e.url === currentBgm) {
       foundCurrentBgmName = e.name;
+      foundCurrentBgmIndex = i;
     }
   });
   const currentPlayingBgmName = useObject('');
@@ -20,6 +27,13 @@ export function ExtraBgm() {
     currentPlayingBgmName.set(foundCurrentBgmName);
   }
   const dispatch = useDispatch();
+
+  function setBgmByIndex(index: number) {
+    const e = extraState.bgm[index];
+    currentPlayingBgmName.set(e.name);
+    dispatch(setStage({ key: 'bgm', value: e.url }));
+  }
+
   const showBgmList = extraState.bgm.map((e, i) => {
     let className = styles.bgmElement;
     if (e.name === currentPlayingBgmName.value) {
@@ -41,5 +55,63 @@ export function ExtraBgm() {
       </div>
     );
   });
-  return <div className={styles.bgmContainer}>{showBgmList}</div>;
+  return (
+    <div className={styles.bgmContainer} style={{ maxHeight: bgmPlayerHeight }}>
+      <div className={styles.bgmPlayerMain}>
+        <div
+          onClick={() => {
+            if (foundCurrentBgmIndex <= 0) {
+              setBgmByIndex(bgmListLen - 1);
+            } else {
+              setBgmByIndex(foundCurrentBgmIndex - 1);
+            }
+          }}
+          className={styles.bgmControlButton}
+        >
+          <GoStart theme="filled" size="24" fill="#fff" strokeWidth={3} strokeLinejoin="miter" />
+        </div>
+        <div
+          onClick={() => {
+            const bgmControl: HTMLAudioElement = document.getElementById('currentBgm') as HTMLAudioElement;
+            bgmControl.play().then();
+          }}
+          className={styles.bgmControlButton}
+        >
+          <PlayOne theme="filled" size="24" fill="#fff" strokeWidth={3} strokeLinejoin="miter" />
+        </div>
+        <div
+          onClick={() => {
+            if (foundCurrentBgmIndex >= bgmListLen - 1) {
+              setBgmByIndex(0);
+            } else {
+              setBgmByIndex(foundCurrentBgmIndex + 1);
+            }
+          }}
+          className={styles.bgmControlButton}
+        >
+          <GoEnd theme="filled" size="24" fill="#fff" strokeWidth={3} strokeLinejoin="miter" />
+        </div>
+        <div
+          onClick={() => {
+            const bgmControl: HTMLAudioElement = document.getElementById('currentBgm') as HTMLAudioElement;
+            bgmControl.pause();
+          }}
+          className={styles.bgmControlButton}
+        >
+          <SquareSmall theme="filled" size="24" fill="#fff" strokeWidth={3} strokeLinejoin="miter" />
+        </div>
+        <div className={styles.bgmName}>{foundCurrentBgmName}</div>
+        <div
+          onClick={() => {
+            isShowBgmList.set(!isShowBgmList.value);
+          }}
+          className={styles.bgmControlButton}
+          style={{ marginLeft: 'auto' }}
+        >
+          <MusicList theme="filled" size="24" fill="#fff" strokeWidth={3} strokeLinejoin="miter" />
+        </div>
+      </div>
+      {isShowBgmList.value && <div className={styles.bgmListContainer}> {showBgmList}</div>}
+    </div>
+  );
 }

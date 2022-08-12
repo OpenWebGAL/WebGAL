@@ -28,8 +28,8 @@ export function Extra() {
             <div className={styles.extra_title}>鉴赏模式</div>
           </div>
           <div className={styles.mainContainer}>
-            <ExtraBgm />
             <ExtraCg />
+            <ExtraBgm />
           </div>
         </div>
       )}
