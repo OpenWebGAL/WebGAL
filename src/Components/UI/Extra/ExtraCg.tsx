@@ -7,7 +7,7 @@ import './extraCG_animation_List.scss';
 import { ExtraCgElement } from '@/Components/UI/Extra/ExtraCgElement';
 
 export function ExtraCg() {
-  const cgPerPage = 9;
+  const cgPerPage = 8;
   const extraState = useSelector((state: RootState) => state.userData.appreciationData);
   const pageNumber = Math.ceil(extraState.cg.length / cgPerPage);
   const currentPage = useObject(1);
@@ -51,8 +51,8 @@ export function ExtraCg() {
 
   return (
     <div className={styles.cgMain}>
-      <div className={styles.cgContainer}>{showCgList}</div>
       <div className={styles.cgShowDiv}>{showNav}</div>
+      <div className={styles.cgContainer}>{showCgList}</div>
     </div>
   );
 }
