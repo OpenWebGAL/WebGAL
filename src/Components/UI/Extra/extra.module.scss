@@ -88,6 +88,7 @@
   justify-content: flex-start;
   align-items: flex-start;
   margin: 0 0 15px 0 ;
+  flex-wrap: wrap;
 }
 
 .bgmPlayerMain {
@@ -127,15 +128,16 @@
   font-size: 125%;
   margin: 0.5em 1em 0.5em 0.5em;
   transition: background-color 1s, color 1s;
-  opacity: 0;
-  animation: bgmElement_In 0.5s forwards ease-out;
+  opacity: 1;
+  //animation: bgmElement_In 0.5s forwards ease-out;
   cursor: pointer;
-  width: 33%;
+  width: 28%;
+  flex-shrink: 0;
 }
 
 @keyframes bgmElement_In {
   0% {
-    opacity: 0;
+    opacity: 0.95;
     //transform: translate(-50px, 0);
   }
   100% {
@@ -168,12 +170,12 @@
   align-content: flex-start;
   height: 90%;
   box-sizing: border-box;
-  padding: 2em 0 0 2em;
+  padding: 4em 0 0 2em;
 }
 
 .cgElement {
   width: 22.5%;
-  height: 35%;
+  height: 37.5%;
   background-color: rgba(255, 255, 255, 0.75);
   box-shadow: 0 0 15px 5px rgba(0, 0, 0, 0.35);
   box-sizing: border-box;
@@ -187,7 +189,7 @@
 }
 
 .cgShowDiv {
-  height: 10%;
+  height: 8%;
   width: 100%;
   display: flex;
   flex-flow: row;
@@ -195,18 +197,34 @@
   align-items: flex-end;
 }
 
+.cgShowDivWarpper{
+  display: flex;
+  flex-flow: row;
+  justify-content: center;
+  align-items: flex-end;
+  background: rgba(0,0,0,0.1);
+  border-radius: 4px;
+}
 
 .cgNav {
-  font-size: 150%;
-  background-color: rgba(0, 0, 0, 0.2);
+  font-size: 170%;
+  //background-color: rgba(0, 0, 0, 0.2);
   color: white;
   padding: 0.25em 1em 0.25em 1em;
-  margin: 0 0.5em 0 0.5em;
+  margin: 0 0.25em 0 0.25em;
   width: 20px;
   text-align: center;
   transition: background-color 1s, color 1s;
   cursor: pointer;
   border-radius: 4px;
+}
+
+.cgNav:first-child{
+  margin-left: 0;
+}
+
+.cgNav:last-child{
+  margin-right: 0;
 }
 
 .cgNav_active {
