@@ -54,16 +54,68 @@
   padding: 0 2em 0 2em;
   display: flex;
   height: 92%;
+  flex-flow: column;
 }
 
 .bgmContainer {
+  left: 50px;
+  right: 50px;
+  bottom: 30px;
+  position: absolute;
   overflow: auto;
-  width: 30%;
-  margin: 1.25em 0 2.65em 0;
-  padding: 0 1em 0 0;
+  //width: 100%;
+  //height: 70%;
   box-sizing: border-box;
+  display: flex;
+  flex-flow: column-reverse;
+  align-content: center;
+  background-image: linear-gradient(315deg, rgba(163, 189, 237, 0.95) 0%, rgba(105, 145, 199, 0.95) 100%);
+  padding: 1em 2em 1em 2em;
+  border-radius: 4px;
+  transition: max-height 0.5s;
+  z-index: 2;
 }
 
+.bgmListContainer {
+  z-index: 2;
+  bottom: 0;
+  overflow: hidden;
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  flex: 1;
+  flex-flow: row;
+  justify-content: flex-start;
+  align-items: flex-start;
+  margin: 0 0 15px 0 ;
+}
+
+.bgmPlayerMain {
+  display: flex;
+}
+
+.bgmControlButton {
+  padding: 7px 22px 2px 22px;
+  margin: 0 5px 0 5px;
+  box-sizing: border-box;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  transition: all 0.33s;
+  flex-shrink: 0;
+}
+
+.bgmControlButton:hover{
+  box-shadow: 0 0 10px 5px rgba(255,255,255,0.35);
+}
+
+.bgmName {
+  color: rgba(255, 255, 255, 0.8);
+  font-family: "思源宋体", serif;
+  font-size: 155%;
+  margin: 0 5px 0 15px;
+  overflow: hidden;
+}
 
 .bgmElement {
   font-family: "思源宋体", serif;
@@ -72,18 +124,19 @@
   background-color: rgba(0, 0, 0, 0.1);
   border-radius: 5px;
   color: white;
-  font-size: 150%;
-  margin: 0 0 0.5em 0;
+  font-size: 125%;
+  margin: 0.5em 1em 0.5em 0.5em;
   transition: background-color 1s, color 1s;
   opacity: 0;
   animation: bgmElement_In 0.5s forwards ease-out;
   cursor: pointer;
+  width: 33%;
 }
 
 @keyframes bgmElement_In {
   0% {
     opacity: 0;
-    transform: translate(-50px, 0);
+    //transform: translate(-50px, 0);
   }
   100% {
     opacity: 1;
@@ -103,7 +156,7 @@
 
 .cgMain {
   width: 100%;
-  height: 100%;
+  height: 88%;
 }
 
 .cgContainer {
@@ -115,12 +168,12 @@
   align-content: flex-start;
   height: 90%;
   box-sizing: border-box;
-  padding: 0 0 0 2em;
+  padding: 2em 0 0 2em;
 }
 
 .cgElement {
-  width: 30%;
-  height: 30%;
+  width: 22.5%;
+  height: 35%;
   background-color: rgba(255, 255, 255, 0.75);
   box-shadow: 0 0 15px 5px rgba(0, 0, 0, 0.35);
   box-sizing: border-box;
@@ -153,6 +206,7 @@
   text-align: center;
   transition: background-color 1s, color 1s;
   cursor: pointer;
+  border-radius: 4px;
 }
 
 .cgNav_active {
