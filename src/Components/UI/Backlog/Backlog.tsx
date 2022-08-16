@@ -136,9 +136,11 @@ export const Backlog = () => {
               回想
             </div>
           </div>
-          <div className={`${styles.backlog_content} ${isDisableScroll ? styles.Backlog_main_DisableScroll : ''}`}>
-            {backlogList}
-          </div>
+          {GUIStore.showBacklog && (
+            <div className={`${styles.backlog_content} ${isDisableScroll ? styles.Backlog_main_DisableScroll : ''}`}>
+              {backlogList}
+            </div>
+          )}
         </div>
       }
     </>

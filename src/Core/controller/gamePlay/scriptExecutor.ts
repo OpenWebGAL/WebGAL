@@ -11,6 +11,7 @@ import { getValueFromState } from '@/Core/gameScripts/setVar';
 import { strIf } from '@/Core/gameScripts/function/strIf';
 import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
 import cloneDeep from 'lodash/cloneDeep';
+import { SYSTEM_CONFIG } from '@/Core/config/systemConfig';
 
 /**
  * 语句执行器
@@ -121,6 +122,11 @@ export const scriptExecutor = () => {
         },
       };
       RUNTIME_CURRENT_BACKLOG.push(backlogElement);
+
+      // 清除超出长度的部分
+      while (RUNTIME_CURRENT_BACKLOG.length > SYSTEM_CONFIG.backlog_size) {
+        RUNTIME_CURRENT_BACKLOG.shift();
+      }
     }
   }, 0);
   RUNTIME_SCENE_DATA.currentSentenceId++;
