@@ -32,6 +32,7 @@
         "cloudlogjs": "^1.0.9",
         "localforage": "^1.10.0",
         "lodash": "^4.17.21",
+        "modern-css-reset": "^1.4.0",
         "pixi.js": "^6.3.0",
         "react": "^17.0.2",
         "react-dom": "^17.0.2",
