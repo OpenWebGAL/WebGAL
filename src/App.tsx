@@ -9,6 +9,7 @@ import { Provider } from 'react-redux';
 import { webgalStore } from './store/store';
 import { Extra } from '@/Components/UI/Extra/Extra';
 import { BottomControlPanelFilm } from './Components/UI/BottomControlPanel/BottomControlPanelFilm';
+import GlobalDialog from '@/Components/UI/GlobalDialog/GlobalDialog';
 
 function App() {
   useEffect(() => {
@@ -25,6 +26,7 @@ function App() {
         <BottomControlPanel />
         <BottomControlPanelFilm />
         <Backlog />
+        <GlobalDialog />
       </Provider>
     </div>
   );

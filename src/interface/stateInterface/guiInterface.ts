@@ -20,6 +20,7 @@ export interface IGuiState {
   titleBgm: string; // 标题背景音乐
   titleBg: string; // 标题背景图片
   showExtra: boolean;
+  showGlobalDialog: boolean;
 }
 
 export type componentsVisibility = Pick<IGuiState, Exclude<keyof IGuiState, 'currentMenuTag' | 'titleBg' | 'titleBgm'>>;
