@@ -36,13 +36,25 @@ export const BottomControlPanel = () => {
         <div className={styles.main}>
           {GUIStore.showTextBox && (
             <span className={styles.singleButton} onClick={() => setComponentVisibility('showTextBox', false)}>
-              <PreviewCloseOne className={styles.button} theme="outline" size="30" fill="#f5f5f7" strokeWidth={strokeWidth} />
+              <PreviewCloseOne
+                className={styles.button}
+                theme="outline"
+                size="30"
+                fill="#f5f5f7"
+                strokeWidth={strokeWidth}
+              />
               <span className={styles.button_text}>隐藏</span>
             </span>
           )}
           {!GUIStore.showTextBox && (
             <span className={styles.singleButton} onClick={() => setComponentVisibility('showTextBox', true)}>
-              <PreviewOpen className={styles.button} theme="outline" size="30" fill="#f5f5f7" strokeWidth={strokeWidth} />
+              <PreviewOpen
+                className={styles.button}
+                theme="outline"
+                size="30"
+                fill="#f5f5f7"
+                strokeWidth={strokeWidth}
+              />
               <span className={styles.button_text}>显示</span>
             </span>
           )}
@@ -53,7 +65,13 @@ export const BottomControlPanel = () => {
               setComponentVisibility('showTextBox', false);
             }}
           >
-            <AlignTextLeftOne className={styles.button} theme="outline" size="30" fill="#f5f5f7" strokeWidth={strokeWidth} />
+            <AlignTextLeftOne
+              className={styles.button}
+              theme="outline"
+              size="30"
+              fill="#f5f5f7"
+              strokeWidth={strokeWidth}
+            />
             <span className={styles.button_text}>回想</span>
           </span>
           <span
