@@ -24,7 +24,7 @@ const initState: IGuiState = {
   titleBg: '',
   titleBgm: '',
   showExtra: false,
-  showGlobalDialog: true,
+  showGlobalDialog: false,
 };
 
 /**

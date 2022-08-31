@@ -1,5 +1,54 @@
 import styles from './globalDialog.module.scss';
+import ReactDOM from 'react-dom';
+import { useSelector } from 'react-redux';
+import { RootState, webgalStore } from '@/store/store';
+import { setVisibility } from '@/store/GUIReducer';
 
 export default function GlobalDialog() {
-  return <div className={styles.GlobalDialog_main}>Global Dialog</div>;
+  const isGlobalDialogShow = useSelector((state: RootState) => state.GUI.showGlobalDialog);
+  return <>{isGlobalDialogShow && <div id="globalDialogContainer" />}</>;
+}
+
+interface IShowGlobalDialogProps {
+  title: string;
+  leftText: string;
+  rightText: string;
+  leftFunc: Function;
+  rightFunc: Function;
+}
+
+export function showGlogalDialog(props: IShowGlobalDialogProps) {
+  webgalStore.dispatch(setVisibility({ component: 'showGlobalDialog', visibility: true }));
+  const handleLeft = () => {
+    props.leftFunc();
+    hideGlobalDialog();
+  };
+  const handleRight = () => {
+    props.rightFunc();
+    hideGlobalDialog();
+  };
+  const renderElement = (
+    <div className={styles.GlobalDialog_main}>
+      <div className={styles.glabalDialog_container}>
+        <div className={styles.glabalDialog_container_inner}>
+          <div className={styles.title}>{props.title}</div>
+          <div className={styles.button_list}>
+            <div className={styles.button} onClick={handleLeft}>
+              {props.leftText}
+            </div>
+            <div className={styles.button} onClick={handleRight}>
+              {props.rightText}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+  setTimeout(() => {
+    ReactDOM.render(renderElement, document.getElementById('globalDialogContainer'));
+  }, 100);
+}
+
+export function hideGlobalDialog() {
+  webgalStore.dispatch(setVisibility({ component: 'showGlobalDialog', visibility: false }));
 }
