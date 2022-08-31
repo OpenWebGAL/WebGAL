@@ -5,6 +5,7 @@ import { setStorage } from '@/Core/controller/storage/storageController';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import { setSlPage } from '@/store/userDataReducer';
+import { showGlogalDialog } from '@/Components/UI/GlobalDialog/GlobalDialog';
 
 export const Save: FC = () => {
   const userDataState = useSelector((state: RootState) => state.userData);
@@ -103,7 +104,23 @@ export const Save: FC = () => {
     // }
     const saveElement = (
       <div
-        onClick={() => saveGame(i)}
+        onClick={() => {
+          console.log('123', userDataState.saveData[i]);
+          if (userDataState.saveData[i]) {
+            showGlogalDialog({
+              title: '是否覆盖存档？',
+              leftText: '是',
+              rightText: '否',
+              leftFunc: () => {
+                saveGame(i);
+                setStorage();
+              },
+              rightFunc: () => {},
+            });
+          } else {
+            saveGame(i);
+          }
+        }}
         key={'saveElement_' + i}
         className={styles.Save_Load_content_element}
         style={{ animationDelay: `${animationIndex * 30}ms` }}
