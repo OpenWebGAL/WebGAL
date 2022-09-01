@@ -56,7 +56,7 @@ export const TextBox = () => {
           {stageState.showName}
         </div>
       )}
-      <div style={{ fontSize: size }}>{textElementList}</div>
+      <div style={{ fontSize: size, wordBreak: 'break-word' }}>{textElementList}</div>
     </div>
   );
 };
