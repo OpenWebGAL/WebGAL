@@ -63,8 +63,14 @@ export function useMouseRightClickHotKey() {
   const setComponentVisibility = useSetComponentVisibility();
   const isGameActive = useGameActive<typeof GUIStore>(GUIStore);
   const isInBackLog = useIsInBackLog<typeof GUIStore>(GUIStore);
+  const isOpenedDialog = useIsOpenedDialog<typeof GUIStore>(GUIStore);
   const validMenuPanelTag = useValidMenuPanelTag<typeof GUIStore>(GUIStore);
   const handleContextMenu = useCallback((ev: MouseEvent) => {
+    if (isOpenedDialog()) {
+      setComponentVisibility('showGlobalDialog', false);
+      ev.preventDefault();
+      return false;
+    }
     if (isGameActive()) {
       setComponentVisibility('showTextBox', !GUIStore.current.showTextBox);
     }
@@ -259,6 +265,13 @@ function useGameActive<T = any>(GUIStore: T & any): () => boolean {
 function useIsInBackLog<T = any>(GUIStore: T & any): () => boolean {
   return useCallback(() => {
     return GUIStore.current.showBacklog;
+  }, [GUIStore]);
+}
+
+// 判断是否打开了全局对话框
+function useIsOpenedDialog<T = any>(GUIStore: T & any): () => boolean {
+  return useCallback(() => {
+    return GUIStore.current.showGlobalDialog;
   }, [GUIStore]);
 }
 
