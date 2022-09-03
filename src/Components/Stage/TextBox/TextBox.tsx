@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import { PERFORM_CONFIG } from '@/Core/config/performConfig';
+import { useFontFamily } from '@/hooks/useFontFamily';
 
 export const TextBox = () => {
   const stageState = useSelector((state: RootState) => state.stage);
@@ -10,6 +11,7 @@ export const TextBox = () => {
   useEffect(() => {});
   const textDelay = PERFORM_CONFIG.textInitialDelay - 20 * userDataState.optionData.textSpeed;
   const size = userDataState.optionData.textSize * 50 + 200 + '%';
+  const font = useFontFamily();
 
   // 拆字
   const textArray: Array<string> = stageState.showText.split('');
@@ -45,7 +47,7 @@ export const TextBox = () => {
     );
   });
   return (
-    <div id="textBoxMain" className={styles.TextBox_main}>
+    <div id="textBoxMain" className={styles.TextBox_main} style={{ fontFamily: font }}>
       <div id="miniAvatar" className={styles.miniAvatarContainer}>
         {stageState.miniAvatar !== '' && (
           <img className={styles.miniAvatarImg} alt="miniAvatar" src={stageState.miniAvatar} />

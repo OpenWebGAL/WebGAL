@@ -16,6 +16,11 @@ export enum textSize {
   large,
 }
 
+export enum textFont {
+  song,
+  hei,
+}
+
 /**
  * @interface IOptionData 用户设置数据接口
  */
@@ -27,6 +32,7 @@ export interface IOptionData {
   vocalVolume: number; // 语音音量
   bgmVolume: number; // 背景音乐音量
   slPage: number; // 存读档界面所在页面
+  textboxFont: textFont;
 }
 
 /**
