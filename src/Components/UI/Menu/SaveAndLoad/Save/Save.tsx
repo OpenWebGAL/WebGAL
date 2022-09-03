@@ -105,7 +105,6 @@ export const Save: FC = () => {
     const saveElement = (
       <div
         onClick={() => {
-          console.log('123', userDataState.saveData[i]);
           if (userDataState.saveData[i]) {
             showGlogalDialog({
               title: '是否覆盖存档？',
