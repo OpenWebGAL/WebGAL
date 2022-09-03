@@ -10,22 +10,26 @@ import {
   ISetUserDataPayload,
   IUserData,
   playSpeed,
+  textFont,
   textSize,
 } from '@/interface/stateInterface/userDataInterface';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
+const initialOptionSet = {
+  slPage: 1,
+  volumeMain: 100, // 主音量
+  textSpeed: playSpeed.normal, // 文字速度
+  autoSpeed: playSpeed.normal, // 自动播放速度
+  textSize: textSize.medium,
+  vocalVolume: 100, // 语音音量
+  bgmVolume: 25, // 背景音乐音量
+  textboxFont: textFont.song,
+};
+
 // 初始化用户数据
 export const initState: IUserData = {
   saveData: [],
-  optionData: {
-    slPage: 1,
-    volumeMain: 100, // 主音量
-    textSpeed: playSpeed.normal, // 文字速度
-    autoSpeed: playSpeed.normal, // 自动播放速度
-    textSize: textSize.medium,
-    vocalVolume: 100, // 语音音量
-    bgmVolume: 25, // 背景音乐音量
-  },
+  optionData: initialOptionSet,
   appreciationData: {
     bgm: [],
     cg: [],
@@ -104,6 +108,12 @@ const userDataSlice = createSlice({
     setFastSave: (state, action: PayloadAction<ISaveData | null>) => {
       state.quickSaveData = action.payload;
     },
+    resetOptionSet(state) {
+      Object.assign(state.optionData, initialOptionSet);
+    },
+    resetSaveData(state) {
+      state.saveData.splice(0, state.saveData.length);
+    },
   },
 });
 
@@ -115,6 +125,8 @@ export const {
   unlockCgInUserData,
   unlockBgmInUserData,
   setFastSave,
+  resetOptionSet,
+  resetSaveData,
 } = userDataSlice.actions;
 export default userDataSlice.reducer;
 

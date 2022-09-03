@@ -3,17 +3,21 @@ import styles from './textPreview.module.scss';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import { PERFORM_CONFIG } from '@/Core/config/performConfig';
+import { textFont } from '@/interface/stateInterface/userDataInterface';
+import { useFontFamily } from '@/hooks/useFontFamily';
 
 export const TextPreview = (props: any) => {
   const userDataState = useSelector((state: RootState) => state.userData);
   const textDelay = PERFORM_CONFIG.textInitialDelay - 20 * userDataState.optionData.textSpeed;
   const previewText = '现在预览的是文本框字体大小和播放速度的情况，您可以根据您的观感调整上面的选项。';
   const size = userDataState.optionData.textSize * 50 + 200 + '%';
+  const font = useFontFamily();
+
   let classNameText = styles.singleText;
   const previewTextArray = previewText.split('').map((e, i) => (
     <span
       id={textDelay + 'text' + i}
-      style={{ fontSize: size, animationDelay: String(i * textDelay) + 'ms' }}
+      style={{ fontSize: size, animationDelay: String(i * textDelay) + 'ms', fontFamily: font }}
       className={classNameText}
       key={e + i + userDataState.optionData.textSpeed}
     >

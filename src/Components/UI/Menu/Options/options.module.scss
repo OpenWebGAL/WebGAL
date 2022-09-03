@@ -57,18 +57,19 @@
 }
 
 .Options_main_content {
-  height: 85%;
   display: flex;
+  flex: 1;
+  padding: 0 0 0 3em;
 }
 
 .Options_main_content_half {
-  width: 50%;
+  width: 95%;
   display: flex;
   flex-flow: row;
   align-items: flex-start;
   align-content: flex-start;
   flex-wrap: wrap;
-  padding: 1em 1em 1em 1em;
+  padding: 0 1em 0 1em;
 }
 
 @keyframes Elements_in {
@@ -80,4 +81,36 @@
     opacity: 1;
     transform: scale(1, 1) translate(0, 0);
   }
+}
+
+.Options_page_container {
+  height: 85%;
+  display: flex;
+  padding: 2em 3.75em 2em 3.75em;
+}
+
+.Options_button_list{
+  animation: Elements_in ease-out 0.7s forwards;
+}
+
+.Options_page_button {
+  font-family: "思源宋体", serif;
+  font-size: 300%;
+  font-weight: bold;
+  color: transparent;
+  background: linear-gradient(to left, #227D51, rgba(81, 110, 65, 1));
+  opacity: 0.35;
+  -webkit-background-clip: text;
+  transition: all 0.33s;
+  cursor: pointer;
+}
+
+.Options_page_button_active {
+  background: linear-gradient(to left, #227D51, rgba(81, 110, 65, 1));
+  -webkit-background-clip: text;
+  opacity: 1;
+}
+
+.Options_page_button:hover {
+  opacity: 1;
 }
