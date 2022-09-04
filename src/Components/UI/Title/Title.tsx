@@ -23,7 +23,7 @@ const Title: FC = () => {
     <>
       {GUIState.showTitle && <div className={styles.Title_backup_background} />}
       <div
-        id="play_title_bgm_target"
+        id="enter_game_target"
         onClick={() => {
           playBgm(GUIState.titleBgm);
         }}

@@ -3,7 +3,6 @@ import styles from './textPreview.module.scss';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import { PERFORM_CONFIG } from '@/Core/config/performConfig';
-import { textFont } from '@/interface/stateInterface/userDataInterface';
 import { useFontFamily } from '@/hooks/useFontFamily';
 
 export const TextPreview = (props: any) => {

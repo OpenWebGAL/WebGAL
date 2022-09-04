@@ -4,7 +4,7 @@ import { RootState } from '@/store/store';
 import { NormalOption } from '@/Components/UI/Menu/Options/NormalOption';
 import { NormalButton } from '@/Components/UI/Menu/Options/NormalButton';
 import { setOptionData } from '@/store/userDataReducer';
-import {playSpeed, textFont, textSize} from '@/interface/stateInterface/userDataInterface';
+import { playSpeed, textFont, textSize } from '@/interface/stateInterface/userDataInterface';
 import { setStorage } from '@/Core/controller/storage/storageController';
 import { TextPreview } from '@/Components/UI/Menu/Options/TextPreview/TextPreview';
 

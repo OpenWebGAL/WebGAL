@@ -87,7 +87,7 @@
   flex-flow: row;
   justify-content: flex-start;
   align-items: flex-start;
-  margin: 0 0 15px 0 ;
+  margin: 0 0 15px 0;
   flex-wrap: wrap;
 }
 
@@ -106,8 +106,8 @@
   flex-shrink: 0;
 }
 
-.bgmControlButton:hover{
-  box-shadow: 0 0 10px 5px rgba(255,255,255,0.35);
+.bgmControlButton:hover {
+  box-shadow: 0 0 10px 5px rgba(255, 255, 255, 0.35);
 }
 
 .bgmName {
@@ -197,12 +197,12 @@
   align-items: flex-end;
 }
 
-.cgShowDivWarpper{
+.cgShowDivWarpper {
   display: flex;
   flex-flow: row;
   justify-content: center;
   align-items: flex-end;
-  background: rgba(0,0,0,0.1);
+  background: rgba(0, 0, 0, 0.1);
   border-radius: 4px;
 }
 
@@ -219,11 +219,11 @@
   border-radius: 4px;
 }
 
-.cgNav:first-child{
+.cgNav:first-child {
   margin-left: 0;
 }
 
-.cgNav:last-child{
+.cgNav:last-child {
   margin-right: 0;
 }
 
