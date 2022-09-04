@@ -46,7 +46,6 @@ src
 |  |     ├─stateInterface
 |  |     |       ├─guiInterface.ts
 |  |     |       ├─stageInterface.ts
-|  |     |       ├─storeRefInterface.ts
 |  |     |       └userDataInterface.ts
 |  |     ├─coreInterface
 |  |     |       ├─performInterface.ts
