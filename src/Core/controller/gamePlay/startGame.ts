@@ -10,14 +10,29 @@ import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
 /**
  * 从头开始游戏
  */
+// export const startGame = () => {
+//   resetStage(true);
+
+//   // 重新获取初始场景
+//   const sceneUrl: string = assetSetter('start.txt', fileType.scene);
+//   // 场景写入到运行时
+//   sceneFetcher(sceneUrl).then((rawScene) => {
+//     RUNTIME_SCENE_DATA.currentScene = sceneParser(rawScene, 'start.txt', sceneUrl);
+//     // 开始第一条语句
+//     nextSentence();
+//   });
+//   webgalStore.dispatch(setVisibility({ component: 'showTitle', visibility: false }));
+// };
+
+// 测试能不能改文件后缀名
 export const startGame = () => {
   resetStage(true);
 
   // 重新获取初始场景
-  const sceneUrl: string = assetSetter('start.txt', fileType.scene);
+  const sceneUrl: string = assetSetter('start.scene', fileType.scene);
   // 场景写入到运行时
   sceneFetcher(sceneUrl).then((rawScene) => {
-    RUNTIME_SCENE_DATA.currentScene = sceneParser(rawScene, 'start.txt', sceneUrl);
+    RUNTIME_SCENE_DATA.currentScene = sceneParser(rawScene, 'start.scene', sceneUrl);
     // 开始第一条语句
     nextSentence();
   });
