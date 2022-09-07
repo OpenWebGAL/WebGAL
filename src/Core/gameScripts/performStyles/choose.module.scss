@@ -9,6 +9,7 @@
   z-index: 13;
   background: rgba(0, 0, 0, 0.05);
   animation: Choose_main 0.3s;
+  -webkit-animation: Choose_main 0.3s;
 }
 
 .Choose_item {
@@ -17,7 +18,7 @@
   min-width: 50%;
   padding: 0.25em 1em 0.25em 1em;
   font-size: 265%;
-  color: #8E354A;
+  color: #355c8e;
   text-align: center;
   border-radius: 4px;
   border: 3px solid rgba(0, 0, 0, 0);
@@ -25,13 +26,18 @@
   background: rgba(255, 255, 255, 0.65);
   margin: 0.25em 0 0.25em 0;
   transition: background-color 0.5s, border 0.5s, font-weight 0.5s, box-shadow 0.5s;
+  animation: Choose_main 0.3s;
+  -webkit-animation: Choose_main 0.3s;
+
 }
 
 .Choose_item:hover {
   //font-weight: bold;
   background: rgba(255, 255, 255, 0.9);
   box-shadow: 0 0 25px rgba(0, 0, 0, 0.35);
-  border: 3px solid #8E354A;
+  border: 3px solid #355c8e;
+  animation: Choose_main 0.3s;
+  -webkit-animation: Choose_main 0.3s;
 }
 
 
