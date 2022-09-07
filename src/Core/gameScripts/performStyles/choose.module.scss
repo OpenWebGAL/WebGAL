@@ -8,6 +8,7 @@
   align-items: center;
   z-index: 13;
   background: rgba(0, 0, 0, 0.05);
+  animation: Choose_main 0.3s;
 }
 
 .Choose_item {
@@ -31,4 +32,14 @@
   background: rgba(255, 255, 255, 0.9);
   box-shadow: 0 0 25px rgba(0, 0, 0, 0.35);
   border: 3px solid #8E354A;
+}
+
+
+@keyframes Choose_Main {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
