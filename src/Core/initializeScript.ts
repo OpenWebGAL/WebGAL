@@ -42,12 +42,12 @@ export const initializeScript = (): void => {
   // 获得 userAnimation
   loadStyle('./game/userAnimation.css');
   // 获取游戏信息
-  infoFetcher('./game/config.txt');
+  infoFetcher('./game/config.wgconf');
   // 获取start场景
-  const sceneUrl: string = assetSetter('start.txt', fileType.scene);
+  const sceneUrl: string = assetSetter('start.scene', fileType.scene);
   // 场景写入到运行时
   sceneFetcher(sceneUrl).then((rawScene) => {
-    RUNTIME_SCENE_DATA.currentScene = sceneParser(rawScene, 'start.txt', sceneUrl);
+    RUNTIME_SCENE_DATA.currentScene = sceneParser(rawScene, 'start.scene', sceneUrl);
     // 开始场景的预加载
     const subSceneList = RUNTIME_SCENE_DATA.currentScene.subSceneList;
     RUNTIME_SETTLED_SCENES.push(sceneUrl); // 放入已加载场景列表，避免递归加载相同场景

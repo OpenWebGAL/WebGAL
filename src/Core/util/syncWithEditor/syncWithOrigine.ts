@@ -10,7 +10,7 @@ import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
 
 export const syncWithOrigine = (str: string) => {
   const strLst = str.split(' ');
-  const scene = strLst[1].replace(/json/g, 'txt');
+  const scene = strLst[1].replace(/json/g, 'scene');
   const sentenceID = parseInt(strLst[2], 10);
   logger.warn('正在跳转到' + scene + ':' + sentenceID);
   const dispatch = webgalStore.dispatch;
@@ -21,7 +21,7 @@ export const syncWithOrigine = (str: string) => {
   const sceneUrl: string = assetSetter(scene, fileType.scene);
   // 场景写入到运行时
   sceneFetcher(sceneUrl).then((rawScene) => {
-    RUNTIME_SCENE_DATA.currentScene = sceneParser(rawScene, 'start.txt', sceneUrl);
+    RUNTIME_SCENE_DATA.currentScene = sceneParser(rawScene, 'start.scene', sceneUrl);
     // 开始快进到指定语句
     const currentSceneName = RUNTIME_SCENE_DATA.currentScene.sceneName;
     syncFast(sentenceID, currentSceneName);

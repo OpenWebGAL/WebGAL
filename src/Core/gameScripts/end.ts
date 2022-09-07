@@ -16,10 +16,10 @@ export const end = (sentence: ISentence): IPerform => {
   resetStage(true);
   const dispatch = webgalStore.dispatch;
   // 重新获取初始场景
-  const sceneUrl: string = assetSetter('start.txt', fileType.scene);
+  const sceneUrl: string = assetSetter('start.scene', fileType.scene);
   // 场景写入到运行时
   sceneFetcher(sceneUrl).then((rawScene) => {
-    RUNTIME_SCENE_DATA.currentScene = sceneParser(rawScene, 'start.txt', sceneUrl);
+    RUNTIME_SCENE_DATA.currentScene = sceneParser(rawScene, 'start.scene', sceneUrl);
   });
   dispatch(setVisibility({ component: 'showTitle', visibility: true }));
   return {
