@@ -8,8 +8,9 @@
   align-items: center;
   z-index: 13;
   background: rgba(0, 0, 0, 0.05);
-  animation: Choose_main 0.3s;
-  -webkit-animation: Choose_main 0.3s;
+  animation: Choose_Main 0.3s;
+  -webkit-animation: Choose_Main 0.3s;
+  -moz-animation: Choose_Main 0.3s;
 }
 
 .Choose_item {
@@ -26,9 +27,9 @@
   background: rgba(255, 255, 255, 0.65);
   margin: 0.25em 0 0.25em 0;
   transition: background-color 0.5s, border 0.5s, font-weight 0.5s, box-shadow 0.5s;
-  animation: Choose_main 0.3s;
-  -webkit-animation: Choose_main 0.3s;
-
+  animation: Choose_Main 0.3s;
+  -webkit-animation: Choose_Main 0.3s;
+  -moz-animation: Choose_Main 0.3s;
 }
 
 .Choose_item:hover {
@@ -36,8 +37,9 @@
   background: rgba(255, 255, 255, 0.9);
   box-shadow: 0 0 25px rgba(0, 0, 0, 0.35);
   border: 3px solid #355c8e;
-  animation: Choose_main 0.3s;
-  -webkit-animation: Choose_main 0.3s;
+  animation: Choose_Main 0.3s;
+  -moz-animation: Choose_Main 0.3s;
+  -webkit-animation: Choose_Main 0.3s;
 }
 
 
