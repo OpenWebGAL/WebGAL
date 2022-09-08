@@ -34,7 +34,7 @@ export function Display() {
           currentChecked={userDataState.optionData.textSpeed}
         />
       </NormalOption>
-      <NormalOption key="option2" title="文本大小">
+      <NormalOption key="option1" title="文本大小">
         <NormalButton
           textList={['小', '中', '大']}
           functionList={[
