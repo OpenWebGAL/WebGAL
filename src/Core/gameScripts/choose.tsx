@@ -6,6 +6,8 @@ import ReactDOM from 'react-dom';
 import React from 'react';
 import { unmountPerform } from '@/Core/controller/perform/unmountPerform';
 import styles from './performStyles/choose.module.scss';
+import { webgalStore } from '@/store/store';
+import { textFont } from '@/interface/stateInterface/userDataInterface';
 
 /**
  * 显示选择枝
@@ -14,10 +16,13 @@ import styles from './performStyles/choose.module.scss';
 export const choose = (sentence: ISentence): IPerform => {
   let chooseList = sentence.content.split('|');
   const chooseListFull = chooseList.map((e) => e.split(':'));
+  const fontFamily = webgalStore.getState().userData.optionData.textboxFont;
+  const font = fontFamily === textFont.song ? '"思源宋体", serif' : '"WebgalUI", serif';
   const chooseElements = chooseListFull.map((e, i) => {
     return (
       <div
         className={styles.Choose_item}
+        style={{ fontFamily: font }}
         key={e[0] + i}
         onClick={() => {
           if (e[1].match(/\./)) {
