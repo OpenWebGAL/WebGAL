@@ -28,5 +28,5 @@ jobs:
         uses: JamesIves/github-pages-deploy-action@releases/v4
         with:
           ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }} # 也就是我们刚才生成的 secret
-          BRANCH: demo-page 
+          BRANCH: live-demo-page 
           FOLDER: dist 
