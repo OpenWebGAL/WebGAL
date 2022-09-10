@@ -1,0 +1,5 @@
+Game_name:星光咖啡馆与死神之蝶;
+Game_key:0f35dst;
+Title_img:xgmain.jpeg;
+Title_bgm:s_Title.mp3;
+Loading_img:none;
