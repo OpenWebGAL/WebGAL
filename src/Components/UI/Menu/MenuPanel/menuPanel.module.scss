@@ -18,14 +18,14 @@
   width: 15%;
   cursor: pointer;
   color: rgba(8, 8, 8, 0.3);
+  background: rgba(0, 0, 0, 0);
   overflow: hidden;
   border-right: 1.5px solid rgba(0, 0, 0, 0.15);
-  transition: text-shadow 0.7s, backgroud 0.7s;
+  transition: text-shadow 0.7s, backgroud 0.7s, all 0.33s;
 }
 
 .MenuPanel_button:hover {
-  //background: radial-gradient(50% 50%, rgba(180, 181, 182, 0.25) 0%,rgba(180, 181, 182, 0.1) 75%, rgba(0, 0, 0, 0) 100%);
-  background: linear-gradient(rgba(180, 181, 182, 0.2) 0%, rgba(180, 181, 182, 0.05) 50%, rgba(180, 181, 182, 0.2) 100%);
+  background: rgba(0, 0, 0, 0.05);
 }
 
 .MenuPanel_button:last-child {
@@ -33,7 +33,7 @@
 }
 
 .MenuPanel_button_icon {
-  transform: translate(0, 0.05em);
+  transform: translate(0, 0.125em);
   padding: 0 0.15em 0 0;
   margin: 0 0.15em 0 0;
 }

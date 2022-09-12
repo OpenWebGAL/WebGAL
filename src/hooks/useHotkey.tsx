@@ -65,11 +65,15 @@ export function useMouseRightClickHotKey() {
   const isInBackLog = useIsInBackLog<typeof GUIStore>(GUIStore);
   const isOpenedDialog = useIsOpenedDialog<typeof GUIStore>(GUIStore);
   const validMenuPanelTag = useValidMenuPanelTag<typeof GUIStore>(GUIStore);
+  const isShowExtra = useIsOpenedExtra<typeof GUIStore>(GUIStore);
   const handleContextMenu = useCallback((ev: MouseEvent) => {
     if (isOpenedDialog()) {
       setComponentVisibility('showGlobalDialog', false);
       ev.preventDefault();
       return false;
+    }
+    if (isShowExtra()) {
+      setComponentVisibility('showExtra', false);
     }
     if (isGameActive()) {
       setComponentVisibility('showTextBox', !GUIStore.current.showTextBox);
@@ -272,6 +276,13 @@ function useIsInBackLog<T = any>(GUIStore: T & any): () => boolean {
 function useIsOpenedDialog<T = any>(GUIStore: T & any): () => boolean {
   return useCallback(() => {
     return GUIStore.current.showGlobalDialog;
+  }, [GUIStore]);
+}
+
+// 判断是否打开了鉴赏模式
+function useIsOpenedExtra<T = any>(GUIStore: T & any): () => boolean {
+  return useCallback(() => {
+    return GUIStore.current.showExtra;
   }, [GUIStore]);
 }
 
