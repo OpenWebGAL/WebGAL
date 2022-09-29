@@ -33,6 +33,7 @@ export enum commandType {
   unlockCg,
   unlockBgm,
   filmMode,
+  setTextbox,
 }
 
 /**
