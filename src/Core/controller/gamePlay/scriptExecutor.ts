@@ -30,7 +30,7 @@ export const scriptExecutor = () => {
   }
   const currentScript: ISentence = RUNTIME_SCENE_DATA.currentScene.sentenceList[RUNTIME_SCENE_DATA.currentSentenceId];
   // 判断这个脚本要不要执行
-  let runThis = true;
+  let runThis: number | boolean = true;
   let isHasWhenArg = false;
   let whenValue = '';
   currentScript.args.forEach((e) => {

@@ -67,7 +67,7 @@ export const MainStage: FC = () => {
         <FigureContainer />
       </div>
       <FullScreenPerform />
-      {GUIState.showTextBox && stageState.enableFilm === '' && <TextBox />}
+      {GUIState.showTextBox && stageState.enableFilm === '' && !stageState.isDisableTextbox && <TextBox />}
       {GUIState.showTextBox && stageState.enableFilm !== '' && <TextBoxFilm />}
       <AudioContainer />
       <div
