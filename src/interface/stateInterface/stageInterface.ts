@@ -1,4 +1,4 @@
-import { IRunPerform } from '../coreInterface/performInterface';
+import { IRunPerform } from "../coreInterface/performInterface";
 
 /**
  * 游戏内变量
@@ -60,6 +60,7 @@ export interface IStageState {
   currentConcatDialogPrev: string;
   // 测试：电影叙事
   enableFilm: string;
+  isDisableTextbox: boolean;
 }
 
 /**

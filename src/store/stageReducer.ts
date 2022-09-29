@@ -30,6 +30,7 @@ export const initState: IStageState = {
   // currentPerformDelay: 0
   currentConcatDialogPrev: '',
   enableFilm: '',
+  isDisableTextbox: false,
 };
 
 /**
@@ -53,6 +54,7 @@ const stageSlice = createSlice({
      * @param action 要替换的键值对
      */
     setStage: (state, action: PayloadAction<ISetStagePayload>) => {
+      // @ts-ignore
       state[action.payload.key] = action.payload.value;
     },
     /**
