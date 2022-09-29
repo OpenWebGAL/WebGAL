@@ -26,6 +26,7 @@ import { unlockBgm } from '@/Core/gameScripts/unlockBgm';
 import { say } from '../gameScripts/say';
 import { filmMode } from '@/Core/gameScripts/filmMode';
 import { callSceneScript } from '@/Core/gameScripts/callSceneScript';
+import { setTextbox } from '@/Core/gameScripts/setTextbox';
 
 export const SCRIPT_CONFIG: IConfigInterface[] = [
   { scriptString: 'intro', scriptType: commandType.intro, scriptFunction: intro },
@@ -56,6 +57,7 @@ export const SCRIPT_CONFIG: IConfigInterface[] = [
   { scriptString: 'say', scriptType: commandType.say, scriptFunction: say },
   { scriptString: 'filmMode', scriptType: commandType.filmMode, scriptFunction: filmMode },
   { scriptString: 'callScene', scriptType: commandType.callScene, scriptFunction: callSceneScript },
+  { scriptString: 'setTextbox', scriptType: commandType.setTextbox, scriptFunction: setTextbox },
 ];
 export const ADD_NEXT_ARG_LIST = [
   commandType.bgm,
