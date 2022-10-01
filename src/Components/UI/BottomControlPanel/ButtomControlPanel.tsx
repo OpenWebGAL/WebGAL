@@ -21,6 +21,7 @@ import { backToTitle } from '@/Core/controller/gamePlay/backToTitle';
 
 export const BottomControlPanel = () => {
   const strokeWidth = 2.5;
+  const size = 48;
   const GUIStore = useSelector((state: RootState) => state.GUI);
   const stageState = useSelector((state: RootState) => state.stage);
   const dispatch = useDispatch();
@@ -39,7 +40,7 @@ export const BottomControlPanel = () => {
               <PreviewCloseOne
                 className={styles.button}
                 theme="outline"
-                size="30"
+                size={size}
                 fill="#f5f5f7"
                 strokeWidth={strokeWidth}
               />
@@ -51,7 +52,7 @@ export const BottomControlPanel = () => {
               <PreviewOpen
                 className={styles.button}
                 theme="outline"
-                size="30"
+                size={size}
                 fill="#f5f5f7"
                 strokeWidth={strokeWidth}
               />
@@ -68,7 +69,7 @@ export const BottomControlPanel = () => {
             <AlignTextLeftOne
               className={styles.button}
               theme="outline"
-              size="30"
+              size={size}
               fill="#f5f5f7"
               strokeWidth={strokeWidth}
             />
@@ -85,15 +86,27 @@ export const BottomControlPanel = () => {
               }
             }}
           >
-            <ReplayMusic className={styles.button} theme="outline" size="30" fill="#f5f5f7" strokeWidth={strokeWidth} />
+            <ReplayMusic
+              className={styles.button}
+              theme="outline"
+              size={size}
+              fill="#f5f5f7"
+              strokeWidth={strokeWidth}
+            />
             <span className={styles.button_text}>重播</span>
           </span>
           <span id="Button_ControlPanel_auto" className={styles.singleButton} onClick={switchAuto}>
-            <PlayOne className={styles.button} theme="outline" size="30" fill="#f5f5f7" strokeWidth={strokeWidth} />
+            <PlayOne className={styles.button} theme="outline" size={size} fill="#f5f5f7" strokeWidth={strokeWidth} />
             <span className={styles.button_text}>自动</span>
           </span>
           <span id="Button_ControlPanel_fast" className={styles.singleButton} onClick={switchFast}>
-            <DoubleRight className={styles.button} theme="outline" size="30" fill="#f5f5f7" strokeWidth={strokeWidth} />
+            <DoubleRight
+              className={styles.button}
+              theme="outline"
+              size={size}
+              fill="#f5f5f7"
+              strokeWidth={strokeWidth}
+            />
             <span className={styles.button_text}>快进</span>
           </span>
           <span
@@ -103,7 +116,7 @@ export const BottomControlPanel = () => {
               setComponentVisibility('showMenuPanel', true);
             }}
           >
-            <Save className={styles.button} theme="outline" size="30" fill="#f5f5f7" strokeWidth={strokeWidth} />
+            <Save className={styles.button} theme="outline" size={size} fill="#f5f5f7" strokeWidth={strokeWidth} />
             <span className={styles.button_text}>存档</span>
           </span>
           <span
@@ -113,7 +126,13 @@ export const BottomControlPanel = () => {
               setComponentVisibility('showMenuPanel', true);
             }}
           >
-            <FolderOpen className={styles.button} theme="outline" size="30" fill="#f5f5f7" strokeWidth={strokeWidth} />
+            <FolderOpen
+              className={styles.button}
+              theme="outline"
+              size={size}
+              fill="#f5f5f7"
+              strokeWidth={strokeWidth}
+            />
             <span className={styles.button_text}>读档</span>
           </span>
           <span
@@ -123,7 +142,13 @@ export const BottomControlPanel = () => {
               setComponentVisibility('showMenuPanel', true);
             }}
           >
-            <SettingTwo className={styles.button} theme="outline" size="30" fill="#f5f5f7" strokeWidth={strokeWidth} />
+            <SettingTwo
+              className={styles.button}
+              theme="outline"
+              size={size}
+              fill="#f5f5f7"
+              strokeWidth={strokeWidth}
+            />
             <span className={styles.button_text}>选项</span>
           </span>
           <span
@@ -132,7 +157,7 @@ export const BottomControlPanel = () => {
               backToTitle();
             }}
           >
-            <Home className={styles.button} theme="outline" size="30" fill="#f5f5f7" strokeWidth={strokeWidth} />
+            <Home className={styles.button} theme="outline" size={size} fill="#f5f5f7" strokeWidth={strokeWidth} />
             <span className={styles.button_text}>标题</span>
           </span>
         </div>

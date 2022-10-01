@@ -12,6 +12,7 @@ export const Backlog = () => {
   // logger.info('Backlog render');
   const GUIStore = useSelector((state: RootState) => state.GUI);
   const dispatch = useDispatch();
+  const iconSize = '1em';
   const [indexHide, setIndexHide] = useState(false);
   const [isDisableScroll, setIsDisableScroll] = useState(false);
   let timeRef = useRef<ReturnType<typeof setTimeout>>();
@@ -50,7 +51,7 @@ export const Backlog = () => {
                   }}
                   className={styles.backlog_item_button_element}
                 >
-                  <VolumeNotice theme="outline" size="23" fill="#ffffff" strokeWidth={3} />
+                  <VolumeNotice theme="outline" size={iconSize} fill="#ffffff" strokeWidth={3} />
                 </div>
               ) : null}
               <div
@@ -61,7 +62,7 @@ export const Backlog = () => {
                 }}
                 className={styles.backlog_item_button_element}
               >
-                <Return theme="outline" size="23" fill="#ffffff" strokeWidth={3} />
+                <Return theme="outline" size={iconSize} fill="#ffffff" strokeWidth={3} />
               </div>
             </div>
           </div>
