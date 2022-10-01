@@ -66,11 +66,12 @@ code {
 }
 
 #root {
-  width: 1600px;
-  height: 900px;
+  width: 2560px;
+  height: 1440px;
   overflow: hidden;
   /*position: absolute;*/
   /*top: 0;*/
+  font-size: 160%;
 }
 
 /* 设置滚动条的样式 */

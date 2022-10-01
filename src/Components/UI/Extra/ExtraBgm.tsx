@@ -14,6 +14,7 @@ export function ExtraBgm() {
   const isShowBgmList = useObject(false);
   let foundCurrentBgmName = 'init_bgm_find_var_WebGAL_4.2.1';
   let foundCurrentBgmIndex = -1;
+  const iconSize = 39;
   const bgmPlayerHeight = isShowBgmList.value ? '80%' : '10%';
   const bgmListLen = extraState.bgm.length;
   extraState.bgm.forEach((e, i) => {
@@ -68,7 +69,7 @@ export function ExtraBgm() {
           }}
           className={styles.bgmControlButton}
         >
-          <GoStart theme="filled" size="24" fill="#fff" strokeWidth={3} strokeLinejoin="miter" />
+          <GoStart theme="filled" size={iconSize} fill="#fff" strokeWidth={3} strokeLinejoin="miter" />
         </div>
         <div
           onClick={() => {
@@ -77,7 +78,7 @@ export function ExtraBgm() {
           }}
           className={styles.bgmControlButton}
         >
-          <PlayOne theme="filled" size="24" fill="#fff" strokeWidth={3} strokeLinejoin="miter" />
+          <PlayOne theme="filled" size={iconSize} fill="#fff" strokeWidth={3} strokeLinejoin="miter" />
         </div>
         <div
           onClick={() => {
@@ -89,7 +90,7 @@ export function ExtraBgm() {
           }}
           className={styles.bgmControlButton}
         >
-          <GoEnd theme="filled" size="24" fill="#fff" strokeWidth={3} strokeLinejoin="miter" />
+          <GoEnd theme="filled" size={iconSize} fill="#fff" strokeWidth={3} strokeLinejoin="miter" />
         </div>
         <div
           onClick={() => {
@@ -98,7 +99,7 @@ export function ExtraBgm() {
           }}
           className={styles.bgmControlButton}
         >
-          <SquareSmall theme="filled" size="24" fill="#fff" strokeWidth={3} strokeLinejoin="miter" />
+          <SquareSmall theme="filled" size={iconSize} fill="#fff" strokeWidth={3} strokeLinejoin="miter" />
         </div>
         <div className={styles.bgmName}>{foundCurrentBgmName}</div>
         <div
@@ -108,7 +109,7 @@ export function ExtraBgm() {
           className={styles.bgmControlButton}
           style={{ marginLeft: 'auto' }}
         >
-          <MusicList theme="filled" size="24" fill="#fff" strokeWidth={3} strokeLinejoin="miter" />
+          <MusicList theme="filled" size={iconSize} fill="#fff" strokeWidth={3} strokeLinejoin="miter" />
         </div>
       </div>
       {isShowBgmList.value && <div className={styles.bgmListContainer}> {showBgmList}</div>}
