@@ -4,7 +4,7 @@ import { RUNTIME_GAMEPLAY } from '@/Core/runtime/gamePlay';
 export const pixiRain = (rainSpeed: number, number: number) => {
   // 动画参数
   // 设置缩放的系数
-  const scalePreset = 0.3;
+  const scalePreset = 0.48;
 
   const app = RUNTIME_GAMEPLAY.currentPixi;
   const container = new PIXI.Container();
@@ -24,8 +24,8 @@ export const pixiRain = (rainSpeed: number, number: number) => {
   // 监听动画更新
   app.ticker.add((delta: any) => {
     // 获取长宽，用于控制雪花出现位置
-    const stageWidth = 1600;
-    const stageHeight = 900;
+    const stageWidth = 2560;
+    const stageHeight = 1440;
     for (let i = 0; i < number; i++) {
       // 创建对象
       const bunny = new PIXI.Sprite(texture);
