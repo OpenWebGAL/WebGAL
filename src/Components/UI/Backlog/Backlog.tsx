@@ -12,7 +12,7 @@ export const Backlog = () => {
   // logger.info('Backlog render');
   const GUIStore = useSelector((state: RootState) => state.GUI);
   const dispatch = useDispatch();
-  const iconSize = '1em';
+  const iconSize = '0.8em';
   const [indexHide, setIndexHide] = useState(false);
   const [isDisableScroll, setIsDisableScroll] = useState(false);
   let timeRef = useRef<ReturnType<typeof setTimeout>>();
@@ -29,13 +29,17 @@ export const Backlog = () => {
           key={'backlogItem' + backlogItem.currentStageState.showText + backlogItem.saveScene.currentSentenceId}
         >
           <div className={styles.backlog_func_area}>
-            {backlogItem.currentStageState.showName !== '' && (
-              <div className={styles.backlog_item_content_name}>
-                {backlogItem.currentStageState.showName}
-                {/* {backlogItem.currentStageState.showName === '' ? '' : '：'} */}
-              </div>
-            )}
             <div className={styles.backlog_item_button_list}>
+              <div
+                onClick={(e) => {
+                  jumpFromBacklog(i);
+                  e.preventDefault();
+                  e.stopPropagation();
+                }}
+                className={styles.backlog_item_button_element}
+              >
+                <Return theme="outline" size={iconSize} fill="#ffffff" strokeWidth={3} />
+              </div>
               {backlogItem.currentStageState.vocal ? (
                 <div
                   onClick={() => {
@@ -54,17 +58,8 @@ export const Backlog = () => {
                   <VolumeNotice theme="outline" size={iconSize} fill="#ffffff" strokeWidth={3} />
                 </div>
               ) : null}
-              <div
-                onClick={(e) => {
-                  jumpFromBacklog(i);
-                  e.preventDefault();
-                  e.stopPropagation();
-                }}
-                className={styles.backlog_item_button_element}
-              >
-                <Return theme="outline" size={iconSize} fill="#ffffff" strokeWidth={3} />
-              </div>
             </div>
+            <div className={styles.backlog_item_content_name}>{backlogItem.currentStageState.showName}</div>
           </div>
           <div className={styles.backlog_item_content}>
             <span className={styles.backlog_item_content_text}>{backlogItem.currentStageState.showText}</span>
