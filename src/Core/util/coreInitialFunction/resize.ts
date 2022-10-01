@@ -2,8 +2,8 @@
  * 在窗口大小改变时进行强制缩放
  */
 export const resize = () => {
-  const targetHeight = 900;
-  const targetWidth = 1600;
+  const targetHeight = 1440;
+  const targetWidth = 2560;
 
   const h = window.innerHeight; // 窗口高度
   const w = window.innerWidth; // 窗口宽度
