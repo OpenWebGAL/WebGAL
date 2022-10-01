@@ -6,14 +6,14 @@
     <!--    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>-->
     <title>WebGAL</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no" />
-  <script type="module" crossorigin src="./assets/index.00137911.js"></script>
-  <link rel="stylesheet" href="./assets/index.4d453a66.css">
+  <script type="module" crossorigin src="./assets/index.59fdef96.js"></script>
+  <link rel="stylesheet" href="./assets/index.90275f5a.css">
 </head>
 <body>
 <!--快速显示落地页，让用户感知不到加载的过程-->
 <div id="Title_enter_page" onclick="enter()" style="
-            width: 1600px;
-            height: 900px;
+            width: 2560px;
+            height: 1440px;
             overflow: hidden;
             position: absolute;
             top: 0;
@@ -47,6 +47,7 @@
     top: 0;
     height: 100%;
     opacity: 1;
+    font-size: 175%;
     transition: opacity 1s;
     z-index: 15;
     font-family: '思源宋体',Georgia,serif">
@@ -57,11 +58,12 @@
             justify-content: center;
             align-items: center;
 ">
-            <div class="StartButton" style="font-size: xx-large;
+            <div class="StartButton" style="
             letter-spacing: 0.25em ;
             padding: 2em 2em 2em 2em;
             text-shadow: 0 0 30px rgba(0,0,0,0.5);
             transition: text-shadow 1s;
+            font-size: 175%;
 ">
                 PRESS THE SCREEN TO START
             </div>
@@ -144,8 +146,8 @@
      * 对标题页进行自动强制缩放
      */
     function resizeTitle() {
-        const targetHeight = 900;
-        const targetWidth = 1600;
+        const targetHeight = 1440;
+        const targetWidth = 2560;
 
         const h = window.innerHeight; // 窗口高度
         const w = window.innerWidth; // 窗口宽度
