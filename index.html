@@ -6,8 +6,8 @@
     <!--    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>-->
     <title>WebGAL</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no" />
-  <script type="module" crossorigin src="./assets/index.69bae3f0.js"></script>
-  <link rel="stylesheet" href="./assets/index.bb739f8f.css">
+  <script type="module" crossorigin src="./assets/index.e7fdfb1e.js"></script>
+  <link rel="stylesheet" href="./assets/index.c78a1f2b.css">
 </head>
 <body>
 <!--快速显示落地页，让用户感知不到加载的过程-->
@@ -87,7 +87,23 @@
 </div>
 <div id="root"></div>
 
-<script src="./webgal-sw-register.js"></script>
+<script>
+  /**
+   * 注册 Service Worker
+   */
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker
+    .register('./webgal-serviceworker.js', { scope: './assets' })
+    .then(function (reg) {
+      // registration worked
+      console.log('Registration succeeded. Scope is ' + reg.scope);
+    })
+    .catch(function (error) {
+      // registration failed
+      console.log('Registration failed with ' + error);
+    });
+  }
+</script>
 <script>
     let enterPromise=new Promise(res=>window.enterPromise=res)
     let renderPromise=new Promise(res=>window.renderPromise=res)
