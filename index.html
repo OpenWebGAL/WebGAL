@@ -85,7 +85,23 @@
 </div>
 <div id="root"></div>
 <script type="module" src="/src/main.tsx"></script>
-<script src="./webgal-sw-register.js"></script>
+<script>
+  /**
+   * 注册 Service Worker
+   */
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker
+    .register('./webgal-serviceworker.js', { scope: './assets' })
+    .then(function (reg) {
+      // registration worked
+      console.log('Registration succeeded. Scope is ' + reg.scope);
+    })
+    .catch(function (error) {
+      // registration failed
+      console.log('Registration failed with ' + error);
+    });
+  }
+</script>
 <script>
     let enterPromise=new Promise(res=>window.enterPromise=res)
     let renderPromise=new Promise(res=>window.renderPromise=res)

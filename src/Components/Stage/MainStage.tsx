@@ -16,6 +16,7 @@ import { useHotkey } from '@/hooks/useHotkey';
 export const MainStage: FC = () => {
   const stageState = useSelector((state: RootState) => state.stage);
   const GUIState = useSelector((state: RootState) => state.GUI);
+  const oldBg = useSelector((state: RootState) => state.stageTemp.oldBg);
   const dispatch = useDispatch();
   useEffect(() => {
     const effectList: Array<IEffect> = stageState.effects;
@@ -46,15 +47,17 @@ export const MainStage: FC = () => {
   return (
     <div className={styles.MainStage_main}>
       <div className={styles.MainStage_main_container} style={{ width: stageWidth, height: stageHeight, top: top }}>
-        <div
-          key={'bgOld' + stageState.oldBgName}
-          id="MainStage_bg_OldContainer"
-          className={styles.MainStage_oldBgContainer}
-          style={{
-            backgroundImage: `url("${stageState.oldBgName}")`,
-            backgroundSize: 'cover',
-          }}
-        />
+        {oldBg !== '' && (
+          <div
+            key={'bgOld' + oldBg + Math.random().toString()}
+            id="MainStage_bg_OldContainer"
+            className={styles.MainStage_oldBgContainer}
+            style={{
+              backgroundImage: `url("${oldBg}")`,
+              backgroundSize: 'cover',
+            }}
+          />
+        )}
         <div
           key={'bgMain' + stageState.bgName}
           id="MainStage_bg_MainContainer"
