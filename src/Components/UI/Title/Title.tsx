@@ -9,6 +9,7 @@ import { setMenuPanelTag, setVisibility } from '@/store/GUIReducer';
 import { MenuPanelTag } from '@/interface/stateInterface/guiInterface';
 import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
 import { hasFastSaveRecord, loadFastSaveGame } from '@/hooks/useHotkey';
+import { restorePerform } from '@/Core/controller/storage/jumpFromBacklog';
 
 /**
  * 标题页
@@ -59,6 +60,8 @@ const Title: FC = () => {
                 ) {
                   // 如果游戏没有开始，开始游戏
                   nextSentence();
+                } else {
+                  restorePerform();
                 }
               }}
             >
