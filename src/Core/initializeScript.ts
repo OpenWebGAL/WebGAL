@@ -63,18 +63,18 @@ export const initializeScript = (): void => {
    */
   pixiController(true);
 
-  /**
-   * 如果有 Service Worker ，则卸载所有 Service Worker
-   */
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.getRegistrations().then((registrations) => {
-      for (const registration of registrations) {
-        registration.unregister().then(() => {
-          logger.info('已卸载 Service Worker');
-        });
-      }
-    });
-  }
+  // /**
+  //  * 如果有 Service Worker ，则卸载所有 Service Worker
+  //  */
+  // if ('serviceWorker' in navigator) {
+  //   navigator.serviceWorker.getRegistrations().then((registrations) => {
+  //     for (const registration of registrations) {
+  //       registration.unregister().then(() => {
+  //         logger.info('已卸载 Service Worker');
+  //       });
+  //     }
+  //   });
+  // }
 
   /**
    * 绑定工具函数
