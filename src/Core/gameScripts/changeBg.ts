@@ -4,6 +4,7 @@ import { IPerform } from '@/interface/coreInterface/performInterface';
 import styles from '../../Components/Stage/mainStage.module.scss';
 import { webgalStore } from '@/store/store';
 import { setStage } from '@/store/stageReducer';
+import { setOldBg } from '@/store/stageTempReducer';
 
 /**
  * 进行背景图片的切换
@@ -14,7 +15,8 @@ export const changeBg = (sentence: ISentence): IPerform => {
   const stageState = webgalStore.getState().stage;
   const oldBgName = stageState.bgName;
   const dispatch = webgalStore.dispatch;
-  dispatch(setStage({ key: 'oldBgName', value: oldBgName }));
+  dispatch(setOldBg(oldBgName));
+  setTimeout(() => setOldBg(''), 3000);
   dispatch(setStage({ key: 'bgName', value: sentence.content }));
   // const performInitName: string = getRandomPerformName();
   return {
