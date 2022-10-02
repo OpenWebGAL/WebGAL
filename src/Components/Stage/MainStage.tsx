@@ -17,6 +17,7 @@ export const MainStage: FC = () => {
   const stageState = useSelector((state: RootState) => state.stage);
   const GUIState = useSelector((state: RootState) => state.GUI);
   const oldBg = useSelector((state: RootState) => state.stageTemp.oldBg);
+  const oldBgKey = useSelector((state: RootState) => state.stageTemp.oldBgKey);
   const dispatch = useDispatch();
   useEffect(() => {
     const effectList: Array<IEffect> = stageState.effects;
@@ -49,7 +50,7 @@ export const MainStage: FC = () => {
       <div className={styles.MainStage_main_container} style={{ width: stageWidth, height: stageHeight, top: top }}>
         {oldBg !== '' && (
           <div
-            key={'bgOld' + oldBg + Math.random().toString()}
+            key={'bgOld' + oldBg + oldBgKey}
             id="MainStage_bg_OldContainer"
             className={styles.MainStage_oldBgContainer}
             style={{

@@ -15,8 +15,9 @@ export const changeBg = (sentence: ISentence): IPerform => {
   const stageState = webgalStore.getState().stage;
   const oldBgName = stageState.bgName;
   const dispatch = webgalStore.dispatch;
-  dispatch(setOldBg(oldBgName));
-  setTimeout(() => setOldBg(''), 3000);
+  // 为保证旧背景仅在切换时重置
+  const bgTarnsitionKey = Math.random().toString();
+  dispatch(setOldBg({ value: oldBgName, key: bgTarnsitionKey }));
   dispatch(setStage({ key: 'bgName', value: sentence.content }));
   // const performInitName: string = getRandomPerformName();
   return {
