@@ -1,6 +1,8 @@
 import styles from './devPanel.module.scss';
 import { useObject } from '@/hooks/useObject';
 import { getPixiSscreenshot } from '@/Components/UI/DevPanel/devFunctions/getPixiSscreenshot';
+import { RUNTIME_GAMEPLAY } from '@/Core/runtime/gamePlay';
+import { useEffect } from 'react';
 
 export default function DevPanel() {
   // 控制显隐
@@ -9,12 +11,18 @@ export default function DevPanel() {
     return !!hash.match(/dev/);
   }
   const isOpenDevPanel = useObject(false);
+  const hash = useObject(window.location.hash);
+  useEffect(() => {
+    window.onhashchange = () => {
+      hash.set(window.location.hash);
+    };
+  }, []);
   const isShow = isShowDevPanel();
 
   const devMainArea = (
     <>
-      <div style={{ textAlign: 'center' }}>Webcome to WebGAL !</div>
       <div onClick={() => getPixiSscreenshot()}>Save PIXI Screenshot</div>
+      <div onClick={() => RUNTIME_GAMEPLAY.pixiStage?.removeTicker('snow-Ticker')}>Remove Snow Ticker</div>
     </>
   );
   return (
