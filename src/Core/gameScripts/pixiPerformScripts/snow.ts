@@ -70,5 +70,5 @@ export const pixiSnow = (snowSpeed: number) => {
     }
   }
   RUNTIME_GAMEPLAY.pixiStage?.registerTicker(tickerFn, 'snow-Ticker');
-  return container;
+  return { container, tickerKey: 'snow-Ticker' };
 };

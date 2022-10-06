@@ -12,6 +12,8 @@ import { RootState } from '@/store/store';
 import { setVisibility } from '@/store/GUIReducer';
 import { TextBoxFilm } from '@/Components/Stage/TextBox/TextBoxFilm';
 import { useHotkey } from '@/hooks/useHotkey';
+import { RUNTIME_GAMEPLAY } from '@/Core/runtime/gamePlay';
+import { generateBgSoftInFn } from '@/Core/controller/stage/pixi/animations/bgSoftIn';
 
 export const MainStage: FC = () => {
   const stageState = useSelector((state: RootState) => state.stage);
@@ -19,10 +21,12 @@ export const MainStage: FC = () => {
   const oldBg = useSelector((state: RootState) => state.stageTemp.oldBg);
   const oldBgKey = useSelector((state: RootState) => state.stageTemp.oldBgKey);
   const dispatch = useDispatch();
+
+  /**
+   * 设置效果
+   */
   useEffect(() => {
     const effectList: Array<IEffect> = stageState.effects;
-
-    // 设置效果
     setTimeout(() => {
       effectList.forEach((effect) => {
         const target = document.getElementById(effect.target);
@@ -37,6 +41,30 @@ export const MainStage: FC = () => {
       });
     }, 100);
   });
+
+  /**
+   * 设置背景
+   */
+  useEffect(() => {
+    if (stageState.bgName !== '') {
+      const currentBg = RUNTIME_GAMEPLAY.pixiStage?.getBgByKey('main');
+      if (currentBg) {
+        if (currentBg.url !== stageState.bgName) {
+          RUNTIME_GAMEPLAY.pixiStage?.removeBg('main');
+          RUNTIME_GAMEPLAY.pixiStage?.removeTicker('bg-softin');
+        }
+      }
+      RUNTIME_GAMEPLAY.pixiStage?.addBg('main', stageState.bgName).then((res) => {
+        if (res) {
+          RUNTIME_GAMEPLAY.pixiStage!.getBgByKey('main')!.pixiSprite.alpha = 0;
+          RUNTIME_GAMEPLAY.pixiStage!.registerTicker(generateBgSoftInFn('main', 3000), 'bg-softin', 'main');
+        }
+      });
+    } else {
+      RUNTIME_GAMEPLAY.pixiStage?.removeBg('main');
+      RUNTIME_GAMEPLAY.pixiStage?.removeTicker('bg-softin');
+    }
+  });
   let stageWidth = '100%';
   let stageHeight = '100%';
   let top = '0';
@@ -47,7 +75,10 @@ export const MainStage: FC = () => {
   useHotkey();
   return (
     <div className={styles.MainStage_main}>
-      <div className={styles.MainStage_main_container} style={{ width: stageWidth, height: stageHeight, top: top }}>
+      <div
+        className={styles.MainStage_main_container}
+        style={{ opacity: 0, width: stageWidth, height: stageHeight, top: top }}
+      >
         {oldBg !== '' && (
           <div
             key={'bgOld' + oldBg + oldBgKey}

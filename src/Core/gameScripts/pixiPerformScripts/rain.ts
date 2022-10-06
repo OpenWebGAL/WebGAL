@@ -69,7 +69,7 @@ export const pixiRain = (rainSpeed: number, number: number) => {
     }
   }
   RUNTIME_GAMEPLAY.pixiStage?.registerTicker(ticker, 'rain-Ticker');
-  return container;
+  return { container, tickerKey: 'rain-Ticker' };
 };
 
 export default pixiRain;
