@@ -10,6 +10,7 @@ import { webgalStore } from './store/store';
 import { Extra } from '@/Components/UI/Extra/Extra';
 import { BottomControlPanelFilm } from './Components/UI/BottomControlPanel/BottomControlPanelFilm';
 import GlobalDialog from '@/Components/UI/GlobalDialog/GlobalDialog';
+import DevPanel from '@/Components/UI/DevPanel/DevPanel';
 
 function App() {
   useEffect(() => {
@@ -19,6 +20,7 @@ function App() {
   return (
     <div className="App" style={{ height: '100%', width: '100%', background: 'rgba(0, 0, 0, 1)' }}>
       <Provider store={webgalStore}>
+        <DevPanel />
         <Extra />
         <Title />
         <Menu />

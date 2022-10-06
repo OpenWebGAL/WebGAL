@@ -70,7 +70,7 @@ src
 |  |     ├─perform
 |  |     |    ├─unmountPerform.ts
 |  |     |    ├─pixi
-|  |     |    |  └pixiController.ts
+|  |     |    |  └initPixi.ts
 |  |     ├─gamePlay
 |  |     |    ├─autoPlay.ts
 |  |     |    ├─fastSkip.ts

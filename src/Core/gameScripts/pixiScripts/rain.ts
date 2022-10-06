@@ -6,9 +6,10 @@ export const pixiRain = (rainSpeed: number, number: number) => {
   // 设置缩放的系数
   const scalePreset = 0.48;
 
-  const app = RUNTIME_GAMEPLAY.currentPixi;
+  const effectsContainer = RUNTIME_GAMEPLAY.pixiStage!.effectsContainer!;
+  const app = RUNTIME_GAMEPLAY.pixiStage!.currentApp!;
   const container = new PIXI.Container();
-  app.stage.addChild(container);
+  effectsContainer.addChild(container);
   // 创建纹理
   const texture = PIXI.Texture.from('./game/tex/raindrop.png');
   // 将容器移到中心
