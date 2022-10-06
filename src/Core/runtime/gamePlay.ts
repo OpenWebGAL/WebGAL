@@ -11,5 +11,5 @@ export const RUNTIME_GAMEPLAY: IGamePlay = {
   autoInterval: null,
   fastInterval: null,
   autoTimeout: null,
-  currentPixi: null,
+  pixiStage: null,
 };

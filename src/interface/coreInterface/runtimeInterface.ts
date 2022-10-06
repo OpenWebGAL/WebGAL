@@ -5,6 +5,7 @@
 import { IStageState } from '../stateInterface/stageInterface';
 import { ISaveScene } from '../stateInterface/userDataInterface';
 import { IPerform } from './performInterface';
+import PixiStage from '@/Core/controller/stage/pixi/PixiController';
 
 export interface sceneEntry {
   sceneName: string; // 场景名称
@@ -29,5 +30,5 @@ export interface IGamePlay {
   autoInterval: ReturnType<typeof setInterval> | null;
   fastInterval: ReturnType<typeof setInterval> | null;
   autoTimeout: ReturnType<typeof setTimeout> | null;
-  currentPixi: any;
+  pixiStage: PixiStage | null;
 }

@@ -10,19 +10,20 @@ import { sceneFetcher } from './controller/scene/sceneFetcher';
 import { RUNTIME_SCENE_DATA } from './runtime/sceneData';
 import { sceneParser } from './parser/sceneParser';
 import { setVolume } from '@/Core/controller/stage/setVolume';
-import { pixiController } from '@/Core/controller/stage/pixi/pixiController';
 import { bindExtraFunc } from '@/Core/util/coreInitialFunction/bindExtraFunc';
 import { webSocketFunc } from '@/Core/util/syncWithEditor/webSocketFunc';
 import uniqWith from 'lodash/uniqWith';
 import { RUNTIME_SETTLED_SCENES } from './runtime/etc';
 import { scenePrefetcher } from './util/prefetcher/scenePrefetcher';
+import { RUNTIME_GAMEPLAY } from '@/Core/runtime/gamePlay';
+import PixiStage from '@/Core/controller/stage/pixi/PixiController';
 
 /**
  * 引擎初始化函数
  */
 export const initializeScript = (): void => {
   // 打印初始log信息
-  logger.info('WebGAL 4.2.15');
+  logger.info('WebGAL 4.3.0');
   logger.info('Github: https://github.com/MakinoharaShoko/WebGAL ');
   logger.info('Made with ❤ by MakinoharaShoko');
   // 激活强制缩放
@@ -61,7 +62,7 @@ export const initializeScript = (): void => {
   /**
    * 启动Pixi
    */
-  pixiController(true);
+  RUNTIME_GAMEPLAY.pixiStage = new PixiStage();
 
   // /**
   //  * 如果有 Service Worker ，则卸载所有 Service Worker
