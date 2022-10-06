@@ -1,8 +1,8 @@
 import { ISentence } from '@/interface/coreInterface/sceneInterface';
 import { IPerform } from '@/interface/coreInterface/performInterface';
 import { RUNTIME_GAMEPLAY } from '@/Core/runtime/gamePlay';
-import pixiRain from './pixiScripts/rain';
-import { pixiSnow } from '@/Core/gameScripts/pixiScripts/snow';
+import pixiRain from './pixiPerformScripts/rain';
+import { pixiSnow } from '@/Core/gameScripts/pixiPerformScripts/snow';
 import { logger } from '@/Core/util/etc/logger';
 
 /**
@@ -26,12 +26,18 @@ export const pixi = (sentence: ISentence): IPerform => {
     }
   });
   let container: any;
+  let tickerKey: any;
+  let res: any;
   switch (sentence.content) {
     case 'rain':
-      container = pixiRain(6, 10);
+      res = pixiRain(6, 10);
+      container = res.container;
+      tickerKey = res.tickerKey;
       break;
     case 'snow':
-      container = pixiSnow(3);
+      res = pixiSnow(3);
+      container = res.container;
+      tickerKey = res.tickerKey;
       break;
   }
   return {
@@ -42,6 +48,8 @@ export const pixi = (sentence: ISentence): IPerform => {
     stopFunction: () => {
       logger.warn('现在正在卸载pixi演出');
       container.destroy({ texture: true, baseTexture: true });
+      RUNTIME_GAMEPLAY.pixiStage?.effectsContainer.removeChild(container);
+      RUNTIME_GAMEPLAY.pixiStage?.removeTicker(tickerKey);
     },
     blockingNext: () => false,
     blockingAuto: () => false,
