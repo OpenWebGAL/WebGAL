@@ -1,5 +1,16 @@
 import * as PIXI from 'pixi.js';
 
+interface ITickerFunc {
+  key: string;
+  func: PIXI.TickerCallback<number>;
+}
+
+interface ITransformFunc {
+  key: string;
+  targetId: string;
+  func: Function;
+}
+
 export default class PixiStage {
   /**
    * 当前的 PIXI App
@@ -8,6 +19,12 @@ export default class PixiStage {
   public effectsContainer: PIXI.Container;
   public figureContainer: PIXI.Container;
   public backgroundContainer: PIXI.Container;
+  // 注册到 Ticker 上的函数
+  public tickerFuncs: Array<ITickerFunc> = [];
+  // 要执行的变换操作
+  public transformFuncs: Array<ITransformFunc> = [];
+  // 锁定变换对象（对象可能正在执行动画，不能应用变换）
+  private LockTransformTarget: Array<string> = [];
 
   public constructor() {
     const app = new PIXI.Application({
@@ -45,5 +62,19 @@ export default class PixiStage {
     this.backgroundContainer.zIndex = 0;
     app.stage.addChild(this.effectsContainer, this.figureContainer, this.backgroundContainer);
     this.currentApp = app;
+  }
+
+  public registerTicker(tickerFn: PIXI.TickerCallback<number>, key: string) {
+    this.tickerFuncs.push({ func: tickerFn, key: key });
+    this.currentApp?.ticker.add(tickerFn);
+  }
+
+  public removeTicker(key: string) {
+    const index = this.tickerFuncs.findIndex((e) => e.key === key);
+    if (index >= 0) {
+      const thisTickerFunc = this.tickerFuncs[index];
+      this.currentApp?.ticker.remove(thisTickerFunc.func);
+      this.tickerFuncs.splice(index, 1);
+    }
   }
 }

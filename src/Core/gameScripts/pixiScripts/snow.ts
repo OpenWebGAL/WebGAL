@@ -23,7 +23,7 @@ export const pixiSnow = (snowSpeed: number) => {
   // container.rotation = -0.2;
   const bunnyList: any = [];
   // 监听动画更新
-  app.ticker.add((delta: number) => {
+  function tickerFn(delta: number) {
     // 获取长宽，用于控制雪花出现位置
     const stageWidth = 2560;
     const stageHeight = 1440;
@@ -68,6 +68,7 @@ export const pixiSnow = (snowSpeed: number) => {
       bunnyList.unshift();
       container.removeChild(container.children[0]);
     }
-  });
+  }
+  RUNTIME_GAMEPLAY.pixiStage?.registerTicker(tickerFn, 'snow-Ticker');
   return container;
 };
