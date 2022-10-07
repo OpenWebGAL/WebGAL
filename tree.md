@@ -128,7 +128,7 @@ src
 |     | |    ├─Backlog.tsx
 |     | |    └backlog.module.scss
 |     ├─Stage
-|     |   ├─MainStage.tsx
+|     |   ├─Stage.tsx
 |     |   ├─mainStage.module.scss
 |     |   ├─TextBox
 |     |   |    ├─TextBox.tsx

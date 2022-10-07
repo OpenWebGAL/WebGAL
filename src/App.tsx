@@ -2,7 +2,7 @@ import Title from './Components/UI/Title/Title';
 import { useEffect } from 'react';
 import { initializeScript } from './Core/initializeScript';
 import Menu from './Components/UI/Menu/Menu';
-import { MainStage } from './Components/Stage/MainStage';
+import { Stage } from './Components/Stage/Stage';
 import { BottomControlPanel } from './Components/UI/BottomControlPanel/ButtomControlPanel';
 import { Backlog } from './Components/UI/Backlog/Backlog';
 import { Provider } from 'react-redux';
@@ -24,7 +24,7 @@ function App() {
         <Extra />
         <Title />
         <Menu />
-        <MainStage />
+        <Stage />
         <BottomControlPanel />
         <BottomControlPanelFilm />
         <Backlog />
