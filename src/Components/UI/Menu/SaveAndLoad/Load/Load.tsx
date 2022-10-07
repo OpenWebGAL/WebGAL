@@ -53,48 +53,7 @@ export const Load: FC = () => {
             </div>
           </div>
           <div className={styles.Save_Load_content_miniRen}>
-            {saveData.nowStageState.bgName !== '' && (
-              <img
-                className={styles.Save_Load_content_miniRen_bg}
-                alt="Save_img_preview"
-                src={saveData.nowStageState.bgName}
-              />
-            )}
-            {saveData.nowStageState.bgName === '' && (
-              <div style={{ background: 'rgba(0,0,0,0.6)', width: '100%', height: '100%' }} />
-            )}
-            {saveData.nowStageState.figNameLeft !== '' && (
-              <img
-                className={styles.Save_Load_content_miniRen_figure + ' ' + styles.Save_Load_content_miniRen_figLeft}
-                alt="Save_img_previewLeft"
-                src={saveData.nowStageState.figNameLeft}
-              />
-            )}
-            {saveData.nowStageState.figNameRight !== '' && (
-              <img
-                className={styles.Save_Load_content_miniRen_figure + ' ' + styles.Save_Load_content_miniRen_figRight}
-                alt="Save_img_preview"
-                src={saveData.nowStageState.figNameRight}
-              />
-            )}
-            {saveData.nowStageState.figName !== '' && (
-              <div
-                style={{
-                  display: 'flex',
-                  width: '100%',
-                  height: '100%',
-                  position: 'absolute',
-                  bottom: '0',
-                  justifyContent: 'center',
-                }}
-              >
-                <img
-                  className={styles.Save_Load_content_miniRen_figure}
-                  alt="Save_img_preview"
-                  src={saveData.nowStageState.figName}
-                />
-              </div>
-            )}
+            <img className={styles.Save_Load_content_miniRen_bg} alt="Save_img_preview" src={saveData.previewImage} />
           </div>
           <div className={styles.Save_Load_content_text}>
             <div className={styles.Save_Load_content_speaker + ' ' + styles.Load_content_speaker}>{speaker}</div>
