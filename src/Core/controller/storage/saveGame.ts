@@ -41,7 +41,7 @@ export function generateCurrentStageData(index: number) {
   canvas2.width = 640;
   canvas2.height = 360;
   context!.drawImage(canvas, 0, 0, 640, 360);
-  const urlToSave = canvas2.toDataURL('image/jpeg', 0.6);
+  const urlToSave = canvas2.toDataURL('image/webp', 0.8);
   canvas2.remove();
   const saveData: ISaveData = {
     nowStageState: cloneDeep(stageState),
