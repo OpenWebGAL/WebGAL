@@ -1,5 +1,6 @@
 import * as PIXI from 'pixi.js';
 import { generateBgSoftInFn } from '@/Core/controller/stage/pixi/animations/bgSoftIn';
+import { logger } from '@/Core/util/etc/logger';
 
 interface ITickerFunc {
   key: string;
@@ -43,7 +44,6 @@ export default class PixiStage {
   private LockTransformTarget: Array<string> = [];
   private stageWidth = 2560;
   private stageHeight = 1440;
-  private resourseLoader = new PIXI.Loader();
 
   public constructor() {
     const app = new PIXI.Application({
@@ -76,7 +76,7 @@ export default class PixiStage {
     this.effectsContainer = new PIXI.Container();
     this.effectsContainer.zIndex = 3;
     this.figureContainer = new PIXI.Container();
-    this.effectsContainer.zIndex = 2;
+    this.figureContainer.zIndex = 2;
     this.backgroundContainer = new PIXI.Container();
     this.backgroundContainer.zIndex = 0;
     app.stage.addChild(this.effectsContainer, this.figureContainer, this.backgroundContainer);
@@ -99,14 +99,13 @@ export default class PixiStage {
 
   public addBg(key: string, url: string) {
     return new Promise<boolean>((resolve) => {
-      if (this.backgroundObjects.findIndex((e) => e.key === key) >= 0) {
-        resolve(false);
-      } else {
-        const loader = this.resourseLoader;
+      const loader = new PIXI.Loader();
 
-        // 完成图片加载后执行的函数
-        const setup = () => {
-          const texture = loader.resources[url].texture!;
+      // 完成图片加载后执行的函数
+      const setup = () => {
+        const texture = loader.resources[url].texture!;
+        const isBgSet = this.backgroundObjects.findIndex((e) => e.key === key) >= 0;
+        if (texture && !isBgSet) {
           /**
            * 重设大小
            */
@@ -114,9 +113,10 @@ export default class PixiStage {
           const originalHeight = texture.height;
           const scaleX = this.stageWidth / originalWidth;
           const scaleY = this.stageHeight / originalHeight;
+          const targetScale = Math.max(scaleX, scaleY);
           const bgSprite = new PIXI.Sprite(texture);
-          bgSprite.scale.x = scaleX;
-          bgSprite.scale.y = scaleY;
+          bgSprite.scale.x = targetScale;
+          bgSprite.scale.y = targetScale;
           bgSprite.anchor.set(0.5);
           bgSprite.position.x = this.stageWidth / 2;
           bgSprite.position.y = this.stageHeight / 2;
@@ -125,25 +125,25 @@ export default class PixiStage {
           this.backgroundObjects.push({ key: key, pixiSprite: bgSprite, url: url });
           this.backgroundContainer.addChild(bgSprite);
           resolve(true);
-        };
-        const resourses = Object.keys(loader.resources);
-        if (!resourses.includes(url)) {
-          // 此资源未加载，加载
-          loader.add(url).load(setup);
-        } else {
-          // 复用
-          setup();
-        }
+        } else resolve(false);
+      };
+
+      /**
+       * 加载器部分
+       */
+      const resourses = Object.keys(loader.resources);
+      if (!resourses.includes(url)) {
+        // 此资源未加载，加载
+        loader.add(url).load(setup);
+      } else {
+        // 复用
+        setup();
       }
     });
   }
 
   public getBgByKey(key: string) {
     return this.backgroundObjects.find((e) => e.key === key);
-  }
-
-  public getBgByKeyAndUrl(key: string, url: string) {
-    return this.backgroundObjects.find((e) => e.key === key && e.url === url);
   }
 
   public removeBg(key: string) {
@@ -156,11 +156,71 @@ export default class PixiStage {
     }
   }
 
-  public addFigure(key: string, url: string) {
-    const texture = PIXI.Texture.from(url);
+  public addFigure(key: string, url: string, presetPosition: 'left' | 'center' | 'right' = 'center') {
+    return new Promise<boolean>((resolve) => {
+      const loader = new PIXI.Loader();
 
-    /**
-     * 重设大小
-     */
+      // 完成图片加载后执行的函数
+      const setup = () => {
+        const texture = loader.resources[url].texture;
+        const isSetThisFigure = this.figureObjects.findIndex((e) => e.key === key) >= 0;
+        if (texture && !isSetThisFigure) {
+          /**
+           * 重设大小
+           */
+          const originalWidth = texture.width;
+          const originalHeight = texture.height;
+          const scaleX = this.stageWidth / originalWidth;
+          const scaleY = this.stageHeight / originalHeight;
+          const targetScale = Math.min(scaleX, scaleY);
+          const figureSprite = new PIXI.Sprite(texture);
+          figureSprite.scale.x = targetScale;
+          figureSprite.scale.y = targetScale;
+          figureSprite.anchor.set(0.5);
+          figureSprite.position.y = this.stageHeight / 2;
+          const targetWidth = originalWidth * targetScale;
+          if (presetPosition === 'center') {
+            figureSprite.position.x = this.stageWidth / 2;
+          }
+          if (presetPosition === 'left') {
+            figureSprite.position.x = targetWidth / 2;
+          }
+          if (presetPosition === 'right') {
+            figureSprite.position.x = this.stageWidth - targetWidth / 2;
+          }
+
+          // 挂载
+          this.figureObjects.push({ key: key, pixiSprite: figureSprite, url: url });
+          this.figureContainer.addChild(figureSprite);
+          resolve(true);
+        } else resolve(false);
+      };
+
+      /**
+       * 加载器部分
+       */
+      const resourses = Object.keys(loader.resources);
+      if (!resourses.includes(url)) {
+        // 此资源未加载，加载
+        loader.add(url).load(setup);
+      } else {
+        // 复用
+        setup();
+      }
+    });
+  }
+
+  public getFigureByKey(key: string) {
+    return this.figureObjects.find((e) => e.key === key);
+  }
+
+  public removeFigure(key: string) {
+    const index = this.figureObjects.findIndex((e) => e.key === key);
+    if (index >= 0) {
+      const bgSprite = this.figureObjects[index];
+      bgSprite.pixiSprite.destroy();
+      this.figureContainer.removeChild(bgSprite.pixiSprite);
+      this.figureObjects.splice(index, 1);
+    }
   }
 }
