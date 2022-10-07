@@ -1,11 +1,3 @@
-WebGAL:要启动电影模式吗？
-choose:启动:enableFilm|不启动:notEnable;
-label:enableFilm;
-filmMode:enable;
-jumpLabel:scriptStart;
-label:notEnable;
-filmMode:none;
-label:scriptStart;
 changeBg:c4.jpg -next;
 unlockCg:c4.jpg -name=街前;
 unlockCg:xgmain.jpeg -name=星光咖啡馆与死神之蝶;
@@ -21,7 +13,7 @@ pixiPerform:snow;
 WebGAL:现在展示的是下雪的特效。;
 setTextbox:hide;
 pixiInit;
-setTextbox:on;
+setTextbox:on -next;
 WebGAL:特效的演示已经结束，现在我们正式开始吧！;
 label:toStart;
 playVideo:OP.mp4;
