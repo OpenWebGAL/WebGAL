@@ -1,6 +1,4 @@
 import * as PIXI from 'pixi.js';
-import { generateBgSoftInFn } from '@/Core/controller/stage/pixi/animations/bgSoftIn';
-import { logger } from '@/Core/util/etc/logger';
 
 interface ITickerFunc {
   key: string;
@@ -14,13 +12,13 @@ interface ITransformFunc {
   func: Function;
 }
 
-interface IFigure {
+export interface IFigure {
   key: string;
   pixiSprite: PIXI.Sprite;
   url: string;
 }
 
-interface IBackground {
+export interface IBackground {
   key: string;
   pixiSprite: PIXI.Sprite;
   url: string;
@@ -133,6 +131,8 @@ export default class PixiStage {
        */
       const resourses = Object.keys(loader.resources);
       if (!resourses.includes(url)) {
+        // 清缓存
+        PIXI.utils.clearTextureCache();
         // 此资源未加载，加载
         loader.add(url).load(setup);
       } else {
@@ -201,6 +201,8 @@ export default class PixiStage {
        */
       const resourses = Object.keys(loader.resources);
       if (!resourses.includes(url)) {
+        // 清缓存
+        PIXI.utils.clearTextureCache();
         // 此资源未加载，加载
         loader.add(url).load(setup);
       } else {
@@ -221,6 +223,27 @@ export default class PixiStage {
       bgSprite.pixiSprite.destroy();
       this.figureContainer.removeChild(bgSprite.pixiSprite);
       this.figureObjects.splice(index, 1);
+    }
+  }
+
+  public getStageObjByKey(key: string) {
+    return [...this.figureObjects, ...this.backgroundObjects].find((e) => e.key === key);
+  }
+
+  public removeStageObject(key: string) {
+    const indexFig = this.figureObjects.findIndex((e) => e.key === key);
+    const indexBg = this.backgroundObjects.findIndex((e) => e.key === key);
+    if (indexFig >= 0) {
+      const bgSprite = this.figureObjects[indexFig];
+      bgSprite.pixiSprite.destroy();
+      this.figureContainer.removeChild(bgSprite.pixiSprite);
+      this.figureObjects.splice(indexFig, 1);
+    }
+    if (indexBg >= 0) {
+      const bgSprite = this.backgroundObjects[indexBg];
+      bgSprite.pixiSprite.destroy();
+      this.backgroundContainer.removeChild(bgSprite.pixiSprite);
+      this.backgroundObjects.splice(indexBg, 1);
     }
   }
 }
