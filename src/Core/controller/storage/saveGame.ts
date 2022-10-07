@@ -38,10 +38,10 @@ export function generateCurrentStageData(index: number) {
   const canvas: HTMLCanvasElement = document.getElementById('pixiCanvas')! as HTMLCanvasElement;
   const canvas2 = document.createElement('canvas');
   const context = canvas2.getContext('2d');
-  canvas2.width = 1280;
-  canvas2.height = 720;
-  context!.drawImage(canvas, 0, 0, 1280, 720);
-  const urlToSave = canvas2.toDataURL();
+  canvas2.width = 640;
+  canvas2.height = 360;
+  context!.drawImage(canvas, 0, 0, 640, 360);
+  const urlToSave = canvas2.toDataURL('image/jpeg', 0.6);
   canvas2.remove();
   const saveData: ISaveData = {
     nowStageState: cloneDeep(stageState),
