@@ -30,5 +30,6 @@ export interface IGamePlay {
   autoInterval: ReturnType<typeof setInterval> | null;
   fastInterval: ReturnType<typeof setInterval> | null;
   autoTimeout: ReturnType<typeof setTimeout> | null;
+  // 游戏运行时的 PIXI 舞台
   pixiStage: PixiStage | null;
 }
