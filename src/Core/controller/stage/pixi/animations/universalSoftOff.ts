@@ -5,7 +5,7 @@ export function generateUniversalSoftOffFn(targetKey: string, duration: number) 
   return function (delta: number) {
     if (target) {
       const sprite = target.pixiSprite;
-      const baseDuration = 1000 / 60;
+      const baseDuration = RUNTIME_GAMEPLAY.pixiStage!.frameDuration;
       const currentAddOplityDelta = (duration / baseDuration) * delta;
       const decreasement = 1 / currentAddOplityDelta;
       if (sprite.alpha > 0) {
