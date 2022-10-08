@@ -6,22 +6,25 @@ interface ITickerFunc {
   func: PIXI.TickerCallback<number>;
 }
 
-interface ITransformFunc {
-  key: string;
-  targetKey: string;
-  func: Function;
-}
-
 export interface IFigure {
   key: string;
   pixiSprite: PIXI.Sprite;
   url: string;
+  startRegisterTime: Date;
 }
 
 export interface IBackground {
   key: string;
   pixiSprite: PIXI.Sprite;
   url: string;
+  startRegisterTime: Date;
+}
+
+export interface registerTickerOpr {
+  tickerGeneraterFn: (targetKey: string, duration: number) => PIXI.TickerCallback<number>;
+  key: string;
+  target: string;
+  duration: number;
 }
 
 export default class PixiStage {
@@ -34,14 +37,18 @@ export default class PixiStage {
   public figureObjects: Array<IFigure> = [];
   public backgroundContainer: PIXI.Container;
   public backgroundObjects: Array<IBackground> = [];
+  public frameDuration = PIXI.Ticker.shared.elapsedMS;
+
   // 注册到 Ticker 上的函数
   public tickerFuncs: Array<ITickerFunc> = [];
-  // 要执行的变换操作
-  public transformFuncs: Array<ITransformFunc> = [];
+
   // 锁定变换对象（对象可能正在执行动画，不能应用变换）
   private LockTransformTarget: Array<string> = [];
   private stageWidth = 2560;
   private stageHeight = 1440;
+
+  // 将要注册的动画，但是由于资源未就位还不能注册，在此等待注册，注册后清除
+  private pendingRegisterTickers: Map<string, registerTickerOpr> = new Map();
 
   public constructor() {
     const app = new PIXI.Application({
@@ -95,15 +102,45 @@ export default class PixiStage {
     }
   }
 
+  public getPendingTicker(key: string) {
+    return this.pendingRegisterTickers.get(key);
+  }
+
+  public removePendingTicker(key: string) {
+    this.pendingRegisterTickers.delete(key);
+  }
+
   public addBg(key: string, url: string) {
     return new Promise<boolean>((resolve) => {
       const loader = new PIXI.Loader();
 
+      // 开始注册这个背景的时间，用于判断后注册的要不要顶掉前面的
+      const startRegisterTime = new Date();
+
       // 完成图片加载后执行的函数
       const setup = () => {
-        const texture = loader.resources[url].texture!;
-        const isBgSet = this.backgroundObjects.findIndex((e) => e.key === key) >= 0;
-        if (texture && !isBgSet) {
+        const texture = loader.resources[url].texture;
+        const setBgIndex = this.backgroundObjects.findIndex((e) => e.key === key);
+
+        // 是否有相同 key 的背景
+        const isBgSet = setBgIndex >= 0;
+
+        // 要不要注册这个背景
+        let setThis = true;
+
+        // 已经有一个这个 key 的背景存在了
+        if (isBgSet) {
+          const setBg = this.backgroundObjects[setBgIndex];
+          if (setBg.startRegisterTime > startRegisterTime) {
+            // 新背景已经设置，不挤占
+            setThis = false;
+          } else {
+            // 原先的背景是旧的，挤占
+            this.removeBg(key);
+          }
+        }
+
+        if (texture && setThis) {
           /**
            * 重设大小
            */
@@ -120,7 +157,7 @@ export default class PixiStage {
           bgSprite.position.y = this.stageHeight / 2;
 
           // 挂载
-          this.backgroundObjects.push({ key: key, pixiSprite: bgSprite, url: url });
+          this.backgroundObjects.push({ key: key, pixiSprite: bgSprite, url: url, startRegisterTime });
           this.backgroundContainer.addChild(bgSprite);
           resolve(true);
         } else resolve(false);
@@ -160,11 +197,32 @@ export default class PixiStage {
     return new Promise<boolean>((resolve) => {
       const loader = new PIXI.Loader();
 
+      // 开始注册这个立绘的时间，用于判断后注册的要不要顶掉前面的
+      const startRegisterTime = new Date();
+
       // 完成图片加载后执行的函数
       const setup = () => {
         const texture = loader.resources[url].texture;
-        const isSetThisFigure = this.figureObjects.findIndex((e) => e.key === key) >= 0;
-        if (texture && !isSetThisFigure) {
+        const setFigIndex = this.figureObjects.findIndex((e) => e.key === key);
+
+        // 是否有相同 key 的背景
+        const isFigSet = setFigIndex >= 0;
+
+        // 要不要注册这个背景
+        let setThis = true;
+
+        // 已经有一个这个 key 的背景存在了
+        if (isFigSet) {
+          const setBg = this.figureObjects[setFigIndex];
+          if (setBg.startRegisterTime > startRegisterTime) {
+            // 新背景已经设置，不挤占
+            setThis = false;
+          } else {
+            // 原先的背景是旧的，挤占
+            this.removeBg(key);
+          }
+        }
+        if (texture && setThis) {
           /**
            * 重设大小
            */
@@ -190,7 +248,7 @@ export default class PixiStage {
           }
 
           // 挂载
-          this.figureObjects.push({ key: key, pixiSprite: figureSprite, url: url });
+          this.figureObjects.push({ key: key, pixiSprite: figureSprite, url: url, startRegisterTime });
           this.figureContainer.addChild(figureSprite);
           resolve(true);
         } else resolve(false);
