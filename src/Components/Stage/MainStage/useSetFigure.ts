@@ -16,23 +16,40 @@ export function useSetFigure(stageState: IStageState) {
     /**
      * 特殊处理：中间立绘
      */
+    const thisFigKey = 'center';
     const softInAniKey = 'center-figer-softin';
     if (figName !== '') {
-      const currentFigCenter = RUNTIME_GAMEPLAY.pixiStage?.getFigureByKey('center');
+      const currentFigCenter = RUNTIME_GAMEPLAY.pixiStage?.getFigureByKey(thisFigKey);
       if (currentFigCenter) {
         if (currentFigCenter.url !== figName) {
           removeFig(currentFigCenter, softInAniKey);
         }
       }
-      RUNTIME_GAMEPLAY.pixiStage?.addFigure('center', figName, 'center').then((res) => {
+      RUNTIME_GAMEPLAY.pixiStage?.addFigure(thisFigKey, figName, thisFigKey).then((res) => {
         if (res) {
           logger.debug('中立绘已重设');
-          RUNTIME_GAMEPLAY.pixiStage!.registerTicker(generateUniversalSoftInFn('center', 300), softInAniKey, 'center');
+          // 如果有等待注册的动画
+          if (RUNTIME_GAMEPLAY.pixiStage!.getPendingTicker(thisFigKey)) {
+            const pendingTicker = RUNTIME_GAMEPLAY.pixiStage!.getPendingTicker(thisFigKey)!;
+            RUNTIME_GAMEPLAY.pixiStage!.registerTicker(
+              pendingTicker.tickerGeneraterFn(pendingTicker.key, pendingTicker.duration),
+              pendingTicker.key,
+              pendingTicker.target,
+            );
+            RUNTIME_GAMEPLAY.pixiStage?.removePendingTicker(thisFigKey);
+          }
+          // 否则走默认动画
+          else
+            RUNTIME_GAMEPLAY.pixiStage!.registerTicker(
+              generateUniversalSoftInFn(thisFigKey, 300),
+              softInAniKey,
+              thisFigKey,
+            );
         }
       });
     } else {
       logger.debug('移除中立绘');
-      const currentFigCenter = RUNTIME_GAMEPLAY.pixiStage?.getFigureByKey('center');
+      const currentFigCenter = RUNTIME_GAMEPLAY.pixiStage?.getFigureByKey(thisFigKey);
       if (currentFigCenter) {
         if (currentFigCenter.url !== figName) {
           removeFig(currentFigCenter, softInAniKey);
@@ -45,22 +62,39 @@ export function useSetFigure(stageState: IStageState) {
     /**
      * 特殊处理：左侧立绘
      */
+    const thisFigKey = 'left';
     const softInAniKey = 'left-figer-softin';
     if (figNameLeft !== '') {
-      const currentFigLeft = RUNTIME_GAMEPLAY.pixiStage?.getFigureByKey('left');
+      const currentFigLeft = RUNTIME_GAMEPLAY.pixiStage?.getFigureByKey(thisFigKey);
       if (currentFigLeft) {
         if (currentFigLeft.url !== figNameLeft) {
           removeFig(currentFigLeft, softInAniKey);
         }
       }
-      RUNTIME_GAMEPLAY.pixiStage?.addFigure('left', figNameLeft, 'left').then((res) => {
+      RUNTIME_GAMEPLAY.pixiStage?.addFigure(thisFigKey, figNameLeft, thisFigKey).then((res) => {
         if (res) {
           logger.debug('左立绘已重设');
-          RUNTIME_GAMEPLAY.pixiStage!.registerTicker(generateUniversalSoftInFn('left', 300), softInAniKey, 'left');
+          // 如果有等待注册的动画
+          if (RUNTIME_GAMEPLAY.pixiStage!.getPendingTicker(thisFigKey)) {
+            const pendingTicker = RUNTIME_GAMEPLAY.pixiStage!.getPendingTicker(thisFigKey)!;
+            RUNTIME_GAMEPLAY.pixiStage!.registerTicker(
+              pendingTicker.tickerGeneraterFn(pendingTicker.key, pendingTicker.duration),
+              pendingTicker.key,
+              pendingTicker.target,
+            );
+            RUNTIME_GAMEPLAY.pixiStage?.removePendingTicker(thisFigKey);
+          }
+          // 否则走默认动画
+          else
+            RUNTIME_GAMEPLAY.pixiStage!.registerTicker(
+              generateUniversalSoftInFn(thisFigKey, 300),
+              softInAniKey,
+              thisFigKey,
+            );
         }
       });
     } else {
-      const currentFigLeft = RUNTIME_GAMEPLAY.pixiStage?.getFigureByKey('left');
+      const currentFigLeft = RUNTIME_GAMEPLAY.pixiStage?.getFigureByKey(thisFigKey);
       if (currentFigLeft) {
         if (currentFigLeft.url !== figNameLeft) {
           removeFig(currentFigLeft, softInAniKey);
@@ -73,22 +107,39 @@ export function useSetFigure(stageState: IStageState) {
     /**
      * 特殊处理：右侧立绘
      */
+    const thisFigKey = 'right';
     const softInAniKey = 'right-figer-softin';
     if (figNameRight !== '') {
-      const currentFigRight = RUNTIME_GAMEPLAY.pixiStage?.getFigureByKey('right');
+      const currentFigRight = RUNTIME_GAMEPLAY.pixiStage?.getFigureByKey(thisFigKey);
       if (currentFigRight) {
         if (currentFigRight.url !== figNameRight) {
           removeFig(currentFigRight, softInAniKey);
         }
       }
-      RUNTIME_GAMEPLAY.pixiStage?.addFigure('right', figNameRight, 'right').then((res) => {
+      RUNTIME_GAMEPLAY.pixiStage?.addFigure(thisFigKey, figNameRight, thisFigKey).then((res) => {
         if (res) {
           logger.debug('右立绘已重设');
-          RUNTIME_GAMEPLAY.pixiStage!.registerTicker(generateUniversalSoftInFn('right', 300), softInAniKey, 'right');
+          // 如果有等待注册的动画
+          if (RUNTIME_GAMEPLAY.pixiStage!.getPendingTicker(thisFigKey)) {
+            const pendingTicker = RUNTIME_GAMEPLAY.pixiStage!.getPendingTicker(thisFigKey)!;
+            RUNTIME_GAMEPLAY.pixiStage!.registerTicker(
+              pendingTicker.tickerGeneraterFn(pendingTicker.key, pendingTicker.duration),
+              pendingTicker.key,
+              pendingTicker.target,
+            );
+            RUNTIME_GAMEPLAY.pixiStage?.removePendingTicker(thisFigKey);
+          }
+          // 否则走默认动画
+          else
+            RUNTIME_GAMEPLAY.pixiStage!.registerTicker(
+              generateUniversalSoftInFn(thisFigKey, 300),
+              softInAniKey,
+              thisFigKey,
+            );
         }
       });
     } else {
-      const currentFigRight = RUNTIME_GAMEPLAY.pixiStage?.getFigureByKey('right');
+      const currentFigRight = RUNTIME_GAMEPLAY.pixiStage?.getFigureByKey(thisFigKey);
       if (currentFigRight) {
         if (currentFigRight.url !== figNameRight) {
           removeFig(currentFigRight, softInAniKey);
