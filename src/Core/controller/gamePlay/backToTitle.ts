@@ -8,6 +8,8 @@ import { stopFast } from '@/Core/controller/gamePlay/fastSkip';
 export const backToTitle = () => {
   const GUIState = webgalStore.getState().GUI;
   const dispatch = webgalStore.dispatch;
+  // @ts-ignore
+  window.prevBgm = webgalStore.getState().stage.bgm;
   playBgm(GUIState.titleBgm);
   stopAllPerform();
   stopAuto();
