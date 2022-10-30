@@ -46,7 +46,13 @@ const Title: FC = () => {
               className={styles.Title_button}
               onClick={async () => {
                 dispatch(setVisibility({ component: 'showTitle', visibility: false }));
-                playBgm('/');
+                // @ts-ignore
+                if (window.prevBgm) {
+                  // @ts-ignore
+                  playBgm(window.prevBgm);
+                  // @ts-ignore
+                  delete window.prevBgm;
+                } else playBgm('/');
                 // 当且仅当游戏未开始时使用快速存档
                 // 当游戏开始后 使用原来的逻辑
                 if ((await hasFastSaveRecord()) && RUNTIME_SCENE_DATA.currentSentenceId === 0) {

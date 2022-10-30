@@ -70,7 +70,7 @@ export const Backlog = () => {
       backlogs.unshift(singleBacklogView);
     }
     return backlogs;
-  }, [RUNTIME_CURRENT_BACKLOG.length]);
+  }, [RUNTIME_CURRENT_BACKLOG[RUNTIME_CURRENT_BACKLOG.length - 1]?.saveScene?.currentSentenceId ?? 0]);
   useEffect(() => {
     /* 切换为展示历史记录时触发 */
     if (GUIStore.showBacklog) {
