@@ -65,9 +65,8 @@ export const initializeScript = (): void => {
   RUNTIME_GAMEPLAY.pixiStage = new PixiStage();
 
   /**
-   * 如果有 Service Worker ，则卸载所有 Service Worker
+   * iOS 设备 卸载所有 Service Worker
    */
-
   const u = navigator.userAgent;
   const isIOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); // 判断是否是 iOS终端
   if ('serviceWorker' in navigator && isIOS) {
