@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import React from 'react';
 import styles from '@/Components/UI/Extra/extra.module.scss';
-import { useObject } from '@/hooks/useObject';
+import { useValue } from '@/hooks/useValue';
 import { setStage } from '@/store/stageReducer';
 import { GoEnd, GoStart, MusicList, PlayOne, SquareSmall } from '@icon-park/react';
 
@@ -11,7 +11,7 @@ export function ExtraBgm() {
   const currentBgm = useSelector((state: RootState) => state.stage.bgm);
   const extraState = useSelector((state: RootState) => state.userData.appreciationData);
   // 是否展示 bgm 列表
-  const isShowBgmList = useObject(false);
+  const isShowBgmList = useValue(false);
   let foundCurrentBgmName = 'init_bgm_find_var_WebGAL_4.2.1';
   let foundCurrentBgmIndex = -1;
   const iconSize = 39;
@@ -23,7 +23,7 @@ export function ExtraBgm() {
       foundCurrentBgmIndex = i;
     }
   });
-  const currentPlayingBgmName = useObject('');
+  const currentPlayingBgmName = useValue('');
   if (foundCurrentBgmName !== 'init_bgm_find_var_WebGAL_4.2.1' && foundCurrentBgmName !== currentPlayingBgmName.value) {
     currentPlayingBgmName.set(foundCurrentBgmName);
   }

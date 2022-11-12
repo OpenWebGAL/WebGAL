@@ -1,4 +1,4 @@
-import { useObject } from '@/hooks/useObject';
+import { useValue } from '@/hooks/useValue';
 import styles from '@/Components/UI/Extra/extra.module.scss';
 import React from 'react';
 
@@ -10,7 +10,7 @@ interface IProps {
 }
 
 export function ExtraCgElement(props: IProps) {
-  const showFull = useObject(false);
+  const showFull = useValue(false);
   return (
     <>
       {showFull.value && (

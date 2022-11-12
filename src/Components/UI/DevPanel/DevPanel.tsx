@@ -1,5 +1,5 @@
 import styles from './devPanel.module.scss';
-import { useObject } from '@/hooks/useObject';
+import { useValue } from '@/hooks/useValue';
 import { getPixiSscreenshot } from '@/Components/UI/DevPanel/devFunctions/getPixiSscreenshot';
 import { RUNTIME_GAMEPLAY } from '@/Core/runtime/gamePlay';
 import { useEffect } from 'react';
@@ -10,8 +10,8 @@ export default function DevPanel() {
     const hash = window.location.hash;
     return !!hash.match(/dev/);
   }
-  const isOpenDevPanel = useObject(false);
-  const hash = useObject(window.location.hash);
+  const isOpenDevPanel = useValue(false);
+  const hash = useValue(window.location.hash);
   useEffect(() => {
     window.onhashchange = () => {
       hash.set(window.location.hash);

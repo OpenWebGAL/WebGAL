@@ -1,7 +1,7 @@
 import { FC, useEffect } from 'react';
 import styles from './options.module.scss';
 import { getStorage } from '@/Core/controller/storage/storageController';
-import { useObject } from '@/hooks/useObject';
+import { useValue } from '@/hooks/useValue';
 import { System } from '@/Components/UI/Menu/Options/System/System';
 import { Display } from '@/Components/UI/Menu/Options/Display/Display';
 import { Sound } from '@/Components/UI/Menu/Options/Sound/Sound';
@@ -13,7 +13,7 @@ enum optionPage {
 }
 
 export const Options: FC = () => {
-  const currentOptionPage = useObject(optionPage.System);
+  const currentOptionPage = useValue(optionPage.System);
   useEffect(getStorage, []);
 
   function getClassName(page: optionPage) {
