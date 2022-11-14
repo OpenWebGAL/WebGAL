@@ -5,6 +5,7 @@
 export const RUNTIME_GAME_INFO = {
   gameName: '',
   gameKey: '',
+  prevBgm: '',
 };
 
 // export const RUNTIME_ETC = {

@@ -17,7 +17,7 @@ export function generateTemplateFn(targetKey: string, duration: number) {
   return function (delta: number) {
     if (target) {
       // 要操控的精灵
-      const sprite = target.pixiSprite;
+      const sprite = target.pixiContainer;
       // 每一帧的时间
       const baseDuration = RUNTIME_GAMEPLAY.pixiStage!.frameDuration;
 

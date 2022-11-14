@@ -1,27 +1,27 @@
 import * as PIXI from 'pixi.js';
+import { v4 as uuid } from 'uuid';
 
 interface ITickerFunc {
+  // 唯一标识
+  uuid: string;
+  // 一般与作用目标有关
   key: string;
   targetKey?: string;
   func: PIXI.TickerCallback<number>;
 }
 
-export interface IFigure {
+export interface IStageObject {
+  // 唯一标识
+  uuid: string;
+  // 一般与作用目标有关
   key: string;
-  pixiSprite: PIXI.Sprite;
-  url: string;
-  startRegisterTime: Date;
+  pixiContainer: PIXI.Container;
+  // 相关的源 url
+  sourceUrl: string;
 }
 
-export interface IBackground {
-  key: string;
-  pixiSprite: PIXI.Sprite;
-  url: string;
-  startRegisterTime: Date;
-}
-
-export interface registerTickerOpr {
-  tickerGeneraterFn: (targetKey: string, duration: number) => PIXI.TickerCallback<number>;
+export interface IRegisterTickerOpr {
+  tickerGeneratorFn: (targetKey: string, duration: number) => PIXI.TickerCallback<number>;
   key: string;
   target: string;
   duration: number;
@@ -34,9 +34,9 @@ export default class PixiStage {
   public currentApp: PIXI.Application | null = null;
   public effectsContainer: PIXI.Container;
   public figureContainer: PIXI.Container;
-  public figureObjects: Array<IFigure> = [];
+  public figureObjects: Array<IStageObject> = [];
   public backgroundContainer: PIXI.Container;
-  public backgroundObjects: Array<IBackground> = [];
+  public backgroundObjects: Array<IStageObject> = [];
   public frameDuration = PIXI.Ticker.shared.elapsedMS;
 
   // 注册到 Ticker 上的函数
@@ -46,9 +46,6 @@ export default class PixiStage {
   private LockTransformTarget: Array<string> = [];
   private stageWidth = 2560;
   private stageHeight = 1440;
-
-  // 将要注册的动画，但是由于资源未就位还不能注册，在此等待注册，注册后清除
-  private pendingRegisterTickers: Map<string, registerTickerOpr> = new Map();
 
   public constructor() {
     const app = new PIXI.Application({
@@ -88,8 +85,8 @@ export default class PixiStage {
     this.currentApp = app;
   }
 
-  public registerTicker(tickerFn: PIXI.TickerCallback<number>, key: string, target = 'defalut') {
-    this.tickerFuncs.push({ func: tickerFn, key: key, targetKey: target });
+  public registerTicker(tickerFn: PIXI.TickerCallback<number>, key: string, target = 'default') {
+    this.tickerFuncs.push({ uuid: uuid(), func: tickerFn, key: key, targetKey: target });
     this.currentApp?.ticker.add(tickerFn);
   }
 
@@ -102,45 +99,37 @@ export default class PixiStage {
     }
   }
 
-  public getPendingTicker(key: string) {
-    return this.pendingRegisterTickers.get(key);
-  }
-
-  public removePendingTicker(key: string) {
-    this.pendingRegisterTickers.delete(key);
-  }
-
+  /**
+   * 添加背景
+   * @param key 背景的标识，一般和背景类型有关
+   * @param url 背景图片url
+   */
   public addBg(key: string, url: string) {
     return new Promise<boolean>((resolve) => {
       const loader = new PIXI.Loader();
 
-      // 开始注册这个背景的时间，用于判断后注册的要不要顶掉前面的
-      const startRegisterTime = new Date();
+      // 准备用于存放这个背景的 Container
+      const thisBgContainer = new PIXI.Container();
+
+      // 是否有相同 key 的背景
+      const setBgIndex = this.backgroundObjects.findIndex((e) => e.key === key);
+      const isBgSet = setBgIndex >= 0;
+
+      // 已经有一个这个 key 的背景存在了
+      if (isBgSet) {
+        // 挤占
+        this.removeStageObjectByKey(key);
+      }
+
+      // 挂载
+      this.backgroundContainer.addChild(thisBgContainer);
+      this.backgroundObjects.push({ uuid: uuid(), key: key, pixiContainer: thisBgContainer, sourceUrl: url });
+      resolve(true);
 
       // 完成图片加载后执行的函数
       const setup = () => {
         const texture = loader.resources[url].texture;
-        const setBgIndex = this.backgroundObjects.findIndex((e) => e.key === key);
-
-        // 是否有相同 key 的背景
-        const isBgSet = setBgIndex >= 0;
-
-        // 要不要注册这个背景
-        let setThis = true;
-
-        // 已经有一个这个 key 的背景存在了
-        if (isBgSet) {
-          const setBg = this.backgroundObjects[setBgIndex];
-          if (setBg.startRegisterTime > startRegisterTime) {
-            // 新背景已经设置，不挤占
-            setThis = false;
-          } else {
-            // 原先的背景是旧的，挤占
-            this.removeBg(key);
-          }
-        }
-
-        if (texture && setThis) {
+        if (texture && thisBgContainer) {
           /**
            * 重设大小
            */
@@ -157,10 +146,8 @@ export default class PixiStage {
           bgSprite.position.y = this.stageHeight / 2;
 
           // 挂载
-          this.backgroundObjects.push({ key: key, pixiSprite: bgSprite, url: url, startRegisterTime });
-          this.backgroundContainer.addChild(bgSprite);
-          resolve(true);
-        } else resolve(false);
+          thisBgContainer.addChild(bgSprite);
+        }
       };
 
       /**
@@ -179,50 +166,32 @@ export default class PixiStage {
     });
   }
 
-  public getBgByKey(key: string) {
-    return this.backgroundObjects.find((e) => e.key === key);
-  }
-
-  public removeBg(key: string) {
-    const index = this.backgroundObjects.findIndex((e) => e.key === key);
-    if (index >= 0) {
-      const bgSprite = this.backgroundObjects[index];
-      bgSprite.pixiSprite.destroy();
-      this.backgroundContainer.removeChild(bgSprite.pixiSprite);
-      this.backgroundObjects.splice(index, 1);
-    }
-  }
-
   public addFigure(key: string, url: string, presetPosition: 'left' | 'center' | 'right' = 'center') {
     return new Promise<boolean>((resolve) => {
       const loader = new PIXI.Loader();
 
-      // 开始注册这个立绘的时间，用于判断后注册的要不要顶掉前面的
-      const startRegisterTime = new Date();
+      // 准备用于存放这个立绘的 Container
+      const thisFigureContainer = new PIXI.Container();
+
+      // 是否有相同 key 的立绘
+      const setFigIndex = this.figureObjects.findIndex((e) => e.key === key);
+      const isFigSet = setFigIndex >= 0;
+
+      // 已经有一个这个 key 的立绘存在了
+      if (isFigSet) {
+        // 挤占
+        this.removeStageObjectByKey(key);
+      }
+
+      // 挂载
+      this.figureContainer.addChild(thisFigureContainer);
+      this.figureObjects.push({ uuid: uuid(), key: key, pixiContainer: thisFigureContainer, sourceUrl: url });
+      resolve(true);
 
       // 完成图片加载后执行的函数
       const setup = () => {
         const texture = loader.resources[url].texture;
-        const setFigIndex = this.figureObjects.findIndex((e) => e.key === key);
-
-        // 是否有相同 key 的背景
-        const isFigSet = setFigIndex >= 0;
-
-        // 要不要注册这个背景
-        let setThis = true;
-
-        // 已经有一个这个 key 的背景存在了
-        if (isFigSet) {
-          const setBg = this.figureObjects[setFigIndex];
-          if (setBg.startRegisterTime > startRegisterTime) {
-            // 新背景已经设置，不挤占
-            setThis = false;
-          } else {
-            // 原先的背景是旧的，挤占
-            this.removeBg(key);
-          }
-        }
-        if (texture && setThis) {
+        if (texture && thisFigureContainer) {
           /**
            * 重设大小
            */
@@ -246,12 +215,8 @@ export default class PixiStage {
           if (presetPosition === 'right') {
             figureSprite.position.x = this.stageWidth - targetWidth / 2;
           }
-
-          // 挂载
-          this.figureObjects.push({ key: key, pixiSprite: figureSprite, url: url, startRegisterTime });
-          this.figureContainer.addChild(figureSprite);
-          resolve(true);
-        } else resolve(false);
+          thisFigureContainer.addChild(figureSprite);
+        }
       };
 
       /**
@@ -270,37 +235,23 @@ export default class PixiStage {
     });
   }
 
-  public getFigureByKey(key: string) {
-    return this.figureObjects.find((e) => e.key === key);
-  }
-
-  public removeFigure(key: string) {
-    const index = this.figureObjects.findIndex((e) => e.key === key);
-    if (index >= 0) {
-      const bgSprite = this.figureObjects[index];
-      bgSprite.pixiSprite.destroy();
-      this.figureContainer.removeChild(bgSprite.pixiSprite);
-      this.figureObjects.splice(index, 1);
-    }
-  }
-
   public getStageObjByKey(key: string) {
     return [...this.figureObjects, ...this.backgroundObjects].find((e) => e.key === key);
   }
 
-  public removeStageObject(key: string) {
+  public removeStageObjectByKey(key: string) {
     const indexFig = this.figureObjects.findIndex((e) => e.key === key);
     const indexBg = this.backgroundObjects.findIndex((e) => e.key === key);
     if (indexFig >= 0) {
       const bgSprite = this.figureObjects[indexFig];
-      bgSprite.pixiSprite.destroy();
-      this.figureContainer.removeChild(bgSprite.pixiSprite);
+      bgSprite.pixiContainer.destroy();
+      this.figureContainer.removeChild(bgSprite.pixiContainer);
       this.figureObjects.splice(indexFig, 1);
     }
     if (indexBg >= 0) {
       const bgSprite = this.backgroundObjects[indexBg];
-      bgSprite.pixiSprite.destroy();
-      this.backgroundContainer.removeChild(bgSprite.pixiSprite);
+      bgSprite.pixiContainer.destroy();
+      this.backgroundContainer.removeChild(bgSprite.pixiContainer);
       this.backgroundObjects.splice(indexBg, 1);
     }
   }

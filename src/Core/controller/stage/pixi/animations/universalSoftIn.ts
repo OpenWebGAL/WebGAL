@@ -2,10 +2,10 @@ import { RUNTIME_GAMEPLAY } from '@/Core/runtime/gamePlay';
 
 export function generateUniversalSoftInFn(targetKey: string, duration: number) {
   const target = RUNTIME_GAMEPLAY.pixiStage!.getStageObjByKey(targetKey);
-  if (target) target.pixiSprite.alpha = 0;
+  if (target) target.pixiContainer.alpha = 0;
   return function (delta: number) {
     if (target) {
-      const sprite = target.pixiSprite;
+      const sprite = target.pixiContainer;
       const baseDuration = RUNTIME_GAMEPLAY.pixiStage!.frameDuration;
       const currentAddOplityDelta = (duration / baseDuration) * delta;
       const increasement = 1 / currentAddOplityDelta;
