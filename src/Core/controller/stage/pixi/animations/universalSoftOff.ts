@@ -1,8 +1,27 @@
 import { RUNTIME_GAMEPLAY } from '@/Core/runtime/gamePlay';
 
-export function generateUniversalSoftOffFn(targetKey: string, duration: number) {
+export function generateUniversalSoftOffAnimationObj(targetKey: string, duration: number) {
   const target = RUNTIME_GAMEPLAY.pixiStage!.getStageObjByKey(targetKey);
-  return function (delta: number) {
+
+  // 先设置一个通用的初态
+
+  /**
+   * 在此书写为动画设置初态的操作
+   */
+  function setStartState() {}
+
+  /**
+   * 在此书写为动画设置终态的操作
+   */
+  function setEndState() {
+    if (target) target.pixiContainer.alpha = 0;
+  }
+
+  /**
+   * 在此书写动画每一帧执行的函数
+   * @param delta
+   */
+  function tickerFunc(delta: number) {
     if (target) {
       const sprite = target.pixiContainer;
       const baseDuration = RUNTIME_GAMEPLAY.pixiStage!.frameDuration;
@@ -12,5 +31,11 @@ export function generateUniversalSoftOffFn(targetKey: string, duration: number) 
         sprite.alpha -= decreasement;
       }
     }
+  }
+
+  return {
+    setStartState,
+    setEndState,
+    tickerFunc,
   };
 }
