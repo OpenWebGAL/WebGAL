@@ -39,15 +39,17 @@ export function useSetBg(stageState: IStageState) {
 }
 
 function removeBg(bgObject: IStageObject) {
-  RUNTIME_GAMEPLAY.pixiStage?.removeAnimation('bg-main-softin');
+  RUNTIME_GAMEPLAY.pixiStage?.removeAnimationWithSetEffects('bg-main-softin');
+  const oldBgKey = bgObject.key;
   bgObject.key = 'bg-main-off';
+  RUNTIME_GAMEPLAY.pixiStage?.removeStageObjectByKey(oldBgKey);
   RUNTIME_GAMEPLAY.pixiStage!.registerAnimation(
     generateUniversalSoftOffAnimationObj('bg-main-off', 1000),
     'bg-main-softoff',
     'bg-main-off',
   );
   setTimeout(() => {
-    RUNTIME_GAMEPLAY.pixiStage?.removeAnimation('bg-main-softoff');
+    RUNTIME_GAMEPLAY.pixiStage?.removeAnimationWithSetEffects('bg-main-softoff');
     RUNTIME_GAMEPLAY.pixiStage?.removeStageObjectByKey('bg-main-off');
   }, 1000);
 }

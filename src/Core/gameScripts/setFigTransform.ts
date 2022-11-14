@@ -10,33 +10,33 @@ import cloneDeep from 'lodash/cloneDeep';
  * @param sentence
  */
 export const setFigTransform = (sentence: ISentence): IPerform => {
-  const stageState = webgalStore.getState().stage;
-  const effectList: Array<IEffect> = stageState.effects;
-  const newEffectList = cloneDeep(effectList);
-  let target = 'figCenterContainer';
-  sentence.args.forEach((e) => {
-    if (e.key === 'left' && e.value) {
-      target = 'figLeftContainer';
-    }
-    if (e.key === 'right' && e.value) {
-      target = 'figRightContainer';
-    }
-  });
-  let isTargetSet = false;
-  newEffectList.forEach((e) => {
-    if (e.target === target) {
-      isTargetSet = true;
-      e.transform = sentence.content;
-    }
-  });
-  if (!isTargetSet) {
-    newEffectList.push({
-      target: target,
-      transform: sentence.content,
-      filter: '',
-    });
-  }
-  webgalStore.dispatch(setStage({ key: 'effects', value: newEffectList }));
+  // const stageState = webgalStore.getState().stage;
+  // const effectList: Array<IEffect> = stageState.effects;
+  // const newEffectList = cloneDeep(effectList);
+  // let target = 'figCenterContainer';
+  // sentence.args.forEach((e) => {
+  //   if (e.key === 'left' && e.value) {
+  //     target = 'figLeftContainer';
+  //   }
+  //   if (e.key === 'right' && e.value) {
+  //     target = 'figRightContainer';
+  //   }
+  // });
+  // let isTargetSet = false;
+  // newEffectList.forEach((e) => {
+  //   if (e.target === target) {
+  //     isTargetSet = true;
+  //     e.transform = sentence.content;
+  //   }
+  // });
+  // if (!isTargetSet) {
+  //   newEffectList.push({
+  //     target: target,
+  //     transform: sentence.content,
+  //     filter: '',
+  //   });
+  // }
+  // webgalStore.dispatch(setStage({ key: 'effects', value: newEffectList }));
   // stageStore.setStage('effects', effectList);
   // stageStore.setStage('bgTransform',sentence.content);
   return {
