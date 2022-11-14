@@ -3,8 +3,8 @@ import { useEffect } from 'react';
 import { RUNTIME_GAMEPLAY } from '@/Core/runtime/gamePlay';
 import { logger } from '@/Core/util/etc/logger';
 import { IStageObject } from '@/Core/controller/stage/pixi/PixiController';
-import { generateUniversalSoftOffFn } from '@/Core/controller/stage/pixi/animations/universalSoftOff';
-import { generateUniversalSoftInFn } from '@/Core/controller/stage/pixi/animations/universalSoftIn';
+import { generateUniversalSoftOffAnimationObj } from '@/Core/controller/stage/pixi/animations/universalSoftOff';
+import { generateUniversalSoftInAnimationObj } from '@/Core/controller/stage/pixi/animations/universalSoftIn';
 
 export function useSetBg(stageState: IStageState) {
   const bgName = stageState.bgName;
@@ -13,7 +13,7 @@ export function useSetBg(stageState: IStageState) {
    * 设置背景
    */
   useEffect(() => {
-    const thisBgKey = 'main';
+    const thisBgKey = 'bg-main';
     if (bgName !== '') {
       const currentBg = RUNTIME_GAMEPLAY.pixiStage?.getStageObjByKey(thisBgKey);
       if (currentBg) {
@@ -21,17 +21,14 @@ export function useSetBg(stageState: IStageState) {
           removeBg(currentBg);
         }
       }
-      RUNTIME_GAMEPLAY.pixiStage?.addBg(thisBgKey, bgName).then((res) => {
-        if (res) {
-          logger.debug('重设背景');
-          // 走默认动画
-          RUNTIME_GAMEPLAY.pixiStage!.registerTicker(
-            generateUniversalSoftInFn(thisBgKey, 1000),
-            'bg-softin',
-            thisBgKey,
-          );
-        }
-      });
+      RUNTIME_GAMEPLAY.pixiStage?.addBg(thisBgKey, bgName);
+      logger.debug('重设背景');
+      // 走默认动画
+      RUNTIME_GAMEPLAY.pixiStage!.registerAnimation(
+        generateUniversalSoftInAnimationObj(thisBgKey, 1000),
+        'bg-main-softin',
+        thisBgKey,
+      );
     } else {
       const currentBg = RUNTIME_GAMEPLAY.pixiStage?.getStageObjByKey(thisBgKey);
       if (currentBg) {
@@ -42,11 +39,15 @@ export function useSetBg(stageState: IStageState) {
 }
 
 function removeBg(bgObject: IStageObject) {
-  RUNTIME_GAMEPLAY.pixiStage?.removeTicker('bg-softin');
-  bgObject.key = 'main-off';
-  RUNTIME_GAMEPLAY.pixiStage!.registerTicker(generateUniversalSoftOffFn('main-off', 1000), 'bg-softoff', 'main-off');
+  RUNTIME_GAMEPLAY.pixiStage?.removeAnimation('bg-main-softin');
+  bgObject.key = 'bg-main-off';
+  RUNTIME_GAMEPLAY.pixiStage!.registerAnimation(
+    generateUniversalSoftOffAnimationObj('bg-main-off', 1000),
+    'bg-main-softoff',
+    'bg-main-off',
+  );
   setTimeout(() => {
-    RUNTIME_GAMEPLAY.pixiStage?.removeTicker('bg-softoff');
-    RUNTIME_GAMEPLAY.pixiStage?.removeStageObjectByKey('main-off');
+    RUNTIME_GAMEPLAY.pixiStage?.removeAnimation('bg-main-softoff');
+    RUNTIME_GAMEPLAY.pixiStage?.removeStageObjectByKey('bg-main-off');
   }, 1000);
 }
