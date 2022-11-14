@@ -1,5 +1,5 @@
-import { ISentence } from '@/interface/coreInterface/sceneInterface';
-import { IPerform } from '@/interface/coreInterface/performInterface';
+import { ISentence } from '@/Core/controller/scene/sceneInterface';
+import { IPerform } from '@/Core/controller/perform/performInterface';
 import { RUNTIME_GAMEPLAY } from '@/Core/runtime/gamePlay';
 import pixiRain from './pixiPerformScripts/rain';
 import { pixiSnow } from '@/Core/gameScripts/pixiPerformScripts/snow';
@@ -49,7 +49,7 @@ export const pixi = (sentence: ISentence): IPerform => {
       logger.warn('现在正在卸载pixi演出');
       container.destroy({ texture: true, baseTexture: true });
       RUNTIME_GAMEPLAY.pixiStage?.effectsContainer.removeChild(container);
-      RUNTIME_GAMEPLAY.pixiStage?.removeTicker(tickerKey);
+      RUNTIME_GAMEPLAY.pixiStage?.removeAnimation(tickerKey);
     },
     blockingNext: () => false,
     blockingAuto: () => false,

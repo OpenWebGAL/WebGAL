@@ -69,6 +69,9 @@ export const pixiSnow = (snowSpeed: number) => {
       container.removeChild(container.children[0]);
     }
   }
-  RUNTIME_GAMEPLAY.pixiStage?.registerTicker(tickerFn, 'snow-Ticker');
+  RUNTIME_GAMEPLAY.pixiStage?.registerAnimation(
+    { setStartState: () => {}, setEndState: () => {}, tickerFunc: tickerFn },
+    'snow-Ticker',
+  );
   return { container, tickerKey: 'snow-Ticker' };
 };

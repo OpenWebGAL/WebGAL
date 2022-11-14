@@ -12,7 +12,7 @@ import {
   playSpeed,
   textFont,
   textSize,
-} from '@/interface/stateInterface/userDataInterface';
+} from '@/store/userDataInterface';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 const initialOptionSet = {

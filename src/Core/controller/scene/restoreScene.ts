@@ -1,4 +1,4 @@
-import { sceneEntry } from '@/interface/coreInterface/runtimeInterface';
+import { sceneEntry } from '@/Core/runtime/runtimeInterface';
 import { RUNTIME_SCENE_DATA } from '../../runtime/sceneData';
 import { sceneFetcher } from './sceneFetcher';
 import { sceneParser } from '../../parser/sceneParser';

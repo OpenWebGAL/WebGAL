@@ -1,5 +1,5 @@
-import { ISentence } from '@/interface/coreInterface/sceneInterface';
-import { IPerform } from '@/interface/coreInterface/performInterface';
+import { ISentence } from '@/Core/controller/scene/sceneInterface';
+import { IPerform } from '@/Core/controller/perform/performInterface';
 import { webgalStore } from '@/store/store';
 import { setStageVar } from '@/store/stageReducer';
 import { logger } from '@/Core/util/etc/logger';

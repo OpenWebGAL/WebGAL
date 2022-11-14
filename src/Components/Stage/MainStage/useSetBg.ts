@@ -1,4 +1,4 @@
-import { IStageState } from '@/interface/stateInterface/stageInterface';
+import { IStageState } from '@/store/stageInterface';
 import { useEffect } from 'react';
 import { RUNTIME_GAMEPLAY } from '@/Core/runtime/gamePlay';
 import { logger } from '@/Core/util/etc/logger';

@@ -1,6 +1,6 @@
-import { ISentence } from '@/interface/coreInterface/sceneInterface';
+import { ISentence } from '@/Core/controller/scene/sceneInterface';
 import { say } from '../../gameScripts/say';
-import { initPerform, IPerform } from '@/interface/coreInterface/performInterface';
+import { initPerform, IPerform } from '@/Core/controller/perform/performInterface';
 import { unmountPerform } from '../perform/unmountPerform';
 import { RUNTIME_GAMEPLAY } from '../../runtime/gamePlay';
 import { webgalStore } from '@/store/store';

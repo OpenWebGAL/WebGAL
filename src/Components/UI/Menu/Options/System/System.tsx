@@ -2,7 +2,7 @@ import styles from '@/Components/UI/Menu/Options/options.module.scss';
 import { NormalOption } from '@/Components/UI/Menu/Options/NormalOption';
 import { NormalButton } from '@/Components/UI/Menu/Options/NormalButton';
 import { resetOptionSet, resetSaveData, setOptionData } from '@/store/userDataReducer';
-import { playSpeed } from '@/interface/stateInterface/userDataInterface';
+import { playSpeed } from '@/store/userDataInterface';
 import { setStorage, syncStorageFast } from '@/Core/controller/storage/storageController';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/store/store';

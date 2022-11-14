@@ -1,4 +1,4 @@
-import { arg } from '@/interface/coreInterface/sceneInterface';
+import { arg } from '@/Core/controller/scene/sceneInterface';
 import { assetSetter, fileType } from '../../util/gameAssetsAccess/assetSetter';
 
 /**

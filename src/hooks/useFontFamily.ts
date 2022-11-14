@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
-import { textFont } from '@/interface/stateInterface/userDataInterface';
+import { textFont } from '@/store/userDataInterface';
 
 export function useFontFamily() {
   const fontFamily = useSelector((state: RootState) => state.userData.optionData.textboxFont);

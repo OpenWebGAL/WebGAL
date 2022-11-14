@@ -1,4 +1,4 @@
-import { arg, commandType, IAsset } from '@/interface/coreInterface/sceneInterface';
+import { arg, commandType, IAsset } from '@/Core/controller/scene/sceneInterface';
 import { fileType } from '../../util/gameAssetsAccess/assetSetter';
 
 /**

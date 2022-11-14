@@ -1,6 +1,6 @@
-import { ISentence } from '@/interface/coreInterface/sceneInterface';
-import { IPerform } from '@/interface/coreInterface/performInterface';
-import { IEffect } from '@/interface/stateInterface/stageInterface';
+import { ISentence } from '@/Core/controller/scene/sceneInterface';
+import { IPerform } from '@/Core/controller/perform/performInterface';
+import { IEffect } from '@/store/stageInterface';
 import { logger } from '@/Core/util/etc/logger';
 import { webgalStore } from '@/store/store';
 import { setStage } from '@/store/stageReducer';

@@ -1,5 +1,5 @@
-import { commandType, ISentence } from '@/interface/coreInterface/sceneInterface';
-import { IPerform, IRunPerform } from '@/interface/coreInterface/performInterface';
+import { commandType, ISentence } from '@/Core/controller/scene/sceneInterface';
+import { IPerform, IRunPerform } from '@/Core/controller/perform/performInterface';
 import { RUNTIME_GAMEPLAY } from '@/Core/runtime/gamePlay';
 import { logger } from '@/Core/util/etc/logger';
 import { webgalStore } from '@/store/store';
