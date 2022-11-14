@@ -10,24 +10,24 @@ import cloneDeep from 'lodash/cloneDeep';
  * @param sentence
  */
 export const setBgTransform = (sentence: ISentence): IPerform => {
-  const stageState = webgalStore.getState().stage;
-  const effectList: Array<IEffect> = stageState.effects;
-  const newEffectList = cloneDeep(effectList);
-  let isTargetSet = false;
-  newEffectList.forEach((e) => {
-    if (e.target === 'MainStage_bg_MainContainer') {
-      isTargetSet = true;
-      e.transform = sentence.content;
-    }
-  });
-  if (!isTargetSet) {
-    newEffectList.push({
-      target: 'MainStage_bg_MainContainer',
-      transform: sentence.content,
-      filter: '',
-    });
-  }
-  webgalStore.dispatch(setStage({ key: 'effects', value: newEffectList }));
+  // const stageState = webgalStore.getState().stage;
+  // const effectList: Array<IEffect> = stageState.effects;
+  // const newEffectList = cloneDeep(effectList);
+  // let isTargetSet = false;
+  // newEffectList.forEach((e) => {
+  //   if (e.target === 'MainStage_bg_MainContainer') {
+  //     isTargetSet = true;
+  //     e.transform = sentence.content;
+  //   }
+  // });
+  // if (!isTargetSet) {
+  //   newEffectList.push({
+  //     target: 'MainStage_bg_MainContainer',
+  //     transform: sentence.content,
+  //     filter: '',
+  //   });
+  // }
+  // webgalStore.dispatch(setStage({ key: 'effects', value: newEffectList }));
   // stageStore.setStage('effects', effectList);
   // stageStore.setStage('bgTransform',sentence.content);
   return {

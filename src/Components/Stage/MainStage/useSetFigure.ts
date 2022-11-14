@@ -107,13 +107,15 @@ export function useSetFigure(stageState: IStageState) {
 }
 
 function removeFig(figObj: IStageObject, enterTikerKey: string) {
-  RUNTIME_GAMEPLAY.pixiStage?.removeAnimation(enterTikerKey);
+  RUNTIME_GAMEPLAY.pixiStage?.removeAnimationWithSetEffects(enterTikerKey);
+  const oldFigKey = figObj.key;
   figObj.key = figObj.key + '-off';
+  RUNTIME_GAMEPLAY.pixiStage?.removeStageObjectByKey(oldFigKey);
   const figKey = figObj.key;
   const leaveKey = figKey + '-softoff';
   RUNTIME_GAMEPLAY.pixiStage!.registerAnimation(generateUniversalSoftOffAnimationObj(figKey, 200), leaveKey, figKey);
   setTimeout(() => {
-    RUNTIME_GAMEPLAY.pixiStage?.removeAnimation(leaveKey);
+    RUNTIME_GAMEPLAY.pixiStage?.removeAnimationWithSetEffects(leaveKey);
     RUNTIME_GAMEPLAY.pixiStage?.removeStageObjectByKey(figKey);
   }, 250);
 }

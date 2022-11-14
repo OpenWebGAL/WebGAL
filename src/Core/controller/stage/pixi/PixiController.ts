@@ -1,5 +1,9 @@
 import * as PIXI from 'pixi.js';
 import { v4 as uuid } from 'uuid';
+import { webgalStore } from '@/store/store';
+import { setStage } from '@/store/stageReducer';
+import __ from 'lodash';
+import { IEffect } from '@/store/stageInterface';
 
 interface IAnimationObject {
   setStartState: Function;
@@ -91,18 +95,71 @@ export default class PixiStage {
     this.currentApp = app;
   }
 
+  /**
+   * 注册动画
+   * @param animationObject
+   * @param key
+   * @param target
+   */
   public registerAnimation(animationObject: IAnimationObject, key: string, target = 'default') {
     this.stageAnimations.push({ uuid: uuid(), animationObject, key: key, targetKey: target });
     animationObject.setStartState();
     this.currentApp?.ticker.add(animationObject.tickerFunc);
   }
 
+  /**
+   * 移除动画
+   * @param key
+   */
   public removeAnimation(key: string) {
     const index = this.stageAnimations.findIndex((e) => e.key === key);
     if (index >= 0) {
       const thisTickerFunc = this.stageAnimations[index];
       this.currentApp?.ticker.remove(thisTickerFunc.animationObject.tickerFunc);
       thisTickerFunc.animationObject.setEndState();
+      this.stageAnimations.splice(index, 1);
+    }
+  }
+
+  public removeAnimationWithSetEffects(key: string) {
+    const index = this.stageAnimations.findIndex((e) => e.key === key);
+    if (index >= 0) {
+      const thisTickerFunc = this.stageAnimations[index];
+      this.currentApp?.ticker.remove(thisTickerFunc.animationObject.tickerFunc);
+      thisTickerFunc.animationObject.setEndState();
+      if (thisTickerFunc.targetKey) {
+        const target = this.getStageObjByKey(thisTickerFunc.targetKey);
+        if (target) {
+          const targetTransform = {
+            alpha: target.pixiContainer.alpha,
+            scale: {
+              x: target.pixiContainer.scale.x,
+              y: target.pixiContainer.scale.y,
+            },
+            pivot: {
+              x: target.pixiContainer.pivot.x,
+              y: target.pixiContainer.pivot.y,
+            },
+            position: {
+              x: target.pixiContainer.x,
+              y: target.pixiContainer.y,
+            },
+            rotation: target.pixiContainer.rotation,
+          };
+          const prevEffects = webgalStore.getState().stage.effects;
+          const newEffects = __.cloneDeep(prevEffects);
+          let effect: IEffect = { target: thisTickerFunc.targetKey, transform: targetTransform };
+          const index = newEffects.findIndex((e) => e.target === thisTickerFunc.targetKey);
+          if (index >= 0) {
+            effect = newEffects[index];
+            effect.transform = targetTransform;
+            newEffects[index] = effect;
+          } else {
+            newEffects.push(effect);
+          }
+          webgalStore.dispatch(setStage({ key: 'effects', value: newEffects }));
+        }
+      }
       this.stageAnimations.splice(index, 1);
     }
   }
@@ -175,6 +232,7 @@ export default class PixiStage {
    * 添加立绘
    * @param key 立绘的标识，一般和立绘位置有关
    * @param url 立绘图片url
+   * @param presetPosition
    */
   public addFigure(key: string, url: string, presetPosition: 'left' | 'center' | 'right' = 'center') {
     const loader = new PIXI.Loader();
@@ -269,5 +327,15 @@ export default class PixiStage {
       this.backgroundContainer.removeChild(bgSprite.pixiContainer);
       this.backgroundObjects.splice(indexBg, 1);
     }
+    /**
+     * 删掉相关 Effects，因为已经移除了
+     */
+    const prevEffects = webgalStore.getState().stage.effects;
+    const newEffects = __.cloneDeep(prevEffects);
+    const index = newEffects.findIndex((e) => e.target === key);
+    if (index >= 0) {
+      newEffects.splice(index, 1);
+    }
+    webgalStore.dispatch(setStage({ key: 'effects', value: newEffects }));
   }
 }

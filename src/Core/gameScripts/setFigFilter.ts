@@ -11,34 +11,34 @@ import cloneDeep from 'lodash/cloneDeep';
  * @param sentence
  */
 export const setFigFilter = (sentence: ISentence): IPerform => {
-  const stageState = webgalStore.getState().stage;
-  const effectList: Array<IEffect> = stageState.effects;
-  const newEffectList = cloneDeep(effectList);
-  let target = 'figCenterContainer';
-  sentence.args.forEach((e) => {
-    if (e.key === 'left' && e.value) {
-      target = 'figLeftContainer';
-    }
-    if (e.key === 'right' && e.value) {
-      target = 'figRightContainer';
-    }
-  });
-  let isTargetSet = false;
-  newEffectList.forEach((e) => {
-    if (e.target === target) {
-      logger.warn('已存在效果，正在修改');
-      isTargetSet = true;
-      e.filter = sentence.content;
-    }
-  });
-  if (!isTargetSet) {
-    newEffectList.push({
-      target: target,
-      transform: '',
-      filter: sentence.content,
-    });
-  }
-  webgalStore.dispatch(setStage({ key: 'effects', value: newEffectList }));
+  // const stageState = webgalStore.getState().stage;
+  // const effectList: Array<IEffect> = stageState.effects;
+  // const newEffectList = cloneDeep(effectList);
+  // let target = 'figCenterContainer';
+  // sentence.args.forEach((e) => {
+  //   if (e.key === 'left' && e.value) {
+  //     target = 'figLeftContainer';
+  //   }
+  //   if (e.key === 'right' && e.value) {
+  //     target = 'figRightContainer';
+  //   }
+  // });
+  // let isTargetSet = false;
+  // newEffectList.forEach((e) => {
+  //   if (e.target === target) {
+  //     logger.warn('已存在效果，正在修改');
+  //     isTargetSet = true;
+  //     e.filter = sentence.content;
+  //   }
+  // });
+  // if (!isTargetSet) {
+  //   newEffectList.push({
+  //     target: target,
+  //     transform: '',
+  //     filter: sentence.content,
+  //   });
+  // }
+  // webgalStore.dispatch(setStage({ key: 'effects', value: newEffectList }));
   // stageStore.setStage('bgFilter', sentence.content);
   return {
     performName: 'none',
