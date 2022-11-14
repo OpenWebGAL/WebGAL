@@ -6,7 +6,7 @@ import { RUNTIME_SCENE_DATA } from '@/Core/runtime/sceneData';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import { setMenuPanelTag, setVisibility } from '@/store/GUIReducer';
-import { MenuPanelTag } from '@/interface/stateInterface/guiInterface';
+import { MenuPanelTag } from '@/store/guiInterface';
 import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
 import { hasFastSaveRecord, loadFastSaveGame } from '@/hooks/useHotkey';
 import { restorePerform } from '@/Core/controller/storage/jumpFromBacklog';

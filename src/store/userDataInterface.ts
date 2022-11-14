@@ -1,4 +1,4 @@
-import { IBacklogItem, sceneEntry } from '../coreInterface/runtimeInterface';
+import { IBacklogItem, sceneEntry } from '../Core/runtime/runtimeInterface';
 import { IStageState } from './stageInterface';
 
 /**

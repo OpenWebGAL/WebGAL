@@ -1,7 +1,7 @@
 /**
  * 语句类型
  */
-import { sceneEntry } from './runtimeInterface';
+import { sceneEntry } from '../../runtime/runtimeInterface';
 import { fileType } from '@/Core/util/gameAssetsAccess/assetSetter';
 
 export enum commandType {

@@ -1,4 +1,4 @@
-import { IRunPerform } from '../coreInterface/performInterface';
+import { IRunPerform } from '../Core/controller/perform/performInterface';
 
 /**
  * 游戏内变量

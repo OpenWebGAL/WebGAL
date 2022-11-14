@@ -1,4 +1,4 @@
-import { IGamePlay } from '@/interface/coreInterface/runtimeInterface';
+import { IGamePlay } from '@/Core/runtime/runtimeInterface';
 
 /**
  * 游戏运行时变量

@@ -1,4 +1,4 @@
-import { arg, commandType, IAsset, ISentence, parsedCommand } from '@/interface/coreInterface/sceneInterface';
+import { arg, commandType, IAsset, ISentence, parsedCommand } from '@/Core/controller/scene/sceneInterface';
 import { commandParser } from './commandParser';
 import { argsParser } from './argsParser';
 import { contentParser } from './contentParser';

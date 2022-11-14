@@ -1,4 +1,4 @@
-import { IAsset } from '@/interface/coreInterface/sceneInterface';
+import { IAsset } from '@/Core/controller/scene/sceneInterface';
 import { logger } from '../etc/logger';
 import { RUNTIME_SETTLED_ASSETS } from '@/Core/runtime/etc';
 

@@ -1,5 +1,5 @@
-import { IConfigInterface } from '@/interface/coreInterface/configInterface';
-import { commandType } from '@/interface/coreInterface/sceneInterface';
+import { IConfigInterface } from '@/Core/config/configInterface';
+import { commandType } from '@/Core/controller/scene/sceneInterface';
 import { intro } from '@/Core/gameScripts/intro';
 import { changeBg } from '@/Core/gameScripts/changeBg';
 import { changeFigure } from '@/Core/gameScripts/changeFigure';

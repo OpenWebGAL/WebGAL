@@ -68,7 +68,10 @@ export const pixiRain = (rainSpeed: number, number: number) => {
       container.removeChild(container.children[0]);
     }
   }
-  RUNTIME_GAMEPLAY.pixiStage?.registerTicker(ticker, 'rain-Ticker');
+  RUNTIME_GAMEPLAY.pixiStage?.registerAnimation(
+    { setStartState: () => {}, setEndState: () => {}, tickerFunc: ticker },
+    'rain-Ticker',
+  );
   return { container, tickerKey: 'rain-Ticker' };
 };
 
