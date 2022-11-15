@@ -4,8 +4,9 @@ import { webgalStore } from '@/store/store';
 import { setStage } from '@/store/stageReducer';
 import __ from 'lodash';
 import { IEffect } from '@/store/stageInterface';
+import { RUNTIME_CURRENT_BACKLOG } from '@/Core/runtime/backlog';
 
-interface IAnimationObject {
+export interface IAnimationObject {
   setStartState: Function;
   setEndState: Function;
   tickerFunc: PIXI.TickerCallback<number>;
@@ -17,6 +18,7 @@ interface IStageAnimationObject {
   // 一般与作用目标有关
   key: string;
   targetKey?: string;
+  type: 'common' | 'preset';
   animationObject: IAnimationObject;
 }
 
@@ -30,12 +32,12 @@ export interface IStageObject {
   sourceUrl: string;
 }
 
-export interface IRegisterTickerOpr {
-  tickerGeneratorFn: (targetKey: string, duration: number) => PIXI.TickerCallback<number>;
-  key: string;
-  target: string;
-  duration: number;
-}
+// export interface IRegisterTickerOpr {
+//   tickerGeneratorFn: (targetKey: string, duration: number) => PIXI.TickerCallback<number>;
+//   key: string;
+//   target: string;
+//   duration: number;
+// }
 
 export default class PixiStage {
   /**
@@ -53,7 +55,7 @@ export default class PixiStage {
   public stageAnimations: Array<IStageAnimationObject> = [];
 
   // 锁定变换对象（对象可能正在执行动画，不能应用变换）
-  private LockTransformTarget: Array<string> = [];
+  private lockTransformTarget: Array<string> = [];
   private stageWidth = 2560;
   private stageHeight = 1440;
 
@@ -62,6 +64,8 @@ export default class PixiStage {
       backgroundAlpha: 0,
       preserveDrawingBuffer: true,
     });
+    // @ts-ignore
+    window.PIXIapp = this;
     // 清空原节点
     const pixiContainer = document.getElementById('pixiContianer');
     if (pixiContainer) {
@@ -95,6 +99,10 @@ export default class PixiStage {
     this.currentApp = app;
   }
 
+  public getAllLockedObject() {
+    return this.lockTransformTarget;
+  }
+
   /**
    * 注册动画
    * @param animationObject
@@ -102,9 +110,48 @@ export default class PixiStage {
    * @param target
    */
   public registerAnimation(animationObject: IAnimationObject, key: string, target = 'default') {
-    this.stageAnimations.push({ uuid: uuid(), animationObject, key: key, targetKey: target });
+    this.stageAnimations.push({ uuid: uuid(), animationObject, key: key, targetKey: target, type: 'common' });
+    // 上锁
+    this.lockStageObject(target);
     animationObject.setStartState();
     this.currentApp?.ticker.add(animationObject.tickerFunc);
+  }
+
+  /**
+   * 注册预设动画
+   * @param animationObject
+   * @param key
+   * @param target
+   * @param currentEffects
+   */
+  // eslint-disable-next-line max-params
+  public registerPresetAnimation(
+    animationObject: IAnimationObject,
+    key: string,
+    target = 'default',
+    currentEffects: IEffect[],
+  ) {
+    const effect = currentEffects.find((effect) => effect.target === target);
+    if (effect) {
+      const targetPixiContainer = this.getStageObjByKey(target);
+      if (targetPixiContainer) {
+        const container = targetPixiContainer.pixiContainer;
+        Object.assign(container, effect.transform);
+      }
+      return;
+    }
+    this.stageAnimations.push({ uuid: uuid(), animationObject, key: key, targetKey: target, type: 'preset' });
+    // 上锁
+    this.lockStageObject(target);
+    animationObject.setStartState();
+    this.currentApp?.ticker.add(animationObject.tickerFunc);
+  }
+
+  public stopPresetAnimationOnTarget(target: string) {
+    const targetPresetAnimations = this.stageAnimations.find((e) => e.targetKey === target && e.type === 'preset');
+    if (targetPresetAnimations) {
+      this.removeAnimation(targetPresetAnimations.key);
+    }
   }
 
   /**
@@ -117,16 +164,18 @@ export default class PixiStage {
       const thisTickerFunc = this.stageAnimations[index];
       this.currentApp?.ticker.remove(thisTickerFunc.animationObject.tickerFunc);
       thisTickerFunc.animationObject.setEndState();
+      this.unlockStageObject(thisTickerFunc.targetKey ?? 'default');
       this.stageAnimations.splice(index, 1);
     }
   }
 
-  public removeAnimationWithSetEffects(key: string) {
+  public removeAnimationWithSetEffects(key: string, notUpdateBacklogEffects = false) {
     const index = this.stageAnimations.findIndex((e) => e.key === key);
     if (index >= 0) {
       const thisTickerFunc = this.stageAnimations[index];
       this.currentApp?.ticker.remove(thisTickerFunc.animationObject.tickerFunc);
       thisTickerFunc.animationObject.setEndState();
+      this.unlockStageObject(thisTickerFunc.targetKey ?? 'default');
       if (thisTickerFunc.targetKey) {
         const target = this.getStageObjByKey(thisTickerFunc.targetKey);
         if (target) {
@@ -157,7 +206,7 @@ export default class PixiStage {
           } else {
             newEffects.push(effect);
           }
-          webgalStore.dispatch(setStage({ key: 'effects', value: newEffects }));
+          updateCurrentEffects(newEffects, notUpdateBacklogEffects);
         }
       }
       this.stageAnimations.splice(index, 1);
@@ -246,7 +295,6 @@ export default class PixiStage {
 
     // 已经有一个这个 key 的立绘存在了
     if (isFigSet) {
-      // 挤占
       this.removeStageObjectByKey(key);
     }
 
@@ -301,15 +349,19 @@ export default class PixiStage {
   }
 
   /**
-   * 根据 key 移除舞台上的对象
+   * 根据 key 获取舞台上的对象
    * @param key
    */
   public getStageObjByKey(key: string) {
     return [...this.figureObjects, ...this.backgroundObjects].find((e) => e.key === key);
   }
 
+  public getAllStageObj() {
+    return [...this.figureObjects, ...this.backgroundObjects];
+  }
+
   /**
-   * 根据 key 获取舞台上的对象
+   * 根据 key 删除舞台上的对象
    * @param key
    */
   public removeStageObjectByKey(key: string) {
@@ -327,15 +379,44 @@ export default class PixiStage {
       this.backgroundContainer.removeChild(bgSprite.pixiContainer);
       this.backgroundObjects.splice(indexBg, 1);
     }
-    /**
-     * 删掉相关 Effects，因为已经移除了
-     */
-    const prevEffects = webgalStore.getState().stage.effects;
-    const newEffects = __.cloneDeep(prevEffects);
-    const index = newEffects.findIndex((e) => e.target === key);
-    if (index >= 0) {
-      newEffects.splice(index, 1);
-    }
-    webgalStore.dispatch(setStage({ key: 'effects', value: newEffects }));
+    // /**
+    //  * 删掉相关 Effects，因为已经移除了
+    //  */
+    // const prevEffects = webgalStore.getState().stage.effects;
+    // const newEffects = __.cloneDeep(prevEffects);
+    // const index = newEffects.findIndex((e) => e.target === key);
+    // if (index >= 0) {
+    //   newEffects.splice(index, 1);
+    // }
+    // updateCurrentEffects(newEffects);
   }
+
+  private lockStageObject(targetName: string) {
+    this.lockTransformTarget.push(targetName);
+  }
+
+  private unlockStageObject(targetName: string) {
+    const index = this.lockTransformTarget.findIndex((name) => name === targetName);
+    if (index >= 0) this.lockTransformTarget.splice(index, 1);
+  }
+}
+
+export function updateCurrentEffects(newEffects: IEffect[], notUpdateBacklogEffects = false) {
+  /**
+   * 更新当前 backlog 条目的 Transform 记录
+   */
+  if (!notUpdateBacklogEffects)
+    setTimeout(() => {
+      const backlog = RUNTIME_CURRENT_BACKLOG[RUNTIME_CURRENT_BACKLOG.length - 1];
+      const newBacklogItem = __.cloneDeep(backlog);
+      const backlog_effects = newBacklogItem.currentStageState.effects;
+      while (backlog_effects.length > 0) {
+        backlog_effects.pop();
+      }
+      backlog_effects.push(...newEffects);
+      RUNTIME_CURRENT_BACKLOG.pop();
+      RUNTIME_CURRENT_BACKLOG.push(newBacklogItem);
+    }, 50);
+
+  webgalStore.dispatch(setStage({ key: 'effects', value: newEffects }));
 }

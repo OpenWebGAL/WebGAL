@@ -9,12 +9,8 @@ import { choose } from '@/Core/gameScripts/choose';
 import { end } from '../gameScripts/end';
 import { bgm } from '@/Core/gameScripts/bgm';
 import { playVideo } from '@/Core/gameScripts/playVideo';
-import { setBgAni } from '@/Core/gameScripts/setBgAni';
-import { setFigAni } from '@/Core/gameScripts/setFigAni';
-import { setBgTransform } from '@/Core/gameScripts/setBgTransform';
-import { setBgFilter } from '@/Core/gameScripts/setBgFilter';
-import { setFigTransform } from '@/Core/gameScripts/setFigTransform';
-import { setFigFilter } from '../gameScripts/setFigFilter';
+import { setAnimation } from '@/Core/gameScripts/setAnimation';
+import { setFilter } from '@/Core/gameScripts/setFilter';
 import { pixiInit } from '../gameScripts/pixiInit';
 import { pixi } from '@/Core/gameScripts/pixi';
 import { label } from '@/Core/gameScripts/label';
@@ -38,17 +34,12 @@ export const SCRIPT_CONFIG: IConfigInterface[] = [
   { scriptString: 'end', scriptType: commandType.end, scriptFunction: end },
   { scriptString: 'bgm', scriptType: commandType.bgm, scriptFunction: bgm },
   { scriptString: 'playVideo', scriptType: commandType.video, scriptFunction: playVideo },
-  { scriptString: 'setBgAni', scriptType: commandType.perform_bgAni, scriptFunction: setBgAni },
-  { scriptString: 'setFigAni', scriptType: commandType.perform_FigAni, scriptFunction: setFigAni },
-  { scriptString: 'setBgTransform', scriptType: commandType.setBgTransform, scriptFunction: setBgTransform },
-  { scriptString: 'setBgFilter', scriptType: commandType.setBgFilter, scriptFunction: setBgFilter },
-  { scriptString: 'setFigTransform', scriptType: commandType.setFigTransform, scriptFunction: setFigTransform },
-  { scriptString: 'setFigFilter', scriptType: commandType.setFigFilter, scriptFunction: setFigFilter },
+  { scriptString: 'setAnimation', scriptType: commandType.setAnimation, scriptFunction: setAnimation },
+  { scriptString: 'setFilter', scriptType: commandType.setFilter, scriptFunction: setFilter },
   { scriptString: 'pixiInit', scriptType: commandType.pixiInit, scriptFunction: pixiInit },
   { scriptString: 'pixiPerform', scriptType: commandType.pixi, scriptFunction: pixi },
   { scriptString: 'label', scriptType: commandType.label, scriptFunction: label },
   { scriptString: 'jumpLabel', scriptType: commandType.jumpLabel, scriptFunction: jumpLabel },
-  // {scriptString:'chooseLabel',scriptType:commandType.chooseLabel,scriptFunction:setFigFilter},
   { scriptString: 'setVar', scriptType: commandType.setVar, scriptFunction: setVar },
   { scriptString: 'callScene', scriptType: commandType.callScene, scriptFunction: changeSceneScript },
   { scriptString: 'showVars', scriptType: commandType.showVars, scriptFunction: showVars },
@@ -66,12 +57,6 @@ export const ADD_NEXT_ARG_LIST = [
   commandType.label,
   commandType.if,
   commandType.miniAvatar,
-  commandType.setBgTransform,
-  commandType.setBgFilter,
-  commandType.setFigFilter,
-  commandType.setFigTransform,
-  commandType.perform_FigAni,
-  commandType.perform_bgAni,
   commandType.setVar,
   commandType.unlockBgm,
   commandType.unlockCg,
