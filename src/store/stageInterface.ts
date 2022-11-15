@@ -55,6 +55,26 @@ export interface IEffect {
 }
 
 /**
+ * 基本变换预设
+ */
+export const baseTransform: ITransform = {
+  alpha: 1,
+  scale: {
+    x: 1,
+    y: 1,
+  },
+  pivot: {
+    x: 0.5,
+    y: 0.5,
+  },
+  position: {
+    x: 0,
+    y: 0,
+  },
+  rotation: 0,
+};
+
+/**
  * @interface IStageState 游戏舞台数据接口
  */
 export interface IStageState {

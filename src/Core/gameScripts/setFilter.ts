@@ -2,22 +2,12 @@ import { ISentence } from '@/Core/controller/scene/sceneInterface';
 import { IPerform } from '@/Core/controller/perform/performInterface';
 
 /**
- * 设置背景动画
+ * 设置背景效果
  * @param sentence
  */
-export const setBgAni = (sentence: ISentence): IPerform => {
-  const content = sentence.content;
-  setTimeout(() => {
-    const mainBg = document.getElementById('MainStage_bg_MainContainer');
-    if (mainBg) {
-      mainBg.style.animation = 'none';
-      setTimeout(() => {
-        mainBg.style.animation = content;
-      }, 1);
-    }
-  }, 50);
+export const setFilter = (sentence: ISentence): IPerform => {
   return {
-    performName: 'bgAni',
+    performName: 'none',
     duration: 0,
     isOver: false,
     isHoldOn: false,

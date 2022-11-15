@@ -5,6 +5,7 @@ import { logger } from '@/Core/util/etc/logger';
 import { IStageObject } from '@/Core/controller/stage/pixi/PixiController';
 import { generateUniversalSoftOffAnimationObj } from '@/Core/controller/stage/pixi/animations/universalSoftOff';
 import { generateUniversalSoftInAnimationObj } from '@/Core/controller/stage/pixi/animations/universalSoftIn';
+import { RUNTIME_SCENE_DATA } from '@/Core/runtime/sceneData';
 
 export function useSetBg(stageState: IStageState) {
   const bgName = stageState.bgName;
@@ -24,11 +25,13 @@ export function useSetBg(stageState: IStageState) {
       RUNTIME_GAMEPLAY.pixiStage?.addBg(thisBgKey, bgName);
       logger.debug('重设背景');
       // 走默认动画
-      RUNTIME_GAMEPLAY.pixiStage!.registerAnimation(
+      RUNTIME_GAMEPLAY.pixiStage!.registerPresetAnimation(
         generateUniversalSoftInAnimationObj(thisBgKey, 1000),
         'bg-main-softin',
         thisBgKey,
+        stageState.effects,
       );
+      setTimeout(() => RUNTIME_GAMEPLAY.pixiStage!.removeAnimation('bg-main-softin'), 1000);
     } else {
       const currentBg = RUNTIME_GAMEPLAY.pixiStage?.getStageObjByKey(thisBgKey);
       if (currentBg) {
