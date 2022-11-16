@@ -52,7 +52,7 @@ function removeBg(bgObject: IStageObject) {
     'bg-main-off',
   );
   setTimeout(() => {
-    RUNTIME_GAMEPLAY.pixiStage?.removeAnimationWithSetEffects('bg-main-softoff');
+    RUNTIME_GAMEPLAY.pixiStage?.removeAnimation('bg-main-softoff');
     RUNTIME_GAMEPLAY.pixiStage?.removeStageObjectByKey('bg-main-off');
   }, 1000);
 }
