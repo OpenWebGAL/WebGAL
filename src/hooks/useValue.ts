@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-export function useObject(initialState: any) {
+export function useValue<T>(initialState: T) {
   const [value, setValue] = useState(initialState);
   return {
     value,

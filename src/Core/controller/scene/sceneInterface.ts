@@ -1,7 +1,7 @@
 /**
  * 语句类型
  */
-import { sceneEntry } from './runtimeInterface';
+import { sceneEntry } from '../../runtime/runtimeInterface';
 import { fileType } from '@/Core/util/gameAssetsAccess/assetSetter';
 
 export enum commandType {
@@ -17,12 +17,8 @@ export enum commandType {
   changeScene, // 切换场景
   choose, // 分支选择
   end, // 结束游戏
-  perform_bgAni, // 背景动画演出
-  perform_FigAni, // 人物动画演出
-  setBgTransform, // 背景变换
-  setFigTransform, // 人物变换
-  setBgFilter, // 背景效果
-  setFigFilter, // 人物效果
+  setAnimation, // 动画演出
+  setFilter, // 设置效果
   label, // 标签
   jumpLabel, // 跳转标签
   chooseLabel, // 选择标签

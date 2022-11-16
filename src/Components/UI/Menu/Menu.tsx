@@ -6,7 +6,7 @@ import { Load } from './SaveAndLoad/Load/Load';
 import { Options } from './Options/Options';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
-import { MenuPanelTag } from '@/interface/stateInterface/guiInterface';
+import { MenuPanelTag } from '@/store/guiInterface';
 
 /**
  * Menu 页面，包括存读档、选项等

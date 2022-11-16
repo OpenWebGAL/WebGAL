@@ -2,7 +2,7 @@ import styles from '@/Components/UI/Extra/extra.module.scss';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
-import { useObject } from '@/hooks/useObject';
+import { useValue } from '@/hooks/useValue';
 import './extraCG_animation_List.scss';
 import { ExtraCgElement } from '@/Components/UI/Extra/ExtraCgElement';
 
@@ -10,7 +10,7 @@ export function ExtraCg() {
   const cgPerPage = 8;
   const extraState = useSelector((state: RootState) => state.userData.appreciationData);
   const pageNumber = Math.ceil(extraState.cg.length / cgPerPage);
-  const currentPage = useObject(1);
+  const currentPage = useValue(1);
 
   // 开始生成立绘鉴赏的图片
   const showCgList = [];

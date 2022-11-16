@@ -1,5 +1,5 @@
-import { ISentence } from '@/interface/coreInterface/sceneInterface';
-import { IPerform } from '@/interface/coreInterface/performInterface';
+import { ISentence } from '@/Core/controller/scene/sceneInterface';
+import { IPerform } from '@/Core/controller/perform/performInterface';
 import { RUNTIME_SCENE_DATA } from '@/Core/runtime/sceneData';
 import { assetSetter, fileType } from '@/Core/util/gameAssetsAccess/assetSetter';
 import { sceneFetcher } from '@/Core/controller/scene/sceneFetcher';

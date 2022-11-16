@@ -1,4 +1,4 @@
-import { ISentence } from '@/interface/coreInterface/sceneInterface';
+import { ISentence } from '@/Core/controller/scene/sceneInterface';
 import { getRandomPerformName } from '@/Core/controller/perform/getRandomPerformName';
 import { RUNTIME_GAMEPLAY } from '@/Core/runtime/gamePlay';
 import { unmountPerform } from '../controller/perform/unmountPerform';

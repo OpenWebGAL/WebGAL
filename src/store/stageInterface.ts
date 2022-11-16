@@ -1,4 +1,4 @@
-import { IRunPerform } from '../coreInterface/performInterface';
+import { IRunPerform } from '@/Core/controller/perform/performInterface';
 
 /**
  * 游戏内变量
@@ -23,15 +23,56 @@ export interface IChooseItem {
   isSubScene: boolean; // 是否是子场景调用
 }
 
+interface ITransform {
+  alpha: number;
+  scale: {
+    x: number;
+    y: number;
+  };
+  pivot: {
+    x: number;
+    y: number;
+  };
+  position: {
+    x: number;
+    y: number;
+  };
+  rotation: number;
+}
+
+interface IFilter {
+  blur: string;
+}
+
 /**
  * 基本效果接口
  * @interface IEffect
  */
 export interface IEffect {
   target: string; // 作用目标
-  transform: string; // 变换
-  filter: string; // 效果
+  transform?: ITransform; // 变换
+  filter?: IFilter; // 效果
 }
+
+/**
+ * 基本变换预设
+ */
+export const baseTransform: ITransform = {
+  alpha: 1,
+  scale: {
+    x: 1,
+    y: 1,
+  },
+  pivot: {
+    x: 0.5,
+    y: 0.5,
+  },
+  position: {
+    x: 0,
+    y: 0,
+  },
+  rotation: 0,
+};
 
 /**
  * @interface IStageState 游戏舞台数据接口

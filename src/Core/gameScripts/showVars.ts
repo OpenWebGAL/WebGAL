@@ -1,5 +1,5 @@
-import { ISentence } from '@/interface/coreInterface/sceneInterface';
-import { IPerform } from '@/interface/coreInterface/performInterface';
+import { ISentence } from '@/Core/controller/scene/sceneInterface';
+import { IPerform } from '@/Core/controller/perform/performInterface';
 import styles from '../../Components/Stage/TextBox/textbox.module.scss';
 import { getRandomPerformName } from '@/Core/controller/perform/getRandomPerformName';
 import { webgalStore } from '@/store/store';

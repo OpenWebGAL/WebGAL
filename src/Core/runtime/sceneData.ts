@@ -1,4 +1,4 @@
-import { ISceneData } from '@/interface/coreInterface/sceneInterface';
+import { ISceneData } from '@/Core/controller/scene/sceneInterface';
 
 /**
  * 初始化场景数据

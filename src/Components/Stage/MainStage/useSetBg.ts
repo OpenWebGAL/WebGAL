@@ -1,10 +1,11 @@
-import { IStageState } from '@/interface/stateInterface/stageInterface';
+import { IStageState } from '@/store/stageInterface';
 import { useEffect } from 'react';
 import { RUNTIME_GAMEPLAY } from '@/Core/runtime/gamePlay';
-import { generateBgSoftInFn } from '@/Core/controller/stage/pixi/animations/bgSoftIn';
 import { logger } from '@/Core/util/etc/logger';
-import { IBackground } from '@/Core/controller/stage/pixi/PixiController';
-import { generateUniversalSoftOffFn } from '@/Core/controller/stage/pixi/animations/universalSoftOff';
+import { IStageObject } from '@/Core/controller/stage/pixi/PixiController';
+import { generateUniversalSoftOffAnimationObj } from '@/Core/controller/stage/pixi/animations/universalSoftOff';
+import { generateUniversalSoftInAnimationObj } from '@/Core/controller/stage/pixi/animations/universalSoftIn';
+import { RUNTIME_SCENE_DATA } from '@/Core/runtime/sceneData';
 
 export function useSetBg(stageState: IStageState) {
   const bgName = stageState.bgName;
@@ -13,33 +14,26 @@ export function useSetBg(stageState: IStageState) {
    * 设置背景
    */
   useEffect(() => {
-    const thisBgKey = 'main';
+    const thisBgKey = 'bg-main';
     if (bgName !== '') {
-      const currentBg = RUNTIME_GAMEPLAY.pixiStage?.getBgByKey(thisBgKey);
+      const currentBg = RUNTIME_GAMEPLAY.pixiStage?.getStageObjByKey(thisBgKey);
       if (currentBg) {
-        if (currentBg.url !== bgName) {
+        if (currentBg.sourceUrl !== bgName) {
           removeBg(currentBg);
         }
       }
-      RUNTIME_GAMEPLAY.pixiStage?.addBg(thisBgKey, bgName).then((res) => {
-        if (res) {
-          logger.debug('重设背景');
-          // 如果有等待注册的动画
-          if (RUNTIME_GAMEPLAY.pixiStage!.getPendingTicker(thisBgKey)) {
-            const pendingTicker = RUNTIME_GAMEPLAY.pixiStage!.getPendingTicker(thisBgKey)!;
-            RUNTIME_GAMEPLAY.pixiStage!.registerTicker(
-              pendingTicker.tickerGeneraterFn(pendingTicker.key, pendingTicker.duration),
-              pendingTicker.key,
-              pendingTicker.target,
-            );
-            RUNTIME_GAMEPLAY.pixiStage?.removePendingTicker(thisBgKey);
-          }
-          // 否则走默认动画
-          else RUNTIME_GAMEPLAY.pixiStage!.registerTicker(generateBgSoftInFn(thisBgKey, 1000), 'bg-softin', thisBgKey);
-        }
-      });
+      RUNTIME_GAMEPLAY.pixiStage?.addBg(thisBgKey, bgName);
+      logger.debug('重设背景');
+      // 走默认动画
+      RUNTIME_GAMEPLAY.pixiStage!.registerPresetAnimation(
+        generateUniversalSoftInAnimationObj(thisBgKey, 1000),
+        'bg-main-softin',
+        thisBgKey,
+        stageState.effects,
+      );
+      setTimeout(() => RUNTIME_GAMEPLAY.pixiStage!.removeAnimation('bg-main-softin'), 1000);
     } else {
-      const currentBg = RUNTIME_GAMEPLAY.pixiStage?.getBgByKey(thisBgKey);
+      const currentBg = RUNTIME_GAMEPLAY.pixiStage?.getStageObjByKey(thisBgKey);
       if (currentBg) {
         removeBg(currentBg);
       }
@@ -47,12 +41,18 @@ export function useSetBg(stageState: IStageState) {
   }, [bgName]);
 }
 
-function removeBg(bgObject: IBackground) {
-  RUNTIME_GAMEPLAY.pixiStage?.removeTicker('bg-softin');
-  bgObject.key = 'main-off';
-  RUNTIME_GAMEPLAY.pixiStage!.registerTicker(generateUniversalSoftOffFn('main-off', 1000), 'bg-softoff', 'main-off');
+function removeBg(bgObject: IStageObject) {
+  RUNTIME_GAMEPLAY.pixiStage?.removeAnimationWithSetEffects('bg-main-softin');
+  const oldBgKey = bgObject.key;
+  bgObject.key = 'bg-main-off';
+  RUNTIME_GAMEPLAY.pixiStage?.removeStageObjectByKey(oldBgKey);
+  RUNTIME_GAMEPLAY.pixiStage!.registerAnimation(
+    generateUniversalSoftOffAnimationObj('bg-main-off', 1000),
+    'bg-main-softoff',
+    'bg-main-off',
+  );
   setTimeout(() => {
-    RUNTIME_GAMEPLAY.pixiStage?.removeTicker('bg-softoff');
-    RUNTIME_GAMEPLAY.pixiStage?.removeBg('main-off');
+    RUNTIME_GAMEPLAY.pixiStage?.removeAnimation('bg-main-softoff');
+    RUNTIME_GAMEPLAY.pixiStage?.removeStageObjectByKey('bg-main-off');
   }, 1000);
 }

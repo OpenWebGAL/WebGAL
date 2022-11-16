@@ -1,5 +1,5 @@
 import * as localforage from 'localforage';
-import { IUserData } from '@/interface/stateInterface/userDataInterface';
+import { IUserData } from '@/store/userDataInterface';
 import { RUNTIME_GAME_INFO } from '../../runtime/etc';
 import { logger } from '../../util/etc/logger';
 import { webgalStore } from '@/store/store';

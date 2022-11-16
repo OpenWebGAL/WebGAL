@@ -6,10 +6,11 @@ import { RUNTIME_SCENE_DATA } from '@/Core/runtime/sceneData';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import { setMenuPanelTag, setVisibility } from '@/store/GUIReducer';
-import { MenuPanelTag } from '@/interface/stateInterface/guiInterface';
+import { MenuPanelTag } from '@/store/guiInterface';
 import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
 import { hasFastSaveRecord, loadFastSaveGame } from '@/hooks/useHotkey';
 import { restorePerform } from '@/Core/controller/storage/jumpFromBacklog';
+import { RUNTIME_GAME_INFO } from '@/Core/runtime/etc';
 
 /**
  * 标题页
@@ -47,11 +48,9 @@ const Title: FC = () => {
               onClick={async () => {
                 dispatch(setVisibility({ component: 'showTitle', visibility: false }));
                 // @ts-ignore
-                if (window.prevBgm) {
-                  // @ts-ignore
-                  playBgm(window.prevBgm);
-                  // @ts-ignore
-                  delete window.prevBgm;
+                if (RUNTIME_GAME_INFO.prevBgm !== '') {
+                  playBgm(RUNTIME_GAME_INFO.prevBgm);
+                  RUNTIME_GAME_INFO.prevBgm = '';
                 } else playBgm('/');
                 // 当且仅当游戏未开始时使用快速存档
                 // 当游戏开始后 使用原来的逻辑

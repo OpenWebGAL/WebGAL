@@ -1,5 +1,5 @@
-import { ISentence } from '@/interface/coreInterface/sceneInterface';
-import { IPerform } from '@/interface/coreInterface/performInterface';
+import { ISentence } from '@/Core/controller/scene/sceneInterface';
+import { IPerform } from '@/Core/controller/perform/performInterface';
 import styles1 from '../../Components/Stage/TextBox/textbox.module.scss';
 import styles2 from '../../Components/Stage/TextBox/textboxFilm.module.scss';
 import { getRandomPerformName } from '@/Core/controller/perform/getRandomPerformName';
