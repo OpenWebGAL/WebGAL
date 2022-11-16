@@ -3,12 +3,7 @@
  * @author Mahiru
  */
 import { getStorage } from '@/Core/controller/storage/storageController';
-import {
-  IGuiState,
-  MenuPanelTag,
-  setAssetPayload,
-  setVisibilityPayload,
-} from '@/interface/stateInterface/guiInterface';
+import { IGuiState, MenuPanelTag, setAssetPayload, setVisibilityPayload } from '@/store/guiInterface';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 /**

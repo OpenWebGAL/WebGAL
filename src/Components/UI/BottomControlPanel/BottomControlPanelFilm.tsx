@@ -4,13 +4,13 @@ import { switchFast } from '@/Core/controller/gamePlay/fastSkip';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import { setMenuPanelTag, setVisibility } from '@/store/GUIReducer';
-import { componentsVisibility, MenuPanelTag } from '@/interface/stateInterface/guiInterface';
+import { componentsVisibility, MenuPanelTag } from '@/store/guiInterface';
 import { backToTitle } from '@/Core/controller/gamePlay/backToTitle';
-import { useObject } from '@/hooks/useObject';
+import { useValue } from '@/hooks/useValue';
 import { HamburgerButton } from '@icon-park/react';
 
 export const BottomControlPanelFilm = () => {
-  const showPanel = useObject(false);
+  const showPanel = useValue(false);
   const stageState = useSelector((state: RootState) => state.stage);
   const dispatch = useDispatch();
   const setComponentVisibility = (component: keyof componentsVisibility, visibility: boolean) => {

@@ -1,7 +1,7 @@
 import styles from '@/Components/Stage/stage.module.scss';
 import { FigureContainer } from '@/Components/Stage/FigureContainer/FigureContainer';
 import { useEffect } from 'react';
-import { IEffect } from '@/interface/stateInterface/stageInterface';
+import { IEffect } from '@/store/stageInterface';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 

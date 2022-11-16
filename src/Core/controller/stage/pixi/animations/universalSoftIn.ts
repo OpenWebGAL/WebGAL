@@ -1,11 +1,33 @@
 import { RUNTIME_GAMEPLAY } from '@/Core/runtime/gamePlay';
 
-export function generateUniversalSoftInFn(targetKey: string, duration: number) {
+export function generateUniversalSoftInAnimationObj(targetKey: string, duration: number) {
   const target = RUNTIME_GAMEPLAY.pixiStage!.getStageObjByKey(targetKey);
-  if (target) target.pixiSprite.alpha = 0;
-  return function (delta: number) {
+
+  // 先设置一个通用的初态
+
+  // TODO：通用初态设置
+  /**
+   * 在此书写为动画设置初态的操作
+   */
+  function setStartState() {
+    if (target) target.pixiContainer.alpha = 0;
+  }
+
+  // TODO：通用终态设置
+  /**
+   * 在此书写为动画设置终态的操作
+   */
+  function setEndState() {
+    if (target) target.pixiContainer.alpha = 1;
+  }
+
+  /**
+   * 在此书写动画每一帧执行的函数
+   * @param delta
+   */
+  function tickerFunc(delta: number) {
     if (target) {
-      const sprite = target.pixiSprite;
+      const sprite = target.pixiContainer;
       const baseDuration = RUNTIME_GAMEPLAY.pixiStage!.frameDuration;
       const currentAddOplityDelta = (duration / baseDuration) * delta;
       const increasement = 1 / currentAddOplityDelta;
@@ -13,5 +35,11 @@ export function generateUniversalSoftInFn(targetKey: string, duration: number) {
         sprite.alpha += increasement;
       }
     }
+  }
+
+  return {
+    setStartState,
+    setEndState,
+    tickerFunc,
   };
 }

@@ -1,5 +1,5 @@
-import { ISentence } from '@/interface/coreInterface/sceneInterface';
-import { IPerform } from '@/interface/coreInterface/performInterface';
+import { ISentence } from '@/Core/controller/scene/sceneInterface';
+import { IPerform } from '@/Core/controller/perform/performInterface';
 import { changeScene } from '@/Core/controller/scene/changeScene';
 import { jmp } from '@/Core/gameScripts/function/jmp';
 import ReactDOM from 'react-dom';
@@ -7,7 +7,7 @@ import React from 'react';
 import { unmountPerform } from '@/Core/controller/perform/unmountPerform';
 import styles from './performStyles/choose.module.scss';
 import { webgalStore } from '@/store/store';
-import { textFont } from '@/interface/stateInterface/userDataInterface';
+import { textFont } from '@/store/userDataInterface';
 
 /**
  * 显示选择枝

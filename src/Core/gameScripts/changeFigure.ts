@@ -1,7 +1,9 @@
-import { ISentence } from '@/interface/coreInterface/sceneInterface';
-import { IPerform } from '@/interface/coreInterface/performInterface';
+import { ISentence } from '@/Core/controller/scene/sceneInterface';
+import { IPerform } from '@/Core/controller/perform/performInterface';
 import { webgalStore } from '@/store/store';
 import { setStage } from '@/store/stageReducer';
+import { updateCurrentEffects } from '../controller/stage/pixi/PixiController';
+import __ from 'lodash';
 
 /**
  * 更改立绘
@@ -26,6 +28,16 @@ export const changeFigure = (sentence: ISentence): IPerform => {
     }
   }
   const dispatch = webgalStore.dispatch;
+  /**
+   * 删掉相关 Effects，因为已经移除了
+   */
+  const prevEffects = webgalStore.getState().stage.effects;
+  const newEffects = __.cloneDeep(prevEffects);
+  const index = newEffects.findIndex((e) => e.target === `fig-${pos}`);
+  if (index >= 0) {
+    newEffects.splice(index, 1);
+  }
+  updateCurrentEffects(newEffects);
   switch (pos) {
     case 'center':
       dispatch(setStage({ key: 'figName', value: content }));

@@ -1,4 +1,4 @@
-import { commandType, parsedCommand } from '@/interface/coreInterface/sceneInterface';
+import { commandType, parsedCommand } from '@/Core/controller/scene/sceneInterface';
 import { ADD_NEXT_ARG_LIST, SCRIPT_CONFIG } from '@/Core/config/scriptConfig';
 
 /**

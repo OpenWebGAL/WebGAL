@@ -1,4 +1,4 @@
-import { commandType } from '@/interface/coreInterface/sceneInterface';
+import { commandType } from '@/Core/controller/scene/sceneInterface';
 
 export interface IConfigInterface {
   scriptString: string;

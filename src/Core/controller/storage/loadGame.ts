@@ -1,6 +1,6 @@
 import { RUNTIME_CURRENT_BACKLOG } from '../../runtime/backlog';
 import { RUNTIME_SCENE_DATA } from '../../runtime/sceneData';
-import { ISaveData } from '@/interface/stateInterface/userDataInterface';
+import { ISaveData } from '@/store/userDataInterface';
 import { logger } from '../../util/etc/logger';
 import { sceneFetcher } from '../scene/sceneFetcher';
 import { sceneParser } from '../../parser/sceneParser';
@@ -61,7 +61,8 @@ export function loadGameFromStageData(stageData: ISaveData) {
   dispatch(resetStageState(newStageState));
 
   // 恢复演出
-  restorePerform();
+  setTimeout(restorePerform, 0);
+  // restorePerform();
 
   dispatch(setVisibility({ component: 'showTitle', visibility: false }));
   dispatch(setVisibility({ component: 'showMenuPanel', visibility: false }));
