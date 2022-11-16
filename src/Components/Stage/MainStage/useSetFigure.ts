@@ -124,7 +124,7 @@ function removeFig(figObj: IStageObject, enterTikerKey: string, effects: IEffect
     effects,
   );
   setTimeout(() => {
-    RUNTIME_GAMEPLAY.pixiStage?.removeAnimationWithSetEffects(leaveKey);
+    RUNTIME_GAMEPLAY.pixiStage?.removeAnimation(leaveKey);
     RUNTIME_GAMEPLAY.pixiStage?.removeStageObjectByKey(figKey);
   }, 250);
 }
