@@ -5,16 +5,17 @@ import { webgalAnimations } from '@/Core/controller/stage/pixi/animations';
 import { IAnimationObject } from '@/Core/controller/stage/pixi/PixiController';
 import { RUNTIME_GAMEPLAY } from '@/Core/runtime/gamePlay';
 import { logger } from '@/Core/util/etc/logger';
+import { webgalStore } from '@/store/store';
 
 /**
  * 设置背景动画
  * @param sentence
  */
 export const setAnimation = (sentence: ISentence): IPerform => {
+  const startDialogKey = webgalStore.getState().stage.currentDialogKey;
   const animationName = sentence.content;
   const animationDuration = (getSentenceArgByKey(sentence, 'duration') ?? 0) as number;
   const target = (getSentenceArgByKey(sentence, 'target') ?? 0) as string;
-  const isHasNext = (getSentenceArgByKey(sentence, 'next') ?? false) as boolean;
   const key = `${target}-${animationName}-${animationDuration}`;
   const animationFunction: Function | null = getAnimationObject(animationName);
   let stopFunction: Function = () => {};
@@ -23,7 +24,11 @@ export const setAnimation = (sentence: ISentence): IPerform => {
     const animationObj: IAnimationObject = animationFunction(target, animationDuration);
     RUNTIME_GAMEPLAY.pixiStage?.stopPresetAnimationOnTarget(target);
     RUNTIME_GAMEPLAY.pixiStage?.registerAnimation(animationObj, key, target);
-    stopFunction = () => RUNTIME_GAMEPLAY.pixiStage?.removeAnimationWithSetEffects(key, !isHasNext);
+    stopFunction = () => {
+      const endDialogKey = webgalStore.getState().stage.currentDialogKey;
+      const isHasNext = startDialogKey !== endDialogKey;
+      RUNTIME_GAMEPLAY.pixiStage?.removeAnimationWithSetEffects(key, !isHasNext);
+    };
   }
   return {
     performName: key,

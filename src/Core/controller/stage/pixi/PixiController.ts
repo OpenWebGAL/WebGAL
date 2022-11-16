@@ -408,14 +408,16 @@ export function updateCurrentEffects(newEffects: IEffect[], notUpdateBacklogEffe
   if (!notUpdateBacklogEffects)
     setTimeout(() => {
       const backlog = RUNTIME_CURRENT_BACKLOG[RUNTIME_CURRENT_BACKLOG.length - 1];
-      const newBacklogItem = __.cloneDeep(backlog);
-      const backlog_effects = newBacklogItem.currentStageState.effects;
-      while (backlog_effects.length > 0) {
-        backlog_effects.pop();
+      if (backlog) {
+        const newBacklogItem = __.cloneDeep(backlog);
+        const backlog_effects = newBacklogItem.currentStageState.effects;
+        while (backlog_effects.length > 0) {
+          backlog_effects.pop();
+        }
+        backlog_effects.push(...newEffects);
+        RUNTIME_CURRENT_BACKLOG.pop();
+        RUNTIME_CURRENT_BACKLOG.push(newBacklogItem);
       }
-      backlog_effects.push(...newEffects);
-      RUNTIME_CURRENT_BACKLOG.pop();
-      RUNTIME_CURRENT_BACKLOG.push(newBacklogItem);
     }, 50);
 
   webgalStore.dispatch(setStage({ key: 'effects', value: newEffects }));
