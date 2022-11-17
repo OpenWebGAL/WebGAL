@@ -17,7 +17,7 @@ export enum commandType {
   changeScene, // 切换场景
   choose, // 分支选择
   end, // 结束游戏
-  setAnimation, // 动画演出
+  setComplexAnimation, // 动画演出
   setFilter, // 设置效果
   label, // 标签
   jumpLabel, // 跳转标签
@@ -30,6 +30,7 @@ export enum commandType {
   unlockBgm,
   filmMode,
   setTextbox,
+  setAnimation,
 }
 
 /**

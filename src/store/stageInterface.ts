@@ -23,7 +23,7 @@ export interface IChooseItem {
   isSubScene: boolean; // 是否是子场景调用
 }
 
-interface ITransform {
+export interface ITransform {
   alpha: number;
   scale: {
     x: number;

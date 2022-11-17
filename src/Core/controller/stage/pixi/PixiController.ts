@@ -5,6 +5,7 @@ import { setStage } from '@/store/stageReducer';
 import __ from 'lodash';
 import { IEffect } from '@/store/stageInterface';
 import { RUNTIME_CURRENT_BACKLOG } from '@/Core/runtime/backlog';
+import { setStageEffects } from '@/Components/Stage/MainStage/useSetEffects';
 
 export interface IAnimationObject {
   setStartState: Function;
@@ -230,9 +231,13 @@ export default class PixiStage {
 
     // 准备 blur Filter
     const blurFilter = new PIXI.filters.BlurFilter();
+    for (const filter of thisBgContainer?.filters ?? []) {
+      filter.destroy();
+    }
     thisBgContainer.filters = [blurFilter];
     // @ts-ignore
     thisBgContainer.blurFilter = blurFilter;
+    blurFilter.blur = 0;
 
     // 是否有相同 key 的背景
     const setBgIndex = this.backgroundObjects.findIndex((e) => e.key === key);
@@ -301,9 +306,13 @@ export default class PixiStage {
 
     // 准备 blur Filter
     const blurFilter = new PIXI.filters.BlurFilter();
+    for (const filter of thisFigureContainer?.filters ?? []) {
+      filter.destroy();
+    }
     thisFigureContainer.filters = [blurFilter];
     // @ts-ignore
     thisFigureContainer.blurFilter = blurFilter;
+    blurFilter.blur = 0;
 
     // 是否有相同 key 的立绘
     const setFigIndex = this.figureObjects.findIndex((e) => e.key === key);
