@@ -22,7 +22,7 @@ export function generateTimelineObj(
   const gsapTimelines = [gsapTimeline1, gsapTimeline2, gsapTimeline3, gsapTimeline4, gsapTimeline5];
   for (const gsapEffect of timeline) {
     const gsapEffectDuration = gsapEffect.duration;
-    if (target) {
+    if (target?.pixiContainer) {
       gsapTimeline1.to(target.pixiContainer, {
         alpha: gsapEffect.alpha,
         rotation: gsapEffect.rotation,
