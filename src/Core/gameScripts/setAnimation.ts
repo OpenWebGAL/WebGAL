@@ -7,6 +7,7 @@ import { logger } from '@/Core/util/etc/logger';
 import { webgalStore } from '@/store/store';
 import { RUNTIME_USER_ANIMATIONS } from '@/Core/runtime/etc';
 import { generateTimelineObj } from '@/Core/controller/stage/pixi/animations/timeline';
+import __ from 'lodash';
 
 /**
  * 设置背景动画
@@ -47,7 +48,7 @@ function getAnimationObject(animationName: string, target: string, duration: num
   const effect = RUNTIME_USER_ANIMATIONS.find((ani) => ani.name === animationName);
   if (effect) {
     const mappedEffects = effect.effects.map((effect) => {
-      const newEffect = effect;
+      const newEffect = __.cloneDeep(effect);
       newEffect.duration = effect.duration / 1000;
       return newEffect;
     });
