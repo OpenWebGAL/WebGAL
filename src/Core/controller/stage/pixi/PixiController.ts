@@ -194,6 +194,10 @@ export default class PixiStage {
               y: target.pixiContainer.y,
             },
             rotation: target.pixiContainer.rotation,
+            blurFilter: {
+              // @ts-ignore
+              blur: target.pixiContainer.blurFilter.blur,
+            },
           };
           const prevEffects = webgalStore.getState().stage.effects;
           const newEffects = __.cloneDeep(prevEffects);
@@ -223,6 +227,12 @@ export default class PixiStage {
 
     // 准备用于存放这个背景的 Container
     const thisBgContainer = new PIXI.Container();
+
+    // 准备 blur Filter
+    const blurFilter = new PIXI.filters.BlurFilter();
+    thisBgContainer.filters = [blurFilter];
+    // @ts-ignore
+    thisBgContainer.blurFilter = blurFilter;
 
     // 是否有相同 key 的背景
     const setBgIndex = this.backgroundObjects.findIndex((e) => e.key === key);
@@ -288,6 +298,12 @@ export default class PixiStage {
 
     // 准备用于存放这个立绘的 Container
     const thisFigureContainer = new PIXI.Container();
+
+    // 准备 blur Filter
+    const blurFilter = new PIXI.filters.BlurFilter();
+    thisFigureContainer.filters = [blurFilter];
+    // @ts-ignore
+    thisFigureContainer.blurFilter = blurFilter;
 
     // 是否有相同 key 的立绘
     const setFigIndex = this.figureObjects.findIndex((e) => e.key === key);
@@ -403,7 +419,7 @@ export default class PixiStage {
 
 export function updateCurrentEffects(newEffects: IEffect[], notUpdateBacklogEffects = false) {
   /**
-   * 更新当前 backlog 条目的 Transform 记录
+   * 更新当前 backlog 条目的 effects 记录
    */
   if (!notUpdateBacklogEffects)
     setTimeout(() => {
