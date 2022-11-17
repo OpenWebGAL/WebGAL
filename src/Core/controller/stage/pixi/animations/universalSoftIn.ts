@@ -10,7 +10,11 @@ export function generateUniversalSoftInAnimationObj(targetKey: string, duration:
    * 在此书写为动画设置初态的操作
    */
   function setStartState() {
-    if (target) target.pixiContainer.alpha = 0;
+    if (target) {
+      target.pixiContainer.alpha = 0;
+      // @ts-ignore
+      target.pixiContainer.blurFilter.blur = 5;
+    }
   }
 
   // TODO：通用终态设置
@@ -18,7 +22,11 @@ export function generateUniversalSoftInAnimationObj(targetKey: string, duration:
    * 在此书写为动画设置终态的操作
    */
   function setEndState() {
-    if (target) target.pixiContainer.alpha = 1;
+    if (target) {
+      target.pixiContainer.alpha = 1;
+      // @ts-ignore
+      target.pixiContainer.blurFilter.blur = 0;
+    }
   }
 
   /**
@@ -31,8 +39,14 @@ export function generateUniversalSoftInAnimationObj(targetKey: string, duration:
       const baseDuration = RUNTIME_GAMEPLAY.pixiStage!.frameDuration;
       const currentAddOplityDelta = (duration / baseDuration) * delta;
       const increasement = 1 / currentAddOplityDelta;
+      const decreasement = 5 / currentAddOplityDelta;
       if (sprite.alpha < 1) {
         sprite.alpha += increasement;
+      }
+      // @ts-ignore
+      if (sprite.blurFilter.blur > 0) {
+        // @ts-ignore
+        sprite.blurFilter.blur -= decreasement;
       }
     }
   }

@@ -38,10 +38,9 @@ interface ITransform {
     y: number;
   };
   rotation: number;
-}
-
-interface IFilter {
-  blur: string;
+  blurFilter: {
+    blur: number;
+  };
 }
 
 /**
@@ -51,7 +50,6 @@ interface IFilter {
 export interface IEffect {
   target: string; // 作用目标
   transform?: ITransform; // 变换
-  filter?: IFilter; // 效果
 }
 
 /**
@@ -72,6 +70,9 @@ export const baseTransform: ITransform = {
     y: 0,
   },
   rotation: 0,
+  blurFilter: {
+    blur: 0,
+  },
 };
 
 /**

@@ -14,6 +14,7 @@
     "angular-expressions": "^1.1.5",
     "axios": "^0.26.1",
     "cloudlogjs": "^1.0.9",
+    "gsap": "^3.11.3",
     "localforage": "^1.10.0",
     "lodash": "^4.17.21",
     "modern-css-reset": "^1.4.0",
