@@ -1,7 +1,6 @@
 import { RUNTIME_GAMEPLAY } from '@/Core/runtime/gamePlay';
 import { ITransform } from '@/store/stageInterface';
 import { gsap } from 'gsap';
-import __ from 'lodash';
 
 /**
  * 动画创建模板
@@ -14,8 +13,6 @@ export function generateTimelineObj(
   targetKey: string,
   duration: number,
 ) {
-  const thisTimeline = __.cloneDeep(timeline);
-  const numbers = thisTimeline.map((t) => t.duration);
   const target = RUNTIME_GAMEPLAY.pixiStage!.getStageObjByKey(targetKey);
   let gsapTimeline1: gsap.core.Timeline | null = gsap.timeline();
   let gsapTimeline2: gsap.core.Timeline | null = gsap.timeline();
@@ -23,12 +20,8 @@ export function generateTimelineObj(
   let gsapTimeline4: gsap.core.Timeline | null = gsap.timeline();
   let gsapTimeline5: gsap.core.Timeline | null = gsap.timeline();
   const gsapTimelines = [gsapTimeline1, gsapTimeline2, gsapTimeline3, gsapTimeline4, gsapTimeline5];
-  let i = 0;
-  for (const gsapEffect of thisTimeline) {
-    console.log(thisTimeline);
-    const gsapEffectDuration = numbers[i] + 0.001;
-    i++;
-    console.log(gsapEffectDuration);
+  for (const gsapEffect of timeline) {
+    const gsapEffectDuration = gsapEffect.duration;
     if (target) {
       gsapTimeline1.to(target.pixiContainer, {
         alpha: gsapEffect.alpha,
@@ -78,11 +71,11 @@ export function generateTimelineObj(
         gsaptimeline.kill();
       }
     }
-    // gsapTimeline1 = null;
-    // gsapTimeline2 = null;
-    // gsapTimeline3 = null;
-    // gsapTimeline4 = null;
-    // gsapTimeline5 = null;
+    gsapTimeline1 = null;
+    gsapTimeline2 = null;
+    gsapTimeline3 = null;
+    gsapTimeline4 = null;
+    gsapTimeline5 = null;
   }
 
   /**
