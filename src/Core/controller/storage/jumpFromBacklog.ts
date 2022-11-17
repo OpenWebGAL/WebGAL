@@ -64,7 +64,7 @@ export const jumpFromBacklog = (index: number) => {
   dispatch(resetStageState(newStageState));
 
   // 恢复演出
-  restorePerform();
+  setTimeout(restorePerform, 0);
 
   // 关闭backlog界面
   dispatch(setVisibility({ component: 'showBacklog', visibility: false }));
