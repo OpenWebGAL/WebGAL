@@ -13,10 +13,11 @@ import { setVolume } from '@/Core/controller/stage/setVolume';
 import { bindExtraFunc } from '@/Core/util/coreInitialFunction/bindExtraFunc';
 import { webSocketFunc } from '@/Core/util/syncWithEditor/webSocketFunc';
 import uniqWith from 'lodash/uniqWith';
-import { RUNTIME_SETTLED_SCENES } from './runtime/etc';
+import { RUNTIME_SETTLED_SCENES, RUNTIME_USER_ANIMATIONS } from './runtime/etc';
 import { scenePrefetcher } from './util/prefetcher/scenePrefetcher';
 import { RUNTIME_GAMEPLAY } from '@/Core/runtime/gamePlay';
 import PixiStage from '@/Core/controller/stage/pixi/PixiController';
+import axios from 'axios';
 
 /**
  * 引擎初始化函数
@@ -41,7 +42,9 @@ export const initializeScript = (): void => {
     }
   };
   // 获得 userAnimation
-  loadStyle('./game/userAnimation.css');
+  loadStyle('./game/userStyleSheet.css');
+  // 获得 user Animation
+  getUserAnimation();
   // 获取游戏信息
   infoFetcher('./game/config.txt');
   // 获取start场景
@@ -93,4 +96,21 @@ function loadStyle(url: string) {
   link.href = url;
   const head = document.getElementsByTagName('head')[0];
   head.appendChild(link);
+}
+
+function getUserAnimation() {
+  axios.get('./game/animation/animationTable.json').then((res) => {
+    const animations: Array<string> = res.data;
+    for (const animationName of animations) {
+      axios.get(`./game/animation/${animationName}.json`).then((res) => {
+        if (res.data) {
+          const userAnimation = {
+            name: animationName,
+            effects: res.data,
+          };
+          RUNTIME_USER_ANIMATIONS.push(userAnimation);
+        }
+      });
+    }
+  });
 }

@@ -1,0 +1,42 @@
+[
+  {
+    "alpha": 1,
+    "scale": {
+      "x": 1,
+      "y": 1
+    },
+    "pivot": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "position": {
+      "x": -1000,
+      "y": 0
+    },
+    "rotation": 0,
+    "blurFilter": {
+      "blur": 0
+    },
+    "duration": 0
+  },
+  {
+    "alpha": 1,
+    "scale": {
+      "x": 1,
+      "y": 1
+    },
+    "pivot": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "position": {
+      "x": 0,
+      "y": 0
+    },
+    "rotation": 0,
+    "blurFilter": {
+      "blur": 0
+    },
+    "duration": 1000
+  }
+]

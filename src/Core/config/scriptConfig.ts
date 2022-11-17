@@ -9,7 +9,7 @@ import { choose } from '@/Core/gameScripts/choose';
 import { end } from '../gameScripts/end';
 import { bgm } from '@/Core/gameScripts/bgm';
 import { playVideo } from '@/Core/gameScripts/playVideo';
-import { setAnimation } from '@/Core/gameScripts/setAnimation';
+import { setComplexAnimation } from '@/Core/gameScripts/setComplexAnimation';
 import { setFilter } from '@/Core/gameScripts/setFilter';
 import { pixiInit } from '../gameScripts/pixiInit';
 import { pixi } from '@/Core/gameScripts/pixi';
@@ -23,6 +23,7 @@ import { say } from '../gameScripts/say';
 import { filmMode } from '@/Core/gameScripts/filmMode';
 import { callSceneScript } from '@/Core/gameScripts/callSceneScript';
 import { setTextbox } from '@/Core/gameScripts/setTextbox';
+import { setAnimation } from '@/Core/gameScripts/setAnimation';
 
 export const SCRIPT_CONFIG: IConfigInterface[] = [
   { scriptString: 'intro', scriptType: commandType.intro, scriptFunction: intro },
@@ -34,7 +35,11 @@ export const SCRIPT_CONFIG: IConfigInterface[] = [
   { scriptString: 'end', scriptType: commandType.end, scriptFunction: end },
   { scriptString: 'bgm', scriptType: commandType.bgm, scriptFunction: bgm },
   { scriptString: 'playVideo', scriptType: commandType.video, scriptFunction: playVideo },
-  { scriptString: 'setAnimation', scriptType: commandType.setAnimation, scriptFunction: setAnimation },
+  {
+    scriptString: 'setComplexAnimation',
+    scriptType: commandType.setComplexAnimation,
+    scriptFunction: setComplexAnimation,
+  },
   { scriptString: 'setFilter', scriptType: commandType.setFilter, scriptFunction: setFilter },
   { scriptString: 'pixiInit', scriptType: commandType.pixiInit, scriptFunction: pixiInit },
   { scriptString: 'pixiPerform', scriptType: commandType.pixi, scriptFunction: pixi },
@@ -49,6 +54,7 @@ export const SCRIPT_CONFIG: IConfigInterface[] = [
   { scriptString: 'filmMode', scriptType: commandType.filmMode, scriptFunction: filmMode },
   { scriptString: 'callScene', scriptType: commandType.callScene, scriptFunction: callSceneScript },
   { scriptString: 'setTextbox', scriptType: commandType.setTextbox, scriptFunction: setTextbox },
+  { scriptString: 'setAnimation', scriptType: commandType.setAnimation, scriptFunction: setAnimation },
 ];
 export const ADD_NEXT_ARG_LIST = [
   commandType.bgm,

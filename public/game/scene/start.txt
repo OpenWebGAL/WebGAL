@@ -23,7 +23,7 @@ changeFigure:m2.png -left -next;
 bgm:cb1.mp3;
 unlockBgm:cb1.mp3 -name=ひとすじの光明;
 米咖多:蛋包饭是栞那做的，但红茶是夏目泡的。 -v1.ogg;
-setAnimation:universalSoftOff -target=fig-left -duration=200 -next;
+setAnimation:enter-from-left -target=fig-left -duration=1000 -next;
 昂晴:......;
 顺便问一下，你是打算做什么的？;
 changeFigure:m1.png -left -next;
