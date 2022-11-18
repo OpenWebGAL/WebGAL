@@ -47,13 +47,7 @@ export function generateTimelineObj(
   /**
    * 在此书写为动画设置初态的操作
    */
-  function setStartState() {
-    for (const gsaptimeline of gsapTimelines) {
-      if (gsaptimeline) {
-        gsaptimeline.seek(0);
-      }
-    }
-  }
+  function setStartState() {}
 
   /**
    * 在此书写为动画设置终态的操作

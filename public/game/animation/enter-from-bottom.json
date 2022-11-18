@@ -1,0 +1,20 @@
+[
+  {
+    "alpha": 0,
+    "position": {
+      "x": 0,
+      "y": 50
+    },
+    "blur": 5,
+    "duration": 0
+  },
+  {
+    "alpha": 1,
+    "position": {
+      "x": 0,
+      "y": 0
+    },
+    "blur": 0,
+    "duration": 500
+  }
+]

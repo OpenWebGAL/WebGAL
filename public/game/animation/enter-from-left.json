@@ -10,7 +10,7 @@
       "y": 0.5
     },
     "position": {
-      "x": -250,
+      "x": -50,
       "y": 0
     },
     "rotation": 0,
@@ -33,6 +33,6 @@
     },
     "rotation": 0,
     "blur": 0,
-    "duration": 1000
+    "duration": 500
   }
 ]

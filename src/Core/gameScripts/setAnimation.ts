@@ -8,6 +8,7 @@ import { webgalStore } from '@/store/store';
 import { RUNTIME_USER_ANIMATIONS } from '@/Core/runtime/etc';
 import { generateTimelineObj } from '@/Core/controller/stage/pixi/animations/timeline';
 import __ from 'lodash';
+import { baseTransform } from '@/store/stageInterface';
 
 /**
  * 设置背景动画
@@ -21,10 +22,10 @@ export const setAnimation = (sentence: ISentence): IPerform => {
   const key = `${target}-${animationName}-${animationDuration}`;
   let stopFunction: Function = () => {};
   setTimeout(() => {
+    RUNTIME_GAMEPLAY.pixiStage?.stopPresetAnimationOnTarget(target);
     const animationObj: IAnimationObject | null = getAnimationObject(animationName, target, animationDuration);
     if (animationObj) {
       logger.debug(`动画${animationName}作用在${target}`, animationDuration);
-      RUNTIME_GAMEPLAY.pixiStage?.stopPresetAnimationOnTarget(target);
       RUNTIME_GAMEPLAY.pixiStage?.registerAnimation(animationObj, key, target);
     }
   }, 0);
@@ -52,7 +53,8 @@ function getAnimationObject(animationName: string, target: string, duration: num
   const effect = RUNTIME_USER_ANIMATIONS.find((ani) => ani.name === animationName);
   if (effect) {
     const mappedEffects = effect.effects.map((effect) => {
-      const newEffect = __.cloneDeep(effect);
+      const newEffect = __.cloneDeep({ ...baseTransform, duration: 0 });
+      Object.assign(newEffect, effect);
       newEffect.duration = effect.duration / 1000;
       return newEffect;
     });
