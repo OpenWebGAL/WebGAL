@@ -26,6 +26,7 @@ export function generateTimelineObj(
       gsapTimeline1.to(target.pixiContainer, {
         alpha: gsapEffect.alpha,
         rotation: gsapEffect.rotation,
+        blur: gsapEffect.blur,
         duration: gsapEffectDuration,
       });
       gsapTimeline2.to(target.pixiContainer.scale, {
@@ -40,11 +41,6 @@ export function generateTimelineObj(
         ...gsapEffect.pivot,
         duration: gsapEffectDuration,
       });
-      // @ts-ignore
-      // gsapTimeline5.to(target.pixiContainer.blurFilter, {
-      //   ...gsapEffect.blurFilter,
-      //   duration: gsapEffect.duration,
-      // });
     }
   }
 
@@ -52,7 +48,6 @@ export function generateTimelineObj(
    * 在此书写为动画设置初态的操作
    */
   function setStartState() {
-    console.log('set start');
     for (const gsaptimeline of gsapTimelines) {
       if (gsaptimeline) {
         gsaptimeline.seek(0);
@@ -64,7 +59,6 @@ export function generateTimelineObj(
    * 在此书写为动画设置终态的操作
    */
   function setEndState() {
-    console.log('set end');
     for (const gsaptimeline of gsapTimelines) {
       if (gsaptimeline) {
         gsaptimeline.seek(duration);
