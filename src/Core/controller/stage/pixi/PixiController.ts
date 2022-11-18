@@ -195,10 +195,8 @@ export default class PixiStage {
               y: target.pixiContainer.y,
             },
             rotation: target.pixiContainer.rotation,
-            blurFilter: {
-              // @ts-ignore
-              blur: target.pixiContainer.blurFilter.blur,
-            },
+            // @ts-ignore
+            blur: target.pixiContainer.blur,
           };
           const prevEffects = webgalStore.getState().stage.effects;
           const newEffects = __.cloneDeep(prevEffects);
@@ -227,7 +225,7 @@ export default class PixiStage {
     const loader = new PIXI.Loader();
 
     // 准备用于存放这个背景的 Container
-    const thisBgContainer = new PIXI.Container();
+    let thisBgContainer = new PIXI.Container();
 
     // 准备 blur Filter
     const blurFilter = new PIXI.filters.BlurFilter();
@@ -235,8 +233,8 @@ export default class PixiStage {
       filter.destroy();
     }
     thisBgContainer.filters = [blurFilter];
+    thisBgContainer = new Proxy(thisBgContainer, containerHandler as any);
     // @ts-ignore
-    thisBgContainer.blurFilter = blurFilter;
     blurFilter.blur = 0;
 
     // 是否有相同 key 的背景
@@ -302,7 +300,7 @@ export default class PixiStage {
     const loader = new PIXI.Loader();
 
     // 准备用于存放这个立绘的 Container
-    const thisFigureContainer = new PIXI.Container();
+    let thisFigureContainer = new PIXI.Container();
 
     // 准备 blur Filter
     const blurFilter = new PIXI.filters.BlurFilter();
@@ -311,7 +309,7 @@ export default class PixiStage {
     }
     thisFigureContainer.filters = [blurFilter];
     // @ts-ignore
-    thisFigureContainer.blurFilter = blurFilter;
+    thisFigureContainer = new Proxy(thisFigureContainer, containerHandler as any);
     blurFilter.blur = 0;
 
     // 是否有相同 key 的立绘
@@ -447,3 +445,23 @@ export function updateCurrentEffects(newEffects: IEffect[], notUpdateBacklogEffe
 
   webgalStore.dispatch(setStage({ key: 'effects', value: newEffects }));
 }
+
+const containerHandler = {
+  get: function (obj: Object, prop: string) {
+    if (prop === 'blur') {
+      // @ts-ignore
+      return obj.filters[0].blur;
+    }
+    return Reflect.get(obj, prop);
+  },
+  set: function (obj: Object, prop: string, value: any) {
+    if (prop === 'blur') {
+      // @ts-ignore
+      // obj.filters[0].blur = value;
+      return Reflect.set(obj.filters[0], 'blur', value);
+      // return true;
+    } else {
+      return Reflect.set(obj, prop, value);
+    }
+  },
+};

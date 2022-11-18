@@ -16,21 +16,23 @@ import __ from 'lodash';
 export const setAnimation = (sentence: ISentence): IPerform => {
   const startDialogKey = webgalStore.getState().stage.currentDialogKey;
   const animationName = sentence.content;
-  const animationDuration = (getSentenceArgByKey(sentence, 'duration') ?? 0) as number;
+  const animationDuration = getAnimateDuration(animationName);
   const target = (getSentenceArgByKey(sentence, 'target') ?? 0) as string;
   const key = `${target}-${animationName}-${animationDuration}`;
   let stopFunction: Function = () => {};
-  const animationObj: IAnimationObject | null = getAnimationObject(animationName, target, animationDuration);
-  if (animationObj) {
-    logger.debug(`动画${animationName}作用在${target}`, animationDuration);
-    RUNTIME_GAMEPLAY.pixiStage?.stopPresetAnimationOnTarget(target);
-    RUNTIME_GAMEPLAY.pixiStage?.registerAnimation(animationObj, key, target);
-    stopFunction = () => {
-      const endDialogKey = webgalStore.getState().stage.currentDialogKey;
-      const isHasNext = startDialogKey !== endDialogKey;
-      RUNTIME_GAMEPLAY.pixiStage?.removeAnimationWithSetEffects(key, !isHasNext);
-    };
-  }
+  setTimeout(() => {
+    const animationObj: IAnimationObject | null = getAnimationObject(animationName, target, animationDuration);
+    if (animationObj) {
+      logger.debug(`动画${animationName}作用在${target}`, animationDuration);
+      RUNTIME_GAMEPLAY.pixiStage?.stopPresetAnimationOnTarget(target);
+      RUNTIME_GAMEPLAY.pixiStage?.registerAnimation(animationObj, key, target);
+      stopFunction = () => {
+        const endDialogKey = webgalStore.getState().stage.currentDialogKey;
+        const isHasNext = startDialogKey !== endDialogKey;
+        RUNTIME_GAMEPLAY.pixiStage?.removeAnimationWithSetEffects(key, !isHasNext);
+      };
+    }
+  }, 0);
 
   return {
     performName: key,
@@ -56,4 +58,16 @@ function getAnimationObject(animationName: string, target: string, duration: num
     return generateTimelineObj(mappedEffects, target, duration);
   }
   return null;
+}
+
+function getAnimateDuration(animationName: string) {
+  const effect = RUNTIME_USER_ANIMATIONS.find((ani) => ani.name === animationName);
+  if (effect) {
+    let duration = 0;
+    effect.effects.forEach((e) => {
+      duration += e.duration;
+    });
+    return duration;
+  }
+  return 0;
 }

@@ -38,9 +38,7 @@ export interface ITransform {
     y: number;
   };
   rotation: number;
-  blurFilter: {
-    blur: number;
-  };
+  blur: number;
 }
 
 /**
@@ -70,9 +68,7 @@ export const baseTransform: ITransform = {
     y: 0,
   },
   rotation: 0,
-  blurFilter: {
-    blur: 0,
-  },
+  blur: 0,
 };
 
 /**

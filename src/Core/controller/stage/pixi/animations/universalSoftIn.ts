@@ -13,7 +13,7 @@ export function generateUniversalSoftInAnimationObj(targetKey: string, duration:
     if (target) {
       target.pixiContainer.alpha = 0;
       // @ts-ignore
-      target.pixiContainer.blurFilter.blur = 5;
+      target.pixiContainer.blur = 5;
     }
   }
 
@@ -25,7 +25,7 @@ export function generateUniversalSoftInAnimationObj(targetKey: string, duration:
     if (target) {
       target.pixiContainer.alpha = 1;
       // @ts-ignore
-      target.pixiContainer.blurFilter.blur = 0;
+      target.pixiContainer.blur = 0;
     }
   }
 
@@ -44,9 +44,9 @@ export function generateUniversalSoftInAnimationObj(targetKey: string, duration:
         sprite.alpha += increasement;
       }
       // @ts-ignore
-      if (sprite.blurFilter.blur > 0) {
+      if (sprite.blur > 0) {
         // @ts-ignore
-        sprite.blurFilter.blur -= decreasement;
+        sprite.blur -= decreasement;
       }
     }
   }
