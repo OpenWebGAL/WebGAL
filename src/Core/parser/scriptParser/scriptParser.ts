@@ -20,8 +20,8 @@ export const scriptParser = (sentenceRaw: string): ISentence => {
 
   // 正式开始解析
 
-  // 去分号
-  let newSentenceRaw = sentenceRaw.split(';')[0];
+  // 去分号，前面已做，这里不再需要
+  let newSentenceRaw = sentenceRaw;
   // 截取命令
   const getCommandResult = /:/.exec(newSentenceRaw);
   /**
