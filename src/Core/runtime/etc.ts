@@ -1,6 +1,7 @@
 /**
  * 其他运行时临时变量
  */
+import { ITransform } from '@/store/stageInterface';
 
 export const RUNTIME_GAME_INFO = {
   gameName: '',
@@ -13,5 +14,11 @@ export const RUNTIME_GAME_INFO = {
 //   currentPreloadRemainingSceneCount: 2,
 // };
 
+interface IUserAnimation {
+  name: string;
+  effects: Array<ITransform & { duration: number }>;
+}
+
 export const RUNTIME_SETTLED_SCENES: Array<string> = [];
 export const RUNTIME_SETTLED_ASSETS: Array<string> = [];
+export const RUNTIME_USER_ANIMATIONS: Array<IUserAnimation> = [];

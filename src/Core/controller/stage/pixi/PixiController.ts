@@ -5,6 +5,7 @@ import { setStage } from '@/store/stageReducer';
 import __ from 'lodash';
 import { IEffect } from '@/store/stageInterface';
 import { RUNTIME_CURRENT_BACKLOG } from '@/Core/runtime/backlog';
+import { setStageEffects } from '@/Components/Stage/MainStage/useSetEffects';
 
 export interface IAnimationObject {
   setStartState: Function;
@@ -194,6 +195,8 @@ export default class PixiStage {
               y: target.pixiContainer.y,
             },
             rotation: target.pixiContainer.rotation,
+            // @ts-ignore
+            blur: target.pixiContainer.blur,
           };
           const prevEffects = webgalStore.getState().stage.effects;
           const newEffects = __.cloneDeep(prevEffects);
@@ -222,7 +225,17 @@ export default class PixiStage {
     const loader = new PIXI.Loader();
 
     // 准备用于存放这个背景的 Container
-    const thisBgContainer = new PIXI.Container();
+    let thisBgContainer = new PIXI.Container();
+
+    // 准备 blur Filter
+    const blurFilter = new PIXI.filters.BlurFilter();
+    for (const filter of thisBgContainer?.filters ?? []) {
+      filter.destroy();
+    }
+    thisBgContainer.filters = [blurFilter];
+    thisBgContainer = new Proxy(thisBgContainer, containerHandler as any);
+    // @ts-ignore
+    blurFilter.blur = 0;
 
     // 是否有相同 key 的背景
     const setBgIndex = this.backgroundObjects.findIndex((e) => e.key === key);
@@ -287,7 +300,17 @@ export default class PixiStage {
     const loader = new PIXI.Loader();
 
     // 准备用于存放这个立绘的 Container
-    const thisFigureContainer = new PIXI.Container();
+    let thisFigureContainer = new PIXI.Container();
+
+    // 准备 blur Filter
+    const blurFilter = new PIXI.filters.BlurFilter();
+    for (const filter of thisFigureContainer?.filters ?? []) {
+      filter.destroy();
+    }
+    thisFigureContainer.filters = [blurFilter];
+    // @ts-ignore
+    thisFigureContainer = new Proxy(thisFigureContainer, containerHandler as any);
+    blurFilter.blur = 0;
 
     // 是否有相同 key 的立绘
     const setFigIndex = this.figureObjects.findIndex((e) => e.key === key);
@@ -403,7 +426,7 @@ export default class PixiStage {
 
 export function updateCurrentEffects(newEffects: IEffect[], notUpdateBacklogEffects = false) {
   /**
-   * 更新当前 backlog 条目的 Transform 记录
+   * 更新当前 backlog 条目的 effects 记录
    */
   if (!notUpdateBacklogEffects)
     setTimeout(() => {
@@ -422,3 +445,23 @@ export function updateCurrentEffects(newEffects: IEffect[], notUpdateBacklogEffe
 
   webgalStore.dispatch(setStage({ key: 'effects', value: newEffects }));
 }
+
+const containerHandler = {
+  get: function (obj: Object, prop: string) {
+    if (prop === 'blur') {
+      // @ts-ignore
+      return obj.filters[0].blur;
+    }
+    return Reflect.get(obj, prop);
+  },
+  set: function (obj: Object, prop: string, value: any) {
+    if (prop === 'blur') {
+      // @ts-ignore
+      // obj.filters[0].blur = value;
+      return Reflect.set(obj.filters[0], 'blur', value);
+      // return true;
+    } else {
+      return Reflect.set(obj, prop, value);
+    }
+  },
+};
