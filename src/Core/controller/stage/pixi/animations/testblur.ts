@@ -1,7 +1,9 @@
 import { RUNTIME_GAMEPLAY } from '@/Core/runtime/gamePlay';
+import { setBlurFilter } from '@/Core/util/etc/setBlurFilter';
 
-export function generateUniversalSoftInAnimationObj(targetKey: string, duration: number) {
+export function generateTestblurAnimationObj(targetKey: string, duration: number) {
   const target = RUNTIME_GAMEPLAY.pixiStage!.getStageObjByKey(targetKey);
+  setBlurFilter(target!.pixiContainer);
 
   // 先设置一个通用的初态
 
@@ -13,7 +15,7 @@ export function generateUniversalSoftInAnimationObj(targetKey: string, duration:
     if (target) {
       target.pixiContainer.alpha = 0;
       // @ts-ignore
-      target.pixiContainer.blur = 5;
+      target.pixiContainer.blurFilter.blur = 0;
     }
   }
 
@@ -25,7 +27,7 @@ export function generateUniversalSoftInAnimationObj(targetKey: string, duration:
     if (target) {
       target.pixiContainer.alpha = 1;
       // @ts-ignore
-      target.pixiContainer.blur = 0;
+      target.pixiContainer.blurFilter.blur = 5;
     }
   }
 
@@ -44,9 +46,9 @@ export function generateUniversalSoftInAnimationObj(targetKey: string, duration:
         sprite.alpha += increasement;
       }
       // @ts-ignore
-      if (sprite.blur > 0) {
+      if (sprite.blurFilter.blur < 5) {
         // @ts-ignore
-        sprite.blur -= decreasement;
+        sprite.blurFilter.blur += decreasement;
       }
     }
   }

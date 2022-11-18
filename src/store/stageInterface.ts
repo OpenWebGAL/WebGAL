@@ -23,7 +23,7 @@ export interface IChooseItem {
   isSubScene: boolean; // 是否是子场景调用
 }
 
-interface ITransform {
+export interface ITransform {
   alpha: number;
   scale: {
     x: number;
@@ -38,10 +38,7 @@ interface ITransform {
     y: number;
   };
   rotation: number;
-}
-
-interface IFilter {
-  blur: string;
+  blur: number;
 }
 
 /**
@@ -51,7 +48,6 @@ interface IFilter {
 export interface IEffect {
   target: string; // 作用目标
   transform?: ITransform; // 变换
-  filter?: IFilter; // 效果
 }
 
 /**
@@ -72,6 +68,7 @@ export const baseTransform: ITransform = {
     y: 0,
   },
   rotation: 0,
+  blur: 0,
 };
 
 /**
