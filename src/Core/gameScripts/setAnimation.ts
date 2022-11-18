@@ -26,13 +26,15 @@ export const setAnimation = (sentence: ISentence): IPerform => {
       logger.debug(`动画${animationName}作用在${target}`, animationDuration);
       RUNTIME_GAMEPLAY.pixiStage?.stopPresetAnimationOnTarget(target);
       RUNTIME_GAMEPLAY.pixiStage?.registerAnimation(animationObj, key, target);
-      stopFunction = () => {
-        const endDialogKey = webgalStore.getState().stage.currentDialogKey;
-        const isHasNext = startDialogKey !== endDialogKey;
-        RUNTIME_GAMEPLAY.pixiStage?.removeAnimationWithSetEffects(key, !isHasNext);
-      };
     }
   }, 0);
+  stopFunction = () => {
+    setTimeout(() => {
+      const endDialogKey = webgalStore.getState().stage.currentDialogKey;
+      const isHasNext = startDialogKey !== endDialogKey;
+      RUNTIME_GAMEPLAY.pixiStage?.removeAnimationWithSetEffects(key, !isHasNext);
+    }, 0);
+  };
 
   return {
     performName: key,
