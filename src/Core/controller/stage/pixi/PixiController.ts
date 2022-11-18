@@ -6,6 +6,7 @@ import __ from 'lodash';
 import { IEffect } from '@/store/stageInterface';
 import { RUNTIME_CURRENT_BACKLOG } from '@/Core/runtime/backlog';
 import { setStageEffects } from '@/Components/Stage/MainStage/useSetEffects';
+import { logger } from '@/Core/util/etc/logger';
 
 export interface IAnimationObject {
   setStartState: Function;
@@ -50,7 +51,7 @@ export default class PixiStage {
   public figureObjects: Array<IStageObject> = [];
   public backgroundContainer: PIXI.Container;
   public backgroundObjects: Array<IStageObject> = [];
-  public frameDuration = PIXI.Ticker.shared.elapsedMS;
+  public frameDuration = 16.67;
 
   // 注册到 Ticker 上的函数
   public stageAnimations: Array<IStageAnimationObject> = [];
@@ -98,6 +99,13 @@ export default class PixiStage {
     this.backgroundContainer.zIndex = 0;
     app.stage.addChild(this.effectsContainer, this.figureContainer, this.backgroundContainer);
     this.currentApp = app;
+    // 获取帧率
+    setTimeout(() => {
+      getScreenFps?.(75).then((fps) => {
+        this.frameDuration = 1000 / (fps as number);
+        logger.info('当前帧率', fps);
+      });
+    }, 250);
   }
 
   public getAllLockedObject() {
@@ -465,3 +473,40 @@ const containerHandler = {
     }
   },
 };
+
+/**
+ * @param {number} targetCount 不小于1的整数，表示经过targetCount帧之后返回结果
+ * @return {Promise<number>}
+ */
+const getScreenFps = (() => {
+  // 先做一下兼容性处理
+  const nextFrame = [
+    window.requestAnimationFrame,
+    // @ts-ignore
+    window.webkitRequestAnimationFrame,
+    // @ts-ignore
+    window.mozRequestAnimationFrame,
+  ].find((fn) => fn);
+  if (!nextFrame) {
+    console.error('requestAnimationFrame is not supported!');
+    return;
+  }
+  return (targetCount = 50) => {
+    // 判断参数是否合规
+    if (targetCount < 1) throw new Error('targetCount cannot be less than 1.');
+    const beginDate = Date.now();
+    let count = 0;
+    return new Promise((resolve) => {
+      (function log() {
+        nextFrame(() => {
+          if (++count >= targetCount) {
+            const diffDate = Date.now() - beginDate;
+            const fps = (count / diffDate) * 1000;
+            return resolve(fps);
+          }
+          log();
+        });
+      })();
+    });
+  };
+})();
