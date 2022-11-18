@@ -13,8 +13,11 @@ import uniqWith from 'lodash/uniqWith';
  */
 export const sceneParser = (rawScene: string, sceneName: string, sceneUrl: string): IScene => {
   const rawSentenceList = rawScene.split('\n'); // 原始句子列表
-  // 去除空行
-  const rawSentenceListWithoutEmpty = rawSentenceList.filter((sentence) => sentence.trim() !== '');
+  // 去除冒号后的内容
+  // 去除分号后的内容
+  const rawSentenceListWithoutEmpty = rawSentenceList
+    .map((sentence) => sentence.split(';')[0])
+    .filter((sentence) => sentence.trim() !== '');
   let assetsList: Array<IAsset> = []; // 场景资源列表
   let subSceneList: Array<string> = []; // 子场景列表
   const sentenceList: Array<ISentence> = rawSentenceListWithoutEmpty.map((sentence) => {
