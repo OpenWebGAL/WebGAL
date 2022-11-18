@@ -29,9 +29,11 @@ export const setAnimation = (sentence: ISentence): IPerform => {
     }
   }, 0);
   stopFunction = () => {
-    const endDialogKey = webgalStore.getState().stage.currentDialogKey;
-    const isHasNext = startDialogKey !== endDialogKey;
-    RUNTIME_GAMEPLAY.pixiStage?.removeAnimationWithSetEffects(key, !isHasNext);
+    setTimeout(() => {
+      const endDialogKey = webgalStore.getState().stage.currentDialogKey;
+      const isHasNext = startDialogKey !== endDialogKey;
+      RUNTIME_GAMEPLAY.pixiStage?.removeAnimationWithSetEffects(key, !isHasNext);
+    }, 0);
   };
 
   return {
