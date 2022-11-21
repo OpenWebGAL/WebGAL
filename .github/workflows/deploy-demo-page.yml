@@ -24,14 +24,12 @@ jobs:
 
       # 生成静态文件
       - name: Build
-        working-directory: ./packages/webgal
-        run:  yarn build
+        run: cd ./packages/webgal && yarn build
 
       # 部署到 GitHub Pages
       - name: Deploy
-        working-directory: ./packages/webgal
         uses: JamesIves/github-pages-deploy-action@releases/v4
         with:
           ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }} # 也就是我们刚才生成的 secret
           BRANCH: live-demo-page
-          FOLDER: dist
+          FOLDER: packages/webgal/dist
