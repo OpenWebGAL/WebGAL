@@ -1,0 +1,135 @@
+@charset "UTF-8";
+
+@font-face {
+  font-family: "思源宋体";
+  /*noinspection CssUnknownTarget*/
+  src: url("assets/fonts/SourceHanSerifCN-Regular.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "WebgalUI";
+  /*noinspection CssUnknownTarget*/
+  src: url("assets/fonts/OPPOSans-R.ttf") format("truetype");
+}
+
+.StartButton {
+  animation: StartButton_blink 4s infinite;
+}
+
+@keyframes StartButton_blink {
+  0% {
+    text-shadow: 0 0 15px rgba(0, 0, 0, 0.65);
+  }
+  50% {
+    text-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+  }
+  100% {
+    text-shadow: 0 0 15px rgba(0, 0, 0, 0.65);
+  }
+}
+
+a {
+  transition: color 1s;
+}
+
+a:link {
+  color: #434343;
+}
+
+a:visited {
+  color: #434343;
+}
+
+a:hover {
+  color: #434343;
+}
+
+a:active {
+  color: #434343;
+}
+
+body {
+  font-size: 16px;
+  margin: 0;
+  font-family: "WebgalUI", -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+  'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow: hidden;
+  user-select: none;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+  monospace;
+}
+
+#root {
+  width: 2560px;
+  height: 1440px;
+  overflow: hidden;
+  /*position: absolute;*/
+  /*top: 0;*/
+  font-size: 160%;
+}
+
+/* 设置滚动条的样式 */
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+/* 滚动槽 */
+::-webkit-scrollbar-track {
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+  -webkit-box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+}
+
+/* 滚动条滑块 */
+::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.5);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+  -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+}
+
+/* ::-webkit-scrollbar-thumb:window-inactive {
+    background:rgba(255,0,0,0.4);
+} */
+
+/*@media screen and (orientation: portrait) {*/
+/*    !*竖屏 css*!*/
+/*    #root {*/
+/*        !*transform-origin: calc(100vw / 2) calc(100vw / 2);*!*/
+/*        transform: rotate(90deg);*/
+/*        width: 1600px;*/
+/*        height: 900px;*/
+/*        overflow: hidden;*/
+/*    }*/
+/*}*/
+
+/*@media screen and (orientation: landscape) {*/
+/*    !*横屏 css*!*/
+/*    #root {*/
+/*        width: 1600px;*/
+/*        height: 900px;*/
+/*        overflow: hidden;*/
+/*    }*/
+/*}*/
+
+
+/*@media screen and (max-width: 1100px) {*/
+/*    !*手机端视图*!*/
+/*    #root {*/
+/*        font-size: 50%;*/
+/*    }*/
+/*}*/
+
+/*@media screen and (max-height: 650px) {*/
+/*    !*手机端视图*!*/
+/*    #root {*/
+/*        font-size: 50%;*/
+/*    }*/
+/*}*/
