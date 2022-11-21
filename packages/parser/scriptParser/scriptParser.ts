@@ -12,7 +12,7 @@ import { subSceneScanner } from "./subSceneScanner";
  * @param ADD_NEXT_ARG_LIST
  * @param SCRIPT_CONFIG
  */
-export const scriptParser = (sentenceRaw: string, assetSetter, ADD_NEXT_ARG_LIST, SCRIPT_CONFIG): ISentence => {
+export const scriptParser = (sentenceRaw: string, assetSetter:any, ADD_NEXT_ARG_LIST:any, SCRIPT_CONFIG:any): ISentence => {
   let command: commandType; // 默认为对话
   let content: string; // 语句内容
   let subScene: Array<string>; // 语句携带的子场景（可能没有）
