@@ -1,15 +1,16 @@
-import { commandType } from '@/Core/controller/scene/sceneInterface';
-import { assetSetter, fileType } from '../../util/gameAssetsAccess/assetSetter';
+import { commandType } from "../interface/sceneInterface";
+import { fileType } from "../interface/assets";
 
 /**
  * 解析语句内容的函数，主要作用是把文件名改为绝对地址或相对地址（根据使用情况而定）
  * @param contentRaw 原始语句内容
  * @param type 语句类型
+ * @param assetSetter
  * @return {string} 解析后的语句内容
  */
-export const contentParser = (contentRaw: string, type: commandType) => {
-  if (contentRaw === 'none' || contentRaw === '') {
-    return '';
+export const contentParser = (contentRaw: string, type: commandType, assetSetter) => {
+  if (contentRaw === "none" || contentRaw === "") {
+    return "";
   }
   switch (type) {
     case commandType.changeBg:
@@ -27,7 +28,7 @@ export const contentParser = (contentRaw: string, type: commandType) => {
     case commandType.video:
       return assetSetter(contentRaw, fileType.video);
     case commandType.choose:
-      return getChooseContent(contentRaw);
+      return getChooseContent(contentRaw, assetSetter);
     case commandType.unlockBgm:
       return assetSetter(contentRaw, fileType.bgm);
     case commandType.unlockCg:
@@ -37,13 +38,13 @@ export const contentParser = (contentRaw: string, type: commandType) => {
   }
 };
 
-function getChooseContent(contentRaw: string): string {
-  const chooseList = contentRaw.split('|');
+function getChooseContent(contentRaw: string, assetSetter): string {
+  const chooseList = contentRaw.split("|");
   const chooseKeyList = [];
   const chooseValueList = [];
   for (const e of chooseList) {
-    chooseKeyList.push(e.split(':')[0]);
-    chooseValueList.push(e.split(':')[1]);
+    chooseKeyList.push(e.split(":")[0]);
+    chooseValueList.push(e.split(":")[1]);
   }
   const parsedChooseList = chooseValueList.map((e) => {
     if (e.match(/\./)) {
@@ -52,10 +53,10 @@ function getChooseContent(contentRaw: string): string {
       return e;
     }
   });
-  let ret = '';
+  let ret = "";
   for (let i = 0; i < chooseKeyList.length; i++) {
     if (i !== 0) {
-      ret = ret + '|';
+      ret = ret + "|";
     }
     ret = ret + `${chooseKeyList[i]}:${parsedChooseList[i]}`;
   }
