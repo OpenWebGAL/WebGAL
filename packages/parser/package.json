@@ -1,0 +1,19 @@
+{
+  "name": "webgal-parser",
+  "version": "4.3.2",
+  "description": "WebGAL script parser",
+  "scripts": {
+    "test": "node test/test.js"
+  },
+  "main": "index.js",
+  "author": "Mahiru <Mahiru_@outlook.com>",
+  "license": "MPL-2.0",
+  "dependencies": {
+    "cloudlogjs": "^1.0.11",
+    "lodash": "^4.17.21"
+  },
+  "devDependencies": {
+    "@types/lodash": "^4.14.189",
+    "ts-node": "^10.9.1"
+  }
+}

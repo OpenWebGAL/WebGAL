@@ -1,5 +1,5 @@
-import { arg, commandType, IAsset } from '@/Core/controller/scene/sceneInterface';
-import { fileType } from '../../util/gameAssetsAccess/assetSetter';
+import { arg, commandType, IAsset } from '../interface/sceneInterface';
+import { fileType } from '../interface/assets';
 
 /**
  * 根据语句类型、语句内容、参数列表，扫描该语句可能携带的资源
