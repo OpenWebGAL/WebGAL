@@ -25,7 +25,7 @@
     "sass": "^1.49.9",
     "uuid": "^9.0.0",
     "vite-plugin-package-version": "^1.0.2",
-    "webgal-parser": "^4.3.3"
+    "webgal-parser": "^4.3.4"
   },
   "devDependencies": {
     "@types/lodash": "^4.14.180",

@@ -1,27 +1,4 @@
-'use strict';
-
-Object.defineProperty(exports, '__esModule', { value: true });
-
-var __ = require('lodash');
-
-function _interopNamespaceDefault(e) {
-  var n = Object.create(null);
-  if (e) {
-    Object.keys(e).forEach(function (k) {
-      if (k !== 'default') {
-        var d = Object.getOwnPropertyDescriptor(e, k);
-        Object.defineProperty(n, k, d.get ? d : {
-          enumerable: true,
-          get: function () { return e[k]; }
-        });
-      }
-    });
-  }
-  n.default = e;
-  return Object.freeze(n);
-}
-
-var ____namespace = /*#__PURE__*/_interopNamespaceDefault(__);
+import * as __ from 'lodash';
 
 var commandType;
 (function (commandType) {
@@ -437,7 +414,7 @@ const sceneParser = (rawScene, sceneName, sceneUrl, assetsPrefetcher, assetSette
         return returnSentence;
     });
     // 开始资源的预加载
-    assetsList = ____namespace.uniqWith(assetsList); // 去重
+    assetsList = __.uniqWith(assetsList); // 去重
     assetsPrefetcher(assetsList);
     return {
         sceneName: sceneName,
@@ -464,5 +441,5 @@ class SceneParser {
     }
 }
 
-exports.default = SceneParser;
+export { SceneParser as default };
 //# sourceMappingURL=index.js.map
