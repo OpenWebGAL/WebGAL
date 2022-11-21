@@ -2,7 +2,7 @@ import { commandType, IAsset } from "./interface/sceneInterface";
 import { fileType } from "./interface/assets";
 import { sceneParser } from "./sceneParser";
 
-export class SceneParser {
+export default class SceneParser {
 
   private readonly assetsPrefetcher;
   private readonly assetSetter;

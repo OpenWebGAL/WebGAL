@@ -40,8 +40,8 @@ export const contentParser = (contentRaw: string, type: commandType, assetSetter
 
 function getChooseContent(contentRaw: string, assetSetter:any): string {
   const chooseList = contentRaw.split("|");
-  const chooseKeyList = [];
-  const chooseValueList = [];
+  const chooseKeyList:Array<string> = [];
+  const chooseValueList:Array<string> = [];
   for (const e of chooseList) {
     chooseKeyList.push(e.split(":")[0]);
     chooseValueList.push(e.split(":")[1]);
