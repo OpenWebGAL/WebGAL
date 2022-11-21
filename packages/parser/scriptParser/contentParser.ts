@@ -8,7 +8,7 @@ import { fileType } from "../interface/assets";
  * @param assetSetter
  * @return {string} 解析后的语句内容
  */
-export const contentParser = (contentRaw: string, type: commandType, assetSetter) => {
+export const contentParser = (contentRaw: string, type: commandType, assetSetter:any) => {
   if (contentRaw === "none" || contentRaw === "") {
     return "";
   }
@@ -38,7 +38,7 @@ export const contentParser = (contentRaw: string, type: commandType, assetSetter
   }
 };
 
-function getChooseContent(contentRaw: string, assetSetter): string {
+function getChooseContent(contentRaw: string, assetSetter:any): string {
   const chooseList = contentRaw.split("|");
   const chooseKeyList = [];
   const chooseValueList = [];

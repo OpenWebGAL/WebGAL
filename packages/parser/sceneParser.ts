@@ -16,7 +16,7 @@ import { fileType } from "./interface/assets";
  */
 export const sceneParser = (rawScene: string, sceneName: string, sceneUrl: string
   , assetsPrefetcher: ((assetList: Array<IAsset>) => void), assetSetter: (fileName: string, assetType: fileType) => string
-  , ADD_NEXT_ARG_LIST, SCRIPT_CONFIG): IScene => {
+  , ADD_NEXT_ARG_LIST:any, SCRIPT_CONFIG:any): IScene => {
   const rawSentenceList = rawScene.split("\n"); // 原始句子列表
   // 去除冒号后的内容
   // 去除分号后的内容

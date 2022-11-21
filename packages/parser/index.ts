@@ -1,17 +1,17 @@
-import { IAsset } from "./interface/sceneInterface";
+import { commandType, IAsset } from "./interface/sceneInterface";
 import { fileType } from "./interface/assets";
 import { sceneParser } from "./sceneParser";
 
 export class SceneParser {
 
-  private assetsPrefetcher;
-  private assetSetter;
-  private ADD_NEXT_ARG_LIST;
-  private SCRIPT_CONFIG;
+  private readonly assetsPrefetcher;
+  private readonly assetSetter;
+  private readonly ADD_NEXT_ARG_LIST;
+  private readonly SCRIPT_CONFIG;
 
   constructor(assetsPrefetcher: ((assetList: Array<IAsset>) => void),
               assetSetter: (fileName: string, assetType: fileType) => string,
-              ADD_NEXT_ARG_LIST, SCRIPT_CONFIG) {
+              ADD_NEXT_ARG_LIST: Array<commandType>, SCRIPT_CONFIG: Array<any>) {
     this.assetsPrefetcher = assetsPrefetcher;
     this.assetSetter = assetSetter;
     this.ADD_NEXT_ARG_LIST = ADD_NEXT_ARG_LIST;
