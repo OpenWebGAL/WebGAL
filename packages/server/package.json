@@ -1,0 +1,21 @@
+{
+  "name": "WebGAL-Server",
+  "scripts": {
+    "start": "node index.js",
+    "pkg": "pkg index.js"
+  },
+  "version": "0.1.0",
+  "description": "WebGAL Server and Command LIne Interface.",
+  "main": "index.js",
+  "repository": "https://github.com/WebGAL-Technical-Committee/WebGAL-Server.git",
+  "author": "Mahiru <Mahiru_@outlook.com>",
+  "license": "MPL-2.0",
+  "devDependencies": {
+    "pkg": "^5.8.0"
+  },
+  "dependencies": {
+    "cloudlogjs": "^1.0.11",
+    "express": "^4.18.1",
+    "open": "^8.4.0"
+  }
+}
