@@ -5,6 +5,7 @@
 
 import { ISetGameVar, ISetStagePayload, IStageState } from '@/store/stageInterface';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import cloneDeep from 'lodash/cloneDeep';
 
 // 初始化舞台数据
 
@@ -38,7 +39,7 @@ export const initState: IStageState = {
  */
 const stageSlice = createSlice({
   name: 'stage',
-  initialState: initState,
+  initialState: cloneDeep(initState),
   reducers: {
     /**
      * 替换舞台状态
