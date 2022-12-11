@@ -1,4 +1,5 @@
 import { ISceneData } from '@/Core/controller/scene/sceneInterface';
+import cloneDeep from 'lodash/cloneDeep';
 
 /**
  * 初始化场景数据
@@ -16,4 +17,4 @@ export const initSceneData = {
   },
 };
 // 场景数据
-export const RUNTIME_SCENE_DATA: ISceneData = initSceneData;
+export const RUNTIME_SCENE_DATA: ISceneData = cloneDeep(initSceneData);
