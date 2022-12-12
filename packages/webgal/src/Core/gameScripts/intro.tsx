@@ -27,7 +27,7 @@ export const intro = (sentence: ISentence): IPerform => {
     introContainer.style.display = 'block';
   }
   return {
-    performName: 'introPerform',
+    performName: `introPerform${Math.random()}`,
     duration: 1000 + 1500 * introArray.length,
     isOver: false,
     isHoldOn: false,
