@@ -1,4 +1,5 @@
 ; 初始场景，以及特效演示
+intro:你好|欢迎来到 WebGAL 的世界;
 changeBg:c4.jpg -next;
 unlockCg:c4.jpg -name=街前;  解锁部分CG
 unlockCg:xgmain.jpeg -name=星光咖啡馆与死神之蝶;
