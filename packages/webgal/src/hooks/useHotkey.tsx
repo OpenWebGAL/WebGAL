@@ -108,6 +108,20 @@ export function useMouseWheel() {
   const isInBackLog = useIsInBackLog(GUIStore);
   const next = useCallback(
     throttle(() => {
+      const introContainer = document.getElementById('introContainer');
+      if (introContainer) {
+        // 处理 intro 的情况
+        if (introContainer.style.display === 'block') {
+          introContainer.dispatchEvent(
+            new MouseEvent('click', {
+              bubbles: true,
+              cancelable: true,
+              view: window,
+            }),
+          );
+          return;
+        }
+      }
       nextSentence();
     }, 100),
     [],
