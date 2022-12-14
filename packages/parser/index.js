@@ -51,6 +51,7 @@ var commandType;
     commandType[commandType["filmMode"] = 23] = "filmMode";
     commandType[commandType["setTextbox"] = 24] = "setTextbox";
     commandType[commandType["setAnimation"] = 25] = "setAnimation";
+    commandType[commandType["playEffect"] = 26] = "playEffect";
 })(commandType || (commandType = {}));
 
 /**
@@ -200,6 +201,8 @@ const contentParser = (contentRaw, type, assetSetter) => {
         return "";
     }
     switch (type) {
+        case commandType.playEffect:
+            return assetSetter(contentRaw, fileType.vocal);
         case commandType.changeBg:
             return assetSetter(contentRaw, fileType.background);
         case commandType.changeFigure:
