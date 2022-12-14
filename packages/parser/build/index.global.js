@@ -48,6 +48,7 @@ var webgalparser = (function (__) {
       commandType[commandType["filmMode"] = 23] = "filmMode";
       commandType[commandType["setTextbox"] = 24] = "setTextbox";
       commandType[commandType["setAnimation"] = 25] = "setAnimation";
+      commandType[commandType["playEffect"] = 26] = "playEffect";
   })(commandType || (commandType = {}));
 
   /**
@@ -197,6 +198,8 @@ var webgalparser = (function (__) {
           return "";
       }
       switch (type) {
+          case commandType.playEffect:
+              return assetSetter(contentRaw, fileType.vocal);
           case commandType.changeBg:
               return assetSetter(contentRaw, fileType.background);
           case commandType.changeFigure:

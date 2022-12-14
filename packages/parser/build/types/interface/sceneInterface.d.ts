@@ -29,7 +29,8 @@ export declare enum commandType {
     unlockBgm = 22,
     filmMode = 23,
     setTextbox = 24,
-    setAnimation = 25
+    setAnimation = 25,
+    playEffect = 26
 }
 /**
  * 单个参数接口
