@@ -24,6 +24,7 @@ import { filmMode } from '@/Core/gameScripts/filmMode';
 import { callSceneScript } from '@/Core/gameScripts/callSceneScript';
 import { setTextbox } from '@/Core/gameScripts/setTextbox';
 import { setAnimation } from '@/Core/gameScripts/setAnimation';
+import { playEffect } from '@/Core/gameScripts/playEffect';
 
 export const SCRIPT_CONFIG: IConfigInterface[] = [
   { scriptString: 'intro', scriptType: commandType.intro, scriptFunction: intro },
@@ -55,6 +56,7 @@ export const SCRIPT_CONFIG: IConfigInterface[] = [
   { scriptString: 'callScene', scriptType: commandType.callScene, scriptFunction: callSceneScript },
   { scriptString: 'setTextbox', scriptType: commandType.setTextbox, scriptFunction: setTextbox },
   { scriptString: 'setAnimation', scriptType: commandType.setAnimation, scriptFunction: setAnimation },
+  { scriptString: 'playEffect', scriptType: commandType.playEffect, scriptFunction: playEffect },
 ];
 export const ADD_NEXT_ARG_LIST = [
   commandType.bgm,
@@ -67,4 +69,5 @@ export const ADD_NEXT_ARG_LIST = [
   commandType.unlockBgm,
   commandType.unlockCg,
   commandType.filmMode,
+  commandType.playEffect,
 ];

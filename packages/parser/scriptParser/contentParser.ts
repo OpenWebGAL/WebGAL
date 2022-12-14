@@ -13,6 +13,8 @@ export const contentParser = (contentRaw: string, type: commandType, assetSetter
     return "";
   }
   switch (type) {
+    case commandType.playEffect:
+      return assetSetter(contentRaw, fileType.vocal);
     case commandType.changeBg:
       return assetSetter(contentRaw, fileType.background);
     case commandType.changeFigure:
