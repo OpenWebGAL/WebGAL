@@ -9,6 +9,8 @@ import {
   ReplayMusic,
   Save,
   SettingTwo,
+  DoubleDown,
+  DoubleUp,
 } from '@icon-park/react';
 import styles from './bottomControlPanel.module.scss';
 import { switchAuto } from '@/Core/controller/gamePlay/autoPlay';
@@ -18,6 +20,8 @@ import { RootState } from '@/store/store';
 import { setMenuPanelTag, setVisibility } from '@/store/GUIReducer';
 import { componentsVisibility, MenuPanelTag } from '@/store/guiInterface';
 import { backToTitle } from '@/Core/controller/gamePlay/backToTitle';
+import { saveGame } from '@/Core/controller/storage/saveGame';
+import { loadGame } from '@/Core/controller/storage/loadGame';
 
 export const BottomControlPanel = () => {
   const strokeWidth = 2.5;
@@ -31,6 +35,28 @@ export const BottomControlPanel = () => {
   const setMenuPanel = (menuPanel: MenuPanelTag) => {
     dispatch(setMenuPanelTag(menuPanel));
   };
+
+  const saveData = useSelector((state: RootState) => state.userData.saveData);
+  let fastSlPreview = (
+    <div style={{ height: '100%', width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+      <div style={{ fontSize: '125%' }}>暂无存档</div>
+    </div>
+  );
+  if (saveData[0]) {
+    const data = saveData[0];
+    fastSlPreview = (
+      <div className={styles.slPreviewMain}>
+        <div className={styles.imgContainer}>
+          <img style={{ height: '100%' }} alt="q-save-preview image" src={data.previewImage} />
+        </div>
+        <div className={styles.textContainer}>
+          <div>{data.nowStageState.showName}</div>
+          <div style={{ fontSize: '75%', color: 'rgb(55,60,56)' }}>{data.nowStageState.showText}</div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className={styles.ToCenter}>
       {GUIStore.showTextBox && stageState.enableFilm === '' && (
@@ -108,6 +134,32 @@ export const BottomControlPanel = () => {
               strokeWidth={strokeWidth}
             />
             <span className={styles.button_text}>快进</span>
+          </span>
+          <span
+            className={styles.singleButton + ' ' + styles.fastsave}
+            onClick={() => {
+              saveGame(0);
+            }}
+          >
+            <DoubleDown
+              className={styles.button}
+              theme="outline"
+              size={size}
+              fill="#f5f5f7"
+              strokeWidth={strokeWidth}
+            />
+            <span className={styles.button_text}>快速存档</span>
+            <div className={styles.fastSlPreview + ' ' + styles.fastSPreview}>{fastSlPreview}</div>
+          </span>
+          <span
+            className={styles.singleButton + ' ' + styles.fastload}
+            onClick={() => {
+              loadGame(0);
+            }}
+          >
+            <DoubleUp className={styles.button} theme="outline" size={size} fill="#f5f5f7" strokeWidth={strokeWidth} />
+            <span className={styles.button_text}>快速读档</span>
+            <div className={styles.fastSlPreview + ' ' + styles.fastLPreview}>{fastSlPreview}</div>
           </span>
           <span
             className={styles.singleButton}
