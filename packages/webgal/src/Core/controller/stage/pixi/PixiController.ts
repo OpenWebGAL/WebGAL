@@ -101,11 +101,11 @@ export default class PixiStage {
     this.currentApp = app;
     // 获取帧率
     setTimeout(() => {
-      getScreenFps?.(75).then((fps) => {
+      getScreenFps?.(120).then((fps) => {
         this.frameDuration = 1000 / (fps as number);
         logger.info('当前帧率', fps);
       });
-    }, 250);
+    }, 1000);
   }
 
   public getAllLockedObject() {
@@ -491,7 +491,7 @@ const getScreenFps = (() => {
     console.error('requestAnimationFrame is not supported!');
     return;
   }
-  return (targetCount = 50) => {
+  return (targetCount = 60) => {
     // 判断参数是否合规
     if (targetCount < 1) throw new Error('targetCount cannot be less than 1.');
     const beginDate = Date.now();
