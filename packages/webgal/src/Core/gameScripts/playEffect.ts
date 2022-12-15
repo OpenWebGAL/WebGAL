@@ -13,43 +13,45 @@ export const playEffect = (sentence: ISentence) => {
   logger.debug('播放效果音');
   const performInitName: string = getRandomPerformName();
   let url = sentence.content;
-  // 播放语音
-  setTimeout(() => {
-    let VocalControl = document.createElement('audio');
-    VocalControl.src = url;
-    const userDataState = webgalStore.getState().userData;
-    const mainVol = userDataState.optionData.volumeMain;
-    VocalControl.volume = mainVol * 0.01 * userDataState.optionData.vocalVolume * 0.01;
-    VocalControl.currentTime = 0;
-    const perform = {
-      performName: performInitName,
-      duration: 1000 * 60 * 60,
-      isOver: false,
-      isHoldOn: true,
-      stopFunction: () => {
-        // 演出已经结束了，所以不用播放语音了
-        VocalControl.oncanplay = () => {};
-        VocalControl.pause();
-      },
-      blockingNext: () => false,
-      blockingAuto: () => true,
-      stopTimeout: undefined, // 暂时不用，后面会交给自动清除
-    };
-    RUNTIME_GAMEPLAY.performList.push(perform);
-    VocalControl.oncanplay = () => {
-      VocalControl.play();
-    };
-    VocalControl.onended = () => {
-      for (const e of RUNTIME_GAMEPLAY.performList) {
-        if (e.performName === performInitName) {
-          e.isOver = true;
-          e.stopFunction();
-          unmountPerform(e.performName);
-        }
-      }
-    };
-  }, 1);
   return {
     performName: 'none',
+    arrangePerformPromise: new Promise((resolve) => {
+      // 播放语音
+      setTimeout(() => {
+        let VocalControl = document.createElement('audio');
+        VocalControl.src = url;
+        const userDataState = webgalStore.getState().userData;
+        const mainVol = userDataState.optionData.volumeMain;
+        VocalControl.volume = mainVol * 0.01 * userDataState.optionData.vocalVolume * 0.01;
+        VocalControl.currentTime = 0;
+        const perform = {
+          performName: performInitName,
+          duration: 1000 * 60 * 60,
+          isOver: false,
+          isHoldOn: true,
+          stopFunction: () => {
+            // 演出已经结束了，所以不用播放语音了
+            VocalControl.oncanplay = () => {};
+            VocalControl.pause();
+          },
+          blockingNext: () => false,
+          blockingAuto: () => true,
+          stopTimeout: undefined, // 暂时不用，后面会交给自动清除
+        };
+        resolve(perform);
+        VocalControl.oncanplay = () => {
+          VocalControl.play();
+        };
+        VocalControl.onended = () => {
+          for (const e of RUNTIME_GAMEPLAY.performList) {
+            if (e.performName === performInitName) {
+              e.isOver = true;
+              e.stopFunction();
+              unmountPerform(e.performName);
+            }
+          }
+        };
+      }, 1);
+    }),
   };
 };
