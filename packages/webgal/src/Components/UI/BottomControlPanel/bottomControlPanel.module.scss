@@ -47,13 +47,67 @@
   display: inline-block;
   color: white;
   font-size: 150%;
-  padding: 0.2em 0.6em 0 0.45em;
+  padding: 0.25em 0.3em 0 0.15em;
   transition: background-color 0.5s;
   cursor: pointer;
   border-radius: 4px;
-  margin: 0 0.1em 0 0.1em;
+  margin: 0 0.05em 0 0.05em;
+  position: relative;
 }
 
 .singleButton:hover {
   background-color: rgba(255, 255, 255, 0.3);
+}
+
+.fastSlPreview {
+  position: absolute;
+  top: -250px;
+  left: 0;
+  background: linear-gradient(315deg, rgba(253, 251, 251, 0.9) 0%, rgba(235, 237, 238, 0.85) 100%);
+  width: 900px;
+  height: 230px;
+  color: #005caf;
+  border-radius: 5px;
+  display: none;
+  animation: fastSlEnter 0.33s;
+  transition: opacity 0.33s;
+}
+
+.fastsave:hover .fastSPreview {
+  display: block;
+}
+
+.fastload:hover .fastLPreview {
+  display: block;
+}
+
+@keyframes fastSlEnter {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.slPreviewMain {
+  padding: 0.5em 0.5em 0.5em 0.5em;
+  display: flex;
+  box-sizing: border-box;
+  height: 100%;
+  width: 100%;
+}
+
+.imgContainer {
+  display: flex;
+  overflow: hidden;
+  border-radius: 5px;
+  //outline: 4px solid #005caf;
+  flex-shrink: 0;
+  height: 100%;
+}
+
+.textContainer {
+  overflow: hidden;
+  padding: 0 0 0 0.5em;
 }
