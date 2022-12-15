@@ -1,13 +1,8 @@
 import { ISentence } from '@/Core/controller/scene/sceneInterface';
 import { say } from '../../gameScripts/say';
 import { initPerform, IPerform } from '@/Core/controller/perform/performInterface';
-import { unmountPerform } from '../perform/unmountPerform';
-import { RUNTIME_GAMEPLAY } from '../../runtime/gamePlay';
-import { webgalStore } from '@/store/store';
-import { resetStageState } from '@/store/stageReducer';
-import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
-import cloneDeep from 'lodash/cloneDeep';
 import { SCRIPT_CONFIG } from '@/Core/config/scriptConfig';
+import { PerformController } from '@/Core/controller/perform/performController';
 
 /**
  * 规范函数的类型
@@ -37,45 +32,11 @@ export const runScript = (script: ISentence) => {
   // 调用脚本对应的函数
   perform = funcToRun(script);
 
-  // 语句不执行演出
-  if (perform.performName === 'none') {
-    return;
-  }
-
-  // 同步演出状态
-  const stageState = webgalStore.getState().stage;
-  const newStageState = cloneDeep(stageState);
-  newStageState.PerformList.push({ isHoldOn: perform.isHoldOn, script: script });
-  webgalStore.dispatch(resetStageState(newStageState));
-
-  // 时间到后自动清理演出
-  perform.stopTimeout = setTimeout(() => {
-    // perform.stopFunction();
-    perform.isOver = true;
-    if (!perform.isHoldOn) {
-      // 如果不是保持演出，清除
-      unmountPerform(perform.performName);
-      if (perform.goNextWhenOver) {
-        // nextSentence();
-        goNextWhenOver();
-      }
-    }
-  }, perform.duration);
-
-  RUNTIME_GAMEPLAY.performList.push(perform);
-};
-
-function goNextWhenOver() {
-  let isBlockingAuto = false;
-  RUNTIME_GAMEPLAY.performList.forEach((e) => {
-    if (e.blockingAuto() && !e.isOver)
-      // 阻塞且没有结束的演出
-      isBlockingAuto = true;
-  });
-  if (isBlockingAuto) {
-    // 有阻塞，提前结束
-    setTimeout(goNextWhenOver, 100);
+  if (perform.arrangePerformPromise) {
+    perform.arrangePerformPromise.then((resolovedPerform) =>
+      PerformController.arrangeNewPerform(resolovedPerform, script),
+    );
   } else {
-    nextSentence();
+    PerformController.arrangeNewPerform(perform, script);
   }
-}
+};

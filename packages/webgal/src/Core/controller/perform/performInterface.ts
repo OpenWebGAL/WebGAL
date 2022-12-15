@@ -15,6 +15,8 @@ export interface IPerform {
   stopTimeout: any;
   // 演出结束后转到下一句
   goNextWhenOver?: boolean;
+  // 对于延迟触发的演出，使用 Promise
+  arrangePerformPromise?: Promise<IPerform>;
 }
 
 // next之后，可以被打断的演出会被打断，不能被打断的演出会继续，阻塞next的演出会阻止next被响应。

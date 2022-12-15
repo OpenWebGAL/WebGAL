@@ -1,6 +1,6 @@
 import { RUNTIME_GAMEPLAY } from '@/Core/runtime/gamePlay';
 import { baseTransform, IEffect, IStageState } from '@/store/stageInterface';
-import { logger } from '@/Core/util/etc/logger';
+// import { logger } from '@/Core/util/etc/logger';
 import { setBlurFilter } from '@/Core/util/etc/setBlurFilter';
 
 export function setStageObjectEffects(stageState: IStageState) {
@@ -18,7 +18,7 @@ export function setStageEffects(effects: IEffect[]) {
     const lockedStageTargets = RUNTIME_GAMEPLAY.pixiStage?.getAllLockedObject() ?? [];
     if (!lockedStageTargets.includes(key)) {
       if (effect) {
-        logger.debug('应用effects', key);
+        // logger.debug('应用effects', key);
         const targetPixiContainer = RUNTIME_GAMEPLAY.pixiStage?.getStageObjByKey(key);
         if (targetPixiContainer) {
           const container = targetPixiContainer.pixiContainer;
