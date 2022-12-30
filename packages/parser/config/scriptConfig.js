@@ -1,7 +1,7 @@
 "use strict";
 exports.__esModule = true;
 exports.ADD_NEXT_ARG_LIST = exports.SCRIPT_CONFIG = void 0;
-var sceneInterface_1 = require("../interface/sceneInterface");
+var sceneInterface_1 = require("../interface/sceneInterface.js");
 exports.SCRIPT_CONFIG = [
     { scriptString: 'intro', scriptType: sceneInterface_1.commandType.intro },
     { scriptString: 'changeBg', scriptType: sceneInterface_1.commandType.changeBg },
