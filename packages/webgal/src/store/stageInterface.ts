@@ -71,6 +71,12 @@ export const baseTransform: ITransform = {
   blur: 0,
 };
 
+export interface IFreeFigure {
+  basePosition: 'left' | 'center' | 'right';
+  name: string;
+  key: string;
+}
+
 /**
  * @interface IStageState 游戏舞台数据接口
  */
@@ -80,6 +86,8 @@ export interface IStageState {
   figName: string; // 立绘_中 文件地址（相对或绝对）
   figNameLeft: string; // 立绘_左 文件地址（相对或绝对）
   figNameRight: string; // 立绘_右 文件地址（相对或绝对）
+  // 自由立绘
+  freeFigure: Array<IFreeFigure>;
   showText: string; // 文字
   showName: string; // 人物名
   command: string; // 语句指令
