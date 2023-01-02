@@ -15,6 +15,7 @@ export const initState: IStageState = {
   figName: '', // 立绘_中 文件地址（相对或绝对）
   figNameLeft: '', // 立绘_左 文件地址（相对或绝对）
   figNameRight: '', // 立绘_右 文件地址（相对或绝对）
+  freeFigure: [],
   showText: '', // 文字
   showName: '', // 人物名
   command: '', // 语句指令
