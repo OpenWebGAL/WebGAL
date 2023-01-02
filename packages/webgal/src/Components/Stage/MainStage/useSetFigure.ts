@@ -7,7 +7,7 @@ import { IStageObject } from '@/Core/controller/stage/pixi/PixiController';
 import { generateUniversalSoftOffAnimationObj } from '@/Core/controller/stage/pixi/animations/universalSoftOff';
 
 export function useSetFigure(stageState: IStageState) {
-  const { figNameLeft, figName, figNameRight } = stageState;
+  const { figNameLeft, figName, figNameRight, freeFigure } = stageState;
 
   /**
    * 设置立绘
@@ -108,6 +108,54 @@ export function useSetFigure(stageState: IStageState) {
       }
     }
   }, [figNameRight]);
+
+  useEffect(() => {
+    // 自由立绘
+    for (const fig of freeFigure) {
+      /**
+       * 特殊处理：自由立绘
+       */
+      const thisFigKey = `${fig.key}`;
+      const softInAniKey = `${fig.key}-softin`;
+      /**
+       * 非空
+       */
+      if (fig.name !== '') {
+        const currentFigThisKey = RUNTIME_GAMEPLAY.pixiStage?.getStageObjByKey(thisFigKey);
+        if (currentFigThisKey) {
+          if (currentFigThisKey.sourceUrl !== fig.name) {
+            removeFig(currentFigThisKey, softInAniKey, stageState.effects);
+            RUNTIME_GAMEPLAY.pixiStage?.addFigure(thisFigKey, fig.name, fig.basePosition);
+            logger.debug(`${fig.key}立绘已重设`);
+            RUNTIME_GAMEPLAY.pixiStage!.registerPresetAnimation(
+              generateUniversalSoftInAnimationObj(thisFigKey, 300),
+              softInAniKey,
+              thisFigKey,
+              stageState.effects,
+            );
+            setTimeout(() => RUNTIME_GAMEPLAY.pixiStage!.removeAnimation(softInAniKey), 300);
+          }
+        } else {
+          RUNTIME_GAMEPLAY.pixiStage?.addFigure(thisFigKey, fig.name, fig.basePosition);
+          logger.debug(`${fig.key}立绘已重设`);
+          RUNTIME_GAMEPLAY.pixiStage!.registerPresetAnimation(
+            generateUniversalSoftInAnimationObj(thisFigKey, 300),
+            softInAniKey,
+            thisFigKey,
+            stageState.effects,
+          );
+          setTimeout(() => RUNTIME_GAMEPLAY.pixiStage!.removeAnimation(softInAniKey), 300);
+        }
+      } else {
+        const currentFigThisKey = RUNTIME_GAMEPLAY.pixiStage?.getStageObjByKey(thisFigKey);
+        if (currentFigThisKey) {
+          if (currentFigThisKey.sourceUrl !== fig.name) {
+            removeFig(currentFigThisKey, softInAniKey, stageState.effects);
+          }
+        }
+      }
+    }
+  }, [freeFigure]);
 }
 
 function removeFig(figObj: IStageObject, enterTikerKey: string, effects: IEffect[]) {
