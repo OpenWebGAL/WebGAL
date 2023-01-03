@@ -155,6 +155,25 @@ export function useSetFigure(stageState: IStageState) {
         }
       }
     }
+
+    /**
+     * 移除不在状态表中的立绘
+     */
+    const currentFigures = RUNTIME_GAMEPLAY.pixiStage?.figureObjects;
+    if (currentFigures) {
+      for (const existFigure of currentFigures) {
+        if (existFigure.key === 'fig-left' || existFigure.key === 'fig-center' || existFigure.key === 'fig-right') {
+          // 什么也不做
+        } else {
+          const existKey = existFigure.key;
+          const existFigInState = freeFigure.findIndex((fig) => fig.key === existKey);
+          if (existFigInState < 0) {
+            const softInAniKey = `${existFigure.key}-softin`;
+            removeFig(existFigure, softInAniKey, stageState.effects);
+          }
+        }
+      }
+    }
   }, [freeFigure]);
 }
 
