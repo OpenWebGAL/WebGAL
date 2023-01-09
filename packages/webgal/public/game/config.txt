@@ -1,5 +1,4 @@
-Game_name:星光咖啡馆与死神之蝶;
-Game_key:0f36dst;
-Title_img:xgmain.jpeg;
+Game_name:欢迎使用WebGAL！;
+Game_key:0f86dst;
+Title_img:WebGAL_New_Enter_Image.png;
 Title_bgm:s_Title.mp3;
-Loading_img:none;
