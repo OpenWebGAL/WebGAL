@@ -1,0 +1,38 @@
+[
+  {
+    "alpha": 1,
+    "scale": {
+      "x": 1,
+      "y": 1
+    },
+    "pivot": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "position": {
+      "x": 0,
+      "y": 0
+    },
+    "rotation": 0,
+    "blur": 5,
+    "duration": 0
+  },
+  {
+    "alpha": 1,
+    "scale": {
+      "x": 1,
+      "y": 1
+    },
+    "pivot": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "position": {
+      "x": 500,
+      "y": 0
+    },
+    "rotation": 0,
+    "blur": 0,
+    "duration": 500
+  }
+]
