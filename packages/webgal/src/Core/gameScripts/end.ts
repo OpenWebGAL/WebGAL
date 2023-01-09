@@ -7,6 +7,7 @@ import { sceneParser } from '@/Core/parser/sceneParser';
 import { resetStage } from '@/Core/controller/stage/resetStage';
 import { webgalStore } from '@/store/store';
 import { setVisibility } from '@/store/GUIReducer';
+import { playBgm } from '@/Core/controller/stage/playBgm';
 
 /**
  * 结束游戏
@@ -22,6 +23,7 @@ export const end = (sentence: ISentence): IPerform => {
     RUNTIME_SCENE_DATA.currentScene = sceneParser(rawScene, 'start.txt', sceneUrl);
   });
   dispatch(setVisibility({ component: 'showTitle', visibility: true }));
+  playBgm(webgalStore.getState().GUI.titleBgm);
   return {
     performName: 'none',
     duration: 0,
