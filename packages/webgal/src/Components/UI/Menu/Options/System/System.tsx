@@ -1,7 +1,7 @@
 import styles from '@/Components/UI/Menu/Options/options.module.scss';
 import { NormalOption } from '@/Components/UI/Menu/Options/NormalOption';
 import { NormalButton } from '@/Components/UI/Menu/Options/NormalButton';
-import { resetOptionSet, resetSaveData, setOptionData } from '@/store/userDataReducer';
+import { resetAllData, resetOptionSet, resetSaveData, setOptionData } from '@/store/userDataReducer';
 import { playSpeed } from '@/store/userDataInterface';
 import { getStorage, setStorage, syncStorageFast } from '@/Core/controller/storage/storageController';
 import { useDispatch, useSelector } from 'react-redux';
@@ -38,7 +38,7 @@ export function System() {
       </NormalOption>
       <NormalOption key="option2" title="清除或还原数据">
         <NormalButton
-          textList={['清除所有存档', '还原默认设置']}
+          textList={['清除所有存档', '还原默认设置', '清除所有数据']}
           functionList={[
             () => {
               showGlogalDialog({
@@ -64,8 +64,20 @@ export function System() {
                 rightFunc: () => {},
               });
             },
+            () => {
+              showGlogalDialog({
+                title: '确定要清除所有数据吗',
+                leftText: '是',
+                rightText: '否',
+                leftFunc: () => {
+                  dispatch(resetAllData());
+                  syncStorageFast();
+                },
+                rightFunc: () => {},
+              });
+            },
           ]}
-          currentChecked={2}
+          currentChecked={3}
         />
       </NormalOption>
       <NormalOption key="option3" title="导入或导出存档与选项">
