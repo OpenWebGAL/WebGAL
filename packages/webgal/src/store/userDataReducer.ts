@@ -14,6 +14,7 @@ import {
   textSize,
 } from '@/store/userDataInterface';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { cloneDeep } from 'lodash';
 
 const initialOptionSet = {
   slPage: 1,
@@ -39,7 +40,7 @@ export const initState: IUserData = {
 
 const userDataSlice = createSlice({
   name: 'userData',
-  initialState: initState,
+  initialState: cloneDeep(initState),
   reducers: {
     /**
      * 设置用户数据
@@ -111,6 +112,9 @@ const userDataSlice = createSlice({
     resetOptionSet(state) {
       Object.assign(state.optionData, initialOptionSet);
     },
+    resetAllData(state) {
+      Object.assign(state, cloneDeep(initState));
+    },
     resetSaveData(state) {
       state.saveData.splice(0, state.saveData.length);
     },
@@ -127,6 +131,7 @@ export const {
   setFastSave,
   resetOptionSet,
   resetSaveData,
+  resetAllData,
 } = userDataSlice.actions;
 export default userDataSlice.reducer;
 
