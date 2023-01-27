@@ -25,6 +25,7 @@ import { callSceneScript } from '@/Core/gameScripts/callSceneScript';
 import { setTextbox } from '@/Core/gameScripts/setTextbox';
 import { setAnimation } from '@/Core/gameScripts/setAnimation';
 import { playEffect } from '@/Core/gameScripts/playEffect';
+import { setTempAnimation } from '@/Core/gameScripts/setTempAnimation';
 
 export const SCRIPT_CONFIG: IConfigInterface[] = [
   { scriptString: 'intro', scriptType: commandType.intro, scriptFunction: intro },
@@ -57,6 +58,7 @@ export const SCRIPT_CONFIG: IConfigInterface[] = [
   { scriptString: 'setTextbox', scriptType: commandType.setTextbox, scriptFunction: setTextbox },
   { scriptString: 'setAnimation', scriptType: commandType.setAnimation, scriptFunction: setAnimation },
   { scriptString: 'playEffect', scriptType: commandType.playEffect, scriptFunction: playEffect },
+  { scriptString: 'setTempAnimation', scriptType: commandType.setTempAnimation, scriptFunction: setTempAnimation },
 ];
 export const ADD_NEXT_ARG_LIST = [
   commandType.bgm,
