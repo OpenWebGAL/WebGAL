@@ -14,7 +14,7 @@ export const RUNTIME_GAME_INFO = {
 //   currentPreloadRemainingSceneCount: 2,
 // };
 
-interface IUserAnimation {
+export interface IUserAnimation {
   name: string;
   effects: Array<ITransform & { duration: number }>;
 }
