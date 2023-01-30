@@ -30,7 +30,11 @@ export const TextBox = () => {
           key={stageState.currentDialogKey + index}
           style={{ animationDelay: `${delay}ms` }}
         >
-          {e}
+          <span className={styles.zhanwei}>
+            {e}
+            <span className={styles.outer}>{e}</span>
+            <span className={styles.inner}>{e}</span>
+          </span>
         </span>
       );
     }
@@ -40,9 +44,13 @@ export const TextBox = () => {
         id={`${delay}`}
         className={styles.TextBox_textElement_start}
         key={stageState.currentDialogKey + index}
-        style={{ animationDelay: `${delay}ms` }}
+        style={{ animationDelay: `${delay}ms`, position: 'relative' }}
       >
-        {e}
+        <span className={styles.zhanwei}>
+          {e}
+          <span className={styles.outer}>{e}</span>
+          <span className={styles.inner}>{e}</span>
+        </span>
       </span>
     );
   });

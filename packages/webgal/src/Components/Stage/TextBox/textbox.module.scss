@@ -56,6 +56,28 @@
   opacity: 0;
 }
 
+.outer{
+  position: absolute;
+  left: 0;
+  background: linear-gradient(#2de2ff,#8b67fb);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  z-index: 2;
+}
+
+.inner{
+  position: absolute;
+  left: 0;
+  -webkit-text-stroke: 1px black;
+  z-index: 1;
+  text-shadow: 2px 2px 7px rgba(255,255,255,0.5);
+}
+
+.zhanwei{
+  color: transparent;
+}
+
 //
 //.TextBox_textElement_start::before{
 //  animation: TextDelayShow 700ms ease-out forwards;
