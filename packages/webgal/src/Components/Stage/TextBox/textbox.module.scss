@@ -24,6 +24,7 @@
       rgba(0, 0, 0, .35) 75%,
       transparent);
   bottom: 0;
+  font-weight: bold;
   color: white;
   padding: 1em 16em 2em 16em;
   box-sizing: border-box;
@@ -59,7 +60,7 @@
 .outer{
   position: absolute;
   left: 0;
-  background: linear-gradient(#2de2ff,#8b67fb);
+  background-image: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
   background-clip: text;
   -webkit-background-clip: text;
   color: transparent;
@@ -69,9 +70,9 @@
 .inner{
   position: absolute;
   left: 0;
-  -webkit-text-stroke: 1px black;
+  -webkit-text-stroke: 0.075em rgba(0,0,0,0.65);
   z-index: 1;
-  text-shadow: 2px 2px 7px rgba(255,255,255,0.5);
+  text-shadow: 1px 1px 7px rgba(255,255,255,0.5);
 }
 
 .zhanwei{
@@ -107,6 +108,7 @@
   min-width: 50%;
   padding: 0 0.2em 0.2em 0.1em;
   margin: 0 0 0.2em 0;
+  position: relative;
 }
 
 @keyframes TextDelayShow {

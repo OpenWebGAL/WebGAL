@@ -63,7 +63,17 @@ export const TextBox = () => {
       </div>
       {stageState.showName !== '' && (
         <div className={styles.TextBox_showName} style={{ fontSize: '200%' }}>
-          {stageState.showName}
+          {stageState.showName.split('').map((e) => {
+            return (
+              <span key={e} style={{ position: 'relative' }}>
+                <span className={styles.zhanwei}>
+                  {e}
+                  <span className={styles.outer}>{e}</span>
+                  <span className={styles.inner}>{e}</span>
+                </span>
+              </span>
+            );
+          })}
         </div>
       )}
       <div style={{ fontSize: size, wordBreak: 'break-word' }}>{textElementList}</div>
