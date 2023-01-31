@@ -24,7 +24,7 @@ jobs:
 
       # 生成静态文件
       - name: Build
-        run: cd ./packages/webgal && yarn build
+        run: cd ./packages/webgal && yarn build && touch dist/.nojekyll
 
       # 部署到 GitHub Pages
       - name: Deploy
