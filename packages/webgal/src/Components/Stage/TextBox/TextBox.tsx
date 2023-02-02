@@ -4,13 +4,15 @@ import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import { PERFORM_CONFIG } from '@/Core/config/performConfig';
 import { useFontFamily } from '@/hooks/useFontFamily';
+import { useTextAnimationDuration, useTextDelay } from '@/hooks/useTextOptions';
 
 export const TextBox = () => {
   const stageState = useSelector((state: RootState) => state.stage);
   const userDataState = useSelector((state: RootState) => state.userData);
   useEffect(() => {});
-  const textDelay = PERFORM_CONFIG.textInitialDelay - 20 * userDataState.optionData.textSpeed;
-  const size = userDataState.optionData.textSize * 50 + 200 + '%';
+  const textDelay = useTextDelay(userDataState.optionData.textSpeed);
+  const textDuration = useTextAnimationDuration(userDataState.optionData.textSpeed);
+  const size = userDataState.optionData.textSize * 40 + 200 + '%';
   const font = useFontFamily();
 
   // 拆字
@@ -28,7 +30,7 @@ export const TextBox = () => {
           id={`${delay}`}
           className={styles.TextBox_textElement_Settled}
           key={stageState.currentDialogKey + index}
-          style={{ animationDelay: `${delay}ms` }}
+          style={{ animationDelay: `${delay}ms`, animationDuration: `${textDuration}ms` }}
         >
           <span className={styles.zhanwei}>
             {e}

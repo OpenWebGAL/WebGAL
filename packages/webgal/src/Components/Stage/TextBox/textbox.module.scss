@@ -16,13 +16,14 @@
   width: 100%;
   min-height: 37.5%;
   background: linear-gradient(transparent,
-    rgba(0, 0, 0, .25) 25%,
-    rgba(0, 0, 0, .35) 75%,
-    rgba(0, 0, 0, .6)),
-  linear-gradient(90deg, transparent 0,
-      rgba(0, 0, 0, .35) 25%,
-      rgba(0, 0, 0, .35) 75%,
-      transparent);
+    rgba(0, 0, 0, 0.05) 60%,
+    //rgba(0, 0, 0, 0) 75%,
+    //rgba(0, 0, 0, .75) 75%,
+    rgba(0, 0, 0, .5));
+  //linear-gradient(90deg, transparent 0,
+  //    rgba(0, 0, 0, .35) 25%,
+  //    rgba(0, 0, 0, .35) 75%,
+  //    transparent);
   bottom: 0;
   font-weight: bold;
   color: white;
@@ -53,29 +54,34 @@
 
 .TextBox_textElement_start {
   @include text_shadow_textElement;
-  animation: TextDelayShow 700ms ease-out forwards;
+  animation: TextDelayShow ease-out forwards;
   opacity: 0;
 }
 
-.outer{
+.outer {
   position: absolute;
   left: 0;
-  background-image: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  background-image: linear-gradient(
+    //135deg,
+      #ffffff 0%,
+      #f5f7fa 45%,
+      #c3cfe2 100%
+  );
   background-clip: text;
   -webkit-background-clip: text;
   color: transparent;
   z-index: 2;
 }
 
-.inner{
+.inner {
   position: absolute;
   left: 0;
-  -webkit-text-stroke: 0.075em rgba(0,0,0,0.65);
+  -webkit-text-stroke: 0.085em rgba(0, 0, 0, 0.65);
   z-index: 1;
-  text-shadow: 1px 1px 7px rgba(255,255,255,0.5);
+  text-shadow: 3px 3px 7px rgba(0, 0, 0, 0.5);
 }
 
-.zhanwei{
+.zhanwei {
   color: transparent;
 }
 
@@ -104,7 +110,7 @@
 .TextBox_showName {
   @include text_shadow_textElement;
   font-size: 85%;
-  border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+  border-bottom: 3px solid rgb(176, 176, 176);
   min-width: 50%;
   padding: 0 0.2em 0.2em 0.1em;
   margin: 0 0 0.2em 0;
