@@ -31,7 +31,8 @@ export enum commandType {
   filmMode,
   setTextbox,
   setAnimation,
-  playEffect
+  playEffect,
+  setTempAnimation
 }
 
 /**

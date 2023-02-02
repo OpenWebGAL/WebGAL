@@ -7,6 +7,7 @@ import { playVocal } from './playVocal';
 import { webgalStore } from '@/store/store';
 import { setStage } from '@/store/stageReducer';
 import { PERFORM_CONFIG } from '@/Core/config/performConfig';
+import { useTextDelay } from '@/hooks/useTextOptions';
 
 /**
  * 进行普通对话的显示
@@ -47,7 +48,7 @@ export const say = (sentence: ISentence): IPerform => {
   // 设置key
   dispatch(setStage({ key: 'currentDialogKey', value: dialogKey }));
   // 计算延迟
-  const textDelay = PERFORM_CONFIG.textInitialDelay - 20 * userDataState.optionData.textSpeed;
+  const textDelay = useTextDelay(userDataState.optionData.textSpeed);
   // 本句延迟
   const sentenceDelay = textDelay * sentence.content.length;
   // // 设置延迟
