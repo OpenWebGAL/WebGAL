@@ -2,13 +2,19 @@
   position: relative;
   z-index: 1;
   padding: 1em 1.5em 1em 1.5em;
-  background: rgba(0, 0, 0, 0.35);
+  background: rgba(0, 0, 0, 0.1);
+  //background:
+    //linear-gradient(transparent,
+      //rgba(0, 0, 0, .9) 25%,
+      //rgba(0, 0, 0, .75) 75%,
+      //rgba(0, 0, 0, .35));
   color: rgb(255, 255, 255);
-  min-height: 350px
+  min-height: 350px;
+  font-weight: bold;
 }
 
 .singleText {
-  animation: TextDelayShow 1000ms forwards;
+  animation: TextDelayShow ease-out forwards;
   opacity: 0;
   transition: font-size 1s;
   letter-spacing: 0.05em;
