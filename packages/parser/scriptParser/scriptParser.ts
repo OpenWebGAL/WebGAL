@@ -12,7 +12,7 @@ import { subSceneScanner } from "./subSceneScanner";
  * @param ADD_NEXT_ARG_LIST
  * @param SCRIPT_CONFIG
  */
-export const scriptParser = (sentenceRaw: string, assetSetter:any, ADD_NEXT_ARG_LIST:any, SCRIPT_CONFIG:any): ISentence => {
+export const scriptParser = (sentenceRaw: string, assetSetter: any, ADD_NEXT_ARG_LIST: any, SCRIPT_CONFIG: any): ISentence => {
   let command: commandType; // 默认为对话
   let content: string; // 语句内容
   let subScene: Array<string>; // 语句携带的子场景（可能没有）
@@ -24,7 +24,18 @@ export const scriptParser = (sentenceRaw: string, assetSetter:any, ADD_NEXT_ARG_
   // 正式开始解析
 
   // 去分号，前面已做，这里不再需要
-  let newSentenceRaw = sentenceRaw;
+  let newSentenceRaw = sentenceRaw.split(";")[0];
+  if (newSentenceRaw === "") {
+    // 注释提前返回
+    return {
+      command: commandType.comment, // 语句类型
+      commandRaw: "comment", // 命令原始内容，方便调试
+      content: sentenceRaw.split(";")[1] ?? "", // 语句内容
+      args: [], // 参数列表
+      sentenceAssets: [], // 语句携带的资源列表
+      subScene: [] // 语句携带的子场景
+    };
+  }
   // 截取命令
   const getCommandResult = /:/.exec(newSentenceRaw);
   /**
