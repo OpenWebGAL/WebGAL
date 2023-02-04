@@ -74,4 +74,5 @@ export const ADD_NEXT_ARG_LIST = [
   commandType.unlockCg,
   commandType.filmMode,
   commandType.playEffect,
+  commandType.comment,
 ];
