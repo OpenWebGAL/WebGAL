@@ -31,7 +31,7 @@ export const scriptParser = (sentenceRaw: string, assetSetter: any, ADD_NEXT_ARG
       command: commandType.comment, // 语句类型
       commandRaw: "comment", // 命令原始内容，方便调试
       content: sentenceRaw.split(";")[1] ?? "", // 语句内容
-      args: [], // 参数列表
+      args: [{ key: "next", value: true }], // 参数列表
       sentenceAssets: [], // 语句携带的资源列表
       subScene: [] // 语句携带的子场景
     };
