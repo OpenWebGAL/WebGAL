@@ -366,7 +366,7 @@ var webgalparser = (function (__) {
               command: commandType.comment,
               commandRaw: "comment",
               content: sentenceRaw.split(";")[1] ?? "",
-              args: [],
+              args: [{ key: "next", value: true }],
               sentenceAssets: [],
               subScene: [] // 语句携带的子场景
           };
