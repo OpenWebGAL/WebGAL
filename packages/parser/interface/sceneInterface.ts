@@ -32,7 +32,8 @@ export enum commandType {
   setTextbox,
   setAnimation,
   playEffect,
-  setTempAnimation
+  setTempAnimation,
+  comment
 }
 
 /**
