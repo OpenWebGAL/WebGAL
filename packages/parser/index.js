@@ -52,6 +52,8 @@ var commandType;
     commandType[commandType["setTextbox"] = 24] = "setTextbox";
     commandType[commandType["setAnimation"] = 25] = "setAnimation";
     commandType[commandType["playEffect"] = 26] = "playEffect";
+    commandType[commandType["setTempAnimation"] = 27] = "setTempAnimation";
+    commandType[commandType["comment"] = 28] = "comment";
 })(commandType || (commandType = {}));
 
 /**
@@ -360,7 +362,18 @@ const scriptParser = (sentenceRaw, assetSetter, ADD_NEXT_ARG_LIST, SCRIPT_CONFIG
     let commandRaw;
     // 正式开始解析
     // 去分号，前面已做，这里不再需要
-    let newSentenceRaw = sentenceRaw;
+    let newSentenceRaw = sentenceRaw.split(";")[0];
+    if (newSentenceRaw === "") {
+        // 注释提前返回
+        return {
+            command: commandType.comment,
+            commandRaw: "comment",
+            content: sentenceRaw.split(";")[1] ?? "",
+            args: [],
+            sentenceAssets: [],
+            subScene: [] // 语句携带的子场景
+        };
+    }
     // 截取命令
     const getCommandResult = /:/.exec(newSentenceRaw);
     /**
@@ -425,11 +438,10 @@ const scriptParser = (sentenceRaw, assetSetter, ADD_NEXT_ARG_LIST, SCRIPT_CONFIG
  */
 const sceneParser = (rawScene, sceneName, sceneUrl, assetsPrefetcher, assetSetter, ADD_NEXT_ARG_LIST, SCRIPT_CONFIG) => {
     const rawSentenceList = rawScene.split("\n"); // 原始句子列表
-    // 去除冒号后的内容
-    // 去除分号后的内容
-    const rawSentenceListWithoutEmpty = rawSentenceList
-        .map((sentence) => sentence.split(";")[0])
-        .filter((sentence) => sentence.trim() !== "");
+    // 去分号留到后面去做了，现在注释要单独处理
+    const rawSentenceListWithoutEmpty = rawSentenceList;
+    // .map((sentence) => sentence.split(";")[0])
+    // .filter((sentence) => sentence.trim() !== "");
     let assetsList = []; // 场景资源列表
     let subSceneList = []; // 子场景列表
     const sentenceList = rawSentenceListWithoutEmpty.map((sentence) => {

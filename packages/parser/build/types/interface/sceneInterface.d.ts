@@ -30,7 +30,9 @@ export declare enum commandType {
     filmMode = 23,
     setTextbox = 24,
     setAnimation = 25,
-    playEffect = 26
+    playEffect = 26,
+    setTempAnimation = 27,
+    comment = 28
 }
 /**
  * 单个参数接口
