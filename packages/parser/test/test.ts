@@ -1,4 +1,4 @@
-import { SceneParser } from "../index";
+import SceneParser from "../index";
 import { ADD_NEXT_ARG_LIST, SCRIPT_CONFIG } from "../config/scriptConfig";
 
 const parser = new SceneParser((assetList) => {
