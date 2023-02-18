@@ -5,7 +5,6 @@ import { setStage } from '@/store/stageReducer';
 import __ from 'lodash';
 import { IEffect } from '@/store/stageInterface';
 import { RUNTIME_CURRENT_BACKLOG } from '@/Core/runtime/backlog';
-import { setStageEffects } from '@/Components/Stage/MainStage/useSetEffects';
 import { logger } from '@/Core/util/etc/logger';
 
 export interface IAnimationObject {

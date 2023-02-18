@@ -2,8 +2,8 @@
  * 子场景结束后回到父场景的入口
  * @interface sceneEntry
  */
-import { IStageState } from '../../store/stageInterface';
-import { ISaveScene } from '../../store/userDataInterface';
+import { IStageState } from '@/store/stageInterface';
+import { ISaveScene } from '@/store/userDataInterface';
 import { IPerform } from '../controller/perform/performInterface';
 import PixiStage from '@/Core/controller/stage/pixi/PixiController';
 

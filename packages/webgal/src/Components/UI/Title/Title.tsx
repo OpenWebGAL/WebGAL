@@ -10,7 +10,6 @@ import { MenuPanelTag } from '@/store/guiInterface';
 import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
 import { hasFastSaveRecord, loadFastSaveGame } from '@/hooks/useHotkey';
 import { restorePerform } from '@/Core/controller/storage/jumpFromBacklog';
-import { RUNTIME_GAME_INFO } from '@/Core/runtime/etc';
 
 /**
  * 标题页
@@ -47,11 +46,6 @@ const Title: FC = () => {
               className={styles.Title_button}
               onClick={async () => {
                 dispatch(setVisibility({ component: 'showTitle', visibility: false }));
-                // @ts-ignore
-                if (RUNTIME_GAME_INFO.prevBgm !== '') {
-                  playBgm(RUNTIME_GAME_INFO.prevBgm);
-                  RUNTIME_GAME_INFO.prevBgm = '';
-                } else playBgm('/');
                 // 当且仅当游戏未开始时使用快速存档
                 // 当游戏开始后 使用原来的逻辑
                 if ((await hasFastSaveRecord()) && RUNTIME_SCENE_DATA.currentSentenceId === 0) {
