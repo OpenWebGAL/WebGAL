@@ -5,7 +5,6 @@ import { logger } from '@/Core/util/etc/logger';
 import { IStageObject } from '@/Core/controller/stage/pixi/PixiController';
 import { generateUniversalSoftOffAnimationObj } from '@/Core/controller/stage/pixi/animations/universalSoftOff';
 import { generateUniversalSoftInAnimationObj } from '@/Core/controller/stage/pixi/animations/universalSoftIn';
-import { RUNTIME_SCENE_DATA } from '@/Core/runtime/sceneData';
 
 export function useSetBg(stageState: IStageState) {
   const bgName = stageState.bgName;

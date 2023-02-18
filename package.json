@@ -4,6 +4,11 @@
   "description": "A brand new web Visual Novel engine.",
   "repository": "https://github.com/MakinoharaShoko/WebGAL.git",
   "author": "Mahiru <Mahiru_@outlook.com>",
+  "scripts": {
+    "dev": "cd packages/webgal && yarn dev",
+    "build": "cd packages/webgal && yarn build",
+    "build-parser": "cd packages/parser && yarn build"
+  },
   "license": "MPL-2.0",
   "workspaces": {
     "packages": [
