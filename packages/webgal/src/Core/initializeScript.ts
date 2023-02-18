@@ -24,7 +24,7 @@ import axios from 'axios';
  */
 export const initializeScript = (): void => {
   // 打印初始log信息
-  logger.info('WebGAL 4.3.12');
+  logger.info('WebGAL 4.3.13');
   logger.info('Github: https://github.com/MakinoharaShoko/WebGAL ');
   logger.info('Made with ❤ by MakinoharaShoko');
   // 激活强制缩放
@@ -35,7 +35,7 @@ export const initializeScript = (): void => {
   // 监听键盘 F11 事件，全屏时触发页面调整
   document.onkeydown = function (event) {
     const e = event;
-    if (e && e.keyCode === 122) {
+    if (e && e.key === 'F11') {
       setTimeout(() => {
         resize();
       }, 50);
