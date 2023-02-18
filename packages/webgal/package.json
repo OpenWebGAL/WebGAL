@@ -17,6 +17,7 @@
     "gsap": "^3.11.3",
     "localforage": "^1.10.0",
     "lodash": "^4.17.21",
+    "mitt": "^3.0.0",
     "modern-css-reset": "^1.4.0",
     "pixi.js": "^6.3.0",
     "react": "^17.0.2",
