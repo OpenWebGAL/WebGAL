@@ -5,11 +5,17 @@ import { logger } from '../../util/etc/logger';
 import { webgalStore } from '@/store/store';
 import { resetStageState } from '@/store/stageReducer';
 import cloneDeep from 'lodash/cloneDeep';
+import { webgalEventBus } from '@/Core/runtime/eventBus';
 
 /**
  * 进行下一句
  */
 export const nextSentence = () => {
+  /**
+   * 发送 “发生点击下一句” 事件。
+   */
+  webgalEventBus.emit('__NEXT');
+
   // 如果当前显示标题，那么不进行下一句
   const GUIState = webgalStore.getState().GUI;
   if (GUIState.showTitle) {
