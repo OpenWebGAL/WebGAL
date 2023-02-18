@@ -1,17 +1,11 @@
-import { playBgm } from '@/Core/controller/stage/playBgm';
 import { webgalStore } from '@/store/store';
 import { setVisibility } from '@/store/GUIReducer';
 import { stopAllPerform } from '@/Core/controller/gamePlay/stopAllPerform';
 import { stopAuto } from '@/Core/controller/gamePlay/autoPlay';
 import { stopFast } from '@/Core/controller/gamePlay/fastSkip';
-import { RUNTIME_GAME_INFO } from '@/Core/runtime/etc';
 
 export const backToTitle = () => {
-  const GUIState = webgalStore.getState().GUI;
   const dispatch = webgalStore.dispatch;
-  // @ts-ignore
-  RUNTIME_GAME_INFO.prevBgm = webgalStore.getState().stage.bgm;
-  playBgm(GUIState.titleBgm);
   stopAllPerform();
   stopAuto();
   stopFast();

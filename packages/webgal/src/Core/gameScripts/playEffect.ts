@@ -40,7 +40,7 @@ export const playEffect = (sentence: ISentence) => {
         };
         resolve(perform);
         VocalControl.oncanplay = () => {
-          VocalControl.play();
+          VocalControl.play().then();
         };
         VocalControl.onended = () => {
           for (const e of RUNTIME_GAMEPLAY.performList) {

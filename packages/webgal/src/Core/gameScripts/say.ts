@@ -6,7 +6,6 @@ import { getRandomPerformName } from '@/Core/controller/perform/getRandomPerform
 import { playVocal } from './playVocal';
 import { webgalStore } from '@/store/store';
 import { setStage } from '@/store/stageReducer';
-import { PERFORM_CONFIG } from '@/Core/config/performConfig';
 import { useTextDelay } from '@/hooks/useTextOptions';
 
 /**

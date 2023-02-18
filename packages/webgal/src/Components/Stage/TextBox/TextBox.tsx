@@ -2,7 +2,6 @@ import styles from './textbox.module.scss';
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
-import { PERFORM_CONFIG } from '@/Core/config/performConfig';
 import { useFontFamily } from '@/hooks/useFontFamily';
 import { useTextAnimationDuration, useTextDelay } from '@/hooks/useTextOptions';
 
