@@ -1,5 +1,3 @@
-import { RUNTIME_GAMEPLAY } from '@/Core/runtime/gamePlay';
-
 export function getPixiSscreenshot() {
   const canvas: HTMLCanvasElement = document.getElementById('pixiCanvas')! as HTMLCanvasElement;
   canvas.toBlob((b) => {
