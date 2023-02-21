@@ -5,9 +5,11 @@
   "repository": "https://github.com/MakinoharaShoko/WebGAL.git",
   "author": "Mahiru <Mahiru_@outlook.com>",
   "scripts": {
-    "dev": "cd packages/webgal && yarn dev",
-    "build": "cd packages/webgal && yarn build",
-    "build-parser": "cd packages/parser && yarn build"
+    "webgal:dev": "cd packages/webgal && yarn dev",
+    "webgal:build": "cd packages/webgal && yarn build",
+    "parser:test": "cd packages/parser && yarn test",
+    "parser:test-coverage": "cd packages/parser && yarn coverage",
+    "parser:build": "cd packages/parser && yarn build"
   },
   "license": "MPL-2.0",
   "workspaces": {
