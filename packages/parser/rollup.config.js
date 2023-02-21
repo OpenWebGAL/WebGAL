@@ -1,32 +1,48 @@
-import typescript from 'rollup-plugin-typescript2';
+import typescript from "rollup-plugin-typescript2";
+import resolve from "@rollup/plugin-node-resolve";
+import commonjs from "@rollup/plugin-commonjs";
 
 const mode = process.env.MODE;
-const isProd = mode === 'prod';
-import pkg from './package.json' assert { type: "json" };
+const isProd = mode === "prod";
 
-export default {
-  input: `index.ts`,
-  output: [
-    {
-      file: pkg.main,
-      exports: 'named',
-      format: 'cjs',
-      sourcemap: !isProd
-    },
-    {
-      file: pkg.module,
-      format: 'es',
-      sourcemap: !isProd
-    },
-    {
-      file: 'build/index.global.js',
-      name: 'webgalparser',
-      format: 'iife',
-      sourcemap: !isProd
-    },
-  ],
-  plugins: [typescript({
-    useTsconfigDeclarationDir: true,
-    tsconfigOverride: { compilerOptions: { sourceMap: !isProd } }
-  })],
-};
+export default [
+  {
+    input: `./src/index.ts`,
+    output:
+      {
+        file: "./build/es/index.js",
+        format: "es",
+        sourcemap: !isProd
+      },
+    plugins: [
+      resolve(), commonjs(), typescript({
+        useTsconfigDeclarationDir: true,
+        tsconfigOverride: {
+          compilerOptions: {
+            sourceMap: !isProd,
+            declarationDir: "build/es"
+          }, include: ["src"]
+        }
+      })]
+  }, {
+    input: `./src/index.ts`,
+    output: [
+      {
+        file: "./build/cjs/index.js",
+        exports: "named",
+        format: "cjs",
+        sourcemap: !isProd
+      },
+    ],
+    plugins: [
+      resolve(), commonjs(), typescript({
+        useTsconfigDeclarationDir: true,
+        tsconfigOverride: {
+          compilerOptions: {
+            sourceMap: !isProd,
+            declarationDir: "build/cjs"
+          }, include: ["src"]
+        }
+      })],
+  }
+];
