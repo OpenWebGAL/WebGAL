@@ -1,12 +1,15 @@
-import SceneParser from "../index";
-import { ADD_NEXT_ARG_LIST, SCRIPT_CONFIG } from "../config/scriptConfig";
+import SceneParser from "../src/index";
+import { ADD_NEXT_ARG_LIST, SCRIPT_CONFIG } from "../src/config/scriptConfig";
+import { expect, test } from "vitest";
+import { commandType, ISentence } from "../src/interface/sceneInterface";
 
-const parser = new SceneParser((assetList) => {
-}, (fileName, assetType) => {
-  return fileName;
-}, ADD_NEXT_ARG_LIST, SCRIPT_CONFIG);
+test("label", async () => {
+  const parser = new SceneParser((assetList) => {
+  }, (fileName, assetType) => {
+    return fileName;
+  }, ADD_NEXT_ARG_LIST, SCRIPT_CONFIG);
 
-const result = parser.parse(`
+  const result = parser.parse(`
 ; 初始场景，以及特效演示
 changeBg:c4.jpg -next;
 unlockCg:c4.jpg -name=街前;  解锁部分CG
@@ -113,5 +116,15 @@ label:end;
 changeFigure:none -next;
 WebGAL:基础演出的展示已经结束。;
 `, "test", "/test.txt");
-
-console.log(result);
+  const expectSentenceItem: ISentence = {
+    command: commandType.label,
+    commandRaw: "label",
+    content: "end",
+    args: [
+      { key: "next", value: true }
+    ],
+    sentenceAssets: [],
+    subScene: []
+  };
+  expect(result.sentenceList).toContainEqual(expectSentenceItem);
+});
