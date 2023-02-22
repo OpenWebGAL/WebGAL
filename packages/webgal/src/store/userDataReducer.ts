@@ -14,7 +14,7 @@ import {
   textSize,
 } from '@/store/userDataInterface';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { cloneDeep } from 'lodash';
+import cloneDeep from 'lodash/cloneDeep';
 
 const initialOptionSet = {
   slPage: 1,
