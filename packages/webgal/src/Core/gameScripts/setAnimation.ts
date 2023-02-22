@@ -7,7 +7,7 @@ import { logger } from '@/Core/util/etc/logger';
 import { webgalStore } from '@/store/store';
 import { RUNTIME_USER_ANIMATIONS } from '@/Core/runtime/etc';
 import { generateTimelineObj } from '@/Core/controller/stage/pixi/animations/timeline';
-import __ from 'lodash';
+import cloneDeep from 'lodash/cloneDeep';
 import { baseTransform } from '@/store/stageInterface';
 
 /**
@@ -53,7 +53,7 @@ function getAnimationObject(animationName: string, target: string, duration: num
   const effect = RUNTIME_USER_ANIMATIONS.find((ani) => ani.name === animationName);
   if (effect) {
     const mappedEffects = effect.effects.map((effect) => {
-      const newEffect = __.cloneDeep({ ...baseTransform, duration: 0 });
+      const newEffect = cloneDeep({ ...baseTransform, duration: 0 });
       Object.assign(newEffect, effect);
       newEffect.duration = effect.duration / 1000;
       return newEffect;

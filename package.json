@@ -5,6 +5,8 @@
   "repository": "https://github.com/MakinoharaShoko/WebGAL.git",
   "author": "Mahiru <Mahiru_@outlook.com>",
   "scripts": {
+    "build": "yarn parser:build && yarn webgal:build",
+    "dev": "yarn parser:build && yarn webgal:dev",
     "webgal:dev": "cd packages/webgal && yarn dev",
     "webgal:build": "cd packages/webgal && yarn build",
     "parser:test": "cd packages/parser && yarn test",
