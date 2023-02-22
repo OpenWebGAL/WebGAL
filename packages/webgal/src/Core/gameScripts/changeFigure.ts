@@ -3,7 +3,6 @@ import { IPerform } from '@/Core/controller/perform/performInterface';
 import { webgalStore } from '@/store/store';
 import { setStage } from '@/store/stageReducer';
 import { updateCurrentEffects } from '../controller/stage/pixi/PixiController';
-import __ from 'lodash';
 import cloneDeep from 'lodash/cloneDeep';
 
 /**
@@ -40,7 +39,7 @@ export const changeFigure = (sentence: ISentence): IPerform => {
    * 删掉相关 Effects，因为已经移除了
    */
   const prevEffects = webgalStore.getState().stage.effects;
-  const newEffects = __.cloneDeep(prevEffects);
+  const newEffects = cloneDeep(prevEffects);
   const index = newEffects.findIndex((e) => e.target === `fig-${pos}${key}`);
   if (index >= 0) {
     newEffects.splice(index, 1);

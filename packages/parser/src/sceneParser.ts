@@ -1,6 +1,6 @@
 import { IAsset, IScene, ISentence } from "./interface/sceneInterface";
 import { scriptParser } from "./scriptParser/scriptParser";
-import * as __ from "lodash";
+import uniqWith from "lodash/uniqWith";
 import { fileType } from "./interface/assets";
 
 /**
@@ -16,13 +16,13 @@ import { fileType } from "./interface/assets";
  */
 export const sceneParser = (rawScene: string, sceneName: string, sceneUrl: string
   , assetsPrefetcher: ((assetList: Array<IAsset>) => void), assetSetter: (fileName: string, assetType: fileType) => string
-  , ADD_NEXT_ARG_LIST:any, SCRIPT_CONFIG:any): IScene => {
+  , ADD_NEXT_ARG_LIST: any, SCRIPT_CONFIG: any): IScene => {
   const rawSentenceList = rawScene.split("\n"); // 原始句子列表
 
   // 去分号留到后面去做了，现在注释要单独处理
   const rawSentenceListWithoutEmpty = rawSentenceList;
-    // .map((sentence) => sentence.split(";")[0])
-    // .filter((sentence) => sentence.trim() !== "");
+  // .map((sentence) => sentence.split(";")[0])
+  // .filter((sentence) => sentence.trim() !== "");
   let assetsList: Array<IAsset> = []; // 场景资源列表
   let subSceneList: Array<string> = []; // 子场景列表
   const sentenceList: Array<ISentence> = rawSentenceListWithoutEmpty.map((sentence) => {
@@ -34,7 +34,7 @@ export const sceneParser = (rawScene: string, sceneName: string, sceneUrl: strin
   });
 
   // 开始资源的预加载
-  assetsList = __.uniqWith(assetsList); // 去重
+  assetsList = uniqWith(assetsList); // 去重
   assetsPrefetcher(assetsList);
 
   return {
