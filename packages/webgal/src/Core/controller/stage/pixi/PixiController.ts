@@ -2,7 +2,7 @@ import * as PIXI from 'pixi.js';
 import { v4 as uuid } from 'uuid';
 import { webgalStore } from '@/store/store';
 import { setStage } from '@/store/stageReducer';
-import __ from 'lodash';
+import cloneDeep from 'lodash/cloneDeep';
 import { IEffect } from '@/store/stageInterface';
 import { RUNTIME_CURRENT_BACKLOG } from '@/Core/runtime/backlog';
 import { logger } from '@/Core/util/etc/logger';
@@ -206,7 +206,7 @@ export default class PixiStage {
             blur: target.pixiContainer.blur,
           };
           const prevEffects = webgalStore.getState().stage.effects;
-          const newEffects = __.cloneDeep(prevEffects);
+          const newEffects = cloneDeep(prevEffects);
           let effect: IEffect = { target: thisTickerFunc.targetKey, transform: targetTransform };
           const index = newEffects.findIndex((e) => e.target === thisTickerFunc.targetKey);
           if (index >= 0) {
@@ -439,7 +439,7 @@ export function updateCurrentEffects(newEffects: IEffect[], notUpdateBacklogEffe
     setTimeout(() => {
       const backlog = RUNTIME_CURRENT_BACKLOG[RUNTIME_CURRENT_BACKLOG.length - 1];
       if (backlog) {
-        const newBacklogItem = __.cloneDeep(backlog);
+        const newBacklogItem = cloneDeep(backlog);
         const backlog_effects = newBacklogItem.currentStageState.effects;
         while (backlog_effects.length > 0) {
           backlog_effects.pop();
