@@ -12,8 +12,6 @@ export function generateUniversalSoftInAnimationObj(targetKey: string, duration:
   function setStartState() {
     if (target) {
       target.pixiContainer.alpha = 0;
-      // @ts-ignore
-      target.pixiContainer.blur = 5;
     }
   }
 
@@ -24,8 +22,6 @@ export function generateUniversalSoftInAnimationObj(targetKey: string, duration:
   function setEndState() {
     if (target) {
       target.pixiContainer.alpha = 1;
-      // @ts-ignore
-      target.pixiContainer.blur = 0;
     }
   }
 
@@ -39,14 +35,9 @@ export function generateUniversalSoftInAnimationObj(targetKey: string, duration:
       const baseDuration = RUNTIME_GAMEPLAY.pixiStage!.frameDuration;
       const currentAddOplityDelta = (duration / baseDuration) * delta;
       const increasement = 1 / currentAddOplityDelta;
-      const decreasement = 5 / currentAddOplityDelta;
+      // const decreasement = 5 / currentAddOplityDelta;
       if (sprite.alpha < 1) {
         sprite.alpha += increasement;
-      }
-      // @ts-ignore
-      if (sprite.blur > 0) {
-        // @ts-ignore
-        sprite.blur -= decreasement;
       }
     }
   }
