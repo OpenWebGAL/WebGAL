@@ -98,13 +98,12 @@ export default class PixiStage {
     this.backgroundContainer.zIndex = 0;
     app.stage.addChild(this.effectsContainer, this.figureContainer, this.backgroundContainer);
     this.currentApp = app;
-    // 获取帧率
-    setTimeout(() => {
-      getScreenFps?.(120).then((fps) => {
-        this.frameDuration = 1000 / (fps as number);
-        logger.info('当前帧率', fps);
-      });
-    }, 1000);
+    // 每 5s 获取帧率
+    const update = () => {
+      this.updateFps();
+      setTimeout(update, 5000);
+    };
+    update();
   }
 
   public getAllLockedObject() {
@@ -419,6 +418,13 @@ export default class PixiStage {
     //   newEffects.splice(index, 1);
     // }
     // updateCurrentEffects(newEffects);
+  }
+
+  private updateFps() {
+    getScreenFps?.(120).then((fps) => {
+      this.frameDuration = 1000 / (fps as number);
+      logger.info('当前帧率', fps);
+    });
   }
 
   private lockStageObject(targetName: string) {
