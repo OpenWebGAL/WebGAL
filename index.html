@@ -144,6 +144,9 @@
      function jump(url){
          tryToEnter=false;
          window.location=url;
+         setTimeout(() => {
+                tryToEnter=true
+            }, 10);
      }
     /**
      * 点击屏幕，进入引擎主界面
