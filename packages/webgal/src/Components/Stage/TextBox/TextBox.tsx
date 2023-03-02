@@ -63,10 +63,10 @@ export const TextBox = () => {
         )}
       </div>
       {stageState.showName !== '' && (
-        <div className={styles.TextBox_showName} style={{ fontSize: '200%' }}>
-          {stageState.showName.split('').map((e) => {
+        <div key={stageState.showName} className={styles.TextBox_showName} style={{ fontSize: '200%' }}>
+          {stageState.showName.split('').map((e, i) => {
             return (
-              <span key={e} style={{ position: 'relative' }}>
+              <span key={e + i} style={{ position: 'relative' }}>
                 <span className={styles.zhanwei}>
                   {e}
                   <span className={styles.outer}>{e}</span>
