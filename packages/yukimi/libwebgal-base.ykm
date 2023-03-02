@@ -1,0 +1,41 @@
+# Dialog
+- extern say content speaker vocal %
+@__type content string
+@__type speaker string
+@__type vocal string
+^
+
+
+# Background and figure
+-extern changeBg content %
+@__type content string
+^
+
+-extern changeFigure content left center right id %
+@__type conetnt string
+@__type left boolean
+@__type center boolean
+@__type right boolean
+@__type id string
+^
+
+
+#bgm, effect sound, video
+-extern bgm conetnt %
+@__type conetnt string
+^
+
+-extern playVideo conetnt %
+@__type content string
+^
+
+-extern playEffects conetnt %
+@__type conetnt string
+^
+
+#
+
+
+# Demo
+- scene "main"
+@say "你好" "WebGAL" "v1.ogg"
