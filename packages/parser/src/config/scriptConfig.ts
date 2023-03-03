@@ -1,4 +1,4 @@
-import { commandType } from '../interface/sceneInterface';
+import { commandType } from "../interface/sceneInterface";
 
 export const SCRIPT_CONFIG = [
   { scriptString: 'intro', scriptType: commandType.intro },
@@ -42,4 +42,5 @@ export const ADD_NEXT_ARG_LIST = [
   commandType.unlockBgm,
   commandType.unlockCg,
   commandType.filmMode,
+  commandType.playEffect,
 ];
