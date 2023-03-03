@@ -25,3 +25,4 @@ dist-ssr
 .eslintcache
 stats.html
 packages/webgal/public/game.old
+packages/parser/build
