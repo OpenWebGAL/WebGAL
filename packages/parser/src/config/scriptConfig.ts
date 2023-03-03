@@ -29,6 +29,7 @@ export const SCRIPT_CONFIG = [
   { scriptString: 'callScene', scriptType: commandType.callScene },
   { scriptString: 'setTextbox', scriptType: commandType.setTextbox},
   { scriptString: 'setAnimation', scriptType: commandType.setAnimation },
+  { scriptString: 'playEffect', scriptType: commandType.playEffect },
 ];
 export const ADD_NEXT_ARG_LIST = [
   commandType.bgm,
