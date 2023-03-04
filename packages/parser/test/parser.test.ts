@@ -27,3 +27,25 @@ test("label", async () => {
   };
   expect(result.sentenceList).toContainEqual(expectSentenceItem);
 });
+
+test("choose", async () => {
+
+  const sceneRaw = await fsp.readFile('test/test-resources/choose.txt');
+  const sceneText = sceneRaw.toString();
+
+  const parser = new SceneParser((assetList) => {
+  }, (fileName, assetType) => {
+    return fileName;
+  }, ADD_NEXT_ARG_LIST, SCRIPT_CONFIG);
+
+  const result = parser.parse(sceneText, "choose", "/choose.txt");
+  const expectSentenceItem: ISentence = {
+    command: commandType.choose,
+    commandRaw: "choose",
+    content: "",
+    args: [],
+    sentenceAssets: [],
+    subScene: []
+  };
+  expect(result.sentenceList).toContainEqual(expectSentenceItem);
+});
