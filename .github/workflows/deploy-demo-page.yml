@@ -18,6 +18,14 @@ jobs:
         uses: actions/checkout@v2
         with:
           persist-credentials: false
+          
+      # 设置 node
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+          cache: 'yarn'
+          
       # 安装依赖
       - name: Install
         run: npm install yarn -g && yarn install
