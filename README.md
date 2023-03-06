@@ -42,7 +42,7 @@ https://demo.msfasr.com
 
 ### 参与 WebGAL 的开发工作
 
-**下一代 Galgame 引擎 WebGAL 4.X 正处于在开发阶段，想要参与引擎开发的开发者请阅读 [此项目的参与指南](https://docs.msfasr.com/developers/)**
+**想要参与引擎开发的开发者请阅读 [此项目的参与指南](https://docs.msfasr.com/developers/)**
 
 ## Stargazers over time
 
