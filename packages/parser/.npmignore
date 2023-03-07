@@ -1,5 +1,4 @@
 coverage
-src
 test
 .babelrc
 rollup.config.js
