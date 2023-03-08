@@ -159,7 +159,7 @@ export function useSetFigure(stageState: IStageState) {
     /**
      * 移除不在状态表中的立绘
      */
-    const currentFigures = RUNTIME_GAMEPLAY.pixiStage?.figureObjects;
+    const currentFigures = RUNTIME_GAMEPLAY.pixiStage?.getFigureObjects();
     if (currentFigures) {
       for (const existFigure of currentFigures) {
         if (existFigure.key === 'fig-left' || existFigure.key === 'fig-center' || existFigure.key === 'fig-right') {

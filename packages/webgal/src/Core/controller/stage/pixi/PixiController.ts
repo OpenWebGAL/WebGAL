@@ -45,15 +45,15 @@ export default class PixiStage {
    * 当前的 PIXI App
    */
   public currentApp: PIXI.Application | null = null;
-  public effectsContainer: PIXI.Container;
-  public figureContainer: PIXI.Container;
-  public figureObjects: Array<IStageObject> = [];
-  public backgroundContainer: PIXI.Container;
-  public backgroundObjects: Array<IStageObject> = [];
+  public readonly effectsContainer: PIXI.Container;
   public frameDuration = 16.67;
+  private readonly figureContainer: PIXI.Container;
+  private figureObjects: Array<IStageObject> = [];
+  private readonly backgroundContainer: PIXI.Container;
+  private backgroundObjects: Array<IStageObject> = [];
 
   // 注册到 Ticker 上的函数
-  public stageAnimations: Array<IStageAnimationObject> = [];
+  private stageAnimations: Array<IStageAnimationObject> = [];
 
   // 锁定变换对象（对象可能正在执行动画，不能应用变换）
   private lockTransformTarget: Array<string> = [];
@@ -104,6 +104,10 @@ export default class PixiStage {
       setTimeout(update, 5000);
     };
     update();
+  }
+
+  public getFigureObjects() {
+    return this.figureObjects;
   }
 
   public getAllLockedObject() {
