@@ -1,0 +1,32 @@
+name: Build Check
+
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+
+# 任务
+jobs:
+  build-webgal-static-webpage :
+    # 服务器环境：最新版 Ubuntu
+    runs-on: ubuntu-latest
+    steps:
+      # 拉取代码
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          persist-credentials: false
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          cache: 'yarn'
+          
+      # 安装依赖
+      - name: Install
+        run: npm install yarn -g && yarn install
+
+      # 生成静态文件
+      - name: Build
+        run: yarn build && cd ./packages/webgal && touch dist/.nojekyll
