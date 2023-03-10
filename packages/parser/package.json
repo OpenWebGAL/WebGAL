@@ -1,12 +1,13 @@
 {
   "name": "webgal-parser",
-  "version": "4.3.13-9",
+  "version": "4.3.13-10",
   "description": "WebGAL script parser",
   "scripts": {
     "test": "vitest",
     "coverage": "vitest run --coverage",
     "build": "rimraf -rf ./build && rollup --config"
   },
+  "types": "./build/types/index.d.ts",
   "module": "./build/es/index.js",
   "main": "./build/cjs/index.js",
   "author": "Mahiru <Mahiru_@outlook.com>",
