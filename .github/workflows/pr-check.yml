@@ -1,10 +1,11 @@
-name: Deploy WebGAL Demo Page
+name: Build Check
 
 on:
-  push:
-    branches:
-      - main
-      
+  pull_request:
+    types:
+      - opened
+      - synchronize
+
 # 任务
 jobs:
   build-webgal-static-webpage :
@@ -29,11 +30,3 @@ jobs:
       # 生成静态文件
       - name: Build
         run: yarn build && cd ./packages/webgal && touch dist/.nojekyll
-
-      # 部署到 GitHub Pages
-      - name: Deploy
-        uses: JamesIves/github-pages-deploy-action@releases/v4
-        with:
-          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }} # 也就是我们刚才生成的 secret
-          BRANCH: live-demo-page
-          FOLDER: packages/webgal/dist
