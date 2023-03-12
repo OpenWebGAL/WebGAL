@@ -4,12 +4,13 @@ import { playBgm } from '@/Core/controller/stage/playBgm';
 import { startGame } from '@/Core/controller/gamePlay/startGame';
 import { RUNTIME_SCENE_DATA } from '@/Core/runtime/sceneData';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '@/store/store';
+import { RootState, webgalStore } from '@/store/store';
 import { setMenuPanelTag, setVisibility } from '@/store/GUIReducer';
 import { MenuPanelTag } from '@/store/guiInterface';
 import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
 import { hasFastSaveRecord, loadFastSaveGame } from '@/hooks/useHotkey';
 import { restorePerform } from '@/Core/controller/storage/jumpFromBacklog';
+import { setEbg } from '@/Core/util/setEbg';
 
 /**
  * 标题页
@@ -46,6 +47,10 @@ const Title: FC = () => {
               className={styles.Title_button}
               onClick={async () => {
                 dispatch(setVisibility({ component: 'showTitle', visibility: false }));
+                /**
+                 * 重设模糊背景
+                 */
+                setEbg(webgalStore.getState().stage.bgName);
                 // 当且仅当游戏未开始时使用快速存档
                 // 当游戏开始后 使用原来的逻辑
                 if ((await hasFastSaveRecord()) && RUNTIME_SCENE_DATA.currentSentenceId === 0) {

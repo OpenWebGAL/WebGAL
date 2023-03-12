@@ -96,6 +96,18 @@ code {
   -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
 }
 
+#ebg{
+  height: 100vh;
+  width: 100vw;
+  filter: blur(50px);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
 /* ::-webkit-scrollbar-thumb:window-inactive {
     background:rgba(255,0,0,0.4);
 } */

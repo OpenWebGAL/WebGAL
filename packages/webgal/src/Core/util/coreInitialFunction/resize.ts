@@ -18,6 +18,10 @@ export const resize = () => {
   const root = document.getElementById('root'); // 获取根元素
   if (root) {
     if (w > h) {
+      const ebg = document.getElementById('ebg');
+      ebg!.style.transform = ``;
+      ebg!.style.height = `100vh`;
+      ebg!.style.width = `100vw`;
       mw = -mw;
       mh = -mh;
       if (w * (9 / 16) >= h) {
@@ -27,11 +31,23 @@ export const resize = () => {
         root.style.transform = `translate(${mw}px, ${mh}px) scale(${zoomW},${zoomW})`;
       }
     } else {
+      /**
+       * 旋转
+       */
+      const ebg = document.getElementById('ebg');
+      ebg!.style.height = `${targetHeight}px`;
+      ebg!.style.width = `${targetWidth}px`;
       mw2os = -mw2os;
       if (h * (9 / 16) >= w) {
+        ebg!.style.transform = `rotate(90deg) translate(${mw2os}px, ${mh2os}px) scale(${zoomH2 * 1.75},${
+          zoomH2 * 1.75
+        })`;
         root.style.transform = `rotate(90deg) translate(${mw2os}px, ${mh2os}px) scale(${zoomH2},${zoomH2})`;
       }
       if (h * (9 / 16) < w) {
+        ebg!.style.transform = `rotate(90deg) translate(${mw2os}px, ${mh2os}px) scale(${zoomW2 * 1.75},${
+          zoomW2 * 1.75
+        })`;
         root.style.transform = `rotate(90deg) translate(${mw2os}px, ${mh2os}px) scale(${zoomW2},${zoomW2})`;
       }
     }
