@@ -6,6 +6,7 @@ import { getStorage } from '../../controller/storage/storageController';
 import { webgalStore } from '@/store/store';
 import { setGuiAsset } from '@/store/GUIReducer';
 import { initKey } from '@/hooks/useHotkey';
+import { setEbg } from '@/Core/util/setEbg';
 
 declare global {
   interface Window {
@@ -31,6 +32,7 @@ export const infoFetcher = (url: string) => {
         if (e[0] === 'Title_img') {
           const url: string = assetSetter(e[1], fileType.background);
           dispatch(setGuiAsset({ asset: 'titleBg', value: url }));
+          setEbg(url);
         }
         // 设置标题背景音乐
         if (e[0] === 'Title_bgm') {

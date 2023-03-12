@@ -5,6 +5,7 @@ import { logger } from '@/Core/util/etc/logger';
 import { IStageObject } from '@/Core/controller/stage/pixi/PixiController';
 import { generateUniversalSoftOffAnimationObj } from '@/Core/controller/stage/pixi/animations/universalSoftOff';
 import { generateUniversalSoftInAnimationObj } from '@/Core/controller/stage/pixi/animations/universalSoftIn';
+import { setEbg } from '@/Core/util/setEbg';
 
 export function useSetBg(stageState: IStageState) {
   const bgName = stageState.bgName;
@@ -22,6 +23,7 @@ export function useSetBg(stageState: IStageState) {
         }
       }
       RUNTIME_GAMEPLAY.pixiStage?.addBg(thisBgKey, bgName);
+      setEbg(bgName);
       logger.debug('重设背景');
       // 走默认动画
       RUNTIME_GAMEPLAY.pixiStage!.registerPresetAnimation(

@@ -13,6 +13,7 @@ import cloneDeep from 'lodash/cloneDeep';
 import { RUNTIME_SETTLED_SCENES } from '@/Core/runtime/etc';
 import uniqWith from 'lodash/uniqWith';
 import { scenePrefetcher } from '@/Core/util/prefetcher/scenePrefetcher';
+import { setEbg } from '@/Core/util/setEbg';
 
 /**
  * 读取游戏存档
@@ -66,4 +67,8 @@ export function loadGameFromStageData(stageData: ISaveData) {
 
   dispatch(setVisibility({ component: 'showTitle', visibility: false }));
   dispatch(setVisibility({ component: 'showMenuPanel', visibility: false }));
+  /**
+   * 恢复模糊背景
+   */
+  setEbg(webgalStore.getState().stage.bgName);
 }
