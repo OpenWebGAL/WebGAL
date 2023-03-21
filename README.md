@@ -44,6 +44,14 @@ https://demo.msfasr.com
 
 **想要参与引擎开发的开发者请阅读 [此项目的参与指南](https://docs.msfasr.com/developers/)**
 
+### 赞助
+
+WebGAL 是一款开源软件，因此你可以免费在 MPL-2.0 开源协议的范畴下使用本软件，并可用于商业使用。
+
+但即便如此，你的赞助也可以给予开发者前进的动力，让这个项目变得更好。
+
+[赞助本项目](https://docs.msfasr.com/sponsor/)
+
 ## Stargazers over time
 
 [![Stargazers over time](https://starchart.cc/MakinoharaShoko/WebGAL.svg)](https://starchart.cc/MakinoharaShoko/WebGAL)
