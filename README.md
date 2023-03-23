@@ -1,4 +1,4 @@
-![wgfav-new-min](https://user-images.githubusercontent.com/30483415/172886841-d61ac4e1-a0ac-4b3a-8a75-e586837ffb9a.png)
+![WebGAL](https://user-images.githubusercontent.com/30483415/227242979-297ff392-f210-47ef-b0e9-d4788ddc8df0.png)
 
 # WebGAL
 
