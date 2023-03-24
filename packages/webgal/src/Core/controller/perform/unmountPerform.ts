@@ -15,3 +15,15 @@ export const unmountPerform = (name: string) => {
     }
   }
 };
+
+export const unmountPerformForce = (name: string) => {
+  for (let i = 0; i < RUNTIME_GAMEPLAY.performList.length; i++) {
+    const e = RUNTIME_GAMEPLAY.performList[i];
+    if (e.performName === name) {
+      e.stopFunction();
+      clearTimeout(e.stopTimeout);
+      RUNTIME_GAMEPLAY.performList.splice(i, 1);
+      i--;
+    }
+  }
+};

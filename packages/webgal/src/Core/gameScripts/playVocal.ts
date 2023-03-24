@@ -1,7 +1,7 @@
 import { ISentence } from '@/Core/controller/scene/sceneInterface';
 import { getRandomPerformName } from '@/Core/controller/perform/getRandomPerformName';
 import { RUNTIME_GAMEPLAY } from '@/Core/runtime/gamePlay';
-import { unmountPerform } from '../controller/perform/unmountPerform';
+import { unmountPerform, unmountPerformForce } from '../controller/perform/unmountPerform';
 import { logger } from '@/Core/util/etc/logger';
 import { webgalStore } from '@/store/store';
 import { setStage } from '@/store/stageReducer';
@@ -13,7 +13,7 @@ import { PerformController } from '@/Core/controller/perform/performController';
  */
 export const playVocal = (sentence: ISentence) => {
   logger.debug('单次播放语音');
-  const performInitName: string = getRandomPerformName();
+  const performInitName = 'vocal-play';
   let url = ''; // 获取语音的url
   for (const e of sentence.args) {
     if (e.key === 'vocal') {
@@ -22,6 +22,7 @@ export const playVocal = (sentence: ISentence) => {
   }
   // 先停止之前的语音
   let VocalControl: any = document.getElementById('currentVocal');
+  unmountPerformForce('vocal-play');
   if (VocalControl !== null) {
     VocalControl.currentTime = 0;
     VocalControl.pause();

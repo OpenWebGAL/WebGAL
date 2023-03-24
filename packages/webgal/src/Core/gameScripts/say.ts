@@ -7,6 +7,7 @@ import { playVocal } from './playVocal';
 import { webgalStore } from '@/store/store';
 import { setStage } from '@/store/stageReducer';
 import { useTextDelay } from '@/hooks/useTextOptions';
+import { unmountPerformForce } from '@/Core/controller/perform/unmountPerform';
 
 /**
  * 进行普通对话的显示
@@ -44,6 +45,9 @@ export const say = (sentence: ISentence): IPerform => {
   dispatch(setStage({ key: 'showText', value: dialogToShow }));
   // 清除语音
   dispatch(setStage({ key: 'vocal', value: '' }));
+  unmountPerformForce('vocal-play');
+  // 清除没有 ID 的效果音
+  unmountPerformForce('effect-sound');
   // 设置key
   dispatch(setStage({ key: 'currentDialogKey', value: dialogKey }));
   // 计算延迟
