@@ -39,12 +39,7 @@ export const stopAuto = () => {
 export const switchAuto = () => {
   // 现在正在自动播放
   if (RUNTIME_GAMEPLAY.isAuto) {
-    RUNTIME_GAMEPLAY.isAuto = false;
-    setButton(false);
-    if (RUNTIME_GAMEPLAY.autoInterval !== null) {
-      clearInterval(RUNTIME_GAMEPLAY.autoInterval);
-      RUNTIME_GAMEPLAY.autoInterval = null;
-    }
+    stopAuto();
   } else {
     // 当前不在自动播放
     RUNTIME_GAMEPLAY.isAuto = true;

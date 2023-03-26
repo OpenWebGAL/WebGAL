@@ -17,7 +17,7 @@ export class PerformController {
     if (syncPerformState) {
       const stageState = webgalStore.getState().stage;
       const newStageState = cloneDeep(stageState);
-      newStageState.PerformList.push({ isHoldOn: perform.isHoldOn, script: script });
+      newStageState.PerformList.push({ id: perform.performName, isHoldOn: perform.isHoldOn, script: script });
       webgalStore.dispatch(resetStageState(newStageState));
     }
 
