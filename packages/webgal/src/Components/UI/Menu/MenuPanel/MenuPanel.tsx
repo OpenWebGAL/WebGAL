@@ -5,6 +5,7 @@ import { MenuPanelTag } from '@/store/guiInterface';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import { setMenuPanelTag, setVisibility } from '@/store/GUIReducer';
+import { backToTitle } from '@/Core/controller/gamePlay/backToTitle';
 
 /**
  * Menu页的底栏
@@ -70,9 +71,8 @@ export const MenuPanel = () => {
       <MenuPanelButton
         iconName="title"
         clickFunc={() => {
-          dispatch(setVisibility({ component: 'showTitle', visibility: true }));
+          backToTitle();
           dispatch(setVisibility({ component: 'showMenuPanel', visibility: false }));
-          playBgm(GUIState.titleBgm);
         }}
         tagName="标题"
         key="titleIcon"

@@ -1,5 +1,6 @@
 import { webgalStore } from '@/store/store';
 import { setStage } from '@/store/stageReducer';
+import { logger } from '@/Core/util/etc/logger';
 
 // /**
 //  * 停止bgm
@@ -21,5 +22,8 @@ import { setStage } from '@/store/stageReducer';
  * @param url bgm路径
  */
 export function playBgm(url: string): void {
+  logger.info('playing bgm' + url);
   webgalStore.dispatch(setStage({ key: 'bgm', value: url }));
+  const audioElement = document.getElementById('currentBgm') as HTMLAudioElement;
+  audioElement.play().then();
 }
