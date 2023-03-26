@@ -4,6 +4,7 @@ import { RUNTIME_GAMEPLAY } from '@/Core/runtime/gamePlay';
 import { unmountPerform, unmountPerformForce } from '../controller/perform/unmountPerform';
 import { logger } from '@/Core/util/etc/logger';
 import { webgalStore } from '@/store/store';
+import { getSentenceArgByKey } from '@/Core/util/getSentenceArg';
 
 /**
  * 播放一段效果音
@@ -16,6 +17,13 @@ export const playEffect = (sentence: ISentence) => {
   let performInitName = 'effect-sound';
   unmountPerformForce(performInitName);
   let url = sentence.content;
+  let isLoop = false;
+  if (getSentenceArgByKey(sentence, 'id')) {
+    const id = getSentenceArgByKey(sentence, 'id');
+    performInitName = `effect-sound-${id}`;
+    unmountPerformForce(performInitName);
+    isLoop = true;
+  }
   return {
     performName: 'none',
     arrangePerformPromise: new Promise((resolve) => {
@@ -23,6 +31,9 @@ export const playEffect = (sentence: ISentence) => {
       setTimeout(() => {
         let VocalControl = document.createElement('audio');
         VocalControl.src = url;
+        if (isLoop) {
+          VocalControl.loop = true;
+        }
         const userDataState = webgalStore.getState().userData;
         const mainVol = userDataState.optionData.volumeMain;
         VocalControl.volume = mainVol * 0.01 * userDataState.optionData.vocalVolume * 0.01;
