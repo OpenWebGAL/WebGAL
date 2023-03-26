@@ -28,6 +28,7 @@ export interface IPerform {
  * @interface IRunPerform
  */
 export interface IRunPerform {
+  id: string;
   isHoldOn: boolean; // 演出类型
   script: ISentence; // 演出脚本
 }
