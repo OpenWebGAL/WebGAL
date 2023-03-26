@@ -42,7 +42,7 @@ export const scriptExecutor = () => {
   // 如果语句有 when
   if (isHasWhenArg) {
     // 先把变量解析出来
-    const valExpArr = whenValue.split(/([+\-*\/()><=!]|>=|<=)/g);
+    const valExpArr = whenValue.split(/([+\-*\/()><!]|>=|<=|==)/g);
     const valExp = valExpArr
       .map((e) => {
         if (e.match(/[a-zA-Z]/)) {
