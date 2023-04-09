@@ -47,15 +47,15 @@
   }
 }
 
-.TextBox_textElement {
-  opacity: 0;
-  animation: showSoftly 1000ms forwards;
-}
+//.TextBox_textElement {
+//  opacity: 0;
+//  animation: showSoftly 1000ms forwards;
+//}
 
 
 .TextBox_textElement_start {
   @include text_shadow_textElement;
-  animation: TextDelayShow ease-out forwards;
+  animation: TextDelayShow 1000ms ease-out forwards;
   opacity: 0;
 }
 
