@@ -74,13 +74,13 @@ export const say = (sentence: ISentence): IPerform => {
     }
   }
   dispatch(setStage({ key: 'showName', value: showName }));
-  setTimeout(() => {
-    const textElements = document.querySelectorAll('.' + styles.TextBox_textElement_start);
-    const textArray = [...textElements];
-    textArray.forEach((e) => {
-      e.className = styles.TextBox_textElement;
-    });
-  }, 0);
+  // setTimeout(() => {
+  //   const textElements = document.querySelectorAll('.' + styles.TextBox_textElement_start);
+  //   const textArray = [...textElements];
+  //   textArray.forEach((e) => {
+  //     e.className = styles.TextBox_textElement;
+  //   });
+  // }, 0);
   const performInitName: string = getRandomPerformName();
   let endDelay = 750 - userDataState.optionData.textSpeed * 250;
   if (isNotend) {
@@ -92,7 +92,7 @@ export const say = (sentence: ISentence): IPerform => {
     isOver: false,
     isHoldOn: false,
     stopFunction: () => {
-      const textElements = document.querySelectorAll('.' + styles.TextBox_textElement);
+      const textElements = document.querySelectorAll('.' + styles.TextBox_textElement_start);
       const textArray = [...textElements];
       textArray.forEach((e) => {
         e.className = styles.TextBox_textElement_Settled;
