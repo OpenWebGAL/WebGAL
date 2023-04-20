@@ -76,10 +76,10 @@
         flex-flow: column;
         align-items: center ">
             <div style="padding: 0 0 0.25em 0">
-                Powered by <a href="https://github.com/MakinoharaShoko/WebGAL" onclick="jump('https://github.com/MakinoharaShoko/WebGAL')">WebGAL</a> Framework
+                Powered by <a href="https://github.com/MakinoharaShoko/WebGAL" onclick="jump(event, 'https://github.com/MakinoharaShoko/WebGAL')">WebGAL</a> Framework
             </div>
             <div>
-                Made with ❤ by <a href="https://github.com/MakinoharaShoko" onclick="jump('https://github.com/MakinoharaShoko')">Mahiru</a>
+                Made with ❤ by <a href="https://github.com/MakinoharaShoko" onclick="jump(event, 'https://github.com/MakinoharaShoko')">Mahiru</a>
             </div>
         </div>
     </div>
@@ -138,9 +138,8 @@
             }, 100);
         }
     };
-     function jump(url){
+     function jump(event, url){
         // 获取点击事件，阻止点击事件冒泡触发 `enter` 事件
-        const event = arguments.callee.caller.arguments[0];
         event.stopPropagation();
         window.location=url;
      }
