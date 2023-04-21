@@ -29,7 +29,7 @@ export const setTempAnimation = (sentence: ISentence): IPerform => {
   const animationDuration = getAnimateDuration(animationName);
   const target = (getSentenceArgByKey(sentence, 'target') ?? 0) as string;
   const key = `${target}-${animationName}-${animationDuration}`;
-  let stopFunction: Function = () => {};
+  let stopFunction = () => {};
   setTimeout(() => {
     RUNTIME_GAMEPLAY.pixiStage?.stopPresetAnimationOnTarget(target);
     const animationObj: IAnimationObject | null = getAnimationObject(animationName, target, animationDuration);

@@ -6,7 +6,7 @@ export const stopAllPerform = () => {
   for (let i = 0; i < RUNTIME_GAMEPLAY.performList.length; i++) {
     const e = RUNTIME_GAMEPLAY.performList[i];
     e.stopFunction();
-    clearTimeout(e.stopTimeout);
+    clearTimeout(e.stopTimeout as unknown as number);
     RUNTIME_GAMEPLAY.performList.splice(i, 1);
     i--;
   }
