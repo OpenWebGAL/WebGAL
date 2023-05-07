@@ -5,6 +5,7 @@ import { useValue } from '@/hooks/useValue';
 import { System } from '@/Components/UI/Menu/Options/System/System';
 import { Display } from '@/Components/UI/Menu/Options/Display/Display';
 import { Sound } from '@/Components/UI/Menu/Options/Sound/Sound';
+import { useTranslation } from 'react-i18next';
 
 enum optionPage {
   'System',
@@ -22,11 +23,13 @@ export const Options: FC = () => {
     } else return styles.Options_page_button;
   }
 
+  const { t } = useTranslation();
+
   return (
     <div className={styles.Options_main}>
       <div className={styles.Options_top}>
         <div className={styles.Options_title}>
-          <div className={styles.Option_title_text}>选项</div>
+          <div className={styles.Option_title_text}>{t('menu.options.title')}</div>
         </div>
       </div>
       <div className={styles.Options_page_container}>
