@@ -5,6 +5,7 @@ import { RUNTIME_GAMEPLAY } from '@/Core/runtime/gamePlay';
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
+import { useTranslation } from 'react-i18next';
 
 export default function DevPanel() {
   // 控制显隐
@@ -22,9 +23,15 @@ export default function DevPanel() {
   }, []);
   const isShow = isShowDevPanel();
 
+  const { t, i18n } = useTranslation();
+
   const devMainArea = (
     <>
       <div onClick={() => getPixiSscreenshot()}>Save PIXI Screenshot</div>
+      <div onClick={() => i18n.changeLanguage('zhCn')}>To Chinese</div>
+      <div onClick={() => i18n.changeLanguage('en')}>To English</div>
+      <div onClick={() => i18n.changeLanguage('jp')}>To Japanese</div>
+      <div>Current Language:{i18n.language}</div>
       <div onClick={() => RUNTIME_GAMEPLAY.pixiStage?.removeAnimation('snow-Ticker')}>Remove Snow Ticker</div>
       <div>Stage State</div>
       <div>{JSON.stringify(stageState, null, '  ')}</div>
