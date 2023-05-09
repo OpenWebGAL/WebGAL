@@ -94,7 +94,7 @@ export const zhCn = {
             language: {
               title: '语言',
               options: {
-                zhCn: '中文',
+                zhCn: '简体中文',
                 en: 'English',
                 jp: '日本語',
               },
