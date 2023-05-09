@@ -88,6 +88,19 @@ export const jp = {
             bgmVolume: { title: 'BGMのボリューム' },
           },
         },
+        language: {
+          title: '言語',
+          options: {
+            language: {
+              title: '言語',
+              options: {
+                zhCn: '中文',
+                en: 'English',
+                jp: '日本語',
+              },
+            },
+          },
+        },
       },
     },
   },

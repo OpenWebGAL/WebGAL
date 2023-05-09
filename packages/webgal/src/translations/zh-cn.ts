@@ -88,6 +88,19 @@ export const zhCn = {
             bgmVolume: { title: '背景音乐音量' },
           },
         },
+        language: {
+          title: '语言',
+          options: {
+            language: {
+              title: '语言',
+              options: {
+                zhCn: '中文',
+                en: 'English',
+                jp: '日本語',
+              },
+            },
+          },
+        },
       },
     },
   },
