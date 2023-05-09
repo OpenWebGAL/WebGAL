@@ -9,9 +9,9 @@ import 'modern-css-reset/dist/reset.min.css';
  * i18n
  */
 import i18n from 'i18next';
-import { initReactI18next } from 'react-i18next';
+import { initReactI18next, Trans } from 'react-i18next';
 import { en } from './translations/en';
-import { zh } from './translations/zh';
+import { zhCn } from './translations/zh-cn';
 import { jp } from './translations/jp';
 
 i18n
@@ -22,11 +22,11 @@ i18n
     // or even better, manage them via a UI: https://react.i18next.com/guides/multiple-translation-files#manage-your-translations-with-a-management-gui)
     resources: {
       en: { translation: en },
-      zh: { translation: zh },
+      zhCn: { translation: zhCn },
       jp: { translation: jp },
     },
-    lng: 'zh', // if you're using a language detector, do not define the lng option
-    fallbackLng: 'zh',
+    lng: 'zhCn', // if you're using a language detector, do not define the lng option
+    fallbackLng: 'zhCn',
 
     interpolation: {
       escapeValue: false, // react already safes from xss => https://www.i18next.com/translation-function/interpolation#unescape
@@ -36,7 +36,9 @@ i18n
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <Trans>
+      <App />
+    </Trans>
   </React.StrictMode>,
   document.getElementById('root'),
 );

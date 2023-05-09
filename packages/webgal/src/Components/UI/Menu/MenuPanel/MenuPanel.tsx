@@ -6,12 +6,16 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import { setMenuPanelTag, setVisibility } from '@/store/GUIReducer';
 import { backToTitle } from '@/Core/controller/gamePlay/backToTitle';
+import useTrans from '@/hooks/useTrans';
 
 /**
  * Menu页的底栏
  * @constructor
  */
 export const MenuPanel = () => {
+  // 国际化
+  const t = useTrans('menu.options.');
+
   const GUIState = useSelector((state: RootState) => state.GUI);
   const dispatch = useDispatch();
   // 设置Menu按钮的高亮
@@ -74,7 +78,7 @@ export const MenuPanel = () => {
           backToTitle();
           dispatch(setVisibility({ component: 'showMenuPanel', visibility: false }));
         }}
-        tagName="标题"
+        tagName={t('title')}
         key="titleIcon"
       />
       <MenuPanelButton
