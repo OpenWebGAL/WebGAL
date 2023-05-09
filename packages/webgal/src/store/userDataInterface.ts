@@ -21,6 +21,12 @@ export enum textFont {
   hei,
 }
 
+export enum language {
+  zhCn,
+  en,
+  jp,
+}
+
 /**
  * @interface IOptionData 用户设置数据接口
  */
@@ -33,6 +39,7 @@ export interface IOptionData {
   bgmVolume: number; // 背景音乐音量
   slPage: number; // 存读档界面所在页面
   textboxFont: textFont;
+  language: language;
 }
 
 /**

@@ -6,11 +6,13 @@ import { System } from '@/Components/UI/Menu/Options/System/System';
 import { Display } from '@/Components/UI/Menu/Options/Display/Display';
 import { Sound } from '@/Components/UI/Menu/Options/Sound/Sound';
 import useTrans from '@/hooks/useTrans';
+import Language from './Language/Language';
 
 enum optionPage {
   'System',
   'Display',
   'Sound',
+  'Language',
 }
 
 export const Options: FC = () => {
@@ -43,11 +45,15 @@ export const Options: FC = () => {
           <div onClick={() => currentOptionPage.set(optionPage.Sound)} className={getClassName(optionPage.Sound)}>
             {t('pages.sound.title')}
           </div>
+          <div onClick={() => currentOptionPage.set(optionPage.Language)} className={getClassName(optionPage.Language)}>
+            {t('pages.language.title')}
+          </div>
         </div>
         <div className={styles.Options_main_content}>
           {currentOptionPage.value === optionPage.Display && <Display />}
           {currentOptionPage.value === optionPage.System && <System />}
           {currentOptionPage.value === optionPage.Sound && <Sound />}
+          {currentOptionPage.value === optionPage.Language && <Language />}
         </div>
       </div>
     </div>
