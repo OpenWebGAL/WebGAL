@@ -1,5 +1,7 @@
 export const jp = {
   menu: {
-    options: { title: '設定' },
+    options: {
+      title: '設定',
+    },
   },
 };

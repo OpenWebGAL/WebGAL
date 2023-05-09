@@ -6,16 +6,19 @@ import { setStorage } from '@/Core/controller/storage/storageController';
 import { setVolume } from '@/Core/controller/stage/setVolume';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
+import useTrans from '@/hooks/useTrans';
 
 export function Sound() {
   const userDataState = useSelector((state: RootState) => state.userData);
   const dispatch = useDispatch();
+  const t = useTrans('menu.options.pages.sound.options.');
+
   return (
     <div className={styles.Options_main_content_half}>
-      <NormalOption key="option4" title="主音量">
+      <NormalOption key="option4" title={t('volumeMain.title')}>
         <OptionSlider
           initValue={userDataState.optionData.volumeMain}
-          uniqueID="主音量"
+          uniqueID={t('volumeMain.title')}
           onChange={(event) => {
             const newValue = event.target.value;
             dispatch(setOptionData({ key: 'volumeMain', value: Number(newValue) }));
@@ -24,10 +27,10 @@ export function Sound() {
           }}
         />
       </NormalOption>
-      <NormalOption key="option5" title="语音音量">
+      <NormalOption key="option5" title={t('vocalVolume.title')}>
         <OptionSlider
           initValue={userDataState.optionData.vocalVolume}
-          uniqueID="语音音量"
+          uniqueID={t('vocalVolume.title')}
           onChange={(event) => {
             const newValue = event.target.value;
             dispatch(setOptionData({ key: 'vocalVolume', value: Number(newValue) }));
@@ -36,10 +39,10 @@ export function Sound() {
           }}
         />
       </NormalOption>
-      <NormalOption key="option6" title="背景音乐音量">
+      <NormalOption key="option6" title={t('bgmVolume.title')}>
         <OptionSlider
           initValue={userDataState.optionData.bgmVolume}
-          uniqueID="背景音乐音量"
+          uniqueID={t('bgmVolume.title')}
           onChange={(event) => {
             const newValue = event.target.value;
             dispatch(setOptionData({ key: 'bgmVolume', value: Number(newValue) }));
