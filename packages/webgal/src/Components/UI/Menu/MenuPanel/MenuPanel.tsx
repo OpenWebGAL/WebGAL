@@ -14,7 +14,7 @@ import useTrans from '@/hooks/useTrans';
  */
 export const MenuPanel = () => {
   // 国际化
-  const t = useTrans('menu.options.');
+  const t = useTrans('menu.');
 
   const GUIState = useSelector((state: RootState) => state.GUI);
   const dispatch = useDispatch();
@@ -69,7 +69,7 @@ export const MenuPanel = () => {
         clickFunc={() => {
           dispatch(setMenuPanelTag(MenuPanelTag.Option));
         }}
-        tagName="选项"
+        tagName={t('options.title')}
         key="optionButton"
       />
       <MenuPanelButton
@@ -78,7 +78,7 @@ export const MenuPanel = () => {
           backToTitle();
           dispatch(setVisibility({ component: 'showMenuPanel', visibility: false }));
         }}
-        tagName={t('title')}
+        tagName="标题"
         key="titleIcon"
       />
       <MenuPanelButton
