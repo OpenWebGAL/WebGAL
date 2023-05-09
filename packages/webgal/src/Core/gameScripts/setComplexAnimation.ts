@@ -18,7 +18,7 @@ export const setComplexAnimation = (sentence: ISentence): IPerform => {
   const target = (getSentenceArgByKey(sentence, 'target') ?? 0) as string;
   const key = `${target}-${animationName}-${animationDuration}`;
   const animationFunction: Function | null = getAnimationObject(animationName);
-  let stopFunction: Function = () => {};
+  let stopFunction: () => void = () => {};
   if (animationFunction) {
     logger.debug(`动画${animationName}作用在${target}`, animationDuration);
     const animationObj: IAnimationObject = animationFunction(target, animationDuration);

@@ -21,7 +21,7 @@ export const pixiInit = (sentence: ISentence): IPerform => {
         const e2 = RUNTIME_GAMEPLAY.performList[i];
         if (e2.performName === e.performName) {
           e2.stopFunction();
-          clearTimeout(e2.stopTimeout);
+          clearTimeout(e2.stopTimeout as unknown as number);
           RUNTIME_GAMEPLAY.performList.splice(i, 1);
           i--;
         }
