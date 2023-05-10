@@ -106,6 +106,7 @@ export const zhCn = {
     },
     saving: {
       title: '存档',
+      isOverwrite: '是否覆盖存档？',
     },
     loadSaving: {
       title: '读档',
@@ -161,5 +162,9 @@ export const zhCn = {
       options: '选项',
       title: '标题',
     },
+  },
+
+  extra: {
+    title: '鉴赏模式',
   },
 };

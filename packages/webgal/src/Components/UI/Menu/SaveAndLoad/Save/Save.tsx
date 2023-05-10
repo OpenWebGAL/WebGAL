@@ -12,7 +12,6 @@ export const Save: FC = () => {
   const userDataState = useSelector((state: RootState) => state.userData);
   const dispatch = useDispatch();
   const page = [];
-  const t = useTrans('menu.');
   for (let i = 1; i <= 20; i++) {
     let classNameOfElement = styles.Save_Load_top_button;
     if (i === userDataState.optionData.slPage) {
@@ -32,6 +31,8 @@ export const Save: FC = () => {
     );
     page.push(element);
   }
+
+  const tCommon = useTrans('common.');
 
   const showSaves = [];
   // 现在尝试设置10个存档每页
@@ -68,9 +69,9 @@ export const Save: FC = () => {
         onClick={() => {
           if (userDataState.saveData[i]) {
             showGlogalDialog({
-              title: '是否覆盖存档？',
-              leftText: '是',
-              rightText: '否',
+              title: t('saving.isOverwrite'),
+              leftText: tCommon('yes'),
+              rightText: tCommon('no'),
               leftFunc: () => {
                 saveGame(i);
                 setStorage();

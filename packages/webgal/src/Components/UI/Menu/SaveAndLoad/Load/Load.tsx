@@ -12,7 +12,6 @@ export const Load: FC = () => {
   const userDataState = useSelector((state: RootState) => state.userData);
   const dispatch = useDispatch();
   const page = [];
-  const t = useTrans('menu.');
   for (let i = 1; i <= 20; i++) {
     let classNameOfElement = styles.Save_Load_top_button + ' ' + styles.Load_top_button;
     if (i === userDataState.optionData.slPage) {
