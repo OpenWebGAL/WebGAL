@@ -4,6 +4,8 @@
 
 **[Help us with translation | 协助翻译 | 翻訳のお手伝い ](https://github.com/MakinoharaShoko/WebGAL/tree/dev/packages/webgal/src/translations)**
 
+**[Join Discord Server](https://discord.gg/kPrQkJttJy)**
+
 # WebGAL
 
 **A visually appealing, feature-rich, and easy-to-develop new web-based visual novel engine**

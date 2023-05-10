@@ -4,6 +4,8 @@
 
 **[Help us with translation | 协助翻译 | 翻訳のお手伝い ](https://github.com/MakinoharaShoko/WebGAL/tree/dev/packages/webgal/src/translations)**
 
+**[Join Discord Server](https://discord.gg/kPrQkJttJy)**
+
 # WebGAL
 
 **界面美观、功能强大、易于开发的全新网页端视觉小说引擎**
