@@ -80,6 +80,8 @@ export const Load: FC = () => {
     showSaves.push(saveElement);
   }
 
+  const t = useTrans('menu.');
+
   return (
     <div className={styles.Save_Load_main}>
       <div className={styles.Save_Load_top}>
