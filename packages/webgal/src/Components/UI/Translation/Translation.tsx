@@ -12,7 +12,7 @@ export default function Translation() {
   useEffect(() => {
     // 防止初始化后调用
     inited++;
-    if (inited) return;
+    if (inited > 0) return;
     setLanguage();
   }, [optionData.language]);
 
