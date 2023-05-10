@@ -85,6 +85,8 @@ export const jp = {
             },
             textPreview: {
               title: 'テキスト表示プレビュー',
+              // todo
+              text: '',
             },
           },
         },
@@ -114,6 +116,48 @@ export const jp = {
     },
     exit: {
       title: 'BACK',
+    },
+  },
+
+  // todo
+  title: {
+    start: {
+      title: '开始游戏',
+      subtitle: 'START',
+    },
+    continue: {
+      title: '继续游戏',
+      subtitle: 'CONTINUE',
+    },
+    options: {
+      title: '游戏选项',
+      subtitle: 'OPTIONS',
+    },
+    load: {
+      title: '读取存档',
+      subtitle: 'LOAD',
+    },
+    extra: {
+      title: '鉴赏模式',
+      subtitle: 'EXTRA',
+    },
+  },
+
+  gaming: {
+    noSaving: '暂无存档',
+    buttons: {
+      hide: '隐藏',
+      show: '显示',
+      backlog: '回想',
+      replay: '重播',
+      auto: '自动',
+      forward: '快进',
+      quicklySave: '快速存档',
+      quicklyLoad: '快速读档',
+      save: '存档',
+      load: '读档',
+      options: '选项',
+      title: '标题',
     },
   },
 };
