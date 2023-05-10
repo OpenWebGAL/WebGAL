@@ -1,8 +1,8 @@
 export const en = {
   // 通用
   common: {
-    yes: 'yes',
-    no: 'no',
+    yes: 'OK',
+    no: 'Cancel',
   },
 
   menu: {
@@ -104,16 +104,16 @@ export const en = {
       },
     },
     saving: {
-      title: 'SAVING',
+      title: 'SAVE',
     },
     loadSaving: {
       title: 'LOAD',
     },
     title: {
-      title: 'HOME',
+      title: 'TITLE',
     },
     exit: {
-      title: 'EXIT',
+      title: 'BACK',
     },
   },
 };

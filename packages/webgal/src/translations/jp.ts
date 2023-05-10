@@ -7,7 +7,7 @@ export const jp = {
 
   menu: {
     options: {
-      title: '設定',
+      title: 'OPTIONS',
       pages: {
         system: {
           title: 'システム',
@@ -104,16 +104,16 @@ export const jp = {
       },
     },
     saving: {
-      title: 'アーカイブ',
+      title: 'SAVE',
     },
     loadSaving: {
-      title: 'アーカイブをロード',
+      title: 'LOAD',
     },
     title: {
-      title: '見出し',
+      title: 'TITLE',
     },
     exit: {
-      title: '戻り',
+      title: 'BACK',
     },
   },
 };
