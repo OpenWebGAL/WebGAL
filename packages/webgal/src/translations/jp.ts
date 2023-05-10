@@ -20,6 +20,14 @@ export const jp = {
                 fast: '速い',
               },
             },
+            language: {
+              title: '言語',
+              options: {
+                zhCn: '简体中文',
+                en: 'English',
+                jp: '日本語',
+              },
+            },
             resetData: {
               title: 'データの削除またに復元',
               options: {
@@ -71,7 +79,7 @@ export const jp = {
             textFont: {
               title: 'テキストフォント',
               options: {
-                siYuanSimSun: '四元宋書体',
+                siYuanSimSun: '源ノ明朝',
                 SimHei: '黒体',
               },
             },
@@ -88,20 +96,24 @@ export const jp = {
             bgmVolume: { title: 'BGMのボリューム' },
           },
         },
-        language: {
-          title: '言語',
-          options: {
-            language: {
-              title: '言語',
-              options: {
-                zhCn: '简体中文',
-                en: 'English',
-                jp: '日本語',
-              },
-            },
-          },
-        },
+        // language: {
+        //   title: '言語',
+        //   options: {
+        //   },
+        // },
       },
+    },
+    saving: {
+      title: 'アーカイブ',
+    },
+    loadSaving: {
+      title: 'アーカイブをロード',
+    },
+    title: {
+      title: '見出し',
+    },
+    exit: {
+      title: '戻り',
     },
   },
 };
