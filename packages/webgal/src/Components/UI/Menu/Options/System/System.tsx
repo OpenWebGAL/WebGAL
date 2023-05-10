@@ -2,7 +2,7 @@ import styles from '@/Components/UI/Menu/Options/options.module.scss';
 import { NormalOption } from '@/Components/UI/Menu/Options/NormalOption';
 import { NormalButton } from '@/Components/UI/Menu/Options/NormalButton';
 import { resetAllData, resetOptionSet, resetSaveData, setOptionData } from '@/store/userDataReducer';
-import { playSpeed } from '@/store/userDataInterface';
+import { language, playSpeed } from '@/store/userDataInterface';
 import { getStorage, setStorage, syncStorageFast } from '@/Core/controller/storage/storageController';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
@@ -11,10 +11,12 @@ import localforage from 'localforage';
 import { RUNTIME_GAME_INFO } from '@/Core/runtime/etc';
 import { logger } from '@/Core/util/etc/logger';
 import useTrans from '@/hooks/useTrans';
+import useLanguage from '@/hooks/useLanguage';
 
 export function System() {
   const userDataState = useSelector((state: RootState) => state.userData);
   const dispatch = useDispatch();
+  const setLanguage = useLanguage();
   const t = useTrans('menu.options.pages.system.options.');
 
   return (
@@ -37,6 +39,17 @@ export function System() {
             },
           ]}
           currentChecked={userDataState.optionData.autoSpeed}
+        />
+      </NormalOption>
+      <NormalOption key="option7" title={t('language.title')}>
+        <NormalButton
+          currentChecked={userDataState.optionData.language}
+          textList={t('language.options.zhCn', 'language.options.en', 'language.options.jp')}
+          functionList={[
+            () => setLanguage(language.zhCn),
+            () => setLanguage(language.en),
+            () => setLanguage(language.jp),
+          ]}
         />
       </NormalOption>
       <NormalOption key="option2" title={t('resetData.title')}>
