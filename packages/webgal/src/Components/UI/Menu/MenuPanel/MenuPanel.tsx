@@ -47,7 +47,7 @@ export const MenuPanel = () => {
         clickFunc={() => {
           dispatch(setMenuPanelTag(MenuPanelTag.Save));
         }}
-        tagName="存档"
+        tagName={t('saving.title')}
         key="saveButton"
       />
       <MenuPanelButton
@@ -58,7 +58,7 @@ export const MenuPanel = () => {
         clickFunc={() => {
           dispatch(setMenuPanelTag(MenuPanelTag.Load));
         }}
-        tagName="读档"
+        tagName={t('loadSaving.title')}
         key="loadButton"
       />
       <MenuPanelButton
@@ -78,7 +78,7 @@ export const MenuPanel = () => {
           backToTitle();
           dispatch(setVisibility({ component: 'showMenuPanel', visibility: false }));
         }}
-        tagName="标题"
+        tagName={t('title.title')}
         key="titleIcon"
       />
       <MenuPanelButton
@@ -86,7 +86,7 @@ export const MenuPanel = () => {
         clickFunc={() => {
           dispatch(setVisibility({ component: 'showMenuPanel', visibility: false }));
         }}
-        tagName="返回"
+        tagName={t('exit.title')}
         key="exitIcon"
       />
     </div>

@@ -9,6 +9,7 @@ import {
   ISetOptionDataPayload,
   ISetUserDataPayload,
   IUserData,
+  language,
   playSpeed,
   textFont,
   textSize,
@@ -25,6 +26,7 @@ const initialOptionSet = {
   vocalVolume: 100, // 语音音量
   bgmVolume: 25, // 背景音乐音量
   textboxFont: textFont.song,
+  language: language.zhCn,
 };
 
 // 初始化用户数据
