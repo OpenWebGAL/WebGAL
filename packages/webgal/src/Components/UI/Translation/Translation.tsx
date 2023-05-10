@@ -3,7 +3,7 @@ import { RootState } from '@/store/store';
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 
-let inited = -2;
+let inited = -1;
 
 export default function Translation() {
   const setLanguage = useLanguage();
@@ -11,8 +11,8 @@ export default function Translation() {
 
   useEffect(() => {
     // 防止初始化后调用
-    inited++;
     if (inited > 0) return;
+    inited++;
     setLanguage();
   }, [optionData.language]);
 
