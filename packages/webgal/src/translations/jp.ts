@@ -7,7 +7,7 @@ export const jp = {
 
   menu: {
     options: {
-      title: '設定',
+      title: 'OPTIONS',
       pages: {
         system: {
           title: 'システム',
@@ -85,6 +85,8 @@ export const jp = {
             },
             textPreview: {
               title: 'テキスト表示プレビュー',
+              // todo
+              text: '现在预览的是文本框字体大小和播放速度的情况，您可以根据您的观感调整上面的选项。',
             },
           },
         },
@@ -104,16 +106,63 @@ export const jp = {
       },
     },
     saving: {
-      title: 'アーカイブ',
+      title: 'SAVE',
+      isOverwrite: '是否覆盖存档？',
     },
     loadSaving: {
-      title: 'アーカイブをロード',
+      title: 'LOAD',
     },
     title: {
-      title: '見出し',
+      title: 'TITLE',
     },
     exit: {
-      title: '戻り',
+      title: 'BACK',
     },
+  },
+
+  // todo
+  title: {
+    start: {
+      title: '开始游戏',
+      subtitle: 'START',
+    },
+    continue: {
+      title: '继续游戏',
+      subtitle: 'CONTINUE',
+    },
+    options: {
+      title: '游戏选项',
+      subtitle: 'OPTIONS',
+    },
+    load: {
+      title: '读取存档',
+      subtitle: 'LOAD',
+    },
+    extra: {
+      title: '鉴赏模式',
+      subtitle: 'EXTRA',
+    },
+  },
+
+  gaming: {
+    noSaving: '暂无存档',
+    buttons: {
+      hide: '隐藏',
+      show: '显示',
+      backlog: '回想',
+      replay: '重播',
+      auto: '自动',
+      forward: '快进',
+      quicklySave: '快速存档',
+      quicklyLoad: '快速读档',
+      save: '存档',
+      load: '读档',
+      options: '选项',
+      title: '标题',
+    },
+  },
+
+  extra: {
+    title: '鉴赏模式',
   },
 };

@@ -1,8 +1,8 @@
 export const en = {
   // 通用
   common: {
-    yes: 'yes',
-    no: 'no',
+    yes: 'OK',
+    no: 'Cancel',
   },
 
   menu: {
@@ -85,6 +85,7 @@ export const en = {
             },
             textPreview: {
               title: 'Preview Text Showing',
+              text: "You are previewing the text's font, size and playback speed, now. You can adjust the above options according to your perception.",
             },
           },
         },
@@ -104,16 +105,62 @@ export const en = {
       },
     },
     saving: {
-      title: 'SAVING',
+      title: 'SAVE',
+      isOverwrite: 'Are you sure you want to overwrite this save?',
     },
     loadSaving: {
       title: 'LOAD',
     },
     title: {
-      title: 'HOME',
+      title: 'TITLE',
     },
     exit: {
-      title: 'EXIT',
+      title: 'BACK',
     },
+  },
+
+  title: {
+    start: {
+      title: 'START',
+      subtitle: '',
+    },
+    continue: {
+      title: 'CONTINUE',
+      subtitle: '',
+    },
+    options: {
+      title: 'OPTIONS',
+      subtitle: '',
+    },
+    load: {
+      title: 'LOAD',
+      subtitle: '',
+    },
+    extra: {
+      title: 'EXTRA',
+      subtitle: '',
+    },
+  },
+
+  gaming: {
+    noSaving: 'No saving',
+    buttons: {
+      hide: 'Hide',
+      show: 'Show',
+      backlog: 'Backlog',
+      replay: 'Replay',
+      auto: 'Auto',
+      forward: 'Forward',
+      quicklySave: 'Quickly Save',
+      quicklyLoad: 'Quickly Save',
+      save: 'Save',
+      load: 'Load',
+      options: 'Options',
+      title: 'Title',
+    },
+  },
+
+  extra: {
+    title: 'EXTRA',
   },
 };
