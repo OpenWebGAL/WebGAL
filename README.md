@@ -1,5 +1,9 @@
 ![WebGAL](https://user-images.githubusercontent.com/30483415/227242979-297ff392-f210-47ef-b0e9-d4788ddc8df0.png)
 
+**[English Version](/README_EN.md)**
+
+**[Help us with translation | 协助翻译 | 翻訳のお手伝い ](https://github.com/MakinoharaShoko/WebGAL/tree/dev/packages/webgal/src/translations)**
+
 # WebGAL
 
 **界面美观、功能强大、易于开发的全新网页端视觉小说引擎**
@@ -14,9 +18,7 @@ https://demo.msfasr.com
 
 一个完整的游戏：
 
-[铃色☆记忆](http://hoshinasuzu.cn/) by 星奈组
-
-[备用链接](http://hoshinasuzu.cc/)
+[铃色☆记忆](http://hoshinasuzu.cn/) by 星奈组  [备用链接](http://hoshinasuzu.cc/)
 
 ### 使用 WebGAL 制作游戏
 
