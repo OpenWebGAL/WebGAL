@@ -6,9 +6,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState, webgalStore } from '@/store/store';
 import { setVisibility } from '@/store/GUIReducer';
 import { logger } from '@/Core/util/etc/logger';
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import useTrans from '@/hooks/useTrans';
 
 export const Backlog = () => {
+  const t = useTrans('gaming.');
   // logger.info('Backlog render');
   const GUIStore = useSelector((state: RootState) => state.GUI);
   const dispatch = useDispatch();
@@ -129,7 +131,7 @@ export const Backlog = () => {
                 logger.info('Rua! Testing');
               }}
             >
-              回想
+              {t('buttons.backlog')}
             </div>
           </div>
           {GUIStore.showBacklog && (

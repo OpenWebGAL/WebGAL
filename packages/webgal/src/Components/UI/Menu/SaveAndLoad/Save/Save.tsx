@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import { setSlPage } from '@/store/userDataReducer';
 import { showGlogalDialog } from '@/Components/UI/GlobalDialog/GlobalDialog';
+import useTrans from '@/hooks/useTrans';
 
 export const Save: FC = () => {
   const userDataState = useSelector((state: RootState) => state.userData);
@@ -89,11 +90,13 @@ export const Save: FC = () => {
     showSaves.push(saveElement);
   }
 
+  const t = useTrans('menu.');
+
   return (
     <div className={styles.Save_Load_main}>
       <div className={styles.Save_Load_top}>
         <div className={styles.Save_Load_title}>
-          <div className={styles.Save_title_text}>存档</div>
+          <div className={styles.Save_title_text}>{t('saving.title')}</div>
         </div>
         <div className={styles.Save_Load_top_buttonList}>{page}</div>
       </div>
