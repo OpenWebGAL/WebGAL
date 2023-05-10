@@ -20,6 +20,14 @@ export const zhCn = {
                 fast: '快',
               },
             },
+            language: {
+              title: '语言',
+              options: {
+                zhCn: '简体中文',
+                en: 'English',
+                jp: '日本語',
+              },
+            },
             resetData: {
               title: '清除或还原数据',
               options: {
@@ -88,7 +96,24 @@ export const zhCn = {
             bgmVolume: { title: '背景音乐音量' },
           },
         },
+        // language: {
+        //   title: '语言',
+        //   options: {
+        //   },
+        // },
       },
+    },
+    saving: {
+      title: '存档',
+    },
+    loadSaving: {
+      title: '读档',
+    },
+    title: {
+      title: '标题',
+    },
+    exit: {
+      title: '返回',
     },
   },
 };
