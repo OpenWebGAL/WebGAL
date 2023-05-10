@@ -85,6 +85,7 @@ export const en = {
             },
             textPreview: {
               title: 'Preview Text Showing',
+              text: "You are previewing the text's font, size and playback speed, now. You can adjust the above options according to your perception.",
             },
           },
         },
@@ -114,6 +115,47 @@ export const en = {
     },
     exit: {
       title: 'EXIT',
+    },
+  },
+
+  title: {
+    start: {
+      title: 'START',
+      subtitle: '',
+    },
+    continue: {
+      title: 'CONTINUE',
+      subtitle: '',
+    },
+    options: {
+      title: 'OPTIONS',
+      subtitle: '',
+    },
+    load: {
+      title: 'LOAD',
+      subtitle: '',
+    },
+    extra: {
+      title: 'EXTRA',
+      subtitle: '',
+    },
+  },
+
+  gaming: {
+    noSaving: 'No saving',
+    buttons: {
+      hide: 'Hide',
+      show: 'Show',
+      backlog: 'Backlog',
+      replay: 'Replay',
+      auto: 'Auto',
+      forward: 'Forward',
+      quicklySave: 'Quickly Save',
+      quicklyLoad: 'Quickly Save',
+      save: 'Save',
+      load: 'Load',
+      options: 'Options',
+      title: 'Title',
     },
   },
 };
