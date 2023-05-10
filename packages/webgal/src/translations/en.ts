@@ -106,6 +106,7 @@ export const en = {
     },
     saving: {
       title: 'SAVE',
+      isOverwrite: 'Are you sure you want to overwrite this save?',
     },
     loadSaving: {
       title: 'LOAD',
@@ -157,5 +158,9 @@ export const en = {
       options: 'Options',
       title: 'Title',
     },
+  },
+
+  extra: {
+    title: 'EXTRA',
   },
 };

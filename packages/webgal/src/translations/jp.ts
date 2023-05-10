@@ -86,7 +86,7 @@ export const jp = {
             textPreview: {
               title: 'テキスト表示プレビュー',
               // todo
-              text: '',
+              text: '现在预览的是文本框字体大小和播放速度的情况，您可以根据您的观感调整上面的选项。',
             },
           },
         },
@@ -107,6 +107,7 @@ export const jp = {
     },
     saving: {
       title: 'SAVE',
+      isOverwrite: '是否覆盖存档？',
     },
     loadSaving: {
       title: 'LOAD',
@@ -159,5 +160,9 @@ export const jp = {
       options: '选项',
       title: '标题',
     },
+  },
+
+  extra: {
+    title: '鉴赏模式',
   },
 };
