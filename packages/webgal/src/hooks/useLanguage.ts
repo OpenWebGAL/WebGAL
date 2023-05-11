@@ -31,6 +31,7 @@ export default function useLanguage() {
 
     dispatch(setOptionData({ key: 'language', value: lang }));
     logger.info('设置语言: ' + languageName);
+    window?.localStorage.setItem('lang', lang.toString());
     setStorage();
   };
 }
