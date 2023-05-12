@@ -22,11 +22,6 @@ export const zhCn = {
             },
             language: {
               title: '语言',
-              options: {
-                zhCn: '简体中文',
-                en: 'English',
-                jp: '日本語',
-              },
             },
             resetData: {
               title: '清除或还原数据',

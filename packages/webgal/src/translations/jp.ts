@@ -22,11 +22,6 @@ export const jp = {
             },
             language: {
               title: '言語',
-              options: {
-                zhCn: '简体中文',
-                en: 'English',
-                jp: '日本語',
-              },
             },
             resetData: {
               title: 'データの削除またに復元',

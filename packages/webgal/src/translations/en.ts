@@ -22,11 +22,6 @@ export const en = {
             },
             language: {
               title: 'Language',
-              options: {
-                zhCn: '简体中文',
-                en: 'English',
-                jp: '日本語',
-              },
             },
             resetData: {
               title: 'Clear or Reset Data',

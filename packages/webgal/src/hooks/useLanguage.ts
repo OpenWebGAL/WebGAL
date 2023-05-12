@@ -1,11 +1,11 @@
 import { RootState } from '@/store/store';
-import { language } from '@/store/userDataInterface';
 import { setOptionData } from '@/store/userDataReducer';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { useGenSyncRef } from './useGenSyncRef';
 import { logger } from '@/Core/util/etc/logger';
 import { setStorage } from '@/Core/controller/storage/storageController';
+import { language } from '@/config/language';
 
 export function getLanguageName(lang: language): string {
   return language[lang];
