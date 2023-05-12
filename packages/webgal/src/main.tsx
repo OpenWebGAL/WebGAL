@@ -13,6 +13,7 @@ import { initReactI18next, Trans } from 'react-i18next';
 import { en } from './translations/en';
 import { zhCn } from './translations/zh-cn';
 import { jp } from './translations/jp';
+import { defaultLanguage, language } from './config/language';
 
 i18n
   .use(initReactI18next) // passes i18n down to react-i18next
@@ -25,7 +26,7 @@ i18n
       zhCn: { translation: zhCn },
       jp: { translation: jp },
     },
-    lng: 'zhCn', // if you're using a language detector, do not define the lng option
+    lng: language[defaultLanguage] || 'zhCn', // if you're using a language detector, do not define the lng option
     fallbackLng: 'zhCn',
 
     interpolation: {
