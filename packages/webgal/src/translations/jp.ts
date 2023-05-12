@@ -1,4 +1,4 @@
-export const jp = {
+const jp = {
   // 通用
   common: {
     yes: 'はい',
@@ -156,3 +156,5 @@ export const jp = {
     },
   },
 };
+
+export default jp;

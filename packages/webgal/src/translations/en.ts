@@ -1,4 +1,4 @@
-export const en = {
+const en = {
   // 通用
   common: {
     yes: 'yes',
@@ -154,3 +154,5 @@ export const en = {
     },
   },
 };
+
+export default en;
