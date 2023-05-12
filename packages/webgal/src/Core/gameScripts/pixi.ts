@@ -29,6 +29,10 @@ export const pixi = (sentence: ISentence): IPerform => {
   let container: any;
   let tickerKey: any;
   let res: any;
+  /**
+   * 先清一波纹理
+   */
+  RUNTIME_GAMEPLAY.pixiStage?.cacheGC();
   switch (sentence.content) {
     case 'rain':
       res = pixiRain(6, 10);
@@ -41,10 +45,10 @@ export const pixi = (sentence: ISentence): IPerform => {
       tickerKey = res.tickerKey;
       break;
     case 'cherryBlossoms':
-        res = pixicherryBlossoms(3);
-        container = res.container;
-        tickerKey = res.tickerKey;
-        break;
+      res = pixicherryBlossoms(3);
+      container = res.container;
+      tickerKey = res.tickerKey;
+      break;
   }
   return {
     performName: pixiPerformName,
