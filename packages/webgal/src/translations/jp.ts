@@ -1,4 +1,4 @@
-export const jp = {
+const jp = {
   // 通用
   common: {
     yes: 'はい',
@@ -22,11 +22,6 @@ export const jp = {
             },
             language: {
               title: '言語',
-              options: {
-                zhCn: '简体中文',
-                en: 'English',
-                jp: '日本語',
-              },
             },
             resetData: {
               title: 'データの削除またに復元',
@@ -166,3 +161,5 @@ export const jp = {
     title: '鑑賞モード',
   },
 };
+
+export default jp;
