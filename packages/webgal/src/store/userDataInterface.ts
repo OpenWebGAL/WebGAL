@@ -1,5 +1,6 @@
 import { IBacklogItem, sceneEntry } from '@/Core/runtime/runtimeInterface';
 import { IStageState } from './stageInterface';
+import { language } from '@/config/language';
 
 /**
  * 播放速度的枚举类型
@@ -19,12 +20,6 @@ export enum textSize {
 export enum textFont {
   song,
   hei,
-}
-
-export enum language {
-  zhCn,
-  en,
-  jp,
 }
 
 /**

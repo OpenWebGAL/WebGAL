@@ -2,7 +2,7 @@ import styles from '@/Components/UI/Menu/Options/options.module.scss';
 import { NormalOption } from '@/Components/UI/Menu/Options/NormalOption';
 import { NormalButton } from '@/Components/UI/Menu/Options/NormalButton';
 import { resetAllData, resetOptionSet, resetSaveData, setOptionData } from '@/store/userDataReducer';
-import { language, playSpeed } from '@/store/userDataInterface';
+import { playSpeed } from '@/store/userDataInterface';
 import { getStorage, setStorage, syncStorageFast } from '@/Core/controller/storage/storageController';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
@@ -12,6 +12,7 @@ import { RUNTIME_GAME_INFO } from '@/Core/runtime/etc';
 import { logger } from '@/Core/util/etc/logger';
 import useTrans from '@/hooks/useTrans';
 import useLanguage from '@/hooks/useLanguage';
+import languages, { language } from '@/config/language';
 
 export function System() {
   const userDataState = useSelector((state: RootState) => state.userData);
@@ -44,12 +45,10 @@ export function System() {
       <NormalOption key="option7" title={t('language.title')}>
         <NormalButton
           currentChecked={userDataState.optionData.language}
-          textList={t('language.options.zhCn', 'language.options.en', 'language.options.jp')}
-          functionList={[
-            () => setLanguage(language.zhCn),
-            () => setLanguage(language.en),
-            () => setLanguage(language.jp),
-          ]}
+          textList={Object.values(languages)}
+          functionList={Object.keys(languages).map(
+            (k) => () => setLanguage(language[k as unknown as number] as unknown as language),
+          )}
         />
       </NormalOption>
       <NormalOption key="option2" title={t('resetData.title')}>
