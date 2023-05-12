@@ -8,14 +8,7 @@ import { logger } from '@/Core/util/etc/logger';
 import { setStorage } from '@/Core/controller/storage/storageController';
 
 export function getLanguageName(lang: language): string {
-  switch (lang) {
-    case language.zhCn:
-      return 'zhCn';
-    case language.en:
-      return 'en';
-    case language.jp:
-      return 'jp';
-  }
+  return language[lang];
 }
 
 export default function useLanguage() {
