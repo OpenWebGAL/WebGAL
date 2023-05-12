@@ -1,4 +1,4 @@
-export const zhCn = {
+const zhCn = {
   // 通用
   common: {
     yes: '是',
@@ -158,3 +158,5 @@ export const zhCn = {
     },
   },
 };
+
+export default zhCn;

@@ -5,6 +5,15 @@
  * also you need to code the name of it show.
  */
 
+import en from '@/translations/en';
+import jp from '@/translations/jp';
+import zhCn from '@/translations/zh-cn';
+/*
+  Import your translation configs here;
+  example:
+  import myLang from '@/translations/filename of your config file';
+*/
+
 export enum language {
   zhCn,
   en,
@@ -15,6 +24,12 @@ const languages: Record<string, string> = {
   zhCn: '中文',
   en: 'English',
   jp: '日本語',
+};
+
+export const i18nTranslationResources: Record<string, { translation: Record<string, any> }> = {
+  en: { translation: en },
+  zhCn: { translation: zhCn },
+  jp: { translation: jp },
 };
 
 export const defaultLanguage: language = language.zhCn;
