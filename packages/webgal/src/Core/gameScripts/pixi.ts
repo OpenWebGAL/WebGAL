@@ -3,6 +3,7 @@ import { IPerform } from '@/Core/controller/perform/performInterface';
 import { RUNTIME_GAMEPLAY } from '@/Core/runtime/gamePlay';
 import pixiRain from './pixiPerformScripts/rain';
 import { pixiSnow } from '@/Core/gameScripts/pixiPerformScripts/snow';
+import { pixicherryBlossoms } from '@/Core/gameScripts/pixiPerformScripts/cherryBlossoms';
 import { logger } from '@/Core/util/etc/logger';
 
 /**
@@ -39,6 +40,11 @@ export const pixi = (sentence: ISentence): IPerform => {
       container = res.container;
       tickerKey = res.tickerKey;
       break;
+    case 'cherryBlossoms':
+        res = pixicherryBlossoms(3);
+        container = res.container;
+        tickerKey = res.tickerKey;
+        break;
   }
   return {
     performName: pixiPerformName,
