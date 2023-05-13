@@ -32,6 +32,8 @@ export const Save: FC = () => {
     page.push(element);
   }
 
+  const tCommon = useTrans('common.');
+
   const showSaves = [];
   // 现在尝试设置10个存档每页
   const start = (userDataState.optionData.slPage - 1) * 10 + 1;
@@ -67,9 +69,9 @@ export const Save: FC = () => {
         onClick={() => {
           if (userDataState.saveData[i]) {
             showGlogalDialog({
-              title: '是否覆盖存档？',
-              leftText: '是',
-              rightText: '否',
+              title: t('saving.isOverwrite'),
+              leftText: tCommon('yes'),
+              rightText: tCommon('no'),
               leftFunc: () => {
                 saveGame(i);
                 setStorage();

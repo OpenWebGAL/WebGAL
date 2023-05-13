@@ -3,6 +3,7 @@
   width: 100%;
   position: absolute;
   z-index: 20;
+  transform: translateZ(20px);
   background: rgba(15, 37, 64, 0.39);
   color: white;
   opacity: 0.5;
@@ -61,7 +62,7 @@
   padding: 0.15em 1em 0.15em 1em;
   margin: 0.2em 1em 0.2em 1em;
   cursor: pointer;
-  transition: all 0.33s;
+  transition: background-color 0.33s, color 0.33s, font-weight 0.33s, transform 0.33s;
   text-shadow: 0 0 10px rgba(255, 255, 255, 1);
   border-radius: 5px;
   //background: rgba(0, 0, 0, 0.05);
