@@ -101,12 +101,12 @@
   background: linear-gradient(to left, #227D51, rgba(81, 110, 65, 1));
   opacity: 0.35;
   -webkit-background-clip: text;
-  transition: all 0.33s;
+  transition: color 0.33s, background-image 0.33s, opacity 0.33s;
   cursor: pointer;
 }
 
 .Options_page_button_active {
-  background: linear-gradient(to left, #227D51, rgba(81, 110, 65, 1));
+  background-image: linear-gradient(to left, #227D51, rgba(81, 110, 65, 1));
   -webkit-background-clip: text;
   opacity: 1;
 }

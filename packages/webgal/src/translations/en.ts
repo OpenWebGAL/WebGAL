@@ -1,8 +1,8 @@
 const en = {
   // 通用
   common: {
-    yes: 'yes',
-    no: 'no',
+    yes: 'OK',
+    no: 'Cancel',
   },
 
   menu: {
@@ -100,16 +100,17 @@ const en = {
       },
     },
     saving: {
-      title: 'SAVING',
+      title: 'SAVE',
+      isOverwrite: 'Are you sure you want to overwrite this save?',
     },
     loadSaving: {
       title: 'LOAD',
     },
     title: {
-      title: 'HOME',
+      title: 'TITLE',
     },
     exit: {
-      title: 'EXIT',
+      title: 'BACK',
     },
   },
 
@@ -152,6 +153,10 @@ const en = {
       options: 'Options',
       title: 'Title',
     },
+  },
+
+  extra: {
+    title: 'EXTRA',
   },
 };
 
