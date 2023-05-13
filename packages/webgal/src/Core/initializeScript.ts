@@ -48,9 +48,12 @@ export const initializeScript = (): void => {
   } else {
     /**
      * iOS
+     *
      */
     alert(
-      '由于苹果设备的兼容性问题，引擎可能表现不正常或运行缓慢。 | Due to compatibility issues with Apple devices, the engine may behave abnormally or run slowly. | Appleのデバイスとの互換性の問題により、エンジンの動作が正常でない場合や遅くなる可能性があります。',
+      `由于苹果设备的兼容性问题，引擎可能表现不正常或运行缓慢。
+| Due to compatibility issues with Apple devices, the engine may behave abnormally or run slowly.
+| Appleのデバイスとの互換性の問題により、エンジンの動作が正常でない場合や遅くなる可能性があります。`,
     );
   }
 
