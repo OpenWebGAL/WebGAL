@@ -40,8 +40,16 @@ export const Stage: FC = () => {
           nextSentence();
         }}
         id="FullScreenClick"
-        style={{ width: '100%', height: '100%', position: 'absolute', zIndex: '12', top: '0' }}
+        style={{
+          width: '100%',
+          height: '100%',
+          position: 'absolute',
+          zIndex: '12',
+          transform: 'translateZ(12px);',
+          top: '0',
+        }}
       />
+      <div id="chooseContainer" />
       <IntroContainer />
     </div>
   );

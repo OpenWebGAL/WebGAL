@@ -8,6 +8,7 @@
   position: absolute;
   bottom: 0.3em;
   z-index: 9;
+  transform: translateZ(9px);
   display: flex;
   flex-flow: row;
   justify-content: center;

@@ -13,6 +13,7 @@
 .TextBox_main {
   position: absolute;
   z-index: 6;
+  transform: translateZ(6px);
   width: 100%;
   min-height: 37.5%;
   background: linear-gradient(
@@ -62,7 +63,7 @@
 .outer {
   position: absolute;
   left: 0;
-  top:0;
+  top: 0;
   background-image: linear-gradient(
     //135deg,
       #ffffff 0%,
@@ -78,7 +79,7 @@
 .inner {
   position: absolute;
   left: 0;
-  top:0;
+  top: 0;
   -webkit-text-stroke: 0.085em rgba(0, 0, 0, 0.35);
   z-index: 1;
   text-shadow: 3px 3px 7px rgba(0, 0, 0, 0.3);
