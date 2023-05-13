@@ -3,6 +3,7 @@ import { IPerform } from '@/Core/controller/perform/performInterface';
 import { RUNTIME_GAMEPLAY } from '@/Core/runtime/gamePlay';
 import pixiRain from './pixiPerformScripts/rain';
 import { pixiSnow } from '@/Core/gameScripts/pixiPerformScripts/snow';
+import { pixicherryBlossoms } from '@/Core/gameScripts/pixiPerformScripts/cherryBlossoms';
 import { logger } from '@/Core/util/etc/logger';
 
 /**
@@ -28,6 +29,10 @@ export const pixi = (sentence: ISentence): IPerform => {
   let container: any;
   let tickerKey: any;
   let res: any;
+  /**
+   * 先清一波纹理
+   */
+  RUNTIME_GAMEPLAY.pixiStage?.cacheGC();
   switch (sentence.content) {
     case 'rain':
       res = pixiRain(6, 10);
@@ -36,6 +41,11 @@ export const pixi = (sentence: ISentence): IPerform => {
       break;
     case 'snow':
       res = pixiSnow(3);
+      container = res.container;
+      tickerKey = res.tickerKey;
+      break;
+    case 'cherryBlossoms':
+      res = pixicherryBlossoms(3);
       container = res.container;
       tickerKey = res.tickerKey;
       break;
