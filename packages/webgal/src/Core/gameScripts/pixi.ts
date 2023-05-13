@@ -2,7 +2,7 @@ import { ISentence } from '@/Core/controller/scene/sceneInterface';
 import { IPerform } from '@/Core/controller/perform/performInterface';
 import { RUNTIME_GAMEPLAY } from '@/Core/runtime/gamePlay';
 import { logger } from '@/Core/util/etc/logger';
-import { IResult, call } from './pixiPerformManager';
+import { IResult, call } from '../util/pixiPerformManager/pixiPerformManager';
 
 /**
  * 运行一段pixi演出
