@@ -96,7 +96,7 @@ code {
   -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
 }
 
-#ebg{
+#ebg {
   height: 100vh;
   width: 100vw;
   filter: blur(50px);
@@ -146,3 +146,15 @@ code {
 /*        font-size: 50%;*/
 /*    }*/
 /*}*/
+
+.App {
+  height: 100%;
+  width: 100%;
+  background: rgba(0, 0, 0, 1);
+  overflow: visible;
+  perspective: 0;
+}
+
+*{
+  -webkit-overflow-scrolling: auto;
+}
