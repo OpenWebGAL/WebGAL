@@ -1,8 +1,7 @@
 import * as PIXI from 'pixi.js';
 import { RUNTIME_GAMEPLAY } from '@/Core/runtime/gamePlay';
-import { registerPerform } from '../pixiPerformManager';
 
-const pixiSnow = (snowSpeed: number) => {
+export const pixiSnow = (snowSpeed: number) => {
   // 动画参数
   // 设置缩放的系数
   const scalePreset = 0.144;
@@ -76,5 +75,3 @@ const pixiSnow = (snowSpeed: number) => {
   );
   return { container, tickerKey: 'snow-Ticker' };
 };
-
-registerPerform('snow', () => pixiSnow(3));
