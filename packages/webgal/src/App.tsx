@@ -23,15 +23,15 @@ function App() {
     <div className="App">
       <Provider store={webgalStore}>
         <Translation />
-        <DevPanel />
-        <Extra />
-        <Title />
-        <Menu />
         <Stage />
         <BottomControlPanel />
         <BottomControlPanelFilm />
         <Backlog />
+        <Title />
+        <Extra />
+        <Menu />
         <GlobalDialog />
+        <DevPanel />
       </Provider>
     </div>
   );
