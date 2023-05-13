@@ -1,6 +1,6 @@
 import * as PIXI from 'pixi.js';
 import { RUNTIME_GAMEPLAY } from '@/Core/runtime/gamePlay';
-import { addPerform } from '../pixiPerformManager';
+import { registerPerform } from '../pixiPerformManager';
 
 const pixiSnow = (snowSpeed: number) => {
   // 动画参数
@@ -77,4 +77,4 @@ const pixiSnow = (snowSpeed: number) => {
   return { container, tickerKey: 'snow-Ticker' };
 };
 
-addPerform('snow', () => pixiSnow(3));
+registerPerform('snow', () => pixiSnow(3));
