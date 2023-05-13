@@ -15,6 +15,7 @@ export const FullScreenPerform = () => {
     <div className={styles.FullScreenPerform_main} style={{ width: stageWidth, height: stageHeight, top: top }}>
       <div id="videoContainer" />
       <div id="pixiContianer" />
+      <div id="chooseContainer" />
     </div>
   );
 };
