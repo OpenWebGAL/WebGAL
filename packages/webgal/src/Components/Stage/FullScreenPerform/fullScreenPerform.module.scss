@@ -3,6 +3,8 @@
   width: 100%;
   height: 100%;
   top: 0;
+  z-index: 3;
+  transform: translateZ(3px);
 }
 
 .FullScreenPerform_element {
@@ -11,6 +13,7 @@
   width: 100%;
   height: 100%;
   z-index: 11;
+  transform: translateZ(11px);
 }
 
 .fullScreen_video {
