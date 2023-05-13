@@ -19,13 +19,13 @@ import { RUNTIME_GAMEPLAY } from '@/Core/runtime/gamePlay';
 import PixiStage from '@/Core/controller/stage/pixi/PixiController';
 import axios from 'axios';
 
+const u = navigator.userAgent;
+export const isIOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); // 判断是否是 iOS终端
+
 /**
  * 引擎初始化函数
  */
 export const initializeScript = (): void => {
-  const u = navigator.userAgent;
-  const isIOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); // 判断是否是 iOS终端
-
   // 打印初始log信息
   logger.info('WebGAL 4.3.15');
   logger.info('Github: https://github.com/MakinoharaShoko/WebGAL ');
@@ -50,9 +50,8 @@ export const initializeScript = (): void => {
      * iOS
      */
     alert(
-      '由于苹果设备存在的兼容性问题，我们可能会花费更长的时间启动引擎 | Due to compatibility issues with Apple devices, we may take longer to start the engine. | Appleのデバイスとの互換性の問題により、エンジンの起動に時間がかかる可能性があります。',
+      '由于苹果设备的兼容性问题，引擎可能表现不正常或运行缓慢。 | Due to compatibility issues with Apple devices, the engine may behave abnormally or run slowly. | Appleのデバイスとの互換性の問題により、エンジンの動作が正常でない場合や遅くなる可能性があります。',
     );
-    setTimeout(resize, 5000);
   }
 
   // 获得 userAnimation

@@ -151,10 +151,19 @@ code {
   height: 100%;
   width: 100%;
   background: rgba(0, 0, 0, 1);
-  overflow: visible;
+  overflow: hidden;
   perspective: 0;
+  -webkit-overflow-scrolling: auto;
 }
 
 *{
-  -webkit-overflow-scrolling: auto;
+  /*-webkit-overflow-scrolling: auto;*/
+}
+
+#pixiCanvas{
+  z-index: 5;
+}
+
+#root{
+  will-change: transform;
 }
