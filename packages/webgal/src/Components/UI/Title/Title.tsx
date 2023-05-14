@@ -12,6 +12,7 @@ import { hasFastSaveRecord, loadFastSaveGame } from '@/hooks/useHotkey';
 import { restorePerform } from '@/Core/controller/storage/jumpFromBacklog';
 import { setEbg } from '@/Core/util/setEbg';
 import useTrans from '@/hooks/useTrans';
+import { resize } from '@/Core/util/coreInitialFunction/resize';
 
 /**
  * 标题页
@@ -31,6 +32,7 @@ const Title: FC = () => {
         id="enter_game_target"
         onClick={() => {
           playBgm(GUIState.titleBgm);
+          setTimeout(resize, 2000);
         }}
       />
       {GUIState.showTitle && (
