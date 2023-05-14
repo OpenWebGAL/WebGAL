@@ -1,7 +1,8 @@
 import * as PIXI from 'pixi.js';
 import { RUNTIME_GAMEPLAY } from '@/Core/runtime/gamePlay';
+import { registerPerform } from '@/Core/util/pixiPerformManager/pixiPerformManager';
 
-export const pixicherryBlossoms = (cherryBlossomsSpeed: number) => {
+const pixicherryBlossoms = (cherryBlossomsSpeed: number) => {
   // アニメーション パラメータ
   // 倍率を設定
   // 动画参数
@@ -83,3 +84,5 @@ export const pixicherryBlossoms = (cherryBlossomsSpeed: number) => {
   );
   return { container, tickerKey: 'cherryBlossoms-Ticker' };
 };
+
+registerPerform('cherryBlossoms', () => pixicherryBlossoms(3));

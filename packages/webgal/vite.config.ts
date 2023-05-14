@@ -1,9 +1,46 @@
-import {defineConfig} from 'vite';
+import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import loadVersion from 'vite-plugin-package-version';
-import {resolve} from 'path';
-import {visualizer} from 'rollup-plugin-visualizer';
+import { resolve, relative } from 'path';
+import { visualizer } from 'rollup-plugin-visualizer';
+import { readdirSync, writeFileSync } from 'fs';
+import { isEqual } from 'lodash';
 // https://vitejs.dev/config/
+
+(() => {
+  const pixiPerformScriptDirPath = './src/Core/gameScripts/pixiPerformScripts/';
+  const pixiPerformManagerDirPath = './src/Core/util/pixiPerformManager/';
+  const relativePath = relative(pixiPerformManagerDirPath, pixiPerformScriptDirPath);
+  let lastFiles: string[] = [];
+
+  function setInitFile() {
+    console.log('正在自动编写pixi特效依赖注入');
+    writeFileSync(
+      resolve(pixiPerformManagerDirPath, 'initRegister.ts'),
+      lastFiles
+        .map((v) => {
+          const filePath = relativePath + '/' + v.slice(0, v.lastIndexOf('.'));
+          return `import '${filePath}';`;
+        })
+        .join('\n'),
+      { encoding: 'utf-8' },
+    );
+  }
+
+  async function getPixiPerformScriptFiles() {
+    const pixiPerformScriptFiles = await readdirSync(pixiPerformScriptDirPath, { encoding: 'utf-8' }).filter((v) =>
+      ['ts', 'js', 'tsx', 'jsx'].includes(v.slice(v.indexOf('.') + 1, v.length)),
+    );
+    if (!isEqual(pixiPerformScriptFiles, lastFiles)) {
+      lastFiles = pixiPerformScriptFiles;
+      setInitFile();
+    }
+  }
+
+  getPixiPerformScriptFiles();
+  setInterval(getPixiPerformScriptFiles, 30000);
+})();
+
 export default defineConfig({
   plugins: [react(), loadVersion(), visualizer()],
   resolve: {
