@@ -60,7 +60,8 @@ export const BottomControlPanel = () => {
   }
 
   return (
-    <div className={styles.ToCenter}>
+    // <div className={styles.ToCenter}>
+    <>
       {GUIStore.showTextBox && stageState.enableFilm === '' && (
         <div className={styles.main}>
           {GUIStore.showTextBox && (
@@ -216,6 +217,7 @@ export const BottomControlPanel = () => {
           </span>
         </div>
       )}
-    </div>
+    </>
+    // </div>
   );
 };

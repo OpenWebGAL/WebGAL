@@ -6,6 +6,7 @@ import cloneDeep from 'lodash/cloneDeep';
 import { IEffect } from '@/store/stageInterface';
 import { RUNTIME_CURRENT_BACKLOG } from '@/Core/runtime/backlog';
 import { logger } from '@/Core/util/etc/logger';
+import { isIOS } from '@/Core/initializeScript';
 
 export interface IAnimationObject {
   setStartState: Function;
@@ -91,7 +92,9 @@ export default class PixiStage {
     if (appRoot) {
       app.renderer.resize(appRoot.clientWidth, appRoot.clientHeight);
     }
-    app.renderer.view.style.zIndex = '5';
+    if (isIOS) {
+      app.renderer.view.style.zIndex = '-5';
+    }
 
     // 设置可排序
     app.stage.sortableChildren = true;
