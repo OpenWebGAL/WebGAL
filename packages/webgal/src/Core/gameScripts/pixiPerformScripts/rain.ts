@@ -1,6 +1,6 @@
 import * as PIXI from 'pixi.js';
 import { RUNTIME_GAMEPLAY } from '@/Core/runtime/gamePlay';
-import { registerPerform } from '../pixiPerformManager';
+import { registerPerform } from '@/Core/util/pixiPerformManager/pixiPerformManager';
 
 const pixiRain = (rainSpeed: number, number: number) => {
   // 动画参数

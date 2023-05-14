@@ -1,5 +1,5 @@
 import type { Container } from 'pixi.js';
-import { logger } from '../util/etc/logger';
+import { logger } from '../etc/logger';
 
 /**
  * 特效执行返回的结果
@@ -32,7 +32,10 @@ function getName(name: IName): string | null {
  */
 function getKey(name: IName): string {
   const key = getName(name);
-  if (!key) throw new Error('Get name of perform failed. There no name of the perform.');
+  if (!key) {
+    logger.error('Get name of perform failed. There no name of the perform.');
+    return '';
+  }
   return key;
 }
 
@@ -42,6 +45,7 @@ function getKey(name: IName): string {
  * @param callback 调用特效的函数
  */
 export function registerPerform(name: IName, callback: IPerformCallback): void {
+  if (!callback || typeof callback !== 'function') throw new Error(`"${name}" is not a callback.`);
   performs.set(getKey(name), callback);
 }
 
@@ -54,7 +58,10 @@ export function registerPerform(name: IName, callback: IPerformCallback): void {
 export function call(name: IName, args: unknown[] = []): IResult {
   const callback = performs.get(getKey(name));
 
-  if (!callback || !(callback instanceof Function)) logger.error(`Can\'t call the perform named "${name}"`);
+  if (!callback || !(callback instanceof Function)) {
+    logger.error(`Can\'t call the perform named "${name}"`);
+    throw new Error(`"${name}" don't have the pixiPerform callback.`);
+  }
   return (callback as IPerformCallback)(...(args as []));
 }
 
@@ -72,3 +79,5 @@ export function unregisterPerform(name: IName) {
 export function getPerforms(): string[] {
   return [...performs.keys()];
 }
+
+import('./initRegister');
