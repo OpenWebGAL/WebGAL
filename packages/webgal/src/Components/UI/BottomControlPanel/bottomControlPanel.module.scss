@@ -1,18 +1,24 @@
-.ToCenter {
-  display: flex;
-  justify-content: center;
-}
+//.ToCenter {
+//  display: flex;
+//  justify-content: center;
+//  position: absolute;
+//  bottom: 0;
+//  left: 0;
+//  width: 100%;
+//  z-index: 9;
+//}
 
 .main {
   //border-bottom: 2px solid rgba(255,255,255,0.25);
   position: absolute;
   bottom: 0.3em;
+  will-change: z-index;
   z-index: 9;
-  transform: translateZ(9px);
   display: flex;
   flex-flow: row;
   justify-content: center;
   align-items: center;
+  width: 100%;
   //background-color: rgba(150, 150, 150, 0.25);
   padding: 0.15em 1.75em 0.15em 1.75em;
   //background: linear-gradient(rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.25) 100%);

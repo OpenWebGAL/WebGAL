@@ -20,18 +20,18 @@ function App() {
 
   // Provider用于对各组件提供状态
   return (
-    <div className="App" style={{ height: '100%', width: '100%', background: 'rgba(0, 0, 0, 1)' }}>
+    <div className="App">
       <Provider store={webgalStore}>
         <Translation />
-        <DevPanel />
-        <Extra />
-        <Title />
-        <Menu />
         <Stage />
         <BottomControlPanel />
         <BottomControlPanelFilm />
         <Backlog />
+        <Title />
+        <Extra />
+        <Menu />
         <GlobalDialog />
+        <DevPanel />
       </Provider>
     </div>
   );
