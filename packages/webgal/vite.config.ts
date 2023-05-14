@@ -7,6 +7,9 @@ import { readdirSync, watch, writeFileSync } from 'fs';
 import { isEqual } from 'lodash';
 // https://vitejs.dev/config/
 
+// @ts-ignore
+const env = process.env.NODE_ENV;
+console.log(env);
 (() => {
   const pixiPerformScriptDirPath = './src/Core/gameScripts/pixiPerformScripts/';
   const pixiPerformManagerDirPath = './src/Core/util/pixiPerformManager/';
@@ -39,7 +42,7 @@ import { isEqual } from 'lodash';
 
   getPixiPerformScriptFiles();
 
-  watch(pixiPerformScriptDirPath, { encoding: 'utf-8' }, getPixiPerformScriptFiles);
+  if (env !== 'production') watch(pixiPerformScriptDirPath, { encoding: 'utf-8' }, getPixiPerformScriptFiles);
 })();
 
 export default defineConfig({
