@@ -1,10 +1,8 @@
 /**
  * @file 引擎初始化时会执行的脚本，包括获取游戏信息，初始化运行时变量，初始化用户数据存储
  */
-
 import { logger } from './util/etc/logger';
 import { infoFetcher } from './util/coreInitialFunction/infoFetcher';
-import { resize } from './util/coreInitialFunction/resize';
 import { assetSetter, fileType } from './util/gameAssetsAccess/assetSetter';
 import { sceneFetcher } from './controller/scene/sceneFetcher';
 import { RUNTIME_SCENE_DATA } from './runtime/sceneData';
@@ -32,23 +30,9 @@ export const initializeScript = (): void => {
   logger.info('Made with ❤ by MakinoharaShoko');
   // 激活强制缩放
   // 在调整窗口大小时重新计算宽高，设计稿按照 1600*900。
-  if (!isIOS) {
-    resize();
-    setTimeout(resize, 100);
-    window.onresize = resize;
-    // 监听键盘 F11 事件，全屏时触发页面调整
-    document.onkeydown = function (event) {
-      const e = event;
-      if (e && e.key === 'F11') {
-        setTimeout(() => {
-          resize();
-        }, 50);
-      }
-    };
-  } else {
+  if (isIOS) {
     /**
      * iOS
-     *
      */
     alert(
       `由于苹果设备的兼容性问题，引擎可能表现不正常或运行缓慢。
