@@ -45,7 +45,6 @@ function getKey(name: IName): string {
  * @param callback 调用特效的函数
  */
 export function registerPerform(name: IName, callback: IPerformCallback): void {
-  console.log(name, callback);
   if (!callback || typeof callback !== 'function') throw new Error(`"${name}" is not a callback.`);
   performs.set(getKey(name), callback);
 }
@@ -59,7 +58,6 @@ export function registerPerform(name: IName, callback: IPerformCallback): void {
 export function call(name: IName, args: unknown[] = []): IResult {
   const callback = performs.get(getKey(name));
 
-  console.log(callback, getKey(name));
   if (!callback || !(callback instanceof Function)) {
     logger.error(`Can\'t call the perform named "${name}"`);
     throw new Error(`"${name}" don't have the pixiPerform callback.`);
