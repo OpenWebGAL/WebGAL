@@ -27,8 +27,8 @@ import { isEqual } from 'lodash';
     );
   }
 
-  async function getPixiPerformScriptFiles() {
-    const pixiPerformScriptFiles = await readdirSync(pixiPerformScriptDirPath, { encoding: 'utf-8' }).filter((v) =>
+  function getPixiPerformScriptFiles() {
+    const pixiPerformScriptFiles = readdirSync(pixiPerformScriptDirPath, { encoding: 'utf-8' }).filter((v) =>
       ['ts', 'js', 'tsx', 'jsx'].includes(v.slice(v.indexOf('.') + 1, v.length)),
     );
     if (!isEqual(pixiPerformScriptFiles, lastFiles)) {
@@ -43,7 +43,12 @@ import { isEqual } from 'lodash';
 })();
 
 export default defineConfig({
-  plugins: [react(), loadVersion(), visualizer()],
+  plugins: [
+    react(),
+    loadVersion(),
+    // @ts-ignore
+    visualizer(),
+  ],
   resolve: {
     alias: {
       '@': resolve('src'),
