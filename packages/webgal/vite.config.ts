@@ -3,14 +3,14 @@ import react from '@vitejs/plugin-react';
 import loadVersion from 'vite-plugin-package-version';
 import { resolve, relative } from 'path';
 import { visualizer } from 'rollup-plugin-visualizer';
-import { readdirSync, writeFileSync } from 'fs';
+import { readdirSync, watch, writeFileSync } from 'fs';
 import { isEqual } from 'lodash';
 // https://vitejs.dev/config/
 
 (() => {
   const pixiPerformScriptDirPath = './src/Core/gameScripts/pixiPerformScripts/';
   const pixiPerformManagerDirPath = './src/Core/util/pixiPerformManager/';
-  const relativePath = relative(pixiPerformManagerDirPath, pixiPerformScriptDirPath);
+  const relativePath = relative(pixiPerformManagerDirPath, pixiPerformScriptDirPath).replaceAll('\\', '/');
   let lastFiles: string[] = [];
 
   function setInitFile() {
@@ -38,7 +38,8 @@ import { isEqual } from 'lodash';
   }
 
   getPixiPerformScriptFiles();
-  setInterval(getPixiPerformScriptFiles, 30000);
+
+  watch(pixiPerformScriptDirPath, { encoding: 'utf-8' }, getPixiPerformScriptFiles);
 })();
 
 export default defineConfig({
