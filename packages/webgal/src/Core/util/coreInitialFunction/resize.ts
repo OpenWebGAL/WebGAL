@@ -16,65 +16,79 @@ export const resize = () => {
   let mh2os = targetWidth / 2 - w / 2; // 竖屏时 y轴移动距离
   let mw2os = targetHeight / 2 - h / 2; // 竖屏时 x轴移动距离
   const root = document.getElementById('root'); // 获取根元素
-  if (root) {
-    if (w > h) {
-      const ebg = document.getElementById('ebg');
-      ebg!.style.transform = ``;
-      ebg!.style.height = `100vh`;
-      ebg!.style.width = `100vw`;
-      mw = -mw;
-      mh = -mh;
-      if (w * (9 / 16) >= h) {
-        root.style.transform = `translate(${mw}px, ${mh}px) scale(${zoomH},${zoomH})`;
-      }
-      if (w * (9 / 16) < h) {
-        root.style.transform = `translate(${mw}px, ${mh}px) scale(${zoomW},${zoomW})`;
-      }
-    } else {
-      /**
-       * 旋转
-       */
-      const ebg = document.getElementById('ebg');
-      ebg!.style.height = `${targetHeight}px`;
-      ebg!.style.width = `${targetWidth}px`;
-      mw2os = -mw2os;
-      if (h * (9 / 16) >= w) {
-        ebg!.style.transform = `rotate(90deg) translate(${mw2os}px, ${mh2os}px) scale(${zoomH2 * 1.75},${
-          zoomH2 * 1.75
-        })`;
-        root.style.transform = `rotate(90deg) translate(${mw2os}px, ${mh2os}px) scale(${zoomH2},${zoomH2})`;
-      }
-      if (h * (9 / 16) < w) {
-        ebg!.style.transform = `rotate(90deg) translate(${mw2os}px, ${mh2os}px) scale(${zoomW2 * 1.75},${
-          zoomW2 * 1.75
-        })`;
-        root.style.transform = `rotate(90deg) translate(${mw2os}px, ${mh2os}px) scale(${zoomW2},${zoomW2})`;
+  const title = document.getElementById('Title_enter_page');
+  const elements = [root, title];
+  if (w > h) {
+    const ebg = document.getElementById('ebg');
+    if (ebg) {
+      ebg.style.translate = ``;
+      ebg.style.scale = ``;
+      ebg.style.rotate = ``;
+      ebg.style.height = `100vh`;
+      ebg.style.width = `100vw`;
+    }
+
+    mw = -mw;
+    mh = -mh;
+    if (w * (9 / 16) >= h) {
+      for (const element of elements) {
+        if (element) {
+          // element.style.transform = `translate(${mw}px, ${mh}px) scale(,${zoomH})`;
+          element.style.translate = `${mw}px ${mh}px`;
+          element.style.scale = `${zoomH}`;
+          element.style.rotate = ``;
+        }
       }
     }
-  }
-
-  const title = document.getElementById('Title_enter_page');
-  mh = (targetHeight - h) / 2; // y轴移动距离
-  mw = (targetWidth - w) / 2; // x轴移动距离
-  mh2os = targetWidth / 2 - w / 2; // 竖屏时 y轴移动距离
-  mw2os = targetHeight / 2 - h / 2; // 竖屏时 x轴移动距离
-  if (title) {
-    if (w > h) {
-      mw = -mw;
-      mh = -mh;
-      if (w * (9 / 16) >= h) {
-        title.style.transform = `translate(${mw}px, ${mh}px) scale(${zoomH},${zoomH})`;
+    if (w * (9 / 16) < h) {
+      for (const element of elements) {
+        if (element) {
+          element.style.translate = `${mw}px ${mh}px`;
+          element.style.scale = `${zoomW}`;
+          element.style.rotate = ``;
+        }
       }
-      if (w * (9 / 16) < h) {
-        title.style.transform = `translate(${mw}px, ${mh}px) scale(${zoomW},${zoomW})`;
-      }
-    } else {
+    }
+  } else {
+    /**
+     * 旋转
+     */
+    const ebg = document.getElementById('ebg');
+    if (ebg) {
+      ebg.style.height = `${targetHeight}px`;
+      ebg.style.width = `${targetWidth}px`;
+    }
+    // mw2os = -mw2os;
+    if (h * (9 / 16) >= w) {
+      mh2os = -mh2os;
       mw2os = -mw2os;
-      if (h * (9 / 16) >= w) {
-        title.style.transform = `rotate(90deg) translate(${mw2os}px, ${mh2os}px) scale(${zoomH2},${zoomH2})`;
+      if (ebg) {
+        ebg.style.rotate = `90deg`;
+        ebg.style.translate = `${mh2os}px ${mw2os}px`;
+        ebg.style.scale = `${zoomH2 * 1.25}`;
       }
-      if (h * (9 / 16) < w) {
-        title.style.transform = `rotate(90deg) translate(${mw2os}px, ${mh2os}px) scale(${zoomW2},${zoomW2})`;
+      for (const element of elements) {
+        if (element) {
+          element.style.translate = `${mh2os}px ${mw2os}px`;
+          element.style.scale = `${zoomH2}`;
+          element.style.rotate = `90deg`;
+        }
+      }
+    }
+    if (h * (9 / 16) < w) {
+      mh2os = -mh2os;
+      mw2os = -mw2os;
+      if (ebg) {
+        ebg.style.rotate = `90deg`;
+        ebg.style.translate = `${mh2os}px ${mw2os}px`;
+        ebg.style.scale = `${zoomH2}`;
+      }
+      for (const element of elements) {
+        if (element) {
+          element.style.translate = `${mh2os}px ${mw2os}px`;
+          element.style.scale = `${zoomW2}`;
+          element.style.rotate = `90deg`;
+        }
       }
     }
   }

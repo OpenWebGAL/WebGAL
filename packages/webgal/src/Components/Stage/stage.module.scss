@@ -3,7 +3,6 @@
   height: 100%;
   position: absolute;
   z-index: 1;
-  transform: translateZ(1px);
   //animation: MainStage_showBgSoftly 100ms forwards;
   opacity: 1;
   overflow: hidden;
@@ -71,4 +70,13 @@
   100% {
     opacity: 0;
   }
+}
+
+.pixiContainer{
+  position: absolute;
+  z-index: 5;
+}
+
+.chooseContainer{
+  z-index: 8;
 }
