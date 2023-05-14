@@ -1,7 +1,8 @@
 import * as PIXI from 'pixi.js';
 import { RUNTIME_GAMEPLAY } from '@/Core/runtime/gamePlay';
+import { registerPerform } from '@/Core/util/pixiPerformManager/pixiPerformManager';
 
-export const pixiRain = (rainSpeed: number, number: number) => {
+const pixiRain = (rainSpeed: number, number: number) => {
   // 动画参数
   // 设置缩放的系数
   const scalePreset = 0.48;
@@ -74,3 +75,5 @@ export const pixiRain = (rainSpeed: number, number: number) => {
   );
   return { container, tickerKey: 'rain-Ticker' };
 };
+
+registerPerform('rain', () => pixiRain(6, 10));

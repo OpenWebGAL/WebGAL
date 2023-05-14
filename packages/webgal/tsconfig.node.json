@@ -1,5 +1,6 @@
 {
     "compilerOptions": {
+      "target": "ES2017",
         "composite": true,
         "module": "esnext",
         "moduleResolution": "node"

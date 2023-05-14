@@ -81,3 +81,5 @@ export function unregisterPerform(name: IName) {
 export function getPerforms(): string[] {
   return [...performs.keys()];
 }
+
+import('./initRegister');
