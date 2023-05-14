@@ -12,7 +12,7 @@ import { hasFastSaveRecord, loadFastSaveGame } from '@/hooks/useHotkey';
 import { restorePerform } from '@/Core/controller/storage/jumpFromBacklog';
 import { setEbg } from '@/Core/util/setEbg';
 import useTrans from '@/hooks/useTrans';
-import { resize } from '@/Core/util/coreInitialFunction/resize';
+import { resize } from '@/Core/util/resize';
 
 /**
  * 标题页
