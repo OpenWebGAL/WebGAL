@@ -24,7 +24,7 @@ https://webgal-jp-demo.onrender.com/
 
 ### WebGALでゲームを作成
 
-[WebGAL 開発ドキュメント](https://docs.msfasr.com/)
+[WebGAL 開発ドキュメント](https://docs.openwebgal.com/)
 ※日本語の開発ドキュメントは準備中です
 
 [WebGAL Webエディターのダウンロードはこちら](https://github.com/MakinoharaShoko/WebGAL_Terre/releases)
@@ -40,7 +40,7 @@ WebGALは、プログラミング知識が不要で、簡単にビジュアル�
 
 ### WebGALのエンジン開発に参加（オープンソースプロジェクトに参加）
 
-**エンジン開発に参加したい開発者は、[このプロジェクトの参加ガイド](https://docs.msfasr.com/developers/)をお読みください**
+**エンジン開発に参加したい開発者は、[このプロジェクトの参加ガイド](https://docs.openwebgal.com/developers/)をお読みください**
 <br>上記のDiscordに参加すると多くの情報を得ることができます。
 
 ### スポンサーシップ
@@ -48,7 +48,7 @@ WebGALは、プログラミング知識が不要で、簡単にビジュアル�
 WebGAL はオープンソース ソフトウェアであるため、MPL-2.0 オープンソース ライセンスの範囲内で無料で使用でき、商用利用も可能です。
 <br>スポンサーシップは、開発者が前進し、このプロジェクトをさらに改善する動機となることができます。
 
-[このプロジェクトのスポンサー](https://docs.msfasr.com/sponsor/)
+[このプロジェクトのスポンサー](https://docs.openwebgal.com/sponsor/)
 
 ## Stargazers over time
 
