@@ -165,5 +165,5 @@ code {
 }
 
 #root{
-  will-change: transform;
+  /*will-change: transform;*/
 }
