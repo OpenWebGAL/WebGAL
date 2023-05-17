@@ -106,6 +106,7 @@ export function useMouseWheel() {
   const setComponentVisibility = useSetComponentVisibility();
   const isGameActive = useGameActive(GUIStore);
   const isInBackLog = useIsInBackLog(GUIStore);
+  const isPanicOverlayOpen = useIsPanicOverlayOpen(GUIStore);
   const next = useCallback(
     throttle(() => {
       nextSentence();
@@ -116,6 +117,7 @@ export function useMouseWheel() {
   // 问就是抄的999
   const prevDownWheelTimeRef = useRef(0);
   const handleMouseWheel = useCallback((ev) => {
+    if (isPanicOverlayOpen()) return;
     const direction =
       (ev.wheelDelta && (ev.wheelDelta > 0 ? 'up' : 'down')) ||
       (ev.detail && (ev.detail < 0 ? 'up' : 'down')) ||
@@ -158,17 +160,18 @@ export function useEscape() {
     [],
   );
   const GUIStore = useGenSyncRef((state: RootState) => state.GUI);
-  const isGameActive = useGameActive(GUIStore);
+  const isTitleShown = useCallback(() => GUIStore.current.showTitle, [GUIStore]);
   const isPanicOverlayOpen = useIsPanicOverlayOpen(GUIStore);
   const setComponentVisibility = useSetComponentVisibility();
   const handlePressEsc = useCallback((ev: KeyboardEvent) => {
-    if (!isEscKey(ev) || !isGameActive()) return;
+    if (!isEscKey(ev) || isTitleShown()) return;
     if (isPanicOverlayOpen()) {
       setComponentVisibility('showPanicOverlay', false);
       // todo: resume
     } else {
       setComponentVisibility('showPanicOverlay', true);
-      // todo: stop fast mode, pause auto play, pause music & animation
+      stopAll(); // despite the name, it only disables fast mode and auto mode
+      // todo: pause music & animation for better performance
     }
   }, []);
   useMounted(() => {
