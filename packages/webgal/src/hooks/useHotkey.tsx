@@ -150,47 +150,32 @@ export function useMouseWheel() {
 }
 
 /**
- * 我真的不是二次元
- * 按ESC紧急回避
- * 立即卸载#app & 跳转到度娘 & 移除历史记录
- * @todo 自定义URL
+ * ESC panic button
  */
 export function useEscape() {
-  const isEscKey = useCallback((e) => e.keyCode === 27, []);
+  const isEscKey = useCallback(
+    (ev: KeyboardEvent) => !ev.isComposing && !ev.defaultPrevented && ev.code === 'Escape',
+    [],
+  );
   const GUIStore = useGenSyncRef((state: RootState) => state.GUI);
-  const gameActive = useGameActive(GUIStore);
-  const lockRef = useRef(false);
-  const navigate = useCallback((url: string) => {
-    // 简单加个延时 防止没保存完就跳走了
-    setTimeout(() => {
-      location.replace(url);
-    }, 100);
-  }, []);
-  const handlePressEsc = useCallback((e) => {
-    if (isEscKey(e)) {
-      nextTick(async () => {
-        lockRef.current = true;
-        // document.body.innerText = '';
-        if (gameActive()) {
-          try {
-            document.body.innerText = '';
-            await fastSaveGame();
-          } catch (e) {
-            logger.error('保存失败', e);
-          }
-          logger.info('保存完成');
-        } else {
-          logger.info('游戏未激活 直接退出');
-        }
-      });
-      navigate('https://baidu.com');
+  const isGameActive = useGameActive(GUIStore);
+  const isPanicOverlayOpen = useIsPanicOverlayOpen(GUIStore);
+  const setComponentVisibility = useSetComponentVisibility();
+  const handlePressEsc = useCallback((ev: KeyboardEvent) => {
+    if (!isEscKey(ev) || !isGameActive()) return;
+    if (isPanicOverlayOpen()) {
+      setComponentVisibility('showPanicOverlay', false);
+      // todo: resume
+    } else {
+      setComponentVisibility('showPanicOverlay', true);
+      // todo: stop fast mode, pause auto play, pause music & animation
     }
   }, []);
   useMounted(() => {
-    document.addEventListener('keydown', handlePressEsc);
+    document.addEventListener('keyup', handlePressEsc);
   });
   useUnMounted(() => {
-    document.removeEventListener('keydown', handlePressEsc);
+    document.removeEventListener('keyup', handlePressEsc);
   });
 }
 
@@ -261,7 +246,12 @@ export function useFastSaveBeforeUnloadPage() {
 // 判断游戏是否激活
 function useGameActive<T = any>(GUIStore: T & any): () => boolean {
   return useCallback(() => {
-    return !GUIStore.current.showTitle && !GUIStore.current.showMenuPanel && !GUIStore.current.showBacklog;
+    return (
+      !GUIStore.current.showTitle &&
+      !GUIStore.current.showMenuPanel &&
+      !GUIStore.current.showBacklog &&
+      !GUIStore.current.showPanicOverlay
+    );
   }, [GUIStore]);
 }
 
@@ -283,6 +273,12 @@ function useIsOpenedDialog<T = any>(GUIStore: T & any): () => boolean {
 function useIsOpenedExtra<T = any>(GUIStore: T & any): () => boolean {
   return useCallback(() => {
     return GUIStore.current.showExtra;
+  }, [GUIStore]);
+}
+
+function useIsPanicOverlayOpen<T = any>(GUIStore: T & any): () => boolean {
+  return useCallback(() => {
+    return GUIStore.current.showPanicOverlay;
   }, [GUIStore]);
 }
 

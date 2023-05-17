@@ -1,0 +1,9 @@
+.panic_overlay_main {
+  margin: 0;
+  position: fixed;
+  //display: none;
+  width: 100%;
+  height: 100%;
+  background-color: white;
+  z-index: 256;
+}
