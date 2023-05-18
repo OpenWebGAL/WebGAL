@@ -12,6 +12,7 @@ import { BottomControlPanelFilm } from './Components/UI/BottomControlPanel/Botto
 import GlobalDialog from '@/Components/UI/GlobalDialog/GlobalDialog';
 import DevPanel from '@/Components/UI/DevPanel/DevPanel';
 import Translation from '@/Components/UI/Translation/Translation';
+import { PanicOverlay } from '@/Components/UI/PanicOverlay/PanicOverlay';
 
 function App() {
   useEffect(() => {
@@ -31,6 +32,7 @@ function App() {
         <Extra />
         <Menu />
         <GlobalDialog />
+        <PanicOverlay />
         <DevPanel />
       </Provider>
     </div>
