@@ -1,7 +1,7 @@
 import useLanguage from '@/hooks/useLanguage';
 import { useEffect, useState } from 'react';
 import s from './translation.module.scss';
-import { language } from '@/config/language';
+import languages, { language } from '@/config/language';
 
 export default function Translation() {
   const setLanguage = useLanguage();
@@ -29,15 +29,14 @@ export default function Translation() {
           <div className={s.langWrapper}>
             <div className={s.lang}>LANGUAGE SELECT</div>
             <div className={s.langSelect}>
-              <div className={s.langSelectButton} onClick={() => setLang(language.zhCn)}>
-                中文
-              </div>
-              <div className={s.langSelectButton} onClick={() => setLang(language.en)}>
-                ENGLISH
-              </div>
-              <div className={s.langSelectButton} onClick={() => setLang(language.jp)}>
-                日本語
-              </div>
+              {
+                Object.keys(languages).map(key =>
+                  <div className={s.langSelectButton}
+                    onClick={() => setLanguage(language[key as unknown as language] as unknown as language)}>
+                      {languages[key]}
+                    </div>
+                )
+              }
             </div>
           </div>
         </div>
