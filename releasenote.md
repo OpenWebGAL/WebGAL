@@ -1,11 +1,14 @@
-## 发布日志：WebGAL 4.3.15
+## 发布日志：WebGAL 4.3.18
 ### 在此版本中
-1、修复了文字偏移的问题
 
-2、修复了文字动画异常闪烁的问题
+添加了多国语言支持
 
-## Release Note: WebGAL 4.3.15
+## Release Note: WebGAL 4.3.18
 ### In this version
-Fixed the issue of abnormal text offset
 
-Fixed the problem of abnormal flickering in text fade-in animation
+Added internationalization
+
+## リリースログ：WebGAL 4.3.18
+### このバージョンでは
+
+多言語サポートが追加されました
