@@ -17,7 +17,7 @@
 
 一个简短的示例：
 
-https://demo.msfasr.com
+https://demo.openwebgal.com
 
 一个完整的游戏：
 
@@ -25,7 +25,7 @@ https://demo.msfasr.com
 
 ### 使用 WebGAL 制作游戏
 
-[WebGAL 开发文档](https://docs.msfasr.com/)
+[WebGAL 开发文档](https://docs.openwebgal.com/)
 
 [下载 WebGAL 图形化编辑器](https://github.com/MakinoharaShoko/WebGAL_Terre/releases)
 
@@ -47,7 +47,7 @@ https://demo.msfasr.com
 
 ### 参与 WebGAL 的开发工作
 
-**想要参与引擎开发的开发者请阅读 [此项目的参与指南](https://docs.msfasr.com/developers/)**
+**想要参与引擎开发的开发者请阅读 [此项目的参与指南](https://docs.openwebgal.com/developers/)**
 
 ### 赞助
 
@@ -55,7 +55,7 @@ WebGAL 是一款开源软件，因此你可以免费在 MPL-2.0 开源协议的�
 
 但即便如此，你的赞助也可以给予开发者前进的动力，让这个项目变得更好。
 
-[赞助本项目](https://docs.msfasr.com/sponsor/)
+[赞助本项目](https://docs.openwebgal.com/sponsor/)
 
 ## Stargazers over time
 
