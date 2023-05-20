@@ -20,6 +20,7 @@ const initState: IGuiState = {
   titleBgm: '',
   showExtra: false,
   showGlobalDialog: false,
+  showPanicOverlay: false,
 };
 
 /**

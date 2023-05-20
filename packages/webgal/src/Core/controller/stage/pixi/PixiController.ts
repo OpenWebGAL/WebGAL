@@ -359,6 +359,10 @@ export default class PixiStage {
         figureSprite.anchor.set(0.5);
         figureSprite.position.y = this.stageHeight / 2;
         const targetWidth = originalWidth * targetScale;
+        const targetHeight = originalHeight * targetScale;
+        if (targetHeight < this.stageHeight) {
+          figureSprite.position.y = this.stageHeight - targetHeight / 2;
+        }
         if (presetPosition === 'center') {
           figureSprite.position.x = this.stageWidth / 2;
         }
