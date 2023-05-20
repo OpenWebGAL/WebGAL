@@ -50,6 +50,15 @@ WebGAL はオープンソース ソフトウェアであるため、MPL-2.0 オ�
 
 [このプロジェクトのスポンサー](https://docs.openwebgal.com/sponsor/)
 
+
+## Sponsor
+
+| <img src="https://avatars.githubusercontent.com/u/91712707?v=4" alt="T2" style="zoom:25%;" /> |
+| ------------------------------------------------------------ |
+| [T2-official(T2)](https://github.com/T2-official)            |
+
+
+
 ## Stargazers over time
 
 [![Stargazers over time](https://starchart.cc/MakinoharaShoko/WebGAL.svg)](https://starchart.cc/MakinoharaShoko/WebGAL)
