@@ -33,7 +33,7 @@ export default function Translation() {
                 <div
                   key={key}
                   className={s.langSelectButton}
-                  onClick={() => setLanguage(language[key as unknown as language] as unknown as language)}
+                  onClick={() => setLang(language[key as unknown as language] as unknown as language)}
                 >
                   {languages[key]}
                 </div>
