@@ -20,6 +20,59 @@ export function System() {
   const setLanguage = useLanguage();
   const t = useTrans('menu.options.pages.system.options.');
 
+  function exportSaves() {
+    setStorage();
+    localforage.getItem(RUNTIME_GAME_INFO.gameKey).then((newUserData) => {
+      const saves = JSON.stringify(newUserData);
+      if (saves !== null) {
+        // @ts-ignore
+        const blob = new Blob([saves], { type: 'application/json' });
+        const blobUrl = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = blobUrl;
+        a.download = 'saves.json';
+        a.click();
+        a.remove();
+      }
+    });
+  }
+
+  function importSaves() {
+    const inputElement = document.createElement('input');
+    inputElement.type = 'file';
+    inputElement.onchange = importSavesEventHandler;
+    inputElement.click();
+  }
+
+  function importSavesEventHandler(ev: any) {
+    // const t = useTrans('menu.options.pages.system.options.');
+
+    const file = ev.target.files[0];
+    const reader = new FileReader();
+    reader.onload = (evR) => {
+      const saves = evR!.target!.result as string;
+      try {
+        const saveAsObj = JSON.parse(saves);
+        showGlogalDialog({
+          title: t('gameSave.dialogs.import.title'),
+          leftText: t('$common.yes'),
+          rightText: t('$common.no'),
+          leftFunc: () => {
+            localforage.setItem(RUNTIME_GAME_INFO.gameKey, saveAsObj).then(() => {
+              logger.info(t('gameSave.dialogs.import.tip'));
+            });
+            getStorage();
+          },
+          rightFunc: () => {},
+        });
+      } catch (e) {
+        logger.error(t('gameSave.dialogs.import.error'), e);
+      }
+      // window.location.reload(); // dirty: 强制刷新 UI
+    };
+    reader.readAsText(file, 'UTF-8');
+  }
+
   return (
     <div className={styles.Options_main_content_half}>
       <NormalOption key="option1" title={t('autoSpeed.title')}>
@@ -108,57 +161,4 @@ export function System() {
       </NormalOption>
     </div>
   );
-}
-
-function exportSaves() {
-  setStorage();
-  localforage.getItem(RUNTIME_GAME_INFO.gameKey).then((newUserData) => {
-    const saves = JSON.stringify(newUserData);
-    if (saves !== null) {
-      // @ts-ignore
-      const blob = new Blob([saves], { type: 'application/json' });
-      const blobUrl = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = blobUrl;
-      a.download = 'saves.json';
-      a.click();
-      a.remove();
-    }
-  });
-}
-
-function importSaves() {
-  const inputElement = document.createElement('input');
-  inputElement.type = 'file';
-  inputElement.onchange = importSavesEventHandler;
-  inputElement.click();
-}
-
-function importSavesEventHandler(ev: any) {
-  const t = useTrans('menu.options.pages.system.options.');
-
-  const file = ev.target.files[0];
-  const reader = new FileReader();
-  reader.onload = (evR) => {
-    const saves = evR!.target!.result as string;
-    try {
-      const saveAsObj = JSON.parse(saves);
-      showGlogalDialog({
-        title: t('gameSave.dialogs.import.title'),
-        leftText: t('$common.yes'),
-        rightText: t('$common.no'),
-        leftFunc: () => {
-          localforage.setItem(RUNTIME_GAME_INFO.gameKey, saveAsObj).then(() => {
-            logger.info(t('gameSave.dialogs.import.tip'));
-          });
-          getStorage();
-        },
-        rightFunc: () => {},
-      });
-    } catch (e) {
-      logger.error(t('gameSave.dialogs.import.error'), e);
-    }
-    // window.location.reload(); // dirty: 强制刷新 UI
-  };
-  reader.readAsText(file, 'UTF-8');
 }
