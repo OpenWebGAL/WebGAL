@@ -13,6 +13,7 @@
   "author": "Mahiru <Mahiru_@outlook.com>",
   "license": "MPL-2.0",
   "dependencies": {
+    "chevrotain": "^10.5.0",
     "cloudlogjs": "^1.0.11",
     "lodash": "^4.17.21"
   },

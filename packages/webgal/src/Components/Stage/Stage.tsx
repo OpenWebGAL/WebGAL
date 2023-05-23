@@ -12,6 +12,7 @@ import { TextBoxFilm } from '@/Components/Stage/TextBox/TextBoxFilm';
 import { useHotkey } from '@/hooks/useHotkey';
 import { MainStage } from '@/Components/Stage/MainStage/MainStage';
 import IntroContainer from '@/Components/Stage/introContainer/IntroContainer';
+import { isIOS } from '@/Core/initializeScript';
 // import OldStage from '@/Components/Stage/OldStage/OldStage';
 
 export const Stage: FC = () => {
@@ -26,6 +27,8 @@ export const Stage: FC = () => {
       {/* 已弃用旧的立绘与背景舞台 */}
       {/* <OldStage /> */}
       <MainStage />
+      <div id="pixiContianer" className={styles.pixiContainer} style={{ zIndex: isIOS ? '-5' : undefined }} />
+      <div id="chooseContainer" className={styles.chooseContainer} />
       {GUIState.showTextBox && stageState.enableFilm === '' && !stageState.isDisableTextbox && <TextBox />}
       {GUIState.showTextBox && stageState.enableFilm !== '' && <TextBoxFilm />}
       <AudioContainer />

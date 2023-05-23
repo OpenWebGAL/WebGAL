@@ -71,3 +71,12 @@
     opacity: 0;
   }
 }
+
+.pixiContainer{
+  position: absolute;
+  z-index: 5;
+}
+
+.chooseContainer{
+  z-index: 8;
+}

@@ -6,6 +6,7 @@ import { setStorage } from '@/Core/controller/storage/storageController';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import { setSlPage } from '@/store/userDataReducer';
+import useTrans from '@/hooks/useTrans';
 
 export const Load: FC = () => {
   const userDataState = useSelector((state: RootState) => state.userData);
@@ -78,11 +79,13 @@ export const Load: FC = () => {
     showSaves.push(saveElement);
   }
 
+  const t = useTrans('menu.');
+
   return (
     <div className={styles.Save_Load_main}>
       <div className={styles.Save_Load_top}>
         <div className={styles.Save_Load_title}>
-          <div className={styles.Load_title_text}>读档</div>
+          <div className={styles.Load_title_text}>{t('loadSaving.title')}</div>
         </div>
         <div className={styles.Save_Load_top_buttonList}>{page}</div>
       </div>

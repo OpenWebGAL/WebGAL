@@ -6,6 +6,7 @@ import cloneDeep from 'lodash/cloneDeep';
 import { IEffect } from '@/store/stageInterface';
 import { RUNTIME_CURRENT_BACKLOG } from '@/Core/runtime/backlog';
 import { logger } from '@/Core/util/etc/logger';
+import { isIOS } from '@/Core/initializeScript';
 
 export interface IAnimationObject {
   setStartState: Function;
@@ -54,11 +55,18 @@ export default class PixiStage {
 
   // 注册到 Ticker 上的函数
   private stageAnimations: Array<IStageAnimationObject> = [];
+  private assetLoader = new PIXI.Loader();
+  private loadQueue: { url: string; callback: () => void }[] = [];
 
   // 锁定变换对象（对象可能正在执行动画，不能应用变换）
   private lockTransformTarget: Array<string> = [];
   private stageWidth = 2560;
   private stageHeight = 1440;
+  /**
+   * 暂时没用上，以后可能用
+   * @private
+   */
+  private MAX_TEX_COUNT = 10;
 
   public constructor() {
     const app = new PIXI.Application({
@@ -84,7 +92,9 @@ export default class PixiStage {
     if (appRoot) {
       app.renderer.resize(appRoot.clientWidth, appRoot.clientHeight);
     }
-    app.renderer.view.style.zIndex = '5';
+    if (isIOS) {
+      app.renderer.view.style.zIndex = '-5';
+    }
 
     // 设置可排序
     app.stage.sortableChildren = true;
@@ -232,8 +242,7 @@ export default class PixiStage {
    * @param url 背景图片url
    */
   public addBg(key: string, url: string) {
-    const loader = new PIXI.Loader();
-
+    const loader = this.assetLoader;
     // 准备用于存放这个背景的 Container
     let thisBgContainer = new PIXI.Container();
 
@@ -289,11 +298,9 @@ export default class PixiStage {
      * 加载器部分
      */
     const resourses = Object.keys(loader.resources);
+    this.cacheGC();
     if (!resourses.includes(url)) {
-      // 清缓存
-      PIXI.utils.clearTextureCache();
-      // 此资源未加载，加载
-      loader.add(url).load(setup);
+      this.loadAsset(url, setup);
     } else {
       // 复用
       setup();
@@ -307,8 +314,7 @@ export default class PixiStage {
    * @param presetPosition
    */
   public addFigure(key: string, url: string, presetPosition: 'left' | 'center' | 'right' = 'center') {
-    const loader = new PIXI.Loader();
-
+    const loader = this.assetLoader;
     // 准备用于存放这个立绘的 Container
     let thisFigureContainer = new PIXI.Container();
 
@@ -353,6 +359,10 @@ export default class PixiStage {
         figureSprite.anchor.set(0.5);
         figureSprite.position.y = this.stageHeight / 2;
         const targetWidth = originalWidth * targetScale;
+        const targetHeight = originalHeight * targetScale;
+        if (targetHeight < this.stageHeight) {
+          figureSprite.position.y = this.stageHeight - targetHeight / 2;
+        }
         if (presetPosition === 'center') {
           figureSprite.position.x = this.stageWidth / 2;
         }
@@ -370,11 +380,9 @@ export default class PixiStage {
      * 加载器部分
      */
     const resourses = Object.keys(loader.resources);
+    this.cacheGC();
     if (!resourses.includes(url)) {
-      // 清缓存
-      PIXI.utils.clearTextureCache();
-      // 此资源未加载，加载
-      loader.add(url).load(setup);
+      this.loadAsset(url, setup);
     } else {
       // 复用
       setup();
@@ -422,6 +430,30 @@ export default class PixiStage {
     //   newEffects.splice(index, 1);
     // }
     // updateCurrentEffects(newEffects);
+  }
+
+  public cacheGC() {
+    PIXI.utils.clearTextureCache();
+  }
+
+  private loadAsset(url: string, callback: () => void) {
+    this.loadQueue.push({ url, callback });
+    /**
+     * 尝试启动加载
+     */
+    this.callLoader();
+  }
+
+  private callLoader() {
+    if (!this.assetLoader.loading) {
+      const front = this.loadQueue.shift();
+      if (front) {
+        this.assetLoader.add(front.url).load(() => {
+          front.callback();
+          this.callLoader();
+        });
+      }
+    }
   }
 
   private updateFps() {

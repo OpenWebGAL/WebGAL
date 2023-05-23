@@ -6,12 +6,16 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import { setMenuPanelTag, setVisibility } from '@/store/GUIReducer';
 import { backToTitle } from '@/Core/controller/gamePlay/backToTitle';
+import useTrans from '@/hooks/useTrans';
 
 /**
  * Menu页的底栏
  * @constructor
  */
 export const MenuPanel = () => {
+  // 国际化
+  const t = useTrans('menu.');
+
   const GUIState = useSelector((state: RootState) => state.GUI);
   const dispatch = useDispatch();
   // 设置Menu按钮的高亮
@@ -41,9 +45,10 @@ export const MenuPanel = () => {
         iconColor={SaveIconColor}
         tagColor={SaveTagColor}
         clickFunc={() => {
+          if (GUIState.showTitle) return;
           dispatch(setMenuPanelTag(MenuPanelTag.Save));
         }}
-        tagName="存档"
+        tagName={t('saving.title')}
         key="saveButton"
       />
       <MenuPanelButton
@@ -54,7 +59,7 @@ export const MenuPanel = () => {
         clickFunc={() => {
           dispatch(setMenuPanelTag(MenuPanelTag.Load));
         }}
-        tagName="读档"
+        tagName={t('loadSaving.title')}
         key="loadButton"
       />
       <MenuPanelButton
@@ -65,7 +70,7 @@ export const MenuPanel = () => {
         clickFunc={() => {
           dispatch(setMenuPanelTag(MenuPanelTag.Option));
         }}
-        tagName="选项"
+        tagName={t('options.title')}
         key="optionButton"
       />
       <MenuPanelButton
@@ -74,7 +79,7 @@ export const MenuPanel = () => {
           backToTitle();
           dispatch(setVisibility({ component: 'showMenuPanel', visibility: false }));
         }}
-        tagName="标题"
+        tagName={t('title.title')}
         key="titleIcon"
       />
       <MenuPanelButton
@@ -82,7 +87,7 @@ export const MenuPanel = () => {
         clickFunc={() => {
           dispatch(setVisibility({ component: 'showMenuPanel', visibility: false }));
         }}
-        tagName="返回"
+        tagName={t('exit.title')}
         key="exitIcon"
       />
     </div>

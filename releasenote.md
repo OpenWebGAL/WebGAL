@@ -1,11 +1,14 @@
-## 发布日志：WebGAL 4.3.15
+## 发布日志：WebGAL 4.3.18.1
 ### 在此版本中
-1、修复了文字偏移的问题
 
-2、修复了文字动画异常闪烁的问题
+修复了引擎的存档导入及标题界面可以存档的问题
 
-## Release Note: WebGAL 4.3.15
+## Release Note: WebGAL 4.3.18.1
 ### In this version
-Fixed the issue of abnormal text offset
 
-Fixed the problem of abnormal flickering in text fade-in animation
+Fixed the problem that the engine's archive import and title screen can save the game.
+
+## リリースログ：WebGAL 4.3.18.1
+### このバージョンでは
+
+エンジンのアーカイブインポートとタイトル画面でアーカイブができる問題を修正した

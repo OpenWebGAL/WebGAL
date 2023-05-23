@@ -5,6 +5,7 @@ import { useValue } from '@/hooks/useValue';
 import { System } from '@/Components/UI/Menu/Options/System/System';
 import { Display } from '@/Components/UI/Menu/Options/Display/Display';
 import { Sound } from '@/Components/UI/Menu/Options/Sound/Sound';
+import useTrans from '@/hooks/useTrans';
 
 enum optionPage {
   'System',
@@ -22,23 +23,25 @@ export const Options: FC = () => {
     } else return styles.Options_page_button;
   }
 
+  const t = useTrans('menu.options.');
+
   return (
     <div className={styles.Options_main}>
       <div className={styles.Options_top}>
         <div className={styles.Options_title}>
-          <div className={styles.Option_title_text}>选项</div>
+          <div className={styles.Option_title_text}>{t('title')}</div>
         </div>
       </div>
       <div className={styles.Options_page_container}>
         <div className={styles.Options_button_list}>
           <div onClick={() => currentOptionPage.set(optionPage.System)} className={getClassName(optionPage.System)}>
-            系统
+            {t('pages.system.title')}
           </div>
           <div onClick={() => currentOptionPage.set(optionPage.Display)} className={getClassName(optionPage.Display)}>
-            显示
+            {t('pages.display.title')}
           </div>
           <div onClick={() => currentOptionPage.set(optionPage.Sound)} className={getClassName(optionPage.Sound)}>
-            音频
+            {t('pages.sound.title')}
           </div>
         </div>
         <div className={styles.Options_main_content}>

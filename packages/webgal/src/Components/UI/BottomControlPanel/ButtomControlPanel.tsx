@@ -22,8 +22,10 @@ import { componentsVisibility, MenuPanelTag } from '@/store/guiInterface';
 import { backToTitle } from '@/Core/controller/gamePlay/backToTitle';
 import { saveGame } from '@/Core/controller/storage/saveGame';
 import { loadGame } from '@/Core/controller/storage/loadGame';
+import useTrans from '@/hooks/useTrans';
 
 export const BottomControlPanel = () => {
+  const t = useTrans('gaming.');
   const strokeWidth = 2.5;
   const size = 48;
   const GUIStore = useSelector((state: RootState) => state.GUI);
@@ -39,7 +41,7 @@ export const BottomControlPanel = () => {
   const saveData = useSelector((state: RootState) => state.userData.saveData);
   let fastSlPreview = (
     <div style={{ height: '100%', width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-      <div style={{ fontSize: '125%' }}>暂无存档</div>
+      <div style={{ fontSize: '125%' }}>{t('noSaving')}</div>
     </div>
   );
   if (saveData[0]) {
@@ -58,7 +60,8 @@ export const BottomControlPanel = () => {
   }
 
   return (
-    <div className={styles.ToCenter}>
+    // <div className={styles.ToCenter}>
+    <>
       {GUIStore.showTextBox && stageState.enableFilm === '' && (
         <div className={styles.main}>
           {GUIStore.showTextBox && (
@@ -70,7 +73,7 @@ export const BottomControlPanel = () => {
                 fill="#f5f5f7"
                 strokeWidth={strokeWidth}
               />
-              <span className={styles.button_text}>隐藏</span>
+              <span className={styles.button_text}>{t('buttons.hide')}</span>
             </span>
           )}
           {!GUIStore.showTextBox && (
@@ -82,7 +85,7 @@ export const BottomControlPanel = () => {
                 fill="#f5f5f7"
                 strokeWidth={strokeWidth}
               />
-              <span className={styles.button_text}>显示</span>
+              <span className={styles.button_text}>{t('buttons.show')}</span>
             </span>
           )}
           <span
@@ -99,7 +102,7 @@ export const BottomControlPanel = () => {
               fill="#f5f5f7"
               strokeWidth={strokeWidth}
             />
-            <span className={styles.button_text}>回想</span>
+            <span className={styles.button_text}>{t('buttons.backlog')}</span>
           </span>
           <span
             className={styles.singleButton}
@@ -119,11 +122,11 @@ export const BottomControlPanel = () => {
               fill="#f5f5f7"
               strokeWidth={strokeWidth}
             />
-            <span className={styles.button_text}>重播</span>
+            <span className={styles.button_text}>{t('buttons.replay')}</span>
           </span>
           <span id="Button_ControlPanel_auto" className={styles.singleButton} onClick={switchAuto}>
             <PlayOne className={styles.button} theme="outline" size={size} fill="#f5f5f7" strokeWidth={strokeWidth} />
-            <span className={styles.button_text}>自动</span>
+            <span className={styles.button_text}>{t('buttons.auto')}</span>
           </span>
           <span id="Button_ControlPanel_fast" className={styles.singleButton} onClick={switchFast}>
             <DoubleRight
@@ -133,7 +136,7 @@ export const BottomControlPanel = () => {
               fill="#f5f5f7"
               strokeWidth={strokeWidth}
             />
-            <span className={styles.button_text}>快进</span>
+            <span className={styles.button_text}>{t('buttons.forward')}</span>
           </span>
           <span
             className={styles.singleButton + ' ' + styles.fastsave}
@@ -148,7 +151,7 @@ export const BottomControlPanel = () => {
               fill="#f5f5f7"
               strokeWidth={strokeWidth}
             />
-            <span className={styles.button_text}>快速存档</span>
+            <span className={styles.button_text}>{t('buttons.quicklySave')}</span>
             <div className={styles.fastSlPreview + ' ' + styles.fastSPreview}>{fastSlPreview}</div>
           </span>
           <span
@@ -158,7 +161,7 @@ export const BottomControlPanel = () => {
             }}
           >
             <DoubleUp className={styles.button} theme="outline" size={size} fill="#f5f5f7" strokeWidth={strokeWidth} />
-            <span className={styles.button_text}>快速读档</span>
+            <span className={styles.button_text}>{t('buttons.quicklyLoad')}</span>
             <div className={styles.fastSlPreview + ' ' + styles.fastLPreview}>{fastSlPreview}</div>
           </span>
           <span
@@ -169,7 +172,7 @@ export const BottomControlPanel = () => {
             }}
           >
             <Save className={styles.button} theme="outline" size={size} fill="#f5f5f7" strokeWidth={strokeWidth} />
-            <span className={styles.button_text}>存档</span>
+            <span className={styles.button_text}>{t('buttons.save')}</span>
           </span>
           <span
             className={styles.singleButton}
@@ -185,7 +188,7 @@ export const BottomControlPanel = () => {
               fill="#f5f5f7"
               strokeWidth={strokeWidth}
             />
-            <span className={styles.button_text}>读档</span>
+            <span className={styles.button_text}>{t('buttons.load')}</span>
           </span>
           <span
             className={styles.singleButton}
@@ -201,7 +204,7 @@ export const BottomControlPanel = () => {
               fill="#f5f5f7"
               strokeWidth={strokeWidth}
             />
-            <span className={styles.button_text}>选项</span>
+            <span className={styles.button_text}>{t('buttons.options')}</span>
           </span>
           <span
             className={styles.singleButton}
@@ -210,10 +213,11 @@ export const BottomControlPanel = () => {
             }}
           >
             <Home className={styles.button} theme="outline" size={size} fill="#f5f5f7" strokeWidth={strokeWidth} />
-            <span className={styles.button_text}>标题</span>
+            <span className={styles.button_text}>{t('buttons.title')}</span>
           </span>
         </div>
       )}
-    </div>
+    </>
+    // </div>
   );
 };
