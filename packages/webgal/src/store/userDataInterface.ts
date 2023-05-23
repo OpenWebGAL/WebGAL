@@ -1,5 +1,6 @@
 import { IBacklogItem, sceneEntry } from '@/Core/runtime/runtimeInterface';
 import { IStageState } from './stageInterface';
+import { language } from '@/config/language';
 
 /**
  * 播放速度的枚举类型
@@ -33,6 +34,7 @@ export interface IOptionData {
   bgmVolume: number; // 背景音乐音量
   slPage: number; // 存读档界面所在页面
   textboxFont: textFont;
+  language: language;
 }
 
 /**

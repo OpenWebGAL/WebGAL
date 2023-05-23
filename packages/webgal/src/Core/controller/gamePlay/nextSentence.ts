@@ -6,6 +6,7 @@ import { webgalStore } from '@/store/store';
 import { resetStageState } from '@/store/stageReducer';
 import cloneDeep from 'lodash/cloneDeep';
 import { webgalEventBus } from '@/Core/runtime/eventBus';
+import { commandType } from '@/Core/controller/scene/sceneInterface';
 
 /**
  * 进行下一句
@@ -47,7 +48,8 @@ export const nextSentence = () => {
     const newStageState = cloneDeep(stageState);
     for (let i = 0; i < newStageState.PerformList.length; i++) {
       const e: IRunPerform = newStageState.PerformList[i];
-      if (!e.isHoldOn) {
+      // TODO: 解决这里的硬编码
+      if (!e.isHoldOn || e.script.command === commandType.playEffect) {
         newStageState.PerformList.splice(i, 1);
         i--;
       }
@@ -67,7 +69,7 @@ export const nextSentence = () => {
         isGoNext = true;
       }
       e.stopFunction();
-      clearTimeout(e.stopTimeout);
+      clearTimeout(e.stopTimeout as unknown as number);
       RUNTIME_GAMEPLAY.performList.splice(i, 1);
       i--;
     }

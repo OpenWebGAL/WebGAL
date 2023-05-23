@@ -1,10 +1,8 @@
 /**
  * @file 引擎初始化时会执行的脚本，包括获取游戏信息，初始化运行时变量，初始化用户数据存储
  */
-
 import { logger } from './util/etc/logger';
 import { infoFetcher } from './util/coreInitialFunction/infoFetcher';
-import { resize } from './util/coreInitialFunction/resize';
 import { assetSetter, fileType } from './util/gameAssetsAccess/assetSetter';
 import { sceneFetcher } from './controller/scene/sceneFetcher';
 import { RUNTIME_SCENE_DATA } from './runtime/sceneData';
@@ -19,28 +17,30 @@ import { RUNTIME_GAMEPLAY } from '@/Core/runtime/gamePlay';
 import PixiStage from '@/Core/controller/stage/pixi/PixiController';
 import axios from 'axios';
 
+const u = navigator.userAgent;
+export const isIOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); // 判断是否是 iOS终端
+
 /**
  * 引擎初始化函数
  */
 export const initializeScript = (): void => {
   // 打印初始log信息
-  logger.info('WebGAL 4.3.15');
+  logger.info('WebGAL 4.3.18.1');
   logger.info('Github: https://github.com/MakinoharaShoko/WebGAL ');
   logger.info('Made with ❤ by MakinoharaShoko');
   // 激活强制缩放
   // 在调整窗口大小时重新计算宽高，设计稿按照 1600*900。
-  setTimeout(resize, 100);
-  resize();
-  window.onresize = resize;
-  // 监听键盘 F11 事件，全屏时触发页面调整
-  document.onkeydown = function (event) {
-    const e = event;
-    if (e && e.key === 'F11') {
-      setTimeout(() => {
-        resize();
-      }, 50);
-    }
-  };
+  if (isIOS) {
+    /**
+     * iOS
+     */
+    alert(
+      `由于苹果设备的兼容性问题，引擎可能表现不正常或运行缓慢。
+| Due to compatibility issues with Apple devices, the engine may behave abnormally or run slowly.
+| Appleのデバイスとの互換性の問題により、エンジンの動作が正常でない場合や遅くなる可能性があります。`,
+    );
+  }
+
   // 获得 userAnimation
   loadStyle('./game/userStyleSheet.css');
   // 获得 user Animation
@@ -70,17 +70,15 @@ export const initializeScript = (): void => {
   /**
    * iOS 设备 卸载所有 Service Worker
    */
-  const u = navigator.userAgent;
-  const isIOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); // 判断是否是 iOS终端
-  if ('serviceWorker' in navigator && isIOS) {
-    navigator.serviceWorker.getRegistrations().then((registrations) => {
-      for (const registration of registrations) {
-        registration.unregister().then(() => {
-          logger.info('已卸载 Service Worker');
-        });
-      }
-    });
-  }
+  // if ('serviceWorker' in navigator && isIOS) {
+  //   navigator.serviceWorker.getRegistrations().then((registrations) => {
+  //     for (const registration of registrations) {
+  //       registration.unregister().then(() => {
+  //         logger.info('已卸载 Service Worker');
+  //       });
+  //     }
+  //   });
+  // }
 
   /**
    * 绑定工具函数

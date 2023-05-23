@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="zh-Hans">
 <head>
-    <meta charset="UTF-8"/>
-    <link rel="icon" type="image/x-icon" href="/src/favicon.ico"/>
-    <!--    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>-->
-    <title>WebGAL</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no" />
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/x-icon" href="/src/favicon.ico" />
+  <!--    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>-->
+  <title>WebGAL</title>
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no" />
 </head>
 <body>
 <!--快速显示落地页，让用户感知不到加载的过程-->
@@ -20,8 +21,8 @@
             opacity: 1;
             transition: opacity 1.5s;
 ">
-    <!--    落地页背景-->
-    <div id="Title_bg_container" style="
+  <!--    落地页背景-->
+  <div id="Title_bg_container" style="
     height: 100%;
     width: 100%;
     position: absolute;
@@ -30,8 +31,8 @@
     opacity: 1;
     transition: opacity 1s;
 "></div>
-    <!--    点击后的白色渐变-->
-    <div id="Title_white_container" style="
+  <!--    点击后的白色渐变-->
+  <div id="Title_white_container" style="
     width: 100%;
     height: 100%;
     position: absolute;
@@ -40,8 +41,8 @@
     background: linear-gradient(165deg,rgba(255,255,255,0.25) 0%,rgba(255,255,255,1) 50%,rgba(255,255,255,0.25) 100%);
     transition: opacity 1s;
 "></div>
-    <!--    落地页文字-->
-    <div id="Title_enter_text" style="width: 100%;
+  <!--    落地页文字-->
+  <div id="Title_enter_text" style="width: 100%;
     position: absolute;
     top: 0;
     height: 100%;
@@ -50,159 +51,121 @@
     transition: opacity 1s;
     z-index: 15;
     font-family: '思源宋体',Georgia,serif">
-        <div class="toCenter" style="
+    <div class="toCenter" style="
             width: 100%;
             height: 100%;
             display: flex;
             justify-content: center;
             align-items: center;
 ">
-            <div class="StartButton" style="
+      <div class="StartButton" style="
             letter-spacing: 0.25em ;
             padding: 2em 2em 2em 2em;
             text-shadow: 0 0 30px rgba(0,0,0,0.5);
             transition: text-shadow 1s;
             font-size: 175%;
 ">
-                PRESS THE SCREEN TO START
-            </div>
-        </div>
-        <div
-            style="position: absolute;
+        PRESS THE SCREEN TO START
+      </div>
+    </div>
+    <div
+      style="position: absolute;
         bottom: 1em;
         display: flex;
         justify-content: center;
         width: 100%;
         flex-flow: column;
         align-items: center ">
-            <div style="padding: 0 0 0.25em 0">
-                Powered by <a href="https://github.com/MakinoharaShoko/WebGAL" onclick="jump('https://github.com/MakinoharaShoko/WebGAL')">WebGAL</a> Framework
-            </div>
-            <div>
-                Made with ❤ by <a href="https://github.com/MakinoharaShoko" onclick="jump('https://github.com/MakinoharaShoko')">Mahiru</a>
-            </div>
-        </div>
+      <div style="padding: 0 0 0.25em 0">
+        Powered by <a href="https://github.com/MakinoharaShoko/WebGAL"
+                      onclick="jump(event, 'https://github.com/MakinoharaShoko/WebGAL')">WebGAL</a> Framework
+      </div>
+      <div>
+        Made with ❤ by <a href="https://github.com/MakinoharaShoko"
+                          onclick="jump(event, 'https://github.com/MakinoharaShoko')">Mahiru</a>
+      </div>
     </div>
+  </div>
 </div>
+<div id="panic-overlay"> <!-- 紧急回避 --> </div>
 <div id="root"></div>
-<script type="module" src="/src/main.tsx"></script>
 <script>
   /**
    * 注册 Service Worker
    */
-
   const u = navigator.userAgent;
   const isIOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); // 判断是否是 iOS终端
-  if ('serviceWorker' in navigator && !isIOS) {
-    navigator.serviceWorker
-    .register('./webgal-serviceworker.js', { scope: './assets' })
-    .then(function (reg) {
+  if ("serviceWorker" in navigator && !isIOS) {
+    navigator.serviceWorker.register("./webgal-serviceworker.js", { scope: "./assets" }).then(function(reg) {
       // registration worked
-      console.log('Registration succeeded. Scope is ' + reg.scope);
-    })
-    .catch(function (error) {
+      console.log("Registration succeeded. Scope is " + reg.scope);
+    }).catch(function(error) {
       // registration failed
-      console.log('Registration failed with ' + error);
+      console.log("Registration failed with " + error);
     });
   }
 </script>
+<script type="module" src="/src/main.tsx"></script>
+<script type="module" src="/src/Core/util/resize.ts"></script>
 <script>
-    let enterPromise=new Promise(res=>window.enterPromise=res)
-    let renderPromise=new Promise(res=>window.renderPromise=res)
-       /**
-         * 将播放bgm的事件发送出去
-         */
-    Promise.all([enterPromise,renderPromise])
-    .then(()=>{
-        const event = new MouseEvent('click', {
-            'view': window,
-            'bubbles': true,
-            'cancelable': true,
-        });
-        const target = document.getElementById('enter_game_target');
-        if (target !== null) {
-            target.dispatchEvent(event);
-        }
-    })
-    // 激活强制缩放
-    // 在调整窗口大小时重新计算宽高，设计稿按照 1600*900。
-    setTimeout(resizeTitle, 100);
-    resizeTitle();
-    //判断是跳转操作还是enter操作
-    let tryToEnter=true;
-    window.onresize = resizeTitle;
-    // 监听键盘 F11 事件，全屏时触发页面调整
-    document.onkeydown = function (event) {
-        const e = event;
-        if (e && e.keyCode === 122) {
-            setTimeout(() => {
-                resizeTitle();
-            }, 100);
-        }
-    };
-     function jump(url){
-         tryToEnter=false;
-         window.location=url;
-         setTimeout(() => {
-                tryToEnter=true
-            }, 10);
-     }
-    /**
-     * 点击屏幕，进入引擎主界面
-     */
-    function enter() {
-        if(!tryToEnter) return;
-        document.getElementById('Title_bg_container').style.opacity = '0'; // 调整标题背景的透明度
-        document.getElementById('Title_enter_text').style.opacity = '0'; // 调整标题文字的透明度
-        setTimeout(() => document.getElementById('Title_white_container').style.opacity = '1', 50); // 在50ms后开始显示白色渐变
-        const title = document.getElementById('Title_enter_page');
-        setTimeout(() => title.style.opacity = '0', 500); //500ms后开始降低落地页透明度
-        title.style.pointerEvents = 'none'; //落地页不再响应点击
-        title.style.background = 'linear-gradient( #a1c4fd 0%, #c2e9fb 100%)'; //改变标题渐变效果
-        setTimeout(() => title.style.display = 'none', 2000) // 将落地页设置为不显示
-        window.enterPromise()
-        delete window.enterPromise
+  let enterPromise = new Promise(res => window.enterPromise = res);
+  let renderPromise = new Promise(res => window.renderPromise = res);
+  /**
+   * 将播放bgm的事件发送出去
+   */
+  Promise.all([enterPromise, renderPromise]).then(() => {
+    const event = new MouseEvent("click", {
+      "view": window,
+      "bubbles": true,
+      "cancelable": true
+    });
+    const target = document.getElementById("enter_game_target");
+    if (target) {
+      target.dispatchEvent(event);
     }
+  });
 
-    /**
-     * 对标题页进行自动强制缩放
-     */
-    function resizeTitle() {
-        const targetHeight = 1440;
-        const targetWidth = 2560;
+  function jump(event, url) {
+    // 获取点击事件，阻止点击事件冒泡触发 `enter` 事件
+    event.stopPropagation();
+    // window.location = url;
+  }
 
-        const h = window.innerHeight; // 窗口高度
-        const w = window.innerWidth; // 窗口宽度
-        const zoomH = h / targetHeight; // 以窗口高度为基准的变换比
-        const zoomW = w / targetWidth; // 以窗口宽度为基准的变换比
-        const zoomH2 = w / targetHeight; // 竖屏时以窗口高度为基础的变换比
-        const zoomW2 = h / targetWidth; // 竖屏时以窗口宽度为基础的变换比
-        let mh = (targetHeight - h) / 2; // y轴移动距离
-        let mw = (targetWidth - w) / 2; // x轴移动距离
-        let mh2os = targetWidth / 2 - w / 2; // 竖屏时 y轴移动距离
-        let mw2os = targetHeight / 2 - h / 2; // 竖屏时 x轴移动距离
-        const root = document.getElementById('Title_enter_page'); // 获取根元素
-        if (root) {
-            if (w > h) {
-                mw = -mw;
-                mh = -mh;
-                if (w * (9 / 16) >= h) {
-                    root.style.transform = `translate(${mw}px, ${mh}px) scale(${zoomH},${zoomH})`;
-                }
-                if (w * (9 / 16) < h) {
-                    root.style.transform = `translate(${mw}px, ${mh}px) scale(${zoomW},${zoomW})`;
-                }
-            } else {
-                mw2os = -mw2os;
-                if (h * (9 / 16) >= w) {
-                    root.style.transform = `rotate(90deg) translate(${mw2os}px, ${mh2os}px) scale(${zoomH2},${zoomH2})`;
-                }
-                if (h * (9 / 16) < w) {
-                    root.style.transform = `rotate(90deg) translate(${mw2os}px, ${mh2os}px) scale(${zoomW2},${zoomW2})`;
-                }
-            }
-        }
+  /**
+   * 点击屏幕，进入引擎主界面
+   */
+  function enter() {
+    const bgContainer = document.getElementById("Title_bg_container");
+    if (bgContainer) {
+      bgContainer.style.opacity = "0"; // 调整标题背景的透明度
     }
+    const enterText = document.getElementById("Title_enter_text");
+    if (enterText) {
+      enterText.style.opacity = "0"; // 调整标题文字的透明度
+    }
+    const whiteContainer = document.getElementById("Title_white_container");
+    setTimeout(() => {
+      if (whiteContainer) {
+        whiteContainer.style.opacity = "1";
+      }
+    }, 50); // 在50ms后开始显示白色渐变
+    const title = document.getElementById("Title_enter_page");
+    setTimeout(() => {
+      if (title)
+        title.style.opacity = "0";
+    }, 500); //500ms后开始降低落地页透明度
+    if (!isIOS && title) {
+      title.style.pointerEvents = "none"; //落地页不再响应点击
+      title.style.background = "linear-gradient( #a1c4fd 0%, #c2e9fb 100%)"; //改变标题渐变效果
+    }
+    setTimeout(() => {
+      if (title) {
+        title.style.display = "none";
+      }
+    }, 2000); // 将落地页设置为不显示
+    window.enterPromise();
+    delete window.enterPromise;
+  }
 </script>
 </body>
 </html>

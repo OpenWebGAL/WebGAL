@@ -3,6 +3,7 @@
  * 这些状态会在指定的生命周期与本地存储发生交换，比如打开存档界面、存档、修改设置时。
  * 在引擎初始化时会将这些状态从本地存储加载到运行时状态。
  */
+import { language } from '@/config/language';
 import {
   IAppreciationAsset,
   ISaveData,
@@ -25,6 +26,7 @@ const initialOptionSet = {
   vocalVolume: 100, // 语音音量
   bgmVolume: 25, // 背景音乐音量
   textboxFont: textFont.song,
+  language: language.zhCn,
 };
 
 // 初始化用户数据

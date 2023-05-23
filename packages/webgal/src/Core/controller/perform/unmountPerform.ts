@@ -14,7 +14,7 @@ export const unmountPerform = (name: string) => {
     const e = RUNTIME_GAMEPLAY.performList[i];
     if (!e.isHoldOn && e.performName === name) {
       e.stopFunction();
-      clearTimeout(e.stopTimeout);
+      clearTimeout(e.stopTimeout as unknown as number);
       RUNTIME_GAMEPLAY.performList.splice(i, 1);
       i--;
     }
@@ -26,7 +26,7 @@ export const unmountPerformForce = (name: string) => {
     const e = RUNTIME_GAMEPLAY.performList[i];
     if (e.performName === name) {
       e.stopFunction();
-      clearTimeout(e.stopTimeout);
+      clearTimeout(e.stopTimeout as unknown as number);
       RUNTIME_GAMEPLAY.performList.splice(i, 1);
       i--;
 

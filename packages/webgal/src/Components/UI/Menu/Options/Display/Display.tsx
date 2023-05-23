@@ -7,16 +7,18 @@ import { setOptionData } from '@/store/userDataReducer';
 import { playSpeed, textFont, textSize } from '@/store/userDataInterface';
 import { setStorage } from '@/Core/controller/storage/storageController';
 import { TextPreview } from '@/Components/UI/Menu/Options/TextPreview/TextPreview';
+import useTrans from '@/hooks/useTrans';
 
 export function Display() {
   const userDataState = useSelector((state: RootState) => state.userData);
   const dispatch = useDispatch();
+  const t = useTrans('menu.options.pages.display.options.');
 
   return (
     <div className={styles.Options_main_content_half}>
-      <NormalOption key="option0" title="文字显示速度">
+      <NormalOption key="option0" title={t('textSpeed.title')}>
         <NormalButton
-          textList={['慢', '中', '快']}
+          textList={t('textSpeed.options.slow', 'textSpeed.options.medium', 'textSpeed.options.fast')}
           functionList={[
             () => {
               dispatch(setOptionData({ key: 'textSpeed', value: playSpeed.slow }));
@@ -34,9 +36,9 @@ export function Display() {
           currentChecked={userDataState.optionData.textSpeed}
         />
       </NormalOption>
-      <NormalOption key="option1" title="文本大小">
+      <NormalOption key="option1" title={t('textSize.title')}>
         <NormalButton
-          textList={['小', '中', '大']}
+          textList={t('textSize.options.small', 'textSize.options.medium', 'textSize.options.large')}
           functionList={[
             () => {
               dispatch(setOptionData({ key: 'textSize', value: textSize.small }));
@@ -54,9 +56,9 @@ export function Display() {
           currentChecked={userDataState.optionData.textSize}
         />
       </NormalOption>
-      <NormalOption key="option2" title="文本字体">
+      <NormalOption key="option2" title={t('textFont.title')}>
         <NormalButton
-          textList={['思源宋体', '黑体']}
+          textList={t('textFont.options.siYuanSimSun', 'textFont.options.SimHei')}
           functionList={[
             () => {
               dispatch(setOptionData({ key: 'textboxFont', value: textFont.song }));
@@ -70,7 +72,7 @@ export function Display() {
           currentChecked={userDataState.optionData.textboxFont}
         />
       </NormalOption>
-      <NormalOption key="option3" title="文本显示预览">
+      <NormalOption key="option3" title={t('textPreview.title')}>
         {/* 这是一个临时的组件，用于模拟文本预览的效果 */}
         <TextPreview />
       </NormalOption>

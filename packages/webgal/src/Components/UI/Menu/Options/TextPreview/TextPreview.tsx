@@ -1,16 +1,17 @@
-import React from 'react';
 import styles from './textPreview.module.scss';
 import textStyle from '../../../../Stage/TextBox/textbox.module.scss';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import { useFontFamily } from '@/hooks/useFontFamily';
 import { useTextAnimationDuration, useTextDelay } from '@/hooks/useTextOptions';
+import useTrans from '@/hooks/useTrans';
 
 export const TextPreview = (props: any) => {
   const userDataState = useSelector((state: RootState) => state.userData);
   const textDelay = useTextDelay(userDataState.optionData.textSpeed);
   const textDuration = useTextAnimationDuration(userDataState.optionData.textSpeed);
-  const previewText = '现在预览的是文本框字体大小和播放速度的情况，您可以根据您的观感调整上面的选项。';
+  const t = useTrans('menu.options.pages.display.options.textPreview.');
+  const previewText = t('text');
   const size = userDataState.optionData.textSize * 40 + 200 + '%';
   const font = useFontFamily();
 
