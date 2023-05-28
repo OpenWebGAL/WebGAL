@@ -1,14 +1,14 @@
-## 发布日志：WebGAL 4.3.18.1
+## 发布日志：WebGAL 4.3.20
 ### 在此版本中
 
-修复了引擎的存档导入及标题界面可以存档的问题
+修复读取语言时错误更新保存的问题
 
-## Release Note: WebGAL 4.3.18.1
+## Release Note: WebGAL 4.3.20
 ### In this version
 
-Fixed the problem that the engine's archive import and title screen can save the game.
+Repair the problem of incorrect update saving when reading language
 
-## リリースログ：WebGAL 4.3.18.1
+## リリースログ：WebGAL 4.3.20
 ### このバージョンでは
 
-エンジンのアーカイブインポートとタイトル画面でアーカイブができる問題を修正した
+言語読み込み時の不正確な更新保存を修正
