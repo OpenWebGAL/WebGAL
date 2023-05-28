@@ -13,7 +13,7 @@ export default function Translation() {
     if (!lang) {
       setIsShowSelectLanguage(true);
     } else {
-      setLanguage(Number(window?.localStorage.getItem('lang')));
+      setLanguage(Number(window?.localStorage.getItem('lang')), false);
     }
   }, []);
 
