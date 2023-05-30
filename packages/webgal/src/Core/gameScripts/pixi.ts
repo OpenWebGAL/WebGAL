@@ -1,9 +1,8 @@
 import { ISentence } from '@/Core/controller/scene/sceneInterface';
 import { IPerform } from '@/Core/controller/perform/performInterface';
 import { RUNTIME_GAMEPLAY } from '@/Core/runtime/gamePlay';
-import pixiRain from './pixiPerformScripts/rain';
-import { pixiSnow } from '@/Core/gameScripts/pixiPerformScripts/snow';
 import { logger } from '@/Core/util/etc/logger';
+import { IResult, call } from '../util/pixiPerformManager/pixiPerformManager';
 
 /**
  * 运行一段pixi演出
@@ -25,21 +24,9 @@ export const pixi = (sentence: ISentence): IPerform => {
       };
     }
   });
-  let container: any;
-  let tickerKey: any;
-  let res: any;
-  switch (sentence.content) {
-    case 'rain':
-      res = pixiRain(6, 10);
-      container = res.container;
-      tickerKey = res.tickerKey;
-      break;
-    case 'snow':
-      res = pixiSnow(3);
-      container = res.container;
-      tickerKey = res.tickerKey;
-      break;
-  }
+  const res: IResult = call(sentence.content);
+  const { container, tickerKey } = res;
+
   return {
     performName: pixiPerformName,
     duration: 0,

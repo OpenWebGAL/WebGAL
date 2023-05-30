@@ -21,6 +21,7 @@ export interface IGuiState {
   titleBg: string; // 标题背景图片
   showExtra: boolean;
   showGlobalDialog: boolean;
+  showPanicOverlay: boolean;
 }
 
 export type componentsVisibility = Pick<IGuiState, Exclude<keyof IGuiState, 'currentMenuTag' | 'titleBg' | 'titleBgm'>>;

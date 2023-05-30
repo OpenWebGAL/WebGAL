@@ -1,8 +1,8 @@
-export const en = {
+const en = {
   // 通用
   common: {
-    yes: 'yes',
-    no: 'no',
+    yes: 'OK',
+    no: 'Cancel',
   },
 
   menu: {
@@ -22,11 +22,6 @@ export const en = {
             },
             language: {
               title: 'Language',
-              options: {
-                zhCn: '简体中文',
-                en: 'English',
-                jp: '日本語',
-              },
             },
             resetData: {
               title: 'Clear or Reset Data',
@@ -105,16 +100,17 @@ export const en = {
       },
     },
     saving: {
-      title: 'SAVING',
+      title: 'SAVE',
+      isOverwrite: 'Are you sure you want to overwrite this save?',
     },
     loadSaving: {
       title: 'LOAD',
     },
     title: {
-      title: 'HOME',
+      title: 'TITLE',
     },
     exit: {
-      title: 'EXIT',
+      title: 'BACK',
     },
   },
 
@@ -158,4 +154,10 @@ export const en = {
       title: 'Title',
     },
   },
+
+  extra: {
+    title: 'EXTRA',
+  },
 };
+
+export default en;

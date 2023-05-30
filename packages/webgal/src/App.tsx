@@ -12,6 +12,7 @@ import { BottomControlPanelFilm } from './Components/UI/BottomControlPanel/Botto
 import GlobalDialog from '@/Components/UI/GlobalDialog/GlobalDialog';
 import DevPanel from '@/Components/UI/DevPanel/DevPanel';
 import Translation from '@/Components/UI/Translation/Translation';
+import { PanicOverlay } from '@/Components/UI/PanicOverlay/PanicOverlay';
 
 function App() {
   useEffect(() => {
@@ -20,18 +21,19 @@ function App() {
 
   // Provider用于对各组件提供状态
   return (
-    <div className="App" style={{ height: '100%', width: '100%', background: 'rgba(0, 0, 0, 1)' }}>
+    <div className="App">
       <Provider store={webgalStore}>
         <Translation />
-        <DevPanel />
-        <Extra />
-        <Title />
-        <Menu />
         <Stage />
         <BottomControlPanel />
         <BottomControlPanelFilm />
         <Backlog />
+        <Title />
+        <Extra />
+        <Menu />
         <GlobalDialog />
+        <PanicOverlay />
+        <DevPanel />
       </Provider>
     </div>
   );

@@ -1,5 +1,12 @@
 ![WebGAL](https://user-images.githubusercontent.com/30483415/227242979-297ff392-f210-47ef-b0e9-d4788ddc8df0.png)
 
+**[English Version](/README_EN.md)**
+**[日本語版](/README_JP.md)**
+
+**[Help us with translation | 协助翻译 | 翻訳のお手伝い ](https://github.com/MakinoharaShoko/WebGAL/tree/dev/packages/webgal/src/translations)**
+
+**[Join Discord Server](https://discord.gg/kPrQkJttJy)**
+
 # WebGAL
 
 **界面美观、功能强大、易于开发的全新网页端视觉小说引擎**
@@ -10,17 +17,15 @@
 
 一个简短的示例：
 
-https://demo.msfasr.com
+https://demo.openwebgal.com
 
 一个完整的游戏：
 
-[铃色☆记忆](http://hoshinasuzu.cn/) by 星奈组
-
-[备用链接](http://hoshinasuzu.cc/)
+[铃色☆记忆](http://hoshinasuzu.cn/) by 星奈组  [备用链接](http://hoshinasuzu.cc/)
 
 ### 使用 WebGAL 制作游戏
 
-[WebGAL 开发文档](https://docs.msfasr.com/)
+[WebGAL 开发文档](https://docs.openwebgal.com/)
 
 [下载 WebGAL 图形化编辑器](https://github.com/MakinoharaShoko/WebGAL_Terre/releases)
 
@@ -42,7 +47,7 @@ https://demo.msfasr.com
 
 ### 参与 WebGAL 的开发工作
 
-**想要参与引擎开发的开发者请阅读 [此项目的参与指南](https://docs.msfasr.com/developers/)**
+**想要参与引擎开发的开发者请阅读 [此项目的参与指南](https://docs.openwebgal.com/developers/)**
 
 ### 赞助
 
@@ -50,7 +55,7 @@ WebGAL 是一款开源软件，因此你可以免费在 MPL-2.0 开源协议的�
 
 但即便如此，你的赞助也可以给予开发者前进的动力，让这个项目变得更好。
 
-[赞助本项目](https://docs.msfasr.com/sponsor/)
+[赞助本项目](https://docs.openwebgal.com/sponsor/)
 
 ## Stargazers over time
 
