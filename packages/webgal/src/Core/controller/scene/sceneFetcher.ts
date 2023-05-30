@@ -6,7 +6,7 @@ import axios from 'axios';
  */
 export const sceneFetcher = (sceneUrl: string) => {
   return new Promise<string>((resolve) => {
-    axios.get(sceneUrl).then((response) => {
+    axios.get(encodeURI(sceneUrl)).then((response) => {
       const rawScene: string = response.data.toString();
       resolve(rawScene);
     });

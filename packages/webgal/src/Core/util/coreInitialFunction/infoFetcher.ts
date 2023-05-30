@@ -20,7 +20,7 @@ declare global {
 export const infoFetcher = (url: string) => {
   const GUIState = webgalStore.getState().GUI;
   const dispatch = webgalStore.dispatch;
-  axios.get(url).then((r) => {
+  axios.get(encodeURI(url)).then((r) => {
     let gameConfigRaw: Array<string> = r.data.split('\n'); // 游戏配置原始数据
     gameConfigRaw = gameConfigRaw.map((e) => e.split(';')[0]);
     const gameConfig: Array<Array<string>> = gameConfigRaw.map((e) => e.split(':')); // 游戏配置数据
