@@ -4,8 +4,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import styles from '../../Components/Stage/FullScreenPerform/fullScreenPerform.module.scss';
 import { webgalEventBus } from '@/Core/runtime/eventBus';
-import { unmountPerform } from '@/Core/controller/perform/unmountPerform';
 import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
+import { PerformController } from '@/Core/controller/perform/performController';
 
 /**
  * 显示一小段黑屏演示
@@ -32,13 +32,13 @@ export const intro = (sentence: ISentence): IPerform => {
         if (index === len - 1) {
           if (currentDelay === 0) {
             clearTimeout(timeout);
-            unmountPerform(performName);
+            PerformController.unmountPerform(performName);
             // 卸载函数发生在 nextSentence 生效前，所以不需要做下一行的操作。
             // setTimeout(nextSentence, 0);
           } else {
             clearTimeout(timeout);
             timeout = setTimeout(() => {
-              unmountPerform(performName);
+              PerformController.unmountPerform(performName);
               setTimeout(nextSentence, 0);
             }, currentDelay - 500);
           }

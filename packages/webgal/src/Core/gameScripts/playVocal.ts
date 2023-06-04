@@ -1,7 +1,5 @@
 import { ISentence } from '@/Core/controller/scene/sceneInterface';
-import { getRandomPerformName } from '@/Core/controller/perform/getRandomPerformName';
 import { RUNTIME_GAMEPLAY } from '@/Core/runtime/gamePlay';
-import { unmountPerform, unmountPerformForce } from '../controller/perform/unmountPerform';
 import { logger } from '@/Core/util/etc/logger';
 import { webgalStore } from '@/store/store';
 import { setStage } from '@/store/stageReducer';
@@ -22,7 +20,7 @@ export const playVocal = (sentence: ISentence) => {
   }
   // 先停止之前的语音
   let VocalControl: any = document.getElementById('currentVocal');
-  unmountPerformForce('vocal-play');
+  PerformController.unmountPerform('vocal-play', true);
   if (VocalControl !== null) {
     VocalControl.currentTime = 0;
     VocalControl.pause();
@@ -41,7 +39,7 @@ export const playVocal = (sentence: ISentence) => {
             performName: performInitName,
             duration: 1000 * 60 * 60,
             isOver: false,
-            isHoldOn: true,
+            isHoldOn: false,
             stopFunction: () => {
               // 演出已经结束了，所以不用播放语音了
               VocalControl.oncanplay = () => {};
@@ -49,6 +47,7 @@ export const playVocal = (sentence: ISentence) => {
             },
             blockingNext: () => false,
             blockingAuto: () => true,
+            skipNextCollect: true,
             stopTimeout: undefined, // 暂时不用，后面会交给自动清除
           };
           PerformController.arrangeNewPerform(perform, sentence, false);
@@ -60,7 +59,7 @@ export const playVocal = (sentence: ISentence) => {
               if (e.performName === performInitName) {
                 e.isOver = true;
                 e.stopFunction();
-                unmountPerform(e.performName);
+                PerformController.unmountPerform(e.performName);
               }
             }
           };

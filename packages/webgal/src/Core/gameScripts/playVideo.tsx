@@ -3,11 +3,11 @@ import { IPerform } from '@/Core/controller/perform/performInterface';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { RUNTIME_GAMEPLAY } from '@/Core/runtime/gamePlay';
-import { unmountPerform } from '@/Core/controller/perform/unmountPerform';
 import { getRandomPerformName } from '@/Core/controller/perform/getRandomPerformName';
 import styles from '../../Components/Stage/FullScreenPerform/fullScreenPerform.module.scss';
 import { webgalStore } from '@/store/store';
 import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
+import { PerformController } from '@/Core/controller/perform/performController';
 
 /**
  * 播放一段视频
@@ -95,7 +95,7 @@ export const playVideo = (sentence: ISentence): IPerform => {
               if (e.performName === performInitName) {
                 e.isOver = true;
                 e.stopFunction();
-                unmountPerform(e.performName);
+                PerformController.unmountPerform(e.performName);
                 nextSentence();
               }
             }

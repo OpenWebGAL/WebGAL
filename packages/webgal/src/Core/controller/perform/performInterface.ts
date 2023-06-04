@@ -17,8 +17,8 @@ export interface IPerform {
   goNextWhenOver?: boolean;
   // 对于延迟触发的演出，使用 Promise
   arrangePerformPromise?: Promise<IPerform>;
-  // 在步进后清除状态，用于极特殊的情况（不结束演出，但是不想让其在步进后还在演出状态表中）
-  removeFromStateWhenNext?: boolean;
+  // 跳过由 nextSentence 函数引发的演出回收
+  skipNextCollect?: boolean;
 }
 
 // next之后，可以被打断的演出会被打断，不能被打断的演出会继续，阻塞next的演出会阻止next被响应。
