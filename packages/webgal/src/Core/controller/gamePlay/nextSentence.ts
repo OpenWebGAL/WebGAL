@@ -39,7 +39,7 @@ export const nextSentence = () => {
   // 检查是否处于演出完成状态，不是则结束所有普通演出（保持演出不算做普通演出）
   let allSettled = true;
   RUNTIME_GAMEPLAY.performList.forEach((e) => {
-    if (!e.isHoldOn) allSettled = false;
+    if (!e.isHoldOn && !e.skipNextCollect) allSettled = false;
   });
   if (allSettled) {
     // 所有普通演出已经结束
@@ -48,8 +48,7 @@ export const nextSentence = () => {
     const newStageState = cloneDeep(stageState);
     for (let i = 0; i < newStageState.PerformList.length; i++) {
       const e: IRunPerform = newStageState.PerformList[i];
-      // TODO: 解决这里的硬编码
-      if (!e.isHoldOn || e.script.command === commandType.playEffect) {
+      if (!e.isHoldOn) {
         newStageState.PerformList.splice(i, 1);
         i--;
       }
@@ -68,10 +67,12 @@ export const nextSentence = () => {
       if (e.goNextWhenOver) {
         isGoNext = true;
       }
-      e.stopFunction();
-      clearTimeout(e.stopTimeout as unknown as number);
-      RUNTIME_GAMEPLAY.performList.splice(i, 1);
-      i--;
+      if (!e.skipNextCollect) {
+        e.stopFunction();
+        clearTimeout(e.stopTimeout as unknown as number);
+        RUNTIME_GAMEPLAY.performList.splice(i, 1);
+        i--;
+      }
     }
   }
   if (isGoNext) {

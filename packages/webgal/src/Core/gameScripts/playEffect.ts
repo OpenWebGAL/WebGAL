@@ -1,10 +1,9 @@
 import { ISentence } from '@/Core/controller/scene/sceneInterface';
-import { getRandomPerformName } from '@/Core/controller/perform/getRandomPerformName';
 import { RUNTIME_GAMEPLAY } from '@/Core/runtime/gamePlay';
-import { unmountPerform, unmountPerformForce } from '../controller/perform/unmountPerform';
 import { logger } from '@/Core/util/etc/logger';
 import { webgalStore } from '@/store/store';
 import { getSentenceArgByKey } from '@/Core/util/getSentenceArg';
+import { PerformController } from '@/Core/controller/perform/performController';
 
 /**
  * 播放一段效果音
@@ -15,13 +14,15 @@ export const playEffect = (sentence: ISentence) => {
   // 如果有ID，这里被覆写，一般用于循环的情况
   // 有循环参数且有 ID，就循环
   let performInitName = 'effect-sound';
-  unmountPerformForce(performInitName);
+  // 清除先前的效果音
+  PerformController.unmountPerform(performInitName, true);
   let url = sentence.content;
   let isLoop = false;
+  // 清除带 id 的效果音
   if (getSentenceArgByKey(sentence, 'id')) {
     const id = getSentenceArgByKey(sentence, 'id');
     performInitName = `effect-sound-${id}`;
-    unmountPerformForce(performInitName);
+    PerformController.unmountPerform(performInitName, true);
     isLoop = true;
   }
   return {
@@ -42,7 +43,8 @@ export const playEffect = (sentence: ISentence) => {
           performName: performInitName,
           duration: 1000 * 60 * 60,
           isOver: false,
-          isHoldOn: true,
+          isHoldOn: isLoop,
+          skipNextCollect: true,
           stopFunction: () => {
             // 演出已经结束了，所以不用播放语音了
             VocalControl.oncanplay = () => {};
@@ -61,7 +63,7 @@ export const playEffect = (sentence: ISentence) => {
             if (e.performName === performInitName) {
               e.isOver = true;
               e.stopFunction();
-              unmountPerform(e.performName);
+              PerformController.unmountPerform(e.performName);
             }
           }
         };

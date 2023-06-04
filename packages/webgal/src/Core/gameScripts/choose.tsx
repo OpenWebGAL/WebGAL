@@ -4,10 +4,10 @@ import { changeScene } from '@/Core/controller/scene/changeScene';
 import { jmp } from '@/Core/gameScripts/function/jmp';
 import ReactDOM from 'react-dom';
 import React from 'react';
-import { unmountPerform } from '@/Core/controller/perform/unmountPerform';
 import styles from './performStyles/choose.module.scss';
 import { webgalStore } from '@/store/store';
 import { textFont } from '@/store/userDataInterface';
+import { PerformController } from '@/Core/controller/perform/performController';
 
 /**
  * 显示选择枝
@@ -30,7 +30,7 @@ export const choose = (sentence: ISentence): IPerform => {
           } else {
             jmp(e[1]);
           }
-          unmountPerform('choose');
+          PerformController.unmountPerform('choose');
         }}
       >
         {e[0]}
