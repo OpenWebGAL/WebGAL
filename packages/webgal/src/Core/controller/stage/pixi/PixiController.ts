@@ -4,7 +4,6 @@ import { webgalStore } from '@/store/store';
 import { setStage } from '@/store/stageReducer';
 import cloneDeep from 'lodash/cloneDeep';
 import { IEffect } from '@/store/stageInterface';
-import { RUNTIME_CURRENT_BACKLOG } from '@/Core/runtime/backlog';
 import { logger } from '@/Core/util/etc/logger';
 import { isIOS } from '@/Core/initializeScript';
 
@@ -190,7 +189,7 @@ export default class PixiStage {
     }
   }
 
-  public removeAnimationWithSetEffects(key: string, notUpdateBacklogEffects = false) {
+  public removeAnimationWithSetEffects(key: string) {
     const index = this.stageAnimations.findIndex((e) => e.key === key);
     if (index >= 0) {
       const thisTickerFunc = this.stageAnimations[index];
@@ -229,7 +228,7 @@ export default class PixiStage {
           } else {
             newEffects.push(effect);
           }
-          updateCurrentEffects(newEffects, notUpdateBacklogEffects);
+          updateCurrentEffects(newEffects);
         }
       }
       this.stageAnimations.splice(index, 1);
@@ -473,24 +472,24 @@ export default class PixiStage {
   }
 }
 
-export function updateCurrentEffects(newEffects: IEffect[], notUpdateBacklogEffects = false) {
+export function updateCurrentEffects(newEffects: IEffect[]) {
   /**
    * 更新当前 backlog 条目的 effects 记录
    */
-  if (!notUpdateBacklogEffects)
-    setTimeout(() => {
-      const backlog = RUNTIME_CURRENT_BACKLOG[RUNTIME_CURRENT_BACKLOG.length - 1];
-      if (backlog) {
-        const newBacklogItem = cloneDeep(backlog);
-        const backlog_effects = newBacklogItem.currentStageState.effects;
-        while (backlog_effects.length > 0) {
-          backlog_effects.pop();
-        }
-        backlog_effects.push(...newEffects);
-        RUNTIME_CURRENT_BACKLOG.pop();
-        RUNTIME_CURRENT_BACKLOG.push(newBacklogItem);
-      }
-    }, 50);
+  // if (!notUpdateBacklogEffects)
+  //   setTimeout(() => {
+  //     const backlog = RUNTIME_CURRENT_BACKLOG[RUNTIME_CURRENT_BACKLOG.length - 1];
+  //     if (backlog) {
+  //       const newBacklogItem = cloneDeep(backlog);
+  //       const backlog_effects = newBacklogItem.currentStageState.effects;
+  //       while (backlog_effects.length > 0) {
+  //         backlog_effects.pop();
+  //       }
+  //       backlog_effects.push(...newEffects);
+  //       RUNTIME_CURRENT_BACKLOG.pop();
+  //       RUNTIME_CURRENT_BACKLOG.push(newBacklogItem);
+  //     }
+  //   }, 50);
 
   webgalStore.dispatch(setStage({ key: 'effects', value: newEffects }));
 }

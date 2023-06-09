@@ -2,7 +2,6 @@ import { FC } from 'react';
 import styles from './title.module.scss';
 import { playBgm } from '@/Core/controller/stage/playBgm';
 import { startGame } from '@/Core/controller/gamePlay/startGame';
-import { RUNTIME_SCENE_DATA } from '@/Core/runtime/sceneData';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState, webgalStore } from '@/store/store';
 import { setMenuPanelTag, setVisibility } from '@/store/GUIReducer';
@@ -13,6 +12,7 @@ import { restorePerform } from '@/Core/controller/storage/jumpFromBacklog';
 import { setEbg } from '@/Core/util/setEbg';
 import useTrans from '@/hooks/useTrans';
 import { resize } from '@/Core/util/resize';
+import { WebGAL } from '@/main';
 
 /**
  * 标题页
@@ -58,14 +58,14 @@ const Title: FC = () => {
                 setEbg(webgalStore.getState().stage.bgName);
                 // 当且仅当游戏未开始时使用快速存档
                 // 当游戏开始后 使用原来的逻辑
-                if ((await hasFastSaveRecord()) && RUNTIME_SCENE_DATA.currentSentenceId === 0) {
+                if ((await hasFastSaveRecord()) && WebGAL.sceneManager.sceneData.currentSentenceId === 0) {
                   // 恢复记录
                   await loadFastSaveGame();
                   return;
                 }
                 if (
-                  RUNTIME_SCENE_DATA.currentSentenceId === 0 &&
-                  RUNTIME_SCENE_DATA.currentScene.sceneName === 'start.txt'
+                  WebGAL.sceneManager.sceneData.currentSentenceId === 0 &&
+                  WebGAL.sceneManager.sceneData.currentScene.sceneName === 'start.txt'
                 ) {
                   // 如果游戏没有开始，开始游戏
                   nextSentence();

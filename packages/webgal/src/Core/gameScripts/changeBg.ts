@@ -1,5 +1,5 @@
 import { ISentence } from '@/Core/controller/scene/sceneInterface';
-import { IPerform } from '@/Core/controller/perform/performInterface';
+import { IPerform } from '@/Core/Modules/perform/performInterface';
 // import {getRandomPerformName} from '../../../util/getRandomPerformName';
 import styles from '../../Components/Stage/stage.module.scss';
 import { webgalStore } from '@/store/store';
@@ -17,7 +17,6 @@ export const changeBg = (sentence: ISentence): IPerform => {
   return {
     performName: 'none',
     duration: 1000,
-    isOver: false,
     isHoldOn: false,
     stopFunction: () => {
       // const bgContainer = document.getElementById('MainStage_bg_MainContainer');

@@ -1,9 +1,8 @@
 import { ISentence } from '@/Core/controller/scene/sceneInterface';
-import { RUNTIME_GAMEPLAY } from '@/Core/runtime/gamePlay';
 import { logger } from '@/Core/util/etc/logger';
 import { webgalStore } from '@/store/store';
 import { setStage } from '@/store/stageReducer';
-import { PerformController } from '@/Core/controller/perform/performController';
+import { WebGAL } from '@/main';
 
 /**
  * 播放一段语音
@@ -20,13 +19,14 @@ export const playVocal = (sentence: ISentence) => {
   }
   // 先停止之前的语音
   let VocalControl: any = document.getElementById('currentVocal');
-  PerformController.unmountPerform('vocal-play', true);
+  WebGAL.gameplay.performController.unmountPerform('vocal-play', true);
   if (VocalControl !== null) {
     VocalControl.currentTime = 0;
     VocalControl.pause();
   }
   // 获得舞台状态
   webgalStore.dispatch(setStage({ key: 'vocal', value: url }));
+  let isOver = false;
   return {
     arrangePerformPromise: new Promise((resolve) => {
       // 播放语音
@@ -46,20 +46,22 @@ export const playVocal = (sentence: ISentence) => {
               VocalControl.pause();
             },
             blockingNext: () => false,
-            blockingAuto: () => true,
+            blockingAuto: () => {
+              return !isOver;
+            },
             skipNextCollect: true,
             stopTimeout: undefined, // 暂时不用，后面会交给自动清除
           };
-          PerformController.arrangeNewPerform(perform, sentence, false);
+          WebGAL.gameplay.performController.arrangeNewPerform(perform, sentence, false);
           VocalControl.oncanplay = () => {
             VocalControl.play();
           };
           VocalControl.onended = () => {
-            for (const e of RUNTIME_GAMEPLAY.performList) {
+            for (const e of WebGAL.gameplay.performController.performList) {
               if (e.performName === performInitName) {
-                e.isOver = true;
+                isOver = true;
                 e.stopFunction();
-                PerformController.unmountPerform(e.performName);
+                WebGAL.gameplay.performController.unmountPerform(e.performName);
               }
             }
           };

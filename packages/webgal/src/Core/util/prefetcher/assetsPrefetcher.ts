@@ -1,6 +1,6 @@
 import { IAsset } from '@/Core/controller/scene/sceneInterface';
 import { logger } from '../etc/logger';
-import { RUNTIME_SETTLED_ASSETS } from '@/Core/runtime/etc';
+import { WebGAL } from '@/main';
 
 /**
  * 预加载函数
@@ -11,7 +11,7 @@ export const assetsPrefetcher = (assetList: Array<IAsset>) => {
     // 是否要插入这个标签
     let isInsert = true;
     // 判断是否已经存在
-    RUNTIME_SETTLED_ASSETS.forEach((settledAssetUrl) => {
+    WebGAL.sceneManager.settledAssets.forEach((settledAssetUrl) => {
       if (settledAssetUrl === asset.url) {
         isInsert = false;
       }
@@ -26,7 +26,7 @@ export const assetsPrefetcher = (assetList: Array<IAsset>) => {
       if (head.length) {
         head[0].appendChild(newLink);
       }
-      RUNTIME_SETTLED_ASSETS.push(asset.url);
+      WebGAL.sceneManager.settledAssets.push(asset.url);
     }
   }
 };

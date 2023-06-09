@@ -1,10 +1,10 @@
 import { IEffect, IStageState } from '@/store/stageInterface';
 import { useEffect } from 'react';
-import { RUNTIME_GAMEPLAY } from '@/Core/runtime/gamePlay';
 import { logger } from '@/Core/util/etc/logger';
 import { generateUniversalSoftInAnimationObj } from '@/Core/controller/stage/pixi/animations/universalSoftIn';
 import { IStageObject } from '@/Core/controller/stage/pixi/PixiController';
 import { generateUniversalSoftOffAnimationObj } from '@/Core/controller/stage/pixi/animations/universalSoftOff';
+import { WebGAL } from '@/main';
 
 export function useSetFigure(stageState: IStageState) {
   const { figNameLeft, figName, figNameRight, freeFigure } = stageState;
@@ -19,24 +19,24 @@ export function useSetFigure(stageState: IStageState) {
     const thisFigKey = 'fig-center';
     const softInAniKey = 'fig-center-softin';
     if (figName !== '') {
-      const currentFigCenter = RUNTIME_GAMEPLAY.pixiStage?.getStageObjByKey(thisFigKey);
+      const currentFigCenter = WebGAL.gameplay.pixiStage?.getStageObjByKey(thisFigKey);
       if (currentFigCenter) {
         if (currentFigCenter.sourceUrl !== figName) {
           removeFig(currentFigCenter, softInAniKey, stageState.effects);
         }
       }
-      RUNTIME_GAMEPLAY.pixiStage?.addFigure(thisFigKey, figName, 'center');
+      WebGAL.gameplay.pixiStage?.addFigure(thisFigKey, figName, 'center');
       logger.debug('中立绘已重设');
-      RUNTIME_GAMEPLAY.pixiStage!.registerPresetAnimation(
+      WebGAL.gameplay.pixiStage!.registerPresetAnimation(
         generateUniversalSoftInAnimationObj(thisFigKey, 300),
         softInAniKey,
         thisFigKey,
         stageState.effects,
       );
-      setTimeout(() => RUNTIME_GAMEPLAY.pixiStage!.removeAnimation(softInAniKey), 300);
+      setTimeout(() => WebGAL.gameplay.pixiStage!.removeAnimation(softInAniKey), 300);
     } else {
       logger.debug('移除中立绘');
-      const currentFigCenter = RUNTIME_GAMEPLAY.pixiStage?.getStageObjByKey(thisFigKey);
+      const currentFigCenter = WebGAL.gameplay.pixiStage?.getStageObjByKey(thisFigKey);
       if (currentFigCenter) {
         if (currentFigCenter.sourceUrl !== figName) {
           removeFig(currentFigCenter, softInAniKey, stageState.effects);
@@ -52,23 +52,23 @@ export function useSetFigure(stageState: IStageState) {
     const thisFigKey = 'fig-left';
     const softInAniKey = 'fig-left-softin';
     if (figNameLeft !== '') {
-      const currentFigLeft = RUNTIME_GAMEPLAY.pixiStage?.getStageObjByKey(thisFigKey);
+      const currentFigLeft = WebGAL.gameplay.pixiStage?.getStageObjByKey(thisFigKey);
       if (currentFigLeft) {
         if (currentFigLeft.sourceUrl !== figNameLeft) {
           removeFig(currentFigLeft, softInAniKey, stageState.effects);
         }
       }
-      RUNTIME_GAMEPLAY.pixiStage?.addFigure(thisFigKey, figNameLeft, 'left');
+      WebGAL.gameplay.pixiStage?.addFigure(thisFigKey, figNameLeft, 'left');
       logger.debug('左立绘已重设');
-      RUNTIME_GAMEPLAY.pixiStage!.registerPresetAnimation(
+      WebGAL.gameplay.pixiStage!.registerPresetAnimation(
         generateUniversalSoftInAnimationObj(thisFigKey, 300),
         softInAniKey,
         thisFigKey,
         stageState.effects,
       );
-      setTimeout(() => RUNTIME_GAMEPLAY.pixiStage!.removeAnimation(softInAniKey), 300);
+      setTimeout(() => WebGAL.gameplay.pixiStage!.removeAnimation(softInAniKey), 300);
     } else {
-      const currentFigLeft = RUNTIME_GAMEPLAY.pixiStage?.getStageObjByKey(thisFigKey);
+      const currentFigLeft = WebGAL.gameplay.pixiStage?.getStageObjByKey(thisFigKey);
       if (currentFigLeft) {
         if (currentFigLeft.sourceUrl !== figNameLeft) {
           removeFig(currentFigLeft, softInAniKey, stageState.effects);
@@ -84,23 +84,23 @@ export function useSetFigure(stageState: IStageState) {
     const thisFigKey = 'fig-right';
     const softInAniKey = 'fig-right-softin';
     if (figNameRight !== '') {
-      const currentFigRight = RUNTIME_GAMEPLAY.pixiStage?.getStageObjByKey(thisFigKey);
+      const currentFigRight = WebGAL.gameplay.pixiStage?.getStageObjByKey(thisFigKey);
       if (currentFigRight) {
         if (currentFigRight.sourceUrl !== figNameRight) {
           removeFig(currentFigRight, softInAniKey, stageState.effects);
         }
       }
-      RUNTIME_GAMEPLAY.pixiStage?.addFigure(thisFigKey, figNameRight, 'right');
+      WebGAL.gameplay.pixiStage?.addFigure(thisFigKey, figNameRight, 'right');
       logger.debug('右立绘已重设');
-      RUNTIME_GAMEPLAY.pixiStage!.registerPresetAnimation(
+      WebGAL.gameplay.pixiStage!.registerPresetAnimation(
         generateUniversalSoftInAnimationObj(thisFigKey, 300),
         softInAniKey,
         thisFigKey,
         stageState.effects,
       );
-      setTimeout(() => RUNTIME_GAMEPLAY.pixiStage!.removeAnimation(softInAniKey), 300);
+      setTimeout(() => WebGAL.gameplay.pixiStage!.removeAnimation(softInAniKey), 300);
     } else {
-      const currentFigRight = RUNTIME_GAMEPLAY.pixiStage?.getStageObjByKey(thisFigKey);
+      const currentFigRight = WebGAL.gameplay.pixiStage?.getStageObjByKey(thisFigKey);
       if (currentFigRight) {
         if (currentFigRight.sourceUrl !== figNameRight) {
           removeFig(currentFigRight, softInAniKey, stageState.effects);
@@ -121,33 +121,33 @@ export function useSetFigure(stageState: IStageState) {
        * 非空
        */
       if (fig.name !== '') {
-        const currentFigThisKey = RUNTIME_GAMEPLAY.pixiStage?.getStageObjByKey(thisFigKey);
+        const currentFigThisKey = WebGAL.gameplay.pixiStage?.getStageObjByKey(thisFigKey);
         if (currentFigThisKey) {
           if (currentFigThisKey.sourceUrl !== fig.name) {
             removeFig(currentFigThisKey, softInAniKey, stageState.effects);
-            RUNTIME_GAMEPLAY.pixiStage?.addFigure(thisFigKey, fig.name, fig.basePosition);
+            WebGAL.gameplay.pixiStage?.addFigure(thisFigKey, fig.name, fig.basePosition);
             logger.debug(`${fig.key}立绘已重设`);
-            RUNTIME_GAMEPLAY.pixiStage!.registerPresetAnimation(
+            WebGAL.gameplay.pixiStage!.registerPresetAnimation(
               generateUniversalSoftInAnimationObj(thisFigKey, 300),
               softInAniKey,
               thisFigKey,
               stageState.effects,
             );
-            setTimeout(() => RUNTIME_GAMEPLAY.pixiStage!.removeAnimation(softInAniKey), 300);
+            setTimeout(() => WebGAL.gameplay.pixiStage!.removeAnimation(softInAniKey), 300);
           }
         } else {
-          RUNTIME_GAMEPLAY.pixiStage?.addFigure(thisFigKey, fig.name, fig.basePosition);
+          WebGAL.gameplay.pixiStage?.addFigure(thisFigKey, fig.name, fig.basePosition);
           logger.debug(`${fig.key}立绘已重设`);
-          RUNTIME_GAMEPLAY.pixiStage!.registerPresetAnimation(
+          WebGAL.gameplay.pixiStage!.registerPresetAnimation(
             generateUniversalSoftInAnimationObj(thisFigKey, 300),
             softInAniKey,
             thisFigKey,
             stageState.effects,
           );
-          setTimeout(() => RUNTIME_GAMEPLAY.pixiStage!.removeAnimation(softInAniKey), 300);
+          setTimeout(() => WebGAL.gameplay.pixiStage!.removeAnimation(softInAniKey), 300);
         }
       } else {
-        const currentFigThisKey = RUNTIME_GAMEPLAY.pixiStage?.getStageObjByKey(thisFigKey);
+        const currentFigThisKey = WebGAL.gameplay.pixiStage?.getStageObjByKey(thisFigKey);
         if (currentFigThisKey) {
           if (currentFigThisKey.sourceUrl !== fig.name) {
             removeFig(currentFigThisKey, softInAniKey, stageState.effects);
@@ -159,7 +159,7 @@ export function useSetFigure(stageState: IStageState) {
     /**
      * 移除不在状态表中的立绘
      */
-    const currentFigures = RUNTIME_GAMEPLAY.pixiStage?.getFigureObjects();
+    const currentFigures = WebGAL.gameplay.pixiStage?.getFigureObjects();
     if (currentFigures) {
       for (const existFigure of currentFigures) {
         if (existFigure.key === 'fig-left' || existFigure.key === 'fig-center' || existFigure.key === 'fig-right') {
@@ -178,20 +178,20 @@ export function useSetFigure(stageState: IStageState) {
 }
 
 function removeFig(figObj: IStageObject, enterTikerKey: string, effects: IEffect[]) {
-  RUNTIME_GAMEPLAY.pixiStage?.removeAnimationWithSetEffects(enterTikerKey);
+  WebGAL.gameplay.pixiStage?.removeAnimationWithSetEffects(enterTikerKey);
   const oldFigKey = figObj.key;
   figObj.key = figObj.key + '-off';
-  RUNTIME_GAMEPLAY.pixiStage?.removeStageObjectByKey(oldFigKey);
+  WebGAL.gameplay.pixiStage?.removeStageObjectByKey(oldFigKey);
   const figKey = figObj.key;
   const leaveKey = figKey + '-softoff';
-  RUNTIME_GAMEPLAY.pixiStage!.registerPresetAnimation(
+  WebGAL.gameplay.pixiStage!.registerPresetAnimation(
     generateUniversalSoftOffAnimationObj(figKey, 200),
     leaveKey,
     figKey,
     effects,
   );
   setTimeout(() => {
-    RUNTIME_GAMEPLAY.pixiStage?.removeAnimation(leaveKey);
-    RUNTIME_GAMEPLAY.pixiStage?.removeStageObjectByKey(figKey);
+    WebGAL.gameplay.pixiStage?.removeAnimation(leaveKey);
+    WebGAL.gameplay.pixiStage?.removeStageObjectByKey(figKey);
   }, 250);
 }

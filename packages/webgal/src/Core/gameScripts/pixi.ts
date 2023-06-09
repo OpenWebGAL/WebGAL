@@ -1,8 +1,8 @@
 import { ISentence } from '@/Core/controller/scene/sceneInterface';
-import { IPerform } from '@/Core/controller/perform/performInterface';
-import { RUNTIME_GAMEPLAY } from '@/Core/runtime/gamePlay';
+import { IPerform } from '@/Core/Modules/perform/performInterface';
 import { logger } from '@/Core/util/etc/logger';
 import { IResult, call } from '../util/pixiPerformManager/pixiPerformManager';
+import { WebGAL } from '@/main';
 
 /**
  * 运行一段pixi演出
@@ -10,7 +10,7 @@ import { IResult, call } from '../util/pixiPerformManager/pixiPerformManager';
  */
 export const pixi = (sentence: ISentence): IPerform => {
   const pixiPerformName = 'PixiPerform' + sentence.content;
-  RUNTIME_GAMEPLAY.performList.forEach((e) => {
+  WebGAL.gameplay.performController.performList.forEach((e) => {
     if (e.performName === pixiPerformName) {
       return {
         performName: 'none',
@@ -30,13 +30,12 @@ export const pixi = (sentence: ISentence): IPerform => {
   return {
     performName: pixiPerformName,
     duration: 0,
-    isOver: false,
     isHoldOn: true,
     stopFunction: () => {
       logger.warn('现在正在卸载pixi演出');
       container.destroy({ texture: true, baseTexture: true });
-      RUNTIME_GAMEPLAY.pixiStage?.effectsContainer.removeChild(container);
-      RUNTIME_GAMEPLAY.pixiStage?.removeAnimation(tickerKey);
+      WebGAL.gameplay.pixiStage?.effectsContainer.removeChild(container);
+      WebGAL.gameplay.pixiStage?.removeAnimation(tickerKey);
     },
     blockingNext: () => false,
     blockingAuto: () => false,

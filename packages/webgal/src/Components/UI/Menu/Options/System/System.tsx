@@ -8,11 +8,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import { showGlogalDialog } from '@/Components/UI/GlobalDialog/GlobalDialog';
 import localforage from 'localforage';
-import { RUNTIME_GAME_INFO } from '@/Core/runtime/etc';
 import { logger } from '@/Core/util/etc/logger';
 import useTrans from '@/hooks/useTrans';
 import useLanguage from '@/hooks/useLanguage';
 import languages, { language } from '@/config/language';
+import { WebGAL } from '@/main';
 
 export function System() {
   const userDataState = useSelector((state: RootState) => state.userData);
@@ -22,7 +22,7 @@ export function System() {
 
   function exportSaves() {
     setStorage();
-    localforage.getItem(RUNTIME_GAME_INFO.gameKey).then((newUserData) => {
+    localforage.getItem(WebGAL.gameKey).then((newUserData) => {
       const saves = JSON.stringify(newUserData);
       if (saves !== null) {
         // @ts-ignore
@@ -58,7 +58,7 @@ export function System() {
           leftText: t('$common.yes'),
           rightText: t('$common.no'),
           leftFunc: () => {
-            localforage.setItem(RUNTIME_GAME_INFO.gameKey, saveAsObj).then(() => {
+            localforage.setItem(WebGAL.gameKey, saveAsObj).then(() => {
               logger.info(t('gameSave.dialogs.import.tip'));
             });
             getStorage();

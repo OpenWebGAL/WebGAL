@@ -1,5 +1,5 @@
 import { ISentence } from '@/Core/controller/scene/sceneInterface';
-import { IPerform } from '@/Core/controller/perform/performInterface';
+import { IPerform } from '@/Core/Modules/perform/performInterface';
 import { callScene } from '../controller/scene/callScene';
 
 /**
@@ -13,7 +13,6 @@ export const callSceneScript = (sentence: ISentence): IPerform => {
   return {
     performName: 'none',
     duration: 0,
-    isOver: false,
     isHoldOn: true,
     stopFunction: () => {},
     blockingNext: () => false,

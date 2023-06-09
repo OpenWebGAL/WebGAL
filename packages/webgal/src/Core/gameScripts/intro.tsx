@@ -1,11 +1,11 @@
 import { ISentence } from '@/Core/controller/scene/sceneInterface';
-import { IPerform } from '@/Core/controller/perform/performInterface';
+import { IPerform } from '@/Core/Modules/perform/performInterface';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import styles from '../../Components/Stage/FullScreenPerform/fullScreenPerform.module.scss';
-import { webgalEventBus } from '@/Core/runtime/eventBus';
 import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
-import { PerformController } from '@/Core/controller/perform/performController';
+import { PerformController } from '@/Core/Modules/perform/performController';
+import { WebGAL } from '@/main';
 
 /**
  * 显示一小段黑屏演示
@@ -32,13 +32,13 @@ export const intro = (sentence: ISentence): IPerform => {
         if (index === len - 1) {
           if (currentDelay === 0) {
             clearTimeout(timeout);
-            PerformController.unmountPerform(performName);
+            WebGAL.gameplay.performController.unmountPerform(performName);
             // 卸载函数发生在 nextSentence 生效前，所以不需要做下一行的操作。
             // setTimeout(nextSentence, 0);
           } else {
             clearTimeout(timeout);
             timeout = setTimeout(() => {
-              PerformController.unmountPerform(performName);
+              WebGAL.gameplay.performController.unmountPerform(performName);
               setTimeout(nextSentence, 0);
             }, currentDelay - 500);
           }
@@ -50,7 +50,7 @@ export const intro = (sentence: ISentence): IPerform => {
   /**
    * 接受 next 事件
    */
-  webgalEventBus.on('__NEXT', toNextIntroElement);
+  WebGAL.eventBus.on('__NEXT', toNextIntroElement);
 
   const introArray: Array<string> = sentence.content.split(/\|/);
   const showIntro = introArray.map((e, i) => (
@@ -72,14 +72,13 @@ export const intro = (sentence: ISentence): IPerform => {
   return {
     performName,
     duration: 1000 + 1500 * introArray.length,
-    isOver: false,
     isHoldOn: false,
     stopFunction: () => {
       const introContainer = document.getElementById('introContainer');
       if (introContainer) {
         introContainer.style.display = 'none';
       }
-      webgalEventBus.off('__NEXT', toNextIntroElement);
+      WebGAL.eventBus.off('__NEXT', toNextIntroElement);
     },
     blockingNext: () => true,
     blockingAuto: () => true,
