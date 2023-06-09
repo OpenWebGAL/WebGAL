@@ -1,9 +1,6 @@
 import { logger } from '../../util/etc/logger';
 import { sceneFetcher } from '../scene/sceneFetcher';
-import { RUNTIME_SCENE_DATA } from '../../runtime/sceneData';
 import { sceneParser } from '../../parser/sceneParser';
-import { RUNTIME_CURRENT_BACKLOG } from '../../runtime/backlog';
-import { IBacklogItem } from '@/Core/runtime/runtimeInterface';
 import { IStageState } from '@/store/stageInterface';
 import { webgalStore } from '@/store/store';
 import { resetStageState } from '@/store/stageReducer';
@@ -11,9 +8,9 @@ import { setVisibility } from '@/store/GUIReducer';
 import { runScript } from '@/Core/controller/gamePlay/runScript';
 import { stopAllPerform } from '@/Core/controller/gamePlay/stopAllPerform';
 import cloneDeep from 'lodash/cloneDeep';
-import { RUNTIME_SETTLED_SCENES } from '@/Core/runtime/etc';
 import uniqWith from 'lodash/uniqWith';
 import { scenePrefetcher } from '@/Core/util/prefetcher/scenePrefetcher';
+import { WebGAL } from '@/main';
 
 /**
  * 恢复演出
@@ -32,31 +29,34 @@ export const restorePerform = () => {
 export const jumpFromBacklog = (index: number) => {
   const dispatch = webgalStore.dispatch;
   // 获得存档文件
-  const backlogFile: IBacklogItem = RUNTIME_CURRENT_BACKLOG[index];
+  const backlogFile = WebGAL.backlogManager.getBacklog()[index];
   logger.debug('读取的backlog数据', backlogFile);
   // 重新获取并同步场景状态
   sceneFetcher(backlogFile.saveScene.sceneUrl).then((rawScene) => {
-    RUNTIME_SCENE_DATA.currentScene = sceneParser(
+    WebGAL.sceneManager.sceneData.currentScene = sceneParser(
       rawScene,
       backlogFile.saveScene.sceneName,
       backlogFile.saveScene.sceneUrl,
     );
     // 开始场景的预加载
-    const subSceneList = RUNTIME_SCENE_DATA.currentScene.subSceneList;
-    RUNTIME_SETTLED_SCENES.push(RUNTIME_SCENE_DATA.currentScene.sceneUrl); // 放入已加载场景列表，避免递归加载相同场景
+    const subSceneList = WebGAL.sceneManager.sceneData.currentScene.subSceneList;
+    WebGAL.sceneManager.settledScenes.push(WebGAL.sceneManager.sceneData.currentScene.sceneUrl); // 放入已加载场景列表，避免递归加载相同场景
     const subSceneListUniq = uniqWith(subSceneList); // 去重
     scenePrefetcher(subSceneListUniq);
   });
-  RUNTIME_SCENE_DATA.currentSentenceId = backlogFile.saveScene.currentSentenceId;
-  RUNTIME_SCENE_DATA.sceneStack = cloneDeep(backlogFile.saveScene.sceneStack);
+  WebGAL.sceneManager.sceneData.currentSentenceId = backlogFile.saveScene.currentSentenceId;
+  WebGAL.sceneManager.sceneData.sceneStack = cloneDeep(backlogFile.saveScene.sceneStack);
 
   // 强制停止所有演出
   stopAllPerform();
 
   // 弹出backlog项目到指定状态
-  for (let i = RUNTIME_CURRENT_BACKLOG.length - 1; i > index; i--) {
-    RUNTIME_CURRENT_BACKLOG.pop();
+  for (let i = WebGAL.backlogManager.getBacklog().length - 1; i >= index; i--) {
+    WebGAL.backlogManager.getBacklog().pop();
   }
+
+  // 要记录本句 Backlog
+  WebGAL.backlogManager.isSaveBacklogNext = true;
 
   // 恢复舞台状态
   const newStageState: IStageState = cloneDeep(backlogFile.currentStageState);
@@ -69,6 +69,6 @@ export const jumpFromBacklog = (index: number) => {
   // 关闭backlog界面
   dispatch(setVisibility({ component: 'showBacklog', visibility: false }));
 
-  // 重新显示Textbox
+  // 重新显示 TextBox
   dispatch(setVisibility({ component: 'showTextBox', visibility: true }));
 };

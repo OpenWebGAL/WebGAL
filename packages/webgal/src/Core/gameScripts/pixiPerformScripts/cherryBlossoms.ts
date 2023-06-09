@@ -1,6 +1,6 @@
 import * as PIXI from 'pixi.js';
-import { RUNTIME_GAMEPLAY } from '@/Core/runtime/gamePlay';
 import { registerPerform } from '@/Core/util/pixiPerformManager/pixiPerformManager';
+import { WebGAL } from '@/main';
 
 const pixicherryBlossoms = (cherryBlossomsSpeed: number) => {
   // アニメーション パラメータ
@@ -9,8 +9,8 @@ const pixicherryBlossoms = (cherryBlossomsSpeed: number) => {
   // 设置缩放的系数
   const scalePreset = 0.15;
 
-  const effectsContainer = RUNTIME_GAMEPLAY.pixiStage!.effectsContainer!;
-  const app = RUNTIME_GAMEPLAY.pixiStage!.currentApp!;
+  const effectsContainer = WebGAL!.gameplay!.pixiStage!.effectsContainer;
+  const app = WebGAL!.gameplay!.pixiStage!.currentApp!;
   const container = new PIXI.Container();
   effectsContainer.addChild(container);
   // テクスチャを作成
@@ -78,7 +78,7 @@ const pixicherryBlossoms = (cherryBlossomsSpeed: number) => {
       container.removeChild(container.children[0]);
     }
   }
-  RUNTIME_GAMEPLAY.pixiStage?.registerAnimation(
+  WebGAL!.gameplay!.pixiStage!.registerAnimation(
     { setStartState: () => {}, setEndState: () => {}, tickerFunc: tickerFn },
     'cherryBlossoms-Ticker',
   );

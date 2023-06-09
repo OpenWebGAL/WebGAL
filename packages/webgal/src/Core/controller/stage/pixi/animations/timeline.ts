@@ -1,4 +1,4 @@
-import { RUNTIME_GAMEPLAY } from '@/Core/runtime/gamePlay';
+import { WebGAL } from '@/main';
 import { ITransform } from '@/store/stageInterface';
 import { gsap } from 'gsap';
 
@@ -13,7 +13,7 @@ export function generateTimelineObj(
   targetKey: string,
   duration: number,
 ) {
-  const target = RUNTIME_GAMEPLAY.pixiStage!.getStageObjByKey(targetKey);
+  const target = WebGAL.gameplay.pixiStage!.getStageObjByKey(targetKey);
   let gsapTimeline1: gsap.core.Timeline | null = gsap.timeline();
   let gsapTimeline2: gsap.core.Timeline | null = gsap.timeline();
   let gsapTimeline3: gsap.core.Timeline | null = gsap.timeline();

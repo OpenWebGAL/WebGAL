@@ -1,5 +1,5 @@
 import { ISentence } from '@/Core/controller/scene/sceneInterface';
-import { IPerform } from '@/Core/controller/perform/performInterface';
+import { IPerform } from '@/Core/Modules/perform/performInterface';
 import { changeScene } from '@/Core/controller/scene/changeScene';
 import { jmp } from '@/Core/gameScripts/function/jmp';
 import ReactDOM from 'react-dom';
@@ -7,7 +7,8 @@ import React from 'react';
 import styles from './performStyles/choose.module.scss';
 import { webgalStore } from '@/store/store';
 import { textFont } from '@/store/userDataInterface';
-import { PerformController } from '@/Core/controller/perform/performController';
+import { PerformController } from '@/Core/Modules/perform/performController';
+import { WebGAL } from '@/main';
 
 /**
  * 显示选择枝
@@ -30,7 +31,7 @@ export const choose = (sentence: ISentence): IPerform => {
           } else {
             jmp(e[1]);
           }
-          PerformController.unmountPerform('choose');
+          WebGAL.gameplay.performController.unmountPerform('choose');
         }}
       >
         {e[0]}
@@ -44,7 +45,6 @@ export const choose = (sentence: ISentence): IPerform => {
   return {
     performName: 'choose',
     duration: 1000 * 60 * 60 * 24,
-    isOver: false,
     isHoldOn: false,
     stopFunction: () => {
       ReactDOM.render(<div />, document.getElementById('chooseContainer'));
