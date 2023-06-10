@@ -4,8 +4,8 @@ import styles from '../../Components/Stage/TextBox/textbox.module.scss';
 import { webgalStore } from '@/store/store';
 import { setStage } from '@/store/stageReducer';
 import { logger } from '@/Core/util/etc/logger';
-import { PERFORM_CONFIG } from '@/Core/config/performConfig';
 import { getRandomPerformName } from '@/Core/Modules/perform/performController';
+import { PERFORM_CONFIG } from '@/Core/config/config';
 
 /**
  * 进行普通对话的显示
