@@ -40,6 +40,9 @@ export interface IStageObject {
 //   duration: number;
 // }
 
+// @ts-ignore
+window.PIXI = PIXI;
+
 export default class PixiStage {
   /**
    * 当前的 PIXI App
@@ -73,7 +76,9 @@ export default class PixiStage {
       preserveDrawingBuffer: true,
     });
     // @ts-ignore
-    window.PIXIapp = this;
+
+    window.PIXIapp = this; // @ts-ignore
+    window.__PIXI_APP__ = app;
     // 清空原节点
     const pixiContainer = document.getElementById('pixiContianer');
     if (pixiContainer) {
@@ -243,7 +248,7 @@ export default class PixiStage {
   public addBg(key: string, url: string) {
     const loader = this.assetLoader;
     // 准备用于存放这个背景的 Container
-    let thisBgContainer = new PIXI.Container();
+    let thisBgContainer = new WebGALPixiContainer();
 
     // 准备 blur Filter
     const blurFilter = new PIXI.filters.BlurFilter();
@@ -285,8 +290,10 @@ export default class PixiStage {
         bgSprite.scale.x = targetScale;
         bgSprite.scale.y = targetScale;
         bgSprite.anchor.set(0.5);
-        bgSprite.position.x = this.stageWidth / 2;
         bgSprite.position.y = this.stageHeight / 2;
+        thisBgContainer.setBaseX(this.stageWidth / 2);
+        thisBgContainer.setBaseY(this.stageHeight / 2);
+        thisBgContainer.pivot.set(0, this.stageHeight / 2);
 
         // 挂载
         thisBgContainer.addChild(bgSprite);
@@ -315,7 +322,7 @@ export default class PixiStage {
   public addFigure(key: string, url: string, presetPosition: 'left' | 'center' | 'right' = 'center') {
     const loader = this.assetLoader;
     // 准备用于存放这个立绘的 Container
-    let thisFigureContainer = new PIXI.Container();
+    let thisFigureContainer = new WebGALPixiContainer();
 
     // 准备 blur Filter
     const blurFilter = new PIXI.filters.BlurFilter();
@@ -359,18 +366,20 @@ export default class PixiStage {
         figureSprite.position.y = this.stageHeight / 2;
         const targetWidth = originalWidth * targetScale;
         const targetHeight = originalHeight * targetScale;
+        thisFigureContainer.setBaseY(this.stageHeight / 2);
         if (targetHeight < this.stageHeight) {
-          figureSprite.position.y = this.stageHeight - targetHeight / 2;
+          thisFigureContainer.setBaseY(this.stageHeight / 2 + this.stageHeight - targetHeight / 2);
         }
         if (presetPosition === 'center') {
-          figureSprite.position.x = this.stageWidth / 2;
+          thisFigureContainer.setBaseX(this.stageWidth / 2);
         }
         if (presetPosition === 'left') {
-          figureSprite.position.x = targetWidth / 2;
+          thisFigureContainer.setBaseX(targetWidth / 2);
         }
         if (presetPosition === 'right') {
-          figureSprite.position.x = this.stageWidth - targetWidth / 2;
+          thisFigureContainer.setBaseX(this.stageWidth - targetWidth / 2);
         }
+        thisFigureContainer.pivot.set(0, this.stageHeight / 2);
         thisFigureContainer.addChild(figureSprite);
       }
     };
@@ -513,6 +522,42 @@ const containerHandler = {
     }
   },
 };
+
+class WebGALPixiContainer extends PIXI.Container {
+  private baseX = 0;
+  private baseY = 0;
+  public constructor() {
+    super();
+  }
+
+  public get x() {
+    return super.position.x - this.baseX;
+  }
+
+  public set x(value) {
+    super.position.x = value + this.baseX;
+  }
+
+  public get y() {
+    return super.position.y - this.baseY;
+  }
+
+  public set y(value) {
+    super.position.y = value + this.baseY;
+  }
+
+  public setBaseX(x: number) {
+    const originalX = this.x;
+    this.baseX = x;
+    this.x = originalX;
+  }
+
+  public setBaseY(y: number) {
+    const originalY = this.y;
+    this.baseY = y;
+    this.y = originalY;
+  }
+}
 
 /**
  * @param {number} targetCount 不小于1的整数，表示经过targetCount帧之后返回结果
