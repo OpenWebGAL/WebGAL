@@ -6,7 +6,8 @@ import { webgalStore } from '@/store/store';
 import { ISaveScene } from '@/store/userDataInterface';
 import cloneDeep from 'lodash/cloneDeep';
 import { WebGAL } from '@/main';
-import { SYSTEM_CONFIG } from '@/Core/config/systemConfig';
+
+import { SYSTEM_CONFIG } from '@/Core/config/config';
 
 export interface IBacklogItem {
   currentStageState: IStageState;

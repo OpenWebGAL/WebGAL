@@ -3,12 +3,13 @@ import { logger } from '@/Core/util/etc/logger';
 import { webgalStore } from '@/store/store';
 import { getSentenceArgByKey } from '@/Core/util/getSentenceArg';
 import { WebGAL } from '@/main';
+import { IPerform } from '@/Core/Modules/perform/performInterface';
 
 /**
  * 播放一段效果音
  * @param sentence 语句
  */
-export const playEffect = (sentence: ISentence) => {
+export const playEffect = (sentence: ISentence): IPerform => {
   logger.debug('播放效果音');
   // 如果有ID，这里被覆写，一般用于循环的情况
   // 有循环参数且有 ID，就循环
@@ -27,6 +28,17 @@ export const playEffect = (sentence: ISentence) => {
   let isOver = false;
   return {
     performName: 'none',
+    blockingAuto(): boolean {
+      return false;
+    },
+    blockingNext(): boolean {
+      return false;
+    },
+    isHoldOn: false,
+    stopFunction(): void {},
+    stopTimeout: undefined,
+
+    duration: 1000 * 60 * 60,
     arrangePerformPromise: new Promise((resolve) => {
       // 播放语音
       setTimeout(() => {
@@ -42,7 +54,6 @@ export const playEffect = (sentence: ISentence) => {
         const perform = {
           performName: performInitName,
           duration: 1000 * 60 * 60,
-          isOver: false,
           isHoldOn: isLoop,
           skipNextCollect: true,
           stopFunction: () => {

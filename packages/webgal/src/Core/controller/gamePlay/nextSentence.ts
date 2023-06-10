@@ -6,7 +6,8 @@ import { resetStageState } from '@/store/stageReducer';
 import cloneDeep from 'lodash/cloneDeep';
 import { WebGAL } from '@/main';
 import { IBacklogItem } from '@/Core/Modules/backlog';
-import { SYSTEM_CONFIG } from '@/Core/config/systemConfig';
+
+import { SYSTEM_CONFIG } from '@/Core/config/config';
 
 /**
  * 进行下一句
