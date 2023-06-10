@@ -51,7 +51,7 @@ export const jumpFromBacklog = (index: number) => {
   stopAllPerform();
 
   // 弹出backlog项目到指定状态
-  for (let i = WebGAL.backlogManager.getBacklog().length - 1; i >= index; i--) {
+  for (let i = WebGAL.backlogManager.getBacklog().length - 1; i > index; i--) {
     WebGAL.backlogManager.getBacklog().pop();
   }
 

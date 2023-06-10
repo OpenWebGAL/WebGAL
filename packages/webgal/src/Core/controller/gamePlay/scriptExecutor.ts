@@ -101,14 +101,15 @@ export const scriptExecutor = () => {
   /**
    * 为了让 backlog 拿到连续执行了多条语句后正确的数据，放到下一个宏任务中执行（我也不知道为什么这样能正常，有能力的可以研究一下
    */
-  // setTimeout(() => {
-  // 同步当前舞台数据
-  currentStageState = webgalStore.getState().stage;
-  logger.debug('本条语句执行结果', currentStageState);
-  // 保存 backlog
-  if (isSaveBacklog) {
-    WebGAL.backlogManager.isSaveBacklogNext = true;
-  }
-  // }, 0);
+  setTimeout(() => {
+    // 同步当前舞台数据
+    currentStageState = webgalStore.getState().stage;
+    logger.debug('本条语句执行结果', currentStageState);
+    // 保存 backlog
+    if (isSaveBacklog) {
+      // WebGAL.backlogManager.isSaveBacklogNext = true;
+      WebGAL.backlogManager.saveCurrentStateToBacklog();
+    }
+  }, 0);
   WebGAL.sceneManager.sceneData.currentSentenceId++;
 };
