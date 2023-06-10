@@ -33,14 +33,14 @@ export function generateTimelineObj(
         ...gsapEffect.scale,
         duration: gsapEffectDuration,
       });
-      gsapTimeline3.to(target.pixiContainer.position, {
+      gsapTimeline3.to(target.pixiContainer, {
         ...gsapEffect.position,
         duration: gsapEffectDuration,
       });
-      gsapTimeline4.to(target.pixiContainer.pivot, {
-        ...gsapEffect.pivot,
-        duration: gsapEffectDuration,
-      });
+      // gsapTimeline4.to(target.pixiContainer.pivot, {
+      //   ...gsapEffect.pivot,
+      //   duration: gsapEffectDuration,
+      // });
     }
   }
 
