@@ -23,7 +23,7 @@ https://demo.openwebgal.com
 
 [铃色☆记忆](http://hoshinasuzu.cn/) by 星奈组  [备用链接](http://hoshinasuzu.cc/)
 
-### 使用 WebGAL 制作游戏
+## 使用 WebGAL 制作游戏
 
 [WebGAL 开发文档](https://docs.openwebgal.com/)
 
