@@ -10,6 +10,7 @@ WebGAL:欢迎使用 WebGAL！这是一款全新的网页端视觉小说引擎。
 changeFigure:stand2.png -right -next;
 WebGAL 是使用 Web 技术开发的引擎，因此在网页端有良好的表现。 -v2.wav;
 由于这个特性，如果你将 WebGAL 部署到服务器或网页托管平台上，玩家只需要一串链接就可以开始游玩！ -v3.wav;
+setAnimation:move-front-and-back -target=fig-left -next;
 听起来是不是非常吸引人？ -v4.wav;
 changeFigure:none -right -next;
 setAnimation:l2c -target=fig-left -next;
