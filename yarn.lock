@@ -4831,6 +4831,11 @@ vitest@0.28.5, vitest@^0.28.5:
     vite-node "0.28.5"
     why-is-node-running "^2.2.2"
 
+void-elements@3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/void-elements/-/void-elements-3.1.0.tgz#614f7fbf8d801f0bb5f0661f5b2f5785750e4f09"
+  integrity sha512-Dhxzh5HZuiHQhbvTW9AMetFfBHDMYpo23Uo9btPXgdYP+3T5S+p+jgNy7spra+veYhBP2dCSgxR/i2Y02h5/6w==
+
 webgal-parser@4.3.13-5:
   version "4.3.13-5"
   resolved "https://registry.yarnpkg.com/webgal-parser/-/webgal-parser-4.3.13-5.tgz#26c8ab930d18e7a55c7aceaa5c2d64fb675e453e"
