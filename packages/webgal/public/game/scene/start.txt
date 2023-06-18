@@ -1,4 +1,4 @@
-; 初始场景，以及特效演示
+; WebGAL 引擎会默认读取 start.txt 作为初始场景，因此请不要删除，并在初始场景内跳转到其他场景
 bgm:s_Title.mp3;
 unlockBgm:s_Title.mp3 -name=雲を追いかけて;
 intro:你好|欢迎来到 WebGAL 的世界;
