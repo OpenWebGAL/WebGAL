@@ -4,9 +4,9 @@ import { assetSetter, fileType } from '../gameAssetsAccess/assetSetter';
 import { getStorage } from '../../controller/storage/storageController';
 import { webgalStore } from '@/store/store';
 import { setGuiAsset } from '@/store/GUIReducer';
-import { initKey } from '@/hooks/useHotkey';
 import { setEbg } from '@/Core/util/setEbg';
 import { WebGAL } from '@/main';
+import { initKey } from '@/Core/controller/storage/fastSaveLoad';
 
 declare global {
   interface Window {

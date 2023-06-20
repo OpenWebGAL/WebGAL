@@ -1,18 +1,18 @@
 import { FC } from 'react';
 import styles from './title.module.scss';
 import { playBgm } from '@/Core/controller/stage/playBgm';
-import { startGame } from '@/Core/controller/gamePlay/startGame';
+import { continueGame, startGame } from '@/Core/controller/gamePlay/startContinueGame';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState, webgalStore } from '@/store/store';
 import { setMenuPanelTag, setVisibility } from '@/store/GUIReducer';
 import { MenuPanelTag } from '@/store/guiInterface';
 import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
-import { hasFastSaveRecord, loadFastSaveGame } from '@/hooks/useHotkey';
 import { restorePerform } from '@/Core/controller/storage/jumpFromBacklog';
 import { setEbg } from '@/Core/util/setEbg';
 import useTrans from '@/hooks/useTrans';
 import { resize } from '@/Core/util/resize';
 import { WebGAL } from '@/main';
+import { hasFastSaveRecord, loadFastSaveGame } from '@/Core/controller/storage/fastSaveLoad';
 
 /**
  * 标题页
@@ -52,26 +52,7 @@ const Title: FC = () => {
               className={styles.Title_button}
               onClick={async () => {
                 dispatch(setVisibility({ component: 'showTitle', visibility: false }));
-                /**
-                 * 重设模糊背景
-                 */
-                setEbg(webgalStore.getState().stage.bgName);
-                // 当且仅当游戏未开始时使用快速存档
-                // 当游戏开始后 使用原来的逻辑
-                if ((await hasFastSaveRecord()) && WebGAL.sceneManager.sceneData.currentSentenceId === 0) {
-                  // 恢复记录
-                  await loadFastSaveGame();
-                  return;
-                }
-                if (
-                  WebGAL.sceneManager.sceneData.currentSentenceId === 0 &&
-                  WebGAL.sceneManager.sceneData.currentScene.sceneName === 'start.txt'
-                ) {
-                  // 如果游戏没有开始，开始游戏
-                  nextSentence();
-                } else {
-                  restorePerform();
-                }
+                continueGame();
               }}
             >
               <div className={styles.Title_button_text + ' ' + styles.Title_button_text_up}>{t('continue.title')}</div>
