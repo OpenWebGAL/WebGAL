@@ -1,0 +1,3672 @@
+; WebGAL 引擎会默认读取 start.txt 作为初始场景，因此请不要删除，并在初始场景内跳转到其他场景
+bgm:s_Title.mp3;
+unlockBgm:s_Title.mp3 -name=雲を追いかけて;
+intro:你好|欢迎来到 WebGAL 的世界;
+changeBg:bg.png -next;
+unlockCg:bg.png -name=良夜; // 解锁CG并赋予名称
+changeFigure:stand.png -left -next;
+setAnimation:enter-from-left -target=fig-left -next;
+WebGAL:欢迎使用 WebGAL！这是一款全新的网页端视觉小说引擎。 -v1.wav;
+changeFigure:stand2.png -right -next;
+WebGAL 是使用 Web 技术开发的引擎，因此在网页端有良好的表现。 -v2.wav;
+由于这个特性，如果你将 WebGAL 部署到服务器或网页托管平台上，玩家只需要一串链接就可以开始游玩！ -v3.wav;
+setAnimation:move-front-and-back -target=fig-left -next;
+听起来是不是非常吸引人？ -v4.wav;
+changeFigure:none -right -next;
+setAnimation:l2c -target=fig-left -next;
+WebGAL 引擎也具有动画系统和特效系统，使用 WebGAL 开发的游戏可以拥有很好的表现效果。 -v5.wav;
+pixiInit;
+pixiPerform:snow;
+比如，这个下起小雪的特效。 -v6.wav;
+除此以外，分支选择的功能也必不可少。 -v7.wav;
+你可以通过以下两个分支了解 WebGAL 的更多故事。 -v8.wav;
+pixiInit;
+choose:WebGAL 发展历程:choose1|WebGAL 冷知识:choose2;
+
+;分支1
+label:choose1;
+WebGAL 的开发初衷是能够让更多人可以更方便地制作属于自己的视觉小说。 -v9.wav;
+在一开始，WebGAL 只具备很少的功能，仅仅能支持立绘和背景的显示、语音播放和分支选择。 -v10.wav;
+在经历一年的发展后，现在已经是支持了很多优秀的表现效果的引擎了！ -v11.wav;
+除此以外，WebGAL 编辑器的加入也使得制作和导出一个游戏更加方便快捷。 -v12.wav;
+jumpLabel:end;
+
+;分支2
+label:choose2;
+这个演示游戏使用的素材是 AI 生成的。 -v13.wav;
+WebGAL 项目只用了一年不到就在 GitHub 获得了 1000 星标！ -v14.wav;
+WebGAL 的开发历程，是一个在开发中学习开发的过程。因此她经历了3次重构，并且每次几乎都是推倒重来式的。 -v15.wav;
+WebGAL 的脚本语言是为了简化制作难度而全新设计的！ -v16.wav;
+
+;结束分支
+label:end;
+为了更接近桌面端视觉小说引擎的能力，我们支持很多快捷键以及可跳转的剧情回溯。 -v17.wav;
+按下菜单中的“回想”按钮或者向上滚动鼠标滚轮试试吧！ -v18.wav;
+快速存读挡、丰富的选项、自动播放以及快进等功能，也是应有尽有。 -v19.wav;
+setTempAnimation:[{"position": {"x": 500,"y": 0},"duration": 0},{"position": {"x": 400,"y": 0},"duration": 250},{"position": {"x": 600,"y": 0},"duration": 500},{"position": {"x": 500,"y": 0},"duration": 250}] -target=fig-left -next;
+当然，这不算什么，因为大多数成熟的引擎都有这些功能。但是在 Web 端，这却是很少见的。 -v20.wav;
+我们为可能初次开发游戏的开发者提供了美观的通用 UI 和丰富的预设功能与动画。所以你可以没有顾虑地快速开始制作游戏。 -v21.wav;
+WebGAL 项目组期待你的作品能够在 WebGAL 上呈现！只需要一个链接就可以让万千用户立刻开始享受你的作品。 -v22.wav;
+感谢你关注 WebGAL 项目！ -v23.wav;
+end;
+; WebGAL 引擎会默认读取 start.txt 作为初始场景，因此请不要删除，并在初始场景内跳转到其他场景
+bgm:s_Title.mp3;
+unlockBgm:s_Title.mp3 -name=雲を追いかけて;
+intro:你好|欢迎来到 WebGAL 的世界;
+changeBg:bg.png -next;
+unlockCg:bg.png -name=良夜; // 解锁CG并赋予名称
+changeFigure:stand.png -left -next;
+setAnimation:enter-from-left -target=fig-left -next;
+WebGAL:欢迎使用 WebGAL！这是一款全新的网页端视觉小说引擎。 -v1.wav;
+changeFigure:stand2.png -right -next;
+WebGAL 是使用 Web 技术开发的引擎，因此在网页端有良好的表现。 -v2.wav;
+由于这个特性，如果你将 WebGAL 部署到服务器或网页托管平台上，玩家只需要一串链接就可以开始游玩！ -v3.wav;
+setAnimation:move-front-and-back -target=fig-left -next;
+听起来是不是非常吸引人？ -v4.wav;
+changeFigure:none -right -next;
+setAnimation:l2c -target=fig-left -next;
+WebGAL 引擎也具有动画系统和特效系统，使用 WebGAL 开发的游戏可以拥有很好的表现效果。 -v5.wav;
+pixiInit;
+pixiPerform:snow;
+比如，这个下起小雪的特效。 -v6.wav;
+除此以外，分支选择的功能也必不可少。 -v7.wav;
+你可以通过以下两个分支了解 WebGAL 的更多故事。 -v8.wav;
+pixiInit;
+choose:WebGAL 发展历程:choose1|WebGAL 冷知识:choose2;
+
+;分支1
+label:choose1;
+WebGAL 的开发初衷是能够让更多人可以更方便地制作属于自己的视觉小说。 -v9.wav;
+在一开始，WebGAL 只具备很少的功能，仅仅能支持立绘和背景的显示、语音播放和分支选择。 -v10.wav;
+在经历一年的发展后，现在已经是支持了很多优秀的表现效果的引擎了！ -v11.wav;
+除此以外，WebGAL 编辑器的加入也使得制作和导出一个游戏更加方便快捷。 -v12.wav;
+jumpLabel:end;
+
+;分支2
+label:choose2;
+这个演示游戏使用的素材是 AI 生成的。 -v13.wav;
+WebGAL 项目只用了一年不到就在 GitHub 获得了 1000 星标！ -v14.wav;
+WebGAL 的开发历程，是一个在开发中学习开发的过程。因此她经历了3次重构，并且每次几乎都是推倒重来式的。 -v15.wav;
+WebGAL 的脚本语言是为了简化制作难度而全新设计的！ -v16.wav;
+
+;结束分支
+label:end;
+为了更接近桌面端视觉小说引擎的能力，我们支持很多快捷键以及可跳转的剧情回溯。 -v17.wav;
+按下菜单中的“回想”按钮或者向上滚动鼠标滚轮试试吧！ -v18.wav;
+快速存读挡、丰富的选项、自动播放以及快进等功能，也是应有尽有。 -v19.wav;
+setTempAnimation:[{"position": {"x": 500,"y": 0},"duration": 0},{"position": {"x": 400,"y": 0},"duration": 250},{"position": {"x": 600,"y": 0},"duration": 500},{"position": {"x": 500,"y": 0},"duration": 250}] -target=fig-left -next;
+当然，这不算什么，因为大多数成熟的引擎都有这些功能。但是在 Web 端，这却是很少见的。 -v20.wav;
+我们为可能初次开发游戏的开发者提供了美观的通用 UI 和丰富的预设功能与动画。所以你可以没有顾虑地快速开始制作游戏。 -v21.wav;
+WebGAL 项目组期待你的作品能够在 WebGAL 上呈现！只需要一个链接就可以让万千用户立刻开始享受你的作品。 -v22.wav;
+感谢你关注 WebGAL 项目！ -v23.wav;
+end;
+; WebGAL 引擎会默认读取 start.txt 作为初始场景，因此请不要删除，并在初始场景内跳转到其他场景
+bgm:s_Title.mp3;
+unlockBgm:s_Title.mp3 -name=雲を追いかけて;
+intro:你好|欢迎来到 WebGAL 的世界;
+changeBg:bg.png -next;
+unlockCg:bg.png -name=良夜; // 解锁CG并赋予名称
+changeFigure:stand.png -left -next;
+setAnimation:enter-from-left -target=fig-left -next;
+WebGAL:欢迎使用 WebGAL！这是一款全新的网页端视觉小说引擎。 -v1.wav;
+changeFigure:stand2.png -right -next;
+WebGAL 是使用 Web 技术开发的引擎，因此在网页端有良好的表现。 -v2.wav;
+由于这个特性，如果你将 WebGAL 部署到服务器或网页托管平台上，玩家只需要一串链接就可以开始游玩！ -v3.wav;
+setAnimation:move-front-and-back -target=fig-left -next;
+听起来是不是非常吸引人？ -v4.wav;
+changeFigure:none -right -next;
+setAnimation:l2c -target=fig-left -next;
+WebGAL 引擎也具有动画系统和特效系统，使用 WebGAL 开发的游戏可以拥有很好的表现效果。 -v5.wav;
+pixiInit;
+pixiPerform:snow;
+比如，这个下起小雪的特效。 -v6.wav;
+除此以外，分支选择的功能也必不可少。 -v7.wav;
+你可以通过以下两个分支了解 WebGAL 的更多故事。 -v8.wav;
+pixiInit;
+choose:WebGAL 发展历程:choose1|WebGAL 冷知识:choose2;
+
+;分支1
+label:choose1;
+WebGAL 的开发初衷是能够让更多人可以更方便地制作属于自己的视觉小说。 -v9.wav;
+在一开始，WebGAL 只具备很少的功能，仅仅能支持立绘和背景的显示、语音播放和分支选择。 -v10.wav;
+在经历一年的发展后，现在已经是支持了很多优秀的表现效果的引擎了！ -v11.wav;
+除此以外，WebGAL 编辑器的加入也使得制作和导出一个游戏更加方便快捷。 -v12.wav;
+jumpLabel:end;
+
+;分支2
+label:choose2;
+这个演示游戏使用的素材是 AI 生成的。 -v13.wav;
+WebGAL 项目只用了一年不到就在 GitHub 获得了 1000 星标！ -v14.wav;
+WebGAL 的开发历程，是一个在开发中学习开发的过程。因此她经历了3次重构，并且每次几乎都是推倒重来式的。 -v15.wav;
+WebGAL 的脚本语言是为了简化制作难度而全新设计的！ -v16.wav;
+
+;结束分支
+label:end;
+为了更接近桌面端视觉小说引擎的能力，我们支持很多快捷键以及可跳转的剧情回溯。 -v17.wav;
+按下菜单中的“回想”按钮或者向上滚动鼠标滚轮试试吧！ -v18.wav;
+快速存读挡、丰富的选项、自动播放以及快进等功能，也是应有尽有。 -v19.wav;
+setTempAnimation:[{"position": {"x": 500,"y": 0},"duration": 0},{"position": {"x": 400,"y": 0},"duration": 250},{"position": {"x": 600,"y": 0},"duration": 500},{"position": {"x": 500,"y": 0},"duration": 250}] -target=fig-left -next;
+当然，这不算什么，因为大多数成熟的引擎都有这些功能。但是在 Web 端，这却是很少见的。 -v20.wav;
+我们为可能初次开发游戏的开发者提供了美观的通用 UI 和丰富的预设功能与动画。所以你可以没有顾虑地快速开始制作游戏。 -v21.wav;
+WebGAL 项目组期待你的作品能够在 WebGAL 上呈现！只需要一个链接就可以让万千用户立刻开始享受你的作品。 -v22.wav;
+感谢你关注 WebGAL 项目！ -v23.wav;
+end;
+; WebGAL 引擎会默认读取 start.txt 作为初始场景，因此请不要删除，并在初始场景内跳转到其他场景
+bgm:s_Title.mp3;
+unlockBgm:s_Title.mp3 -name=雲を追いかけて;
+intro:你好|欢迎来到 WebGAL 的世界;
+changeBg:bg.png -next;
+unlockCg:bg.png -name=良夜; // 解锁CG并赋予名称
+changeFigure:stand.png -left -next;
+setAnimation:enter-from-left -target=fig-left -next;
+WebGAL:欢迎使用 WebGAL！这是一款全新的网页端视觉小说引擎。 -v1.wav;
+changeFigure:stand2.png -right -next;
+WebGAL 是使用 Web 技术开发的引擎，因此在网页端有良好的表现。 -v2.wav;
+由于这个特性，如果你将 WebGAL 部署到服务器或网页托管平台上，玩家只需要一串链接就可以开始游玩！ -v3.wav;
+setAnimation:move-front-and-back -target=fig-left -next;
+听起来是不是非常吸引人？ -v4.wav;
+changeFigure:none -right -next;
+setAnimation:l2c -target=fig-left -next;
+WebGAL 引擎也具有动画系统和特效系统，使用 WebGAL 开发的游戏可以拥有很好的表现效果。 -v5.wav;
+pixiInit;
+pixiPerform:snow;
+比如，这个下起小雪的特效。 -v6.wav;
+除此以外，分支选择的功能也必不可少。 -v7.wav;
+你可以通过以下两个分支了解 WebGAL 的更多故事。 -v8.wav;
+pixiInit;
+choose:WebGAL 发展历程:choose1|WebGAL 冷知识:choose2;
+
+;分支1
+label:choose1;
+WebGAL 的开发初衷是能够让更多人可以更方便地制作属于自己的视觉小说。 -v9.wav;
+在一开始，WebGAL 只具备很少的功能，仅仅能支持立绘和背景的显示、语音播放和分支选择。 -v10.wav;
+在经历一年的发展后，现在已经是支持了很多优秀的表现效果的引擎了！ -v11.wav;
+除此以外，WebGAL 编辑器的加入也使得制作和导出一个游戏更加方便快捷。 -v12.wav;
+jumpLabel:end;
+
+;分支2
+label:choose2;
+这个演示游戏使用的素材是 AI 生成的。 -v13.wav;
+WebGAL 项目只用了一年不到就在 GitHub 获得了 1000 星标！ -v14.wav;
+WebGAL 的开发历程，是一个在开发中学习开发的过程。因此她经历了3次重构，并且每次几乎都是推倒重来式的。 -v15.wav;
+WebGAL 的脚本语言是为了简化制作难度而全新设计的！ -v16.wav;
+
+;结束分支
+label:end;
+为了更接近桌面端视觉小说引擎的能力，我们支持很多快捷键以及可跳转的剧情回溯。 -v17.wav;
+按下菜单中的“回想”按钮或者向上滚动鼠标滚轮试试吧！ -v18.wav;
+快速存读挡、丰富的选项、自动播放以及快进等功能，也是应有尽有。 -v19.wav;
+setTempAnimation:[{"position": {"x": 500,"y": 0},"duration": 0},{"position": {"x": 400,"y": 0},"duration": 250},{"position": {"x": 600,"y": 0},"duration": 500},{"position": {"x": 500,"y": 0},"duration": 250}] -target=fig-left -next;
+当然，这不算什么，因为大多数成熟的引擎都有这些功能。但是在 Web 端，这却是很少见的。 -v20.wav;
+我们为可能初次开发游戏的开发者提供了美观的通用 UI 和丰富的预设功能与动画。所以你可以没有顾虑地快速开始制作游戏。 -v21.wav;
+WebGAL 项目组期待你的作品能够在 WebGAL 上呈现！只需要一个链接就可以让万千用户立刻开始享受你的作品。 -v22.wav;
+感谢你关注 WebGAL 项目！ -v23.wav;
+end;
+; WebGAL 引擎会默认读取 start.txt 作为初始场景，因此请不要删除，并在初始场景内跳转到其他场景
+bgm:s_Title.mp3;
+unlockBgm:s_Title.mp3 -name=雲を追いかけて;
+intro:你好|欢迎来到 WebGAL 的世界;
+changeBg:bg.png -next;
+unlockCg:bg.png -name=良夜; // 解锁CG并赋予名称
+changeFigure:stand.png -left -next;
+setAnimation:enter-from-left -target=fig-left -next;
+WebGAL:欢迎使用 WebGAL！这是一款全新的网页端视觉小说引擎。 -v1.wav;
+changeFigure:stand2.png -right -next;
+WebGAL 是使用 Web 技术开发的引擎，因此在网页端有良好的表现。 -v2.wav;
+由于这个特性，如果你将 WebGAL 部署到服务器或网页托管平台上，玩家只需要一串链接就可以开始游玩！ -v3.wav;
+setAnimation:move-front-and-back -target=fig-left -next;
+听起来是不是非常吸引人？ -v4.wav;
+changeFigure:none -right -next;
+setAnimation:l2c -target=fig-left -next;
+WebGAL 引擎也具有动画系统和特效系统，使用 WebGAL 开发的游戏可以拥有很好的表现效果。 -v5.wav;
+pixiInit;
+pixiPerform:snow;
+比如，这个下起小雪的特效。 -v6.wav;
+除此以外，分支选择的功能也必不可少。 -v7.wav;
+你可以通过以下两个分支了解 WebGAL 的更多故事。 -v8.wav;
+pixiInit;
+choose:WebGAL 发展历程:choose1|WebGAL 冷知识:choose2;
+
+;分支1
+label:choose1;
+WebGAL 的开发初衷是能够让更多人可以更方便地制作属于自己的视觉小说。 -v9.wav;
+在一开始，WebGAL 只具备很少的功能，仅仅能支持立绘和背景的显示、语音播放和分支选择。 -v10.wav;
+在经历一年的发展后，现在已经是支持了很多优秀的表现效果的引擎了！ -v11.wav;
+除此以外，WebGAL 编辑器的加入也使得制作和导出一个游戏更加方便快捷。 -v12.wav;
+jumpLabel:end;
+
+;分支2
+label:choose2;
+这个演示游戏使用的素材是 AI 生成的。 -v13.wav;
+WebGAL 项目只用了一年不到就在 GitHub 获得了 1000 星标！ -v14.wav;
+WebGAL 的开发历程，是一个在开发中学习开发的过程。因此她经历了3次重构，并且每次几乎都是推倒重来式的。 -v15.wav;
+WebGAL 的脚本语言是为了简化制作难度而全新设计的！ -v16.wav;
+
+;结束分支
+label:end;
+为了更接近桌面端视觉小说引擎的能力，我们支持很多快捷键以及可跳转的剧情回溯。 -v17.wav;
+按下菜单中的“回想”按钮或者向上滚动鼠标滚轮试试吧！ -v18.wav;
+快速存读挡、丰富的选项、自动播放以及快进等功能，也是应有尽有。 -v19.wav;
+setTempAnimation:[{"position": {"x": 500,"y": 0},"duration": 0},{"position": {"x": 400,"y": 0},"duration": 250},{"position": {"x": 600,"y": 0},"duration": 500},{"position": {"x": 500,"y": 0},"duration": 250}] -target=fig-left -next;
+当然，这不算什么，因为大多数成熟的引擎都有这些功能。但是在 Web 端，这却是很少见的。 -v20.wav;
+我们为可能初次开发游戏的开发者提供了美观的通用 UI 和丰富的预设功能与动画。所以你可以没有顾虑地快速开始制作游戏。 -v21.wav;
+WebGAL 项目组期待你的作品能够在 WebGAL 上呈现！只需要一个链接就可以让万千用户立刻开始享受你的作品。 -v22.wav;
+感谢你关注 WebGAL 项目！ -v23.wav;
+end;
+; WebGAL 引擎会默认读取 start.txt 作为初始场景，因此请不要删除，并在初始场景内跳转到其他场景
+bgm:s_Title.mp3;
+unlockBgm:s_Title.mp3 -name=雲を追いかけて;
+intro:你好|欢迎来到 WebGAL 的世界;
+changeBg:bg.png -next;
+unlockCg:bg.png -name=良夜; // 解锁CG并赋予名称
+changeFigure:stand.png -left -next;
+setAnimation:enter-from-left -target=fig-left -next;
+WebGAL:欢迎使用 WebGAL！这是一款全新的网页端视觉小说引擎。 -v1.wav;
+changeFigure:stand2.png -right -next;
+WebGAL 是使用 Web 技术开发的引擎，因此在网页端有良好的表现。 -v2.wav;
+由于这个特性，如果你将 WebGAL 部署到服务器或网页托管平台上，玩家只需要一串链接就可以开始游玩！ -v3.wav;
+setAnimation:move-front-and-back -target=fig-left -next;
+听起来是不是非常吸引人？ -v4.wav;
+changeFigure:none -right -next;
+setAnimation:l2c -target=fig-left -next;
+WebGAL 引擎也具有动画系统和特效系统，使用 WebGAL 开发的游戏可以拥有很好的表现效果。 -v5.wav;
+pixiInit;
+pixiPerform:snow;
+比如，这个下起小雪的特效。 -v6.wav;
+除此以外，分支选择的功能也必不可少。 -v7.wav;
+你可以通过以下两个分支了解 WebGAL 的更多故事。 -v8.wav;
+pixiInit;
+choose:WebGAL 发展历程:choose1|WebGAL 冷知识:choose2;
+
+;分支1
+label:choose1;
+WebGAL 的开发初衷是能够让更多人可以更方便地制作属于自己的视觉小说。 -v9.wav;
+在一开始，WebGAL 只具备很少的功能，仅仅能支持立绘和背景的显示、语音播放和分支选择。 -v10.wav;
+在经历一年的发展后，现在已经是支持了很多优秀的表现效果的引擎了！ -v11.wav;
+除此以外，WebGAL 编辑器的加入也使得制作和导出一个游戏更加方便快捷。 -v12.wav;
+jumpLabel:end;
+
+;分支2
+label:choose2;
+这个演示游戏使用的素材是 AI 生成的。 -v13.wav;
+WebGAL 项目只用了一年不到就在 GitHub 获得了 1000 星标！ -v14.wav;
+WebGAL 的开发历程，是一个在开发中学习开发的过程。因此她经历了3次重构，并且每次几乎都是推倒重来式的。 -v15.wav;
+WebGAL 的脚本语言是为了简化制作难度而全新设计的！ -v16.wav;
+
+;结束分支
+label:end;
+为了更接近桌面端视觉小说引擎的能力，我们支持很多快捷键以及可跳转的剧情回溯。 -v17.wav;
+按下菜单中的“回想”按钮或者向上滚动鼠标滚轮试试吧！ -v18.wav;
+快速存读挡、丰富的选项、自动播放以及快进等功能，也是应有尽有。 -v19.wav;
+setTempAnimation:[{"position": {"x": 500,"y": 0},"duration": 0},{"position": {"x": 400,"y": 0},"duration": 250},{"position": {"x": 600,"y": 0},"duration": 500},{"position": {"x": 500,"y": 0},"duration": 250}] -target=fig-left -next;
+当然，这不算什么，因为大多数成熟的引擎都有这些功能。但是在 Web 端，这却是很少见的。 -v20.wav;
+我们为可能初次开发游戏的开发者提供了美观的通用 UI 和丰富的预设功能与动画。所以你可以没有顾虑地快速开始制作游戏。 -v21.wav;
+WebGAL 项目组期待你的作品能够在 WebGAL 上呈现！只需要一个链接就可以让万千用户立刻开始享受你的作品。 -v22.wav;
+感谢你关注 WebGAL 项目！ -v23.wav;
+end;
+; WebGAL 引擎会默认读取 start.txt 作为初始场景，因此请不要删除，并在初始场景内跳转到其他场景
+bgm:s_Title.mp3;
+unlockBgm:s_Title.mp3 -name=雲を追いかけて;
+intro:你好|欢迎来到 WebGAL 的世界;
+changeBg:bg.png -next;
+unlockCg:bg.png -name=良夜; // 解锁CG并赋予名称
+changeFigure:stand.png -left -next;
+setAnimation:enter-from-left -target=fig-left -next;
+WebGAL:欢迎使用 WebGAL！这是一款全新的网页端视觉小说引擎。 -v1.wav;
+changeFigure:stand2.png -right -next;
+WebGAL 是使用 Web 技术开发的引擎，因此在网页端有良好的表现。 -v2.wav;
+由于这个特性，如果你将 WebGAL 部署到服务器或网页托管平台上，玩家只需要一串链接就可以开始游玩！ -v3.wav;
+setAnimation:move-front-and-back -target=fig-left -next;
+听起来是不是非常吸引人？ -v4.wav;
+changeFigure:none -right -next;
+setAnimation:l2c -target=fig-left -next;
+WebGAL 引擎也具有动画系统和特效系统，使用 WebGAL 开发的游戏可以拥有很好的表现效果。 -v5.wav;
+pixiInit;
+pixiPerform:snow;
+比如，这个下起小雪的特效。 -v6.wav;
+除此以外，分支选择的功能也必不可少。 -v7.wav;
+你可以通过以下两个分支了解 WebGAL 的更多故事。 -v8.wav;
+pixiInit;
+choose:WebGAL 发展历程:choose1|WebGAL 冷知识:choose2;
+
+;分支1
+label:choose1;
+WebGAL 的开发初衷是能够让更多人可以更方便地制作属于自己的视觉小说。 -v9.wav;
+在一开始，WebGAL 只具备很少的功能，仅仅能支持立绘和背景的显示、语音播放和分支选择。 -v10.wav;
+在经历一年的发展后，现在已经是支持了很多优秀的表现效果的引擎了！ -v11.wav;
+除此以外，WebGAL 编辑器的加入也使得制作和导出一个游戏更加方便快捷。 -v12.wav;
+jumpLabel:end;
+
+;分支2
+label:choose2;
+这个演示游戏使用的素材是 AI 生成的。 -v13.wav;
+WebGAL 项目只用了一年不到就在 GitHub 获得了 1000 星标！ -v14.wav;
+WebGAL 的开发历程，是一个在开发中学习开发的过程。因此她经历了3次重构，并且每次几乎都是推倒重来式的。 -v15.wav;
+WebGAL 的脚本语言是为了简化制作难度而全新设计的！ -v16.wav;
+
+;结束分支
+label:end;
+为了更接近桌面端视觉小说引擎的能力，我们支持很多快捷键以及可跳转的剧情回溯。 -v17.wav;
+按下菜单中的“回想”按钮或者向上滚动鼠标滚轮试试吧！ -v18.wav;
+快速存读挡、丰富的选项、自动播放以及快进等功能，也是应有尽有。 -v19.wav;
+setTempAnimation:[{"position": {"x": 500,"y": 0},"duration": 0},{"position": {"x": 400,"y": 0},"duration": 250},{"position": {"x": 600,"y": 0},"duration": 500},{"position": {"x": 500,"y": 0},"duration": 250}] -target=fig-left -next;
+当然，这不算什么，因为大多数成熟的引擎都有这些功能。但是在 Web 端，这却是很少见的。 -v20.wav;
+我们为可能初次开发游戏的开发者提供了美观的通用 UI 和丰富的预设功能与动画。所以你可以没有顾虑地快速开始制作游戏。 -v21.wav;
+WebGAL 项目组期待你的作品能够在 WebGAL 上呈现！只需要一个链接就可以让万千用户立刻开始享受你的作品。 -v22.wav;
+感谢你关注 WebGAL 项目！ -v23.wav;
+end;
+; WebGAL 引擎会默认读取 start.txt 作为初始场景，因此请不要删除，并在初始场景内跳转到其他场景
+bgm:s_Title.mp3;
+unlockBgm:s_Title.mp3 -name=雲を追いかけて;
+intro:你好|欢迎来到 WebGAL 的世界;
+changeBg:bg.png -next;
+unlockCg:bg.png -name=良夜; // 解锁CG并赋予名称
+changeFigure:stand.png -left -next;
+setAnimation:enter-from-left -target=fig-left -next;
+WebGAL:欢迎使用 WebGAL！这是一款全新的网页端视觉小说引擎。 -v1.wav;
+changeFigure:stand2.png -right -next;
+WebGAL 是使用 Web 技术开发的引擎，因此在网页端有良好的表现。 -v2.wav;
+由于这个特性，如果你将 WebGAL 部署到服务器或网页托管平台上，玩家只需要一串链接就可以开始游玩！ -v3.wav;
+setAnimation:move-front-and-back -target=fig-left -next;
+听起来是不是非常吸引人？ -v4.wav;
+changeFigure:none -right -next;
+setAnimation:l2c -target=fig-left -next;
+WebGAL 引擎也具有动画系统和特效系统，使用 WebGAL 开发的游戏可以拥有很好的表现效果。 -v5.wav;
+pixiInit;
+pixiPerform:snow;
+比如，这个下起小雪的特效。 -v6.wav;
+除此以外，分支选择的功能也必不可少。 -v7.wav;
+你可以通过以下两个分支了解 WebGAL 的更多故事。 -v8.wav;
+pixiInit;
+choose:WebGAL 发展历程:choose1|WebGAL 冷知识:choose2;
+
+;分支1
+label:choose1;
+WebGAL 的开发初衷是能够让更多人可以更方便地制作属于自己的视觉小说。 -v9.wav;
+在一开始，WebGAL 只具备很少的功能，仅仅能支持立绘和背景的显示、语音播放和分支选择。 -v10.wav;
+在经历一年的发展后，现在已经是支持了很多优秀的表现效果的引擎了！ -v11.wav;
+除此以外，WebGAL 编辑器的加入也使得制作和导出一个游戏更加方便快捷。 -v12.wav;
+jumpLabel:end;
+
+;分支2
+label:choose2;
+这个演示游戏使用的素材是 AI 生成的。 -v13.wav;
+WebGAL 项目只用了一年不到就在 GitHub 获得了 1000 星标！ -v14.wav;
+WebGAL 的开发历程，是一个在开发中学习开发的过程。因此她经历了3次重构，并且每次几乎都是推倒重来式的。 -v15.wav;
+WebGAL 的脚本语言是为了简化制作难度而全新设计的！ -v16.wav;
+
+;结束分支
+label:end;
+为了更接近桌面端视觉小说引擎的能力，我们支持很多快捷键以及可跳转的剧情回溯。 -v17.wav;
+按下菜单中的“回想”按钮或者向上滚动鼠标滚轮试试吧！ -v18.wav;
+快速存读挡、丰富的选项、自动播放以及快进等功能，也是应有尽有。 -v19.wav;
+setTempAnimation:[{"position": {"x": 500,"y": 0},"duration": 0},{"position": {"x": 400,"y": 0},"duration": 250},{"position": {"x": 600,"y": 0},"duration": 500},{"position": {"x": 500,"y": 0},"duration": 250}] -target=fig-left -next;
+当然，这不算什么，因为大多数成熟的引擎都有这些功能。但是在 Web 端，这却是很少见的。 -v20.wav;
+我们为可能初次开发游戏的开发者提供了美观的通用 UI 和丰富的预设功能与动画。所以你可以没有顾虑地快速开始制作游戏。 -v21.wav;
+WebGAL 项目组期待你的作品能够在 WebGAL 上呈现！只需要一个链接就可以让万千用户立刻开始享受你的作品。 -v22.wav;
+感谢你关注 WebGAL 项目！ -v23.wav;
+end;
+; WebGAL 引擎会默认读取 start.txt 作为初始场景，因此请不要删除，并在初始场景内跳转到其他场景
+bgm:s_Title.mp3;
+unlockBgm:s_Title.mp3 -name=雲を追いかけて;
+intro:你好|欢迎来到 WebGAL 的世界;
+changeBg:bg.png -next;
+unlockCg:bg.png -name=良夜; // 解锁CG并赋予名称
+changeFigure:stand.png -left -next;
+setAnimation:enter-from-left -target=fig-left -next;
+WebGAL:欢迎使用 WebGAL！这是一款全新的网页端视觉小说引擎。 -v1.wav;
+changeFigure:stand2.png -right -next;
+WebGAL 是使用 Web 技术开发的引擎，因此在网页端有良好的表现。 -v2.wav;
+由于这个特性，如果你将 WebGAL 部署到服务器或网页托管平台上，玩家只需要一串链接就可以开始游玩！ -v3.wav;
+setAnimation:move-front-and-back -target=fig-left -next;
+听起来是不是非常吸引人？ -v4.wav;
+changeFigure:none -right -next;
+setAnimation:l2c -target=fig-left -next;
+WebGAL 引擎也具有动画系统和特效系统，使用 WebGAL 开发的游戏可以拥有很好的表现效果。 -v5.wav;
+pixiInit;
+pixiPerform:snow;
+比如，这个下起小雪的特效。 -v6.wav;
+除此以外，分支选择的功能也必不可少。 -v7.wav;
+你可以通过以下两个分支了解 WebGAL 的更多故事。 -v8.wav;
+pixiInit;
+choose:WebGAL 发展历程:choose1|WebGAL 冷知识:choose2;
+
+;分支1
+label:choose1;
+WebGAL 的开发初衷是能够让更多人可以更方便地制作属于自己的视觉小说。 -v9.wav;
+在一开始，WebGAL 只具备很少的功能，仅仅能支持立绘和背景的显示、语音播放和分支选择。 -v10.wav;
+在经历一年的发展后，现在已经是支持了很多优秀的表现效果的引擎了！ -v11.wav;
+除此以外，WebGAL 编辑器的加入也使得制作和导出一个游戏更加方便快捷。 -v12.wav;
+jumpLabel:end;
+
+;分支2
+label:choose2;
+这个演示游戏使用的素材是 AI 生成的。 -v13.wav;
+WebGAL 项目只用了一年不到就在 GitHub 获得了 1000 星标！ -v14.wav;
+WebGAL 的开发历程，是一个在开发中学习开发的过程。因此她经历了3次重构，并且每次几乎都是推倒重来式的。 -v15.wav;
+WebGAL 的脚本语言是为了简化制作难度而全新设计的！ -v16.wav;
+
+;结束分支
+label:end;
+为了更接近桌面端视觉小说引擎的能力，我们支持很多快捷键以及可跳转的剧情回溯。 -v17.wav;
+按下菜单中的“回想”按钮或者向上滚动鼠标滚轮试试吧！ -v18.wav;
+快速存读挡、丰富的选项、自动播放以及快进等功能，也是应有尽有。 -v19.wav;
+setTempAnimation:[{"position": {"x": 500,"y": 0},"duration": 0},{"position": {"x": 400,"y": 0},"duration": 250},{"position": {"x": 600,"y": 0},"duration": 500},{"position": {"x": 500,"y": 0},"duration": 250}] -target=fig-left -next;
+当然，这不算什么，因为大多数成熟的引擎都有这些功能。但是在 Web 端，这却是很少见的。 -v20.wav;
+我们为可能初次开发游戏的开发者提供了美观的通用 UI 和丰富的预设功能与动画。所以你可以没有顾虑地快速开始制作游戏。 -v21.wav;
+WebGAL 项目组期待你的作品能够在 WebGAL 上呈现！只需要一个链接就可以让万千用户立刻开始享受你的作品。 -v22.wav;
+感谢你关注 WebGAL 项目！ -v23.wav;
+end;
+; WebGAL 引擎会默认读取 start.txt 作为初始场景，因此请不要删除，并在初始场景内跳转到其他场景
+bgm:s_Title.mp3;
+unlockBgm:s_Title.mp3 -name=雲を追いかけて;
+intro:你好|欢迎来到 WebGAL 的世界;
+changeBg:bg.png -next;
+unlockCg:bg.png -name=良夜; // 解锁CG并赋予名称
+changeFigure:stand.png -left -next;
+setAnimation:enter-from-left -target=fig-left -next;
+WebGAL:欢迎使用 WebGAL！这是一款全新的网页端视觉小说引擎。 -v1.wav;
+changeFigure:stand2.png -right -next;
+WebGAL 是使用 Web 技术开发的引擎，因此在网页端有良好的表现。 -v2.wav;
+由于这个特性，如果你将 WebGAL 部署到服务器或网页托管平台上，玩家只需要一串链接就可以开始游玩！ -v3.wav;
+setAnimation:move-front-and-back -target=fig-left -next;
+听起来是不是非常吸引人？ -v4.wav;
+changeFigure:none -right -next;
+setAnimation:l2c -target=fig-left -next;
+WebGAL 引擎也具有动画系统和特效系统，使用 WebGAL 开发的游戏可以拥有很好的表现效果。 -v5.wav;
+pixiInit;
+pixiPerform:snow;
+比如，这个下起小雪的特效。 -v6.wav;
+除此以外，分支选择的功能也必不可少。 -v7.wav;
+你可以通过以下两个分支了解 WebGAL 的更多故事。 -v8.wav;
+pixiInit;
+choose:WebGAL 发展历程:choose1|WebGAL 冷知识:choose2;
+
+;分支1
+label:choose1;
+WebGAL 的开发初衷是能够让更多人可以更方便地制作属于自己的视觉小说。 -v9.wav;
+在一开始，WebGAL 只具备很少的功能，仅仅能支持立绘和背景的显示、语音播放和分支选择。 -v10.wav;
+在经历一年的发展后，现在已经是支持了很多优秀的表现效果的引擎了！ -v11.wav;
+除此以外，WebGAL 编辑器的加入也使得制作和导出一个游戏更加方便快捷。 -v12.wav;
+jumpLabel:end;
+
+;分支2
+label:choose2;
+这个演示游戏使用的素材是 AI 生成的。 -v13.wav;
+WebGAL 项目只用了一年不到就在 GitHub 获得了 1000 星标！ -v14.wav;
+WebGAL 的开发历程，是一个在开发中学习开发的过程。因此她经历了3次重构，并且每次几乎都是推倒重来式的。 -v15.wav;
+WebGAL 的脚本语言是为了简化制作难度而全新设计的！ -v16.wav;
+
+;结束分支
+label:end;
+为了更接近桌面端视觉小说引擎的能力，我们支持很多快捷键以及可跳转的剧情回溯。 -v17.wav;
+按下菜单中的“回想”按钮或者向上滚动鼠标滚轮试试吧！ -v18.wav;
+快速存读挡、丰富的选项、自动播放以及快进等功能，也是应有尽有。 -v19.wav;
+setTempAnimation:[{"position": {"x": 500,"y": 0},"duration": 0},{"position": {"x": 400,"y": 0},"duration": 250},{"position": {"x": 600,"y": 0},"duration": 500},{"position": {"x": 500,"y": 0},"duration": 250}] -target=fig-left -next;
+当然，这不算什么，因为大多数成熟的引擎都有这些功能。但是在 Web 端，这却是很少见的。 -v20.wav;
+我们为可能初次开发游戏的开发者提供了美观的通用 UI 和丰富的预设功能与动画。所以你可以没有顾虑地快速开始制作游戏。 -v21.wav;
+WebGAL 项目组期待你的作品能够在 WebGAL 上呈现！只需要一个链接就可以让万千用户立刻开始享受你的作品。 -v22.wav;
+感谢你关注 WebGAL 项目！ -v23.wav;
+end;
+; WebGAL 引擎会默认读取 start.txt 作为初始场景，因此请不要删除，并在初始场景内跳转到其他场景
+bgm:s_Title.mp3;
+unlockBgm:s_Title.mp3 -name=雲を追いかけて;
+intro:你好|欢迎来到 WebGAL 的世界;
+changeBg:bg.png -next;
+unlockCg:bg.png -name=良夜; // 解锁CG并赋予名称
+changeFigure:stand.png -left -next;
+setAnimation:enter-from-left -target=fig-left -next;
+WebGAL:欢迎使用 WebGAL！这是一款全新的网页端视觉小说引擎。 -v1.wav;
+changeFigure:stand2.png -right -next;
+WebGAL 是使用 Web 技术开发的引擎，因此在网页端有良好的表现。 -v2.wav;
+由于这个特性，如果你将 WebGAL 部署到服务器或网页托管平台上，玩家只需要一串链接就可以开始游玩！ -v3.wav;
+setAnimation:move-front-and-back -target=fig-left -next;
+听起来是不是非常吸引人？ -v4.wav;
+changeFigure:none -right -next;
+setAnimation:l2c -target=fig-left -next;
+WebGAL 引擎也具有动画系统和特效系统，使用 WebGAL 开发的游戏可以拥有很好的表现效果。 -v5.wav;
+pixiInit;
+pixiPerform:snow;
+比如，这个下起小雪的特效。 -v6.wav;
+除此以外，分支选择的功能也必不可少。 -v7.wav;
+你可以通过以下两个分支了解 WebGAL 的更多故事。 -v8.wav;
+pixiInit;
+choose:WebGAL 发展历程:choose1|WebGAL 冷知识:choose2;
+
+;分支1
+label:choose1;
+WebGAL 的开发初衷是能够让更多人可以更方便地制作属于自己的视觉小说。 -v9.wav;
+在一开始，WebGAL 只具备很少的功能，仅仅能支持立绘和背景的显示、语音播放和分支选择。 -v10.wav;
+在经历一年的发展后，现在已经是支持了很多优秀的表现效果的引擎了！ -v11.wav;
+除此以外，WebGAL 编辑器的加入也使得制作和导出一个游戏更加方便快捷。 -v12.wav;
+jumpLabel:end;
+
+;分支2
+label:choose2;
+这个演示游戏使用的素材是 AI 生成的。 -v13.wav;
+WebGAL 项目只用了一年不到就在 GitHub 获得了 1000 星标！ -v14.wav;
+WebGAL 的开发历程，是一个在开发中学习开发的过程。因此她经历了3次重构，并且每次几乎都是推倒重来式的。 -v15.wav;
+WebGAL 的脚本语言是为了简化制作难度而全新设计的！ -v16.wav;
+
+;结束分支
+label:end;
+为了更接近桌面端视觉小说引擎的能力，我们支持很多快捷键以及可跳转的剧情回溯。 -v17.wav;
+按下菜单中的“回想”按钮或者向上滚动鼠标滚轮试试吧！ -v18.wav;
+快速存读挡、丰富的选项、自动播放以及快进等功能，也是应有尽有。 -v19.wav;
+setTempAnimation:[{"position": {"x": 500,"y": 0},"duration": 0},{"position": {"x": 400,"y": 0},"duration": 250},{"position": {"x": 600,"y": 0},"duration": 500},{"position": {"x": 500,"y": 0},"duration": 250}] -target=fig-left -next;
+当然，这不算什么，因为大多数成熟的引擎都有这些功能。但是在 Web 端，这却是很少见的。 -v20.wav;
+我们为可能初次开发游戏的开发者提供了美观的通用 UI 和丰富的预设功能与动画。所以你可以没有顾虑地快速开始制作游戏。 -v21.wav;
+WebGAL 项目组期待你的作品能够在 WebGAL 上呈现！只需要一个链接就可以让万千用户立刻开始享受你的作品。 -v22.wav;
+感谢你关注 WebGAL 项目！ -v23.wav;
+end;
+; WebGAL 引擎会默认读取 start.txt 作为初始场景，因此请不要删除，并在初始场景内跳转到其他场景
+bgm:s_Title.mp3;
+unlockBgm:s_Title.mp3 -name=雲を追いかけて;
+intro:你好|欢迎来到 WebGAL 的世界;
+changeBg:bg.png -next;
+unlockCg:bg.png -name=良夜; // 解锁CG并赋予名称
+changeFigure:stand.png -left -next;
+setAnimation:enter-from-left -target=fig-left -next;
+WebGAL:欢迎使用 WebGAL！这是一款全新的网页端视觉小说引擎。 -v1.wav;
+changeFigure:stand2.png -right -next;
+WebGAL 是使用 Web 技术开发的引擎，因此在网页端有良好的表现。 -v2.wav;
+由于这个特性，如果你将 WebGAL 部署到服务器或网页托管平台上，玩家只需要一串链接就可以开始游玩！ -v3.wav;
+setAnimation:move-front-and-back -target=fig-left -next;
+听起来是不是非常吸引人？ -v4.wav;
+changeFigure:none -right -next;
+setAnimation:l2c -target=fig-left -next;
+WebGAL 引擎也具有动画系统和特效系统，使用 WebGAL 开发的游戏可以拥有很好的表现效果。 -v5.wav;
+pixiInit;
+pixiPerform:snow;
+比如，这个下起小雪的特效。 -v6.wav;
+除此以外，分支选择的功能也必不可少。 -v7.wav;
+你可以通过以下两个分支了解 WebGAL 的更多故事。 -v8.wav;
+pixiInit;
+choose:WebGAL 发展历程:choose1|WebGAL 冷知识:choose2;
+
+;分支1
+label:choose1;
+WebGAL 的开发初衷是能够让更多人可以更方便地制作属于自己的视觉小说。 -v9.wav;
+在一开始，WebGAL 只具备很少的功能，仅仅能支持立绘和背景的显示、语音播放和分支选择。 -v10.wav;
+在经历一年的发展后，现在已经是支持了很多优秀的表现效果的引擎了！ -v11.wav;
+除此以外，WebGAL 编辑器的加入也使得制作和导出一个游戏更加方便快捷。 -v12.wav;
+jumpLabel:end;
+
+;分支2
+label:choose2;
+这个演示游戏使用的素材是 AI 生成的。 -v13.wav;
+WebGAL 项目只用了一年不到就在 GitHub 获得了 1000 星标！ -v14.wav;
+WebGAL 的开发历程，是一个在开发中学习开发的过程。因此她经历了3次重构，并且每次几乎都是推倒重来式的。 -v15.wav;
+WebGAL 的脚本语言是为了简化制作难度而全新设计的！ -v16.wav;
+
+;结束分支
+label:end;
+为了更接近桌面端视觉小说引擎的能力，我们支持很多快捷键以及可跳转的剧情回溯。 -v17.wav;
+按下菜单中的“回想”按钮或者向上滚动鼠标滚轮试试吧！ -v18.wav;
+快速存读挡、丰富的选项、自动播放以及快进等功能，也是应有尽有。 -v19.wav;
+setTempAnimation:[{"position": {"x": 500,"y": 0},"duration": 0},{"position": {"x": 400,"y": 0},"duration": 250},{"position": {"x": 600,"y": 0},"duration": 500},{"position": {"x": 500,"y": 0},"duration": 250}] -target=fig-left -next;
+当然，这不算什么，因为大多数成熟的引擎都有这些功能。但是在 Web 端，这却是很少见的。 -v20.wav;
+我们为可能初次开发游戏的开发者提供了美观的通用 UI 和丰富的预设功能与动画。所以你可以没有顾虑地快速开始制作游戏。 -v21.wav;
+WebGAL 项目组期待你的作品能够在 WebGAL 上呈现！只需要一个链接就可以让万千用户立刻开始享受你的作品。 -v22.wav;
+感谢你关注 WebGAL 项目！ -v23.wav;
+end;
+; WebGAL 引擎会默认读取 start.txt 作为初始场景，因此请不要删除，并在初始场景内跳转到其他场景
+bgm:s_Title.mp3;
+unlockBgm:s_Title.mp3 -name=雲を追いかけて;
+intro:你好|欢迎来到 WebGAL 的世界;
+changeBg:bg.png -next;
+unlockCg:bg.png -name=良夜; // 解锁CG并赋予名称
+changeFigure:stand.png -left -next;
+setAnimation:enter-from-left -target=fig-left -next;
+WebGAL:欢迎使用 WebGAL！这是一款全新的网页端视觉小说引擎。 -v1.wav;
+changeFigure:stand2.png -right -next;
+WebGAL 是使用 Web 技术开发的引擎，因此在网页端有良好的表现。 -v2.wav;
+由于这个特性，如果你将 WebGAL 部署到服务器或网页托管平台上，玩家只需要一串链接就可以开始游玩！ -v3.wav;
+setAnimation:move-front-and-back -target=fig-left -next;
+听起来是不是非常吸引人？ -v4.wav;
+changeFigure:none -right -next;
+setAnimation:l2c -target=fig-left -next;
+WebGAL 引擎也具有动画系统和特效系统，使用 WebGAL 开发的游戏可以拥有很好的表现效果。 -v5.wav;
+pixiInit;
+pixiPerform:snow;
+比如，这个下起小雪的特效。 -v6.wav;
+除此以外，分支选择的功能也必不可少。 -v7.wav;
+你可以通过以下两个分支了解 WebGAL 的更多故事。 -v8.wav;
+pixiInit;
+choose:WebGAL 发展历程:choose1|WebGAL 冷知识:choose2;
+
+;分支1
+label:choose1;
+WebGAL 的开发初衷是能够让更多人可以更方便地制作属于自己的视觉小说。 -v9.wav;
+在一开始，WebGAL 只具备很少的功能，仅仅能支持立绘和背景的显示、语音播放和分支选择。 -v10.wav;
+在经历一年的发展后，现在已经是支持了很多优秀的表现效果的引擎了！ -v11.wav;
+除此以外，WebGAL 编辑器的加入也使得制作和导出一个游戏更加方便快捷。 -v12.wav;
+jumpLabel:end;
+
+;分支2
+label:choose2;
+这个演示游戏使用的素材是 AI 生成的。 -v13.wav;
+WebGAL 项目只用了一年不到就在 GitHub 获得了 1000 星标！ -v14.wav;
+WebGAL 的开发历程，是一个在开发中学习开发的过程。因此她经历了3次重构，并且每次几乎都是推倒重来式的。 -v15.wav;
+WebGAL 的脚本语言是为了简化制作难度而全新设计的！ -v16.wav;
+
+;结束分支
+label:end;
+为了更接近桌面端视觉小说引擎的能力，我们支持很多快捷键以及可跳转的剧情回溯。 -v17.wav;
+按下菜单中的“回想”按钮或者向上滚动鼠标滚轮试试吧！ -v18.wav;
+快速存读挡、丰富的选项、自动播放以及快进等功能，也是应有尽有。 -v19.wav;
+setTempAnimation:[{"position": {"x": 500,"y": 0},"duration": 0},{"position": {"x": 400,"y": 0},"duration": 250},{"position": {"x": 600,"y": 0},"duration": 500},{"position": {"x": 500,"y": 0},"duration": 250}] -target=fig-left -next;
+当然，这不算什么，因为大多数成熟的引擎都有这些功能。但是在 Web 端，这却是很少见的。 -v20.wav;
+我们为可能初次开发游戏的开发者提供了美观的通用 UI 和丰富的预设功能与动画。所以你可以没有顾虑地快速开始制作游戏。 -v21.wav;
+WebGAL 项目组期待你的作品能够在 WebGAL 上呈现！只需要一个链接就可以让万千用户立刻开始享受你的作品。 -v22.wav;
+感谢你关注 WebGAL 项目！ -v23.wav;
+end;
+; WebGAL 引擎会默认读取 start.txt 作为初始场景，因此请不要删除，并在初始场景内跳转到其他场景
+bgm:s_Title.mp3;
+unlockBgm:s_Title.mp3 -name=雲を追いかけて;
+intro:你好|欢迎来到 WebGAL 的世界;
+changeBg:bg.png -next;
+unlockCg:bg.png -name=良夜; // 解锁CG并赋予名称
+changeFigure:stand.png -left -next;
+setAnimation:enter-from-left -target=fig-left -next;
+WebGAL:欢迎使用 WebGAL！这是一款全新的网页端视觉小说引擎。 -v1.wav;
+changeFigure:stand2.png -right -next;
+WebGAL 是使用 Web 技术开发的引擎，因此在网页端有良好的表现。 -v2.wav;
+由于这个特性，如果你将 WebGAL 部署到服务器或网页托管平台上，玩家只需要一串链接就可以开始游玩！ -v3.wav;
+setAnimation:move-front-and-back -target=fig-left -next;
+听起来是不是非常吸引人？ -v4.wav;
+changeFigure:none -right -next;
+setAnimation:l2c -target=fig-left -next;
+WebGAL 引擎也具有动画系统和特效系统，使用 WebGAL 开发的游戏可以拥有很好的表现效果。 -v5.wav;
+pixiInit;
+pixiPerform:snow;
+比如，这个下起小雪的特效。 -v6.wav;
+除此以外，分支选择的功能也必不可少。 -v7.wav;
+你可以通过以下两个分支了解 WebGAL 的更多故事。 -v8.wav;
+pixiInit;
+choose:WebGAL 发展历程:choose1|WebGAL 冷知识:choose2;
+
+;分支1
+label:choose1;
+WebGAL 的开发初衷是能够让更多人可以更方便地制作属于自己的视觉小说。 -v9.wav;
+在一开始，WebGAL 只具备很少的功能，仅仅能支持立绘和背景的显示、语音播放和分支选择。 -v10.wav;
+在经历一年的发展后，现在已经是支持了很多优秀的表现效果的引擎了！ -v11.wav;
+除此以外，WebGAL 编辑器的加入也使得制作和导出一个游戏更加方便快捷。 -v12.wav;
+jumpLabel:end;
+
+;分支2
+label:choose2;
+这个演示游戏使用的素材是 AI 生成的。 -v13.wav;
+WebGAL 项目只用了一年不到就在 GitHub 获得了 1000 星标！ -v14.wav;
+WebGAL 的开发历程，是一个在开发中学习开发的过程。因此她经历了3次重构，并且每次几乎都是推倒重来式的。 -v15.wav;
+WebGAL 的脚本语言是为了简化制作难度而全新设计的！ -v16.wav;
+
+;结束分支
+label:end;
+为了更接近桌面端视觉小说引擎的能力，我们支持很多快捷键以及可跳转的剧情回溯。 -v17.wav;
+按下菜单中的“回想”按钮或者向上滚动鼠标滚轮试试吧！ -v18.wav;
+快速存读挡、丰富的选项、自动播放以及快进等功能，也是应有尽有。 -v19.wav;
+setTempAnimation:[{"position": {"x": 500,"y": 0},"duration": 0},{"position": {"x": 400,"y": 0},"duration": 250},{"position": {"x": 600,"y": 0},"duration": 500},{"position": {"x": 500,"y": 0},"duration": 250}] -target=fig-left -next;
+当然，这不算什么，因为大多数成熟的引擎都有这些功能。但是在 Web 端，这却是很少见的。 -v20.wav;
+我们为可能初次开发游戏的开发者提供了美观的通用 UI 和丰富的预设功能与动画。所以你可以没有顾虑地快速开始制作游戏。 -v21.wav;
+WebGAL 项目组期待你的作品能够在 WebGAL 上呈现！只需要一个链接就可以让万千用户立刻开始享受你的作品。 -v22.wav;
+感谢你关注 WebGAL 项目！ -v23.wav;
+end;
+; WebGAL 引擎会默认读取 start.txt 作为初始场景，因此请不要删除，并在初始场景内跳转到其他场景
+bgm:s_Title.mp3;
+unlockBgm:s_Title.mp3 -name=雲を追いかけて;
+intro:你好|欢迎来到 WebGAL 的世界;
+changeBg:bg.png -next;
+unlockCg:bg.png -name=良夜; // 解锁CG并赋予名称
+changeFigure:stand.png -left -next;
+setAnimation:enter-from-left -target=fig-left -next;
+WebGAL:欢迎使用 WebGAL！这是一款全新的网页端视觉小说引擎。 -v1.wav;
+changeFigure:stand2.png -right -next;
+WebGAL 是使用 Web 技术开发的引擎，因此在网页端有良好的表现。 -v2.wav;
+由于这个特性，如果你将 WebGAL 部署到服务器或网页托管平台上，玩家只需要一串链接就可以开始游玩！ -v3.wav;
+setAnimation:move-front-and-back -target=fig-left -next;
+听起来是不是非常吸引人？ -v4.wav;
+changeFigure:none -right -next;
+setAnimation:l2c -target=fig-left -next;
+WebGAL 引擎也具有动画系统和特效系统，使用 WebGAL 开发的游戏可以拥有很好的表现效果。 -v5.wav;
+pixiInit;
+pixiPerform:snow;
+比如，这个下起小雪的特效。 -v6.wav;
+除此以外，分支选择的功能也必不可少。 -v7.wav;
+你可以通过以下两个分支了解 WebGAL 的更多故事。 -v8.wav;
+pixiInit;
+choose:WebGAL 发展历程:choose1|WebGAL 冷知识:choose2;
+
+;分支1
+label:choose1;
+WebGAL 的开发初衷是能够让更多人可以更方便地制作属于自己的视觉小说。 -v9.wav;
+在一开始，WebGAL 只具备很少的功能，仅仅能支持立绘和背景的显示、语音播放和分支选择。 -v10.wav;
+在经历一年的发展后，现在已经是支持了很多优秀的表现效果的引擎了！ -v11.wav;
+除此以外，WebGAL 编辑器的加入也使得制作和导出一个游戏更加方便快捷。 -v12.wav;
+jumpLabel:end;
+
+;分支2
+label:choose2;
+这个演示游戏使用的素材是 AI 生成的。 -v13.wav;
+WebGAL 项目只用了一年不到就在 GitHub 获得了 1000 星标！ -v14.wav;
+WebGAL 的开发历程，是一个在开发中学习开发的过程。因此她经历了3次重构，并且每次几乎都是推倒重来式的。 -v15.wav;
+WebGAL 的脚本语言是为了简化制作难度而全新设计的！ -v16.wav;
+
+;结束分支
+label:end;
+为了更接近桌面端视觉小说引擎的能力，我们支持很多快捷键以及可跳转的剧情回溯。 -v17.wav;
+按下菜单中的“回想”按钮或者向上滚动鼠标滚轮试试吧！ -v18.wav;
+快速存读挡、丰富的选项、自动播放以及快进等功能，也是应有尽有。 -v19.wav;
+setTempAnimation:[{"position": {"x": 500,"y": 0},"duration": 0},{"position": {"x": 400,"y": 0},"duration": 250},{"position": {"x": 600,"y": 0},"duration": 500},{"position": {"x": 500,"y": 0},"duration": 250}] -target=fig-left -next;
+当然，这不算什么，因为大多数成熟的引擎都有这些功能。但是在 Web 端，这却是很少见的。 -v20.wav;
+我们为可能初次开发游戏的开发者提供了美观的通用 UI 和丰富的预设功能与动画。所以你可以没有顾虑地快速开始制作游戏。 -v21.wav;
+WebGAL 项目组期待你的作品能够在 WebGAL 上呈现！只需要一个链接就可以让万千用户立刻开始享受你的作品。 -v22.wav;
+感谢你关注 WebGAL 项目！ -v23.wav;
+end;
+; WebGAL 引擎会默认读取 start.txt 作为初始场景，因此请不要删除，并在初始场景内跳转到其他场景
+bgm:s_Title.mp3;
+unlockBgm:s_Title.mp3 -name=雲を追いかけて;
+intro:你好|欢迎来到 WebGAL 的世界;
+changeBg:bg.png -next;
+unlockCg:bg.png -name=良夜; // 解锁CG并赋予名称
+changeFigure:stand.png -left -next;
+setAnimation:enter-from-left -target=fig-left -next;
+WebGAL:欢迎使用 WebGAL！这是一款全新的网页端视觉小说引擎。 -v1.wav;
+changeFigure:stand2.png -right -next;
+WebGAL 是使用 Web 技术开发的引擎，因此在网页端有良好的表现。 -v2.wav;
+由于这个特性，如果你将 WebGAL 部署到服务器或网页托管平台上，玩家只需要一串链接就可以开始游玩！ -v3.wav;
+setAnimation:move-front-and-back -target=fig-left -next;
+听起来是不是非常吸引人？ -v4.wav;
+changeFigure:none -right -next;
+setAnimation:l2c -target=fig-left -next;
+WebGAL 引擎也具有动画系统和特效系统，使用 WebGAL 开发的游戏可以拥有很好的表现效果。 -v5.wav;
+pixiInit;
+pixiPerform:snow;
+比如，这个下起小雪的特效。 -v6.wav;
+除此以外，分支选择的功能也必不可少。 -v7.wav;
+你可以通过以下两个分支了解 WebGAL 的更多故事。 -v8.wav;
+pixiInit;
+choose:WebGAL 发展历程:choose1|WebGAL 冷知识:choose2;
+
+;分支1
+label:choose1;
+WebGAL 的开发初衷是能够让更多人可以更方便地制作属于自己的视觉小说。 -v9.wav;
+在一开始，WebGAL 只具备很少的功能，仅仅能支持立绘和背景的显示、语音播放和分支选择。 -v10.wav;
+在经历一年的发展后，现在已经是支持了很多优秀的表现效果的引擎了！ -v11.wav;
+除此以外，WebGAL 编辑器的加入也使得制作和导出一个游戏更加方便快捷。 -v12.wav;
+jumpLabel:end;
+
+;分支2
+label:choose2;
+这个演示游戏使用的素材是 AI 生成的。 -v13.wav;
+WebGAL 项目只用了一年不到就在 GitHub 获得了 1000 星标！ -v14.wav;
+WebGAL 的开发历程，是一个在开发中学习开发的过程。因此她经历了3次重构，并且每次几乎都是推倒重来式的。 -v15.wav;
+WebGAL 的脚本语言是为了简化制作难度而全新设计的！ -v16.wav;
+
+;结束分支
+label:end;
+为了更接近桌面端视觉小说引擎的能力，我们支持很多快捷键以及可跳转的剧情回溯。 -v17.wav;
+按下菜单中的“回想”按钮或者向上滚动鼠标滚轮试试吧！ -v18.wav;
+快速存读挡、丰富的选项、自动播放以及快进等功能，也是应有尽有。 -v19.wav;
+setTempAnimation:[{"position": {"x": 500,"y": 0},"duration": 0},{"position": {"x": 400,"y": 0},"duration": 250},{"position": {"x": 600,"y": 0},"duration": 500},{"position": {"x": 500,"y": 0},"duration": 250}] -target=fig-left -next;
+当然，这不算什么，因为大多数成熟的引擎都有这些功能。但是在 Web 端，这却是很少见的。 -v20.wav;
+我们为可能初次开发游戏的开发者提供了美观的通用 UI 和丰富的预设功能与动画。所以你可以没有顾虑地快速开始制作游戏。 -v21.wav;
+WebGAL 项目组期待你的作品能够在 WebGAL 上呈现！只需要一个链接就可以让万千用户立刻开始享受你的作品。 -v22.wav;
+感谢你关注 WebGAL 项目！ -v23.wav;
+end;
+; WebGAL 引擎会默认读取 start.txt 作为初始场景，因此请不要删除，并在初始场景内跳转到其他场景
+bgm:s_Title.mp3;
+unlockBgm:s_Title.mp3 -name=雲を追いかけて;
+intro:你好|欢迎来到 WebGAL 的世界;
+changeBg:bg.png -next;
+unlockCg:bg.png -name=良夜; // 解锁CG并赋予名称
+changeFigure:stand.png -left -next;
+setAnimation:enter-from-left -target=fig-left -next;
+WebGAL:欢迎使用 WebGAL！这是一款全新的网页端视觉小说引擎。 -v1.wav;
+changeFigure:stand2.png -right -next;
+WebGAL 是使用 Web 技术开发的引擎，因此在网页端有良好的表现。 -v2.wav;
+由于这个特性，如果你将 WebGAL 部署到服务器或网页托管平台上，玩家只需要一串链接就可以开始游玩！ -v3.wav;
+setAnimation:move-front-and-back -target=fig-left -next;
+听起来是不是非常吸引人？ -v4.wav;
+changeFigure:none -right -next;
+setAnimation:l2c -target=fig-left -next;
+WebGAL 引擎也具有动画系统和特效系统，使用 WebGAL 开发的游戏可以拥有很好的表现效果。 -v5.wav;
+pixiInit;
+pixiPerform:snow;
+比如，这个下起小雪的特效。 -v6.wav;
+除此以外，分支选择的功能也必不可少。 -v7.wav;
+你可以通过以下两个分支了解 WebGAL 的更多故事。 -v8.wav;
+pixiInit;
+choose:WebGAL 发展历程:choose1|WebGAL 冷知识:choose2;
+
+;分支1
+label:choose1;
+WebGAL 的开发初衷是能够让更多人可以更方便地制作属于自己的视觉小说。 -v9.wav;
+在一开始，WebGAL 只具备很少的功能，仅仅能支持立绘和背景的显示、语音播放和分支选择。 -v10.wav;
+在经历一年的发展后，现在已经是支持了很多优秀的表现效果的引擎了！ -v11.wav;
+除此以外，WebGAL 编辑器的加入也使得制作和导出一个游戏更加方便快捷。 -v12.wav;
+jumpLabel:end;
+
+;分支2
+label:choose2;
+这个演示游戏使用的素材是 AI 生成的。 -v13.wav;
+WebGAL 项目只用了一年不到就在 GitHub 获得了 1000 星标！ -v14.wav;
+WebGAL 的开发历程，是一个在开发中学习开发的过程。因此她经历了3次重构，并且每次几乎都是推倒重来式的。 -v15.wav;
+WebGAL 的脚本语言是为了简化制作难度而全新设计的！ -v16.wav;
+
+;结束分支
+label:end;
+为了更接近桌面端视觉小说引擎的能力，我们支持很多快捷键以及可跳转的剧情回溯。 -v17.wav;
+按下菜单中的“回想”按钮或者向上滚动鼠标滚轮试试吧！ -v18.wav;
+快速存读挡、丰富的选项、自动播放以及快进等功能，也是应有尽有。 -v19.wav;
+setTempAnimation:[{"position": {"x": 500,"y": 0},"duration": 0},{"position": {"x": 400,"y": 0},"duration": 250},{"position": {"x": 600,"y": 0},"duration": 500},{"position": {"x": 500,"y": 0},"duration": 250}] -target=fig-left -next;
+当然，这不算什么，因为大多数成熟的引擎都有这些功能。但是在 Web 端，这却是很少见的。 -v20.wav;
+我们为可能初次开发游戏的开发者提供了美观的通用 UI 和丰富的预设功能与动画。所以你可以没有顾虑地快速开始制作游戏。 -v21.wav;
+WebGAL 项目组期待你的作品能够在 WebGAL 上呈现！只需要一个链接就可以让万千用户立刻开始享受你的作品。 -v22.wav;
+感谢你关注 WebGAL 项目！ -v23.wav;
+end;
+; WebGAL 引擎会默认读取 start.txt 作为初始场景，因此请不要删除，并在初始场景内跳转到其他场景
+bgm:s_Title.mp3;
+unlockBgm:s_Title.mp3 -name=雲を追いかけて;
+intro:你好|欢迎来到 WebGAL 的世界;
+changeBg:bg.png -next;
+unlockCg:bg.png -name=良夜; // 解锁CG并赋予名称
+changeFigure:stand.png -left -next;
+setAnimation:enter-from-left -target=fig-left -next;
+WebGAL:欢迎使用 WebGAL！这是一款全新的网页端视觉小说引擎。 -v1.wav;
+changeFigure:stand2.png -right -next;
+WebGAL 是使用 Web 技术开发的引擎，因此在网页端有良好的表现。 -v2.wav;
+由于这个特性，如果你将 WebGAL 部署到服务器或网页托管平台上，玩家只需要一串链接就可以开始游玩！ -v3.wav;
+setAnimation:move-front-and-back -target=fig-left -next;
+听起来是不是非常吸引人？ -v4.wav;
+changeFigure:none -right -next;
+setAnimation:l2c -target=fig-left -next;
+WebGAL 引擎也具有动画系统和特效系统，使用 WebGAL 开发的游戏可以拥有很好的表现效果。 -v5.wav;
+pixiInit;
+pixiPerform:snow;
+比如，这个下起小雪的特效。 -v6.wav;
+除此以外，分支选择的功能也必不可少。 -v7.wav;
+你可以通过以下两个分支了解 WebGAL 的更多故事。 -v8.wav;
+pixiInit;
+choose:WebGAL 发展历程:choose1|WebGAL 冷知识:choose2;
+
+;分支1
+label:choose1;
+WebGAL 的开发初衷是能够让更多人可以更方便地制作属于自己的视觉小说。 -v9.wav;
+在一开始，WebGAL 只具备很少的功能，仅仅能支持立绘和背景的显示、语音播放和分支选择。 -v10.wav;
+在经历一年的发展后，现在已经是支持了很多优秀的表现效果的引擎了！ -v11.wav;
+除此以外，WebGAL 编辑器的加入也使得制作和导出一个游戏更加方便快捷。 -v12.wav;
+jumpLabel:end;
+
+;分支2
+label:choose2;
+这个演示游戏使用的素材是 AI 生成的。 -v13.wav;
+WebGAL 项目只用了一年不到就在 GitHub 获得了 1000 星标！ -v14.wav;
+WebGAL 的开发历程，是一个在开发中学习开发的过程。因此她经历了3次重构，并且每次几乎都是推倒重来式的。 -v15.wav;
+WebGAL 的脚本语言是为了简化制作难度而全新设计的！ -v16.wav;
+
+;结束分支
+label:end;
+为了更接近桌面端视觉小说引擎的能力，我们支持很多快捷键以及可跳转的剧情回溯。 -v17.wav;
+按下菜单中的“回想”按钮或者向上滚动鼠标滚轮试试吧！ -v18.wav;
+快速存读挡、丰富的选项、自动播放以及快进等功能，也是应有尽有。 -v19.wav;
+setTempAnimation:[{"position": {"x": 500,"y": 0},"duration": 0},{"position": {"x": 400,"y": 0},"duration": 250},{"position": {"x": 600,"y": 0},"duration": 500},{"position": {"x": 500,"y": 0},"duration": 250}] -target=fig-left -next;
+当然，这不算什么，因为大多数成熟的引擎都有这些功能。但是在 Web 端，这却是很少见的。 -v20.wav;
+我们为可能初次开发游戏的开发者提供了美观的通用 UI 和丰富的预设功能与动画。所以你可以没有顾虑地快速开始制作游戏。 -v21.wav;
+WebGAL 项目组期待你的作品能够在 WebGAL 上呈现！只需要一个链接就可以让万千用户立刻开始享受你的作品。 -v22.wav;
+感谢你关注 WebGAL 项目！ -v23.wav;
+end;
+; WebGAL 引擎会默认读取 start.txt 作为初始场景，因此请不要删除，并在初始场景内跳转到其他场景
+bgm:s_Title.mp3;
+unlockBgm:s_Title.mp3 -name=雲を追いかけて;
+intro:你好|欢迎来到 WebGAL 的世界;
+changeBg:bg.png -next;
+unlockCg:bg.png -name=良夜; // 解锁CG并赋予名称
+changeFigure:stand.png -left -next;
+setAnimation:enter-from-left -target=fig-left -next;
+WebGAL:欢迎使用 WebGAL！这是一款全新的网页端视觉小说引擎。 -v1.wav;
+changeFigure:stand2.png -right -next;
+WebGAL 是使用 Web 技术开发的引擎，因此在网页端有良好的表现。 -v2.wav;
+由于这个特性，如果你将 WebGAL 部署到服务器或网页托管平台上，玩家只需要一串链接就可以开始游玩！ -v3.wav;
+setAnimation:move-front-and-back -target=fig-left -next;
+听起来是不是非常吸引人？ -v4.wav;
+changeFigure:none -right -next;
+setAnimation:l2c -target=fig-left -next;
+WebGAL 引擎也具有动画系统和特效系统，使用 WebGAL 开发的游戏可以拥有很好的表现效果。 -v5.wav;
+pixiInit;
+pixiPerform:snow;
+比如，这个下起小雪的特效。 -v6.wav;
+除此以外，分支选择的功能也必不可少。 -v7.wav;
+你可以通过以下两个分支了解 WebGAL 的更多故事。 -v8.wav;
+pixiInit;
+choose:WebGAL 发展历程:choose1|WebGAL 冷知识:choose2;
+
+;分支1
+label:choose1;
+WebGAL 的开发初衷是能够让更多人可以更方便地制作属于自己的视觉小说。 -v9.wav;
+在一开始，WebGAL 只具备很少的功能，仅仅能支持立绘和背景的显示、语音播放和分支选择。 -v10.wav;
+在经历一年的发展后，现在已经是支持了很多优秀的表现效果的引擎了！ -v11.wav;
+除此以外，WebGAL 编辑器的加入也使得制作和导出一个游戏更加方便快捷。 -v12.wav;
+jumpLabel:end;
+
+;分支2
+label:choose2;
+这个演示游戏使用的素材是 AI 生成的。 -v13.wav;
+WebGAL 项目只用了一年不到就在 GitHub 获得了 1000 星标！ -v14.wav;
+WebGAL 的开发历程，是一个在开发中学习开发的过程。因此她经历了3次重构，并且每次几乎都是推倒重来式的。 -v15.wav;
+WebGAL 的脚本语言是为了简化制作难度而全新设计的！ -v16.wav;
+
+;结束分支
+label:end;
+为了更接近桌面端视觉小说引擎的能力，我们支持很多快捷键以及可跳转的剧情回溯。 -v17.wav;
+按下菜单中的“回想”按钮或者向上滚动鼠标滚轮试试吧！ -v18.wav;
+快速存读挡、丰富的选项、自动播放以及快进等功能，也是应有尽有。 -v19.wav;
+setTempAnimation:[{"position": {"x": 500,"y": 0},"duration": 0},{"position": {"x": 400,"y": 0},"duration": 250},{"position": {"x": 600,"y": 0},"duration": 500},{"position": {"x": 500,"y": 0},"duration": 250}] -target=fig-left -next;
+当然，这不算什么，因为大多数成熟的引擎都有这些功能。但是在 Web 端，这却是很少见的。 -v20.wav;
+我们为可能初次开发游戏的开发者提供了美观的通用 UI 和丰富的预设功能与动画。所以你可以没有顾虑地快速开始制作游戏。 -v21.wav;
+WebGAL 项目组期待你的作品能够在 WebGAL 上呈现！只需要一个链接就可以让万千用户立刻开始享受你的作品。 -v22.wav;
+感谢你关注 WebGAL 项目！ -v23.wav;
+end;
+; WebGAL 引擎会默认读取 start.txt 作为初始场景，因此请不要删除，并在初始场景内跳转到其他场景
+bgm:s_Title.mp3;
+unlockBgm:s_Title.mp3 -name=雲を追いかけて;
+intro:你好|欢迎来到 WebGAL 的世界;
+changeBg:bg.png -next;
+unlockCg:bg.png -name=良夜; // 解锁CG并赋予名称
+changeFigure:stand.png -left -next;
+setAnimation:enter-from-left -target=fig-left -next;
+WebGAL:欢迎使用 WebGAL！这是一款全新的网页端视觉小说引擎。 -v1.wav;
+changeFigure:stand2.png -right -next;
+WebGAL 是使用 Web 技术开发的引擎，因此在网页端有良好的表现。 -v2.wav;
+由于这个特性，如果你将 WebGAL 部署到服务器或网页托管平台上，玩家只需要一串链接就可以开始游玩！ -v3.wav;
+setAnimation:move-front-and-back -target=fig-left -next;
+听起来是不是非常吸引人？ -v4.wav;
+changeFigure:none -right -next;
+setAnimation:l2c -target=fig-left -next;
+WebGAL 引擎也具有动画系统和特效系统，使用 WebGAL 开发的游戏可以拥有很好的表现效果。 -v5.wav;
+pixiInit;
+pixiPerform:snow;
+比如，这个下起小雪的特效。 -v6.wav;
+除此以外，分支选择的功能也必不可少。 -v7.wav;
+你可以通过以下两个分支了解 WebGAL 的更多故事。 -v8.wav;
+pixiInit;
+choose:WebGAL 发展历程:choose1|WebGAL 冷知识:choose2;
+
+;分支1
+label:choose1;
+WebGAL 的开发初衷是能够让更多人可以更方便地制作属于自己的视觉小说。 -v9.wav;
+在一开始，WebGAL 只具备很少的功能，仅仅能支持立绘和背景的显示、语音播放和分支选择。 -v10.wav;
+在经历一年的发展后，现在已经是支持了很多优秀的表现效果的引擎了！ -v11.wav;
+除此以外，WebGAL 编辑器的加入也使得制作和导出一个游戏更加方便快捷。 -v12.wav;
+jumpLabel:end;
+
+;分支2
+label:choose2;
+这个演示游戏使用的素材是 AI 生成的。 -v13.wav;
+WebGAL 项目只用了一年不到就在 GitHub 获得了 1000 星标！ -v14.wav;
+WebGAL 的开发历程，是一个在开发中学习开发的过程。因此她经历了3次重构，并且每次几乎都是推倒重来式的。 -v15.wav;
+WebGAL 的脚本语言是为了简化制作难度而全新设计的！ -v16.wav;
+
+;结束分支
+label:end;
+为了更接近桌面端视觉小说引擎的能力，我们支持很多快捷键以及可跳转的剧情回溯。 -v17.wav;
+按下菜单中的“回想”按钮或者向上滚动鼠标滚轮试试吧！ -v18.wav;
+快速存读挡、丰富的选项、自动播放以及快进等功能，也是应有尽有。 -v19.wav;
+setTempAnimation:[{"position": {"x": 500,"y": 0},"duration": 0},{"position": {"x": 400,"y": 0},"duration": 250},{"position": {"x": 600,"y": 0},"duration": 500},{"position": {"x": 500,"y": 0},"duration": 250}] -target=fig-left -next;
+当然，这不算什么，因为大多数成熟的引擎都有这些功能。但是在 Web 端，这却是很少见的。 -v20.wav;
+我们为可能初次开发游戏的开发者提供了美观的通用 UI 和丰富的预设功能与动画。所以你可以没有顾虑地快速开始制作游戏。 -v21.wav;
+WebGAL 项目组期待你的作品能够在 WebGAL 上呈现！只需要一个链接就可以让万千用户立刻开始享受你的作品。 -v22.wav;
+感谢你关注 WebGAL 项目！ -v23.wav;
+end;
+; WebGAL 引擎会默认读取 start.txt 作为初始场景，因此请不要删除，并在初始场景内跳转到其他场景
+bgm:s_Title.mp3;
+unlockBgm:s_Title.mp3 -name=雲を追いかけて;
+intro:你好|欢迎来到 WebGAL 的世界;
+changeBg:bg.png -next;
+unlockCg:bg.png -name=良夜; // 解锁CG并赋予名称
+changeFigure:stand.png -left -next;
+setAnimation:enter-from-left -target=fig-left -next;
+WebGAL:欢迎使用 WebGAL！这是一款全新的网页端视觉小说引擎。 -v1.wav;
+changeFigure:stand2.png -right -next;
+WebGAL 是使用 Web 技术开发的引擎，因此在网页端有良好的表现。 -v2.wav;
+由于这个特性，如果你将 WebGAL 部署到服务器或网页托管平台上，玩家只需要一串链接就可以开始游玩！ -v3.wav;
+setAnimation:move-front-and-back -target=fig-left -next;
+听起来是不是非常吸引人？ -v4.wav;
+changeFigure:none -right -next;
+setAnimation:l2c -target=fig-left -next;
+WebGAL 引擎也具有动画系统和特效系统，使用 WebGAL 开发的游戏可以拥有很好的表现效果。 -v5.wav;
+pixiInit;
+pixiPerform:snow;
+比如，这个下起小雪的特效。 -v6.wav;
+除此以外，分支选择的功能也必不可少。 -v7.wav;
+你可以通过以下两个分支了解 WebGAL 的更多故事。 -v8.wav;
+pixiInit;
+choose:WebGAL 发展历程:choose1|WebGAL 冷知识:choose2;
+
+;分支1
+label:choose1;
+WebGAL 的开发初衷是能够让更多人可以更方便地制作属于自己的视觉小说。 -v9.wav;
+在一开始，WebGAL 只具备很少的功能，仅仅能支持立绘和背景的显示、语音播放和分支选择。 -v10.wav;
+在经历一年的发展后，现在已经是支持了很多优秀的表现效果的引擎了！ -v11.wav;
+除此以外，WebGAL 编辑器的加入也使得制作和导出一个游戏更加方便快捷。 -v12.wav;
+jumpLabel:end;
+
+;分支2
+label:choose2;
+这个演示游戏使用的素材是 AI 生成的。 -v13.wav;
+WebGAL 项目只用了一年不到就在 GitHub 获得了 1000 星标！ -v14.wav;
+WebGAL 的开发历程，是一个在开发中学习开发的过程。因此她经历了3次重构，并且每次几乎都是推倒重来式的。 -v15.wav;
+WebGAL 的脚本语言是为了简化制作难度而全新设计的！ -v16.wav;
+
+;结束分支
+label:end;
+为了更接近桌面端视觉小说引擎的能力，我们支持很多快捷键以及可跳转的剧情回溯。 -v17.wav;
+按下菜单中的“回想”按钮或者向上滚动鼠标滚轮试试吧！ -v18.wav;
+快速存读挡、丰富的选项、自动播放以及快进等功能，也是应有尽有。 -v19.wav;
+setTempAnimation:[{"position": {"x": 500,"y": 0},"duration": 0},{"position": {"x": 400,"y": 0},"duration": 250},{"position": {"x": 600,"y": 0},"duration": 500},{"position": {"x": 500,"y": 0},"duration": 250}] -target=fig-left -next;
+当然，这不算什么，因为大多数成熟的引擎都有这些功能。但是在 Web 端，这却是很少见的。 -v20.wav;
+我们为可能初次开发游戏的开发者提供了美观的通用 UI 和丰富的预设功能与动画。所以你可以没有顾虑地快速开始制作游戏。 -v21.wav;
+WebGAL 项目组期待你的作品能够在 WebGAL 上呈现！只需要一个链接就可以让万千用户立刻开始享受你的作品。 -v22.wav;
+感谢你关注 WebGAL 项目！ -v23.wav;
+end;
+; WebGAL 引擎会默认读取 start.txt 作为初始场景，因此请不要删除，并在初始场景内跳转到其他场景
+bgm:s_Title.mp3;
+unlockBgm:s_Title.mp3 -name=雲を追いかけて;
+intro:你好|欢迎来到 WebGAL 的世界;
+changeBg:bg.png -next;
+unlockCg:bg.png -name=良夜; // 解锁CG并赋予名称
+changeFigure:stand.png -left -next;
+setAnimation:enter-from-left -target=fig-left -next;
+WebGAL:欢迎使用 WebGAL！这是一款全新的网页端视觉小说引擎。 -v1.wav;
+changeFigure:stand2.png -right -next;
+WebGAL 是使用 Web 技术开发的引擎，因此在网页端有良好的表现。 -v2.wav;
+由于这个特性，如果你将 WebGAL 部署到服务器或网页托管平台上，玩家只需要一串链接就可以开始游玩！ -v3.wav;
+setAnimation:move-front-and-back -target=fig-left -next;
+听起来是不是非常吸引人？ -v4.wav;
+changeFigure:none -right -next;
+setAnimation:l2c -target=fig-left -next;
+WebGAL 引擎也具有动画系统和特效系统，使用 WebGAL 开发的游戏可以拥有很好的表现效果。 -v5.wav;
+pixiInit;
+pixiPerform:snow;
+比如，这个下起小雪的特效。 -v6.wav;
+除此以外，分支选择的功能也必不可少。 -v7.wav;
+你可以通过以下两个分支了解 WebGAL 的更多故事。 -v8.wav;
+pixiInit;
+choose:WebGAL 发展历程:choose1|WebGAL 冷知识:choose2;
+
+;分支1
+label:choose1;
+WebGAL 的开发初衷是能够让更多人可以更方便地制作属于自己的视觉小说。 -v9.wav;
+在一开始，WebGAL 只具备很少的功能，仅仅能支持立绘和背景的显示、语音播放和分支选择。 -v10.wav;
+在经历一年的发展后，现在已经是支持了很多优秀的表现效果的引擎了！ -v11.wav;
+除此以外，WebGAL 编辑器的加入也使得制作和导出一个游戏更加方便快捷。 -v12.wav;
+jumpLabel:end;
+
+;分支2
+label:choose2;
+这个演示游戏使用的素材是 AI 生成的。 -v13.wav;
+WebGAL 项目只用了一年不到就在 GitHub 获得了 1000 星标！ -v14.wav;
+WebGAL 的开发历程，是一个在开发中学习开发的过程。因此她经历了3次重构，并且每次几乎都是推倒重来式的。 -v15.wav;
+WebGAL 的脚本语言是为了简化制作难度而全新设计的！ -v16.wav;
+
+;结束分支
+label:end;
+为了更接近桌面端视觉小说引擎的能力，我们支持很多快捷键以及可跳转的剧情回溯。 -v17.wav;
+按下菜单中的“回想”按钮或者向上滚动鼠标滚轮试试吧！ -v18.wav;
+快速存读挡、丰富的选项、自动播放以及快进等功能，也是应有尽有。 -v19.wav;
+setTempAnimation:[{"position": {"x": 500,"y": 0},"duration": 0},{"position": {"x": 400,"y": 0},"duration": 250},{"position": {"x": 600,"y": 0},"duration": 500},{"position": {"x": 500,"y": 0},"duration": 250}] -target=fig-left -next;
+当然，这不算什么，因为大多数成熟的引擎都有这些功能。但是在 Web 端，这却是很少见的。 -v20.wav;
+我们为可能初次开发游戏的开发者提供了美观的通用 UI 和丰富的预设功能与动画。所以你可以没有顾虑地快速开始制作游戏。 -v21.wav;
+WebGAL 项目组期待你的作品能够在 WebGAL 上呈现！只需要一个链接就可以让万千用户立刻开始享受你的作品。 -v22.wav;
+感谢你关注 WebGAL 项目！ -v23.wav;
+end;
+; WebGAL 引擎会默认读取 start.txt 作为初始场景，因此请不要删除，并在初始场景内跳转到其他场景
+bgm:s_Title.mp3;
+unlockBgm:s_Title.mp3 -name=雲を追いかけて;
+intro:你好|欢迎来到 WebGAL 的世界;
+changeBg:bg.png -next;
+unlockCg:bg.png -name=良夜; // 解锁CG并赋予名称
+changeFigure:stand.png -left -next;
+setAnimation:enter-from-left -target=fig-left -next;
+WebGAL:欢迎使用 WebGAL！这是一款全新的网页端视觉小说引擎。 -v1.wav;
+changeFigure:stand2.png -right -next;
+WebGAL 是使用 Web 技术开发的引擎，因此在网页端有良好的表现。 -v2.wav;
+由于这个特性，如果你将 WebGAL 部署到服务器或网页托管平台上，玩家只需要一串链接就可以开始游玩！ -v3.wav;
+setAnimation:move-front-and-back -target=fig-left -next;
+听起来是不是非常吸引人？ -v4.wav;
+changeFigure:none -right -next;
+setAnimation:l2c -target=fig-left -next;
+WebGAL 引擎也具有动画系统和特效系统，使用 WebGAL 开发的游戏可以拥有很好的表现效果。 -v5.wav;
+pixiInit;
+pixiPerform:snow;
+比如，这个下起小雪的特效。 -v6.wav;
+除此以外，分支选择的功能也必不可少。 -v7.wav;
+你可以通过以下两个分支了解 WebGAL 的更多故事。 -v8.wav;
+pixiInit;
+choose:WebGAL 发展历程:choose1|WebGAL 冷知识:choose2;
+
+;分支1
+label:choose1;
+WebGAL 的开发初衷是能够让更多人可以更方便地制作属于自己的视觉小说。 -v9.wav;
+在一开始，WebGAL 只具备很少的功能，仅仅能支持立绘和背景的显示、语音播放和分支选择。 -v10.wav;
+在经历一年的发展后，现在已经是支持了很多优秀的表现效果的引擎了！ -v11.wav;
+除此以外，WebGAL 编辑器的加入也使得制作和导出一个游戏更加方便快捷。 -v12.wav;
+jumpLabel:end;
+
+;分支2
+label:choose2;
+这个演示游戏使用的素材是 AI 生成的。 -v13.wav;
+WebGAL 项目只用了一年不到就在 GitHub 获得了 1000 星标！ -v14.wav;
+WebGAL 的开发历程，是一个在开发中学习开发的过程。因此她经历了3次重构，并且每次几乎都是推倒重来式的。 -v15.wav;
+WebGAL 的脚本语言是为了简化制作难度而全新设计的！ -v16.wav;
+
+;结束分支
+label:end;
+为了更接近桌面端视觉小说引擎的能力，我们支持很多快捷键以及可跳转的剧情回溯。 -v17.wav;
+按下菜单中的“回想”按钮或者向上滚动鼠标滚轮试试吧！ -v18.wav;
+快速存读挡、丰富的选项、自动播放以及快进等功能，也是应有尽有。 -v19.wav;
+setTempAnimation:[{"position": {"x": 500,"y": 0},"duration": 0},{"position": {"x": 400,"y": 0},"duration": 250},{"position": {"x": 600,"y": 0},"duration": 500},{"position": {"x": 500,"y": 0},"duration": 250}] -target=fig-left -next;
+当然，这不算什么，因为大多数成熟的引擎都有这些功能。但是在 Web 端，这却是很少见的。 -v20.wav;
+我们为可能初次开发游戏的开发者提供了美观的通用 UI 和丰富的预设功能与动画。所以你可以没有顾虑地快速开始制作游戏。 -v21.wav;
+WebGAL 项目组期待你的作品能够在 WebGAL 上呈现！只需要一个链接就可以让万千用户立刻开始享受你的作品。 -v22.wav;
+感谢你关注 WebGAL 项目！ -v23.wav;
+end;
+; WebGAL 引擎会默认读取 start.txt 作为初始场景，因此请不要删除，并在初始场景内跳转到其他场景
+bgm:s_Title.mp3;
+unlockBgm:s_Title.mp3 -name=雲を追いかけて;
+intro:你好|欢迎来到 WebGAL 的世界;
+changeBg:bg.png -next;
+unlockCg:bg.png -name=良夜; // 解锁CG并赋予名称
+changeFigure:stand.png -left -next;
+setAnimation:enter-from-left -target=fig-left -next;
+WebGAL:欢迎使用 WebGAL！这是一款全新的网页端视觉小说引擎。 -v1.wav;
+changeFigure:stand2.png -right -next;
+WebGAL 是使用 Web 技术开发的引擎，因此在网页端有良好的表现。 -v2.wav;
+由于这个特性，如果你将 WebGAL 部署到服务器或网页托管平台上，玩家只需要一串链接就可以开始游玩！ -v3.wav;
+setAnimation:move-front-and-back -target=fig-left -next;
+听起来是不是非常吸引人？ -v4.wav;
+changeFigure:none -right -next;
+setAnimation:l2c -target=fig-left -next;
+WebGAL 引擎也具有动画系统和特效系统，使用 WebGAL 开发的游戏可以拥有很好的表现效果。 -v5.wav;
+pixiInit;
+pixiPerform:snow;
+比如，这个下起小雪的特效。 -v6.wav;
+除此以外，分支选择的功能也必不可少。 -v7.wav;
+你可以通过以下两个分支了解 WebGAL 的更多故事。 -v8.wav;
+pixiInit;
+choose:WebGAL 发展历程:choose1|WebGAL 冷知识:choose2;
+
+;分支1
+label:choose1;
+WebGAL 的开发初衷是能够让更多人可以更方便地制作属于自己的视觉小说。 -v9.wav;
+在一开始，WebGAL 只具备很少的功能，仅仅能支持立绘和背景的显示、语音播放和分支选择。 -v10.wav;
+在经历一年的发展后，现在已经是支持了很多优秀的表现效果的引擎了！ -v11.wav;
+除此以外，WebGAL 编辑器的加入也使得制作和导出一个游戏更加方便快捷。 -v12.wav;
+jumpLabel:end;
+
+;分支2
+label:choose2;
+这个演示游戏使用的素材是 AI 生成的。 -v13.wav;
+WebGAL 项目只用了一年不到就在 GitHub 获得了 1000 星标！ -v14.wav;
+WebGAL 的开发历程，是一个在开发中学习开发的过程。因此她经历了3次重构，并且每次几乎都是推倒重来式的。 -v15.wav;
+WebGAL 的脚本语言是为了简化制作难度而全新设计的！ -v16.wav;
+
+;结束分支
+label:end;
+为了更接近桌面端视觉小说引擎的能力，我们支持很多快捷键以及可跳转的剧情回溯。 -v17.wav;
+按下菜单中的“回想”按钮或者向上滚动鼠标滚轮试试吧！ -v18.wav;
+快速存读挡、丰富的选项、自动播放以及快进等功能，也是应有尽有。 -v19.wav;
+setTempAnimation:[{"position": {"x": 500,"y": 0},"duration": 0},{"position": {"x": 400,"y": 0},"duration": 250},{"position": {"x": 600,"y": 0},"duration": 500},{"position": {"x": 500,"y": 0},"duration": 250}] -target=fig-left -next;
+当然，这不算什么，因为大多数成熟的引擎都有这些功能。但是在 Web 端，这却是很少见的。 -v20.wav;
+我们为可能初次开发游戏的开发者提供了美观的通用 UI 和丰富的预设功能与动画。所以你可以没有顾虑地快速开始制作游戏。 -v21.wav;
+WebGAL 项目组期待你的作品能够在 WebGAL 上呈现！只需要一个链接就可以让万千用户立刻开始享受你的作品。 -v22.wav;
+感谢你关注 WebGAL 项目！ -v23.wav;
+end;
+; WebGAL 引擎会默认读取 start.txt 作为初始场景，因此请不要删除，并在初始场景内跳转到其他场景
+bgm:s_Title.mp3;
+unlockBgm:s_Title.mp3 -name=雲を追いかけて;
+intro:你好|欢迎来到 WebGAL 的世界;
+changeBg:bg.png -next;
+unlockCg:bg.png -name=良夜; // 解锁CG并赋予名称
+changeFigure:stand.png -left -next;
+setAnimation:enter-from-left -target=fig-left -next;
+WebGAL:欢迎使用 WebGAL！这是一款全新的网页端视觉小说引擎。 -v1.wav;
+changeFigure:stand2.png -right -next;
+WebGAL 是使用 Web 技术开发的引擎，因此在网页端有良好的表现。 -v2.wav;
+由于这个特性，如果你将 WebGAL 部署到服务器或网页托管平台上，玩家只需要一串链接就可以开始游玩！ -v3.wav;
+setAnimation:move-front-and-back -target=fig-left -next;
+听起来是不是非常吸引人？ -v4.wav;
+changeFigure:none -right -next;
+setAnimation:l2c -target=fig-left -next;
+WebGAL 引擎也具有动画系统和特效系统，使用 WebGAL 开发的游戏可以拥有很好的表现效果。 -v5.wav;
+pixiInit;
+pixiPerform:snow;
+比如，这个下起小雪的特效。 -v6.wav;
+除此以外，分支选择的功能也必不可少。 -v7.wav;
+你可以通过以下两个分支了解 WebGAL 的更多故事。 -v8.wav;
+pixiInit;
+choose:WebGAL 发展历程:choose1|WebGAL 冷知识:choose2;
+
+;分支1
+label:choose1;
+WebGAL 的开发初衷是能够让更多人可以更方便地制作属于自己的视觉小说。 -v9.wav;
+在一开始，WebGAL 只具备很少的功能，仅仅能支持立绘和背景的显示、语音播放和分支选择。 -v10.wav;
+在经历一年的发展后，现在已经是支持了很多优秀的表现效果的引擎了！ -v11.wav;
+除此以外，WebGAL 编辑器的加入也使得制作和导出一个游戏更加方便快捷。 -v12.wav;
+jumpLabel:end;
+
+;分支2
+label:choose2;
+这个演示游戏使用的素材是 AI 生成的。 -v13.wav;
+WebGAL 项目只用了一年不到就在 GitHub 获得了 1000 星标！ -v14.wav;
+WebGAL 的开发历程，是一个在开发中学习开发的过程。因此她经历了3次重构，并且每次几乎都是推倒重来式的。 -v15.wav;
+WebGAL 的脚本语言是为了简化制作难度而全新设计的！ -v16.wav;
+
+;结束分支
+label:end;
+为了更接近桌面端视觉小说引擎的能力，我们支持很多快捷键以及可跳转的剧情回溯。 -v17.wav;
+按下菜单中的“回想”按钮或者向上滚动鼠标滚轮试试吧！ -v18.wav;
+快速存读挡、丰富的选项、自动播放以及快进等功能，也是应有尽有。 -v19.wav;
+setTempAnimation:[{"position": {"x": 500,"y": 0},"duration": 0},{"position": {"x": 400,"y": 0},"duration": 250},{"position": {"x": 600,"y": 0},"duration": 500},{"position": {"x": 500,"y": 0},"duration": 250}] -target=fig-left -next;
+当然，这不算什么，因为大多数成熟的引擎都有这些功能。但是在 Web 端，这却是很少见的。 -v20.wav;
+我们为可能初次开发游戏的开发者提供了美观的通用 UI 和丰富的预设功能与动画。所以你可以没有顾虑地快速开始制作游戏。 -v21.wav;
+WebGAL 项目组期待你的作品能够在 WebGAL 上呈现！只需要一个链接就可以让万千用户立刻开始享受你的作品。 -v22.wav;
+感谢你关注 WebGAL 项目！ -v23.wav;
+end;
+; WebGAL 引擎会默认读取 start.txt 作为初始场景，因此请不要删除，并在初始场景内跳转到其他场景
+bgm:s_Title.mp3;
+unlockBgm:s_Title.mp3 -name=雲を追いかけて;
+intro:你好|欢迎来到 WebGAL 的世界;
+changeBg:bg.png -next;
+unlockCg:bg.png -name=良夜; // 解锁CG并赋予名称
+changeFigure:stand.png -left -next;
+setAnimation:enter-from-left -target=fig-left -next;
+WebGAL:欢迎使用 WebGAL！这是一款全新的网页端视觉小说引擎。 -v1.wav;
+changeFigure:stand2.png -right -next;
+WebGAL 是使用 Web 技术开发的引擎，因此在网页端有良好的表现。 -v2.wav;
+由于这个特性，如果你将 WebGAL 部署到服务器或网页托管平台上，玩家只需要一串链接就可以开始游玩！ -v3.wav;
+setAnimation:move-front-and-back -target=fig-left -next;
+听起来是不是非常吸引人？ -v4.wav;
+changeFigure:none -right -next;
+setAnimation:l2c -target=fig-left -next;
+WebGAL 引擎也具有动画系统和特效系统，使用 WebGAL 开发的游戏可以拥有很好的表现效果。 -v5.wav;
+pixiInit;
+pixiPerform:snow;
+比如，这个下起小雪的特效。 -v6.wav;
+除此以外，分支选择的功能也必不可少。 -v7.wav;
+你可以通过以下两个分支了解 WebGAL 的更多故事。 -v8.wav;
+pixiInit;
+choose:WebGAL 发展历程:choose1|WebGAL 冷知识:choose2;
+
+;分支1
+label:choose1;
+WebGAL 的开发初衷是能够让更多人可以更方便地制作属于自己的视觉小说。 -v9.wav;
+在一开始，WebGAL 只具备很少的功能，仅仅能支持立绘和背景的显示、语音播放和分支选择。 -v10.wav;
+在经历一年的发展后，现在已经是支持了很多优秀的表现效果的引擎了！ -v11.wav;
+除此以外，WebGAL 编辑器的加入也使得制作和导出一个游戏更加方便快捷。 -v12.wav;
+jumpLabel:end;
+
+;分支2
+label:choose2;
+这个演示游戏使用的素材是 AI 生成的。 -v13.wav;
+WebGAL 项目只用了一年不到就在 GitHub 获得了 1000 星标！ -v14.wav;
+WebGAL 的开发历程，是一个在开发中学习开发的过程。因此她经历了3次重构，并且每次几乎都是推倒重来式的。 -v15.wav;
+WebGAL 的脚本语言是为了简化制作难度而全新设计的！ -v16.wav;
+
+;结束分支
+label:end;
+为了更接近桌面端视觉小说引擎的能力，我们支持很多快捷键以及可跳转的剧情回溯。 -v17.wav;
+按下菜单中的“回想”按钮或者向上滚动鼠标滚轮试试吧！ -v18.wav;
+快速存读挡、丰富的选项、自动播放以及快进等功能，也是应有尽有。 -v19.wav;
+setTempAnimation:[{"position": {"x": 500,"y": 0},"duration": 0},{"position": {"x": 400,"y": 0},"duration": 250},{"position": {"x": 600,"y": 0},"duration": 500},{"position": {"x": 500,"y": 0},"duration": 250}] -target=fig-left -next;
+当然，这不算什么，因为大多数成熟的引擎都有这些功能。但是在 Web 端，这却是很少见的。 -v20.wav;
+我们为可能初次开发游戏的开发者提供了美观的通用 UI 和丰富的预设功能与动画。所以你可以没有顾虑地快速开始制作游戏。 -v21.wav;
+WebGAL 项目组期待你的作品能够在 WebGAL 上呈现！只需要一个链接就可以让万千用户立刻开始享受你的作品。 -v22.wav;
+感谢你关注 WebGAL 项目！ -v23.wav;
+end;
+; WebGAL 引擎会默认读取 start.txt 作为初始场景，因此请不要删除，并在初始场景内跳转到其他场景
+bgm:s_Title.mp3;
+unlockBgm:s_Title.mp3 -name=雲を追いかけて;
+intro:你好|欢迎来到 WebGAL 的世界;
+changeBg:bg.png -next;
+unlockCg:bg.png -name=良夜; // 解锁CG并赋予名称
+changeFigure:stand.png -left -next;
+setAnimation:enter-from-left -target=fig-left -next;
+WebGAL:欢迎使用 WebGAL！这是一款全新的网页端视觉小说引擎。 -v1.wav;
+changeFigure:stand2.png -right -next;
+WebGAL 是使用 Web 技术开发的引擎，因此在网页端有良好的表现。 -v2.wav;
+由于这个特性，如果你将 WebGAL 部署到服务器或网页托管平台上，玩家只需要一串链接就可以开始游玩！ -v3.wav;
+setAnimation:move-front-and-back -target=fig-left -next;
+听起来是不是非常吸引人？ -v4.wav;
+changeFigure:none -right -next;
+setAnimation:l2c -target=fig-left -next;
+WebGAL 引擎也具有动画系统和特效系统，使用 WebGAL 开发的游戏可以拥有很好的表现效果。 -v5.wav;
+pixiInit;
+pixiPerform:snow;
+比如，这个下起小雪的特效。 -v6.wav;
+除此以外，分支选择的功能也必不可少。 -v7.wav;
+你可以通过以下两个分支了解 WebGAL 的更多故事。 -v8.wav;
+pixiInit;
+choose:WebGAL 发展历程:choose1|WebGAL 冷知识:choose2;
+
+;分支1
+label:choose1;
+WebGAL 的开发初衷是能够让更多人可以更方便地制作属于自己的视觉小说。 -v9.wav;
+在一开始，WebGAL 只具备很少的功能，仅仅能支持立绘和背景的显示、语音播放和分支选择。 -v10.wav;
+在经历一年的发展后，现在已经是支持了很多优秀的表现效果的引擎了！ -v11.wav;
+除此以外，WebGAL 编辑器的加入也使得制作和导出一个游戏更加方便快捷。 -v12.wav;
+jumpLabel:end;
+
+;分支2
+label:choose2;
+这个演示游戏使用的素材是 AI 生成的。 -v13.wav;
+WebGAL 项目只用了一年不到就在 GitHub 获得了 1000 星标！ -v14.wav;
+WebGAL 的开发历程，是一个在开发中学习开发的过程。因此她经历了3次重构，并且每次几乎都是推倒重来式的。 -v15.wav;
+WebGAL 的脚本语言是为了简化制作难度而全新设计的！ -v16.wav;
+
+;结束分支
+label:end;
+为了更接近桌面端视觉小说引擎的能力，我们支持很多快捷键以及可跳转的剧情回溯。 -v17.wav;
+按下菜单中的“回想”按钮或者向上滚动鼠标滚轮试试吧！ -v18.wav;
+快速存读挡、丰富的选项、自动播放以及快进等功能，也是应有尽有。 -v19.wav;
+setTempAnimation:[{"position": {"x": 500,"y": 0},"duration": 0},{"position": {"x": 400,"y": 0},"duration": 250},{"position": {"x": 600,"y": 0},"duration": 500},{"position": {"x": 500,"y": 0},"duration": 250}] -target=fig-left -next;
+当然，这不算什么，因为大多数成熟的引擎都有这些功能。但是在 Web 端，这却是很少见的。 -v20.wav;
+我们为可能初次开发游戏的开发者提供了美观的通用 UI 和丰富的预设功能与动画。所以你可以没有顾虑地快速开始制作游戏。 -v21.wav;
+WebGAL 项目组期待你的作品能够在 WebGAL 上呈现！只需要一个链接就可以让万千用户立刻开始享受你的作品。 -v22.wav;
+感谢你关注 WebGAL 项目！ -v23.wav;
+end;
+; WebGAL 引擎会默认读取 start.txt 作为初始场景，因此请不要删除，并在初始场景内跳转到其他场景
+bgm:s_Title.mp3;
+unlockBgm:s_Title.mp3 -name=雲を追いかけて;
+intro:你好|欢迎来到 WebGAL 的世界;
+changeBg:bg.png -next;
+unlockCg:bg.png -name=良夜; // 解锁CG并赋予名称
+changeFigure:stand.png -left -next;
+setAnimation:enter-from-left -target=fig-left -next;
+WebGAL:欢迎使用 WebGAL！这是一款全新的网页端视觉小说引擎。 -v1.wav;
+changeFigure:stand2.png -right -next;
+WebGAL 是使用 Web 技术开发的引擎，因此在网页端有良好的表现。 -v2.wav;
+由于这个特性，如果你将 WebGAL 部署到服务器或网页托管平台上，玩家只需要一串链接就可以开始游玩！ -v3.wav;
+setAnimation:move-front-and-back -target=fig-left -next;
+听起来是不是非常吸引人？ -v4.wav;
+changeFigure:none -right -next;
+setAnimation:l2c -target=fig-left -next;
+WebGAL 引擎也具有动画系统和特效系统，使用 WebGAL 开发的游戏可以拥有很好的表现效果。 -v5.wav;
+pixiInit;
+pixiPerform:snow;
+比如，这个下起小雪的特效。 -v6.wav;
+除此以外，分支选择的功能也必不可少。 -v7.wav;
+你可以通过以下两个分支了解 WebGAL 的更多故事。 -v8.wav;
+pixiInit;
+choose:WebGAL 发展历程:choose1|WebGAL 冷知识:choose2;
+
+;分支1
+label:choose1;
+WebGAL 的开发初衷是能够让更多人可以更方便地制作属于自己的视觉小说。 -v9.wav;
+在一开始，WebGAL 只具备很少的功能，仅仅能支持立绘和背景的显示、语音播放和分支选择。 -v10.wav;
+在经历一年的发展后，现在已经是支持了很多优秀的表现效果的引擎了！ -v11.wav;
+除此以外，WebGAL 编辑器的加入也使得制作和导出一个游戏更加方便快捷。 -v12.wav;
+jumpLabel:end;
+
+;分支2
+label:choose2;
+这个演示游戏使用的素材是 AI 生成的。 -v13.wav;
+WebGAL 项目只用了一年不到就在 GitHub 获得了 1000 星标！ -v14.wav;
+WebGAL 的开发历程，是一个在开发中学习开发的过程。因此她经历了3次重构，并且每次几乎都是推倒重来式的。 -v15.wav;
+WebGAL 的脚本语言是为了简化制作难度而全新设计的！ -v16.wav;
+
+;结束分支
+label:end;
+为了更接近桌面端视觉小说引擎的能力，我们支持很多快捷键以及可跳转的剧情回溯。 -v17.wav;
+按下菜单中的“回想”按钮或者向上滚动鼠标滚轮试试吧！ -v18.wav;
+快速存读挡、丰富的选项、自动播放以及快进等功能，也是应有尽有。 -v19.wav;
+setTempAnimation:[{"position": {"x": 500,"y": 0},"duration": 0},{"position": {"x": 400,"y": 0},"duration": 250},{"position": {"x": 600,"y": 0},"duration": 500},{"position": {"x": 500,"y": 0},"duration": 250}] -target=fig-left -next;
+当然，这不算什么，因为大多数成熟的引擎都有这些功能。但是在 Web 端，这却是很少见的。 -v20.wav;
+我们为可能初次开发游戏的开发者提供了美观的通用 UI 和丰富的预设功能与动画。所以你可以没有顾虑地快速开始制作游戏。 -v21.wav;
+WebGAL 项目组期待你的作品能够在 WebGAL 上呈现！只需要一个链接就可以让万千用户立刻开始享受你的作品。 -v22.wav;
+感谢你关注 WebGAL 项目！ -v23.wav;
+end;
+; WebGAL 引擎会默认读取 start.txt 作为初始场景，因此请不要删除，并在初始场景内跳转到其他场景
+bgm:s_Title.mp3;
+unlockBgm:s_Title.mp3 -name=雲を追いかけて;
+intro:你好|欢迎来到 WebGAL 的世界;
+changeBg:bg.png -next;
+unlockCg:bg.png -name=良夜; // 解锁CG并赋予名称
+changeFigure:stand.png -left -next;
+setAnimation:enter-from-left -target=fig-left -next;
+WebGAL:欢迎使用 WebGAL！这是一款全新的网页端视觉小说引擎。 -v1.wav;
+changeFigure:stand2.png -right -next;
+WebGAL 是使用 Web 技术开发的引擎，因此在网页端有良好的表现。 -v2.wav;
+由于这个特性，如果你将 WebGAL 部署到服务器或网页托管平台上，玩家只需要一串链接就可以开始游玩！ -v3.wav;
+setAnimation:move-front-and-back -target=fig-left -next;
+听起来是不是非常吸引人？ -v4.wav;
+changeFigure:none -right -next;
+setAnimation:l2c -target=fig-left -next;
+WebGAL 引擎也具有动画系统和特效系统，使用 WebGAL 开发的游戏可以拥有很好的表现效果。 -v5.wav;
+pixiInit;
+pixiPerform:snow;
+比如，这个下起小雪的特效。 -v6.wav;
+除此以外，分支选择的功能也必不可少。 -v7.wav;
+你可以通过以下两个分支了解 WebGAL 的更多故事。 -v8.wav;
+pixiInit;
+choose:WebGAL 发展历程:choose1|WebGAL 冷知识:choose2;
+
+;分支1
+label:choose1;
+WebGAL 的开发初衷是能够让更多人可以更方便地制作属于自己的视觉小说。 -v9.wav;
+在一开始，WebGAL 只具备很少的功能，仅仅能支持立绘和背景的显示、语音播放和分支选择。 -v10.wav;
+在经历一年的发展后，现在已经是支持了很多优秀的表现效果的引擎了！ -v11.wav;
+除此以外，WebGAL 编辑器的加入也使得制作和导出一个游戏更加方便快捷。 -v12.wav;
+jumpLabel:end;
+
+;分支2
+label:choose2;
+这个演示游戏使用的素材是 AI 生成的。 -v13.wav;
+WebGAL 项目只用了一年不到就在 GitHub 获得了 1000 星标！ -v14.wav;
+WebGAL 的开发历程，是一个在开发中学习开发的过程。因此她经历了3次重构，并且每次几乎都是推倒重来式的。 -v15.wav;
+WebGAL 的脚本语言是为了简化制作难度而全新设计的！ -v16.wav;
+
+;结束分支
+label:end;
+为了更接近桌面端视觉小说引擎的能力，我们支持很多快捷键以及可跳转的剧情回溯。 -v17.wav;
+按下菜单中的“回想”按钮或者向上滚动鼠标滚轮试试吧！ -v18.wav;
+快速存读挡、丰富的选项、自动播放以及快进等功能，也是应有尽有。 -v19.wav;
+setTempAnimation:[{"position": {"x": 500,"y": 0},"duration": 0},{"position": {"x": 400,"y": 0},"duration": 250},{"position": {"x": 600,"y": 0},"duration": 500},{"position": {"x": 500,"y": 0},"duration": 250}] -target=fig-left -next;
+当然，这不算什么，因为大多数成熟的引擎都有这些功能。但是在 Web 端，这却是很少见的。 -v20.wav;
+我们为可能初次开发游戏的开发者提供了美观的通用 UI 和丰富的预设功能与动画。所以你可以没有顾虑地快速开始制作游戏。 -v21.wav;
+WebGAL 项目组期待你的作品能够在 WebGAL 上呈现！只需要一个链接就可以让万千用户立刻开始享受你的作品。 -v22.wav;
+感谢你关注 WebGAL 项目！ -v23.wav;
+end;
+; WebGAL 引擎会默认读取 start.txt 作为初始场景，因此请不要删除，并在初始场景内跳转到其他场景
+bgm:s_Title.mp3;
+unlockBgm:s_Title.mp3 -name=雲を追いかけて;
+intro:你好|欢迎来到 WebGAL 的世界;
+changeBg:bg.png -next;
+unlockCg:bg.png -name=良夜; // 解锁CG并赋予名称
+changeFigure:stand.png -left -next;
+setAnimation:enter-from-left -target=fig-left -next;
+WebGAL:欢迎使用 WebGAL！这是一款全新的网页端视觉小说引擎。 -v1.wav;
+changeFigure:stand2.png -right -next;
+WebGAL 是使用 Web 技术开发的引擎，因此在网页端有良好的表现。 -v2.wav;
+由于这个特性，如果你将 WebGAL 部署到服务器或网页托管平台上，玩家只需要一串链接就可以开始游玩！ -v3.wav;
+setAnimation:move-front-and-back -target=fig-left -next;
+听起来是不是非常吸引人？ -v4.wav;
+changeFigure:none -right -next;
+setAnimation:l2c -target=fig-left -next;
+WebGAL 引擎也具有动画系统和特效系统，使用 WebGAL 开发的游戏可以拥有很好的表现效果。 -v5.wav;
+pixiInit;
+pixiPerform:snow;
+比如，这个下起小雪的特效。 -v6.wav;
+除此以外，分支选择的功能也必不可少。 -v7.wav;
+你可以通过以下两个分支了解 WebGAL 的更多故事。 -v8.wav;
+pixiInit;
+choose:WebGAL 发展历程:choose1|WebGAL 冷知识:choose2;
+
+;分支1
+label:choose1;
+WebGAL 的开发初衷是能够让更多人可以更方便地制作属于自己的视觉小说。 -v9.wav;
+在一开始，WebGAL 只具备很少的功能，仅仅能支持立绘和背景的显示、语音播放和分支选择。 -v10.wav;
+在经历一年的发展后，现在已经是支持了很多优秀的表现效果的引擎了！ -v11.wav;
+除此以外，WebGAL 编辑器的加入也使得制作和导出一个游戏更加方便快捷。 -v12.wav;
+jumpLabel:end;
+
+;分支2
+label:choose2;
+这个演示游戏使用的素材是 AI 生成的。 -v13.wav;
+WebGAL 项目只用了一年不到就在 GitHub 获得了 1000 星标！ -v14.wav;
+WebGAL 的开发历程，是一个在开发中学习开发的过程。因此她经历了3次重构，并且每次几乎都是推倒重来式的。 -v15.wav;
+WebGAL 的脚本语言是为了简化制作难度而全新设计的！ -v16.wav;
+
+;结束分支
+label:end;
+为了更接近桌面端视觉小说引擎的能力，我们支持很多快捷键以及可跳转的剧情回溯。 -v17.wav;
+按下菜单中的“回想”按钮或者向上滚动鼠标滚轮试试吧！ -v18.wav;
+快速存读挡、丰富的选项、自动播放以及快进等功能，也是应有尽有。 -v19.wav;
+setTempAnimation:[{"position": {"x": 500,"y": 0},"duration": 0},{"position": {"x": 400,"y": 0},"duration": 250},{"position": {"x": 600,"y": 0},"duration": 500},{"position": {"x": 500,"y": 0},"duration": 250}] -target=fig-left -next;
+当然，这不算什么，因为大多数成熟的引擎都有这些功能。但是在 Web 端，这却是很少见的。 -v20.wav;
+我们为可能初次开发游戏的开发者提供了美观的通用 UI 和丰富的预设功能与动画。所以你可以没有顾虑地快速开始制作游戏。 -v21.wav;
+WebGAL 项目组期待你的作品能够在 WebGAL 上呈现！只需要一个链接就可以让万千用户立刻开始享受你的作品。 -v22.wav;
+感谢你关注 WebGAL 项目！ -v23.wav;
+end;
+; WebGAL 引擎会默认读取 start.txt 作为初始场景，因此请不要删除，并在初始场景内跳转到其他场景
+bgm:s_Title.mp3;
+unlockBgm:s_Title.mp3 -name=雲を追いかけて;
+intro:你好|欢迎来到 WebGAL 的世界;
+changeBg:bg.png -next;
+unlockCg:bg.png -name=良夜; // 解锁CG并赋予名称
+changeFigure:stand.png -left -next;
+setAnimation:enter-from-left -target=fig-left -next;
+WebGAL:欢迎使用 WebGAL！这是一款全新的网页端视觉小说引擎。 -v1.wav;
+changeFigure:stand2.png -right -next;
+WebGAL 是使用 Web 技术开发的引擎，因此在网页端有良好的表现。 -v2.wav;
+由于这个特性，如果你将 WebGAL 部署到服务器或网页托管平台上，玩家只需要一串链接就可以开始游玩！ -v3.wav;
+setAnimation:move-front-and-back -target=fig-left -next;
+听起来是不是非常吸引人？ -v4.wav;
+changeFigure:none -right -next;
+setAnimation:l2c -target=fig-left -next;
+WebGAL 引擎也具有动画系统和特效系统，使用 WebGAL 开发的游戏可以拥有很好的表现效果。 -v5.wav;
+pixiInit;
+pixiPerform:snow;
+比如，这个下起小雪的特效。 -v6.wav;
+除此以外，分支选择的功能也必不可少。 -v7.wav;
+你可以通过以下两个分支了解 WebGAL 的更多故事。 -v8.wav;
+pixiInit;
+choose:WebGAL 发展历程:choose1|WebGAL 冷知识:choose2;
+
+;分支1
+label:choose1;
+WebGAL 的开发初衷是能够让更多人可以更方便地制作属于自己的视觉小说。 -v9.wav;
+在一开始，WebGAL 只具备很少的功能，仅仅能支持立绘和背景的显示、语音播放和分支选择。 -v10.wav;
+在经历一年的发展后，现在已经是支持了很多优秀的表现效果的引擎了！ -v11.wav;
+除此以外，WebGAL 编辑器的加入也使得制作和导出一个游戏更加方便快捷。 -v12.wav;
+jumpLabel:end;
+
+;分支2
+label:choose2;
+这个演示游戏使用的素材是 AI 生成的。 -v13.wav;
+WebGAL 项目只用了一年不到就在 GitHub 获得了 1000 星标！ -v14.wav;
+WebGAL 的开发历程，是一个在开发中学习开发的过程。因此她经历了3次重构，并且每次几乎都是推倒重来式的。 -v15.wav;
+WebGAL 的脚本语言是为了简化制作难度而全新设计的！ -v16.wav;
+
+;结束分支
+label:end;
+为了更接近桌面端视觉小说引擎的能力，我们支持很多快捷键以及可跳转的剧情回溯。 -v17.wav;
+按下菜单中的“回想”按钮或者向上滚动鼠标滚轮试试吧！ -v18.wav;
+快速存读挡、丰富的选项、自动播放以及快进等功能，也是应有尽有。 -v19.wav;
+setTempAnimation:[{"position": {"x": 500,"y": 0},"duration": 0},{"position": {"x": 400,"y": 0},"duration": 250},{"position": {"x": 600,"y": 0},"duration": 500},{"position": {"x": 500,"y": 0},"duration": 250}] -target=fig-left -next;
+当然，这不算什么，因为大多数成熟的引擎都有这些功能。但是在 Web 端，这却是很少见的。 -v20.wav;
+我们为可能初次开发游戏的开发者提供了美观的通用 UI 和丰富的预设功能与动画。所以你可以没有顾虑地快速开始制作游戏。 -v21.wav;
+WebGAL 项目组期待你的作品能够在 WebGAL 上呈现！只需要一个链接就可以让万千用户立刻开始享受你的作品。 -v22.wav;
+感谢你关注 WebGAL 项目！ -v23.wav;
+end;
+; WebGAL 引擎会默认读取 start.txt 作为初始场景，因此请不要删除，并在初始场景内跳转到其他场景
+bgm:s_Title.mp3;
+unlockBgm:s_Title.mp3 -name=雲を追いかけて;
+intro:你好|欢迎来到 WebGAL 的世界;
+changeBg:bg.png -next;
+unlockCg:bg.png -name=良夜; // 解锁CG并赋予名称
+changeFigure:stand.png -left -next;
+setAnimation:enter-from-left -target=fig-left -next;
+WebGAL:欢迎使用 WebGAL！这是一款全新的网页端视觉小说引擎。 -v1.wav;
+changeFigure:stand2.png -right -next;
+WebGAL 是使用 Web 技术开发的引擎，因此在网页端有良好的表现。 -v2.wav;
+由于这个特性，如果你将 WebGAL 部署到服务器或网页托管平台上，玩家只需要一串链接就可以开始游玩！ -v3.wav;
+setAnimation:move-front-and-back -target=fig-left -next;
+听起来是不是非常吸引人？ -v4.wav;
+changeFigure:none -right -next;
+setAnimation:l2c -target=fig-left -next;
+WebGAL 引擎也具有动画系统和特效系统，使用 WebGAL 开发的游戏可以拥有很好的表现效果。 -v5.wav;
+pixiInit;
+pixiPerform:snow;
+比如，这个下起小雪的特效。 -v6.wav;
+除此以外，分支选择的功能也必不可少。 -v7.wav;
+你可以通过以下两个分支了解 WebGAL 的更多故事。 -v8.wav;
+pixiInit;
+choose:WebGAL 发展历程:choose1|WebGAL 冷知识:choose2;
+
+;分支1
+label:choose1;
+WebGAL 的开发初衷是能够让更多人可以更方便地制作属于自己的视觉小说。 -v9.wav;
+在一开始，WebGAL 只具备很少的功能，仅仅能支持立绘和背景的显示、语音播放和分支选择。 -v10.wav;
+在经历一年的发展后，现在已经是支持了很多优秀的表现效果的引擎了！ -v11.wav;
+除此以外，WebGAL 编辑器的加入也使得制作和导出一个游戏更加方便快捷。 -v12.wav;
+jumpLabel:end;
+
+;分支2
+label:choose2;
+这个演示游戏使用的素材是 AI 生成的。 -v13.wav;
+WebGAL 项目只用了一年不到就在 GitHub 获得了 1000 星标！ -v14.wav;
+WebGAL 的开发历程，是一个在开发中学习开发的过程。因此她经历了3次重构，并且每次几乎都是推倒重来式的。 -v15.wav;
+WebGAL 的脚本语言是为了简化制作难度而全新设计的！ -v16.wav;
+
+;结束分支
+label:end;
+为了更接近桌面端视觉小说引擎的能力，我们支持很多快捷键以及可跳转的剧情回溯。 -v17.wav;
+按下菜单中的“回想”按钮或者向上滚动鼠标滚轮试试吧！ -v18.wav;
+快速存读挡、丰富的选项、自动播放以及快进等功能，也是应有尽有。 -v19.wav;
+setTempAnimation:[{"position": {"x": 500,"y": 0},"duration": 0},{"position": {"x": 400,"y": 0},"duration": 250},{"position": {"x": 600,"y": 0},"duration": 500},{"position": {"x": 500,"y": 0},"duration": 250}] -target=fig-left -next;
+当然，这不算什么，因为大多数成熟的引擎都有这些功能。但是在 Web 端，这却是很少见的。 -v20.wav;
+我们为可能初次开发游戏的开发者提供了美观的通用 UI 和丰富的预设功能与动画。所以你可以没有顾虑地快速开始制作游戏。 -v21.wav;
+WebGAL 项目组期待你的作品能够在 WebGAL 上呈现！只需要一个链接就可以让万千用户立刻开始享受你的作品。 -v22.wav;
+感谢你关注 WebGAL 项目！ -v23.wav;
+end;
+; WebGAL 引擎会默认读取 start.txt 作为初始场景，因此请不要删除，并在初始场景内跳转到其他场景
+bgm:s_Title.mp3;
+unlockBgm:s_Title.mp3 -name=雲を追いかけて;
+intro:你好|欢迎来到 WebGAL 的世界;
+changeBg:bg.png -next;
+unlockCg:bg.png -name=良夜; // 解锁CG并赋予名称
+changeFigure:stand.png -left -next;
+setAnimation:enter-from-left -target=fig-left -next;
+WebGAL:欢迎使用 WebGAL！这是一款全新的网页端视觉小说引擎。 -v1.wav;
+changeFigure:stand2.png -right -next;
+WebGAL 是使用 Web 技术开发的引擎，因此在网页端有良好的表现。 -v2.wav;
+由于这个特性，如果你将 WebGAL 部署到服务器或网页托管平台上，玩家只需要一串链接就可以开始游玩！ -v3.wav;
+setAnimation:move-front-and-back -target=fig-left -next;
+听起来是不是非常吸引人？ -v4.wav;
+changeFigure:none -right -next;
+setAnimation:l2c -target=fig-left -next;
+WebGAL 引擎也具有动画系统和特效系统，使用 WebGAL 开发的游戏可以拥有很好的表现效果。 -v5.wav;
+pixiInit;
+pixiPerform:snow;
+比如，这个下起小雪的特效。 -v6.wav;
+除此以外，分支选择的功能也必不可少。 -v7.wav;
+你可以通过以下两个分支了解 WebGAL 的更多故事。 -v8.wav;
+pixiInit;
+choose:WebGAL 发展历程:choose1|WebGAL 冷知识:choose2;
+
+;分支1
+label:choose1;
+WebGAL 的开发初衷是能够让更多人可以更方便地制作属于自己的视觉小说。 -v9.wav;
+在一开始，WebGAL 只具备很少的功能，仅仅能支持立绘和背景的显示、语音播放和分支选择。 -v10.wav;
+在经历一年的发展后，现在已经是支持了很多优秀的表现效果的引擎了！ -v11.wav;
+除此以外，WebGAL 编辑器的加入也使得制作和导出一个游戏更加方便快捷。 -v12.wav;
+jumpLabel:end;
+
+;分支2
+label:choose2;
+这个演示游戏使用的素材是 AI 生成的。 -v13.wav;
+WebGAL 项目只用了一年不到就在 GitHub 获得了 1000 星标！ -v14.wav;
+WebGAL 的开发历程，是一个在开发中学习开发的过程。因此她经历了3次重构，并且每次几乎都是推倒重来式的。 -v15.wav;
+WebGAL 的脚本语言是为了简化制作难度而全新设计的！ -v16.wav;
+
+;结束分支
+label:end;
+为了更接近桌面端视觉小说引擎的能力，我们支持很多快捷键以及可跳转的剧情回溯。 -v17.wav;
+按下菜单中的“回想”按钮或者向上滚动鼠标滚轮试试吧！ -v18.wav;
+快速存读挡、丰富的选项、自动播放以及快进等功能，也是应有尽有。 -v19.wav;
+setTempAnimation:[{"position": {"x": 500,"y": 0},"duration": 0},{"position": {"x": 400,"y": 0},"duration": 250},{"position": {"x": 600,"y": 0},"duration": 500},{"position": {"x": 500,"y": 0},"duration": 250}] -target=fig-left -next;
+当然，这不算什么，因为大多数成熟的引擎都有这些功能。但是在 Web 端，这却是很少见的。 -v20.wav;
+我们为可能初次开发游戏的开发者提供了美观的通用 UI 和丰富的预设功能与动画。所以你可以没有顾虑地快速开始制作游戏。 -v21.wav;
+WebGAL 项目组期待你的作品能够在 WebGAL 上呈现！只需要一个链接就可以让万千用户立刻开始享受你的作品。 -v22.wav;
+感谢你关注 WebGAL 项目！ -v23.wav;
+end;
+; WebGAL 引擎会默认读取 start.txt 作为初始场景，因此请不要删除，并在初始场景内跳转到其他场景
+bgm:s_Title.mp3;
+unlockBgm:s_Title.mp3 -name=雲を追いかけて;
+intro:你好|欢迎来到 WebGAL 的世界;
+changeBg:bg.png -next;
+unlockCg:bg.png -name=良夜; // 解锁CG并赋予名称
+changeFigure:stand.png -left -next;
+setAnimation:enter-from-left -target=fig-left -next;
+WebGAL:欢迎使用 WebGAL！这是一款全新的网页端视觉小说引擎。 -v1.wav;
+changeFigure:stand2.png -right -next;
+WebGAL 是使用 Web 技术开发的引擎，因此在网页端有良好的表现。 -v2.wav;
+由于这个特性，如果你将 WebGAL 部署到服务器或网页托管平台上，玩家只需要一串链接就可以开始游玩！ -v3.wav;
+setAnimation:move-front-and-back -target=fig-left -next;
+听起来是不是非常吸引人？ -v4.wav;
+changeFigure:none -right -next;
+setAnimation:l2c -target=fig-left -next;
+WebGAL 引擎也具有动画系统和特效系统，使用 WebGAL 开发的游戏可以拥有很好的表现效果。 -v5.wav;
+pixiInit;
+pixiPerform:snow;
+比如，这个下起小雪的特效。 -v6.wav;
+除此以外，分支选择的功能也必不可少。 -v7.wav;
+你可以通过以下两个分支了解 WebGAL 的更多故事。 -v8.wav;
+pixiInit;
+choose:WebGAL 发展历程:choose1|WebGAL 冷知识:choose2;
+
+;分支1
+label:choose1;
+WebGAL 的开发初衷是能够让更多人可以更方便地制作属于自己的视觉小说。 -v9.wav;
+在一开始，WebGAL 只具备很少的功能，仅仅能支持立绘和背景的显示、语音播放和分支选择。 -v10.wav;
+在经历一年的发展后，现在已经是支持了很多优秀的表现效果的引擎了！ -v11.wav;
+除此以外，WebGAL 编辑器的加入也使得制作和导出一个游戏更加方便快捷。 -v12.wav;
+jumpLabel:end;
+
+;分支2
+label:choose2;
+这个演示游戏使用的素材是 AI 生成的。 -v13.wav;
+WebGAL 项目只用了一年不到就在 GitHub 获得了 1000 星标！ -v14.wav;
+WebGAL 的开发历程，是一个在开发中学习开发的过程。因此她经历了3次重构，并且每次几乎都是推倒重来式的。 -v15.wav;
+WebGAL 的脚本语言是为了简化制作难度而全新设计的！ -v16.wav;
+
+;结束分支
+label:end;
+为了更接近桌面端视觉小说引擎的能力，我们支持很多快捷键以及可跳转的剧情回溯。 -v17.wav;
+按下菜单中的“回想”按钮或者向上滚动鼠标滚轮试试吧！ -v18.wav;
+快速存读挡、丰富的选项、自动播放以及快进等功能，也是应有尽有。 -v19.wav;
+setTempAnimation:[{"position": {"x": 500,"y": 0},"duration": 0},{"position": {"x": 400,"y": 0},"duration": 250},{"position": {"x": 600,"y": 0},"duration": 500},{"position": {"x": 500,"y": 0},"duration": 250}] -target=fig-left -next;
+当然，这不算什么，因为大多数成熟的引擎都有这些功能。但是在 Web 端，这却是很少见的。 -v20.wav;
+我们为可能初次开发游戏的开发者提供了美观的通用 UI 和丰富的预设功能与动画。所以你可以没有顾虑地快速开始制作游戏。 -v21.wav;
+WebGAL 项目组期待你的作品能够在 WebGAL 上呈现！只需要一个链接就可以让万千用户立刻开始享受你的作品。 -v22.wav;
+感谢你关注 WebGAL 项目！ -v23.wav;
+end;
+; WebGAL 引擎会默认读取 start.txt 作为初始场景，因此请不要删除，并在初始场景内跳转到其他场景
+bgm:s_Title.mp3;
+unlockBgm:s_Title.mp3 -name=雲を追いかけて;
+intro:你好|欢迎来到 WebGAL 的世界;
+changeBg:bg.png -next;
+unlockCg:bg.png -name=良夜; // 解锁CG并赋予名称
+changeFigure:stand.png -left -next;
+setAnimation:enter-from-left -target=fig-left -next;
+WebGAL:欢迎使用 WebGAL！这是一款全新的网页端视觉小说引擎。 -v1.wav;
+changeFigure:stand2.png -right -next;
+WebGAL 是使用 Web 技术开发的引擎，因此在网页端有良好的表现。 -v2.wav;
+由于这个特性，如果你将 WebGAL 部署到服务器或网页托管平台上，玩家只需要一串链接就可以开始游玩！ -v3.wav;
+setAnimation:move-front-and-back -target=fig-left -next;
+听起来是不是非常吸引人？ -v4.wav;
+changeFigure:none -right -next;
+setAnimation:l2c -target=fig-left -next;
+WebGAL 引擎也具有动画系统和特效系统，使用 WebGAL 开发的游戏可以拥有很好的表现效果。 -v5.wav;
+pixiInit;
+pixiPerform:snow;
+比如，这个下起小雪的特效。 -v6.wav;
+除此以外，分支选择的功能也必不可少。 -v7.wav;
+你可以通过以下两个分支了解 WebGAL 的更多故事。 -v8.wav;
+pixiInit;
+choose:WebGAL 发展历程:choose1|WebGAL 冷知识:choose2;
+
+;分支1
+label:choose1;
+WebGAL 的开发初衷是能够让更多人可以更方便地制作属于自己的视觉小说。 -v9.wav;
+在一开始，WebGAL 只具备很少的功能，仅仅能支持立绘和背景的显示、语音播放和分支选择。 -v10.wav;
+在经历一年的发展后，现在已经是支持了很多优秀的表现效果的引擎了！ -v11.wav;
+除此以外，WebGAL 编辑器的加入也使得制作和导出一个游戏更加方便快捷。 -v12.wav;
+jumpLabel:end;
+
+;分支2
+label:choose2;
+这个演示游戏使用的素材是 AI 生成的。 -v13.wav;
+WebGAL 项目只用了一年不到就在 GitHub 获得了 1000 星标！ -v14.wav;
+WebGAL 的开发历程，是一个在开发中学习开发的过程。因此她经历了3次重构，并且每次几乎都是推倒重来式的。 -v15.wav;
+WebGAL 的脚本语言是为了简化制作难度而全新设计的！ -v16.wav;
+
+;结束分支
+label:end;
+为了更接近桌面端视觉小说引擎的能力，我们支持很多快捷键以及可跳转的剧情回溯。 -v17.wav;
+按下菜单中的“回想”按钮或者向上滚动鼠标滚轮试试吧！ -v18.wav;
+快速存读挡、丰富的选项、自动播放以及快进等功能，也是应有尽有。 -v19.wav;
+setTempAnimation:[{"position": {"x": 500,"y": 0},"duration": 0},{"position": {"x": 400,"y": 0},"duration": 250},{"position": {"x": 600,"y": 0},"duration": 500},{"position": {"x": 500,"y": 0},"duration": 250}] -target=fig-left -next;
+当然，这不算什么，因为大多数成熟的引擎都有这些功能。但是在 Web 端，这却是很少见的。 -v20.wav;
+我们为可能初次开发游戏的开发者提供了美观的通用 UI 和丰富的预设功能与动画。所以你可以没有顾虑地快速开始制作游戏。 -v21.wav;
+WebGAL 项目组期待你的作品能够在 WebGAL 上呈现！只需要一个链接就可以让万千用户立刻开始享受你的作品。 -v22.wav;
+感谢你关注 WebGAL 项目！ -v23.wav;
+end;
+; WebGAL 引擎会默认读取 start.txt 作为初始场景，因此请不要删除，并在初始场景内跳转到其他场景
+bgm:s_Title.mp3;
+unlockBgm:s_Title.mp3 -name=雲を追いかけて;
+intro:你好|欢迎来到 WebGAL 的世界;
+changeBg:bg.png -next;
+unlockCg:bg.png -name=良夜; // 解锁CG并赋予名称
+changeFigure:stand.png -left -next;
+setAnimation:enter-from-left -target=fig-left -next;
+WebGAL:欢迎使用 WebGAL！这是一款全新的网页端视觉小说引擎。 -v1.wav;
+changeFigure:stand2.png -right -next;
+WebGAL 是使用 Web 技术开发的引擎，因此在网页端有良好的表现。 -v2.wav;
+由于这个特性，如果你将 WebGAL 部署到服务器或网页托管平台上，玩家只需要一串链接就可以开始游玩！ -v3.wav;
+setAnimation:move-front-and-back -target=fig-left -next;
+听起来是不是非常吸引人？ -v4.wav;
+changeFigure:none -right -next;
+setAnimation:l2c -target=fig-left -next;
+WebGAL 引擎也具有动画系统和特效系统，使用 WebGAL 开发的游戏可以拥有很好的表现效果。 -v5.wav;
+pixiInit;
+pixiPerform:snow;
+比如，这个下起小雪的特效。 -v6.wav;
+除此以外，分支选择的功能也必不可少。 -v7.wav;
+你可以通过以下两个分支了解 WebGAL 的更多故事。 -v8.wav;
+pixiInit;
+choose:WebGAL 发展历程:choose1|WebGAL 冷知识:choose2;
+
+;分支1
+label:choose1;
+WebGAL 的开发初衷是能够让更多人可以更方便地制作属于自己的视觉小说。 -v9.wav;
+在一开始，WebGAL 只具备很少的功能，仅仅能支持立绘和背景的显示、语音播放和分支选择。 -v10.wav;
+在经历一年的发展后，现在已经是支持了很多优秀的表现效果的引擎了！ -v11.wav;
+除此以外，WebGAL 编辑器的加入也使得制作和导出一个游戏更加方便快捷。 -v12.wav;
+jumpLabel:end;
+
+;分支2
+label:choose2;
+这个演示游戏使用的素材是 AI 生成的。 -v13.wav;
+WebGAL 项目只用了一年不到就在 GitHub 获得了 1000 星标！ -v14.wav;
+WebGAL 的开发历程，是一个在开发中学习开发的过程。因此她经历了3次重构，并且每次几乎都是推倒重来式的。 -v15.wav;
+WebGAL 的脚本语言是为了简化制作难度而全新设计的！ -v16.wav;
+
+;结束分支
+label:end;
+为了更接近桌面端视觉小说引擎的能力，我们支持很多快捷键以及可跳转的剧情回溯。 -v17.wav;
+按下菜单中的“回想”按钮或者向上滚动鼠标滚轮试试吧！ -v18.wav;
+快速存读挡、丰富的选项、自动播放以及快进等功能，也是应有尽有。 -v19.wav;
+setTempAnimation:[{"position": {"x": 500,"y": 0},"duration": 0},{"position": {"x": 400,"y": 0},"duration": 250},{"position": {"x": 600,"y": 0},"duration": 500},{"position": {"x": 500,"y": 0},"duration": 250}] -target=fig-left -next;
+当然，这不算什么，因为大多数成熟的引擎都有这些功能。但是在 Web 端，这却是很少见的。 -v20.wav;
+我们为可能初次开发游戏的开发者提供了美观的通用 UI 和丰富的预设功能与动画。所以你可以没有顾虑地快速开始制作游戏。 -v21.wav;
+WebGAL 项目组期待你的作品能够在 WebGAL 上呈现！只需要一个链接就可以让万千用户立刻开始享受你的作品。 -v22.wav;
+感谢你关注 WebGAL 项目！ -v23.wav;
+end;
+; WebGAL 引擎会默认读取 start.txt 作为初始场景，因此请不要删除，并在初始场景内跳转到其他场景
+bgm:s_Title.mp3;
+unlockBgm:s_Title.mp3 -name=雲を追いかけて;
+intro:你好|欢迎来到 WebGAL 的世界;
+changeBg:bg.png -next;
+unlockCg:bg.png -name=良夜; // 解锁CG并赋予名称
+changeFigure:stand.png -left -next;
+setAnimation:enter-from-left -target=fig-left -next;
+WebGAL:欢迎使用 WebGAL！这是一款全新的网页端视觉小说引擎。 -v1.wav;
+changeFigure:stand2.png -right -next;
+WebGAL 是使用 Web 技术开发的引擎，因此在网页端有良好的表现。 -v2.wav;
+由于这个特性，如果你将 WebGAL 部署到服务器或网页托管平台上，玩家只需要一串链接就可以开始游玩！ -v3.wav;
+setAnimation:move-front-and-back -target=fig-left -next;
+听起来是不是非常吸引人？ -v4.wav;
+changeFigure:none -right -next;
+setAnimation:l2c -target=fig-left -next;
+WebGAL 引擎也具有动画系统和特效系统，使用 WebGAL 开发的游戏可以拥有很好的表现效果。 -v5.wav;
+pixiInit;
+pixiPerform:snow;
+比如，这个下起小雪的特效。 -v6.wav;
+除此以外，分支选择的功能也必不可少。 -v7.wav;
+你可以通过以下两个分支了解 WebGAL 的更多故事。 -v8.wav;
+pixiInit;
+choose:WebGAL 发展历程:choose1|WebGAL 冷知识:choose2;
+
+;分支1
+label:choose1;
+WebGAL 的开发初衷是能够让更多人可以更方便地制作属于自己的视觉小说。 -v9.wav;
+在一开始，WebGAL 只具备很少的功能，仅仅能支持立绘和背景的显示、语音播放和分支选择。 -v10.wav;
+在经历一年的发展后，现在已经是支持了很多优秀的表现效果的引擎了！ -v11.wav;
+除此以外，WebGAL 编辑器的加入也使得制作和导出一个游戏更加方便快捷。 -v12.wav;
+jumpLabel:end;
+
+;分支2
+label:choose2;
+这个演示游戏使用的素材是 AI 生成的。 -v13.wav;
+WebGAL 项目只用了一年不到就在 GitHub 获得了 1000 星标！ -v14.wav;
+WebGAL 的开发历程，是一个在开发中学习开发的过程。因此她经历了3次重构，并且每次几乎都是推倒重来式的。 -v15.wav;
+WebGAL 的脚本语言是为了简化制作难度而全新设计的！ -v16.wav;
+
+;结束分支
+label:end;
+为了更接近桌面端视觉小说引擎的能力，我们支持很多快捷键以及可跳转的剧情回溯。 -v17.wav;
+按下菜单中的“回想”按钮或者向上滚动鼠标滚轮试试吧！ -v18.wav;
+快速存读挡、丰富的选项、自动播放以及快进等功能，也是应有尽有。 -v19.wav;
+setTempAnimation:[{"position": {"x": 500,"y": 0},"duration": 0},{"position": {"x": 400,"y": 0},"duration": 250},{"position": {"x": 600,"y": 0},"duration": 500},{"position": {"x": 500,"y": 0},"duration": 250}] -target=fig-left -next;
+当然，这不算什么，因为大多数成熟的引擎都有这些功能。但是在 Web 端，这却是很少见的。 -v20.wav;
+我们为可能初次开发游戏的开发者提供了美观的通用 UI 和丰富的预设功能与动画。所以你可以没有顾虑地快速开始制作游戏。 -v21.wav;
+WebGAL 项目组期待你的作品能够在 WebGAL 上呈现！只需要一个链接就可以让万千用户立刻开始享受你的作品。 -v22.wav;
+感谢你关注 WebGAL 项目！ -v23.wav;
+end;
+; WebGAL 引擎会默认读取 start.txt 作为初始场景，因此请不要删除，并在初始场景内跳转到其他场景
+bgm:s_Title.mp3;
+unlockBgm:s_Title.mp3 -name=雲を追いかけて;
+intro:你好|欢迎来到 WebGAL 的世界;
+changeBg:bg.png -next;
+unlockCg:bg.png -name=良夜; // 解锁CG并赋予名称
+changeFigure:stand.png -left -next;
+setAnimation:enter-from-left -target=fig-left -next;
+WebGAL:欢迎使用 WebGAL！这是一款全新的网页端视觉小说引擎。 -v1.wav;
+changeFigure:stand2.png -right -next;
+WebGAL 是使用 Web 技术开发的引擎，因此在网页端有良好的表现。 -v2.wav;
+由于这个特性，如果你将 WebGAL 部署到服务器或网页托管平台上，玩家只需要一串链接就可以开始游玩！ -v3.wav;
+setAnimation:move-front-and-back -target=fig-left -next;
+听起来是不是非常吸引人？ -v4.wav;
+changeFigure:none -right -next;
+setAnimation:l2c -target=fig-left -next;
+WebGAL 引擎也具有动画系统和特效系统，使用 WebGAL 开发的游戏可以拥有很好的表现效果。 -v5.wav;
+pixiInit;
+pixiPerform:snow;
+比如，这个下起小雪的特效。 -v6.wav;
+除此以外，分支选择的功能也必不可少。 -v7.wav;
+你可以通过以下两个分支了解 WebGAL 的更多故事。 -v8.wav;
+pixiInit;
+choose:WebGAL 发展历程:choose1|WebGAL 冷知识:choose2;
+
+;分支1
+label:choose1;
+WebGAL 的开发初衷是能够让更多人可以更方便地制作属于自己的视觉小说。 -v9.wav;
+在一开始，WebGAL 只具备很少的功能，仅仅能支持立绘和背景的显示、语音播放和分支选择。 -v10.wav;
+在经历一年的发展后，现在已经是支持了很多优秀的表现效果的引擎了！ -v11.wav;
+除此以外，WebGAL 编辑器的加入也使得制作和导出一个游戏更加方便快捷。 -v12.wav;
+jumpLabel:end;
+
+;分支2
+label:choose2;
+这个演示游戏使用的素材是 AI 生成的。 -v13.wav;
+WebGAL 项目只用了一年不到就在 GitHub 获得了 1000 星标！ -v14.wav;
+WebGAL 的开发历程，是一个在开发中学习开发的过程。因此她经历了3次重构，并且每次几乎都是推倒重来式的。 -v15.wav;
+WebGAL 的脚本语言是为了简化制作难度而全新设计的！ -v16.wav;
+
+;结束分支
+label:end;
+为了更接近桌面端视觉小说引擎的能力，我们支持很多快捷键以及可跳转的剧情回溯。 -v17.wav;
+按下菜单中的“回想”按钮或者向上滚动鼠标滚轮试试吧！ -v18.wav;
+快速存读挡、丰富的选项、自动播放以及快进等功能，也是应有尽有。 -v19.wav;
+setTempAnimation:[{"position": {"x": 500,"y": 0},"duration": 0},{"position": {"x": 400,"y": 0},"duration": 250},{"position": {"x": 600,"y": 0},"duration": 500},{"position": {"x": 500,"y": 0},"duration": 250}] -target=fig-left -next;
+当然，这不算什么，因为大多数成熟的引擎都有这些功能。但是在 Web 端，这却是很少见的。 -v20.wav;
+我们为可能初次开发游戏的开发者提供了美观的通用 UI 和丰富的预设功能与动画。所以你可以没有顾虑地快速开始制作游戏。 -v21.wav;
+WebGAL 项目组期待你的作品能够在 WebGAL 上呈现！只需要一个链接就可以让万千用户立刻开始享受你的作品。 -v22.wav;
+感谢你关注 WebGAL 项目！ -v23.wav;
+end;
+; WebGAL 引擎会默认读取 start.txt 作为初始场景，因此请不要删除，并在初始场景内跳转到其他场景
+bgm:s_Title.mp3;
+unlockBgm:s_Title.mp3 -name=雲を追いかけて;
+intro:你好|欢迎来到 WebGAL 的世界;
+changeBg:bg.png -next;
+unlockCg:bg.png -name=良夜; // 解锁CG并赋予名称
+changeFigure:stand.png -left -next;
+setAnimation:enter-from-left -target=fig-left -next;
+WebGAL:欢迎使用 WebGAL！这是一款全新的网页端视觉小说引擎。 -v1.wav;
+changeFigure:stand2.png -right -next;
+WebGAL 是使用 Web 技术开发的引擎，因此在网页端有良好的表现。 -v2.wav;
+由于这个特性，如果你将 WebGAL 部署到服务器或网页托管平台上，玩家只需要一串链接就可以开始游玩！ -v3.wav;
+setAnimation:move-front-and-back -target=fig-left -next;
+听起来是不是非常吸引人？ -v4.wav;
+changeFigure:none -right -next;
+setAnimation:l2c -target=fig-left -next;
+WebGAL 引擎也具有动画系统和特效系统，使用 WebGAL 开发的游戏可以拥有很好的表现效果。 -v5.wav;
+pixiInit;
+pixiPerform:snow;
+比如，这个下起小雪的特效。 -v6.wav;
+除此以外，分支选择的功能也必不可少。 -v7.wav;
+你可以通过以下两个分支了解 WebGAL 的更多故事。 -v8.wav;
+pixiInit;
+choose:WebGAL 发展历程:choose1|WebGAL 冷知识:choose2;
+
+;分支1
+label:choose1;
+WebGAL 的开发初衷是能够让更多人可以更方便地制作属于自己的视觉小说。 -v9.wav;
+在一开始，WebGAL 只具备很少的功能，仅仅能支持立绘和背景的显示、语音播放和分支选择。 -v10.wav;
+在经历一年的发展后，现在已经是支持了很多优秀的表现效果的引擎了！ -v11.wav;
+除此以外，WebGAL 编辑器的加入也使得制作和导出一个游戏更加方便快捷。 -v12.wav;
+jumpLabel:end;
+
+;分支2
+label:choose2;
+这个演示游戏使用的素材是 AI 生成的。 -v13.wav;
+WebGAL 项目只用了一年不到就在 GitHub 获得了 1000 星标！ -v14.wav;
+WebGAL 的开发历程，是一个在开发中学习开发的过程。因此她经历了3次重构，并且每次几乎都是推倒重来式的。 -v15.wav;
+WebGAL 的脚本语言是为了简化制作难度而全新设计的！ -v16.wav;
+
+;结束分支
+label:end;
+为了更接近桌面端视觉小说引擎的能力，我们支持很多快捷键以及可跳转的剧情回溯。 -v17.wav;
+按下菜单中的“回想”按钮或者向上滚动鼠标滚轮试试吧！ -v18.wav;
+快速存读挡、丰富的选项、自动播放以及快进等功能，也是应有尽有。 -v19.wav;
+setTempAnimation:[{"position": {"x": 500,"y": 0},"duration": 0},{"position": {"x": 400,"y": 0},"duration": 250},{"position": {"x": 600,"y": 0},"duration": 500},{"position": {"x": 500,"y": 0},"duration": 250}] -target=fig-left -next;
+当然，这不算什么，因为大多数成熟的引擎都有这些功能。但是在 Web 端，这却是很少见的。 -v20.wav;
+我们为可能初次开发游戏的开发者提供了美观的通用 UI 和丰富的预设功能与动画。所以你可以没有顾虑地快速开始制作游戏。 -v21.wav;
+WebGAL 项目组期待你的作品能够在 WebGAL 上呈现！只需要一个链接就可以让万千用户立刻开始享受你的作品。 -v22.wav;
+感谢你关注 WebGAL 项目！ -v23.wav;
+end;
+; WebGAL 引擎会默认读取 start.txt 作为初始场景，因此请不要删除，并在初始场景内跳转到其他场景
+bgm:s_Title.mp3;
+unlockBgm:s_Title.mp3 -name=雲を追いかけて;
+intro:你好|欢迎来到 WebGAL 的世界;
+changeBg:bg.png -next;
+unlockCg:bg.png -name=良夜; // 解锁CG并赋予名称
+changeFigure:stand.png -left -next;
+setAnimation:enter-from-left -target=fig-left -next;
+WebGAL:欢迎使用 WebGAL！这是一款全新的网页端视觉小说引擎。 -v1.wav;
+changeFigure:stand2.png -right -next;
+WebGAL 是使用 Web 技术开发的引擎，因此在网页端有良好的表现。 -v2.wav;
+由于这个特性，如果你将 WebGAL 部署到服务器或网页托管平台上，玩家只需要一串链接就可以开始游玩！ -v3.wav;
+setAnimation:move-front-and-back -target=fig-left -next;
+听起来是不是非常吸引人？ -v4.wav;
+changeFigure:none -right -next;
+setAnimation:l2c -target=fig-left -next;
+WebGAL 引擎也具有动画系统和特效系统，使用 WebGAL 开发的游戏可以拥有很好的表现效果。 -v5.wav;
+pixiInit;
+pixiPerform:snow;
+比如，这个下起小雪的特效。 -v6.wav;
+除此以外，分支选择的功能也必不可少。 -v7.wav;
+你可以通过以下两个分支了解 WebGAL 的更多故事。 -v8.wav;
+pixiInit;
+choose:WebGAL 发展历程:choose1|WebGAL 冷知识:choose2;
+
+;分支1
+label:choose1;
+WebGAL 的开发初衷是能够让更多人可以更方便地制作属于自己的视觉小说。 -v9.wav;
+在一开始，WebGAL 只具备很少的功能，仅仅能支持立绘和背景的显示、语音播放和分支选择。 -v10.wav;
+在经历一年的发展后，现在已经是支持了很多优秀的表现效果的引擎了！ -v11.wav;
+除此以外，WebGAL 编辑器的加入也使得制作和导出一个游戏更加方便快捷。 -v12.wav;
+jumpLabel:end;
+
+;分支2
+label:choose2;
+这个演示游戏使用的素材是 AI 生成的。 -v13.wav;
+WebGAL 项目只用了一年不到就在 GitHub 获得了 1000 星标！ -v14.wav;
+WebGAL 的开发历程，是一个在开发中学习开发的过程。因此她经历了3次重构，并且每次几乎都是推倒重来式的。 -v15.wav;
+WebGAL 的脚本语言是为了简化制作难度而全新设计的！ -v16.wav;
+
+;结束分支
+label:end;
+为了更接近桌面端视觉小说引擎的能力，我们支持很多快捷键以及可跳转的剧情回溯。 -v17.wav;
+按下菜单中的“回想”按钮或者向上滚动鼠标滚轮试试吧！ -v18.wav;
+快速存读挡、丰富的选项、自动播放以及快进等功能，也是应有尽有。 -v19.wav;
+setTempAnimation:[{"position": {"x": 500,"y": 0},"duration": 0},{"position": {"x": 400,"y": 0},"duration": 250},{"position": {"x": 600,"y": 0},"duration": 500},{"position": {"x": 500,"y": 0},"duration": 250}] -target=fig-left -next;
+当然，这不算什么，因为大多数成熟的引擎都有这些功能。但是在 Web 端，这却是很少见的。 -v20.wav;
+我们为可能初次开发游戏的开发者提供了美观的通用 UI 和丰富的预设功能与动画。所以你可以没有顾虑地快速开始制作游戏。 -v21.wav;
+WebGAL 项目组期待你的作品能够在 WebGAL 上呈现！只需要一个链接就可以让万千用户立刻开始享受你的作品。 -v22.wav;
+感谢你关注 WebGAL 项目！ -v23.wav;
+end;
+; WebGAL 引擎会默认读取 start.txt 作为初始场景，因此请不要删除，并在初始场景内跳转到其他场景
+bgm:s_Title.mp3;
+unlockBgm:s_Title.mp3 -name=雲を追いかけて;
+intro:你好|欢迎来到 WebGAL 的世界;
+changeBg:bg.png -next;
+unlockCg:bg.png -name=良夜; // 解锁CG并赋予名称
+changeFigure:stand.png -left -next;
+setAnimation:enter-from-left -target=fig-left -next;
+WebGAL:欢迎使用 WebGAL！这是一款全新的网页端视觉小说引擎。 -v1.wav;
+changeFigure:stand2.png -right -next;
+WebGAL 是使用 Web 技术开发的引擎，因此在网页端有良好的表现。 -v2.wav;
+由于这个特性，如果你将 WebGAL 部署到服务器或网页托管平台上，玩家只需要一串链接就可以开始游玩！ -v3.wav;
+setAnimation:move-front-and-back -target=fig-left -next;
+听起来是不是非常吸引人？ -v4.wav;
+changeFigure:none -right -next;
+setAnimation:l2c -target=fig-left -next;
+WebGAL 引擎也具有动画系统和特效系统，使用 WebGAL 开发的游戏可以拥有很好的表现效果。 -v5.wav;
+pixiInit;
+pixiPerform:snow;
+比如，这个下起小雪的特效。 -v6.wav;
+除此以外，分支选择的功能也必不可少。 -v7.wav;
+你可以通过以下两个分支了解 WebGAL 的更多故事。 -v8.wav;
+pixiInit;
+choose:WebGAL 发展历程:choose1|WebGAL 冷知识:choose2;
+
+;分支1
+label:choose1;
+WebGAL 的开发初衷是能够让更多人可以更方便地制作属于自己的视觉小说。 -v9.wav;
+在一开始，WebGAL 只具备很少的功能，仅仅能支持立绘和背景的显示、语音播放和分支选择。 -v10.wav;
+在经历一年的发展后，现在已经是支持了很多优秀的表现效果的引擎了！ -v11.wav;
+除此以外，WebGAL 编辑器的加入也使得制作和导出一个游戏更加方便快捷。 -v12.wav;
+jumpLabel:end;
+
+;分支2
+label:choose2;
+这个演示游戏使用的素材是 AI 生成的。 -v13.wav;
+WebGAL 项目只用了一年不到就在 GitHub 获得了 1000 星标！ -v14.wav;
+WebGAL 的开发历程，是一个在开发中学习开发的过程。因此她经历了3次重构，并且每次几乎都是推倒重来式的。 -v15.wav;
+WebGAL 的脚本语言是为了简化制作难度而全新设计的！ -v16.wav;
+
+;结束分支
+label:end;
+为了更接近桌面端视觉小说引擎的能力，我们支持很多快捷键以及可跳转的剧情回溯。 -v17.wav;
+按下菜单中的“回想”按钮或者向上滚动鼠标滚轮试试吧！ -v18.wav;
+快速存读挡、丰富的选项、自动播放以及快进等功能，也是应有尽有。 -v19.wav;
+setTempAnimation:[{"position": {"x": 500,"y": 0},"duration": 0},{"position": {"x": 400,"y": 0},"duration": 250},{"position": {"x": 600,"y": 0},"duration": 500},{"position": {"x": 500,"y": 0},"duration": 250}] -target=fig-left -next;
+当然，这不算什么，因为大多数成熟的引擎都有这些功能。但是在 Web 端，这却是很少见的。 -v20.wav;
+我们为可能初次开发游戏的开发者提供了美观的通用 UI 和丰富的预设功能与动画。所以你可以没有顾虑地快速开始制作游戏。 -v21.wav;
+WebGAL 项目组期待你的作品能够在 WebGAL 上呈现！只需要一个链接就可以让万千用户立刻开始享受你的作品。 -v22.wav;
+感谢你关注 WebGAL 项目！ -v23.wav;
+end;
+; WebGAL 引擎会默认读取 start.txt 作为初始场景，因此请不要删除，并在初始场景内跳转到其他场景
+bgm:s_Title.mp3;
+unlockBgm:s_Title.mp3 -name=雲を追いかけて;
+intro:你好|欢迎来到 WebGAL 的世界;
+changeBg:bg.png -next;
+unlockCg:bg.png -name=良夜; // 解锁CG并赋予名称
+changeFigure:stand.png -left -next;
+setAnimation:enter-from-left -target=fig-left -next;
+WebGAL:欢迎使用 WebGAL！这是一款全新的网页端视觉小说引擎。 -v1.wav;
+changeFigure:stand2.png -right -next;
+WebGAL 是使用 Web 技术开发的引擎，因此在网页端有良好的表现。 -v2.wav;
+由于这个特性，如果你将 WebGAL 部署到服务器或网页托管平台上，玩家只需要一串链接就可以开始游玩！ -v3.wav;
+setAnimation:move-front-and-back -target=fig-left -next;
+听起来是不是非常吸引人？ -v4.wav;
+changeFigure:none -right -next;
+setAnimation:l2c -target=fig-left -next;
+WebGAL 引擎也具有动画系统和特效系统，使用 WebGAL 开发的游戏可以拥有很好的表现效果。 -v5.wav;
+pixiInit;
+pixiPerform:snow;
+比如，这个下起小雪的特效。 -v6.wav;
+除此以外，分支选择的功能也必不可少。 -v7.wav;
+你可以通过以下两个分支了解 WebGAL 的更多故事。 -v8.wav;
+pixiInit;
+choose:WebGAL 发展历程:choose1|WebGAL 冷知识:choose2;
+
+;分支1
+label:choose1;
+WebGAL 的开发初衷是能够让更多人可以更方便地制作属于自己的视觉小说。 -v9.wav;
+在一开始，WebGAL 只具备很少的功能，仅仅能支持立绘和背景的显示、语音播放和分支选择。 -v10.wav;
+在经历一年的发展后，现在已经是支持了很多优秀的表现效果的引擎了！ -v11.wav;
+除此以外，WebGAL 编辑器的加入也使得制作和导出一个游戏更加方便快捷。 -v12.wav;
+jumpLabel:end;
+
+;分支2
+label:choose2;
+这个演示游戏使用的素材是 AI 生成的。 -v13.wav;
+WebGAL 项目只用了一年不到就在 GitHub 获得了 1000 星标！ -v14.wav;
+WebGAL 的开发历程，是一个在开发中学习开发的过程。因此她经历了3次重构，并且每次几乎都是推倒重来式的。 -v15.wav;
+WebGAL 的脚本语言是为了简化制作难度而全新设计的！ -v16.wav;
+
+;结束分支
+label:end;
+为了更接近桌面端视觉小说引擎的能力，我们支持很多快捷键以及可跳转的剧情回溯。 -v17.wav;
+按下菜单中的“回想”按钮或者向上滚动鼠标滚轮试试吧！ -v18.wav;
+快速存读挡、丰富的选项、自动播放以及快进等功能，也是应有尽有。 -v19.wav;
+setTempAnimation:[{"position": {"x": 500,"y": 0},"duration": 0},{"position": {"x": 400,"y": 0},"duration": 250},{"position": {"x": 600,"y": 0},"duration": 500},{"position": {"x": 500,"y": 0},"duration": 250}] -target=fig-left -next;
+当然，这不算什么，因为大多数成熟的引擎都有这些功能。但是在 Web 端，这却是很少见的。 -v20.wav;
+我们为可能初次开发游戏的开发者提供了美观的通用 UI 和丰富的预设功能与动画。所以你可以没有顾虑地快速开始制作游戏。 -v21.wav;
+WebGAL 项目组期待你的作品能够在 WebGAL 上呈现！只需要一个链接就可以让万千用户立刻开始享受你的作品。 -v22.wav;
+感谢你关注 WebGAL 项目！ -v23.wav;
+end;
+; WebGAL 引擎会默认读取 start.txt 作为初始场景，因此请不要删除，并在初始场景内跳转到其他场景
+bgm:s_Title.mp3;
+unlockBgm:s_Title.mp3 -name=雲を追いかけて;
+intro:你好|欢迎来到 WebGAL 的世界;
+changeBg:bg.png -next;
+unlockCg:bg.png -name=良夜; // 解锁CG并赋予名称
+changeFigure:stand.png -left -next;
+setAnimation:enter-from-left -target=fig-left -next;
+WebGAL:欢迎使用 WebGAL！这是一款全新的网页端视觉小说引擎。 -v1.wav;
+changeFigure:stand2.png -right -next;
+WebGAL 是使用 Web 技术开发的引擎，因此在网页端有良好的表现。 -v2.wav;
+由于这个特性，如果你将 WebGAL 部署到服务器或网页托管平台上，玩家只需要一串链接就可以开始游玩！ -v3.wav;
+setAnimation:move-front-and-back -target=fig-left -next;
+听起来是不是非常吸引人？ -v4.wav;
+changeFigure:none -right -next;
+setAnimation:l2c -target=fig-left -next;
+WebGAL 引擎也具有动画系统和特效系统，使用 WebGAL 开发的游戏可以拥有很好的表现效果。 -v5.wav;
+pixiInit;
+pixiPerform:snow;
+比如，这个下起小雪的特效。 -v6.wav;
+除此以外，分支选择的功能也必不可少。 -v7.wav;
+你可以通过以下两个分支了解 WebGAL 的更多故事。 -v8.wav;
+pixiInit;
+choose:WebGAL 发展历程:choose1|WebGAL 冷知识:choose2;
+
+;分支1
+label:choose1;
+WebGAL 的开发初衷是能够让更多人可以更方便地制作属于自己的视觉小说。 -v9.wav;
+在一开始，WebGAL 只具备很少的功能，仅仅能支持立绘和背景的显示、语音播放和分支选择。 -v10.wav;
+在经历一年的发展后，现在已经是支持了很多优秀的表现效果的引擎了！ -v11.wav;
+除此以外，WebGAL 编辑器的加入也使得制作和导出一个游戏更加方便快捷。 -v12.wav;
+jumpLabel:end;
+
+;分支2
+label:choose2;
+这个演示游戏使用的素材是 AI 生成的。 -v13.wav;
+WebGAL 项目只用了一年不到就在 GitHub 获得了 1000 星标！ -v14.wav;
+WebGAL 的开发历程，是一个在开发中学习开发的过程。因此她经历了3次重构，并且每次几乎都是推倒重来式的。 -v15.wav;
+WebGAL 的脚本语言是为了简化制作难度而全新设计的！ -v16.wav;
+
+;结束分支
+label:end;
+为了更接近桌面端视觉小说引擎的能力，我们支持很多快捷键以及可跳转的剧情回溯。 -v17.wav;
+按下菜单中的“回想”按钮或者向上滚动鼠标滚轮试试吧！ -v18.wav;
+快速存读挡、丰富的选项、自动播放以及快进等功能，也是应有尽有。 -v19.wav;
+setTempAnimation:[{"position": {"x": 500,"y": 0},"duration": 0},{"position": {"x": 400,"y": 0},"duration": 250},{"position": {"x": 600,"y": 0},"duration": 500},{"position": {"x": 500,"y": 0},"duration": 250}] -target=fig-left -next;
+当然，这不算什么，因为大多数成熟的引擎都有这些功能。但是在 Web 端，这却是很少见的。 -v20.wav;
+我们为可能初次开发游戏的开发者提供了美观的通用 UI 和丰富的预设功能与动画。所以你可以没有顾虑地快速开始制作游戏。 -v21.wav;
+WebGAL 项目组期待你的作品能够在 WebGAL 上呈现！只需要一个链接就可以让万千用户立刻开始享受你的作品。 -v22.wav;
+感谢你关注 WebGAL 项目！ -v23.wav;
+end;
+; WebGAL 引擎会默认读取 start.txt 作为初始场景，因此请不要删除，并在初始场景内跳转到其他场景
+bgm:s_Title.mp3;
+unlockBgm:s_Title.mp3 -name=雲を追いかけて;
+intro:你好|欢迎来到 WebGAL 的世界;
+changeBg:bg.png -next;
+unlockCg:bg.png -name=良夜; // 解锁CG并赋予名称
+changeFigure:stand.png -left -next;
+setAnimation:enter-from-left -target=fig-left -next;
+WebGAL:欢迎使用 WebGAL！这是一款全新的网页端视觉小说引擎。 -v1.wav;
+changeFigure:stand2.png -right -next;
+WebGAL 是使用 Web 技术开发的引擎，因此在网页端有良好的表现。 -v2.wav;
+由于这个特性，如果你将 WebGAL 部署到服务器或网页托管平台上，玩家只需要一串链接就可以开始游玩！ -v3.wav;
+setAnimation:move-front-and-back -target=fig-left -next;
+听起来是不是非常吸引人？ -v4.wav;
+changeFigure:none -right -next;
+setAnimation:l2c -target=fig-left -next;
+WebGAL 引擎也具有动画系统和特效系统，使用 WebGAL 开发的游戏可以拥有很好的表现效果。 -v5.wav;
+pixiInit;
+pixiPerform:snow;
+比如，这个下起小雪的特效。 -v6.wav;
+除此以外，分支选择的功能也必不可少。 -v7.wav;
+你可以通过以下两个分支了解 WebGAL 的更多故事。 -v8.wav;
+pixiInit;
+choose:WebGAL 发展历程:choose1|WebGAL 冷知识:choose2;
+
+;分支1
+label:choose1;
+WebGAL 的开发初衷是能够让更多人可以更方便地制作属于自己的视觉小说。 -v9.wav;
+在一开始，WebGAL 只具备很少的功能，仅仅能支持立绘和背景的显示、语音播放和分支选择。 -v10.wav;
+在经历一年的发展后，现在已经是支持了很多优秀的表现效果的引擎了！ -v11.wav;
+除此以外，WebGAL 编辑器的加入也使得制作和导出一个游戏更加方便快捷。 -v12.wav;
+jumpLabel:end;
+
+;分支2
+label:choose2;
+这个演示游戏使用的素材是 AI 生成的。 -v13.wav;
+WebGAL 项目只用了一年不到就在 GitHub 获得了 1000 星标！ -v14.wav;
+WebGAL 的开发历程，是一个在开发中学习开发的过程。因此她经历了3次重构，并且每次几乎都是推倒重来式的。 -v15.wav;
+WebGAL 的脚本语言是为了简化制作难度而全新设计的！ -v16.wav;
+
+;结束分支
+label:end;
+为了更接近桌面端视觉小说引擎的能力，我们支持很多快捷键以及可跳转的剧情回溯。 -v17.wav;
+按下菜单中的“回想”按钮或者向上滚动鼠标滚轮试试吧！ -v18.wav;
+快速存读挡、丰富的选项、自动播放以及快进等功能，也是应有尽有。 -v19.wav;
+setTempAnimation:[{"position": {"x": 500,"y": 0},"duration": 0},{"position": {"x": 400,"y": 0},"duration": 250},{"position": {"x": 600,"y": 0},"duration": 500},{"position": {"x": 500,"y": 0},"duration": 250}] -target=fig-left -next;
+当然，这不算什么，因为大多数成熟的引擎都有这些功能。但是在 Web 端，这却是很少见的。 -v20.wav;
+我们为可能初次开发游戏的开发者提供了美观的通用 UI 和丰富的预设功能与动画。所以你可以没有顾虑地快速开始制作游戏。 -v21.wav;
+WebGAL 项目组期待你的作品能够在 WebGAL 上呈现！只需要一个链接就可以让万千用户立刻开始享受你的作品。 -v22.wav;
+感谢你关注 WebGAL 项目！ -v23.wav;
+end;
+; WebGAL 引擎会默认读取 start.txt 作为初始场景，因此请不要删除，并在初始场景内跳转到其他场景
+bgm:s_Title.mp3;
+unlockBgm:s_Title.mp3 -name=雲を追いかけて;
+intro:你好|欢迎来到 WebGAL 的世界;
+changeBg:bg.png -next;
+unlockCg:bg.png -name=良夜; // 解锁CG并赋予名称
+changeFigure:stand.png -left -next;
+setAnimation:enter-from-left -target=fig-left -next;
+WebGAL:欢迎使用 WebGAL！这是一款全新的网页端视觉小说引擎。 -v1.wav;
+changeFigure:stand2.png -right -next;
+WebGAL 是使用 Web 技术开发的引擎，因此在网页端有良好的表现。 -v2.wav;
+由于这个特性，如果你将 WebGAL 部署到服务器或网页托管平台上，玩家只需要一串链接就可以开始游玩！ -v3.wav;
+setAnimation:move-front-and-back -target=fig-left -next;
+听起来是不是非常吸引人？ -v4.wav;
+changeFigure:none -right -next;
+setAnimation:l2c -target=fig-left -next;
+WebGAL 引擎也具有动画系统和特效系统，使用 WebGAL 开发的游戏可以拥有很好的表现效果。 -v5.wav;
+pixiInit;
+pixiPerform:snow;
+比如，这个下起小雪的特效。 -v6.wav;
+除此以外，分支选择的功能也必不可少。 -v7.wav;
+你可以通过以下两个分支了解 WebGAL 的更多故事。 -v8.wav;
+pixiInit;
+choose:WebGAL 发展历程:choose1|WebGAL 冷知识:choose2;
+
+;分支1
+label:choose1;
+WebGAL 的开发初衷是能够让更多人可以更方便地制作属于自己的视觉小说。 -v9.wav;
+在一开始，WebGAL 只具备很少的功能，仅仅能支持立绘和背景的显示、语音播放和分支选择。 -v10.wav;
+在经历一年的发展后，现在已经是支持了很多优秀的表现效果的引擎了！ -v11.wav;
+除此以外，WebGAL 编辑器的加入也使得制作和导出一个游戏更加方便快捷。 -v12.wav;
+jumpLabel:end;
+
+;分支2
+label:choose2;
+这个演示游戏使用的素材是 AI 生成的。 -v13.wav;
+WebGAL 项目只用了一年不到就在 GitHub 获得了 1000 星标！ -v14.wav;
+WebGAL 的开发历程，是一个在开发中学习开发的过程。因此她经历了3次重构，并且每次几乎都是推倒重来式的。 -v15.wav;
+WebGAL 的脚本语言是为了简化制作难度而全新设计的！ -v16.wav;
+
+;结束分支
+label:end;
+为了更接近桌面端视觉小说引擎的能力，我们支持很多快捷键以及可跳转的剧情回溯。 -v17.wav;
+按下菜单中的“回想”按钮或者向上滚动鼠标滚轮试试吧！ -v18.wav;
+快速存读挡、丰富的选项、自动播放以及快进等功能，也是应有尽有。 -v19.wav;
+setTempAnimation:[{"position": {"x": 500,"y": 0},"duration": 0},{"position": {"x": 400,"y": 0},"duration": 250},{"position": {"x": 600,"y": 0},"duration": 500},{"position": {"x": 500,"y": 0},"duration": 250}] -target=fig-left -next;
+当然，这不算什么，因为大多数成熟的引擎都有这些功能。但是在 Web 端，这却是很少见的。 -v20.wav;
+我们为可能初次开发游戏的开发者提供了美观的通用 UI 和丰富的预设功能与动画。所以你可以没有顾虑地快速开始制作游戏。 -v21.wav;
+WebGAL 项目组期待你的作品能够在 WebGAL 上呈现！只需要一个链接就可以让万千用户立刻开始享受你的作品。 -v22.wav;
+感谢你关注 WebGAL 项目！ -v23.wav;
+end;
+; WebGAL 引擎会默认读取 start.txt 作为初始场景，因此请不要删除，并在初始场景内跳转到其他场景
+bgm:s_Title.mp3;
+unlockBgm:s_Title.mp3 -name=雲を追いかけて;
+intro:你好|欢迎来到 WebGAL 的世界;
+changeBg:bg.png -next;
+unlockCg:bg.png -name=良夜; // 解锁CG并赋予名称
+changeFigure:stand.png -left -next;
+setAnimation:enter-from-left -target=fig-left -next;
+WebGAL:欢迎使用 WebGAL！这是一款全新的网页端视觉小说引擎。 -v1.wav;
+changeFigure:stand2.png -right -next;
+WebGAL 是使用 Web 技术开发的引擎，因此在网页端有良好的表现。 -v2.wav;
+由于这个特性，如果你将 WebGAL 部署到服务器或网页托管平台上，玩家只需要一串链接就可以开始游玩！ -v3.wav;
+setAnimation:move-front-and-back -target=fig-left -next;
+听起来是不是非常吸引人？ -v4.wav;
+changeFigure:none -right -next;
+setAnimation:l2c -target=fig-left -next;
+WebGAL 引擎也具有动画系统和特效系统，使用 WebGAL 开发的游戏可以拥有很好的表现效果。 -v5.wav;
+pixiInit;
+pixiPerform:snow;
+比如，这个下起小雪的特效。 -v6.wav;
+除此以外，分支选择的功能也必不可少。 -v7.wav;
+你可以通过以下两个分支了解 WebGAL 的更多故事。 -v8.wav;
+pixiInit;
+choose:WebGAL 发展历程:choose1|WebGAL 冷知识:choose2;
+
+;分支1
+label:choose1;
+WebGAL 的开发初衷是能够让更多人可以更方便地制作属于自己的视觉小说。 -v9.wav;
+在一开始，WebGAL 只具备很少的功能，仅仅能支持立绘和背景的显示、语音播放和分支选择。 -v10.wav;
+在经历一年的发展后，现在已经是支持了很多优秀的表现效果的引擎了！ -v11.wav;
+除此以外，WebGAL 编辑器的加入也使得制作和导出一个游戏更加方便快捷。 -v12.wav;
+jumpLabel:end;
+
+;分支2
+label:choose2;
+这个演示游戏使用的素材是 AI 生成的。 -v13.wav;
+WebGAL 项目只用了一年不到就在 GitHub 获得了 1000 星标！ -v14.wav;
+WebGAL 的开发历程，是一个在开发中学习开发的过程。因此她经历了3次重构，并且每次几乎都是推倒重来式的。 -v15.wav;
+WebGAL 的脚本语言是为了简化制作难度而全新设计的！ -v16.wav;
+
+;结束分支
+label:end;
+为了更接近桌面端视觉小说引擎的能力，我们支持很多快捷键以及可跳转的剧情回溯。 -v17.wav;
+按下菜单中的“回想”按钮或者向上滚动鼠标滚轮试试吧！ -v18.wav;
+快速存读挡、丰富的选项、自动播放以及快进等功能，也是应有尽有。 -v19.wav;
+setTempAnimation:[{"position": {"x": 500,"y": 0},"duration": 0},{"position": {"x": 400,"y": 0},"duration": 250},{"position": {"x": 600,"y": 0},"duration": 500},{"position": {"x": 500,"y": 0},"duration": 250}] -target=fig-left -next;
+当然，这不算什么，因为大多数成熟的引擎都有这些功能。但是在 Web 端，这却是很少见的。 -v20.wav;
+我们为可能初次开发游戏的开发者提供了美观的通用 UI 和丰富的预设功能与动画。所以你可以没有顾虑地快速开始制作游戏。 -v21.wav;
+WebGAL 项目组期待你的作品能够在 WebGAL 上呈现！只需要一个链接就可以让万千用户立刻开始享受你的作品。 -v22.wav;
+感谢你关注 WebGAL 项目！ -v23.wav;
+end;
+; WebGAL 引擎会默认读取 start.txt 作为初始场景，因此请不要删除，并在初始场景内跳转到其他场景
+bgm:s_Title.mp3;
+unlockBgm:s_Title.mp3 -name=雲を追いかけて;
+intro:你好|欢迎来到 WebGAL 的世界;
+changeBg:bg.png -next;
+unlockCg:bg.png -name=良夜; // 解锁CG并赋予名称
+changeFigure:stand.png -left -next;
+setAnimation:enter-from-left -target=fig-left -next;
+WebGAL:欢迎使用 WebGAL！这是一款全新的网页端视觉小说引擎。 -v1.wav;
+changeFigure:stand2.png -right -next;
+WebGAL 是使用 Web 技术开发的引擎，因此在网页端有良好的表现。 -v2.wav;
+由于这个特性，如果你将 WebGAL 部署到服务器或网页托管平台上，玩家只需要一串链接就可以开始游玩！ -v3.wav;
+setAnimation:move-front-and-back -target=fig-left -next;
+听起来是不是非常吸引人？ -v4.wav;
+changeFigure:none -right -next;
+setAnimation:l2c -target=fig-left -next;
+WebGAL 引擎也具有动画系统和特效系统，使用 WebGAL 开发的游戏可以拥有很好的表现效果。 -v5.wav;
+pixiInit;
+pixiPerform:snow;
+比如，这个下起小雪的特效。 -v6.wav;
+除此以外，分支选择的功能也必不可少。 -v7.wav;
+你可以通过以下两个分支了解 WebGAL 的更多故事。 -v8.wav;
+pixiInit;
+choose:WebGAL 发展历程:choose1|WebGAL 冷知识:choose2;
+
+;分支1
+label:choose1;
+WebGAL 的开发初衷是能够让更多人可以更方便地制作属于自己的视觉小说。 -v9.wav;
+在一开始，WebGAL 只具备很少的功能，仅仅能支持立绘和背景的显示、语音播放和分支选择。 -v10.wav;
+在经历一年的发展后，现在已经是支持了很多优秀的表现效果的引擎了！ -v11.wav;
+除此以外，WebGAL 编辑器的加入也使得制作和导出一个游戏更加方便快捷。 -v12.wav;
+jumpLabel:end;
+
+;分支2
+label:choose2;
+这个演示游戏使用的素材是 AI 生成的。 -v13.wav;
+WebGAL 项目只用了一年不到就在 GitHub 获得了 1000 星标！ -v14.wav;
+WebGAL 的开发历程，是一个在开发中学习开发的过程。因此她经历了3次重构，并且每次几乎都是推倒重来式的。 -v15.wav;
+WebGAL 的脚本语言是为了简化制作难度而全新设计的！ -v16.wav;
+
+;结束分支
+label:end;
+为了更接近桌面端视觉小说引擎的能力，我们支持很多快捷键以及可跳转的剧情回溯。 -v17.wav;
+按下菜单中的“回想”按钮或者向上滚动鼠标滚轮试试吧！ -v18.wav;
+快速存读挡、丰富的选项、自动播放以及快进等功能，也是应有尽有。 -v19.wav;
+setTempAnimation:[{"position": {"x": 500,"y": 0},"duration": 0},{"position": {"x": 400,"y": 0},"duration": 250},{"position": {"x": 600,"y": 0},"duration": 500},{"position": {"x": 500,"y": 0},"duration": 250}] -target=fig-left -next;
+当然，这不算什么，因为大多数成熟的引擎都有这些功能。但是在 Web 端，这却是很少见的。 -v20.wav;
+我们为可能初次开发游戏的开发者提供了美观的通用 UI 和丰富的预设功能与动画。所以你可以没有顾虑地快速开始制作游戏。 -v21.wav;
+WebGAL 项目组期待你的作品能够在 WebGAL 上呈现！只需要一个链接就可以让万千用户立刻开始享受你的作品。 -v22.wav;
+感谢你关注 WebGAL 项目！ -v23.wav;
+end;
+; WebGAL 引擎会默认读取 start.txt 作为初始场景，因此请不要删除，并在初始场景内跳转到其他场景
+bgm:s_Title.mp3;
+unlockBgm:s_Title.mp3 -name=雲を追いかけて;
+intro:你好|欢迎来到 WebGAL 的世界;
+changeBg:bg.png -next;
+unlockCg:bg.png -name=良夜; // 解锁CG并赋予名称
+changeFigure:stand.png -left -next;
+setAnimation:enter-from-left -target=fig-left -next;
+WebGAL:欢迎使用 WebGAL！这是一款全新的网页端视觉小说引擎。 -v1.wav;
+changeFigure:stand2.png -right -next;
+WebGAL 是使用 Web 技术开发的引擎，因此在网页端有良好的表现。 -v2.wav;
+由于这个特性，如果你将 WebGAL 部署到服务器或网页托管平台上，玩家只需要一串链接就可以开始游玩！ -v3.wav;
+setAnimation:move-front-and-back -target=fig-left -next;
+听起来是不是非常吸引人？ -v4.wav;
+changeFigure:none -right -next;
+setAnimation:l2c -target=fig-left -next;
+WebGAL 引擎也具有动画系统和特效系统，使用 WebGAL 开发的游戏可以拥有很好的表现效果。 -v5.wav;
+pixiInit;
+pixiPerform:snow;
+比如，这个下起小雪的特效。 -v6.wav;
+除此以外，分支选择的功能也必不可少。 -v7.wav;
+你可以通过以下两个分支了解 WebGAL 的更多故事。 -v8.wav;
+pixiInit;
+choose:WebGAL 发展历程:choose1|WebGAL 冷知识:choose2;
+
+;分支1
+label:choose1;
+WebGAL 的开发初衷是能够让更多人可以更方便地制作属于自己的视觉小说。 -v9.wav;
+在一开始，WebGAL 只具备很少的功能，仅仅能支持立绘和背景的显示、语音播放和分支选择。 -v10.wav;
+在经历一年的发展后，现在已经是支持了很多优秀的表现效果的引擎了！ -v11.wav;
+除此以外，WebGAL 编辑器的加入也使得制作和导出一个游戏更加方便快捷。 -v12.wav;
+jumpLabel:end;
+
+;分支2
+label:choose2;
+这个演示游戏使用的素材是 AI 生成的。 -v13.wav;
+WebGAL 项目只用了一年不到就在 GitHub 获得了 1000 星标！ -v14.wav;
+WebGAL 的开发历程，是一个在开发中学习开发的过程。因此她经历了3次重构，并且每次几乎都是推倒重来式的。 -v15.wav;
+WebGAL 的脚本语言是为了简化制作难度而全新设计的！ -v16.wav;
+
+;结束分支
+label:end;
+为了更接近桌面端视觉小说引擎的能力，我们支持很多快捷键以及可跳转的剧情回溯。 -v17.wav;
+按下菜单中的“回想”按钮或者向上滚动鼠标滚轮试试吧！ -v18.wav;
+快速存读挡、丰富的选项、自动播放以及快进等功能，也是应有尽有。 -v19.wav;
+setTempAnimation:[{"position": {"x": 500,"y": 0},"duration": 0},{"position": {"x": 400,"y": 0},"duration": 250},{"position": {"x": 600,"y": 0},"duration": 500},{"position": {"x": 500,"y": 0},"duration": 250}] -target=fig-left -next;
+当然，这不算什么，因为大多数成熟的引擎都有这些功能。但是在 Web 端，这却是很少见的。 -v20.wav;
+我们为可能初次开发游戏的开发者提供了美观的通用 UI 和丰富的预设功能与动画。所以你可以没有顾虑地快速开始制作游戏。 -v21.wav;
+WebGAL 项目组期待你的作品能够在 WebGAL 上呈现！只需要一个链接就可以让万千用户立刻开始享受你的作品。 -v22.wav;
+感谢你关注 WebGAL 项目！ -v23.wav;
+end;
+; WebGAL 引擎会默认读取 start.txt 作为初始场景，因此请不要删除，并在初始场景内跳转到其他场景
+bgm:s_Title.mp3;
+unlockBgm:s_Title.mp3 -name=雲を追いかけて;
+intro:你好|欢迎来到 WebGAL 的世界;
+changeBg:bg.png -next;
+unlockCg:bg.png -name=良夜; // 解锁CG并赋予名称
+changeFigure:stand.png -left -next;
+setAnimation:enter-from-left -target=fig-left -next;
+WebGAL:欢迎使用 WebGAL！这是一款全新的网页端视觉小说引擎。 -v1.wav;
+changeFigure:stand2.png -right -next;
+WebGAL 是使用 Web 技术开发的引擎，因此在网页端有良好的表现。 -v2.wav;
+由于这个特性，如果你将 WebGAL 部署到服务器或网页托管平台上，玩家只需要一串链接就可以开始游玩！ -v3.wav;
+setAnimation:move-front-and-back -target=fig-left -next;
+听起来是不是非常吸引人？ -v4.wav;
+changeFigure:none -right -next;
+setAnimation:l2c -target=fig-left -next;
+WebGAL 引擎也具有动画系统和特效系统，使用 WebGAL 开发的游戏可以拥有很好的表现效果。 -v5.wav;
+pixiInit;
+pixiPerform:snow;
+比如，这个下起小雪的特效。 -v6.wav;
+除此以外，分支选择的功能也必不可少。 -v7.wav;
+你可以通过以下两个分支了解 WebGAL 的更多故事。 -v8.wav;
+pixiInit;
+choose:WebGAL 发展历程:choose1|WebGAL 冷知识:choose2;
+
+;分支1
+label:choose1;
+WebGAL 的开发初衷是能够让更多人可以更方便地制作属于自己的视觉小说。 -v9.wav;
+在一开始，WebGAL 只具备很少的功能，仅仅能支持立绘和背景的显示、语音播放和分支选择。 -v10.wav;
+在经历一年的发展后，现在已经是支持了很多优秀的表现效果的引擎了！ -v11.wav;
+除此以外，WebGAL 编辑器的加入也使得制作和导出一个游戏更加方便快捷。 -v12.wav;
+jumpLabel:end;
+
+;分支2
+label:choose2;
+这个演示游戏使用的素材是 AI 生成的。 -v13.wav;
+WebGAL 项目只用了一年不到就在 GitHub 获得了 1000 星标！ -v14.wav;
+WebGAL 的开发历程，是一个在开发中学习开发的过程。因此她经历了3次重构，并且每次几乎都是推倒重来式的。 -v15.wav;
+WebGAL 的脚本语言是为了简化制作难度而全新设计的！ -v16.wav;
+
+;结束分支
+label:end;
+为了更接近桌面端视觉小说引擎的能力，我们支持很多快捷键以及可跳转的剧情回溯。 -v17.wav;
+按下菜单中的“回想”按钮或者向上滚动鼠标滚轮试试吧！ -v18.wav;
+快速存读挡、丰富的选项、自动播放以及快进等功能，也是应有尽有。 -v19.wav;
+setTempAnimation:[{"position": {"x": 500,"y": 0},"duration": 0},{"position": {"x": 400,"y": 0},"duration": 250},{"position": {"x": 600,"y": 0},"duration": 500},{"position": {"x": 500,"y": 0},"duration": 250}] -target=fig-left -next;
+当然，这不算什么，因为大多数成熟的引擎都有这些功能。但是在 Web 端，这却是很少见的。 -v20.wav;
+我们为可能初次开发游戏的开发者提供了美观的通用 UI 和丰富的预设功能与动画。所以你可以没有顾虑地快速开始制作游戏。 -v21.wav;
+WebGAL 项目组期待你的作品能够在 WebGAL 上呈现！只需要一个链接就可以让万千用户立刻开始享受你的作品。 -v22.wav;
+感谢你关注 WebGAL 项目！ -v23.wav;
+end;
+; WebGAL 引擎会默认读取 start.txt 作为初始场景，因此请不要删除，并在初始场景内跳转到其他场景
+bgm:s_Title.mp3;
+unlockBgm:s_Title.mp3 -name=雲を追いかけて;
+intro:你好|欢迎来到 WebGAL 的世界;
+changeBg:bg.png -next;
+unlockCg:bg.png -name=良夜; // 解锁CG并赋予名称
+changeFigure:stand.png -left -next;
+setAnimation:enter-from-left -target=fig-left -next;
+WebGAL:欢迎使用 WebGAL！这是一款全新的网页端视觉小说引擎。 -v1.wav;
+changeFigure:stand2.png -right -next;
+WebGAL 是使用 Web 技术开发的引擎，因此在网页端有良好的表现。 -v2.wav;
+由于这个特性，如果你将 WebGAL 部署到服务器或网页托管平台上，玩家只需要一串链接就可以开始游玩！ -v3.wav;
+setAnimation:move-front-and-back -target=fig-left -next;
+听起来是不是非常吸引人？ -v4.wav;
+changeFigure:none -right -next;
+setAnimation:l2c -target=fig-left -next;
+WebGAL 引擎也具有动画系统和特效系统，使用 WebGAL 开发的游戏可以拥有很好的表现效果。 -v5.wav;
+pixiInit;
+pixiPerform:snow;
+比如，这个下起小雪的特效。 -v6.wav;
+除此以外，分支选择的功能也必不可少。 -v7.wav;
+你可以通过以下两个分支了解 WebGAL 的更多故事。 -v8.wav;
+pixiInit;
+choose:WebGAL 发展历程:choose1|WebGAL 冷知识:choose2;
+
+;分支1
+label:choose1;
+WebGAL 的开发初衷是能够让更多人可以更方便地制作属于自己的视觉小说。 -v9.wav;
+在一开始，WebGAL 只具备很少的功能，仅仅能支持立绘和背景的显示、语音播放和分支选择。 -v10.wav;
+在经历一年的发展后，现在已经是支持了很多优秀的表现效果的引擎了！ -v11.wav;
+除此以外，WebGAL 编辑器的加入也使得制作和导出一个游戏更加方便快捷。 -v12.wav;
+jumpLabel:end;
+
+;分支2
+label:choose2;
+这个演示游戏使用的素材是 AI 生成的。 -v13.wav;
+WebGAL 项目只用了一年不到就在 GitHub 获得了 1000 星标！ -v14.wav;
+WebGAL 的开发历程，是一个在开发中学习开发的过程。因此她经历了3次重构，并且每次几乎都是推倒重来式的。 -v15.wav;
+WebGAL 的脚本语言是为了简化制作难度而全新设计的！ -v16.wav;
+
+;结束分支
+label:end;
+为了更接近桌面端视觉小说引擎的能力，我们支持很多快捷键以及可跳转的剧情回溯。 -v17.wav;
+按下菜单中的“回想”按钮或者向上滚动鼠标滚轮试试吧！ -v18.wav;
+快速存读挡、丰富的选项、自动播放以及快进等功能，也是应有尽有。 -v19.wav;
+setTempAnimation:[{"position": {"x": 500,"y": 0},"duration": 0},{"position": {"x": 400,"y": 0},"duration": 250},{"position": {"x": 600,"y": 0},"duration": 500},{"position": {"x": 500,"y": 0},"duration": 250}] -target=fig-left -next;
+当然，这不算什么，因为大多数成熟的引擎都有这些功能。但是在 Web 端，这却是很少见的。 -v20.wav;
+我们为可能初次开发游戏的开发者提供了美观的通用 UI 和丰富的预设功能与动画。所以你可以没有顾虑地快速开始制作游戏。 -v21.wav;
+WebGAL 项目组期待你的作品能够在 WebGAL 上呈现！只需要一个链接就可以让万千用户立刻开始享受你的作品。 -v22.wav;
+感谢你关注 WebGAL 项目！ -v23.wav;
+end;
+; WebGAL 引擎会默认读取 start.txt 作为初始场景，因此请不要删除，并在初始场景内跳转到其他场景
+bgm:s_Title.mp3;
+unlockBgm:s_Title.mp3 -name=雲を追いかけて;
+intro:你好|欢迎来到 WebGAL 的世界;
+changeBg:bg.png -next;
+unlockCg:bg.png -name=良夜; // 解锁CG并赋予名称
+changeFigure:stand.png -left -next;
+setAnimation:enter-from-left -target=fig-left -next;
+WebGAL:欢迎使用 WebGAL！这是一款全新的网页端视觉小说引擎。 -v1.wav;
+changeFigure:stand2.png -right -next;
+WebGAL 是使用 Web 技术开发的引擎，因此在网页端有良好的表现。 -v2.wav;
+由于这个特性，如果你将 WebGAL 部署到服务器或网页托管平台上，玩家只需要一串链接就可以开始游玩！ -v3.wav;
+setAnimation:move-front-and-back -target=fig-left -next;
+听起来是不是非常吸引人？ -v4.wav;
+changeFigure:none -right -next;
+setAnimation:l2c -target=fig-left -next;
+WebGAL 引擎也具有动画系统和特效系统，使用 WebGAL 开发的游戏可以拥有很好的表现效果。 -v5.wav;
+pixiInit;
+pixiPerform:snow;
+比如，这个下起小雪的特效。 -v6.wav;
+除此以外，分支选择的功能也必不可少。 -v7.wav;
+你可以通过以下两个分支了解 WebGAL 的更多故事。 -v8.wav;
+pixiInit;
+choose:WebGAL 发展历程:choose1|WebGAL 冷知识:choose2;
+
+;分支1
+label:choose1;
+WebGAL 的开发初衷是能够让更多人可以更方便地制作属于自己的视觉小说。 -v9.wav;
+在一开始，WebGAL 只具备很少的功能，仅仅能支持立绘和背景的显示、语音播放和分支选择。 -v10.wav;
+在经历一年的发展后，现在已经是支持了很多优秀的表现效果的引擎了！ -v11.wav;
+除此以外，WebGAL 编辑器的加入也使得制作和导出一个游戏更加方便快捷。 -v12.wav;
+jumpLabel:end;
+
+;分支2
+label:choose2;
+这个演示游戏使用的素材是 AI 生成的。 -v13.wav;
+WebGAL 项目只用了一年不到就在 GitHub 获得了 1000 星标！ -v14.wav;
+WebGAL 的开发历程，是一个在开发中学习开发的过程。因此她经历了3次重构，并且每次几乎都是推倒重来式的。 -v15.wav;
+WebGAL 的脚本语言是为了简化制作难度而全新设计的！ -v16.wav;
+
+;结束分支
+label:end;
+为了更接近桌面端视觉小说引擎的能力，我们支持很多快捷键以及可跳转的剧情回溯。 -v17.wav;
+按下菜单中的“回想”按钮或者向上滚动鼠标滚轮试试吧！ -v18.wav;
+快速存读挡、丰富的选项、自动播放以及快进等功能，也是应有尽有。 -v19.wav;
+setTempAnimation:[{"position": {"x": 500,"y": 0},"duration": 0},{"position": {"x": 400,"y": 0},"duration": 250},{"position": {"x": 600,"y": 0},"duration": 500},{"position": {"x": 500,"y": 0},"duration": 250}] -target=fig-left -next;
+当然，这不算什么，因为大多数成熟的引擎都有这些功能。但是在 Web 端，这却是很少见的。 -v20.wav;
+我们为可能初次开发游戏的开发者提供了美观的通用 UI 和丰富的预设功能与动画。所以你可以没有顾虑地快速开始制作游戏。 -v21.wav;
+WebGAL 项目组期待你的作品能够在 WebGAL 上呈现！只需要一个链接就可以让万千用户立刻开始享受你的作品。 -v22.wav;
+感谢你关注 WebGAL 项目！ -v23.wav;
+end;
+; WebGAL 引擎会默认读取 start.txt 作为初始场景，因此请不要删除，并在初始场景内跳转到其他场景
+bgm:s_Title.mp3;
+unlockBgm:s_Title.mp3 -name=雲を追いかけて;
+intro:你好|欢迎来到 WebGAL 的世界;
+changeBg:bg.png -next;
+unlockCg:bg.png -name=良夜; // 解锁CG并赋予名称
+changeFigure:stand.png -left -next;
+setAnimation:enter-from-left -target=fig-left -next;
+WebGAL:欢迎使用 WebGAL！这是一款全新的网页端视觉小说引擎。 -v1.wav;
+changeFigure:stand2.png -right -next;
+WebGAL 是使用 Web 技术开发的引擎，因此在网页端有良好的表现。 -v2.wav;
+由于这个特性，如果你将 WebGAL 部署到服务器或网页托管平台上，玩家只需要一串链接就可以开始游玩！ -v3.wav;
+setAnimation:move-front-and-back -target=fig-left -next;
+听起来是不是非常吸引人？ -v4.wav;
+changeFigure:none -right -next;
+setAnimation:l2c -target=fig-left -next;
+WebGAL 引擎也具有动画系统和特效系统，使用 WebGAL 开发的游戏可以拥有很好的表现效果。 -v5.wav;
+pixiInit;
+pixiPerform:snow;
+比如，这个下起小雪的特效。 -v6.wav;
+除此以外，分支选择的功能也必不可少。 -v7.wav;
+你可以通过以下两个分支了解 WebGAL 的更多故事。 -v8.wav;
+pixiInit;
+choose:WebGAL 发展历程:choose1|WebGAL 冷知识:choose2;
+
+;分支1
+label:choose1;
+WebGAL 的开发初衷是能够让更多人可以更方便地制作属于自己的视觉小说。 -v9.wav;
+在一开始，WebGAL 只具备很少的功能，仅仅能支持立绘和背景的显示、语音播放和分支选择。 -v10.wav;
+在经历一年的发展后，现在已经是支持了很多优秀的表现效果的引擎了！ -v11.wav;
+除此以外，WebGAL 编辑器的加入也使得制作和导出一个游戏更加方便快捷。 -v12.wav;
+jumpLabel:end;
+
+;分支2
+label:choose2;
+这个演示游戏使用的素材是 AI 生成的。 -v13.wav;
+WebGAL 项目只用了一年不到就在 GitHub 获得了 1000 星标！ -v14.wav;
+WebGAL 的开发历程，是一个在开发中学习开发的过程。因此她经历了3次重构，并且每次几乎都是推倒重来式的。 -v15.wav;
+WebGAL 的脚本语言是为了简化制作难度而全新设计的！ -v16.wav;
+
+;结束分支
+label:end;
+为了更接近桌面端视觉小说引擎的能力，我们支持很多快捷键以及可跳转的剧情回溯。 -v17.wav;
+按下菜单中的“回想”按钮或者向上滚动鼠标滚轮试试吧！ -v18.wav;
+快速存读挡、丰富的选项、自动播放以及快进等功能，也是应有尽有。 -v19.wav;
+setTempAnimation:[{"position": {"x": 500,"y": 0},"duration": 0},{"position": {"x": 400,"y": 0},"duration": 250},{"position": {"x": 600,"y": 0},"duration": 500},{"position": {"x": 500,"y": 0},"duration": 250}] -target=fig-left -next;
+当然，这不算什么，因为大多数成熟的引擎都有这些功能。但是在 Web 端，这却是很少见的。 -v20.wav;
+我们为可能初次开发游戏的开发者提供了美观的通用 UI 和丰富的预设功能与动画。所以你可以没有顾虑地快速开始制作游戏。 -v21.wav;
+WebGAL 项目组期待你的作品能够在 WebGAL 上呈现！只需要一个链接就可以让万千用户立刻开始享受你的作品。 -v22.wav;
+感谢你关注 WebGAL 项目！ -v23.wav;
+end;
+; WebGAL 引擎会默认读取 start.txt 作为初始场景，因此请不要删除，并在初始场景内跳转到其他场景
+bgm:s_Title.mp3;
+unlockBgm:s_Title.mp3 -name=雲を追いかけて;
+intro:你好|欢迎来到 WebGAL 的世界;
+changeBg:bg.png -next;
+unlockCg:bg.png -name=良夜; // 解锁CG并赋予名称
+changeFigure:stand.png -left -next;
+setAnimation:enter-from-left -target=fig-left -next;
+WebGAL:欢迎使用 WebGAL！这是一款全新的网页端视觉小说引擎。 -v1.wav;
+changeFigure:stand2.png -right -next;
+WebGAL 是使用 Web 技术开发的引擎，因此在网页端有良好的表现。 -v2.wav;
+由于这个特性，如果你将 WebGAL 部署到服务器或网页托管平台上，玩家只需要一串链接就可以开始游玩！ -v3.wav;
+setAnimation:move-front-and-back -target=fig-left -next;
+听起来是不是非常吸引人？ -v4.wav;
+changeFigure:none -right -next;
+setAnimation:l2c -target=fig-left -next;
+WebGAL 引擎也具有动画系统和特效系统，使用 WebGAL 开发的游戏可以拥有很好的表现效果。 -v5.wav;
+pixiInit;
+pixiPerform:snow;
+比如，这个下起小雪的特效。 -v6.wav;
+除此以外，分支选择的功能也必不可少。 -v7.wav;
+你可以通过以下两个分支了解 WebGAL 的更多故事。 -v8.wav;
+pixiInit;
+choose:WebGAL 发展历程:choose1|WebGAL 冷知识:choose2;
+
+;分支1
+label:choose1;
+WebGAL 的开发初衷是能够让更多人可以更方便地制作属于自己的视觉小说。 -v9.wav;
+在一开始，WebGAL 只具备很少的功能，仅仅能支持立绘和背景的显示、语音播放和分支选择。 -v10.wav;
+在经历一年的发展后，现在已经是支持了很多优秀的表现效果的引擎了！ -v11.wav;
+除此以外，WebGAL 编辑器的加入也使得制作和导出一个游戏更加方便快捷。 -v12.wav;
+jumpLabel:end;
+
+;分支2
+label:choose2;
+这个演示游戏使用的素材是 AI 生成的。 -v13.wav;
+WebGAL 项目只用了一年不到就在 GitHub 获得了 1000 星标！ -v14.wav;
+WebGAL 的开发历程，是一个在开发中学习开发的过程。因此她经历了3次重构，并且每次几乎都是推倒重来式的。 -v15.wav;
+WebGAL 的脚本语言是为了简化制作难度而全新设计的！ -v16.wav;
+
+;结束分支
+label:end;
+为了更接近桌面端视觉小说引擎的能力，我们支持很多快捷键以及可跳转的剧情回溯。 -v17.wav;
+按下菜单中的“回想”按钮或者向上滚动鼠标滚轮试试吧！ -v18.wav;
+快速存读挡、丰富的选项、自动播放以及快进等功能，也是应有尽有。 -v19.wav;
+setTempAnimation:[{"position": {"x": 500,"y": 0},"duration": 0},{"position": {"x": 400,"y": 0},"duration": 250},{"position": {"x": 600,"y": 0},"duration": 500},{"position": {"x": 500,"y": 0},"duration": 250}] -target=fig-left -next;
+当然，这不算什么，因为大多数成熟的引擎都有这些功能。但是在 Web 端，这却是很少见的。 -v20.wav;
+我们为可能初次开发游戏的开发者提供了美观的通用 UI 和丰富的预设功能与动画。所以你可以没有顾虑地快速开始制作游戏。 -v21.wav;
+WebGAL 项目组期待你的作品能够在 WebGAL 上呈现！只需要一个链接就可以让万千用户立刻开始享受你的作品。 -v22.wav;
+感谢你关注 WebGAL 项目！ -v23.wav;
+end;
+; WebGAL 引擎会默认读取 start.txt 作为初始场景，因此请不要删除，并在初始场景内跳转到其他场景
+bgm:s_Title.mp3;
+unlockBgm:s_Title.mp3 -name=雲を追いかけて;
+intro:你好|欢迎来到 WebGAL 的世界;
+changeBg:bg.png -next;
+unlockCg:bg.png -name=良夜; // 解锁CG并赋予名称
+changeFigure:stand.png -left -next;
+setAnimation:enter-from-left -target=fig-left -next;
+WebGAL:欢迎使用 WebGAL！这是一款全新的网页端视觉小说引擎。 -v1.wav;
+changeFigure:stand2.png -right -next;
+WebGAL 是使用 Web 技术开发的引擎，因此在网页端有良好的表现。 -v2.wav;
+由于这个特性，如果你将 WebGAL 部署到服务器或网页托管平台上，玩家只需要一串链接就可以开始游玩！ -v3.wav;
+setAnimation:move-front-and-back -target=fig-left -next;
+听起来是不是非常吸引人？ -v4.wav;
+changeFigure:none -right -next;
+setAnimation:l2c -target=fig-left -next;
+WebGAL 引擎也具有动画系统和特效系统，使用 WebGAL 开发的游戏可以拥有很好的表现效果。 -v5.wav;
+pixiInit;
+pixiPerform:snow;
+比如，这个下起小雪的特效。 -v6.wav;
+除此以外，分支选择的功能也必不可少。 -v7.wav;
+你可以通过以下两个分支了解 WebGAL 的更多故事。 -v8.wav;
+pixiInit;
+choose:WebGAL 发展历程:choose1|WebGAL 冷知识:choose2;
+
+;分支1
+label:choose1;
+WebGAL 的开发初衷是能够让更多人可以更方便地制作属于自己的视觉小说。 -v9.wav;
+在一开始，WebGAL 只具备很少的功能，仅仅能支持立绘和背景的显示、语音播放和分支选择。 -v10.wav;
+在经历一年的发展后，现在已经是支持了很多优秀的表现效果的引擎了！ -v11.wav;
+除此以外，WebGAL 编辑器的加入也使得制作和导出一个游戏更加方便快捷。 -v12.wav;
+jumpLabel:end;
+
+;分支2
+label:choose2;
+这个演示游戏使用的素材是 AI 生成的。 -v13.wav;
+WebGAL 项目只用了一年不到就在 GitHub 获得了 1000 星标！ -v14.wav;
+WebGAL 的开发历程，是一个在开发中学习开发的过程。因此她经历了3次重构，并且每次几乎都是推倒重来式的。 -v15.wav;
+WebGAL 的脚本语言是为了简化制作难度而全新设计的！ -v16.wav;
+
+;结束分支
+label:end;
+为了更接近桌面端视觉小说引擎的能力，我们支持很多快捷键以及可跳转的剧情回溯。 -v17.wav;
+按下菜单中的“回想”按钮或者向上滚动鼠标滚轮试试吧！ -v18.wav;
+快速存读挡、丰富的选项、自动播放以及快进等功能，也是应有尽有。 -v19.wav;
+setTempAnimation:[{"position": {"x": 500,"y": 0},"duration": 0},{"position": {"x": 400,"y": 0},"duration": 250},{"position": {"x": 600,"y": 0},"duration": 500},{"position": {"x": 500,"y": 0},"duration": 250}] -target=fig-left -next;
+当然，这不算什么，因为大多数成熟的引擎都有这些功能。但是在 Web 端，这却是很少见的。 -v20.wav;
+我们为可能初次开发游戏的开发者提供了美观的通用 UI 和丰富的预设功能与动画。所以你可以没有顾虑地快速开始制作游戏。 -v21.wav;
+WebGAL 项目组期待你的作品能够在 WebGAL 上呈现！只需要一个链接就可以让万千用户立刻开始享受你的作品。 -v22.wav;
+感谢你关注 WebGAL 项目！ -v23.wav;
+end;
+; WebGAL 引擎会默认读取 start.txt 作为初始场景，因此请不要删除，并在初始场景内跳转到其他场景
+bgm:s_Title.mp3;
+unlockBgm:s_Title.mp3 -name=雲を追いかけて;
+intro:你好|欢迎来到 WebGAL 的世界;
+changeBg:bg.png -next;
+unlockCg:bg.png -name=良夜; // 解锁CG并赋予名称
+changeFigure:stand.png -left -next;
+setAnimation:enter-from-left -target=fig-left -next;
+WebGAL:欢迎使用 WebGAL！这是一款全新的网页端视觉小说引擎。 -v1.wav;
+changeFigure:stand2.png -right -next;
+WebGAL 是使用 Web 技术开发的引擎，因此在网页端有良好的表现。 -v2.wav;
+由于这个特性，如果你将 WebGAL 部署到服务器或网页托管平台上，玩家只需要一串链接就可以开始游玩！ -v3.wav;
+setAnimation:move-front-and-back -target=fig-left -next;
+听起来是不是非常吸引人？ -v4.wav;
+changeFigure:none -right -next;
+setAnimation:l2c -target=fig-left -next;
+WebGAL 引擎也具有动画系统和特效系统，使用 WebGAL 开发的游戏可以拥有很好的表现效果。 -v5.wav;
+pixiInit;
+pixiPerform:snow;
+比如，这个下起小雪的特效。 -v6.wav;
+除此以外，分支选择的功能也必不可少。 -v7.wav;
+你可以通过以下两个分支了解 WebGAL 的更多故事。 -v8.wav;
+pixiInit;
+choose:WebGAL 发展历程:choose1|WebGAL 冷知识:choose2;
+
+;分支1
+label:choose1;
+WebGAL 的开发初衷是能够让更多人可以更方便地制作属于自己的视觉小说。 -v9.wav;
+在一开始，WebGAL 只具备很少的功能，仅仅能支持立绘和背景的显示、语音播放和分支选择。 -v10.wav;
+在经历一年的发展后，现在已经是支持了很多优秀的表现效果的引擎了！ -v11.wav;
+除此以外，WebGAL 编辑器的加入也使得制作和导出一个游戏更加方便快捷。 -v12.wav;
+jumpLabel:end;
+
+;分支2
+label:choose2;
+这个演示游戏使用的素材是 AI 生成的。 -v13.wav;
+WebGAL 项目只用了一年不到就在 GitHub 获得了 1000 星标！ -v14.wav;
+WebGAL 的开发历程，是一个在开发中学习开发的过程。因此她经历了3次重构，并且每次几乎都是推倒重来式的。 -v15.wav;
+WebGAL 的脚本语言是为了简化制作难度而全新设计的！ -v16.wav;
+
+;结束分支
+label:end;
+为了更接近桌面端视觉小说引擎的能力，我们支持很多快捷键以及可跳转的剧情回溯。 -v17.wav;
+按下菜单中的“回想”按钮或者向上滚动鼠标滚轮试试吧！ -v18.wav;
+快速存读挡、丰富的选项、自动播放以及快进等功能，也是应有尽有。 -v19.wav;
+setTempAnimation:[{"position": {"x": 500,"y": 0},"duration": 0},{"position": {"x": 400,"y": 0},"duration": 250},{"position": {"x": 600,"y": 0},"duration": 500},{"position": {"x": 500,"y": 0},"duration": 250}] -target=fig-left -next;
+当然，这不算什么，因为大多数成熟的引擎都有这些功能。但是在 Web 端，这却是很少见的。 -v20.wav;
+我们为可能初次开发游戏的开发者提供了美观的通用 UI 和丰富的预设功能与动画。所以你可以没有顾虑地快速开始制作游戏。 -v21.wav;
+WebGAL 项目组期待你的作品能够在 WebGAL 上呈现！只需要一个链接就可以让万千用户立刻开始享受你的作品。 -v22.wav;
+感谢你关注 WebGAL 项目！ -v23.wav;
+end;
+; WebGAL 引擎会默认读取 start.txt 作为初始场景，因此请不要删除，并在初始场景内跳转到其他场景
+bgm:s_Title.mp3;
+unlockBgm:s_Title.mp3 -name=雲を追いかけて;
+intro:你好|欢迎来到 WebGAL 的世界;
+changeBg:bg.png -next;
+unlockCg:bg.png -name=良夜; // 解锁CG并赋予名称
+changeFigure:stand.png -left -next;
+setAnimation:enter-from-left -target=fig-left -next;
+WebGAL:欢迎使用 WebGAL！这是一款全新的网页端视觉小说引擎。 -v1.wav;
+changeFigure:stand2.png -right -next;
+WebGAL 是使用 Web 技术开发的引擎，因此在网页端有良好的表现。 -v2.wav;
+由于这个特性，如果你将 WebGAL 部署到服务器或网页托管平台上，玩家只需要一串链接就可以开始游玩！ -v3.wav;
+setAnimation:move-front-and-back -target=fig-left -next;
+听起来是不是非常吸引人？ -v4.wav;
+changeFigure:none -right -next;
+setAnimation:l2c -target=fig-left -next;
+WebGAL 引擎也具有动画系统和特效系统，使用 WebGAL 开发的游戏可以拥有很好的表现效果。 -v5.wav;
+pixiInit;
+pixiPerform:snow;
+比如，这个下起小雪的特效。 -v6.wav;
+除此以外，分支选择的功能也必不可少。 -v7.wav;
+你可以通过以下两个分支了解 WebGAL 的更多故事。 -v8.wav;
+pixiInit;
+choose:WebGAL 发展历程:choose1|WebGAL 冷知识:choose2;
+
+;分支1
+label:choose1;
+WebGAL 的开发初衷是能够让更多人可以更方便地制作属于自己的视觉小说。 -v9.wav;
+在一开始，WebGAL 只具备很少的功能，仅仅能支持立绘和背景的显示、语音播放和分支选择。 -v10.wav;
+在经历一年的发展后，现在已经是支持了很多优秀的表现效果的引擎了！ -v11.wav;
+除此以外，WebGAL 编辑器的加入也使得制作和导出一个游戏更加方便快捷。 -v12.wav;
+jumpLabel:end;
+
+;分支2
+label:choose2;
+这个演示游戏使用的素材是 AI 生成的。 -v13.wav;
+WebGAL 项目只用了一年不到就在 GitHub 获得了 1000 星标！ -v14.wav;
+WebGAL 的开发历程，是一个在开发中学习开发的过程。因此她经历了3次重构，并且每次几乎都是推倒重来式的。 -v15.wav;
+WebGAL 的脚本语言是为了简化制作难度而全新设计的！ -v16.wav;
+
+;结束分支
+label:end;
+为了更接近桌面端视觉小说引擎的能力，我们支持很多快捷键以及可跳转的剧情回溯。 -v17.wav;
+按下菜单中的“回想”按钮或者向上滚动鼠标滚轮试试吧！ -v18.wav;
+快速存读挡、丰富的选项、自动播放以及快进等功能，也是应有尽有。 -v19.wav;
+setTempAnimation:[{"position": {"x": 500,"y": 0},"duration": 0},{"position": {"x": 400,"y": 0},"duration": 250},{"position": {"x": 600,"y": 0},"duration": 500},{"position": {"x": 500,"y": 0},"duration": 250}] -target=fig-left -next;
+当然，这不算什么，因为大多数成熟的引擎都有这些功能。但是在 Web 端，这却是很少见的。 -v20.wav;
+我们为可能初次开发游戏的开发者提供了美观的通用 UI 和丰富的预设功能与动画。所以你可以没有顾虑地快速开始制作游戏。 -v21.wav;
+WebGAL 项目组期待你的作品能够在 WebGAL 上呈现！只需要一个链接就可以让万千用户立刻开始享受你的作品。 -v22.wav;
+感谢你关注 WebGAL 项目！ -v23.wav;
+end;
+; WebGAL 引擎会默认读取 start.txt 作为初始场景，因此请不要删除，并在初始场景内跳转到其他场景
+bgm:s_Title.mp3;
+unlockBgm:s_Title.mp3 -name=雲を追いかけて;
+intro:你好|欢迎来到 WebGAL 的世界;
+changeBg:bg.png -next;
+unlockCg:bg.png -name=良夜; // 解锁CG并赋予名称
+changeFigure:stand.png -left -next;
+setAnimation:enter-from-left -target=fig-left -next;
+WebGAL:欢迎使用 WebGAL！这是一款全新的网页端视觉小说引擎。 -v1.wav;
+changeFigure:stand2.png -right -next;
+WebGAL 是使用 Web 技术开发的引擎，因此在网页端有良好的表现。 -v2.wav;
+由于这个特性，如果你将 WebGAL 部署到服务器或网页托管平台上，玩家只需要一串链接就可以开始游玩！ -v3.wav;
+setAnimation:move-front-and-back -target=fig-left -next;
+听起来是不是非常吸引人？ -v4.wav;
+changeFigure:none -right -next;
+setAnimation:l2c -target=fig-left -next;
+WebGAL 引擎也具有动画系统和特效系统，使用 WebGAL 开发的游戏可以拥有很好的表现效果。 -v5.wav;
+pixiInit;
+pixiPerform:snow;
+比如，这个下起小雪的特效。 -v6.wav;
+除此以外，分支选择的功能也必不可少。 -v7.wav;
+你可以通过以下两个分支了解 WebGAL 的更多故事。 -v8.wav;
+pixiInit;
+choose:WebGAL 发展历程:choose1|WebGAL 冷知识:choose2;
+
+;分支1
+label:choose1;
+WebGAL 的开发初衷是能够让更多人可以更方便地制作属于自己的视觉小说。 -v9.wav;
+在一开始，WebGAL 只具备很少的功能，仅仅能支持立绘和背景的显示、语音播放和分支选择。 -v10.wav;
+在经历一年的发展后，现在已经是支持了很多优秀的表现效果的引擎了！ -v11.wav;
+除此以外，WebGAL 编辑器的加入也使得制作和导出一个游戏更加方便快捷。 -v12.wav;
+jumpLabel:end;
+
+;分支2
+label:choose2;
+这个演示游戏使用的素材是 AI 生成的。 -v13.wav;
+WebGAL 项目只用了一年不到就在 GitHub 获得了 1000 星标！ -v14.wav;
+WebGAL 的开发历程，是一个在开发中学习开发的过程。因此她经历了3次重构，并且每次几乎都是推倒重来式的。 -v15.wav;
+WebGAL 的脚本语言是为了简化制作难度而全新设计的！ -v16.wav;
+
+;结束分支
+label:end;
+为了更接近桌面端视觉小说引擎的能力，我们支持很多快捷键以及可跳转的剧情回溯。 -v17.wav;
+按下菜单中的“回想”按钮或者向上滚动鼠标滚轮试试吧！ -v18.wav;
+快速存读挡、丰富的选项、自动播放以及快进等功能，也是应有尽有。 -v19.wav;
+setTempAnimation:[{"position": {"x": 500,"y": 0},"duration": 0},{"position": {"x": 400,"y": 0},"duration": 250},{"position": {"x": 600,"y": 0},"duration": 500},{"position": {"x": 500,"y": 0},"duration": 250}] -target=fig-left -next;
+当然，这不算什么，因为大多数成熟的引擎都有这些功能。但是在 Web 端，这却是很少见的。 -v20.wav;
+我们为可能初次开发游戏的开发者提供了美观的通用 UI 和丰富的预设功能与动画。所以你可以没有顾虑地快速开始制作游戏。 -v21.wav;
+WebGAL 项目组期待你的作品能够在 WebGAL 上呈现！只需要一个链接就可以让万千用户立刻开始享受你的作品。 -v22.wav;
+感谢你关注 WebGAL 项目！ -v23.wav;
+end;
+; WebGAL 引擎会默认读取 start.txt 作为初始场景，因此请不要删除，并在初始场景内跳转到其他场景
+bgm:s_Title.mp3;
+unlockBgm:s_Title.mp3 -name=雲を追いかけて;
+intro:你好|欢迎来到 WebGAL 的世界;
+changeBg:bg.png -next;
+unlockCg:bg.png -name=良夜; // 解锁CG并赋予名称
+changeFigure:stand.png -left -next;
+setAnimation:enter-from-left -target=fig-left -next;
+WebGAL:欢迎使用 WebGAL！这是一款全新的网页端视觉小说引擎。 -v1.wav;
+changeFigure:stand2.png -right -next;
+WebGAL 是使用 Web 技术开发的引擎，因此在网页端有良好的表现。 -v2.wav;
+由于这个特性，如果你将 WebGAL 部署到服务器或网页托管平台上，玩家只需要一串链接就可以开始游玩！ -v3.wav;
+setAnimation:move-front-and-back -target=fig-left -next;
+听起来是不是非常吸引人？ -v4.wav;
+changeFigure:none -right -next;
+setAnimation:l2c -target=fig-left -next;
+WebGAL 引擎也具有动画系统和特效系统，使用 WebGAL 开发的游戏可以拥有很好的表现效果。 -v5.wav;
+pixiInit;
+pixiPerform:snow;
+比如，这个下起小雪的特效。 -v6.wav;
+除此以外，分支选择的功能也必不可少。 -v7.wav;
+你可以通过以下两个分支了解 WebGAL 的更多故事。 -v8.wav;
+pixiInit;
+choose:WebGAL 发展历程:choose1|WebGAL 冷知识:choose2;
+
+;分支1
+label:choose1;
+WebGAL 的开发初衷是能够让更多人可以更方便地制作属于自己的视觉小说。 -v9.wav;
+在一开始，WebGAL 只具备很少的功能，仅仅能支持立绘和背景的显示、语音播放和分支选择。 -v10.wav;
+在经历一年的发展后，现在已经是支持了很多优秀的表现效果的引擎了！ -v11.wav;
+除此以外，WebGAL 编辑器的加入也使得制作和导出一个游戏更加方便快捷。 -v12.wav;
+jumpLabel:end;
+
+;分支2
+label:choose2;
+这个演示游戏使用的素材是 AI 生成的。 -v13.wav;
+WebGAL 项目只用了一年不到就在 GitHub 获得了 1000 星标！ -v14.wav;
+WebGAL 的开发历程，是一个在开发中学习开发的过程。因此她经历了3次重构，并且每次几乎都是推倒重来式的。 -v15.wav;
+WebGAL 的脚本语言是为了简化制作难度而全新设计的！ -v16.wav;
+
+;结束分支
+label:end;
+为了更接近桌面端视觉小说引擎的能力，我们支持很多快捷键以及可跳转的剧情回溯。 -v17.wav;
+按下菜单中的“回想”按钮或者向上滚动鼠标滚轮试试吧！ -v18.wav;
+快速存读挡、丰富的选项、自动播放以及快进等功能，也是应有尽有。 -v19.wav;
+setTempAnimation:[{"position": {"x": 500,"y": 0},"duration": 0},{"position": {"x": 400,"y": 0},"duration": 250},{"position": {"x": 600,"y": 0},"duration": 500},{"position": {"x": 500,"y": 0},"duration": 250}] -target=fig-left -next;
+当然，这不算什么，因为大多数成熟的引擎都有这些功能。但是在 Web 端，这却是很少见的。 -v20.wav;
+我们为可能初次开发游戏的开发者提供了美观的通用 UI 和丰富的预设功能与动画。所以你可以没有顾虑地快速开始制作游戏。 -v21.wav;
+WebGAL 项目组期待你的作品能够在 WebGAL 上呈现！只需要一个链接就可以让万千用户立刻开始享受你的作品。 -v22.wav;
+感谢你关注 WebGAL 项目！ -v23.wav;
+end;
+; WebGAL 引擎会默认读取 start.txt 作为初始场景，因此请不要删除，并在初始场景内跳转到其他场景
+bgm:s_Title.mp3;
+unlockBgm:s_Title.mp3 -name=雲を追いかけて;
+intro:你好|欢迎来到 WebGAL 的世界;
+changeBg:bg.png -next;
+unlockCg:bg.png -name=良夜; // 解锁CG并赋予名称
+changeFigure:stand.png -left -next;
+setAnimation:enter-from-left -target=fig-left -next;
+WebGAL:欢迎使用 WebGAL！这是一款全新的网页端视觉小说引擎。 -v1.wav;
+changeFigure:stand2.png -right -next;
+WebGAL 是使用 Web 技术开发的引擎，因此在网页端有良好的表现。 -v2.wav;
+由于这个特性，如果你将 WebGAL 部署到服务器或网页托管平台上，玩家只需要一串链接就可以开始游玩！ -v3.wav;
+setAnimation:move-front-and-back -target=fig-left -next;
+听起来是不是非常吸引人？ -v4.wav;
+changeFigure:none -right -next;
+setAnimation:l2c -target=fig-left -next;
+WebGAL 引擎也具有动画系统和特效系统，使用 WebGAL 开发的游戏可以拥有很好的表现效果。 -v5.wav;
+pixiInit;
+pixiPerform:snow;
+比如，这个下起小雪的特效。 -v6.wav;
+除此以外，分支选择的功能也必不可少。 -v7.wav;
+你可以通过以下两个分支了解 WebGAL 的更多故事。 -v8.wav;
+pixiInit;
+choose:WebGAL 发展历程:choose1|WebGAL 冷知识:choose2;
+
+;分支1
+label:choose1;
+WebGAL 的开发初衷是能够让更多人可以更方便地制作属于自己的视觉小说。 -v9.wav;
+在一开始，WebGAL 只具备很少的功能，仅仅能支持立绘和背景的显示、语音播放和分支选择。 -v10.wav;
+在经历一年的发展后，现在已经是支持了很多优秀的表现效果的引擎了！ -v11.wav;
+除此以外，WebGAL 编辑器的加入也使得制作和导出一个游戏更加方便快捷。 -v12.wav;
+jumpLabel:end;
+
+;分支2
+label:choose2;
+这个演示游戏使用的素材是 AI 生成的。 -v13.wav;
+WebGAL 项目只用了一年不到就在 GitHub 获得了 1000 星标！ -v14.wav;
+WebGAL 的开发历程，是一个在开发中学习开发的过程。因此她经历了3次重构，并且每次几乎都是推倒重来式的。 -v15.wav;
+WebGAL 的脚本语言是为了简化制作难度而全新设计的！ -v16.wav;
+
+;结束分支
+label:end;
+为了更接近桌面端视觉小说引擎的能力，我们支持很多快捷键以及可跳转的剧情回溯。 -v17.wav;
+按下菜单中的“回想”按钮或者向上滚动鼠标滚轮试试吧！ -v18.wav;
+快速存读挡、丰富的选项、自动播放以及快进等功能，也是应有尽有。 -v19.wav;
+setTempAnimation:[{"position": {"x": 500,"y": 0},"duration": 0},{"position": {"x": 400,"y": 0},"duration": 250},{"position": {"x": 600,"y": 0},"duration": 500},{"position": {"x": 500,"y": 0},"duration": 250}] -target=fig-left -next;
+当然，这不算什么，因为大多数成熟的引擎都有这些功能。但是在 Web 端，这却是很少见的。 -v20.wav;
+我们为可能初次开发游戏的开发者提供了美观的通用 UI 和丰富的预设功能与动画。所以你可以没有顾虑地快速开始制作游戏。 -v21.wav;
+WebGAL 项目组期待你的作品能够在 WebGAL 上呈现！只需要一个链接就可以让万千用户立刻开始享受你的作品。 -v22.wav;
+感谢你关注 WebGAL 项目！ -v23.wav;
+end;
+; WebGAL 引擎会默认读取 start.txt 作为初始场景，因此请不要删除，并在初始场景内跳转到其他场景
+bgm:s_Title.mp3;
+unlockBgm:s_Title.mp3 -name=雲を追いかけて;
+intro:你好|欢迎来到 WebGAL 的世界;
+changeBg:bg.png -next;
+unlockCg:bg.png -name=良夜; // 解锁CG并赋予名称
+changeFigure:stand.png -left -next;
+setAnimation:enter-from-left -target=fig-left -next;
+WebGAL:欢迎使用 WebGAL！这是一款全新的网页端视觉小说引擎。 -v1.wav;
+changeFigure:stand2.png -right -next;
+WebGAL 是使用 Web 技术开发的引擎，因此在网页端有良好的表现。 -v2.wav;
+由于这个特性，如果你将 WebGAL 部署到服务器或网页托管平台上，玩家只需要一串链接就可以开始游玩！ -v3.wav;
+setAnimation:move-front-and-back -target=fig-left -next;
+听起来是不是非常吸引人？ -v4.wav;
+changeFigure:none -right -next;
+setAnimation:l2c -target=fig-left -next;
+WebGAL 引擎也具有动画系统和特效系统，使用 WebGAL 开发的游戏可以拥有很好的表现效果。 -v5.wav;
+pixiInit;
+pixiPerform:snow;
+比如，这个下起小雪的特效。 -v6.wav;
+除此以外，分支选择的功能也必不可少。 -v7.wav;
+你可以通过以下两个分支了解 WebGAL 的更多故事。 -v8.wav;
+pixiInit;
+choose:WebGAL 发展历程:choose1|WebGAL 冷知识:choose2;
+
+;分支1
+label:choose1;
+WebGAL 的开发初衷是能够让更多人可以更方便地制作属于自己的视觉小说。 -v9.wav;
+在一开始，WebGAL 只具备很少的功能，仅仅能支持立绘和背景的显示、语音播放和分支选择。 -v10.wav;
+在经历一年的发展后，现在已经是支持了很多优秀的表现效果的引擎了！ -v11.wav;
+除此以外，WebGAL 编辑器的加入也使得制作和导出一个游戏更加方便快捷。 -v12.wav;
+jumpLabel:end;
+
+;分支2
+label:choose2;
+这个演示游戏使用的素材是 AI 生成的。 -v13.wav;
+WebGAL 项目只用了一年不到就在 GitHub 获得了 1000 星标！ -v14.wav;
+WebGAL 的开发历程，是一个在开发中学习开发的过程。因此她经历了3次重构，并且每次几乎都是推倒重来式的。 -v15.wav;
+WebGAL 的脚本语言是为了简化制作难度而全新设计的！ -v16.wav;
+
+;结束分支
+label:end;
+为了更接近桌面端视觉小说引擎的能力，我们支持很多快捷键以及可跳转的剧情回溯。 -v17.wav;
+按下菜单中的“回想”按钮或者向上滚动鼠标滚轮试试吧！ -v18.wav;
+快速存读挡、丰富的选项、自动播放以及快进等功能，也是应有尽有。 -v19.wav;
+setTempAnimation:[{"position": {"x": 500,"y": 0},"duration": 0},{"position": {"x": 400,"y": 0},"duration": 250},{"position": {"x": 600,"y": 0},"duration": 500},{"position": {"x": 500,"y": 0},"duration": 250}] -target=fig-left -next;
+当然，这不算什么，因为大多数成熟的引擎都有这些功能。但是在 Web 端，这却是很少见的。 -v20.wav;
+我们为可能初次开发游戏的开发者提供了美观的通用 UI 和丰富的预设功能与动画。所以你可以没有顾虑地快速开始制作游戏。 -v21.wav;
+WebGAL 项目组期待你的作品能够在 WebGAL 上呈现！只需要一个链接就可以让万千用户立刻开始享受你的作品。 -v22.wav;
+感谢你关注 WebGAL 项目！ -v23.wav;
+end;
+; WebGAL 引擎会默认读取 start.txt 作为初始场景，因此请不要删除，并在初始场景内跳转到其他场景
+bgm:s_Title.mp3;
+unlockBgm:s_Title.mp3 -name=雲を追いかけて;
+intro:你好|欢迎来到 WebGAL 的世界;
+changeBg:bg.png -next;
+unlockCg:bg.png -name=良夜; // 解锁CG并赋予名称
+changeFigure:stand.png -left -next;
+setAnimation:enter-from-left -target=fig-left -next;
+WebGAL:欢迎使用 WebGAL！这是一款全新的网页端视觉小说引擎。 -v1.wav;
+changeFigure:stand2.png -right -next;
+WebGAL 是使用 Web 技术开发的引擎，因此在网页端有良好的表现。 -v2.wav;
+由于这个特性，如果你将 WebGAL 部署到服务器或网页托管平台上，玩家只需要一串链接就可以开始游玩！ -v3.wav;
+setAnimation:move-front-and-back -target=fig-left -next;
+听起来是不是非常吸引人？ -v4.wav;
+changeFigure:none -right -next;
+setAnimation:l2c -target=fig-left -next;
+WebGAL 引擎也具有动画系统和特效系统，使用 WebGAL 开发的游戏可以拥有很好的表现效果。 -v5.wav;
+pixiInit;
+pixiPerform:snow;
+比如，这个下起小雪的特效。 -v6.wav;
+除此以外，分支选择的功能也必不可少。 -v7.wav;
+你可以通过以下两个分支了解 WebGAL 的更多故事。 -v8.wav;
+pixiInit;
+choose:WebGAL 发展历程:choose1|WebGAL 冷知识:choose2;
+
+;分支1
+label:choose1;
+WebGAL 的开发初衷是能够让更多人可以更方便地制作属于自己的视觉小说。 -v9.wav;
+在一开始，WebGAL 只具备很少的功能，仅仅能支持立绘和背景的显示、语音播放和分支选择。 -v10.wav;
+在经历一年的发展后，现在已经是支持了很多优秀的表现效果的引擎了！ -v11.wav;
+除此以外，WebGAL 编辑器的加入也使得制作和导出一个游戏更加方便快捷。 -v12.wav;
+jumpLabel:end;
+
+;分支2
+label:choose2;
+这个演示游戏使用的素材是 AI 生成的。 -v13.wav;
+WebGAL 项目只用了一年不到就在 GitHub 获得了 1000 星标！ -v14.wav;
+WebGAL 的开发历程，是一个在开发中学习开发的过程。因此她经历了3次重构，并且每次几乎都是推倒重来式的。 -v15.wav;
+WebGAL 的脚本语言是为了简化制作难度而全新设计的！ -v16.wav;
+
+;结束分支
+label:end;
+为了更接近桌面端视觉小说引擎的能力，我们支持很多快捷键以及可跳转的剧情回溯。 -v17.wav;
+按下菜单中的“回想”按钮或者向上滚动鼠标滚轮试试吧！ -v18.wav;
+快速存读挡、丰富的选项、自动播放以及快进等功能，也是应有尽有。 -v19.wav;
+setTempAnimation:[{"position": {"x": 500,"y": 0},"duration": 0},{"position": {"x": 400,"y": 0},"duration": 250},{"position": {"x": 600,"y": 0},"duration": 500},{"position": {"x": 500,"y": 0},"duration": 250}] -target=fig-left -next;
+当然，这不算什么，因为大多数成熟的引擎都有这些功能。但是在 Web 端，这却是很少见的。 -v20.wav;
+我们为可能初次开发游戏的开发者提供了美观的通用 UI 和丰富的预设功能与动画。所以你可以没有顾虑地快速开始制作游戏。 -v21.wav;
+WebGAL 项目组期待你的作品能够在 WebGAL 上呈现！只需要一个链接就可以让万千用户立刻开始享受你的作品。 -v22.wav;
+感谢你关注 WebGAL 项目！ -v23.wav;
+end;
+; WebGAL 引擎会默认读取 start.txt 作为初始场景，因此请不要删除，并在初始场景内跳转到其他场景
+bgm:s_Title.mp3;
+unlockBgm:s_Title.mp3 -name=雲を追いかけて;
+intro:你好|欢迎来到 WebGAL 的世界;
+changeBg:bg.png -next;
+unlockCg:bg.png -name=良夜; // 解锁CG并赋予名称
+changeFigure:stand.png -left -next;
+setAnimation:enter-from-left -target=fig-left -next;
+WebGAL:欢迎使用 WebGAL！这是一款全新的网页端视觉小说引擎。 -v1.wav;
+changeFigure:stand2.png -right -next;
+WebGAL 是使用 Web 技术开发的引擎，因此在网页端有良好的表现。 -v2.wav;
+由于这个特性，如果你将 WebGAL 部署到服务器或网页托管平台上，玩家只需要一串链接就可以开始游玩！ -v3.wav;
+setAnimation:move-front-and-back -target=fig-left -next;
+听起来是不是非常吸引人？ -v4.wav;
+changeFigure:none -right -next;
+setAnimation:l2c -target=fig-left -next;
+WebGAL 引擎也具有动画系统和特效系统，使用 WebGAL 开发的游戏可以拥有很好的表现效果。 -v5.wav;
+pixiInit;
+pixiPerform:snow;
+比如，这个下起小雪的特效。 -v6.wav;
+除此以外，分支选择的功能也必不可少。 -v7.wav;
+你可以通过以下两个分支了解 WebGAL 的更多故事。 -v8.wav;
+pixiInit;
+choose:WebGAL 发展历程:choose1|WebGAL 冷知识:choose2;
+
+;分支1
+label:choose1;
+WebGAL 的开发初衷是能够让更多人可以更方便地制作属于自己的视觉小说。 -v9.wav;
+在一开始，WebGAL 只具备很少的功能，仅仅能支持立绘和背景的显示、语音播放和分支选择。 -v10.wav;
+在经历一年的发展后，现在已经是支持了很多优秀的表现效果的引擎了！ -v11.wav;
+除此以外，WebGAL 编辑器的加入也使得制作和导出一个游戏更加方便快捷。 -v12.wav;
+jumpLabel:end;
+
+;分支2
+label:choose2;
+这个演示游戏使用的素材是 AI 生成的。 -v13.wav;
+WebGAL 项目只用了一年不到就在 GitHub 获得了 1000 星标！ -v14.wav;
+WebGAL 的开发历程，是一个在开发中学习开发的过程。因此她经历了3次重构，并且每次几乎都是推倒重来式的。 -v15.wav;
+WebGAL 的脚本语言是为了简化制作难度而全新设计的！ -v16.wav;
+
+;结束分支
+label:end;
+为了更接近桌面端视觉小说引擎的能力，我们支持很多快捷键以及可跳转的剧情回溯。 -v17.wav;
+按下菜单中的“回想”按钮或者向上滚动鼠标滚轮试试吧！ -v18.wav;
+快速存读挡、丰富的选项、自动播放以及快进等功能，也是应有尽有。 -v19.wav;
+setTempAnimation:[{"position": {"x": 500,"y": 0},"duration": 0},{"position": {"x": 400,"y": 0},"duration": 250},{"position": {"x": 600,"y": 0},"duration": 500},{"position": {"x": 500,"y": 0},"duration": 250}] -target=fig-left -next;
+当然，这不算什么，因为大多数成熟的引擎都有这些功能。但是在 Web 端，这却是很少见的。 -v20.wav;
+我们为可能初次开发游戏的开发者提供了美观的通用 UI 和丰富的预设功能与动画。所以你可以没有顾虑地快速开始制作游戏。 -v21.wav;
+WebGAL 项目组期待你的作品能够在 WebGAL 上呈现！只需要一个链接就可以让万千用户立刻开始享受你的作品。 -v22.wav;
+感谢你关注 WebGAL 项目！ -v23.wav;
+end;
+; WebGAL 引擎会默认读取 start.txt 作为初始场景，因此请不要删除，并在初始场景内跳转到其他场景
+bgm:s_Title.mp3;
+unlockBgm:s_Title.mp3 -name=雲を追いかけて;
+intro:你好|欢迎来到 WebGAL 的世界;
+changeBg:bg.png -next;
+unlockCg:bg.png -name=良夜; // 解锁CG并赋予名称
+changeFigure:stand.png -left -next;
+setAnimation:enter-from-left -target=fig-left -next;
+WebGAL:欢迎使用 WebGAL！这是一款全新的网页端视觉小说引擎。 -v1.wav;
+changeFigure:stand2.png -right -next;
+WebGAL 是使用 Web 技术开发的引擎，因此在网页端有良好的表现。 -v2.wav;
+由于这个特性，如果你将 WebGAL 部署到服务器或网页托管平台上，玩家只需要一串链接就可以开始游玩！ -v3.wav;
+setAnimation:move-front-and-back -target=fig-left -next;
+听起来是不是非常吸引人？ -v4.wav;
+changeFigure:none -right -next;
+setAnimation:l2c -target=fig-left -next;
+WebGAL 引擎也具有动画系统和特效系统，使用 WebGAL 开发的游戏可以拥有很好的表现效果。 -v5.wav;
+pixiInit;
+pixiPerform:snow;
+比如，这个下起小雪的特效。 -v6.wav;
+除此以外，分支选择的功能也必不可少。 -v7.wav;
+你可以通过以下两个分支了解 WebGAL 的更多故事。 -v8.wav;
+pixiInit;
+choose:WebGAL 发展历程:choose1|WebGAL 冷知识:choose2;
+
+;分支1
+label:choose1;
+WebGAL 的开发初衷是能够让更多人可以更方便地制作属于自己的视觉小说。 -v9.wav;
+在一开始，WebGAL 只具备很少的功能，仅仅能支持立绘和背景的显示、语音播放和分支选择。 -v10.wav;
+在经历一年的发展后，现在已经是支持了很多优秀的表现效果的引擎了！ -v11.wav;
+除此以外，WebGAL 编辑器的加入也使得制作和导出一个游戏更加方便快捷。 -v12.wav;
+jumpLabel:end;
+
+;分支2
+label:choose2;
+这个演示游戏使用的素材是 AI 生成的。 -v13.wav;
+WebGAL 项目只用了一年不到就在 GitHub 获得了 1000 星标！ -v14.wav;
+WebGAL 的开发历程，是一个在开发中学习开发的过程。因此她经历了3次重构，并且每次几乎都是推倒重来式的。 -v15.wav;
+WebGAL 的脚本语言是为了简化制作难度而全新设计的！ -v16.wav;
+
+;结束分支
+label:end;
+为了更接近桌面端视觉小说引擎的能力，我们支持很多快捷键以及可跳转的剧情回溯。 -v17.wav;
+按下菜单中的“回想”按钮或者向上滚动鼠标滚轮试试吧！ -v18.wav;
+快速存读挡、丰富的选项、自动播放以及快进等功能，也是应有尽有。 -v19.wav;
+setTempAnimation:[{"position": {"x": 500,"y": 0},"duration": 0},{"position": {"x": 400,"y": 0},"duration": 250},{"position": {"x": 600,"y": 0},"duration": 500},{"position": {"x": 500,"y": 0},"duration": 250}] -target=fig-left -next;
+当然，这不算什么，因为大多数成熟的引擎都有这些功能。但是在 Web 端，这却是很少见的。 -v20.wav;
+我们为可能初次开发游戏的开发者提供了美观的通用 UI 和丰富的预设功能与动画。所以你可以没有顾虑地快速开始制作游戏。 -v21.wav;
+WebGAL 项目组期待你的作品能够在 WebGAL 上呈现！只需要一个链接就可以让万千用户立刻开始享受你的作品。 -v22.wav;
+感谢你关注 WebGAL 项目！ -v23.wav;
+end;
+; WebGAL 引擎会默认读取 start.txt 作为初始场景，因此请不要删除，并在初始场景内跳转到其他场景
+bgm:s_Title.mp3;
+unlockBgm:s_Title.mp3 -name=雲を追いかけて;
+intro:你好|欢迎来到 WebGAL 的世界;
+changeBg:bg.png -next;
+unlockCg:bg.png -name=良夜; // 解锁CG并赋予名称
+changeFigure:stand.png -left -next;
+setAnimation:enter-from-left -target=fig-left -next;
+WebGAL:欢迎使用 WebGAL！这是一款全新的网页端视觉小说引擎。 -v1.wav;
+changeFigure:stand2.png -right -next;
+WebGAL 是使用 Web 技术开发的引擎，因此在网页端有良好的表现。 -v2.wav;
+由于这个特性，如果你将 WebGAL 部署到服务器或网页托管平台上，玩家只需要一串链接就可以开始游玩！ -v3.wav;
+setAnimation:move-front-and-back -target=fig-left -next;
+听起来是不是非常吸引人？ -v4.wav;
+changeFigure:none -right -next;
+setAnimation:l2c -target=fig-left -next;
+WebGAL 引擎也具有动画系统和特效系统，使用 WebGAL 开发的游戏可以拥有很好的表现效果。 -v5.wav;
+pixiInit;
+pixiPerform:snow;
+比如，这个下起小雪的特效。 -v6.wav;
+除此以外，分支选择的功能也必不可少。 -v7.wav;
+你可以通过以下两个分支了解 WebGAL 的更多故事。 -v8.wav;
+pixiInit;
+choose:WebGAL 发展历程:choose1|WebGAL 冷知识:choose2;
+
+;分支1
+label:choose1;
+WebGAL 的开发初衷是能够让更多人可以更方便地制作属于自己的视觉小说。 -v9.wav;
+在一开始，WebGAL 只具备很少的功能，仅仅能支持立绘和背景的显示、语音播放和分支选择。 -v10.wav;
+在经历一年的发展后，现在已经是支持了很多优秀的表现效果的引擎了！ -v11.wav;
+除此以外，WebGAL 编辑器的加入也使得制作和导出一个游戏更加方便快捷。 -v12.wav;
+jumpLabel:end;
+
+;分支2
+label:choose2;
+这个演示游戏使用的素材是 AI 生成的。 -v13.wav;
+WebGAL 项目只用了一年不到就在 GitHub 获得了 1000 星标！ -v14.wav;
+WebGAL 的开发历程，是一个在开发中学习开发的过程。因此她经历了3次重构，并且每次几乎都是推倒重来式的。 -v15.wav;
+WebGAL 的脚本语言是为了简化制作难度而全新设计的！ -v16.wav;
+
+;结束分支
+label:end;
+为了更接近桌面端视觉小说引擎的能力，我们支持很多快捷键以及可跳转的剧情回溯。 -v17.wav;
+按下菜单中的“回想”按钮或者向上滚动鼠标滚轮试试吧！ -v18.wav;
+快速存读挡、丰富的选项、自动播放以及快进等功能，也是应有尽有。 -v19.wav;
+setTempAnimation:[{"position": {"x": 500,"y": 0},"duration": 0},{"position": {"x": 400,"y": 0},"duration": 250},{"position": {"x": 600,"y": 0},"duration": 500},{"position": {"x": 500,"y": 0},"duration": 250}] -target=fig-left -next;
+当然，这不算什么，因为大多数成熟的引擎都有这些功能。但是在 Web 端，这却是很少见的。 -v20.wav;
+我们为可能初次开发游戏的开发者提供了美观的通用 UI 和丰富的预设功能与动画。所以你可以没有顾虑地快速开始制作游戏。 -v21.wav;
+WebGAL 项目组期待你的作品能够在 WebGAL 上呈现！只需要一个链接就可以让万千用户立刻开始享受你的作品。 -v22.wav;
+感谢你关注 WebGAL 项目！ -v23.wav;
+end;
+; WebGAL 引擎会默认读取 start.txt 作为初始场景，因此请不要删除，并在初始场景内跳转到其他场景
+bgm:s_Title.mp3;
+unlockBgm:s_Title.mp3 -name=雲を追いかけて;
+intro:你好|欢迎来到 WebGAL 的世界;
+changeBg:bg.png -next;
+unlockCg:bg.png -name=良夜; // 解锁CG并赋予名称
+changeFigure:stand.png -left -next;
+setAnimation:enter-from-left -target=fig-left -next;
+WebGAL:欢迎使用 WebGAL！这是一款全新的网页端视觉小说引擎。 -v1.wav;
+changeFigure:stand2.png -right -next;
+WebGAL 是使用 Web 技术开发的引擎，因此在网页端有良好的表现。 -v2.wav;
+由于这个特性，如果你将 WebGAL 部署到服务器或网页托管平台上，玩家只需要一串链接就可以开始游玩！ -v3.wav;
+setAnimation:move-front-and-back -target=fig-left -next;
+听起来是不是非常吸引人？ -v4.wav;
+changeFigure:none -right -next;
+setAnimation:l2c -target=fig-left -next;
+WebGAL 引擎也具有动画系统和特效系统，使用 WebGAL 开发的游戏可以拥有很好的表现效果。 -v5.wav;
+pixiInit;
+pixiPerform:snow;
+比如，这个下起小雪的特效。 -v6.wav;
+除此以外，分支选择的功能也必不可少。 -v7.wav;
+你可以通过以下两个分支了解 WebGAL 的更多故事。 -v8.wav;
+pixiInit;
+choose:WebGAL 发展历程:choose1|WebGAL 冷知识:choose2;
+
+;分支1
+label:choose1;
+WebGAL 的开发初衷是能够让更多人可以更方便地制作属于自己的视觉小说。 -v9.wav;
+在一开始，WebGAL 只具备很少的功能，仅仅能支持立绘和背景的显示、语音播放和分支选择。 -v10.wav;
+在经历一年的发展后，现在已经是支持了很多优秀的表现效果的引擎了！ -v11.wav;
+除此以外，WebGAL 编辑器的加入也使得制作和导出一个游戏更加方便快捷。 -v12.wav;
+jumpLabel:end;
+
+;分支2
+label:choose2;
+这个演示游戏使用的素材是 AI 生成的。 -v13.wav;
+WebGAL 项目只用了一年不到就在 GitHub 获得了 1000 星标！ -v14.wav;
+WebGAL 的开发历程，是一个在开发中学习开发的过程。因此她经历了3次重构，并且每次几乎都是推倒重来式的。 -v15.wav;
+WebGAL 的脚本语言是为了简化制作难度而全新设计的！ -v16.wav;
+
+;结束分支
+label:end;
+为了更接近桌面端视觉小说引擎的能力，我们支持很多快捷键以及可跳转的剧情回溯。 -v17.wav;
+按下菜单中的“回想”按钮或者向上滚动鼠标滚轮试试吧！ -v18.wav;
+快速存读挡、丰富的选项、自动播放以及快进等功能，也是应有尽有。 -v19.wav;
+setTempAnimation:[{"position": {"x": 500,"y": 0},"duration": 0},{"position": {"x": 400,"y": 0},"duration": 250},{"position": {"x": 600,"y": 0},"duration": 500},{"position": {"x": 500,"y": 0},"duration": 250}] -target=fig-left -next;
+当然，这不算什么，因为大多数成熟的引擎都有这些功能。但是在 Web 端，这却是很少见的。 -v20.wav;
+我们为可能初次开发游戏的开发者提供了美观的通用 UI 和丰富的预设功能与动画。所以你可以没有顾虑地快速开始制作游戏。 -v21.wav;
+WebGAL 项目组期待你的作品能够在 WebGAL 上呈现！只需要一个链接就可以让万千用户立刻开始享受你的作品。 -v22.wav;
+感谢你关注 WebGAL 项目！ -v23.wav;
+end;
+; WebGAL 引擎会默认读取 start.txt 作为初始场景，因此请不要删除，并在初始场景内跳转到其他场景
+bgm:s_Title.mp3;
+unlockBgm:s_Title.mp3 -name=雲を追いかけて;
+intro:你好|欢迎来到 WebGAL 的世界;
+changeBg:bg.png -next;
+unlockCg:bg.png -name=良夜; // 解锁CG并赋予名称
+changeFigure:stand.png -left -next;
+setAnimation:enter-from-left -target=fig-left -next;
+WebGAL:欢迎使用 WebGAL！这是一款全新的网页端视觉小说引擎。 -v1.wav;
+changeFigure:stand2.png -right -next;
+WebGAL 是使用 Web 技术开发的引擎，因此在网页端有良好的表现。 -v2.wav;
+由于这个特性，如果你将 WebGAL 部署到服务器或网页托管平台上，玩家只需要一串链接就可以开始游玩！ -v3.wav;
+setAnimation:move-front-and-back -target=fig-left -next;
+听起来是不是非常吸引人？ -v4.wav;
+changeFigure:none -right -next;
+setAnimation:l2c -target=fig-left -next;
+WebGAL 引擎也具有动画系统和特效系统，使用 WebGAL 开发的游戏可以拥有很好的表现效果。 -v5.wav;
+pixiInit;
+pixiPerform:snow;
+比如，这个下起小雪的特效。 -v6.wav;
+除此以外，分支选择的功能也必不可少。 -v7.wav;
+你可以通过以下两个分支了解 WebGAL 的更多故事。 -v8.wav;
+pixiInit;
+choose:WebGAL 发展历程:choose1|WebGAL 冷知识:choose2;
+
+;分支1
+label:choose1;
+WebGAL 的开发初衷是能够让更多人可以更方便地制作属于自己的视觉小说。 -v9.wav;
+在一开始，WebGAL 只具备很少的功能，仅仅能支持立绘和背景的显示、语音播放和分支选择。 -v10.wav;
+在经历一年的发展后，现在已经是支持了很多优秀的表现效果的引擎了！ -v11.wav;
+除此以外，WebGAL 编辑器的加入也使得制作和导出一个游戏更加方便快捷。 -v12.wav;
+jumpLabel:end;
+
+;分支2
+label:choose2;
+这个演示游戏使用的素材是 AI 生成的。 -v13.wav;
+WebGAL 项目只用了一年不到就在 GitHub 获得了 1000 星标！ -v14.wav;
+WebGAL 的开发历程，是一个在开发中学习开发的过程。因此她经历了3次重构，并且每次几乎都是推倒重来式的。 -v15.wav;
+WebGAL 的脚本语言是为了简化制作难度而全新设计的！ -v16.wav;
+
+;结束分支
+label:end;
+为了更接近桌面端视觉小说引擎的能力，我们支持很多快捷键以及可跳转的剧情回溯。 -v17.wav;
+按下菜单中的“回想”按钮或者向上滚动鼠标滚轮试试吧！ -v18.wav;
+快速存读挡、丰富的选项、自动播放以及快进等功能，也是应有尽有。 -v19.wav;
+setTempAnimation:[{"position": {"x": 500,"y": 0},"duration": 0},{"position": {"x": 400,"y": 0},"duration": 250},{"position": {"x": 600,"y": 0},"duration": 500},{"position": {"x": 500,"y": 0},"duration": 250}] -target=fig-left -next;
+当然，这不算什么，因为大多数成熟的引擎都有这些功能。但是在 Web 端，这却是很少见的。 -v20.wav;
+我们为可能初次开发游戏的开发者提供了美观的通用 UI 和丰富的预设功能与动画。所以你可以没有顾虑地快速开始制作游戏。 -v21.wav;
+WebGAL 项目组期待你的作品能够在 WebGAL 上呈现！只需要一个链接就可以让万千用户立刻开始享受你的作品。 -v22.wav;
+感谢你关注 WebGAL 项目！ -v23.wav;
+end;
+; WebGAL 引擎会默认读取 start.txt 作为初始场景，因此请不要删除，并在初始场景内跳转到其他场景
+bgm:s_Title.mp3;
+unlockBgm:s_Title.mp3 -name=雲を追いかけて;
+intro:你好|欢迎来到 WebGAL 的世界;
+changeBg:bg.png -next;
+unlockCg:bg.png -name=良夜; // 解锁CG并赋予名称
+changeFigure:stand.png -left -next;
+setAnimation:enter-from-left -target=fig-left -next;
+WebGAL:欢迎使用 WebGAL！这是一款全新的网页端视觉小说引擎。 -v1.wav;
+changeFigure:stand2.png -right -next;
+WebGAL 是使用 Web 技术开发的引擎，因此在网页端有良好的表现。 -v2.wav;
+由于这个特性，如果你将 WebGAL 部署到服务器或网页托管平台上，玩家只需要一串链接就可以开始游玩！ -v3.wav;
+setAnimation:move-front-and-back -target=fig-left -next;
+听起来是不是非常吸引人？ -v4.wav;
+changeFigure:none -right -next;
+setAnimation:l2c -target=fig-left -next;
+WebGAL 引擎也具有动画系统和特效系统，使用 WebGAL 开发的游戏可以拥有很好的表现效果。 -v5.wav;
+pixiInit;
+pixiPerform:snow;
+比如，这个下起小雪的特效。 -v6.wav;
+除此以外，分支选择的功能也必不可少。 -v7.wav;
+你可以通过以下两个分支了解 WebGAL 的更多故事。 -v8.wav;
+pixiInit;
+choose:WebGAL 发展历程:choose1|WebGAL 冷知识:choose2;
+
+;分支1
+label:choose1;
+WebGAL 的开发初衷是能够让更多人可以更方便地制作属于自己的视觉小说。 -v9.wav;
+在一开始，WebGAL 只具备很少的功能，仅仅能支持立绘和背景的显示、语音播放和分支选择。 -v10.wav;
+在经历一年的发展后，现在已经是支持了很多优秀的表现效果的引擎了！ -v11.wav;
+除此以外，WebGAL 编辑器的加入也使得制作和导出一个游戏更加方便快捷。 -v12.wav;
+jumpLabel:end;
+
+;分支2
+label:choose2;
+这个演示游戏使用的素材是 AI 生成的。 -v13.wav;
+WebGAL 项目只用了一年不到就在 GitHub 获得了 1000 星标！ -v14.wav;
+WebGAL 的开发历程，是一个在开发中学习开发的过程。因此她经历了3次重构，并且每次几乎都是推倒重来式的。 -v15.wav;
+WebGAL 的脚本语言是为了简化制作难度而全新设计的！ -v16.wav;
+
+;结束分支
+label:end;
+为了更接近桌面端视觉小说引擎的能力，我们支持很多快捷键以及可跳转的剧情回溯。 -v17.wav;
+按下菜单中的“回想”按钮或者向上滚动鼠标滚轮试试吧！ -v18.wav;
+快速存读挡、丰富的选项、自动播放以及快进等功能，也是应有尽有。 -v19.wav;
+setTempAnimation:[{"position": {"x": 500,"y": 0},"duration": 0},{"position": {"x": 400,"y": 0},"duration": 250},{"position": {"x": 600,"y": 0},"duration": 500},{"position": {"x": 500,"y": 0},"duration": 250}] -target=fig-left -next;
+当然，这不算什么，因为大多数成熟的引擎都有这些功能。但是在 Web 端，这却是很少见的。 -v20.wav;
+我们为可能初次开发游戏的开发者提供了美观的通用 UI 和丰富的预设功能与动画。所以你可以没有顾虑地快速开始制作游戏。 -v21.wav;
+WebGAL 项目组期待你的作品能够在 WebGAL 上呈现！只需要一个链接就可以让万千用户立刻开始享受你的作品。 -v22.wav;
+感谢你关注 WebGAL 项目！ -v23.wav;
+end;
+; WebGAL 引擎会默认读取 start.txt 作为初始场景，因此请不要删除，并在初始场景内跳转到其他场景
+bgm:s_Title.mp3;
+unlockBgm:s_Title.mp3 -name=雲を追いかけて;
+intro:你好|欢迎来到 WebGAL 的世界;
+changeBg:bg.png -next;
+unlockCg:bg.png -name=良夜; // 解锁CG并赋予名称
+changeFigure:stand.png -left -next;
+setAnimation:enter-from-left -target=fig-left -next;
+WebGAL:欢迎使用 WebGAL！这是一款全新的网页端视觉小说引擎。 -v1.wav;
+changeFigure:stand2.png -right -next;
+WebGAL 是使用 Web 技术开发的引擎，因此在网页端有良好的表现。 -v2.wav;
+由于这个特性，如果你将 WebGAL 部署到服务器或网页托管平台上，玩家只需要一串链接就可以开始游玩！ -v3.wav;
+setAnimation:move-front-and-back -target=fig-left -next;
+听起来是不是非常吸引人？ -v4.wav;
+changeFigure:none -right -next;
+setAnimation:l2c -target=fig-left -next;
+WebGAL 引擎也具有动画系统和特效系统，使用 WebGAL 开发的游戏可以拥有很好的表现效果。 -v5.wav;
+pixiInit;
+pixiPerform:snow;
+比如，这个下起小雪的特效。 -v6.wav;
+除此以外，分支选择的功能也必不可少。 -v7.wav;
+你可以通过以下两个分支了解 WebGAL 的更多故事。 -v8.wav;
+pixiInit;
+choose:WebGAL 发展历程:choose1|WebGAL 冷知识:choose2;
+
+;分支1
+label:choose1;
+WebGAL 的开发初衷是能够让更多人可以更方便地制作属于自己的视觉小说。 -v9.wav;
+在一开始，WebGAL 只具备很少的功能，仅仅能支持立绘和背景的显示、语音播放和分支选择。 -v10.wav;
+在经历一年的发展后，现在已经是支持了很多优秀的表现效果的引擎了！ -v11.wav;
+除此以外，WebGAL 编辑器的加入也使得制作和导出一个游戏更加方便快捷。 -v12.wav;
+jumpLabel:end;
+
+;分支2
+label:choose2;
+这个演示游戏使用的素材是 AI 生成的。 -v13.wav;
+WebGAL 项目只用了一年不到就在 GitHub 获得了 1000 星标！ -v14.wav;
+WebGAL 的开发历程，是一个在开发中学习开发的过程。因此她经历了3次重构，并且每次几乎都是推倒重来式的。 -v15.wav;
+WebGAL 的脚本语言是为了简化制作难度而全新设计的！ -v16.wav;
+
+;结束分支
+label:end;
+为了更接近桌面端视觉小说引擎的能力，我们支持很多快捷键以及可跳转的剧情回溯。 -v17.wav;
+按下菜单中的“回想”按钮或者向上滚动鼠标滚轮试试吧！ -v18.wav;
+快速存读挡、丰富的选项、自动播放以及快进等功能，也是应有尽有。 -v19.wav;
+setTempAnimation:[{"position": {"x": 500,"y": 0},"duration": 0},{"position": {"x": 400,"y": 0},"duration": 250},{"position": {"x": 600,"y": 0},"duration": 500},{"position": {"x": 500,"y": 0},"duration": 250}] -target=fig-left -next;
+当然，这不算什么，因为大多数成熟的引擎都有这些功能。但是在 Web 端，这却是很少见的。 -v20.wav;
+我们为可能初次开发游戏的开发者提供了美观的通用 UI 和丰富的预设功能与动画。所以你可以没有顾虑地快速开始制作游戏。 -v21.wav;
+WebGAL 项目组期待你的作品能够在 WebGAL 上呈现！只需要一个链接就可以让万千用户立刻开始享受你的作品。 -v22.wav;
+感谢你关注 WebGAL 项目！ -v23.wav;
+end;
+; WebGAL 引擎会默认读取 start.txt 作为初始场景，因此请不要删除，并在初始场景内跳转到其他场景
+bgm:s_Title.mp3;
+unlockBgm:s_Title.mp3 -name=雲を追いかけて;
+intro:你好|欢迎来到 WebGAL 的世界;
+changeBg:bg.png -next;
+unlockCg:bg.png -name=良夜; // 解锁CG并赋予名称
+changeFigure:stand.png -left -next;
+setAnimation:enter-from-left -target=fig-left -next;
+WebGAL:欢迎使用 WebGAL！这是一款全新的网页端视觉小说引擎。 -v1.wav;
+changeFigure:stand2.png -right -next;
+WebGAL 是使用 Web 技术开发的引擎，因此在网页端有良好的表现。 -v2.wav;
+由于这个特性，如果你将 WebGAL 部署到服务器或网页托管平台上，玩家只需要一串链接就可以开始游玩！ -v3.wav;
+setAnimation:move-front-and-back -target=fig-left -next;
+听起来是不是非常吸引人？ -v4.wav;
+changeFigure:none -right -next;
+setAnimation:l2c -target=fig-left -next;
+WebGAL 引擎也具有动画系统和特效系统，使用 WebGAL 开发的游戏可以拥有很好的表现效果。 -v5.wav;
+pixiInit;
+pixiPerform:snow;
+比如，这个下起小雪的特效。 -v6.wav;
+除此以外，分支选择的功能也必不可少。 -v7.wav;
+你可以通过以下两个分支了解 WebGAL 的更多故事。 -v8.wav;
+pixiInit;
+choose:WebGAL 发展历程:choose1|WebGAL 冷知识:choose2;
+
+;分支1
+label:choose1;
+WebGAL 的开发初衷是能够让更多人可以更方便地制作属于自己的视觉小说。 -v9.wav;
+在一开始，WebGAL 只具备很少的功能，仅仅能支持立绘和背景的显示、语音播放和分支选择。 -v10.wav;
+在经历一年的发展后，现在已经是支持了很多优秀的表现效果的引擎了！ -v11.wav;
+除此以外，WebGAL 编辑器的加入也使得制作和导出一个游戏更加方便快捷。 -v12.wav;
+jumpLabel:end;
+
+;分支2
+label:choose2;
+这个演示游戏使用的素材是 AI 生成的。 -v13.wav;
+WebGAL 项目只用了一年不到就在 GitHub 获得了 1000 星标！ -v14.wav;
+WebGAL 的开发历程，是一个在开发中学习开发的过程。因此她经历了3次重构，并且每次几乎都是推倒重来式的。 -v15.wav;
+WebGAL 的脚本语言是为了简化制作难度而全新设计的！ -v16.wav;
+
+;结束分支
+label:end;
+为了更接近桌面端视觉小说引擎的能力，我们支持很多快捷键以及可跳转的剧情回溯。 -v17.wav;
+按下菜单中的“回想”按钮或者向上滚动鼠标滚轮试试吧！ -v18.wav;
+快速存读挡、丰富的选项、自动播放以及快进等功能，也是应有尽有。 -v19.wav;
+setTempAnimation:[{"position": {"x": 500,"y": 0},"duration": 0},{"position": {"x": 400,"y": 0},"duration": 250},{"position": {"x": 600,"y": 0},"duration": 500},{"position": {"x": 500,"y": 0},"duration": 250}] -target=fig-left -next;
+当然，这不算什么，因为大多数成熟的引擎都有这些功能。但是在 Web 端，这却是很少见的。 -v20.wav;
+我们为可能初次开发游戏的开发者提供了美观的通用 UI 和丰富的预设功能与动画。所以你可以没有顾虑地快速开始制作游戏。 -v21.wav;
+WebGAL 项目组期待你的作品能够在 WebGAL 上呈现！只需要一个链接就可以让万千用户立刻开始享受你的作品。 -v22.wav;
+感谢你关注 WebGAL 项目！ -v23.wav;
+end;
+; WebGAL 引擎会默认读取 start.txt 作为初始场景，因此请不要删除，并在初始场景内跳转到其他场景
+bgm:s_Title.mp3;
+unlockBgm:s_Title.mp3 -name=雲を追いかけて;
+intro:你好|欢迎来到 WebGAL 的世界;
+changeBg:bg.png -next;
+unlockCg:bg.png -name=良夜; // 解锁CG并赋予名称
+changeFigure:stand.png -left -next;
+setAnimation:enter-from-left -target=fig-left -next;
+WebGAL:欢迎使用 WebGAL！这是一款全新的网页端视觉小说引擎。 -v1.wav;
+changeFigure:stand2.png -right -next;
+WebGAL 是使用 Web 技术开发的引擎，因此在网页端有良好的表现。 -v2.wav;
+由于这个特性，如果你将 WebGAL 部署到服务器或网页托管平台上，玩家只需要一串链接就可以开始游玩！ -v3.wav;
+setAnimation:move-front-and-back -target=fig-left -next;
+听起来是不是非常吸引人？ -v4.wav;
+changeFigure:none -right -next;
+setAnimation:l2c -target=fig-left -next;
+WebGAL 引擎也具有动画系统和特效系统，使用 WebGAL 开发的游戏可以拥有很好的表现效果。 -v5.wav;
+pixiInit;
+pixiPerform:snow;
+比如，这个下起小雪的特效。 -v6.wav;
+除此以外，分支选择的功能也必不可少。 -v7.wav;
+你可以通过以下两个分支了解 WebGAL 的更多故事。 -v8.wav;
+pixiInit;
+choose:WebGAL 发展历程:choose1|WebGAL 冷知识:choose2;
+
+;分支1
+label:choose1;
+WebGAL 的开发初衷是能够让更多人可以更方便地制作属于自己的视觉小说。 -v9.wav;
+在一开始，WebGAL 只具备很少的功能，仅仅能支持立绘和背景的显示、语音播放和分支选择。 -v10.wav;
+在经历一年的发展后，现在已经是支持了很多优秀的表现效果的引擎了！ -v11.wav;
+除此以外，WebGAL 编辑器的加入也使得制作和导出一个游戏更加方便快捷。 -v12.wav;
+jumpLabel:end;
+
+;分支2
+label:choose2;
+这个演示游戏使用的素材是 AI 生成的。 -v13.wav;
+WebGAL 项目只用了一年不到就在 GitHub 获得了 1000 星标！ -v14.wav;
+WebGAL 的开发历程，是一个在开发中学习开发的过程。因此她经历了3次重构，并且每次几乎都是推倒重来式的。 -v15.wav;
+WebGAL 的脚本语言是为了简化制作难度而全新设计的！ -v16.wav;
+
+;结束分支
+label:end;
+为了更接近桌面端视觉小说引擎的能力，我们支持很多快捷键以及可跳转的剧情回溯。 -v17.wav;
+按下菜单中的“回想”按钮或者向上滚动鼠标滚轮试试吧！ -v18.wav;
+快速存读挡、丰富的选项、自动播放以及快进等功能，也是应有尽有。 -v19.wav;
+setTempAnimation:[{"position": {"x": 500,"y": 0},"duration": 0},{"position": {"x": 400,"y": 0},"duration": 250},{"position": {"x": 600,"y": 0},"duration": 500},{"position": {"x": 500,"y": 0},"duration": 250}] -target=fig-left -next;
+当然，这不算什么，因为大多数成熟的引擎都有这些功能。但是在 Web 端，这却是很少见的。 -v20.wav;
+我们为可能初次开发游戏的开发者提供了美观的通用 UI 和丰富的预设功能与动画。所以你可以没有顾虑地快速开始制作游戏。 -v21.wav;
+WebGAL 项目组期待你的作品能够在 WebGAL 上呈现！只需要一个链接就可以让万千用户立刻开始享受你的作品。 -v22.wav;
+感谢你关注 WebGAL 项目！ -v23.wav;
+end;
+; WebGAL 引擎会默认读取 start.txt 作为初始场景，因此请不要删除，并在初始场景内跳转到其他场景
+bgm:s_Title.mp3;
+unlockBgm:s_Title.mp3 -name=雲を追いかけて;
+intro:你好|欢迎来到 WebGAL 的世界;
+changeBg:bg.png -next;
+unlockCg:bg.png -name=良夜; // 解锁CG并赋予名称
+changeFigure:stand.png -left -next;
+setAnimation:enter-from-left -target=fig-left -next;
+WebGAL:欢迎使用 WebGAL！这是一款全新的网页端视觉小说引擎。 -v1.wav;
+changeFigure:stand2.png -right -next;
+WebGAL 是使用 Web 技术开发的引擎，因此在网页端有良好的表现。 -v2.wav;
+由于这个特性，如果你将 WebGAL 部署到服务器或网页托管平台上，玩家只需要一串链接就可以开始游玩！ -v3.wav;
+setAnimation:move-front-and-back -target=fig-left -next;
+听起来是不是非常吸引人？ -v4.wav;
+changeFigure:none -right -next;
+setAnimation:l2c -target=fig-left -next;
+WebGAL 引擎也具有动画系统和特效系统，使用 WebGAL 开发的游戏可以拥有很好的表现效果。 -v5.wav;
+pixiInit;
+pixiPerform:snow;
+比如，这个下起小雪的特效。 -v6.wav;
+除此以外，分支选择的功能也必不可少。 -v7.wav;
+你可以通过以下两个分支了解 WebGAL 的更多故事。 -v8.wav;
+pixiInit;
+choose:WebGAL 发展历程:choose1|WebGAL 冷知识:choose2;
+
+;分支1
+label:choose1;
+WebGAL 的开发初衷是能够让更多人可以更方便地制作属于自己的视觉小说。 -v9.wav;
+在一开始，WebGAL 只具备很少的功能，仅仅能支持立绘和背景的显示、语音播放和分支选择。 -v10.wav;
+在经历一年的发展后，现在已经是支持了很多优秀的表现效果的引擎了！ -v11.wav;
+除此以外，WebGAL 编辑器的加入也使得制作和导出一个游戏更加方便快捷。 -v12.wav;
+jumpLabel:end;
+
+;分支2
+label:choose2;
+这个演示游戏使用的素材是 AI 生成的。 -v13.wav;
+WebGAL 项目只用了一年不到就在 GitHub 获得了 1000 星标！ -v14.wav;
+WebGAL 的开发历程，是一个在开发中学习开发的过程。因此她经历了3次重构，并且每次几乎都是推倒重来式的。 -v15.wav;
+WebGAL 的脚本语言是为了简化制作难度而全新设计的！ -v16.wav;
+
+;结束分支
+label:end;
+为了更接近桌面端视觉小说引擎的能力，我们支持很多快捷键以及可跳转的剧情回溯。 -v17.wav;
+按下菜单中的“回想”按钮或者向上滚动鼠标滚轮试试吧！ -v18.wav;
+快速存读挡、丰富的选项、自动播放以及快进等功能，也是应有尽有。 -v19.wav;
+setTempAnimation:[{"position": {"x": 500,"y": 0},"duration": 0},{"position": {"x": 400,"y": 0},"duration": 250},{"position": {"x": 600,"y": 0},"duration": 500},{"position": {"x": 500,"y": 0},"duration": 250}] -target=fig-left -next;
+当然，这不算什么，因为大多数成熟的引擎都有这些功能。但是在 Web 端，这却是很少见的。 -v20.wav;
+我们为可能初次开发游戏的开发者提供了美观的通用 UI 和丰富的预设功能与动画。所以你可以没有顾虑地快速开始制作游戏。 -v21.wav;
+WebGAL 项目组期待你的作品能够在 WebGAL 上呈现！只需要一个链接就可以让万千用户立刻开始享受你的作品。 -v22.wav;
+感谢你关注 WebGAL 项目！ -v23.wav;
+end;
+; WebGAL 引擎会默认读取 start.txt 作为初始场景，因此请不要删除，并在初始场景内跳转到其他场景
+bgm:s_Title.mp3;
+unlockBgm:s_Title.mp3 -name=雲を追いかけて;
+intro:你好|欢迎来到 WebGAL 的世界;
+changeBg:bg.png -next;
+unlockCg:bg.png -name=良夜; // 解锁CG并赋予名称
+changeFigure:stand.png -left -next;
+setAnimation:enter-from-left -target=fig-left -next;
+WebGAL:欢迎使用 WebGAL！这是一款全新的网页端视觉小说引擎。 -v1.wav;
+changeFigure:stand2.png -right -next;
+WebGAL 是使用 Web 技术开发的引擎，因此在网页端有良好的表现。 -v2.wav;
+由于这个特性，如果你将 WebGAL 部署到服务器或网页托管平台上，玩家只需要一串链接就可以开始游玩！ -v3.wav;
+setAnimation:move-front-and-back -target=fig-left -next;
+听起来是不是非常吸引人？ -v4.wav;
+changeFigure:none -right -next;
+setAnimation:l2c -target=fig-left -next;
+WebGAL 引擎也具有动画系统和特效系统，使用 WebGAL 开发的游戏可以拥有很好的表现效果。 -v5.wav;
+pixiInit;
+pixiPerform:snow;
+比如，这个下起小雪的特效。 -v6.wav;
+除此以外，分支选择的功能也必不可少。 -v7.wav;
+你可以通过以下两个分支了解 WebGAL 的更多故事。 -v8.wav;
+pixiInit;
+choose:WebGAL 发展历程:choose1|WebGAL 冷知识:choose2;
+
+;分支1
+label:choose1;
+WebGAL 的开发初衷是能够让更多人可以更方便地制作属于自己的视觉小说。 -v9.wav;
+在一开始，WebGAL 只具备很少的功能，仅仅能支持立绘和背景的显示、语音播放和分支选择。 -v10.wav;
+在经历一年的发展后，现在已经是支持了很多优秀的表现效果的引擎了！ -v11.wav;
+除此以外，WebGAL 编辑器的加入也使得制作和导出一个游戏更加方便快捷。 -v12.wav;
+jumpLabel:end;
+
+;分支2
+label:choose2;
+这个演示游戏使用的素材是 AI 生成的。 -v13.wav;
+WebGAL 项目只用了一年不到就在 GitHub 获得了 1000 星标！ -v14.wav;
+WebGAL 的开发历程，是一个在开发中学习开发的过程。因此她经历了3次重构，并且每次几乎都是推倒重来式的。 -v15.wav;
+WebGAL 的脚本语言是为了简化制作难度而全新设计的！ -v16.wav;
+
+;结束分支
+label:end;
+为了更接近桌面端视觉小说引擎的能力，我们支持很多快捷键以及可跳转的剧情回溯。 -v17.wav;
+按下菜单中的“回想”按钮或者向上滚动鼠标滚轮试试吧！ -v18.wav;
+快速存读挡、丰富的选项、自动播放以及快进等功能，也是应有尽有。 -v19.wav;
+setTempAnimation:[{"position": {"x": 500,"y": 0},"duration": 0},{"position": {"x": 400,"y": 0},"duration": 250},{"position": {"x": 600,"y": 0},"duration": 500},{"position": {"x": 500,"y": 0},"duration": 250}] -target=fig-left -next;
+当然，这不算什么，因为大多数成熟的引擎都有这些功能。但是在 Web 端，这却是很少见的。 -v20.wav;
+我们为可能初次开发游戏的开发者提供了美观的通用 UI 和丰富的预设功能与动画。所以你可以没有顾虑地快速开始制作游戏。 -v21.wav;
+WebGAL 项目组期待你的作品能够在 WebGAL 上呈现！只需要一个链接就可以让万千用户立刻开始享受你的作品。 -v22.wav;
+感谢你关注 WebGAL 项目！ -v23.wav;
+end;
