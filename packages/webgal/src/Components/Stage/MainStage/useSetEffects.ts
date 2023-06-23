@@ -1,6 +1,4 @@
 import { baseTransform, IEffect, IStageState, ITransform } from '@/store/stageInterface';
-// import { logger } from '@/Core/util/etc/logger';
-import { setBlurFilter } from '@/Core/util/etc/setBlurFilter';
 import { WebGAL } from '@/main';
 
 export function setStageObjectEffects(stageState: IStageState) {
@@ -22,14 +20,12 @@ export function setStageEffects(effects: IEffect[]) {
         const targetPixiContainer = WebGAL.gameplay.pixiStage?.getStageObjByKey(key);
         if (targetPixiContainer) {
           const container = targetPixiContainer.pixiContainer;
-          setBlurFilter(container);
           Object.assign(container, convertTransform(effect.transform));
         }
       } else {
         const targetPixiContainer = WebGAL.gameplay.pixiStage?.getStageObjByKey(key);
         if (targetPixiContainer) {
           const container = targetPixiContainer.pixiContainer;
-          setBlurFilter(container);
           Object.assign(container, convertTransform(baseTransform));
         }
       }

@@ -6,6 +6,7 @@ import cloneDeep from 'lodash/cloneDeep';
 import { IEffect } from '@/store/stageInterface';
 import { logger } from '@/Core/util/etc/logger';
 import { isIOS } from '@/Core/initializeScript';
+import { WebGALPixiContainer } from '@/Core/controller/stage/pixi/WebGALPixiContainer';
 
 export interface IAnimationObject {
   setStartState: Function;
@@ -248,17 +249,7 @@ export default class PixiStage {
   public addBg(key: string, url: string) {
     const loader = this.assetLoader;
     // 准备用于存放这个背景的 Container
-    let thisBgContainer = new WebGALPixiContainer();
-
-    // 准备 blur Filter
-    const blurFilter = new PIXI.filters.BlurFilter();
-    for (const filter of thisBgContainer?.filters ?? []) {
-      filter.destroy();
-    }
-    thisBgContainer.filters = [blurFilter];
-    thisBgContainer = new Proxy(thisBgContainer, containerHandler as any);
-    // @ts-ignore
-    blurFilter.blur = 0;
+    const thisBgContainer = new WebGALPixiContainer();
 
     // 是否有相同 key 的背景
     const setBgIndex = this.backgroundObjects.findIndex((e) => e.key === key);
@@ -322,17 +313,7 @@ export default class PixiStage {
   public addFigure(key: string, url: string, presetPosition: 'left' | 'center' | 'right' = 'center') {
     const loader = this.assetLoader;
     // 准备用于存放这个立绘的 Container
-    let thisFigureContainer = new WebGALPixiContainer();
-
-    // 准备 blur Filter
-    const blurFilter = new PIXI.filters.BlurFilter();
-    for (const filter of thisFigureContainer?.filters ?? []) {
-      filter.destroy();
-    }
-    thisFigureContainer.filters = [blurFilter];
-    // @ts-ignore
-    thisFigureContainer = new Proxy(thisFigureContainer, containerHandler as any);
-    blurFilter.blur = 0;
+    const thisFigureContainer = new WebGALPixiContainer();
 
     // 是否有相同 key 的立绘
     const setFigIndex = this.figureObjects.findIndex((e) => e.key === key);
@@ -501,62 +482,6 @@ export function updateCurrentEffects(newEffects: IEffect[]) {
   //   }, 50);
 
   webgalStore.dispatch(setStage({ key: 'effects', value: newEffects }));
-}
-
-const containerHandler = {
-  get: function (obj: Object, prop: string) {
-    if (prop === 'blur') {
-      // @ts-ignore
-      return obj.filters[0].blur;
-    }
-    return Reflect.get(obj, prop);
-  },
-  set: function (obj: Object, prop: string, value: any) {
-    if (prop === 'blur') {
-      // @ts-ignore
-      // obj.filters[0].blur = value;
-      return Reflect.set(obj.filters[0], 'blur', value);
-      // return true;
-    } else {
-      return Reflect.set(obj, prop, value);
-    }
-  },
-};
-
-class WebGALPixiContainer extends PIXI.Container {
-  private baseX = 0;
-  private baseY = 0;
-  public constructor() {
-    super();
-  }
-
-  public get x() {
-    return super.position.x - this.baseX;
-  }
-
-  public set x(value) {
-    super.position.x = value + this.baseX;
-  }
-
-  public get y() {
-    return super.position.y - this.baseY;
-  }
-
-  public set y(value) {
-    super.position.y = value + this.baseY;
-  }
-
-  public setBaseX(x: number) {
-    const originalX = this.x;
-    this.baseX = x;
-    this.x = originalX;
-  }
-
-  public setBaseY(y: number) {
-    const originalY = this.y;
-    this.baseY = y;
-    this.y = originalY;
-  }
 }
 
 /**
