@@ -11,6 +11,7 @@ import { WebGALPixiContainer } from '@/Core/controller/stage/pixi/WebGALPixiCont
 export interface IAnimationObject {
   setStartState: Function;
   setEndState: Function;
+  getEndFilterState?: () => { [key: string]: any };
   tickerFunc: PIXI.TickerCallback<number>;
 }
 
@@ -29,7 +30,7 @@ export interface IStageObject {
   uuid: string;
   // 一般与作用目标有关
   key: string;
-  pixiContainer: PIXI.Container;
+  pixiContainer: WebGALPixiContainer;
   // 相关的源 url
   sourceUrl: string;
 }
@@ -207,6 +208,11 @@ export default class PixiStage {
       if (thisTickerFunc.targetKey) {
         const target = this.getStageObjByKey(thisTickerFunc.targetKey);
         if (target) {
+          let filters = {};
+          const filterEffects = thisTickerFunc.animationObject.getEndFilterState?.();
+          if (filterEffects) {
+            filters = filterEffects;
+          }
           const targetTransform = {
             alpha: target.pixiContainer.alpha,
             scale: {
@@ -224,6 +230,7 @@ export default class PixiStage {
             rotation: target.pixiContainer.rotation,
             // @ts-ignore
             blur: target.pixiContainer.blur,
+            webgalFilters: filters,
           };
           const prevEffects = webgalStore.getState().stage.effects;
           const newEffects = cloneDeep(prevEffects);

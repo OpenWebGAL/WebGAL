@@ -1,11 +1,15 @@
 import * as PIXI from 'pixi.js';
+import { WebGALPixiFilters } from '@/Core/controller/stage/pixi/WebGALPixiFilters';
+import { logger } from '@/Core/util/etc/logger';
 
 export class WebGALPixiContainer extends PIXI.Container {
   private baseX = 0;
   private baseY = 0;
 
-  private containerFilters = new Map<string, PIXI.Filter>();
-
+  // eslint-disable-next-line @typescript-eslint/member-ordering
+  public containerFilters = new Map<string, PIXI.Filter>();
+  // eslint-disable-next-line @typescript-eslint/member-ordering
+  public webgalFilters = new WebGALPixiFilters(this.containerFilters, this);
   public constructor() {
     super();
   }
@@ -64,9 +68,12 @@ export class WebGALPixiContainer extends PIXI.Container {
 
   private addFilter(filter: PIXI.Filter) {
     if (this.filters) {
+      logger.debug('PUSH FILTER', filter);
       this.filters.push(filter);
     } else {
-      this.filters = [filter];
+      logger.debug('INIT FILTER', filter);
+      this.filters = [];
+      this.filters.push(filter);
     }
   }
 }

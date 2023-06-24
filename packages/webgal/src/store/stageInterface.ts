@@ -39,6 +39,7 @@ export interface ITransform {
   };
   rotation: number;
   blur: number;
+  webgalFilters: { [key: string]: any };
 }
 
 /**
@@ -69,6 +70,7 @@ export const baseTransform: ITransform = {
   },
   rotation: 0,
   blur: 0,
+  webgalFilters: {},
 };
 
 export interface IFreeFigure {
