@@ -15,10 +15,10 @@ import { WebGAL } from '@/main';
 export const changeBg = (sentence: ISentence): IPerform => {
   const dispatch = webgalStore.dispatch;
   if (getSentenceArgByKey(sentence, 'enter')) {
-    WebGAL.animationManager.nextEnterAnimationName = getSentenceArgByKey(sentence, 'enter')!.toString();
+    WebGAL.animationManager.nextEnterAnimationName.set('bg-main', getSentenceArgByKey(sentence, 'enter')!.toString());
   }
   if (getSentenceArgByKey(sentence, 'exit')) {
-    WebGAL.animationManager.nextExitAnimationName = getSentenceArgByKey(sentence, 'enter')!.toString();
+    WebGAL.animationManager.nextExitAnimationName.set('bg-main-off', getSentenceArgByKey(sentence, 'exit')!.toString());
   }
   dispatch(setStage({ key: 'bgName', value: sentence.content }));
 

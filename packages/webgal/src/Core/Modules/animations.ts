@@ -3,6 +3,8 @@ import { WebGAL } from '@/main';
 import cloneDeep from 'lodash/cloneDeep';
 import { logger } from '@/Core/util/etc/logger';
 import { generateTimelineObj } from '@/Core/controller/stage/pixi/animations/timeline';
+import { generateUniversalSoftInAnimationObj } from '@/Core/controller/stage/pixi/animations/universalSoftIn';
+import { generateUniversalSoftOffAnimationObj } from '@/Core/controller/stage/pixi/animations/universalSoftOff';
 
 export interface IUserAnimation {
   name: string;
@@ -10,8 +12,8 @@ export interface IUserAnimation {
 }
 
 export class AnimationManager {
-  public nextEnterAnimationName = '';
-  public nextExitAnimationName = '';
+  public nextEnterAnimationName: Map<string, string> = new Map();
+  public nextExitAnimationName: Map<string, string> = new Map();
   private animations: Array<IUserAnimation> = [];
 
   public addAnimation(animation: IUserAnimation) {
@@ -47,4 +49,52 @@ export function getAnimateDuration(animationName: string) {
     return duration;
   }
   return 0;
+}
+
+export function getEnterExitAnimation(
+  target: string,
+  type: 'enter' | 'exit',
+): {
+  duration: number;
+  animation: {
+    setStartState: () => void;
+    tickerFunc: (delta: number) => void;
+    setEndState: () => void;
+  } | null;
+} {
+  if (type === 'enter') {
+    let duration = 1000;
+    // 走默认动画
+    let animation: {
+      setStartState: () => void;
+      tickerFunc: (delta: number) => void;
+      setEndState: () => void;
+    } | null = generateUniversalSoftInAnimationObj(target, duration);
+    const animarionName = WebGAL.animationManager.nextEnterAnimationName.get(target);
+    if (animarionName) {
+      logger.debug('取代默认进入动画', target);
+      animation = getAnimationObject(animarionName, target, getAnimateDuration(animarionName));
+      duration = getAnimateDuration(animarionName);
+      // 用后重置
+      WebGAL.animationManager.nextEnterAnimationName.delete(target);
+    }
+    return { duration, animation };
+  } else {
+    let duration = 1000;
+    // 走默认动画
+    let animation: {
+      setStartState: () => void;
+      tickerFunc: (delta: number) => void;
+      setEndState: () => void;
+    } | null = generateUniversalSoftOffAnimationObj(target, duration);
+    const animarionName = WebGAL.animationManager.nextExitAnimationName.get(target);
+    if (animarionName) {
+      logger.debug('取代默认退出动画', target);
+      animation = getAnimationObject(animarionName, target, getAnimateDuration(animarionName));
+      duration = getAnimateDuration(animarionName);
+      // 用后重置
+      WebGAL.animationManager.nextExitAnimationName.delete(target);
+    }
+    return { duration, animation };
+  }
 }
