@@ -37,10 +37,14 @@ export function generateTimelineObj(
         ...gsapEffect.position,
         duration: gsapEffectDuration,
       });
-      // gsapTimeline4.to(target.pixiContainer.pivot, {
-      //   ...gsapEffect.pivot,
-      //   duration: gsapEffectDuration,
-      // });
+      /**
+       * filters
+       */
+      const { alpha, rotation, blur, duration, scale, position, pivot, ...rest } = gsapEffect;
+      gsapTimeline4.to(target.pixiContainer, {
+        ...rest,
+        duration: gsapEffectDuration,
+      });
     }
   }
 
@@ -72,9 +76,16 @@ export function generateTimelineObj(
    */
   function tickerFunc(delta: number) {}
 
+  function getEndFilterEffect() {
+    const gsapEffect = timeline[timeline.length - 1];
+    const { alpha, rotation, blur, duration, scale, position, pivot, ...rest } = gsapEffect;
+    return rest;
+  }
+
   return {
     setStartState,
     setEndState,
     tickerFunc,
+    getEndFilterEffect,
   };
 }
