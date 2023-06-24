@@ -43,6 +43,7 @@ export function useSetBg(stageState: IStageState) {
         // 用后重置
         WebGAL.animationManager.nextEnterAnimationName = '';
       }
+      console.log(animation);
       WebGAL.gameplay.pixiStage!.registerPresetAnimation(animation, 'bg-main-softin', thisBgKey, stageState.effects);
       setTimeout(() => WebGAL.gameplay.pixiStage!.removeAnimationWithSetEffects('bg-main-softin'), duration);
     } else {
