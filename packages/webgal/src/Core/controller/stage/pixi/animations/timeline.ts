@@ -37,10 +37,10 @@ export function generateTimelineObj(
         ...gsapEffect.position,
         duration: gsapEffectDuration,
       });
-      // gsapTimeline4.to(target.pixiContainer.pivot, {
-      //   ...gsapEffect.pivot,
-      //   duration: gsapEffectDuration,
-      // });
+      gsapTimeline4.to(target.pixiContainer.webgalFilters, {
+        ...gsapEffect.webgalFilters,
+        duration: gsapEffectDuration,
+      });
     }
   }
 
@@ -66,6 +66,10 @@ export function generateTimelineObj(
     gsapTimeline5 = null;
   }
 
+  function getEndFilterState() {
+    return timeline[timeline.length - 1]?.webgalFilters ?? {};
+  }
+
   /**
    * 在此书写动画每一帧执行的函数
    * @param delta
@@ -76,5 +80,6 @@ export function generateTimelineObj(
     setStartState,
     setEndState,
     tickerFunc,
+    getEndFilterState,
   };
 }
