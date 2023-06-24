@@ -4,10 +4,8 @@ import { getSentenceArgByKey } from '@/Core/util/getSentenceArg';
 import { IAnimationObject } from '@/Core/controller/stage/pixi/PixiController';
 import { logger } from '@/Core/util/etc/logger';
 import { webgalStore } from '@/store/store';
-import { generateTimelineObj } from '@/Core/controller/stage/pixi/animations/timeline';
-import cloneDeep from 'lodash/cloneDeep';
-import { baseTransform } from '@/store/stageInterface';
 import { WebGAL } from '@/main';
+import { getAnimateDuration, getAnimationObject } from '../Modules/animations';
 
 /**
  * 设置背景动画
@@ -46,30 +44,3 @@ export const setAnimation = (sentence: ISentence): IPerform => {
     stopTimeout: undefined, // 暂时不用，后面会交给自动清除
   };
 };
-
-function getAnimationObject(animationName: string, target: string, duration: number) {
-  const effect = WebGAL.animationManager.getAnimations().find((ani) => ani.name === animationName);
-  if (effect) {
-    const mappedEffects = effect.effects.map((effect) => {
-      const newEffect = cloneDeep({ ...baseTransform, duration: 0 });
-      Object.assign(newEffect, effect);
-      newEffect.duration = effect.duration / 1000;
-      return newEffect;
-    });
-    logger.debug('装载自定义动画', mappedEffects);
-    return generateTimelineObj(mappedEffects, target, duration);
-  }
-  return null;
-}
-
-function getAnimateDuration(animationName: string) {
-  const effect = WebGAL.animationManager.getAnimations().find((ani) => ani.name === animationName);
-  if (effect) {
-    let duration = 0;
-    effect.effects.forEach((e) => {
-      duration += e.duration;
-    });
-    return duration;
-  }
-  return 0;
-}

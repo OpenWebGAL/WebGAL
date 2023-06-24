@@ -135,7 +135,8 @@ export default class PixiStage {
    * @param key
    * @param target
    */
-  public registerAnimation(animationObject: IAnimationObject, key: string, target = 'default') {
+  public registerAnimation(animationObject: IAnimationObject | null, key: string, target = 'default') {
+    if (!animationObject) return;
     this.stageAnimations.push({ uuid: uuid(), animationObject, key: key, targetKey: target, type: 'common' });
     // 上锁
     this.lockStageObject(target);
@@ -152,11 +153,12 @@ export default class PixiStage {
    */
   // eslint-disable-next-line max-params
   public registerPresetAnimation(
-    animationObject: IAnimationObject,
+    animationObject: IAnimationObject | null,
     key: string,
     target = 'default',
     currentEffects: IEffect[],
   ) {
+    if (!animationObject) return;
     const effect = currentEffects.find((effect) => effect.target === target);
     if (effect) {
       const targetPixiContainer = this.getStageObjByKey(target);
