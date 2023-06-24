@@ -54,6 +54,8 @@ export class WebGALPixiContainer extends PIXI.Container {
       return blurFilterFromMap;
     } else {
       const blurFilter = new PIXI.filters.BlurFilter();
+      // 默认的 blur 是8，覆盖掉
+      blurFilter.blur = 0;
       this.addFilter(blurFilter);
       this.containerFilters.set('blur', blurFilter);
       return blurFilter;
