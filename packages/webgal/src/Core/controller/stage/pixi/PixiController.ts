@@ -12,6 +12,7 @@ export interface IAnimationObject {
   setStartState: Function;
   setEndState: Function;
   tickerFunc: PIXI.TickerCallback<number>;
+  getEndFilterEffect?: Function;
 }
 
 interface IStageAnimationObject {
@@ -203,6 +204,7 @@ export default class PixiStage {
       const thisTickerFunc = this.stageAnimations[index];
       this.currentApp?.ticker.remove(thisTickerFunc.animationObject.tickerFunc);
       thisTickerFunc.animationObject.setEndState();
+      const webgalFilters = thisTickerFunc.animationObject.getEndFilterEffect?.() ?? {};
       this.unlockStageObject(thisTickerFunc.targetKey ?? 'default');
       if (thisTickerFunc.targetKey) {
         const target = this.getStageObjByKey(thisTickerFunc.targetKey);
@@ -224,6 +226,7 @@ export default class PixiStage {
             rotation: target.pixiContainer.rotation,
             // @ts-ignore
             blur: target.pixiContainer.blur,
+            ...webgalFilters,
           };
           const prevEffects = webgalStore.getState().stage.effects;
           const newEffects = cloneDeep(prevEffects);

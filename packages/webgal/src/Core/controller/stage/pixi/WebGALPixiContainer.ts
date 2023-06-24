@@ -1,3 +1,4 @@
+import { OldFilmFilter } from '@pixi/filter-old-film';
 import * as PIXI from 'pixi.js';
 
 export class WebGALPixiContainer extends PIXI.Container {
@@ -60,6 +61,31 @@ export class WebGALPixiContainer extends PIXI.Container {
       this.containerFilters.set('blur', blurFilter);
       return blurFilter;
     }
+  }
+
+  /**
+   * old film filter
+   * @private
+   */
+  private getOrCreateOldFilmFilter() {
+    const blurFilterFromMap = this.containerFilters.get('oldFilm');
+    if (blurFilterFromMap) {
+      return blurFilterFromMap;
+    } else {
+      const oldFilm = new OldFilmFilter();
+      this.addFilter(oldFilm);
+      this.containerFilters.set('oldFilm', oldFilm);
+      return oldFilm;
+    }
+  }
+  public get oldFilm(): number {
+    this.getOrCreateOldFilmFilter();
+    return 0;
+  }
+
+  public set oldFilm(value: number) {
+    console.log('set oldfilm');
+    this.getOrCreateOldFilmFilter();
   }
 
   private addFilter(filter: PIXI.Filter) {
