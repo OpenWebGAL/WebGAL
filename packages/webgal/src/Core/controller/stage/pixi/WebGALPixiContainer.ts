@@ -72,25 +72,31 @@ export class WebGALPixiContainer extends PIXI.Container {
    * old film filter
    * @private
    */
-  private getOrCreateOldFilmFilter() {
+  private getOrCreateOldFilmFilter(createMode = true) {
     const blurFilterFromMap = this.containerFilters.get('oldFilm');
     if (blurFilterFromMap) {
       return blurFilterFromMap;
     } else {
-      const oldFilm = new OldFilmFilter();
-      this.addFilter(oldFilm);
-      this.containerFilters.set('oldFilm', oldFilm);
-      return oldFilm;
+      if (createMode) {
+        const oldFilm = new OldFilmFilter();
+        this.addFilter(oldFilm);
+        this.containerFilters.set('oldFilm', oldFilm);
+        return oldFilm;
+      } else return null;
     }
   }
   public get oldFilm(): number {
-    this.getOrCreateOldFilmFilter();
+    if (this.getOrCreateOldFilmFilter(false)) return 1;
     return 0;
   }
 
   public set oldFilm(value: number) {
-    console.log('set oldfilm');
-    this.getOrCreateOldFilmFilter();
+    /**
+     * 如果是0，就移除这个滤镜
+     */
+    if (value === 0) {
+      this.removeFilter('oldFilm');
+    } else this.getOrCreateOldFilmFilter();
   }
 
   /**
@@ -223,6 +229,17 @@ export class WebGALPixiContainer extends PIXI.Container {
       this.filters.push(filter);
     } else {
       this.filters = [filter];
+    }
+  }
+
+  private removeFilter(name: string) {
+    const filter = this.containerFilters.get(name);
+    if (filter) {
+      const index = (this?.filters ?? []).findIndex((e) => e === filter);
+      if (this.filters) {
+        this.filters.splice(index, 1);
+        this.containerFilters.delete(name);
+      }
     }
   }
 }
