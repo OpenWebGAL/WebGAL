@@ -103,125 +103,155 @@ export class WebGALPixiContainer extends PIXI.Container {
    * dot film filter
    * @private
    */
-  private getOrCreateDotFilter() {
+  private getOrCreateDotFilter(createMode = true) {
     const blurFilterFromMap = this.containerFilters.get('dotFilm');
     if (blurFilterFromMap) {
       return blurFilterFromMap;
     } else {
-      const dotFilm = new DotFilter();
-      this.addFilter(dotFilm);
-      this.containerFilters.set('dotFilm', dotFilm);
-      return dotFilm;
+      if (createMode) {
+        const dotFilm = new DotFilter();
+        this.addFilter(dotFilm);
+        this.containerFilters.set('dotFilm', dotFilm);
+        return dotFilm;
+      } else return null;
     }
   }
   public get dotFilm(): number {
-    this.getOrCreateDotFilter();
+    if (this.getOrCreateDotFilter(false)) return 1;
     return 0;
   }
 
   public set dotFilm(value: number) {
-    console.log('set dotFilm');
-    this.getOrCreateDotFilter();
+    /**
+     * 如果是0，就移除这个滤镜
+     */
+    if (value === 0) {
+      this.removeFilter('dotFilm');
+    } else this.getOrCreateDotFilter();
   }
 
   /**
    * reflection film filter
    * @private
    */
-  private getOrCreateReflectionFilter() {
+  private getOrCreateReflectionFilter(createMode = true) {
     const blurFilterFromMap = this.containerFilters.get('reflectionFilm');
     if (blurFilterFromMap) {
       return blurFilterFromMap;
     } else {
-      const reflectionFilm = new ReflectionFilter();
-      this.addFilter(reflectionFilm);
-      this.containerFilters.set('reflectionFilm', reflectionFilm);
-      return reflectionFilm;
+      if (createMode) {
+        const reflectionFilm = new ReflectionFilter();
+        this.addFilter(reflectionFilm);
+        this.containerFilters.set('reflectionFilm', reflectionFilm);
+        return reflectionFilm;
+      } else return null;
     }
   }
   public get reflectionFilm(): number {
-    this.getOrCreateReflectionFilter();
+    if (this.getOrCreateReflectionFilter(false)) return 1;
     return 0;
   }
 
   public set reflectionFilm(value: number) {
-    console.log('set reflectionFilm');
-    this.getOrCreateReflectionFilter();
+    /**
+     * 如果是0，就移除这个滤镜
+     */
+    if (value === 0) {
+      this.removeFilter('reflectionFilm');
+    } else this.getOrCreateReflectionFilter();
   }
 
    /**
    * glitchFilter film filter
    * @private
    */
-  private getOrCreateGlitchFilter() {
+  private getOrCreateGlitchFilter(createMode = true) {
     const blurFilterFromMap = this.containerFilters.get('glitchFilm');
     if (blurFilterFromMap) {
       return blurFilterFromMap;
     } else {
-      const glitchFilm = new GlitchFilter();
-      this.addFilter(glitchFilm);
-      this.containerFilters.set('glitchFilm', glitchFilm);
-      return glitchFilm;
+      if (createMode) {
+        const glitchFilm = new GlitchFilter();
+        this.addFilter(glitchFilm);
+        this.containerFilters.set('glitchFilm', glitchFilm);
+        return glitchFilm;
+      } else return null;
     }
   }
   public get glitchFilm(): number {
-    this.getOrCreateGlitchFilter();
+    if (this.getOrCreateGlitchFilter(false)) return 1;
     return 0;
   }
 
   public set glitchFilm(value: number) {
-    console.log('set glitchFilm');
-    this.getOrCreateGlitchFilter();
+    /**
+     * 如果是0，就移除这个滤镜
+     */
+    if (value === 0) {
+      this.removeFilter('glitchFilm');
+    } else this.getOrCreateGlitchFilter();
   }
 
    /**
    * rgbSplitFilter film filter
    * @private
    */
-  private getOrCreateRGBSplitFilter() {
+  private getOrCreateRGBSplitFilter(createMode = true) {
     const blurFilterFromMap = this.containerFilters.get('rgbFilm');
     if (blurFilterFromMap) {
       return blurFilterFromMap;
     } else {
-      const rgbFilm = new RGBSplitFilter();
-      this.addFilter(rgbFilm);
-      this.containerFilters.set('rgbFilm', rgbFilm);
-      return rgbFilm;
+      if (createMode) {
+        const rgbFilm = new RGBSplitFilter();
+        this.addFilter(rgbFilm);
+        this.containerFilters.set('rgbFilm', rgbFilm);
+        return rgbFilm;
+      }
     }
   }
   public get rgbFilm(): number {
-    this.getOrCreateRGBSplitFilter();
+    if (this.getOrCreateRGBSplitFilter(false)) return 1;
     return 0;
   }
 
   public set rgbFilm(value: number) {
-    console.log('set rgbFilm');
-    this.getOrCreateRGBSplitFilter();
+    /**
+     * 如果是0，就移除这个滤镜
+     */
+    if (value === 0) {
+      this.removeFilter('rgbFilm');
+    } else this.getOrCreateRGBSplitFilter();
   }
 
    /**
    * godrayFilter film filter
    * @private
    */
-  private getOrCreateGodrayFilter() {
+  private getOrCreateGodrayFilter(createMode = true) {
     const blurFilterFromMap = this.containerFilters.get('godrayFilm');
     if (blurFilterFromMap) {
       return blurFilterFromMap;
     } else {
-      const godrayFilm = new GodrayFilter();
-      this.addFilter(godrayFilm);
-      this.containerFilters.set('godrayFilm', godrayFilm);
-      return godrayFilm;
+      if (createMode) {
+        const godrayFilm = new GodrayFilter();
+        this.addFilter(godrayFilm);
+        this.containerFilters.set('godrayFilm', godrayFilm);
+        return godrayFilm;
+      }
     }
   }
   public get godrayFilm(): number {
-    this.getOrCreateGodrayFilter();
+    if (this.getOrCreateGodrayFilter(false)) return 1;
     return 0;
   }
 
   public set godrayFilm(value: number) {
-    console.log('set godrayFilm');
-    this.getOrCreateGodrayFilter();
+    /**
+     * 如果是0，就移除这个滤镜
+     */
+    if (value === 0) {
+      this.removeFilter('godrayFilm');
+    } else this.getOrCreateGodrayFilter();
   }
 
   private addFilter(filter: PIXI.Filter) {
