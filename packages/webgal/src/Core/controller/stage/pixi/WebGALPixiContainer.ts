@@ -161,7 +161,7 @@ export class WebGALPixiContainer extends PIXI.Container {
     } else this.getOrCreateReflectionFilter();
   }
 
-   /**
+  /**
    * glitchFilter film filter
    * @private
    */
@@ -192,7 +192,7 @@ export class WebGALPixiContainer extends PIXI.Container {
     } else this.getOrCreateGlitchFilter();
   }
 
-   /**
+  /**
    * rgbSplitFilter film filter
    * @private
    */
@@ -223,7 +223,7 @@ export class WebGALPixiContainer extends PIXI.Container {
     } else this.getOrCreateRGBSplitFilter();
   }
 
-   /**
+  /**
    * godrayFilter film filter
    * @private
    */
