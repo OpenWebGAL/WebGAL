@@ -15,13 +15,15 @@
 
 ## 在线体验
 
-一个简短的示例：
+WebGAL 示例游戏，一般会演示最新开发的功能：
 
 https://demo.openwebgal.com
 
-一个完整的游戏：
+完整的游戏：
 
 [铃色☆记忆](http://hoshinasuzu.cn/) by 星奈组  [备用链接](http://hoshinasuzu.cc/)
+
+[Elf of Era Idols Project](https://store.steampowered.com/app/2414730/Elf_of_Era_Idols_Project/) (通过 Steam 获取)
 
 ## 使用 WebGAL 制作游戏
 
