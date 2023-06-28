@@ -455,7 +455,7 @@ export default class PixiStage {
           });
         } catch (error) {
           front.callback();
-          this.assetLoader.reset();
+          // 这里可能需要 reset，待定
           this.callLoader();
         }
       }
