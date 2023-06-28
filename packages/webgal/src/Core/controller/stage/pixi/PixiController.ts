@@ -7,6 +7,8 @@ import { IEffect } from '@/store/stageInterface';
 import { logger } from '@/Core/util/etc/logger';
 import { isIOS } from '@/Core/initializeScript';
 import { WebGALPixiContainer } from '@/Core/controller/stage/pixi/WebGALPixiContainer';
+import { Simulate } from 'react-dom/test-utils';
+import load = Simulate.load;
 
 export interface IAnimationObject {
   setStartState: Function;
@@ -252,7 +254,8 @@ export default class PixiStage {
    * @param url 背景图片url
    */
   public addBg(key: string, url: string) {
-    const loader = this.assetLoader;
+    // const loader = this.assetLoader;
+    const loader = new PIXI.Loader();
     // 准备用于存放这个背景的 Container
     const thisBgContainer = new WebGALPixiContainer();
 
@@ -302,7 +305,7 @@ export default class PixiStage {
     const resourses = Object.keys(loader.resources);
     this.cacheGC();
     if (!resourses.includes(url)) {
-      this.loadAsset(url, setup);
+      loader.add(url).load(setup);
     } else {
       // 复用
       setup();
@@ -316,7 +319,7 @@ export default class PixiStage {
    * @param presetPosition
    */
   public addFigure(key: string, url: string, presetPosition: 'left' | 'center' | 'right' = 'center') {
-    const loader = this.assetLoader;
+    const loader = new PIXI.Loader();
     // 准备用于存放这个立绘的 Container
     const thisFigureContainer = new WebGALPixiContainer();
 
@@ -376,7 +379,7 @@ export default class PixiStage {
     const resourses = Object.keys(loader.resources);
     this.cacheGC();
     if (!resourses.includes(url)) {
-      this.loadAsset(url, setup);
+      loader.add(url).load(setup);
     } else {
       // 复用
       setup();
@@ -431,6 +434,9 @@ export default class PixiStage {
   }
 
   private loadAsset(url: string, callback: () => void) {
+    /**
+     * Loader 复用疑似有问题，转而采用先前的单独方式
+     */
     this.loadQueue.push({ url, callback });
     /**
      * 尝试启动加载
