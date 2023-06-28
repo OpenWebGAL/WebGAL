@@ -448,10 +448,16 @@ export default class PixiStage {
     if (!this.assetLoader.loading) {
       const front = this.loadQueue.shift();
       if (front) {
-        this.assetLoader.add(front.url).load(() => {
+        try {
+          this.assetLoader.add(front.url).load(() => {
+            front.callback();
+            this.callLoader();
+          });
+        } catch (error) {
           front.callback();
+          this.assetLoader.reset();
           this.callLoader();
-        });
+        }
       }
     }
   }
