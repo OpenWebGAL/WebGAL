@@ -255,7 +255,7 @@ export default class PixiStage {
    */
   public addBg(key: string, url: string) {
     // const loader = this.assetLoader;
-    const loader = new PIXI.Loader();
+    const loader = this.assetLoader;
     // 准备用于存放这个背景的 Container
     const thisBgContainer = new WebGALPixiContainer();
 
@@ -275,7 +275,7 @@ export default class PixiStage {
 
     // 完成图片加载后执行的函数
     const setup = () => {
-      const texture = loader.resources[url].texture;
+      const texture = loader.resources?.[url]?.texture;
       if (texture && thisBgContainer) {
         /**
          * 重设大小
@@ -305,7 +305,7 @@ export default class PixiStage {
     const resourses = Object.keys(loader.resources);
     this.cacheGC();
     if (!resourses.includes(url)) {
-      loader.add(url).load(setup);
+      this.loadAsset(url, setup);
     } else {
       // 复用
       setup();
@@ -319,7 +319,7 @@ export default class PixiStage {
    * @param presetPosition
    */
   public addFigure(key: string, url: string, presetPosition: 'left' | 'center' | 'right' = 'center') {
-    const loader = new PIXI.Loader();
+    const loader = this.assetLoader;
     // 准备用于存放这个立绘的 Container
     const thisFigureContainer = new WebGALPixiContainer();
 
@@ -338,7 +338,7 @@ export default class PixiStage {
 
     // 完成图片加载后执行的函数
     const setup = () => {
-      const texture = loader.resources[url].texture;
+      const texture = loader.resources?.[url]?.texture;
       if (texture && thisFigureContainer) {
         /**
          * 重设大小
@@ -379,7 +379,7 @@ export default class PixiStage {
     const resourses = Object.keys(loader.resources);
     this.cacheGC();
     if (!resourses.includes(url)) {
-      loader.add(url).load(setup);
+      this.loadAsset(url, setup);
     } else {
       // 复用
       setup();
