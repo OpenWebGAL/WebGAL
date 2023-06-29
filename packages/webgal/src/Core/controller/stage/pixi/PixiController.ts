@@ -459,7 +459,7 @@ export default class PixiStage {
             });
           }
         } catch (error) {
-          logger.fatal('PIXI 加载器故障', error);
+          logger.fatal('PIXI Loader 故障', error);
           front.callback();
           // this.assetLoader.reset(); // 暂时先不用重置
           this.callLoader();
