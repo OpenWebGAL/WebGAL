@@ -449,13 +449,19 @@ export default class PixiStage {
       const front = this.loadQueue.shift();
       if (front) {
         try {
-          this.assetLoader.add(front.url).load(() => {
+          if (this.assetLoader.resources[front.url]) {
             front.callback();
             this.callLoader();
-          });
+          } else {
+            this.assetLoader.add(front.url).load(() => {
+              front.callback();
+              this.callLoader();
+            });
+          }
         } catch (error) {
+          logger.fatal('PIXI 加载器故障', error);
           front.callback();
-          this.assetLoader.reset();
+          // this.assetLoader.reset(); // 暂时先不用重置
           this.callLoader();
         }
       }
