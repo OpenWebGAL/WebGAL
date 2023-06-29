@@ -69,7 +69,7 @@ export const playEffect = (sentence: ISentence): IPerform => {
         };
         resolve(perform);
         VocalControl.oncanplay = () => {
-          VocalControl.play().then();
+          VocalControl?.play();
         };
         VocalControl.onended = () => {
           for (const e of WebGAL.gameplay.performController.performList) {

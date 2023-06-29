@@ -54,7 +54,7 @@ export const playVocal = (sentence: ISentence) => {
           };
           WebGAL.gameplay.performController.arrangeNewPerform(perform, sentence, false);
           VocalControl.oncanplay = () => {
-            VocalControl.play();
+            VocalControl?.play();
           };
           VocalControl.onended = () => {
             for (const e of WebGAL.gameplay.performController.performList) {

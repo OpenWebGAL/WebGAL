@@ -111,7 +111,7 @@ export const BottomControlPanel = () => {
               if (VocalControl !== null) {
                 VocalControl.currentTime = 0;
                 VocalControl.pause();
-                VocalControl.play();
+                VocalControl?.play();
               }
             }}
           >
