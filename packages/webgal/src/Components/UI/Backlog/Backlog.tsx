@@ -52,7 +52,7 @@ export const Backlog = () => {
                       const userDataStore = webgalStore.getState().userData;
                       const mainVol = userDataStore.optionData.volumeMain;
                       backlog_audio_element.volume = mainVol * 0.01 * userDataStore.optionData.vocalVolume * 0.01;
-                      backlog_audio_element.play();
+                      backlog_audio_element?.play();
                     }
                   }}
                   className={styles.backlog_item_button_element}

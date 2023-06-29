@@ -88,7 +88,7 @@ export const playVideo = (sentence: ISentence): IPerform => {
               vocalElement.volume = vocalVol.toString();
             }
 
-            VocalControl.play();
+            VocalControl?.play();
           };
           VocalControl.onended = () => {
             for (const e of WebGAL.gameplay.performController.performList) {

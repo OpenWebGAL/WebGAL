@@ -74,7 +74,7 @@ export function ExtraBgm() {
         <div
           onClick={() => {
             const bgmControl: HTMLAudioElement = document.getElementById('currentBgm') as HTMLAudioElement;
-            bgmControl.play().then();
+            bgmControl?.play().then();
           }}
           className={styles.bgmControlButton}
         >
