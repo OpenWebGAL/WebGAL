@@ -27,18 +27,30 @@ export class WebGALPixiContainer extends PIXI.Container {
   }
 
   public get x() {
+    if (!super.position) {
+      return 0;
+    }
     return super.position.x - this.baseX;
   }
 
   public set x(value) {
+    if (!super.position) {
+      return;
+    }
     super.position.x = value + this.baseX;
   }
 
   public get y() {
+    if (!super.position) {
+      return 0;
+    }
     return super.position.y - this.baseY;
   }
 
   public set y(value) {
+    if (!super.position) {
+      return;
+    }
     super.position.y = value + this.baseY;
   }
 
