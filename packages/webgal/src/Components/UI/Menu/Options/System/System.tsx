@@ -13,6 +13,8 @@ import useTrans from '@/hooks/useTrans';
 import useLanguage from '@/hooks/useLanguage';
 import languages, { language } from '@/config/language';
 import { WebGAL } from '@/main';
+import { useState } from 'react';
+import About from '@/Components/UI/Menu/Options/System/About';
 
 export function System() {
   const userDataState = useSelector((state: RootState) => state.userData);
@@ -42,6 +44,12 @@ export function System() {
     inputElement.type = 'file';
     inputElement.onchange = importSavesEventHandler;
     inputElement.click();
+  }
+
+  const [showAbout, setShowAbout] = useState(false);
+
+  function toggleAbout() {
+    setShowAbout(!showAbout);
   }
 
   function importSavesEventHandler(ev: any) {
@@ -75,90 +83,98 @@ export function System() {
 
   return (
     <div className={styles.Options_main_content_half}>
-      <NormalOption key="option1" title={t('autoSpeed.title')}>
-        <NormalButton
-          textList={t('autoSpeed.options.slow', 'autoSpeed.options.medium', 'autoSpeed.options.fast')}
-          functionList={[
-            () => {
-              dispatch(setOptionData({ key: 'autoSpeed', value: playSpeed.slow }));
-              setStorage();
-            },
-            () => {
-              dispatch(setOptionData({ key: 'autoSpeed', value: playSpeed.normal }));
-              setStorage();
-            },
-            () => {
-              dispatch(setOptionData({ key: 'autoSpeed', value: playSpeed.fast }));
-              setStorage();
-            },
-          ]}
-          currentChecked={userDataState.optionData.autoSpeed}
-        />
-      </NormalOption>
-      <NormalOption key="option7" title={t('language.title')}>
-        <NormalButton
-          currentChecked={userDataState.optionData.language}
-          textList={Object.values(languages)}
-          functionList={Object.keys(languages).map(
-            (k) => () => setLanguage(language[k as unknown as number] as unknown as language),
-          )}
-        />
-      </NormalOption>
-      <NormalOption key="option2" title={t('resetData.title')}>
-        <NormalButton
-          textList={t(
-            'resetData.options.clearGameSave',
-            'resetData.options.resetSettings',
-            'resetData.options.clearAll',
-          )}
-          functionList={[
-            () => {
-              showGlogalDialog({
-                title: t('resetData.dialogs.clearGameSave'),
-                leftText: t('$common.yes'),
-                rightText: t('$common.no'),
-                leftFunc: () => {
-                  dispatch(resetSaveData());
-                  syncStorageFast();
+      {showAbout && <About onClose={toggleAbout} />}
+      {!showAbout && (
+        <>
+          <NormalOption key="option1" title={t('autoSpeed.title')}>
+            <NormalButton
+              textList={t('autoSpeed.options.slow', 'autoSpeed.options.medium', 'autoSpeed.options.fast')}
+              functionList={[
+                () => {
+                  dispatch(setOptionData({ key: 'autoSpeed', value: playSpeed.slow }));
+                  setStorage();
                 },
-                rightFunc: () => {},
-              });
-            },
-            () => {
-              showGlogalDialog({
-                title: t('resetData.dialogs.resetSettings'),
-                leftText: t('$common.yes'),
-                rightText: t('$common.no'),
-                leftFunc: () => {
-                  dispatch(resetOptionSet());
-                  syncStorageFast();
+                () => {
+                  dispatch(setOptionData({ key: 'autoSpeed', value: playSpeed.normal }));
+                  setStorage();
                 },
-                rightFunc: () => {},
-              });
-            },
-            () => {
-              showGlogalDialog({
-                title: t('resetData.dialogs.clearAll'),
-                leftText: t('$common.yes'),
-                rightText: t('$common.no'),
-                leftFunc: () => {
-                  dispatch(resetAllData());
-                  syncStorageFast();
+                () => {
+                  dispatch(setOptionData({ key: 'autoSpeed', value: playSpeed.fast }));
+                  setStorage();
                 },
-                rightFunc: () => {},
-              });
-            },
-          ]}
-          currentChecked={3}
-        />
-      </NormalOption>
-      <NormalOption key="option3" title={t('gameSave.title')}>
-        <NormalButton
-          textList={t('gameSave.options.export', 'gameSave.options.import')}
-          functionList={[exportSaves, importSaves]}
-          currentChecked={2}
-        />
-      </NormalOption>
+              ]}
+              currentChecked={userDataState.optionData.autoSpeed}
+            />
+          </NormalOption>
+          <NormalOption key="option7" title={t('language.title')}>
+            <NormalButton
+              currentChecked={userDataState.optionData.language}
+              textList={Object.values(languages)}
+              functionList={Object.keys(languages).map(
+                (k) => () => setLanguage(language[k as unknown as number] as unknown as language),
+              )}
+            />
+          </NormalOption>
+          <NormalOption key="option2" title={t('resetData.title')}>
+            <NormalButton
+              textList={t(
+                'resetData.options.clearGameSave',
+                'resetData.options.resetSettings',
+                'resetData.options.clearAll',
+              )}
+              functionList={[
+                () => {
+                  showGlogalDialog({
+                    title: t('resetData.dialogs.clearGameSave'),
+                    leftText: t('$common.yes'),
+                    rightText: t('$common.no'),
+                    leftFunc: () => {
+                      dispatch(resetSaveData());
+                      syncStorageFast();
+                    },
+                    rightFunc: () => {},
+                  });
+                },
+                () => {
+                  showGlogalDialog({
+                    title: t('resetData.dialogs.resetSettings'),
+                    leftText: t('$common.yes'),
+                    rightText: t('$common.no'),
+                    leftFunc: () => {
+                      dispatch(resetOptionSet());
+                      syncStorageFast();
+                    },
+                    rightFunc: () => {},
+                  });
+                },
+                () => {
+                  showGlogalDialog({
+                    title: t('resetData.dialogs.clearAll'),
+                    leftText: t('$common.yes'),
+                    rightText: t('$common.no'),
+                    leftFunc: () => {
+                      dispatch(resetAllData());
+                      syncStorageFast();
+                    },
+                    rightFunc: () => {},
+                  });
+                },
+              ]}
+              currentChecked={3}
+            />
+          </NormalOption>
+          <NormalOption key="option3" title={t('gameSave.title')}>
+            <NormalButton
+              textList={t('gameSave.options.export', 'gameSave.options.import')}
+              functionList={[exportSaves, importSaves]}
+              currentChecked={2}
+            />
+          </NormalOption>
+          <NormalOption key="option4" title={t('about.title')}>
+            <NormalButton textList={[t('about.title')]} functionList={[toggleAbout]} currentChecked={3} />
+          </NormalOption>
+        </>
+      )}
     </div>
   );
 }
