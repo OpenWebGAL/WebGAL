@@ -50,6 +50,14 @@ const zhCn = {
                 },
               },
             },
+            about: {
+              title: '关于 WebGAL',
+              subTitle: 'WebGAL：开源的网页端视觉小说引擎',
+              version: '版本号',
+              source: '源代码仓库',
+              contributors: '贡献者',
+              website: '网站',
+            },
           },
         },
         display: {
