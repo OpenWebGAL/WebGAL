@@ -271,12 +271,13 @@ export default class PixiStage {
 
     // 挂载
     this.backgroundContainer.addChild(thisBgContainer);
-    this.backgroundObjects.push({ uuid: uuid(), key: key, pixiContainer: thisBgContainer, sourceUrl: url });
+    const bgUuid = uuid();
+    this.backgroundObjects.push({ uuid: bgUuid, key: key, pixiContainer: thisBgContainer, sourceUrl: url });
 
     // 完成图片加载后执行的函数
     const setup = () => {
       const texture = loader.resources?.[url]?.texture;
-      if (texture && thisBgContainer) {
+      if (texture && this.getStageObjByUuid(bgUuid)) {
         /**
          * 重设大小
          */
@@ -334,12 +335,13 @@ export default class PixiStage {
 
     // 挂载
     this.figureContainer.addChild(thisFigureContainer);
-    this.figureObjects.push({ uuid: uuid(), key: key, pixiContainer: thisFigureContainer, sourceUrl: url });
+    const figureUuid = uuid();
+    this.figureObjects.push({ uuid: figureUuid, key: key, pixiContainer: thisFigureContainer, sourceUrl: url });
 
     // 完成图片加载后执行的函数
     const setup = () => {
       const texture = loader.resources?.[url]?.texture;
-      if (texture && thisFigureContainer) {
+      if (texture && this.getStageObjByUuid(figureUuid)) {
         /**
          * 重设大小
          */
@@ -392,6 +394,10 @@ export default class PixiStage {
    */
   public getStageObjByKey(key: string) {
     return [...this.figureObjects, ...this.backgroundObjects].find((e) => e.key === key);
+  }
+
+  public getStageObjByUuid(objUuid: string) {
+    return [...this.figureObjects, ...this.backgroundObjects].find((e) => e.uuid === objUuid);
   }
 
   public getAllStageObj() {
