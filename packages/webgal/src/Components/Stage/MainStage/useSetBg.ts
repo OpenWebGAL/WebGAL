@@ -24,7 +24,7 @@ export function useSetBg(stageState: IStageState) {
       WebGAL.gameplay.pixiStage?.addBg(thisBgKey, bgName);
       setEbg(bgName);
       logger.debug('重设背景');
-      const { duration, animation } = getEnterExitAnimation('bg-main', 'enter');
+      const { duration, animation } = getEnterExitAnimation('bg-main', 'enter', true);
       WebGAL.gameplay.pixiStage!.registerPresetAnimation(animation, 'bg-main-softin', thisBgKey, stageState.effects);
       setTimeout(() => WebGAL.gameplay.pixiStage!.removeAnimationWithSetEffects('bg-main-softin'), duration);
     } else {
@@ -41,7 +41,7 @@ function removeBg(bgObject: IStageObject) {
   const oldBgKey = bgObject.key;
   bgObject.key = 'bg-main-off';
   WebGAL.gameplay.pixiStage?.removeStageObjectByKey(oldBgKey);
-  const { duration, animation } = getEnterExitAnimation('bg-main-off', 'exit');
+  const { duration, animation } = getEnterExitAnimation('bg-main-off', 'exit', true);
   WebGAL.gameplay.pixiStage!.registerAnimation(animation, 'bg-main-softoff', 'bg-main-off');
   setTimeout(() => {
     WebGAL.gameplay.pixiStage?.removeAnimation('bg-main-softoff');
