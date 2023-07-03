@@ -24,6 +24,7 @@ export const syncWithOrigine = (str: string) => {
     WebGAL.sceneManager.sceneData.currentScene = sceneParser(rawScene, 'start.txt', sceneUrl);
     // 开始快进到指定语句
     const currentSceneName = WebGAL.sceneManager.sceneData.currentScene.sceneName;
+    WebGAL.gameplay.isFast = true;
     syncFast(sentenceID, currentSceneName);
   });
 };
@@ -35,5 +36,7 @@ export function syncFast(sentenceId: number, currentSceneName: string) {
   ) {
     nextSentence();
     setTimeout(() => syncFast(sentenceId, currentSceneName), 2);
+  } else {
+    WebGAL.gameplay.isFast = false;
   }
 }

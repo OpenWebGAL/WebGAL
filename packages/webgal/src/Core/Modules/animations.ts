@@ -63,7 +63,7 @@ export function getEnterExitAnimation(
   } | null;
 } {
   if (type === 'enter') {
-    let duration = 300;
+    let duration = 500;
     // 走默认动画
     let animation: {
       setStartState: () => void;
@@ -80,7 +80,7 @@ export function getEnterExitAnimation(
     }
     return { duration, animation };
   } else {
-    let duration = 300;
+    let duration = 750;
     // 走默认动画
     let animation: {
       setStartState: () => void;
