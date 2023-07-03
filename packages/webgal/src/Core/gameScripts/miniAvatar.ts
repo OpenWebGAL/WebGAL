@@ -1,5 +1,5 @@
 import { ISentence } from '@/Core/controller/scene/sceneInterface';
-import { IPerform } from '@/Core/controller/perform/performInterface';
+import { IPerform } from '@/Core/Modules/perform/performInterface';
 import { webgalStore } from '@/store/store';
 import { setStage } from '@/store/stageReducer';
 
@@ -16,7 +16,6 @@ export const miniAvatar = (sentence: ISentence): IPerform => {
   return {
     performName: 'none',
     duration: 0,
-    isOver: false,
     isHoldOn: true,
     stopFunction: () => {},
     blockingNext: () => false,

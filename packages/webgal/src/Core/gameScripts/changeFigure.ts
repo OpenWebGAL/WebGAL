@@ -1,9 +1,11 @@
 import { ISentence } from '@/Core/controller/scene/sceneInterface';
-import { IPerform } from '@/Core/controller/perform/performInterface';
+import { IPerform } from '@/Core/Modules/perform/performInterface';
 import { webgalStore } from '@/store/store';
 import { setStage } from '@/store/stageReducer';
 import { updateCurrentEffects } from '../controller/stage/pixi/PixiController';
 import cloneDeep from 'lodash/cloneDeep';
+import { getSentenceArgByKey } from '@/Core/util/getSentenceArg';
+import { WebGAL } from '@/main';
 
 /**
  * 更改立绘
@@ -65,23 +67,61 @@ export const changeFigure = (sentence: ISentence): IPerform => {
       // 新加
       if (content !== '') newFreeFigure.push({ key, name: content, basePosition: pos });
     }
+    if (getSentenceArgByKey(sentence, 'enter')) {
+      WebGAL.animationManager.nextEnterAnimationName.set(key, getSentenceArgByKey(sentence, 'enter')!.toString());
+    }
+    if (getSentenceArgByKey(sentence, 'exit')) {
+      WebGAL.animationManager.nextExitAnimationName.set(
+        key + '-off',
+        getSentenceArgByKey(sentence, 'exit')!.toString(),
+      );
+    }
     dispatch(setStage({ key: 'freeFigure', value: newFreeFigure }));
   } else
     switch (pos) {
       case 'center':
+        key = 'fig-center';
+        if (getSentenceArgByKey(sentence, 'enter')) {
+          WebGAL.animationManager.nextEnterAnimationName.set(key, getSentenceArgByKey(sentence, 'enter')!.toString());
+        }
+        if (getSentenceArgByKey(sentence, 'exit')) {
+          WebGAL.animationManager.nextExitAnimationName.set(
+            key + '-off',
+            getSentenceArgByKey(sentence, 'exit')!.toString(),
+          );
+        }
         dispatch(setStage({ key: 'figName', value: content }));
         break;
       case 'left':
+        key = 'fig-left';
+        if (getSentenceArgByKey(sentence, 'enter')) {
+          WebGAL.animationManager.nextEnterAnimationName.set(key, getSentenceArgByKey(sentence, 'enter')!.toString());
+        }
+        if (getSentenceArgByKey(sentence, 'exit')) {
+          WebGAL.animationManager.nextExitAnimationName.set(
+            key + '-off',
+            getSentenceArgByKey(sentence, 'exit')!.toString(),
+          );
+        }
         dispatch(setStage({ key: 'figNameLeft', value: content }));
         break;
       case 'right':
+        key = 'fig-right';
+        if (getSentenceArgByKey(sentence, 'enter')) {
+          WebGAL.animationManager.nextEnterAnimationName.set(key, getSentenceArgByKey(sentence, 'enter')!.toString());
+        }
+        if (getSentenceArgByKey(sentence, 'exit')) {
+          WebGAL.animationManager.nextExitAnimationName.set(
+            key + '-off',
+            getSentenceArgByKey(sentence, 'exit')!.toString(),
+          );
+        }
         dispatch(setStage({ key: 'figNameRight', value: content }));
         break;
     }
   return {
     performName: 'none',
     duration: 0,
-    isOver: false,
     isHoldOn: false,
     stopFunction: () => {},
     blockingNext: () => false,

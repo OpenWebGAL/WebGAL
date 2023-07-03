@@ -1,4 +1,4 @@
-import { RUNTIME_GAMEPLAY } from '@/Core/runtime/gamePlay';
+import { WebGAL } from '@/main';
 import { ITransform } from '@/store/stageInterface';
 import { gsap } from 'gsap';
 
@@ -13,7 +13,7 @@ export function generateTimelineObj(
   targetKey: string,
   duration: number,
 ) {
-  const target = RUNTIME_GAMEPLAY.pixiStage!.getStageObjByKey(targetKey);
+  const target = WebGAL.gameplay.pixiStage!.getStageObjByKey(targetKey);
   let gsapTimeline1: gsap.core.Timeline | null = gsap.timeline();
   let gsapTimeline2: gsap.core.Timeline | null = gsap.timeline();
   let gsapTimeline3: gsap.core.Timeline | null = gsap.timeline();
@@ -33,12 +33,16 @@ export function generateTimelineObj(
         ...gsapEffect.scale,
         duration: gsapEffectDuration,
       });
-      gsapTimeline3.to(target.pixiContainer.position, {
+      gsapTimeline3.to(target.pixiContainer, {
         ...gsapEffect.position,
         duration: gsapEffectDuration,
       });
-      gsapTimeline4.to(target.pixiContainer.pivot, {
-        ...gsapEffect.pivot,
+      /**
+       * filters
+       */
+      const { alpha, rotation, blur, duration, scale, position, pivot, ...rest } = gsapEffect;
+      gsapTimeline4.to(target.pixiContainer, {
+        ...rest,
         duration: gsapEffectDuration,
       });
     }
@@ -72,9 +76,16 @@ export function generateTimelineObj(
    */
   function tickerFunc(delta: number) {}
 
+  function getEndFilterEffect() {
+    const gsapEffect = timeline[timeline.length - 1];
+    const { alpha, rotation, blur, duration, scale, position, pivot, ...rest } = gsapEffect;
+    return rest;
+  }
+
   return {
     setStartState,
     setEndState,
     tickerFunc,
+    getEndFilterEffect,
   };
 }

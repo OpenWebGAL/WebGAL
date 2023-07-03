@@ -1,4 +1,4 @@
-import { RUNTIME_GAMEPLAY } from '@/Core/runtime/gamePlay';
+import { WebGAL } from '@/main';
 
 /**
  * 动画创建模板
@@ -6,7 +6,7 @@ import { RUNTIME_GAMEPLAY } from '@/Core/runtime/gamePlay';
  * @param duration 持续时间
  */
 export function generateTemplateAnimationObj(targetKey: string, duration: number) {
-  const target = RUNTIME_GAMEPLAY.pixiStage!.getStageObjByKey(targetKey);
+  const target = WebGAL.gameplay.pixiStage!.getStageObjByKey(targetKey);
 
   // 先设置一个通用的初态
 
@@ -31,7 +31,7 @@ export function generateTemplateAnimationObj(targetKey: string, duration: number
       // 要操控的精灵
       const sprite = target.pixiContainer;
       // 每一帧的时间
-      const baseDuration = RUNTIME_GAMEPLAY.pixiStage!.frameDuration;
+      const baseDuration = WebGAL.gameplay.pixiStage!.frameDuration;
 
       /**
        * 在下面书写具体的动画

@@ -1,11 +1,11 @@
 import { ISentence } from '@/Core/controller/scene/sceneInterface';
-import { IPerform } from '@/Core/controller/perform/performInterface';
+import { IPerform } from '@/Core/Modules/perform/performInterface';
 import styles from '../../Components/Stage/TextBox/textbox.module.scss';
-import { getRandomPerformName } from '@/Core/controller/perform/getRandomPerformName';
 import { webgalStore } from '@/store/store';
 import { setStage } from '@/store/stageReducer';
 import { logger } from '@/Core/util/etc/logger';
-import { PERFORM_CONFIG } from '@/Core/config/performConfig';
+import { getRandomPerformName } from '@/Core/Modules/perform/performController';
+import { PERFORM_CONFIG } from '@/Core/config/config';
 
 /**
  * 进行普通对话的显示
@@ -33,7 +33,6 @@ export const showVars = (sentence: ISentence): IPerform => {
   return {
     performName: performInitName,
     duration: sentence.content.length * textDelay + endDelay,
-    isOver: false,
     isHoldOn: false,
     stopFunction: () => {
       const textElements = document.querySelectorAll('.' + styles.TextBox_textElement);

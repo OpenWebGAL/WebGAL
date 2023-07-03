@@ -1,28 +1,28 @@
 import { commandType, ISentence } from '@/Core/controller/scene/sceneInterface';
-import { IPerform, IRunPerform } from '@/Core/controller/perform/performInterface';
-import { RUNTIME_GAMEPLAY } from '@/Core/runtime/gamePlay';
+import { IPerform, IRunPerform } from '@/Core/Modules/perform/performInterface';
 import { logger } from '@/Core/util/etc/logger';
 import { webgalStore } from '@/store/store';
 import { resetStageState } from '@/store/stageReducer';
 import cloneDeep from 'lodash/cloneDeep';
+import { WebGAL } from '@/main';
 
 /**
  * 初始化pixi
  * @param sentence
  */
 export const pixiInit = (sentence: ISentence): IPerform => {
-  RUNTIME_GAMEPLAY.performList.forEach((e) => {
+  WebGAL.gameplay.performController.performList.forEach((e) => {
     if (e.performName.match(/PixiPerform/)) {
       logger.warn('pixi 被脚本重新初始化', e.performName);
       /**
        * 卸载演出
        */
-      for (let i = 0; i < RUNTIME_GAMEPLAY.performList.length; i++) {
-        const e2 = RUNTIME_GAMEPLAY.performList[i];
+      for (let i = 0; i < WebGAL.gameplay.performController.performList.length; i++) {
+        const e2 = WebGAL.gameplay.performController.performList[i];
         if (e2.performName === e.performName) {
           e2.stopFunction();
           clearTimeout(e2.stopTimeout as unknown as number);
-          RUNTIME_GAMEPLAY.performList.splice(i, 1);
+          WebGAL.gameplay.performController.performList.splice(i, 1);
           i--;
         }
       }
@@ -44,7 +44,6 @@ export const pixiInit = (sentence: ISentence): IPerform => {
   return {
     performName: 'none',
     duration: 0,
-    isOver: false,
     isHoldOn: false,
     stopFunction: () => {},
     blockingNext: () => false,

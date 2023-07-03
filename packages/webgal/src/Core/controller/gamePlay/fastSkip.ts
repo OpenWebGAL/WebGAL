@@ -1,8 +1,8 @@
 // 切换自动播放状态
-import { RUNTIME_GAMEPLAY } from '../../runtime/gamePlay';
 import { stopAuto } from './autoPlay';
 import styles from '../../../Components/UI/BottomControlPanel/bottomControlPanel.module.scss';
 import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
+import { WebGAL } from '@/main';
 
 /**
  * 设置 fast 按钮的激活与否
@@ -24,11 +24,11 @@ export const stopFast = () => {
   if (!isFast()) {
     return;
   }
-  RUNTIME_GAMEPLAY.isFast = false;
+  WebGAL.gameplay.isFast = false;
   setButton(false);
-  if (RUNTIME_GAMEPLAY.fastInterval !== null) {
-    clearInterval(RUNTIME_GAMEPLAY.fastInterval);
-    RUNTIME_GAMEPLAY.fastInterval = null;
+  if (WebGAL.gameplay.fastInterval !== null) {
+    clearInterval(WebGAL.gameplay.fastInterval);
+    WebGAL.gameplay.fastInterval = null;
   }
 };
 
@@ -39,16 +39,16 @@ export const startFast = () => {
   if (isFast()) {
     return;
   }
-  RUNTIME_GAMEPLAY.isFast = true;
+  WebGAL.gameplay.isFast = true;
   setButton(true);
-  RUNTIME_GAMEPLAY.fastInterval = setInterval(() => {
+  WebGAL.gameplay.fastInterval = setInterval(() => {
     nextSentence();
   }, 100);
 };
 
 // 判断是否是快进模式
 export const isFast = function () {
-  return RUNTIME_GAMEPLAY.isFast;
+  return WebGAL.gameplay.isFast;
 };
 
 /**
@@ -64,7 +64,7 @@ export const stopAll = () => {
  */
 export const switchFast = () => {
   // 现在正在快进
-  if (RUNTIME_GAMEPLAY.isFast) {
+  if (WebGAL.gameplay.isFast) {
     stopFast();
   } else {
     // 当前不在快进
