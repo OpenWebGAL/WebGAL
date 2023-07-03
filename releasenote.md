@@ -15,7 +15,7 @@
 
 调整了立绘及背景的进出场动画
 
-## Release Note: WebGAL 4.4.0-alpha-1
+## Release Note: WebGAL 4.4.0
 ### In this version
 
 Added options for customizing character and background entrance and exit animations
@@ -32,7 +32,7 @@ Fixed some anomalies in effect sound playback
 
 Adjusted the entrance and exit animations for characters and backgrounds
 
-## リリースログ：WebGAL 4.4.0-alpha-1
+## リリースログ：WebGAL 4.4.0
 ### このバージョンでは
 
 キャラクターと背景の入場と退場のアニメーションをカスタマイズするオプションを追加しました
