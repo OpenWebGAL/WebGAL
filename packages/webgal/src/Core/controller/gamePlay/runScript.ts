@@ -1,8 +1,8 @@
 import { ISentence } from '@/Core/controller/scene/sceneInterface';
 import { say } from '../../gameScripts/say';
-import { initPerform, IPerform } from '@/Core/controller/perform/performInterface';
+import { initPerform, IPerform } from '@/Core/Modules/perform/performInterface';
 import { SCRIPT_CONFIG } from '@/Core/config/scriptConfig';
-import { PerformController } from '@/Core/controller/perform/performController';
+import { WebGAL } from '@/main';
 
 /**
  * 规范函数的类型
@@ -34,9 +34,9 @@ export const runScript = (script: ISentence) => {
 
   if (perform.arrangePerformPromise) {
     perform.arrangePerformPromise.then((resolovedPerform) =>
-      PerformController.arrangeNewPerform(resolovedPerform, script),
+      WebGAL.gameplay.performController.arrangeNewPerform(resolovedPerform, script),
     );
   } else {
-    PerformController.arrangeNewPerform(perform, script);
+    WebGAL.gameplay.performController.arrangeNewPerform(perform, script);
   }
 };

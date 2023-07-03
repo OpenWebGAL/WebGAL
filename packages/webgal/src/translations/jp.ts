@@ -50,6 +50,14 @@ const jp = {
                 },
               },
             },
+            about: {
+              title: 'WebGALについて',
+              subTitle: 'WebGAL：開源のウェブ基盤視覚小説エンジン',
+              version: '版数',
+              source: '源コード保管所',
+              contributors: '貢献者',
+              website: 'ウェブサイト',
+            },
           },
         },
         display: {

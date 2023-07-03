@@ -1,8 +1,8 @@
 /**
  * 语句类型
  */
-import { sceneEntry } from '../../runtime/runtimeInterface';
 import { fileType } from '@/Core/util/gameAssetsAccess/assetSetter';
+import { ISceneEntry } from '@/Core/Modules/scene';
 
 export enum commandType {
   say, // 对话
@@ -87,7 +87,7 @@ export interface IScene {
  */
 export interface ISceneData {
   currentSentenceId: number; // 当前语句ID
-  sceneStack: Array<sceneEntry>; // 场景栈
+  sceneStack: Array<ISceneEntry>; // 场景栈
   currentScene: IScene; // 当前场景数据
 }
 

@@ -1,17 +1,17 @@
 import { commandType, ISentence } from '@/Core/controller/scene/sceneInterface';
-import { RUNTIME_CURRENT_BACKLOG } from '../../runtime/backlog';
-import { RUNTIME_SCENE_DATA } from '../../runtime/sceneData';
 import { runScript } from './runScript';
 import { logger } from '../../util/etc/logger';
 import { IStageState } from '@/store/stageInterface';
 import { restoreScene } from '../scene/restoreScene';
-import { IBacklogItem, sceneEntry } from '@/Core/runtime/runtimeInterface';
 import { webgalStore } from '@/store/store';
 import { getValueFromState } from '@/Core/gameScripts/setVar';
 import { strIf } from '@/Core/gameScripts/function/strIf';
 import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
 import cloneDeep from 'lodash/cloneDeep';
-import { SYSTEM_CONFIG } from '@/Core/config/systemConfig';
+import { WebGAL } from '@/main';
+import { ISceneEntry } from '@/Core/Modules/scene';
+import { IBacklogItem } from '@/Core/Modules/backlog';
+import { SYSTEM_CONFIG } from '@/Core/config/config';
 
 /**
  * 语句执行器
@@ -19,16 +19,20 @@ import { SYSTEM_CONFIG } from '@/Core/config/systemConfig';
  */
 export const scriptExecutor = () => {
   // 超过总语句数量，则从场景栈拿出一个需要继续的场景，然后继续流程。若场景栈清空，则停止流程
-  if (RUNTIME_SCENE_DATA.currentSentenceId > RUNTIME_SCENE_DATA.currentScene.sentenceList.length - 1) {
-    if (RUNTIME_SCENE_DATA.sceneStack.length !== 0) {
-      const sceneToRestore: sceneEntry | undefined = RUNTIME_SCENE_DATA.sceneStack.pop();
+  if (
+    WebGAL.sceneManager.sceneData.currentSentenceId >
+    WebGAL.sceneManager.sceneData.currentScene.sentenceList.length - 1
+  ) {
+    if (WebGAL.sceneManager.sceneData.sceneStack.length !== 0) {
+      const sceneToRestore: ISceneEntry | undefined = WebGAL.sceneManager.sceneData.sceneStack.pop();
       if (sceneToRestore !== undefined) {
         restoreScene(sceneToRestore);
       }
     }
     return;
   }
-  const currentScript: ISentence = RUNTIME_SCENE_DATA.currentScene.sentenceList[RUNTIME_SCENE_DATA.currentSentenceId];
+  const currentScript: ISentence =
+    WebGAL.sceneManager.sceneData.currentScene.sentenceList[WebGAL.sceneManager.sceneData.currentSentenceId];
   // 判断这个脚本要不要执行
   let runThis: number | boolean = true;
   let isHasWhenArg = false;
@@ -58,7 +62,7 @@ export const scriptExecutor = () => {
   // 执行语句
   if (!runThis) {
     logger.warn('不满足条件，跳过本句！');
-    RUNTIME_SCENE_DATA.currentSentenceId++;
+    WebGAL.sceneManager.sceneData.currentSentenceId++;
     nextSentence();
     return;
   }
@@ -89,7 +93,7 @@ export const scriptExecutor = () => {
 
   // 执行“下一句”
   if (isNext) {
-    RUNTIME_SCENE_DATA.currentSentenceId++;
+    WebGAL.sceneManager.sceneData.currentSentenceId++;
     scriptExecutor();
     return;
   }
@@ -103,31 +107,9 @@ export const scriptExecutor = () => {
     logger.debug('本条语句执行结果', currentStageState);
     // 保存 backlog
     if (isSaveBacklog) {
-      const newStageState = cloneDeep(currentStageState);
-      newStageState.PerformList.forEach((ele) => {
-        ele.script.args.forEach((argelement) => {
-          if (argelement.key === 'concat') {
-            argelement.value = false;
-            ele.script.content = newStageState.showText;
-          }
-        });
-      });
-      const backlogElement: IBacklogItem = {
-        currentStageState: newStageState,
-        saveScene: {
-          currentSentenceId: RUNTIME_SCENE_DATA.currentSentenceId, // 当前语句ID
-          sceneStack: cloneDeep(RUNTIME_SCENE_DATA.sceneStack), // 场景栈
-          sceneName: RUNTIME_SCENE_DATA.currentScene.sceneName, // 场景名称
-          sceneUrl: RUNTIME_SCENE_DATA.currentScene.sceneUrl, // 场景url
-        },
-      };
-      RUNTIME_CURRENT_BACKLOG.push(backlogElement);
-
-      // 清除超出长度的部分
-      while (RUNTIME_CURRENT_BACKLOG.length > SYSTEM_CONFIG.backlog_size) {
-        RUNTIME_CURRENT_BACKLOG.shift();
-      }
+      // WebGAL.backlogManager.isSaveBacklogNext = true;
+      WebGAL.backlogManager.saveCurrentStateToBacklog();
     }
   }, 0);
-  RUNTIME_SCENE_DATA.currentSentenceId++;
+  WebGAL.sceneManager.sceneData.currentSentenceId++;
 };

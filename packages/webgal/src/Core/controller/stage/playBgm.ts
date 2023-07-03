@@ -25,5 +25,5 @@ export function playBgm(url: string): void {
   logger.info('playing bgm' + url);
   webgalStore.dispatch(setStage({ key: 'bgm', value: url }));
   const audioElement = document.getElementById('currentBgm') as HTMLAudioElement;
-  audioElement.play().then();
+  audioElement?.play();
 }

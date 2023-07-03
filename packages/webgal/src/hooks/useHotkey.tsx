@@ -1,23 +1,16 @@
 import { useGenSyncRef } from '@/hooks/useGenSyncRef';
-import { RootState, webgalStore } from '@/store/store';
+import { RootState } from '@/store/store';
 import { useMounted, useUnMounted, useUpdated } from '@/hooks/useLifeCycle';
 import { useCallback, useRef } from 'react';
 import { componentsVisibility, MenuPanelTag } from '@/store/guiInterface';
 import { setVisibility } from '@/store/GUIReducer';
 import { useDispatch } from 'react-redux';
 import { startFast, stopAll, stopFast } from '@/Core/controller/gamePlay/fastSkip';
-import cloneDeep from 'lodash/cloneDeep';
-import { ISaveData } from '@/store/userDataInterface';
-import { generateCurrentStageData } from '@/Core/controller/storage/saveGame';
-import { loadGameFromStageData } from '@/Core/controller/storage/loadGame';
-import { RUNTIME_GAME_INFO } from '@/Core/runtime/etc';
-import { logger } from '@/Core/util/etc/logger';
-import { RUNTIME_SCENE_DATA } from '@/Core/runtime/sceneData';
 import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
-import { setFastSave } from '@/store/userDataReducer';
-import { getStorageAsync, setStorageAsync } from '@/Core/controller/storage/storageController';
 import styles from '@/Components/UI/Backlog/backlog.module.scss';
 import throttle from 'lodash/throttle';
+import { WebGAL } from '@/main';
+import { fastSaveGame } from '@/Core/controller/storage/fastSaveLoad';
 
 // options备用
 export interface HotKeyType {
@@ -31,16 +24,6 @@ export interface HotKeyType {
       }
     | boolean;
   AutoSave: {} | boolean;
-}
-
-export let fastSaveGameKey = '';
-export let isFastSaveKey = '';
-let lock = true;
-
-export function initKey() {
-  lock = false;
-  fastSaveGameKey = `FastSaveKey-${RUNTIME_GAME_INFO.gameName}-${RUNTIME_GAME_INFO.gameKey}`;
-  isFastSaveKey = `FastSaveActive-${RUNTIME_GAME_INFO.gameName}-${RUNTIME_GAME_INFO.gameKey}`;
 }
 
 // export const fastSaveGameKey = `FastSaveKey`;
@@ -296,8 +279,8 @@ function useValidMenuGameStart() {
   return useCallback(() => {
     // return !(runtime_currentSceneData.currentSentenceId === 0 &&
     //   runtime_currentSceneData.currentScene.sceneName === 'start.txt');
-    return !(RUNTIME_SCENE_DATA.currentSentenceId === 0);
-  }, [RUNTIME_SCENE_DATA]);
+    return !(WebGAL.sceneManager.sceneData.currentSentenceId === 0);
+  }, [WebGAL.sceneManager.sceneData]);
 }
 
 function useSetComponentVisibility(): (component: keyof componentsVisibility, visibility: boolean) => void {
@@ -316,54 +299,6 @@ function nextTick(callback: () => void) {
     // 兼容IE
     setTimeout(callback, 0);
   }
-}
-
-/**
- * 用于紧急回避时的数据存储 & 快速保存
- */
-export async function fastSaveGame() {
-  const saveData: ISaveData = generateCurrentStageData(-1);
-  const newSaveData = cloneDeep(saveData);
-  // localStorage.setItem(fastSaveGameKey, JSON.stringify(newSaveData));
-  // localStorage.setItem(isFastSaveKey, JSON.stringify(true));
-  // localStorage.setItem('currentSentenceId', JSON.stringify(runtime_currentSceneData.currentSentenceId));
-  // await localforage.setItem(fastSaveGameKey, newSaveData);
-  // await localforage.setItem(isFastSaveKey, true);
-  webgalStore.dispatch(setFastSave(newSaveData));
-  await setStorageAsync();
-}
-
-/**
- * 判断是否有无存储紧急回避时的数据
- */
-export async function hasFastSaveRecord() {
-  // return await localforage.getItem(isFastSaveKey);
-  await getStorageAsync();
-  return webgalStore.getState().userData.quickSaveData !== null;
-}
-
-/**
- * 加载紧急回避时的数据
- */
-export async function loadFastSaveGame() {
-  // 获得存档文件
-  // const loadFile: ISaveData | null = await localforage.getItem(fastSaveGameKey);
-  await getStorageAsync();
-  const loadFile: ISaveData | null = webgalStore.getState().userData.quickSaveData;
-  if (!loadFile) {
-    return;
-  }
-  loadGameFromStageData(loadFile);
-}
-
-/**
- * 移除紧急回避的数据
- */
-export async function removeFastSaveGameRecord() {
-  webgalStore.dispatch(setFastSave(null));
-  await setStorageAsync();
-  // await localforage.setItem(isFastSaveKey, false);
-  // await localforage.setItem(fastSaveGameKey, null);
 }
 
 /**
