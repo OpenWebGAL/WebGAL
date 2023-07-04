@@ -19,14 +19,17 @@ export interface IGuiState {
   showBacklog: boolean;
   titleBgm: string; // 标题背景音乐
   titleBg: string; // 标题背景图片
+  logo1: string;
+  logo2: string;
+  logo3: string;
   showExtra: boolean;
   showGlobalDialog: boolean;
   showPanicOverlay: boolean;
 }
 
-export type componentsVisibility = Pick<IGuiState, Exclude<keyof IGuiState, 'currentMenuTag' | 'titleBg' | 'titleBgm'>>;
+export type componentsVisibility = Pick<IGuiState, Exclude<keyof IGuiState, 'currentMenuTag' | 'titleBg' | 'titleBgm' | 'logo1' | 'logo2' | 'logo3' >>;
 // 标题资源
-export type GuiAsset = Pick<IGuiState, 'titleBgm' | 'titleBg'>;
+export type GuiAsset = Pick<IGuiState, 'titleBgm' | 'titleBg' | 'logo1' | 'logo2' | 'logo3' >;
 
 export interface IGuiStore {
   GuiState: IGuiState;

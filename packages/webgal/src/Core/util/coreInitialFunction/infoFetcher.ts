@@ -5,6 +5,7 @@ import { getStorage } from '../../controller/storage/storageController';
 import { webgalStore } from '@/store/store';
 import { setGuiAsset } from '@/store/GUIReducer';
 import { setEbg } from '@/Core/util/setEbg';
+import { setLogo } from '@/Core/util/setLogo';
 import { WebGAL } from '@/main';
 import { initKey } from '@/Core/controller/storage/fastSaveLoad';
 
@@ -33,6 +34,21 @@ export const infoFetcher = (url: string) => {
           const url: string = assetSetter(e[1], fileType.background);
           dispatch(setGuiAsset({ asset: 'titleBg', value: url }));
           setEbg(url);
+        }
+        if (e[0] === 'logo1') {
+          const url: string = assetSetter(e[1], fileType.background);
+          dispatch(setGuiAsset({ asset: 'logo1', value: url }));
+          setLogo('logo1',url);
+        }
+        if (e[0] === 'logo2') {
+          const url: string = assetSetter(e[1], fileType.background);
+          dispatch(setGuiAsset({ asset: 'logo2', value: url }));
+          setLogo('logo2',url);
+        }
+        if (e[0] === 'logo3') {
+          const url: string = assetSetter(e[1], fileType.background);
+          dispatch(setGuiAsset({ asset: 'logo3', value: url }));
+          setLogo('logo3',url);
         }
         // 设置标题背景音乐
         if (e[0] === 'Title_bgm') {

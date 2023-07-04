@@ -9,7 +9,18 @@
         content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no" />
 </head>
 <body>
+<style>
+  @keyframes change-img-anim {
+	0%{ opacity: 0;z-index: 14;}
+	10%{ opacity: 1;}
+	90%{ opacity: 1;}
+	100%{ opacity: 0;z-index: 14;}
+}
+</style>
 <!--快速显示落地页，让用户感知不到加载的过程-->
+<div id="logo1" style="background-size: cover; overflow: hidden; width: 100%; height: 100%; position: absolute; top: 0; opacity: 0; transition: opacity 2s;"></div>
+<div id="logo2" style="background-size: cover; overflow: hidden; width: 100%; height: 100%; position: absolute; top: 0; opacity: 0; transition: opacity 2s;"></div>
+<div id="logo3" style="background-size: cover; overflow: hidden; width: 100%; height: 100%; position: absolute; top: 0; opacity: 0; transition: opacity 2s;"></div>
 <div id="ebg"></div>
 <div id="Title_enter_page" onclick="enter()" style="
             width: 2560px;
@@ -119,6 +130,50 @@
       "bubbles": true,
       "cancelable": true
     });
+    if(event){
+
+      const logo1 = document.getElementById("logo1");
+      const logo2 = document.getElementById("logo2");
+      const logo3 = document.getElementById("logo3");
+
+      if (logo1) {
+
+        logo1.style.animation = "change-img-anim 3s infinite";
+        logo1.style.animationIterationCount = "1";
+        logo1.style.animationDirection = "alternate";
+
+        setTimeout(() => {
+          logo1.style.opacity = "0";
+          document.getElementById("logo1").style.zIndex = -1;
+        }, 3000); //500ms后开始降低落地页透明度
+      }
+
+      if (logo2) {
+
+        logo2.style.animation = "change-img-anim 3s infinite";
+        logo2.style.animationIterationCount = "1";
+        logo2.style.animationDirection = "alternate";
+        logo2.style.animationDelay = "2.5s";
+
+        setTimeout(() => {
+          logo2.style.opacity = "0";
+          document.getElementById("logo2").style.zIndex = -1;
+        }, 3000); //500ms后开始降低落地页透明度
+      }
+
+      if (logo3) {
+
+        logo3.style.animation = "change-img-anim 3s infinite";
+        logo3.style.animationIterationCount = "1";
+        logo3.style.animationDirection = "alternate";
+        logo3.style.animationDelay = "5s";
+
+        setTimeout(() => {
+          logo3.style.opacity = "0";
+          document.getElementById("logo3").style.zIndex = -1;
+        }, 3000); //500ms后开始降低落地页透明度
+      }
+    }
     const target = document.getElementById("enter_game_target");
     if (target) {
       target.dispatchEvent(event);
