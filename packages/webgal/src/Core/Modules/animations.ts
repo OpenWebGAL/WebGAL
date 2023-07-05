@@ -54,6 +54,7 @@ export function getAnimateDuration(animationName: string) {
 export function getEnterExitAnimation(
   target: string,
   type: 'enter' | 'exit',
+  isBg = false,
 ): {
   duration: number;
   animation: {
@@ -64,6 +65,9 @@ export function getEnterExitAnimation(
 } {
   if (type === 'enter') {
     let duration = 500;
+    if (isBg) {
+      duration = 1500;
+    }
     // 走默认动画
     let animation: {
       setStartState: () => void;
@@ -81,6 +85,9 @@ export function getEnterExitAnimation(
     return { duration, animation };
   } else {
     let duration = 750;
+    if (isBg) {
+      duration = 1500;
+    }
     // 走默认动画
     let animation: {
       setStartState: () => void;
