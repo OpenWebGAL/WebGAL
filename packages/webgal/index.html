@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="zh-Hans">
 <head>
-  <meta charset="UTF-8" />
-  <link rel="icon" type="image/x-icon" href="/src/favicon.ico" />
+  <meta charset="UTF-8"/>
+  <link rel="icon" type="image/x-icon" href="/src/favicon.ico"/>
   <!--    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>-->
   <title>WebGAL</title>
   <meta name="viewport"
-        content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no" />
+        content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no"/>
 </head>
 <body>
 <!--快速显示落地页，让用户感知不到加载的过程-->
@@ -96,10 +96,10 @@
   const u = navigator.userAgent;
   const isIOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); // 判断是否是 iOS终端
   if ("serviceWorker" in navigator && !isIOS) {
-    navigator.serviceWorker.register("./webgal-serviceworker.js", { scope: "./assets" }).then(function(reg) {
+    navigator.serviceWorker.register("./webgal-serviceworker.js").then(function (reg) {
       // registration worked
       console.log("Registration succeeded. Scope is " + reg.scope);
-    }).catch(function(error) {
+    }).catch(function (error) {
       // registration failed
       console.log("Registration failed with " + error);
     });
