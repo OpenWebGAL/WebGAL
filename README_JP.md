@@ -50,8 +50,9 @@ WebGAL はオープンソース ソフトウェアであるため、MPL-2.0 オ�
 
 [このプロジェクトのスポンサー](https://docs.openwebgal.com/sponsor/)
 
+# Sponsor
 
-## Sponsor
+## Gold Sponsors
 
 | <img src="https://avatars.githubusercontent.com/u/91712707?v=4" alt="T2" style="zoom:25%;" /> |
 | ------------------------------------------------------------ |
