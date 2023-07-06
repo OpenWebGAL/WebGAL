@@ -56,8 +56,9 @@ Even so, your sponsorship can provide motivation for the developers to move forw
 
 [Sponsor this project](https://docs.openwebgal.com/sponsor/)
 
+# Sponsor
 
-## Sponsor
+## Gold Sponsors
 
 | <img src="https://avatars.githubusercontent.com/u/91712707?v=4" alt="T2" style="zoom:25%;" /> |
 | ------------------------------------------------------------ |
