@@ -1,0 +1,32 @@
+.Logo_target {
+  display: none;
+}
+.Logo_main {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  animation: change-img-anim 2.5s infinite;
+  background-size: cover;
+  animation-iteration-count: 1;
+  animation-direction: alternate;
+}
+@keyframes change-img-anim {
+  0%{
+    opacity: 0;
+    z-index: 14;
+  }
+  10%{
+    opacity: 1;
+  }
+  90%{
+    opacity: 1;
+  }
+  100%{
+    opacity: 0;
+    z-index: 14;
+  }
+}

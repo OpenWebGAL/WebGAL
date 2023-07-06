@@ -35,20 +35,18 @@ export const infoFetcher = (url: string) => {
           dispatch(setGuiAsset({ asset: 'titleBg', value: url }));
           setEbg(url);
         }
-        if (e[0] === 'logo1') {
-          const url: string = assetSetter(e[1], fileType.background);
-          dispatch(setGuiAsset({ asset: 'logo1', value: url }));
-          setLogo('logo1',url);
-        }
-        if (e[0] === 'logo2') {
-          const url: string = assetSetter(e[1], fileType.background);
-          dispatch(setGuiAsset({ asset: 'logo2', value: url }));
-          setLogo('logo2',url);
-        }
-        if (e[0] === 'logo3') {
-          const url: string = assetSetter(e[1], fileType.background);
-          dispatch(setGuiAsset({ asset: 'logo3', value: url }));
-          setLogo('logo3',url);
+        if (e[0] === 'LogoImage') {
+            const logoList:any = e[1].split(' ');
+            let urlList = "";
+            for(let i = 0; i < logoList.length; i++){
+              let url: string = assetSetter(logoList[i], fileType.background);
+              if(i + 1 == logoList.length){
+                urlList += url;
+              } else {
+                urlList += url + ' ';
+              }
+            }
+            dispatch(setGuiAsset({ asset: 'logoImage' , value: urlList}));
         }
         // 设置标题背景音乐
         if (e[0] === 'Title_bgm') {
