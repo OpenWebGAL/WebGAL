@@ -28,6 +28,8 @@ https://demo.openwebgal.com
 
 [下载 WebGAL 图形化编辑器](https://github.com/MakinoharaShoko/WebGAL_Terre/releases)
 
+你也可以使用源代码或 [WebGAL 调试工具](https://github.com/MakinoharaShoko/WebGAL/releases) 制作游戏，并使用 [WebGAL Script VS Code 插件](https://marketplace.visualstudio.com/items?itemName=c6h5-no2.webgal-script-basics) 来启用语法高亮
+
 ## WebGAL 优势与特色
 
 一次编写，处处运行，无需网页开发基础，3 分钟即可学会所有的语法，只要你有灵感，就可以立刻开始开始创作你自己的视觉小说！
