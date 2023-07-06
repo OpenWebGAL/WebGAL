@@ -58,7 +58,9 @@ WebGAL 是一款开源软件，因此你可以免费在 MPL-2.0 开源协议的�
 
 [赞助本项目](https://docs.openwebgal.com/sponsor/)
 
-## Sponsor
+# Sponsor
+
+## Gold Sponsors
 
 | <img src="https://avatars.githubusercontent.com/u/91712707?v=4" alt="T2" style="zoom:25%;" /> |
 | ------------------------------------------------------------ |
