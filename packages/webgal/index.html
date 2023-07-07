@@ -123,6 +123,12 @@
     if (target) {
       target.dispatchEvent(event);
     }
+    if(event){
+      const logo = document.getElementById("logo_target");
+      if(logo){
+        logo.style.display= "contents";
+      }
+    }
   });
 
   function jump(event, url) {
