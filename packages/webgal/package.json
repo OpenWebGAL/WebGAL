@@ -1,7 +1,7 @@
 {
   "name": "webgal",
   "private": true,
-  "version": "4.4.0",
+  "version": "4.4.1",
   "scripts": {
     "dev": "vite --host --port 3000",
     "build": "cross-env NODE_ENV=production tsc && vite build --base=./",
@@ -50,6 +50,6 @@
     "prettier": "^2.6.2",
     "rollup-plugin-visualizer": "^5.6.0",
     "typescript": "^4.5.4",
-    "vite": "^2.9.13"
+    "vite": "^2.9.16"
   }
 }
