@@ -1,33 +1,34 @@
 ![WebGAL](https://user-images.githubusercontent.com/30483415/227242979-297ff392-f210-47ef-b0e9-d4788ddc8df0.png)
 
-**[English Version](/README_EN.md)**
-**[日本語版](/README_JP.md)**
+### **[English Version](/README_EN.md)** | **[日本語版](/README_JP.md)**
 
 **[Help us with translation | 协助翻译 | 翻訳のお手伝い ](https://github.com/MakinoharaShoko/WebGAL/tree/dev/packages/webgal/src/translations)**
 
-**[Join Discord Server](https://discord.gg/kPrQkJttJy)**
+**[Join Discord Server | 加入 Discord 讨论 | Discordのディスカッションに参加する](https://discord.gg/kPrQkJttJy)**
 
 # WebGAL
 
 **界面美观、功能强大、易于开发的全新网页端视觉小说引擎**
 
-演示视频： https://www.bilibili.com/video/BV1jS4y1i7Wz/
-
 ## 在线体验
 
-一个简短的示例：
+#### WebGAL 示例游戏，一般会演示最新开发的功能
 
 https://demo.openwebgal.com
 
-一个完整的游戏：
+#### 完整的游戏
 
 [铃色☆记忆](http://hoshinasuzu.cn/) by 星奈组  [备用链接](http://hoshinasuzu.cc/)
 
-### 使用 WebGAL 制作游戏
+[Elf of Era Idols Project](https://store.steampowered.com/app/2414730/Elf_of_Era_Idols_Project/) (通过 Steam 获取)
+
+## 使用 WebGAL 制作游戏
 
 [WebGAL 开发文档](https://docs.openwebgal.com/)
 
 [下载 WebGAL 图形化编辑器](https://github.com/MakinoharaShoko/WebGAL_Terre/releases)
+
+你也可以使用源代码或 [WebGAL 调试工具](https://github.com/MakinoharaShoko/WebGAL/releases) 制作游戏，并使用 [WebGAL Script VS Code 插件](https://marketplace.visualstudio.com/items?itemName=c6h5-no2.webgal-script-basics) 来启用语法高亮
 
 ## WebGAL 优势与特色
 
@@ -57,7 +58,9 @@ WebGAL 是一款开源软件，因此你可以免费在 MPL-2.0 开源协议的�
 
 [赞助本项目](https://docs.openwebgal.com/sponsor/)
 
-## Sponsor
+# Sponsor
+
+## Gold Sponsors
 
 | <img src="https://avatars.githubusercontent.com/u/91712707?v=4" alt="T2" style="zoom:25%;" /> |
 | ------------------------------------------------------------ |
