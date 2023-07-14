@@ -1,11 +1,12 @@
 {
   "name": "webgal-parser",
-  "version": "4.3.13-10",
+  "version": "4.4.2",
   "description": "WebGAL script parser",
   "scripts": {
     "test": "vitest",
     "coverage": "vitest run --coverage",
-    "build": "rimraf -rf ./build && rollup --config"
+    "build": "rimraf -rf ./build && rollup --config",
+    "debug": "tsx test/debug.ts"
   },
   "types": "./build/types/index.d.ts",
   "module": "./build/es/index.js",
@@ -15,7 +16,8 @@
   "dependencies": {
     "chevrotain": "^10.5.0",
     "cloudlogjs": "^1.0.11",
-    "lodash": "^4.17.21"
+    "lodash": "^4.17.21",
+    "tsx": "^3.12.7"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^23.0.2",

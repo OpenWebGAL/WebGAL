@@ -76,3 +76,25 @@ test("long-script", async () => {
   };
   expect(result.sentenceList).toContainEqual(expectSentenceItem);
 });
+
+test("var", async () => {
+
+  const sceneRaw = await fsp.readFile('test/test-resources/var.txt');
+  const sceneText = sceneRaw.toString();
+
+  const parser = new SceneParser((assetList) => {
+  }, (fileName, assetType) => {
+    return fileName;
+  }, ADD_NEXT_ARG_LIST, SCRIPT_CONFIG);
+
+  const result = parser.parse(sceneText, "var", "/var.txt");
+  const expectSentenceItem: ISentence = {
+    command: commandType.say,
+    commandRaw: "WebGAL",
+    content: "a=1?",
+    args: [{key:'speaker',value:'WebGAL'},{key:'when',value:"a==1"}],
+    sentenceAssets: [],
+    subScene: []
+  };
+  expect(result.sentenceList).toContainEqual(expectSentenceItem);
+});
