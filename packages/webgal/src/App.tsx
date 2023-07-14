@@ -1,4 +1,5 @@
 import Title from './Components/UI/Title/Title';
+import Logo from './Components/UI/Logo/Logo';
 import { useEffect } from 'react';
 import { initializeScript } from './Core/initializeScript';
 import Menu from './Components/UI/Menu/Menu';
@@ -29,6 +30,7 @@ function App() {
         <BottomControlPanelFilm />
         <Backlog />
         <Title />
+        {/* <Logo /> */}
         <Extra />
         <Menu />
         <GlobalDialog />
