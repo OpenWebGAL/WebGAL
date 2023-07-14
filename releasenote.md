@@ -1,14 +1,14 @@
-## 发布日志：WebGAL 4.4.1
+## 发布日志：WebGAL 4.4.2
 ### 在此版本中
 
-使用 Service Worker 来提高静态资源加载速度
+修复引擎条件执行参数解析错误
 
-## Release Note: WebGAL 4.4.1
+## Release Note: WebGAL 4.4.2
 ### In this version
 
-Using Service Worker to improve static resource loading speed.
+Fix an error in parsing engine conditional execution parameters.
 
-## リリースログ：WebGAL 4.4.1
+## リリースログ：WebGAL 4.4.2
 ### このバージョンでは
 
-Service Workerを使用して、静的リソースのロード速度を向上させます。
+エンジンの条件実行パラメータの解析におけるエラーを修正。
