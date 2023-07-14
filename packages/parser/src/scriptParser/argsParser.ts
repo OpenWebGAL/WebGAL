@@ -18,8 +18,9 @@ export function argsParser(argsRaw: string, assetSetter: (fileName: string, asse
     return e !== "";
   });
   rawArgsList.forEach((e) => {
-    const argName = e.split("=")[0];
-    const argValue = e.split("=")[1];
+    const equalSignIndex = e.indexOf('=');
+    const argName = e.slice(0, equalSignIndex);
+    const argValue = e.slice(equalSignIndex + 1);
     // 判断是不是语音参数
     if (e.match(/.ogg|.mp3|.wav/)) {
       returnArrayList.push({
