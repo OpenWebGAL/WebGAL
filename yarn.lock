@@ -5223,14 +5223,6 @@ void-elements@3.1.0:
   resolved "https://registry.yarnpkg.com/void-elements/-/void-elements-3.1.0.tgz#614f7fbf8d801f0bb5f0661f5b2f5785750e4f09"
   integrity sha512-Dhxzh5HZuiHQhbvTW9AMetFfBHDMYpo23Uo9btPXgdYP+3T5S+p+jgNy7spra+veYhBP2dCSgxR/i2Y02h5/6w==
 
-webgal-parser@4.3.13-5:
-  version "4.3.13-5"
-  resolved "https://registry.yarnpkg.com/webgal-parser/-/webgal-parser-4.3.13-5.tgz#26c8ab930d18e7a55c7aceaa5c2d64fb675e453e"
-  integrity sha512-Bc+u2/ReFHJUVPd/wF6N9INfnv58XxYV2eWbD5ScsZ47bX1R2iIbR6W9pMekHAL4wYeJjVP9y8trmEmIDBNH8g==
-  dependencies:
-    cloudlogjs "^1.0.11"
-    lodash "^4.17.21"
-
 webidl-conversions@^3.0.0:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/webidl-conversions/-/webidl-conversions-3.0.1.tgz#24534275e2a7bc6be7bc86611cc16ae0a5654871"
