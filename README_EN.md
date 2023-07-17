@@ -58,8 +58,7 @@ The engine now supports the use of Live2D character models. If you want to use L
    - Live2D: https://cdn.jsdelivr.net/gh/dylanNew/live2d/webgl/Live2D/lib/live2d.min.js
    - CubismCore: https://cubism.live2d.com/sdk-web/cubismcore/live2dcubismcore.min.js
 
-3. Rename the downloaded files as `l2d.js` and `live2dcubismcore.min.js` respectively. Then, in the `packages/webgal/index.html` file, uncomment the following two lines to include them:
-
+3. Rename `l2d.js` and `live2dcubismcore.min.js` respectively, then put the files in `packages/webgal/src/assets/lib`, and then go to `packages/webgal/index.html`, and uncomment the following two lines so that they become:
    ```
    htmlCopy code<script src="/src/assets/lib/l2d.js"></script>
    <script src="/src/assets/lib/live2dcubismcore.min.js"></script>
