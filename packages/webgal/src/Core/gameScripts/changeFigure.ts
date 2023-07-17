@@ -123,9 +123,19 @@ export const changeFigure = (sentence: ISentence): IPerform => {
         dispatch(setStage({ key: 'figNameRight', value: content }));
         break;
     }
-    if(motion){
-      dispatch(setStage({ key: 'live2dMotion', value: motion }));
+  if (motion) {
+    const index = webgalStore.getState().stage.live2dMotion.findIndex((e) => e.target === key);
+    let motionArr = webgalStore.getState().stage.live2dMotion;
+    if (index <= 0) {
+      // 应用一个新的 motion
+      motionArr = [...webgalStore.getState().stage.live2dMotion, { target: key, motion }];
+    } else {
+      motionArr[index].motion = motion;
+      // deep clone
+      motionArr = [...motionArr];
     }
+    dispatch(setStage({ key: 'live2dMotion', value: motionArr }));
+  }
   return {
     performName: 'none',
     duration: 0,

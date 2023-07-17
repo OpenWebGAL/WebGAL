@@ -49,7 +49,41 @@ Whether using WebGAL scripts or the visual editor for development, everything is
 **Developers who want to participate in engine development, please read [the participation guide for this project](https://docs.openwebgal.com/developers/)**
 
 ### About Live2D
-The characters in this work use sample data copyrighted by Live2D Co., Ltd. in accordance with the rules set by Live2D Co., Ltd. This work is produced at the complete discretion of the creator.
+The engine now supports the use of Live2D character models. If you want to use Live2D models, please follow these steps:
+
+1. Obtain the necessary authorization for using Live2D.
+
+2. Download Live2D and CubismCore from the following links:
+
+   - Live2D: https://cdn.jsdelivr.net/gh/dylanNew/live2d/webgl/Live2D/lib/live2d.min.js
+   - CubismCore: https://cubism.live2d.com/sdk-web/cubismcore/live2dcubismcore.min.js
+
+3. Rename the downloaded files as `l2d.js` and `live2dcubismcore.min.js` respectively. Then, in the `packages/webgal/index.html` file, uncomment the following two lines to include them:
+
+   ```
+   htmlCopy code<script src="/src/assets/lib/l2d.js"></script>
+   <script src="/src/assets/lib/live2dcubismcore.min.js"></script>
+   ```
+
+4. In the `packages/webgal/src/Core/controller/stage/pixi/PixiController.ts` file, uncomment the following lines:
+
+   ```
+   javascriptCopy codeimport { Live2DModel, SoundManager } from 'pixi-live2d-display';
+   public addLive2dFigure(key: string, jsonPath: string, pos: string, motion: string) {
+      // ...
+   }
+   ```
+
+5. In the `packages/webgal/src/Components/Stage/MainStage/useSetFigure.ts` file, uncomment the following line:
+
+   ```
+   javascriptCopy code
+   return WebGAL.gameplay.pixiStage?.addLive2dFigure(...args);
+   ```
+
+6. You can now use Live2D character models as part of your illustrations. Place the entire model directory inside the `game/figure` directory. To display a character model, call the corresponding JSON file.
+
+**Note: The author of this project has not used any Live2D SDK source code or models. Any copyright disputes arising from the use of Live2D are the sole responsibility of the developers or creators of the modified project!**
 
 ### Sponsorship
 
