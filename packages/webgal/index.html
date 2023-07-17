@@ -9,8 +9,6 @@
         content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no"/>
 </head>
 <body>
-  <script src="https://cubism.live2d.com/sdk-web/cubismcore/live2dcubismcore.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/gh/dylanNew/live2d/webgl/Live2D/lib/live2d.min.js"></script>
 <!--快速显示落地页，让用户感知不到加载的过程-->
 <div id="ebg"></div>
 <div id="Title_enter_page" onclick="enter()" style="
@@ -109,6 +107,8 @@
 </script>
 <script type="module" src="/src/main.tsx"></script>
 <script type="module" src="/src/Core/util/resize.ts"></script>
+<!--<script src="/src/assets/lib/l2d.js"></script>-->
+<!--<script src="/src/assets/lib/live2dcubismcore.min.js"></script>-->
 <script>
   let enterPromise = new Promise(res => window.enterPromise = res);
   let renderPromise = new Promise(res => window.renderPromise = res);

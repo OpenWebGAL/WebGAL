@@ -29,7 +29,7 @@ export const initState: IStageState = {
   bgTransform: '', // 现在不用，先预留
   PerformList: [], // 要启动的演出列表
   currentDialogKey: 'initial',
-  live2dMotion: '',
+  live2dMotion: [],
   // currentPerformDelay: 0
   currentConcatDialogPrev: '',
   enableFilm: '',

@@ -3,7 +3,6 @@ bgm:s_Title.mp3;
 unlockBgm:s_Title.mp3 -name=雲を追いかけて;
 intro:你好|欢迎来到 WebGAL 的世界;
 changeBg:bg.png -next;
-changeFigure:hiyori/hiyori_pro_t11.model3.json -left -next -motion=Idle;
 unlockCg:bg.png -name=良夜; // 解锁CG并赋予名称
 changeFigure:stand.png -left -enter=enter-from-left -next;
 WebGAL:欢迎使用 WebGAL！这是一款全新的网页端视觉小说引擎。 -v1.wav;
@@ -38,8 +37,15 @@ WebGAL 项目只用了一年不到就在 GitHub 获得了 1000 星标！ -v14.wa
 WebGAL 的开发历程，是一个在开发中学习开发的过程。因此她经历了3次重构，并且每次几乎都是推倒重来式的。 -v15.wav;
 WebGAL 的脚本语言是为了简化制作难度而全新设计的！ -v16.wav;
 
+;l2d
+;label:l2d;
+;changeFigure:hiyori/hiyori_pro_t11.model3.json -left -motion=Idle -next;
+;WebGAL 项目现在也开始尝试实验性支持 live2D！今后可能会成为一个正式功能！
+
 ;结束分支
 label:end;
+;changeFigure:none -left -next;
+;changeFigure:stand.png -next;
 为了更接近桌面端视觉小说引擎的能力，我们支持很多快捷键以及可跳转的剧情回溯。 -v17.wav;
 按下菜单中的“回想”按钮或者向上滚动鼠标滚轮试试吧！ -v18.wav;
 快速存读挡、丰富的选项、自动播放以及快进等功能，也是应有尽有。 -v19.wav;

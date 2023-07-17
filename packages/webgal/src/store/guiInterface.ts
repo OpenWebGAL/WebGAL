@@ -25,9 +25,12 @@ export interface IGuiState {
   showPanicOverlay: boolean;
 }
 
-export type componentsVisibility = Pick<IGuiState, Exclude<keyof IGuiState, 'currentMenuTag' | 'titleBg' | 'titleBgm' | 'logoImage' >>;
+export type componentsVisibility = Pick<
+  IGuiState,
+  Exclude<keyof IGuiState, 'currentMenuTag' | 'titleBg' | 'titleBgm' | 'logoImage'>
+>;
 // 标题资源
-export type GuiAsset = Pick<IGuiState, 'titleBgm' | 'titleBg' | 'logoImage' >;
+export type GuiAsset = Pick<IGuiState, 'titleBgm' | 'titleBg' | 'logoImage'>;
 
 export interface IGuiStore {
   GuiState: IGuiState;

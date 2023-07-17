@@ -11,24 +11,22 @@ const Logo: FC = () => {
   const logoImage = GUIState.logoImage;
   const logoList = logoImage.split(' ');
 
-  const logo = logoList.map((logo,index)=>
+  const logo = logoList.map((logo, index) => (
     <li
-      key = {index}
+      key={index}
       className={styles.Logo_main}
       style={{
         backgroundImage: `url("${logo}")`,
-        animationDelay: `${index*1.5}s`,
+        animationDelay: `${index * 1.5}s`,
       }}
-    ></li>
-  );
+    />
+  ));
 
   return (
     <>
       {GUIState.showTitle && (
-        <div id = "logo_target"  className={styles.Logo_target}>
-          <ul>
-            {logo}
-          </ul>
+        <div id="logo_target" className={styles.Logo_target}>
+          <ul>{logo}</ul>
         </div>
       )}
     </>
