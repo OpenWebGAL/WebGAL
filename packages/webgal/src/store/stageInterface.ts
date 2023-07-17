@@ -101,6 +101,7 @@ export interface IStageState {
   bgFilter: string;
   PerformList: Array<IRunPerform>; // 要启动的演出列表
   currentDialogKey: string; // 当前对话的key
+  live2dMotion: { target: string; motion: string }[];
   // 当前演出的延迟，用于做对话插演出！
   // currentPerformDelay:number
   currentConcatDialogPrev: string;

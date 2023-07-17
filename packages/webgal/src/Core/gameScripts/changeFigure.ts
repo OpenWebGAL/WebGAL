@@ -16,6 +16,7 @@ export const changeFigure = (sentence: ISentence): IPerform => {
   let pos: 'center' | 'left' | 'right' = 'center';
   let content = sentence.content;
   let isFreeFigure = false;
+  let motion = '';
   let key = '';
   for (const e of sentence.args) {
     if (e.key === 'left' && e.value === true) {
@@ -30,6 +31,9 @@ export const changeFigure = (sentence: ISentence): IPerform => {
     if (e.key === 'id') {
       isFreeFigure = true;
       key = e.value.toString();
+    }
+    if (e.key === 'motion') {
+      motion = e.value.toString();
     }
     if (content === 'none') {
       content = '';
@@ -119,6 +123,19 @@ export const changeFigure = (sentence: ISentence): IPerform => {
         dispatch(setStage({ key: 'figNameRight', value: content }));
         break;
     }
+  if (motion) {
+    const index = webgalStore.getState().stage.live2dMotion.findIndex((e) => e.target === key);
+    let motionArr = webgalStore.getState().stage.live2dMotion;
+    if (index <= 0) {
+      // 应用一个新的 motion
+      motionArr = [...webgalStore.getState().stage.live2dMotion, { target: key, motion }];
+    } else {
+      motionArr[index].motion = motion;
+      // deep clone
+      motionArr = [...motionArr];
+    }
+    dispatch(setStage({ key: 'live2dMotion', value: motionArr }));
+  }
   return {
     performName: 'none',
     duration: 0,
