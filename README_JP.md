@@ -52,7 +52,7 @@ WebGALは、プログラミング知識が不要で、簡単にビジュアル�
    - Live2D: https://cdn.jsdelivr.net/gh/dylanNew/live2d/webgl/Live2D/lib/live2d.min.js
    - CubismCore: https://cubism.live2d.com/sdk-web/cubismcore/live2dcubismcore.min.js
 
-3. ダウンロードしたファイルをそれぞれ`l2d.js`と`live2dcubismcore.min.js`という名前に変更します。その後、`packages/webgal/index.html`ファイル内の次の2行のコメントを解除して、次のようにします：
+3. l2d.js`と`live2dcubismcore.min.js`の名前をそれぞれ変更し、そのファイルを`packages/webgal/src/assets/lib`に置いてから、`packages/webgal/index.html`に移動し、以下の2行をアンコメントする：
 
    ```
    htmlCopy code<script src="/src/assets/lib/l2d.js"></script>
