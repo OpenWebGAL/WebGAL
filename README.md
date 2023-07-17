@@ -50,6 +50,9 @@ https://demo.openwebgal.com
 
 **想要参与引擎开发的开发者请阅读 [此项目的参与指南](https://docs.openwebgal.com/developers/)**
 
+### 关于Live2D
+本作品中的角色按照Live2D Co., Ltd.制定的规则使用Live2D Co., Ltd.拥有版权的样本数据。本作品的制作完全由创作者自行决定。
+
 ### 赞助
 
 WebGAL 是一款开源软件，因此你可以免费在 MPL-2.0 开源协议的范畴下使用本软件，并可用于商业使用。
