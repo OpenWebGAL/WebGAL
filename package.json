@@ -19,8 +19,5 @@
       "packages/*"
     ]
   },
-  "private": true,
-  "dependencies": {
-    "pixi-live2d-display": "^0.4.0"
-  }
+  "private": true
 }
