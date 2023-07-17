@@ -28,7 +28,6 @@ https://webgal-jp-demo.onrender.com/
 ※日本語の開発ドキュメントは準備中です
 
 [WebGAL Webエディターのダウンロードはこちら](https://github.com/MakinoharaShoko/WebGAL_Terre/releases)
-※日本語化は準備中です
 
 ## WebGALの魅力と機能
 
@@ -42,6 +41,9 @@ WebGALは、プログラミング知識が不要で、簡単にビジュアル�
 
 **エンジン開発に参加したい開発者は、[このプロジェクトの参加ガイド](https://docs.openwebgal.com/developers/)をお読みください**
 <br>上記のDiscordに参加すると多くの情報を得ることができます。
+
+### About Live2D
+本作品のキャラクターには株式会社Live2Dの著作物であるサンプルデータが株式会社Live2Dの定める規約に従って用いられています。本作品は制作者の完全な自己の裁量で制作されています。
 
 ### スポンサーシップ
 

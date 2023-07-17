@@ -48,6 +48,9 @@ Whether using WebGAL scripts or the visual editor for development, everything is
 
 **Developers who want to participate in engine development, please read [the participation guide for this project](https://docs.openwebgal.com/developers/)**
 
+### About Live2D
+The characters in this work use sample data copyrighted by Live2D Co., Ltd. in accordance with the rules set by Live2D Co., Ltd. This work is produced at the complete discretion of the creator.
+
 ### Sponsorship
 
 WebGAL is an open-source software, so you can use this software for free under the scope of the MPL-2.0 open-source license, and it is available for commercial use.

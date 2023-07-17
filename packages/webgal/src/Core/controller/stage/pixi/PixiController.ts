@@ -9,6 +9,10 @@ import { isIOS } from '@/Core/initializeScript';
 import { WebGALPixiContainer } from '@/Core/controller/stage/pixi/WebGALPixiContainer';
 import { Simulate } from 'react-dom/test-utils';
 import load = Simulate.load;
+import { Live2DModel } from 'pixi-live2d-display';
+import { SoundManager } from 'pixi-live2d-display';
+import { figureCash,voiceCash} from '@/Core/gameScripts/conentsCash';
+
 
 export interface IAnimationObject {
   setStartState: Function;
@@ -386,6 +390,97 @@ export default class PixiStage {
       // 复用
       setup();
     }
+  }
+
+  /**
+   * Live2d立绘
+   * @param jsonPath
+  */
+  public addLive2dFigure(key: string, jsonPath: string, pos: string, motion: string) {
+
+    let stageWidth = this.stageWidth;
+    let stageHeight = this.stageHeight;
+    
+    figureCash.push(jsonPath);
+
+    const loader = this.assetLoader;
+    // 准备用于存放这个立绘的 Container
+    const thisFigureContainer = new WebGALPixiContainer();
+  
+    // 是否有相同 key 的立绘
+    const setFigIndex = this.figureObjects.findIndex((e) => e.key === key);
+    const isFigSet = setFigIndex >= 0;
+
+    // 已经有一个这个 key 的立绘存在了
+    if (isFigSet) {
+      this.removeStageObjectByKey(key);
+    }
+
+    // 挂载
+    this.figureContainer.addChild(thisFigureContainer);
+    this.figureObjects.push({ uuid: uuid(), key: key, pixiContainer: thisFigureContainer, sourceUrl: jsonPath });
+
+
+    const setup = () => {
+
+      if (thisFigureContainer) {
+        (async function () {
+
+          const models = await Promise.all([
+            Live2DModel.from(jsonPath),
+          ]);
+
+          models.forEach((model) => {
+
+            const scaleX = stageWidth / model.width;
+            const scaleY = stageHeight / model.height;
+            const targetScale = Math.min(scaleX, scaleY) * 1.5;
+            const targetWidth = model.width * targetScale;
+            //const targetHeight = model.height * targetScale;
+
+            model.scale.set(targetScale);
+            model.anchor.set(0.5);
+            model.position.x = stageWidth / 2;
+            model.position.y = stageHeight / 1.2;
+
+            if (pos == 'left' ) {
+              model.position.x = targetWidth / 2;
+            }
+            if (pos == 'right') {
+              model.position.x = stageWidth - targetWidth / 2;
+            }
+
+            var category_name = motion;
+            var animation_index = 0;
+            var priority_number = 3;
+            //var audio_link = voiceCash.pop();
+            
+            //model.motion(category_name, animation_index, priority_number,location.href + audio_link);
+            model.motion(category_name, animation_index, priority_number);
+            
+            // lip-sync is still a problem and you can not.
+            SoundManager.volume = 0;
+            thisFigureContainer.addChild(model);
+
+          });
+          
+        })();
+      }
+      
+    };
+
+    /**
+     * 加载器部分
+    */
+    const resourses = Object.keys(loader.resources);
+    this.cacheGC();
+    if (!resourses.includes(jsonPath)) {
+      this.loadAsset(jsonPath, setup);
+    } else {
+      // 复用
+      setup();
+    }
+
   }
 
   /**
