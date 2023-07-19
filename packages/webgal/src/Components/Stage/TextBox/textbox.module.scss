@@ -15,16 +15,9 @@
   z-index: 6;
   width: 100%;
   min-height: 37.5%;
-  background: linear-gradient(
-    //transparent,
-      rgba(0, 0, 0, 0.05) 20%,
-      //rgba(0, 0, 0, 0) 75%,
-      //rgba(0, 0, 0, .75) 75%,
-      rgba(0, 0, 0, .75));
-  //linear-gradient(90deg, transparent 0,
-  //    rgba(0, 0, 0, .35) 25%,
-  //    rgba(0, 0, 0, .35) 75%,
-  //    transparent);
+  background: linear-gradient(rgba(0, 0, 0, 0.05) 20%, rgba(0, 0, 0, .85)),
+  linear-gradient(to right, rgba(0, 0, 0, 0.05), rgba(0, 0, 0, .1) 50%, rgba(0, 0, 0, 0.05));
+  //background: white;
   bottom: 0;
   font-weight: bold;
   color: white;
@@ -62,9 +55,8 @@
 .outer {
   position: absolute;
   left: 0;
-  top:0;
+  top: 0;
   background-image: linear-gradient(
-    //135deg,
       #ffffff 0%,
       #f5f7fa 45%,
       #c3cfe2 100%
@@ -78,10 +70,10 @@
 .inner {
   position: absolute;
   left: 0;
-  top:0;
-  -webkit-text-stroke: 0.085em rgba(0, 0, 0, 0.35);
+  top: 0;
+  -webkit-text-stroke: 0.06em rgba(0, 0, 0, 0.6);
   z-index: 1;
-  text-shadow: 3px 3px 7px rgba(0, 0, 0, 0.3);
+  text-shadow: 1px 1px 12px rgba(255, 255, 255, 0.35);
 }
 
 .zhanwei {
