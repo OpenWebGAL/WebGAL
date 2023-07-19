@@ -8,7 +8,7 @@ import { WebGAL } from '@/main';
 import { getEnterExitAnimation } from '@/Core/Modules/animations';
 
 export function useSetFigure(stageState: IStageState) {
-  const { figNameLeft, figName, figNameRight, freeFigure } = stageState;
+  const { figNameLeft, figName, figNameRight, freeFigure, live2dMotion } = stageState;
 
   /**
    * 设置立绘
@@ -27,6 +27,10 @@ export function useSetFigure(stageState: IStageState) {
         }
       }
       WebGAL.gameplay.pixiStage?.addFigure(thisFigKey, figName, 'center');
+      const regex = /.json$/;
+      if (regex.test(figName)) {
+        addLive2dFigure(thisFigKey, figName, 'center', live2dMotion.find((e) => e.target === thisFigKey)?.motion ?? '');
+      }
       logger.debug('中立绘已重设');
       const { duration, animation } = getEnterExitAnimation(thisFigKey, 'enter');
       WebGAL.gameplay.pixiStage!.registerPresetAnimation(animation, softInAniKey, thisFigKey, stageState.effects);
@@ -56,6 +60,15 @@ export function useSetFigure(stageState: IStageState) {
         }
       }
       WebGAL.gameplay.pixiStage?.addFigure(thisFigKey, figNameLeft, 'left');
+      const regex = /.json$/;
+      if (regex.test(figNameLeft)) {
+        addLive2dFigure(
+          thisFigKey,
+          figNameLeft,
+          'left',
+          live2dMotion.find((e) => e.target === thisFigKey)?.motion ?? '',
+        );
+      }
       logger.debug('左立绘已重设');
       const { duration, animation } = getEnterExitAnimation(thisFigKey, 'enter');
       WebGAL.gameplay.pixiStage!.registerPresetAnimation(animation, softInAniKey, thisFigKey, stageState.effects);
@@ -85,6 +98,15 @@ export function useSetFigure(stageState: IStageState) {
         }
       }
       WebGAL.gameplay.pixiStage?.addFigure(thisFigKey, figNameRight, 'right');
+      const regex = /.json$/;
+      if (regex.test(figNameRight)) {
+        addLive2dFigure(
+          thisFigKey,
+          figNameRight,
+          'right',
+          live2dMotion.find((e) => e.target === thisFigKey)?.motion ?? '',
+        );
+      }
       logger.debug('右立绘已重设');
       const { duration, animation } = getEnterExitAnimation(thisFigKey, 'enter');
       WebGAL.gameplay.pixiStage!.registerPresetAnimation(animation, softInAniKey, thisFigKey, stageState.effects);
@@ -123,6 +145,15 @@ export function useSetFigure(stageState: IStageState) {
           }
         } else {
           WebGAL.gameplay.pixiStage?.addFigure(thisFigKey, fig.name, fig.basePosition);
+          const regex = /.json$/;
+          if (regex.test(fig.name)) {
+            addLive2dFigure(
+              thisFigKey,
+              fig.name,
+              fig.basePosition,
+              live2dMotion.find((e) => e.target === thisFigKey)?.motion ?? '',
+            );
+          }
           logger.debug(`${fig.key}立绘已重设`);
           const { duration, animation } = getEnterExitAnimation(thisFigKey, 'enter');
           WebGAL.gameplay.pixiStage!.registerPresetAnimation(animation, softInAniKey, thisFigKey, stageState.effects);
@@ -183,4 +214,8 @@ function removeFig(figObj: IStageObject, enterTikerKey: string, effects: IEffect
     WebGAL.gameplay.pixiStage?.removeAnimation(leaveKey);
     WebGAL.gameplay.pixiStage?.removeStageObjectByKey(figKey);
   }, duration);
+}
+
+function addLive2dFigure(...args: any[]) {
+  // return WebGAL.gameplay.pixiStage?.addLive2dFigure.apply(args);
 }
