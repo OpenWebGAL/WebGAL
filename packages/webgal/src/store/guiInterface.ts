@@ -23,6 +23,7 @@ export interface IGuiState {
   showExtra: boolean;
   showGlobalDialog: boolean;
   showPanicOverlay: boolean;
+  isEnterGame: boolean;
 }
 
 export type componentsVisibility = Pick<
