@@ -87,6 +87,11 @@ WebGAL 是一款开源软件，因此你可以免费在 MPL-2.0 开源协议的�
 | ------------------------------------------------------------ |
 | [T2-official(T2)](https://github.com/T2-official)            |
 
+## Silver Sponsors
+| <img src="https://avatars.githubusercontent.com/u/103700780?v=4" alt="IdrilK" style="zoom:25%;" /> |
+| ------------------------------------------------------------ |
+| [IdrilK](https://github.com/IdrilK)            |
+
 
 
 ## Stargazers over time

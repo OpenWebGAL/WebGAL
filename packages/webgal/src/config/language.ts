@@ -8,6 +8,7 @@
 import en from '@/translations/en';
 import jp from '@/translations/jp';
 import zhCn from '@/translations/zh-cn';
+import fr from '@/translations/fr';
 /*
   Import your translation configs here;
   example:
@@ -18,18 +19,21 @@ export enum language {
   zhCn,
   en,
   jp,
+  fr,
 }
 
 const languages: Record<string, string> = {
   zhCn: '中文',
   en: 'English',
   jp: '日本語',
+  fr: 'Français',
 };
 
 export const i18nTranslationResources: Record<string, { translation: Record<string, any> }> = {
   en: { translation: en },
   zhCn: { translation: zhCn },
   jp: { translation: jp },
+  fr: { translation: fr },
 };
 
 export const defaultLanguage: language = language.zhCn;
