@@ -94,7 +94,10 @@ WebGAL はオープンソース ソフトウェアであるため、MPL-2.0 オ�
 | ------------------------------------------------------------ |
 | [T2-official(T2)](https://github.com/T2-official)            |
 
-
+## Silver Sponsors
+| <img src="https://avatars.githubusercontent.com/u/103700780?v=4" alt="IdrilK" style="zoom:25%;" /> |
+| ------------------------------------------------------------ |
+| [IdrilK](https://github.com/IdrilK)            |
 
 ## Stargazers over time
 

@@ -23,11 +23,20 @@ import { backToTitle } from '@/Core/controller/gamePlay/backToTitle';
 import { saveGame } from '@/Core/controller/storage/saveGame';
 import { loadGame } from '@/Core/controller/storage/loadGame';
 import useTrans from '@/hooks/useTrans';
+import { useTranslation } from 'react-i18next';
 
 export const BottomControlPanel = () => {
   const t = useTrans('gaming.');
   const strokeWidth = 2.5;
-  const size = 48;
+  const { i18n } = useTranslation();
+  const lang = i18n.language;
+  const isFr = lang === 'fr';
+  let size = 48;
+  let fontSize = '150%';
+  if (isFr) {
+    fontSize = '125%';
+    size = 40;
+  }
   const GUIStore = useSelector((state: RootState) => state.GUI);
   const stageState = useSelector((state: RootState) => state.stage);
   const dispatch = useDispatch();
@@ -65,7 +74,11 @@ export const BottomControlPanel = () => {
       {GUIStore.showTextBox && stageState.enableFilm === '' && (
         <div className={styles.main}>
           {GUIStore.showTextBox && (
-            <span className={styles.singleButton} onClick={() => setComponentVisibility('showTextBox', false)}>
+            <span
+              className={styles.singleButton}
+              style={{ fontSize }}
+              onClick={() => setComponentVisibility('showTextBox', false)}
+            >
               <PreviewCloseOne
                 className={styles.button}
                 theme="outline"
@@ -77,7 +90,11 @@ export const BottomControlPanel = () => {
             </span>
           )}
           {!GUIStore.showTextBox && (
-            <span className={styles.singleButton} onClick={() => setComponentVisibility('showTextBox', true)}>
+            <span
+              className={styles.singleButton}
+              style={{ fontSize }}
+              onClick={() => setComponentVisibility('showTextBox', true)}
+            >
               <PreviewOpen
                 className={styles.button}
                 theme="outline"
@@ -90,6 +107,7 @@ export const BottomControlPanel = () => {
           )}
           <span
             className={styles.singleButton}
+            style={{ fontSize }}
             onClick={() => {
               setComponentVisibility('showBacklog', true);
               setComponentVisibility('showTextBox', false);
@@ -106,6 +124,7 @@ export const BottomControlPanel = () => {
           </span>
           <span
             className={styles.singleButton}
+            style={{ fontSize }}
             onClick={() => {
               let VocalControl: any = document.getElementById('currentVocal');
               if (VocalControl !== null) {
@@ -124,11 +143,11 @@ export const BottomControlPanel = () => {
             />
             <span className={styles.button_text}>{t('buttons.replay')}</span>
           </span>
-          <span id="Button_ControlPanel_auto" className={styles.singleButton} onClick={switchAuto}>
+          <span id="Button_ControlPanel_auto" className={styles.singleButton} style={{ fontSize }} onClick={switchAuto}>
             <PlayOne className={styles.button} theme="outline" size={size} fill="#f5f5f7" strokeWidth={strokeWidth} />
             <span className={styles.button_text}>{t('buttons.auto')}</span>
           </span>
-          <span id="Button_ControlPanel_fast" className={styles.singleButton} onClick={switchFast}>
+          <span id="Button_ControlPanel_fast" className={styles.singleButton} style={{ fontSize }} onClick={switchFast}>
             <DoubleRight
               className={styles.button}
               theme="outline"
@@ -140,6 +159,7 @@ export const BottomControlPanel = () => {
           </span>
           <span
             className={styles.singleButton + ' ' + styles.fastsave}
+            style={{ fontSize }}
             onClick={() => {
               saveGame(0);
             }}
@@ -156,6 +176,7 @@ export const BottomControlPanel = () => {
           </span>
           <span
             className={styles.singleButton + ' ' + styles.fastload}
+            style={{ fontSize }}
             onClick={() => {
               loadGame(0);
             }}
@@ -166,6 +187,7 @@ export const BottomControlPanel = () => {
           </span>
           <span
             className={styles.singleButton}
+            style={{ fontSize }}
             onClick={() => {
               setMenuPanel(MenuPanelTag.Save);
               setComponentVisibility('showMenuPanel', true);
@@ -176,6 +198,7 @@ export const BottomControlPanel = () => {
           </span>
           <span
             className={styles.singleButton}
+            style={{ fontSize }}
             onClick={() => {
               setMenuPanel(MenuPanelTag.Load);
               setComponentVisibility('showMenuPanel', true);
@@ -192,6 +215,7 @@ export const BottomControlPanel = () => {
           </span>
           <span
             className={styles.singleButton}
+            style={{ fontSize }}
             onClick={() => {
               setMenuPanel(MenuPanelTag.Option);
               setComponentVisibility('showMenuPanel', true);
@@ -208,6 +232,7 @@ export const BottomControlPanel = () => {
           </span>
           <span
             className={styles.singleButton}
+            style={{ fontSize }}
             onClick={() => {
               backToTitle();
             }}
