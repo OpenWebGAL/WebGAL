@@ -51,7 +51,6 @@ a:active {
 body {
   background-color: #000;
   font-size: 16px;
-  margin: 0;
   font-family: "WebgalUI", -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
   'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
   sans-serif;
@@ -72,6 +71,7 @@ code {
   overflow: hidden;
   /*position: absolute;*/
   /*top: 0;*/
+  transform-origin: 0 0;
   font-size: 160%;
 }
 
@@ -97,15 +97,10 @@ code {
 }
 
 #ebg {
-  height: 100vh;
-  width: 100vw;
   filter: blur(50px);
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
-  position: absolute;
-  top: 0;
-  left: 0;
 }
 
 /* ::-webkit-scrollbar-thumb:window-inactive {
