@@ -1,4 +1,4 @@
-import { configureStore } from '@reduxjs/toolkit';
+import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
 import stageReducer from '@/store/stageReducer';
 import GUIReducer from '@/store/GUIReducer';
 import userDataReducer from '@/store/userDataReducer';
@@ -12,6 +12,9 @@ export const webgalStore = configureStore({
     GUI: GUIReducer,
     userData: userDataReducer,
   },
+  middleware: getDefaultMiddleware({
+    serializableCheck: false,
+  }),
 });
 
 // 在 TS 中的类型声明
