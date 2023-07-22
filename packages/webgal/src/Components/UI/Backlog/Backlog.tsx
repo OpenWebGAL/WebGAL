@@ -1,5 +1,4 @@
 import styles from './backlog.module.scss';
-import { RUNTIME_CURRENT_BACKLOG } from '@/Core/runtime/backlog';
 import { CloseSmall, Return, VolumeNotice } from '@icon-park/react';
 import { jumpFromBacklog } from '@/Core/controller/storage/jumpFromBacklog';
 import { useDispatch, useSelector } from 'react-redux';
@@ -8,6 +7,7 @@ import { setVisibility } from '@/store/GUIReducer';
 import { logger } from '@/Core/util/etc/logger';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import useTrans from '@/hooks/useTrans';
+import { WebGAL } from '@/main';
 
 export const Backlog = () => {
   const t = useTrans('gaming.');
@@ -22,12 +22,12 @@ export const Backlog = () => {
   const backlogList = useMemo<any>(() => {
     let backlogs = [];
     // logger.info('backlogList render');
-    for (let i = 0; i < RUNTIME_CURRENT_BACKLOG.length; i++) {
-      const backlogItem = RUNTIME_CURRENT_BACKLOG[i];
+    for (let i = 0; i < WebGAL.backlogManager.getBacklog().length; i++) {
+      const backlogItem = WebGAL.backlogManager.getBacklog()[i];
       const singleBacklogView = (
         <div
           className={styles.backlog_item}
-          style={{ animationDelay: `${20 * (RUNTIME_CURRENT_BACKLOG.length - i)}ms` }}
+          style={{ animationDelay: `${20 * (WebGAL.backlogManager.getBacklog().length - i)}ms` }}
           key={'backlogItem' + backlogItem.currentStageState.showText + backlogItem.saveScene.currentSentenceId}
         >
           <div className={styles.backlog_func_area}>
@@ -52,7 +52,7 @@ export const Backlog = () => {
                       const userDataStore = webgalStore.getState().userData;
                       const mainVol = userDataStore.optionData.volumeMain;
                       backlog_audio_element.volume = mainVol * 0.01 * userDataStore.optionData.vocalVolume * 0.01;
-                      backlog_audio_element.play();
+                      backlog_audio_element?.play();
                     }
                   }}
                   className={styles.backlog_item_button_element}
@@ -72,7 +72,10 @@ export const Backlog = () => {
       backlogs.unshift(singleBacklogView);
     }
     return backlogs;
-  }, [RUNTIME_CURRENT_BACKLOG[RUNTIME_CURRENT_BACKLOG.length - 1]?.saveScene?.currentSentenceId ?? 0]);
+  }, [
+    WebGAL.backlogManager.getBacklog()[WebGAL.backlogManager.getBacklog().length - 1]?.saveScene?.currentSentenceId ??
+      0,
+  ]);
   useEffect(() => {
     /* 切换为展示历史记录时触发 */
     if (GUIStore.showBacklog) {

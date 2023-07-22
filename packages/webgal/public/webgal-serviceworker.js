@@ -1,19 +1,41 @@
+self.addEventListener('install', (ev) => {
+  // console.log('[service worker] installing');
+  ev.waitUntil(self.skipWaiting());
+});
+
+// fetch事件是每次页面请求资源时触发的
 self.addEventListener('fetch', function (event) {
-  event.respondWith(
-    // 从缓存中找资源
-    caches.match(event.request).then(function (resp) {
-      return (
-        resp ||
-        fetch(event.request).then(function (response) {
-          console.log('Request New Assets');
-          // eslint-disable-next-line max-nested-callbacks
-          return caches.open('v1').then(function (cache) {
+  const url = event.request.url;
+  const isReturnCache = !!(url.match('/assets/') && !url.match('game'));
+  if (isReturnCache) {
+    console.log('%cCACHED: ' + url, 'color: #005CAF; padding: 2px;');
+  }
+  if (!isReturnCache) {
+    event.respondWith(fetch(event.request));
+  } else {
+    event.respondWith(
+      // 检查在缓存中是否有匹配的资源
+      caches.match(event.request).then(function (response) {
+        // 如果缓存中有匹配的资源，则返回缓存资源
+        if (response) {
+          return response;
+        }
+        // 如果没有匹配的资源，则尝试从网络请求
+        // 同时将获取的资源存入缓存
+        return fetch(event.request)
+          .then(function (networkResponse) {
+            const clonedResponse = networkResponse.clone();
             // eslint-disable-next-line max-nested-callbacks
-            cache.put(event.request, response.clone()).then(() => console.log('New Cache Put'));
-            return response;
+            caches.open('my-cache').then(function (cache) {
+              cache.put(event.request, clonedResponse);
+            });
+            return networkResponse;
+          })
+          .catch(function (error) {
+            console.error('Fetching failed:', error);
+            throw error;
           });
-        })
-      );
-    }),
-  );
+      }),
+    );
+  }
 });

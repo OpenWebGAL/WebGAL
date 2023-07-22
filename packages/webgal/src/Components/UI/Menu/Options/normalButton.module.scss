@@ -1,11 +1,12 @@
 .NormalButton {
-  font-size: 175%;
+  font-size: 150%;
   box-sizing: border-box;
   padding: 0.2em 1em 0.2em 1em;
   background-color: rgba(50, 50, 50, 0.05);
   margin: 0 0.4em 0 0;
   color: rgba(160, 170, 160, 1);
   cursor: pointer;
+  border-bottom: 2px solid transparent;
 }
 
 .NormalButton:hover {

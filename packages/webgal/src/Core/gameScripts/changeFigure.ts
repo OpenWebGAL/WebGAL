@@ -1,9 +1,11 @@
 import { ISentence } from '@/Core/controller/scene/sceneInterface';
-import { IPerform } from '@/Core/controller/perform/performInterface';
+import { IPerform } from '@/Core/Modules/perform/performInterface';
 import { webgalStore } from '@/store/store';
 import { setStage } from '@/store/stageReducer';
 import { updateCurrentEffects } from '../controller/stage/pixi/PixiController';
 import cloneDeep from 'lodash/cloneDeep';
+import { getSentenceArgByKey } from '@/Core/util/getSentenceArg';
+import { WebGAL } from '@/main';
 
 /**
  * 更改立绘
@@ -14,6 +16,7 @@ export const changeFigure = (sentence: ISentence): IPerform => {
   let pos: 'center' | 'left' | 'right' = 'center';
   let content = sentence.content;
   let isFreeFigure = false;
+  let motion = '';
   let key = '';
   for (const e of sentence.args) {
     if (e.key === 'left' && e.value === true) {
@@ -28,6 +31,9 @@ export const changeFigure = (sentence: ISentence): IPerform => {
     if (e.key === 'id') {
       isFreeFigure = true;
       key = e.value.toString();
+    }
+    if (e.key === 'motion') {
+      motion = e.value.toString();
     }
     if (content === 'none') {
       content = '';
@@ -65,23 +71,74 @@ export const changeFigure = (sentence: ISentence): IPerform => {
       // 新加
       if (content !== '') newFreeFigure.push({ key, name: content, basePosition: pos });
     }
+    if (getSentenceArgByKey(sentence, 'enter')) {
+      WebGAL.animationManager.nextEnterAnimationName.set(key, getSentenceArgByKey(sentence, 'enter')!.toString());
+    }
+    if (getSentenceArgByKey(sentence, 'exit')) {
+      WebGAL.animationManager.nextExitAnimationName.set(
+        key + '-off',
+        getSentenceArgByKey(sentence, 'exit')!.toString(),
+      );
+    }
     dispatch(setStage({ key: 'freeFigure', value: newFreeFigure }));
   } else
     switch (pos) {
       case 'center':
+        key = 'fig-center';
+        if (getSentenceArgByKey(sentence, 'enter')) {
+          WebGAL.animationManager.nextEnterAnimationName.set(key, getSentenceArgByKey(sentence, 'enter')!.toString());
+        }
+        if (getSentenceArgByKey(sentence, 'exit')) {
+          WebGAL.animationManager.nextExitAnimationName.set(
+            key + '-off',
+            getSentenceArgByKey(sentence, 'exit')!.toString(),
+          );
+        }
         dispatch(setStage({ key: 'figName', value: content }));
         break;
       case 'left':
+        key = 'fig-left';
+        if (getSentenceArgByKey(sentence, 'enter')) {
+          WebGAL.animationManager.nextEnterAnimationName.set(key, getSentenceArgByKey(sentence, 'enter')!.toString());
+        }
+        if (getSentenceArgByKey(sentence, 'exit')) {
+          WebGAL.animationManager.nextExitAnimationName.set(
+            key + '-off',
+            getSentenceArgByKey(sentence, 'exit')!.toString(),
+          );
+        }
         dispatch(setStage({ key: 'figNameLeft', value: content }));
         break;
       case 'right':
+        key = 'fig-right';
+        if (getSentenceArgByKey(sentence, 'enter')) {
+          WebGAL.animationManager.nextEnterAnimationName.set(key, getSentenceArgByKey(sentence, 'enter')!.toString());
+        }
+        if (getSentenceArgByKey(sentence, 'exit')) {
+          WebGAL.animationManager.nextExitAnimationName.set(
+            key + '-off',
+            getSentenceArgByKey(sentence, 'exit')!.toString(),
+          );
+        }
         dispatch(setStage({ key: 'figNameRight', value: content }));
         break;
     }
+  if (motion) {
+    const index = webgalStore.getState().stage.live2dMotion.findIndex((e) => e.target === key);
+    let motionArr = webgalStore.getState().stage.live2dMotion;
+    if (index <= 0) {
+      // 应用一个新的 motion
+      motionArr = [...webgalStore.getState().stage.live2dMotion, { target: key, motion }];
+    } else {
+      motionArr[index].motion = motion;
+      // deep clone
+      motionArr = [...motionArr];
+    }
+    dispatch(setStage({ key: 'live2dMotion', value: motionArr }));
+  }
   return {
     performName: 'none',
     duration: 0,
-    isOver: false,
     isHoldOn: false,
     stopFunction: () => {},
     blockingNext: () => false,

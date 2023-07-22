@@ -1,11 +1,11 @@
 import { ISentence } from '@/Core/controller/scene/sceneInterface';
-import { IPerform } from '@/Core/controller/perform/performInterface';
+import { IPerform } from '@/Core/Modules/perform/performInterface';
 import { getSentenceArgByKey } from '@/Core/util/getSentenceArg';
 import { webgalAnimations } from '@/Core/controller/stage/pixi/animations';
 import { IAnimationObject } from '@/Core/controller/stage/pixi/PixiController';
-import { RUNTIME_GAMEPLAY } from '@/Core/runtime/gamePlay';
 import { logger } from '@/Core/util/etc/logger';
 import { webgalStore } from '@/store/store';
+import { WebGAL } from '@/main';
 
 /**
  * 设置背景动画
@@ -22,18 +22,17 @@ export const setComplexAnimation = (sentence: ISentence): IPerform => {
   if (animationFunction) {
     logger.debug(`动画${animationName}作用在${target}`, animationDuration);
     const animationObj: IAnimationObject = animationFunction(target, animationDuration);
-    RUNTIME_GAMEPLAY.pixiStage?.stopPresetAnimationOnTarget(target);
-    RUNTIME_GAMEPLAY.pixiStage?.registerAnimation(animationObj, key, target);
+    WebGAL.gameplay.pixiStage?.stopPresetAnimationOnTarget(target);
+    WebGAL.gameplay.pixiStage?.registerAnimation(animationObj, key, target);
     stopFunction = () => {
       const endDialogKey = webgalStore.getState().stage.currentDialogKey;
       const isHasNext = startDialogKey !== endDialogKey;
-      RUNTIME_GAMEPLAY.pixiStage?.removeAnimationWithSetEffects(key, !isHasNext);
+      WebGAL.gameplay.pixiStage?.removeAnimationWithSetEffects(key);
     };
   }
   return {
     performName: key,
     duration: animationDuration,
-    isOver: false,
     isHoldOn: false,
     stopFunction,
     blockingNext: () => false,

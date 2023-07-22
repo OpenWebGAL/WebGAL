@@ -1,13 +1,13 @@
 import { ISentence } from '@/Core/controller/scene/sceneInterface';
-import { IPerform } from '@/Core/controller/perform/performInterface';
+import { IPerform } from '@/Core/Modules/perform/performInterface';
 import styles1 from '../../Components/Stage/TextBox/textbox.module.scss';
 import styles2 from '../../Components/Stage/TextBox/textboxFilm.module.scss';
-import { getRandomPerformName } from '@/Core/controller/perform/getRandomPerformName';
 import { playVocal } from './playVocal';
 import { webgalStore } from '@/store/store';
 import { setStage } from '@/store/stageReducer';
 import { useTextDelay } from '@/hooks/useTextOptions';
-import { unmountPerformForce } from '@/Core/controller/perform/unmountPerform';
+import { getRandomPerformName, PerformController } from '@/Core/Modules/perform/performController';
+import { WebGAL } from '@/main';
 
 /**
  * 进行普通对话的显示
@@ -45,9 +45,7 @@ export const say = (sentence: ISentence): IPerform => {
   dispatch(setStage({ key: 'showText', value: dialogToShow }));
   // 清除语音
   dispatch(setStage({ key: 'vocal', value: '' }));
-  unmountPerformForce('vocal-play');
-  // 清除没有 ID 的效果音
-  unmountPerformForce('effect-sound');
+  WebGAL.gameplay.performController.unmountPerform('vocal-play', true);
   // 设置key
   dispatch(setStage({ key: 'currentDialogKey', value: dialogKey }));
   // 计算延迟
@@ -89,7 +87,6 @@ export const say = (sentence: ISentence): IPerform => {
   return {
     performName: performInitName,
     duration: sentenceDelay + endDelay,
-    isOver: false,
     isHoldOn: false,
     stopFunction: () => {
       const textElements = document.querySelectorAll('.' + styles.TextBox_textElement_start);

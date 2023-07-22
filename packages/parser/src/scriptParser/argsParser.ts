@@ -1,5 +1,6 @@
-import { arg } from "../interface/sceneInterface";
-import { fileType } from "../interface/assets";
+import {arg} from "../interface/sceneInterface";
+import {fileType} from "../interface/assets";
+
 /**
  * 参数解析器
  * @param argsRaw 原始参数字符串
@@ -18,8 +19,13 @@ export function argsParser(argsRaw: string, assetSetter: (fileName: string, asse
     return e !== "";
   });
   rawArgsList.forEach((e) => {
-    const argName = e.split("=")[0];
-    const argValue = e.split("=")[1];
+    const equalSignIndex = e.indexOf('=');
+    let argName = e.slice(0, equalSignIndex);
+    let argValue: string | undefined = e.slice(equalSignIndex + 1);
+    if (equalSignIndex < 0) {
+      argName = e;
+      argValue = undefined;
+    }
     // 判断是不是语音参数
     if (e.match(/.ogg|.mp3|.wav/)) {
       returnArrayList.push({

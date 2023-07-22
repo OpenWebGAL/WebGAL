@@ -5,17 +5,16 @@ import { logger } from './util/etc/logger';
 import { infoFetcher } from './util/coreInitialFunction/infoFetcher';
 import { assetSetter, fileType } from './util/gameAssetsAccess/assetSetter';
 import { sceneFetcher } from './controller/scene/sceneFetcher';
-import { RUNTIME_SCENE_DATA } from './runtime/sceneData';
 import { sceneParser } from './parser/sceneParser';
 import { setVolume } from '@/Core/controller/stage/setVolume';
 import { bindExtraFunc } from '@/Core/util/coreInitialFunction/bindExtraFunc';
 import { webSocketFunc } from '@/Core/util/syncWithEditor/webSocketFunc';
 import uniqWith from 'lodash/uniqWith';
-import { RUNTIME_SETTLED_SCENES, RUNTIME_USER_ANIMATIONS } from './runtime/etc';
 import { scenePrefetcher } from './util/prefetcher/scenePrefetcher';
-import { RUNTIME_GAMEPLAY } from '@/Core/runtime/gamePlay';
 import PixiStage from '@/Core/controller/stage/pixi/PixiController';
 import axios from 'axios';
+import { WebGAL } from '@/main';
+import { __INFO } from '@/config/info';
 
 const u = navigator.userAgent;
 export const isIOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); // 判断是否是 iOS终端
@@ -25,7 +24,7 @@ export const isIOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); // 判断是否
  */
 export const initializeScript = (): void => {
   // 打印初始log信息
-  logger.info('WebGAL 4.3.18');
+  logger.info(__INFO.version);
   logger.info('Github: https://github.com/MakinoharaShoko/WebGAL ');
   logger.info('Made with ❤ by MakinoharaShoko');
   // 激活强制缩放
@@ -51,10 +50,10 @@ export const initializeScript = (): void => {
   const sceneUrl: string = assetSetter('start.txt', fileType.scene);
   // 场景写入到运行时
   sceneFetcher(sceneUrl).then((rawScene) => {
-    RUNTIME_SCENE_DATA.currentScene = sceneParser(rawScene, 'start.txt', sceneUrl);
+    WebGAL.sceneManager.sceneData.currentScene = sceneParser(rawScene, 'start.txt', sceneUrl);
     // 开始场景的预加载
-    const subSceneList = RUNTIME_SCENE_DATA.currentScene.subSceneList;
-    RUNTIME_SETTLED_SCENES.push(sceneUrl); // 放入已加载场景列表，避免递归加载相同场景
+    const subSceneList = WebGAL.sceneManager.sceneData.currentScene.subSceneList;
+    WebGAL.sceneManager.settledScenes.push(sceneUrl); // 放入已加载场景列表，避免递归加载相同场景
     const subSceneListUniq = uniqWith(subSceneList); // 去重
     scenePrefetcher(subSceneListUniq);
   });
@@ -65,7 +64,7 @@ export const initializeScript = (): void => {
   /**
    * 启动Pixi
    */
-  RUNTIME_GAMEPLAY.pixiStage = new PixiStage();
+  WebGAL.gameplay.pixiStage = new PixiStage();
 
   /**
    * iOS 设备 卸载所有 Service Worker
@@ -106,7 +105,7 @@ function getUserAnimation() {
             name: animationName,
             effects: res.data,
           };
-          RUNTIME_USER_ANIMATIONS.push(userAnimation);
+          WebGAL.animationManager.addAnimation(userAnimation);
         }
       });
     }

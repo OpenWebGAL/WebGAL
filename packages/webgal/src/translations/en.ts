@@ -50,6 +50,14 @@ const en = {
                 },
               },
             },
+            about: {
+              title: 'About WebGAL',
+              subTitle: 'WebGAL: An Open-Source Web-Based Visual Novel Engine',
+              version: 'Version',
+              source: 'Source Code Repository',
+              contributors: 'Contributors',
+              website: 'Website',
+            },
           },
         },
         display: {

@@ -45,6 +45,7 @@ export const MenuPanel = () => {
         iconColor={SaveIconColor}
         tagColor={SaveTagColor}
         clickFunc={() => {
+          if (GUIState.showTitle) return;
           dispatch(setMenuPanelTag(MenuPanelTag.Save));
         }}
         tagName={t('saving.title')}

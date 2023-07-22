@@ -1,7 +1,5 @@
-import { RUNTIME_GAMEPLAY } from '@/Core/runtime/gamePlay';
-import { baseTransform, IEffect, IStageState } from '@/store/stageInterface';
-// import { logger } from '@/Core/util/etc/logger';
-import { setBlurFilter } from '@/Core/util/etc/setBlurFilter';
+import { baseTransform, IEffect, IStageState, ITransform } from '@/store/stageInterface';
+import { WebGAL } from '@/main';
 
 export function setStageObjectEffects(stageState: IStageState) {
   const effects = stageState.effects;
@@ -11,28 +9,34 @@ export function setStageObjectEffects(stageState: IStageState) {
 }
 
 export function setStageEffects(effects: IEffect[]) {
-  const stageObjects = RUNTIME_GAMEPLAY.pixiStage?.getAllStageObj() ?? [];
+  const stageObjects = WebGAL.gameplay.pixiStage?.getAllStageObj() ?? [];
   for (const stageObj of stageObjects) {
     const key = stageObj.key;
     const effect = effects.find((effect) => effect.target === key);
-    const lockedStageTargets = RUNTIME_GAMEPLAY.pixiStage?.getAllLockedObject() ?? [];
+    const lockedStageTargets = WebGAL.gameplay.pixiStage?.getAllLockedObject() ?? [];
     if (!lockedStageTargets.includes(key)) {
       if (effect) {
         // logger.debug('应用effects', key);
-        const targetPixiContainer = RUNTIME_GAMEPLAY.pixiStage?.getStageObjByKey(key);
+        const targetPixiContainer = WebGAL.gameplay.pixiStage?.getStageObjByKey(key);
         if (targetPixiContainer) {
           const container = targetPixiContainer.pixiContainer;
-          setBlurFilter(container);
-          Object.assign(container, effect.transform);
+          Object.assign(container, convertTransform(effect.transform));
         }
       } else {
-        const targetPixiContainer = RUNTIME_GAMEPLAY.pixiStage?.getStageObjByKey(key);
+        const targetPixiContainer = WebGAL.gameplay.pixiStage?.getStageObjByKey(key);
         if (targetPixiContainer) {
           const container = targetPixiContainer.pixiContainer;
-          setBlurFilter(container);
-          Object.assign(container, baseTransform);
+          Object.assign(container, convertTransform(baseTransform));
         }
       }
     }
   }
+}
+
+function convertTransform(transform: ITransform | undefined) {
+  if (!transform) {
+    return {};
+  }
+  const { position, pivot, ...rest } = transform;
+  return { ...rest, x: position.x, y: position.y };
 }
