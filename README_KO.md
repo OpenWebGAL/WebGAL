@@ -100,7 +100,10 @@ WebGAL은 오픈소스 소프트웨어이므로 MPL-2.0 오픈소스 라이센�
 | ------------------------------------------------------------ |
 | [T2-official(T2)](https://github.com/T2-official)            |
 
-
+## Silver Sponsors
+| <img src="https://avatars.githubusercontent.com/u/103700780?v=4" alt="IdrilK" style="zoom:25%;" /> |
+| ------------------------------------------------------------ |
+| [IdrilK](https://github.com/IdrilK)            |
 
 ## 시간에 따른 사용자 수
 
