@@ -22,6 +22,7 @@ const initState: IGuiState = {
   showExtra: false,
   showGlobalDialog: false,
   showPanicOverlay: false,
+  isEnterGame: false,
 };
 
 /**

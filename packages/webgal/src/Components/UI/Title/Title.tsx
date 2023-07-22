@@ -10,7 +10,7 @@ import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
 import { restorePerform } from '@/Core/controller/storage/jumpFromBacklog';
 import { setEbg } from '@/Core/util/setEbg';
 import useTrans from '@/hooks/useTrans';
-import { resize } from '@/Core/util/resize';
+// import { resize } from '@/Core/util/resize';
 import { WebGAL } from '@/main';
 import { hasFastSaveRecord, loadFastSaveGame } from '@/Core/controller/storage/fastSaveLoad';
 
@@ -32,7 +32,8 @@ const Title: FC = () => {
         id="enter_game_target"
         onClick={() => {
           playBgm(GUIState.titleBgm);
-          setTimeout(resize, 2000);
+          dispatch(setVisibility({ component: 'isEnterGame', visibility: true }));
+          // setTimeout(resize, 2000);
         }}
       />
       {GUIState.showTitle && (
