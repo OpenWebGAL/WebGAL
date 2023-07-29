@@ -13,22 +13,25 @@
 .TextBox_main {
   position: absolute;
   z-index: 6;
-  width: 100%;
-  min-height: 37.5%;
-  background: linear-gradient(rgba(0, 0, 0, 0.05) 20%, rgba(0, 0, 0, .85)),
-  linear-gradient(to right, rgba(0, 0, 0, 0.05), rgba(0, 0, 0, .1) 50%, rgba(0, 0, 0, 0.05));
+  width: 85%;
+  min-height: 350px;
+  max-height: 350px;
+  background-image: linear-gradient(to right, rgba(245, 247, 250, 0.45) 0%, rgba(245, 247, 250, 0) 75%, rgba(195, 207, 226, 0) 100%),
+  linear-gradient(rgba(245, 247, 250, 0.25) 0%, rgba(195, 207, 226, 0) 100%);
   //background: white;
-  bottom: 0;
+  border-radius: 175px;
+  bottom: 85px;
+  left: 10%;
   font-weight: bold;
   color: white;
-  padding: 1em 16em 2em 16em;
+  padding: 1em 100px 2em 200px;
   box-sizing: border-box;
-  overflow: hidden;
   display: flex;
   flex-flow: column;
   align-items: flex-start;
   animation: showSoftly 0.7s ease-out forwards;
   letter-spacing: 0.2em;
+  backdrop-filter: blur(3px);
 }
 
 @keyframes showSoftly {
@@ -56,11 +59,13 @@
   position: absolute;
   left: 0;
   top: 0;
+  //background-image: linear-gradient(rgba(255, 255, 255, 1) 0%, rgb(225, 237, 255) 100%);
   background-image: linear-gradient(
       #ffffff 0%,
       #f5f7fa 45%,
       #c3cfe2 100%
   );
+  //background: rgba(255, 255, 255, 1);
   background-clip: text;
   -webkit-background-clip: text;
   color: transparent;
@@ -71,9 +76,9 @@
   position: absolute;
   left: 0;
   top: 0;
-  -webkit-text-stroke: 0.06em rgba(0, 0, 0, 0.6);
+  -webkit-text-stroke: 0.08em rgba(0, 0, 0, 0.35);
   z-index: 1;
-  text-shadow: 1px 1px 12px rgba(255, 255, 255, 0.2);
+  text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.35);
 }
 
 .zhanwei {
@@ -107,8 +112,8 @@
   font-size: 85%;
   //border-bottom: 3px solid rgb(176, 176, 176);
   min-width: 50%;
-  padding: 0 0.2em 0.2em 0.1em;
-  margin: 0 0 0.2em 0;
+  padding: 0 0 0.1em 0.1em;
+  //margin: 0 0 0 0;
   position: relative;
 }
 
@@ -123,10 +128,12 @@
 
 .miniAvatarContainer {
   position: absolute;
-  height: 80%;
-  width: 15%;
+  height: 450px;
+  width: 450px;
   bottom: 0;
-  left: 0.5em;
+  left: -250px;
+  border-radius: 100% 0 0 100%;
+  overflow: hidden;
 }
 
 .miniAvatarImg {
@@ -134,4 +141,11 @@
   max-width: 100%;
   position: absolute;
   bottom: 0;
+  filter: drop-shadow(15px 0 3px rgba(0, 0, 0, 0.5));
+}
+
+.nameContainer {
+  position: absolute;
+  left: 2em;
+  top: -3.5em;
 }
