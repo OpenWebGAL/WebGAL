@@ -16,8 +16,8 @@
   width: 85%;
   min-height: 350px;
   max-height: 350px;
-  background-image: linear-gradient(to right, rgba(245, 247, 250, 0.45) 0%, rgba(245, 247, 250, 0) 75%, rgba(195, 207, 226, 0) 100%),
-  linear-gradient(rgba(245, 247, 250, 0.25) 0%, rgba(195, 207, 226, 0) 100%);
+  background-image: linear-gradient(rgba(245, 247, 250, 0.375) 0%, rgba(255, 255, 255, 0.75) 50%, rgba(195, 207, 226, 0.375) 100%);
+  background-blend-mode: darken;
   //background: white;
   border-radius: 175px;
   bottom: 85px;
@@ -31,7 +31,7 @@
   align-items: flex-start;
   animation: showSoftly 0.7s ease-out forwards;
   letter-spacing: 0.2em;
-  backdrop-filter: blur(3px);
+  backdrop-filter: blur(5px);
 }
 
 @keyframes showSoftly {
@@ -61,9 +61,9 @@
   top: 0;
   //background-image: linear-gradient(rgba(255, 255, 255, 1) 0%, rgb(225, 237, 255) 100%);
   background-image: linear-gradient(
-      #ffffff 0%,
-      #f5f7fa 45%,
-      #c3cfe2 100%
+      #005CAF 0%,
+      //#f5f7fa 45%,
+      #0B346E 100%
   );
   //background: rgba(255, 255, 255, 1);
   background-clip: text;
@@ -76,9 +76,9 @@
   position: absolute;
   left: 0;
   top: 0;
-  -webkit-text-stroke: 0.08em rgba(0, 0, 0, 0.35);
+  -webkit-text-stroke: 0.1em rgba(255, 255, 255, 0.4);
   z-index: 1;
-  text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.35);
+  text-shadow: 2px 2px 7px rgba(0, 0, 0, 0.5);
 }
 
 .zhanwei {

@@ -47,7 +47,7 @@ const Title: FC = () => {
           <div className={styles.Title_buttonList}>
             <div className={styles.Title_button} onClick={startGame}>
               <div className={styles.Title_button_text + ' ' + styles.Title_button_text_up}>{t('start.title')}</div>
-              <div className={styles.Title_button_text}>{t('start.subtitle')}</div>
+              {/* <div className={styles.Title_button_text}>{t('start.subtitle')}</div> */}
             </div>
             <div
               className={styles.Title_button}
@@ -57,7 +57,7 @@ const Title: FC = () => {
               }}
             >
               <div className={styles.Title_button_text + ' ' + styles.Title_button_text_up}>{t('continue.title')}</div>
-              <div className={styles.Title_button_text}>{t('continue.subtitle')}</div>
+              {/* <div className={styles.Title_button_text}>{t('continue.subtitle')}</div> */}
             </div>
             <div
               className={styles.Title_button}
@@ -67,7 +67,7 @@ const Title: FC = () => {
               }}
             >
               <div className={styles.Title_button_text + ' ' + styles.Title_button_text_up}>{t('options.title')}</div>
-              <div className={styles.Title_button_text}>{t('options.subtitle')}</div>
+              {/* <div className={styles.Title_button_text}>{t('options.subtitle')}</div> */}
             </div>
             <div
               className={styles.Title_button}
@@ -77,7 +77,7 @@ const Title: FC = () => {
               }}
             >
               <div className={styles.Title_button_text + ' ' + styles.Title_button_text_up}>{t('load.title')}</div>
-              <div className={styles.Title_button_text}>{t('load.subtitle')}</div>
+              {/* <div className={styles.Title_button_text}>{t('load.subtitle')}</div> */}
             </div>
             {/* <div */}
             {/*   className={styles.Title_button} */}
@@ -97,7 +97,7 @@ const Title: FC = () => {
               }}
             >
               <div className={styles.Title_button_text + ' ' + styles.Title_button_text_up}>{t('extra.title')}</div>
-              <div className={styles.Title_button_text}>{t('extra.subtitle')}</div>
+              {/* <div className={styles.Title_button_text}>{t('extra.subtitle')}</div> */}
             </div>
           </div>
         </div>
