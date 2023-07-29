@@ -99,6 +99,11 @@ WebGAL はオープンソース ソフトウェアであるため、MPL-2.0 オ�
 | ------------------------------------------------------------ |
 | [IdrilK](https://github.com/IdrilK)            |
 
+## Sponsors
+| <img src="https://avatars.githubusercontent.com/u/71590526?v=4" alt="Yuji Sakai" style="zoom:25%;" width="150px" height="150px" /> |
+| ------------------------------------------------------------ |
+| [Yuji Sakai (generalfreed)](https://github.com/generalfreed) |
+
 ## Stargazers over time
 
 [![Stargazers over time](https://starchart.cc/MakinoharaShoko/WebGAL.svg)](https://starchart.cc/MakinoharaShoko/WebGAL)

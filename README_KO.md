@@ -105,6 +105,11 @@ WebGAL은 오픈소스 소프트웨어이므로 MPL-2.0 오픈소스 라이센�
 | ------------------------------------------------------------ |
 | [IdrilK](https://github.com/IdrilK)            |
 
+## Sponsors
+| <img src="https://avatars.githubusercontent.com/u/71590526?v=4" alt="Yuji Sakai" style="zoom:25%;" width="150px" height="150px" /> |
+| ------------------------------------------------------------ |
+| [Yuji Sakai (generalfreed)](https://github.com/generalfreed) |
+
 ## 시간에 따른 사용자 수
 
 [![시간에 따른 사용자 수](https://starchart.cc/MakinoharaShoko/WebGAL.svg)](https://starchart.cc/MakinoharaShoko/WebGAL)
