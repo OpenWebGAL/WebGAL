@@ -82,7 +82,7 @@ const en = {
             textFont: {
               title: 'Text Font',
               options: {
-                siYuanSimSun: 'Source Han Serif',
+                siYuanSimSun: 'LXGW WenKai',
                 SimHei: 'Sans',
               },
             },
