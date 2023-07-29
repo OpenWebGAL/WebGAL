@@ -5,6 +5,7 @@ intro:你好|欢迎来到 WebGAL 的世界;
 changeBg:bg.png -next;
 unlockCg:bg.png -name=良夜; // 解锁CG并赋予名称
 changeFigure:stand.png -left -enter=enter-from-left -next;
+miniAvatar:miniavatar.png;
 WebGAL:欢迎使用 WebGAL！这是一款全新的网页端视觉小说引擎。 -v1.wav;
 changeFigure:stand2.png -right -next;
 WebGAL 是使用 Web 技术开发的引擎，因此在网页端有良好的表现。 -v2.wav;
