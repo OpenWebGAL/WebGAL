@@ -108,7 +108,10 @@ Cependant, votre soutien peut motiver les développeurs à avancer et à rendre 
 | ------------------------------------------------------------ |
 | [IdrilK](https://github.com/IdrilK)            |
 
-
+## Sponsors
+| <img src="https://avatars.githubusercontent.com/u/71590526?v=4" alt="Yuji Sakai" style="zoom:25%;" width="150px" height="150px" /> |
+| ------------------------------------------------------------ |
+| [Yuji Sakai (generalfreed)](https://github.com/generalfreed) |
 
 ## Pour les amateurs de Stargazers (Historique GitHub stars)
 
