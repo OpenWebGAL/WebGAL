@@ -11,35 +11,43 @@
 .main {
   //border-bottom: 2px solid rgba(255,255,255,0.25);
   position: absolute;
-  bottom: 0.3em;
-  will-change: z-index;
+  bottom: 5px;
+  //will-change: z-index;
   z-index: 9;
   display: flex;
+  //background-image: linear-gradient(rgba(245, 247, 250, 0.7) 0%, rgba(195, 207, 226, 0.7) 100%);
   flex-flow: row;
   justify-content: center;
   align-items: center;
-  width: 100%;
-  //background-color: rgba(150, 150, 150, 0.25);
+  //width: 100%;
+  height: 70px;
+  right: 20px;
+  border-radius: 35px;
+  //backdrop-filter: blur(5px);
   padding: 0.15em 1.75em 0.15em 1.75em;
   //background: linear-gradient(rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.25) 100%);
   //border-radius: 10px;
+  font-size: 80%;
 }
 
 .button {
   position: relative;
   top: 2px;
   padding: 0 0 0 0;
+  filter: drop-shadow(2px 2px 10px rgba(0, 0, 0, 1));
 }
 
 .button_text {
   position: relative;
   bottom: 8px;
+  color: white;
+  text-shadow: 2px 2px 10px rgba(0, 0, 0, 1);
+  padding-left: 3px;
 }
 
 .button_on {
   height: 100%;
   display: inline-block;
-  color: white;
   font-size: 150%;
   padding: 0.25em 0.3em 0 0.15em;
   transition: background-color 0.5s;
@@ -54,7 +62,7 @@
   display: inline-block;
   color: white;
   font-size: 150%;
-  padding: 0.25em 0.3em 0 0.15em;
+  padding: 0.3em 0.3em 0 0.15em;
   transition: background-color 0.5s;
   cursor: pointer;
   border-radius: 4px;
