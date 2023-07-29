@@ -12,7 +12,7 @@ export const TextPreview = (props: any) => {
   const textDuration = useTextAnimationDuration(userDataState.optionData.textSpeed);
   const t = useTrans('menu.options.pages.display.options.textPreview.');
   const previewText = t('text');
-  const size = userDataState.optionData.textSize * 40 + 200 + '%';
+  const size = userDataState.optionData.textSize * 40 + 170 + '%';
   const font = useFontFamily();
 
   let classNameText = styles.singleText;
