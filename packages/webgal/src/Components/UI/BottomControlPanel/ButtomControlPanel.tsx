@@ -31,7 +31,7 @@ export const BottomControlPanel = () => {
   const { i18n } = useTranslation();
   const lang = i18n.language;
   const isFr = lang === 'fr';
-  let size = 48;
+  let size = 42;
   let fontSize = '150%';
   if (isFr) {
     fontSize = '125%';

@@ -13,8 +13,10 @@ export const TextBox = () => {
   useEffect(() => {});
   const textDelay = useTextDelay(userDataState.optionData.textSpeed);
   const textDuration = useTextAnimationDuration(userDataState.optionData.textSpeed);
-  const size = userDataState.optionData.textSize * 40 + 200 + '%';
+  const size = userDataState.optionData.textSize * 40 + 170 + '%';
   const font = useFontFamily();
+
+  const isText = stageState.showText !== '' && stageState.showName !== '';
 
   // 拆字
   const textArray: Array<string> = splitChars(stageState.showText);
@@ -58,31 +60,42 @@ export const TextBox = () => {
     );
   });
   return (
-    <div id="textBoxMain" className={styles.TextBox_main} style={{ fontFamily: font }}>
-      <div id="miniAvatar" className={styles.miniAvatarContainer}>
-        {stageState.miniAvatar !== '' && (
-          <img className={styles.miniAvatarImg} alt="miniAvatar" src={stageState.miniAvatar} />
-        )}
-      </div>
-      {stageState.showName !== '' && (
-        <div key={stageState.showName} className={styles.TextBox_showName} style={{ fontSize: '200%' }}>
-          {stageState.showName.split('').map((e, i) => {
-            return (
-              <span key={e + i} style={{ position: 'relative' }}>
-                <span className={styles.zhanwei}>
-                  {e}
-                  <span className={styles.outer}>{e}</span>
-                  <span className={styles.inner}>{e}</span>
+    <>
+      {isText && (
+        <div id="textBoxMain" className={styles.TextBox_main} style={{ fontFamily: font }}>
+          {/* <div className={styles.nameContainer}>{stageState.showName !== ''}</div> */}
+          <div id="miniAvatar" className={styles.miniAvatarContainer}>
+            {stageState.miniAvatar !== '' && (
+              <img className={styles.miniAvatarImg} alt="miniAvatar" src={stageState.miniAvatar} />
+            )}
+          </div>
+          <div key={stageState.showName} className={styles.TextBox_showName} style={{ fontSize: '200%' }}>
+            {stageState.showName.split('').map((e, i) => {
+              return (
+                <span key={e + i} style={{ position: 'relative' }}>
+                  <span className={styles.zhanwei}>
+                    {e}
+                    <span className={styles.outer}>{e}</span>
+                    <span className={styles.inner}>{e}</span>
+                  </span>
                 </span>
-              </span>
-            );
-          })}
+              );
+            })}
+          </div>
+          <div
+            className={styles.text}
+            style={{
+              fontSize: size,
+              wordBreak: isSafari ? 'break-word' : undefined,
+              overflow: 'hidden',
+              paddingLeft: '0.1em',
+            }}
+          >
+            {textElementList}
+          </div>
         </div>
       )}
-      <div className={styles.text} style={{ fontSize: size, wordBreak: isSafari ? 'break-word' : undefined }}>
-        {textElementList}
-      </div>
-    </div>
+    </>
   );
 };
 

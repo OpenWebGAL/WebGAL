@@ -1,7 +1,8 @@
-import { commandType, IAsset } from "./interface/sceneInterface";
-import { fileType } from "./interface/assets";
-import { sceneParser } from "./sceneParser";
-import { ADD_NEXT_ARG_LIST, SCRIPT_CONFIG } from "./config/scriptConfig";
+import {commandType, IAsset} from "./interface/sceneInterface";
+import {fileType} from "./interface/assets";
+import {sceneParser} from "./sceneParser";
+import {ADD_NEXT_ARG_LIST, SCRIPT_CONFIG} from "./config/scriptConfig";
+import {configParser} from "@/configParser/configParser";
 
 export default class SceneParser {
 
@@ -23,6 +24,10 @@ export default class SceneParser {
   ) {
     return sceneParser(rawScene, sceneName, sceneUrl, this.assetsPrefetcher, this.assetSetter, this.ADD_NEXT_ARG_LIST, this.SCRIPT_CONFIG);
   }
+
+  parseConfig(configText: string) {
+    return configParser(configText)
+  }
 }
 
-export { ADD_NEXT_ARG_LIST, SCRIPT_CONFIG };
+export {ADD_NEXT_ARG_LIST, SCRIPT_CONFIG};
