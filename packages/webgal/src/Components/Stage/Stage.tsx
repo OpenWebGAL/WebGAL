@@ -32,19 +32,19 @@ export const Stage: FC = () => {
       {GUIState.showTextBox && stageState.enableFilm === '' && !stageState.isDisableTextbox && <TextBox />}
       {GUIState.showTextBox && stageState.enableFilm !== '' && <TextBoxFilm />}
       <AudioContainer />
-      {/* <div */}
-      {/*  onClick={() => { */}
-      {/*    // 如果文本框没有显示，则显示文本框 */}
-      {/*    if (!GUIState.showTextBox) { */}
-      {/*      dispatch(setVisibility({ component: 'showTextBox', visibility: true })); */}
-      {/*      return; */}
-      {/*    } */}
-      {/*    stopAll(); */}
-      {/*    nextSentence(); */}
-      {/*  }} */}
-      {/*  id="FullScreenClick" */}
-      {/*  style={{ width: '100%', height: '100%', position: 'absolute', zIndex: '12', top: '0' }} */}
-      {/*/ > */}
+      <div
+        onClick={() => {
+          // 如果文本框没有显示，则显示文本框
+          if (!GUIState.showTextBox) {
+            dispatch(setVisibility({ component: 'showTextBox', visibility: true }));
+            return;
+          }
+          stopAll();
+          nextSentence();
+        }}
+        id="FullScreenClick"
+        style={{ width: '100%', height: '100%', position: 'absolute', zIndex: '12', top: '0' }}
+      />
       <IntroContainer />
     </div>
   );
