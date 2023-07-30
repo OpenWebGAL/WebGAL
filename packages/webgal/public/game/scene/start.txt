@@ -37,12 +37,12 @@ label:choose2;
 WebGAL 项目只用了一年不到就在 GitHub 获得了 1000 星标！ -v14.wav;
 WebGAL 的开发历程，是一个在开发中学习开发的过程。因此她经历了3次重构，并且每次几乎都是推倒重来式的。 -v15.wav;
 WebGAL 的脚本语言是为了简化制作难度而全新设计的！ -v16.wav;
-
+;
 ;l2d
 ;label:l2d;
 ;changeFigure:hiyori/hiyori_pro_t11.model3.json -left -motion=Idle -next;
 ;WebGAL 项目现在也开始尝试实验性支持 live2D！今后可能会成为一个正式功能！
-
+;
 ;结束分支
 label:end;
 ;changeFigure:none -left -next;
