@@ -5,6 +5,7 @@ import { RootState } from '@/store/store';
 import { useFontFamily } from '@/hooks/useFontFamily';
 import { useTextAnimationDuration, useTextDelay } from '@/hooks/useTextOptions';
 import useTrans from '@/hooks/useTrans';
+import { getTextSize } from '@/Components/UI/getTextSize';
 
 export const TextPreview = (props: any) => {
   const userDataState = useSelector((state: RootState) => state.userData);
@@ -12,7 +13,7 @@ export const TextPreview = (props: any) => {
   const textDuration = useTextAnimationDuration(userDataState.optionData.textSpeed);
   const t = useTrans('menu.options.pages.display.options.textPreview.');
   const previewText = t('text');
-  const size = userDataState.optionData.textSize * 40 + 170 + '%';
+  const size = getTextSize(userDataState.optionData.textSize) + '%';
   const font = useFontFamily();
 
   let classNameText = styles.singleText;
