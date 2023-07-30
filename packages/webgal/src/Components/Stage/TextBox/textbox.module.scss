@@ -10,21 +10,23 @@
   //text-shadow: 0 0 3px rgba(81,168,221,1);
 }
 
+$height : 375px;
+
 .TextBox_main {
   position: absolute;
   z-index: 6;
-  width: 85%;
-  min-height: 350px;
-  max-height: 350px;
-  background-image: linear-gradient(rgba(245, 247, 250, 0.5) 0%, rgba(195, 207, 226, 0.5) 100%);
+  right:25px;
+  min-height: $height;
+  max-height: $height;
+  background-image: linear-gradient(rgba(245, 247, 250, 0.5) 0%, rgba(164, 189, 255, 0.5) 100%);
   background-blend-mode: darken;
   //background: white;
-  border-radius: 175px;
-  bottom: 85px;
-  left: 10%;
+  border-radius: calc($height / 2) 20px 20px calc($height / 2);
+  bottom: 20px;
+  left: 275px;
   font-weight: bold;
   color: white;
-  padding: 1em 100px 2em 200px;
+  padding: 1em 50px 70px 200px;
   box-sizing: border-box;
   display: flex;
   flex-flow: column;
@@ -61,9 +63,9 @@
   top: 0;
   //background-image: linear-gradient(rgba(255, 255, 255, 1) 0%, rgb(225, 237, 255) 100%);
   background-image: linear-gradient(
-      #005CAF 0%,
+      #0B346E 0%,
       //#f5f7fa 45%,
-      #0B346E 100%
+      #141423 100%
   );
   //background: rgba(255, 255, 255, 1);
   background-clip: text;
@@ -78,7 +80,7 @@
   top: 0;
   -webkit-text-stroke: 0.1em rgba(255, 255, 255, 0.4);
   z-index: 1;
-  text-shadow: 2px 2px 7px rgba(0, 0, 0, 0.5);
+  text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.7);
 }
 
 .zhanwei {
