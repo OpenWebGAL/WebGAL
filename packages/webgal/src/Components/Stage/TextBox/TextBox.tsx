@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import { useFontFamily } from '@/hooks/useFontFamily';
 import { useTextAnimationDuration, useTextDelay } from '@/hooks/useTextOptions';
+import { getTextSize } from '@/Components/UI/getTextSize';
 
 const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 
@@ -13,10 +14,10 @@ export const TextBox = () => {
   useEffect(() => {});
   const textDelay = useTextDelay(userDataState.optionData.textSpeed);
   const textDuration = useTextAnimationDuration(userDataState.optionData.textSpeed);
-  const size = userDataState.optionData.textSize * 40 + 170 + '%';
+  const size = getTextSize(userDataState.optionData.textSize) + '%';
   const font = useFontFamily();
 
-  const isText = stageState.showText !== '' && stageState.showName !== '';
+  const isText = stageState.showText !== '' || stageState.showName !== '';
 
   // 拆字
   const textArray: Array<string> = splitChars(stageState.showText);
@@ -69,19 +70,21 @@ export const TextBox = () => {
               <img className={styles.miniAvatarImg} alt="miniAvatar" src={stageState.miniAvatar} />
             )}
           </div>
-          <div key={stageState.showName} className={styles.TextBox_showName} style={{ fontSize: '200%' }}>
-            {stageState.showName.split('').map((e, i) => {
-              return (
-                <span key={e + i} style={{ position: 'relative' }}>
-                  <span className={styles.zhanwei}>
-                    {e}
-                    <span className={styles.outer}>{e}</span>
-                    <span className={styles.inner}>{e}</span>
+          {stageState.showName !== '' && (
+            <div key={stageState.showName} className={styles.TextBox_showName} style={{ fontSize: '200%' }}>
+              {stageState.showName.split('').map((e, i) => {
+                return (
+                  <span key={e + i} style={{ position: 'relative' }}>
+                    <span className={styles.zhanwei}>
+                      {e}
+                      <span className={styles.outerName}>{e}</span>
+                      <span className={styles.innerName}>{e}</span>
+                    </span>
                   </span>
-                </span>
-              );
-            })}
-          </div>
+                );
+              })}
+            </div>
+          )}
           <div
             className={styles.text}
             style={{
