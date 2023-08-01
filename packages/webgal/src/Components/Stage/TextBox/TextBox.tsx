@@ -22,6 +22,9 @@ export const TextBox = () => {
   // 拆字
   const textArray: Array<string> = splitChars(stageState.showText);
   const textElementList = textArray.map((e, index) => {
+    if (e === '<br />') {
+      return <br key={`br${index}`} />;
+    }
     let delay = index * textDelay;
     let prevLength = stageState.currentConcatDialogPrev.length;
     if (stageState.currentConcatDialogPrev !== '' && index >= prevLength) {
@@ -120,6 +123,15 @@ export function splitChars(sentence: string) {
   };
 
   for (const character of sentence) {
+    if (character === '|') {
+      if (word) {
+        words.push(word);
+        word = '';
+      }
+      words.push('<br />');
+      cjkFlag = false;
+      continue;
+    }
     if (character === ' ') {
       // Space
       if (word) {

@@ -8,6 +8,7 @@ import { logger } from '@/Core/util/etc/logger';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import useTrans from '@/hooks/useTrans';
 import { WebGAL } from '@/main';
+import { splitChars } from '@/Components/Stage/TextBox/TextBox';
 
 export const Backlog = () => {
   const t = useTrans('gaming.');
@@ -24,6 +25,14 @@ export const Backlog = () => {
     // logger.info('backlogList render');
     for (let i = 0; i < WebGAL.backlogManager.getBacklog().length; i++) {
       const backlogItem = WebGAL.backlogManager.getBacklog()[i];
+      const showTextArray = splitChars(backlogItem.currentStageState.showText);
+      const showTextElementList = showTextArray.map((e, index) => {
+        if (e === '<br />') {
+          return <br key={`br${index}`} />;
+        } else {
+          return e;
+        }
+      });
       const singleBacklogView = (
         <div
           className={styles.backlog_item}
@@ -64,7 +73,7 @@ export const Backlog = () => {
             <div className={styles.backlog_item_content_name}>{backlogItem.currentStageState.showName}</div>
           </div>
           <div className={styles.backlog_item_content}>
-            <span className={styles.backlog_item_content_text}>{backlogItem.currentStageState.showText}</span>
+            <span className={styles.backlog_item_content_text}>{showTextElementList}</span>
           </div>
           <audio id={'backlog_audio_play_element_' + i} src={backlogItem.currentStageState.vocal} />
         </div>
