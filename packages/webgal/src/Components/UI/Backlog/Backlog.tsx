@@ -8,6 +8,7 @@ import { logger } from '@/Core/util/etc/logger';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import useTrans from '@/hooks/useTrans';
 import { WebGAL } from '@/main';
+import { splitChars } from '@/Components/Stage/TextBox/TextBox';
 
 export const Backlog = () => {
   const t = useTrans('gaming.');
@@ -155,75 +156,3 @@ export const Backlog = () => {
     </>
   );
 };
-
-function isCJK(character: string) {
-  if (character.match(/[\u4e00-\u9fa5]|[\u0800-\u4e00]|[\uac00-\ud7ff]/)) {
-    return true;
-  } else return false;
-}
-
-export function splitChars(sentence: string) {
-  if (!sentence) return [];
-  const words: string[] = [];
-  let word = '';
-  let cjkFlag = isCJK(sentence[0]);
-
-  const isPunctuation = (ch: string): boolean => {
-    const regex = /[!-\/:-@\[-`{-~\u2000-\u206F\u3000-\u303F\uff00-\uffef]/g;
-    return regex.test(ch);
-  };
-
-  for (const character of sentence) {
-    if (character === '|') {
-      if (word) {
-        words.push(word);
-        word = '';
-      }
-      words.push('<br />');
-      cjkFlag = false;
-      continue;
-    }
-    if (character === ' ') {
-      // Space
-      if (word) {
-        words.push(word);
-        word = '';
-      }
-      words.push(' ');
-      cjkFlag = false;
-    } else if (isCJK(character) && !isPunctuation(character)) {
-      if (!cjkFlag && word) {
-        words.push(word);
-        word = '';
-      }
-      words.push(character);
-      cjkFlag = true;
-    } else {
-      if (isPunctuation(character)) {
-        if (word) {
-          // If it is a punctuation and there is a preceding word, add it to the word
-          word += character;
-          words.push(word);
-          word = '';
-        } else if (words.length > 0) {
-          // If no preceding word in the current iteration, but there are already words in the array, append to the last word
-          words[words.length - 1] += character;
-        }
-        continue;
-      }
-
-      if (cjkFlag && word) {
-        words.push(word);
-        word = '';
-      }
-      word += character;
-      cjkFlag = false;
-    }
-  }
-
-  if (word) {
-    words.push(word);
-  }
-
-  return words;
-}
