@@ -20,10 +20,19 @@ import { logger } from '@/Core/util/etc/logger';
 /**
  * 播放bgm
  * @param url bgm路径
+ * @param enter 淡入时间（单位毫秒）
  */
-export function playBgm(url: string): void {
+export function playBgm(url: string, enter = 0): void {
   logger.info('playing bgm' + url);
-  webgalStore.dispatch(setStage({ key: 'bgm', value: url }));
+  if (url === '') {
+    setTimeout(() => {
+      webgalStore.dispatch(setStage({ key: 'bgm', value: '' }));
+    }, enter);
+    webgalStore.dispatch(setStage({ key: 'bgmEnter', value: -enter }));
+  } else {
+    webgalStore.dispatch(setStage({ key: 'bgm', value: url }));
+    webgalStore.dispatch(setStage({ key: 'bgmEnter', value: enter }));
+  }
   const audioElement = document.getElementById('currentBgm') as HTMLAudioElement;
   audioElement?.play();
 }

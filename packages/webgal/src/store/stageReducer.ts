@@ -22,6 +22,7 @@ export const initState: IStageState = {
   choose: [], // 选项列表，现在不用，先预留
   vocal: '', // 语音 文件地址（相对或绝对）
   bgm: '', // 背景音乐 文件地址（相对或绝对）
+  bgmEnter: 0, // 背景音乐 淡入或淡出的毫秒数
   miniAvatar: '', // 小头像 文件地址（相对或绝对）
   GameVar: {}, // 游戏内变量
   effects: [], // 应用的效果

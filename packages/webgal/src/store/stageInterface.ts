@@ -94,6 +94,7 @@ export interface IStageState {
   choose: Array<IChooseItem>; // 选项列表
   vocal: string; // 语音 文件地址（相对或绝对）
   bgm: string; // 背景音乐 文件地址（相对或绝对）
+  bgmEnter: number; // 背景音乐 淡入或淡出的毫秒数
   miniAvatar: string; // 小头像 文件地址（相对或绝对）
   GameVar: IGameVar; // 游戏内变量
   effects: Array<IEffect>; // 应用的变换
