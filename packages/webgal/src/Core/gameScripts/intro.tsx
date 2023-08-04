@@ -6,7 +6,6 @@ import styles from '../../Components/Stage/FullScreenPerform/fullScreenPerform.m
 import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
 import { PerformController } from '@/Core/Modules/perform/performController';
 import { WebGAL } from '@/main';
-import { logger } from '@/Core/util/etc/logger';
 
 /**
  * 显示一小段黑屏演示
@@ -21,7 +20,7 @@ export const intro = (sentence: ISentence): IPerform => {
   let fontSize: string | undefined;
   let backgroundColor: any = 'rgba(0, 0, 0, 1)';
   let color: any = 'rgba(255, 255, 255, 1)';
-  
+
   for (const e of sentence.args) {
     if (e.key === 'backgroundColor') {
       backgroundColor = e.value || 'rgba(0, 0, 0, 1)';
@@ -30,7 +29,7 @@ export const intro = (sentence: ISentence): IPerform => {
       color = e.value || 'rgba(255, 255, 255, 1)';
     }
     if (e.key === 'fontSize') {
-      switch(e.value) {
+      switch (e.value) {
         case 'small':
           fontSize = '280%';
           break;
@@ -39,7 +38,6 @@ export const intro = (sentence: ISentence): IPerform => {
           break;
         case 'large':
           fontSize = '420%';
-          logger.info("TEST");
           break;
       }
     }
@@ -57,7 +55,7 @@ export const intro = (sentence: ISentence): IPerform => {
   const toNextIntroElement = () => {
     const introContainer = document.getElementById('introContainer');
     if (introContainer) {
-      const children = introContainer.childNodes[1].childNodes as any;
+      const children = introContainer.childNodes[0].childNodes[0].childNodes as any;
       const len = children.length;
       children.forEach((node: HTMLDivElement, index: number) => {
         const currentDelay = Number(node.style.animationDelay.split('ms')[0]);
@@ -99,9 +97,7 @@ export const intro = (sentence: ISentence): IPerform => {
   ));
   const intro = (
     <div style={introContainerStyle}>
-       <div style={{ padding: "3em 4em 3em 4em" }}>
-        {showIntro}
-      </div>
+      <div style={{ padding: '3em 4em 3em 4em' }}>{showIntro}</div>
     </div>
   );
   ReactDOM.render(intro, document.getElementById('introContainer'));
