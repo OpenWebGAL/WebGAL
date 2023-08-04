@@ -48,6 +48,7 @@ export const say = (sentence: ISentence): IPerform => {
   const textDelay = useTextDelay(userDataState.optionData.textSpeed);
   // 本句延迟
   const sentenceDelay = textDelay * sentence.content.length;
+  let dialogToShowTextSize: string | undefined;
 
   // 设置显示的角色名称
   let showName: string | number | boolean = stageState.showName; // 先默认继承
@@ -63,6 +64,23 @@ export const say = (sentence: ISentence): IPerform => {
   if (vocal) {
     playVocal(sentence);
   }
+
+  for (const e of sentence.args) {
+    if (e.key === 'fontSize') {
+      switch (e.value) {
+        case 'small':
+          dialogToShowTextSize = '200%';
+          break;
+        case 'medium':
+          dialogToShowTextSize = '240%';
+          break;
+        case 'large':
+          dialogToShowTextSize = '280%';
+          break;
+      }
+    }
+  }
+  dispatch(setStage({ key: 'showTextSize', value: dialogToShowTextSize }));
 
   const performInitName: string = getRandomPerformName();
   let endDelay = 750 - userDataState.optionData.textSpeed * 250;
