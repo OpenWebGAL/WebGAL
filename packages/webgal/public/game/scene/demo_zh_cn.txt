@@ -1,4 +1,4 @@
-bgm:s_Title.mp3;
+bgm:s_Title.mp3 -volume=80 -enter=3000;
 unlockBgm:s_Title.mp3 -name=雲を追いかけて;
 intro:你好|欢迎来到 WebGAL 的世界;
 changeBg:bg.png -next;

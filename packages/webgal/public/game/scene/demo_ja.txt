@@ -1,4 +1,4 @@
-bgm:ontama_piano1_youkoso.mp3;
+bgm:ontama_piano1_youkoso.mp3 -volume=80 -enter=3000;
 unlockBgm:ontama_piano1_youkoso.mp3 -name=ようこそ;
 intro:■初めに| このデモゲームで使用している画像素材は、AI生成画像です;
 intro:■クレジット| 「VOICEVOX:小夜/SAYO」| 音声を利用の際には動画内、概要欄など任意の場所にクレジットを表記してください。|表記例1： VOICEVOX:小夜/SAYO|表記例2： VOICEVOX:小夜;
