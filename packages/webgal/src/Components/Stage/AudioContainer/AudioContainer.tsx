@@ -10,7 +10,8 @@ export const AudioContainer = () => {
   const userDataState = useSelector((state: RootState) => state.userData);
   const mainVol = userDataState.optionData.volumeMain;
   const vocalVol = mainVol * 0.01 * userDataState.optionData.vocalVolume * 0.01;
-  const bgmVol = mainVol * 0.01 * userDataState.optionData.bgmVolume * 0.01;
+  const bgmVol = mainVol * 0.01 * userDataState.optionData.bgmVolume * 0.01 * stageStore.bgmVolume * 0.01;
+  const bgmEnter = stageStore.bgmEnter;
   const isEnterGame = useSelector((state: RootState) => state.GUI.isEnterGame);
 
   /**
@@ -44,16 +45,28 @@ export const AudioContainer = () => {
   };
 
   useEffect(() => {
-    logger.debug(`设置背景音量：${bgmVol},语音音量：${vocalVol}`);
     const bgmElement = document.getElementById('currentBgm') as HTMLAudioElement;
     if (bgmElement) {
-      stageStore.bgmEnter === 0 ? (bgmElement.volume = bgmVol) : bgmFadeIn(bgmElement, bgmVol, stageStore.bgmEnter);
+      bgmEnter === 0 ? (bgmElement.volume = bgmVol) : bgmFadeIn(bgmElement, bgmVol, bgmEnter);
     }
+  }, [isShowTitle, titleBgm, stageStore.bgm, bgmVol, bgmEnter]);
+
+  useEffect(() => {
+    logger.debug(`设置背景音量：${bgmVol}`);
+  }, [bgmVol]);
+
+  useEffect(() => {
+    logger.debug(`设置背景音量淡入时间: ${bgmEnter}`);
+  }, [bgmEnter]);
+
+  useEffect(() => {
+    logger.debug(`设置语音音量：${vocalVol}`);
     const vocalElement: any = document.getElementById('currentVocal');
     if (vocalElement) {
       vocalElement.volume = vocalVol.toString();
     }
-  }, [isShowTitle, titleBgm, stageStore.bgm, stageStore.bgmEnter, vocalVol, bgmVol]);
+  }, [vocalVol]);
+
   return (
     <div>
       <audio

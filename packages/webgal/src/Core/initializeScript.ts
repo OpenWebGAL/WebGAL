@@ -6,7 +6,6 @@ import { infoFetcher } from './util/coreInitialFunction/infoFetcher';
 import { assetSetter, fileType } from './util/gameAssetsAccess/assetSetter';
 import { sceneFetcher } from './controller/scene/sceneFetcher';
 import { sceneParser } from './parser/sceneParser';
-import { setVolume } from '@/Core/controller/stage/setVolume';
 import { bindExtraFunc } from '@/Core/util/coreInitialFunction/bindExtraFunc';
 import { webSocketFunc } from '@/Core/util/syncWithEditor/webSocketFunc';
 import uniqWith from 'lodash/uniqWith';
@@ -57,10 +56,6 @@ export const initializeScript = (): void => {
     const subSceneListUniq = uniqWith(subSceneList); // 去重
     scenePrefetcher(subSceneListUniq);
   });
-  /**
-   * 设置音量
-   */
-  setVolume();
   /**
    * 启动Pixi
    */
