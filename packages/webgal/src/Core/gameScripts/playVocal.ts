@@ -3,20 +3,18 @@ import { logger } from '@/Core/util/etc/logger';
 import { webgalStore } from '@/store/store';
 import { setStage } from '@/store/stageReducer';
 import { WebGAL } from '@/main';
+import { getSentenceArgByKey } from '@/Core/util/getSentenceArg';
 
 /**
  * 播放一段语音
  * @param sentence 语句
  */
 export const playVocal = (sentence: ISentence) => {
-  logger.debug('单次播放语音');
+  logger.debug('play vocal');
   const performInitName = 'vocal-play';
-  let url = ''; // 获取语音的url
-  for (const e of sentence.args) {
-    if (e.key === 'vocal') {
-      url = e.value.toString();
-    }
-  }
+  const url = getSentenceArgByKey(sentence, 'vocal'); // 获取语音的url
+  const volume = getSentenceArgByKey(sentence, 'volume'); // 获取语音的音量比
+
   // 先停止之前的语音
   let VocalControl: any = document.getElementById('currentVocal');
   WebGAL.gameplay.performController.unmountPerform('vocal-play', true);
@@ -32,6 +30,11 @@ export const playVocal = (sentence: ISentence) => {
       // 播放语音
       setTimeout(() => {
         let VocalControl: any = document.getElementById('currentVocal');
+        // 设置语音音量
+        volume && typeof volume === 'number' && volume >= 0 && volume <= 100
+          ? webgalStore.dispatch(setStage({ key: 'vocalVolume', value: volume }))
+          : webgalStore.dispatch(setStage({ key: 'vocalVolume', value: 100 }));
+        // 设置语音
         if (VocalControl !== null) {
           VocalControl.currentTime = 0;
           // 播放并作为一个特别演出加入

@@ -93,6 +93,7 @@ export interface IStageState {
   command: string; // 语句指令
   choose: Array<IChooseItem>; // 选项列表
   vocal: string; // 语音 文件地址（相对或绝对）
+  vocalVolume: number; // 语音 音量调整（0 - 100）
   bgm: string; // 背景音乐 文件地址（相对或绝对）
   bgmEnter: number; // 背景音乐 淡入或淡出的毫秒数
   bgmVolume: number; // 背景音乐 音量调整（0 - 100）
