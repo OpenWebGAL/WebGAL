@@ -1,10 +1,10 @@
-/* import { logger } from '../../util/etc/logger';
-import { webgalStore } from '@/store/store'; */
+import { logger } from '../../util/etc/logger';
+import { webgalStore } from '@/store/store';
 
 /**
  * 设置音量
  */
-/* export const setVolume = () => {
+export const setVolume = () => {
   const userDataState = webgalStore.getState().userData;
   const mainVol = userDataState.optionData.volumeMain;
   const vocalVol = mainVol * 0.01 * userDataState.optionData.vocalVolume * 0.01;
@@ -18,4 +18,4 @@ import { webgalStore } from '@/store/store'; */
   // if (vocalElement) {
   //   vocalElement.volume = vocalVol.toString();
   // }
-}; */
+};
