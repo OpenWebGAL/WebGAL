@@ -98,6 +98,7 @@ const en = {
             volumeMain: { title: 'Main Volume' },
             vocalVolume: { title: 'Vocal Volume' },
             bgmVolume: { title: 'BGM Volume' },
+            seVolume: { title: 'Sound Effects Volume' },
           },
         },
         // language: {

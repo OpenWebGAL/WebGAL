@@ -5,8 +5,10 @@ import styles from '@/Components/UI/Extra/extra.module.scss';
 import { useValue } from '@/hooks/useValue';
 import { setStage } from '@/store/stageReducer';
 import { GoEnd, GoStart, MusicList, PlayOne, SquareSmall } from '@icon-park/react';
+import useSoundEffect from '@/hooks/useSoundEffect';
 
 export function ExtraBgm() {
+  const { setMouseEnterSE, setClickSE } = useSoundEffect();
   // 检查当前正在播放的bgm是否在bgm列表内
   const currentBgm = useSelector((state: RootState) => state.stage.bgm);
   const extraState = useSelector((state: RootState) => state.userData.appreciationData);
@@ -43,6 +45,7 @@ export function ExtraBgm() {
     return (
       <div
         onClick={() => {
+          setClickSE();
           currentPlayingBgmName.set(e.name);
           dispatch(setStage({ key: 'bgm', value: e.url }));
         }}
@@ -61,42 +64,50 @@ export function ExtraBgm() {
       <div className={styles.bgmPlayerMain}>
         <div
           onClick={() => {
+            setClickSE();
             if (foundCurrentBgmIndex <= 0) {
               setBgmByIndex(bgmListLen - 1);
             } else {
               setBgmByIndex(foundCurrentBgmIndex - 1);
             }
           }}
+          onMouseEnter={setMouseEnterSE}
           className={styles.bgmControlButton}
         >
           <GoStart theme="filled" size={iconSize} fill="#fff" strokeWidth={3} strokeLinejoin="miter" />
         </div>
         <div
           onClick={() => {
+            setClickSE();
             const bgmControl: HTMLAudioElement = document.getElementById('currentBgm') as HTMLAudioElement;
             bgmControl?.play().then();
           }}
+          onMouseEnter={setMouseEnterSE}
           className={styles.bgmControlButton}
         >
           <PlayOne theme="filled" size={iconSize} fill="#fff" strokeWidth={3} strokeLinejoin="miter" />
         </div>
         <div
           onClick={() => {
+            setClickSE();
             if (foundCurrentBgmIndex >= bgmListLen - 1) {
               setBgmByIndex(0);
             } else {
               setBgmByIndex(foundCurrentBgmIndex + 1);
             }
           }}
+          onMouseEnter={setMouseEnterSE}
           className={styles.bgmControlButton}
         >
           <GoEnd theme="filled" size={iconSize} fill="#fff" strokeWidth={3} strokeLinejoin="miter" />
         </div>
         <div
           onClick={() => {
+            setClickSE();
             const bgmControl: HTMLAudioElement = document.getElementById('currentBgm') as HTMLAudioElement;
             bgmControl.pause();
           }}
+          onMouseEnter={setMouseEnterSE}
           className={styles.bgmControlButton}
         >
           <SquareSmall theme="filled" size={iconSize} fill="#fff" strokeWidth={3} strokeLinejoin="miter" />
@@ -104,8 +115,10 @@ export function ExtraBgm() {
         <div className={styles.bgmName}>{foundCurrentBgmName}</div>
         <div
           onClick={() => {
+            setClickSE();
             isShowBgmList.set(!isShowBgmList.value);
           }}
+          onMouseEnter={setMouseEnterSE}
           className={styles.bgmControlButton}
           style={{ marginLeft: 'auto' }}
         >

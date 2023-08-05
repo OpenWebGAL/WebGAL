@@ -98,6 +98,7 @@ const zhCn = {
             volumeMain: { title: '主音量' },
             vocalVolume: { title: '语音音量' },
             bgmVolume: { title: '背景音乐音量' },
+            seVolume: { title: '音效音量' },
           },
         },
         // language: {

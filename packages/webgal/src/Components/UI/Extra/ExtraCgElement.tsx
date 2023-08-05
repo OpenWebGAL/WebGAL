@@ -1,6 +1,7 @@
 import { useValue } from '@/hooks/useValue';
 import styles from '@/Components/UI/Extra/extra.module.scss';
 import React from 'react';
+import useSoundEffect from '@/hooks/useSoundEffect';
 
 interface IProps {
   name: string;
@@ -11,10 +12,18 @@ interface IProps {
 
 export function ExtraCgElement(props: IProps) {
   const showFull = useValue(false);
+  const { setMouseEnterExtraElementSE, setClickSE } = useSoundEffect();
   return (
     <>
       {showFull.value && (
-        <div onClick={() => showFull.set(!showFull.value)} className={styles.showFullContainer}>
+        <div
+          onClick={() => {
+            showFull.set(!showFull.value);
+            setClickSE();
+          }}
+          className={styles.showFullContainer}
+          onMouseEnter={setMouseEnterExtraElementSE}
+        >
           <div className={styles.showFullCgMain}>
             <div
               style={{
@@ -29,7 +38,11 @@ export function ExtraCgElement(props: IProps) {
         </div>
       )}
       <div
-        onClick={() => showFull.set(!showFull.value)}
+        onClick={() => {
+          showFull.set(!showFull.value);
+          setClickSE();
+        }}
+        onMouseEnter={setMouseEnterExtraElementSE}
         style={{
           // transform: `rotate(${deg}deg)`,
           animation: `cg_softIn_${props.transformDeg} 1.5s ease-out ${100 + props.index * 100}ms forwards `,

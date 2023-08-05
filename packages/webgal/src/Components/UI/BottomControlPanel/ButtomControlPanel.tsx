@@ -24,11 +24,13 @@ import { saveGame } from '@/Core/controller/storage/saveGame';
 import { loadGame } from '@/Core/controller/storage/loadGame';
 import useTrans from '@/hooks/useTrans';
 import { useTranslation } from 'react-i18next';
+import useSoundEffect from '@/hooks/useSoundEffect';
 
 export const BottomControlPanel = () => {
   const t = useTrans('gaming.');
   const strokeWidth = 2.5;
   const { i18n } = useTranslation();
+  const { setMouseEnterSE, setClickControlButtonSE, setClickCloseButtonSE } = useSoundEffect();
   const lang = i18n.language;
   const isFr = lang === 'fr';
   let size = 42;
@@ -77,7 +79,11 @@ export const BottomControlPanel = () => {
             <span
               className={styles.singleButton}
               style={{ fontSize }}
-              onClick={() => setComponentVisibility('showTextBox', false)}
+              onClick={() => {
+                setComponentVisibility('showTextBox', false);
+                setClickControlButtonSE();
+              }}
+              onMouseEnter={setMouseEnterSE}
             >
               <PreviewCloseOne
                 className={styles.button}
@@ -93,7 +99,11 @@ export const BottomControlPanel = () => {
             <span
               className={styles.singleButton}
               style={{ fontSize }}
-              onClick={() => setComponentVisibility('showTextBox', true)}
+              onClick={() => {
+                setComponentVisibility('showTextBox', true);
+                setClickControlButtonSE();
+              }}
+              onMouseEnter={setMouseEnterSE}
             >
               <PreviewOpen
                 className={styles.button}
@@ -111,7 +121,9 @@ export const BottomControlPanel = () => {
             onClick={() => {
               setComponentVisibility('showBacklog', true);
               setComponentVisibility('showTextBox', false);
+              setClickControlButtonSE();
             }}
+            onMouseEnter={setMouseEnterSE}
           >
             <AlignTextLeftOne
               className={styles.button}
@@ -132,7 +144,9 @@ export const BottomControlPanel = () => {
                 VocalControl.pause();
                 VocalControl?.play();
               }
+              setClickControlButtonSE();
             }}
+            onMouseEnter={setMouseEnterSE}
           >
             <ReplayMusic
               className={styles.button}
@@ -143,11 +157,29 @@ export const BottomControlPanel = () => {
             />
             <span className={styles.button_text}>{t('buttons.replay')}</span>
           </span>
-          <span id="Button_ControlPanel_auto" className={styles.singleButton} style={{ fontSize }} onClick={switchAuto}>
+          <span
+            id="Button_ControlPanel_auto"
+            className={styles.singleButton}
+            style={{ fontSize }}
+            onClick={() => {
+              switchAuto();
+              setClickControlButtonSE();
+            }}
+            onMouseEnter={setMouseEnterSE}
+          >
             <PlayOne className={styles.button} theme="outline" size={size} fill="#f5f5f7" strokeWidth={strokeWidth} />
             <span className={styles.button_text}>{t('buttons.auto')}</span>
           </span>
-          <span id="Button_ControlPanel_fast" className={styles.singleButton} style={{ fontSize }} onClick={switchFast}>
+          <span
+            id="Button_ControlPanel_fast"
+            className={styles.singleButton}
+            style={{ fontSize }}
+            onClick={() => {
+              switchFast();
+              setClickControlButtonSE();
+            }}
+            onMouseEnter={setMouseEnterSE}
+          >
             <DoubleRight
               className={styles.button}
               theme="outline"
@@ -162,7 +194,9 @@ export const BottomControlPanel = () => {
             style={{ fontSize }}
             onClick={() => {
               saveGame(0);
+              setClickControlButtonSE();
             }}
+            onMouseEnter={setMouseEnterSE}
           >
             <DoubleDown
               className={styles.button}
@@ -179,7 +213,9 @@ export const BottomControlPanel = () => {
             style={{ fontSize }}
             onClick={() => {
               loadGame(0);
+              setClickControlButtonSE();
             }}
+            onMouseEnter={setMouseEnterSE}
           >
             <DoubleUp className={styles.button} theme="outline" size={size} fill="#f5f5f7" strokeWidth={strokeWidth} />
             <span className={styles.button_text}>{t('buttons.quicklyLoad')}</span>
@@ -191,7 +227,9 @@ export const BottomControlPanel = () => {
             onClick={() => {
               setMenuPanel(MenuPanelTag.Save);
               setComponentVisibility('showMenuPanel', true);
+              setClickControlButtonSE();
             }}
+            onMouseEnter={setMouseEnterSE}
           >
             <Save className={styles.button} theme="outline" size={size} fill="#f5f5f7" strokeWidth={strokeWidth} />
             <span className={styles.button_text}>{t('buttons.save')}</span>
@@ -202,7 +240,9 @@ export const BottomControlPanel = () => {
             onClick={() => {
               setMenuPanel(MenuPanelTag.Load);
               setComponentVisibility('showMenuPanel', true);
+              setClickControlButtonSE();
             }}
+            onMouseEnter={setMouseEnterSE}
           >
             <FolderOpen
               className={styles.button}
@@ -219,7 +259,9 @@ export const BottomControlPanel = () => {
             onClick={() => {
               setMenuPanel(MenuPanelTag.Option);
               setComponentVisibility('showMenuPanel', true);
+              setClickControlButtonSE();
             }}
+            onMouseEnter={setMouseEnterSE}
           >
             <SettingTwo
               className={styles.button}
@@ -235,7 +277,9 @@ export const BottomControlPanel = () => {
             style={{ fontSize }}
             onClick={() => {
               backToTitle();
+              setClickCloseButtonSE();
             }}
+            onMouseEnter={setMouseEnterSE}
           >
             <Home className={styles.button} theme="outline" size={size} fill="#f5f5f7" strokeWidth={strokeWidth} />
             <span className={styles.button_text}>{t('buttons.title')}</span>
