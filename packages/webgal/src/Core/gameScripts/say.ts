@@ -9,6 +9,7 @@ import { useTextDelay } from '@/hooks/useTextOptions';
 import { getRandomPerformName, PerformController } from '@/Core/Modules/perform/performController';
 import { WebGAL } from '@/main';
 import { getSentenceArgByKey } from '@/Core/util/getSentenceArg';
+import { textSize } from '@/store/userDataInterface';
 
 /**
  * 进行普通对话的显示
@@ -48,6 +49,25 @@ export const say = (sentence: ISentence): IPerform => {
   const textDelay = useTextDelay(userDataState.optionData.textSpeed);
   // 本句延迟
   const sentenceDelay = textDelay * sentence.content.length;
+
+  for (const e of sentence.args) {
+    if (e.key === 'fontSize') {
+      switch (e.value) {
+        case 'default':
+          dispatch(setStage({ key: 'showTextSize',  value: userDataState.optionData.textSize }));
+          break;        
+        case 'small':
+          dispatch(setStage({ key: 'showTextSize',  value: textSize.small }));
+          break;
+        case 'medium':
+          dispatch(setStage({ key: 'showTextSize',  value: textSize.medium }));
+          break;
+        case 'large':
+          dispatch(setStage({ key: 'showTextSize',  value: textSize.large }));
+          break;
+      }
+    }
+  }
 
   // 设置显示的角色名称
   let showName: string | number | boolean = stageState.showName; // 先默认继承
