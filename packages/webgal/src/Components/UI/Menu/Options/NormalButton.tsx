@@ -1,17 +1,23 @@
 import { ReactElement } from 'react';
 import { INormalButton } from '@/Components/UI/Menu/Options/OptionInterface';
 import styles from './normalButton.module.scss';
+import useSoundEffect from '@/hooks/useSoundEffect';
 
 export const NormalButton = (props: INormalButton) => {
   const len: number = props.textList.length;
   const buttonList: Array<ReactElement> = [];
+  const { setMouseEnterSE, setClickNormalButtonSE } = useSoundEffect();
   for (let i = 0; i < len; i++) {
     if (i === props.currentChecked) {
       const t = (
         <div
           key={props.textList[i] + i + props}
           className={styles.NormalButton + ' ' + styles.NormalButtonChecked}
-          onClick={props.functionList[i]}
+          onClick={() => {
+            setClickNormalButtonSE();
+            props.functionList[i]();
+          }}
+          onMouseEnter={setMouseEnterSE}
         >
           {props.textList[i]}
         </div>
@@ -19,7 +25,15 @@ export const NormalButton = (props: INormalButton) => {
       buttonList.push(t);
     } else {
       const t = (
-        <div key={props.textList[i] + i} className={styles.NormalButton} onClick={props.functionList[i]}>
+        <div
+          key={props.textList[i] + i}
+          className={styles.NormalButton}
+          onClick={() => {
+            setClickNormalButtonSE();
+            props.functionList[i]();
+          }}
+          onMouseEnter={setMouseEnterSE}
+        >
           {props.textList[i]}
         </div>
       );

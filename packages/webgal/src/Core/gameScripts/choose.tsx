@@ -9,6 +9,7 @@ import { webgalStore } from '@/store/store';
 import { textFont } from '@/store/userDataInterface';
 import { PerformController } from '@/Core/Modules/perform/performController';
 import { WebGAL } from '@/main';
+import useSoundEffect from '@/hooks/useSoundEffect';
 
 /**
  * 显示选择枝
@@ -19,6 +20,7 @@ export const choose = (sentence: ISentence): IPerform => {
   const chooseListFull = chooseList.map((e) => e.split(':'));
   const fontFamily = webgalStore.getState().userData.optionData.textboxFont;
   const font = fontFamily === textFont.song ? '"思源宋体", serif' : '"WebgalUI", serif';
+  const { setMouseEnterChooseSE, setClickChooseButtonSE } = useSoundEffect();
   const chooseElements = chooseListFull.map((e, i) => {
     return (
       <div
@@ -26,6 +28,7 @@ export const choose = (sentence: ISentence): IPerform => {
         style={{ fontFamily: font }}
         key={e[0] + i}
         onClick={() => {
+          setClickChooseButtonSE();
           if (e[1].match(/\./)) {
             changeScene(e[1], e[0]);
           } else {
@@ -33,6 +36,7 @@ export const choose = (sentence: ISentence): IPerform => {
           }
           WebGAL.gameplay.performController.unmountPerform('choose');
         }}
+        onMouseEnter={setMouseEnterChooseSE}
       >
         {e[0]}
       </div>

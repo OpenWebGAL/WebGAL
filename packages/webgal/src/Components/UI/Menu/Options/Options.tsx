@@ -6,6 +6,7 @@ import { System } from '@/Components/UI/Menu/Options/System/System';
 import { Display } from '@/Components/UI/Menu/Options/Display/Display';
 import { Sound } from '@/Components/UI/Menu/Options/Sound/Sound';
 import useTrans from '@/hooks/useTrans';
+import useSoundEffect from '@/hooks/useSoundEffect';
 
 enum optionPage {
   'System',
@@ -14,6 +15,7 @@ enum optionPage {
 }
 
 export const Options: FC = () => {
+  const { setMouseEnterOptionsSE, setClickOptionsButtonSE } = useSoundEffect();
   const currentOptionPage = useValue(optionPage.System);
   useEffect(getStorage, []);
 
@@ -34,13 +36,34 @@ export const Options: FC = () => {
       </div>
       <div className={styles.Options_page_container}>
         <div className={styles.Options_button_list}>
-          <div onClick={() => currentOptionPage.set(optionPage.System)} className={getClassName(optionPage.System)}>
+          <div
+            onClick={() => {
+              currentOptionPage.set(optionPage.System);
+              setClickOptionsButtonSE();
+            }}
+            className={getClassName(optionPage.System)}
+            onMouseEnter={setMouseEnterOptionsSE}
+          >
             {t('pages.system.title')}
           </div>
-          <div onClick={() => currentOptionPage.set(optionPage.Display)} className={getClassName(optionPage.Display)}>
+          <div
+            onClick={() => {
+              currentOptionPage.set(optionPage.Display);
+              setClickOptionsButtonSE();
+            }}
+            className={getClassName(optionPage.Display)}
+            onMouseEnter={setMouseEnterOptionsSE}
+          >
             {t('pages.display.title')}
           </div>
-          <div onClick={() => currentOptionPage.set(optionPage.Sound)} className={getClassName(optionPage.Sound)}>
+          <div
+            onClick={() => {
+              currentOptionPage.set(optionPage.Sound);
+              setClickOptionsButtonSE();
+            }}
+            className={getClassName(optionPage.Sound)}
+            onMouseEnter={setMouseEnterOptionsSE}
+          >
             {t('pages.sound.title')}
           </div>
         </div>

@@ -96,9 +96,10 @@ const jp = {
         sound: {
           title: 'サウンド',
           options: {
-            volumeMain: { title: '主音量' },
-            vocalVolume: { title: '声量' },
-            bgmVolume: { title: 'BGMの音量' },
+            volumeMain: { title: 'MAIN 音量' },
+            vocalVolume: { title: 'VOICE 音量' },
+            bgmVolume: { title: 'BGM 音量' },
+            seVolume: { title: 'SE 音量' },
           },
         },
         // language: {
