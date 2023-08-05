@@ -14,11 +14,12 @@ export const TextBox = () => {
   useEffect(() => {});
   const textDelay = useTextDelay(userDataState.optionData.textSpeed);
   const textDuration = useTextAnimationDuration(userDataState.optionData.textSpeed);
-  const size = getTextSize(userDataState.optionData.textSize) + '%';
+  let size = getTextSize(userDataState.optionData.textSize) + '%';
   const font = useFontFamily();
-
   const isText = stageState.showText !== '' || stageState.showName !== '';
-
+  if (isText) {
+    size = getTextSize(stageState.showTextSize) + '%';
+  }
   // 拆字
   const textArray: Array<string> = splitChars(stageState.showText);
   const textElementList = textArray.map((e, index) => {
