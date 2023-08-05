@@ -5,8 +5,6 @@ import { RootState } from '@/store/store';
 import { useFontFamily } from '@/hooks/useFontFamily';
 import { useTextAnimationDuration, useTextDelay } from '@/hooks/useTextOptions';
 import { getTextSize } from '@/Components/UI/getTextSize';
-import { ISentence } from '@/Core/controller/scene/sceneInterface';
-import { WebGAL } from '@/main';
 
 const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 
@@ -19,8 +17,8 @@ export const TextBox = () => {
   let size = getTextSize(userDataState.optionData.textSize) + '%';
   const font = useFontFamily();
   const isText = stageState.showText !== '' || stageState.showName !== '';
-  if (stageState.showTextSize) {
-    size = stageState.showTextSize;
+  if (isText) {
+    size = getTextSize(stageState.showTextSize) + '%';
   }
   // 拆字
   const textArray: Array<string> = splitChars(stageState.showText);
