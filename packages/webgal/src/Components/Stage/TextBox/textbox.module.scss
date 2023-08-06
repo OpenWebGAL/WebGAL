@@ -34,6 +34,7 @@ $height: 330px;
   animation: showSoftly 0.7s ease-out forwards;
   letter-spacing: 0.2em;
   backdrop-filter: blur(5px);
+  transition: left 0.33s;
 }
 
 @keyframes showSoftly {

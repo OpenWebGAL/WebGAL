@@ -17,11 +17,15 @@ export const initState: IStageState = {
   figNameRight: '', // 立绘_右 文件地址（相对或绝对）
   freeFigure: [],
   showText: '', // 文字
+  showTextSize: -1,
   showName: '', // 人物名
   command: '', // 语句指令
   choose: [], // 选项列表，现在不用，先预留
   vocal: '', // 语音 文件地址（相对或绝对）
+  vocalVolume: 100, // 语音 音量调整（0 - 100）
   bgm: '', // 背景音乐 文件地址（相对或绝对）
+  bgmEnter: 0, // 背景音乐 淡入或淡出的毫秒数
+  bgmVolume: 100, // 背景音乐 音量调整（0 - 100）
   miniAvatar: '', // 小头像 文件地址（相对或绝对）
   GameVar: {}, // 游戏内变量
   effects: [], // 应用的效果
