@@ -77,7 +77,12 @@ export const AudioContainer = () => {
     const uiSeAudioElement = document.createElement('audio');
     uiSeAudioElement.src = uiSoundEffects;
     uiSeAudioElement.loop = false;
-    uiSeAudioElement.volume = uiSeVol;
+    if (!isNaN(uiSeVol)) {
+      uiSeAudioElement.volume = uiSeVol;
+    } else {
+      logger.error('UI SE Vol is NaN');
+      uiSeAudioElement.volume = 0.5;
+    }
     uiSeAudioElement.play();
     uiSeAudioElement.addEventListener('ended', () => {
       // Processing after sound effects are played
