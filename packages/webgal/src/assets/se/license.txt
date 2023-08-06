@@ -4,10 +4,17 @@ Book_Page_Flip.wav
 s-cheremisinov-Click-03.wav
 『s-cheremisinov Free Sound Pack  » Click 03』 CC0许可 作者：s-cheremisinov 来源：https://freesound.org/s/401103/ (信息来自淘声网)
 
+taoshen-01.wav
+『波的一声』 CC-BY许可 作者：IUiuiuiu 来源：https://www.ear0.com/sound/38724 (信息来自淘声网)
+
 mouseEnter.mp3
 button-16.wav
 button-20.wav
 button-50.wav
+aigei-se-01.mp3
+aigei-se-02.mp3
+aigei-se-03.mp3
+zhanZhang-y1970.mp3
 no license.
 
 click_soft_02.wav
