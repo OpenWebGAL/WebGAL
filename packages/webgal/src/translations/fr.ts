@@ -98,7 +98,8 @@ const fr = {
             volumeMain: { title: 'Volume principal' },
             vocalVolume: { title: 'Volume des voix' },
             bgmVolume: { title: 'Volume de la musique de fond' },
-            seVolume: { title: 'Sound Effects Volume (English)' },
+            seVolume: { title: 'Volume des effets sonores' },
+            uiSeVolume: { title: 'Volume de l’interface utilisateur' },
           },
         },
         // language: {

@@ -29,94 +29,94 @@ import water_drop_sound from '@/assets/se/water-drop-sound.wav';
 // 调用音效
 const useSoundEffect = () => {
   const playSeEnter = () => {
-    webgalStore.dispatch(setStage({ key: 'se', value: mouseEnterSE }));
+    webgalStore.dispatch(setStage({ key: 'uiSe', value: mouseEnterSE }));
   };
   const playSeEnterChoose = () => {
-    webgalStore.dispatch(setStage({ key: 'se', value: Motion_Pop08_1 }));
+    webgalStore.dispatch(setStage({ key: 'uiSe', value: Motion_Pop08_1 }));
   };
   const playSeEnterTitleButton = () => {
-    webgalStore.dispatch(setStage({ key: 'se', value: Motion_Pop08_3 }));
+    webgalStore.dispatch(setStage({ key: 'uiSe', value: Motion_Pop08_3 }));
   };
   const playSeEnterOptionSelect = () => {
-    webgalStore.dispatch(setStage({ key: 'se', value: Motion_Pop08_4 }));
+    webgalStore.dispatch(setStage({ key: 'uiSe', value: Motion_Pop08_4 }));
   };
   const playSeEnterMenuPanelSelect = () => {
-    webgalStore.dispatch(setStage({ key: 'se', value: Motion_Pop08_2 }));
+    webgalStore.dispatch(setStage({ key: 'uiSe', value: Motion_Pop08_2 }));
   };
   const playSeEnterSavePanelSelect = () => {
-    webgalStore.dispatch(setStage({ key: 'se', value: Motion_Pop03_1 }));
+    webgalStore.dispatch(setStage({ key: 'uiSe', value: Motion_Pop03_1 }));
   };
   const playSeEnterLoadPanelSelect = () => {
-    webgalStore.dispatch(setStage({ key: 'se', value: Motion_Pop03_1 }));
+    webgalStore.dispatch(setStage({ key: 'uiSe', value: Motion_Pop03_1 }));
   };
   const playSeEnterExtraElement = () => {
-    webgalStore.dispatch(setStage({ key: 'se', value: Motion_Pop03_2 }));
+    webgalStore.dispatch(setStage({ key: 'uiSe', value: Motion_Pop03_2 }));
   };
   const playSeEnterCloseButton = () => {
-    webgalStore.dispatch(setStage({ key: 'se', value: Motion_Pop03_3 }));
+    webgalStore.dispatch(setStage({ key: 'uiSe', value: Motion_Pop03_3 }));
   };
   const playSeEnterDialogButton = () => {
-    webgalStore.dispatch(setStage({ key: 'se', value: Motion_Pop03_4 }));
+    webgalStore.dispatch(setStage({ key: 'uiSe', value: Motion_Pop03_4 }));
   };
   const playSeEnterOptionSlider = () => {
-    webgalStore.dispatch(setStage({ key: 'se', value: water_drop_sound }));
+    webgalStore.dispatch(setStage({ key: 'uiSe', value: water_drop_sound }));
   };
   const playSeClick = () => {
-    webgalStore.dispatch(setStage({ key: 'se', value: maou_se_system39 }));
+    webgalStore.dispatch(setStage({ key: 'uiSe', value: maou_se_system39 }));
   };
   const playSeClickChoose = () => {
-    webgalStore.dispatch(setStage({ key: 'se', value: maou_se_system41 }));
+    webgalStore.dispatch(setStage({ key: 'uiSe', value: maou_se_system41 }));
   };
   const playSeClickTitleButton = () => {
-    webgalStore.dispatch(setStage({ key: 'se', value: maou_se_system40 }));
+    webgalStore.dispatch(setStage({ key: 'uiSe', value: maou_se_system40 }));
   };
   const playSeClickCloseButton = () => {
-    webgalStore.dispatch(setStage({ key: 'se', value: button_16 }));
+    webgalStore.dispatch(setStage({ key: 'uiSe', value: button_16 }));
   };
   const playSeClickBottomControlPanelButton = () => {
-    webgalStore.dispatch(setStage({ key: 'se', value: button_20 }));
+    webgalStore.dispatch(setStage({ key: 'uiSe', value: button_20 }));
   };
   const playSeClickMenuNormalButton = () => {
-    webgalStore.dispatch(setStage({ key: 'se', value: button_50 }));
+    webgalStore.dispatch(setStage({ key: 'uiSe', value: button_50 }));
   };
   const playSeClickOptionSelect = () => {
-    webgalStore.dispatch(setStage({ key: 'se', value: switch_1 }));
+    webgalStore.dispatch(setStage({ key: 'uiSe', value: switch_1 }));
   };
   const playSeClickLoadPanelSelect = () => {
-    webgalStore.dispatch(setStage({ key: 'se', value: page_flip_1 }));
+    webgalStore.dispatch(setStage({ key: 'uiSe', value: page_flip_1 }));
   };
   const playSeClickSavePanelSelect = () => {
-    webgalStore.dispatch(setStage({ key: 'se', value: page_flip_1 }));
+    webgalStore.dispatch(setStage({ key: 'uiSe', value: page_flip_1 }));
   };
   const playSeClickSaveElement = () => {
-    webgalStore.dispatch(setStage({ key: 'se', value: maou_se_system48 }));
+    webgalStore.dispatch(setStage({ key: 'uiSe', value: maou_se_system48 }));
   };
   const playSeClickLoadElement = () => {
-    webgalStore.dispatch(setStage({ key: 'se', value: maou_se_system48 }));
+    webgalStore.dispatch(setStage({ key: 'uiSe', value: maou_se_system48 }));
   };
   const playSeClickDialogButton = () => {
-    webgalStore.dispatch(setStage({ key: 'se', value: maou_se_system35 }));
+    webgalStore.dispatch(setStage({ key: 'uiSe', value: maou_se_system35 }));
   };
   const playSeClickToNextBgmButton = () => {
-    webgalStore.dispatch(setStage({ key: 'se', value: switch_1 }));
+    webgalStore.dispatch(setStage({ key: 'uiSe', value: switch_1 }));
   };
   const playSeClickToLastBgmButton = () => {
-    webgalStore.dispatch(setStage({ key: 'se', value: switch_1 }));
+    webgalStore.dispatch(setStage({ key: 'uiSe', value: switch_1 }));
   };
   const playSeClickBeginBgmButton = () => {
-    webgalStore.dispatch(setStage({ key: 'se', value: pausestart }));
+    webgalStore.dispatch(setStage({ key: 'uiSe', value: pausestart }));
   };
   const playSeClickStopBgmButton = () => {
-    webgalStore.dispatch(setStage({ key: 'se', value: pause }));
+    webgalStore.dispatch(setStage({ key: 'uiSe', value: pause }));
   };
   const playSeClickCGPanelSelect = () => {
-    webgalStore.dispatch(setStage({ key: 'se', value: Book_Page_Flip }));
+    webgalStore.dispatch(setStage({ key: 'uiSe', value: Book_Page_Flip }));
   };
   const playSeClickCGElement = () => {
-    webgalStore.dispatch(setStage({ key: 'se', value: s_cheremisinov_Click_03 }));
+    webgalStore.dispatch(setStage({ key: 'uiSe', value: s_cheremisinov_Click_03 }));
   };
   const playSeClickBacklogJumpButton = () => {
-    webgalStore.dispatch(setStage({ key: 'se', value: click_soft_02 }));
+    webgalStore.dispatch(setStage({ key: 'uiSe', value: click_soft_02 }));
   };
 
   return {
