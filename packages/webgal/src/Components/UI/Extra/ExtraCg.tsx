@@ -5,12 +5,14 @@ import { RootState } from '@/store/store';
 import { useValue } from '@/hooks/useValue';
 import './extraCG_animation_List.scss';
 import { ExtraCgElement } from '@/Components/UI/Extra/ExtraCgElement';
+import useSoundEffect from '@/hooks/useSoundEffect';
 
 export function ExtraCg() {
   const cgPerPage = 8;
   const extraState = useSelector((state: RootState) => state.userData.appreciationData);
   const pageNumber = Math.ceil(extraState.cg.length / cgPerPage);
   const currentPage = useValue(1);
+  const { playSeEnterCloseButton, playSeClickCGPanelSelect } = useSoundEffect();
 
   // 开始生成立绘鉴赏的图片
   const showCgList = [];
@@ -42,7 +44,15 @@ export function ExtraCg() {
       className = className + ' ' + styles.cgNav_active;
     }
     const temp = (
-      <div onClick={() => currentPage.set(i)} key={'nav' + i} className={className}>
+      <div
+        onClick={() => {
+          currentPage.set(i);
+          playSeClickCGPanelSelect();
+        }}
+        key={'nav' + i}
+        onMouseEnter={playSeEnterCloseButton}
+        className={className}
+      >
         {i}
       </div>
     );

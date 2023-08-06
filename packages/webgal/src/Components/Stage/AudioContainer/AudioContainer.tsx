@@ -1,5 +1,6 @@
 import { useSelector } from 'react-redux';
-import { RootState } from '@/store/store';
+import { RootState, webgalStore } from '@/store/store';
+import { setStage } from '@/store/stageReducer';
 import { useEffect } from 'react';
 import { logger } from '@/Core/util/etc/logger';
 
@@ -12,6 +13,10 @@ export const AudioContainer = () => {
   const vocalVol = mainVol * 0.01 * userDataState.optionData.vocalVolume * 0.01 * stageStore.vocalVolume * 0.01;
   const bgmVol = mainVol * 0.01 * userDataState.optionData.bgmVolume * 0.01 * stageStore.bgmVolume * 0.01;
   const bgmEnter = stageStore.bgmEnter;
+  const uiSoundEffects = stageStore.uiSe;
+  const seVol = mainVol * 0.01 * userDataState.optionData.seVolume * 0.01 * stageStore.seVolume * 0.01;
+  const uiSeVol =
+    mainVol * 0.01 * userDataState.optionData.seVolume * 0.01 * userDataState.optionData.uiSeVolume * 0.01;
   const isEnterGame = useSelector((state: RootState) => state.GUI.isEnterGame);
 
   /**
@@ -66,6 +71,28 @@ export const AudioContainer = () => {
       vocalElement.volume = vocalVol.toString();
     }
   }, [vocalVol]);
+
+  useEffect(() => {
+    if (uiSoundEffects === '') return;
+    const uiSeAudioElement = document.createElement('audio');
+    uiSeAudioElement.src = uiSoundEffects;
+    uiSeAudioElement.loop = false;
+    uiSeAudioElement.volume = uiSeVol;
+    uiSeAudioElement.play();
+    uiSeAudioElement.addEventListener('ended', () => {
+      // Processing after sound effects are played
+      uiSeAudioElement.remove();
+    });
+    webgalStore.dispatch(setStage({ key: 'uiSe', value: '' }));
+  }, [uiSoundEffects]);
+
+  useEffect(() => {
+    logger.debug(`设置音效音量: ${seVol}`);
+  }, [seVol]);
+
+  useEffect(() => {
+    logger.debug(`设置用户界面音效音量: ${uiSeVol}`);
+  }, [uiSeVol]);
 
   return (
     <div>

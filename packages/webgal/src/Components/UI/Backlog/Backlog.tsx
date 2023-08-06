@@ -9,10 +9,13 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import useTrans from '@/hooks/useTrans';
 import { WebGAL } from '@/main';
 import { splitChars } from '@/Components/Stage/TextBox/TextBox';
+import useSoundEffect from '@/hooks/useSoundEffect';
 
 export const Backlog = () => {
   const t = useTrans('gaming.');
   // logger.info('Backlog render');
+  const { playSeClickBacklogJumpButton, playSeEnter, playSeClickCloseButton, playSeEnterCloseButton } =
+    useSoundEffect();
   const GUIStore = useSelector((state: RootState) => state.GUI);
   const dispatch = useDispatch();
   const iconSize = '0.8em';
@@ -43,10 +46,12 @@ export const Backlog = () => {
             <div className={styles.backlog_item_button_list}>
               <div
                 onClick={(e) => {
+                  playSeClickBacklogJumpButton();
                   jumpFromBacklog(i);
                   e.preventDefault();
                   e.stopPropagation();
                 }}
+                onMouseEnter={playSeEnter}
                 className={styles.backlog_item_button_element}
               >
                 <Return theme="outline" size={iconSize} fill="#ffffff" strokeWidth={3} />
@@ -54,6 +59,7 @@ export const Backlog = () => {
               {backlogItem.currentStageState.vocal ? (
                 <div
                   onClick={() => {
+                    playSeClickBacklogJumpButton();
                     // 获取到播放 backlog 语音的元素
                     const backlog_audio_element: any = document.getElementById('backlog_audio_play_element_' + i);
                     if (backlog_audio_element) {
@@ -64,6 +70,7 @@ export const Backlog = () => {
                       backlog_audio_element?.play();
                     }
                   }}
+                  onMouseEnter={playSeEnter}
                   className={styles.backlog_item_button_element}
                 >
                   <VolumeNotice theme="outline" size={iconSize} fill="#ffffff" strokeWidth={3} />
@@ -129,9 +136,11 @@ export const Backlog = () => {
             <CloseSmall
               className={styles.backlog_top_icon}
               onClick={() => {
+                playSeClickCloseButton();
                 dispatch(setVisibility({ component: 'showBacklog', visibility: false }));
                 dispatch(setVisibility({ component: 'showTextBox', visibility: true }));
               }}
+              onMouseEnter={playSeEnterCloseButton}
               theme="outline"
               size="4em"
               fill="#ffffff"
