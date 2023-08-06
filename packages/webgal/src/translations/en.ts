@@ -99,6 +99,7 @@ const en = {
             vocalVolume: { title: 'Vocal Volume' },
             bgmVolume: { title: 'BGM Volume' },
             seVolume: { title: 'Sound Effects Volume' },
+            uiSeVolume: { title: 'UI Sound Effects Volume' },
           },
         },
         // language: {

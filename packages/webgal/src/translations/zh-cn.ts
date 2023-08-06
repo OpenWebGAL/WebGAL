@@ -99,6 +99,7 @@ const zhCn = {
             vocalVolume: { title: '语音音量' },
             bgmVolume: { title: '背景音乐音量' },
             seVolume: { title: '音效音量' },
+            uiSeVolume: { title: '用户界面音效音量' },
           },
         },
         // language: {

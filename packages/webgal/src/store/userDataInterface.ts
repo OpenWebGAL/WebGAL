@@ -34,6 +34,7 @@ export interface IOptionData {
   vocalVolume: number; // 语音音量
   bgmVolume: number; // 背景音乐音量
   seVolume: number; // 音效音量
+  uiSeVolume: number; // 用户界面音效音量
   slPage: number; // 存读档界面所在页面
   textboxFont: textFont;
   language: language;

@@ -25,7 +25,8 @@ const initialOptionSet = {
   textSize: textSize.medium,
   vocalVolume: 100, // 语音音量
   bgmVolume: 25, // 背景音乐音量
-  seVolume: 25, // 音效音量
+  seVolume: 100, // 音效音量
+  uiSeVolume: 25, // UI音效音量
   textboxFont: textFont.song,
   language: language.zhCn,
 };

@@ -58,6 +58,17 @@ export function Sound() {
           }}
         />
       </NormalOption>
+      <NormalOption key="option8" title={t('uiSeVolume.title')}>
+        <OptionSlider
+          initValue={userDataState.optionData.uiSeVolume}
+          uniqueID={t('uiSeVolume.title')}
+          onChange={(event) => {
+            const newValue = event.target.value;
+            dispatch(setOptionData({ key: 'uiSeVolume', value: Number(newValue) }));
+            setStorage();
+          }}
+        />
+      </NormalOption>
     </div>
   );
 }
