@@ -7,6 +7,7 @@ import { RootState } from '@/store/store';
 import { setMenuPanelTag, setVisibility } from '@/store/GUIReducer';
 import { backToTitle } from '@/Core/controller/gamePlay/backToTitle';
 import useTrans from '@/hooks/useTrans';
+import useSoundEffect from '@/hooks/useSoundEffect';
 
 /**
  * Menu页的底栏
@@ -16,6 +17,7 @@ export const MenuPanel = () => {
   // 国际化
   const t = useTrans('menu.');
 
+  const { playSeClick, playSeClickCloseButton } = useSoundEffect();
   const GUIState = useSelector((state: RootState) => state.GUI);
   const dispatch = useDispatch();
   // 设置Menu按钮的高亮
@@ -45,6 +47,7 @@ export const MenuPanel = () => {
         iconColor={SaveIconColor}
         tagColor={SaveTagColor}
         clickFunc={() => {
+          playSeClick();
           if (GUIState.showTitle) return;
           dispatch(setMenuPanelTag(MenuPanelTag.Save));
         }}
@@ -57,6 +60,7 @@ export const MenuPanel = () => {
         iconColor={LoadIconColor}
         tagColor={LoadTagColor}
         clickFunc={() => {
+          playSeClick();
           dispatch(setMenuPanelTag(MenuPanelTag.Load));
         }}
         tagName={t('loadSaving.title')}
@@ -68,6 +72,7 @@ export const MenuPanel = () => {
         iconColor={OptionIconColor}
         tagColor={OptionTagColor}
         clickFunc={() => {
+          playSeClick();
           dispatch(setMenuPanelTag(MenuPanelTag.Option));
         }}
         tagName={t('options.title')}
@@ -76,6 +81,7 @@ export const MenuPanel = () => {
       <MenuPanelButton
         iconName="title"
         clickFunc={() => {
+          playSeClickCloseButton();
           backToTitle();
           dispatch(setVisibility({ component: 'showMenuPanel', visibility: false }));
         }}
@@ -85,6 +91,7 @@ export const MenuPanel = () => {
       <MenuPanelButton
         iconName="exit"
         clickFunc={() => {
+          playSeClickCloseButton();
           dispatch(setVisibility({ component: 'showMenuPanel', visibility: false }));
         }}
         tagName={t('exit.title')}
