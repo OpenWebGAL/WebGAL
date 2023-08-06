@@ -9,12 +9,12 @@ import useSoundEffect from '@/hooks/useSoundEffect';
 
 export function ExtraBgm() {
   const {
-    playSeEnter,
     playSeClick,
     playSeClickToNextBgmButton,
     playSeClickToLastBgmButton,
     playSeClickBeginBgmButton,
     playSeClickStopBgmButton,
+    playSeEnterExtraBGMButton,
   } = useSoundEffect();
   // 检查当前正在播放的bgm是否在bgm列表内
   const currentBgm = useSelector((state: RootState) => state.stage.bgm);
@@ -61,7 +61,7 @@ export function ExtraBgm() {
         style={{
           animationDelay: `${i * 150}ms`,
         }}
-        onMouseEnter={playSeEnter}
+        onMouseEnter={playSeEnterExtraBGMButton}
       >
         {e.name}
       </div>
@@ -79,7 +79,7 @@ export function ExtraBgm() {
               setBgmByIndex(foundCurrentBgmIndex - 1);
             }
           }}
-          onMouseEnter={playSeEnter}
+          onMouseEnter={playSeEnterExtraBGMButton}
           className={styles.bgmControlButton}
         >
           <GoStart theme="filled" size={iconSize} fill="#fff" strokeWidth={3} strokeLinejoin="miter" />
@@ -90,7 +90,7 @@ export function ExtraBgm() {
             const bgmControl: HTMLAudioElement = document.getElementById('currentBgm') as HTMLAudioElement;
             bgmControl?.play().then();
           }}
-          onMouseEnter={playSeEnter}
+          onMouseEnter={playSeEnterExtraBGMButton}
           className={styles.bgmControlButton}
         >
           <PlayOne theme="filled" size={iconSize} fill="#fff" strokeWidth={3} strokeLinejoin="miter" />
@@ -104,7 +104,7 @@ export function ExtraBgm() {
               setBgmByIndex(foundCurrentBgmIndex + 1);
             }
           }}
-          onMouseEnter={playSeEnter}
+          onMouseEnter={playSeEnterExtraBGMButton}
           className={styles.bgmControlButton}
         >
           <GoEnd theme="filled" size={iconSize} fill="#fff" strokeWidth={3} strokeLinejoin="miter" />
@@ -115,7 +115,7 @@ export function ExtraBgm() {
             const bgmControl: HTMLAudioElement = document.getElementById('currentBgm') as HTMLAudioElement;
             bgmControl.pause();
           }}
-          onMouseEnter={playSeEnter}
+          onMouseEnter={playSeEnterExtraBGMButton}
           className={styles.bgmControlButton}
         >
           <SquareSmall theme="filled" size={iconSize} fill="#fff" strokeWidth={3} strokeLinejoin="miter" />
@@ -126,7 +126,7 @@ export function ExtraBgm() {
             playSeClick();
             isShowBgmList.set(!isShowBgmList.value);
           }}
-          onMouseEnter={playSeEnter}
+          onMouseEnter={playSeEnterExtraBGMButton}
           className={styles.bgmControlButton}
           style={{ marginLeft: 'auto' }}
         >
