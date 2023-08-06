@@ -85,4 +85,6 @@ export const ADD_NEXT_ARG_LIST = [
   commandType.filmMode,
   commandType.playEffect,
   commandType.comment,
+  commandType.setTransform,
+  commandType.setTransition,
 ];
