@@ -17,7 +17,7 @@ export const TextBox = () => {
   let size = getTextSize(userDataState.optionData.textSize) + '%';
   const font = useFontFamily();
   const isText = stageState.showText !== '' || stageState.showName !== '';
-  if (isText) {
+  if (isText && stageState.showTextSize !== -1) {
     size = getTextSize(stageState.showTextSize) + '%';
   }
   // 拆字
@@ -67,7 +67,11 @@ export const TextBox = () => {
   return (
     <>
       {isText && (
-        <div id="textBoxMain" className={styles.TextBox_main} style={{ fontFamily: font }}>
+        <div
+          id="textBoxMain"
+          className={styles.TextBox_main}
+          style={{ fontFamily: font, left: stageState.miniAvatar === '' ? 25 : undefined }}
+        >
           {/* <div className={styles.nameContainer}>{stageState.showName !== ''}</div> */}
           <div id="miniAvatar" className={styles.miniAvatarContainer}>
             {stageState.miniAvatar !== '' && (
