@@ -13,7 +13,7 @@ export default class SceneParser {
 
   constructor(assetsPrefetcher: ((assetList: Array<IAsset>) => void),
               assetSetter: (fileName: string, assetType: fileType) => string,
-              ADD_NEXT_ARG_LIST: Array<commandType>, SCRIPT_CONFIG: Array<any>) {
+              ADD_NEXT_ARG_LIST: Array<number>, SCRIPT_CONFIG: Array<any>) {
     this.assetsPrefetcher = assetsPrefetcher;
     this.assetSetter = assetSetter;
     this.ADD_NEXT_ARG_LIST = ADD_NEXT_ARG_LIST;
