@@ -27,6 +27,8 @@ import { playEffect } from '@/Core/gameScripts/playEffect';
 import { setTempAnimation } from '@/Core/gameScripts/setTempAnimation';
 import { comment } from '@/Core/gameScripts/comment';
 import { IPerform } from '@/Core/Modules/perform/performInterface';
+import { setTransform } from '@/Core/gameScripts/setTransform';
+import { setTransition } from '@/Core/gameScripts/setTransition';
 
 interface IConfigInterface {
   scriptString: string;
@@ -67,6 +69,8 @@ export const SCRIPT_CONFIG: IConfigInterface[] = [
   { scriptString: 'playEffect', scriptType: commandType.playEffect, scriptFunction: playEffect },
   { scriptString: 'setTempAnimation', scriptType: commandType.setTempAnimation, scriptFunction: setTempAnimation },
   { scriptString: '__commment', scriptType: commandType.comment, scriptFunction: comment },
+  { scriptString: 'setTransform', scriptType: commandType.setTransform, scriptFunction: setTransform },
+  { scriptString: 'setTransition', scriptType: commandType.setTransition, scriptFunction: setTransition },
 ];
 export const ADD_NEXT_ARG_LIST = [
   commandType.bgm,
@@ -81,4 +85,6 @@ export const ADD_NEXT_ARG_LIST = [
   commandType.filmMode,
   commandType.playEffect,
   commandType.comment,
+  commandType.setTransform,
+  commandType.setTransition,
 ];

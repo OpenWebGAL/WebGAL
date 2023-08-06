@@ -1,8 +1,8 @@
 /**
  * 语句类型
  */
-import { sceneEntry } from "./runtimeInterface";
-import { fileType } from "./assets";
+import {sceneEntry} from "./runtimeInterface";
+import {fileType} from "./assets";
 
 export enum commandType {
   say, // 对话
@@ -33,7 +33,9 @@ export enum commandType {
   setAnimation,
   playEffect,
   setTempAnimation,
-  comment
+  comment,
+  setTransform,
+  setTransition,
 }
 
 /**

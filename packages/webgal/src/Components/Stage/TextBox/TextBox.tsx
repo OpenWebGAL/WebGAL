@@ -14,14 +14,18 @@ export const TextBox = () => {
   useEffect(() => {});
   const textDelay = useTextDelay(userDataState.optionData.textSpeed);
   const textDuration = useTextAnimationDuration(userDataState.optionData.textSpeed);
-  const size = getTextSize(userDataState.optionData.textSize) + '%';
+  let size = getTextSize(userDataState.optionData.textSize) + '%';
   const font = useFontFamily();
-
   const isText = stageState.showText !== '' || stageState.showName !== '';
-
+  if (isText && stageState.showTextSize !== -1) {
+    size = getTextSize(stageState.showTextSize) + '%';
+  }
   // 拆字
   const textArray: Array<string> = splitChars(stageState.showText);
   const textElementList = textArray.map((e, index) => {
+    if (e === '<br />') {
+      return <br key={`br${index}`} />;
+    }
     let delay = index * textDelay;
     let prevLength = stageState.currentConcatDialogPrev.length;
     if (stageState.currentConcatDialogPrev !== '' && index >= prevLength) {
@@ -63,7 +67,11 @@ export const TextBox = () => {
   return (
     <>
       {isText && (
-        <div id="textBoxMain" className={styles.TextBox_main} style={{ fontFamily: font }}>
+        <div
+          id="textBoxMain"
+          className={styles.TextBox_main}
+          style={{ fontFamily: font, left: stageState.miniAvatar === '' ? 25 : undefined }}
+        >
           {/* <div className={styles.nameContainer}>{stageState.showName !== ''}</div> */}
           <div id="miniAvatar" className={styles.miniAvatarContainer}>
             {stageState.miniAvatar !== '' && (
@@ -120,6 +128,15 @@ export function splitChars(sentence: string) {
   };
 
   for (const character of sentence) {
+    if (character === '|') {
+      if (word) {
+        words.push(word);
+        word = '';
+      }
+      words.push('<br />');
+      cjkFlag = false;
+      continue;
+    }
     if (character === ' ') {
       // Space
       if (word) {

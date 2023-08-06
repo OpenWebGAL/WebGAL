@@ -20,10 +20,22 @@ import { logger } from '@/Core/util/etc/logger';
 /**
  * 播放bgm
  * @param url bgm路径
+ * @param enter 淡入时间（单位毫秒）
+ * @param volume 背景音乐 音量调整（0 - 100）
  */
-export function playBgm(url: string): void {
+export function playBgm(url: string, enter = 0, volume = 100): void {
   logger.info('playing bgm' + url);
-  webgalStore.dispatch(setStage({ key: 'bgm', value: url }));
+  if (url === '') {
+    setTimeout(() => {
+      webgalStore.dispatch(setStage({ key: 'bgm', value: '' }));
+    }, enter);
+    webgalStore.dispatch(setStage({ key: 'bgmEnter', value: -enter }));
+    webgalStore.dispatch(setStage({ key: 'bgmVolume', value: volume }));
+  } else {
+    webgalStore.dispatch(setStage({ key: 'bgm', value: url }));
+    webgalStore.dispatch(setStage({ key: 'bgmEnter', value: enter }));
+    webgalStore.dispatch(setStage({ key: 'bgmVolume', value: volume }));
+  }
   const audioElement = document.getElementById('currentBgm') as HTMLAudioElement;
   audioElement?.play();
 }

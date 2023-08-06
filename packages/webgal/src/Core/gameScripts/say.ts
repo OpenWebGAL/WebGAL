@@ -8,6 +8,8 @@ import { setStage } from '@/store/stageReducer';
 import { useTextDelay } from '@/hooks/useTextOptions';
 import { getRandomPerformName, PerformController } from '@/Core/Modules/perform/performController';
 import { WebGAL } from '@/main';
+import { getSentenceArgByKey } from '@/Core/util/getSentenceArg';
+import { textSize } from '@/store/userDataInterface';
 
 /**
  * 进行普通对话的显示
@@ -19,28 +21,23 @@ export const say = (sentence: ISentence): IPerform => {
   const styles = stageState.enableFilm === '' ? styles1 : styles2;
   const userDataState = webgalStore.getState().userData;
   const dispatch = webgalStore.dispatch;
-  let dialogToShow = sentence.content;
-  let dialogKey = Math.random().toString();
-  // 是否是继承语句
-  let isConcat = false;
-  // 是否有 notend 参数
-  let isNotend = false;
+  let dialogKey = Math.random().toString(); // 生成一个随机的key
+  let dialogToShow = sentence.content; // 获取对话内容
+  const isConcat = getSentenceArgByKey(sentence, 'concat'); // 是否是继承语句
+  const isNotend = getSentenceArgByKey(sentence, 'notend') as boolean; // 是否有 notend 参数
+  const speaker = getSentenceArgByKey(sentence, 'speaker'); // 获取说话者
+  const clear = getSentenceArgByKey(sentence, 'clear'); // 是否清除说话者
+  const vocal = getSentenceArgByKey(sentence, 'vocal'); // 是否播放语音
+
   // 如果是concat，那么就继承上一句的key，并且继承上一句对话。
-  sentence.args.forEach((e) => {
-    if (e.key === 'concat' && e.value === true) {
-      dialogKey = stageState.currentDialogKey;
-      dialogToShow = stageState.showText + dialogToShow;
-      isConcat = true;
-    }
-    if (e.key === 'notend' && e.value === true) {
-      isNotend = true;
-    }
-  });
   if (isConcat) {
+    dialogKey = stageState.currentDialogKey;
+    dialogToShow = stageState.showText + dialogToShow;
     dispatch(setStage({ key: 'currentConcatDialogPrev', value: stageState.showText }));
   } else {
     dispatch(setStage({ key: 'currentConcatDialogPrev', value: '' }));
   }
+
   // 设置文本显示
   dispatch(setStage({ key: 'showText', value: dialogToShow }));
   // 清除语音
@@ -52,38 +49,48 @@ export const say = (sentence: ISentence): IPerform => {
   const textDelay = useTextDelay(userDataState.optionData.textSpeed);
   // 本句延迟
   const sentenceDelay = textDelay * sentence.content.length;
-  // // 设置延迟
-  // if (isNotend) {
-  //   dispatch(setStage({key: 'currentPerformDelay', value: sentenceDelay}));
-  // } else {
-  //   dispatch(setStage({key: 'currentPerformDelay', value: 0}));
-  // }
-  // 设置显示的角色名称
-  let showName: string | number | boolean = stageState.showName; // 先默认继承
+
   for (const e of sentence.args) {
-    if (e.key === 'speaker') {
-      showName = e.value;
-    }
-    if (e.key === 'clear' && e.value === true) {
-      showName = '';
-    }
-    if (e.key === 'vocal') {
-      playVocal(sentence);
+    if (e.key === 'fontSize') {
+      switch (e.value) {
+        case 'default':
+          dispatch(setStage({ key: 'showTextSize', value: -1 }));
+          break;
+        case 'small':
+          dispatch(setStage({ key: 'showTextSize', value: textSize.small }));
+          break;
+        case 'medium':
+          dispatch(setStage({ key: 'showTextSize', value: textSize.medium }));
+          break;
+        case 'large':
+          dispatch(setStage({ key: 'showTextSize', value: textSize.large }));
+          break;
+      }
     }
   }
+
+  // 设置显示的角色名称
+  let showName: string | number | boolean = stageState.showName; // 先默认继承
+  if (speaker !== null) {
+    showName = speaker;
+  }
+  if (clear) {
+    showName = '';
+  }
   dispatch(setStage({ key: 'showName', value: showName }));
-  // setTimeout(() => {
-  //   const textElements = document.querySelectorAll('.' + styles.TextBox_textElement_start);
-  //   const textArray = [...textElements];
-  //   textArray.forEach((e) => {
-  //     e.className = styles.TextBox_textElement;
-  //   });
-  // }, 0);
+
+  // 播放一段语音
+  if (vocal) {
+    playVocal(sentence);
+  }
+
   const performInitName: string = getRandomPerformName();
   let endDelay = 750 - userDataState.optionData.textSpeed * 250;
+  // 如果有 notend 参数，那么就不需要等待
   if (isNotend) {
     endDelay = 0;
   }
+
   return {
     performName: performInitName,
     duration: sentenceDelay + endDelay,

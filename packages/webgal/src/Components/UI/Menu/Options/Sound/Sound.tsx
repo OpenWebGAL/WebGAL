@@ -3,7 +3,6 @@ import { NormalOption } from '@/Components/UI/Menu/Options/NormalOption';
 import { OptionSlider } from '@/Components/UI/Menu/Options/OptionSlider';
 import { setOptionData } from '@/store/userDataReducer';
 import { setStorage } from '@/Core/controller/storage/storageController';
-import { setVolume } from '@/Core/controller/stage/setVolume';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import useTrans from '@/hooks/useTrans';
@@ -23,7 +22,6 @@ export function Sound() {
             const newValue = event.target.value;
             dispatch(setOptionData({ key: 'volumeMain', value: Number(newValue) }));
             setStorage();
-            setVolume();
           }}
         />
       </NormalOption>
@@ -35,7 +33,6 @@ export function Sound() {
             const newValue = event.target.value;
             dispatch(setOptionData({ key: 'vocalVolume', value: Number(newValue) }));
             setStorage();
-            setVolume();
           }}
         />
       </NormalOption>
@@ -47,7 +44,6 @@ export function Sound() {
             const newValue = event.target.value;
             dispatch(setOptionData({ key: 'bgmVolume', value: Number(newValue) }));
             setStorage();
-            setVolume();
           }}
         />
       </NormalOption>
