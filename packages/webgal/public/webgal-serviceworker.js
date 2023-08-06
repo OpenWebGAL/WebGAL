@@ -11,10 +11,10 @@ self.addEventListener('fetch', function (event) {
     console.log('%cCACHED: ' + url, 'color: #005CAF; padding: 2px;');
   }
   if (!isReturnCache) {
-    event.respondWith(fetch(event.request));
+    // 什么也不做
   } else {
-    event.respondWith(
-      // 检查在缓存中是否有匹配的资源
+    let isError = false;
+    const resp = // 检查在缓存中是否有匹配的资源
       caches.match(event.request).then(function (response) {
         // 如果缓存中有匹配的资源，则返回缓存资源
         if (response) {
@@ -33,9 +33,10 @@ self.addEventListener('fetch', function (event) {
           })
           .catch(function (error) {
             console.error('Fetching failed:', error);
+            isError = true;
             throw error;
           });
-      }),
-    );
+      });
+    if (!isError) event.respondWith(resp);
   }
 });
