@@ -15,7 +15,7 @@ enum optionPage {
 }
 
 export const Options: FC = () => {
-  const { setMouseEnterOptionsSE, setClickOptionsButtonSE } = useSoundEffect();
+  const { playSeEnterOptionSelect, playSeClickOptionSelect } = useSoundEffect();
   const currentOptionPage = useValue(optionPage.System);
   useEffect(getStorage, []);
 
@@ -39,30 +39,30 @@ export const Options: FC = () => {
           <div
             onClick={() => {
               currentOptionPage.set(optionPage.System);
-              setClickOptionsButtonSE();
+              playSeClickOptionSelect();
             }}
             className={getClassName(optionPage.System)}
-            onMouseEnter={setMouseEnterOptionsSE}
+            onMouseEnter={playSeEnterOptionSelect}
           >
             {t('pages.system.title')}
           </div>
           <div
             onClick={() => {
               currentOptionPage.set(optionPage.Display);
-              setClickOptionsButtonSE();
+              playSeClickOptionSelect();
             }}
             className={getClassName(optionPage.Display)}
-            onMouseEnter={setMouseEnterOptionsSE}
+            onMouseEnter={playSeEnterOptionSelect}
           >
             {t('pages.display.title')}
           </div>
           <div
             onClick={() => {
               currentOptionPage.set(optionPage.Sound);
-              setClickOptionsButtonSE();
+              playSeClickOptionSelect();
             }}
             className={getClassName(optionPage.Sound)}
-            onMouseEnter={setMouseEnterOptionsSE}
+            onMouseEnter={playSeEnterOptionSelect}
           >
             {t('pages.sound.title')}
           </div>

@@ -1,6 +1,18 @@
 Book_Page_Flip.wav
 『书页翻页』 CC-BY许可 作者：菲利普湾 来源：https://www.ear0.com/sound/17890 (信息来自淘声网)
 
+s-cheremisinov-Click-03.wav
+『s-cheremisinov Free Sound Pack  » Click 03』 CC0许可 作者：s-cheremisinov 来源：https://freesound.org/s/401103/ (信息来自淘声网)
+
+mouseEnter.mp3
+button-16.wav
+button-20.wav
+button-50.wav
+no license.
+
+click_soft_02.wav
+Attribution 4.0 International (CC BY 4.0)
+
 maou_se_system22.mp3
 『音楽：魔王魂』https://maou.audio/se_system22/
 
@@ -28,3 +40,16 @@ Motion-Pop08-2.mp3
 Motion-Pop08-3.mp3
 Motion-Pop08-4.mp3
 「OtoLogic」
+
+page-flip-1.wav
+switch-1.wav
+This work has been identified as being free of known restrictions under copyright law, including all related and neighboring rights.
+You can copy, modify, distribute and perform the work, even for commercial purposes, all without asking permission. 
+
+pause.mp3
+CC0 1.0 Universal (CC0 1.0)
+Public Domain Dedication
+
+pausestart.wav
+CC0 1.0 Universal (CC0 1.0)
+Public Domain Dedication

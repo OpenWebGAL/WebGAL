@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import useSoundEffect from '@/hooks/useSoundEffect';
 
 export const OptionSlider = (props: ISlider) => {
-  const { setMouseEnterSE, setClickSE } = useSoundEffect();
+  const { playSeEnter, playSeEnterOptionSlider } = useSoundEffect();
   useEffect(() => {
     setTimeout(() => {
       const input = document.getElementById(props.uniqueID);
@@ -13,7 +13,13 @@ export const OptionSlider = (props: ISlider) => {
   }, []);
   return (
     <div className="Option_WebGAL_slider">
-      <input id={props.uniqueID} type="range" onChange={props.onChange} onMouseEnter={setMouseEnterSE} />
+      <input
+        id={props.uniqueID}
+        type="range"
+        onChange={props.onChange}
+        onFocus={playSeEnterOptionSlider}
+        onMouseEnter={playSeEnter}
+      />
     </div>
   );
 };

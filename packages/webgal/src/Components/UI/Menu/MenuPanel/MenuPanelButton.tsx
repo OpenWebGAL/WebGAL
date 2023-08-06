@@ -9,7 +9,7 @@ import useSoundEffect from '@/hooks/useSoundEffect';
  * @constructor
  */
 export const MenuPanelButton = (props: IMenuPanel) => {
-  const { setMouseEnterMenuPanelButtonSE } = useSoundEffect();
+  const { playSeEnterMenuPanelSelect } = useSoundEffect();
   let buttonClassName = styles.MenuPanel_button;
   if (props.hasOwnProperty('buttonOnClassName')) {
     buttonClassName = buttonClassName + props.buttonOnClassName;
@@ -20,7 +20,7 @@ export const MenuPanelButton = (props: IMenuPanel) => {
       onClick={() => {
         props.clickFunc();
       }}
-      onMouseEnter={setMouseEnterMenuPanelButtonSE}
+      onMouseEnter={playSeEnterMenuPanelSelect}
       style={{ color: props.tagColor }}
     >
       <div className={styles.MenuPanel_button_icon}>
