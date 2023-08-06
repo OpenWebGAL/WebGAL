@@ -12,7 +12,7 @@ export function ExtraCg() {
   const extraState = useSelector((state: RootState) => state.userData.appreciationData);
   const pageNumber = Math.ceil(extraState.cg.length / cgPerPage);
   const currentPage = useValue(1);
-  const { setMouseEnterExtraControlSE, setClickSE } = useSoundEffect();
+  const { playSeEnterCloseButton, playSeClickCGPanelSelect } = useSoundEffect();
 
   // 开始生成立绘鉴赏的图片
   const showCgList = [];
@@ -47,10 +47,10 @@ export function ExtraCg() {
       <div
         onClick={() => {
           currentPage.set(i);
-          setClickSE();
+          playSeClickCGPanelSelect();
         }}
         key={'nav' + i}
-        onMouseEnter={setMouseEnterExtraControlSE}
+        onMouseEnter={playSeEnterCloseButton}
         className={className}
       >
         {i}

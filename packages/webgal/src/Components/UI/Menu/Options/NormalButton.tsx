@@ -6,7 +6,7 @@ import useSoundEffect from '@/hooks/useSoundEffect';
 export const NormalButton = (props: INormalButton) => {
   const len: number = props.textList.length;
   const buttonList: Array<ReactElement> = [];
-  const { setMouseEnterSE, setClickNormalButtonSE } = useSoundEffect();
+  const { playSeEnter, playSeClickMenuNormalButton } = useSoundEffect();
   for (let i = 0; i < len; i++) {
     if (i === props.currentChecked) {
       const t = (
@@ -14,10 +14,10 @@ export const NormalButton = (props: INormalButton) => {
           key={props.textList[i] + i + props}
           className={styles.NormalButton + ' ' + styles.NormalButtonChecked}
           onClick={() => {
-            setClickNormalButtonSE();
+            playSeClickMenuNormalButton();
             props.functionList[i]();
           }}
-          onMouseEnter={setMouseEnterSE}
+          onMouseEnter={playSeEnter}
         >
           {props.textList[i]}
         </div>
@@ -29,10 +29,10 @@ export const NormalButton = (props: INormalButton) => {
           key={props.textList[i] + i}
           className={styles.NormalButton}
           onClick={() => {
-            setClickNormalButtonSE();
+            playSeClickMenuNormalButton();
             props.functionList[i]();
           }}
-          onMouseEnter={setMouseEnterSE}
+          onMouseEnter={playSeEnter}
         >
           {props.textList[i]}
         </div>
