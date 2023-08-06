@@ -54,16 +54,16 @@ export const say = (sentence: ISentence): IPerform => {
     if (e.key === 'fontSize') {
       switch (e.value) {
         case 'default':
-          dispatch(setStage({ key: 'showTextSize',  value: userDataState.optionData.textSize }));
-          break;        
+          dispatch(setStage({ key: 'showTextSize', value: -1 }));
+          break;
         case 'small':
-          dispatch(setStage({ key: 'showTextSize',  value: textSize.small }));
+          dispatch(setStage({ key: 'showTextSize', value: textSize.small }));
           break;
         case 'medium':
-          dispatch(setStage({ key: 'showTextSize',  value: textSize.medium }));
+          dispatch(setStage({ key: 'showTextSize', value: textSize.medium }));
           break;
         case 'large':
-          dispatch(setStage({ key: 'showTextSize',  value: textSize.large }));
+          dispatch(setStage({ key: 'showTextSize', value: textSize.large }));
           break;
       }
     }
