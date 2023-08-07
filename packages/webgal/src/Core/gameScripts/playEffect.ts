@@ -43,7 +43,7 @@ export const playEffect = (sentence: ISentence): IPerform => {
     arrangePerformPromise: new Promise((resolve) => {
       // 播放效果音
       setTimeout(() => {
-        const volume = getSentenceArgByKey(sentence, 'volume');
+        const volumeArg = getSentenceArgByKey(sentence, 'volume');
         let seElement = document.createElement('audio');
         seElement.src = url;
         if (isLoop) {
@@ -51,7 +51,9 @@ export const playEffect = (sentence: ISentence): IPerform => {
         }
         const userDataState = webgalStore.getState().userData;
         const mainVol = userDataState.optionData.volumeMain;
-        const seVol = mainVol * 0.01 * userDataState.optionData.seVolume * 0.01;
+        // Work when volumeArg is a number between 0 and 100
+        const volume = typeof volumeArg === 'number' && volumeArg >= 0 && volumeArg <= 100 ? volumeArg : 100;
+        const seVol = mainVol * 0.01 * userDataState.optionData.seVolume * 0.01 * volume * 0.01;
         seElement.volume = seVol;
         seElement.currentTime = 0;
         const perform = {

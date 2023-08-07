@@ -14,7 +14,7 @@ export const AudioContainer = () => {
   const bgmVol = mainVol * 0.01 * userDataState.optionData.bgmVolume * 0.01 * stageStore.bgmVolume * 0.01;
   const bgmEnter = stageStore.bgmEnter;
   const uiSoundEffects = stageStore.uiSe;
-  const seVol = mainVol * 0.01 * userDataState.optionData.seVolume * 0.01 * stageStore.seVolume * 0.01;
+  const seVol = mainVol * 0.01 * userDataState.optionData.seVolume * 0.01;
   const uiSeVol =
     mainVol * 0.01 * userDataState.optionData.seVolume * 0.01 * userDataState.optionData.uiSeVolume * 0.01;
   const isEnterGame = useSelector((state: RootState) => state.GUI.isEnterGame);
@@ -77,12 +77,15 @@ export const AudioContainer = () => {
     const uiSeAudioElement = document.createElement('audio');
     uiSeAudioElement.src = uiSoundEffects;
     uiSeAudioElement.loop = false;
+    // 设置音量
     if (!isNaN(uiSeVol)) {
       uiSeAudioElement.volume = uiSeVol;
     } else {
+      // 针对原来使用 WebGAL version <= 4.2.2 的用户数据中不存在UI音效音量的情况
       logger.error('UI SE Vol is NaN');
-      uiSeAudioElement.volume = 0.5;
+      uiSeAudioElement.volume = isNaN(seVol) ? mainVol : seVol;
     }
+    // 播放UI音效
     uiSeAudioElement.play();
     uiSeAudioElement.addEventListener('ended', () => {
       // Processing after sound effects are played

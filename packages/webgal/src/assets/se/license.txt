@@ -38,14 +38,7 @@ maou_se_system41.mp3
 maou_se_system48.mp3
 『音楽：魔王魂』https://maou.audio/se_system48/
 
-Motion-Pop03-1.mp3
-Motion-Pop03-2.mp3
-Motion-Pop03-3.mp3
 Motion-Pop03-4.mp3
-Motion-Pop08-1.mp3
-Motion-Pop08-2.mp3
-Motion-Pop08-3.mp3
-Motion-Pop08-4.mp3
 「OtoLogic」
 
 page-flip-1.wav
