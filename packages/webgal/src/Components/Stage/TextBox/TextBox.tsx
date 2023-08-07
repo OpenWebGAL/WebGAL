@@ -162,6 +162,9 @@ export function splitChars(sentence: string) {
         } else if (words.length > 0) {
           // If no preceding word in the current iteration, but there are already words in the array, append to the last word
           words[words.length - 1] += character;
+        } else {
+          // If no preceding word, still add the punctuation as a new word
+          words.push(character);
         }
         continue;
       }
