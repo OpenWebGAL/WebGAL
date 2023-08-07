@@ -54,6 +54,7 @@ $height: 330px;
 
 .TextBox_textElement_start {
   @include text_shadow_textElement;
+  position: relative;
   animation: TextDelayShow 1000ms ease-out forwards;
   opacity: 0;
 }
@@ -97,6 +98,7 @@ $height: 330px;
 //}
 
 .TextBox_textElement_Settled {
+  position: relative;
   @include text_shadow_textElement;
   opacity: 1;
 }
