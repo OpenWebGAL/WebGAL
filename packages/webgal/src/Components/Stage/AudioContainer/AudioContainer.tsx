@@ -83,7 +83,7 @@ export const AudioContainer = () => {
     } else {
       // 针对原来使用 WebGAL version <= 4.4.2 的用户数据中不存在UI音效音量的情况
       logger.error('UI SE Vol is NaN');
-      uiSeAudioElement.volume = isNaN(seVol) ? mainVol : seVol;
+      uiSeAudioElement.volume = isNaN(seVol) ? mainVol/ 100 : seVol/ 100;
     }
     // 播放UI音效
     uiSeAudioElement.play();
