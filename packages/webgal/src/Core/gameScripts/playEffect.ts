@@ -53,7 +53,7 @@ export const playEffect = (sentence: ISentence): IPerform => {
         const mainVol = userDataState.optionData.volumeMain;
         // Work when volumeArg is a number between 0 and 100
         const volume = typeof volumeArg === 'number' && volumeArg >= 0 && volumeArg <= 100 ? volumeArg : 100;
-        const seVol = mainVol * 0.01 * userDataState.optionData.seVolume * 0.01 * volume * 0.01;
+        const seVol = mainVol * 0.01 * (userDataState.optionData?.seVolume ?? 100) * 0.01 * volume * 0.01;
         seElement.volume = seVol;
         seElement.currentTime = 0;
         const perform = {
