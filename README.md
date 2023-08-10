@@ -1,6 +1,6 @@
 ![WebGAL](https://user-images.githubusercontent.com/30483415/227242979-297ff392-f210-47ef-b0e9-d4788ddc8df0.png)
 
-### **[English Version](/README_EN.md)** | **[日本語版](/README_JP.md)** | **[한국어](/README_KO.md)**
+### **[English Version](/README_EN.md)** | **[日本語版](/README_JP.md)** | **[한국어](/README_KO.md)** | **[Français](/README_FR.md)**
 
 **[Help us with translation | 协助翻译 | 翻訳のお手伝い | 번역을 도와주세요](https://github.com/MakinoharaShoko/WebGAL/tree/dev/packages/webgal/src/translations)**
 
@@ -83,16 +83,19 @@ WebGAL 是一款开源软件，因此你可以免费在 MPL-2.0 开源协议的�
 
 ## Gold Sponsors
 
-| <img src="https://avatars.githubusercontent.com/u/91712707?v=4" alt="T2" style="zoom:25%;"  width="150px" height="150px" /> |
+| <img src="https://avatars.githubusercontent.com/u/91712707?v=4" alt="T2"   width="150px" height="150px" /> |
 | ------------------------------------------------------------ |
 | [T2-official(T2)](https://github.com/T2-official)            |
 
 ## Silver Sponsors
-| <img src="https://avatars.githubusercontent.com/u/103700780?v=4" alt="IdrilK" style="zoom:25%;" width="150px" height="150px" /> |
+| <img src="https://avatars.githubusercontent.com/u/103700780?v=4" alt="IdrilK"  width="150px" height="150px" /> |
 | ------------------------------------------------------------ |
 | [IdrilK](https://github.com/IdrilK)            |
 
-
+## Sponsors
+| <img src="https://avatars.githubusercontent.com/u/71590526?v=4" alt="Yuji Sakai"  width="150px" height="150px" /> | <img src="https://avatars.githubusercontent.com/u/49630998?v=4" alt="Iara"  width="150px" height="150px" /> |
+| ------------------------------------------------------------ |------------------------------------------------------------ |
+| [Yuji Sakai (generalfreed)](https://github.com/generalfreed) |[Iara (labiker)](https://github.com/labiker) |
 
 ## Stargazers over time
 
