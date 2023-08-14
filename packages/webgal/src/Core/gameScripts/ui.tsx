@@ -86,7 +86,7 @@ export const ui = (sentence: ISentence): IPerform => {
     uiContainer?.appendChild(uiElement);
   }
   // 处理是否继续解析
-  const isPauseFlag = nextFlag ? false : true;
+  const isPauseFlag = nextFlag || content === '' ? false : true;
   webgalStore.dispatch(setStage({ key: 'isPause', value: isPauseFlag }));
   return {
     performName: 'none',
