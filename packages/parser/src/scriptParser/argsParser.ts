@@ -27,7 +27,7 @@ export function argsParser(argsRaw: string, assetSetter: (fileName: string, asse
       argValue = undefined;
     }
     // 判断是不是语音参数
-    if (e.match(/.ogg|.mp3|.wav/)) {
+    if (e.match(/.ogg|.mp3|.wav/) && argName !== 'clickse' && argName !== 'enterse') {
       returnArrayList.push({
         key: "vocal",
         value: assetSetter(e, fileType.vocal)
@@ -40,25 +40,39 @@ export function argsParser(argsRaw: string, assetSetter: (fileName: string, asse
           value: true
         });
       } else {
-        // 是字符串描述的布尔值
-        if (argValue === "true" || argValue === "false") {
+        if (argName === 'normal' || argName === 'over') {
+          // 判断是不是normal或over参数，这些参数会携带figure资源
           returnArrayList.push({
             key: argName,
-            value: argValue === "true"
+            value: assetSetter(argValue, fileType.figure)
+          });
+        } else if (argName === 'clickse' || argName === 'enterse') {
+          // 判断是不是clickse或enterse参数，这些参数会携带vocal资源
+          returnArrayList.push({
+            key: argName,
+            value: assetSetter(argValue, fileType.vocal)
           });
         } else {
-          // 是数字
-          if (!isNaN(Number(argValue))) {
+          // 是字符串描述的布尔值
+          if (argValue === "true" || argValue === "false") {
             returnArrayList.push({
               key: argName,
-              value: Number(argValue)
+              value: argValue === "true"
             });
           } else {
-            // 是普通参数
-            returnArrayList.push({
-              key: argName,
-              value: argValue
-            });
+            // 是数字
+            if (!isNaN(Number(argValue))) {
+              returnArrayList.push({
+                key: argName,
+                value: Number(argValue)
+              });
+            } else {
+              // 是普通参数
+              returnArrayList.push({
+                key: argName,
+                value: argValue
+              });
+            }
           }
         }
       }

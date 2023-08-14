@@ -23,6 +23,17 @@ export interface IChooseItem {
   isSubScene: boolean; // 是否是子场景调用
 }
 
+/**
+ * 单个 UI
+ * @interface IUiItem
+ */
+export interface IUiItem {
+  key: string; // 选项名称
+  clickEvent: string; // 存储点击事件的txt文件地址
+  normal: string; // 普通状态下显示的内容
+  over: string; // 鼠标悬浮时显示的内容
+}
+
 export interface ITransform {
   alpha: number;
   scale: {
@@ -93,6 +104,7 @@ export interface IStageState {
   showName: string; // 人物名
   command: string; // 语句指令
   choose: Array<IChooseItem>; // 选项列表
+  ui: Array<IUiItem>; // UI 列表
   vocal: string; // 语音 文件地址（相对或绝对）
   vocalVolume: number; // 语音 音量调整（0 - 100）
   bgm: string; // 背景音乐 文件地址（相对或绝对）
@@ -113,6 +125,7 @@ export interface IStageState {
   // 测试：电影叙事
   enableFilm: string;
   isDisableTextbox: boolean;
+  isPause: boolean; // 是否暂停解析
 }
 
 /**

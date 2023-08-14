@@ -35,6 +35,8 @@ export interface IStageObject {
   pixiContainer: PIXI.Container;
   // 相关的源 url
   sourceUrl: string;
+  // 备用的源 url
+  sourceUrl2?: string;
 }
 
 // export interface IRegisterTickerOpr {
@@ -56,6 +58,8 @@ export default class PixiStage {
   public frameDuration = 16.67;
   private readonly figureContainer: PIXI.Container;
   private figureObjects: Array<IStageObject> = [];
+  private readonly uiContainer: PIXI.Container;
+  private uiObjects: Array<IStageObject> = [];
   private readonly backgroundContainer: PIXI.Container;
   private backgroundObjects: Array<IStageObject> = [];
 
@@ -107,14 +111,16 @@ export default class PixiStage {
     // 设置可排序
     app.stage.sortableChildren = true;
 
-    // 添加 3 个 Container 用于做渲染
+    // 添加 4 个 Container 用于做渲染
     this.effectsContainer = new PIXI.Container();
-    this.effectsContainer.zIndex = 3;
+    this.effectsContainer.zIndex = 4;
+    this.uiContainer = new PIXI.Container();
+    this.uiContainer.zIndex = 3;
     this.figureContainer = new PIXI.Container();
     this.figureContainer.zIndex = 2;
     this.backgroundContainer = new PIXI.Container();
     this.backgroundContainer.zIndex = 0;
-    app.stage.addChild(this.effectsContainer, this.figureContainer, this.backgroundContainer);
+    app.stage.addChild(this.effectsContainer, this.uiContainer, this.figureContainer, this.backgroundContainer);
     this.currentApp = app;
     // 每 5s 获取帧率
     const update = () => {
@@ -126,6 +132,10 @@ export default class PixiStage {
 
   public getFigureObjects() {
     return this.figureObjects;
+  }
+
+  public getUIObjects() {
+    return this.uiObjects;
   }
 
   public getAllLockedObject() {
@@ -389,6 +399,103 @@ export default class PixiStage {
   }
 
   /**
+   * 添加 UI
+   * @param key UI 的标识，一般和 UI 位置有关
+   * @param url UI 图片的 url
+   * @param url2 UI 图片的 url2
+   */
+  public addUI(key: string, url: string, url2 = url) {
+    const loader = this.assetLoader;
+    // 准备用于存放这个 UI 的 Container
+    const thisUIContainer = new WebGALPixiContainer();
+
+    // 是否有相同 key 的UI
+    const setUIIndex = this.uiObjects.findIndex((e) => e.key === key);
+    const isUISet = setUIIndex >= 0;
+
+    // 已经有一个这个 key 的 UI 存在了
+    if (isUISet) {
+      this.removeStageObjectByKey(key);
+    }
+
+    // 挂载
+    this.uiContainer.addChild(thisUIContainer);
+    const uiUuid = uuid();
+    this.uiObjects.push({ uuid: uiUuid, key: key, pixiContainer: thisUIContainer, sourceUrl: url, sourceUrl2: url2 });
+
+    // 完成图片加载后执行的函数
+    const setup = () => {
+      const texture = loader.resources?.[url]?.texture;
+      const texture2 = loader.resources?.[url2]?.texture ? loader.resources?.[url2]?.texture : texture;
+      if (texture && this.getStageObjByUuid(uiUuid)) {
+        // 创建精灵
+        const uiSprite = new PIXI.Sprite(texture);
+        // 获取对应的div元素
+        const uiElement = document.getElementById(key);
+        // 添加鼠标进入事件监听器
+        uiSprite.interactive = true; // 启用交互
+        uiSprite.buttonMode = true; // 鼠标指针变为手型
+        // 监听鼠标进入事件
+        uiSprite.on('mouseover', () => {
+          if (texture2) {
+            uiSprite.texture = texture2; // 在鼠标进入时切换纹理
+            // 触发对应的div元素的mouseenter事件
+            if (uiElement) {
+              const mouseEnterEvent = new MouseEvent('mouseenter', {
+                bubbles: true,
+                cancelable: true,
+                view: window,
+              });
+              uiElement.dispatchEvent(mouseEnterEvent);
+            }
+          }
+        });
+        // 在鼠标离开时恢复原始纹理
+        uiSprite.on('mouseout', () => {
+          uiSprite.texture = texture;
+        });
+        // 在鼠标点击时调用id=key的div元素的click事件
+        uiSprite.on('click', () => {
+          uiElement?.click();
+        });
+        /**
+         * 重设大小
+         */
+        const originalWidth = texture.width;
+        const originalHeight = texture.height;
+        const scaleX = this.stageWidth / originalWidth;
+        const scaleY = this.stageHeight / originalHeight;
+        const targetScale = Math.min(scaleX, scaleY);
+        uiSprite.scale.x = targetScale;
+        uiSprite.scale.y = targetScale;
+        uiSprite.anchor.set(0.5);
+        uiSprite.position.y = this.stageHeight / 2;
+        const targetHeight = originalHeight * targetScale;
+        thisUIContainer.setBaseX(this.stageWidth / 2);
+        thisUIContainer.setBaseY(this.stageHeight / 2);
+        if (targetHeight < this.stageHeight) {
+          thisUIContainer.setBaseY(this.stageHeight / 2 + this.stageHeight - targetHeight / 2);
+        }
+        thisUIContainer.pivot.set(0, this.stageHeight / 2);
+        thisUIContainer.addChild(uiSprite);
+      }
+    };
+
+    /**
+     * 加载器部分
+     */
+    const resourses = Object.keys(loader.resources);
+    this.cacheGC();
+    if (!resourses.includes(url)) {
+      this.loadAsset(url, setup);
+      this.loadAsset(url2, setup);
+    } else {
+      // 复用
+      setup();
+    }
+  }
+
+  /**
    * Live2d立绘
    * @param jsonPath
    */
@@ -475,15 +582,15 @@ export default class PixiStage {
    * @param key
    */
   public getStageObjByKey(key: string) {
-    return [...this.figureObjects, ...this.backgroundObjects].find((e) => e.key === key);
+    return [...this.figureObjects, ...this.uiObjects, ...this.backgroundObjects].find((e) => e.key === key);
   }
 
   public getStageObjByUuid(objUuid: string) {
-    return [...this.figureObjects, ...this.backgroundObjects].find((e) => e.uuid === objUuid);
+    return [...this.figureObjects, ...this.uiObjects, ...this.backgroundObjects].find((e) => e.uuid === objUuid);
   }
 
   public getAllStageObj() {
-    return [...this.figureObjects, ...this.backgroundObjects];
+    return [...this.figureObjects, ...this.uiObjects, ...this.backgroundObjects];
   }
 
   /**
@@ -492,12 +599,19 @@ export default class PixiStage {
    */
   public removeStageObjectByKey(key: string) {
     const indexFig = this.figureObjects.findIndex((e) => e.key === key);
+    const indexUI = this.uiObjects.findIndex((e) => e.key === key);
     const indexBg = this.backgroundObjects.findIndex((e) => e.key === key);
     if (indexFig >= 0) {
       const bgSprite = this.figureObjects[indexFig];
       bgSprite.pixiContainer.destroy();
       this.figureContainer.removeChild(bgSprite.pixiContainer);
       this.figureObjects.splice(indexFig, 1);
+    }
+    if (indexUI >= 0) {
+      const uiSprite = this.uiObjects[indexUI];
+      uiSprite.pixiContainer.destroy();
+      this.uiContainer.removeChild(uiSprite.pixiContainer);
+      this.uiObjects.splice(indexUI, 1);
     }
     if (indexBg >= 0) {
       const bgSprite = this.backgroundObjects[indexBg];

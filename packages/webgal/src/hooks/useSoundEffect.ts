@@ -122,6 +122,9 @@ const useSoundEffect = () => {
   const playSeClickBacklogJumpButton = () => {
     webgalStore.dispatch(setStage({ key: 'uiSe', value: click_soft_02 }));
   };
+  const playSeCustomized = (value: string) => {
+    webgalStore.dispatch(setStage({ key: 'uiSe', value: value }));
+  };
 
   return {
     playSeEnter, // 鼠标进入
@@ -156,6 +159,7 @@ const useSoundEffect = () => {
     playSeClickCGPanelSelect, // 鼠标点击CG页切换按钮
     playSeClickCGElement, // 鼠标点击CG元素
     playSeClickBacklogJumpButton, // 鼠标点击日志页回溯按钮
+    playSeCustomized, // 播放自定义音效
   };
 };
 

@@ -10,6 +10,12 @@ export const subSceneScanner = (command: commandType, content: string): Array<st
   if (command === commandType.changeScene || command === commandType.callScene) {
     subSceneList.push(content);
   }
+  if (command === commandType.ui) {
+    // ui:none -id=xxx; 针对该情况，需要避免加载子场景
+    if (content !== "none" && content !== "") {
+      subSceneList.push(content);
+    }
+  }
   if (command === commandType.choose) {
     const chooseList = content.split("|");
     const chooseValue = chooseList.map((e) => e.split(":")[1] ?? "");

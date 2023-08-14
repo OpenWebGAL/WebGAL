@@ -16,6 +16,7 @@ export enum commandType {
   miniAvatar, // 小头像
   changeScene, // 切换场景
   choose, // 分支选择
+  ui, // 创建 UI
   end, // 结束游戏
   setComplexAnimation, // 动画演出
   setFilter, // 设置效果

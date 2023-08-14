@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useEffect, useState } from 'react';
 import styles from './stage.module.scss';
 import { TextBox } from './TextBox/TextBox';
 import { AudioContainer } from './AudioContainer/AudioContainer';
@@ -13,14 +13,22 @@ import { useHotkey } from '@/hooks/useHotkey';
 import { MainStage } from '@/Components/Stage/MainStage/MainStage';
 import IntroContainer from '@/Components/Stage/introContainer/IntroContainer';
 import { isIOS } from '@/Core/initializeScript';
+import { PointerEvents } from 'pixi.js';
 // import OldStage from '@/Components/Stage/OldStage/OldStage';
 
 export const Stage: FC = () => {
   const stageState = useSelector((state: RootState) => state.stage);
   const GUIState = useSelector((state: RootState) => state.GUI);
   const dispatch = useDispatch();
+  const [pointerEvents, setPointerEvents] = useState('auto');
 
   useHotkey();
+
+  // 控制是否可以继续解析
+  useEffect(() => {
+    setPointerEvents(stageState.isPause ? 'none' : 'auto');
+  }, [stageState.isPause]);
+
   return (
     <div className={styles.MainStage_main}>
       <FullScreenPerform />
@@ -29,6 +37,7 @@ export const Stage: FC = () => {
       <MainStage />
       <div id="pixiContianer" className={styles.pixiContainer} style={{ zIndex: isIOS ? '-5' : undefined }} />
       <div id="chooseContainer" className={styles.chooseContainer} />
+      <div id="uiContainer" />
       {GUIState.showTextBox && stageState.enableFilm === '' && !stageState.isDisableTextbox && <TextBox />}
       {GUIState.showTextBox && stageState.enableFilm !== '' && <TextBoxFilm />}
       <AudioContainer />
@@ -43,7 +52,14 @@ export const Stage: FC = () => {
           nextSentence();
         }}
         id="FullScreenClick"
-        style={{ width: '100%', height: '100%', position: 'absolute', zIndex: '12', top: '0' }}
+        style={{
+          width: '100%',
+          height: '100%',
+          position: 'absolute',
+          zIndex: '12',
+          top: '0',
+          pointerEvents: pointerEvents as PointerEvents,
+        }}
       />
       <IntroContainer />
     </div>

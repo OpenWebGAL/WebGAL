@@ -31,6 +31,8 @@ export const contentParser = (contentRaw: string, type: commandType, assetSetter
       return assetSetter(contentRaw, fileType.video);
     case commandType.choose:
       return getChooseContent(contentRaw, assetSetter);
+    case commandType.ui:
+      return assetSetter(contentRaw, fileType.scene);
     case commandType.unlockBgm:
       return assetSetter(contentRaw, fileType.bgm);
     case commandType.unlockCg:

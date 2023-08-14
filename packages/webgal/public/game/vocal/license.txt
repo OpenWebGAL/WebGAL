@@ -1,0 +1,5 @@
+UI_enter_lock.wav
+『Door Sounds  » Door Locked』 CC0许可 作者：BenjaminNelan 来源：https://freesound.org/s/321087/ (信息来自淘声网)
+
+UI_click_unlock.mp3
+爱给网 no license. 

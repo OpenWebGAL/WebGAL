@@ -5,6 +5,7 @@ import { changeFigure } from '@/Core/gameScripts/changeFigure';
 import { miniAvatar } from '@/Core/gameScripts/miniAvatar';
 import { changeSceneScript } from '@/Core/gameScripts/changeSceneScript';
 import { choose } from '@/Core/gameScripts/choose';
+import { ui } from '@/Core/gameScripts/ui';
 import { end } from '../gameScripts/end';
 import { bgm } from '@/Core/gameScripts/bgm';
 import { playVideo } from '@/Core/gameScripts/playVideo';
@@ -43,6 +44,7 @@ export const SCRIPT_CONFIG: IConfigInterface[] = [
   { scriptString: 'miniAvatar', scriptType: commandType.miniAvatar, scriptFunction: miniAvatar },
   { scriptString: 'changeScene', scriptType: commandType.changeScene, scriptFunction: changeSceneScript },
   { scriptString: 'choose', scriptType: commandType.choose, scriptFunction: choose },
+  { scriptString: 'ui', scriptType: commandType.ui, scriptFunction: ui },
   { scriptString: 'end', scriptType: commandType.end, scriptFunction: end },
   { scriptString: 'bgm', scriptType: commandType.bgm, scriptFunction: bgm },
   { scriptString: 'playVideo', scriptType: commandType.video, scriptFunction: playVideo },

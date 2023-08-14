@@ -27,6 +27,25 @@ export const assetsScanner = (command: commandType, content: string, args: Array
   if (content === 'none' || content === '') {
     return returnAssetsList;
   }
+  if (command === commandType.ui) {
+    args.forEach((e) => {
+      if (e.key === 'normal' || e.key === 'over') {
+        returnAssetsList.push({
+          name: e.value as string,
+          url: e.value as string,
+          lineNumber: 0,
+          type: fileType.figure,
+        });
+      } else if (e.key === 'clickse' || e.key === 'enterse') {
+        returnAssetsList.push({
+          name: e.value as string,
+          url: e.value as string,
+          lineNumber: 0,
+          type: fileType.vocal,
+        });
+      }
+    });
+  }
   // 处理语句携带的资源
   if (command === commandType.changeBg) {
     returnAssetsList.push({

@@ -7,6 +7,7 @@ export const SCRIPT_CONFIG = [
   { scriptString: 'miniAvatar', scriptType: commandType.miniAvatar },
   { scriptString: 'changeScene', scriptType: commandType.changeScene },
   { scriptString: 'choose', scriptType: commandType.choose},
+  { scriptString: 'ui', scriptType: commandType.ui},
   { scriptString: 'end', scriptType: commandType.end },
   { scriptString: 'bgm', scriptType: commandType.bgm },
   { scriptString: 'playVideo', scriptType: commandType.video },
