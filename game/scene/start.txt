@@ -1,2 +1,2 @@
 ; WebGAL 引擎会默认读取 start.txt 作为初始场景，因此请不要删除，并在初始场景内跳转到其他场景
-choose:简体中文:demo_zh_cn.txt|日本語:demo_ja.txt;
+choose:简体中文:demo_zh_cn.txt|日本語:demo_ja.txt|English:demo_en.txt;
