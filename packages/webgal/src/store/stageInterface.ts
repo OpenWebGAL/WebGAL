@@ -98,6 +98,7 @@ export interface IStageState {
   bgm: string; // 背景音乐 文件地址（相对或绝对）
   bgmEnter: number; // 背景音乐 淡入或淡出的毫秒数
   bgmVolume: number; // 背景音乐 音量调整（0 - 100）
+  uiSe: string; // 用户界面音效 文件地址（相对或绝对）
   miniAvatar: string; // 小头像 文件地址（相对或绝对）
   GameVar: IGameVar; // 游戏内变量
   effects: Array<IEffect>; // 应用的变换

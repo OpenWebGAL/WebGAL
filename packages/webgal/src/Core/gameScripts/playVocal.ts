@@ -31,7 +31,7 @@ export const playVocal = (sentence: ISentence) => {
       setTimeout(() => {
         let VocalControl: any = document.getElementById('currentVocal');
         // 设置语音音量
-        volume && typeof volume === 'number' && volume >= 0 && volume <= 100
+        typeof volume === 'number' && volume >= 0 && volume <= 100
           ? webgalStore.dispatch(setStage({ key: 'vocalVolume', value: volume }))
           : webgalStore.dispatch(setStage({ key: 'vocalVolume', value: 100 }));
         // 设置语音
