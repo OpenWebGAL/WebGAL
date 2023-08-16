@@ -1,5 +1,6 @@
 import { useSelector } from 'react-redux';
-import { RootState } from '@/store/store';
+import { RootState, webgalStore } from '@/store/store';
+import { setStage } from '@/store/stageReducer';
 import { useEffect } from 'react';
 import { logger } from '@/Core/util/etc/logger';
 
@@ -12,6 +13,9 @@ export const AudioContainer = () => {
   const vocalVol = mainVol * 0.01 * userDataState.optionData.vocalVolume * 0.01 * stageStore.vocalVolume * 0.01;
   const bgmVol = mainVol * 0.01 * userDataState.optionData.bgmVolume * 0.01 * stageStore.bgmVolume * 0.01;
   const bgmEnter = stageStore.bgmEnter;
+  const uiSoundEffects = stageStore.uiSe;
+  const seVol = mainVol * 0.01 * (userDataState.optionData?.seVolume ?? 100) * 0.01;
+  const uiSeVol = mainVol * 0.01 * (userDataState.optionData.uiSeVolume ?? 50) * 0.01;
   const isEnterGame = useSelector((state: RootState) => state.GUI.isEnterGame);
 
   /**
@@ -66,6 +70,36 @@ export const AudioContainer = () => {
       vocalElement.volume = vocalVol.toString();
     }
   }, [vocalVol]);
+
+  useEffect(() => {
+    if (uiSoundEffects === '') return;
+    const uiSeAudioElement = document.createElement('audio');
+    uiSeAudioElement.src = uiSoundEffects;
+    uiSeAudioElement.loop = false;
+    // 设置音量
+    if (!isNaN(uiSeVol)) {
+      uiSeAudioElement.volume = uiSeVol;
+    } else {
+      // 针对原来使用 WebGAL version <= 4.4.2 的用户数据中不存在UI音效音量的情况
+      logger.error('UI SE Vol is NaN');
+      uiSeAudioElement.volume = isNaN(seVol) ? mainVol / 100 : seVol / 100;
+    }
+    // 播放UI音效
+    uiSeAudioElement.play();
+    uiSeAudioElement.addEventListener('ended', () => {
+      // Processing after sound effects are played
+      uiSeAudioElement.remove();
+    });
+    webgalStore.dispatch(setStage({ key: 'uiSe', value: '' }));
+  }, [uiSoundEffects]);
+
+  useEffect(() => {
+    logger.debug(`设置音效音量: ${seVol}`);
+  }, [seVol]);
+
+  useEffect(() => {
+    logger.debug(`设置用户界面音效音量: ${uiSeVol}`);
+  }, [uiSeVol]);
 
   return (
     <div>
