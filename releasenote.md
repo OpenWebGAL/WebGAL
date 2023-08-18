@@ -1,12 +1,10 @@
-
-## 发布日志：WebGAL 4.4.3
+## 发布日志：WebGAL 4.4.3.1
 
 **如果你想要体验使用便捷的图形化编辑器创建、制作并实时预览 WebGAL 游戏，请 [下载 WebGAL 图形化编辑器](https://github.com/MakinoharaShoko/WebGAL_Terre/releases)**
 
-
 ### 在此版本中
 
-#### 新功能
+1 新功能
 
 全新的文本框和标题 UI 界面（已在稍晚版本的 4.4.2 中实装，这次也带来了更多优化）
 
@@ -16,92 +14,98 @@
 
 全屏文字显示可以自定义
 
-#### 修复
+2 修复
 
 在法语状态下的异常显示
 
 无法正确处理对话开头的符号
 
-对话在使用 `-concat` `-notend` 参数时显示异常
+对话在使用 -concat -notend 参数时显示异常
+
+(4.4.3.1修复)文本框名称显示异常
 
 其他已知问题
 
-## Release Notes: WebGAL 4.4.3
+## Release Notes: WebGAL 4.4.3.1
 
-**If you want to experience creating, making, and real-time previewing WebGAL games with a handy graphical editor, please [download the WebGAL Graphical Editor](https://github.com/MakinoharaShoko/WebGAL_Terre/releases)**
+**If you want to experience creating, making, and real-time previewing WebGAL games with a convenient graphical editor, please [download the WebGAL graphical editor](https://github.com/MakinoharaShoko/WebGAL_Terre/releases)**
 
 ### In this version
 
-#### New features
+1 New features
 
-Brand-new text box and title UI interface (implemented in a later version 4.4.2, more optimizations were added this time)
+Brand new text box and title UI interface (already implemented in the later version 4.4.2, this time with more optimizations)
 
-Added sound effects for button and interface switching, enhancing gaming experience
+Added sound effects for button and interface switching, enhancing the game experience
 
-In the dialogue, you can use | separator to wrap text, and temporarily set the text size
+In dialogues, you can use | as a separator to break lines, or temporarily set font size for text
 
 Full-screen text display can be customized
 
-#### Fixes
+2 Fixes
 
-Abnormal display in French status
+Abnormal display under French status
 
-Unable to handle symbols at the beginning of the dialogue correctly
+Inability to properly handle symbols at the beginning of dialogues
 
-Dialog displays abnormally when using `-concat` `-notend` parameters
+Dialogues display abnormally when using -concat -notend parameters
+
+(4.4.3.1 fixed) Text box name displays abnormally
 
 Other known issues
 
+## リリースノート: WebGAL 4.4.3.1
 
-
-## リリースノート: WebGAL 4.4.3
-
-**WebGALゲームを便利なグラフィックエディターで作成、作成、リアルタイムプレビューしたい場合は、[WebGAL グラフィカルエディターをダウンロード](https://github.com/MakinoharaShoko/WebGAL_Terre/releases)してください**
+**便利なグラフィカルエディターでWebGALゲームを作成、制作、リアルタイムプレビューを体験したい場合、[WebGAL グラフィカルエディターをダウンロードしてください](https://github.com/MakinoharaShoko/WebGAL_Terre/releases)**
 
 ### このバージョンで
 
-#### 新機能
+1 新機能
 
-新しいテキストボックスとタイトルUIインターフェイス（4.4.2の後のバージョンで実装、今回もさらなる最適化が追加されました）
+新しいテキストボックスとタイトルUIインターフェイス（4.4.2の後のバージョンで既に実装されており、今回もさらなる最適化があります）
 
-ボタンとインターフェイスの切り替えに効果音を追加し、ゲーム体験を強化
+ボタンとインターフェイスの切り替えに効果音を追加、ゲーム体験の強化
 
-対話では、| セパレーターを使用してテキストを折り返したり、テキストのサイズを一時的に設定できます
+対話では、|を区切り記号として使用して改行したり、テキストのフォントサイズを一時的に設定したりできます
 
-全画面テキスト表示はカスタマイズ可能
+全画面のテキスト表示はカスタマイズ可能
 
-#### 修正
+2 修正
 
-フランス語の状態での異常表示
+フランス語のステータスでの異常な表示
 
-対話の先頭の記号を正しく処理できない
+ダイアログの先頭の記号を正しく処理できない
 
-`-concat` `-notend` パラメーターを使用したときの対話表示が異常
+-concat -notend パラメーターを使用しているときにダイアログが異常に表示される
+
+(4.4.3.1修正)テキストボックス名が異常に表示される
 
 その他の既知の問題
 
-## Notes de version: WebGAL 4.4.3
+## Notes de version : WebGAL 4.4.3.1
 
-**Si vous souhaitez vivre la création, la réalisation et la prévisualisation en temps réel des jeux WebGAL avec un éditeur graphique pratique, veuillez [télécharger l'éditeur graphique WebGAL](https://github.com/MakinoharaShoko/WebGAL_Terre/releases)**
+**Si vous souhaitez expérimenter la création, la fabrication et la prévisualisation en temps réel de jeux WebGAL avec un éditeur graphique pratique, veuillez [télécharger l'éditeur graphique WebGAL](https://github.com/MakinoharaShoko/WebGAL_Terre/releases)**
 
 ### Dans cette version
 
-#### Nouvelles fonctionnalités
+1 Nouvelles fonctionnalités
 
-Nouvelle interface utilisateur de boîte de texte et de titre (implémentée dans une version ultérieure 4.4.2, plus d'optimisations ont été ajoutées cette fois-ci)
+Nouvelle interface de boîte de texte et d'interface utilisateur de titre (déjà implémentée dans la version ultérieure 4.4.2, cette fois avec plus d'optimisations)
 
-Ajout d'effets sonores pour la commutation de boutons et d'interface, améliorant l'expérience de jeu
+Ajout d'effets sonores pour le changement de bouton et d'interface, améliorant l'expérience de jeu
 
-Dans le dialogue, vous pouvez utiliser le séparateur | pour envelopper le texte et définir temporairement la taille du texte
+Dans les dialogues, vous pouvez utiliser | comme séparateur pour sauter des lignes, ou définir temporairement la taille de la police pour le texte
 
 L'affichage du texte en plein écran peut être personnalisé
 
-#### Corrections
+2 Corrections
 
-Affichage anormal en état français
+Affichage anormal sous le statut français
 
-Incapable de gérer correctement les symboles au début du dialogue
+Incapacité à gérer correctement les symboles au début des dialogues
 
-Affichage anormal du dialogue lors de l'utilisation des paramètres `-concat` `-notend`
+Affichage anormal des dialogues lors de l'utilisation des paramètres -concat -notend
+
+(4.4.3.1 corrigé) Affichage anormal du nom de la boîte de texte
 
 Autres problèmes connus

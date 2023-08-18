@@ -82,7 +82,7 @@ $height: 330px;
   top: 0;
   -webkit-text-stroke: 0.1em rgba(255, 255, 255, 1);
   z-index: 1;
-  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.75);
+  //text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.75);
 }
 
 .zhanwei {
@@ -187,7 +187,8 @@ $height: 330px;
   position: absolute;
   left: 0;
   top: 0;
-  -webkit-text-stroke: 0.1em rgba(0, 0, 0, 0.75);
+  //-webkit-text-stroke: 0.1em rgba(0, 0, 0, 0.25);
+  //-webkit-text-stroke: 0.1em rgba(255, 255, 255, 1);
   z-index: 1;
-  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.75);
+  //text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.75);
 }
