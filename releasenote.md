@@ -1,4 +1,4 @@
-## 发布日志：WebGAL 4.4.3.1
+## 发布日志：WebGAL 4.4.3.2
 
 **如果你想要体验使用便捷的图形化编辑器创建、制作并实时预览 WebGAL 游戏，请 [下载 WebGAL 图形化编辑器](https://github.com/MakinoharaShoko/WebGAL_Terre/releases)**
 
@@ -28,7 +28,7 @@
 
 其他已知问题
 
-## Release Notes: WebGAL 4.4.3.1
+## Release Notes: WebGAL 4.4.3.2
 
 **If you want to experience creating, making, and real-time previewing WebGAL games with a convenient graphical editor, please [download the WebGAL graphical editor](https://github.com/MakinoharaShoko/WebGAL_Terre/releases)**
 
@@ -58,7 +58,7 @@ Dialogues display abnormally when using -concat -notend parameters
 
 Other known issues
 
-## リリースノート: WebGAL 4.4.3.1
+## リリースノート: WebGAL 4.4.3.2
 
 **便利なグラフィカルエディターでWebGALゲームを作成、制作、リアルタイムプレビューを体験したい場合、[WebGAL グラフィカルエディターをダウンロードしてください](https://github.com/MakinoharaShoko/WebGAL_Terre/releases)**
 
@@ -88,7 +88,7 @@ Other known issues
 
 その他の既知の問題
 
-## Notes de version : WebGAL 4.4.3.1
+## Notes de version : WebGAL 4.4.3.2
 
 **Si vous souhaitez expérimenter la création, la fabrication et la prévisualisation en temps réel de jeux WebGAL avec un éditeur graphique pratique, veuillez [télécharger l'éditeur graphique WebGAL](https://github.com/MakinoharaShoko/WebGAL_Terre/releases)**
 
