@@ -21,10 +21,88 @@
   z-index: 11;
 }
 
+@keyframes slideIn {
+  0% {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
 
-.introElement {
+@keyframes typing {
+  from { 
+    width: 0; 
+    height: 0;
+  }
+  to { 
+    width: 100%; 
+    height: auto;
+    border-right:1px solid;
+  }
+}
+
+@keyframes blinkCursor {
+  50% { border-color: transparent; }
+}
+
+@keyframes pixelateAnimation {
+  0% {
+    filter: none;
+    opacity: 0;
+  }
+  50% {
+    filter: blur(5px);
+  }
+  100% {
+    filter: none;
+    opacity: 1;
+  }
+}
+
+@keyframes revealAnimation {
+  0% {
+    opacity: 0;
+    clip-path: polygon(0% 0%, 0% 0%, 0% 100%, 0% 100%);
+  }
+  100% {
+    opacity: 1;
+    clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+  }
+}
+
+.fadeIn {
   opacity: 0;
   animation: intro_showSoftly 1.5s ease-out forwards;
+  font-family: "思源宋体", serif;
+}
+
+.slideIn {
+  opacity: 0;
+  animation: slideIn 1.5s forwards;
+  font-family: "思源宋体", serif;
+}
+
+.typingEffect {
+  display: block;
+  overflow: hidden;
+  white-space: pre-line;
+  width: 0;
+  animation: typing 1.5s forwards, blinkCursor 1s infinite 1.5s;
+  font-family: "思源宋体", serif;
+}
+
+.pixelateEffect {
+  opacity: 0;
+  animation: pixelateAnimation 3s forwards;
+  font-family: "思源宋体", serif;
+}
+
+.revealAnimation {
+  opacity: 0;
+  animation: revealAnimation 3s forwards;
   font-family: "思源宋体", serif;
 }
 
