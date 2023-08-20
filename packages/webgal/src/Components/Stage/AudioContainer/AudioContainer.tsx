@@ -53,7 +53,7 @@ export const AudioContainer = () => {
     if (bgmElement) {
       bgmEnter === 0 ? (bgmElement.volume = bgmVol) : bgmFadeIn(bgmElement, bgmVol, bgmEnter);
     }
-  }, [isShowTitle, titleBgm, stageStore.bgm]);
+  }, [isShowTitle, titleBgm, stageStore.bgm.src, bgmVol, bgmEnter]);
 
   useEffect(() => {
     logger.debug(`设置背景音量：${bgmVol}`);
