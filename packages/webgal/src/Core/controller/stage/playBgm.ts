@@ -29,12 +29,10 @@ export function playBgm(url: string, enter = 0, volume = 100): void {
     setTimeout(() => {
       webgalStore.dispatch(setStage({ key: 'bgm', value: '' }));
     }, enter);
-    webgalStore.dispatch(setStage({ key: 'bgmEnter', value: -enter }));
-    webgalStore.dispatch(setStage({ key: 'bgmVolume', value: volume }));
+    webgalStore.dispatch(setStage({ key: 'bgmAttribute', value: {'enter': -enter, 'volume': volume}}));
   } else {
     webgalStore.dispatch(setStage({ key: 'bgm', value: url }));
-    webgalStore.dispatch(setStage({ key: 'bgmEnter', value: enter }));
-    webgalStore.dispatch(setStage({ key: 'bgmVolume', value: volume }));
+    webgalStore.dispatch(setStage({ key: 'bgmAttribute', value: {'enter': enter, 'volume': volume}}));
   }
   const audioElement = document.getElementById('currentBgm') as HTMLAudioElement;
   audioElement?.play();
