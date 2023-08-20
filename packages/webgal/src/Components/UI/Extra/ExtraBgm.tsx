@@ -17,7 +17,7 @@ export function ExtraBgm() {
     playSeEnterExtraBGMButton,
   } = useSoundEffect();
   // 检查当前正在播放的bgm是否在bgm列表内
-  const currentBgm = useSelector((state: RootState) => state.stage.bgm);
+  const currentBgmSrc = useSelector((state: RootState) => state.stage.bgm.src);
   const extraState = useSelector((state: RootState) => state.userData.appreciationData);
   // 是否展示 bgm 列表
   const isShowBgmList = useValue(false);
@@ -27,7 +27,7 @@ export function ExtraBgm() {
   const bgmPlayerHeight = isShowBgmList.value ? '80%' : '10%';
   const bgmListLen = extraState.bgm.length;
   extraState.bgm.forEach((e, i) => {
-    if (e.url === currentBgm) {
+    if (e.url === currentBgmSrc) {
       foundCurrentBgmName = e.name;
       foundCurrentBgmIndex = i;
     }
