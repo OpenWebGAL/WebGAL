@@ -6,6 +6,8 @@ import { webgalStore } from '@/store/store';
 import { setStage } from '@/store/stageReducer';
 import { getSentenceArgByKey } from '@/Core/util/getSentenceArg';
 import { WebGAL } from '@/main';
+import { unlockCgInUserData } from '@/store/userDataReducer';
+import { logger } from '@/Core/util/etc/logger';
 
 /**
  * 进行背景图片的切换
@@ -13,6 +15,18 @@ import { WebGAL } from '@/main';
  * @return {IPerform}
  */
 export const changeBg = (sentence: ISentence): IPerform => {
+  const url = sentence.content;
+  let name = sentence.content;
+  let series = 'default';
+  sentence.args.forEach((e) => {
+    if (e.key === 'unlockname') {
+      name = e.value.toString();
+    }
+    if (e.key === 'series') {
+      series = e.value.toString();
+    }
+  });
+  webgalStore.dispatch(unlockCgInUserData({ name, url, series }));
   const dispatch = webgalStore.dispatch;
   if (getSentenceArgByKey(sentence, 'enter')) {
     WebGAL.animationManager.nextEnterAnimationName.set('bg-main', getSentenceArgByKey(sentence, 'enter')!.toString());
