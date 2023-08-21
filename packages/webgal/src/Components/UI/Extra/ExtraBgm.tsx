@@ -41,7 +41,7 @@ export function ExtraBgm() {
   function setBgmByIndex(index: number) {
     const e = extraState.bgm[index];
     currentPlayingBgmName.set(e.name);
-    dispatch(setStage({ key: 'bgm', value: e.url }));
+    dispatch(setStage({ key: 'bgm', value: { src: e.url, enter: 0, volume: 100 } }));
   }
 
   const showBgmList = extraState.bgm.map((e, i) => {
@@ -54,7 +54,7 @@ export function ExtraBgm() {
         onClick={() => {
           playSeClickToNextBgmButton();
           currentPlayingBgmName.set(e.name);
-          dispatch(setStage({ key: 'bgm', value: e.url }));
+          dispatch(setStage({ key: 'bgm', value: { src: e.url, enter: 0, volume: 100 } }));
         }}
         key={e.name}
         className={className}
