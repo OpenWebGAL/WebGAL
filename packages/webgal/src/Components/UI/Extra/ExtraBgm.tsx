@@ -6,6 +6,7 @@ import { useValue } from '@/hooks/useValue';
 import { setStage } from '@/store/stageReducer';
 import { GoEnd, GoStart, MusicList, PlayOne, SquareSmall } from '@icon-park/react';
 import useSoundEffect from '@/hooks/useSoundEffect';
+import { setGuiAsset } from '@/store/GUIReducer';
 
 export function ExtraBgm() {
   const {
@@ -17,23 +18,24 @@ export function ExtraBgm() {
     playSeEnterExtraBGMButton,
   } = useSoundEffect();
   // 检查当前正在播放的bgm是否在bgm列表内
-  const currentBgm = useSelector((state: RootState) => state.stage.bgm);
+  const currentBgmSrc = useSelector((state: RootState) => state.GUI.titleBgm);
   const extraState = useSelector((state: RootState) => state.userData.appreciationData);
+  const initName = 'Title_BGM';
   // 是否展示 bgm 列表
   const isShowBgmList = useValue(false);
-  let foundCurrentBgmName = 'init_bgm_find_var_WebGAL_4.2.1';
+  let foundCurrentBgmName = initName;
   let foundCurrentBgmIndex = -1;
   const iconSize = 39;
   const bgmPlayerHeight = isShowBgmList.value ? '80%' : '10%';
   const bgmListLen = extraState.bgm.length;
   extraState.bgm.forEach((e, i) => {
-    if (e.url === currentBgm) {
+    if (e.url === currentBgmSrc) {
       foundCurrentBgmName = e.name;
       foundCurrentBgmIndex = i;
     }
   });
   const currentPlayingBgmName = useValue('');
-  if (foundCurrentBgmName !== 'init_bgm_find_var_WebGAL_4.2.1' && foundCurrentBgmName !== currentPlayingBgmName.value) {
+  if (foundCurrentBgmName !== initName && foundCurrentBgmName !== currentPlayingBgmName.value) {
     currentPlayingBgmName.set(foundCurrentBgmName);
   }
   const dispatch = useDispatch();
@@ -41,7 +43,7 @@ export function ExtraBgm() {
   function setBgmByIndex(index: number) {
     const e = extraState.bgm[index];
     currentPlayingBgmName.set(e.name);
-    dispatch(setStage({ key: 'bgm', value: e.url }));
+    dispatch(setGuiAsset({ asset: 'titleBgm', value: e.url }));
   }
 
   const showBgmList = extraState.bgm.map((e, i) => {
@@ -54,7 +56,7 @@ export function ExtraBgm() {
         onClick={() => {
           playSeClickToNextBgmButton();
           currentPlayingBgmName.set(e.name);
-          dispatch(setStage({ key: 'bgm', value: e.url }));
+          dispatch(setGuiAsset({ asset: 'titleBgm', value: e.url }));
         }}
         key={e.name}
         className={className}

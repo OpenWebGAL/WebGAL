@@ -6,7 +6,7 @@ import styles from '../../Components/Stage/FullScreenPerform/fullScreenPerform.m
 import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
 import { PerformController } from '@/Core/Modules/perform/performController';
 import { WebGAL } from '@/main';
-
+import { logger } from '@/Core/util/etc/logger';
 /**
  * 显示一小段黑屏演示
  * @param sentence
@@ -20,6 +20,24 @@ export const intro = (sentence: ISentence): IPerform => {
   let fontSize: string | undefined;
   let backgroundColor: any = 'rgba(0, 0, 0, 1)';
   let color: any = 'rgba(255, 255, 255, 1)';
+  const animationClass:any = (type: string, length: number = 0) => {
+    switch (type) {
+      case "fadeIn":
+        return styles.fadeIn;
+      case "slideIn":
+        return styles.slideIn;
+      case "typingEffect":
+        return `${styles.typingEffect} ${length}`;
+      case "pixelateEffect":
+          return styles.pixelateEffect;
+      case "revealAnimation":
+          return styles.revealAnimation;
+      default:
+        return styles.fadeIn;
+    }
+};
+  let chosenAnimationClass = styles.fadeIn;
+  let delayTime:number = 1500;
 
   for (const e of sentence.args) {
     if (e.key === 'backgroundColor') {
@@ -40,6 +58,13 @@ export const intro = (sentence: ISentence): IPerform => {
           fontSize = '420%';
           break;
       }
+    }
+    if (e.key === 'animation') {
+        chosenAnimationClass = animationClass(e.value);
+    }
+    if (e.key === 'delayTime') {
+      const parsedValue = parseInt(e.value.toString(), 10);
+      delayTime = isNaN(parsedValue) ? delayTime : parsedValue;
     }
   }
 
@@ -89,8 +114,8 @@ export const intro = (sentence: ISentence): IPerform => {
   const showIntro = introArray.map((e, i) => (
     <div
       key={'introtext' + i + Math.random().toString()}
-      style={{ animationDelay: `${1500 * i}ms` }}
-      className={styles.introElement}
+      style={{ animationDelay: `${delayTime * i}ms` }}
+      className={chosenAnimationClass}
     >
       {e}
     </div>
@@ -108,7 +133,7 @@ export const intro = (sentence: ISentence): IPerform => {
   }
   return {
     performName,
-    duration: 1000 + 1500 * introArray.length,
+    duration: 1000 + delayTime * introArray.length,
     isHoldOn: false,
     stopFunction: () => {
       const introContainer = document.getElementById('introContainer');
