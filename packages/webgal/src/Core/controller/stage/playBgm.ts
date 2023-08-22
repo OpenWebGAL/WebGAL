@@ -26,15 +26,13 @@ import { logger } from '@/Core/util/etc/logger';
 export function playBgm(url: string, enter = 0, volume = 100): void {
   logger.info('playing bgm' + url);
   if (url === '') {
-    setTimeout(() => {
-      // 淡入淡出效果结束后，将 bgm 置空
-      webgalStore.dispatch(setStage({ key: 'bgm', value: { 'src': '', 'enter': 0, 'volume': 100}}));
-    }, enter);
     const lastSrc = webgalStore.getState().stage.bgm.src;
     webgalStore.dispatch(setStage({ key: 'bgm', value: { 'src': lastSrc, 'enter': -enter, 'volume': volume}}));
   } else {
     webgalStore.dispatch(setStage({ key: 'bgm', value: { 'src': url, 'enter': enter, 'volume': volume}}));
   }
   const audioElement = document.getElementById('currentBgm') as HTMLAudioElement;
-  audioElement?.play();
+  if (audioElement.src) {
+    audioElement?.play();
+  }
 }
