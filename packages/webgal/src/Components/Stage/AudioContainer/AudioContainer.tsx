@@ -1,7 +1,7 @@
 import { useSelector } from 'react-redux';
 import { RootState, webgalStore } from '@/store/store';
 import { setStage } from '@/store/stageReducer';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { logger } from '@/Core/util/etc/logger';
 
 export const AudioContainer = () => {
@@ -18,6 +18,9 @@ export const AudioContainer = () => {
   const uiSeVol = mainVol * 0.01 * (userDataState.optionData.uiSeVolume ?? 50) * 0.01;
   const isEnterGame = useSelector((state: RootState) => state.GUI.isEnterGame);
 
+  // 淡入淡出定时器
+  const [fadeTimer, setFadeTimer] = useState(setTimeout(() => {}, 0));
+
   /**
    * 淡入BGM
    * @param bgm 背景音乐
@@ -25,31 +28,42 @@ export const AudioContainer = () => {
    * @param time 淡入时间
    */
   const bgmFadeIn = (bgm: HTMLAudioElement, maxVol: number, time: number) => {
-    // 设置音量为0（静音）
+    // 设置初始音量
     time >= 0 ? (bgm.volume = 0) : (bgm.volume = maxVol);
     // 设置音量递增时间间隔
     const duration = 10;
-    // 计算每duration的音量增加值（淡入效果）
+    // 计算每duration的音量增量
     const volumeStep = (maxVol / time) * duration;
-    // 每隔duration毫秒递增音量
-    const fadeInInterval = setInterval(() => {
-      if (bgm.volume + volumeStep >= maxVol) {
-        // 如果音量接近或达到最大值，则设置最终音量
-        bgm.volume = maxVol;
-        clearInterval(fadeInInterval);
-      } else if (bgm.volume + volumeStep <= 0) {
-        // 如果音量接近或达到最小值，则设置最终音量
-        bgm.volume = 0;
-        clearInterval(fadeInInterval);
-      } else {
-        // 否则增加音量
-        bgm.volume += volumeStep;
-      }
-    }, duration);
+    // 基于递归调用实现淡入淡出效果
+    const fade = () => {
+      const timer = setTimeout(() => {
+        if (bgm.volume + volumeStep >= maxVol) {
+          // 如果音量接近或达到最大值，则设置最终音量（淡入）
+          bgm.volume = maxVol;
+        } else if (bgm.volume + volumeStep <= 0) {
+          // 如果音量接近或达到最小值，则设置最终音量（淡出）
+          bgm.volume = 0;
+          // 淡出效果结束后，将 bgm 置空
+          webgalStore.dispatch(setStage({ key: 'bgm', value: { src: '', enter: 0, volume: 100 } }));
+        } else {
+          // 否则增加音量，并递归调用
+          bgm.volume += volumeStep;
+          fade();
+        }
+      }, duration);
+      // 将定时器引用存储到 fadeTimer 中
+      setFadeTimer(timer);
+    };
+    // 调用淡入淡出函数
+    fade();
   };
 
   useEffect(() => {
+    // 清除之前的淡入淡出定时器
+    clearTimeout(fadeTimer);
+    // 获取当前背景音乐元素
     const bgmElement = document.getElementById('currentBgm') as HTMLAudioElement;
+    // 如果当前背景音乐元素存在，则淡入淡出
     if (bgmElement) {
       bgmEnter === 0 ? (bgmElement.volume = bgmVol) : bgmFadeIn(bgmElement, bgmVol, bgmEnter);
     }
