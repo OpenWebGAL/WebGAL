@@ -1,4 +1,4 @@
-## 发布日志：WebGAL 4.4.3.2
+## 发布日志：WebGAL 4.4.3.3
 
 **本仓库只发布源代码**
 
@@ -28,9 +28,11 @@
 
 (4.4.3.2修复)Safari 浏览器由于文字阴影导致的异常
 
+(4.4.3.3修复)鉴赏 bgm 切换异常、音频渐入渐出导致的异常
+
 其他已知问题
 
-## Release Notes: WebGAL 4.4.3.2
+## Release Notes: WebGAL 4.4.3.3
 
 **This repository only releases source code.**
 
@@ -60,9 +62,11 @@ Dialogues display abnormally when using -concat -notend parameters
 
 (4.4.3.2 fix) Safari browser exception due to text shadows
 
+(4.4.3.3 fix) Fixed the anomalies in appreciating bgm switching and the abnormalities caused by audio fade in and fade out.
+
 Other known issues
 
-## リリースノート: WebGAL 4.4.3.2
+## リリースノート: WebGAL 4.4.3.3
 
 **このリポジトリはソースコードのみを公開します。**
 
@@ -92,9 +96,11 @@ Other known issues
 
 (4.4.3.2 修正) テキストシャドウによる Safari ブラウザの例外
 
+ (4.4.3.3修正) bgmの切り替えの異常、およびオーディオのフェードインとフェードアウトによって引き起こされる異常を修正しました。
+
 その他の既知の問題
 
-## Notes de version : WebGAL 4.4.3.2
+## Notes de version : WebGAL 4.4.3.3
 
 **Ce dépôt publie uniquement le code source.**
 
@@ -123,5 +129,7 @@ Affichage anormal des dialogues lors de l'utilisation des paramètres -concat -n
 (4.4.3.1 Correction) Affichage anormal du nom de la boîte de texte
 
 (4.4.3.2 Correction) Exception du navigateur Safari due aux ombres du texte
+
+(4.4.3.3 correction) Correction des anomalies dans la commutation de bgm et des anomalies causées par le fondu enchaîné audio.
 
 Autres problèmes connus
