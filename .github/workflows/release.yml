@@ -23,4 +23,4 @@ jobs:
           release_name: WebGAL ${{ github.ref }}
           body_path: releasenote.md
           draft: true
-          prerelease: true
+          prerelease: false
