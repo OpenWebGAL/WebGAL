@@ -1,5 +1,7 @@
 ## 发布日志：WebGAL 4.4.3.2
 
+**本仓库只发布源代码**
+
 **如果你想要体验使用便捷的图形化编辑器创建、制作并实时预览 WebGAL 游戏，请 [下载 WebGAL 图形化编辑器](https://github.com/MakinoharaShoko/WebGAL_Terre/releases)**
 
 ### 在此版本中
@@ -29,6 +31,8 @@
 其他已知问题
 
 ## Release Notes: WebGAL 4.4.3.2
+
+**This repository only releases source code.**
 
 **If you want to experience creating, making, and real-time previewing WebGAL games with a convenient graphical editor, please [download the WebGAL graphical editor](https://github.com/MakinoharaShoko/WebGAL_Terre/releases)**
 
@@ -60,6 +64,8 @@ Other known issues
 
 ## リリースノート: WebGAL 4.4.3.2
 
+**このリポジトリはソースコードのみを公開します。**
+
 **便利なグラフィカルエディターでWebGALゲームを作成、制作、リアルタイムプレビューを体験したい場合、[WebGAL グラフィカルエディターをダウンロードしてください](https://github.com/MakinoharaShoko/WebGAL_Terre/releases)**
 
 ### このバージョンで
@@ -89,6 +95,8 @@ Other known issues
 その他の既知の問題
 
 ## Notes de version : WebGAL 4.4.3.2
+
+**Ce dépôt publie uniquement le code source.**
 
 **Si vous souhaitez expérimenter la création, la fabrication et la prévisualisation en temps réel de jeux WebGAL avec un éditeur graphique pratique, veuillez [télécharger l'éditeur graphique WebGAL](https://github.com/MakinoharaShoko/WebGAL_Terre/releases)**
 
