@@ -23,7 +23,7 @@ export function generateTransformAnimationObj(
     const effectWithDuration = { ...targetEffect!.transform!, duration: 0 };
     animationObj.unshift(effectWithDuration);
   } else {
-    // 应用默认effect
+    // 应用默认effect，也就是最终的 effect 的 alpha = 0 版本
     const effectWithDuration = { ...applyFrame, alpha: 0, duration: 0 };
     animationObj.unshift(effectWithDuration);
   }
