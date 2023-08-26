@@ -6,9 +6,10 @@ import { logger } from '@/Core/util/etc/logger';
 import { webgalStore } from '@/store/store';
 import { generateTimelineObj } from '@/Core/controller/stage/pixi/animations/timeline';
 import cloneDeep from 'lodash/cloneDeep';
-import { baseTransform } from '@/store/stageInterface';
+import { baseTransform, ITransform } from '@/store/stageInterface';
 import { IUserAnimation } from '../Modules/animations';
 import { WebGAL } from '@/main';
+import { generateTransformAnimationObj } from '@/Core/gameScripts/function/generateTransformAnimationObj';
 
 /**
  * 设置变换
@@ -18,18 +19,23 @@ export const setTransform = (sentence: ISentence): IPerform => {
   const startDialogKey = webgalStore.getState().stage.currentDialogKey;
   const animationName = (Math.random() * 10).toString(16);
   const animationString = sentence.content;
-  let animationObj: any[];
+  let animationObj: (ITransform & {
+    duration: number;
+  })[];
+  const duration = getSentenceArgByKey(sentence, 'duration');
+  const target = (getSentenceArgByKey(sentence, 'target') ?? 0) as string;
   try {
-    const animation = JSON.parse(animationString);
-    animation.duration = 0;
-    animationObj = [animation];
+    const frame = JSON.parse(animationString) as ITransform & { duration: number };
+    animationObj = generateTransformAnimationObj(target, frame, duration);
   } catch (e) {
+    // 解析都错误了，歇逼吧
     animationObj = [];
   }
+
   const newAnimation: IUserAnimation = { name: animationName, effects: animationObj };
   WebGAL.animationManager.addAnimation(newAnimation);
   const animationDuration = getAnimateDuration(animationName);
-  const target = (getSentenceArgByKey(sentence, 'target') ?? 0) as string;
+
   const key = `${target}-${animationName}-${animationDuration}`;
   let stopFunction = () => {};
   setTimeout(() => {
