@@ -13,7 +13,7 @@ WebGAL 是使用 Web 技术开发的引擎，因此在网页端有良好的表�
 setAnimation:move-front-and-back -target=fig-left -next;
 听起来是不是非常吸引人？ -v4.wav;
 changeFigure:none -right -next;
-setAnimation:l2c -target=fig-left -next;
+setTransform:{"position": {"x": 500,"y": 0}} -target=fig-left -next;
 WebGAL 引擎也具有动画系统和特效系统，使用 WebGAL 开发的游戏可以拥有很好的表现效果。 -v5.wav;
 pixiInit;
 pixiPerform:snow;

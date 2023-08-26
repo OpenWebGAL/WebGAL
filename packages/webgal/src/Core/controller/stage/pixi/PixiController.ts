@@ -119,7 +119,7 @@ export default class PixiStage {
     // 每 5s 获取帧率
     const update = () => {
       this.updateFps();
-      setTimeout(update, 5000);
+      setTimeout(update, 10000);
     };
     update();
   }
@@ -559,7 +559,7 @@ export default class PixiStage {
   private updateFps() {
     getScreenFps?.(120).then((fps) => {
       this.frameDuration = 1000 / (fps as number);
-      logger.info('当前帧率', fps);
+      // logger.info('当前帧率', fps);
     });
   }
 
@@ -574,9 +574,9 @@ export default class PixiStage {
 }
 
 export function updateCurrentEffects(newEffects: IEffect[]) {
-  /**
-   * 更新当前 backlog 条目的 effects 记录
-   */
+  // /**
+  //  * 更新当前 backlog 条目的 effects 记录
+  //  */
   // if (!notUpdateBacklogEffects)
   //   setTimeout(() => {
   //     const backlog = RUNTIME_CURRENT_BACKLOG[RUNTIME_CURRENT_BACKLOG.length - 1];

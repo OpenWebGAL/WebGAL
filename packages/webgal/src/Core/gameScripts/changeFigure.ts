@@ -6,6 +6,9 @@ import { updateCurrentEffects } from '../controller/stage/pixi/PixiController';
 import cloneDeep from 'lodash/cloneDeep';
 import { getSentenceArgByKey } from '@/Core/util/getSentenceArg';
 import { WebGAL } from '@/main';
+import { IStageState, ITransform } from '@/store/stageInterface';
+import { getAnimateDuration, IUserAnimation } from '@/Core/Modules/animations';
+import { generateTransformAnimationObj } from '@/Core/gameScripts/function/generateTransformAnimationObj';
 
 /**
  * 更改立绘
@@ -18,6 +21,7 @@ export const changeFigure = (sentence: ISentence): IPerform => {
   let isFreeFigure = false;
   let motion = '';
   let key = '';
+  let duration = 500;
   for (const e of sentence.args) {
     if (e.key === 'left' && e.value === true) {
       pos = 'left';
@@ -51,6 +55,59 @@ export const changeFigure = (sentence: ISentence): IPerform => {
     newEffects.splice(index, 1);
   }
   updateCurrentEffects(newEffects);
+  const setAnimationNames = (key: string, sentence: ISentence) => {
+    // 处理 transform 和 默认 transform
+    const transformString = getSentenceArgByKey(sentence, 'transform');
+    const durationFromArg = getSentenceArgByKey(sentence, 'duration');
+    if (durationFromArg && typeof durationFromArg === 'number') {
+      duration = durationFromArg;
+    }
+    let animationObj: (ITransform & {
+      duration: number;
+    })[];
+    if (transformString) {
+      console.log(transformString);
+      try {
+        const frame = JSON.parse(transformString.toString()) as ITransform & { duration: number };
+        animationObj = generateTransformAnimationObj(key, frame, duration);
+        // 因为是切换，必须把一开始的 alpha 改为 0
+        animationObj[0].alpha = 0;
+        const animationName = (Math.random() * 10).toString(16);
+        const newAnimation: IUserAnimation = { name: animationName, effects: animationObj };
+        WebGAL.animationManager.addAnimation(newAnimation);
+        duration = getAnimateDuration(animationName);
+        WebGAL.animationManager.nextEnterAnimationName.set(key, animationName);
+      } catch (e) {
+        // 解析都错误了，歇逼吧
+        applyDefaultTransform();
+      }
+    } else {
+      applyDefaultTransform();
+    }
+
+    function applyDefaultTransform() {
+      // 应用默认的
+      const frame = {};
+      animationObj = generateTransformAnimationObj(key, frame as ITransform & { duration: number }, duration);
+      // 因为是切换，必须把一开始的 alpha 改为 0
+      animationObj[0].alpha = 0;
+      const animationName = (Math.random() * 10).toString(16);
+      const newAnimation: IUserAnimation = { name: animationName, effects: animationObj };
+      WebGAL.animationManager.addAnimation(newAnimation);
+      duration = getAnimateDuration(animationName);
+      WebGAL.animationManager.nextEnterAnimationName.set(key, animationName);
+    }
+    const enterAnim = getSentenceArgByKey(sentence, 'enter');
+    const exitAnim = getSentenceArgByKey(sentence, 'exit');
+    if (enterAnim) {
+      WebGAL.animationManager.nextEnterAnimationName.set(key, enterAnim.toString());
+      duration = getAnimateDuration(enterAnim.toString());
+    }
+    if (exitAnim) {
+      WebGAL.animationManager.nextExitAnimationName.set(key + '-off', exitAnim.toString());
+      duration = getAnimateDuration(exitAnim.toString());
+    }
+  };
   if (isFreeFigure) {
     const currentFreeFigures = webgalStore.getState().stage.freeFigure;
 
@@ -60,69 +117,30 @@ export const changeFigure = (sentence: ISentence): IPerform => {
     const index = currentFreeFigures.findIndex((figure) => figure.key === key);
     const newFreeFigure = cloneDeep(currentFreeFigures);
     if (index >= 0) {
-      // if (content === '') {
-      //   // 移除
-      //   newFreeFigure.splice(index, 1);
-      // } else {
       newFreeFigure[index].basePosition = pos;
       newFreeFigure[index].name = content;
-      // }
     } else {
       // 新加
       if (content !== '') newFreeFigure.push({ key, name: content, basePosition: pos });
     }
-    if (getSentenceArgByKey(sentence, 'enter')) {
-      WebGAL.animationManager.nextEnterAnimationName.set(key, getSentenceArgByKey(sentence, 'enter')!.toString());
-    }
-    if (getSentenceArgByKey(sentence, 'exit')) {
-      WebGAL.animationManager.nextExitAnimationName.set(
-        key + '-off',
-        getSentenceArgByKey(sentence, 'exit')!.toString(),
-      );
-    }
+    setAnimationNames(key, sentence);
     dispatch(setStage({ key: 'freeFigure', value: newFreeFigure }));
-  } else
-    switch (pos) {
-      case 'center':
-        key = 'fig-center';
-        if (getSentenceArgByKey(sentence, 'enter')) {
-          WebGAL.animationManager.nextEnterAnimationName.set(key, getSentenceArgByKey(sentence, 'enter')!.toString());
-        }
-        if (getSentenceArgByKey(sentence, 'exit')) {
-          WebGAL.animationManager.nextExitAnimationName.set(
-            key + '-off',
-            getSentenceArgByKey(sentence, 'exit')!.toString(),
-          );
-        }
-        dispatch(setStage({ key: 'figName', value: content }));
-        break;
-      case 'left':
-        key = 'fig-left';
-        if (getSentenceArgByKey(sentence, 'enter')) {
-          WebGAL.animationManager.nextEnterAnimationName.set(key, getSentenceArgByKey(sentence, 'enter')!.toString());
-        }
-        if (getSentenceArgByKey(sentence, 'exit')) {
-          WebGAL.animationManager.nextExitAnimationName.set(
-            key + '-off',
-            getSentenceArgByKey(sentence, 'exit')!.toString(),
-          );
-        }
-        dispatch(setStage({ key: 'figNameLeft', value: content }));
-        break;
-      case 'right':
-        key = 'fig-right';
-        if (getSentenceArgByKey(sentence, 'enter')) {
-          WebGAL.animationManager.nextEnterAnimationName.set(key, getSentenceArgByKey(sentence, 'enter')!.toString());
-        }
-        if (getSentenceArgByKey(sentence, 'exit')) {
-          WebGAL.animationManager.nextExitAnimationName.set(
-            key + '-off',
-            getSentenceArgByKey(sentence, 'exit')!.toString(),
-          );
-        }
-        dispatch(setStage({ key: 'figNameRight', value: content }));
-        break;
-    }
+  } else {
+    const positionMap = {
+      center: 'fig-center',
+      left: 'fig-left',
+      right: 'fig-right',
+    };
+    const dispatchMap = {
+      center: 'figName',
+      left: 'figNameLeft',
+      right: 'figNameRight',
+    };
+
+    key = positionMap[pos];
+    setAnimationNames(key, sentence);
+    dispatch(setStage({ key: dispatchMap[pos] as keyof IStageState, value: content }));
+  }
   if (motion) {
     const index = webgalStore.getState().stage.live2dMotion.findIndex((e) => e.target === key);
     let motionArr = webgalStore.getState().stage.live2dMotion;
@@ -138,7 +156,7 @@ export const changeFigure = (sentence: ISentence): IPerform => {
   }
   return {
     performName: 'none',
-    duration: 0,
+    duration,
     isHoldOn: false,
     stopFunction: () => {},
     blockingNext: () => false,
