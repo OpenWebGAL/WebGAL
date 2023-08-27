@@ -5,6 +5,7 @@ import { logger } from '@/Core/util/etc/logger';
 import { generateTimelineObj } from '@/Core/controller/stage/pixi/animations/timeline';
 import { generateUniversalSoftInAnimationObj } from '@/Core/controller/stage/pixi/animations/universalSoftIn';
 import { generateUniversalSoftOffAnimationObj } from '@/Core/controller/stage/pixi/animations/universalSoftOff';
+import { webgalStore } from '@/store/store';
 
 export interface IUserAnimation {
   name: string;
@@ -28,7 +29,8 @@ export function getAnimationObject(animationName: string, target: string, durati
   const effect = WebGAL.animationManager.getAnimations().find((ani) => ani.name === animationName);
   if (effect) {
     const mappedEffects = effect.effects.map((effect) => {
-      const newEffect = cloneDeep({ ...baseTransform, duration: 0 });
+      const targetSetEffect = webgalStore.getState().stage.effects.find((e) => e.target === target);
+      const newEffect = cloneDeep({ ...(targetSetEffect?.transform ?? baseTransform), duration: 0 });
       Object.assign(newEffect, effect);
       newEffect.duration = effect.duration / 1000;
       return newEffect;
