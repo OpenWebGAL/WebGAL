@@ -11,7 +11,7 @@ import { unlockBgmInUserData } from '@/store/userDataReducer';
  */
 export const bgm = (sentence: ISentence): IPerform => {
   let url: string = sentence.content; // 获取bgm的url
-  let name = sentence.content;
+  let name = '';
   let series = 'default';
   sentence.args.forEach((e) => {
     if (e.key === 'unlockname') {
@@ -23,7 +23,7 @@ export const bgm = (sentence: ISentence): IPerform => {
   });
   const enter = getSentenceArgByKey(sentence, 'enter'); // 获取bgm的淡入时间
   const volume = getSentenceArgByKey(sentence, 'volume'); // 获取bgm的音量比
-  webgalStore.dispatch(unlockBgmInUserData({ name, url, series }));
+  if (name !== '') webgalStore.dispatch(unlockBgmInUserData({ name, url, series }));
   playBgm(
     url,
     typeof enter === 'number' && enter >= 0 ? enter : 0, // 已正确设置淡入时间时，进行淡入
