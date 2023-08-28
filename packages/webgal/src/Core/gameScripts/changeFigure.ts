@@ -50,7 +50,7 @@ export const changeFigure = (sentence: ISentence): IPerform => {
    */
   const prevEffects = webgalStore.getState().stage.effects;
   const newEffects = cloneDeep(prevEffects);
-  const index = newEffects.findIndex((e) => e.target === `fig-${pos}${key}`);
+  const index = newEffects.findIndex((e) => e.target === `fig-${pos}` || e.target === `${key}`);
   if (index >= 0) {
     newEffects.splice(index, 1);
   }
