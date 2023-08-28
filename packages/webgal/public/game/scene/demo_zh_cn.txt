@@ -13,7 +13,7 @@ WebGAL 是使用 Web 技术开发的引擎，因此在网页端有良好的表�
 setAnimation:move-front-and-back -target=fig-left -next;
 听起来是不是非常吸引人？ -v4.wav;
 changeFigure:none -right -next;
-setAnimation:l2c -target=fig-left -next;
+setTransform:{"position": {"x": 500,"y": 0}} -target=fig-left -next;
 WebGAL 引擎也具有动画系统和特效系统，使用 WebGAL 开发的游戏可以拥有很好的表现效果。 -v5.wav;
 pixiInit;
 pixiPerform:snow;
@@ -27,6 +27,7 @@ choose:WebGAL 发展历程:choose1|WebGAL 冷知识:choose2;
 label:choose1;
 WebGAL 的开发初衷是能够让更多人可以更方便地制作属于自己的视觉小说。 -v9.wav;
 在一开始，WebGAL 只具备很少的功能，仅仅能支持立绘和背景的显示、语音播放和分支选择。 -v10.wav;
+setAnimation:move-front-and-back -target=fig-left -next;
 在经历一年的发展后，现在已经是支持了很多优秀的表现效果的引擎了！ -v11.wav;
 除此以外，WebGAL 编辑器的加入也使得制作和导出一个游戏更加方便快捷。 -v12.wav;
 jumpLabel:end;
