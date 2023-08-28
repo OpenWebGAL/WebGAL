@@ -21,7 +21,7 @@ import cloneDeep from 'lodash/cloneDeep';
  */
 export const changeBg = (sentence: ISentence): IPerform => {
   const url = sentence.content;
-  let name = sentence.content;
+  let name = '';
   let series = 'default';
   sentence.args.forEach((e) => {
     if (e.key === 'unlockname') {
@@ -33,7 +33,7 @@ export const changeBg = (sentence: ISentence): IPerform => {
   });
 
   const dispatch = webgalStore.dispatch;
-  dispatch(unlockCgInUserData({ name, url, series }));
+  if (name !== '') dispatch(unlockCgInUserData({ name, url, series }));
 
   /**
    * 删掉相关 Effects，因为已经移除了
