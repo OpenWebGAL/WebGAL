@@ -20,104 +20,70 @@
 
 其他已知问题
 
-## Release Notes: WebGAL 4.4.3.3
+## Release Notes: WebGAL 4.4.4
 
-**This repository only releases source code.**
+**This repository only releases source code**
 
-**If you want to experience creating, making, and real-time previewing WebGAL games with a convenient graphical editor, please [download the WebGAL graphical editor](https://github.com/MakinoharaShoko/WebGAL_Terre/releases)**
+**If you want to create, produce, and preview WebGAL games in real-time using a convenient graphical editor, please [download WebGAL Graphical Editor](https://github.com/MakinoharaShoko/WebGAL_Terre/releases)**
 
-### In this version
+### In This Version
 
-1 New features
+#### New Features
 
-Brand new text box and title UI interface (already implemented in the later version 4.4.2, this time with more optimizations)
+You can now set an effect for character sprites and background objects and automatically generate an animation that transitions from the current effect to the target effect, making production easier.
 
-Added sound effects for button and interface switching, enhancing the game experience
+#### Fixes
 
-In dialogues, you can use | as a separator to break lines, or temporarily set font size for text
+Fixed the issue where the BGM could not be switched in the appreciation screen
 
-Full-screen text display can be customized
+Fixed the issue where the effects applied to sprites with IDs were not cleared after the sprite was unloaded
 
-2 Fixes
-
-Abnormal display under French status
-
-Inability to properly handle symbols at the beginning of dialogues
-
-Dialogues display abnormally when using -concat -notend parameters
-
-(4.4.3.1 fixed) Text box name displays abnormally
-
-(4.4.3.2 fix) Safari browser exception due to text shadows
-
-(4.4.3.3 fix) Fixed the anomalies in appreciating bgm switching and the abnormalities caused by audio fade in and fade out.
+Fixed issues caused by background music fading in and out
 
 Other known issues
 
-## リリースノート: WebGAL 4.4.3.3
+---
+## リリースノート：WebGAL 4.4.4
 
-**このリポジトリはソースコードのみを公開します。**
+**このリポジトリはソースコードのみをリリースします**
 
-**便利なグラフィカルエディターでWebGALゲームを作成、制作、リアルタイムプレビューを体験したい場合、[WebGAL グラフィカルエディターをダウンロードしてください](https://github.com/MakinoharaShoko/WebGAL_Terre/releases)**
+**便利なグラフィックエディタを使用して、WebGALゲームをリアルタイムで作成、制作、プレビューしたい場合は、[WebGAL グラフィックエディタをダウンロードしてください](https://github.com/MakinoharaShoko/WebGAL_Terre/releases)**
 
 ### このバージョンで
 
-1 新機能
+#### 新機能
 
-新しいテキストボックスとタイトルUIインターフェイス（4.4.2の後のバージョンで既に実装されており、今回もさらなる最適化があります）
+キャラクタースプライトと背景オブジェクトにエフェクトを設定し、現在のエフェクトから目標エフェクトに遷移するアニメーションを自動的に生成できるようになりました。これにより、制作が簡単になります。
 
-ボタンとインターフェイスの切り替えに効果音を追加、ゲーム体験の強化
+#### 修正
 
-対話では、|を区切り記号として使用して改行したり、テキストのフォントサイズを一時的に設定したりできます
+鑑賞画面でBGMが切り替えられない問題を修正
 
-全画面のテキスト表示はカスタマイズ可能
+ID付きのスプライトに適用されたエフェクトが、スプライトがアンロードされた後にクリアされない問題を修正
 
-2 修正
-
-フランス語のステータスでの異常な表示
-
-ダイアログの先頭の記号を正しく処理できない
-
--concat -notend パラメーターを使用しているときにダイアログが異常に表示される
-
-(4.4.3.1 修正)テキストボックス名が異常に表示される
-
-(4.4.3.2 修正) テキストシャドウによる Safari ブラウザの例外
-
- (4.4.3.3修正) bgmの切り替えの異常、およびオーディオのフェードインとフェードアウトによって引き起こされる異常を修正しました。
+背景音楽のフェードインとフェードアウトによって引き起こされる問題を修正
 
 その他の既知の問題
 
-## Notes de version : WebGAL 4.4.3.3
+---
+## Notes de version : WebGAL 4.4.4
 
-**Ce dépôt publie uniquement le code source.**
+**Ce dépôt publie uniquement le code source**
 
-**Si vous souhaitez expérimenter la création, la fabrication et la prévisualisation en temps réel de jeux WebGAL avec un éditeur graphique pratique, veuillez [télécharger l'éditeur graphique WebGAL](https://github.com/MakinoharaShoko/WebGAL_Terre/releases)**
+**Si vous souhaitez créer, produire et prévisualiser des jeux WebGAL en temps réel à l'aide d'un éditeur graphique pratique, veuillez [télécharger l'éditeur graphique WebGAL](https://github.com/MakinoharaShoko/WebGAL_Terre/releases)**
 
 ### Dans cette version
 
-1 Nouvelles fonctionnalités
+#### Nouvelles fonctionnalités
 
-Nouvelle interface de boîte de texte et d'interface utilisateur de titre (déjà implémentée dans la version ultérieure 4.4.2, cette fois avec plus d'optimisations)
+Vous pouvez désormais définir un effet pour les sprites de personnages et les objets d'arrière-plan et générer automatiquement une animation qui passe de l'effet actuel à l'effet cible, ce qui facilite la production.
 
-Ajout d'effets sonores pour le changement de bouton et d'interface, améliorant l'expérience de jeu
+#### Corrections
 
-Dans les dialogues, vous pouvez utiliser | comme séparateur pour sauter des lignes, ou définir temporairement la taille de la police pour le texte
+Correction du problème où il était impossible de changer le BGM dans l'écran d'appréciation
 
-L'affichage du texte en plein écran peut être personnalisé
+Correction du problème où les effets appliqués aux sprites avec des ID n'étaient pas effacés après le déchargement du sprite
 
-2 Corrections
-
-Affichage anormal sous le statut français
-
-Incapacité à gérer correctement les symboles au début des dialogues
-
-Affichage anormal des dialogues lors de l'utilisation des paramètres -concat -notend
-
-(4.4.3.1 Correction) Affichage anormal du nom de la boîte de texte
-
-(4.4.3.2 Correction) Exception du navigateur Safari due aux ombres du texte
-
-(4.4.3.3 correction) Correction des anomalies dans la commutation de bgm et des anomalies causées par le fondu enchaîné audio.
+Correction des problèmes causés par la musique de fond se fondant dans et hors
 
 Autres problèmes connus
