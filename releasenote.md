@@ -1,4 +1,4 @@
-## 发布日志：WebGAL 4.4.4
+## 发布日志：WebGAL
 
 **本仓库只发布源代码**
 
@@ -20,7 +20,7 @@
 
 其他已知问题
 
-## Release Notes: WebGAL 4.4.4
+## Release Notes: WebGAL 
 
 **This repository only releases source code**
 
@@ -43,7 +43,7 @@ Fixed issues caused by background music fading in and out
 Other known issues
 
 ---
-## リリースノート：WebGAL 4.4.4
+## リリースノート：WebGAL 
 
 **このリポジトリはソースコードのみをリリースします**
 
@@ -66,7 +66,7 @@ ID付きのスプライトに適用されたエフェクトが、スプライト
 その他の既知の問題
 
 ---
-## Notes de version : WebGAL 4.4.4
+## Notes de version : WebGAL 
 
 **Ce dépôt publie uniquement le code source**
 
