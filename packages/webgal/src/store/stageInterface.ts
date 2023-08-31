@@ -77,6 +77,17 @@ export interface IFreeFigure {
   key: string;
 }
 
+export interface mouthAnimationFile {
+  open: string;
+  close: string;
+  halfOpen: string;
+}
+
+export interface eyesAnimationFile {
+  open: string;
+  close: string;
+}
+
 /**
  * @interface IStageState 游戏舞台数据接口
  */
@@ -88,6 +99,15 @@ export interface IStageState {
   figNameRight: string; // 立绘_右 文件地址（相对或绝对）
   // 自由立绘
   freeFigure: Array<IFreeFigure>;
+  mouthAnimation: Array<mouthAnimationFile>;
+  blinkAnimation: Array<eyesAnimationFile>;
+  mouthAnimationLeft: Array<mouthAnimationFile>;
+  blinkAnimationLeft: Array<eyesAnimationFile>;
+  mouthAnimationRight: Array<mouthAnimationFile>;
+  blinkAnimationRight: Array<eyesAnimationFile>;
+  figureId: string;
+  figurePos :string;
+  animationFlag: string;
   showText: string; // 文字
   showTextSize: number; // 文字
   showName: string; // 人物名

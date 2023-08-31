@@ -4,6 +4,7 @@ import { webgalStore } from '@/store/store';
 import { setStage } from '@/store/stageReducer';
 import { WebGAL } from '@/main';
 import { getSentenceArgByKey } from '@/Core/util/getSentenceArg';
+import { IStageState } from '@/store/stageInterface';
 
 /**
  * 播放一段语音
@@ -14,6 +15,10 @@ export const playVocal = (sentence: ISentence) => {
   const performInitName = 'vocal-play';
   const url = getSentenceArgByKey(sentence, 'vocal'); // 获取语音的url
   const volume = getSentenceArgByKey(sentence, 'volume'); // 获取语音的音量比
+  let currentStageState: IStageState;
+  currentStageState = webgalStore.getState().stage;
+  let pos = '';
+  let key = '';
 
   // 先停止之前的语音
   let VocalControl: any = document.getElementById('currentVocal');
@@ -22,8 +27,63 @@ export const playVocal = (sentence: ISentence) => {
     VocalControl.currentTime = 0;
     VocalControl.pause();
   }
+
+  for (const e of sentence.args) {
+    if (e.key === 'left' && e.value === true) {
+      pos = 'left';
+    }
+    if (e.key === 'right' && e.value === true) {
+      pos = 'right';
+    }
+    if (e.key === 'center' && e.value === true) {
+      pos = 'center';
+    }
+    if (e.key === 'figureId') {
+      key = `${e.value.toString()}`
+    }
+  }
+
   // 获得舞台状态
   webgalStore.dispatch(setStage({ key: 'vocal', value: url }));
+  webgalStore.dispatch(setStage({ key: 'figureId',  value: key }));
+  webgalStore.dispatch(setStage({ key: 'figurePos',  value: pos }));
+
+    // blinkAnimation
+  if(currentStageState.animationFlag === "on"){
+
+    const foundFigure = currentStageState.freeFigure.find(figure => figure.key === key);
+    if (foundFigure) {
+      pos = foundFigure.basePosition;
+    }
+
+    let isBlinking = false;
+    let blinkTimerID:any = null;
+    let animationEndTime:any = null;
+
+    function blinkAnimation() {
+      if (isBlinking || (animationEndTime && Date.now() > animationEndTime)) return;
+    
+      isBlinking = true;
+      WebGAL.gameplay.pixiStage?.performBlinkAnimation(key, currentStageState, 'closed', pos);
+    
+      setTimeout(() => {
+        WebGAL.gameplay.pixiStage?.performBlinkAnimation(key, currentStageState, 'open', pos);
+        isBlinking = false;
+        const nextBlinkTime = Math.random() * 300 + 3500;
+        setTimeout(blinkAnimation, nextBlinkTime);
+      }, 200);
+    }
+
+    // 5sec
+    animationEndTime = Date.now() + 10000;
+    blinkAnimation();
+
+    // 5sec
+    setTimeout(() => {
+      clearTimeout(blinkTimerID);
+    }, 10000);
+  }
+
   let isOver = false;
   return {
     arrangePerformPromise: new Promise((resolve) => {
