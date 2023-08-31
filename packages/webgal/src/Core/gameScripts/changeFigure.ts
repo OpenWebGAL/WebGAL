@@ -9,7 +9,8 @@ import { WebGAL } from '@/main';
 import { IStageState, ITransform } from '@/store/stageInterface';
 import { getAnimateDuration, IUserAnimation } from '@/Core/Modules/animations';
 import { generateTransformAnimationObj } from '@/Core/gameScripts/function/generateTransformAnimationObj';
-
+import { assetSetter,fileType } from '@/Core/util/gameAssetsAccess/assetSetter';
+import { logger } from '@/Core/util/etc/logger';
 /**
  * 更改立绘
  * @param sentence 语句
@@ -22,12 +23,24 @@ export const changeFigure = (sentence: ISentence): IPerform => {
   let motion = '';
   let key = '';
   let duration = 500;
+  let mouthOpen = '';
+  let mouthClose = '';
+  let mouthHalfOpen = '';
+  let eyesOpen = '';
+  let eyesClose = '';
+  let animationFlag:any = '';
+  let mouthAnimationKey:any = 'mouthAnimation';
+  let eyesAnimationKey:any = 'blinkAnimation';
   for (const e of sentence.args) {
     if (e.key === 'left' && e.value === true) {
       pos = 'left';
+      mouthAnimationKey = 'mouthAnimationLeft';
+      eyesAnimationKey = 'blinkAnimationLeft';
     }
     if (e.key === 'right' && e.value === true) {
       pos = 'right';
+      mouthAnimationKey = 'mouthAnimationRight';
+      eyesAnimationKey = 'blinkAnimationRight';
     }
     if (e.key === 'clear' && e.value === true) {
       content = '';
@@ -39,11 +52,46 @@ export const changeFigure = (sentence: ISentence): IPerform => {
     if (e.key === 'motion') {
       motion = e.value.toString();
     }
+    if (e.key === 'mouthOpen') {
+      mouthOpen = e.value.toString();
+      mouthOpen = assetSetter(mouthOpen,fileType.figure);
+    }
+    if (e.key === 'mouthClose') {
+      mouthClose = e.value.toString();
+      mouthClose = assetSetter(mouthClose,fileType.figure);
+    }
+    if (e.key === 'mouthHalfOpen') {
+      mouthHalfOpen = e.value.toString();
+      mouthHalfOpen = assetSetter(mouthHalfOpen,fileType.figure);
+    }
+    if (e.key === 'eyesOpen') {
+      eyesOpen = e.value.toString();
+      eyesOpen = assetSetter(eyesOpen,fileType.figure);
+    }
+    if (e.key === 'eyesClose') {
+      eyesClose = e.value.toString();
+      eyesClose = assetSetter(eyesClose,fileType.figure);
+    }
+    if (e.key === 'animationFlag') {
+      animationFlag = e.value.toString();
+    }
     if (content === 'none') {
       content = '';
     }
   }
+  
+  if(!animationFlag){
+    mouthOpen = '';
+    mouthClose = '';
+    mouthHalfOpen = '';
+    eyesOpen = '';
+    eyesClose = '';
+  }
+    
   const dispatch = webgalStore.dispatch;
+  dispatch(setStage({ key: mouthAnimationKey, value: {open: mouthOpen, close: mouthClose, halfOpen: mouthHalfOpen }}));
+  dispatch(setStage({ key: eyesAnimationKey, value: {open: eyesOpen, close: eyesClose}}));
+  dispatch(setStage({ key: 'animationFlag', value: animationFlag }));
 
   /**
    * 删掉相关 Effects，因为已经移除了
