@@ -3,8 +3,9 @@ import { logger } from '../etc/logger';
 import { assetSetter, fileType } from '../gameAssetsAccess/assetSetter';
 import { getStorage } from '../../controller/storage/storageController';
 import { webgalStore } from '@/store/store';
-import { setGuiAsset } from '@/store/GUIReducer';
+import { setDefaultLanguage, setGuiAsset } from '@/store/GUIReducer';
 import { setEbg } from '@/Core/util/setEbg';
+import { language } from '@/config/language';
 import { setLogo } from '@/Core/util/setLogo';
 import { WebGAL } from '@/main';
 import { initKey } from '@/Core/controller/storage/fastSaveLoad';
@@ -21,7 +22,7 @@ declare global {
 export const infoFetcher = (url: string) => {
   const GUIState = webgalStore.getState().GUI;
   const dispatch = webgalStore.dispatch;
-  axios.get(url).then((r) => {
+  axios.get(encodeURI(url)).then((r) => {
     let gameConfigRaw: Array<string> = r.data.split('\n'); // 游戏配置原始数据
     gameConfigRaw = gameConfigRaw.map((e) => e.split(';')[0]);
     const gameConfig: Array<Array<string>> = gameConfigRaw.map((e) => e.split(':')); // 游戏配置数据
@@ -60,6 +61,9 @@ export const infoFetcher = (url: string) => {
         if (e[0] === 'Game_key') {
           WebGAL.gameKey = e[1];
           getStorage();
+        }
+        if (e[0] === 'Default_language') {
+          dispatch(setDefaultLanguage(language[e[1] as unknown as language] as unknown as language));
         }
       });
     }

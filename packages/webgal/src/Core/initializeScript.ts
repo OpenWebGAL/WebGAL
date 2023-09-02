@@ -94,7 +94,7 @@ function getUserAnimation() {
   axios.get('./game/animation/animationTable.json').then((res) => {
     const animations: Array<string> = res.data;
     for (const animationName of animations) {
-      axios.get(`./game/animation/${animationName}.json`).then((res) => {
+      axios.get(encodeURI(`./game/animation/${animationName}.json`)).then((res) => {
         if (res.data) {
           const userAnimation = {
             name: animationName,

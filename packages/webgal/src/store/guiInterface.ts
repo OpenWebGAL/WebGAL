@@ -1,3 +1,5 @@
+import { language } from "@/config/language";
+
 /**
  * 当前Menu页面显示的Tag
  */
@@ -23,6 +25,7 @@ export interface IGuiState {
   showExtra: boolean;
   showGlobalDialog: boolean;
   showPanicOverlay: boolean;
+  defaultLanguage: language|null;
   isEnterGame: boolean;
 }
 
@@ -49,5 +52,7 @@ export interface setAssetPayload {
   asset: keyof GuiAsset;
   value: string;
 }
+
+export type setDefaultLanguagePayload = language|null;
 
 export type GuiStore = IGuiStore;
