@@ -16,7 +16,7 @@ export default function useLanguage() {
   const userDataRef = useGenSyncRef((state: RootState) => state.userData);
   const dispatch = useDispatch();
 
-  return (_lang?: language) => {
+  return (_lang?: language, isSyncStorage = true) => {
     const lang = _lang ?? userDataRef.current?.optionData.language ?? 0;
 
     const languageName = getLanguageName(lang);
@@ -25,6 +25,8 @@ export default function useLanguage() {
     dispatch(setOptionData({ key: 'language', value: lang }));
     logger.info('设置语言: ' + languageName);
     window?.localStorage.setItem('lang', lang.toString());
-    setStorage();
+    if (isSyncStorage) {
+      setStorage();
+    }
   };
 }

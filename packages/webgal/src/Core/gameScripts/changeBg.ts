@@ -1,9 +1,18 @@
 import { ISentence } from '@/Core/controller/scene/sceneInterface';
-import { IPerform } from '@/Core/controller/perform/performInterface';
+import { IPerform } from '@/Core/Modules/perform/performInterface';
 // import {getRandomPerformName} from '../../../util/getRandomPerformName';
 import styles from '../../Components/Stage/stage.module.scss';
 import { webgalStore } from '@/store/store';
 import { setStage } from '@/store/stageReducer';
+import { getSentenceArgByKey } from '@/Core/util/getSentenceArg';
+import { WebGAL } from '@/main';
+import { unlockCgInUserData } from '@/store/userDataReducer';
+import { logger } from '@/Core/util/etc/logger';
+import { ITransform } from '@/store/stageInterface';
+import { generateTransformAnimationObj } from '@/Core/gameScripts/function/generateTransformAnimationObj';
+import { getAnimateDuration, IUserAnimation } from '@/Core/Modules/animations';
+import { updateCurrentEffects } from '../controller/stage/pixi/PixiController';
+import cloneDeep from 'lodash/cloneDeep';
 
 /**
  * 进行背景图片的切换
@@ -11,22 +20,89 @@ import { setStage } from '@/store/stageReducer';
  * @return {IPerform}
  */
 export const changeBg = (sentence: ISentence): IPerform => {
+  const url = sentence.content;
+  let name = '';
+  let series = 'default';
+  sentence.args.forEach((e) => {
+    if (e.key === 'unlockname') {
+      name = e.value.toString();
+    }
+    if (e.key === 'series') {
+      series = e.value.toString();
+    }
+  });
+
   const dispatch = webgalStore.dispatch;
+  if (name !== '') dispatch(unlockCgInUserData({ name, url, series }));
+
+  /**
+   * 删掉相关 Effects，因为已经移除了
+   */
+  const prevEffects = webgalStore.getState().stage.effects;
+  const newEffects = cloneDeep(prevEffects);
+  const index = newEffects.findIndex((e) => e.target === `bg-main`);
+  if (index >= 0) {
+    newEffects.splice(index, 1);
+  }
+  updateCurrentEffects(newEffects);
+
+  // 处理 transform 和 默认 transform
+  const transformString = getSentenceArgByKey(sentence, 'transform');
+  let duration = getSentenceArgByKey(sentence, 'duration');
+  if (!duration || typeof duration !== 'number') {
+    duration = 1000;
+  }
+  let animationObj: (ITransform & {
+    duration: number;
+  })[];
+  if (transformString) {
+    try {
+      const frame = JSON.parse(transformString.toString()) as ITransform & { duration: number };
+      animationObj = generateTransformAnimationObj('bg-main', frame, duration);
+      // 因为是切换，必须把一开始的 alpha 改为 0
+      animationObj[0].alpha = 0;
+      const animationName = (Math.random() * 10).toString(16);
+      const newAnimation: IUserAnimation = { name: animationName, effects: animationObj };
+      WebGAL.animationManager.addAnimation(newAnimation);
+      duration = getAnimateDuration(animationName);
+      WebGAL.animationManager.nextEnterAnimationName.set('bg-main', animationName);
+    } catch (e) {
+      // 解析都错误了，歇逼吧
+      applyDefaultTransform();
+    }
+  } else {
+    applyDefaultTransform();
+  }
+
+  function applyDefaultTransform() {
+    // 应用默认的
+    const frame = {};
+    animationObj = generateTransformAnimationObj('bg-main', frame as ITransform & { duration: number }, duration);
+    // 因为是切换，必须把一开始的 alpha 改为 0
+    animationObj[0].alpha = 0;
+    const animationName = (Math.random() * 10).toString(16);
+    const newAnimation: IUserAnimation = { name: animationName, effects: animationObj };
+    WebGAL.animationManager.addAnimation(newAnimation);
+    duration = getAnimateDuration(animationName);
+    WebGAL.animationManager.nextEnterAnimationName.set('bg-main', animationName);
+  }
+
+  // 应用动画的优先级更高一点
+  if (getSentenceArgByKey(sentence, 'enter')) {
+    WebGAL.animationManager.nextEnterAnimationName.set('bg-main', getSentenceArgByKey(sentence, 'enter')!.toString());
+    duration = getAnimateDuration(getSentenceArgByKey(sentence, 'enter')!.toString());
+  }
+  if (getSentenceArgByKey(sentence, 'exit')) {
+    WebGAL.animationManager.nextExitAnimationName.set('bg-main-off', getSentenceArgByKey(sentence, 'exit')!.toString());
+    duration = getAnimateDuration(getSentenceArgByKey(sentence, 'exit')!.toString());
+  }
   dispatch(setStage({ key: 'bgName', value: sentence.content }));
-  // const performInitName: string = getRandomPerformName();
+
   return {
     performName: 'none',
-    duration: 1000,
-    isOver: false,
+    duration,
     isHoldOn: false,
-    stopFunction: () => {
-      // const bgContainer = document.getElementById('MainStage_bg_MainContainer');
-      // if (bgContainer) bgContainer.className = styles.MainStage_bgContainer;
-      const BgContainer = document.getElementById('MainStage_bg_MainContainer');
-      if (BgContainer) {
-        BgContainer.className = styles.MainStage_bgContainer_Settled;
-      }
-    },
+    stopFunction: () => {},
     blockingNext: () => false,
     blockingAuto: () => true,
     stopTimeout: undefined, // 暂时不用，后面会交给自动清除

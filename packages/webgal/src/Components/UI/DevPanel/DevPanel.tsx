@@ -1,11 +1,11 @@
 import styles from './devPanel.module.scss';
 import { useValue } from '@/hooks/useValue';
 import { getPixiSscreenshot } from '@/Components/UI/DevPanel/devFunctions/getPixiSscreenshot';
-import { RUNTIME_GAMEPLAY } from '@/Core/runtime/gamePlay';
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import { useTranslation } from 'react-i18next';
+import { WebGAL } from '@/main';
 
 export default function DevPanel() {
   // 控制显隐
@@ -32,7 +32,7 @@ export default function DevPanel() {
       <div onClick={() => i18n.changeLanguage('en')}>To English</div>
       <div onClick={() => i18n.changeLanguage('jp')}>To Japanese</div>
       <div>Current Language:{i18n.language}</div>
-      <div onClick={() => RUNTIME_GAMEPLAY.pixiStage?.removeAnimation('snow-Ticker')}>Remove Snow Ticker</div>
+      <div onClick={() => WebGAL.gameplay.pixiStage?.removeAnimation('snow-Ticker')}>Remove Snow Ticker</div>
       <div>Stage State</div>
       <div>{JSON.stringify(stageState, null, '  ')}</div>
     </>

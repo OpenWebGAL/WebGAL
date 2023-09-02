@@ -17,11 +17,18 @@ export const initState: IStageState = {
   figNameRight: '', // 立绘_右 文件地址（相对或绝对）
   freeFigure: [],
   showText: '', // 文字
+  showTextSize: -1,
   showName: '', // 人物名
   command: '', // 语句指令
   choose: [], // 选项列表，现在不用，先预留
   vocal: '', // 语音 文件地址（相对或绝对）
-  bgm: '', // 背景音乐 文件地址（相对或绝对）
+  vocalVolume: 100, // 语音 音量调整（0 - 100）
+  bgm: { // 背景音乐
+    src: '', // 背景音乐 文件地址（相对或绝对）
+    enter: 0, // 背景音乐 淡入或淡出的毫秒数
+    volume: 100, // 背景音乐 音量调整（0 - 100）
+  },
+  uiSe: '', // 用户界面音效 文件地址（相对或绝对）
   miniAvatar: '', // 小头像 文件地址（相对或绝对）
   GameVar: {}, // 游戏内变量
   effects: [], // 应用的效果
@@ -29,6 +36,7 @@ export const initState: IStageState = {
   bgTransform: '', // 现在不用，先预留
   PerformList: [], // 要启动的演出列表
   currentDialogKey: 'initial',
+  live2dMotion: [],
   // currentPerformDelay: 0
   currentConcatDialogPrev: '',
   enableFilm: '',

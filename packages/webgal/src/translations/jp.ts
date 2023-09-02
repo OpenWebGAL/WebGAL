@@ -50,6 +50,14 @@ const jp = {
                 },
               },
             },
+            about: {
+              title: 'WebGALについて',
+              subTitle: 'WebGAL：開源のウェブ基盤視覚小説エンジン',
+              version: '版数',
+              source: '源コード保管所',
+              contributors: '貢献者',
+              website: 'ウェブサイト',
+            },
           },
         },
         display: {
@@ -74,7 +82,7 @@ const jp = {
             textFont: {
               title: 'フォント',
               options: {
-                siYuanSimSun: '源ノ明朝',
+                siYuanSimSun: '霞鹜文楷',
                 SimHei: '黒体',
               },
             },
@@ -88,9 +96,11 @@ const jp = {
         sound: {
           title: 'サウンド',
           options: {
-            volumeMain: { title: '主音量' },
-            vocalVolume: { title: '声量' },
-            bgmVolume: { title: 'BGMの音量' },
+            volumeMain: { title: 'MAIN 音量' },
+            vocalVolume: { title: 'VOICE 音量' },
+            bgmVolume: { title: 'BGM 音量' },
+            seVolume: { title: 'SE 音量' },
+            uiSeVolume: { title: 'UI 効果音音量' },
           },
         },
         // language: {

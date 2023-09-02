@@ -3,7 +3,6 @@ import { NormalOption } from '@/Components/UI/Menu/Options/NormalOption';
 import { OptionSlider } from '@/Components/UI/Menu/Options/OptionSlider';
 import { setOptionData } from '@/store/userDataReducer';
 import { setStorage } from '@/Core/controller/storage/storageController';
-import { setVolume } from '@/Core/controller/stage/setVolume';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import useTrans from '@/hooks/useTrans';
@@ -23,7 +22,6 @@ export function Sound() {
             const newValue = event.target.value;
             dispatch(setOptionData({ key: 'volumeMain', value: Number(newValue) }));
             setStorage();
-            setVolume();
           }}
         />
       </NormalOption>
@@ -35,7 +33,6 @@ export function Sound() {
             const newValue = event.target.value;
             dispatch(setOptionData({ key: 'vocalVolume', value: Number(newValue) }));
             setStorage();
-            setVolume();
           }}
         />
       </NormalOption>
@@ -47,7 +44,28 @@ export function Sound() {
             const newValue = event.target.value;
             dispatch(setOptionData({ key: 'bgmVolume', value: Number(newValue) }));
             setStorage();
-            setVolume();
+          }}
+        />
+      </NormalOption>
+      <NormalOption key="option7" title={t('seVolume.title')}>
+        <OptionSlider
+          initValue={userDataState.optionData.seVolume}
+          uniqueID={t('seVolume.title')}
+          onChange={(event) => {
+            const newValue = event.target.value;
+            dispatch(setOptionData({ key: 'seVolume', value: Number(newValue) }));
+            setStorage();
+          }}
+        />
+      </NormalOption>
+      <NormalOption key="option8" title={t('uiSeVolume.title')}>
+        <OptionSlider
+          initValue={userDataState.optionData.uiSeVolume}
+          uniqueID={t('uiSeVolume.title')}
+          onChange={(event) => {
+            const newValue = event.target.value;
+            dispatch(setOptionData({ key: 'uiSeVolume', value: Number(newValue) }));
+            setStorage();
           }}
         />
       </NormalOption>

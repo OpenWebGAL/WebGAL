@@ -19,10 +19,12 @@ const initState: IGuiState = {
   currentMenuTag: MenuPanelTag.Option,
   titleBg: '',
   titleBgm: '',
+  logoImage: '',
   showExtra: false,
   showGlobalDialog: false,
   showPanicOverlay: false,
-  defaultLanguage: null
+  defaultLanguage: null,
+  isEnterGame: false,
 };
 
 /**

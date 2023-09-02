@@ -1,4 +1,4 @@
-import { IRunPerform } from '@/Core/controller/perform/performInterface';
+import { IRunPerform } from '@/Core/Modules/perform/performInterface';
 
 /**
  * 游戏内变量
@@ -89,11 +89,18 @@ export interface IStageState {
   // 自由立绘
   freeFigure: Array<IFreeFigure>;
   showText: string; // 文字
+  showTextSize: number; // 文字
   showName: string; // 人物名
   command: string; // 语句指令
   choose: Array<IChooseItem>; // 选项列表
   vocal: string; // 语音 文件地址（相对或绝对）
-  bgm: string; // 背景音乐 文件地址（相对或绝对）
+  vocalVolume: number; // 语音 音量调整（0 - 100）
+  bgm: { // 背景音乐
+    src: string; // 背景音乐 文件地址（相对或绝对）
+    enter: number; // 背景音乐 淡入或淡出的毫秒数
+    volume: number; // 背景音乐 音量调整（0 - 100）
+  }
+  uiSe: string; // 用户界面音效 文件地址（相对或绝对）
   miniAvatar: string; // 小头像 文件地址（相对或绝对）
   GameVar: IGameVar; // 游戏内变量
   effects: Array<IEffect>; // 应用的变换
@@ -101,6 +108,7 @@ export interface IStageState {
   bgFilter: string;
   PerformList: Array<IRunPerform>; // 要启动的演出列表
   currentDialogKey: string; // 当前对话的key
+  live2dMotion: { target: string; motion: string }[];
   // 当前演出的延迟，用于做对话插演出！
   // currentPerformDelay:number
   currentConcatDialogPrev: string;

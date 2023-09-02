@@ -1,0 +1,21 @@
+export const __INFO = {
+  version: 'WebGAL 4.4.4',
+  contributors: [
+    { username: 'Mahiru', link: 'https://github.com/MakinoharaShoko' },
+    { username: 'Hoshinokinya', link: 'https://github.com/hshqwq' },
+    { username: 'Junbo Xiong', link: 'https://github.com/C6H5-NO2' },
+    { username: 'lykl', link: 'https://github.com/lykl' },
+    { username: 'SakuraSnow', link: 'https://github.com/sliyoxn' },
+    { username: 'bcqsd', link: 'https://github.com/bcqsd' },
+    { username: 'Yuji Sakai', link: 'https://github.com/generalfreed' },
+    { username: 'Iara', link: 'https://github.com/labiker' },
+    { username: '22', link: 'https://github.com/nini22P' },
+    { username: '德布罗煜', link: 'https://github.com/ch1ny' },
+    { username: 'Mike Zhou', link: 'https://github.com/mikezzb' },
+    { username: 'Murasame0721', link: 'https://github.com/Murasame0721' },
+    { username: 'loliko', link: 'https://github.com/loliko114514' },
+    { username: 'IdrilK', link: 'https://github.com/IdrilK' },
+    { username: 'callofblood', link: 'https://github.com/callofblood' },
+    { username: 'lyle', link: 'https://github.com/lylelove' },
+  ],
+};

@@ -1,7 +1,7 @@
-import { RUNTIME_GAMEPLAY } from '@/Core/runtime/gamePlay';
+import { WebGAL } from '@/main';
 
 export function generateUniversalSoftOffAnimationObj(targetKey: string, duration: number) {
-  const target = RUNTIME_GAMEPLAY.pixiStage!.getStageObjByKey(targetKey);
+  const target = WebGAL.gameplay.pixiStage!.getStageObjByKey(targetKey);
 
   // 先设置一个通用的初态
 
@@ -24,7 +24,7 @@ export function generateUniversalSoftOffAnimationObj(targetKey: string, duration
   function tickerFunc(delta: number) {
     if (target) {
       const sprite = target.pixiContainer;
-      const baseDuration = RUNTIME_GAMEPLAY.pixiStage!.frameDuration;
+      const baseDuration = WebGAL.gameplay.pixiStage!.frameDuration;
       const currentAddOplityDelta = (duration / baseDuration) * delta;
       const decreasement = 1 / currentAddOplityDelta;
       if (sprite.alpha > 0) {

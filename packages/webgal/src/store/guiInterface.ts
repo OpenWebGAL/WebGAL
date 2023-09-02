@@ -21,15 +21,20 @@ export interface IGuiState {
   showBacklog: boolean;
   titleBgm: string; // 标题背景音乐
   titleBg: string; // 标题背景图片
+  logoImage: string;
   showExtra: boolean;
   showGlobalDialog: boolean;
   showPanicOverlay: boolean;
   defaultLanguage: language|null;
+  isEnterGame: boolean;
 }
 
-export type componentsVisibility = Pick<IGuiState, Exclude<keyof IGuiState, 'currentMenuTag' | 'titleBg' | 'titleBgm'>>;
+export type componentsVisibility = Pick<
+  IGuiState,
+  Exclude<keyof IGuiState, 'currentMenuTag' | 'titleBg' | 'titleBgm' | 'logoImage'>
+>;
 // 标题资源
-export type GuiAsset = Pick<IGuiState, 'titleBgm' | 'titleBg'>;
+export type GuiAsset = Pick<IGuiState, 'titleBgm' | 'titleBg' | 'logoImage'>;
 
 export interface IGuiStore {
   GuiState: IGuiState;

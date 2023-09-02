@@ -4,12 +4,12 @@
  */
 import { sceneFetcher } from '../../controller/scene/sceneFetcher';
 import { sceneParser } from '../../parser/sceneParser';
-import { RUNTIME_SETTLED_SCENES } from '../../runtime/etc';
 import { logger } from '@/Core/util/etc/logger';
+import { WebGAL } from '@/main';
 
 export const scenePrefetcher = (sceneList: Array<string>): void => {
   for (const e of sceneList) {
-    if (!RUNTIME_SETTLED_SCENES.includes(e)) {
+    if (!WebGAL.sceneManager.settledScenes.includes(e)) {
       logger.info(`现在预加载场景${e}`);
       sceneFetcher(e).then((r) => {
         sceneParser(r, e, e);

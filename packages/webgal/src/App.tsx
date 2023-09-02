@@ -1,9 +1,10 @@
 import Title from './Components/UI/Title/Title';
+import Logo from './Components/UI/Logo/Logo';
 import { useEffect } from 'react';
 import { initializeScript } from './Core/initializeScript';
 import Menu from './Components/UI/Menu/Menu';
 import { Stage } from './Components/Stage/Stage';
-import { BottomControlPanel } from './Components/UI/BottomControlPanel/ButtomControlPanel';
+import { BottomControlPanel } from './Components/UI/BottomControlPanel/BottomControlPanel';
 import { Backlog } from './Components/UI/Backlog/Backlog';
 import { Provider } from 'react-redux';
 import { webgalStore } from './store/store';
@@ -29,6 +30,7 @@ function App() {
         <BottomControlPanelFilm />
         <Backlog />
         <Title />
+        {/* <Logo /> */}
         <Extra />
         <Menu />
         <GlobalDialog />

@@ -1,6 +1,7 @@
-import { IBacklogItem, sceneEntry } from '@/Core/runtime/runtimeInterface';
 import { IStageState } from './stageInterface';
 import { language } from '@/config/language';
+import { IBacklogItem } from '@/Core/Modules/backlog';
+import { ISceneEntry } from '@/Core/Modules/scene';
 
 /**
  * 播放速度的枚举类型
@@ -32,6 +33,8 @@ export interface IOptionData {
   textSize: textSize;
   vocalVolume: number; // 语音音量
   bgmVolume: number; // 背景音乐音量
+  seVolume: number; // 音效音量
+  uiSeVolume: number; // 用户界面音效音量
   slPage: number; // 存读档界面所在页面
   textboxFont: textFont;
   language: language;
@@ -43,7 +46,7 @@ export interface IOptionData {
  */
 export interface ISaveScene {
   currentSentenceId: number; // 当前语句ID
-  sceneStack: Array<sceneEntry>; // 场景栈
+  sceneStack: Array<ISceneEntry>; // 场景栈
   sceneName: string; // 场景名称
   sceneUrl: string; // 场景url
 }

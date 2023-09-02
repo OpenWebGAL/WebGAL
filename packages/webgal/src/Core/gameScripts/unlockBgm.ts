@@ -1,10 +1,10 @@
 import { ISentence } from '@/Core/controller/scene/sceneInterface';
-import { IPerform } from '@/Core/controller/perform/performInterface';
+import { IPerform } from '@/Core/Modules/perform/performInterface';
 import { webgalStore } from '@/store/store';
 import { unlockBgmInUserData } from '@/store/userDataReducer';
 import localforage from 'localforage';
-import { RUNTIME_GAME_INFO } from '@/Core/runtime/etc';
 import { logger } from '@/Core/util/etc/logger';
+import { WebGAL } from '@/main';
 
 /**
  * 解锁bgm
@@ -25,11 +25,10 @@ export const unlockBgm = (sentence: ISentence): IPerform => {
   logger.info(`解锁BGM：${name}，路径：${url}，所属系列：${series}`);
   webgalStore.dispatch(unlockBgmInUserData({ name, url, series }));
   const userDataState = webgalStore.getState().userData;
-  localforage.setItem(RUNTIME_GAME_INFO.gameKey, userDataState).then(() => {});
+  localforage.setItem(WebGAL.gameKey, userDataState).then(() => {});
   return {
     performName: 'none',
     duration: 0,
-    isOver: false,
     isHoldOn: false,
     stopFunction: () => {},
     blockingNext: () => false,

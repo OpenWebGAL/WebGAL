@@ -51,7 +51,7 @@ export const BottomControlPanelFilm = () => {
                   if (VocalControl !== null) {
                     VocalControl.currentTime = 0;
                     VocalControl.pause();
-                    VocalControl.play();
+                    VocalControl?.play();
                   }
                 }}
               >

@@ -50,6 +50,14 @@ const en = {
                 },
               },
             },
+            about: {
+              title: 'About WebGAL',
+              subTitle: 'WebGAL: An Open-Source Web-Based Visual Novel Engine',
+              version: 'Version',
+              source: 'Source Code Repository',
+              contributors: 'Contributors',
+              website: 'Website',
+            },
           },
         },
         display: {
@@ -74,7 +82,7 @@ const en = {
             textFont: {
               title: 'Text Font',
               options: {
-                siYuanSimSun: 'Source Han Serif',
+                siYuanSimSun: 'LXGW WenKai',
                 SimHei: 'Sans',
               },
             },
@@ -90,6 +98,8 @@ const en = {
             volumeMain: { title: 'Main Volume' },
             vocalVolume: { title: 'Vocal Volume' },
             bgmVolume: { title: 'BGM Volume' },
+            seVolume: { title: 'Sound Effects Volume' },
+            uiSeVolume: { title: 'UI Sound Effects Volume' },
           },
         },
         // language: {
