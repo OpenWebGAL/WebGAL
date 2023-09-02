@@ -6,6 +6,7 @@ import { ITransform } from '@/store/stageInterface';
 export const RUNTIME_GAME_INFO = {
   gameName: '',
   gameKey: '',
+  defaultLanguage: '',
 };
 
 // export const RUNTIME_ETC = {

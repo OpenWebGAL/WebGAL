@@ -17,7 +17,7 @@ export default function useLanguage() {
   const dispatch = useDispatch();
 
   return (_lang?: language) => {
-    const lang = _lang ?? userDataRef.current?.optionData.language ?? language.zhCn;
+    const lang = _lang ?? userDataRef.current?.optionData.language ?? 0;
 
     const languageName = getLanguageName(lang);
     i18n.changeLanguage(languageName);

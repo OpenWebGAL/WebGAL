@@ -4,9 +4,10 @@ import { assetSetter, fileType } from '../gameAssetsAccess/assetSetter';
 import { RUNTIME_GAME_INFO } from '../../runtime/etc';
 import { getStorage } from '../../controller/storage/storageController';
 import { webgalStore } from '@/store/store';
-import { setGuiAsset } from '@/store/GUIReducer';
+import { setDefaultLanguage, setGuiAsset } from '@/store/GUIReducer';
 import { initKey } from '@/hooks/useHotkey';
 import { setEbg } from '@/Core/util/setEbg';
+import { language } from '@/config/language';
 
 declare global {
   interface Window {
@@ -46,6 +47,9 @@ export const infoFetcher = (url: string) => {
         if (e[0] === 'Game_key') {
           RUNTIME_GAME_INFO.gameKey = e[1];
           getStorage();
+        }
+        if (e[0] === 'Default_language') {
+          dispatch(setDefaultLanguage(language[e[1] as unknown as language] as unknown as language));
         }
       });
     }
