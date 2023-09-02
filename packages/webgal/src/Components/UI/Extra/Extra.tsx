@@ -6,8 +6,10 @@ import { CloseSmall } from '@icon-park/react';
 import { ExtraBgm } from '@/Components/UI/Extra/ExtraBgm';
 import { ExtraCg } from './ExtraCg';
 import useTrans from '@/hooks/useTrans';
+import useSoundEffect from '@/hooks/useSoundEffect';
 
 export function Extra() {
+  const { playSeEnterCloseButton, playSeClickCloseButton } = useSoundEffect();
   const showExtra = useSelector((state: RootState) => state.GUI.showExtra);
   const dispatch = useDispatch();
 
@@ -21,7 +23,9 @@ export function Extra() {
               className={styles.extra_top_icon}
               onClick={() => {
                 dispatch(setVisibility({ component: 'showExtra', visibility: false }));
+                playSeClickCloseButton();
               }}
+              onMouseEnter={playSeEnterCloseButton}
               theme="outline"
               size="4em"
               fill="#fff"

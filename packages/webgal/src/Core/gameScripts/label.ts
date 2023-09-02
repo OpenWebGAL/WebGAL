@@ -1,5 +1,5 @@
 import { ISentence } from '@/Core/controller/scene/sceneInterface';
-import { IPerform } from '@/Core/controller/perform/performInterface';
+import { IPerform } from '@/Core/Modules/perform/performInterface';
 
 /**
  * 标签代码，什么也不做
@@ -9,7 +9,6 @@ export const label = (sentence: ISentence): IPerform => {
   return {
     performName: 'none',
     duration: 0,
-    isOver: false,
     isHoldOn: false,
     stopFunction: () => {},
     blockingNext: () => false,

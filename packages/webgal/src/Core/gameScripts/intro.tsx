@@ -1,12 +1,12 @@
 import { ISentence } from '@/Core/controller/scene/sceneInterface';
-import { IPerform } from '@/Core/controller/perform/performInterface';
+import { IPerform } from '@/Core/Modules/perform/performInterface';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import styles from '../../Components/Stage/FullScreenPerform/fullScreenPerform.module.scss';
-import { webgalEventBus } from '@/Core/runtime/eventBus';
-import { unmountPerform } from '@/Core/controller/perform/unmountPerform';
 import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
-
+import { PerformController } from '@/Core/Modules/perform/performController';
+import { WebGAL } from '@/main';
+import { logger } from '@/Core/util/etc/logger';
 /**
  * 显示一小段黑屏演示
  * @param sentence
@@ -17,12 +17,70 @@ export const intro = (sentence: ISentence): IPerform => {
    */
 
   const performName = `introPerform${Math.random().toString()}`;
+  let fontSize: string | undefined;
+  let backgroundColor: any = 'rgba(0, 0, 0, 1)';
+  let color: any = 'rgba(255, 255, 255, 1)';
+  const animationClass:any = (type: string, length: number = 0) => {
+    switch (type) {
+      case "fadeIn":
+        return styles.fadeIn;
+      case "slideIn":
+        return styles.slideIn;
+      case "typingEffect":
+        return `${styles.typingEffect} ${length}`;
+      case "pixelateEffect":
+          return styles.pixelateEffect;
+      case "revealAnimation":
+          return styles.revealAnimation;
+      default:
+        return styles.fadeIn;
+    }
+};
+  let chosenAnimationClass = styles.fadeIn;
+  let delayTime:number = 1500;
+
+  for (const e of sentence.args) {
+    if (e.key === 'backgroundColor') {
+      backgroundColor = e.value || 'rgba(0, 0, 0, 1)';
+    }
+    if (e.key === 'fontColor') {
+      color = e.value || 'rgba(255, 255, 255, 1)';
+    }
+    if (e.key === 'fontSize') {
+      switch (e.value) {
+        case 'small':
+          fontSize = '280%';
+          break;
+        case 'medium':
+          fontSize = '350%';
+          break;
+        case 'large':
+          fontSize = '420%';
+          break;
+      }
+    }
+    if (e.key === 'animation') {
+        chosenAnimationClass = animationClass(e.value);
+    }
+    if (e.key === 'delayTime') {
+      const parsedValue = parseInt(e.value.toString(), 10);
+      delayTime = isNaN(parsedValue) ? delayTime : parsedValue;
+    }
+  }
+
+  const introContainerStyle = {
+    background: backgroundColor,
+    color: color,
+    fontSize: fontSize || '350%',
+    width: '100%',
+    height: '100%',
+  };
 
   let timeout = setTimeout(() => {});
   const toNextIntroElement = () => {
     const introContainer = document.getElementById('introContainer');
     if (introContainer) {
-      const children = introContainer.childNodes[0].childNodes as any;
+      const children = introContainer.childNodes[0].childNodes[0].childNodes as any;
       const len = children.length;
       children.forEach((node: HTMLDivElement, index: number) => {
         const currentDelay = Number(node.style.animationDelay.split('ms')[0]);
@@ -32,13 +90,13 @@ export const intro = (sentence: ISentence): IPerform => {
         if (index === len - 1) {
           if (currentDelay === 0) {
             clearTimeout(timeout);
-            unmountPerform(performName);
+            WebGAL.gameplay.performController.unmountPerform(performName);
             // 卸载函数发生在 nextSentence 生效前，所以不需要做下一行的操作。
             // setTimeout(nextSentence, 0);
           } else {
             clearTimeout(timeout);
             timeout = setTimeout(() => {
-              unmountPerform(performName);
+              WebGAL.gameplay.performController.unmountPerform(performName);
               setTimeout(nextSentence, 0);
             }, currentDelay - 500);
           }
@@ -50,19 +108,23 @@ export const intro = (sentence: ISentence): IPerform => {
   /**
    * 接受 next 事件
    */
-  webgalEventBus.on('__NEXT', toNextIntroElement);
+  WebGAL.eventBus.on('__NEXT', toNextIntroElement);
 
   const introArray: Array<string> = sentence.content.split(/\|/);
   const showIntro = introArray.map((e, i) => (
     <div
       key={'introtext' + i + Math.random().toString()}
-      style={{ animationDelay: `${1500 * i}ms` }}
-      className={styles.introElement}
+      style={{ animationDelay: `${delayTime * i}ms` }}
+      className={chosenAnimationClass}
     >
       {e}
     </div>
   ));
-  const intro = <div>{showIntro}</div>;
+  const intro = (
+    <div style={introContainerStyle}>
+      <div style={{ padding: '3em 4em 3em 4em' }}>{showIntro}</div>
+    </div>
+  );
   ReactDOM.render(intro, document.getElementById('introContainer'));
   const introContainer = document.getElementById('introContainer');
 
@@ -71,15 +133,14 @@ export const intro = (sentence: ISentence): IPerform => {
   }
   return {
     performName,
-    duration: 1000 + 1500 * introArray.length,
-    isOver: false,
+    duration: 1000 + delayTime * introArray.length,
     isHoldOn: false,
     stopFunction: () => {
       const introContainer = document.getElementById('introContainer');
       if (introContainer) {
         introContainer.style.display = 'none';
       }
-      webgalEventBus.off('__NEXT', toNextIntroElement);
+      WebGAL.eventBus.off('__NEXT', toNextIntroElement);
     },
     blockingNext: () => true,
     blockingAuto: () => true,

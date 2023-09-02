@@ -1,5 +1,4 @@
-import { IConfigInterface } from '@/Core/config/configInterface';
-import { commandType } from '@/Core/controller/scene/sceneInterface';
+import { commandType, ISentence } from '@/Core/controller/scene/sceneInterface';
 import { intro } from '@/Core/gameScripts/intro';
 import { changeBg } from '@/Core/gameScripts/changeBg';
 import { changeFigure } from '@/Core/gameScripts/changeFigure';
@@ -27,6 +26,15 @@ import { setAnimation } from '@/Core/gameScripts/setAnimation';
 import { playEffect } from '@/Core/gameScripts/playEffect';
 import { setTempAnimation } from '@/Core/gameScripts/setTempAnimation';
 import { comment } from '@/Core/gameScripts/comment';
+import { IPerform } from '@/Core/Modules/perform/performInterface';
+import { setTransform } from '@/Core/gameScripts/setTransform';
+import { setTransition } from '@/Core/gameScripts/setTransition';
+
+interface IConfigInterface {
+  scriptString: string;
+  scriptType: commandType;
+  scriptFunction: (sentence: ISentence) => IPerform;
+}
 
 export const SCRIPT_CONFIG: IConfigInterface[] = [
   { scriptString: 'intro', scriptType: commandType.intro, scriptFunction: intro },
@@ -61,6 +69,8 @@ export const SCRIPT_CONFIG: IConfigInterface[] = [
   { scriptString: 'playEffect', scriptType: commandType.playEffect, scriptFunction: playEffect },
   { scriptString: 'setTempAnimation', scriptType: commandType.setTempAnimation, scriptFunction: setTempAnimation },
   { scriptString: '__commment', scriptType: commandType.comment, scriptFunction: comment },
+  { scriptString: 'setTransform', scriptType: commandType.setTransform, scriptFunction: setTransform },
+  { scriptString: 'setTransition', scriptType: commandType.setTransition, scriptFunction: setTransition },
 ];
 export const ADD_NEXT_ARG_LIST = [
   commandType.bgm,
@@ -75,4 +85,5 @@ export const ADD_NEXT_ARG_LIST = [
   commandType.filmMode,
   commandType.playEffect,
   commandType.comment,
+  commandType.setTransition,
 ];

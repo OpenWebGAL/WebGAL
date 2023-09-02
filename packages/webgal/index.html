@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="zh-Hans">
 <head>
-  <meta charset="UTF-8" />
-  <link rel="icon" type="image/x-icon" href="/src/favicon.ico" />
+  <meta charset="UTF-8"/>
+  <link rel="icon" type="image/x-icon" href="/src/favicon.ico"/>
   <!--    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>-->
   <title>WebGAL</title>
   <meta name="viewport"
-        content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no" />
+        content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no"/>
 </head>
 <body>
 <!--快速显示落地页，让用户感知不到加载的过程-->
@@ -91,22 +91,105 @@
 <div id="root"></div>
 <script>
   /**
+   * 在窗口大小改变时进行强制缩放
+   */
+  function resize() {
+    const targetHeight = 1440;
+    const targetWidth = 2560;
+
+    const h = window.innerHeight; // 窗口高度
+    const w = window.innerWidth; // 窗口宽度
+    const zoomH = h / targetHeight; // 以窗口高度为基准的变换比
+    const zoomW = w / targetWidth; // 以窗口宽度为基准的变换比
+    const zoomH2 = w / targetHeight; // 竖屏时以窗口高度为基础的变换比
+    const zoomW2 = h / targetWidth; // 竖屏时以窗口宽度为基础的变换比
+    let mh = (targetHeight - h) / 2; // y轴移动距离
+    let mw = (targetWidth - w) / 2; // x轴移动距离
+    let mh2os = targetWidth / 2 - w / 2; // 竖屏时 y轴移动距离
+    let mw2os = targetHeight / 2 - h / 2; // 竖屏时 x轴移动距离
+    let transform = '';
+    let ebgTransform = '';
+    const root = document.getElementById('root'); // 获取根元素
+    const title = document.getElementById('Title_enter_page');
+    const ebg = document.getElementById('ebg');
+    const elements = [root, title];
+    if (w > h) {
+      const ebg = document.getElementById('ebg');
+      if (ebg) {
+        ebg.style.height = `100vh`;
+        ebg.style.width = `100vw`;
+        ebgTransform = '';
+      }
+      mw = -mw;
+      mh = -mh;
+      if (w * (9 / 16) >= h) {
+        transform = `translate(${mw}px, ${mh}px) scale(${zoomH},${zoomH})`;
+      }
+      if (w * (9 / 16) < h) {
+        transform = `translate(${mw}px, ${mh}px) scale(${zoomW},${zoomW})`;
+      }
+    } else {
+      /**
+       * 旋转
+       */
+      if (ebg) {
+        ebg.style.height = `${targetHeight}px`;
+        ebg.style.width = `${targetWidth}px`;
+      }
+      mw2os = -mw2os;
+      if (h * (9 / 16) >= w) {
+        ebgTransform = `rotate(90deg) translate(${mw2os}px, ${mh2os}px) scale(${zoomH2 * 1.75},${zoomH2 * 1.75})`;
+        transform = `rotate(90deg) translate(${mw2os}px, ${mh2os}px) scale(${zoomH2},${zoomH2})`;
+      }
+      if (h * (9 / 16) < w) {
+        ebgTransform = `rotate(90deg) translate(${mw2os}px, ${mh2os}px) scale(${zoomW2 * 1.75},${zoomW2 * 1.75})`;
+        transform = `rotate(90deg) translate(${mw2os}px, ${mh2os}px) scale(${zoomW2},${zoomW2})`;
+      }
+    }
+    if (ebg) {
+      ebg.style.transform = ebgTransform;
+    }
+    for (const element of elements) {
+      if (element) {
+        element.style.transform = transform;
+      }
+    }
+  }
+
+  resize();
+  window.onload = resize;
+  window.onresize = resize;
+  // 监听键盘 F11 事件，全屏时触发页面调整
+  document.onkeydown = function (event) {
+    const e = event;
+    if (e && e.key === 'F11') {
+      setTimeout(() => {
+        resize();
+      }, 100);
+    }
+  };
+
+</script>
+<script>
+  /**
    * 注册 Service Worker
    */
   const u = navigator.userAgent;
   const isIOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); // 判断是否是 iOS终端
   if ("serviceWorker" in navigator && !isIOS) {
-    navigator.serviceWorker.register("./webgal-serviceworker.js", { scope: "./assets" }).then(function(reg) {
+    navigator.serviceWorker.register("./webgal-serviceworker.js").then(function (reg) {
       // registration worked
       console.log("Registration succeeded. Scope is " + reg.scope);
-    }).catch(function(error) {
+    }).catch(function (error) {
       // registration failed
       console.log("Registration failed with " + error);
     });
   }
 </script>
 <script type="module" src="/src/main.tsx"></script>
-<script type="module" src="/src/Core/util/resize.ts"></script>
+<!--<script type="module" src="/src/Core/util/resize.ts"></script>-->
+<!--<script src="/src/assets/lib/l2d.js"></script>-->
+<!--<script src="/src/assets/lib/live2dcubismcore.min.js"></script>-->
 <script>
   let enterPromise = new Promise(res => window.enterPromise = res);
   let renderPromise = new Promise(res => window.renderPromise = res);
@@ -122,6 +205,12 @@
     const target = document.getElementById("enter_game_target");
     if (target) {
       target.dispatchEvent(event);
+    }
+    if (event) {
+      const logo = document.getElementById("logo_target");
+      if (logo) {
+        logo.style.display = "contents";
+      }
     }
   });
 

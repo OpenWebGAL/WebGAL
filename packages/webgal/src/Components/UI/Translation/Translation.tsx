@@ -13,7 +13,7 @@ export default function Translation() {
     if (!lang) {
       setIsShowSelectLanguage(true);
     } else {
-      setLanguage(Number(window?.localStorage.getItem('lang')));
+      setLanguage(Number(window?.localStorage.getItem('lang')), false);
     }
   }, []);
 
@@ -29,14 +29,15 @@ export default function Translation() {
           <div className={s.langWrapper}>
             <div className={s.lang}>LANGUAGE SELECT</div>
             <div className={s.langSelect}>
-              {
-                Object.keys(languages).map(key =>
-                  <div className={s.langSelectButton}
-                    onClick={() => setLanguage(language[key as unknown as language] as unknown as language)}>
-                      {languages[key]}
-                    </div>
-                )
-              }
+              {Object.keys(languages).map((key) => (
+                <div
+                  key={key}
+                  className={s.langSelectButton}
+                  onClick={() => setLang(language[key as unknown as language] as unknown as language)}
+                >
+                  {languages[key]}
+                </div>
+              ))}
             </div>
           </div>
         </div>

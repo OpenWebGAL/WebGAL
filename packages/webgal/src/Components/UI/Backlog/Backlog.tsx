@@ -1,5 +1,4 @@
 import styles from './backlog.module.scss';
-import { RUNTIME_CURRENT_BACKLOG } from '@/Core/runtime/backlog';
 import { CloseSmall, Return, VolumeNotice } from '@icon-park/react';
 import { jumpFromBacklog } from '@/Core/controller/storage/jumpFromBacklog';
 import { useDispatch, useSelector } from 'react-redux';
@@ -8,10 +7,15 @@ import { setVisibility } from '@/store/GUIReducer';
 import { logger } from '@/Core/util/etc/logger';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import useTrans from '@/hooks/useTrans';
+import { WebGAL } from '@/main';
+import { splitChars } from '@/Components/Stage/TextBox/TextBox';
+import useSoundEffect from '@/hooks/useSoundEffect';
 
 export const Backlog = () => {
   const t = useTrans('gaming.');
   // logger.info('Backlog render');
+  const { playSeClickBacklogJumpButton, playSeEnter, playSeClickCloseButton, playSeEnterCloseButton } =
+    useSoundEffect();
   const GUIStore = useSelector((state: RootState) => state.GUI);
   const dispatch = useDispatch();
   const iconSize = '0.8em';
@@ -22,22 +26,32 @@ export const Backlog = () => {
   const backlogList = useMemo<any>(() => {
     let backlogs = [];
     // logger.info('backlogList render');
-    for (let i = 0; i < RUNTIME_CURRENT_BACKLOG.length; i++) {
-      const backlogItem = RUNTIME_CURRENT_BACKLOG[i];
+    for (let i = 0; i < WebGAL.backlogManager.getBacklog().length; i++) {
+      const backlogItem = WebGAL.backlogManager.getBacklog()[i];
+      const showTextArray = splitChars(backlogItem.currentStageState.showText);
+      const showTextElementList = showTextArray.map((e, index) => {
+        if (e === '<br />') {
+          return <br key={`br${index}`} />;
+        } else {
+          return e;
+        }
+      });
       const singleBacklogView = (
         <div
           className={styles.backlog_item}
-          style={{ animationDelay: `${20 * (RUNTIME_CURRENT_BACKLOG.length - i)}ms` }}
+          style={{ animationDelay: `${20 * (WebGAL.backlogManager.getBacklog().length - i)}ms` }}
           key={'backlogItem' + backlogItem.currentStageState.showText + backlogItem.saveScene.currentSentenceId}
         >
           <div className={styles.backlog_func_area}>
             <div className={styles.backlog_item_button_list}>
               <div
                 onClick={(e) => {
+                  playSeClickBacklogJumpButton();
                   jumpFromBacklog(i);
                   e.preventDefault();
                   e.stopPropagation();
                 }}
+                onMouseEnter={playSeEnter}
                 className={styles.backlog_item_button_element}
               >
                 <Return theme="outline" size={iconSize} fill="#ffffff" strokeWidth={3} />
@@ -45,6 +59,7 @@ export const Backlog = () => {
               {backlogItem.currentStageState.vocal ? (
                 <div
                   onClick={() => {
+                    playSeClickBacklogJumpButton();
                     // 获取到播放 backlog 语音的元素
                     const backlog_audio_element: any = document.getElementById('backlog_audio_play_element_' + i);
                     if (backlog_audio_element) {
@@ -52,9 +67,10 @@ export const Backlog = () => {
                       const userDataStore = webgalStore.getState().userData;
                       const mainVol = userDataStore.optionData.volumeMain;
                       backlog_audio_element.volume = mainVol * 0.01 * userDataStore.optionData.vocalVolume * 0.01;
-                      backlog_audio_element.play();
+                      backlog_audio_element?.play();
                     }
                   }}
+                  onMouseEnter={playSeEnter}
                   className={styles.backlog_item_button_element}
                 >
                   <VolumeNotice theme="outline" size={iconSize} fill="#ffffff" strokeWidth={3} />
@@ -64,7 +80,7 @@ export const Backlog = () => {
             <div className={styles.backlog_item_content_name}>{backlogItem.currentStageState.showName}</div>
           </div>
           <div className={styles.backlog_item_content}>
-            <span className={styles.backlog_item_content_text}>{backlogItem.currentStageState.showText}</span>
+            <span className={styles.backlog_item_content_text}>{showTextElementList}</span>
           </div>
           <audio id={'backlog_audio_play_element_' + i} src={backlogItem.currentStageState.vocal} />
         </div>
@@ -72,7 +88,10 @@ export const Backlog = () => {
       backlogs.unshift(singleBacklogView);
     }
     return backlogs;
-  }, [RUNTIME_CURRENT_BACKLOG[RUNTIME_CURRENT_BACKLOG.length - 1]?.saveScene?.currentSentenceId ?? 0]);
+  }, [
+    WebGAL.backlogManager.getBacklog()[WebGAL.backlogManager.getBacklog().length - 1]?.saveScene?.currentSentenceId ??
+      0,
+  ]);
   useEffect(() => {
     /* 切换为展示历史记录时触发 */
     if (GUIStore.showBacklog) {
@@ -117,9 +136,11 @@ export const Backlog = () => {
             <CloseSmall
               className={styles.backlog_top_icon}
               onClick={() => {
+                playSeClickCloseButton();
                 dispatch(setVisibility({ component: 'showBacklog', visibility: false }));
                 dispatch(setVisibility({ component: 'showTextBox', visibility: true }));
               }}
+              onMouseEnter={playSeEnterCloseButton}
               theme="outline"
               size="4em"
               fill="#ffffff"

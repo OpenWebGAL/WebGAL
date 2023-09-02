@@ -1,14 +1,14 @@
 import * as PIXI from 'pixi.js';
-import { RUNTIME_GAMEPLAY } from '@/Core/runtime/gamePlay';
 import { registerPerform } from '@/Core/util/pixiPerformManager/pixiPerformManager';
+import { WebGAL } from '@/main';
 
 const pixiRain = (rainSpeed: number, number: number) => {
   // 动画参数
   // 设置缩放的系数
   const scalePreset = 0.48;
 
-  const effectsContainer = RUNTIME_GAMEPLAY.pixiStage!.effectsContainer!;
-  const app = RUNTIME_GAMEPLAY.pixiStage!.currentApp!;
+  const effectsContainer = WebGAL.gameplay.pixiStage!.effectsContainer!;
+  const app = WebGAL.gameplay.pixiStage!.currentApp!;
   const container = new PIXI.Container();
   effectsContainer.addChild(container);
   // 创建纹理
@@ -69,7 +69,7 @@ const pixiRain = (rainSpeed: number, number: number) => {
       container.removeChild(container.children[0]);
     }
   }
-  RUNTIME_GAMEPLAY.pixiStage?.registerAnimation(
+  WebGAL.gameplay.pixiStage?.registerAnimation(
     { setStartState: () => {}, setEndState: () => {}, tickerFunc: ticker },
     'rain-Ticker',
   );

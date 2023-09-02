@@ -1,13 +1,12 @@
 import { ISentence } from '@/Core/controller/scene/sceneInterface';
-import { IPerform } from '@/Core/controller/perform/performInterface';
+import { IPerform } from '@/Core/Modules/perform/performInterface';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { RUNTIME_GAMEPLAY } from '@/Core/runtime/gamePlay';
-import { unmountPerform } from '@/Core/controller/perform/unmountPerform';
-import { getRandomPerformName } from '@/Core/controller/perform/getRandomPerformName';
 import styles from '../../Components/Stage/FullScreenPerform/fullScreenPerform.module.scss';
 import { webgalStore } from '@/store/store';
 import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
+import { getRandomPerformName, PerformController } from '@/Core/Modules/perform/performController';
+import { WebGAL } from '@/main';
 
 /**
  * 播放一段视频
@@ -21,11 +20,10 @@ export const playVideo = (sentence: ISentence): IPerform => {
     </div>,
     document.getElementById('videoContainer'),
   );
-
+  let isOver = false;
   return {
     performName: 'none',
     duration: 0,
-    isOver: false,
     isHoldOn: false,
     stopFunction: () => {},
     blockingNext: () => false,
@@ -68,7 +66,9 @@ export const playVideo = (sentence: ISentence): IPerform => {
               ReactDOM.render(<div />, document.getElementById('videoContainer'));
             },
             blockingNext: () => false,
-            blockingAuto: () => true,
+            blockingAuto: () => {
+              return !isOver;
+            },
             stopTimeout: undefined, // 暂时不用，后面会交给自动清除
             goNextWhenOver: true,
           };
@@ -88,14 +88,14 @@ export const playVideo = (sentence: ISentence): IPerform => {
               vocalElement.volume = vocalVol.toString();
             }
 
-            VocalControl.play();
+            VocalControl?.play();
           };
           VocalControl.onended = () => {
-            for (const e of RUNTIME_GAMEPLAY.performList) {
+            for (const e of WebGAL.gameplay.performController.performList) {
               if (e.performName === performInitName) {
-                e.isOver = true;
+                isOver = true;
                 e.stopFunction();
-                unmountPerform(e.performName);
+                WebGAL.gameplay.performController.unmountPerform(e.performName);
                 nextSentence();
               }
             }

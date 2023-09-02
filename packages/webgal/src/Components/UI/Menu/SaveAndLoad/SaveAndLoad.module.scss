@@ -21,17 +21,17 @@
   width: auto;
   height: 100%;
   font-size: 275%;
+  min-width: 350px;
   margin: 0 0 0 0.8em;
   padding: 0 0.8em 0 0.8em;
   box-sizing: border-box;
   //border-bottom: 4px solid #77428D;
   display: flex;
   justify-content: center;
+  align-items: center;
 }
 
 .Save_title_text {
-  height: 100%;
-  font-size: 125%;
   font-weight: bold;
   color: transparent;
   background: linear-gradient(135deg, #77428D 0%, #B28FCE 100%);
@@ -41,8 +41,6 @@
 
 
 .Load_title_text {
-  height: 100%;
-  font-size: 120%;
   font-weight: bold;
   color: transparent;
   background: linear-gradient(135deg, #005CAF 0%, #2EA9DF 100%);

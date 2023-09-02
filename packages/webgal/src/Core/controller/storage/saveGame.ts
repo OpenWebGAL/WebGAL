@@ -1,11 +1,10 @@
-import { RUNTIME_CURRENT_BACKLOG } from '../../runtime/backlog';
 import { logger } from '../../util/etc/logger';
 import { ISaveData } from '@/store/userDataInterface';
-import { RUNTIME_SCENE_DATA } from '../../runtime/sceneData';
 import { syncStorageFast } from './storageController';
 import { webgalStore } from '@/store/store';
 import { setUserData } from '@/store/userDataReducer';
 import cloneDeep from 'lodash/cloneDeep';
+import { WebGAL } from '@/main';
 
 /**
  * 保存游戏
@@ -29,7 +28,7 @@ export const saveGame = (index: number) => {
  */
 export function generateCurrentStageData(index: number) {
   const stageState = webgalStore.getState().stage;
-  const saveBacklog = cloneDeep(RUNTIME_CURRENT_BACKLOG);
+  const saveBacklog = cloneDeep(WebGAL.backlogManager.getBacklog());
 
   /**
    * 生成缩略图
@@ -38,10 +37,10 @@ export function generateCurrentStageData(index: number) {
   const canvas: HTMLCanvasElement = document.getElementById('pixiCanvas')! as HTMLCanvasElement;
   const canvas2 = document.createElement('canvas');
   const context = canvas2.getContext('2d');
-  canvas2.width = 640;
-  canvas2.height = 360;
-  context!.drawImage(canvas, 0, 0, 640, 360);
-  const urlToSave = canvas2.toDataURL('image/webp', 0.8);
+  canvas2.width = 480;
+  canvas2.height = 270;
+  context!.drawImage(canvas, 0, 0, 480, 270);
+  const urlToSave = canvas2.toDataURL('image/webp', 0.5);
   canvas2.remove();
   const saveData: ISaveData = {
     nowStageState: cloneDeep(stageState),
@@ -50,10 +49,10 @@ export function generateCurrentStageData(index: number) {
     saveTime: new Date().toLocaleDateString() + ' ' + new Date().toLocaleTimeString('chinese', { hour12: false }), // 保存时间
     // 场景数据
     sceneData: {
-      currentSentenceId: RUNTIME_SCENE_DATA.currentSentenceId, // 当前语句ID
-      sceneStack: cloneDeep(RUNTIME_SCENE_DATA.sceneStack), // 场景栈
-      sceneName: RUNTIME_SCENE_DATA.currentScene.sceneName, // 场景名称
-      sceneUrl: RUNTIME_SCENE_DATA.currentScene.sceneUrl, // 场景url
+      currentSentenceId: WebGAL.sceneManager.sceneData.currentSentenceId, // 当前语句ID
+      sceneStack: cloneDeep(WebGAL.sceneManager.sceneData.sceneStack), // 场景栈
+      sceneName: WebGAL.sceneManager.sceneData.currentScene.sceneName, // 场景名称
+      sceneUrl: WebGAL.sceneManager.sceneData.currentScene.sceneUrl, // 场景url
     },
     previewImage: urlToSave,
   };

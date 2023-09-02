@@ -50,6 +50,14 @@ const zhCn = {
                 },
               },
             },
+            about: {
+              title: '关于 WebGAL',
+              subTitle: 'WebGAL：开源的网页端视觉小说引擎',
+              version: '版本号',
+              source: '源代码仓库',
+              contributors: '贡献者',
+              website: '网站',
+            },
           },
         },
         display: {
@@ -74,7 +82,7 @@ const zhCn = {
             textFont: {
               title: '文本字体',
               options: {
-                siYuanSimSun: '思源宋体',
+                siYuanSimSun: '霞鹜文楷',
                 SimHei: '黑体',
               },
             },
@@ -90,6 +98,8 @@ const zhCn = {
             volumeMain: { title: '主音量' },
             vocalVolume: { title: '语音音量' },
             bgmVolume: { title: '背景音乐音量' },
+            seVolume: { title: '音效音量' },
+            uiSeVolume: { title: '用户界面音效音量' },
           },
         },
         // language: {

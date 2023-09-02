@@ -1,39 +1,40 @@
 import { ISentence } from '@/Core/controller/scene/sceneInterface';
-import { getRandomPerformName } from '@/Core/controller/perform/getRandomPerformName';
-import { RUNTIME_GAMEPLAY } from '@/Core/runtime/gamePlay';
-import { unmountPerform, unmountPerformForce } from '../controller/perform/unmountPerform';
 import { logger } from '@/Core/util/etc/logger';
 import { webgalStore } from '@/store/store';
 import { setStage } from '@/store/stageReducer';
-import { PerformController } from '@/Core/controller/perform/performController';
+import { WebGAL } from '@/main';
+import { getSentenceArgByKey } from '@/Core/util/getSentenceArg';
 
 /**
  * 播放一段语音
  * @param sentence 语句
  */
 export const playVocal = (sentence: ISentence) => {
-  logger.debug('单次播放语音');
+  logger.debug('play vocal');
   const performInitName = 'vocal-play';
-  let url = ''; // 获取语音的url
-  for (const e of sentence.args) {
-    if (e.key === 'vocal') {
-      url = e.value.toString();
-    }
-  }
+  const url = getSentenceArgByKey(sentence, 'vocal'); // 获取语音的url
+  const volume = getSentenceArgByKey(sentence, 'volume'); // 获取语音的音量比
+
   // 先停止之前的语音
   let VocalControl: any = document.getElementById('currentVocal');
-  unmountPerformForce('vocal-play');
+  WebGAL.gameplay.performController.unmountPerform('vocal-play', true);
   if (VocalControl !== null) {
     VocalControl.currentTime = 0;
     VocalControl.pause();
   }
   // 获得舞台状态
   webgalStore.dispatch(setStage({ key: 'vocal', value: url }));
+  let isOver = false;
   return {
     arrangePerformPromise: new Promise((resolve) => {
       // 播放语音
       setTimeout(() => {
         let VocalControl: any = document.getElementById('currentVocal');
+        // 设置语音音量
+        typeof volume === 'number' && volume >= 0 && volume <= 100
+          ? webgalStore.dispatch(setStage({ key: 'vocalVolume', value: volume }))
+          : webgalStore.dispatch(setStage({ key: 'vocalVolume', value: 100 }));
+        // 设置语音
         if (VocalControl !== null) {
           VocalControl.currentTime = 0;
           // 播放并作为一个特别演出加入
@@ -41,26 +42,29 @@ export const playVocal = (sentence: ISentence) => {
             performName: performInitName,
             duration: 1000 * 60 * 60,
             isOver: false,
-            isHoldOn: true,
+            isHoldOn: false,
             stopFunction: () => {
               // 演出已经结束了，所以不用播放语音了
               VocalControl.oncanplay = () => {};
               VocalControl.pause();
             },
             blockingNext: () => false,
-            blockingAuto: () => true,
+            blockingAuto: () => {
+              return !isOver;
+            },
+            skipNextCollect: true,
             stopTimeout: undefined, // 暂时不用，后面会交给自动清除
           };
-          PerformController.arrangeNewPerform(perform, sentence, false);
+          WebGAL.gameplay.performController.arrangeNewPerform(perform, sentence, false);
           VocalControl.oncanplay = () => {
-            VocalControl.play();
+            VocalControl?.play();
           };
           VocalControl.onended = () => {
-            for (const e of RUNTIME_GAMEPLAY.performList) {
+            for (const e of WebGAL.gameplay.performController.performList) {
               if (e.performName === performInitName) {
-                e.isOver = true;
+                isOver = true;
                 e.stopFunction();
-                unmountPerform(e.performName);
+                WebGAL.gameplay.performController.unmountPerform(e.performName);
               }
             }
           };
