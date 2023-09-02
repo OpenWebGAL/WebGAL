@@ -9,7 +9,7 @@ export default function Translation() {
   const setLanguage = useLanguage();
   const defaultLanguage = useSelector((state: RootState) => state.GUI.defaultLanguage);
   const [isShowSelectLanguage, setIsShowSelectLanguage] = useState(false);
-  
+
   const setLang = (langId: language) => {
     setIsShowSelectLanguage(false);
     setLanguage(langId);
@@ -24,7 +24,7 @@ export default function Translation() {
       setIsShowSelectLanguage(true);
   }, [defaultLanguage]);
 
-  return isShowSelectLanguage &&
+  return !isShowSelectLanguage ? null :
     <div className={s.trans}>
       <div className={s.langWrapper}>
         <div className={s.lang}>LANGUAGE SELECT</div>
