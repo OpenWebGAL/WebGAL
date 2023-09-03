@@ -2,7 +2,7 @@ import {commandType, IAsset} from "./interface/sceneInterface";
 import {fileType} from "./interface/assets";
 import {sceneParser} from "./sceneParser";
 import {ADD_NEXT_ARG_LIST, SCRIPT_CONFIG} from "./config/scriptConfig";
-import {configParser} from "@/configParser/configParser";
+import {configParser} from "./configParser/configParser";
 
 export default class SceneParser {
 
