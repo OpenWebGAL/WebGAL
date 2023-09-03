@@ -27,9 +27,9 @@ export function playBgm(url: string, enter = 0, volume = 100): void {
   logger.info('playing bgm' + url);
   if (url === '') {
     const lastSrc = webgalStore.getState().stage.bgm.src;
-    webgalStore.dispatch(setStage({ key: 'bgm', value: { 'src': lastSrc, 'enter': -enter, 'volume': volume}}));
+    webgalStore.dispatch(setStage({ key: 'bgm', value: { src: lastSrc, enter: -enter, volume: volume } }));
   } else {
-    webgalStore.dispatch(setStage({ key: 'bgm', value: { 'src': url, 'enter': enter, 'volume': volume}}));
+    webgalStore.dispatch(setStage({ key: 'bgm', value: { src: url, enter: enter, volume: volume } }));
   }
   const audioElement = document.getElementById('currentBgm') as HTMLAudioElement;
   if (audioElement.src) {
