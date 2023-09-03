@@ -8,6 +8,7 @@ import { setEbg } from '@/Core/util/setEbg';
 import { setLogo } from '@/Core/util/setLogo';
 import { WebGAL } from '@/main';
 import { initKey } from '@/Core/controller/storage/fastSaveLoad';
+import { WebgalParser } from '@/Core/parser/sceneParser';
 
 declare global {
   interface Window {
@@ -22,44 +23,45 @@ export const infoFetcher = (url: string) => {
   const GUIState = webgalStore.getState().GUI;
   const dispatch = webgalStore.dispatch;
   axios.get(url).then((r) => {
-    let gameConfigRaw: Array<string> = r.data.split('\n'); // 游戏配置原始数据
-    gameConfigRaw = gameConfigRaw.map((e) => e.split(';')[0]);
-    const gameConfig: Array<Array<string>> = gameConfigRaw.map((e) => e.split(':')); // 游戏配置数据
+    let gameConfigRaw: string = r.data;
+    const gameConfig = WebgalParser.parseConfig(gameConfigRaw);
     logger.info('获取到游戏信息', gameConfig);
     // 按照游戏的配置开始设置对应的状态
     if (GUIState) {
       gameConfig.forEach((e) => {
-        // 设置标题背景
-        if (e[0] === 'Title_img') {
-          const url: string = assetSetter(e[1], fileType.background);
-          dispatch(setGuiAsset({ asset: 'titleBg', value: url }));
-          setEbg(url);
-        }
-        if (e[0] === 'LogoImage') {
-          const logoList: any = e[1].split(' ');
-          let urlList = '';
-          for (let i = 0; i < logoList.length; i++) {
-            let url: string = assetSetter(logoList[i], fileType.background);
-            if (i + 1 === logoList.length) {
-              urlList += url;
-            } else {
-              urlList += url + ' ';
-            }
+        const { command, args } = e;
+
+        switch (command) {
+          case 'Title_img': {
+            const titleUrl = assetSetter(args.join(''), fileType.background);
+            dispatch(setGuiAsset({ asset: 'titleBg', value: titleUrl }));
+            setEbg(titleUrl);
+            break;
           }
-          dispatch(setGuiAsset({ asset: 'logoImage', value: urlList }));
-        }
-        // 设置标题背景音乐
-        if (e[0] === 'Title_bgm') {
-          const url: string = assetSetter(e[1], fileType.bgm);
-          dispatch(setGuiAsset({ asset: 'titleBgm', value: url }));
-        }
-        if (e[0] === 'Game_name') {
-          WebGAL.gameName = e[1];
-          document.title = e[1];
-        }
-        if (e[0] === 'Game_key') {
-          WebGAL.gameKey = e[1];
-          getStorage();
+
+          case 'LogoImage': {
+            const logoUrlList = args.map((url) => assetSetter(url, fileType.background)).join(' ');
+            dispatch(setGuiAsset({ asset: 'logoImage', value: logoUrlList }));
+            break;
+          }
+
+          case 'Title_bgm': {
+            const bgmUrl = assetSetter(args[0], fileType.bgm);
+            dispatch(setGuiAsset({ asset: 'titleBgm', value: bgmUrl }));
+            break;
+          }
+
+          case 'Game_name': {
+            WebGAL.gameName = args[0];
+            document.title = args[0];
+            break;
+          }
+
+          case 'Game_key': {
+            WebGAL.gameKey = args[0];
+            getStorage();
+            break;
+          }
         }
       });
     }
