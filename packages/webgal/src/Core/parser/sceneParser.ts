@@ -12,9 +12,10 @@ import SceneParser from 'webgal-parser';
  * @param sceneUrl 场景url
  * @return {IScene} 解析后的场景
  */
+export const WebgalParser = new SceneParser(assetsPrefetcher, assetSetter, ADD_NEXT_ARG_LIST, SCRIPT_CONFIG);
+
 export const sceneParser = (rawScene: string, sceneName: string, sceneUrl: string): IScene => {
-  const parser = new SceneParser(assetsPrefetcher, assetSetter, ADD_NEXT_ARG_LIST, SCRIPT_CONFIG);
-  const parsedScene = parser.parse(rawScene, sceneName, sceneUrl);
+  const parsedScene = WebgalParser.parse(rawScene, sceneName, sceneUrl);
   logger.info(`解析场景：${sceneName}，数据为：`, parsedScene);
   return parsedScene;
 };
