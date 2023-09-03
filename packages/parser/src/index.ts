@@ -2,7 +2,7 @@ import {commandType, IAsset} from "./interface/sceneInterface";
 import {fileType} from "./interface/assets";
 import {sceneParser} from "./sceneParser";
 import {ADD_NEXT_ARG_LIST, SCRIPT_CONFIG} from "./config/scriptConfig";
-import {configParser} from "./configParser/configParser";
+import {configParser, WebgalConfig} from "./configParser/configParser";
 
 export default class SceneParser {
 
@@ -27,6 +27,15 @@ export default class SceneParser {
 
   parseConfig(configText: string) {
     return configParser(configText)
+  }
+
+  stringifyConfig(config: WebgalConfig) {
+    return config
+      .reduce(
+        (previousValue, curr) =>
+          (previousValue + `${curr.command}:${curr.args.join('|')}${curr.options.length <= 0 ? '' : curr.options.reduce((p, c) => (p + ' -' + c.key + '=' + c.value), '')};\n`),
+        ''
+      )
   }
 }
 

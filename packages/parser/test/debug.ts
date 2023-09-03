@@ -21,6 +21,7 @@ Title_bgm:s_Title.mp3;
 Title_logos: 1.png | 2.png | Image Logo.png| -show -active=false -add=op! -count=3;This is a fake config, do not reference anything.
   `)
   console.log(configFesult)
+  console.log(parser.stringifyConfig(configFesult))
 }
 
 debug();
