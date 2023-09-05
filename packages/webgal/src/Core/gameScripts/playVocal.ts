@@ -31,12 +31,16 @@ export const playVocal = (sentence: ISentence) => {
   for (const e of sentence.args) {
     if (e.key === 'left' && e.value === true) {
       pos = 'left';
+      key = 'fig-left';
     }
     if (e.key === 'right' && e.value === true) {
       pos = 'right';
+      key = 'fig-right';
     }
     if (e.key === 'center' && e.value === true) {
       pos = 'center';
+      key = 'fig-center';
+
     }
     if (e.key === 'figureId') {
       key = `${e.value.toString()}`
@@ -48,9 +52,9 @@ export const playVocal = (sentence: ISentence) => {
   webgalStore.dispatch(setStage({ key: 'figureId',  value: key }));
   webgalStore.dispatch(setStage({ key: 'figurePos',  value: pos }));
 
-    // blinkAnimation
-  if(currentStageState.animationFlag === "on"){
-
+  const animationItem = currentStageState.figureAssociatedAnimation.find((flag) => flag.animationFlag === "on");
+  // blinkAnimation
+  if (animationItem){
     const foundFigure = currentStageState.freeFigure.find(figure => figure.key === key);
     if (foundFigure) {
       pos = foundFigure.basePosition;
@@ -62,23 +66,21 @@ export const playVocal = (sentence: ISentence) => {
 
     function blinkAnimation() {
       if (isBlinking || (animationEndTime && Date.now() > animationEndTime)) return;
-    
-      isBlinking = true;
-      WebGAL.gameplay.pixiStage?.performBlinkAnimation(key, currentStageState, 'closed', pos);
-    
-      setTimeout(() => {
-        WebGAL.gameplay.pixiStage?.performBlinkAnimation(key, currentStageState, 'open', pos);
-        isBlinking = false;
-        const nextBlinkTime = Math.random() * 300 + 3500;
-        setTimeout(blinkAnimation, nextBlinkTime);
-      }, 200);
+      if (animationItem !== undefined) {
+        isBlinking = true;
+        WebGAL.gameplay.pixiStage?.performBlinkAnimation(key, animationItem, 'closed', pos);
+        setTimeout(() => {
+          WebGAL.gameplay.pixiStage?.performBlinkAnimation(key, animationItem, 'open', pos);
+          isBlinking = false;
+          const nextBlinkTime = Math.random() * 300 + 3500;
+          setTimeout(blinkAnimation, nextBlinkTime);
+        }, 200);
+      }
     }
-
-    // 5sec
+    // 10sec
     animationEndTime = Date.now() + 10000;
     blinkAnimation();
-
-    // 5sec
+    // 10sec
     setTimeout(() => {
       clearTimeout(blinkTimerID);
     }, 10000);

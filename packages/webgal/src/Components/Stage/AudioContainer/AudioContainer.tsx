@@ -18,12 +18,10 @@ export const AudioContainer = () => {
   const seVol = mainVol * 0.01 * (userDataState.optionData?.seVolume ?? 100) * 0.01;
   const uiSeVol = mainVol * 0.01 * (userDataState.optionData.uiSeVolume ?? 50) * 0.01;
   const isEnterGame = useSelector((state: RootState) => state.GUI.isEnterGame);
-
+  const figureAssociatedAnimation = stageStore.figureAssociatedAnimation;
   const currentKey = stageStore.figureId;
-  const currentPos = stageStore.figurePos;
+  let currentPos = stageStore.figurePos;
   const freeFigure = stageStore.freeFigure;
-  const animationFlag = stageStore.animationFlag;
-
   let analyser: AnalyserNode | null = null;
   let bufferLength: number = 0;
   let dataArray: Uint8Array | undefined;
@@ -134,103 +132,98 @@ export const AudioContainer = () => {
   const dataArrayRef = useRef<Uint8Array | null>(null);
 
   useEffect(() => {
-    
-    if (currentKey === "" && currentPos === "") return;
-    if (animationFlag === "") return;
 
-    let maxAudioLevel = 0;
-    let OPEN_THRESHOLD = 25;
-    let HALF_OPEN_THRESHOLD = 20;
-    let pos = '';
-    let audioLevelInterval: any = null; 
-    const foundFigure = freeFigure.find(figure => figure.key === currentKey);
-    
-    if (foundFigure) {
-      pos = foundFigure.basePosition;
-    } else {
-      pos = currentPos;
-    }
-    logger.info("currentPos:",currentPos);
+    const animationItem = figureAssociatedAnimation.find((flag) => flag.animationFlag === "on");
+    if (animationItem) {
 
-    if (!audioContextRef.current) {
-      let audioContext: AudioContext | null = null;
-      audioContext = new AudioContext();
-      analyser = audioContext.createAnalyser();
-      analyser.fftSize = 256;
-      dataArray = new Uint8Array(analyser.frequencyBinCount);
-    }
-    
-    if (!analyserRef.current) {
-      analyserRef.current = audioContextRef.current.createAnalyser();
-      analyserRef.current.fftSize = 256;
-    }
-    
-    bufferLength = analyserRef.current.frequencyBinCount;
-    dataArrayRef.current = new Uint8Array(bufferLength);
-    
-    if (!sourceRef.current) {
-      let VocalControl = document.getElementById('currentVocal') as HTMLMediaElement;
-      sourceRef.current = audioContextRef.current.createMediaElementSource(VocalControl);
-      sourceRef.current.connect(analyserRef.current);
-    }
-    analyserRef.current.connect(audioContextRef.current.destination);
-
-    function getAudioLevel(): number {
-      if(!analyserRef.current || !dataArrayRef.current) {
-        return 0;
+      const foundFigure = freeFigure.find(figure => figure.key === currentKey);
+      if (foundFigure) {
+        currentPos = foundFigure.basePosition;
       }
-      analyserRef.current.getByteFrequencyData(dataArrayRef.current);
-      let sum = 0;
-      for(let i = 0; i < bufferLength; i++) {
-        sum += dataArrayRef.current[i];
+  
+      let maxAudioLevel = 0;
+      let OPEN_THRESHOLD = 25;
+      let HALF_OPEN_THRESHOLD = 20;
+      let audioLevelInterval: any = null; 
+  
+      if (!audioContextRef.current) {
+        let audioContext: AudioContext | null = null;
+        audioContext = new AudioContext();
+        analyser = audioContext.createAnalyser();
+        analyser.fftSize = 256;
+        dataArray = new Uint8Array(analyser.frequencyBinCount);
       }
-      return sum / bufferLength;
-    }
-
-    function updateThresholds() {
+      
+      if (!analyserRef.current) {
+        analyserRef.current = audioContextRef.current.createAnalyser();
+        analyserRef.current.fftSize = 256;
+      }
+      
+      bufferLength = analyserRef.current.frequencyBinCount;
+      dataArrayRef.current = new Uint8Array(bufferLength);
+      
+      if (!sourceRef.current) {
+        let VocalControl = document.getElementById('currentVocal') as HTMLMediaElement;
+        sourceRef.current = audioContextRef.current.createMediaElementSource(VocalControl);
+        sourceRef.current.connect(analyserRef.current);
+      }
+      analyserRef.current.connect(audioContextRef.current.destination);
+  
+      function getAudioLevel(): number {
+        if(!analyserRef.current || !dataArrayRef.current) {
+          return 0;
+        }
+        analyserRef.current.getByteFrequencyData(dataArrayRef.current);
+        let sum = 0;
+        for(let i = 0; i < bufferLength; i++) {
+          sum += dataArrayRef.current[i];
+        }
+        return sum / bufferLength;
+      }
+  
+      function updateThresholds() {
         if (audioLevel > maxAudioLevel) {
             maxAudioLevel = audioLevel;
         }
         OPEN_THRESHOLD = maxAudioLevel * 0.75;
         HALF_OPEN_THRESHOLD = maxAudioLevel * 0.5;
+      }
+  
+      // Lip-snc Animation
+      audioLevelInterval = setInterval(() => {
+        audioLevel = getAudioLevel();
+        if(audioLevel){
+  
+          updateThresholds();
+            let targetValue;
+            if(audioLevel > OPEN_THRESHOLD) {
+                targetValue = 1; // open
+            } else if(audioLevel > HALF_OPEN_THRESHOLD) {
+                targetValue = 0.5; // half_open
+            } else {
+                targetValue = 0; // closed
+            }
+            // Lerp
+            currentMouthValue = currentMouthValue + (targetValue - currentMouthValue) * lerpSpeed;
+  
+            let mouthState;
+            if(currentMouthValue > 0.75) {
+                mouthState = 'open';
+            } else if(currentMouthValue > 0.25) {
+                mouthState = 'half_open';
+            } else {
+                mouthState = 'closed';
+            }
+            WebGAL.gameplay.pixiStage?.performMouthSyncAnimation(currentKey, animationItem, mouthState, currentPos);
+        }
+      },100);
+
+      return () => {
+        clearInterval(audioLevelInterval);
+      };
     }
 
-    // Lip-snc Animation
-    audioLevelInterval = setInterval(() => {
-      audioLevel = getAudioLevel();
-      if(audioLevel){
-
-        updateThresholds();
-          let targetValue;
-          if(audioLevel > OPEN_THRESHOLD) {
-              targetValue = 1; // open
-          } else if(audioLevel > HALF_OPEN_THRESHOLD) {
-              targetValue = 0.5; // half_open
-          } else {
-              targetValue = 0; // closed
-          }
-
-          // Lerp
-          currentMouthValue = currentMouthValue + (targetValue - currentMouthValue) * lerpSpeed;
-
-          let mouthState;
-          if(currentMouthValue > 0.75) {
-              mouthState = 'open';
-          } else if(currentMouthValue > 0.25) {
-              mouthState = 'half_open';
-          } else {
-              mouthState = 'closed';
-          }
-          WebGAL.gameplay.pixiStage?.performMouthSyncAnimation(currentKey, webgalStore.getState().stage, mouthState, pos);
-      }
-    },100);
-
-    return () => {
-      clearInterval(audioLevelInterval);
-    };
-
   }, [currentKey,currentPos]);
-
 
   return (
     <div>

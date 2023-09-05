@@ -1,5 +1,5 @@
 changeBg:0000.png;
-changeFigure:001.png -left -next -id=test1 -animationFlag=on -eyesOpen=001.png -eyesClose=111.png -mouthOpen=003.png -mouthHalfOpen=002.png -mouthClose=001.png;
+changeFigure:001.png -left -transform={"alpha":0.5,"position":{"x":0,"y":0},"scale":{"x":1,"y":1},"rotation":0,"blur":0,"oldFilm":1,"dotFilm":0,"reflectionFilm":0,"glitchFilm":0,"rgbFilm":0,"godrayFilm":0} -next -id=test1 -animationFlag=on -eyesOpen=001.png -eyesClose=111.png -mouthOpen=003.png -mouthHalfOpen=002.png -mouthClose=001.png;
 WebGAL:こんにちは -001_小夜SAYO（ノーマル）_こんにちは。.wav -fontSize=default -animationFlag=on -figureId=test1;
 WebGALは、かつてないまったく新しいビジュアルノベルエンジンです。  -003_小夜SAYO（ノーマル）_ウェブギャルは、か….wav -fontSize=default -animationFlag=on -figureId=test1;
 changeFigure:001.png -next -id=test2 -animationFlag=on -eyesOpen=001.png -eyesClose=111.png -mouthOpen=003.png -mouthHalfOpen=002.png -mouthClose=001.png;

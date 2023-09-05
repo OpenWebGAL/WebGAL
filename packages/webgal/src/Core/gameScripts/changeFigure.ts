@@ -6,7 +6,7 @@ import { updateCurrentEffects } from '../controller/stage/pixi/PixiController';
 import cloneDeep from 'lodash/cloneDeep';
 import { getSentenceArgByKey } from '@/Core/util/getSentenceArg';
 import { WebGAL } from '@/main';
-import { IStageState, ITransform } from '@/store/stageInterface';
+import { IFigureAssociatedAnimation, IStageState, ITransform } from '@/store/stageInterface';
 import { getAnimateDuration, IUserAnimation } from '@/Core/Modules/animations';
 import { generateTransformAnimationObj } from '@/Core/gameScripts/function/generateTransformAnimationObj';
 import { assetSetter,fileType } from '@/Core/util/gameAssetsAccess/assetSetter';
@@ -31,6 +31,8 @@ export const changeFigure = (sentence: ISentence): IPerform => {
   let animationFlag:any = '';
   let mouthAnimationKey:any = 'mouthAnimation';
   let eyesAnimationKey:any = 'blinkAnimation';
+  const dispatch = webgalStore.dispatch;
+
   for (const e of sentence.args) {
     if (e.key === 'left' && e.value === true) {
       pos = 'left';
@@ -79,20 +81,22 @@ export const changeFigure = (sentence: ISentence): IPerform => {
       content = '';
     }
   }
-  
-  if(!animationFlag){
-    mouthOpen = '';
-    mouthClose = '';
-    mouthHalfOpen = '';
-    eyesOpen = '';
-    eyesClose = '';
+  if(animationFlag){
+    const newFigureAssociatedAnimation: IFigureAssociatedAnimation[] = [{
+      targetId: key,
+      animationFlag: animationFlag,
+      mouthAnimation: {
+        open: mouthOpen,
+        close: mouthClose,
+        halfOpen: mouthHalfOpen
+      },
+      blinkAnimation: {
+        open: eyesOpen,
+        close: eyesClose
+      }
+    }];
+    dispatch(setStage({ key: 'figureAssociatedAnimation', value: newFigureAssociatedAnimation }));
   }
-    
-  const dispatch = webgalStore.dispatch;
-  dispatch(setStage({ key: mouthAnimationKey, value: {open: mouthOpen, close: mouthClose, halfOpen: mouthHalfOpen }}));
-  dispatch(setStage({ key: eyesAnimationKey, value: {open: eyesOpen, close: eyesClose}}));
-  dispatch(setStage({ key: 'animationFlag', value: animationFlag }));
-
   /**
    * 删掉相关 Effects，因为已经移除了
    */

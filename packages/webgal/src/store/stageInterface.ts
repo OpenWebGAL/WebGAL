@@ -77,13 +77,20 @@ export interface IFreeFigure {
   key: string;
 }
 
-export interface mouthAnimationFile {
+export interface IFigureAssociatedAnimation{
+  mouthAnimation: IMouthAnimationFile;
+  blinkAnimation: IEyesAnimationFile;
+  targetId: string;
+  animationFlag:string;
+}
+
+export interface IMouthAnimationFile {
   open: string;
   close: string;
   halfOpen: string;
 }
 
-export interface eyesAnimationFile {
+export interface IEyesAnimationFile {
   open: string;
   close: string;
 }
@@ -99,12 +106,7 @@ export interface IStageState {
   figNameRight: string; // 立绘_右 文件地址（相对或绝对）
   // 自由立绘
   freeFigure: Array<IFreeFigure>;
-  mouthAnimation: Array<mouthAnimationFile>;
-  blinkAnimation: Array<eyesAnimationFile>;
-  mouthAnimationLeft: Array<mouthAnimationFile>;
-  blinkAnimationLeft: Array<eyesAnimationFile>;
-  mouthAnimationRight: Array<mouthAnimationFile>;
-  blinkAnimationRight: Array<eyesAnimationFile>;
+  figureAssociatedAnimation: Array<IFigureAssociatedAnimation>;
   figureId: string;
   figurePos :string;
   animationFlag: string;
