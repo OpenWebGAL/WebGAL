@@ -9,7 +9,7 @@ import { isIOS } from '@/Core/initializeScript';
 import { WebGALPixiContainer } from '@/Core/controller/stage/pixi/WebGALPixiContainer';
 // import { Live2DModel, SoundManager } from 'pixi-live2d-display';
 import { figureCash, voiceCash } from '@/Core/gameScripts/function/conentsCash';
-import { IStageState } from '@/store/stageInterface';
+import { IFigureAssociatedAnimation, IStageState } from '@/store/stageInterface';
 
 export interface IAnimationObject {
   setStartState: Function;
@@ -233,7 +233,10 @@ export default class PixiStage {
           };
           const prevEffects = webgalStore.getState().stage.effects;
           const newEffects = cloneDeep(prevEffects);
-          let effect: IEffect = { target: thisTickerFunc.targetKey, transform: targetTransform };
+          let effect: IEffect = { 
+            target: thisTickerFunc.targetKey, 
+            transform: targetTransform,
+          };
           const index = newEffects.findIndex((e) => e.target === thisTickerFunc.targetKey);
           if (index >= 0) {
             effect = newEffects[index];
@@ -249,48 +252,17 @@ export default class PixiStage {
     }
   }
 
-  public getFigureByKey(key: string): WebGALPixiContainer | undefined {
-    const figureObject = this.figureObjects.find(e => e.key === key);
-    return figureObject?.pixiContainer as WebGALPixiContainer | undefined;
-  }
-
-  public performMouthSyncAnimation(key: string, currentStageState:IStageState, mouthState: string, presetPosition: string) {
-    const currentFigure = this.getFigureByKey(key);
-    let mouthOpen;
-    let mouthClose;
-    let mouthHalfOpen;
-    let mouthAnimation:any;
+  public performMouthSyncAnimation(key: string, targetAnimation:IFigureAssociatedAnimation, mouthState: string, presetPosition: string) {
+    const currentFigure = this.getStageObjByKey(key)?.pixiContainer as WebGALPixiContainer;
     
     if (!currentFigure) {
       return;
     }
 
-    if (presetPosition === 'center') {
-      mouthAnimation = currentStageState.mouthAnimation;
-    }
-    if (presetPosition === 'left') {
-      mouthAnimation = currentStageState.mouthAnimationLeft;
-    }
-    if (presetPosition === 'right') {
-      mouthAnimation = currentStageState.mouthAnimationRight;
-    }
-
-    for (let key in mouthAnimation) {
-      if(key === "open"){
-        mouthOpen = mouthAnimation[key];
-      }
-      if(key === "close"){
-        mouthClose = mouthAnimation[key];
-      }
-      if(key === "halfOpen"){
-        mouthHalfOpen = mouthAnimation[key];
-      }
-    }
-
     const mouthTextureUrls:any = {
-      open: mouthOpen,
-      half_open: mouthHalfOpen,
-      closed: mouthClose,
+      open: targetAnimation.mouthAnimation.open,
+      half_open: targetAnimation.mouthAnimation.close,
+      closed: targetAnimation.mouthAnimation.halfOpen,
     };
 
     // Load mouth texture (reuse if already loaded)
@@ -329,38 +301,15 @@ export default class PixiStage {
     });
   }
 
-  public performBlinkAnimation(key: string, currentStageState:IStageState, blinkState: string, presetPosition: string) {
-    const currentFigure = this.getFigureByKey(key);
-    let blinkOpen;
-    let blinkClose;
-    let blikAnimation:any;
+  public performBlinkAnimation(key: string, targetAnimation:IFigureAssociatedAnimation, blinkState: string, presetPosition: string) {
+    const currentFigure = this.getStageObjByKey(key)?.pixiContainer as WebGALPixiContainer;
 
     if (!currentFigure) {
       return;
     }
-
-    if (presetPosition === 'center') {
-      blikAnimation = currentStageState.blinkAnimation;
-    }
-    if (presetPosition === 'left') {
-      blikAnimation = currentStageState.blinkAnimationLeft;
-    }
-    if (presetPosition === 'right') {
-      blikAnimation = currentStageState.blinkAnimationRight;
-    }
-
-    for (let key in blikAnimation) {
-      if(key === "open"){
-        blinkOpen = blikAnimation[key];
-      }
-      if(key === "close"){
-        blinkClose = blikAnimation[key];
-      }
-    }
-
     const blinkTextureUrls:any = {
-      open: blinkOpen,
-      closed: blinkClose,
+      open: targetAnimation.blinkAnimation.open,
+      closed: targetAnimation.blinkAnimation.close,
     };
 
     // Load eye texture (reuse if already loaded)
