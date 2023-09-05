@@ -21,7 +21,7 @@ export const changeFigure = (sentence: ISentence): IPerform => {
   let content = sentence.content;
   let isFreeFigure = false;
   let motion = '';
-  let key = '';
+  let key = 'fig-center';
   let duration = 500;
   let mouthOpen = '';
   let mouthClose = '';
@@ -34,54 +34,67 @@ export const changeFigure = (sentence: ISentence): IPerform => {
   const dispatch = webgalStore.dispatch;
 
   for (const e of sentence.args) {
-    if (e.key === 'left' && e.value === true) {
-      pos = 'left';
-      mouthAnimationKey = 'mouthAnimationLeft';
-      eyesAnimationKey = 'blinkAnimationLeft';
-    }
-    if (e.key === 'right' && e.value === true) {
-      pos = 'right';
-      mouthAnimationKey = 'mouthAnimationRight';
-      eyesAnimationKey = 'blinkAnimationRight';
-    }
-    if (e.key === 'clear' && e.value === true) {
-      content = '';
-    }
-    if (e.key === 'id') {
-      isFreeFigure = true;
-      key = e.value.toString();
-    }
-    if (e.key === 'motion') {
-      motion = e.value.toString();
-    }
-    if (e.key === 'mouthOpen') {
-      mouthOpen = e.value.toString();
-      mouthOpen = assetSetter(mouthOpen,fileType.figure);
-    }
-    if (e.key === 'mouthClose') {
-      mouthClose = e.value.toString();
-      mouthClose = assetSetter(mouthClose,fileType.figure);
-    }
-    if (e.key === 'mouthHalfOpen') {
-      mouthHalfOpen = e.value.toString();
-      mouthHalfOpen = assetSetter(mouthHalfOpen,fileType.figure);
-    }
-    if (e.key === 'eyesOpen') {
-      eyesOpen = e.value.toString();
-      eyesOpen = assetSetter(eyesOpen,fileType.figure);
-    }
-    if (e.key === 'eyesClose') {
-      eyesClose = e.value.toString();
-      eyesClose = assetSetter(eyesClose,fileType.figure);
-    }
-    if (e.key === 'animationFlag') {
-      animationFlag = e.value.toString();
-    }
-    if (content === 'none') {
-      content = '';
+    switch (e.key) {
+      case 'left':
+        if(e.value === true){;
+          pos = 'left';
+          key = `fig-left`
+          mouthAnimationKey = 'mouthAnimationLeft';
+          eyesAnimationKey = 'blinkAnimationLeft';
+        }
+        break;
+      case 'right':
+        if(e.value === true){
+          pos = 'right';
+          key = `fig-right`
+          mouthAnimationKey = 'mouthAnimationRight';
+          eyesAnimationKey = 'blinkAnimationRight';
+        }
+        break;
+      case 'clear':
+        if(e.value === true){
+          content = '';
+        }
+        break;
+      case 'id':
+        isFreeFigure = true;
+        key = e.value.toString();
+        break;
+      case 'motion':
+        motion = e.value.toString();
+        break;
+      case 'mouthOpen':
+        mouthOpen = e.value.toString();
+        mouthOpen = assetSetter(mouthOpen,fileType.figure);
+        break;
+      case 'mouthClose':
+        mouthClose = e.value.toString();
+        mouthClose = assetSetter(mouthClose,fileType.figure);
+        break;
+      case 'mouthHalfOpen':
+        mouthHalfOpen = e.value.toString();
+        mouthHalfOpen = assetSetter(mouthHalfOpen,fileType.figure);
+        break;
+      case 'eyesOpen':
+        eyesOpen = e.value.toString();
+        eyesOpen = assetSetter(eyesOpen,fileType.figure);
+        break;
+      case 'eyesClose':
+        eyesClose = e.value.toString();
+        eyesClose = assetSetter(eyesClose,fileType.figure);
+        break;
+      case 'animationFlag':
+        animationFlag = e.value.toString();
+        break;
+      case 'none':
+        content = '';
+        break;
+      default:
+        break;
     }
   }
-  if(animationFlag){
+
+  if(content){
     const newFigureAssociatedAnimation: IFigureAssociatedAnimation[] = [{
       targetId: key,
       animationFlag: animationFlag,
@@ -97,6 +110,7 @@ export const changeFigure = (sentence: ISentence): IPerform => {
     }];
     dispatch(setStage({ key: 'figureAssociatedAnimation', value: newFigureAssociatedAnimation }));
   }
+  
   /**
    * 删掉相关 Effects，因为已经移除了
    */
