@@ -9,7 +9,7 @@ import { WebGAL } from '@/main';
 import { IStageState, ITransform } from '@/store/stageInterface';
 import { getAnimateDuration, IUserAnimation } from '@/Core/Modules/animations';
 import { generateTransformAnimationObj } from '@/Core/gameScripts/function/generateTransformAnimationObj';
-import { assetSetter,fileType } from '@/Core/util/gameAssetsAccess/assetSetter';
+import { assetSetter, fileType } from '@/Core/util/gameAssetsAccess/assetSetter';
 import { logger } from '@/Core/util/etc/logger';
 /**
  * 更改立绘
@@ -28,29 +28,29 @@ export const changeFigure = (sentence: ISentence): IPerform => {
   let mouthHalfOpen = '';
   let eyesOpen = '';
   let eyesClose = '';
-  let animationFlag:any = '';
-  let mouthAnimationKey:any = 'mouthAnimation';
-  let eyesAnimationKey:any = 'blinkAnimation';
+  let animationFlag: any = '';
+  let mouthAnimationKey: any = 'mouthAnimation';
+  let eyesAnimationKey: any = 'blinkAnimation';
   const dispatch = webgalStore.dispatch;
 
   for (const e of sentence.args) {
     switch (e.key) {
       case 'left':
-        if(e.value === true){;
+        if (e.value === true) {
           pos = 'left';
           mouthAnimationKey = 'mouthAnimationLeft';
           eyesAnimationKey = 'blinkAnimationLeft';
         }
         break;
       case 'right':
-        if(e.value === true){
+        if (e.value === true) {
           pos = 'right';
           mouthAnimationKey = 'mouthAnimationRight';
           eyesAnimationKey = 'blinkAnimationRight';
         }
         break;
       case 'clear':
-        if(e.value === true){
+        if (e.value === true) {
           content = '';
         }
         break;
@@ -63,23 +63,23 @@ export const changeFigure = (sentence: ISentence): IPerform => {
         break;
       case 'mouthOpen':
         mouthOpen = e.value.toString();
-        mouthOpen = assetSetter(mouthOpen,fileType.figure);
+        mouthOpen = assetSetter(mouthOpen, fileType.figure);
         break;
       case 'mouthClose':
         mouthClose = e.value.toString();
-        mouthClose = assetSetter(mouthClose,fileType.figure);
+        mouthClose = assetSetter(mouthClose, fileType.figure);
         break;
       case 'mouthHalfOpen':
         mouthHalfOpen = e.value.toString();
-        mouthHalfOpen = assetSetter(mouthHalfOpen,fileType.figure);
+        mouthHalfOpen = assetSetter(mouthHalfOpen, fileType.figure);
         break;
       case 'eyesOpen':
         eyesOpen = e.value.toString();
-        eyesOpen = assetSetter(eyesOpen,fileType.figure);
+        eyesOpen = assetSetter(eyesOpen, fileType.figure);
         break;
       case 'eyesClose':
         eyesClose = e.value.toString();
-        eyesClose = assetSetter(eyesClose,fileType.figure);
+        eyesClose = assetSetter(eyesClose, fileType.figure);
         break;
       case 'animationFlag':
         animationFlag = e.value.toString();
@@ -93,25 +93,25 @@ export const changeFigure = (sentence: ISentence): IPerform => {
   }
 
   const id = key ? key : `fig-${pos}`;
-  
+
   const currentFigureAssociatedAnimation = webgalStore.getState().stage.figureAssociatedAnimation;
-  const filteredFigureAssociatedAnimation = currentFigureAssociatedAnimation.filter(item => item.targetId !== id);
+  const filteredFigureAssociatedAnimation = currentFigureAssociatedAnimation.filter((item) => item.targetId !== id);
   const newFigureAssociatedAnimationItem = {
     targetId: id,
     animationFlag: animationFlag,
     mouthAnimation: {
       open: mouthOpen,
       close: mouthClose,
-      halfOpen: mouthHalfOpen
+      halfOpen: mouthHalfOpen,
     },
     blinkAnimation: {
       open: eyesOpen,
-      close: eyesClose
-    }
+      close: eyesClose,
+    },
   };
   filteredFigureAssociatedAnimation.push(newFigureAssociatedAnimationItem);
   dispatch(setStage({ key: 'figureAssociatedAnimation', value: filteredFigureAssociatedAnimation }));
-  
+
   /**
    * 删掉相关 Effects，因为已经移除了
    */

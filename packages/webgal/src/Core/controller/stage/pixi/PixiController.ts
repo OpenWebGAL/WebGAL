@@ -3,13 +3,10 @@ import { v4 as uuid } from 'uuid';
 import { webgalStore } from '@/store/store';
 import { setStage } from '@/store/stageReducer';
 import cloneDeep from 'lodash/cloneDeep';
-import { IEffect } from '@/store/stageInterface';
+import { IEffect, IFigureAssociatedAnimation } from '@/store/stageInterface';
 import { logger } from '@/Core/util/etc/logger';
 import { isIOS } from '@/Core/initializeScript';
 import { WebGALPixiContainer } from '@/Core/controller/stage/pixi/WebGALPixiContainer';
-// import { Live2DModel, SoundManager } from 'pixi-live2d-display';
-import { figureCash, voiceCash } from '@/Core/gameScripts/function/conentsCash';
-import { IFigureAssociatedAnimation, IStageState } from '@/store/stageInterface';
 
 export interface IAnimationObject {
   setStartState: Function;
@@ -233,8 +230,8 @@ export default class PixiStage {
           };
           const prevEffects = webgalStore.getState().stage.effects;
           const newEffects = cloneDeep(prevEffects);
-          let effect: IEffect = { 
-            target: thisTickerFunc.targetKey, 
+          let effect: IEffect = {
+            target: thisTickerFunc.targetKey,
             transform: targetTransform,
           };
           const index = newEffects.findIndex((e) => e.target === thisTickerFunc.targetKey);
@@ -252,14 +249,20 @@ export default class PixiStage {
     }
   }
 
-  public performMouthSyncAnimation(key: string, targetAnimation:IFigureAssociatedAnimation, mouthState: string, presetPosition: string) {
+  // eslint-disable-next-line max-params
+  public performMouthSyncAnimation(
+    key: string,
+    targetAnimation: IFigureAssociatedAnimation,
+    mouthState: string,
+    presetPosition: string,
+  ) {
     const currentFigure = this.getStageObjByKey(key)?.pixiContainer as WebGALPixiContainer;
-    
+
     if (!currentFigure) {
       return;
     }
 
-    const mouthTextureUrls:any = {
+    const mouthTextureUrls: any = {
       open: targetAnimation.mouthAnimation.open,
       half_open: targetAnimation.mouthAnimation.close,
       closed: targetAnimation.mouthAnimation.halfOpen,
@@ -301,13 +304,19 @@ export default class PixiStage {
     });
   }
 
-  public performBlinkAnimation(key: string, targetAnimation:IFigureAssociatedAnimation, blinkState: string, presetPosition: string) {
+  // eslint-disable-next-line max-params
+  public performBlinkAnimation(
+    key: string,
+    targetAnimation: IFigureAssociatedAnimation,
+    blinkState: string,
+    presetPosition: string,
+  ) {
     const currentFigure = this.getStageObjByKey(key)?.pixiContainer as WebGALPixiContainer;
 
     if (!currentFigure) {
       return;
     }
-    const blinkTextureUrls:any = {
+    const blinkTextureUrls: any = {
       open: targetAnimation.blinkAnimation.open,
       closed: targetAnimation.blinkAnimation.close,
     };
@@ -315,7 +324,7 @@ export default class PixiStage {
     // Load eye texture (reuse if already loaded)
     this.loadAsset(blinkTextureUrls[blinkState], () => {
       const texture = this.assetLoader.resources[blinkTextureUrls[blinkState]].texture;
-  
+
       if (!texture) {
         return;
       }
