@@ -107,9 +107,6 @@ export interface IStageState {
   // 自由立绘
   freeFigure: Array<IFreeFigure>;
   figureAssociatedAnimation: Array<IFigureAssociatedAnimation>;
-  figureId: string;
-  figurePos :string;
-  animationFlag: string;
   showText: string; // 文字
   showTextSize: number; // 文字
   showName: string; // 人物名
