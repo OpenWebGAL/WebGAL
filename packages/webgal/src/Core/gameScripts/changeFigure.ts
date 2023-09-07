@@ -6,7 +6,7 @@ import { updateCurrentEffects } from '../controller/stage/pixi/PixiController';
 import cloneDeep from 'lodash/cloneDeep';
 import { getSentenceArgByKey } from '@/Core/util/getSentenceArg';
 import { WebGAL } from '@/main';
-import { IFigureAssociatedAnimation, IStageState, ITransform } from '@/store/stageInterface';
+import { IStageState, ITransform } from '@/store/stageInterface';
 import { getAnimateDuration, IUserAnimation } from '@/Core/Modules/animations';
 import { generateTransformAnimationObj } from '@/Core/gameScripts/function/generateTransformAnimationObj';
 import { assetSetter,fileType } from '@/Core/util/gameAssetsAccess/assetSetter';
@@ -21,7 +21,7 @@ export const changeFigure = (sentence: ISentence): IPerform => {
   let content = sentence.content;
   let isFreeFigure = false;
   let motion = '';
-  let key = 'fig-center';
+  let key = '';
   let duration = 500;
   let mouthOpen = '';
   let mouthClose = '';
@@ -38,7 +38,6 @@ export const changeFigure = (sentence: ISentence): IPerform => {
       case 'left':
         if(e.value === true){;
           pos = 'left';
-          key = `fig-left`
           mouthAnimationKey = 'mouthAnimationLeft';
           eyesAnimationKey = 'blinkAnimationLeft';
         }
@@ -46,7 +45,6 @@ export const changeFigure = (sentence: ISentence): IPerform => {
       case 'right':
         if(e.value === true){
           pos = 'right';
-          key = `fig-right`
           mouthAnimationKey = 'mouthAnimationRight';
           eyesAnimationKey = 'blinkAnimationRight';
         }
@@ -94,22 +92,25 @@ export const changeFigure = (sentence: ISentence): IPerform => {
     }
   }
 
-  if(content){
-    const newFigureAssociatedAnimation: IFigureAssociatedAnimation[] = [{
-      targetId: key,
-      animationFlag: animationFlag,
-      mouthAnimation: {
-        open: mouthOpen,
-        close: mouthClose,
-        halfOpen: mouthHalfOpen
-      },
-      blinkAnimation: {
-        open: eyesOpen,
-        close: eyesClose
-      }
-    }];
-    dispatch(setStage({ key: 'figureAssociatedAnimation', value: newFigureAssociatedAnimation }));
-  }
+  const id = key ? key : `fig-${pos}`;
+  
+  const currentFigureAssociatedAnimation = webgalStore.getState().stage.figureAssociatedAnimation;
+  const filteredFigureAssociatedAnimation = currentFigureAssociatedAnimation.filter(item => item.targetId !== id);
+  const newFigureAssociatedAnimationItem = {
+    targetId: id,
+    animationFlag: animationFlag,
+    mouthAnimation: {
+      open: mouthOpen,
+      close: mouthClose,
+      halfOpen: mouthHalfOpen
+    },
+    blinkAnimation: {
+      open: eyesOpen,
+      close: eyesClose
+    }
+  };
+  filteredFigureAssociatedAnimation.push(newFigureAssociatedAnimationItem);
+  dispatch(setStage({ key: 'figureAssociatedAnimation', value: filteredFigureAssociatedAnimation }));
   
   /**
    * 删掉相关 Effects，因为已经移除了
