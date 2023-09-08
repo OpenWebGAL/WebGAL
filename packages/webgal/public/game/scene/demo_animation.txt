@@ -3,7 +3,7 @@ unlockBgm:ontama_piano1_youkoso.mp3 -name=ようこそ;
 intro:■初めに| このデモゲームで使用している画像素材は、AI生成画像です;
 intro:■クレジット| 「VOICEVOX:小夜/SAYO」;
 intro:まばたき、口パクのアニメーションテストです;
-changeBg:0000.png;
+changeBg:bg.png;
 changeFigure:1/open_mouth.png -left -next -id=test1 -animationFlag=on -eyesOpen=1/open_eyes.png  -eyesClose=1/closed_eyes.png -mouthOpen=1/open_mouth.png -mouthHalfOpen=1/halfopen_mouth.png -mouthClose=1/closed_mouth.png;
 WebGAL:こんにちは -001_小夜SAYO（ノーマル）_こんにちは。.wav -fontSize=default -animationFlag=on -figureId=test1;
 WebGALは、かつてないまったく新しいビジュアルノベルエンジンです。  -003_小夜SAYO（ノーマル）_ウェブギャルは、か….wav -fontSize=default -animationFlag=on -figureId=test1;

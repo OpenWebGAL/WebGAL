@@ -264,8 +264,8 @@ export default class PixiStage {
 
     const mouthTextureUrls: any = {
       open: targetAnimation.mouthAnimation.open,
-      half_open: targetAnimation.mouthAnimation.close,
-      closed: targetAnimation.mouthAnimation.halfOpen,
+      half_open: targetAnimation.mouthAnimation.halfOpen,
+      closed: targetAnimation.mouthAnimation.close,
     };
 
     // Load mouth texture (reuse if already loaded)
