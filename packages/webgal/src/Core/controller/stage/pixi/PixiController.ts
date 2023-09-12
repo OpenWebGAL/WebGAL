@@ -3,12 +3,10 @@ import { v4 as uuid } from 'uuid';
 import { webgalStore } from '@/store/store';
 import { setStage } from '@/store/stageReducer';
 import cloneDeep from 'lodash/cloneDeep';
-import { IEffect } from '@/store/stageInterface';
+import { IEffect, IFigureAssociatedAnimation } from '@/store/stageInterface';
 import { logger } from '@/Core/util/etc/logger';
 import { isIOS } from '@/Core/initializeScript';
 import { WebGALPixiContainer } from '@/Core/controller/stage/pixi/WebGALPixiContainer';
-// import { Live2DModel, SoundManager } from 'pixi-live2d-display';
-import { figureCash, voiceCash } from '@/Core/gameScripts/function/conentsCash';
 
 export interface IAnimationObject {
   setStartState: Function;
@@ -232,7 +230,10 @@ export default class PixiStage {
           };
           const prevEffects = webgalStore.getState().stage.effects;
           const newEffects = cloneDeep(prevEffects);
-          let effect: IEffect = { target: thisTickerFunc.targetKey, transform: targetTransform };
+          let effect: IEffect = {
+            target: thisTickerFunc.targetKey,
+            transform: targetTransform,
+          };
           const index = newEffects.findIndex((e) => e.target === thisTickerFunc.targetKey);
           if (index >= 0) {
             effect = newEffects[index];
@@ -246,6 +247,116 @@ export default class PixiStage {
       }
       this.stageAnimations.splice(index, 1);
     }
+  }
+
+  // eslint-disable-next-line max-params
+  public performMouthSyncAnimation(
+    key: string,
+    targetAnimation: IFigureAssociatedAnimation,
+    mouthState: string,
+    presetPosition: string,
+  ) {
+    const currentFigure = this.getStageObjByKey(key)?.pixiContainer as WebGALPixiContainer;
+
+    if (!currentFigure) {
+      return;
+    }
+
+    const mouthTextureUrls: any = {
+      open: targetAnimation.mouthAnimation.open,
+      half_open: targetAnimation.mouthAnimation.halfOpen,
+      closed: targetAnimation.mouthAnimation.close,
+    };
+
+    // Load mouth texture (reuse if already loaded)
+    this.loadAsset(mouthTextureUrls[mouthState], () => {
+      const texture = this.assetLoader.resources[mouthTextureUrls[mouthState]].texture;
+      if (!texture) {
+        return;
+      }
+      const originalWidth = texture.width;
+      const originalHeight = texture.height;
+      const scaleX = this.stageWidth / originalWidth;
+      const scaleY = this.stageHeight / originalHeight;
+      const targetScale = Math.min(scaleX, scaleY);
+      const figureSprite = new PIXI.Sprite(texture);
+      figureSprite.scale.x = targetScale;
+      figureSprite.scale.y = targetScale;
+      figureSprite.anchor.set(0.5);
+      figureSprite.position.y = this.stageHeight / 2;
+      const targetWidth = originalWidth * targetScale;
+      const targetHeight = originalHeight * targetScale;
+      currentFigure.setBaseY(this.stageHeight / 2);
+      if (targetHeight < this.stageHeight) {
+        currentFigure.setBaseY(this.stageHeight / 2 + this.stageHeight - targetHeight / 2);
+      }
+      if (presetPosition === 'center') {
+        currentFigure.setBaseX(this.stageWidth / 2);
+      }
+      if (presetPosition === 'left') {
+        currentFigure.setBaseX(targetWidth / 2);
+      }
+      if (presetPosition === 'right') {
+        currentFigure.setBaseX(this.stageWidth - targetWidth / 2);
+      }
+      currentFigure.pivot.set(0, this.stageHeight / 2);
+      currentFigure.addChild(figureSprite);
+    });
+  }
+
+  // eslint-disable-next-line max-params
+  public performBlinkAnimation(
+    key: string,
+    targetAnimation: IFigureAssociatedAnimation,
+    blinkState: string,
+    presetPosition: string,
+  ) {
+    const currentFigure = this.getStageObjByKey(key)?.pixiContainer as WebGALPixiContainer;
+
+    if (!currentFigure) {
+      return;
+    }
+    const blinkTextureUrls: any = {
+      open: targetAnimation.blinkAnimation.open,
+      closed: targetAnimation.blinkAnimation.close,
+    };
+
+    // Load eye texture (reuse if already loaded)
+    this.loadAsset(blinkTextureUrls[blinkState], () => {
+      const texture = this.assetLoader.resources[blinkTextureUrls[blinkState]].texture;
+
+      if (!texture) {
+        return;
+      }
+
+      const originalWidth = texture.width;
+      const originalHeight = texture.height;
+      const scaleX = this.stageWidth / originalWidth;
+      const scaleY = this.stageHeight / originalHeight;
+      const targetScale = Math.min(scaleX, scaleY);
+      const figureSprite = new PIXI.Sprite(texture);
+      figureSprite.scale.x = targetScale;
+      figureSprite.scale.y = targetScale;
+      figureSprite.anchor.set(0.5);
+      figureSprite.position.y = this.stageHeight / 2;
+      const targetWidth = originalWidth * targetScale;
+      const targetHeight = originalHeight * targetScale;
+      currentFigure.setBaseY(this.stageHeight / 2);
+      if (targetHeight < this.stageHeight) {
+        currentFigure.setBaseY(this.stageHeight / 2 + this.stageHeight - targetHeight / 2);
+      }
+      if (presetPosition === 'center') {
+        currentFigure.setBaseX(this.stageWidth / 2);
+      }
+      if (presetPosition === 'left') {
+        currentFigure.setBaseX(targetWidth / 2);
+      }
+      if (presetPosition === 'right') {
+        currentFigure.setBaseX(this.stageWidth - targetWidth / 2);
+      }
+      currentFigure.pivot.set(0, this.stageHeight / 2);
+      currentFigure.addChild(figureSprite);
+    });
   }
 
   /**
