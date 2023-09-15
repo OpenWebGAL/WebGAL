@@ -1,5 +1,4 @@
 import { setStage } from '@/store/stageReducer';
-import { webgalStore } from '@/store/store';
 import mouseEnterSE from '@/assets/se/mouseEnter.mp3';
 import maou_se_system35 from '@/assets/se/maou_se_system35.mp3';
 import maou_se_system39 from '@/assets/se/maou_se_system39.mp3';
