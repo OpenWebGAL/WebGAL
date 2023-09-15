@@ -1,6 +1,7 @@
 import { IAsset } from '@/Core/controller/scene/sceneInterface';
 import { logger } from '../etc/logger';
-import { WebGAL } from '@/main';
+
+import { WebGAL } from '@/Core/WebGAL';
 
 /**
  * 预加载函数

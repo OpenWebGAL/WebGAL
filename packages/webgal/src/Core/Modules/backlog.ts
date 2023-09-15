@@ -5,9 +5,9 @@ import { IStageState } from '@/store/stageInterface';
 import { webgalStore } from '@/store/store';
 import { ISaveScene } from '@/store/userDataInterface';
 import cloneDeep from 'lodash/cloneDeep';
-import { WebGAL } from '@/main';
 
 import { SYSTEM_CONFIG } from '@/Core/config/config';
+import { SceneManager } from '@/Core/Modules/scene';
 
 export interface IBacklogItem {
   currentStageState: IStageState;
@@ -17,6 +17,12 @@ export interface IBacklogItem {
 export class BacklogManager {
   public isSaveBacklogNext = false;
   private backlog: Array<IBacklogItem> = [];
+
+  private readonly sceneManager: SceneManager;
+
+  public constructor(sceneManager: SceneManager) {
+    this.sceneManager = sceneManager;
+  }
 
   public getBacklog() {
     return this.backlog;
@@ -42,17 +48,17 @@ export class BacklogManager {
     const backlogElement: IBacklogItem = {
       currentStageState: stageStateToBacklog,
       saveScene: {
-        currentSentenceId: WebGAL.sceneManager.sceneData.currentSentenceId, // 当前语句ID
-        sceneStack: cloneDeep(WebGAL.sceneManager.sceneData.sceneStack), // 场景栈
-        sceneName: WebGAL.sceneManager.sceneData.currentScene.sceneName, // 场景名称
-        sceneUrl: WebGAL.sceneManager.sceneData.currentScene.sceneUrl, // 场景url
+        currentSentenceId: this.sceneManager.sceneData.currentSentenceId, // 当前语句ID
+        sceneStack: cloneDeep(this.sceneManager.sceneData.sceneStack), // 场景栈
+        sceneName: this.sceneManager.sceneData.currentScene.sceneName, // 场景名称
+        sceneUrl: this.sceneManager.sceneData.currentScene.sceneUrl, // 场景url
       },
     };
-    WebGAL.backlogManager.getBacklog().push(backlogElement);
+    this.getBacklog().push(backlogElement);
 
     // 清除超出长度的部分
-    while (WebGAL.backlogManager.getBacklog().length > SYSTEM_CONFIG.backlog_size) {
-      WebGAL.backlogManager.getBacklog().shift();
+    while (this.getBacklog().length > SYSTEM_CONFIG.backlog_size) {
+      this.getBacklog().shift();
     }
   }
 }

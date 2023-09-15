@@ -3,8 +3,9 @@ import { useEffect } from 'react';
 import { logger } from '@/Core/util/etc/logger';
 import { IStageObject } from '@/Core/controller/stage/pixi/PixiController';
 import { setEbg } from '@/Core/util/setEbg';
-import { WebGAL } from '@/main';
-import { getEnterExitAnimation } from '@/Core/Modules/animations';
+
+import { getEnterExitAnimation } from '@/Core/Modules/animationFunctions';
+import { WebGAL } from '@/Core/WebGAL';
 
 export function useSetBg(stageState: IStageState) {
   const bgName = stageState.bgName;

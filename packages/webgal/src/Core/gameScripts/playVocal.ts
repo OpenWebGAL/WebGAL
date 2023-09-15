@@ -2,7 +2,6 @@ import { ISentence } from '@/Core/controller/scene/sceneInterface';
 import { logger } from '@/Core/util/etc/logger';
 import { webgalStore } from '@/store/store';
 import { setStage } from '@/store/stageReducer';
-import { WebGAL } from '@/main';
 import { getSentenceArgByKey } from '@/Core/util/getSentenceArg';
 import { IStageState } from '@/store/stageInterface';
 import {
@@ -13,6 +12,7 @@ import {
   updateThresholds,
 } from '@/Core/gameScripts/function/vocalAnimation';
 import { match } from '../util/match';
+import { WebGAL } from '@/Core/WebGAL';
 
 /**
  * 播放一段语音

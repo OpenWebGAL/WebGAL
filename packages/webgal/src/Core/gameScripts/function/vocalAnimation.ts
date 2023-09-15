@@ -1,4 +1,4 @@
-import { WebGAL } from '@/main';
+import { WebGAL } from '@/Core/WebGAL';
 
 interface IAudioContextWrapper {
   audioContext: AudioContext;

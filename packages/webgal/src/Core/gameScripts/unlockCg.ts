@@ -4,7 +4,8 @@ import { webgalStore } from '@/store/store';
 import { unlockCgInUserData } from '@/store/userDataReducer';
 import { logger } from '@/Core/util/etc/logger';
 import localforage from 'localforage';
-import { WebGAL } from '@/main';
+
+import { WebGAL } from '@/Core/WebGAL';
 
 /**
  * 解锁cg

@@ -4,8 +4,9 @@ import { logger } from '@/Core/util/etc/logger';
 import { generateUniversalSoftInAnimationObj } from '@/Core/controller/stage/pixi/animations/universalSoftIn';
 import { IStageObject } from '@/Core/controller/stage/pixi/PixiController';
 import { generateUniversalSoftOffAnimationObj } from '@/Core/controller/stage/pixi/animations/universalSoftOff';
-import { WebGAL } from '@/main';
-import { getEnterExitAnimation } from '@/Core/Modules/animations';
+
+import { getEnterExitAnimation } from '@/Core/Modules/animationFunctions';
+import { WebGAL } from '@/Core/WebGAL';
 
 export function useSetFigure(stageState: IStageState) {
   const { figNameLeft, figName, figNameRight, freeFigure, live2dMotion } = stageState;

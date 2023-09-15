@@ -8,8 +8,8 @@ import { generateTimelineObj } from '@/Core/controller/stage/pixi/animations/tim
 import cloneDeep from 'lodash/cloneDeep';
 import { baseTransform, ITransform } from '@/store/stageInterface';
 import { IUserAnimation } from '../Modules/animations';
-import { WebGAL } from '@/main';
 import { generateTransformAnimationObj } from '@/Core/gameScripts/function/generateTransformAnimationObj';
+import { WebGAL } from '@/Core/WebGAL';
 
 /**
  * 设置变换

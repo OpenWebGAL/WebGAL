@@ -1,8 +1,9 @@
 import { ISentence } from '@/Core/controller/scene/sceneInterface';
 import { say } from '../../gameScripts/say';
 import { initPerform, IPerform } from '@/Core/Modules/perform/performInterface';
-import { SCRIPT_CONFIG } from '@/Core/config/scriptConfig';
-import { WebGAL } from '@/main';
+
+import { WebGAL } from '@/Core/WebGAL';
+import { SCRIPT_CONFIG } from '@/Core/parser/sceneParser';
 
 /**
  * 规范函数的类型

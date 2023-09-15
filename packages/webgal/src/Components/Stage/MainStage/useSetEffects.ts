@@ -1,5 +1,6 @@
 import { baseTransform, IEffect, IStageState, ITransform } from '@/store/stageInterface';
-import { WebGAL } from '@/main';
+
+import { WebGAL } from '@/Core/WebGAL';
 
 export function setStageObjectEffects(stageState: IStageState) {
   const effects = stageState.effects;

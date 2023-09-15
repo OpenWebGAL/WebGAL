@@ -2,7 +2,8 @@
 import styles from '../../../Components/UI/BottomControlPanel/bottomControlPanel.module.scss';
 import { webgalStore } from '@/store/store';
 import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
-import { WebGAL } from '@/main';
+
+import { WebGAL } from '@/Core/WebGAL';
 
 /**
  * 设置 autoplay 按钮的激活与否

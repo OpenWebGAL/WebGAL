@@ -5,7 +5,8 @@
 import { sceneFetcher } from '../../controller/scene/sceneFetcher';
 import { sceneParser } from '../../parser/sceneParser';
 import { logger } from '@/Core/util/etc/logger';
-import { WebGAL } from '@/main';
+
+import { WebGAL } from '@/Core/WebGAL';
 
 export const scenePrefetcher = (sceneList: Array<string>): void => {
   for (const e of sceneList) {

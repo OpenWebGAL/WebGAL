@@ -7,8 +7,9 @@ import { webgalStore } from '@/store/store';
 import { generateTimelineObj } from '@/Core/controller/stage/pixi/animations/timeline';
 import cloneDeep from 'lodash/cloneDeep';
 import { baseTransform } from '@/store/stageInterface';
-import { getAnimateDuration, getAnimationObject, IUserAnimation } from '../Modules/animations';
-import { WebGAL } from '@/main';
+import { IUserAnimation } from '../Modules/animations';
+import { getAnimateDuration, getAnimationObject } from '@/Core/Modules/animationFunctions';
+import { WebGAL } from '@/Core/WebGAL';
 
 /**
  * 设置临时动画

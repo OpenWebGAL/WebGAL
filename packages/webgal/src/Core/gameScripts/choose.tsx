@@ -8,8 +8,8 @@ import styles from './performStyles/choose.module.scss';
 import { webgalStore } from '@/store/store';
 import { textFont } from '@/store/userDataInterface';
 import { PerformController } from '@/Core/Modules/perform/performController';
-import { WebGAL } from '@/main';
 import useSoundEffect from '@/hooks/useSoundEffect';
+import { WebGAL } from '@/Core/WebGAL';
 
 /**
  * 显示选择枝

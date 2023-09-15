@@ -1,6 +1,7 @@
 import * as PIXI from 'pixi.js';
 import { registerPerform } from '@/Core/util/pixiPerformManager/pixiPerformManager';
-import { WebGAL } from '@/main';
+
+import { WebGAL } from '@/Core/WebGAL';
 
 const pixiSnow = (snowSpeed: number) => {
   // 动画参数

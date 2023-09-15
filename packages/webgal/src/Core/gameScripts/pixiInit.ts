@@ -4,7 +4,8 @@ import { logger } from '@/Core/util/etc/logger';
 import { webgalStore } from '@/store/store';
 import { resetStageState } from '@/store/stageReducer';
 import cloneDeep from 'lodash/cloneDeep';
-import { WebGAL } from '@/main';
+
+import { WebGAL } from '@/Core/WebGAL';
 
 /**
  * 初始化pixi
