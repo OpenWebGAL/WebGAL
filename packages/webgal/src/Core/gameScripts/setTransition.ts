@@ -4,8 +4,8 @@ import { webgalStore } from '@/store/store';
 import cloneDeep from 'lodash/cloneDeep';
 import { updateCurrentEffects } from '@/Core/controller/stage/pixi/PixiController';
 import { getSentenceArgByKey } from '@/Core/util/getSentenceArg';
-import { WebGAL } from '@/main';
 import { setStage } from '@/store/stageReducer';
+import { WebGAL } from '@/Core/WebGAL';
 
 /**
  * 设置转场效果

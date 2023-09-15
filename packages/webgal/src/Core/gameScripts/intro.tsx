@@ -5,8 +5,8 @@ import ReactDOM from 'react-dom';
 import styles from '../../Components/Stage/FullScreenPerform/fullScreenPerform.module.scss';
 import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
 import { PerformController } from '@/Core/Modules/perform/performController';
-import { WebGAL } from '@/main';
 import { logger } from '@/Core/util/etc/logger';
+import { WebGAL } from '@/Core/WebGAL';
 /**
  * 显示一小段黑屏演示
  * @param sentence

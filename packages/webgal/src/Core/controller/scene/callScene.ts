@@ -4,7 +4,8 @@ import { logger } from '../../util/etc/logger';
 import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
 import uniqWith from 'lodash/uniqWith';
 import { scenePrefetcher } from '@/Core/util/prefetcher/scenePrefetcher';
-import { WebGAL } from '@/main';
+
+import { WebGAL } from '@/Core/WebGAL';
 
 /**
  * 调用场景

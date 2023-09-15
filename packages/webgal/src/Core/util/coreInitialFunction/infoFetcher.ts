@@ -6,9 +6,9 @@ import { webgalStore } from '@/store/store';
 import { setGuiAsset } from '@/store/GUIReducer';
 import { setEbg } from '@/Core/util/setEbg';
 import { setLogo } from '@/Core/util/setLogo';
-import { WebGAL } from '@/main';
 import { initKey } from '@/Core/controller/storage/fastSaveLoad';
 import { WebgalParser } from '@/Core/parser/sceneParser';
+import { WebGAL } from '@/Core/WebGAL';
 
 declare global {
   interface Window {

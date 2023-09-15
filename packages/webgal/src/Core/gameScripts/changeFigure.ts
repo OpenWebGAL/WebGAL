@@ -5,12 +5,13 @@ import { setStage } from '@/store/stageReducer';
 import { updateCurrentEffects } from '../controller/stage/pixi/PixiController';
 import cloneDeep from 'lodash/cloneDeep';
 import { getSentenceArgByKey } from '@/Core/util/getSentenceArg';
-import { WebGAL } from '@/main';
 import { IStageState, ITransform } from '@/store/stageInterface';
-import { getAnimateDuration, IUserAnimation } from '@/Core/Modules/animations';
+import { IUserAnimation } from '@/Core/Modules/animations';
 import { generateTransformAnimationObj } from '@/Core/gameScripts/function/generateTransformAnimationObj';
 import { assetSetter, fileType } from '@/Core/util/gameAssetsAccess/assetSetter';
 import { logger } from '@/Core/util/etc/logger';
+import { getAnimateDuration } from '@/Core/Modules/animationFunctions';
+import { WebGAL } from '@/Core/WebGAL';
 /**
  * 更改立绘
  * @param sentence 语句

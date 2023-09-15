@@ -12,8 +12,8 @@ import uniqWith from 'lodash/uniqWith';
 import { scenePrefetcher } from './util/prefetcher/scenePrefetcher';
 import PixiStage from '@/Core/controller/stage/pixi/PixiController';
 import axios from 'axios';
-import { WebGAL } from '@/main';
 import { __INFO } from '@/config/info';
+import { WebGAL } from '@/Core/WebGAL';
 
 const u = navigator.userAgent;
 export const isIOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); // 判断是否是 iOS终端

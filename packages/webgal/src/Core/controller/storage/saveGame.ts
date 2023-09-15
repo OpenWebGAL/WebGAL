@@ -4,7 +4,8 @@ import { syncStorageFast } from './storageController';
 import { webgalStore } from '@/store/store';
 import { setUserData } from '@/store/userDataReducer';
 import cloneDeep from 'lodash/cloneDeep';
-import { WebGAL } from '@/main';
+
+import { WebGAL } from '@/Core/WebGAL';
 
 /**
  * 保存游戏

@@ -1,5 +1,6 @@
 import { logger } from '@/Core/util/etc/logger';
-import { WebGAL } from '@/main';
+
+import { WebGAL } from '@/Core/WebGAL';
 
 export const stopAllPerform = () => {
   logger.warn('清除所有演出');

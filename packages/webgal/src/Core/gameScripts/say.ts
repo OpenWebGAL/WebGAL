@@ -7,9 +7,9 @@ import { webgalStore } from '@/store/store';
 import { setStage } from '@/store/stageReducer';
 import { useTextDelay } from '@/hooks/useTextOptions';
 import { getRandomPerformName, PerformController } from '@/Core/Modules/perform/performController';
-import { WebGAL } from '@/main';
 import { getSentenceArgByKey } from '@/Core/util/getSentenceArg';
 import { textSize } from '@/store/userDataInterface';
+import { WebGAL } from '@/Core/WebGAL';
 
 /**
  * 进行普通对话的显示

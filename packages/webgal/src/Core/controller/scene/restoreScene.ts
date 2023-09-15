@@ -3,7 +3,8 @@ import { sceneParser } from '../../parser/sceneParser';
 import { logger } from '../../util/etc/logger';
 import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
 import { ISceneEntry } from '@/Core/Modules/scene';
-import { WebGAL } from '@/main';
+
+import { WebGAL } from '@/Core/WebGAL';
 
 /**
  * 恢复场景
