@@ -51,16 +51,6 @@ export default defineConfig({
     loadVersion(),
     // @ts-ignore
     visualizer(),
-    {
-      name: 'singleHMR',
-      handleHotUpdate({ modules }) {
-        modules.forEach((m) => {
-          // m.importedModules = new Set();
-          m.importers = new Set();
-        });
-        return modules;
-      },
-    },
   ],
   resolve: {
     alias: {
