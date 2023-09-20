@@ -23,16 +23,16 @@ import aigei_se_03 from '@/assets/se/aigei-se-03.mp3';
 import zhanZhang_y1970 from '@/assets/se/zhanZhang-y1970.mp3';
 import taoshen_01 from '@/assets/se/taoshen-01.wav';
 import { useDispatch } from 'react-redux';
+import { webgalStore } from '@/store/store';
 
-// 调用音效
+/**
+ * 调用音效
+ */
 const useSoundEffect = () => {
   const dispatch = useDispatch();
 
   const playSeEnter = () => {
     dispatch(setStage({ key: 'uiSe', value: mouseEnterSE }));
-  };
-  const playSeEnterChoose = () => {
-    dispatch(setStage({ key: 'uiSe', value: aigei_se_02 }));
   };
   const playSeEnterTitleButton = () => {
     dispatch(setStage({ key: 'uiSe', value: aigei_se_01 }));
@@ -69,9 +69,6 @@ const useSoundEffect = () => {
   };
   const playSeClick = () => {
     dispatch(setStage({ key: 'uiSe', value: maou_se_system39 }));
-  };
-  const playSeClickChoose = () => {
-    dispatch(setStage({ key: 'uiSe', value: maou_se_system41 }));
   };
   const playSeClickTitleButton = () => {
     dispatch(setStage({ key: 'uiSe', value: maou_se_system40 }));
@@ -127,7 +124,6 @@ const useSoundEffect = () => {
 
   return {
     playSeEnter, // 鼠标进入
-    playSeEnterChoose, // 鼠标进入分支选择
     playSeEnterTitleButton, // 鼠标进入标题按钮
     playSeEnterOptionSelect, // 鼠标进入游戏选项切换按钮
     playSeEnterMenuPanelSelect, // 鼠标进入菜单页切换按钮
@@ -140,7 +136,6 @@ const useSoundEffect = () => {
     playSeEnterDialogButton, // 鼠标进入提示框按钮
     playSeEnterOptionSlider, // 鼠标进入滑块选项
     playSeClick, // 鼠标点击
-    playSeClickChoose, // 鼠标点击分支选择
     playSeClickTitleButton, // 鼠标点击标题按钮
     playSeClickCloseButton, // 鼠标点击关闭按钮
     playSeClickBottomControlPanelButton, // 鼠标点击底部控制按钮
@@ -158,6 +153,22 @@ const useSoundEffect = () => {
     playSeClickCGPanelSelect, // 鼠标点击CG页切换按钮
     playSeClickCGElement, // 鼠标点击CG元素
     playSeClickBacklogJumpButton, // 鼠标点击日志页回溯按钮
+  };
+};
+
+/**
+ * 调用音效（只供 choose.tsx 使用）
+ */
+export const useSEByWebgalStore = () => {
+  const playSeEnterChoose = () => {
+    webgalStore.dispatch(setStage({ key: 'uiSe', value: aigei_se_02 }));
+  };
+  const playSeClickChoose = () => {
+    webgalStore.dispatch(setStage({ key: 'uiSe', value: maou_se_system41 }));
+  };
+  return {
+    playSeEnterChoose, // 鼠标进入分支选择
+    playSeClickChoose, // 鼠标点击分支选择
   };
 };
 
