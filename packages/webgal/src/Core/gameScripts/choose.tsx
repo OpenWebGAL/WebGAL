@@ -8,7 +8,7 @@ import styles from './performStyles/choose.module.scss';
 import { webgalStore } from '@/store/store';
 import { textFont } from '@/store/userDataInterface';
 import { PerformController } from '@/Core/Modules/perform/performController';
-import useSoundEffect from '@/hooks/useSoundEffect';
+import { useSEByWebgalStore } from '@/hooks/useSoundEffect';
 import { WebGAL } from '@/Core/WebGAL';
 
 /**
@@ -20,7 +20,7 @@ export const choose = (sentence: ISentence): IPerform => {
   const chooseListFull = chooseList.map((e) => e.split(':'));
   const fontFamily = webgalStore.getState().userData.optionData.textboxFont;
   const font = fontFamily === textFont.song ? '"思源宋体", serif' : '"WebgalUI", serif';
-  const { playSeEnterChoose, playSeClickChoose } = useSoundEffect();
+  const { playSeEnterChoose, playSeClickChoose } = useSEByWebgalStore();
   const chooseElements = chooseListFull.map((e, i) => {
     return (
       <div
