@@ -176,3 +176,21 @@ Title_logos: 1.png | 2.png | Image Logo.png| -show -active=false -add=op! -count
     ]
   })
 })
+
+
+test("say statement", async () => {
+  const parser = new SceneParser((assetList) => {
+  }, (fileName, assetType) => {
+    return fileName;
+  }, ADD_NEXT_ARG_LIST, SCRIPT_CONFIG);
+
+  const result = parser.parse(`say:123 -speaker=xx;`,'test','test')
+  expect(result.sentenceList).toContainEqual({
+    command: commandType.say,
+    commandRaw: "say",
+    content: "123",
+    args: [{key: 'speaker', value: 'xx'}],
+    sentenceAssets: [],
+    subScene: []
+  })
+})
