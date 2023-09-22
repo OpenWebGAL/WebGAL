@@ -93,6 +93,8 @@
   /**
    * 在窗口大小改变时进行强制缩放
    */
+  const u = navigator.userAgent;
+  const isIOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
   function resize() {
     const targetHeight = 1440;
     const targetWidth = 2560;
@@ -144,6 +146,13 @@
       if (h * (9 / 16) < w) {
         ebgTransform = `rotate(90deg) translate(${mw2os}px, ${mh2os}px) scale(${zoomW2 * 1.75},${zoomW2 * 1.75})`;
         transform = `rotate(90deg) translate(${mw2os}px, ${mh2os}px) scale(${zoomW2},${zoomW2})`;
+      }
+      /**
+       * iOS 不强制旋转
+       */
+      if(isIOS){
+        const zoomWi = w/targetWidth;
+        transform = `translate(${-mw}px, ${-mh}px) scale(${zoomWi},${zoomWi})`
       }
     }
     if (ebg) {
