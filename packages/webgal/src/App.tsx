@@ -30,7 +30,7 @@ function App() {
         <BottomControlPanelFilm />
         <Backlog />
         <Title />
-        {/* <Logo /> */}
+        <Logo />
         <Extra />
         <Menu />
         <GlobalDialog />

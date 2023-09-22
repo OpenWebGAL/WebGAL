@@ -19,7 +19,7 @@ export interface IGuiState {
   showBacklog: boolean;
   titleBgm: string; // 标题背景音乐
   titleBg: string; // 标题背景图片
-  logoImage: string;
+  logoImage: string[];
   showExtra: boolean;
   showGlobalDialog: boolean;
   showPanicOverlay: boolean;
@@ -31,7 +31,7 @@ export type componentsVisibility = Pick<
   Exclude<keyof IGuiState, 'currentMenuTag' | 'titleBg' | 'titleBgm' | 'logoImage'>
 >;
 // 标题资源
-export type GuiAsset = Pick<IGuiState, 'titleBgm' | 'titleBg' | 'logoImage'>;
+export type GuiAsset = Pick<IGuiState, 'titleBgm' | 'titleBg'>;
 
 export interface IGuiStore {
   GuiState: IGuiState;

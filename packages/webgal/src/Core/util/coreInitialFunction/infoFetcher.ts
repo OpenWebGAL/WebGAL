@@ -3,7 +3,7 @@ import { logger } from '../etc/logger';
 import { assetSetter, fileType } from '../gameAssetsAccess/assetSetter';
 import { getStorage } from '../../controller/storage/storageController';
 import { webgalStore } from '@/store/store';
-import { setGuiAsset } from '@/store/GUIReducer';
+import { setGuiAsset, setLogoImage } from '@/store/GUIReducer';
 import { setEbg } from '@/Core/util/setEbg';
 import { setLogo } from '@/Core/util/setLogo';
 import { initKey } from '@/Core/controller/storage/fastSaveLoad';
@@ -40,8 +40,8 @@ export const infoFetcher = (url: string) => {
           }
 
           case 'LogoImage': {
-            const logoUrlList = args.map((url) => assetSetter(url, fileType.background)).join(' ');
-            dispatch(setGuiAsset({ asset: 'logoImage', value: logoUrlList }));
+            const logoUrlList = args.map((url) => assetSetter(url, fileType.background));
+            dispatch(setLogoImage(logoUrlList));
             break;
           }
 

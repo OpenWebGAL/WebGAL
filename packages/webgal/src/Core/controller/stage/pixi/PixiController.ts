@@ -7,6 +7,7 @@ import { IEffect, IFigureAssociatedAnimation } from '@/store/stageInterface';
 import { logger } from '@/Core/util/etc/logger';
 import { isIOS } from '@/Core/initializeScript';
 import { WebGALPixiContainer } from '@/Core/controller/stage/pixi/WebGALPixiContainer';
+// import { Live2DModel, SoundManager } from 'pixi-live2d-display'; // 如果要使用 Live2D，取消这里的注释
 
 export interface IAnimationObject {
   setStartState: Function;
@@ -500,7 +501,7 @@ export default class PixiStage {
   }
 
   /**
-   * Live2d立绘
+   * Live2d立绘，如果要使用 Live2D，取消这里的注释
    * @param jsonPath
    */
   // eslint-disable-next-line max-params
