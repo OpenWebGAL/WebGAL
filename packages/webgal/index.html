@@ -93,8 +93,8 @@
   /**
    * 在窗口大小改变时进行强制缩放
    */
-  const u = navigator.userAgent;
-  const isIOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
+  const ua = navigator.userAgent;
+  const isIOSDevice = !!ua.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
   function resize() {
     const targetHeight = 1440;
     const targetWidth = 2560;
@@ -150,7 +150,7 @@
       /**
        * iOS 不强制旋转
        */
-      if(isIOS){
+      if(isIOSDevice){
         const zoomWi = w/targetWidth;
         transform = `translate(${-mw}px, ${-mh}px) scale(${zoomWi},${zoomWi})`
       }

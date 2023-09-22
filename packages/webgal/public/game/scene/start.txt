@@ -1,1 +1,1 @@
-choose:简体中文:demo_zh_cn.txt|日本語:demo_ja.txt|English:demo_en.txt|Animation:demo_animation.txt;
+choose:简体中文:demo_zh_cn.txt|日本語:demo_ja.txt|English:demo_en.txt|Lip Sync Animation Test:demo_animation.txt;
