@@ -168,7 +168,7 @@ export const playVocal = (sentence: ISentence) => {
                   animationItem,
                   pos,
                 });
-              }, 100);
+              }, 50);
 
               // blinkAnimation
               let animationEndTime: number;

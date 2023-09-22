@@ -217,6 +217,10 @@ function removeFig(figObj: IStageObject, enterTikerKey: string, effects: IEffect
   }, duration);
 }
 
+/**
+ * 如果要使用 Live2D，取消这里的注释
+ * @param args
+ */
 function addLive2dFigure(...args: any[]) {
   // return WebGAL.gameplay.pixiStage?.addLive2dFigure.apply(args);
 }
