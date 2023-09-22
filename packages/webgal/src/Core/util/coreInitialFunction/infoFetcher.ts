@@ -39,7 +39,7 @@ export const infoFetcher = (url: string) => {
             break;
           }
 
-          case 'LogoImage': {
+          case 'Game_Logo': {
             const logoUrlList = args.map((url) => assetSetter(url, fileType.background));
             dispatch(setLogoImage(logoUrlList));
             break;
