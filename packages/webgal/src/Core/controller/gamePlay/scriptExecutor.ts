@@ -12,6 +12,7 @@ import { ISceneEntry } from '@/Core/Modules/scene';
 import { IBacklogItem } from '@/Core/Modules/backlog';
 import { SYSTEM_CONFIG } from '@/Core/config/config';
 import { WebGAL } from '@/Core/WebGAL';
+import { getSentenceArgByKey } from '@/Core/util/getSentenceArg';
 
 /**
  * 语句执行器
@@ -59,6 +60,21 @@ export const scriptExecutor = () => {
       .reduce((pre, curr) => pre + curr, '');
     runThis = strIf(valExp);
   }
+
+  // 如果语句类型为 'say',
+  // 则检查是否有 'speaker' 参数和对应的变量，如果有，则替换为变量。
+  if (currentScript.command === commandType.say) {
+    const speaker = getSentenceArgByKey(currentScript, 'speaker') as string;
+    const gameVar = getValueFromState(speaker).toString();
+    if (gameVar !== '0') {
+      currentScript.args.forEach((e) => {
+        if (e.key === 'speaker') {
+          e.value = gameVar;
+        }
+      });
+    }
+  }
+
   // 执行语句
   if (!runThis) {
     logger.warn('不满足条件，跳过本句！');
