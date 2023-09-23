@@ -1,4 +1,4 @@
-import { WebGAL } from '@/main';
+import { WebGAL } from '@/Core/WebGAL';
 
 export function generateTestblurAnimationObj(targetKey: string, duration: number) {
   const target = WebGAL.gameplay.pixiStage!.getStageObjByKey(targetKey);

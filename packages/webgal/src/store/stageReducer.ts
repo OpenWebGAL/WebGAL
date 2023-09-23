@@ -16,6 +16,7 @@ export const initState: IStageState = {
   figNameLeft: '', // 立绘_左 文件地址（相对或绝对）
   figNameRight: '', // 立绘_右 文件地址（相对或绝对）
   freeFigure: [],
+  figureAssociatedAnimation: [],
   showText: '', // 文字
   showTextSize: -1,
   showName: '', // 人物名
@@ -23,7 +24,8 @@ export const initState: IStageState = {
   choose: [], // 选项列表，现在不用，先预留
   vocal: '', // 语音 文件地址（相对或绝对）
   vocalVolume: 100, // 语音 音量调整（0 - 100）
-  bgm: { // 背景音乐
+  bgm: {
+    // 背景音乐
     src: '', // 背景音乐 文件地址（相对或绝对）
     enter: 0, // 背景音乐 淡入或淡出的毫秒数
     volume: 100, // 背景音乐 音量调整（0 - 100）

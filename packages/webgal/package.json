@@ -1,7 +1,7 @@
 {
   "name": "webgal",
   "private": true,
-  "version": "4.4.4",
+  "version": "4.4.5",
   "scripts": {
     "dev": "vite --host --port 3000",
     "build": "cross-env NODE_ENV=production tsc && vite build --base=./",
@@ -30,7 +30,7 @@
     "uuid": "^9.0.0",
     "vite-plugin-package-version": "^1.0.2",
     "pixi-live2d-display": "^0.4.0",
-    "webgal-parser": "4.4.3"
+    "webgal-parser": "4.4.5-fix2"
   },
   "devDependencies": {
     "@types/lodash": "^4.14.180",
@@ -40,7 +40,7 @@
     "@types/uuid": "^8.3.4",
     "@typescript-eslint/eslint-plugin": "^5.18.0",
     "@typescript-eslint/parser": "^5.18.0",
-    "@vitejs/plugin-react": "^1.0.7",
+    "@vitejs/plugin-react": "^4.0.4",
     "cross-env": "^7.0.3",
     "eslint": "^8.13.0",
     "eslint-config-alloy": "^4.5.1",
@@ -51,6 +51,6 @@
     "prettier": "^2.6.2",
     "rollup-plugin-visualizer": "^5.6.0",
     "typescript": "^4.5.4",
-    "vite": "^2.9.16"
+    "vite": "^4.4.9"
   }
 }

@@ -9,8 +9,8 @@ import { startFast, stopAll, stopFast } from '@/Core/controller/gamePlay/fastSki
 import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
 import styles from '@/Components/UI/Backlog/backlog.module.scss';
 import throttle from 'lodash/throttle';
-import { WebGAL } from '@/main';
 import { fastSaveGame } from '@/Core/controller/storage/fastSaveLoad';
+import { WebGAL } from '@/Core/WebGAL';
 
 // options备用
 export interface HotKeyType {

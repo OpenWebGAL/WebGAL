@@ -1,6 +1,7 @@
 import { commandType } from '@/Core/controller/scene/sceneInterface';
 import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
-import { WebGAL } from '@/main';
+
+import { WebGAL } from '@/Core/WebGAL';
 
 export const jmp = (labelName: string) => {
   // 在当前场景中找到指定的标签。

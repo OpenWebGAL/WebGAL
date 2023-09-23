@@ -1,6 +1,6 @@
-import { WebGAL } from '@/main';
 import { ITransform } from '@/store/stageInterface';
 import { gsap } from 'gsap';
+import { WebGAL } from '@/Core/WebGAL';
 
 /**
  * 动画创建模板

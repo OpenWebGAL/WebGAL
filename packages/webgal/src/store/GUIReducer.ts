@@ -3,7 +3,7 @@
  * @author Mahiru
  */
 import { getStorage } from '@/Core/controller/storage/storageController';
-import { IGuiState, MenuPanelTag, setAssetPayload, setVisibilityPayload } from '@/store/guiInterface';
+import { GuiAsset, IGuiState, MenuPanelTag, setAssetPayload, setVisibilityPayload } from '@/store/guiInterface';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 /**
@@ -18,7 +18,7 @@ const initState: IGuiState = {
   currentMenuTag: MenuPanelTag.Option,
   titleBg: '',
   titleBgm: '',
-  logoImage: '',
+  logoImage: [],
   showExtra: false,
   showGlobalDialog: false,
   showPanicOverlay: false,
@@ -60,10 +60,13 @@ const GUISlice = createSlice({
       const { asset, value } = action.payload;
       state[asset] = value;
     },
+    setLogoImage: (state, action: PayloadAction<string[]>) => {
+      state.logoImage = [...action.payload];
+    },
   },
 });
 
-export const { setVisibility, setMenuPanelTag, setGuiAsset } = GUISlice.actions;
+export const { setVisibility, setMenuPanelTag, setGuiAsset, setLogoImage } = GUISlice.actions;
 export default GUISlice.reducer;
 
 // export function GuiStateStore(): GuiStore {

@@ -11,9 +11,6 @@ import 'modern-css-reset/dist/reset.min.css';
 import i18n from 'i18next';
 import { initReactI18next, Trans } from 'react-i18next';
 import { defaultLanguage, i18nTranslationResources, language } from './config/language';
-import { WebgalCore } from '@/Core/webgalCore';
-
-export const WebGAL = new WebgalCore();
 
 i18n
   .use(initReactI18next) // passes i18n down to react-i18next

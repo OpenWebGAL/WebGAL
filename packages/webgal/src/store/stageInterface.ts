@@ -77,6 +77,24 @@ export interface IFreeFigure {
   key: string;
 }
 
+export interface IFigureAssociatedAnimation {
+  mouthAnimation: IMouthAnimationFile;
+  blinkAnimation: IEyesAnimationFile;
+  targetId: string;
+  animationFlag: string;
+}
+
+export interface IMouthAnimationFile {
+  open: string;
+  close: string;
+  halfOpen: string;
+}
+
+export interface IEyesAnimationFile {
+  open: string;
+  close: string;
+}
+
 /**
  * @interface IStageState 游戏舞台数据接口
  */
@@ -88,6 +106,7 @@ export interface IStageState {
   figNameRight: string; // 立绘_右 文件地址（相对或绝对）
   // 自由立绘
   freeFigure: Array<IFreeFigure>;
+  figureAssociatedAnimation: Array<IFigureAssociatedAnimation>;
   showText: string; // 文字
   showTextSize: number; // 文字
   showName: string; // 人物名
@@ -95,11 +114,12 @@ export interface IStageState {
   choose: Array<IChooseItem>; // 选项列表
   vocal: string; // 语音 文件地址（相对或绝对）
   vocalVolume: number; // 语音 音量调整（0 - 100）
-  bgm: { // 背景音乐
+  bgm: {
+    // 背景音乐
     src: string; // 背景音乐 文件地址（相对或绝对）
     enter: number; // 背景音乐 淡入或淡出的毫秒数
     volume: number; // 背景音乐 音量调整（0 - 100）
-  }
+  };
   uiSe: string; // 用户界面音效 文件地址（相对或绝对）
   miniAvatar: string; // 小头像 文件地址（相对或绝对）
   GameVar: IGameVar; // 游戏内变量

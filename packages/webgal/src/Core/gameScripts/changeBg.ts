@@ -5,14 +5,15 @@ import styles from '../../Components/Stage/stage.module.scss';
 import { webgalStore } from '@/store/store';
 import { setStage } from '@/store/stageReducer';
 import { getSentenceArgByKey } from '@/Core/util/getSentenceArg';
-import { WebGAL } from '@/main';
 import { unlockCgInUserData } from '@/store/userDataReducer';
 import { logger } from '@/Core/util/etc/logger';
 import { ITransform } from '@/store/stageInterface';
 import { generateTransformAnimationObj } from '@/Core/gameScripts/function/generateTransformAnimationObj';
-import { getAnimateDuration, IUserAnimation } from '@/Core/Modules/animations';
+import { IUserAnimation } from '@/Core/Modules/animations';
 import { updateCurrentEffects } from '../controller/stage/pixi/PixiController';
 import cloneDeep from 'lodash/cloneDeep';
+import { getAnimateDuration } from '@/Core/Modules/animationFunctions';
+import { WebGAL } from '@/Core/WebGAL';
 
 /**
  * 进行背景图片的切换

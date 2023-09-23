@@ -5,8 +5,8 @@ import ReactDOM from 'react-dom';
 import styles from '../../Components/Stage/FullScreenPerform/fullScreenPerform.module.scss';
 import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
 import { PerformController } from '@/Core/Modules/perform/performController';
-import { WebGAL } from '@/main';
 import { logger } from '@/Core/util/etc/logger';
+import { WebGAL } from '@/Core/WebGAL';
 /**
  * 显示一小段黑屏演示
  * @param sentence
@@ -20,24 +20,24 @@ export const intro = (sentence: ISentence): IPerform => {
   let fontSize: string | undefined;
   let backgroundColor: any = 'rgba(0, 0, 0, 1)';
   let color: any = 'rgba(255, 255, 255, 1)';
-  const animationClass:any = (type: string, length: number = 0) => {
+  const animationClass: any = (type: string, length = 0) => {
     switch (type) {
-      case "fadeIn":
+      case 'fadeIn':
         return styles.fadeIn;
-      case "slideIn":
+      case 'slideIn':
         return styles.slideIn;
-      case "typingEffect":
+      case 'typingEffect':
         return `${styles.typingEffect} ${length}`;
-      case "pixelateEffect":
-          return styles.pixelateEffect;
-      case "revealAnimation":
-          return styles.revealAnimation;
+      case 'pixelateEffect':
+        return styles.pixelateEffect;
+      case 'revealAnimation':
+        return styles.revealAnimation;
       default:
         return styles.fadeIn;
     }
-};
+  };
   let chosenAnimationClass = styles.fadeIn;
-  let delayTime:number = 1500;
+  let delayTime = 1500;
 
   for (const e of sentence.args) {
     if (e.key === 'backgroundColor') {
@@ -60,7 +60,7 @@ export const intro = (sentence: ISentence): IPerform => {
       }
     }
     if (e.key === 'animation') {
-        chosenAnimationClass = animationClass(e.value);
+      chosenAnimationClass = animationClass(e.value);
     }
     if (e.key === 'delayTime') {
       const parsedValue = parseInt(e.value.toString(), 10);

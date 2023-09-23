@@ -11,9 +11,9 @@ import { restorePerform } from '@/Core/controller/storage/jumpFromBacklog';
 import { setEbg } from '@/Core/util/setEbg';
 import useTrans from '@/hooks/useTrans';
 // import { resize } from '@/Core/util/resize';
-import { WebGAL } from '@/main';
 import { hasFastSaveRecord, loadFastSaveGame } from '@/Core/controller/storage/fastSaveLoad';
 import useSoundEffect from '@/hooks/useSoundEffect';
+import { WebGAL } from '@/Core/WebGAL';
 
 /**
  * 标题页

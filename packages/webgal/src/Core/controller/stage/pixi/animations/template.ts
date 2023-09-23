@@ -1,4 +1,4 @@
-import { WebGAL } from '@/main';
+import { WebGAL } from '@/Core/WebGAL';
 
 /**
  * 动画创建模板

@@ -4,8 +4,9 @@ import { getSentenceArgByKey } from '@/Core/util/getSentenceArg';
 import { IAnimationObject } from '@/Core/controller/stage/pixi/PixiController';
 import { logger } from '@/Core/util/etc/logger';
 import { webgalStore } from '@/store/store';
-import { WebGAL } from '@/main';
-import { getAnimateDuration, getAnimationObject } from '../Modules/animations';
+
+import { getAnimateDuration, getAnimationObject } from '@/Core/Modules/animationFunctions';
+import { WebGAL } from '@/Core/WebGAL';
 
 /**
  * 设置背景动画
