@@ -48,42 +48,6 @@ WebGAL 스크립트를 사용하든 비주얼 에디터를 사용하든 개발�
 
 **엔진 개발에 참여하고 싶은 개발자는 [이 프로젝트에 참여하기 위한 안내서](https://docs.openwebgal.com/developers/)를 읽어주세요.**
 
-### Live2D에 대하여
-엔진은 이제 Live2D 캐릭터 모델의 사용을 지원합니다. Live2D 모델을 사용하려면 다음 단계를 따르세요:
-
-1. Live2D 사용에 필요한 권한을 얻습니다.
-
-2. 다음 링크에서 Live2D와 CubismCore를 다운로드합니다:
-
-  - Live2D: https://cdn.jsdelivr.net/gh/dylanNew/live2d/webgl/Live2D/lib/live2d.min.js
-  - CubismCore: https://cubism.live2d.com/sdk-web/cubismcore/live2dcubismcore.min.js
-
-3. `l2d.js`와 `live2dcubismcore.min.js`를 각각 이름 변경하고, 파일을 `packages/webgal/src/assets/lib`에 넣은 다음 `packages/webgal/index.html`로 이동하여 다음 두 줄의 주석을 해제합니다:
-   ```
-   htmlCopy code<script src="/src/assets/lib/l2d.js"></script>
-   <script src="/src/assets/lib/live2dcubismcore.min.js"></script>
-   ```
-
-4. `packages/webgal/src/Core/controller/stage/pixi/PixiController.ts` 파일에서 다음 줄의 주석을 해제합니다:
-
-   ```
-   javascriptCopy codeimport { Live2DModel, SoundManager } from 'pixi-live2d-display';
-   public addLive2dFigure(key: string, jsonPath: string, pos: string, motion: string) {
-      // ...
-   }
-   ```
-
-5. `packages/webgal/src/Components/Stage/MainStage/useSetFigure.ts` 파일에서 다음 줄의 주석을 해제합니다:
-
-   ```
-   javascriptCopy code
-   return WebGAL.gameplay.pixiStage?.addLive2dFigure(...args);
-   ```
-
-6. 이제 Live2D 캐릭터 모델을 삽화의 일부로 사용할 수 있습니다. 전체 모델 디렉토리를 `game/figure` 디렉토리 안에 넣습니다. 캐릭터 모델을 표시하려면 해당 JSON 파일을 호출합니다.
-
-**주의: 이 프로젝트의 작성자는 Live2D SDK 소스 코드나 모델을 사용하지 않았습니다. Live2D 사용으로 인해 발생하는 저작권 분쟁은 수정된 프로젝트의 개발자나 창작자의 단독 책임입니다!**
-
 ### 후원
 
 WebGAL은 오픈소스 소프트웨어이므로 MPL-2.0 오픈소스 라이센스의 범위 내에서 이 소프트웨어를 무료로 사용할 수 있으며, 상업적으로 사용할 수 있습니다.
