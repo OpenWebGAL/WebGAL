@@ -7,9 +7,9 @@ import { setVisibility } from '@/store/GUIReducer';
 import { logger } from '@/Core/util/etc/logger';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import useTrans from '@/hooks/useTrans';
-import { WebGAL } from '@/main';
 import { splitChars } from '@/Components/Stage/TextBox/TextBox';
 import useSoundEffect from '@/hooks/useSoundEffect';
+import { WebGAL } from '@/Core/WebGAL';
 
 export const Backlog = () => {
   const t = useTrans('gaming.');

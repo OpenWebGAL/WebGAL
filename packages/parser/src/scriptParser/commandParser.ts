@@ -16,7 +16,7 @@ export const commandParser = (commandRaw: string, ADD_NEXT_ARG_LIST:any, SCRIPT_
   const type: commandType = getCommandType(commandRaw, ADD_NEXT_ARG_LIST, SCRIPT_CONFIG);
   returnCommand.type = type;
   // 如果是对话，加上额外的参数
-  if (type === commandType.say) {
+  if (type === commandType.say && commandRaw!== 'say') {
     returnCommand.additionalArgs.push({
       key: "speaker",
       value: commandRaw

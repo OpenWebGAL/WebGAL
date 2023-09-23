@@ -1,11 +1,11 @@
 import { webgalStore } from '@/store/store';
 import { setFastSave } from '@/store/userDataReducer';
 import { getStorageAsync, setStorageAsync } from '@/Core/controller/storage/storageController';
-import { WebGAL } from '@/main';
 import { ISaveData } from '@/store/userDataInterface';
 import { loadGameFromStageData } from '@/Core/controller/storage/loadGame';
 import { generateCurrentStageData } from '@/Core/controller/storage/saveGame';
 import cloneDeep from 'lodash/cloneDeep';
+import { WebGAL } from '@/Core/WebGAL';
 
 export let fastSaveGameKey = '';
 export let isFastSaveKey = '';

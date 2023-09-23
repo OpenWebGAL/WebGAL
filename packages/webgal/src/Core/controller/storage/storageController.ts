@@ -3,7 +3,8 @@ import { IUserData } from '@/store/userDataInterface';
 import { logger } from '../../util/etc/logger';
 import { webgalStore } from '@/store/store';
 import { initState, resetUserData } from '@/store/userDataReducer';
-import { WebGAL } from '@/main';
+
+import { WebGAL } from '@/Core/WebGAL';
 
 /**
  * 写入本地存储

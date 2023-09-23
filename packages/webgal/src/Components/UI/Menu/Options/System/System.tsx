@@ -12,9 +12,9 @@ import { logger } from '@/Core/util/etc/logger';
 import useTrans from '@/hooks/useTrans';
 import useLanguage from '@/hooks/useLanguage';
 import languages, { language } from '@/config/language';
-import { WebGAL } from '@/main';
 import { useState } from 'react';
 import About from '@/Components/UI/Menu/Options/System/About';
+import { WebGAL } from '@/Core/WebGAL';
 
 export function System() {
   const userDataState = useSelector((state: RootState) => state.userData);

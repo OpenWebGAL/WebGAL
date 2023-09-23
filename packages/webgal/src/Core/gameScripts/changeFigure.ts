@@ -5,11 +5,13 @@ import { setStage } from '@/store/stageReducer';
 import { updateCurrentEffects } from '../controller/stage/pixi/PixiController';
 import cloneDeep from 'lodash/cloneDeep';
 import { getSentenceArgByKey } from '@/Core/util/getSentenceArg';
-import { WebGAL } from '@/main';
 import { IStageState, ITransform } from '@/store/stageInterface';
-import { getAnimateDuration, IUserAnimation } from '@/Core/Modules/animations';
+import { IUserAnimation } from '@/Core/Modules/animations';
 import { generateTransformAnimationObj } from '@/Core/gameScripts/function/generateTransformAnimationObj';
-
+import { assetSetter, fileType } from '@/Core/util/gameAssetsAccess/assetSetter';
+import { logger } from '@/Core/util/etc/logger';
+import { getAnimateDuration } from '@/Core/Modules/animationFunctions';
+import { WebGAL } from '@/Core/WebGAL';
 /**
  * 更改立绘
  * @param sentence 语句
@@ -22,28 +24,94 @@ export const changeFigure = (sentence: ISentence): IPerform => {
   let motion = '';
   let key = '';
   let duration = 500;
+  let mouthOpen = '';
+  let mouthClose = '';
+  let mouthHalfOpen = '';
+  let eyesOpen = '';
+  let eyesClose = '';
+  let animationFlag: any = '';
+  let mouthAnimationKey: any = 'mouthAnimation';
+  let eyesAnimationKey: any = 'blinkAnimation';
+  const dispatch = webgalStore.dispatch;
+
   for (const e of sentence.args) {
-    if (e.key === 'left' && e.value === true) {
-      pos = 'left';
-    }
-    if (e.key === 'right' && e.value === true) {
-      pos = 'right';
-    }
-    if (e.key === 'clear' && e.value === true) {
-      content = '';
-    }
-    if (e.key === 'id') {
-      isFreeFigure = true;
-      key = e.value.toString();
-    }
-    if (e.key === 'motion') {
-      motion = e.value.toString();
-    }
-    if (content === 'none') {
-      content = '';
+    switch (e.key) {
+      case 'left':
+        if (e.value === true) {
+          pos = 'left';
+          mouthAnimationKey = 'mouthAnimationLeft';
+          eyesAnimationKey = 'blinkAnimationLeft';
+        }
+        break;
+      case 'right':
+        if (e.value === true) {
+          pos = 'right';
+          mouthAnimationKey = 'mouthAnimationRight';
+          eyesAnimationKey = 'blinkAnimationRight';
+        }
+        break;
+      case 'clear':
+        if (e.value === true) {
+          content = '';
+        }
+        break;
+      case 'id':
+        isFreeFigure = true;
+        key = e.value.toString();
+        break;
+      case 'motion':
+        motion = e.value.toString();
+        break;
+      case 'mouthOpen':
+        mouthOpen = e.value.toString();
+        mouthOpen = assetSetter(mouthOpen, fileType.figure);
+        break;
+      case 'mouthClose':
+        mouthClose = e.value.toString();
+        mouthClose = assetSetter(mouthClose, fileType.figure);
+        break;
+      case 'mouthHalfOpen':
+        mouthHalfOpen = e.value.toString();
+        mouthHalfOpen = assetSetter(mouthHalfOpen, fileType.figure);
+        break;
+      case 'eyesOpen':
+        eyesOpen = e.value.toString();
+        eyesOpen = assetSetter(eyesOpen, fileType.figure);
+        break;
+      case 'eyesClose':
+        eyesClose = e.value.toString();
+        eyesClose = assetSetter(eyesClose, fileType.figure);
+        break;
+      case 'animationFlag':
+        animationFlag = e.value.toString();
+        break;
+      case 'none':
+        content = '';
+        break;
+      default:
+        break;
     }
   }
-  const dispatch = webgalStore.dispatch;
+
+  const id = key ? key : `fig-${pos}`;
+
+  const currentFigureAssociatedAnimation = webgalStore.getState().stage.figureAssociatedAnimation;
+  const filteredFigureAssociatedAnimation = currentFigureAssociatedAnimation.filter((item) => item.targetId !== id);
+  const newFigureAssociatedAnimationItem = {
+    targetId: id,
+    animationFlag: animationFlag,
+    mouthAnimation: {
+      open: mouthOpen,
+      close: mouthClose,
+      halfOpen: mouthHalfOpen,
+    },
+    blinkAnimation: {
+      open: eyesOpen,
+      close: eyesClose,
+    },
+  };
+  filteredFigureAssociatedAnimation.push(newFigureAssociatedAnimationItem);
+  dispatch(setStage({ key: 'figureAssociatedAnimation', value: filteredFigureAssociatedAnimation }));
 
   /**
    * 删掉相关 Effects，因为已经移除了

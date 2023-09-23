@@ -6,7 +6,8 @@ import styles from '../../Components/Stage/FullScreenPerform/fullScreenPerform.m
 import { webgalStore } from '@/store/store';
 import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
 import { getRandomPerformName, PerformController } from '@/Core/Modules/perform/performController';
-import { WebGAL } from '@/main';
+
+import { WebGAL } from '@/Core/WebGAL';
 
 /**
  * 播放一段视频

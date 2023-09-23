@@ -61,6 +61,7 @@ $height: 330px;
 
 .outer {
   position: absolute;
+  white-space: nowrap;
   left: 0;
   top: 0;
   //background-image: linear-gradient(rgba(255, 255, 255, 1) 0%, rgb(225, 237, 255) 100%);
@@ -77,6 +78,7 @@ $height: 330px;
 }
 
 .inner {
+  white-space: nowrap;
   position: absolute;
   left: 0;
   top: 0;
@@ -87,6 +89,7 @@ $height: 330px;
 
 .zhanwei {
   color: transparent;
+  white-space: nowrap;
 }
 
 //

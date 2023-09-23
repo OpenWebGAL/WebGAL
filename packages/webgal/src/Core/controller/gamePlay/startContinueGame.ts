@@ -5,11 +5,11 @@ import { resetStage } from '@/Core/controller/stage/resetStage';
 import { webgalStore } from '@/store/store';
 import { setVisibility } from '@/store/GUIReducer';
 import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
-import { WebGAL } from '@/main';
 import { setEbg } from '@/Core/util/setEbg';
 import { restorePerform } from '@/Core/controller/storage/jumpFromBacklog';
 
 import { hasFastSaveRecord, loadFastSaveGame } from '@/Core/controller/storage/fastSaveLoad';
+import { WebGAL } from '@/Core/WebGAL';
 
 /**
  * 从头开始游戏

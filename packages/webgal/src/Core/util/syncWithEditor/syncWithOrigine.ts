@@ -6,7 +6,8 @@ import { logger } from '../etc/logger';
 import { webgalStore } from '@/store/store';
 import { setVisibility } from '@/store/GUIReducer';
 import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
-import { WebGAL } from '@/main';
+
+import { WebGAL } from '@/Core/WebGAL';
 
 export const syncWithOrigine = (str: string) => {
   const strLst = str.split(' ');

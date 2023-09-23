@@ -8,10 +8,10 @@ import { getValueFromState } from '@/Core/gameScripts/setVar';
 import { strIf } from '@/Core/gameScripts/function/strIf';
 import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
 import cloneDeep from 'lodash/cloneDeep';
-import { WebGAL } from '@/main';
 import { ISceneEntry } from '@/Core/Modules/scene';
 import { IBacklogItem } from '@/Core/Modules/backlog';
 import { SYSTEM_CONFIG } from '@/Core/config/config';
+import { WebGAL } from '@/Core/WebGAL';
 
 /**
  * 语句执行器

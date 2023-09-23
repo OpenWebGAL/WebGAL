@@ -5,7 +5,8 @@ import { webgalAnimations } from '@/Core/controller/stage/pixi/animations';
 import { IAnimationObject } from '@/Core/controller/stage/pixi/PixiController';
 import { logger } from '@/Core/util/etc/logger';
 import { webgalStore } from '@/store/store';
-import { WebGAL } from '@/main';
+
+import { WebGAL } from '@/Core/WebGAL';
 
 /**
  * 设置背景动画

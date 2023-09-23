@@ -12,8 +12,8 @@ import uniqWith from 'lodash/uniqWith';
 import { scenePrefetcher } from './util/prefetcher/scenePrefetcher';
 import PixiStage from '@/Core/controller/stage/pixi/PixiController';
 import axios from 'axios';
-import { WebGAL } from '@/main';
 import { __INFO } from '@/config/info';
+import { WebGAL } from '@/Core/WebGAL';
 
 const u = navigator.userAgent;
 export const isIOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); // 判断是否是 iOS终端
@@ -33,9 +33,9 @@ export const initializeScript = (): void => {
      * iOS
      */
     alert(
-      `由于苹果设备的兼容性问题，引擎可能表现不正常或运行缓慢。
-| Due to compatibility issues with Apple devices, the engine may behave abnormally or run slowly.
-| Appleのデバイスとの互換性の問題により、エンジンの動作が正常でない場合や遅くなる可能性があります。`,
+      `iOS 用户请横屏使用以获得最佳体验
+| Please use landscape mode on iOS for the best experience
+| iOS ユーザーは横画面での使用をお勧めします`,
     );
   }
 
