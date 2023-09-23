@@ -2,13 +2,13 @@
 <html lang="zh-Hans">
 <head>
   <meta charset="UTF-8"/>
-  <link rel="icon" type="image/x-icon" href="./assets/favicon.a0f5bb8c.ico"/>
+  <link rel="icon" type="image/x-icon" href="./assets/favicon-a0f5bb8c.ico"/>
   <!--    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>-->
   <title>WebGAL</title>
   <meta name="viewport"
         content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no"/>
-  <script type="module" crossorigin src="./assets/index.9a5985bf.js"></script>
-  <link rel="stylesheet" href="./assets/index.2a7077fa.css">
+  <script type="module" crossorigin src="./assets/index-0271d4b6.js"></script>
+  <link rel="stylesheet" href="./assets/index-baf638f8.css">
 </head>
 <body>
 <!--快速显示落地页，让用户感知不到加载的过程-->
@@ -95,6 +95,8 @@
   /**
    * 在窗口大小改变时进行强制缩放
    */
+  const ua = navigator.userAgent;
+  const isIOSDevice = !!ua.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
   function resize() {
     const targetHeight = 1440;
     const targetWidth = 2560;
@@ -146,6 +148,13 @@
       if (h * (9 / 16) < w) {
         ebgTransform = `rotate(90deg) translate(${mw2os}px, ${mh2os}px) scale(${zoomW2 * 1.75},${zoomW2 * 1.75})`;
         transform = `rotate(90deg) translate(${mw2os}px, ${mh2os}px) scale(${zoomW2},${zoomW2})`;
+      }
+      /**
+       * iOS 不强制旋转
+       */
+      if(isIOSDevice){
+        const zoomWi = w/targetWidth;
+        transform = `translate(${-mw}px, ${-mh}px) scale(${zoomWi},${zoomWi})`
       }
     }
     if (ebg) {
