@@ -51,42 +51,6 @@ Que vous utilisiez les scripts WebGAL ou l'éditeur visuel pour le développemen
 
 **Les développeurs souhaitant participer au développement du moteur, veuillez lire [le guide de participation pour ce projet](https://docs.openwebgal.com/developers/)**
 
-### À propos de Live2D
-Le moteur prend désormais en charge l'utilisation de modèles de personnages Live2D. Si vous souhaitez utiliser des modèles Live2D, suivez ces étapes :
-
-1. Obtenir l'autorisation nécessaire pour utiliser Live2D.
-
-2. Téléchargez Live2D et CubismCore aux liens suivants :
-
-   - Live2D : https://cdn.jsdelivr.net/gh/dylanNew/live2d/webgl/Live2D/lib/live2d.min.js
-   - CubismCore : https://cubism.live2d.com/sdk-web/cubismcore/live2dcubismcore.min.js
-
-3. Renommez `l2d.js` et `live2dcubismcore.min.js` respectivement, puis placez les fichiers dans `packages/webgal/src/assets/lib`, et décommentez ensuite les deux lignes suivantes dans `packages/webgal/index.html` pour qu'elles deviennent :
-   ```
-   htmlCopy code<script src="/src/assets/lib/l2d.js"></script>
-   <script src="/src/assets/lib/live2dcubismcore.min.js"></script>
-   ```
-
-4. Dans le fichier `packages/webgal/src/Core/controller/stage/pixi/PixiController.ts`, décommentez les lignes suivantes :
-
-   ```
-   javascriptCopy codeimport { Live2DModel, SoundManager } from 'pixi-live2d-display';
-   public addLive2dFigure(key: string, jsonPath: string, pos: string, motion: string) {
-      // ...
-   }
-   ```
-
-5. Dans le fichier `packages/webgal/src/Components/Stage/MainStage/useSetFigure.ts`, décommentez la ligne suivante :
-
-   ```
-   javascriptCopy code
-   return WebGAL.gameplay.pixiStage?.addLive2dFigure(...args);
-   ```
-
-6. Vous pouvez désormais utiliser des modèles de personnages Live2D dans vos illustrations. Placez le répertoire complet du modèle dans le répertoire `game/figure`. Pour afficher un modèle de personnage, appelez le fichier JSON correspondant.
-
-**Note : L'auteur de ce projet n'a utilisé aucun code source ou modèle du SDK Live2D. Toute demande de droits d'auteur découlant de l'utilisation de Live2D relève de la responsabilité exclusive des développeurs ou créateurs du projet modifié !**
-
 ### Soutenir
 
 WebGAL est un logiciel open-source, vous pouvez donc utiliser ce logiciel gratuitement dans le cadre de la licence open-source MPL-2.0, et il est disponible pour une utilisation commerciale.

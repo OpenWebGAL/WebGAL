@@ -1,4 +1,4 @@
-## 发布日志：WebGAL
+## 发布日志
 
 **本仓库只发布源代码**
 
@@ -8,82 +8,91 @@
 
 #### 新功能
 
-现在可以为立绘和背景对象设置一个效果，并自动生成一个从当前效果转换到目标效果的动画，使制作更简单。
+添加唇形同步和眨眼动画
+
+添加启动图
 
 #### 修复
 
-鉴赏画面 bgm 无法切换的问题
+iOS 设备上无法正常进行游戏的异常
 
-带 id 的立绘，应用的效果未在立绘卸载后清除的问题
+文本框在遇到特殊符号时的换行异常
 
-背景音乐淡入淡出引起的问题
+解析器解析 `say` 指令时出现的异常
 
-其他已知问题
+解析器解析音频文件路径时出现的异常
 
-## Release Notes: WebGAL 
+<!-- English Translation -->
+## Release Notes
 
 **This repository only releases source code**
 
-**If you want to create, produce, and preview WebGAL games in real-time using a convenient graphical editor, please [download WebGAL Graphical Editor](https://github.com/MakinoharaShoko/WebGAL_Terre/releases)**
+**If you want to create, produce, and preview WebGAL games conveniently with a graphical editor, please [download the WebGAL Graphical Editor](https://github.com/MakinoharaShoko/WebGAL_Terre/releases)**
 
 ### In This Version
 
 #### New Features
 
-You can now set an effect for character sprites and background objects and automatically generate an animation that transitions from the current effect to the target effect, making production easier.
+Added lip sync and blinking animations
+
+Added startup image
 
 #### Fixes
 
-Fixed the issue where the BGM could not be switched in the appreciation screen
+Resolved issues with game not working properly on iOS devices
 
-Fixed the issue where the effects applied to sprites with IDs were not cleared after the sprite was unloaded
+Fixed text box line breaks when encountering special characters
 
-Fixed issues caused by background music fading in and out
+Resolved exceptions when parser parses `say` commands
 
-Other known issues
+Resolved exceptions when parser parses audio file paths
 
----
-## リリースノート：WebGAL 
+<!-- Japanese Translation -->
+## リリースノート
 
 **このリポジトリはソースコードのみをリリースします**
 
-**便利なグラフィックエディタを使用して、WebGALゲームをリアルタイムで作成、制作、プレビューしたい場合は、[WebGAL グラフィックエディタをダウンロードしてください](https://github.com/MakinoharaShoko/WebGAL_Terre/releases)**
+**WebGAL ゲームを便利なグラフィカルエディタで作成、制作、そしてリアルタイムでプレビューしたい場合は、[WebGAL グラフィカルエディタをダウンロードしてください](https://github.com/MakinoharaShoko/WebGAL_Terre/releases)**
 
 ### このバージョンで
 
 #### 新機能
 
-キャラクタースプライトと背景オブジェクトにエフェクトを設定し、現在のエフェクトから目標エフェクトに遷移するアニメーションを自動的に生成できるようになりました。これにより、制作が簡単になります。
+リップシンクとまばたきアニメーションを追加
+
+起動画像を追加
 
 #### 修正
 
-鑑賞画面でBGMが切り替えられない問題を修正
+iOS デバイスでゲームが正常に動作しない問題を修正
 
-ID付きのスプライトに適用されたエフェクトが、スプライトがアンロードされた後にクリアされない問題を修正
+特殊文字に遭遇した際のテキストボックスの改行問題を修正
 
-背景音楽のフェードインとフェードアウトによって引き起こされる問題を修正
+パーサが `say` コマンドを解析する際の例外を修正
 
-その他の既知の問題
+パーサがオーディオファイルパスを解析する際の例外を修正
 
----
-## Notes de version : WebGAL 
+<!-- French Translation -->
+## Notes de version
 
-**Ce dépôt publie uniquement le code source**
+**Ce dépôt ne publie que du code source**
 
-**Si vous souhaitez créer, produire et prévisualiser des jeux WebGAL en temps réel à l'aide d'un éditeur graphique pratique, veuillez [télécharger l'éditeur graphique WebGAL](https://github.com/MakinoharaShoko/WebGAL_Terre/releases)**
+**Si vous souhaitez créer, produire et prévisualiser des jeux WebGAL de manière pratique avec un éditeur graphique, veuillez [télécharger l'Éditeur Graphique WebGAL](https://github.com/MakinoharaShoko/WebGAL_Terre/releases)**
 
 ### Dans cette version
 
 #### Nouvelles fonctionnalités
 
-Vous pouvez désormais définir un effet pour les sprites de personnages et les objets d'arrière-plan et générer automatiquement une animation qui passe de l'effet actuel à l'effet cible, ce qui facilite la production.
+Ajout de la synchronisation labiale et des animations de clignement
+
+Ajout d'une image de démarrage
 
 #### Corrections
 
-Correction du problème où il était impossible de changer le BGM dans l'écran d'appréciation
+Résolution des problèmes de jeu ne fonctionnant pas correctement sur les appareils iOS
 
-Correction du problème où les effets appliqués aux sprites avec des ID n'étaient pas effacés après le déchargement du sprite
+Correction des retours à la ligne dans la zone de texte lors de la rencontre de caractères spéciaux
 
-Correction des problèmes causés par la musique de fond se fondant dans et hors
+Résolution des exceptions lorsque le parseur analyse les commandes `say`
 
-Autres problèmes connus
+Résolution des exceptions lorsque le parseur analyse les chemins de fichiers audio
