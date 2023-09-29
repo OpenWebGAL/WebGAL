@@ -1,11 +1,12 @@
 import { commandType, ISentence } from '@/Core/controller/scene/sceneInterface';
-import { IPerform, IRunPerform } from '@/Core/Modules/perform/performInterface';
+import { IPerform } from '@/Core/Modules/perform/performInterface';
 import { logger } from '@/Core/util/etc/logger';
 import { webgalStore } from '@/store/store';
 import { resetStageState } from '@/store/stageReducer';
 import cloneDeep from 'lodash/cloneDeep';
 
 import { WebGAL } from '@/Core/WebGAL';
+import { IRunPerform } from '@/store/stageInterface';
 
 /**
  * 初始化pixi

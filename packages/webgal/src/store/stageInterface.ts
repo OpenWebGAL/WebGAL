@@ -1,4 +1,4 @@
-import { IRunPerform } from '@/Core/Modules/perform/performInterface';
+import { ISentence } from '@/Core/controller/scene/sceneInterface';
 
 /**
  * 游戏内变量
@@ -93,6 +93,16 @@ export interface IMouthAnimationFile {
 export interface IEyesAnimationFile {
   open: string;
   close: string;
+}
+
+/**
+ * 启动演出接口
+ * @interface IRunPerform
+ */
+export interface IRunPerform {
+  id: string;
+  isHoldOn: boolean; // 演出类型
+  script: ISentence; // 演出脚本
 }
 
 /**
