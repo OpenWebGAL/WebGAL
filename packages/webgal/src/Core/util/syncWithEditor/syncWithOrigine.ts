@@ -9,24 +9,21 @@ import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
 
 import { WebGAL } from '@/Core/WebGAL';
 
-export const syncWithOrigine = (str: string) => {
-  const strLst = str.split(' ');
-  const scene = strLst[1].replace(/json/g, 'txt');
-  const sentenceID = parseInt(strLst[2], 10);
-  logger.warn('正在跳转到' + scene + ':' + sentenceID);
+export const syncWithOrigine = (sceneName: string, sentenceId: number) => {
+  logger.warn('正在跳转到' + sceneName + ':' + sentenceId);
   const dispatch = webgalStore.dispatch;
   dispatch(setVisibility({ component: 'showTitle', visibility: false }));
   dispatch(setVisibility({ component: 'showMenuPanel', visibility: false }));
   resetStage(true);
   // 重新获取初始场景
-  const sceneUrl: string = assetSetter(scene, fileType.scene);
+  const sceneUrl: string = assetSetter(sceneName, fileType.scene);
   // 场景写入到运行时
   sceneFetcher(sceneUrl).then((rawScene) => {
     WebGAL.sceneManager.sceneData.currentScene = sceneParser(rawScene, 'start.txt', sceneUrl);
     // 开始快进到指定语句
     const currentSceneName = WebGAL.sceneManager.sceneData.currentScene.sceneName;
     WebGAL.gameplay.isFast = true;
-    syncFast(sentenceID, currentSceneName);
+    syncFast(sentenceId, currentSceneName);
   });
 };
 
