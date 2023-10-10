@@ -1,5 +1,8 @@
 import { logger } from '../etc/logger';
 import { syncWithOrigine } from '@/Core/util/syncWithEditor/syncWithOrigine';
+import { DebugCommand, IDebugMessage } from '@/types/debugProtocol';
+import { WebGAL } from '@/Core/WebGAL';
+import { webgalStore } from '@/store/store';
 
 export const webSocketFunc = () => {
   const loc: string = window.location.hostname;
@@ -15,13 +18,27 @@ export const webSocketFunc = () => {
   const socket = new WebSocket(wsUrl);
   socket.onopen = () => {
     logger.info('socket已连接');
-    socket.send(' WebGAL 已和 Terre 建立连接。');
+    function sendStageSyncMessage() {
+      const message: IDebugMessage = {
+        command: DebugCommand.SYNCFC,
+        sceneMsg: {
+          scene: WebGAL.sceneManager.sceneData.currentScene.sceneName,
+          sentence: WebGAL.sceneManager.sceneData.currentSentenceId,
+        },
+        stageSyncMsg: webgalStore.getState().stage,
+      };
+      socket.send(JSON.stringify(message));
+      logger.debug('传送信息', message);
+      setTimeout(sendStageSyncMessage, 1000);
+    }
+    sendStageSyncMessage();
   };
   socket.onmessage = (e) => {
     logger.info('收到信息', e.data);
     const str: string = e.data;
-    if (str.match('jmp')) {
-      syncWithOrigine(str);
+    const message: IDebugMessage = JSON.parse(str);
+    if (message.command === DebugCommand.JUMP) {
+      syncWithOrigine(message.sceneMsg.scene, message.sceneMsg.sentence);
     }
   };
   socket.onerror = (e) => {

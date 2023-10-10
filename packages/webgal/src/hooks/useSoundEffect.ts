@@ -6,22 +6,22 @@ import maou_se_system40 from '@/assets/se/maou_se_system40.mp3';
 import maou_se_system41 from '@/assets/se/maou_se_system41.mp3';
 import maou_se_system48 from '@/assets/se/maou_se_system48.mp3';
 import Motion_Pop03_4 from '@/assets/se/Motion-Pop03-4.mp3';
-import button_16 from '@/assets/se/button-16.wav';
-import button_20 from '@/assets/se/button-20.wav';
-import button_50 from '@/assets/se/button-50.wav';
-import click_soft_02 from '@/assets/se/click_soft_02.wav';
-import Book_Page_Flip from '@/assets/se/Book_Page_Flip.wav';
-import page_flip_1 from '@/assets/se/page-flip-1.wav';
+import button_16 from '@/assets/se/button-16.mp3';
+import button_20 from '@/assets/se/button-20.mp3';
+import button_50 from '@/assets/se/button-50.mp3';
+import click_soft_02 from '@/assets/se/click_soft_02.mp3';
+import Book_Page_Flip from '@/assets/se/Book_Page_Flip.mp3';
+import page_flip_1 from '@/assets/se/page-flip-1.mp3';
 import pause from '@/assets/se/pause.mp3';
-import pausestart from '@/assets/se/pausestart.wav';
-import s_cheremisinov_Click_03 from '@/assets/se/s-cheremisinov-Click-03.wav';
-import switch_1 from '@/assets/se/switch-1.wav';
-import water_drop_sound from '@/assets/se/water-drop-sound.wav';
+import pausestart from '@/assets/se/pausestart.mp3';
+import s_cheremisinov_Click_03 from '@/assets/se/s-cheremisinov-Click-03.mp3';
+import switch_1 from '@/assets/se/switch-1.mp3';
+import water_drop_sound from '@/assets/se/water-drop-sound.mp3';
 import aigei_se_01 from '@/assets/se/aigei-se-01.mp3';
 import aigei_se_02 from '@/assets/se/aigei-se-02.mp3';
 import aigei_se_03 from '@/assets/se/aigei-se-03.mp3';
 import zhanZhang_y1970 from '@/assets/se/zhanZhang-y1970.mp3';
-import taoshen_01 from '@/assets/se/taoshen-01.wav';
+import taoshen_01 from '@/assets/se/taoshen-01.mp3';
 import { useDispatch } from 'react-redux';
 import { webgalStore } from '@/store/store';
 
@@ -61,9 +61,6 @@ const useSoundEffect = () => {
   const playSeEnterCloseButton = () => {
     dispatch(setStage({ key: 'uiSe', value: aigei_se_03 }));
   };
-  const playSeEnterDialogButton = () => {
-    dispatch(setStage({ key: 'uiSe', value: Motion_Pop03_4 }));
-  };
   const playSeEnterOptionSlider = () => {
     dispatch(setStage({ key: 'uiSe', value: water_drop_sound }));
   };
@@ -96,9 +93,6 @@ const useSoundEffect = () => {
   };
   const playSeClickLoadElement = () => {
     dispatch(setStage({ key: 'uiSe', value: maou_se_system48 }));
-  };
-  const playSeClickDialogButton = () => {
-    dispatch(setStage({ key: 'uiSe', value: maou_se_system35 }));
   };
   const playSeClickToNextBgmButton = () => {
     dispatch(setStage({ key: 'uiSe', value: switch_1 }));
@@ -133,7 +127,6 @@ const useSoundEffect = () => {
     playSeEnterExtraElement, // 鼠标进入鉴赏元素
     playSeEnterExtraBGMButton, // 鼠标进入鉴赏页BGM按钮
     playSeEnterCloseButton, // 鼠标进入关闭按钮
-    playSeEnterDialogButton, // 鼠标进入提示框按钮
     playSeEnterOptionSlider, // 鼠标进入滑块选项
     playSeClick, // 鼠标点击
     playSeClickTitleButton, // 鼠标点击标题按钮
@@ -145,7 +138,6 @@ const useSoundEffect = () => {
     playSeClickSavePanelSelect, // 鼠标点击存档页切换按钮
     playSeClickSaveElement, // 鼠标点击存档元素
     playSeClickLoadElement, // 鼠标点击读档元素
-    playSeClickDialogButton, // 鼠标点击提示框按钮
     playSeClickToNextBgmButton, // 鼠标点击下一首BGM按钮
     playSeClickToLastBgmButton, // 鼠标点击上一首BGM按钮
     playSeClickBeginBgmButton, // 鼠标点击开始播放BGM按钮
@@ -166,9 +158,17 @@ export const useSEByWebgalStore = () => {
   const playSeClickChoose = () => {
     webgalStore.dispatch(setStage({ key: 'uiSe', value: maou_se_system41 }));
   };
+  const playSeEnterDialogButton = () => {
+    webgalStore.dispatch(setStage({ key: 'uiSe', value: Motion_Pop03_4 }));
+  };
+  const playSeClickDialogButton = () => {
+    webgalStore.dispatch(setStage({ key: 'uiSe', value: maou_se_system35 }));
+  };
   return {
     playSeEnterChoose, // 鼠标进入分支选择
     playSeClickChoose, // 鼠标点击分支选择
+    playSeClickDialogButton, // 鼠标点击提示框按钮
+    playSeEnterDialogButton, // 鼠标进入提示框按钮
   };
 };
 

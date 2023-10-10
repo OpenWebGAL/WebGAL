@@ -1,5 +1,3 @@
-import { ISentence } from '../../controller/scene/sceneInterface';
-
 /**
  * 描述演出的接口，主要用于控制演出，而不是执行（在演出开始时被调用演出的执行器返回）
  * @interface IPerform
@@ -30,16 +28,6 @@ export interface IPerform {
 // next之后，可以被打断的演出会被打断，不能被打断的演出会继续，阻塞next的演出会阻止next被响应。
 // 被打断或执行完毕的演出会移出演出列表
 // 只有所有演出都完成，或者仅存在不阻塞auto的演出，才允许auto
-
-/**
- * 启动演出接口
- * @interface IRunPerform
- */
-export interface IRunPerform {
-  id: string;
-  isHoldOn: boolean; // 演出类型
-  script: ISentence; // 演出脚本
-}
 
 /**
  * 初始化的演出

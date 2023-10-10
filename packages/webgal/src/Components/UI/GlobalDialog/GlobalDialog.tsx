@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import { useSelector } from 'react-redux';
 import { RootState, webgalStore } from '@/store/store';
 import { setVisibility } from '@/store/GUIReducer';
-import useSoundEffect from '@/hooks/useSoundEffect';
+import { useSEByWebgalStore } from '@/hooks/useSoundEffect';
 
 export default function GlobalDialog() {
   const isGlobalDialogShow = useSelector((state: RootState) => state.GUI.showGlobalDialog);
@@ -19,7 +19,7 @@ interface IShowGlobalDialogProps {
 }
 
 export function showGlogalDialog(props: IShowGlobalDialogProps) {
-  const { playSeClickDialogButton, playSeEnterDialogButton } = useSoundEffect();
+  const { playSeClickDialogButton, playSeEnterDialogButton } = useSEByWebgalStore();
   webgalStore.dispatch(setVisibility({ component: 'showGlobalDialog', visibility: true }));
   const handleLeft = () => {
     playSeClickDialogButton();
