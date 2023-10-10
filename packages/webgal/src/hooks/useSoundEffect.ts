@@ -61,9 +61,6 @@ const useSoundEffect = () => {
   const playSeEnterCloseButton = () => {
     dispatch(setStage({ key: 'uiSe', value: aigei_se_03 }));
   };
-  const playSeEnterDialogButton = () => {
-    dispatch(setStage({ key: 'uiSe', value: Motion_Pop03_4 }));
-  };
   const playSeEnterOptionSlider = () => {
     dispatch(setStage({ key: 'uiSe', value: water_drop_sound }));
   };
@@ -96,9 +93,6 @@ const useSoundEffect = () => {
   };
   const playSeClickLoadElement = () => {
     dispatch(setStage({ key: 'uiSe', value: maou_se_system48 }));
-  };
-  const playSeClickDialogButton = () => {
-    dispatch(setStage({ key: 'uiSe', value: maou_se_system35 }));
   };
   const playSeClickToNextBgmButton = () => {
     dispatch(setStage({ key: 'uiSe', value: switch_1 }));
@@ -133,7 +127,6 @@ const useSoundEffect = () => {
     playSeEnterExtraElement, // 鼠标进入鉴赏元素
     playSeEnterExtraBGMButton, // 鼠标进入鉴赏页BGM按钮
     playSeEnterCloseButton, // 鼠标进入关闭按钮
-    playSeEnterDialogButton, // 鼠标进入提示框按钮
     playSeEnterOptionSlider, // 鼠标进入滑块选项
     playSeClick, // 鼠标点击
     playSeClickTitleButton, // 鼠标点击标题按钮
@@ -145,7 +138,6 @@ const useSoundEffect = () => {
     playSeClickSavePanelSelect, // 鼠标点击存档页切换按钮
     playSeClickSaveElement, // 鼠标点击存档元素
     playSeClickLoadElement, // 鼠标点击读档元素
-    playSeClickDialogButton, // 鼠标点击提示框按钮
     playSeClickToNextBgmButton, // 鼠标点击下一首BGM按钮
     playSeClickToLastBgmButton, // 鼠标点击上一首BGM按钮
     playSeClickBeginBgmButton, // 鼠标点击开始播放BGM按钮
@@ -166,9 +158,17 @@ export const useSEByWebgalStore = () => {
   const playSeClickChoose = () => {
     webgalStore.dispatch(setStage({ key: 'uiSe', value: maou_se_system41 }));
   };
+  const playSeEnterDialogButton = () => {
+    webgalStore.dispatch(setStage({ key: 'uiSe', value: Motion_Pop03_4 }));
+  };
+  const playSeClickDialogButton = () => {
+    webgalStore.dispatch(setStage({ key: 'uiSe', value: maou_se_system35 }));
+  };
   return {
     playSeEnterChoose, // 鼠标进入分支选择
     playSeClickChoose, // 鼠标点击分支选择
+    playSeClickDialogButton, // 鼠标点击提示框按钮
+    playSeEnterDialogButton, // 鼠标进入提示框按钮
   };
 };
 
