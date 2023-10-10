@@ -1,9 +1,10 @@
-import { IPerform, IRunPerform } from '@/Core/Modules/perform/performInterface';
+import { IPerform } from '@/Core/Modules/perform/performInterface';
 import { ISentence } from '@/Core/controller/scene/sceneInterface';
 import { webgalStore } from '@/store/store';
 import cloneDeep from 'lodash/cloneDeep';
 import { resetStageState } from '@/store/stageReducer';
 import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
+import { IRunPerform } from '@/store/stageInterface';
 
 /**
  * 获取随机演出名称
