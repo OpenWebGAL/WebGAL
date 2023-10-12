@@ -6,18 +6,59 @@ import styles from '../../Components/Stage/FullScreenPerform/fullScreenPerform.m
 import { webgalStore } from '@/store/store';
 import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
 import { getRandomPerformName, PerformController } from '@/Core/Modules/perform/performController';
-
+import { getSentenceArgByKey } from '@/Core/util/getSentenceArg';
 import { WebGAL } from '@/Core/WebGAL';
-
 /**
- * 播放一段视频
- * @param sentence
+ * 播放一段视频 * @param sentence
  */
 export const playVideo = (sentence: ISentence): IPerform => {
+  const userDataState = webgalStore.getState().userData;
+  const mainVol = userDataState.optionData.volumeMain;
+  const vocalVol = mainVol * 0.01 * userDataState.optionData.vocalVolume * 0.01;
+  const bgmVol = mainVol * 0.01 * userDataState.optionData.bgmVolume * 0.01;
+
+  // 防止左键单击直到视频结束
+  const fullScreenClickElement = document.getElementById('FullScreenClick');
+  if (fullScreenClickElement) {
+    fullScreenClickElement.style.pointerEvents = 'none';
+  }
+
   const performInitName: string = getRandomPerformName();
+
+  let blockRightClick = (e: MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    return false;
+  }
+
+  function disableRightClick() {
+    document.addEventListener('contextmenu', blockRightClick, true);
+  }
+
+  function enableRightClick() {
+    document.removeEventListener('contextmenu', blockRightClick, true);
+  }
+
+  function simulateRightClick(element: HTMLElement) {
+    const mouseEvent = new MouseEvent('contextmenu', {
+        bubbles: true,
+        cancelable: true,
+        view: window,
+        button: 2,
+        buttons: 2,
+        clientX: element.getBoundingClientRect().left,
+        clientY: element.getBoundingClientRect().top
+    });
+    element.dispatchEvent(mouseEvent);
+  }
+
+  // 右键单击一次，隐藏菜单，然后禁用右键单击
+  simulateRightClick(document.body);
+  disableRightClick();
+  
   ReactDOM.render(
     <div className={styles.videoContainer}>
-      <video className={styles.fullScreen_video} id="playVideoElement" src={sentence.content} autoPlay={true} />
+      <video className={styles.fullScreen_video} id="playVideoElement" src={sentence.content} autoPlay={true}/>
     </div>,
     document.getElementById('videoContainer'),
   );
@@ -38,6 +79,17 @@ export const playVideo = (sentence: ISentence): IPerform => {
         let VocalControl: any = document.getElementById('playVideoElement');
         if (VocalControl !== null) {
           VocalControl.currentTime = 0;
+          VocalControl.volume = bgmVol;
+          const skipVideo = () => {
+            if (VocalControl) {
+              VocalControl.currentTime = VocalControl.duration;
+            }
+          };
+          // 双击可跳过视频
+          const videoElement = document.getElementById('playVideoElement');
+          if (videoElement) {
+              videoElement.addEventListener('dblclick', skipVideo);
+          }
           // 播放并作为一个特别演出加入
           const perform = {
             performName: performInitName,
@@ -52,10 +104,6 @@ export const playVideo = (sentence: ISentence): IPerform => {
               /**
                * 恢复音量
                */
-              const userDataState = webgalStore.getState().userData;
-              const mainVol = userDataState.optionData.volumeMain;
-              const vocalVol = mainVol * 0.01 * userDataState.optionData.vocalVolume * 0.01;
-              const bgmVol = mainVol * 0.01 * userDataState.optionData.bgmVolume * 0.01;
               const bgmElement: any = document.getElementById('currentBgm');
               if (bgmElement) {
                 bgmElement.volume = bgmVol.toString();
@@ -101,6 +149,21 @@ export const playVideo = (sentence: ISentence): IPerform => {
               }
             }
           };
+
+         // 防止左键单击直到视频结束
+          VocalControl.addEventListener('timeupdate', function() {
+            if (VocalControl.currentTime >= VocalControl.duration) {
+              const fullScreenClickElement = document.getElementById('FullScreenClick');
+              if (fullScreenClickElement) {
+
+                // 允许右键单击并右键单击一次显示菜单
+                enableRightClick();
+                simulateRightClick(document.body);
+
+                fullScreenClickElement.style.removeProperty('pointer-events');
+              }
+            }
+          });
         }
       }, 1);
     }),
