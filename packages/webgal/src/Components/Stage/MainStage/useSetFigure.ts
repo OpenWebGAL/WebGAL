@@ -222,5 +222,5 @@ function removeFig(figObj: IStageObject, enterTikerKey: string, effects: IEffect
  * @param args
  */
 function addLive2dFigure(...args: any[]) {
-  // return WebGAL.gameplay.pixiStage?.addLive2dFigure.apply(args);
+  // return WebGAL.gameplay.pixiStage?.addLive2dFigure(...args);
 }
