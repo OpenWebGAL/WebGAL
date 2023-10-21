@@ -16,46 +16,14 @@ export const playVideo = (sentence: ISentence): IPerform => {
   const mainVol = userDataState.optionData.volumeMain;
   const vocalVol = mainVol * 0.01 * userDataState.optionData.vocalVolume * 0.01;
   const bgmVol = mainVol * 0.01 * userDataState.optionData.bgmVolume * 0.01;
-
-  // 防止左键单击直到视频结束
-  const fullScreenClickElement = document.getElementById('FullScreenClick');
-  if (fullScreenClickElement) {
-    fullScreenClickElement.style.pointerEvents = 'none';
-  }
-
   const performInitName: string = getRandomPerformName();
 
-  let blockRightClick = (e: MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    return false;
+  var blockingNext = getSentenceArgByKey(sentence, 'skipOff');
+  var blockingNextFlag:boolean = false;
+  if(blockingNext){
+    blockingNextFlag = true;
   }
 
-  function disableRightClick() {
-    document.addEventListener('contextmenu', blockRightClick, true);
-  }
-
-  function enableRightClick() {
-    document.removeEventListener('contextmenu', blockRightClick, true);
-  }
-
-  function simulateRightClick(element: HTMLElement) {
-    const mouseEvent = new MouseEvent('contextmenu', {
-        bubbles: true,
-        cancelable: true,
-        view: window,
-        button: 2,
-        buttons: 2,
-        clientX: element.getBoundingClientRect().left,
-        clientY: element.getBoundingClientRect().top
-    });
-    element.dispatchEvent(mouseEvent);
-  }
-
-  // 右键单击一次，隐藏菜单，然后禁用右键单击
-  simulateRightClick(document.body);
-  disableRightClick();
-  
   ReactDOM.render(
     <div className={styles.videoContainer}>
       <video className={styles.fullScreen_video} id="playVideoElement" src={sentence.content} autoPlay={true}/>
@@ -68,7 +36,7 @@ export const playVideo = (sentence: ISentence): IPerform => {
     duration: 0,
     isHoldOn: false,
     stopFunction: () => {},
-    blockingNext: () => false,
+    blockingNext: () => blockingNextFlag,
     blockingAuto: () => true,
     stopTimeout: undefined, // 暂时不用，后面会交给自动清除
     arrangePerformPromise: new Promise<IPerform>((resolve) => {
@@ -114,7 +82,7 @@ export const playVideo = (sentence: ISentence): IPerform => {
               }
               ReactDOM.render(<div />, document.getElementById('videoContainer'));
             },
-            blockingNext: () => false,
+            blockingNext: () => blockingNextFlag,
             blockingAuto: () => {
               return !isOver;
             },
@@ -149,21 +117,6 @@ export const playVideo = (sentence: ISentence): IPerform => {
               }
             }
           };
-
-         // 防止左键单击直到视频结束
-          VocalControl.addEventListener('timeupdate', function() {
-            if (VocalControl.currentTime >= VocalControl.duration) {
-              const fullScreenClickElement = document.getElementById('FullScreenClick');
-              if (fullScreenClickElement) {
-
-                // 允许右键单击并右键单击一次显示菜单
-                enableRightClick();
-                simulateRightClick(document.body);
-
-                fullScreenClickElement.style.removeProperty('pointer-events');
-              }
-            }
-          });
         }
       }, 1);
     }),
