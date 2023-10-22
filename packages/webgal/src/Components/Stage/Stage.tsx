@@ -13,6 +13,7 @@ import { useHotkey } from '@/hooks/useHotkey';
 import { MainStage } from '@/Components/Stage/MainStage/MainStage';
 import IntroContainer from '@/Components/Stage/introContainer/IntroContainer';
 import { isIOS } from '@/Core/initializeScript';
+import { WebGAL } from '@/Core/WebGAL';
 // import OldStage from '@/Components/Stage/OldStage/OldStage';
 
 export const Stage: FC = () => {
@@ -41,6 +42,9 @@ export const Stage: FC = () => {
           }
           stopAll();
           nextSentence();
+        }}
+        onDoubleClick={() => {
+          WebGAL.eventBus.emit('fullscreen-dbclick');
         }}
         id="FullScreenClick"
         style={{ width: '100%', height: '100%', position: 'absolute', zIndex: '12', top: '0' }}
