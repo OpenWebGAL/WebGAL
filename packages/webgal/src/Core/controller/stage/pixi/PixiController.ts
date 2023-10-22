@@ -582,6 +582,21 @@ export default class PixiStage {
   //   }
   // }
 
+  public changeModelMotionByKey(key: string, motion: string) {
+    const target = this.figureObjects.find((e) => e.key === key);
+    if (target) {
+      const container = target.pixiContainer;
+      const children = container.children;
+      for (const model of children) {
+        let category_name = motion;
+        let animation_index = 0;
+        let priority_number = 3;
+        // @ts-ignore
+        model.motion(category_name, animation_index, priority_number);
+      }
+    }
+  }
+
   /**
    * 根据 key 获取舞台上的对象
    * @param key

@@ -12,6 +12,15 @@ export function useSetFigure(stageState: IStageState) {
   const { figNameLeft, figName, figNameRight, freeFigure, live2dMotion } = stageState;
 
   /**
+   * 同步 motion
+   */
+  useEffect(() => {
+    for (const motion of live2dMotion) {
+      WebGAL.gameplay.pixiStage?.changeModelMotionByKey(motion.target, motion.motion);
+    }
+  }, [live2dMotion]);
+
+  /**
    * 设置立绘
    */
   useEffect(() => {
