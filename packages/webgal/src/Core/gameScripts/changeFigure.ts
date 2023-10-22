@@ -114,15 +114,45 @@ export const changeFigure = (sentence: ISentence): IPerform => {
   dispatch(setStage({ key: 'figureAssociatedAnimation', value: filteredFigureAssociatedAnimation }));
 
   /**
-   * 删掉相关 Effects，因为已经移除了
+   * 如果 url 没变，不移除
    */
-  const prevEffects = webgalStore.getState().stage.effects;
-  const newEffects = cloneDeep(prevEffects);
-  const index = newEffects.findIndex((e) => e.target === `fig-${pos}` || e.target === `${key}`);
-  if (index >= 0) {
-    newEffects.splice(index, 1);
+  let isRemoveEffects = true;
+  if (key !== '') {
+    const figWithKey = webgalStore.getState().stage.freeFigure.find((e) => e.key === key);
+    if (figWithKey) {
+      if (figWithKey.name === sentence.content) {
+        isRemoveEffects = false;
+      }
+    }
+  } else {
+    if (pos === 'center') {
+      if (webgalStore.getState().stage.figName === sentence.content) {
+        isRemoveEffects = false;
+      }
+    }
+    if (pos === 'left') {
+      if (webgalStore.getState().stage.figNameLeft === sentence.content) {
+        isRemoveEffects = false;
+      }
+    }
+    if (pos === 'right') {
+      if (webgalStore.getState().stage.figNameRight === sentence.content) {
+        isRemoveEffects = false;
+      }
+    }
   }
-  updateCurrentEffects(newEffects);
+  /**
+   * 处理 Effects
+   */
+  if (isRemoveEffects) {
+    const prevEffects = webgalStore.getState().stage.effects;
+    const newEffects = cloneDeep(prevEffects);
+    const index = newEffects.findIndex((e) => e.target === `fig-${pos}` || e.target === `${key}`);
+    if (index >= 0) {
+      newEffects.splice(index, 1);
+    }
+    updateCurrentEffects(newEffects);
+  }
   const setAnimationNames = (key: string, sentence: ISentence) => {
     // 处理 transform 和 默认 transform
     const transformString = getSentenceArgByKey(sentence, 'transform');
