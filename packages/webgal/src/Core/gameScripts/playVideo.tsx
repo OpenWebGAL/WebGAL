@@ -18,15 +18,15 @@ export const playVideo = (sentence: ISentence): IPerform => {
   const bgmVol = mainVol * 0.01 * userDataState.optionData.bgmVolume * 0.01;
   const performInitName: string = getRandomPerformName();
 
-  var blockingNext = getSentenceArgByKey(sentence, 'skipOff');
-  var blockingNextFlag:boolean = false;
-  if(blockingNext){
+  let blockingNext = getSentenceArgByKey(sentence, 'skipOff');
+  let blockingNextFlag = false;
+  if (blockingNext) {
     blockingNextFlag = true;
   }
 
   ReactDOM.render(
     <div className={styles.videoContainer}>
-      <video className={styles.fullScreen_video} id="playVideoElement" src={sentence.content} autoPlay={true}/>
+      <video className={styles.fullScreen_video} id="playVideoElement" src={sentence.content} autoPlay={true} />
     </div>,
     document.getElementById('videoContainer'),
   );
@@ -48,16 +48,23 @@ export const playVideo = (sentence: ISentence): IPerform => {
         if (VocalControl !== null) {
           VocalControl.currentTime = 0;
           VocalControl.volume = bgmVol;
-          const skipVideo = () => {
-            if (VocalControl) {
-              VocalControl.currentTime = VocalControl.duration;
+          const endPerform = () => {
+            for (const e of WebGAL.gameplay.performController.performList) {
+              if (e.performName === performInitName) {
+                isOver = true;
+                e.stopFunction();
+                WebGAL.gameplay.performController.unmountPerform(e.performName);
+                nextSentence();
+              }
             }
           };
+          const skipVideo = () => {
+            endPerform();
+          };
           // 双击可跳过视频
-          const videoElement = document.getElementById('playVideoElement');
-          if (videoElement) {
-              videoElement.addEventListener('dblclick', skipVideo);
-          }
+          WebGAL.eventBus.on('fullscreen-dbclick', () => {
+            skipVideo();
+          });
           // 播放并作为一个特别演出加入
           const perform = {
             performName: performInitName,
@@ -108,14 +115,7 @@ export const playVideo = (sentence: ISentence): IPerform => {
             VocalControl?.play();
           };
           VocalControl.onended = () => {
-            for (const e of WebGAL.gameplay.performController.performList) {
-              if (e.performName === performInitName) {
-                isOver = true;
-                e.stopFunction();
-                WebGAL.gameplay.performController.unmountPerform(e.performName);
-                nextSentence();
-              }
-            }
+            endPerform();
           };
         }
       }, 1);
