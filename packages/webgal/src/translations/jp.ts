@@ -82,8 +82,9 @@ const jp = {
             textFont: {
               title: 'フォント',
               options: {
-                siYuanSimSun: '霞鹜文楷',
+                siYuanSimSun: '源ノ明朝',
                 SimHei: '黒体',
+                lxgw: '霞鴎文隷',
               },
             },
             textPreview: {
