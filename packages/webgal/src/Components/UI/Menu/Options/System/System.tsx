@@ -170,9 +170,9 @@ export function System() {
               currentChecked={2}
             />
           </NormalOption>
-          <NormalOption key="option4" title={t('about.title')}>
-            <NormalButton textList={[t('about.title')]} functionList={[toggleAbout]} currentChecked={3} />
-          </NormalOption>
+          <div className={styles.About_title_text} onClick={toggleAbout}>
+            <span className={styles.About_text}>{t('about.title')}</span>
+          </div>
         </>
       )}
     </div>
