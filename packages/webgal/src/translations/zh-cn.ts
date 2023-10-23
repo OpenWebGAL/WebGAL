@@ -82,8 +82,9 @@ const zhCn = {
             textFont: {
               title: '文本字体',
               options: {
-                siYuanSimSun: '霞鹜文楷',
+                siYuanSimSun: '思源宋体',
                 SimHei: '黑体',
+                lxgw: '霞鹜文楷',
               },
             },
             textPreview: {

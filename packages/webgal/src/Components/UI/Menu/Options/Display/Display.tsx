@@ -58,7 +58,7 @@ export function Display() {
       </NormalOption>
       <NormalOption key="option2" title={t('textFont.title')}>
         <NormalButton
-          textList={t('textFont.options.siYuanSimSun', 'textFont.options.SimHei')}
+          textList={t('textFont.options.siYuanSimSun', 'textFont.options.SimHei', 'textFont.options.lxgw')}
           functionList={[
             () => {
               dispatch(setOptionData({ key: 'textboxFont', value: textFont.song }));
@@ -66,6 +66,10 @@ export function Display() {
             },
             () => {
               dispatch(setOptionData({ key: 'textboxFont', value: textFont.hei }));
+              setStorage();
+            },
+            () => {
+              dispatch(setOptionData({ key: 'textboxFont', value: textFont.lxgw }));
               setStorage();
             },
           ]}
