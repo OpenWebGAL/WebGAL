@@ -590,7 +590,9 @@ export default class PixiStage {
       for (const model of children) {
         let category_name = motion;
         let animation_index = 0;
-        let priority_number = 3;
+        let priority_number = 3; // @ts-ignore
+        const internalModel = model?.internalModel ?? undefined; // 安全访问
+        internalModel?.motionManager?.stopAllMotions?.();
         // @ts-ignore
         model.motion(category_name, animation_index, priority_number);
       }
