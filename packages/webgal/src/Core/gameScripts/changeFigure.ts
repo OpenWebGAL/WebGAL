@@ -225,7 +225,7 @@ export const changeFigure = (sentence: ISentence): IPerform => {
     if (motion) {
       const index = webgalStore.getState().stage.live2dMotion.findIndex((e) => e.target === key);
       let motionArr = webgalStore.getState().stage.live2dMotion;
-      if (index <= 0) {
+      if (index < 0) {
         // 应用一个新的 motion
         motionArr = [...webgalStore.getState().stage.live2dMotion, { target: key, motion }];
       } else {
@@ -253,7 +253,7 @@ export const changeFigure = (sentence: ISentence): IPerform => {
     if (motion) {
       const index = webgalStore.getState().stage.live2dMotion.findIndex((e) => e.target === key);
       let motionArr = webgalStore.getState().stage.live2dMotion;
-      if (index <= 0) {
+      if (index < 0) {
         // 应用一个新的 motion
         motionArr = [...webgalStore.getState().stage.live2dMotion, { target: key, motion }];
       } else {
