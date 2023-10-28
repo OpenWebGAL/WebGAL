@@ -39,6 +39,7 @@ export const initState: IStageState = {
   PerformList: [], // 要启动的演出列表
   currentDialogKey: 'initial',
   live2dMotion: [],
+  live2dExpression: [],
   // currentPerformDelay: 0
   currentConcatDialogPrev: '',
   enableFilm: '',

@@ -599,6 +599,18 @@ export default class PixiStage {
     }
   }
 
+  public changeModelExpressionByKey(key: string, expression: string) {
+    const target = this.figureObjects.find((e) => e.key === key);
+    if (target) {
+      const container = target.pixiContainer;
+      const children = container.children;
+      for (const model of children) {
+        // @ts-ignore
+        model.expression(expression);
+      }
+    }
+  }
+
   /**
    * 根据 key 获取舞台上的对象
    * @param key

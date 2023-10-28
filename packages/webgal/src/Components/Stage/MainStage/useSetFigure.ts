@@ -9,7 +9,7 @@ import { getEnterExitAnimation } from '@/Core/Modules/animationFunctions';
 import { WebGAL } from '@/Core/WebGAL';
 
 export function useSetFigure(stageState: IStageState) {
-  const { figNameLeft, figName, figNameRight, freeFigure, live2dMotion } = stageState;
+  const { figNameLeft, figName, figNameRight, freeFigure, live2dMotion, live2dExpression } = stageState;
 
   /**
    * 同步 motion
@@ -19,6 +19,15 @@ export function useSetFigure(stageState: IStageState) {
       WebGAL.gameplay.pixiStage?.changeModelMotionByKey(motion.target, motion.motion);
     }
   }, [live2dMotion]);
+
+  /**
+   * 同步 expression
+   */
+  useEffect(() => {
+    for (const expression of live2dExpression) {
+      WebGAL.gameplay.pixiStage?.changeModelMotionByKey(expression.target, expression.expression);
+    }
+  }, [live2dExpression]);
 
   /**
    * 设置立绘
