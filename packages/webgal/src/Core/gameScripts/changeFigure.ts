@@ -22,6 +22,7 @@ export const changeFigure = (sentence: ISentence): IPerform => {
   let content = sentence.content;
   let isFreeFigure = false;
   let motion = '';
+  let expression = '';
   let key = '';
   let duration = 500;
   let mouthOpen = '';
@@ -61,6 +62,9 @@ export const changeFigure = (sentence: ISentence): IPerform => {
         break;
       case 'motion':
         motion = e.value.toString();
+        break;
+      case 'expression':
+        expression = e.value.toString();
         break;
       case 'mouthOpen':
         mouthOpen = e.value.toString();
@@ -235,6 +239,19 @@ export const changeFigure = (sentence: ISentence): IPerform => {
       }
       dispatch(setStage({ key: 'live2dMotion', value: motionArr }));
     }
+    if (expression) {
+      const index = webgalStore.getState().stage.live2dExpression.findIndex((e) => e.target === key);
+      let expressionArr = webgalStore.getState().stage.live2dExpression;
+      if (index < 0) {
+        // 应用一个新的 motion
+        expressionArr = [...webgalStore.getState().stage.live2dExpression, { target: key, expression }];
+      } else {
+        expressionArr[index].expression = motion;
+        // deep clone
+        expressionArr = [...expressionArr];
+      }
+      dispatch(setStage({ key: 'live2dExpression', value: expressionArr }));
+    }
     dispatch(setStage({ key: 'freeFigure', value: newFreeFigure }));
   } else {
     const positionMap = {
@@ -262,6 +279,19 @@ export const changeFigure = (sentence: ISentence): IPerform => {
         motionArr = [...motionArr];
       }
       dispatch(setStage({ key: 'live2dMotion', value: motionArr }));
+    }
+    if (expression) {
+      const index = webgalStore.getState().stage.live2dExpression.findIndex((e) => e.target === key);
+      let expressionArr = webgalStore.getState().stage.live2dExpression;
+      if (index < 0) {
+        // 应用一个新的 motion
+        expressionArr = [...webgalStore.getState().stage.live2dExpression, { target: key, expression }];
+      } else {
+        expressionArr[index].expression = motion;
+        // deep clone
+        expressionArr = [...expressionArr];
+      }
+      dispatch(setStage({ key: 'live2dExpression', value: expressionArr }));
     }
     dispatch(setStage({ key: dispatchMap[pos] as keyof IStageState, value: content }));
   }
