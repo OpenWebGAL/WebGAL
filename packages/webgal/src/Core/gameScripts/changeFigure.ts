@@ -228,7 +228,7 @@ export const changeFigure = (sentence: ISentence): IPerform => {
     setAnimationNames(key, sentence);
     if (motion) {
       const index = webgalStore.getState().stage.live2dMotion.findIndex((e) => e.target === key);
-      let motionArr = webgalStore.getState().stage.live2dMotion;
+      let motionArr = cloneDeep(webgalStore.getState().stage.live2dMotion);
       if (index < 0) {
         // 应用一个新的 motion
         motionArr = [...webgalStore.getState().stage.live2dMotion, { target: key, motion }];
@@ -241,7 +241,7 @@ export const changeFigure = (sentence: ISentence): IPerform => {
     }
     if (expression) {
       const index = webgalStore.getState().stage.live2dExpression.findIndex((e) => e.target === key);
-      let expressionArr = webgalStore.getState().stage.live2dExpression;
+      let expressionArr = cloneDeep(webgalStore.getState().stage.live2dExpression);
       if (index < 0) {
         // 应用一个新的 motion
         expressionArr = [...webgalStore.getState().stage.live2dExpression, { target: key, expression }];
@@ -269,7 +269,7 @@ export const changeFigure = (sentence: ISentence): IPerform => {
     setAnimationNames(key, sentence);
     if (motion) {
       const index = webgalStore.getState().stage.live2dMotion.findIndex((e) => e.target === key);
-      let motionArr = webgalStore.getState().stage.live2dMotion;
+      let motionArr = cloneDeep(webgalStore.getState().stage.live2dMotion);
       if (index < 0) {
         // 应用一个新的 motion
         motionArr = [...webgalStore.getState().stage.live2dMotion, { target: key, motion }];
@@ -282,7 +282,7 @@ export const changeFigure = (sentence: ISentence): IPerform => {
     }
     if (expression) {
       const index = webgalStore.getState().stage.live2dExpression.findIndex((e) => e.target === key);
-      let expressionArr = webgalStore.getState().stage.live2dExpression;
+      let expressionArr = cloneDeep(webgalStore.getState().stage.live2dExpression);
       if (index < 0) {
         // 应用一个新的 motion
         expressionArr = [...webgalStore.getState().stage.live2dExpression, { target: key, expression }];
