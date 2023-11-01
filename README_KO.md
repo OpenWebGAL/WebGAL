@@ -60,9 +60,9 @@ WebGAL은 오픈소스 소프트웨어이므로 MPL-2.0 오픈소스 라이센�
 
 ## Gold Sponsors
 
-| <img src="https://avatars.githubusercontent.com/u/91712707?v=4" alt="T2"   width="150px" height="150px" /> |
-| ------------------------------------------------------------ |
-| [T2-official(T2)](https://github.com/T2-official)            |
+| <img src="https://avatars.githubusercontent.com/u/91712707?v=4" alt="T2"   width="150px" height="150px" /> | <img src="https://avatars.githubusercontent.com/u/36291011?v=4" alt="Alex Shan"   width="150px" height="150px" /> |
+| ------------------------------------------------------------ | ------------------------------------------------------------ |
+| [T2-official(T2)](https://github.com/T2-official)            | [Alex Shan](https://github.com/Shan-mx)            |
 
 ## Silver Sponsors
 | <img src="https://avatars.githubusercontent.com/u/103700780?v=4" alt="IdrilK"  width="150px" height="150px" /> |
