@@ -37,6 +37,12 @@ export interface IStageObject {
   sourceUrl: string;
 }
 
+export interface ILive2DRecord {
+  target: string;
+  motion: string;
+  expression: string;
+}
+
 // export interface IRegisterTickerOpr {
 //   tickerGeneratorFn: (targetKey: string, duration: number) => PIXI.TickerCallback<number>;
 //   key: string;
@@ -63,6 +69,7 @@ export default class PixiStage {
   private stageAnimations: Array<IStageAnimationObject> = [];
   private assetLoader = new PIXI.Loader();
   private loadQueue: { url: string; callback: () => void }[] = [];
+  private live2dFigureRecorder: Array<ILive2DRecord> = [];
 
   // 锁定变换对象（对象可能正在执行动画，不能应用变换）
   private lockTransformTarget: Array<string> = [];
@@ -519,12 +526,17 @@ export default class PixiStage {
 
     // 挂载
     this.figureContainer.addChild(thisFigureContainer);
-    this.figureObjects.push({ uuid: uuid(), key: key, pixiContainer: thisFigureContainer, sourceUrl: jsonPath });
+    this.figureObjects.push({
+      uuid: uuid(),
+      key: key,
+      pixiContainer: thisFigureContainer,
+      sourceUrl: jsonPath,
+    });
 
     const setup = () => {
       if (thisFigureContainer) {
         (async function () {
-          const models = await Promise.all([Live2DModel.from(jsonPath)]);
+          const models = await Promise.all([Live2DModel.from(jsonPath, { autoInteract: false })]);
 
           models.forEach((model) => {
             const scaleX = stageWidth / model.width;
@@ -575,8 +587,10 @@ export default class PixiStage {
   }
 
   public changeModelMotionByKey(key: string, motion: string) {
+    // logger.debug(`Applying motion ${motion} to ${key}`);
     const target = this.figureObjects.find((e) => e.key === key);
-    if (target) {
+    const figureRecordTarget = this.live2dFigureRecorder.find((e) => e.target === key);
+    if (target && figureRecordTarget?.motion !== motion) {
       const container = target.pixiContainer;
       const children = container.children;
       for (const model of children) {
@@ -588,18 +602,22 @@ export default class PixiStage {
         // @ts-ignore
         model.motion(category_name, animation_index, priority_number);
       }
+      this.updateL2dMotionByKey(key, motion);
     }
   }
 
   public changeModelExpressionByKey(key: string, expression: string) {
+    // logger.debug(`Applying expression ${expression} to ${key}`);
     const target = this.figureObjects.find((e) => e.key === key);
-    if (target) {
+    const figureRecordTarget = this.live2dFigureRecorder.find((e) => e.target === key);
+    if (target && figureRecordTarget?.expression !== expression) {
       const container = target.pixiContainer;
       const children = container.children;
       for (const model of children) {
         // @ts-ignore
         model.expression(expression);
       }
+      this.updateL2dExpressionByKey(key, expression);
     }
   }
 
@@ -652,6 +670,24 @@ export default class PixiStage {
 
   public cacheGC() {
     PIXI.utils.clearTextureCache();
+  }
+
+  private updateL2dMotionByKey(target: string, motion: string) {
+    const figureTargetIndex = this.live2dFigureRecorder.findIndex((e) => e.target === target);
+    if (figureTargetIndex >= 0) {
+      this.live2dFigureRecorder[figureTargetIndex].motion = motion;
+    } else {
+      this.live2dFigureRecorder.push({ target, motion, expression: '' });
+    }
+  }
+
+  private updateL2dExpressionByKey(target: string, expression: string) {
+    const figureTargetIndex = this.live2dFigureRecorder.findIndex((e) => e.target === target);
+    if (figureTargetIndex >= 0) {
+      this.live2dFigureRecorder[figureTargetIndex].expression = expression;
+    } else {
+      this.live2dFigureRecorder.push({ target, motion: '', expression });
+    }
   }
 
   private loadAsset(url: string, callback: () => void) {

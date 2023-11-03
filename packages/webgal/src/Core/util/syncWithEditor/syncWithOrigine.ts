@@ -33,7 +33,7 @@ export function syncFast(sentenceId: number, currentSceneName: string) {
     WebGAL.sceneManager.sceneData.currentScene.sceneName === currentSceneName
   ) {
     nextSentence();
-    setTimeout(() => syncFast(sentenceId, currentSceneName), 2);
+    setTimeout(() => syncFast(sentenceId, currentSceneName), 50);
   } else {
     WebGAL.gameplay.isFast = false;
   }
