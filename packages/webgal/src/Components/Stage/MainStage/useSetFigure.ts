@@ -25,7 +25,7 @@ export function useSetFigure(stageState: IStageState) {
    */
   useEffect(() => {
     for (const expression of live2dExpression) {
-      WebGAL.gameplay.pixiStage?.changeModelMotionByKey(expression.target, expression.expression);
+      WebGAL.gameplay.pixiStage?.changeModelExpressionByKey(expression.target, expression.expression);
     }
   }, [live2dExpression]);
 

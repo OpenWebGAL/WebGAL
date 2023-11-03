@@ -161,10 +161,10 @@ const stageSlice = createSlice({
       const index = state.live2dExpression.findIndex((e) => e.target === target);
 
       if (index < 0) {
-        // Add a new motion
+        // Add a new expression
         state.live2dExpression.push({ target, expression });
       } else {
-        // Update the existing motion
+        // Update the existing expression
         state.live2dExpression[index].expression = expression;
       }
     },
