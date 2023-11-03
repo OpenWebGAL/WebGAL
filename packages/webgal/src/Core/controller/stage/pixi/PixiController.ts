@@ -1,7 +1,7 @@
 import * as PIXI from 'pixi.js';
 import { v4 as uuid } from 'uuid';
 import { webgalStore } from '@/store/store';
-import { setStage } from '@/store/stageReducer';
+import { setStage, stageActions } from '@/store/stageReducer';
 import cloneDeep from 'lodash/cloneDeep';
 import { IEffect, IFigureAssociatedAnimation } from '@/store/stageInterface';
 import { logger } from '@/Core/util/etc/logger';
@@ -229,21 +229,12 @@ export default class PixiStage {
             blur: target.pixiContainer.blur,
             ...webgalFilters,
           };
-          const prevEffects = webgalStore.getState().stage.effects;
-          const newEffects = cloneDeep(prevEffects);
           let effect: IEffect = {
             target: thisTickerFunc.targetKey,
             transform: targetTransform,
           };
-          const index = newEffects.findIndex((e) => e.target === thisTickerFunc.targetKey);
-          if (index >= 0) {
-            effect = newEffects[index];
-            effect.transform = targetTransform;
-            newEffects[index] = effect;
-          } else {
-            newEffects.push(effect);
-          }
-          updateCurrentEffects(newEffects);
+          webgalStore.dispatch(stageActions.updateEffect(effect));
+          // updateCurrentEffects(webgalStore.getState().stage.effects);
         }
       }
       this.stageAnimations.splice(index, 1);
@@ -714,27 +705,27 @@ export default class PixiStage {
   }
 }
 
-export function updateCurrentEffects(newEffects: IEffect[]) {
-  // /**
-  //  * 更新当前 backlog 条目的 effects 记录
-  //  */
-  // if (!notUpdateBacklogEffects)
-  //   setTimeout(() => {
-  //     const backlog = RUNTIME_CURRENT_BACKLOG[RUNTIME_CURRENT_BACKLOG.length - 1];
-  //     if (backlog) {
-  //       const newBacklogItem = cloneDeep(backlog);
-  //       const backlog_effects = newBacklogItem.currentStageState.effects;
-  //       while (backlog_effects.length > 0) {
-  //         backlog_effects.pop();
-  //       }
-  //       backlog_effects.push(...newEffects);
-  //       RUNTIME_CURRENT_BACKLOG.pop();
-  //       RUNTIME_CURRENT_BACKLOG.push(newBacklogItem);
-  //     }
-  //   }, 50);
+// export function updateCurrentEffects(newEffects: IEffect[]) {
+// /**
+//  * 更新当前 backlog 条目的 effects 记录
+//  */
+// if (!notUpdateBacklogEffects)
+//   setTimeout(() => {
+//     const backlog = RUNTIME_CURRENT_BACKLOG[RUNTIME_CURRENT_BACKLOG.length - 1];
+//     if (backlog) {
+//       const newBacklogItem = cloneDeep(backlog);
+//       const backlog_effects = newBacklogItem.currentStageState.effects;
+//       while (backlog_effects.length > 0) {
+//         backlog_effects.pop();
+//       }
+//       backlog_effects.push(...newEffects);
+//       RUNTIME_CURRENT_BACKLOG.pop();
+//       RUNTIME_CURRENT_BACKLOG.push(newBacklogItem);
+//     }
+//   }, 50);
 
-  webgalStore.dispatch(setStage({ key: 'effects', value: newEffects }));
-}
+// webgalStore.dispatch(setStage({ key: 'effects', value: newEffects }));
+// }
 
 /**
  * @param {number} targetCount 不小于1的整数，表示经过targetCount帧之后返回结果
