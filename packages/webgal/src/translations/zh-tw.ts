@@ -93,7 +93,7 @@ const zhTw = {
           },
         },
         sound: {
-          title: '音檔',
+          title: '音量',
           options: {
             volumeMain: { title: '主音量' },
             vocalVolume: { title: '語音音量' },
