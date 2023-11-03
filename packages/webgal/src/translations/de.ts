@@ -89,7 +89,7 @@ const de = {
             },
             textPreview: {
               title: 'Vorschautext wird angezeigt',
-              text: "Sie sehen sich jetzt die Schriftart, Größe und Wiedergabegeschwindigkeit des Textes an. Sie können die oben genannten Optionen nach Ihrer Vorliebe anpassen.",
+              text: "Sie können jederzeit die Schriftart, Größe und Wiedergabegeschwindigkeit des Textes nach Ihrer Vorliebe anpassen.",
             },
           },
         },
