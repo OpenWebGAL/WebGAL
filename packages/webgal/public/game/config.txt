@@ -3,3 +3,4 @@ Game_key:0f86dstRf;
 Title_img:WebGAL_New_Enter_Image.png;
 Title_bgm:s_Title.mp3;
 Game_Logo:WebGalEnter.png;
+Textbox_theme:imss;
