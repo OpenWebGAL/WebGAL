@@ -33,6 +33,36 @@ export const scriptExecutor = () => {
   }
   const currentScript: ISentence =
     WebGAL.sceneManager.sceneData.currentScene.sentenceList[WebGAL.sceneManager.sceneData.currentSentenceId];
+
+  const interpolationOneItem = (content: string): string => {
+    let retContent = content;
+    const contentExp = retContent.match(/(?<!\\)\{(.*?)\}/g);
+
+    if (contentExp !== null) {
+      contentExp.forEach((e) => {
+        const contentVarValue = getValueFromState(e.replace(/(?<!\\)\{(.*)\}/, '$1'));
+        retContent = retContent.replace(e, contentVarValue ? contentVarValue.toString() : e);
+      });
+    }
+    retContent = retContent.replace(/\\{/g, '{').replace(/\\}/g, '}');
+    return retContent;
+  };
+
+  /**
+   * Variable interpolation
+   */
+  const variableInterpolation = () => {
+    currentScript.content = interpolationOneItem(currentScript.content);
+
+    currentScript.args.forEach((arg) => {
+      if (arg.value && typeof arg.value === 'string') {
+        arg.value = interpolationOneItem(arg.value);
+      }
+    });
+  };
+
+  variableInterpolation();
+
   // 判断这个脚本要不要执行
   let runThis: number | boolean = true;
   let isHasWhenArg = false;
@@ -59,47 +89,6 @@ export const scriptExecutor = () => {
       .reduce((pre, curr) => pre + curr, '');
     runThis = strIf(valExp);
   }
-
-  /**
-   * - Check whether `content` contains strings wrapped in `{}`.
-   * - If any parameter exists, check whether it contains strings wrapped in `{}`.
-   *
-   * If true, treat them as variable interpolation and replace them with the value of the variable.
-   * Can handle situations with multiple variables.
-   * @note When you need to use `{` or `}` characters, please escape them with `\{` or `\}`.
-   */
-  const interpolateVariablesInContentAndArgs = () => {
-    let content = currentScript.content;
-    const contentExp = content.match(/(?<!\\)\{(.*?)\}/g);
-
-    if (contentExp !== null) {
-      contentExp.forEach((e) => {
-        const contentVarValue = getValueFromState(e.replace(/(?<!\\)\{(.*)\}/, '$1'));
-        currentScript.content = currentScript.content.replace(e, contentVarValue ? contentVarValue.toString() : e);
-      });
-    }
-
-    currentScript.content = currentScript.content.replace(/\\{/g, '{').replace(/\\}/g, '}');
-
-    currentScript.args.forEach((arg) => {
-      if (arg.value && typeof arg.value === 'string') {
-        const argExp = arg.value.match(/(?<!\\)\{(.*?)\}/g);
-
-        if (argExp !== null) {
-          argExp.forEach((e) => {
-            const argVarValue = getValueFromState(e.replace(/(?<!\\)\{(.*)\}/, '$1'));
-            if (arg.value && typeof arg.value === 'string') {
-              arg.value = arg.value.replace(e, argVarValue ? argVarValue.toString() : e);
-            }
-          });
-        }
-
-        arg.value = arg.value.replace(/\\{/g, '{').replace(/\\}/g, '}');
-      }
-    });
-  };
-
-  interpolateVariablesInContentAndArgs();
 
   // 执行语句
   if (!runThis) {
