@@ -79,9 +79,9 @@ export const scriptExecutor = () => {
         if (speakerExp !== null) {
           speakerExp.forEach((e) => {
             const speakerVarValue = getValueFromState(e.replace(/\{(.*)\}/, '$1'));
-            currentScript.args.forEach((e) => {
-              if (e.key === 'speaker') {
-                e.value = speaker.replace(speakerExp[0], speakerVarValue.toString());
+            currentScript.args.forEach((ev) => {
+              if (ev.key === 'speaker') {
+                ev.value = speaker.replace(e, speakerVarValue.toString());
               }
             });
           });
