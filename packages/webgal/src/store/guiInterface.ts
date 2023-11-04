@@ -1,3 +1,5 @@
+import { IWebGalTextBoxTheme } from '@/Components/themeInterface';
+
 /**
  * 当前Menu页面显示的Tag
  */
@@ -5,6 +7,10 @@ export enum MenuPanelTag {
   Save, // “保存”选项卡
   Load, // “读取”选项卡
   Option, // “设置”选项卡
+}
+
+export interface ITheme {
+  textbox: IWebGalTextBoxTheme;
 }
 
 /**
@@ -24,11 +30,12 @@ export interface IGuiState {
   showGlobalDialog: boolean;
   showPanicOverlay: boolean;
   isEnterGame: boolean;
+  theme: ITheme;
 }
 
 export type componentsVisibility = Pick<
   IGuiState,
-  Exclude<keyof IGuiState, 'currentMenuTag' | 'titleBg' | 'titleBgm' | 'logoImage'>
+  Exclude<keyof IGuiState, 'currentMenuTag' | 'titleBg' | 'titleBgm' | 'logoImage' | 'theme'>
 >;
 // 标题资源
 export type GuiAsset = Pick<IGuiState, 'titleBgm' | 'titleBg'>;
