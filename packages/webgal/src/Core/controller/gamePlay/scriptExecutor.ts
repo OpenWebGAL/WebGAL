@@ -62,41 +62,50 @@ export const scriptExecutor = () => {
   }
 
   /**
-   * 当语句类型为 `say` 时，
-   * - 当 `speaker` 参数存在时，检查其中是否含有用 `{}` 包裹的字符串。
-   * - 检查 `content` 中是否含有用 `{}` 包裹的字符串。
+   * When the statement type is `say` ,
+   * - If the `speaker` parameter exists, check whether it contains strings wrapped in `{}`.
+   * - Check whether `content` contains strings wrapped in `{}`.
    *
-   * 如果有，则将其视为变量插值，并替换为变量的值。
-   * 可应对存在有多个变量的情况。
+   * If true, treat them as variable interpolation and replace them with the value of the variable.
+   * Can handle situations with multiple variables.
+   * @note When you need to use `{` or `}` characters, please escape them with `\{` or `\}`.
    */
   const checkSaySentence = () => {
     if (currentScript.command === commandType.say) {
       const speaker = getSentenceArgByKey(currentScript, 'speaker') as string;
 
       if (speaker !== null) {
-        const speakerExp = speaker.match(/\{(.*?)\}/g);
+        const speakerExp = speaker.match(/(?<!\\)\{(.*?)\}/g);
 
         if (speakerExp !== null) {
           speakerExp.forEach((e) => {
-            const speakerVarValue = getValueFromState(e.replace(/\{(.*)\}/, '$1'));
+            const speakerVarValue = getValueFromState(e.replace(/(?<!\\)\{(.*)\}/, '$1'));
             currentScript.args.forEach((ev) => {
               if (ev.value && typeof ev.value === 'string' && ev.key === 'speaker') {
-                ev.value = ev.value.replace(e, speakerVarValue.toString());
+                ev.value = ev.value.replace(e, speakerVarValue ? speakerVarValue.toString() : e);
               }
             });
           });
         }
       }
 
-      const content = currentScript.content;
-      const contentExp = content.match(/\{(.*?)\}/g);
+      let content = currentScript.content;
+      const contentExp = content.match(/(?<!\\)\{(.*?)\}/g);
 
       if (contentExp !== null) {
         contentExp.forEach((e) => {
-          const contentVarValue = getValueFromState(e.replace(/\{(.*)\}/, '$1'));
-          currentScript.content = currentScript.content.replace(e, contentVarValue.toString());
+          const contentVarValue = getValueFromState(e.replace(/(?<!\\)\{(.*)\}/, '$1'));
+          currentScript.content = currentScript.content.replace(e, contentVarValue ? contentVarValue.toString() : e);
         });
       }
+
+      currentScript.args.forEach((ev) => {
+        if (ev.value && typeof ev.value === 'string' && ev.key === 'speaker') {
+          ev.value = ev.value.replace(/\\{/g, '{').replace(/\\}/g, '}');
+        }
+      });
+
+      currentScript.content = currentScript.content.replace(/\\{/g, '{').replace(/\\}/g, '}');
     }
   };
 
