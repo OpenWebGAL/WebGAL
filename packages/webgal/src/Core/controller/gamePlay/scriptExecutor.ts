@@ -12,7 +12,6 @@ import { ISceneEntry } from '@/Core/Modules/scene';
 import { IBacklogItem } from '@/Core/Modules/backlog';
 import { SYSTEM_CONFIG } from '@/Core/config/config';
 import { WebGAL } from '@/Core/WebGAL';
-import { getSentenceArgByKey } from '@/Core/util/getSentenceArg';
 
 /**
  * 语句执行器
@@ -62,54 +61,45 @@ export const scriptExecutor = () => {
   }
 
   /**
-   * When the statement type is `say` ,
-   * - If the `speaker` parameter exists, check whether it contains strings wrapped in `{}`.
    * - Check whether `content` contains strings wrapped in `{}`.
+   * - If any parameter exists, check whether it contains strings wrapped in `{}`.
    *
    * If true, treat them as variable interpolation and replace them with the value of the variable.
    * Can handle situations with multiple variables.
    * @note When you need to use `{` or `}` characters, please escape them with `\{` or `\}`.
    */
-  const checkSaySentence = () => {
-    if (currentScript.command === commandType.say) {
-      const speaker = getSentenceArgByKey(currentScript, 'speaker') as string;
+  const interpolateVariablesInContentAndArgs = () => {
+    let content = currentScript.content;
+    const contentExp = content.match(/(?<!\\)\{(.*?)\}/g);
 
-      if (speaker !== null) {
-        const speakerExp = speaker.match(/(?<!\\)\{(.*?)\}/g);
+    if (contentExp !== null) {
+      contentExp.forEach((e) => {
+        const contentVarValue = getValueFromState(e.replace(/(?<!\\)\{(.*)\}/, '$1'));
+        currentScript.content = currentScript.content.replace(e, contentVarValue ? contentVarValue.toString() : e);
+      });
+    }
 
-        if (speakerExp !== null) {
-          speakerExp.forEach((e) => {
-            const speakerVarValue = getValueFromState(e.replace(/(?<!\\)\{(.*)\}/, '$1'));
-            currentScript.args.forEach((ev) => {
-              if (ev.value && typeof ev.value === 'string' && ev.key === 'speaker') {
-                ev.value = ev.value.replace(e, speakerVarValue ? speakerVarValue.toString() : e);
-              }
-            });
+    currentScript.content = currentScript.content.replace(/\\{/g, '{').replace(/\\}/g, '}');
+
+    currentScript.args.forEach((arg) => {
+      if (arg.value && typeof arg.value === 'string') {
+        const argExp = arg.value.match(/(?<!\\)\{(.*?)\}/g);
+
+        if (argExp !== null) {
+          argExp.forEach((e) => {
+            const argVarValue = getValueFromState(e.replace(/(?<!\\)\{(.*)\}/, '$1'));
+            if (arg.value && typeof arg.value === 'string') {
+              arg.value = arg.value.replace(e, argVarValue ? argVarValue.toString() : e);
+            }
           });
         }
+
+        arg.value = arg.value.replace(/\\{/g, '{').replace(/\\}/g, '}');
       }
-
-      let content = currentScript.content;
-      const contentExp = content.match(/(?<!\\)\{(.*?)\}/g);
-
-      if (contentExp !== null) {
-        contentExp.forEach((e) => {
-          const contentVarValue = getValueFromState(e.replace(/(?<!\\)\{(.*)\}/, '$1'));
-          currentScript.content = currentScript.content.replace(e, contentVarValue ? contentVarValue.toString() : e);
-        });
-      }
-
-      currentScript.args.forEach((ev) => {
-        if (ev.value && typeof ev.value === 'string' && ev.key === 'speaker') {
-          ev.value = ev.value.replace(/\\{/g, '{').replace(/\\}/g, '}');
-        }
-      });
-
-      currentScript.content = currentScript.content.replace(/\\{/g, '{').replace(/\\}/g, '}');
-    }
+    });
   };
 
-  checkSaySentence();
+  interpolateVariablesInContentAndArgs();
 
   // 执行语句
   if (!runThis) {

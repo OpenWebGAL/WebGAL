@@ -1,6 +1,6 @@
 bgm:s_Title.mp3 -volume=80 -enter=3000;
 unlockBgm:s_Title.mp3 -name=雲を追いかけて;
-intro:你好|欢迎来到 WebGAL 的世界;
+intro:你好|欢迎来到 {egine} 的世界;
 changeBg:bg.png -next;
 unlockCg:bg.png -name=良夜; // 解锁CG并赋予名称
 changeFigure:stand.png -left -enter=enter-from-left -next;
@@ -21,7 +21,7 @@ pixiPerform:snow;
 除此以外，分支选择的功能也必不可少。 -v7.wav;
 你可以通过以下两个分支了解 {egine} 的更多故事。 -v8.wav;
 pixiInit;
-choose:WebGAL 发展历程:choose1|WebGAL 冷知识:choose2;
+choose:{egine} 发展历程:choose1|{egine} 冷知识:choose2;
 
 ;分支1
 label:choose1;
