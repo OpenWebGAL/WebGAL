@@ -23,6 +23,9 @@ const initState: IGuiState = {
   showGlobalDialog: false,
   showPanicOverlay: false,
   isEnterGame: false,
+  theme: {
+    textbox: 'standard',
+  },
 };
 
 /**

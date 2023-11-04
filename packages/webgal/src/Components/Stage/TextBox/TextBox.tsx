@@ -1,12 +1,26 @@
-import styles from './textbox.module.scss';
-import { useEffect } from 'react';
+import { FC, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import { useFontFamily } from '@/hooks/useFontFamily';
 import { useTextAnimationDuration, useTextDelay } from '@/hooks/useTextOptions';
 import { getTextSize } from '@/Components/UI/getTextSize';
+import StandardTextbox, { ITextboxProps } from '@/Components/Stage/TextBox/themes/standard/StandardTextbox';
+import IMSSTextbox from '@/Components/Stage/TextBox/themes/imss/IMSSTextbox';
+import { IWebGalTextBoxTheme } from '@/Components/themeInterface';
+import { textSize } from '@/store/userDataInterface';
 
 const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+
+function getTextboxByTheme(theme: IWebGalTextBoxTheme): FC<ITextboxProps> {
+  switch (theme) {
+    case 'standard':
+      return StandardTextbox;
+    case 'imss':
+      return IMSSTextbox;
+    default:
+      return StandardTextbox;
+  }
+}
 
 export const TextBox = () => {
   const stageState = useSelector((state: RootState) => state.stage);
@@ -17,103 +31,39 @@ export const TextBox = () => {
   let size = getTextSize(userDataState.optionData.textSize) + '%';
   const font = useFontFamily();
   const isText = stageState.showText !== '' || stageState.showName !== '';
+  let textSizeState = userDataState.optionData.textSize;
   if (isText && stageState.showTextSize !== -1) {
     size = getTextSize(stageState.showTextSize) + '%';
+    textSizeState = stageState.showTextSize;
   }
   // 拆字
   const textArray: Array<string> = splitChars(stageState.showText);
-  const textElementList = textArray.map((e, index) => {
-    if (e === '<br />') {
-      return <br key={`br${index}`} />;
-    }
-    let delay = index * textDelay;
-    let prevLength = stageState.currentConcatDialogPrev.length;
-    if (stageState.currentConcatDialogPrev !== '' && index >= prevLength) {
-      delay = delay - prevLength * textDelay;
-    }
-    if (index < prevLength) {
-      return (
-        <span
-          data-text={e}
-          id={`${delay}`}
-          className={styles.TextBox_textElement_Settled}
-          key={stageState.currentDialogKey + index}
-          style={{ animationDelay: `${delay}ms`, animationDuration: `${textDuration}ms` }}
-        >
-          <span className={styles.zhanwei}>
-            {e}
-            <span className={styles.outer}>{e}</span>
-            <span className={styles.inner}>{e}</span>
-          </span>
-        </span>
-      );
-    }
-    return (
-      <span
-        data-text={e}
-        id={`${delay}`}
-        className={styles.TextBox_textElement_start}
-        key={stageState.currentDialogKey + index}
-        style={{ animationDelay: `${delay}ms`, position: 'relative' }}
-      >
-        <span className={styles.zhanwei}>
-          {e}
-          <span className={styles.outer}>{e}</span>
-          <span className={styles.inner}>{e}</span>
-        </span>
-      </span>
-    );
-  });
+  const showName = stageState.showName;
+  const currentConcatDialogPrev = stageState.currentConcatDialogPrev;
+  const currentDialogKey = stageState.currentDialogKey;
+  const miniAvatar = stageState.miniAvatar;
+  const theme = useSelector((state: RootState) => state.GUI.theme);
+  const Textbox = getTextboxByTheme(theme.textbox);
   return (
-    <>
-      {isText && (
-        <div
-          id="textBoxMain"
-          className={styles.TextBox_main}
-          style={{ fontFamily: font, left: stageState.miniAvatar === '' ? 25 : undefined }}
-        >
-          {/* <div className={styles.nameContainer}>{stageState.showName !== ''}</div> */}
-          <div id="miniAvatar" className={styles.miniAvatarContainer}>
-            {stageState.miniAvatar !== '' && (
-              <img className={styles.miniAvatarImg} alt="miniAvatar" src={stageState.miniAvatar} />
-            )}
-          </div>
-          {stageState.showName !== '' && (
-            <div key={stageState.showName} className={styles.TextBox_showName} style={{ fontSize: '200%' }}>
-              {stageState.showName.split('').map((e, i) => {
-                return (
-                  <span key={e + i} style={{ position: 'relative' }}>
-                    <span className={styles.zhanwei}>
-                      {e}
-                      <span className={styles.outerName}>{e}</span>
-                      <span className={styles.innerName}>{e}</span>
-                    </span>
-                  </span>
-                );
-              })}
-            </div>
-          )}
-          <div
-            className={styles.text}
-            style={{
-              fontSize: size,
-              wordBreak: isSafari ? 'break-word' : undefined,
-              overflow: 'hidden',
-              paddingLeft: '0.1em',
-            }}
-          >
-            {textElementList}
-          </div>
-        </div>
-      )}
-    </>
+    <Textbox
+      textArray={textArray}
+      isText={isText}
+      textDelay={textDelay}
+      showName={showName}
+      currentConcatDialogPrev={currentConcatDialogPrev}
+      fontSize={size}
+      currentDialogKey={currentDialogKey}
+      isSafari={isSafari}
+      miniAvatar={miniAvatar}
+      textDuration={textDuration}
+      font={font}
+      textSizeState={textSizeState}
+    />
   );
 };
 
 function isCJK(character: string) {
-  if (character.match(/[\u4e00-\u9fa5]|[\u0800-\u4e00]|[\uac00-\ud7ff]/)) {
-    return true;
-  } else return false;
+  return !!character.match(/[\u4e00-\u9fa5]|[\u0800-\u4e00]|[\uac00-\ud7ff]/);
 }
 
 export function splitChars(sentence: string) {
