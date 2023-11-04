@@ -7,6 +7,7 @@ import { IEffect, IFigureAssociatedAnimation } from '@/store/stageInterface';
 import { logger } from '@/Core/util/etc/logger';
 import { isIOS } from '@/Core/initializeScript';
 import { WebGALPixiContainer } from '@/Core/controller/stage/pixi/WebGALPixiContainer';
+import { WebGAL } from '@/Core/WebGAL';
 // import { figureCash } from '@/Core/gameScripts/function/conentsCash'; // 如果要使用 Live2D，取消这里的注释
 // import { Live2DModel, SoundManager } from 'pixi-live2d-display'; // 如果要使用 Live2D，取消这里的注释
 
@@ -60,6 +61,7 @@ export default class PixiStage {
   public currentApp: PIXI.Application | null = null;
   public readonly effectsContainer: PIXI.Container;
   public frameDuration = 16.67;
+  public notUpdateBacklogEffects = false;
   private readonly figureContainer: PIXI.Container;
   private figureObjects: Array<IStageObject> = [];
   private readonly backgroundContainer: PIXI.Container;
@@ -242,7 +244,7 @@ export default class PixiStage {
             transform: targetTransform,
           };
           webgalStore.dispatch(stageActions.updateEffect(effect));
-          // updateCurrentEffects(webgalStore.getState().stage.effects);
+          if (!this.notUpdateBacklogEffects) updateCurrentBacklogEffects(webgalStore.getState().stage.effects);
         }
       }
       this.stageAnimations.splice(index, 1);
@@ -742,27 +744,16 @@ export default class PixiStage {
   }
 }
 
-// export function updateCurrentEffects(newEffects: IEffect[]) {
-// /**
-//  * 更新当前 backlog 条目的 effects 记录
-//  */
-// if (!notUpdateBacklogEffects)
-//   setTimeout(() => {
-//     const backlog = RUNTIME_CURRENT_BACKLOG[RUNTIME_CURRENT_BACKLOG.length - 1];
-//     if (backlog) {
-//       const newBacklogItem = cloneDeep(backlog);
-//       const backlog_effects = newBacklogItem.currentStageState.effects;
-//       while (backlog_effects.length > 0) {
-//         backlog_effects.pop();
-//       }
-//       backlog_effects.push(...newEffects);
-//       RUNTIME_CURRENT_BACKLOG.pop();
-//       RUNTIME_CURRENT_BACKLOG.push(newBacklogItem);
-//     }
-//   }, 50);
+function updateCurrentBacklogEffects(newEffects: IEffect[]) {
+  /**
+   * 更新当前 backlog 条目的 effects 记录
+   */
+  setTimeout(() => {
+    WebGAL.backlogManager.editLastBacklogItemEffect(cloneDeep(newEffects));
+  }, 50);
 
-// webgalStore.dispatch(setStage({ key: 'effects', value: newEffects }));
-// }
+  webgalStore.dispatch(setStage({ key: 'effects', value: newEffects }));
+}
 
 /**
  * @param {number} targetCount 不小于1的整数，表示经过targetCount帧之后返回结果
