@@ -1,1 +1,3 @@
-choose:简体中文:demo_zh_cn.txt|日本語:demo_ja.txt|English:demo_en.txt|Lip Sync Animation Test:demo_animation.txt;
+setVar:heroine=WebGAL;
+setVar:egine=WebGAL;
+choose:简体中文:demo_zh_cn.txt|日本語:demo_ja.txt|English:demo_en.txt|Lip Sync Animation Test:demo_animation.txt | Variable interpolation test:demo_var.txt;
