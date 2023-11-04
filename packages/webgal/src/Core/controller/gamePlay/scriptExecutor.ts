@@ -61,19 +61,46 @@ export const scriptExecutor = () => {
     runThis = strIf(valExp);
   }
 
-  // 如果语句类型为 'say',
-  // 则检查是否有 'speaker' 参数和对应的变量，如果有，则替换为变量。
-  if (currentScript.command === commandType.say) {
-    const speaker = getSentenceArgByKey(currentScript, 'speaker') as string;
-    const gameVar = getValueFromState(speaker).toString();
-    if (gameVar !== '0') {
-      currentScript.args.forEach((e) => {
-        if (e.key === 'speaker') {
-          e.value = gameVar;
+  /**
+   * 当语句类型为 `say` 时，
+   * - 当 `speaker` 参数存在时，检查其中是否含有用 `{}` 包裹的字符串。
+   * - 检查 `content` 中是否含有用 `{}` 包裹的字符串。
+   *
+   * 如果有，则将其视为变量插值，并替换为变量的值。
+   * 可应对存在有多个变量的情况。
+   */
+  const checkSaySentence = () => {
+    if (currentScript.command === commandType.say) {
+      const speaker = getSentenceArgByKey(currentScript, 'speaker') as string;
+
+      if (speaker !== null) {
+        const speakerExp = speaker.match(/\{(.*?)\}/g);
+
+        if (speakerExp !== null) {
+          speakerExp.forEach((e) => {
+            const speakerVarValue = getValueFromState(e.replace(/\{(.*)\}/, '$1'));
+            currentScript.args.forEach((e) => {
+              if (e.key === 'speaker') {
+                e.value = speaker.replace(speakerExp[0], speakerVarValue.toString());
+              }
+            });
+          });
         }
-      });
+      }
+
+      const content = currentScript.content;
+      const contentExp = content.match(/\{(.*?)\}/g);
+
+      if (contentExp !== null) {
+        contentExp.forEach((e) => {
+          const contentVarValue = getValueFromState(e.replace(/\{(.*)\}/, '$1'));
+          currentScript.content = currentScript.content.replace(e, contentVarValue.toString());
+        });
+      }
     }
-  }
+  };
+
+  checkSaySentence();
 
   // 执行语句
   if (!runThis) {
