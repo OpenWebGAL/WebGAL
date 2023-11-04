@@ -1,5 +1,7 @@
 import styles from './standard.module.scss';
 import { textSize } from '@/store/userDataInterface';
+import { useEffect } from 'react';
+import { WebGAL } from '@/Core/WebGAL';
 
 export interface ITextboxProps {
   textArray: string[];
@@ -34,6 +36,20 @@ export default function StandardTextbox(props: ITextboxProps) {
 
   const isHasMiniAvatar = miniAvatar !== '';
 
+  useEffect(() => {
+    function settleText() {
+      const textElements = document.querySelectorAll('.Textelement_start');
+      const textArray = [...textElements];
+      textArray.forEach((e) => {
+        e.className = styles.TextBox_textElement_Settled;
+      });
+    }
+    WebGAL.eventBus.on('text-settle', settleText);
+    return () => {
+      WebGAL.eventBus.off('text-settle', settleText);
+    };
+  }, []);
+
   const textElementList = textArray.map((e, index) => {
     if (e === '<br />') {
       return <br key={`br${index}`} />;
@@ -64,7 +80,7 @@ export default function StandardTextbox(props: ITextboxProps) {
       <span
         data-text={e}
         id={`${delay}`}
-        className={styles.TextBox_textElement_start}
+        className={`${styles.TextBox_textElement_start} Textelement_start`}
         key={currentDialogKey + index}
         style={{ animationDelay: `${delay}ms`, position: 'relative' }}
       >

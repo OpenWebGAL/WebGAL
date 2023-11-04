@@ -1,11 +1,11 @@
 import { ISentence } from '@/Core/controller/scene/sceneInterface';
 import { IPerform } from '@/Core/Modules/perform/performInterface';
-import styles from '../../Components/Stage/TextBox/textbox.module.scss';
 import { webgalStore } from '@/store/store';
 import { setStage } from '@/store/stageReducer';
 import { logger } from '@/Core/util/etc/logger';
 import { getRandomPerformName } from '@/Core/Modules/perform/performController';
 import { PERFORM_CONFIG } from '@/Core/config/config';
+import { WebGAL } from '@/Core/WebGAL';
 
 /**
  * 进行普通对话的显示
@@ -21,11 +21,7 @@ export const showVars = (sentence: ISentence): IPerform => {
   dispatch(setStage({ key: 'showName', value: '展示变量' }));
   logger.debug('展示变量：', stageState.GameVar);
   setTimeout(() => {
-    const textElements = document.querySelectorAll('.' + styles.TextBox_textElement_start);
-    const textArray = [...textElements];
-    textArray.forEach((e) => {
-      e.className = styles.TextBox_textElement;
-    });
+    WebGAL.eventBus.emit('text-settle');
   }, 0);
   const performInitName: string = getRandomPerformName();
   const textDelay = PERFORM_CONFIG.textInitialDelay - 20 * userDataState.optionData.textSpeed;
@@ -35,11 +31,7 @@ export const showVars = (sentence: ISentence): IPerform => {
     duration: sentence.content.length * textDelay + endDelay,
     isHoldOn: false,
     stopFunction: () => {
-      const textElements = document.querySelectorAll('.' + styles.TextBox_textElement);
-      const textArray = [...textElements];
-      textArray.forEach((e) => {
-        e.className = styles.TextBox_textElement_Settled;
-      });
+      WebGAL.eventBus.emit('text-settle');
     },
     blockingNext: () => false,
     blockingAuto: () => true,

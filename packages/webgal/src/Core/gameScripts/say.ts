@@ -1,7 +1,5 @@
 import { ISentence } from '@/Core/controller/scene/sceneInterface';
 import { IPerform } from '@/Core/Modules/perform/performInterface';
-import styles1 from '../../Components/Stage/TextBox/textbox.module.scss';
-import styles2 from '../../Components/Stage/TextBox/textboxFilm.module.scss';
 import { playVocal } from './playVocal';
 import { webgalStore } from '@/store/store';
 import { setStage } from '@/store/stageReducer';
@@ -18,7 +16,6 @@ import { WebGAL } from '@/Core/WebGAL';
  */
 export const say = (sentence: ISentence): IPerform => {
   const stageState = webgalStore.getState().stage;
-  const styles = stageState.enableFilm === '' ? styles1 : styles2;
   const userDataState = webgalStore.getState().userData;
   const dispatch = webgalStore.dispatch;
   let dialogKey = Math.random().toString(); // 生成一个随机的key
@@ -96,11 +93,7 @@ export const say = (sentence: ISentence): IPerform => {
     duration: sentenceDelay + endDelay,
     isHoldOn: false,
     stopFunction: () => {
-      const textElements = document.querySelectorAll('.' + styles.TextBox_textElement_start);
-      const textArray = [...textElements];
-      textArray.forEach((e) => {
-        e.className = styles.TextBox_textElement_Settled;
-      });
+      WebGAL.eventBus.emit('text-settle');
     },
     blockingNext: () => false,
     blockingAuto: () => true,
