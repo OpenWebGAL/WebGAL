@@ -3,7 +3,7 @@ import { logger } from '../etc/logger';
 import { assetSetter, fileType } from '../gameAssetsAccess/assetSetter';
 import { getStorage } from '../../controller/storage/storageController';
 import { webgalStore } from '@/store/store';
-import { setGuiAsset, setLogoImage } from '@/store/GUIReducer';
+import { setGuiAsset, setLogoImage, setThemeConfigItem } from '@/store/GUIReducer';
 import { setEbg } from '@/Core/util/setEbg';
 import { setLogo } from '@/Core/util/setLogo';
 import { initKey } from '@/Core/controller/storage/fastSaveLoad';
@@ -61,6 +61,10 @@ export const infoFetcher = (url: string) => {
             WebGAL.gameKey = args[0];
             getStorage();
             break;
+          }
+
+          case 'Textbox_theme': {
+            dispatch(setThemeConfigItem({ key: 'textbox', value: args[0] }));
           }
         }
       });

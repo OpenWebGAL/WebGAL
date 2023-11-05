@@ -1,0 +1,154 @@
+.TextBox_EventHandler {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 6;
+  top: 0;
+}
+
+@mixin text_shadow_textElement {
+  //text-shadow: 0 0 3px rgba(81,168,221,1);
+}
+
+$height: 430px;
+
+.TextBox_main {
+  position: absolute;
+  z-index: 6;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  min-height: $height;
+  max-height: $height;
+  background: linear-gradient(
+      rgba(0, 0, 0, 0.1) 20%,
+      rgba(0, 0, 0, .85));
+  background-blend-mode: darken;
+  font-weight: bold;
+  padding: 30px 50px 100px 200px;
+  box-sizing: border-box;
+  display: flex;
+  flex-flow: column;
+  align-items: flex-start;
+  animation: showSoftly 0.7s ease-out forwards;
+  letter-spacing: 0.2em;
+  backdrop-filter: blur(5px);
+  transition: left 0.33s, padding-left 0.33s;
+}
+
+.TextBox_showName {
+  @include text_shadow_textElement;
+  font-size: 85%;
+  min-width: 25%;
+  height: 70px;
+  display: flex;
+  align-items: center;
+  transition: left 0.33s;
+  border-bottom: 3px solid rgba(255,255,255,0.8);
+}
+
+@keyframes showSoftly {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.TextBox_textElement_start {
+  @include text_shadow_textElement;
+  position: relative;
+  animation: TextDelayShow 1000ms ease-out forwards;
+  opacity: 0;
+}
+
+.outer {
+  position: absolute;
+  white-space: nowrap;
+  left: 0;
+  top: 0;
+  background-image: linear-gradient(
+    //135deg,
+      #ffffff 0%,
+      #f5f7fa 45%,
+      #c3cfe2 100%
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  z-index: 2;
+}
+
+.inner {
+  white-space: nowrap;
+  position: absolute;
+  left: 0;
+  top: 0;
+  -webkit-text-stroke: 0.085em rgba(0, 0, 0, 0.35);
+  z-index: 1;
+}
+
+.zhanwei {
+  color: transparent;
+  white-space: nowrap;
+}
+
+
+
+.TextBox_textElement_Settled {
+  position: relative;
+  @include text_shadow_textElement;
+  opacity: 1;
+}
+
+@keyframes TextDelayShow {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.miniAvatarContainer {
+  position: absolute;
+  height: 450px;
+  width: 450px;
+  bottom: 0;
+  left: 0;
+  //border-radius: 100% 0 0 100%;
+  overflow: hidden;
+}
+
+.miniAvatarImg {
+  max-height: 100%;
+  max-width: 100%;
+  position: absolute;
+  bottom: 0;
+  filter: drop-shadow(15px 0 3px rgba(0, 0, 0, 0.5));
+}
+
+.nameContainer {
+  position: absolute;
+  left: 2em;
+  top: -3.5em;
+}
+
+.outerName {
+  position: absolute;
+  left: 0;
+  top: 0;
+  background: linear-gradient(150deg, rgb(255, 255, 255) 0%, rgb(255, 255, 255) 35%, rgb(165, 212, 228) 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  z-index: 2;
+}
+
+.innerName {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 1;
+}

@@ -2,7 +2,7 @@ import { IPerform } from '@/Core/Modules/perform/performInterface';
 import { ISentence } from '@/Core/controller/scene/sceneInterface';
 import { webgalStore } from '@/store/store';
 import cloneDeep from 'lodash/cloneDeep';
-import { resetStageState } from '@/store/stageReducer';
+import { resetStageState, stageActions } from '@/store/stageReducer';
 import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
 import { IRunPerform } from '@/store/stageInterface';
 
@@ -24,10 +24,8 @@ export class PerformController {
     }
     // 同步演出状态
     if (syncPerformState) {
-      const stageState = webgalStore.getState().stage;
-      const newStageState = cloneDeep(stageState);
-      newStageState.PerformList.push({ id: perform.performName, isHoldOn: perform.isHoldOn, script: script });
-      webgalStore.dispatch(resetStageState(newStageState));
+      const performToAdd = { id: perform.performName, isHoldOn: perform.isHoldOn, script: script };
+      webgalStore.dispatch(stageActions.addPerform(performToAdd));
     }
 
     // 时间到后自动清理演出
@@ -76,16 +74,7 @@ export class PerformController {
   }
 
   public erasePerformFromState(name: string) {
-    const stageState = webgalStore.getState().stage;
-    const newStageState = cloneDeep(stageState);
-    for (let i = 0; i < newStageState.PerformList.length; i++) {
-      const e2: IRunPerform = newStageState.PerformList[i];
-      if (e2.id === name) {
-        newStageState.PerformList.splice(i, 1);
-        i--;
-      }
-    }
-    webgalStore.dispatch(resetStageState(newStageState));
+    webgalStore.dispatch(stageActions.removePerformByName(name));
   }
 
   public removeAllPerform() {

@@ -3,14 +3,13 @@ import { IPerform } from '@/Core/Modules/perform/performInterface';
 // import {getRandomPerformName} from '../../../util/getRandomPerformName';
 import styles from '../../Components/Stage/stage.module.scss';
 import { webgalStore } from '@/store/store';
-import { setStage } from '@/store/stageReducer';
+import { setStage, stageActions } from '@/store/stageReducer';
 import { getSentenceArgByKey } from '@/Core/util/getSentenceArg';
 import { unlockCgInUserData } from '@/store/userDataReducer';
 import { logger } from '@/Core/util/etc/logger';
 import { ITransform } from '@/store/stageInterface';
 import { generateTransformAnimationObj } from '@/Core/gameScripts/function/generateTransformAnimationObj';
 import { IUserAnimation } from '@/Core/Modules/animations';
-import { updateCurrentEffects } from '../controller/stage/pixi/PixiController';
 import cloneDeep from 'lodash/cloneDeep';
 import { getAnimateDuration } from '@/Core/Modules/animationFunctions';
 import { WebGAL } from '@/Core/WebGAL';
@@ -39,13 +38,7 @@ export const changeBg = (sentence: ISentence): IPerform => {
   /**
    * 删掉相关 Effects，因为已经移除了
    */
-  const prevEffects = webgalStore.getState().stage.effects;
-  const newEffects = cloneDeep(prevEffects);
-  const index = newEffects.findIndex((e) => e.target === `bg-main`);
-  if (index >= 0) {
-    newEffects.splice(index, 1);
-  }
-  updateCurrentEffects(newEffects);
+  dispatch(stageActions.removeEffectByTargetId(`bg-main`));
 
   // 处理 transform 和 默认 transform
   const transformString = getSentenceArgByKey(sentence, 'transform');

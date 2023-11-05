@@ -28,13 +28,13 @@ export const webSocketFunc = () => {
         stageSyncMsg: webgalStore.getState().stage,
       };
       socket.send(JSON.stringify(message));
-      logger.debug('传送信息', message);
+      // logger.debug('传送信息', message);
       setTimeout(sendStageSyncMessage, 1000);
     }
     sendStageSyncMessage();
   };
   socket.onmessage = (e) => {
-    logger.info('收到信息', e.data);
+    // logger.info('收到信息', e.data);
     const str: string = e.data;
     const message: IDebugMessage = JSON.parse(str);
     if (message.command === DebugCommand.JUMP) {

@@ -33,6 +33,36 @@ export const scriptExecutor = () => {
   }
   const currentScript: ISentence =
     WebGAL.sceneManager.sceneData.currentScene.sentenceList[WebGAL.sceneManager.sceneData.currentSentenceId];
+
+  const interpolationOneItem = (content: string): string => {
+    let retContent = content;
+    const contentExp = retContent.match(/(?<!\\)\{(.*?)\}/g);
+
+    if (contentExp !== null) {
+      contentExp.forEach((e) => {
+        const contentVarValue = getValueFromState(e.replace(/(?<!\\)\{(.*)\}/, '$1'));
+        retContent = retContent.replace(e, contentVarValue ? contentVarValue.toString() : e);
+      });
+    }
+    retContent = retContent.replace(/\\{/g, '{').replace(/\\}/g, '}');
+    return retContent;
+  };
+
+  /**
+   * Variable interpolation
+   */
+  const variableInterpolation = () => {
+    currentScript.content = interpolationOneItem(currentScript.content);
+
+    currentScript.args.forEach((arg) => {
+      if (arg.value && typeof arg.value === 'string') {
+        arg.value = interpolationOneItem(arg.value);
+      }
+    });
+  };
+
+  variableInterpolation();
+
   // 判断这个脚本要不要执行
   let runThis: number | boolean = true;
   let isHasWhenArg = false;
@@ -59,6 +89,7 @@ export const scriptExecutor = () => {
       .reduce((pre, curr) => pre + curr, '');
     runThis = strIf(valExp);
   }
+
   // 执行语句
   if (!runThis) {
     logger.warn('不满足条件，跳过本句！');

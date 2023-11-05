@@ -2,7 +2,7 @@ import { commandType, ISentence } from '@/Core/controller/scene/sceneInterface';
 import { IPerform } from '@/Core/Modules/perform/performInterface';
 import { logger } from '@/Core/util/etc/logger';
 import { webgalStore } from '@/store/store';
-import { resetStageState } from '@/store/stageReducer';
+import { resetStageState, stageActions } from '@/store/stageReducer';
 import cloneDeep from 'lodash/cloneDeep';
 
 import { WebGAL } from '@/Core/WebGAL';
@@ -31,16 +31,7 @@ export const pixiInit = (sentence: ISentence): IPerform => {
       /**
        * 从状态表里清除演出
        */
-      const stageState = webgalStore.getState().stage;
-      const newStageState = cloneDeep(stageState);
-      for (let i = 0; i < newStageState.PerformList.length; i++) {
-        const e2: IRunPerform = newStageState.PerformList[i];
-        if (e2.script.command === commandType.pixi) {
-          newStageState.PerformList.splice(i, 1);
-          i--;
-        }
-      }
-      webgalStore.dispatch(resetStageState(newStageState));
+      webgalStore.dispatch(stageActions.removeAllPixiPerforms());
     }
   });
   return {
