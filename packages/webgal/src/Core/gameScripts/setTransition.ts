@@ -2,7 +2,6 @@ import { ISentence } from '@/Core/controller/scene/sceneInterface';
 import { IPerform } from '@/Core/Modules/perform/performInterface';
 import { webgalStore } from '@/store/store';
 import cloneDeep from 'lodash/cloneDeep';
-import { updateCurrentEffects } from '@/Core/controller/stage/pixi/PixiController';
 import { getSentenceArgByKey } from '@/Core/util/getSentenceArg';
 import { setStage } from '@/store/stageReducer';
 import { WebGAL } from '@/Core/WebGAL';

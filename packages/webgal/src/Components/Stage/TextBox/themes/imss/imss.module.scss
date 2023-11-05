@@ -1,0 +1,197 @@
+.TextBox_EventHandler {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 6;
+  top: 0;
+}
+
+@mixin text_shadow_textElement {
+  //text-shadow: 0 0 3px rgba(81,168,221,1);
+}
+
+$height: 330px;
+
+.TextBox_main {
+  position: absolute;
+  z-index: 6;
+  right: 25px;
+  min-height: $height;
+  max-height: $height;
+  background-image: linear-gradient(rgba(245, 247, 250, 0.8) 0%, rgba(189, 198, 222, 0.8) 100%);
+  background-blend-mode: darken;
+  //background: white;
+  border-radius: calc($height / 2) 20px 20px calc($height / 2);
+  bottom: 20px;
+  left: 275px;
+  font-weight: bold;
+  color: white;
+  padding: 1em 50px 70px 200px;
+  box-sizing: border-box;
+  display: flex;
+  flex-flow: column;
+  align-items: flex-start;
+  animation: showSoftly 0.7s ease-out forwards;
+  letter-spacing: 0.2em;
+  backdrop-filter: blur(5px);
+  transition: left 0.33s;
+}
+
+@keyframes showSoftly {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+//.TextBox_textElement {
+//  opacity: 0;
+//  animation: showSoftly 1000ms forwards;
+//}
+
+
+.TextBox_textElement_start {
+  @include text_shadow_textElement;
+  position: relative;
+  animation: TextDelayShow 1000ms ease-out forwards;
+  opacity: 0;
+}
+
+.outer {
+  position: absolute;
+  white-space: nowrap;
+  left: 0;
+  top: 0;
+  //background-image: linear-gradient(rgba(255, 255, 255, 1) 0%, rgb(225, 237, 255) 100%);
+  background-image: linear-gradient(
+      #0B346E 0%,
+      //#f5f7fa 45%,
+      #141423 100%
+  );
+  //background: rgba(255, 255, 255, 1);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  z-index: 2;
+}
+
+.inner {
+  white-space: nowrap;
+  position: absolute;
+  left: 0;
+  top: 0;
+  -webkit-text-stroke: 0.1em rgba(255, 255, 255, 1);
+  z-index: 1;
+  //text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.75);
+}
+
+.zhanwei {
+  color: transparent;
+  white-space: nowrap;
+}
+
+//
+//.TextBox_textElement_start::before{
+//  animation: TextDelayShow 700ms ease-out forwards;
+//  opacity: 0;
+//  content:attr(data-text);
+//  position: absolute;
+//}
+
+.TextBox_textElement_Settled {
+  position: relative;
+  @include text_shadow_textElement;
+  opacity: 1;
+}
+
+//
+//.TextBox_textElement_Settled::before{
+//  content:attr(data-text);
+//  position: absolute;
+//  opacity: 1;
+//  -webkit-text-stroke: 1px red;
+//  z-index: 1;
+//}
+
+.TextBox_showName {
+  @include text_shadow_textElement;
+  font-size: 85%;
+  //border-bottom: 3px solid rgb(176, 176, 176);
+  //min-width: 25%;
+  padding: 0 2em 0 2em;
+  //margin: 0 0 0 0;
+  position: absolute;
+  left: 150px;
+  top: -68px;
+  height: 80px;
+  line-height: 68px;
+  //display: flex;
+  //align-items: center;
+  background: rgba(11, 52, 110, 0.9);
+  border-radius: 40px;
+  border: 4px solid rgba(255, 255, 255, 0.75);
+  box-shadow: 3px 3px 10px rgba(100, 100, 100, 0.5);
+}
+
+@keyframes TextDelayShow {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.miniAvatarContainer {
+  position: absolute;
+  height: 450px;
+  width: 450px;
+  bottom: 0;
+  left: -250px;
+  border-radius: 100% 0 0 100%;
+  overflow: hidden;
+}
+
+.miniAvatarImg {
+  max-height: 100%;
+  max-width: 100%;
+  position: absolute;
+  bottom: 0;
+  filter: drop-shadow(15px 0 3px rgba(0, 0, 0, 0.5));
+}
+
+.nameContainer {
+  position: absolute;
+  left: 2em;
+  top: -3.5em;
+}
+
+.outerName {
+  position: absolute;
+  left: 0;
+  top: 0;
+  //background-image: linear-gradient(rgba(255, 255, 255, 1) 0%, rgb(225, 237, 255) 100%);
+  //background-image: linear-gradient(
+  //    #bfd8ff 0%,
+  //    //#f5f7fa 45%,
+  //    #bfbfc7 100%
+  //);
+  background: linear-gradient(150deg, rgb(255, 255, 255) 0%, rgb(255, 255, 255) 35%, rgb(165, 212, 228) 100%);
+  //background: rgba(255, 255, 255, 1);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  z-index: 2;
+}
+
+.innerName {
+  position: absolute;
+  left: 0;
+  top: 0;
+  //-webkit-text-stroke: 0.1em rgba(0, 0, 0, 0.25);
+  //-webkit-text-stroke: 0.1em rgba(255, 255, 255, 1);
+  z-index: 1;
+  //text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.75);
+}

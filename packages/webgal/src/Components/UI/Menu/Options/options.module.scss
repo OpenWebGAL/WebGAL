@@ -73,6 +73,24 @@
   padding: 0 1em 0 1em;
 }
 
+.About_title_text {
+  margin: 0.2em 1em 0.2em 1em;
+  padding: 0.2em 0.2em 0.2em 0.2em;
+  width: 100%;
+  animation: Elements_in ease-out 0.7s forwards;
+  cursor: pointer;
+}
+
+.About_text{
+  font-weight: bold;
+  color: transparent;
+  background: linear-gradient(to left, rgba(34, 125, 81, 0.65), rgba(81, 110, 65, 0.65));
+  -webkit-background-clip: text;
+  font-size: 135%;
+  text-decoration: underline;
+
+}
+
 @keyframes Elements_in {
   0% {
     opacity: 0;

@@ -1,5 +1,5 @@
 export const __INFO = {
-  version: 'WebGAL 4.4.5.3',
+  version: 'WebGAL 4.4.6',
   contributors: [
     { username: 'Mahiru', link: 'https://github.com/MakinoharaShoko' },
     { username: 'Hoshinokinya', link: 'https://github.com/hshqwq' },

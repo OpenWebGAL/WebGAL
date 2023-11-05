@@ -1,12 +1,14 @@
 import * as PIXI from 'pixi.js';
 import { v4 as uuid } from 'uuid';
 import { webgalStore } from '@/store/store';
-import { setStage } from '@/store/stageReducer';
+import { setStage, stageActions } from '@/store/stageReducer';
 import cloneDeep from 'lodash/cloneDeep';
 import { IEffect, IFigureAssociatedAnimation } from '@/store/stageInterface';
 import { logger } from '@/Core/util/etc/logger';
 import { isIOS } from '@/Core/initializeScript';
 import { WebGALPixiContainer } from '@/Core/controller/stage/pixi/WebGALPixiContainer';
+import { WebGAL } from '@/Core/WebGAL';
+// import { figureCash } from '@/Core/gameScripts/function/conentsCash'; // 如果要使用 Live2D，取消这里的注释
 // import { Live2DModel, SoundManager } from 'pixi-live2d-display'; // 如果要使用 Live2D，取消这里的注释
 
 export interface IAnimationObject {
@@ -36,6 +38,12 @@ export interface IStageObject {
   sourceUrl: string;
 }
 
+export interface ILive2DRecord {
+  target: string;
+  motion: string;
+  expression: string;
+}
+
 // export interface IRegisterTickerOpr {
 //   tickerGeneratorFn: (targetKey: string, duration: number) => PIXI.TickerCallback<number>;
 //   key: string;
@@ -53,6 +61,7 @@ export default class PixiStage {
   public currentApp: PIXI.Application | null = null;
   public readonly effectsContainer: PIXI.Container;
   public frameDuration = 16.67;
+  public notUpdateBacklogEffects = false;
   private readonly figureContainer: PIXI.Container;
   private figureObjects: Array<IStageObject> = [];
   private readonly backgroundContainer: PIXI.Container;
@@ -62,6 +71,7 @@ export default class PixiStage {
   private stageAnimations: Array<IStageAnimationObject> = [];
   private assetLoader = new PIXI.Loader();
   private loadQueue: { url: string; callback: () => void }[] = [];
+  private live2dFigureRecorder: Array<ILive2DRecord> = [];
 
   // 锁定变换对象（对象可能正在执行动画，不能应用变换）
   private lockTransformTarget: Array<string> = [];
@@ -229,21 +239,12 @@ export default class PixiStage {
             blur: target.pixiContainer.blur,
             ...webgalFilters,
           };
-          const prevEffects = webgalStore.getState().stage.effects;
-          const newEffects = cloneDeep(prevEffects);
           let effect: IEffect = {
             target: thisTickerFunc.targetKey,
             transform: targetTransform,
           };
-          const index = newEffects.findIndex((e) => e.target === thisTickerFunc.targetKey);
-          if (index >= 0) {
-            effect = newEffects[index];
-            effect.transform = targetTransform;
-            newEffects[index] = effect;
-          } else {
-            newEffects.push(effect);
-          }
-          updateCurrentEffects(newEffects);
+          webgalStore.dispatch(stageActions.updateEffect(effect));
+          // if (!this.notUpdateBacklogEffects) updateCurrentBacklogEffects(webgalStore.getState().stage.effects);
         }
       }
       this.stageAnimations.splice(index, 1);
@@ -527,12 +528,17 @@ export default class PixiStage {
   //
   //   // 挂载
   //   this.figureContainer.addChild(thisFigureContainer);
-  //   this.figureObjects.push({ uuid: uuid(), key: key, pixiContainer: thisFigureContainer, sourceUrl: jsonPath });
+  //   this.figureObjects.push({
+  //     uuid: uuid(),
+  //     key: key,
+  //     pixiContainer: thisFigureContainer,
+  //     sourceUrl: jsonPath,
+  //   });
   //
   //   const setup = () => {
   //     if (thisFigureContainer) {
   //       (async function () {
-  //         const models = await Promise.all([Live2DModel.from(jsonPath)]);
+  //         const models = await Promise.all([Live2DModel.from(jsonPath, { autoInteract: false })]);
   //
   //         models.forEach((model) => {
   //           const scaleX = stageWidth / model.width;
@@ -581,6 +587,41 @@ export default class PixiStage {
   //     setup();
   //   }
   // }
+
+  public changeModelMotionByKey(key: string, motion: string) {
+    // logger.debug(`Applying motion ${motion} to ${key}`);
+    const target = this.figureObjects.find((e) => e.key === key);
+    const figureRecordTarget = this.live2dFigureRecorder.find((e) => e.target === key);
+    if (target && figureRecordTarget?.motion !== motion) {
+      const container = target.pixiContainer;
+      const children = container.children;
+      for (const model of children) {
+        let category_name = motion;
+        let animation_index = 0;
+        let priority_number = 3; // @ts-ignore
+        const internalModel = model?.internalModel ?? undefined; // 安全访问
+        internalModel?.motionManager?.stopAllMotions?.();
+        // @ts-ignore
+        model.motion(category_name, animation_index, priority_number);
+      }
+      this.updateL2dMotionByKey(key, motion);
+    }
+  }
+
+  public changeModelExpressionByKey(key: string, expression: string) {
+    // logger.debug(`Applying expression ${expression} to ${key}`);
+    const target = this.figureObjects.find((e) => e.key === key);
+    const figureRecordTarget = this.live2dFigureRecorder.find((e) => e.target === key);
+    if (target && figureRecordTarget?.expression !== expression) {
+      const container = target.pixiContainer;
+      const children = container.children;
+      for (const model of children) {
+        // @ts-ignore
+        model.expression(expression);
+      }
+      this.updateL2dExpressionByKey(key, expression);
+    }
+  }
 
   /**
    * 根据 key 获取舞台上的对象
@@ -631,6 +672,24 @@ export default class PixiStage {
 
   public cacheGC() {
     PIXI.utils.clearTextureCache();
+  }
+
+  private updateL2dMotionByKey(target: string, motion: string) {
+    const figureTargetIndex = this.live2dFigureRecorder.findIndex((e) => e.target === target);
+    if (figureTargetIndex >= 0) {
+      this.live2dFigureRecorder[figureTargetIndex].motion = motion;
+    } else {
+      this.live2dFigureRecorder.push({ target, motion, expression: '' });
+    }
+  }
+
+  private updateL2dExpressionByKey(target: string, expression: string) {
+    const figureTargetIndex = this.live2dFigureRecorder.findIndex((e) => e.target === target);
+    if (figureTargetIndex >= 0) {
+      this.live2dFigureRecorder[figureTargetIndex].expression = expression;
+    } else {
+      this.live2dFigureRecorder.push({ target, motion: '', expression });
+    }
   }
 
   private loadAsset(url: string, callback: () => void) {
@@ -685,24 +744,13 @@ export default class PixiStage {
   }
 }
 
-export function updateCurrentEffects(newEffects: IEffect[]) {
-  // /**
-  //  * 更新当前 backlog 条目的 effects 记录
-  //  */
-  // if (!notUpdateBacklogEffects)
-  //   setTimeout(() => {
-  //     const backlog = RUNTIME_CURRENT_BACKLOG[RUNTIME_CURRENT_BACKLOG.length - 1];
-  //     if (backlog) {
-  //       const newBacklogItem = cloneDeep(backlog);
-  //       const backlog_effects = newBacklogItem.currentStageState.effects;
-  //       while (backlog_effects.length > 0) {
-  //         backlog_effects.pop();
-  //       }
-  //       backlog_effects.push(...newEffects);
-  //       RUNTIME_CURRENT_BACKLOG.pop();
-  //       RUNTIME_CURRENT_BACKLOG.push(newBacklogItem);
-  //     }
-  //   }, 50);
+function updateCurrentBacklogEffects(newEffects: IEffect[]) {
+  /**
+   * 更新当前 backlog 条目的 effects 记录
+   */
+  setTimeout(() => {
+    WebGAL.backlogManager.editLastBacklogItemEffect(cloneDeep(newEffects));
+  }, 50);
 
   webgalStore.dispatch(setStage({ key: 'effects', value: newEffects }));
 }

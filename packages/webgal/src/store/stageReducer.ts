@@ -3,9 +3,19 @@
  * 舞台状态是演出结束后的“终态”，在读档时不发生演出，只是将舞台状态替换为读取的状态。
  */
 
-import { ISetGameVar, ISetStagePayload, IStageState } from '@/store/stageInterface';
+import {
+  IEffect,
+  IFreeFigure,
+  ILive2DExpression,
+  ILive2DMotion,
+  IRunPerform,
+  ISetGameVar,
+  ISetStagePayload,
+  IStageState,
+} from '@/store/stageInterface';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import cloneDeep from 'lodash/cloneDeep';
+import { commandType } from '@/Core/controller/scene/sceneInterface';
 
 // 初始化舞台数据
 
@@ -39,6 +49,7 @@ export const initState: IStageState = {
   PerformList: [], // 要启动的演出列表
   currentDialogKey: 'initial',
   live2dMotion: [],
+  live2dExpression: [],
   // currentPerformDelay: 0
   currentConcatDialogPrev: '',
   enableFilm: '',
@@ -77,10 +88,91 @@ const stageSlice = createSlice({
     setStageVar: (state, action: PayloadAction<ISetGameVar>) => {
       state.GameVar[action.payload.key] = action.payload.value;
     },
+    updateEffect: (state, action: PayloadAction<IEffect>) => {
+      const { target, transform } = action.payload;
+      // 尝试找到待修改的 Effect
+      const effectIndex = state.effects.findIndex((e) => e.target === target);
+      if (effectIndex >= 0) {
+        // Update the existing effect
+        state.effects[effectIndex].transform = transform;
+      } else {
+        // Add a new effect
+        state.effects.push({
+          target,
+          transform,
+        });
+      }
+    },
+    removeEffectByTargetId: (state, action: PayloadAction<string>) => {
+      const index = state.effects.findIndex((e) => e.target === action.payload);
+      if (index >= 0) {
+        state.effects.splice(index, 1);
+      }
+    },
+    addPerform: (state, action: PayloadAction<IRunPerform>) => {
+      state.PerformList.push(action.payload);
+    },
+    removePerformByName: (state, action: PayloadAction<string>) => {
+      for (let i = 0; i < state.PerformList.length; i++) {
+        const performItem: IRunPerform = state.PerformList[i];
+        if (performItem.id === action.payload) {
+          state.PerformList.splice(i, 1);
+          i--;
+        }
+      }
+    },
+    removeAllPixiPerforms: (state, action: PayloadAction<undefined>) => {
+      for (let i = 0; i < state.PerformList.length; i++) {
+        const performItem: IRunPerform = state.PerformList[i];
+        if (performItem.script.command === commandType.pixi) {
+          state.PerformList.splice(i, 1);
+          i--;
+        }
+      }
+    },
+    setFreeFigureByKey: (state, action: PayloadAction<IFreeFigure>) => {
+      const currentFreeFigures = state.freeFigure;
+      const newFigure = action.payload;
+      const index = currentFreeFigures.findIndex((figure) => figure.key === newFigure.key);
+      if (index >= 0) {
+        currentFreeFigures[index].basePosition = newFigure.basePosition;
+        currentFreeFigures[index].name = newFigure.name;
+      } else {
+        // 新加
+        if (newFigure.name !== '') currentFreeFigures.push(newFigure);
+      }
+    },
+    setLive2dMotion: (state, action: PayloadAction<ILive2DMotion>) => {
+      const { target, motion } = action.payload;
+
+      const index = state.live2dMotion.findIndex((e) => e.target === target);
+
+      if (index < 0) {
+        // Add a new motion
+        state.live2dMotion.push({ target, motion });
+      } else {
+        // Update the existing motion
+        state.live2dMotion[index].motion = motion;
+      }
+    },
+    setLive2dExpression: (state, action: PayloadAction<ILive2DExpression>) => {
+      const { target, expression } = action.payload;
+
+      const index = state.live2dExpression.findIndex((e) => e.target === target);
+
+      if (index < 0) {
+        // Add a new expression
+        state.live2dExpression.push({ target, expression });
+      } else {
+        // Update the existing expression
+        state.live2dExpression[index].expression = expression;
+      }
+    },
   },
 });
 
 export const { resetStageState, setStage, setStageVar } = stageSlice.actions;
+export const stageActions = stageSlice.actions;
 export default stageSlice.reducer;
 
 // /**

@@ -105,6 +105,16 @@ export interface IRunPerform {
   script: ISentence; // 演出脚本
 }
 
+export interface ILive2DMotion {
+  target: string;
+  motion: string;
+}
+
+export interface ILive2DExpression {
+  target: string;
+  expression: string;
+}
+
 /**
  * @interface IStageState 游戏舞台数据接口
  */
@@ -138,7 +148,8 @@ export interface IStageState {
   bgFilter: string;
   PerformList: Array<IRunPerform>; // 要启动的演出列表
   currentDialogKey: string; // 当前对话的key
-  live2dMotion: { target: string; motion: string }[];
+  live2dMotion: ILive2DMotion[];
+  live2dExpression: ILive2DExpression[];
   // 当前演出的延迟，用于做对话插演出！
   // currentPerformDelay:number
   currentConcatDialogPrev: string;

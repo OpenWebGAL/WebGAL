@@ -82,8 +82,9 @@ const fr = {
             textFont: {
               title: 'Police du texte',
               options: {
-                siYuanSimSun: 'LXGW WenKai',
+                siYuanSimSun: 'Source Han Serif',
                 SimHei: 'Sans',
+                lxgw: 'LXGW WenKai',
               },
             },
             textPreview: {

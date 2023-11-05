@@ -21,6 +21,7 @@ export enum textSize {
 export enum textFont {
   song,
   hei,
+  lxgw,
 }
 
 /**
