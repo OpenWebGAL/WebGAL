@@ -29,10 +29,10 @@ export interface ITransform {
     x: number;
     y: number;
   };
-  pivot: {
-    x: number;
-    y: number;
-  };
+  // pivot: {
+  //   x: number;
+  //   y: number;
+  // };
   position: {
     x: number;
     y: number;
@@ -59,10 +59,10 @@ export const baseTransform: ITransform = {
     x: 1,
     y: 1,
   },
-  pivot: {
-    x: 0.5,
-    y: 0.5,
-  },
+  // pivot: {
+  //   x: 0.5,
+  //   y: 0.5,
+  // },
   position: {
     x: 0,
     y: 0,

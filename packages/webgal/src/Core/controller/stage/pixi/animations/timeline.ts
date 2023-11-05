@@ -42,7 +42,7 @@ export function generateTimelineObj(
       /**
        * filters
        */
-      const { alpha, rotation, blur, duration, scale, position, pivot, ...rest } = gsapEffect;
+      const { alpha, rotation, blur, duration, scale, position, ...rest } = gsapEffect;
       gsapTimeline4.to(target.pixiContainer, {
         ...rest,
         duration: gsapEffectDuration,
@@ -83,7 +83,7 @@ export function generateTimelineObj(
 
   function getEndFilterEffect() {
     const gsapEffect = timeline[timeline.length - 1];
-    const { alpha, rotation, blur, duration, scale, position, pivot, ...rest } = gsapEffect;
+    const { alpha, rotation, blur, duration, scale, position, ...rest } = gsapEffect;
     return rest;
   }
 
