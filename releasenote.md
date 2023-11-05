@@ -8,91 +8,94 @@
 
 #### 新功能
 
-添加唇形同步和眨眼动画
+文本框主题选择
 
-添加启动图
+视频禁止跳过的选项
+
+变量插值
+
+Live2D 的表情和动作设置
 
 #### 修复
 
-iOS 设备上无法正常进行游戏的异常
+立绘或背景变换没有正确同步的异常
 
-文本框在遇到特殊符号时的换行异常
-
-解析器解析 `say` 指令时出现的异常
-
-解析器解析音频文件路径时出现的异常
+其他已知问题
 
 <!-- English Translation -->
 ## Release Notes
 
-**This repository only releases source code**
+**Only source code is released in this repository**
 
-**If you want to create, produce, and preview WebGAL games conveniently with a graphical editor, please [download the WebGAL Graphical Editor](https://github.com/MakinoharaShoko/WebGAL_Terre/releases)**
+**If you want to experience creating, making, and real-time previewing WebGAL games using a user-friendly graphical editor, please [download the WebGAL graphical editor](https://github.com/MakinoharaShoko/WebGAL_Terre/releases)**
 
-### In This Version
+### In this version
 
 #### New Features
 
-Added lip sync and blinking animations
+Textbox theme selection
 
-Added startup image
+Option to prohibit skipping videos
+
+Variable interpolation
+
+Live2D expression and motion settings
 
 #### Fixes
 
-Resolved issues with game not working properly on iOS devices
+The issue where the standing picture or background transformation was not correctly synchronized
 
-Fixed text box line breaks when encountering special characters
+Other known issues
 
-Resolved exceptions when parser parses `say` commands
-
-Resolved exceptions when parser parses audio file paths
 
 <!-- Japanese Translation -->
 ## リリースノート
 
-**このリポジトリはソースコードのみをリリースします**
+**このリポジトリではソースコードのみを公開しています**
 
-**WebGAL ゲームを便利なグラフィカルエディタで作成、制作、そしてリアルタイムでプレビューしたい場合は、[WebGAL グラフィカルエディタをダウンロードしてください](https://github.com/MakinoharaShoko/WebGAL_Terre/releases)**
+**ユーザーフレンドリーなグラフィックエディタを使用してWebGALゲームの作成、制作、リアルタイムプレビューを体験したい場合は、[WebGALグラフィックエディタをダウンロードしてください](https://github.com/MakinoharaShoko/WebGAL_Terre/releases)**
 
-### このバージョンで
+### このバージョンでは
 
 #### 新機能
 
-リップシンクとまばたきアニメーションを追加
+テキストボックスのテーマ選択
 
-起動画像を追加
+ビデオのスキップ禁止オプション
+
+変数の補間
+
+Live2Dの表情とモーションの設定
 
 #### 修正
 
-iOS デバイスでゲームが正常に動作しない問題を修正
+立ち絵や背景の変形が正しく同期されなかった問題
 
-特殊文字に遭遇した際のテキストボックスの改行問題を修正
+その他の既知の問題
 
-パーサが `say` コマンドを解析する際の例外を修正
-
-パーサがオーディオファイルパスを解析する際の例外を修正
 
 <!-- French Translation -->
 ## Notes de version
 
-**Ce dépôt ne publie que du code source**
+**Seul le code source est publié dans ce dépôt**
 
-**Si vous souhaitez créer, produire et prévisualiser des jeux WebGAL de manière pratique avec un éditeur graphique, veuillez [télécharger l'Éditeur Graphique WebGAL](https://github.com/MakinoharaShoko/WebGAL_Terre/releases)**
+**Si vous souhaitez expérimenter la création, la fabrication et la prévisualisation en temps réel des jeux WebGAL à l'aide d'un éditeur graphique convivial, veuillez [télécharger l'éditeur graphique WebGAL](https://github.com/MakinoharaShoko/WebGAL_Terre/releases)**
 
 ### Dans cette version
 
 #### Nouvelles fonctionnalités
 
-Ajout de la synchronisation labiale et des animations de clignement
+Sélection du thème de la boîte de texte
 
-Ajout d'une image de démarrage
+Option pour interdire le saut des vidéos
+
+Interpolation des variables
+
+Paramètres d'expression et de mouvement Live2D
 
 #### Corrections
 
-Résolution des problèmes de jeu ne fonctionnant pas correctement sur les appareils iOS
+Le problème où la transformation de l'image debout ou de l'arrière-plan n'était pas correctement synchronisée
 
-Correction des retours à la ligne dans la zone de texte lors de la rencontre de caractères spéciaux
+Autres problèmes connus
 
-Résolution des exceptions lorsque le parseur analyse les commandes `say`
-
-Résolution des exceptions lorsque le parseur analyse les chemins de fichiers audio
