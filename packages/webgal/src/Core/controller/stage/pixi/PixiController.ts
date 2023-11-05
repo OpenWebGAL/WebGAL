@@ -244,7 +244,7 @@ export default class PixiStage {
             transform: targetTransform,
           };
           webgalStore.dispatch(stageActions.updateEffect(effect));
-          if (!this.notUpdateBacklogEffects) updateCurrentBacklogEffects(webgalStore.getState().stage.effects);
+          // if (!this.notUpdateBacklogEffects) updateCurrentBacklogEffects(webgalStore.getState().stage.effects);
         }
       }
       this.stageAnimations.splice(index, 1);
