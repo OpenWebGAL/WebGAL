@@ -33,7 +33,7 @@ export interface IStageObject {
   uuid: string;
   // 一般与作用目标有关
   key: string;
-  pixiContainer: PIXI.Container;
+  pixiContainer: WebGALPixiContainer;
   // 相关的源 url
   sourceUrl: string;
 }
@@ -226,10 +226,10 @@ export default class PixiStage {
               x: target.pixiContainer.scale.x,
               y: target.pixiContainer.scale.y,
             },
-            pivot: {
-              x: target.pixiContainer.pivot.x,
-              y: target.pixiContainer.pivot.y,
-            },
+            // pivot: {
+            //   x: target.pixiContainer.pivot.x,
+            //   y: target.pixiContainer.pivot.y,
+            // },
             position: {
               x: target.pixiContainer.x,
               y: target.pixiContainer.y,
