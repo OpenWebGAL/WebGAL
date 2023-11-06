@@ -27,10 +27,8 @@ export class WebGALPixiContainer extends PIXI.Container {
   }
 
   public get x() {
-    if (!super.position) {
-      return 0;
-    }
-    return super.position.x - this.baseX;
+    const rX = super.position?.x ?? 0;
+    return rX - this.baseX;
   }
 
   public set x(value) {
@@ -41,10 +39,8 @@ export class WebGALPixiContainer extends PIXI.Container {
   }
 
   public get y() {
-    if (!super.position) {
-      return 0;
-    }
-    return super.position.y - this.baseY;
+    const rY = super.position?.y ?? 0;
+    return rY - this.baseY;
   }
 
   public set y(value) {
