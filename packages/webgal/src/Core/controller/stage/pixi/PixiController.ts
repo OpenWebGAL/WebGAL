@@ -125,12 +125,18 @@ export default class PixiStage {
     this.backgroundContainer.zIndex = 0;
     app.stage.addChild(this.effectsContainer, this.figureContainer, this.backgroundContainer);
     this.currentApp = app;
-    // 每 5s 获取帧率
+    // 每 5s 获取帧率，并且防 loader 死
     const update = () => {
       this.updateFps();
       setTimeout(update, 10000);
     };
     update();
+    // loader 防死
+    const reload = () => {
+      setTimeout(reload, 500);
+      this.callLoader();
+    };
+    reload();
   }
 
   public getFigureObjects() {
@@ -703,7 +709,7 @@ export default class PixiStage {
     /**
      * Loader 复用疑似有问题，转而采用先前的单独方式
      */
-    this.loadQueue.push({ url, callback });
+    this.loadQueue.unshift({ url, callback });
     /**
      * 尝试启动加载
      */
