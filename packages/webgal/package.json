@@ -12,7 +12,7 @@
     "@icon-park/react": "^1.4.2",
     "@reduxjs/toolkit": "^1.8.1",
     "angular-expressions": "^1.1.5",
-    "axios": "^0.26.1",
+    "axios": "^1.6.0",
     "cloudlogjs": "^1.0.9",
     "gsap": "^3.11.3",
     "i18next": "^22.4.15",
