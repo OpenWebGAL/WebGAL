@@ -66,6 +66,13 @@ function isCJK(character: string) {
   return !!character.match(/[\u4e00-\u9fa5]|[\u0800-\u4e00]|[\uac00-\ud7ff]/);
 }
 
+/**
+ * TODO：新的文本处理模式
+ * 1 拆行，分别处理，中间用 br连接
+ * 2 找出需要注音的部分，然后断开，注音的部分单独处理，其他部分用原来的方法处理
+ * 3 全部连接
+ * @param sentence
+ */
 export function splitChars(sentence: string) {
   if (!sentence) return [];
   const words: string[] = [];
