@@ -248,7 +248,7 @@ function removeFig(figObj: IStageObject, enterTikerKey: string, effects: IEffect
  * 如果要使用 Live2D，取消这里的注释
  * @param args
  */
-// function addLive2dFigure(...args: any[]) {
-//   // @ts-ignore
-//   return WebGAL.gameplay.pixiStage?.addLive2dFigure(...args);
-// }
+function addLive2dFigure(...args: any[]) {
+  // @ts-ignore
+  // return WebGAL.gameplay.pixiStage?.addLive2dFigure(...args);
+}
