@@ -519,7 +519,7 @@ export default class PixiStage {
    * @param jsonPath
    */
   // eslint-disable-next-line max-params
-  // public addLive2dFigure(key: string, jsonPath: string, pos: string, motion: string) {
+  // public addLive2dFigure(key: string, jsonPath: string, pos: string, motion: string, expression: string) {
   //   let stageWidth = this.stageWidth;
   //   let stageHeight = this.stageHeight;
   //   logger.debug('Using motion:', motion);
@@ -579,6 +579,7 @@ export default class PixiStage {
   //
   //           // model.motion(category_name, animation_index, priority_number,location.href + audio_link);
   //           model.motion(category_name, animation_index, priority_number);
+  //           model.expression(expression);
   //
   //           // lip-sync is still a problem and you can not.
   //           SoundManager.volume = 0;

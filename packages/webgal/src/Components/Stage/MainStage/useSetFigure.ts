@@ -48,7 +48,13 @@ export function useSetFigure(stageState: IStageState) {
       WebGAL.gameplay.pixiStage?.addFigure(thisFigKey, figName, 'center');
       const regex = /.json$/;
       if (regex.test(figName)) {
-        addLive2dFigure(thisFigKey, figName, 'center', live2dMotion.find((e) => e.target === thisFigKey)?.motion ?? '');
+        addLive2dFigure(
+          thisFigKey,
+          figName,
+          'center',
+          live2dMotion.find((e) => e.target === thisFigKey)?.motion ?? '',
+          live2dExpression.find((e) => e.target === thisFigKey)?.expression ?? '',
+        );
       }
       logger.debug('中立绘已重设');
       const { duration, animation } = getEnterExitAnimation(thisFigKey, 'enter');
@@ -86,6 +92,7 @@ export function useSetFigure(stageState: IStageState) {
           figNameLeft,
           'left',
           live2dMotion.find((e) => e.target === thisFigKey)?.motion ?? '',
+          live2dExpression.find((e) => e.target === thisFigKey)?.expression ?? '',
         );
       }
       logger.debug('左立绘已重设');
@@ -124,6 +131,7 @@ export function useSetFigure(stageState: IStageState) {
           figNameRight,
           'right',
           live2dMotion.find((e) => e.target === thisFigKey)?.motion ?? '',
+          live2dExpression.find((e) => e.target === thisFigKey)?.expression ?? '',
         );
       }
       logger.debug('右立绘已重设');
@@ -171,6 +179,7 @@ export function useSetFigure(stageState: IStageState) {
               fig.name,
               fig.basePosition,
               live2dMotion.find((e) => e.target === thisFigKey)?.motion ?? '',
+              live2dExpression.find((e) => e.target === thisFigKey)?.expression ?? '',
             );
           }
           logger.debug(`${fig.key}立绘已重设`);
@@ -239,6 +248,7 @@ function removeFig(figObj: IStageObject, enterTikerKey: string, effects: IEffect
  * 如果要使用 Live2D，取消这里的注释
  * @param args
  */
-function addLive2dFigure(...args: any[]) {
-  // return WebGAL.gameplay.pixiStage?.addLive2dFigure(...args);
-}
+// function addLive2dFigure(...args: any[]) {
+//   // @ts-ignore
+//   return WebGAL.gameplay.pixiStage?.addLive2dFigure(...args);
+// }
