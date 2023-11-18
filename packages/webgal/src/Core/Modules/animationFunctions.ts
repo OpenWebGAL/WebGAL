@@ -1,5 +1,5 @@
 import { generateUniversalSoftInAnimationObj } from '@/Core/controller/stage/pixi/animations/universalSoftIn';
-import { logger } from '@/Core/util/etc/logger';
+import { logger } from '@/Core/util/logger';
 import { generateUniversalSoftOffAnimationObj } from '@/Core/controller/stage/pixi/animations/universalSoftOff';
 import { webgalStore } from '@/store/store';
 import cloneDeep from 'lodash/cloneDeep';

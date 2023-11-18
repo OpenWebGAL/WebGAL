@@ -2,9 +2,9 @@ import { ISentence } from '@/Core/controller/scene/sceneInterface';
 import { IPerform } from '@/Core/Modules/perform/performInterface';
 import { webgalStore } from '@/store/store';
 import { setStage } from '@/store/stageReducer';
-import { logger } from '@/Core/util/etc/logger';
+import { logger } from '@/Core/util/logger';
 import { getRandomPerformName } from '@/Core/Modules/perform/performController';
-import { PERFORM_CONFIG } from '@/Core/config/config';
+import { PERFORM_CONFIG } from '@/config';
 import { WebGAL } from '@/Core/WebGAL';
 
 /**

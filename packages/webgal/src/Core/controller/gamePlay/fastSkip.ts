@@ -1,9 +1,10 @@
 // 切换自动播放状态
 import { stopAuto } from './autoPlay';
-import styles from '../../../Components/UI/BottomControlPanel/bottomControlPanel.module.scss';
+import styles from '@/UI/BottomControlPanel/bottomControlPanel.module.scss';
 import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
 
 import { WebGAL } from '@/Core/WebGAL';
+import { SYSTEM_CONFIG } from '@/config';
 
 /**
  * 设置 fast 按钮的激活与否
@@ -44,7 +45,7 @@ export const startFast = () => {
   setButton(true);
   WebGAL.gameplay.fastInterval = setInterval(() => {
     nextSentence();
-  }, 100);
+  }, SYSTEM_CONFIG.fast_timeout);
 };
 
 // 判断是否是快进模式

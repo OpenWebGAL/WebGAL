@@ -2,7 +2,7 @@ import { ISentence } from '@/Core/controller/scene/sceneInterface';
 import { IPerform } from '@/Core/Modules/perform/performInterface';
 import { webgalStore } from '@/store/store';
 import { unlockCgInUserData } from '@/store/userDataReducer';
-import { logger } from '@/Core/util/etc/logger';
+import { logger } from '@/Core/util/logger';
 import localforage from 'localforage';
 
 import { WebGAL } from '@/Core/WebGAL';

@@ -1,6 +1,6 @@
 import { webgalStore } from '@/store/store';
 import { setStage } from '@/store/stageReducer';
-import { logger } from '@/Core/util/etc/logger';
+import { logger } from '@/Core/util/logger';
 
 // /**
 //  * 停止bgm

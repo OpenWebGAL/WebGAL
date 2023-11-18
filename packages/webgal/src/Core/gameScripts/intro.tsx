@@ -2,10 +2,10 @@ import { ISentence } from '@/Core/controller/scene/sceneInterface';
 import { IPerform } from '@/Core/Modules/perform/performInterface';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import styles from '../../Components/Stage/FullScreenPerform/fullScreenPerform.module.scss';
+import styles from '@/Stage/FullScreenPerform/fullScreenPerform.module.scss';
 import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
 import { PerformController } from '@/Core/Modules/perform/performController';
-import { logger } from '@/Core/util/etc/logger';
+import { logger } from '@/Core/util/logger';
 import { WebGAL } from '@/Core/WebGAL';
 /**
  * 显示一小段黑屏演示

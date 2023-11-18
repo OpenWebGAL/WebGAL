@@ -1,5 +1,5 @@
 import { ISaveData } from '@/store/userDataInterface';
-import { logger } from '../../util/etc/logger';
+import { logger } from '../../util/logger';
 import { sceneFetcher } from '../scene/sceneFetcher';
 import { sceneParser } from '../../parser/sceneParser';
 import { webgalStore } from '@/store/store';
@@ -10,7 +10,7 @@ import { stopAllPerform } from '@/Core/controller/gamePlay/stopAllPerform';
 import cloneDeep from 'lodash/cloneDeep';
 import uniqWith from 'lodash/uniqWith';
 import { scenePrefetcher } from '@/Core/util/prefetcher/scenePrefetcher';
-import { setEbg } from '@/Core/util/setEbg';
+import { setEbg } from '@/Core/gameScripts/changeBg/setEbg';
 
 import { WebGAL } from '@/Core/WebGAL';
 

@@ -1,7 +1,7 @@
 /**
  * @file 引擎初始化时会执行的脚本，包括获取游戏信息，初始化运行时变量，初始化用户数据存储
  */
-import { logger } from './util/etc/logger';
+import { logger } from './util/logger';
 import { infoFetcher } from './util/coreInitialFunction/infoFetcher';
 import { assetSetter, fileType } from './util/gameAssetsAccess/assetSetter';
 import { sceneFetcher } from './controller/scene/sceneFetcher';

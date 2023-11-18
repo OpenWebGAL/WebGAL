@@ -4,7 +4,7 @@
  */
 import { sceneFetcher } from '../../controller/scene/sceneFetcher';
 import { sceneParser } from '../../parser/sceneParser';
-import { logger } from '@/Core/util/etc/logger';
+import { logger } from '@/Core/util/logger';
 
 import { WebGAL } from '@/Core/WebGAL';
 
