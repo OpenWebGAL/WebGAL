@@ -1,10 +1,10 @@
 import styles from './standard.module.scss';
 import { textSize } from '@/store/userDataInterface';
-import { useEffect } from 'react';
+import { ReactNode, useEffect } from 'react';
 import { WebGAL } from '@/Core/WebGAL';
 
 export interface ITextboxProps {
-  textArray: string[];
+  textArray: ReactNode[];
   textDelay: number;
   currentConcatDialogPrev: string;
   currentDialogKey: string;
@@ -16,6 +16,7 @@ export interface ITextboxProps {
   font: string;
   textDuration: number;
   textSizeState: number;
+  lineLimit: number;
 }
 
 export default function StandardTextbox(props: ITextboxProps) {
@@ -51,9 +52,9 @@ export default function StandardTextbox(props: ITextboxProps) {
   }, []);
 
   const textElementList = textArray.map((e, index) => {
-    if (e === '<br />') {
-      return <br key={`br${index}`} />;
-    }
+    // if (e === '<br />') {
+    //   return <br key={`br${index}`} />;
+    // }
     let delay = index * textDelay;
     let prevLength = currentConcatDialogPrev.length;
     if (currentConcatDialogPrev !== '' && index >= prevLength) {
@@ -62,7 +63,7 @@ export default function StandardTextbox(props: ITextboxProps) {
     if (index < prevLength) {
       return (
         <span
-          data-text={e}
+          // data-text={e}
           id={`${delay}`}
           className={styles.TextBox_textElement_Settled}
           key={currentDialogKey + index}
@@ -78,7 +79,7 @@ export default function StandardTextbox(props: ITextboxProps) {
     }
     return (
       <span
-        data-text={e}
+        // data-text={e}
         id={`${delay}`}
         className={`${styles.TextBox_textElement_start} Textelement_start`}
         key={currentDialogKey + index}
@@ -134,6 +135,7 @@ export default function StandardTextbox(props: ITextboxProps) {
               wordBreak: isSafari ? 'break-word' : undefined,
               overflow: 'hidden',
               paddingLeft: '0.1em',
+              WebkitLineClamp: props.lineLimit,
             }}
           >
             {textElementList}

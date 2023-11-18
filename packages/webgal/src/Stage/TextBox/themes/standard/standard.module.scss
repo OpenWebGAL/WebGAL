@@ -32,7 +32,7 @@ $height: 430px;
   align-items: flex-start;
   animation: showSoftly 0.7s ease-out forwards;
   letter-spacing: 0.2em;
-  backdrop-filter: blur(5px);
+  backdrop-filter: blur(2px);
   transition: left 0.33s, padding-left 0.33s;
 }
 
@@ -44,7 +44,7 @@ $height: 430px;
   display: flex;
   align-items: center;
   transition: left 0.33s;
-  border-bottom: 3px solid rgba(255,255,255,0.8);
+  border-bottom: 3px solid rgba(255, 255, 255, 0.8);
 }
 
 @keyframes showSoftly {
@@ -93,7 +93,6 @@ $height: 430px;
   color: transparent;
   white-space: nowrap;
 }
-
 
 
 .TextBox_textElement_Settled {
@@ -151,4 +150,12 @@ $height: 430px;
   left: 0;
   top: 0;
   z-index: 1;
+}
+
+.text {
+  line-height: 1.9em;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  //-webkit-line-clamp: 2;
+  overflow: hidden;
 }

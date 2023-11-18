@@ -1,4 +1,4 @@
-import { FC, useEffect } from 'react';
+import { FC, ReactNode, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import { useFontFamily } from '@/hooks/useFontFamily';
@@ -7,6 +7,7 @@ import { getTextSize } from '@/UI/getTextSize';
 import StandardTextbox, { ITextboxProps } from '@/Stage/TextBox/themes/standard/StandardTextbox';
 import IMSSTextbox from '@/Stage/TextBox/themes/imss/IMSSTextbox';
 import { IWebGalTextBoxTheme } from '@/Stage/themeInterface';
+import { match } from '@/Core/util/match';
 import { textSize } from '@/store/userDataInterface';
 
 const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
@@ -36,8 +37,13 @@ export const TextBox = () => {
     size = getTextSize(stageState.showTextSize) + '%';
     textSizeState = stageState.showTextSize;
   }
+  const lineLimit = match(userDataState.optionData.textSize)
+    .with(textSize.small, () => 3)
+    .with(textSize.medium, () => 2)
+    .with(textSize.large, () => 2)
+    .default(() => 2);
   // 拆字
-  const textArray: Array<string> = splitChars(stageState.showText);
+  const textArray = compileSentence(stageState.showText, lineLimit);
   const showName = stageState.showName;
   const currentConcatDialogPrev = stageState.currentConcatDialogPrev;
   const currentDialogKey = stageState.currentDialogKey;
@@ -58,6 +64,7 @@ export const TextBox = () => {
       textDuration={textDuration}
       font={font}
       textSizeState={textSizeState}
+      lineLimit={lineLimit}
     />
   );
 };
@@ -66,11 +73,40 @@ function isCJK(character: string) {
   return !!character.match(/[\u4e00-\u9fa5]|[\u0800-\u4e00]|[\uac00-\ud7ff]/);
 }
 
+export function compileSentence(sentence: string, lineLimit: number, ignoreLineLimit?: boolean): ReactNode[] {
+  // 先拆行
+  const lines = sentence.split('|');
+  // 对每一行进行注音处理
+  const rubyLines = lines.map((line) => parseString(line));
+  const nodeLines = rubyLines.map((line) => {
+    const ln: ReactNode[] = [];
+    line.forEach((node) => {
+      match(node.type)
+        .with(SegmentType.String, () => {
+          const chars = splitChars(node.value as string);
+          ln.push(...chars);
+        })
+        .endsWith(SegmentType.Link, () => {
+          const val = node.value as LinkValue;
+          const rubyNode = (
+            <ruby>
+              {val.text}
+              <rt>{val.link}</rt>
+            </ruby>
+          );
+          ln.push(rubyNode);
+        });
+    });
+    return ln;
+  });
+  const ret = nodeLines
+    .slice(0, ignoreLineLimit ? undefined : lineLimit)
+    .reduce((prev, curr, currentIndex) => [...prev, ...curr, <br key={`br-${currentIndex}`} />], []);
+  ret.pop();
+  return ret;
+}
+
 /**
- * TODO：新的文本处理模式
- * 1 拆行，分别处理，中间用 br连接
- * 2 找出需要注音的部分，然后断开，注音的部分单独处理，其他部分用原来的方法处理
- * 3 全部连接
  * @param sentence
  */
 export function splitChars(sentence: string) {
@@ -85,15 +121,15 @@ export function splitChars(sentence: string) {
   };
 
   for (const character of sentence) {
-    if (character === '|') {
-      if (word) {
-        words.push(word);
-        word = '';
-      }
-      words.push('<br />');
-      cjkFlag = false;
-      continue;
-    }
+    // if (character === '|') {
+    //   if (word) {
+    //     words.push(word);
+    //     word = '';
+    //   }
+    //   words.push('<br />');
+    //   cjkFlag = false;
+    //   continue;
+    // }
     if (character === ' ') {
       // Space
       if (word) {
@@ -140,4 +176,40 @@ export function splitChars(sentence: string) {
   }
 
   return words;
+}
+
+enum SegmentType {
+  String = 'SegmentType.String',
+  Link = 'SegmentType.Link',
+}
+
+interface LinkValue {
+  text: string;
+  link: string;
+}
+
+interface Segment {
+  type: SegmentType;
+  value: string | LinkValue;
+}
+
+function parseString(input: string): Segment[] {
+  const regex = /(\[(.*?)\]\((.*?)\))|([^\[\]]+)/g;
+  const result: Segment[] = [];
+  let match: RegExpExecArray | null;
+
+  while ((match = regex.exec(input)) !== null) {
+    if (match[1]) {
+      // 链接部分
+      const text = match[2];
+      const link = match[3];
+      result.push({ type: SegmentType.Link, value: { text, link } });
+    } else {
+      // 普通文本
+      const text = match[0];
+      result.push({ type: SegmentType.String, value: text });
+    }
+  }
+
+  return result;
 }
