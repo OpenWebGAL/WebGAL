@@ -80,7 +80,7 @@ export function compileSentence(sentence: string, lineLimit: number, ignoreLineL
   const rubyLines = lines.map((line) => parseString(line));
   const nodeLines = rubyLines.map((line) => {
     const ln: ReactNode[] = [];
-    line.forEach((node) => {
+    line.forEach((node, index) => {
       match(node.type)
         .with(SegmentType.String, () => {
           const chars = splitChars(node.value as string);
@@ -89,7 +89,7 @@ export function compileSentence(sentence: string, lineLimit: number, ignoreLineL
         .endsWith(SegmentType.Link, () => {
           const val = node.value as LinkValue;
           const rubyNode = (
-            <ruby>
+            <ruby key={index + val.text}>
               {val.text}
               <rt>{val.link}</rt>
             </ruby>
