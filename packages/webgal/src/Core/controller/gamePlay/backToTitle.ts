@@ -3,7 +3,7 @@ import { setVisibility } from '@/store/GUIReducer';
 import { stopAllPerform } from '@/Core/controller/gamePlay/stopAllPerform';
 import { stopAuto } from '@/Core/controller/gamePlay/autoPlay';
 import { stopFast } from '@/Core/controller/gamePlay/fastSkip';
-import { setEbg } from '@/Core/util/setEbg';
+import { setEbg } from '@/Core/gameScripts/changeBg/setEbg';
 
 export const backToTitle = () => {
   const dispatch = webgalStore.dispatch;

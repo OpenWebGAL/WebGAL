@@ -7,7 +7,7 @@ import { setVisibility } from '@/store/GUIReducer';
 import { useDispatch } from 'react-redux';
 import { startFast, stopAll, stopFast } from '@/Core/controller/gamePlay/fastSkip';
 import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
-import styles from '@/Components/UI/Backlog/backlog.module.scss';
+import styles from '@/UI/Backlog/backlog.module.scss';
 import throttle from 'lodash/throttle';
 import { fastSaveGame } from '@/Core/controller/storage/fastSaveLoad';
 import { WebGAL } from '@/Core/WebGAL';

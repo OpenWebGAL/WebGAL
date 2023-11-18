@@ -1,16 +1,16 @@
 import { commandType, ISentence } from '@/Core/controller/scene/sceneInterface';
 import { runScript } from './runScript';
-import { logger } from '../../util/etc/logger';
+import { logger } from '../../util/logger';
 import { IStageState } from '@/store/stageInterface';
 import { restoreScene } from '../scene/restoreScene';
 import { webgalStore } from '@/store/store';
 import { getValueFromState } from '@/Core/gameScripts/setVar';
-import { strIf } from '@/Core/gameScripts/function/strIf';
+import { strIf } from '@/Core/controller/gamePlay/strIf';
 import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
 import cloneDeep from 'lodash/cloneDeep';
 import { ISceneEntry } from '@/Core/Modules/scene';
 import { IBacklogItem } from '@/Core/Modules/backlog';
-import { SYSTEM_CONFIG } from '@/Core/config/config';
+import { SYSTEM_CONFIG } from '@/config';
 import { WebGAL } from '@/Core/WebGAL';
 
 /**

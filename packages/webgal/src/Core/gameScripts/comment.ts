@@ -1,6 +1,6 @@
 import { ISentence } from '@/Core/controller/scene/sceneInterface';
 import { IPerform } from '@/Core/Modules/perform/performInterface';
-import { logger } from '@/Core/util/etc/logger';
+import { logger } from '@/Core/util/logger';
 
 /**
  * 注释，打LOG

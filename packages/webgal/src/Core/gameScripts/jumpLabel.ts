@@ -1,6 +1,6 @@
 import { ISentence } from '@/Core/controller/scene/sceneInterface';
 import { IPerform } from '@/Core/Modules/perform/performInterface';
-import { jmp } from '@/Core/gameScripts/function/jmp';
+import { jmp } from '@/Core/gameScripts/label/jmp';
 
 /**
  * 跳转到指定标签

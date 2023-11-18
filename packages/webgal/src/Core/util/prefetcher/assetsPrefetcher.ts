@@ -1,5 +1,5 @@
 import { IAsset } from '@/Core/controller/scene/sceneInterface';
-import { logger } from '../etc/logger';
+import { logger } from '../logger';
 
 import { WebGAL } from '@/Core/WebGAL';
 

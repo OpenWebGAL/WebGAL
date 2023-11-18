@@ -1,5 +1,5 @@
 import { IScene } from '../controller/scene/sceneInterface';
-import { logger } from '../util/etc/logger';
+import { logger } from '../util/logger';
 import { assetsPrefetcher } from '@/Core/util/prefetcher/assetsPrefetcher';
 import { assetSetter } from '@/Core/util/gameAssetsAccess/assetSetter';
 import SceneParser from 'webgal-parser';
@@ -16,7 +16,7 @@ import { bgm } from '@/Core/gameScripts/bgm';
 import { playVideo } from '@/Core/gameScripts/playVideo';
 import { setComplexAnimation } from '@/Core/gameScripts/setComplexAnimation';
 import { setFilter } from '@/Core/gameScripts/setFilter';
-import { pixiInit } from '../gameScripts/pixiInit';
+import { pixiInit } from '../gameScripts/pixi/pixiInit';
 import { pixi } from '@/Core/gameScripts/pixi';
 import { label } from '@/Core/gameScripts/label';
 import { jumpLabel } from '../gameScripts/jumpLabel';

@@ -6,9 +6,9 @@ import cloneDeep from 'lodash/cloneDeep';
 import { getSentenceArgByKey } from '@/Core/util/getSentenceArg';
 import { IFreeFigure, IStageState, ITransform } from '@/store/stageInterface';
 import { IUserAnimation } from '@/Core/Modules/animations';
-import { generateTransformAnimationObj } from '@/Core/gameScripts/function/generateTransformAnimationObj';
+import { generateTransformAnimationObj } from '@/Core/controller/stage/pixi/animations/generateTransformAnimationObj';
 import { assetSetter, fileType } from '@/Core/util/gameAssetsAccess/assetSetter';
-import { logger } from '@/Core/util/etc/logger';
+import { logger } from '@/Core/util/logger';
 import { getAnimateDuration } from '@/Core/Modules/animationFunctions';
 import { WebGAL } from '@/Core/WebGAL';
 /**
