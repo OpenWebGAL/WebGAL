@@ -7,7 +7,7 @@ import { setVisibility } from '@/store/GUIReducer';
 import { logger } from '@/Core/util/logger';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import useTrans from '@/hooks/useTrans';
-import { splitChars } from '@/Stage/TextBox/TextBox';
+import { compileSentence, splitChars } from '@/Stage/TextBox/TextBox';
 import useSoundEffect from '@/hooks/useSoundEffect';
 import { WebGAL } from '@/Core/WebGAL';
 
@@ -28,7 +28,8 @@ export const Backlog = () => {
     // logger.info('backlogList render');
     for (let i = 0; i < WebGAL.backlogManager.getBacklog().length; i++) {
       const backlogItem = WebGAL.backlogManager.getBacklog()[i];
-      const showTextArray = splitChars(backlogItem.currentStageState.showText);
+      // const showTextArray = splitChars(backlogItem.currentStageState.showText.replaceAll(/[\[\]]/g, ''));
+      const showTextArray = compileSentence(backlogItem.currentStageState.showText, 3, true);
       const showTextElementList = showTextArray.map((e, index) => {
         if (e === '<br />') {
           return <br key={`br${index}`} />;

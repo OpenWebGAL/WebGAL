@@ -1,20 +1,7 @@
 import styles from './imss.module.scss';
-import { useEffect } from 'react';
+import { ReactNode, useEffect } from 'react';
 import { WebGAL } from '@/Core/WebGAL';
-
-export interface ITextboxProps {
-  textArray: string[];
-  textDelay: number;
-  currentConcatDialogPrev: string;
-  currentDialogKey: string;
-  isText: boolean;
-  isSafari: boolean;
-  fontSize: string;
-  miniAvatar: string;
-  showName: string;
-  font: string;
-  textDuration: number;
-}
+import { ITextboxProps } from '../standard/StandardTextbox';
 
 export default function IMSSTextbox(props: ITextboxProps) {
   const {
@@ -46,9 +33,9 @@ export default function IMSSTextbox(props: ITextboxProps) {
   }, []);
 
   const textElementList = textArray.map((e, index) => {
-    if (e === '<br />') {
-      return <br key={`br${index}`} />;
-    }
+    // if (e === '<br />') {
+    //   return <br key={`br${index}`} />;
+    // }
     let delay = index * textDelay;
     let prevLength = currentConcatDialogPrev.length;
     if (currentConcatDialogPrev !== '' && index >= prevLength) {
@@ -57,7 +44,7 @@ export default function IMSSTextbox(props: ITextboxProps) {
     if (index < prevLength) {
       return (
         <span
-          data-text={e}
+          // data-text={e}
           id={`${delay}`}
           className={styles.TextBox_textElement_Settled}
           key={currentDialogKey + index}
@@ -121,6 +108,7 @@ export default function IMSSTextbox(props: ITextboxProps) {
               wordBreak: isSafari ? 'break-word' : undefined,
               overflow: 'hidden',
               paddingLeft: '0.1em',
+              WebkitLineClamp: props.lineLimit,
             }}
           >
             {textElementList}

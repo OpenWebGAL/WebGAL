@@ -5,7 +5,7 @@ export function getTextSize(size: number) {
     case 1:
       return 205;
     case 2:
-      return 280;
+      return 240;
     default:
       return 205;
   }
