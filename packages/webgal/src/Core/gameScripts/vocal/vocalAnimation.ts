@@ -84,6 +84,7 @@ export const performMouthAnimation = (params: {
   }
   // Lerp
   const mouthValue = currentMouthValue + (targetValue - currentMouthValue) * lerpSpeed;
+  WebGAL.gameplay.pixiStage?.setModelMouthY(key, audioLevel);
 
   let mouthState;
   if (mouthValue > 0.75) {

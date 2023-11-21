@@ -8,7 +8,7 @@ import { logger } from '@/Core/util/logger';
 import { isIOS } from '@/Core/initializeScript';
 import { WebGALPixiContainer } from '@/Core/controller/stage/pixi/WebGALPixiContainer';
 import { WebGAL } from '@/Core/WebGAL';
-// import { figureCash } from '@/Core/gameScripts/function/conentsCash'; // 如果要使用 Live2D，取消这里的注释
+// import { figureCash } from '@/Core/gameScripts/vocal/conentsCash'; // 如果要使用 Live2D，取消这里的注释
 // import { Live2DModel, SoundManager } from 'pixi-live2d-display'; // 如果要使用 Live2D，取消这里的注释
 
 export interface IAnimationObject {
@@ -547,6 +547,8 @@ export default class PixiStage {
   //     pixiContainer: thisFigureContainer,
   //     sourceUrl: jsonPath,
   //   });
+  //   // eslint-disable-next-line @typescript-eslint/no-this-alias
+  //   const instance = this;
   //
   //   const setup = () => {
   //     if (thisFigureContainer) {
@@ -572,14 +574,28 @@ export default class PixiStage {
   //             model.position.x = stageWidth - targetWidth / 2;
   //           }
   //
-  //           let category_name = motion;
+  //           let motionToSet = motion;
   //           let animation_index = 0;
   //           let priority_number = 3;
   //           // var audio_link = voiceCash.pop();
   //
   //           // model.motion(category_name, animation_index, priority_number,location.href + audio_link);
-  //           model.motion(category_name, animation_index, priority_number);
-  //           model.expression(expression);
+  //           /**
+  //            * 检查 Motion 和 Expression
+  //            */
+  //           const motionFromState = webgalStore.getState().stage.live2dMotion.find((e) => e.target === key);
+  //           const expressionFromState = webgalStore.getState().stage.live2dExpression.find((e) => e.target === key);
+  //           if (motionFromState) {
+  //             motionToSet = motionFromState.motion;
+  //           }
+  //           instance.updateL2dMotionByKey(key, motionToSet);
+  //           model.motion(motionToSet, animation_index, priority_number);
+  //           let expressionToSet = expression;
+  //           if (expressionFromState) {
+  //             expressionToSet = expressionFromState.expression;
+  //           }
+  //           instance.updateL2dExpressionByKey(key, expressionToSet);
+  //           model.expression(expressionToSet);
   //
   //           // lip-sync is still a problem and you can not.
   //           SoundManager.volume = 0;
@@ -634,6 +650,24 @@ export default class PixiStage {
         model.expression(expression);
       }
       this.updateL2dExpressionByKey(key, expression);
+    }
+  }
+
+  public setModelMouthY(key: string, y: number) {
+    function mapToZeroOne(value: number) {
+      return value < 50 ? 0 : (value - 50) / 50;
+    }
+    const paramY = mapToZeroOne(y);
+    const target = this.figureObjects.find((e) => e.key === key);
+    if (target) {
+      const container = target.pixiContainer;
+      const children = container.children;
+      for (const model of children) {
+        // @ts-ignore
+        if (model?.internalModel)
+          // @ts-ignore
+          model?.internalModel?.coreModel?.setParamFloat?.('PARAM_MOUTH_OPEN_Y', paramY);
+      }
     }
   }
 
