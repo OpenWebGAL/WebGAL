@@ -25,6 +25,7 @@ import { loadGame } from '@/Core/controller/storage/loadGame';
 import useTrans from '@/hooks/useTrans';
 import { useTranslation } from 'react-i18next';
 import useSoundEffect from '@/hooks/useSoundEffect';
+import { showGlogalDialog } from '@/UI/GlobalDialog/GlobalDialog';
 
 export const BottomControlPanel = () => {
   const t = useTrans('gaming.');
@@ -276,7 +277,15 @@ export const BottomControlPanel = () => {
             className={styles.singleButton}
             style={{ fontSize }}
             onClick={() => {
-              backToTitle();
+              showGlogalDialog({
+                title: t('buttons.titleTips'),
+                leftText: t('$common.yes'),
+                rightText: t('$common.no'),
+                leftFunc: () => {
+                  backToTitle();
+                },
+                rightFunc: () => {},
+              });
               playSeClickCloseButton();
             }}
             onMouseEnter={playSeEnter}
