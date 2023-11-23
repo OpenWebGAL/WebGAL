@@ -11,7 +11,7 @@ import { isEqual } from 'lodash';
 const env = process.env.NODE_ENV;
 console.log(env);
 (() => {
-  const pixiPerformScriptDirPath = './src/Core/gameScripts/pixiPerformScripts/';
+  const pixiPerformScriptDirPath = './src/Core/gameScripts/pixi/performs/';
   const pixiPerformManagerDirPath = './src/Core/util/pixiPerformManager/';
   const relativePath = relative(pixiPerformManagerDirPath, pixiPerformScriptDirPath).replaceAll('\\', '/');
   let lastFiles: string[] = [];

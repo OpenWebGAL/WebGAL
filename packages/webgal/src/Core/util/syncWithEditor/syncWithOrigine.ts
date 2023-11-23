@@ -2,7 +2,7 @@ import { resetStage } from '@/Core/controller/stage/resetStage';
 import { assetSetter, fileType } from '@/Core/util/gameAssetsAccess/assetSetter';
 import { sceneFetcher } from '@/Core/controller/scene/sceneFetcher';
 import { sceneParser } from '@/Core/parser/sceneParser';
-import { logger } from '../etc/logger';
+import { logger } from '../logger';
 import { webgalStore } from '@/store/store';
 import { setVisibility } from '@/store/GUIReducer';
 import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';

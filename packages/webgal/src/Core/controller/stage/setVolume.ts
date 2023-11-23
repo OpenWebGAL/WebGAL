@@ -1,4 +1,4 @@
-import { logger } from '../../util/etc/logger';
+import { logger } from '../../util/logger';
 import { webgalStore } from '@/store/store';
 
 /**
