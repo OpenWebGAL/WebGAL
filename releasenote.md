@@ -8,19 +8,19 @@
 
 #### 新功能
 
-文本框主题选择
+可以获取来自用户的输入
 
-视频禁止跳过的选项
+可以在对话中使用注音
 
-变量插值
+返回标题页面添加确认弹窗
 
-Live2D 的表情和动作设置
+添加德语和繁体中文的 UI 翻译
 
 #### 修复
 
 立绘或背景变换没有正确同步的异常
 
-其他已知问题
+Live2D 表情和动作设置的异常
 
 <!-- English Translation -->
 ## Release Notes
@@ -33,19 +33,19 @@ Live2D 的表情和动作设置
 
 #### New Features
 
-Textbox theme selection
+Can get input from the user
 
-Option to prohibit skipping videos
+Can use phonetic annotations in dialogues
 
-Variable interpolation
+Added confirmation pop-up for returning to the title page
 
-Live2D expression and motion settings
+Added UI translations for German and Traditional Chinese
 
 #### Fixes
 
-The issue where the standing picture or background transformation was not correctly synchronized
+Abnormality where character or background transitions were not properly synchronized
 
-Other known issues
+Anomalies in Live2D expressions and motion settings
 
 
 <!-- Japanese Translation -->
@@ -59,19 +59,19 @@ Other known issues
 
 #### 新機能
 
-テキストボックスのテーマ選択
+ユーザーからの入力を取得できます
 
-ビデオのスキップ禁止オプション
+対話で注音を使用できます
 
-変数の補間
+タイトルページへの戻りに確認ポップアップを追加
 
-Live2Dの表情とモーションの設定
+ドイツ語と繁体字中国語のUI翻訳を追加
 
 #### 修正
 
-立ち絵や背景の変形が正しく同期されなかった問題
+立ち絵や背景の遷移が正しく同期されていない異常
 
-その他の既知の問題
+Live2Dの表情と動作設定の異常
 
 
 <!-- French Translation -->
@@ -85,17 +85,17 @@ Live2Dの表情とモーションの設定
 
 #### Nouvelles fonctionnalités
 
-Sélection du thème de la boîte de texte
+Peut obtenir des entrées de l'utilisateur
 
-Option pour interdire le saut des vidéos
+Peut utiliser des annotations phonétiques dans les dialogues
 
-Interpolation des variables
+Ajout d'une pop-up de confirmation pour le retour à la page de titre
 
-Paramètres d'expression et de mouvement Live2D
+Ajout de traductions de l'UI en allemand et en chinois traditionnel
 
 #### Corrections
 
-Le problème où la transformation de l'image debout ou de l'arrière-plan n'était pas correctement synchronisée
+Anomalie où les transitions de personnages ou d'arrière-plan n'étaient pas correctement synchronisées
 
-Autres problèmes connus
+Anomalies dans les expressions et les paramètres de mouvement Live2D
 
