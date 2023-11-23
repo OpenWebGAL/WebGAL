@@ -8,9 +8,9 @@ export function useFontFamily() {
 
   function getFont() {
     return match(fontFamily)
-      ._(textFont.song, () => '"思源宋体", serif')
-      ._(textFont.lxgw, () => '"LXGW", serif')
-      ._(textFont.hei, () => '"WebgalUI", serif')
+      .with(textFont.song, () => '"思源宋体", serif')
+      .with(textFont.lxgw, () => '"LXGW", serif')
+      .with(textFont.hei, () => '"WebgalUI", serif')
       .default(() => '"WebgalUI", serif');
   }
 

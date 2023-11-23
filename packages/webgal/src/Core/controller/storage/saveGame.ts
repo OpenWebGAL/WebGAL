@@ -1,4 +1,4 @@
-import { logger } from '../../util/etc/logger';
+import { logger } from '../../util/logger';
 import { ISaveData } from '@/store/userDataInterface';
 import { syncStorageFast } from './storageController';
 import { webgalStore } from '@/store/store';

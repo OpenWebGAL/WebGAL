@@ -36,6 +36,7 @@ export enum commandType {
   comment,
   setTransform,
   setTransition,
+  getUserInput
 }
 
 /**

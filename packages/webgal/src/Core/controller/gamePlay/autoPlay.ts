@@ -1,5 +1,5 @@
 // import {logger} from '../../util/logger';
-import styles from '../../../Components/UI/BottomControlPanel/bottomControlPanel.module.scss';
+import styles from '@/UI/BottomControlPanel/bottomControlPanel.module.scss';
 import { webgalStore } from '@/store/store';
 import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
 

@@ -1,5 +1,5 @@
 import type { Container } from 'pixi.js';
-import { logger } from '../etc/logger';
+import { logger } from '../logger';
 
 /**
  * 特效执行返回的结果

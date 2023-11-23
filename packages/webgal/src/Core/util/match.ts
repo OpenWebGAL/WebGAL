@@ -2,19 +2,19 @@ type Case<T, R> = [T, () => R];
 
 class Matcher<T, R = any> {
   private cases: Array<Case<T, R>> = [];
-  private subject: T;
+  private readonly subject: T;
   private defaultCase?: () => R;
 
   public constructor(subject: T) {
     this.subject = subject;
   }
 
-  public _(pattern: T, fn: () => R): this {
+  public with(pattern: T, fn: () => R): this {
     this.cases.push([pattern, fn]);
     return this;
   }
 
-  public __(pattern: T, fn: () => R) {
+  public endsWith(pattern: T, fn: () => R) {
     this.cases.push([pattern, fn]);
     return this.evaluate();
   }

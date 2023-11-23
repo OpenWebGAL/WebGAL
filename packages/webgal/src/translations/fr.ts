@@ -163,6 +163,7 @@ const fr = {
       load: 'Charger',
       options: 'Options',
       title: 'Titre',
+      titleTips: "Confirmer le retour à l'écran titre",
     },
   },
 

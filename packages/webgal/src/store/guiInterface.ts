@@ -1,4 +1,4 @@
-import { IWebGalTextBoxTheme } from '@/Components/themeInterface';
+import { IWebGalTextBoxTheme } from '@/Stage/themeInterface';
 
 /**
  * 当前Menu页面显示的Tag

@@ -19,8 +19,19 @@ pixiInit;
 pixiPerform:snow;
 比如，这个下起小雪的特效。 -v6.wav;
 除此以外，分支选择的功能也必不可少。 -v7.wav;
-你可以通过以下两个分支了解 {egine} 的更多故事。 -v8.wav;
 pixiInit;
+WebGAL:接下来介绍一些新版本功能！
+WebGAL:比如这个[注](zhù)[音](yīn)功能，可以为游戏带来更好的体验！
+WebGAL:新版本添加了特性：获取用户输入，你要尝试一下吗？
+choose:尝试一下:userInput|算了吧:toNextPart;
+
+label:userInput;
+getUserInput:name -title=如何称呼你 -buttonText=确认;
+WebGAL:很高兴遇见你，{name}！
+jumpLabel:toNextPart;
+
+label:toNextPart;
+你可以通过以下两个分支了解 {egine} 的更多故事。 -v8.wav;
 choose:{egine} 发展历程:choose1|{egine} 冷知识:choose2;
 
 ;分支1

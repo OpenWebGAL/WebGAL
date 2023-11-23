@@ -1,4 +1,4 @@
-import { logger } from '../etc/logger';
+import { logger } from '../logger';
 import { syncWithOrigine } from '@/Core/util/syncWithEditor/syncWithOrigine';
 import { DebugCommand, IDebugMessage } from '@/types/debugProtocol';
 import { WebGAL } from '@/Core/WebGAL';

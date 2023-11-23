@@ -3,7 +3,7 @@ import { IPerform } from '@/Core/Modules/perform/performInterface';
 import { getSentenceArgByKey } from '@/Core/util/getSentenceArg';
 import { webgalAnimations } from '@/Core/controller/stage/pixi/animations';
 import { IAnimationObject } from '@/Core/controller/stage/pixi/PixiController';
-import { logger } from '@/Core/util/etc/logger';
+import { logger } from '@/Core/util/logger';
 import { webgalStore } from '@/store/store';
 
 import { WebGAL } from '@/Core/WebGAL';
