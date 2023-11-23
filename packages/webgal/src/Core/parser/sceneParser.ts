@@ -35,6 +35,7 @@ import { comment } from '@/Core/gameScripts/comment';
 import { IPerform } from '@/Core/Modules/perform/performInterface';
 import { setTransform } from '@/Core/gameScripts/setTransform';
 import { setTransition } from '@/Core/gameScripts/setTransition';
+import { getUserInput } from '@/Core/gameScripts/getUserInput';
 
 interface IConfigInterface {
   scriptString: string;
@@ -77,6 +78,7 @@ export const SCRIPT_CONFIG: IConfigInterface[] = [
   { scriptString: '__commment', scriptType: commandType.comment, scriptFunction: comment },
   { scriptString: 'setTransform', scriptType: commandType.setTransform, scriptFunction: setTransform },
   { scriptString: 'setTransition', scriptType: commandType.setTransition, scriptFunction: setTransition },
+  { scriptString: 'getUserInput', scriptType: commandType.getUserInput, scriptFunction: getUserInput },
 ];
 export const ADD_NEXT_ARG_LIST = [
   commandType.bgm,

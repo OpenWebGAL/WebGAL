@@ -1,0 +1,106 @@
+.Choose_Main {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 13;
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.Choose_item {
+  cursor: pointer;
+  min-width: 50%;
+  padding: 0.25em 1em 0.25em 1em;
+  font-size: 265%;
+  color: #005caf;
+  text-align: center;
+  border-radius: 4px;
+  border: 3px solid rgba(0, 0, 0, 0);
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.25);
+  background: rgba(255, 255, 255, 0.65);
+  margin: 0.25em 0 0.25em 0;
+  transition: background-color 0.5s, border 0.5s, font-weight 0.5s, box-shadow 0.5s;
+}
+
+//.title {
+//  cursor: pointer;
+//  min-width: 50%;
+//  padding: 0.25em 1em 0.25em 1em;
+//  font-size: 265%;
+//  color: #8E354A;
+//  text-align: center;
+//  border-radius: 4px;
+//  border: 3px solid rgba(0, 0, 0, 0);
+//  box-shadow: 0 0 25px rgba(0, 0, 0, 0.25);
+//  background: rgba(255, 255, 255, 0.65);
+//  margin: 0.25em 0 0.25em 0;
+//  transition: background-color 0.5s, border 0.5s, font-weight 0.5s, box-shadow 0.5s;
+//}
+
+.glabalDialog_container_inner {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-flow: column;
+  background: linear-gradient(to right,
+    rgba(0, 92, 175, 0) 0%,
+    rgba(0, 92, 175, 0.5) 33%,
+    rgba(0, 92, 175, 0.85) 50%,
+    rgba(0, 92, 175, 0.5) 66%,
+    rgba(0, 92, 175, 0) 100%
+  );
+  padding: 1em 5em 1.5em 5em;
+}
+
+.glabalDialog_container {
+  //height: 20%;
+  color:white;
+  width: 100%;
+  border-top: 4px solid;
+  border-bottom: 4px solid;
+  border-image: linear-gradient(to right,
+    rgba(255, 255, 255, 0.05) 0%,
+    rgba(255, 255, 255, 0.85) 33%,
+    rgba(255, 255, 255, 1) 50%,
+    rgba(255, 255, 255, 0.85) 66%,
+    rgba(255, 255, 255, 0.05) 100%
+  ) 1;
+  //padding: 1px 1px 1px 1px;
+}
+
+.title {
+  font-size: 300%;
+  letter-spacing: 0.05em;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+.Choose_item:hover {
+  //font-weight: bold;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.35);
+  border: 3px solid #005caf;
+}
+
+.button {
+  font-size: 200%;
+  padding: 0.15em 1em 0.15em 1em;
+  margin: 0.2em 1em 0.2em 1em;
+  cursor: pointer;
+  transition: background-color 0.33s, color 0.33s, font-weight 0.33s, transform 0.33s;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 1);
+  border-radius: 5px;
+  //background: rgba(0, 0, 0, 0.05);
+}
+
+.button:hover {
+  font-weight: bold;
+  color: #005caf;
+  transform: scale(1.1, 1.1);
+  text-shadow: 0 0 15px rgba(0, 0, 0, 0);
+  background: rgba(255, 255, 255, 0.85);
+}
