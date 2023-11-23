@@ -29,9 +29,6 @@ export default function DevPanel() {
   const devMainArea = (
     <>
       <div onClick={() => getPixiSscreenshot()}>Save PIXI Screenshot</div>
-      <div onClick={() => i18n.changeLanguage('zhCn')}>To Chinese</div>
-      <div onClick={() => i18n.changeLanguage('en')}>To English</div>
-      <div onClick={() => i18n.changeLanguage('jp')}>To Japanese</div>
       <div>Current Language:{i18n.language}</div>
       <div onClick={() => WebGAL.gameplay.pixiStage?.removeAnimation('snow-Ticker')}>Remove Snow Ticker</div>
       <div>Stage State</div>
