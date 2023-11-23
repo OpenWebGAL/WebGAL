@@ -21,9 +21,9 @@ import { setStageVar } from '@/store/stageReducer';
 export const getUserInput = (sentence: ISentence): IPerform => {
   const varKey = sentence.content.toString().trim();
   const titleFromArgs = getSentenceArgByKey(sentence, 'title');
-  const title = titleFromArgs ?? 'Please Input';
+  const title = (titleFromArgs === 0 ? 'Please Input' : titleFromArgs) ?? 'Please Input';
   const buttonTextFromArgs = getSentenceArgByKey(sentence, 'buttonText');
-  const buttonText = buttonTextFromArgs ?? 'OK';
+  const buttonText = (buttonTextFromArgs === 0 ? 'OK' : buttonTextFromArgs) ?? 'OK';
   const fontFamily = webgalStore.getState().userData.optionData.textboxFont;
   const font = fontFamily === textFont.song ? '"思源宋体", serif' : '"WebgalUI", serif';
   const { playSeEnterChoose, playSeClickChoose } = useSEByWebgalStore();
