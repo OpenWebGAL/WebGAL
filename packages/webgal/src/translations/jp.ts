@@ -165,6 +165,7 @@ const jp = {
       load: 'LOAD',
       options: 'CONFIG',
       title: 'HOME',
+      titleTips: 'タイトル画面に戻ることを確認しますか',
     },
   },
 

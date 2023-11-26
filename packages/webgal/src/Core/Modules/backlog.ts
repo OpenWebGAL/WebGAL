@@ -6,7 +6,7 @@ import { webgalStore } from '@/store/store';
 import { ISaveScene } from '@/store/userDataInterface';
 import cloneDeep from 'lodash/cloneDeep';
 
-import { SYSTEM_CONFIG } from '@/Core/config/config';
+import { SYSTEM_CONFIG } from '@/config';
 import { SceneManager } from '@/Core/Modules/scene';
 
 export interface IBacklogItem {

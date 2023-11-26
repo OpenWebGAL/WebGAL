@@ -2,7 +2,7 @@ import { ISentence } from '@/Core/controller/scene/sceneInterface';
 import { IPerform } from '@/Core/Modules/perform/performInterface';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import styles from '../../Components/Stage/FullScreenPerform/fullScreenPerform.module.scss';
+import styles from '@/Stage/FullScreenPerform/fullScreenPerform.module.scss';
 import { webgalStore } from '@/store/store';
 import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
 import { getRandomPerformName, PerformController } from '@/Core/Modules/perform/performController';

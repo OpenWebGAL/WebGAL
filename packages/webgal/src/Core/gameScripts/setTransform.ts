@@ -2,13 +2,13 @@ import { ISentence } from '@/Core/controller/scene/sceneInterface';
 import { IPerform } from '@/Core/Modules/perform/performInterface';
 import { getSentenceArgByKey } from '@/Core/util/getSentenceArg';
 import { IAnimationObject } from '@/Core/controller/stage/pixi/PixiController';
-import { logger } from '@/Core/util/etc/logger';
+import { logger } from '@/Core/util/logger';
 import { webgalStore } from '@/store/store';
 import { generateTimelineObj } from '@/Core/controller/stage/pixi/animations/timeline';
 import cloneDeep from 'lodash/cloneDeep';
 import { baseTransform, ITransform } from '@/store/stageInterface';
 import { IUserAnimation } from '../Modules/animations';
-import { generateTransformAnimationObj } from '@/Core/gameScripts/function/generateTransformAnimationObj';
+import { generateTransformAnimationObj } from '@/Core/controller/stage/pixi/animations/generateTransformAnimationObj';
 import { WebGAL } from '@/Core/WebGAL';
 
 /**

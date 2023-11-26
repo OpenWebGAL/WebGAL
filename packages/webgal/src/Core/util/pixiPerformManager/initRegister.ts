@@ -1,3 +1,3 @@
-import '../../gameScripts/pixiPerformScripts/cherryBlossoms';
-import '../../gameScripts/pixiPerformScripts/rain';
-import '../../gameScripts/pixiPerformScripts/snow';
+import '../../gameScripts/pixi/performs/cherryBlossoms';
+import '../../gameScripts/pixi/performs/rain';
+import '../../gameScripts/pixi/performs/snow';

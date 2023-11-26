@@ -1,6 +1,6 @@
 import { ISentence } from '@/Core/controller/scene/sceneInterface';
 import { IPerform } from '@/Core/Modules/perform/performInterface';
-import { playVocal } from './playVocal';
+import { playVocal } from './vocal';
 import { webgalStore } from '@/store/store';
 import { setStage } from '@/store/stageReducer';
 import { useTextDelay } from '@/hooks/useTextOptions';

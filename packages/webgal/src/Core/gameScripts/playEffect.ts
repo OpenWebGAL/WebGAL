@@ -1,5 +1,5 @@
 import { ISentence } from '@/Core/controller/scene/sceneInterface';
-import { logger } from '@/Core/util/etc/logger';
+import { logger } from '@/Core/util/logger';
 import { RootState, webgalStore } from '@/store/store';
 import { getSentenceArgByKey } from '@/Core/util/getSentenceArg';
 import { IPerform } from '@/Core/Modules/perform/performInterface';

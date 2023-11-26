@@ -1,4 +1,4 @@
-import { logger } from '@/Core/util/etc/logger';
+import { logger } from '@/Core/util/logger';
 
 import { WebGAL } from '@/Core/WebGAL';
 

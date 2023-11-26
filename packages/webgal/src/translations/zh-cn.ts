@@ -170,6 +170,7 @@ const zhCn = {
       load: '读档',
       options: '选项',
       title: '标题',
+      titleTips: '确认返回到标题界面吗',
     },
   },
 

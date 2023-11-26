@@ -1,6 +1,6 @@
 import { sceneFetcher } from './sceneFetcher';
 import { sceneParser } from '../../parser/sceneParser';
-import { logger } from '../../util/etc/logger';
+import { logger } from '../../util/logger';
 import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
 import { ISceneEntry } from '@/Core/Modules/scene';
 

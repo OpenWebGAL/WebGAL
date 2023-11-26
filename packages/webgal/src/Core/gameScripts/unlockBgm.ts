@@ -3,7 +3,7 @@ import { IPerform } from '@/Core/Modules/perform/performInterface';
 import { webgalStore } from '@/store/store';
 import { unlockBgmInUserData } from '@/store/userDataReducer';
 import localforage from 'localforage';
-import { logger } from '@/Core/util/etc/logger';
+import { logger } from '@/Core/util/logger';
 
 import { WebGAL } from '@/Core/WebGAL';
 

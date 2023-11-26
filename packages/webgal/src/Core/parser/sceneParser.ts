@@ -1,5 +1,5 @@
 import { IScene } from '../controller/scene/sceneInterface';
-import { logger } from '../util/etc/logger';
+import { logger } from '../util/logger';
 import { assetsPrefetcher } from '@/Core/util/prefetcher/assetsPrefetcher';
 import { assetSetter } from '@/Core/util/gameAssetsAccess/assetSetter';
 import SceneParser from 'webgal-parser';
@@ -16,7 +16,7 @@ import { bgm } from '@/Core/gameScripts/bgm';
 import { playVideo } from '@/Core/gameScripts/playVideo';
 import { setComplexAnimation } from '@/Core/gameScripts/setComplexAnimation';
 import { setFilter } from '@/Core/gameScripts/setFilter';
-import { pixiInit } from '../gameScripts/pixiInit';
+import { pixiInit } from '../gameScripts/pixi/pixiInit';
 import { pixi } from '@/Core/gameScripts/pixi';
 import { label } from '@/Core/gameScripts/label';
 import { jumpLabel } from '../gameScripts/jumpLabel';
@@ -35,6 +35,7 @@ import { comment } from '@/Core/gameScripts/comment';
 import { IPerform } from '@/Core/Modules/perform/performInterface';
 import { setTransform } from '@/Core/gameScripts/setTransform';
 import { setTransition } from '@/Core/gameScripts/setTransition';
+import { getUserInput } from '@/Core/gameScripts/getUserInput';
 
 interface IConfigInterface {
   scriptString: string;
@@ -77,6 +78,7 @@ export const SCRIPT_CONFIG: IConfigInterface[] = [
   { scriptString: '__commment', scriptType: commandType.comment, scriptFunction: comment },
   { scriptString: 'setTransform', scriptType: commandType.setTransform, scriptFunction: setTransform },
   { scriptString: 'setTransition', scriptType: commandType.setTransition, scriptFunction: setTransition },
+  { scriptString: 'getUserInput', scriptType: commandType.getUserInput, scriptFunction: getUserInput },
 ];
 export const ADD_NEXT_ARG_LIST = [
   commandType.bgm,
