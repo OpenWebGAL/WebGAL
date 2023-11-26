@@ -8,7 +8,6 @@ import { getRandomPerformName, PerformController } from '@/Core/Modules/perform/
 import { getSentenceArgByKey } from '@/Core/util/getSentenceArg';
 import { textSize, voiceOption } from '@/store/userDataInterface';
 import { WebGAL } from '@/Core/WebGAL';
-import { logger } from 'pixi-live2d-display';
 
 /**
  * 进行普通对话的显示
@@ -38,10 +37,11 @@ export const say = (sentence: ISentence): IPerform => {
 
   // 设置文本显示
   dispatch(setStage({ key: 'showText', value: dialogToShow }));
-  dispatch(setStage({ key: 'vocal', value: '' }));
+  dispatch(setStage({ key: 'backlogVocal', value: '' }));
 
   // 清除语音
-  if(!(userDataState.optionData.voiceInterruption===voiceOption.no&&vocal===null)){//只有开关设置为不中断，并且没有语音的时候，才需要不中断
+  if (!(userDataState.optionData.voiceInterruption === voiceOption.no && vocal === null)) {
+    // 只有开关设置为不中断，并且没有语音的时候，才需要不中断
     dispatch(setStage({ key: 'playVocal', value: '' }));
     WebGAL.gameplay.performController.unmountPerform('vocal-play', true);
   }
@@ -81,7 +81,6 @@ export const say = (sentence: ISentence): IPerform => {
   }
   dispatch(setStage({ key: 'showName', value: showName }));
 
-  console.log('debug'+vocal)
   // 播放一段语音
   if (vocal) {
     playVocal(sentence);

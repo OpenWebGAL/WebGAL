@@ -1,4 +1,3 @@
-
 import styles from '@/UI/Menu/Options/options.module.scss';
 import { NormalOption } from '@/UI/Menu/Options/NormalOption';
 import { OptionSlider } from '@/UI/Menu/Options/OptionSlider';
@@ -74,7 +73,7 @@ export function Sound() {
       </NormalOption>
       <NormalOption key="option9" title={t('voiceOption.title')}>
         <NormalButton
-          textList={t('voiceStop.title', 'voiceContinue.title', )}
+          textList={t('voiceStop.title', 'voiceContinue.title')}
           functionList={[
             () => {
               dispatch(setOptionData({ key: 'voiceInterruption', value: voiceOption.yes }));
@@ -83,7 +82,7 @@ export function Sound() {
             () => {
               dispatch(setOptionData({ key: 'voiceInterruption', value: voiceOption.no }));
               setStorage();
-            }
+            },
           ]}
           currentChecked={userDataState.optionData.voiceInterruption}
         />
