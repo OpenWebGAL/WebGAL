@@ -1,11 +1,13 @@
 import styles from '@/Components/UI/Menu/Options/options.module.scss';
 import { NormalOption } from '@/Components/UI/Menu/Options/NormalOption';
+import { NormalButton } from '@/Components/UI/Menu/Options/NormalButton';
 import { OptionSlider } from '@/Components/UI/Menu/Options/OptionSlider';
 import { setOptionData } from '@/store/userDataReducer';
 import { setStorage } from '@/Core/controller/storage/storageController';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import useTrans from '@/hooks/useTrans';
+import { voiceOption } from '@/store/userDataInterface';
 
 export function Sound() {
   const userDataState = useSelector((state: RootState) => state.userData);
@@ -67,6 +69,22 @@ export function Sound() {
             dispatch(setOptionData({ key: 'uiSeVolume', value: Number(newValue) }));
             setStorage();
           }}
+        />
+      </NormalOption>
+      <NormalOption key="option9" title={t('voiceOption.title')}>
+        <NormalButton
+          textList={t('voiceStop.title', 'voiceContinue.title', )}
+          functionList={[
+            () => {
+              dispatch(setOptionData({ key: 'voiceInterruption', value: voiceOption.yes }));
+              setStorage();
+            },
+            () => {
+              dispatch(setOptionData({ key: 'voiceInterruption', value: voiceOption.no }));
+              setStorage();
+            }
+          ]}
+          currentChecked={userDataState.optionData.voiceInterruption}
         />
       </NormalOption>
     </div>

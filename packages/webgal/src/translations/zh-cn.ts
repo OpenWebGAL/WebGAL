@@ -101,6 +101,9 @@ const zhCn = {
             bgmVolume: { title: '背景音乐音量' },
             seVolume: { title: '音效音量' },
             uiSeVolume: { title: '用户界面音效音量' },
+            voiceOption:{title:'是否中断语音'},
+            voiceStop:{title:'停止语音'},
+            voiceContinue:{title:'继续语音'},
           },
         },
         // language: {

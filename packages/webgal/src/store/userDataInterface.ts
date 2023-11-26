@@ -24,6 +24,11 @@ export enum textFont {
   lxgw,
 }
 
+export enum voiceOption{
+  yes,
+  no,
+}
+
 /**
  * @interface IOptionData 用户设置数据接口
  */
@@ -39,6 +44,7 @@ export interface IOptionData {
   slPage: number; // 存读档界面所在页面
   textboxFont: textFont;
   language: language;
+  voiceInterruption:voiceOption;
 }
 
 /**
