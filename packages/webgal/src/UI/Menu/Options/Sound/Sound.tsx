@@ -1,13 +1,8 @@
-<<<<<<< HEAD:packages/webgal/src/Components/UI/Menu/Options/Sound/Sound.tsx
-import styles from '@/Components/UI/Menu/Options/options.module.scss';
-import { NormalOption } from '@/Components/UI/Menu/Options/NormalOption';
-import { NormalButton } from '@/Components/UI/Menu/Options/NormalButton';
-import { OptionSlider } from '@/Components/UI/Menu/Options/OptionSlider';
-=======
+
 import styles from '@/UI/Menu/Options/options.module.scss';
 import { NormalOption } from '@/UI/Menu/Options/NormalOption';
 import { OptionSlider } from '@/UI/Menu/Options/OptionSlider';
->>>>>>> 98fcca68925349189ee1344a6855b8c4c3c2d3d8:packages/webgal/src/UI/Menu/Options/Sound/Sound.tsx
+import { NormalButton } from '@/UI/Menu/Options//NormalButton';
 import { setOptionData } from '@/store/userDataReducer';
 import { setStorage } from '@/Core/controller/storage/storageController';
 import { useDispatch, useSelector } from 'react-redux';
