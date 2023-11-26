@@ -1,11 +1,10 @@
 import axios from 'axios';
-import { logger } from '../etc/logger';
+import { logger } from '../logger';
 import { assetSetter, fileType } from '../gameAssetsAccess/assetSetter';
 import { getStorage } from '../../controller/storage/storageController';
 import { webgalStore } from '@/store/store';
 import { setGuiAsset, setLogoImage, setThemeConfigItem } from '@/store/GUIReducer';
-import { setEbg } from '@/Core/util/setEbg';
-import { setLogo } from '@/Core/util/setLogo';
+import { setEbg } from '@/Core/gameScripts/changeBg/setEbg';
 import { initKey } from '@/Core/controller/storage/fastSaveLoad';
 import { WebgalParser } from '@/Core/parser/sceneParser';
 import { WebGAL } from '@/Core/WebGAL';

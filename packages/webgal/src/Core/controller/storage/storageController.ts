@@ -1,6 +1,6 @@
 import * as localforage from 'localforage';
 import { IUserData } from '@/store/userDataInterface';
-import { logger } from '../../util/etc/logger';
+import { logger } from '../../util/logger';
 import { webgalStore } from '@/store/store';
 import { initState, resetUserData } from '@/store/userDataReducer';
 

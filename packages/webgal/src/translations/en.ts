@@ -163,6 +163,7 @@ const en = {
       load: 'Load',
       options: 'Options',
       title: 'Title',
+      titleTips: 'Confirm return to the title screen',
     },
   },
 
