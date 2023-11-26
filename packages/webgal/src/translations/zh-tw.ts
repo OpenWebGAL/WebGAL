@@ -166,6 +166,7 @@ const zhTw = {
       load: '讀檔',
       options: '選項',
       title: '標題',
+      titleTips: '確認返回到標題界面嗎',
     },
   },
 
