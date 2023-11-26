@@ -30,7 +30,7 @@ const initialOptionSet = {
   uiSeVolume: 50, // UI音效音量
   textboxFont: textFont.song,
   language: language.zhCn,
-  voiceInterruption:voiceOption.yes,
+  voiceInterruption: voiceOption.yes,
 };
 
 // 初始化用户数据

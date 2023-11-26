@@ -60,7 +60,8 @@ export const playVocal = (sentence: ISentence) => {
   }
 
   // 获得舞台状态
-  webgalStore.dispatch(setStage({ key: 'vocal', value: url }));
+  webgalStore.dispatch(setStage({ key: 'playVocal', value: url }));
+  webgalStore.dispatch(setStage({ key: 'backlogVocal', value: url }));
 
   let isOver = false;
 
