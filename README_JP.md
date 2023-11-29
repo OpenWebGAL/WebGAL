@@ -63,9 +63,9 @@ WebGAL はオープンソース ソフトウェアであるため、MPL-2.0 オ�
 | [IdrilK](https://github.com/IdrilK)            |
 
 ## Sponsors
-| <img src="https://avatars.githubusercontent.com/u/71590526?v=4" alt="Yuji Sakai"  width="150px" height="150px" /> | <img src="https://avatars.githubusercontent.com/u/49630998?v=4" alt="Iara"  width="150px" height="150px" /> |
-| ------------------------------------------------------------ |------------------------------------------------------------ |
-| [Yuji Sakai (generalfreed)](https://github.com/generalfreed) |[Iara (labiker)](https://github.com/labiker) |
+| <img src="https://avatars.githubusercontent.com/u/71590526?v=4" alt="Yuji Sakai"  width="150px" height="150px" /> | <img src="https://avatars.githubusercontent.com/u/49630998?v=4" alt="Iara"  width="150px" height="150px" /> |<img src="https://github.com/MakinoharaShoko/WebGAL/assets/30483415/5df81f7f-abb3-40f0-9861-13a62a0ea427" alt="衔尾工业"  width="150px" height="150px" />|
+| ------------------------------------------------------------ |------------------------------------------------------------ |------------------------------------------------------------ |
+| [Yuji Sakai (generalfreed)](https://github.com/generalfreed) |[Iara (labiker)](https://github.com/labiker) |[衔尾工业(XianWeiGP-R)](https://github.com/XianWeiGP-R) |
 
 ## Stargazers over time
 
