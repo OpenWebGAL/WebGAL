@@ -79,7 +79,7 @@
 .bgmListContainer {
   z-index: 2;
   bottom: 0;
-  overflow: hidden;
+  //overflow: hidden;
   width: 100%;
   box-sizing: border-box;
   display: flex;
@@ -89,6 +89,7 @@
   align-items: flex-start;
   margin: 0 0 15px 0;
   flex-wrap: wrap;
+  overflow: auto;
 }
 
 .bgmPlayerMain {
