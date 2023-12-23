@@ -73,9 +73,9 @@ Cependant, votre soutien peut motiver les développeurs à avancer et à rendre 
 | [IdrilK](https://github.com/IdrilK)            |
 
 ## Sponsors
-| <img src="https://avatars.githubusercontent.com/u/71590526?v=4" alt="Yuji Sakai"  width="150px" height="150px" /> | <img src="https://avatars.githubusercontent.com/u/49630998?v=4" alt="Iara"  width="150px" height="150px" /> | <img src="https://github.com/MakinoharaShoko/WebGAL/assets/30483415/5df81f7f-abb3-40f0-9861-13a62a0ea427" alt="衔尾工业"  width="150px" height="150px" /> | <img src="https://avatars.githubusercontent.com/u/154034055?v=4" alt="JuHuo777"  width="150px" height="150px" /> |
-| ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| [Yuji Sakai (generalfreed)](https://github.com/generalfreed) | [Iara (labiker)](https://github.com/labiker)                 | [衔尾工业(XianWeiGP-R)](https://github.com/XianWeiGP-R)      | [JuHuo](https://github.com/JuHuo777)                         |
+| <img src="https://avatars.githubusercontent.com/u/71590526?v=4" alt="Yuji Sakai"  width="150px" height="150px" /> | <img src="https://avatars.githubusercontent.com/u/49630998?v=4" alt="Iara"  width="150px" height="150px" /> | <img src="https://github.com/MakinoharaShoko/WebGAL/assets/30483415/5df81f7f-abb3-40f0-9861-13a62a0ea427" alt="衔尾工业"  width="150px" height="150px" /> | <img src="https://avatars.githubusercontent.com/u/154034055?v=4" alt="JuHuo777"  width="150px" height="150px" /> | <img src="https://github.com/OpenWebGAL/WebGAL/assets/30483415/49242533-e2ca-49e1-8686-e423455c857a" alt="Xiayan"  width="150px" height="150px" /> |
+| ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| [Yuji Sakai (generalfreed)](https://github.com/generalfreed) | [Iara (labiker)](https://github.com/labiker)                 | [衔尾工业(XianWeiGP-R)](https://github.com/XianWeiGP-R)      | [JuHuo](https://github.com/JuHuo777)                         | [夏颜](https://weibo.com/u/5794895530)                         |
 
 ## Pour les amateurs de Stargazers (Historique GitHub stars)
 
