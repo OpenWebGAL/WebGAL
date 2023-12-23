@@ -21,6 +21,8 @@ export interface IGuiState {
   showTitle: boolean; // 是否显示标题界面
   showMenuPanel: boolean; // 是否显示Menu界面
   showTextBox: boolean;
+  showControls: boolean;
+  controlsVisibility: boolean;
   currentMenuTag: MenuPanelTag; // 当前Menu界面的选项卡
   showBacklog: boolean;
   titleBgm: string; // 标题背景音乐
