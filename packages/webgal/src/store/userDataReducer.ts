@@ -13,6 +13,7 @@ import {
   playSpeed,
   textFont,
   textSize,
+  voiceOption,
 } from '@/store/userDataInterface';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import cloneDeep from 'lodash/cloneDeep';
@@ -29,6 +30,7 @@ const initialOptionSet = {
   uiSeVolume: 50, // UI音效音量
   textboxFont: textFont.song,
   language: language.zhCn,
+  voiceInterruption: voiceOption.no,
 };
 
 // 初始化用户数据

@@ -6,7 +6,7 @@ import { setStage } from '@/store/stageReducer';
 import { useTextDelay } from '@/hooks/useTextOptions';
 import { getRandomPerformName, PerformController } from '@/Core/Modules/perform/performController';
 import { getSentenceArgByKey } from '@/Core/util/getSentenceArg';
-import { textSize } from '@/store/userDataInterface';
+import { textSize, voiceOption } from '@/store/userDataInterface';
 import { WebGAL } from '@/Core/WebGAL';
 
 /**
@@ -37,9 +37,14 @@ export const say = (sentence: ISentence): IPerform => {
 
   // 设置文本显示
   dispatch(setStage({ key: 'showText', value: dialogToShow }));
+  dispatch(setStage({ key: 'backlogVocal', value: '' }));
+
   // 清除语音
-  dispatch(setStage({ key: 'vocal', value: '' }));
-  WebGAL.gameplay.performController.unmountPerform('vocal-play', true);
+  if (!(userDataState.optionData.voiceInterruption === voiceOption.no && vocal === null)) {
+    // 只有开关设置为不中断，并且没有语音的时候，才需要不中断
+    dispatch(setStage({ key: 'playVocal', value: '' }));
+    WebGAL.gameplay.performController.unmountPerform('vocal-play', true);
+  }
   // 设置key
   dispatch(setStage({ key: 'currentDialogKey', value: dialogKey }));
   // 计算延迟
