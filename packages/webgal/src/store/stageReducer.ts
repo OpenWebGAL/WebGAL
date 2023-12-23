@@ -32,7 +32,8 @@ export const initState: IStageState = {
   showName: '', // 人物名
   command: '', // 语句指令
   choose: [], // 选项列表，现在不用，先预留
-  vocal: '', // 语音 文件地址（相对或绝对）
+  backlogVocal: '', // 语音 文件地址（相对或绝对）
+  playVocal: '', // 语音，真实的播放音频
   vocalVolume: 100, // 语音 音量调整（0 - 100）
   bgm: {
     // 背景音乐

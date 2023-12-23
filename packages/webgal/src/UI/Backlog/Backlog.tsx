@@ -57,7 +57,7 @@ export const Backlog = () => {
               >
                 <Return theme="outline" size={iconSize} fill="#ffffff" strokeWidth={3} />
               </div>
-              {backlogItem.currentStageState.vocal ? (
+              {backlogItem.currentStageState.backlogVocal ? (
                 <div
                   onClick={() => {
                     playSeClickBacklogJumpButton();
@@ -83,7 +83,7 @@ export const Backlog = () => {
           <div className={styles.backlog_item_content}>
             <span className={styles.backlog_item_content_text}>{showTextElementList}</span>
           </div>
-          <audio id={'backlog_audio_play_element_' + i} src={backlogItem.currentStageState.vocal} />
+          <audio id={'backlog_audio_play_element_' + i} src={backlogItem.currentStageState.backlogVocal} />
         </div>
       );
       backlogs.unshift(singleBacklogView);
