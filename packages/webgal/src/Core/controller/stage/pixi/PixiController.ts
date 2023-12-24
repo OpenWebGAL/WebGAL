@@ -664,9 +664,12 @@ export default class PixiStage {
       const children = container.children;
       for (const model of children) {
         // @ts-ignore
-        if (model?.internalModel)
+        if (model?.internalModel) {
           // @ts-ignore
           model?.internalModel?.coreModel?.setParamFloat?.('PARAM_MOUTH_OPEN_Y', paramY);
+          // @ts-ignore
+          model?.internalModel?.coreModel?.setParameterValueById('ParamMouthOpenY', paramY);
+        }
       }
     }
   }
