@@ -16,12 +16,34 @@ import { isIOS } from '@/Core/initializeScript';
 import { WebGAL } from '@/Core/WebGAL';
 // import OldStage from '@/Components/Stage/OldStage/OldStage';
 
+function inTextBox(event: React.MouseEvent) {
+  const tb = document.getElementById("textBoxMain")
+  if (!tb) {
+    return false
+  }
+  var bounds = tb.getBoundingClientRect();
+  return event.clientX > bounds.left &&
+    event.clientX < bounds.right &&
+    event.clientY > bounds.top &&
+    event.clientY < bounds.bottom
+}
+
 export const Stage: FC = () => {
   const stageState = useSelector((state: RootState) => state.stage);
   const GUIState = useSelector((state: RootState) => state.GUI);
   const dispatch = useDispatch();
 
   useHotkey();
+
+  const checkPosition = (event: React.MouseEvent) => {
+    if (!GUIState.controlsVisibility && inTextBox(event)) {
+      dispatch(setVisibility({ component: 'controlsVisibility', visibility: true }))
+    }
+    if (GUIState.controlsVisibility && !inTextBox(event)) {
+      dispatch(setVisibility({ component: 'controlsVisibility', visibility: false }))
+    }
+  }
+
   return (
     <div className={styles.MainStage_main}>
       <FullScreenPerform />
@@ -48,6 +70,9 @@ export const Stage: FC = () => {
         }}
         id="FullScreenClick"
         style={{ width: '100%', height: '100%', position: 'absolute', zIndex: '12', top: '0' }}
+        onMouseMove={
+          (e) => !GUIState.showControls && checkPosition(e)
+        }
       />
       <IntroContainer />
     </div>
