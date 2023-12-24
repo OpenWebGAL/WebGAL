@@ -56,3 +56,19 @@ export function showGlogalDialog(props: IShowGlobalDialogProps) {
 export function hideGlobalDialog() {
   webgalStore.dispatch(setVisibility({ component: 'showGlobalDialog', visibility: false }));
 }
+
+export function showControls() {
+  webgalStore.dispatch(setVisibility({ component: 'showControls', visibility: true }));
+}
+
+export function hideControls() {
+  webgalStore.dispatch(setVisibility({ component: 'showControls', visibility: false }));
+}
+
+export function switchControls() {
+  if (webgalStore.getState().GUI.showControls === true) {
+    hideControls();
+  } else {
+    showControls();
+  }
+}
