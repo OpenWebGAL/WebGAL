@@ -5224,9 +5224,9 @@ void-elements@3.1.0:
   integrity sha512-Dhxzh5HZuiHQhbvTW9AMetFfBHDMYpo23Uo9btPXgdYP+3T5S+p+jgNy7spra+veYhBP2dCSgxR/i2Y02h5/6w==
 
 webgal-parser@latest:
-  version "4.4.7"
-  resolved "https://registry.yarnpkg.com/webgal-parser/-/webgal-parser-4.4.7.tgz#e77cf469ef224ac70fda06dfc790e2a9f427bfc4"
-  integrity sha512-cJF6rVRigCSrdEPl7RvVd1QmaHyIKqJbK23JaMudw84Lwy90YQ83QSB+MmCoUlRTe5QYErj9Zr3ATkM+Z553NA==
+  version "4.4.8"
+  resolved "https://registry.yarnpkg.com/webgal-parser/-/webgal-parser-4.4.8.tgz#0a894bcb55d89fdcf080f1d896e945ca9c5715d5"
+  integrity sha512-3iSYCeKP++CoE4lE+xyQeLvPo1cUvpboN9ED0pgrFnzoAFNU0z518SXs1/I+4H5n674Kwe5Il10lz+ukTEfSEA==
   dependencies:
     chevrotain "^10.5.0"
     cloudlogjs "^1.0.11"
