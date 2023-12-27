@@ -14,8 +14,10 @@ export const setVar = (sentence: ISentence): IPerform => {
   if (sentence.content.match(/=/)) {
     const key = sentence.content.split(/=/)[0];
     const valExp = sentence.content.split(/=/)[1];
-    // 如果包含加减乘除号，则运算
-    if (valExp.match(/[+\-*\/()]/)) {
+    if (valExp === 'random()') {
+      webgalStore.dispatch(setStageVar({ key, value: Math.random() }));
+    } else if (valExp.match(/[+\-*\/()]/)) {
+      // 如果包含加减乘除号，则运算
       // 先取出运算表达式中的变量
       const valExpArr = valExp.split(/([+\-*\/()])/g);
       // 将变量替换为变量的值，然后合成表达式字符串
