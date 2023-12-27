@@ -32,6 +32,7 @@ export interface IGuiState {
   showGlobalDialog: boolean;
   showPanicOverlay: boolean;
   isEnterGame: boolean;
+  isShowLogo: boolean;
   theme: ITheme;
 }
 
