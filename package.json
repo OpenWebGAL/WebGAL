@@ -13,7 +13,7 @@
     "parser:test": "cd packages/parser && yarn test",
     "parser:test-coverage": "cd packages/parser && yarn coverage",
     "parser:build": "cd packages/parser && yarn build",
-    "parser:build-ci":"cd packages/parser && yarn build-ci"
+    "parser:build-ci": "cd packages/parser && yarn build-ci"
   },
   "license": "MPL-2.0",
   "workspaces": {
