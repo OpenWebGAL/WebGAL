@@ -26,6 +26,7 @@ const initState: IGuiState = {
   showGlobalDialog: false,
   showPanicOverlay: false,
   isEnterGame: false,
+  isShowLogo: true,
   theme: {
     textbox: 'standard',
   },
