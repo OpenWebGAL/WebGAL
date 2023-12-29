@@ -132,7 +132,7 @@ export interface IStageState {
   showName: string; // 人物名
   command: string; // 语句指令
   choose: Array<IChooseItem>; // 选项列表
-  backlogVocal: string; // 语音 文件地址（相对或绝对）
+  vocal: string; // 语音 文件地址（相对或绝对）
   playVocal: string; // 真实播放语音
   vocalVolume: number; // 语音 音量调整（0 - 100）
   bgm: {
