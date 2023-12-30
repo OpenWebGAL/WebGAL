@@ -10,7 +10,7 @@ import { IWebGalTextBoxTheme } from '@/Stage/themeInterface';
 import { match } from '@/Core/util/match';
 import { textSize } from '@/store/userDataInterface';
 
-const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+const isSafariOrFirefox = /^((?!chrome|android).)*(safari|firefox)/i.test(navigator.userAgent);
 
 function getTextboxByTheme(theme: IWebGalTextBoxTheme): FC<ITextboxProps> {
   switch (theme) {
@@ -59,7 +59,7 @@ export const TextBox = () => {
       currentConcatDialogPrev={currentConcatDialogPrev}
       fontSize={size}
       currentDialogKey={currentDialogKey}
-      isSafari={isSafari}
+      isSafari={isSafariOrFirefox}
       miniAvatar={miniAvatar}
       textDuration={textDuration}
       font={font}
