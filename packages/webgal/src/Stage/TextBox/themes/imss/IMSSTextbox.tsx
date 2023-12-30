@@ -17,6 +17,7 @@ export default function IMSSTextbox(props: ITextboxProps) {
     showName,
     font,
     textDuration,
+    isUseStroke,
   } = props;
 
   useEffect(() => {
@@ -54,7 +55,7 @@ export default function IMSSTextbox(props: ITextboxProps) {
           <span className={styles.zhanwei}>
             {e}
             <span className={styles.outer}>{e}</span>
-            {/* <span className={styles.inner}>{e}</span> */}
+            {isUseStroke && <span className={styles.inner}>{e}</span>}
           </span>
         </span>
       );
@@ -70,7 +71,7 @@ export default function IMSSTextbox(props: ITextboxProps) {
         <span className={styles.zhanwei}>
           {e}
           <span className={styles.outer}>{e}</span>
-          {/* <span className={styles.inner}>{e}</span> */}
+          {isUseStroke && <span className={styles.inner}>{e}</span>}
         </span>
       </span>
     );
@@ -95,7 +96,7 @@ export default function IMSSTextbox(props: ITextboxProps) {
                     <span className={styles.zhanwei}>
                       {e}
                       <span className={styles.outerName}>{e}</span>
-                      {/* <span className={styles.innerName}>{e}</span> */}
+                      {isUseStroke && <span className={styles.innerName}>{e}</span>}
                     </span>
                   </span>
                 );
