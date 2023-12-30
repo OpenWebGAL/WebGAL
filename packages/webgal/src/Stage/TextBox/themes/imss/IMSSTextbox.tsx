@@ -54,7 +54,7 @@ export default function IMSSTextbox(props: ITextboxProps) {
           <span className={styles.zhanwei}>
             {e}
             <span className={styles.outer}>{e}</span>
-            <span className={styles.inner}>{e}</span>
+            {/* <span className={styles.inner}>{e}</span> */}
           </span>
         </span>
       );
@@ -70,7 +70,7 @@ export default function IMSSTextbox(props: ITextboxProps) {
         <span className={styles.zhanwei}>
           {e}
           <span className={styles.outer}>{e}</span>
-          <span className={styles.inner}>{e}</span>
+          {/* <span className={styles.inner}>{e}</span> */}
         </span>
       </span>
     );
@@ -95,7 +95,7 @@ export default function IMSSTextbox(props: ITextboxProps) {
                     <span className={styles.zhanwei}>
                       {e}
                       <span className={styles.outerName}>{e}</span>
-                      <span className={styles.innerName}>{e}</span>
+                      {/* <span className={styles.innerName}>{e}</span> */}
                     </span>
                   </span>
                 );
