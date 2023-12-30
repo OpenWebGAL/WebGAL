@@ -11,6 +11,7 @@ export default function IMSSTextbox(props: ITextboxProps) {
     currentDialogKey,
     isText,
     isSafari,
+    isFirefox: boolean,
     fontSize,
     miniAvatar,
     showName,
@@ -105,7 +106,9 @@ export default function IMSSTextbox(props: ITextboxProps) {
             className={styles.text}
             style={{
               fontSize,
-              wordBreak: isSafari ? 'break-all' : undefined,
+              wordBreak: isSafari || props.isFirefox ? 'break-all' : undefined,
+              display: isSafari ? 'flex' : undefined,
+              flexWrap: isSafari ? 'wrap' : undefined,
               overflow: 'hidden',
               paddingLeft: '0.1em',
               WebkitLineClamp: props.lineLimit,
