@@ -23,7 +23,7 @@ $height: 430px;
   background: linear-gradient(transparent, rgba(0, 0, 0, .25) 25%, rgba(0, 0, 0, .35) 75%, rgba(0, 0, 0, .6)),
   linear-gradient(90deg, transparent 0, rgba(0, 0, 0, .35) 25%, rgba(0, 0, 0, .35) 75%, transparent);
   //background-blend-mode: darken;
-  //font-weight: bold;
+  font-weight: bold;
   padding: 30px 50px 100px 200px;
   box-sizing: border-box;
   display: flex;
@@ -67,9 +67,15 @@ $height: 430px;
   white-space: nowrap;
   left: 0;
   top: 0;
-  //background-clip: text;
+  background-image: linear-gradient(
+    //135deg,
+      #ffffff 0%,
+      #f5f7fa 45%,
+      #c3cfe2 100%
+  );
+  background-clip: text;
   -webkit-background-clip: text;
-  color: #FFF;
+  color: transparent;
   z-index: 2;
 }
 

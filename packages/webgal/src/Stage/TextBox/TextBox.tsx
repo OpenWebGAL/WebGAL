@@ -1,4 +1,4 @@
-import { FC, ReactNode, useEffect } from 'react';
+import { FC, ReactNode, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import { useFontFamily } from '@/hooks/useFontFamily';
@@ -26,6 +26,33 @@ function getTextboxByTheme(theme: IWebGalTextBoxTheme): FC<ITextboxProps> {
 }
 
 export const TextBox = () => {
+  const [isShowStroke, setIsShowStroke] = useState(true);
+
+  useEffect(() => {
+    const handleResize = () => {
+      const targetHeight = 1440;
+      const targetWidth = 2560;
+
+      const h = window.innerHeight; // 窗口高度
+      const w = window.innerWidth; // 窗口宽度
+      const zoomH = h / targetHeight; // 以窗口高度为基准的变换比
+      const zoomW = w / targetWidth; // 以窗口宽度为基准的变换比
+      const zoomH2 = w / targetHeight; // 竖屏时以窗口高度为基础的变换比
+      const zoomW2 = h / targetWidth; // 竖屏时以窗口宽度为基础的变换比
+      [zoomH, zoomW, zoomH2, zoomW2].forEach((e) => {
+        if (e <= 0.2) {
+          setIsShowStroke(false);
+        } else {
+          setIsShowStroke(true);
+        }
+      });
+    };
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
   const stageState = useSelector((state: RootState) => state.stage);
   const userDataState = useSelector((state: RootState) => state.userData);
   useEffect(() => {});
@@ -68,6 +95,7 @@ export const TextBox = () => {
       font={font}
       textSizeState={textSizeState}
       lineLimit={lineLimit}
+      isUseStroke={isShowStroke}
     />
   );
 };
