@@ -105,7 +105,7 @@ export default function IMSSTextbox(props: ITextboxProps) {
             className={styles.text}
             style={{
               fontSize,
-              wordBreak: isSafari ? 'break-word' : undefined,
+              wordBreak: isSafari ? 'break-all' : undefined,
               overflow: 'hidden',
               paddingLeft: '0.1em',
               WebkitLineClamp: props.lineLimit,
