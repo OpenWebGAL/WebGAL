@@ -74,7 +74,7 @@ export default function StandardTextbox(props: ITextboxProps) {
           <span className={styles.zhanwei}>
             {e}
             <span className={styles.outer}>{e}</span>
-            <span className={styles.inner}>{e}</span>
+            {/* <span className={styles.inner}>{e}</span> */}
           </span>
         </span>
       );
@@ -90,7 +90,7 @@ export default function StandardTextbox(props: ITextboxProps) {
         <span className={styles.zhanwei}>
           {e}
           <span className={styles.outer}>{e}</span>
-          <span className={styles.inner}>{e}</span>
+          {/* <span className={styles.inner}>{e}</span> */}
         </span>
       </span>
     );
@@ -123,7 +123,7 @@ export default function StandardTextbox(props: ITextboxProps) {
                     <span className={styles.zhanwei}>
                       {e}
                       <span className={styles.outer}>{e}</span>
-                      <span className={styles.inner}>{e}</span>
+                      {/* <span className={styles.inner}>{e}</span> */}
                     </span>
                   </span>
                 );

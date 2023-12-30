@@ -18,7 +18,7 @@ $height: 330px;
   right: 25px;
   min-height: $height;
   max-height: $height;
-  background-image: linear-gradient(rgba(245, 247, 250, 0.9) 0%, rgba(189, 198, 222, 0.9) 100%);
+  background-image: linear-gradient(rgba(245, 247, 250, 0.95) 0%, rgba(189, 198, 222, 0.95) 100%);
   background-blend-mode: darken;
   //background: white;
   border-radius: calc($height / 2) 20px 20px calc($height / 2);
