@@ -8,7 +8,7 @@ export const jmp = (labelName: string) => {
   const currentLine = WebGAL.sceneManager.sceneData.currentSentenceId;
   let result = currentLine;
   WebGAL.sceneManager.sceneData.currentScene.sentenceList.forEach((sentence, index) => {
-    if (sentence.command === commandType.label && sentence.content === labelName && index >= currentLine) {
+    if (sentence.command === commandType.label && sentence.content === labelName && index !== currentLine) {
       result = index;
     }
   });

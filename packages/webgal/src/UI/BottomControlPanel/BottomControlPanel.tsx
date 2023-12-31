@@ -11,6 +11,8 @@ import {
   SettingTwo,
   DoubleDown,
   DoubleUp,
+  Lock,
+  Unlock
 } from '@icon-park/react';
 import styles from './bottomControlPanel.module.scss';
 import { switchAuto } from '@/Core/controller/gamePlay/autoPlay';
@@ -25,7 +27,7 @@ import { loadGame } from '@/Core/controller/storage/loadGame';
 import useTrans from '@/hooks/useTrans';
 import { useTranslation } from 'react-i18next';
 import useSoundEffect from '@/hooks/useSoundEffect';
-import { showGlogalDialog } from '@/UI/GlobalDialog/GlobalDialog';
+import { showGlogalDialog, switchControls } from '@/UI/GlobalDialog/GlobalDialog';
 
 export const BottomControlPanel = () => {
   const t = useTrans('gaming.');
@@ -75,7 +77,10 @@ export const BottomControlPanel = () => {
     // <div className={styles.ToCenter}>
     <>
       {GUIStore.showTextBox && stageState.enableFilm === '' && (
-        <div className={styles.main}>
+        <div
+          className={styles.main}
+          style={{visibility: GUIStore.controlsVisibility ? "visible" : "hidden"}}
+        >
           {GUIStore.showTextBox && (
             <span
               className={styles.singleButton}
@@ -292,6 +297,21 @@ export const BottomControlPanel = () => {
           >
             <Home className={styles.button} theme="outline" size={size} fill="#f5f5f7" strokeWidth={strokeWidth} />
             <span className={styles.button_text}>{t('buttons.title')}</span>
+          </span>
+          <span
+            className={styles.singleButton}
+            style={{ fontSize }}
+            onClick={() => {
+              switchControls();
+              playSeClickBottomControlPanelButton();
+            }}
+            onMouseEnter={playSeEnter}
+          >
+            {
+              GUIStore.showControls ?
+                (<Lock className={styles.button} theme="outline" size={size} fill="#f5f5f7" strokeWidth={strokeWidth} />) :
+                (<Unlock className={styles.button} theme="outline" size={size} fill="#f5f5f7" strokeWidth={strokeWidth} />)
+            }
           </span>
         </div>
       )}

@@ -20,10 +20,9 @@ $height: 430px;
   left: 0;
   min-height: $height;
   max-height: $height;
-  background: linear-gradient(
-      rgba(0, 0, 0, 0.1) 20%,
-      rgba(0, 0, 0, .85));
-  background-blend-mode: darken;
+  background: linear-gradient(transparent, rgba(0, 0, 0, .25) 25%, rgba(0, 0, 0, .35) 75%, rgba(0, 0, 0, .6)),
+  linear-gradient(90deg, transparent 0, rgba(0, 0, 0, .35) 25%, rgba(0, 0, 0, .35) 75%, transparent);
+  //background-blend-mode: darken;
   font-weight: bold;
   padding: 30px 50px 100px 200px;
   box-sizing: border-box;
@@ -32,7 +31,7 @@ $height: 430px;
   align-items: flex-start;
   animation: showSoftly 0.7s ease-out forwards;
   letter-spacing: 0.2em;
-  backdrop-filter: blur(2px);
+  //backdrop-filter: blur(2px);
   transition: left 0.33s, padding-left 0.33s;
 }
 

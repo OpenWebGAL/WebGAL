@@ -11,11 +11,13 @@ export default function IMSSTextbox(props: ITextboxProps) {
     currentDialogKey,
     isText,
     isSafari,
+    isFirefox: boolean,
     fontSize,
     miniAvatar,
     showName,
     font,
     textDuration,
+    isUseStroke,
   } = props;
 
   useEffect(() => {
@@ -53,7 +55,7 @@ export default function IMSSTextbox(props: ITextboxProps) {
           <span className={styles.zhanwei}>
             {e}
             <span className={styles.outer}>{e}</span>
-            <span className={styles.inner}>{e}</span>
+            {isUseStroke && <span className={styles.inner}>{e}</span>}
           </span>
         </span>
       );
@@ -69,7 +71,7 @@ export default function IMSSTextbox(props: ITextboxProps) {
         <span className={styles.zhanwei}>
           {e}
           <span className={styles.outer}>{e}</span>
-          <span className={styles.inner}>{e}</span>
+          {isUseStroke && <span className={styles.inner}>{e}</span>}
         </span>
       </span>
     );
@@ -94,7 +96,7 @@ export default function IMSSTextbox(props: ITextboxProps) {
                     <span className={styles.zhanwei}>
                       {e}
                       <span className={styles.outerName}>{e}</span>
-                      <span className={styles.innerName}>{e}</span>
+                      {isUseStroke && <span className={styles.innerName}>{e}</span>}
                     </span>
                   </span>
                 );
@@ -105,7 +107,9 @@ export default function IMSSTextbox(props: ITextboxProps) {
             className={styles.text}
             style={{
               fontSize,
-              wordBreak: isSafari ? 'break-word' : undefined,
+              wordBreak: isSafari || props.isFirefox ? 'break-all' : undefined,
+              display: isSafari ? 'flex' : undefined,
+              flexWrap: isSafari ? 'wrap' : undefined,
               overflow: 'hidden',
               paddingLeft: '0.1em',
               WebkitLineClamp: props.lineLimit,

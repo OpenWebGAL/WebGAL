@@ -27,7 +27,7 @@ export function argsParser(argsRaw: string, assetSetter: (fileName: string, asse
       argValue = undefined;
     }
     // 判断是不是语音参数
-    if (argName.match(/.ogg|.mp3|.wav/)) {
+    if (argName.toLowerCase().match(/.ogg|.mp3|.wav/)) {
       returnArrayList.push({
         key: "vocal",
         value: assetSetter(e, fileType.vocal)

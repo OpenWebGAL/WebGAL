@@ -6,12 +6,14 @@
   "author": "Mahiru <Mahiru_@outlook.com>",
   "scripts": {
     "build": "yarn parser:build && yarn webgal:build",
+    "build-ci": "yarn parser:build-ci && yarn webgal:build",
     "dev": "yarn parser:build && yarn webgal:dev",
     "webgal:dev": "cd packages/webgal && yarn dev",
     "webgal:build": "cd packages/webgal && yarn build",
     "parser:test": "cd packages/parser && yarn test",
     "parser:test-coverage": "cd packages/parser && yarn coverage",
-    "parser:build": "cd packages/parser && yarn build"
+    "parser:build": "cd packages/parser && yarn build",
+    "parser:build-ci": "cd packages/parser && yarn build-ci"
   },
   "license": "MPL-2.0",
   "workspaces": {
