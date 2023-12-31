@@ -14,6 +14,11 @@ export const syncWithOrigine = (sceneName: string, sentenceId: number) => {
   const dispatch = webgalStore.dispatch;
   dispatch(setVisibility({ component: 'showTitle', visibility: false }));
   dispatch(setVisibility({ component: 'showMenuPanel', visibility: false }));
+  dispatch(setVisibility({ component: 'isShowLogo', visibility: false }));
+  const title = document.getElementById('Title_enter_page');
+  if (title) {
+    title.style.display = 'none';
+  }
   resetStage(true);
   // 重新获取初始场景
   const sceneUrl: string = assetSetter(sceneName, fileType.scene);

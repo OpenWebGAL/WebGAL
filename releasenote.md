@@ -8,17 +8,19 @@
 
 #### 新功能
 
-可以获取来自用户的输入
+`jumpLabel` 支持跳转到场景内任何标签，而不仅仅是向后跳转
 
-可以在对话中使用注音
+支持了语音不中断的设置项
 
-返回标题页面添加确认弹窗
+支持为变量设置随机数
 
-添加德语和繁体中文的 UI 翻译
+支持隐藏控制按钮
 
 #### 修复
 
-立绘或背景变换没有正确同步的异常
+音乐鉴赏无法在条目数多时无法显示完全
+
+bgm 设置为 none 时，无法正确停止 bgm
 
 Live2D 表情和动作设置的异常
 
@@ -33,19 +35,21 @@ Live2D 表情和动作设置的异常
 
 #### New Features
 
-Can get input from the user
+`jumpLabel` supports jumping to any label within a scene, not just backwards
 
-Can use phonetic annotations in dialogues
+Added a setting to allow uninterrupted voice playback
 
-Added confirmation pop-up for returning to the title page
+Added support for setting random numbers for variables
 
-Added UI translations for German and Traditional Chinese
+Added support for hiding control buttons
 
 #### Fixes
 
-Abnormality where character or background transitions were not properly synchronized
+Music appreciation cannot be fully displayed when there are many entries
 
-Anomalies in Live2D expressions and motion settings
+When bgm is set to none, bgm cannot be stopped correctly
+
+Live2D expression and motion setting exceptions
 
 
 <!-- Japanese Translation -->
@@ -59,19 +63,21 @@ Anomalies in Live2D expressions and motion settings
 
 #### 新機能
 
-ユーザーからの入力を取得できます
+`jumpLabel`はシーン内の任意のラベルにジャンプすることができ、後方ジャンプだけではありません
 
-対話で注音を使用できます
+音声中断しない設定項目をサポート
 
-タイトルページへの戻りに確認ポップアップを追加
+変数に乱数を設定することをサポート
 
-ドイツ語と繁体字中国語のUI翻訳を追加
+コントロールボタンを隠すことをサポート
 
 #### 修正
 
-立ち絵や背景の遷移が正しく同期されていない異常
+音楽鑑賞はエントリ数が多いと完全に表示できない
 
-Live2Dの表情と動作設定の異常
+bgmをnoneに設定すると、bgmを正しく停止できない
+
+Live2D表情と動作設定の異常
 
 
 <!-- French Translation -->
@@ -85,17 +91,19 @@ Live2Dの表情と動作設定の異常
 
 #### Nouvelles fonctionnalités
 
-Peut obtenir des entrées de l'utilisateur
+`jumpLabel` prend désormais en charge les sauts vers n'importe quelle étiquette dans une scène, et pas seulement vers l'arrière
 
-Peut utiliser des annotations phonétiques dans les dialogues
+Ajout d'une option pour désactiver l'interruption de la voix
 
-Ajout d'une pop-up de confirmation pour le retour à la page de titre
+Ajout de la prise en charge de l'attribution de nombres aléatoires aux variables
 
-Ajout de traductions de l'UI en allemand et en chinois traditionnel
+Ajout de la prise en charge du masquage des boutons de contrôle
 
 #### Corrections
 
-Anomalie où les transitions de personnages ou d'arrière-plan n'étaient pas correctement synchronisées
+L'aperçu musical ne s'affiche pas complètement lorsque le nombre d'entrées est élevé
 
-Anomalies dans les expressions et les paramètres de mouvement Live2D
+La musique de fond ne s'arrête pas correctement lorsque bgm est défini sur none
+
+Anomalie dans les paramètres d'expression et d'animation Live2D
 

@@ -10,6 +10,7 @@ export interface ITextboxProps {
   currentDialogKey: string;
   isText: boolean;
   isSafari: boolean;
+  isFirefox: boolean;
   fontSize: string;
   miniAvatar: string;
   showName: string;
@@ -17,6 +18,7 @@ export interface ITextboxProps {
   textDuration: number;
   textSizeState: number;
   lineLimit: number;
+  isUseStroke: boolean;
 }
 
 export default function StandardTextbox(props: ITextboxProps) {
@@ -27,12 +29,14 @@ export default function StandardTextbox(props: ITextboxProps) {
     currentDialogKey,
     isText,
     isSafari,
+    isFirefox,
     fontSize,
     miniAvatar,
     showName,
     font,
     textDuration,
     textSizeState,
+    isUseStroke,
   } = props;
 
   const isHasMiniAvatar = miniAvatar !== '';
@@ -72,7 +76,7 @@ export default function StandardTextbox(props: ITextboxProps) {
           <span className={styles.zhanwei}>
             {e}
             <span className={styles.outer}>{e}</span>
-            <span className={styles.inner}>{e}</span>
+            {isUseStroke && <span className={styles.inner}>{e}</span>}
           </span>
         </span>
       );
@@ -88,7 +92,7 @@ export default function StandardTextbox(props: ITextboxProps) {
         <span className={styles.zhanwei}>
           {e}
           <span className={styles.outer}>{e}</span>
-          <span className={styles.inner}>{e}</span>
+          {isUseStroke && <span className={styles.inner}>{e}</span>}
         </span>
       </span>
     );
@@ -121,7 +125,7 @@ export default function StandardTextbox(props: ITextboxProps) {
                     <span className={styles.zhanwei}>
                       {e}
                       <span className={styles.outer}>{e}</span>
-                      <span className={styles.inner}>{e}</span>
+                      {isUseStroke && <span className={styles.inner}>{e}</span>}
                     </span>
                   </span>
                 );
@@ -132,7 +136,9 @@ export default function StandardTextbox(props: ITextboxProps) {
             className={styles.text}
             style={{
               fontSize,
-              wordBreak: isSafari ? 'break-word' : undefined,
+              wordBreak: isSafari || isFirefox ? 'break-all' : undefined,
+              display: isSafari ? 'flex' : undefined,
+              flexWrap: isSafari ? 'wrap' : undefined,
               overflow: 'hidden',
               paddingLeft: '0.1em',
               WebkitLineClamp: props.lineLimit,
