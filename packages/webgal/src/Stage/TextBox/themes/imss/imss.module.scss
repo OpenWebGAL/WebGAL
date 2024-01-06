@@ -18,7 +18,7 @@ $height: 330px;
   right: 25px;
   min-height: $height;
   max-height: $height;
-  background-image: linear-gradient(rgba(245, 247, 250, 0.95) 0%, rgba(189, 198, 222, 0.95) 100%);
+  // background: linear-gradient(rgba(245, 247, 250, 0.95) 0%, rgba(189, 198, 222, 0.95) 100%);
   background-blend-mode: darken;
   //background: white;
   border-radius: calc($height / 2) 20px 20px calc($height / 2);
@@ -41,6 +41,7 @@ $height: 330px;
   0% {
     opacity: 0;
   }
+
   100% {
     opacity: 1;
   }
@@ -65,11 +66,9 @@ $height: 330px;
   left: 0;
   top: 0;
   //background-image: linear-gradient(rgba(255, 255, 255, 1) 0%, rgb(225, 237, 255) 100%);
-  background-image: linear-gradient(
-      #0B346E 0%,
+  background-image: linear-gradient(#0B346E 0%,
       //#f5f7fa 45%,
-      #141423 100%
-  );
+      #141423 100%);
   //background: rgba(255, 255, 255, 1);
   background-clip: text;
   -webkit-background-clip: text;
@@ -129,16 +128,17 @@ $height: 330px;
   line-height: 68px;
   //display: flex;
   //align-items: center;
-  background: rgba(11, 52, 110, 0.9);
+  // background: rgba(11, 52, 110, 0.9);
   border-radius: 40px;
-  border: 4px solid rgba(255, 255, 255, 0.75);
-  box-shadow: 3px 3px 10px rgba(100, 100, 100, 0.5);
+  // border: 4px solid rgba(255, 255, 255, 0.75);
+  // box-shadow: 3px 3px 10px rgba(100, 100, 100, 0.5);
 }
 
 @keyframes TextDelayShow {
   0% {
     opacity: 0;
   }
+
   100% {
     opacity: 1;
   }

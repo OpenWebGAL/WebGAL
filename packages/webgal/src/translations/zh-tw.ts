@@ -86,6 +86,9 @@ const zhTw = {
                 SimHei: '黑體',
               },
             },
+            textboxOpacity: {
+              title: '文本框不透明度',
+            },
             textPreview: {
               title: '文字顯示預覽',
               text: '現在預覽的是文字框字體大小和播放速度的情況，您可以根據您的觀感調整上面的選項。',

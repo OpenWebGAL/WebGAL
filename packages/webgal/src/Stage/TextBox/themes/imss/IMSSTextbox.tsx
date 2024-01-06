@@ -18,6 +18,7 @@ export default function IMSSTextbox(props: ITextboxProps) {
     font,
     textDuration,
     isUseStroke,
+    textboxOpacity,
   } = props;
 
   useEffect(() => {
@@ -82,14 +83,30 @@ export default function IMSSTextbox(props: ITextboxProps) {
         <div
           id="textBoxMain"
           className={styles.TextBox_main}
-          style={{ fontFamily: font, left: miniAvatar === '' ? 25 : undefined }}
+          style={{
+            fontFamily: font,
+            left: miniAvatar === '' ? 25 : undefined,
+            background: `linear-gradient(
+              rgba(245, 247, 250, ${textboxOpacity / 100}) 0%,
+              rgba(189, 198, 222, ${textboxOpacity / 100}) 100%
+            )`,
+          }}
         >
           {/* <div className={styles.nameContainer}>{stageState.showName !== ''}</div> */}
           <div id="miniAvatar" className={styles.miniAvatarContainer}>
             {miniAvatar !== '' && <img className={styles.miniAvatarImg} alt="miniAvatar" src={miniAvatar} />}
           </div>
           {showName !== '' && (
-            <div key={showName} className={styles.TextBox_showName} style={{ fontSize: '200%' }}>
+            <div
+              key={showName}
+              className={styles.TextBox_showName}
+              style={{
+                fontSize: '200%',
+                background: `rgba(11, 52, 110, ${(textboxOpacity / 100) * 0.9})`,
+                border: `4px solid rgba(255, 255, 255, ${(textboxOpacity / 100) * 0.75})`,
+                boxShadow: `3px 3px 10px rgba(100, 100, 100, ${(textboxOpacity / 100) * 0.5})`,
+              }}
+            >
               {showName.split('').map((e, i) => {
                 return (
                   <span key={e + i} style={{ position: 'relative' }}>
