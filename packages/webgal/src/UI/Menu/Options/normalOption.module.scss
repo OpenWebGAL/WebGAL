@@ -36,18 +36,18 @@
   z-index: -1;
   padding: 0.15em 0.5em 0.15em 0.1em;
   text-shadow: 0.04em 0.04em rgba(81, 110, 65, 0.9),
-  0.05em 0.05em rgba(81, 110, 65, 0.9),
-  0.06em 0.06em rgba(81, 110, 65, 0.9),
-  0.07em 0.07em rgba(81, 110, 65, 0.9),
-  0.08em 0.08em rgba(81, 110, 65, 0.9),
-  0.09em 0.09em rgba(81, 110, 65, 0.9),
-  0.10em 0.10em rgba(81, 110, 65, 0.9);
+    0.05em 0.05em rgba(81, 110, 65, 0.9),
+    0.06em 0.06em rgba(81, 110, 65, 0.9),
+    0.07em 0.07em rgba(81, 110, 65, 0.9),
+    0.08em 0.08em rgba(81, 110, 65, 0.9),
+    0.09em 0.09em rgba(81, 110, 65, 0.9),
+    0.10em 0.10em rgba(81, 110, 65, 0.9);
   //0.11em 0.11em rgba(81, 110, 65, 0.9),
   //0.12em 0.12em rgba(81, 110, 65, 0.9);
 }
 
 .NormalOption_buttonList {
-  padding: 1em 0 1em 0;
+  padding: 0.5em 0 0.5em 0;
   display: flex;
 }
 
@@ -56,6 +56,7 @@
     opacity: 0;
     transform: scale(1.03, 1.03) translate(-25px, -20px);
   }
+
   100% {
     opacity: 1;
     transform: scale(1, 1) translate(0, 0);

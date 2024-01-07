@@ -8,6 +8,7 @@ import { getTextSize } from '@/UI/getTextSize';
 import StandardTextbox from '@/Stage/TextBox/themes/standard/StandardTextbox';
 import IMSSTextbox from '@/Stage/TextBox/themes/imss/IMSSTextbox';
 import { ReactNode } from 'react';
+import { compileSentence } from '@/Stage/TextBox/TextBox';
 
 export const TextPreview = (props: any) => {
   const t = useTrans('menu.options.pages.display.options.');
@@ -17,16 +18,14 @@ export const TextPreview = (props: any) => {
   const previewBackground = stageState.bgName;
   const textDelay = useTextDelay(userDataState.optionData.textSpeed);
   const textDuration = useTextAnimationDuration(userDataState.optionData.textSpeed);
-  const previewText = t('textPreview.text');
-  const size = getTextSize(userDataState.optionData.textSize) + '%';
   const textboxOpacity = userDataState.optionData.textboxOpacity;
+  const size = getTextSize(userDataState.optionData.textSize) + '%';
   const font = useFontFamily();
-
   const userAgent = navigator.userAgent;
   const isFirefox = /firefox/i.test(userAgent);
   const isSafari = /^((?!chrome|android).)*safari/i.test(userAgent);
-
-  const previewTextArray: ReactNode[] = previewText.split('').map((e, i) => <span key={e}>{e}</span>);
+  const previewText = t('textPreview.text');
+  const previewTextArray = compileSentence(previewText, 3);
 
   const textboxs = new Map([
     ['standard', StandardTextbox],
