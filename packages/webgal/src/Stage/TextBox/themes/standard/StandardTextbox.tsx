@@ -19,6 +19,7 @@ export interface ITextboxProps {
   textSizeState: number;
   lineLimit: number;
   isUseStroke: boolean;
+  textboxOpacity: number;
 }
 
 export default function StandardTextbox(props: ITextboxProps) {
@@ -37,6 +38,7 @@ export default function StandardTextbox(props: ITextboxProps) {
     textDuration,
     textSizeState,
     isUseStroke,
+    textboxOpacity,
   } = props;
 
   const isHasMiniAvatar = miniAvatar !== '';
@@ -111,7 +113,20 @@ export default function StandardTextbox(props: ITextboxProps) {
         <div
           id="textBoxMain"
           className={styles.TextBox_main}
-          style={{ fontFamily: font, paddingLeft: padding, paddingTop }}
+          style={{
+            fontFamily: font,
+            paddingLeft: padding,
+            paddingTop,
+            background: `linear-gradient(
+                transparent,
+                rgba(0, 0, 0, ${textboxOpacity / 100 / 2}) 25%,
+                rgba(0, 0, 0, ${textboxOpacity / 100 / 2}) 75%,
+                rgba(0, 0, 0, ${textboxOpacity / 100})),
+              linear-gradient(
+                90deg, transparent 0,
+                rgba(0, 0, 0, ${textboxOpacity / 100 / 2}) 25%,
+                rgba(0, 0, 0, ${textboxOpacity / 100}) 75%, transparent)`,
+          }}
         >
           {/* <div className={styles.nameContainer}>{stageState.showName !== ''}</div> */}
           <div id="miniAvatar" className={styles.miniAvatarContainer}>
