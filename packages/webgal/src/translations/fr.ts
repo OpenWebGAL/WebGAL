@@ -87,6 +87,9 @@ const fr = {
                 lxgw: 'LXGW WenKai',
               },
             },
+            textboxOpacity: {
+              title: 'Textbox Opacity',
+            },
             textPreview: {
               title: "Aperçu de l'affichage du texte",
               text: 'Vous prévisualisez la police, la taille et la vitesse de lecture du texte, maintenant. Vous pouvez ajuster les options ci-dessus selon votre perception.',

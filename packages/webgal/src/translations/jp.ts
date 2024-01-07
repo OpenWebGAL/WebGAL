@@ -87,6 +87,9 @@ const jp = {
                 lxgw: '霞鴎文隷',
               },
             },
+            textboxOpacity: {
+              title: 'Textbox Opacity',
+            },
             textPreview: {
               title: 'テキスト表示プレビュー',
               // todo

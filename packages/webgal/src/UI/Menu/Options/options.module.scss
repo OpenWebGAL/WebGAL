@@ -45,9 +45,9 @@
   position: absolute;
   color: rgba(0, 0, 0, 0);
   text-shadow: 0.04em 0.04em rgba(81, 110, 65, 0.9),
-  0.05em 0.05em rgba(81, 110, 65, 0.9),
-  0.06em 0.06em rgba(81, 110, 65, 0.9),
-  0.07em 0.07em rgba(81, 110, 65, 0.9);
+    0.05em 0.05em rgba(81, 110, 65, 0.9),
+    0.06em 0.06em rgba(81, 110, 65, 0.9),
+    0.07em 0.07em rgba(81, 110, 65, 0.9);
   //0.08em 0.08em rgba(81, 110, 65, 0.9),
   //0.09em 0.09em rgba(81, 110, 65, 0.9),
   //0.10em 0.10em rgba(81, 110, 65, 0.9),
@@ -81,7 +81,7 @@
   cursor: pointer;
 }
 
-.About_text{
+.About_text {
   font-weight: bold;
   color: transparent;
   background: linear-gradient(to left, rgba(34, 125, 81, 0.65), rgba(81, 110, 65, 0.65));
@@ -96,6 +96,7 @@
     opacity: 0;
     transform: scale(1.03, 1.03) translate(-25px, -20px);
   }
+
   100% {
     opacity: 1;
     transform: scale(1, 1) translate(0, 0);
@@ -105,7 +106,7 @@
 .Options_page_container {
   height: 85%;
   display: flex;
-  padding: 2em 3.75em 2em 3.75em;
+  padding: 1em 3.75em 1em 3.75em;
 }
 
 .Options_button_list {

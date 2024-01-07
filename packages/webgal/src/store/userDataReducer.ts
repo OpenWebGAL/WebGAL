@@ -6,6 +6,7 @@
 import { language } from '@/config/language';
 import {
   IAppreciationAsset,
+  IOptionData,
   ISaveData,
   ISetOptionDataPayload,
   ISetUserDataPayload,
@@ -18,7 +19,7 @@ import {
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import cloneDeep from 'lodash/cloneDeep';
 
-const initialOptionSet = {
+const initialOptionSet: IOptionData = {
   slPage: 1,
   volumeMain: 100, // 主音量
   textSpeed: playSpeed.normal, // 文字速度
@@ -29,6 +30,7 @@ const initialOptionSet = {
   seVolume: 100, // 音效音量
   uiSeVolume: 50, // UI音效音量
   textboxFont: textFont.song,
+  textboxOpacity: 75,
   language: language.zhCn,
   voiceInterruption: voiceOption.yes,
 };
