@@ -703,12 +703,18 @@ export default class PixiStage {
     const indexBg = this.backgroundObjects.findIndex((e) => e.key === key);
     if (indexFig >= 0) {
       const bgSprite = this.figureObjects[indexFig];
+      for (const element of bgSprite.pixiContainer.children) {
+        element.destroy();
+      }
       bgSprite.pixiContainer.destroy();
       this.figureContainer.removeChild(bgSprite.pixiContainer);
       this.figureObjects.splice(indexFig, 1);
     }
     if (indexBg >= 0) {
       const bgSprite = this.backgroundObjects[indexBg];
+      for (const element of bgSprite.pixiContainer.children) {
+        element.destroy();
+      }
       bgSprite.pixiContainer.destroy();
       this.backgroundContainer.removeChild(bgSprite.pixiContainer);
       this.backgroundObjects.splice(indexBg, 1);
