@@ -18,6 +18,7 @@ import {
 } from '@/store/userDataInterface';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import cloneDeep from 'lodash/cloneDeep';
+import { ISetGameVar } from './stageInterface';
 
 const initialOptionSet: IOptionData = {
   slPage: 1,
@@ -39,6 +40,7 @@ const initialOptionSet: IOptionData = {
 export const initState: IUserData = {
   saveData: [],
   optionData: initialOptionSet,
+  globalGameVar: {},
   appreciationData: {
     bgm: [],
     cg: [],
@@ -107,6 +109,14 @@ const userDataSlice = createSlice({
       (state.optionData as any)[key] = value;
     },
     /**
+     * 修改不跟随存档的全局变量
+     * @param state 当前状态
+     * @param action 要改变或添加的变量
+     */
+    setGlobalVar: (state, action: PayloadAction<ISetGameVar>) => {
+      state.globalGameVar[action.payload.key] = action.payload.value;
+    },
+    /**
      * 设置存档/读档页面
      * @param state
      * @param action
@@ -133,6 +143,7 @@ export const {
   setUserData,
   resetUserData,
   setOptionData,
+  setGlobalVar,
   setSlPage,
   unlockCgInUserData,
   unlockBgmInUserData,

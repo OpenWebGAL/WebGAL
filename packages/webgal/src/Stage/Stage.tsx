@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import React, { FC } from 'react';
 import styles from './stage.module.scss';
 import { TextBox } from './TextBox/TextBox';
 import { AudioContainer } from './AudioContainer/AudioContainer';
@@ -17,15 +17,17 @@ import { WebGAL } from '@/Core/WebGAL';
 // import OldStage from '@/Components/Stage/OldStage/OldStage';
 
 function inTextBox(event: React.MouseEvent) {
-  const tb = document.getElementById("textBoxMain")
+  const tb = document.getElementById('textBoxMain');
   if (!tb) {
-    return false
+    return false;
   }
-  var bounds = tb.getBoundingClientRect();
-  return event.clientX > bounds.left &&
+  let bounds = tb.getBoundingClientRect();
+  return (
+    event.clientX > bounds.left &&
     event.clientX < bounds.right &&
     event.clientY > bounds.top &&
     event.clientY < bounds.bottom
+  );
 }
 
 export const Stage: FC = () => {
@@ -37,12 +39,12 @@ export const Stage: FC = () => {
 
   const checkPosition = (event: React.MouseEvent) => {
     if (!GUIState.controlsVisibility && inTextBox(event)) {
-      dispatch(setVisibility({ component: 'controlsVisibility', visibility: true }))
+      dispatch(setVisibility({ component: 'controlsVisibility', visibility: true }));
     }
     if (GUIState.controlsVisibility && !inTextBox(event)) {
-      dispatch(setVisibility({ component: 'controlsVisibility', visibility: false }))
+      dispatch(setVisibility({ component: 'controlsVisibility', visibility: false }));
     }
-  }
+  };
 
   return (
     <div className={styles.MainStage_main}>
@@ -70,9 +72,7 @@ export const Stage: FC = () => {
         }}
         id="FullScreenClick"
         style={{ width: '100%', height: '100%', position: 'absolute', zIndex: '12', top: '0' }}
-        onMouseMove={
-          (e) => !GUIState.showControls && checkPosition(e)
-        }
+        onMouseMove={(e) => !GUIState.showControls && checkPosition(e)}
       />
       <IntroContainer />
     </div>

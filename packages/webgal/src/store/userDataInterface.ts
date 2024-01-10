@@ -1,4 +1,4 @@
-import { IStageState } from './stageInterface';
+import { IGameVar, IStageState } from './stageInterface';
 import { language } from '@/config/language';
 import { IBacklogItem } from '@/Core/Modules/backlog';
 import { ISceneEntry } from '@/Core/Modules/scene';
@@ -88,6 +88,7 @@ export interface IAppreciation {
 export interface IUserData {
   saveData: Array<ISaveData>; // 用户存档数据
   quickSaveData: ISaveData | null;
+  globalGameVar: IGameVar; // 不跟随存档的全局变量
   optionData: IOptionData; // 用户设置选项数据
   appreciationData: IAppreciation;
 }
