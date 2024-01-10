@@ -12,7 +12,7 @@ import {
   DoubleDown,
   DoubleUp,
   Lock,
-  Unlock
+  Unlock,
 } from '@icon-park/react';
 import styles from './bottomControlPanel.module.scss';
 import { switchAuto } from '@/Core/controller/gamePlay/autoPlay';
@@ -77,10 +77,7 @@ export const BottomControlPanel = () => {
     // <div className={styles.ToCenter}>
     <>
       {GUIStore.showTextBox && stageState.enableFilm === '' && (
-        <div
-          className={styles.main}
-          style={{visibility: GUIStore.controlsVisibility ? "visible" : "hidden"}}
-        >
+        <div className={styles.main} style={{ visibility: GUIStore.controlsVisibility ? 'visible' : 'hidden' }}>
           {GUIStore.showTextBox && (
             <span
               className={styles.singleButton}
@@ -307,11 +304,11 @@ export const BottomControlPanel = () => {
             }}
             onMouseEnter={playSeEnter}
           >
-            {
-              GUIStore.showControls ?
-                (<Lock className={styles.button} theme="outline" size={size} fill="#f5f5f7" strokeWidth={strokeWidth} />) :
-                (<Unlock className={styles.button} theme="outline" size={size} fill="#f5f5f7" strokeWidth={strokeWidth} />)
-            }
+            {GUIStore.showControls ? (
+              <Lock className={styles.button} theme="outline" size={size} fill="#f5f5f7" strokeWidth={strokeWidth} />
+            ) : (
+              <Unlock className={styles.button} theme="outline" size={size} fill="#f5f5f7" strokeWidth={strokeWidth} />
+            )}
           </span>
         </div>
       )}

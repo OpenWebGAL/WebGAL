@@ -18,9 +18,9 @@ export const showVars = (sentence: ISentence): IPerform => {
   const dispatch = webgalStore.dispatch;
   // 设置文本显示
   const allVar = {
-    'stageGameVar': stageState.GameVar,
-    'globalGameVar': userDataState.globalGameVar
-  }
+    stageGameVar: stageState.GameVar,
+    globalGameVar: userDataState.globalGameVar,
+  };
   dispatch(setStage({ key: 'showText', value: JSON.stringify(allVar) }));
   dispatch(setStage({ key: 'showName', value: '展示变量' }));
   logger.debug('展示变量：', allVar);
