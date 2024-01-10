@@ -56,7 +56,6 @@ export const TextBox = () => {
 
   const stageState = useSelector((state: RootState) => state.stage);
   const userDataState = useSelector((state: RootState) => state.userData);
-  useEffect(() => {});
   const textDelay = useTextDelay(userDataState.optionData.textSpeed);
   const textDuration = useTextAnimationDuration(userDataState.optionData.textSpeed);
   let size = getTextSize(userDataState.optionData.textSize) + '%';
@@ -79,6 +78,7 @@ export const TextBox = () => {
   const currentDialogKey = stageState.currentDialogKey;
   const miniAvatar = stageState.miniAvatar;
   const theme = useSelector((state: RootState) => state.GUI.theme);
+  const textboxOpacity = userDataState.optionData.textboxOpacity;
   const Textbox = getTextboxByTheme(theme.textbox);
   return (
     <Textbox
@@ -97,6 +97,7 @@ export const TextBox = () => {
       textSizeState={textSizeState}
       lineLimit={lineLimit}
       isUseStroke={isShowStroke}
+      textboxOpacity={textboxOpacity}
     />
   );
 };

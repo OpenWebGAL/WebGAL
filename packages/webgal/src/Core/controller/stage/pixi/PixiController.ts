@@ -666,9 +666,13 @@ export default class PixiStage {
         // @ts-ignore
         if (model?.internalModel) {
           // @ts-ignore
-          model?.internalModel?.coreModel?.setParamFloat?.('PARAM_MOUTH_OPEN_Y', paramY);
+          if (model?.internalModel?.coreModel?.setParamFloat)
+            // @ts-ignore
+            model?.internalModel?.coreModel?.setParamFloat?.('PARAM_MOUTH_OPEN_Y', paramY);
           // @ts-ignore
-          model?.internalModel?.coreModel?.setParameterValueById('ParamMouthOpenY', paramY);
+          if (model?.internalModel?.coreModel?.setParameterValueById)
+            // @ts-ignore
+            model?.internalModel?.coreModel?.setParameterValueById('ParamMouthOpenY', paramY);
         }
       }
     }
@@ -699,12 +703,18 @@ export default class PixiStage {
     const indexBg = this.backgroundObjects.findIndex((e) => e.key === key);
     if (indexFig >= 0) {
       const bgSprite = this.figureObjects[indexFig];
+      for (const element of bgSprite.pixiContainer.children) {
+        element.destroy();
+      }
       bgSprite.pixiContainer.destroy();
       this.figureContainer.removeChild(bgSprite.pixiContainer);
       this.figureObjects.splice(indexFig, 1);
     }
     if (indexBg >= 0) {
       const bgSprite = this.backgroundObjects[indexBg];
+      for (const element of bgSprite.pixiContainer.children) {
+        element.destroy();
+      }
       bgSprite.pixiContainer.destroy();
       this.backgroundContainer.removeChild(bgSprite.pixiContainer);
       this.backgroundObjects.splice(indexBg, 1);

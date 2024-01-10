@@ -87,6 +87,9 @@ const de = {
                 lxgw: 'LXGW WenKai',
               },
             },
+            textboxOpacity: {
+              title: 'Textbox Opacity',
+            },
             textPreview: {
               title: 'Vorschautext wird angezeigt',
               text: 'Sie können jederzeit die Schriftart, Größe und Wiedergabegeschwindigkeit des Textes nach Ihrer Vorliebe anpassen.',

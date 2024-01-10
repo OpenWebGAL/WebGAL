@@ -17,18 +17,21 @@ export const showVars = (sentence: ISentence): IPerform => {
   const userDataState = webgalStore.getState().userData;
   const dispatch = webgalStore.dispatch;
   // 设置文本显示
-  dispatch(setStage({ key: 'showText', value: JSON.stringify(stageState.GameVar) }));
+  const allVar = {
+    stageGameVar: stageState.GameVar,
+    globalGameVar: userDataState.globalGameVar,
+  };
+  dispatch(setStage({ key: 'showText', value: JSON.stringify(allVar) }));
   dispatch(setStage({ key: 'showName', value: '展示变量' }));
-  logger.debug('展示变量：', stageState.GameVar);
+  logger.debug('展示变量：', allVar);
   setTimeout(() => {
     WebGAL.eventBus.emit('text-settle');
   }, 0);
   const performInitName: string = getRandomPerformName();
-  const textDelay = PERFORM_CONFIG.textInitialDelay - 20 * userDataState.optionData.textSpeed;
   const endDelay = 750 - userDataState.optionData.textSpeed * 250;
   return {
     performName: performInitName,
-    duration: sentence.content.length * textDelay + endDelay,
+    duration: endDelay,
     isHoldOn: false,
     stopFunction: () => {
       WebGAL.eventBus.emit('text-settle');

@@ -15,22 +15,15 @@ export default function About(props: { onClose: () => void }) {
       <div className={s.text}>{__INFO.version}</div>
       <div className={s.title}>{t('source')}</div>
       <div className={s.text}>
-        <a target="_blank" href="https://github.com/MakinoharaShoko/WebGAL">
-          https://github.com/MakinoharaShoko/WebGAL
+        <a target="_blank" href="https://github.com/OpenWebGAL/WebGAL">
+          https://github.com/OpenWebGAL/WebGAL
         </a>
       </div>
       <div className={s.title}>{t('contributors')}</div>
       <div className={s.text}>
-        {__INFO.contributors.map((user, index, array) => {
-          return (
-            <span key={user.link} className={s.contributor}>
-              <a target="_blank" href={user.link}>
-                {user.username}
-              </a>
-              {index !== array.length - 1 && <>,</>}
-            </span>
-          );
-        })}
+        <a target="_blank" href="https://github.com/OpenWebGAL/WebGAL/graphs/contributors">
+          https://github.com/OpenWebGAL/WebGAL/graphs/contributors
+        </a>
       </div>
       <div className={s.title}>{t('website')}</div>
       <div className={s.text}>
