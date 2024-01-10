@@ -6,6 +6,7 @@
 import { language } from '@/config/language';
 import {
   IAppreciationAsset,
+  IOptionData,
   ISaveData,
   ISetOptionDataPayload,
   ISetUserDataPayload,
@@ -17,8 +18,9 @@ import {
 } from '@/store/userDataInterface';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import cloneDeep from 'lodash/cloneDeep';
+import { ISetGameVar } from './stageInterface';
 
-const initialOptionSet = {
+const initialOptionSet: IOptionData = {
   slPage: 1,
   volumeMain: 100, // 主音量
   textSpeed: playSpeed.normal, // 文字速度
@@ -29,6 +31,7 @@ const initialOptionSet = {
   seVolume: 100, // 音效音量
   uiSeVolume: 50, // UI音效音量
   textboxFont: textFont.song,
+  textboxOpacity: 75,
   language: language.zhCn,
   voiceInterruption: voiceOption.yes,
 };
@@ -37,6 +40,7 @@ const initialOptionSet = {
 export const initState: IUserData = {
   saveData: [],
   optionData: initialOptionSet,
+  globalGameVar: {},
   appreciationData: {
     bgm: [],
     cg: [],
@@ -62,7 +66,7 @@ const userDataSlice = createSlice({
       // 检查是否存在
       let isExist = false;
       state.appreciationData.cg.forEach((e) => {
-        if (name === e.name) {
+        if (url === e.url) {
           isExist = true;
           e.url = url;
           e.series = series;
@@ -77,7 +81,7 @@ const userDataSlice = createSlice({
       // 检查是否存在
       let isExist = false;
       state.appreciationData.bgm.forEach((e) => {
-        if (name === e.name) {
+        if (url === e.url) {
           isExist = true;
           e.url = url;
           e.series = series;
@@ -103,6 +107,14 @@ const userDataSlice = createSlice({
     setOptionData: (state, action: PayloadAction<ISetOptionDataPayload>) => {
       const { key, value } = action.payload;
       (state.optionData as any)[key] = value;
+    },
+    /**
+     * 修改不跟随存档的全局变量
+     * @param state 当前状态
+     * @param action 要改变或添加的变量
+     */
+    setGlobalVar: (state, action: PayloadAction<ISetGameVar>) => {
+      state.globalGameVar[action.payload.key] = action.payload.value;
     },
     /**
      * 设置存档/读档页面
@@ -131,6 +143,7 @@ export const {
   setUserData,
   resetUserData,
   setOptionData,
+  setGlobalVar,
   setSlPage,
   unlockCgInUserData,
   unlockBgmInUserData,

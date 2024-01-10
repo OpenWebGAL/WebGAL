@@ -219,7 +219,7 @@ export function changeFigure(sentence: ISentence): IPerform {
       dispatch(stageActions.setLive2dMotion({ target: key, motion }));
     }
     if (expression) {
-      dispatch(stageActions.setLive2dExpression({ target: 'live2dExpression', expression }));
+      dispatch(stageActions.setLive2dExpression({ target: key, expression }));
     }
     dispatch(stageActions.setFreeFigureByKey(freeFigureItem));
   } else {

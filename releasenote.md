@@ -8,21 +8,19 @@
 
 #### 新功能
 
-`jumpLabel` 支持跳转到场景内任何标签，而不仅仅是向后跳转
+文本框可以调整透明度
 
-支持了语音不中断的设置项
-
-支持为变量设置随机数
-
-支持隐藏控制按钮
+支持长效（全局）变量
 
 #### 修复
 
-音乐鉴赏无法在条目数多时无法显示完全
+Live2D 口型同步的异常和使用 Live2D 造成的内存泄露问题
 
-bgm 设置为 none 时，无法正确停止 bgm
+Live2D 表情设置问题
 
-Live2D 表情和动作设置的异常
+文本框角色名称空格不显示问题
+
+鉴赏文件重复解锁问题
 
 <!-- English Translation -->
 ## Release Notes
@@ -35,21 +33,19 @@ Live2D 表情和动作设置的异常
 
 #### New Features
 
-`jumpLabel` supports jumping to any label within a scene, not just backwards
+Textbox can adjust transparency
 
-Added a setting to allow uninterrupted voice playback
-
-Added support for setting random numbers for variables
-
-Added support for hiding control buttons
+Support persistent (global) variables
 
 #### Fixes
 
-Music appreciation cannot be fully displayed when there are many entries
+Live2D lip-sync anomaly and memory leak caused by using Live2D
 
-When bgm is set to none, bgm cannot be stopped correctly
+Live2D expression setting issue
 
-Live2D expression and motion setting exceptions
+Textbox character name space not displayed issue
+
+Gallery file repeatedly unlocked issue
 
 
 <!-- Japanese Translation -->
@@ -63,21 +59,19 @@ Live2D expression and motion setting exceptions
 
 #### 新機能
 
-`jumpLabel`はシーン内の任意のラベルにジャンプすることができ、後方ジャンプだけではありません
+テキストボックスの透明度を調整可能
 
-音声中断しない設定項目をサポート
-
-変数に乱数を設定することをサポート
-
-コントロールボタンを隠すことをサポート
+永続変数（グローバル変数）に対応
 
 #### 修正
 
-音楽鑑賞はエントリ数が多いと完全に表示できない
+Live2D の口パクの異常と Live2D 使用時のメモリリーク問題
 
-bgmをnoneに設定すると、bgmを正しく停止できない
+Live2D の表情設定の問題
 
-Live2D表情と動作設定の異常
+テキストボックスの役職名に空白が表示されない問題
+
+鑑賞ファイルの重複アンロックの問題
 
 
 <!-- French Translation -->
@@ -91,19 +85,17 @@ Live2D表情と動作設定の異常
 
 #### Nouvelles fonctionnalités
 
-`jumpLabel` prend désormais en charge les sauts vers n'importe quelle étiquette dans une scène, et pas seulement vers l'arrière
+Les zones de texte peuvent maintenant avoir une transparence réglable
 
-Ajout d'une option pour désactiver l'interruption de la voix
-
-Ajout de la prise en charge de l'attribution de nombres aléatoires aux variables
-
-Ajout de la prise en charge du masquage des boutons de contrôle
+Support des variables persistantes (globales)
 
 #### Corrections
 
-L'aperçu musical ne s'affiche pas complètement lorsque le nombre d'entrées est élevé
+Anomalie de synchronisation labiale Live2D et problème de fuite de mémoire causé par l'utilisation de Live2D
 
-La musique de fond ne s'arrête pas correctement lorsque bgm est défini sur none
+Problème de configuration des expressions Live2D
 
-Anomalie dans les paramètres d'expression et d'animation Live2D
+Problème d'espace dans le nom du personnage de la zone de texte
+
+Problème de déverrouillage répété des fichiers d'appréciation
 

@@ -87,6 +87,9 @@ const en = {
                 lxgw: 'LXGW WenKai',
               },
             },
+            textboxOpacity: {
+              title: 'Textbox Opacity',
+            },
             textPreview: {
               title: 'Preview Text Showing',
               text: "You are previewing the text's font, size and playback speed, now. You can adjust the above options according to your perception.",

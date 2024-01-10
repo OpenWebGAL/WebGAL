@@ -135,7 +135,11 @@ export const scriptExecutor = () => {
   setTimeout(() => {
     // 同步当前舞台数据
     currentStageState = webgalStore.getState().stage;
-    logger.debug('本条语句执行结果', currentStageState);
+    const allState = {
+      currentStageState: currentStageState,
+      globalGameVar: webgalStore.getState().userData.globalGameVar,
+    };
+    logger.debug('本条语句执行结果', allState);
     // 保存 backlog
     if (isSaveBacklog) {
       // WebGAL.backlogManager.isSaveBacklogNext = true;
