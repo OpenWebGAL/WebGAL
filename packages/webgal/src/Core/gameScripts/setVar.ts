@@ -7,13 +7,14 @@ import { compile } from 'angular-expressions';
 import { setGlobalVar } from '@/store/userDataReducer';
 import { ActionCreatorWithPayload } from '@reduxjs/toolkit';
 import { ISetGameVar } from '@/store/stageInterface';
+import { syncStorageFast } from '@/Core/controller/storage/storageController';
 
 /**
  * 设置变量
  * @param sentence
  */
 export const setVar = (sentence: ISentence): IPerform => {
-  let setGlobal: boolean = false;
+  let setGlobal = false;
   sentence.args.forEach((e) => {
     if (e.key === 'global') {
       setGlobal = true;
@@ -60,6 +61,7 @@ export const setVar = (sentence: ISentence): IPerform => {
     }
     if (setGlobal) {
       logger.debug('设置全局变量：', { key, value: webgalStore.getState().userData.globalGameVar[key] });
+      syncStorageFast();
     } else {
       logger.debug('设置变量：', { key, value: webgalStore.getState().stage.GameVar[key] });
     }
@@ -74,7 +76,6 @@ export const setVar = (sentence: ISentence): IPerform => {
     stopTimeout: undefined, // 暂时不用，后面会交给自动清除
   };
 };
-
 
 export function getValueFromState(key: string) {
   let ret: number | string | boolean = 0;

@@ -136,9 +136,9 @@ export const scriptExecutor = () => {
     // 同步当前舞台数据
     currentStageState = webgalStore.getState().stage;
     const allState = {
-      'currentStageState': currentStageState,
-      'globalGameVar': webgalStore.getState().userData.globalGameVar
-    }
+      currentStageState: currentStageState,
+      globalGameVar: webgalStore.getState().userData.globalGameVar,
+    };
     logger.debug('本条语句执行结果', allState);
     // 保存 backlog
     if (isSaveBacklog) {
