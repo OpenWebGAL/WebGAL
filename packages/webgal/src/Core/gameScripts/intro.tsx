@@ -83,7 +83,8 @@ export const intro = (sentence: ISentence): IPerform => {
   };
   const introArray: Array<string> = sentence.content.split(/\|/);
 
-  let baseDuration = 1000 + delayTime * introArray.length;
+  let endWait = 1000;
+  let baseDuration = endWait + delayTime * introArray.length;
   const duration = isHold ? 1000 * 60 * 60 * 24 : 1000 + delayTime * introArray.length;
   let isBlocking = true;
   let setBlockingStateTimeout = setTimeout(() => {
@@ -93,6 +94,7 @@ export const intro = (sentence: ISentence): IPerform => {
   let timeout = setTimeout(() => {});
   const toNextIntroElement = () => {
     const introContainer = document.getElementById('introContainer');
+    // 由于用户操作，相当于时间向前推进，这时候更新这个演出的预计完成时间
     baseDuration -= delayTime;
     clearTimeout(setBlockingStateTimeout);
     setBlockingStateTimeout = setTimeout(() => {
@@ -124,7 +126,7 @@ export const intro = (sentence: ISentence): IPerform => {
               timeout = setTimeout(() => {
                 WebGAL.gameplay.performController.unmountPerform(performName);
                 setTimeout(nextSentence, 0);
-              }, currentDelay - 500);
+              }, baseDuration);
             }
           }
         }
