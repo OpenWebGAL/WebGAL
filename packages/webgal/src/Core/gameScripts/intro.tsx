@@ -38,6 +38,7 @@ export const intro = (sentence: ISentence): IPerform => {
   };
   let chosenAnimationClass = styles.fadeIn;
   let delayTime = 1500;
+  let isHold = false;
 
   for (const e of sentence.args) {
     if (e.key === 'backgroundColor') {
@@ -66,6 +67,11 @@ export const intro = (sentence: ISentence): IPerform => {
       const parsedValue = parseInt(e.value.toString(), 10);
       delayTime = isNaN(parsedValue) ? delayTime : parsedValue;
     }
+    if (e.key === 'hold') {
+      if (e.value === true) {
+        isHold = true;
+      }
+    }
   }
 
   const introContainerStyle = {
@@ -75,30 +81,53 @@ export const intro = (sentence: ISentence): IPerform => {
     width: '100%',
     height: '100%',
   };
+  const introArray: Array<string> = sentence.content.split(/\|/);
+
+  let endWait = 1000;
+  let baseDuration = endWait + delayTime * introArray.length;
+  const duration = isHold ? 1000 * 60 * 60 * 24 : 1000 + delayTime * introArray.length;
+  let isBlocking = true;
+  let setBlockingStateTimeout = setTimeout(() => {
+    isBlocking = false;
+  }, baseDuration);
 
   let timeout = setTimeout(() => {});
   const toNextIntroElement = () => {
     const introContainer = document.getElementById('introContainer');
+    // 由于用户操作，相当于时间向前推进，这时候更新这个演出的预计完成时间
+    baseDuration -= delayTime;
+    clearTimeout(setBlockingStateTimeout);
+    setBlockingStateTimeout = setTimeout(() => {
+      isBlocking = false;
+    }, baseDuration);
     if (introContainer) {
       const children = introContainer.childNodes[0].childNodes[0].childNodes as any;
       const len = children.length;
       children.forEach((node: HTMLDivElement, index: number) => {
+        // 当前语句的延迟显示时间
         const currentDelay = Number(node.style.animationDelay.split('ms')[0]);
+        // 当前语句还没有显示，降低显示延迟，因为现在时间因为用户操作，相当于向前推进了
         if (currentDelay > 0) {
-          node.style.animationDelay = `${currentDelay - 1500}ms`;
+          node.style.animationDelay = `${currentDelay - delayTime}ms`;
         }
+        // 最后一个元素了
         if (index === len - 1) {
+          // 并且已经完全显示了，这时候进行下一步
           if (currentDelay === 0) {
             clearTimeout(timeout);
             WebGAL.gameplay.performController.unmountPerform(performName);
             // 卸载函数发生在 nextSentence 生效前，所以不需要做下一行的操作。
             // setTimeout(nextSentence, 0);
           } else {
+            // 还没有完全显示，但是因为时间的推进，要提前完成演出，更新用于结束演出的计时器
             clearTimeout(timeout);
-            timeout = setTimeout(() => {
-              WebGAL.gameplay.performController.unmountPerform(performName);
-              setTimeout(nextSentence, 0);
-            }, currentDelay - 500);
+            // 如果 Hold 了，自然不要自动结束
+            if (!isHold) {
+              timeout = setTimeout(() => {
+                WebGAL.gameplay.performController.unmountPerform(performName);
+                setTimeout(nextSentence, 0);
+              }, baseDuration);
+            }
           }
         }
       });
@@ -110,7 +139,6 @@ export const intro = (sentence: ISentence): IPerform => {
    */
   WebGAL.eventBus.on('__NEXT', toNextIntroElement);
 
-  const introArray: Array<string> = sentence.content.split(/\|/);
   const showIntro = introArray.map((e, i) => (
     <div
       key={'introtext' + i + Math.random().toString()}
@@ -132,9 +160,10 @@ export const intro = (sentence: ISentence): IPerform => {
   if (introContainer) {
     introContainer.style.display = 'block';
   }
+
   return {
     performName,
-    duration: 1000 + delayTime * introArray.length,
+    duration,
     isHoldOn: false,
     stopFunction: () => {
       const introContainer = document.getElementById('introContainer');
@@ -143,8 +172,8 @@ export const intro = (sentence: ISentence): IPerform => {
       }
       WebGAL.eventBus.off('__NEXT', toNextIntroElement);
     },
-    blockingNext: () => true,
-    blockingAuto: () => true,
+    blockingNext: () => isBlocking,
+    blockingAuto: () => isBlocking,
     stopTimeout: undefined, // 暂时不用，后面会交给自动清除
     goNextWhenOver: true,
   };
