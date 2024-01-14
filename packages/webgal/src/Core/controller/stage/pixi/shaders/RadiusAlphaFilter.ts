@@ -1,0 +1,88 @@
+import * as PIXI from 'pixi.js';
+import { WebGALPixiContainer } from '@/Core/controller/stage/pixi/WebGALPixiContainer';
+
+const INIT_RAD = 0;
+const FILTER_NAME = 'radiusAlphaFilter';
+
+class RadiusAlphaFilter extends PIXI.Filter {
+  public constructor(center: PIXI.Point, radius: number) {
+    const fragmentShader = `
+// 半径透明度的fragment shader
+precision mediump float;
+
+uniform sampler2D uSampler;        // 输入纹理
+varying vec2 vTextureCoord;        // 当前片元的纹理坐标
+uniform vec2 center;               // 圆心坐标
+uniform float radius;              // 圆的半径
+
+void main(void) {
+    vec4 color = texture2D(uSampler, vTextureCoord);
+    float dist = 0.0;
+    dist = distance(vTextureCoord, center);  // 使用不同的变量名
+
+    vec4 color2 = color;
+
+    if (dist < radius) {
+        color2 = color * 0.3;
+    }
+
+    gl_FragColor = color2;
+}
+    `; // 填入上面的fragment shader代码
+    super(null as any, fragmentShader);
+    this.uniforms.center = [center.x, center.y];
+    this.uniforms.radius = radius;
+  }
+
+  public set center(value: PIXI.Point) {
+    this.uniforms.center = [value.x, value.y];
+  }
+
+  public get center(): PIXI.Point {
+    return new PIXI.Point(this.uniforms.center[0], this.uniforms.center[1]);
+  }
+
+  public set radius(value: number) {
+    console.log(value);
+    this.uniforms.radius = value;
+  }
+
+  public get radius(): number {
+    return this.uniforms.radius;
+  }
+}
+
+export function getOrCreateRadiusAlphaFilterImpl(container: WebGALPixiContainer, createMode: boolean) {
+  const shockwaveFilterFromMap = container.containerFilters.get(FILTER_NAME);
+  if (shockwaveFilterFromMap) {
+    return shockwaveFilterFromMap;
+  } else {
+    if (createMode) {
+      const shockwaveFilter = new RadiusAlphaFilter(new PIXI.Point(0.5, 0.5), INIT_RAD);
+      shockwaveFilter.radius = INIT_RAD;
+      container.addFilter(shockwaveFilter);
+      container.containerFilters.set(FILTER_NAME, shockwaveFilter);
+      return shockwaveFilter;
+    }
+  }
+}
+
+export function getRadiusAlphaFilter(container: WebGALPixiContainer) {
+  if (container.getOrCreateShockwaveFilter(false)) {
+    const shockwaveFilter = container.getOrCreateRadiusAlphaFilter() as RadiusAlphaFilter;
+    return shockwaveFilter.radius;
+  }
+  return INIT_RAD;
+}
+
+export function setRadiusAlphaFilter(container: WebGALPixiContainer, value: number) {
+  /**
+   * 如果是0，就移除这个滤镜
+   */
+  if (value === 0) {
+    container.removeFilter(FILTER_NAME);
+  } else {
+    const shockwaveFilter = container.getOrCreateRadiusAlphaFilter() as RadiusAlphaFilter;
+    if (shockwaveFilter) shockwaveFilter.radius = value;
+  }
+}

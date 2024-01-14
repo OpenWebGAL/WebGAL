@@ -1,8 +1,10 @@
 import { WebGALPixiContainer } from '@/Core/controller/stage/pixi/WebGALPixiContainer';
 import { ShockwaveFilter } from 'pixi-filters';
 
+const FILTER_NAME = 'shockwaveFilter';
+
 export function getOrCreateShockwaveFilterImpl(container: WebGALPixiContainer, createMode: boolean) {
-  const shockwaveFilterFromMap = container.containerFilters.get('shockwaveFilter');
+  const shockwaveFilterFromMap = container.containerFilters.get(FILTER_NAME);
   if (shockwaveFilterFromMap) {
     return shockwaveFilterFromMap;
   } else {
@@ -10,7 +12,7 @@ export function getOrCreateShockwaveFilterImpl(container: WebGALPixiContainer, c
       const shockwaveFilter = new ShockwaveFilter([1280, 720]);
       shockwaveFilter.time = 0;
       container.addFilter(shockwaveFilter);
-      container.containerFilters.set('shockwaveFilter', shockwaveFilter);
+      container.containerFilters.set(FILTER_NAME, shockwaveFilter);
       return shockwaveFilter;
     }
   }
@@ -29,7 +31,7 @@ export function setShockwaveFilter(container: WebGALPixiContainer, value: number
    * 如果是0，就移除这个滤镜
    */
   if (value === 0) {
-    container.removeFilter('shockwaveFilter');
+    container.removeFilter(FILTER_NAME);
   } else {
     const shockwaveFilter = container.getOrCreateShockwaveFilter() as ShockwaveFilter;
     if (shockwaveFilter) shockwaveFilter.time = value;

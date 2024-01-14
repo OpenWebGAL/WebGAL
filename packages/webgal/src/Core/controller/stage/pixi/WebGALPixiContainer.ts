@@ -10,6 +10,11 @@ import {
   getShockwaveFilter,
   setShockwaveFilter,
 } from '@/Core/controller/stage/pixi/filters/ShockwaveFilter';
+import {
+  getOrCreateRadiusAlphaFilterImpl,
+  getRadiusAlphaFilter,
+  setRadiusAlphaFilter,
+} from '@/Core/controller/stage/pixi/shaders/RadiusAlphaFilter';
 
 export class WebGALPixiContainer extends PIXI.Container {
   public containerFilters = new Map<string, PIXI.Filter>();
@@ -297,5 +302,19 @@ export class WebGALPixiContainer extends PIXI.Container {
   }
   public set shockwaveFilter(value: number) {
     setShockwaveFilter(this, value);
+  }
+
+  /**
+   * RadiusAlphaFilter
+   */
+
+  public getOrCreateRadiusAlphaFilter(createMode = true) {
+    return getOrCreateRadiusAlphaFilterImpl(this, createMode);
+  }
+  public get radiusAlphaFilter(): number {
+    return getRadiusAlphaFilter(this);
+  }
+  public set radiusAlphaFilter(value: number) {
+    setRadiusAlphaFilter(this, value);
   }
 }
