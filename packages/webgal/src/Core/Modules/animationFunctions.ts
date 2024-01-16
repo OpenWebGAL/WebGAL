@@ -14,7 +14,7 @@ export function getAnimationObject(animationName: string, target: string, durati
       const targetSetEffect = webgalStore.getState().stage.effects.find((e) => e.target === target);
       const newEffect = cloneDeep({ ...(targetSetEffect?.transform ?? baseTransform), duration: 0 });
       Object.assign(newEffect, effect);
-      newEffect.duration = effect.duration / 1000;
+      newEffect.duration = effect.duration;
       return newEffect;
     });
     logger.debug('装载自定义动画', mappedEffects);

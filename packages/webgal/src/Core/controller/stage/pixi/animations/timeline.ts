@@ -1,5 +1,5 @@
 import { ITransform } from '@/store/stageInterface';
-import { gsap } from 'gsap';
+import { animate } from 'popmotion';
 import { WebGAL } from '@/Core/WebGAL';
 import { webgalStore } from '@/store/store';
 import { stageActions } from '@/store/stageReducer';
@@ -16,39 +16,32 @@ export function generateTimelineObj(
   duration: number,
 ) {
   const target = WebGAL.gameplay.pixiStage!.getStageObjByKey(targetKey);
-  let gsapTimeline1: gsap.core.Timeline | null = gsap.timeline();
-  let gsapTimeline2: gsap.core.Timeline | null = gsap.timeline();
-  let gsapTimeline3: gsap.core.Timeline | null = gsap.timeline();
-  let gsapTimeline4: gsap.core.Timeline | null = gsap.timeline();
-  let gsapTimeline5: gsap.core.Timeline | null = gsap.timeline();
-  const gsapTimelines = [gsapTimeline1, gsapTimeline2, gsapTimeline3, gsapTimeline4, gsapTimeline5];
-  for (const gsapEffect of timeline) {
-    const gsapEffectDuration = gsapEffect.duration;
-    if (target?.pixiContainer) {
-      gsapTimeline1.to(target.pixiContainer, {
-        alpha: gsapEffect.alpha,
-        rotation: gsapEffect.rotation,
-        blur: gsapEffect.blur,
-        duration: gsapEffectDuration,
-      });
-      gsapTimeline2.to(target.pixiContainer.scale, {
-        ...gsapEffect.scale,
-        duration: gsapEffectDuration,
-      });
-      gsapTimeline3.to(target.pixiContainer, {
-        ...gsapEffect.position,
-        duration: gsapEffectDuration,
-      });
-      /**
-       * filters
-       */
-      const { alpha, rotation, blur, duration, scale, position, ...rest } = gsapEffect;
-      gsapTimeline4.to(target.pixiContainer, {
-        ...rest,
-        duration: gsapEffectDuration,
-      });
-    }
+  let currentDelay = 0;
+  const values = [];
+  const times: number[] = [];
+  for (const segment of timeline) {
+    const segmentDuration = segment.duration;
+    currentDelay += segmentDuration;
+    const { position, scale, ...segmentValues } = segment;
+    // 不能用 scale，因为 popmotion 不能用嵌套
+    values.push({ x: position.x, y: position.y, scaleX: scale.x, scaleY: scale.y, ...segmentValues });
+    times.push(currentDelay / duration);
   }
+  const container = target?.pixiContainer;
+  let animateInstance = animate({
+    to: values,
+    offset: times,
+    duration,
+    onUpdate: (updateValue) => {
+      if (container) {
+        const { scaleX, scaleY, ...val } = updateValue;
+        Object.assign(container, val);
+        // 因为 popmotion 不能用嵌套，scale 要手动设置
+        container.scale.x = scaleX;
+        container.scale.y = scaleY;
+      }
+    },
+  });
 
   const { duration: sliceDuration, ...endState } = getEndStateEffect();
   webgalStore.dispatch(stageActions.updateEffect({ target: targetKey, transform: endState }));
@@ -56,23 +49,24 @@ export function generateTimelineObj(
   /**
    * 在此书写为动画设置初态的操作
    */
-  function setStartState() {}
+  function setStartState() {
+    if (target?.pixiContainer) {
+      // 不能赋值到 position，因为 x 和 y 被 WebGALPixiContainer 代理，而 position 属性没有代理
+      const { position, ...state } = getStartStateEffect();
+      Object.assign(target?.pixiContainer, { x: position.x, y: position.y, ...state });
+    }
+  }
 
   /**
    * 在此书写为动画设置终态的操作
    */
   function setEndState() {
-    for (const gsaptimeline of gsapTimelines) {
-      if (gsaptimeline) {
-        gsaptimeline.seek(duration);
-        gsaptimeline.kill();
-      }
+    animateInstance.stop();
+    if (target?.pixiContainer) {
+      // 不能赋值到 position，因为 x 和 y 被 WebGALPixiContainer 代理，而 position 属性没有代理
+      const { position, ...state } = getEndStateEffect();
+      Object.assign(target?.pixiContainer, { x: position.x, y: position.y, ...state });
     }
-    gsapTimeline1 = null;
-    gsapTimeline2 = null;
-    gsapTimeline3 = null;
-    gsapTimeline4 = null;
-    gsapTimeline5 = null;
   }
 
   /**
@@ -81,14 +75,18 @@ export function generateTimelineObj(
    */
   function tickerFunc(delta: number) {}
 
-  function getEndFilterEffect() {
-    const gsapEffect = timeline[timeline.length - 1];
-    const { alpha, rotation, blur, duration, scale, position, ...rest } = gsapEffect;
-    return rest;
+  function getStartStateEffect() {
+    return timeline[0];
   }
 
   function getEndStateEffect() {
     return timeline[timeline.length - 1];
+  }
+
+  function getEndFilterEffect() {
+    const endSegment = timeline[timeline.length - 1];
+    const { alpha, rotation, blur, duration, scale, position, ...rest } = endSegment;
+    return rest;
   }
 
   return {
