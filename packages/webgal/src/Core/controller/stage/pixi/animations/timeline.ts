@@ -25,23 +25,29 @@ export function generateTimelineObj(
     const { position, scale, ...segmentValues } = segment;
     // 不能用 scale，因为 popmotion 不能用嵌套
     values.push({ x: position.x, y: position.y, scaleX: scale.x, scaleY: scale.y, ...segmentValues });
-    times.push(currentDelay / duration);
+    if (duration !== 0) {
+      times.push(currentDelay / duration);
+    } else times.push(0);
   }
   const container = target?.pixiContainer;
-  let animateInstance = animate({
-    to: values,
-    offset: times,
-    duration,
-    onUpdate: (updateValue) => {
-      if (container) {
-        const { scaleX, scaleY, ...val } = updateValue;
-        Object.assign(container, val);
-        // 因为 popmotion 不能用嵌套，scale 要手动设置
-        container.scale.x = scaleX;
-        container.scale.y = scaleY;
-      }
-    },
-  });
+  let animateInstance: ReturnType<typeof animate> | null = null;
+  // 只有有 duration 的时候才有动画
+  if (duration > 0) {
+    animateInstance = animate({
+      to: values,
+      offset: times,
+      duration,
+      onUpdate: (updateValue) => {
+        if (container) {
+          const { scaleX, scaleY, ...val } = updateValue;
+          Object.assign(container, val);
+          // 因为 popmotion 不能用嵌套，scale 要手动设置
+          container.scale.x = scaleX;
+          container.scale.y = scaleY;
+        }
+      },
+    });
+  }
 
   const { duration: sliceDuration, ...endState } = getEndStateEffect();
   webgalStore.dispatch(stageActions.updateEffect({ target: targetKey, transform: endState }));
@@ -61,7 +67,8 @@ export function generateTimelineObj(
    * 在此书写为动画设置终态的操作
    */
   function setEndState() {
-    animateInstance.stop();
+    if (animateInstance) animateInstance.stop();
+    animateInstance = null;
     if (target?.pixiContainer) {
       // 不能赋值到 position，因为 x 和 y 被 WebGALPixiContainer 代理，而 position 属性没有代理
       const { position, ...state } = getEndStateEffect();
