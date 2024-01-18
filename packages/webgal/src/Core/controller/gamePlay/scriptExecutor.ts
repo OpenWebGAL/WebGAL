@@ -13,6 +13,25 @@ import { IBacklogItem } from '@/Core/Modules/backlog';
 import { SYSTEM_CONFIG } from '@/config';
 import { WebGAL } from '@/Core/WebGAL';
 
+export const whenChecker = (whenValue: string | undefined): boolean => {
+  if (whenValue === undefined) {
+    return true;
+  }
+  // 先把变量解析出来
+  const valExpArr = whenValue.split(/([+\-*\/()><!]|>=|<=|==)/g);
+  const valExp = valExpArr
+    .map((e) => {
+      if (e.match(/[a-zA-Z]/)) {
+        if (e.match(/true/) || e.match(/false/)) {
+          return e;
+        }
+        return getValueFromState(e).toString();
+      } else return e;
+    })
+    .reduce((pre, curr) => pre + curr, '');
+  return !!strIf(valExp);
+};
+
 /**
  * 语句执行器
  * 执行语句，同步场景状态，并根据情况立即执行下一句或者加入backlog
@@ -64,7 +83,7 @@ export const scriptExecutor = () => {
   variableInterpolation();
 
   // 判断这个脚本要不要执行
-  let runThis: number | boolean = true;
+  let runThis = true;
   let isHasWhenArg = false;
   let whenValue = '';
   currentScript.args.forEach((e) => {
@@ -75,19 +94,7 @@ export const scriptExecutor = () => {
   });
   // 如果语句有 when
   if (isHasWhenArg) {
-    // 先把变量解析出来
-    const valExpArr = whenValue.split(/([+\-*\/()><!]|>=|<=|==)/g);
-    const valExp = valExpArr
-      .map((e) => {
-        if (e.match(/[a-zA-Z]/)) {
-          if (e.match(/true/) || e.match(/false/)) {
-            return e;
-          }
-          return getValueFromState(e).toString();
-        } else return e;
-      })
-      .reduce((pre, curr) => pre + curr, '');
-    runThis = strIf(valExp);
+    runThis = whenChecker(whenValue);
   }
 
   // 执行语句
