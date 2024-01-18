@@ -14,9 +14,10 @@ import { SYSTEM_CONFIG } from '@/config';
 import { WebGAL } from '@/Core/WebGAL';
 
 export const whenChecker = (whenValue: string | undefined): boolean => {
-  if (whenValue == undefined) {
+  if (whenValue === undefined) {
     return true;
   }
+  // 先把变量解析出来
   const valExpArr = whenValue.split(/([+\-*\/()><!]|>=|<=|==)/g);
   const valExp = valExpArr
     .map((e) => {
@@ -28,9 +29,8 @@ export const whenChecker = (whenValue: string | undefined): boolean => {
       } else return e;
     })
     .reduce((pre, curr) => pre + curr, '');
-  return strIf(valExp) == true;
-}
-
+  return !!strIf(valExp);
+};
 
 /**
  * 语句执行器
@@ -83,7 +83,7 @@ export const scriptExecutor = () => {
   variableInterpolation();
 
   // 判断这个脚本要不要执行
-  let runThis: boolean = true;
+  let runThis = true;
   let isHasWhenArg = false;
   let whenValue = '';
   currentScript.args.forEach((e) => {
@@ -94,7 +94,6 @@ export const scriptExecutor = () => {
   });
   // 如果语句有 when
   if (isHasWhenArg) {
-    // 先把变量解析出来
     runThis = whenChecker(whenValue);
   }
 
