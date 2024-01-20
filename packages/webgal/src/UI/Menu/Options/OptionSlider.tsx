@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import useSoundEffect from '@/hooks/useSoundEffect';
 
 export const OptionSlider = (props: ISlider) => {
-  const { playSeEnter, playSeEnterOptionSlider } = useSoundEffect();
+  const { playSeEnter } = useSoundEffect();
   useEffect(() => {
     setTimeout(() => {
       const input = document.getElementById(props.uniqueID);
@@ -17,7 +17,7 @@ export const OptionSlider = (props: ISlider) => {
         id={props.uniqueID}
         type="range"
         onChange={props.onChange}
-        onFocus={playSeEnterOptionSlider}
+        onFocus={playSeEnter}
         onMouseEnter={playSeEnter}
       />
     </div>

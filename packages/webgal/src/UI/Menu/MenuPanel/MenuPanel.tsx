@@ -17,7 +17,7 @@ export const MenuPanel = () => {
   // 国际化
   const t = useTrans('menu.');
 
-  const { playSeClick, playSeClickCloseButton } = useSoundEffect();
+  const { playSeClick, playSeEnter } = useSoundEffect();
   const GUIState = useSelector((state: RootState) => state.GUI);
   const dispatch = useDispatch();
   // 设置Menu按钮的高亮
@@ -81,7 +81,7 @@ export const MenuPanel = () => {
       <MenuPanelButton
         iconName="title"
         clickFunc={() => {
-          playSeClickCloseButton();
+          playSeClick();
           backToTitle();
           dispatch(setVisibility({ component: 'showMenuPanel', visibility: false }));
         }}
@@ -91,7 +91,7 @@ export const MenuPanel = () => {
       <MenuPanelButton
         iconName="exit"
         clickFunc={() => {
-          playSeClickCloseButton();
+          playSeClick();
           dispatch(setVisibility({ component: 'showMenuPanel', visibility: false }));
         }}
         tagName={t('exit.title')}
