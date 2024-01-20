@@ -24,6 +24,7 @@ export const playVideo = (sentence: ISentence): IPerform => {
     blockingNextFlag = true;
   }
 
+  // eslint-disable-next-line react/no-deprecated
   ReactDOM.render(
     <div className={styles.videoContainer}>
       <video className={styles.fullScreen_video} id="playVideoElement" src={sentence.content} autoPlay={true} />
@@ -87,6 +88,7 @@ export const playVideo = (sentence: ISentence): IPerform => {
               if (bgmElement) {
                 vocalElement.volume = vocalVol.toString();
               }
+              // eslint-disable-next-line react/no-deprecated
               ReactDOM.render(<div />, document.getElementById('videoContainer'));
             },
             blockingNext: () => blockingNextFlag,

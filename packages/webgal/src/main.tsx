@@ -28,6 +28,7 @@ i18n
   })
   .then(() => console.log('WebGAL i18n Ready!'));
 
+// eslint-disable-next-line react/no-deprecated
 ReactDOM.render(
   <React.StrictMode>
     <Trans>
