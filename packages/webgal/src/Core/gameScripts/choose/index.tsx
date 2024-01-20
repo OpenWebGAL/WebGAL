@@ -58,7 +58,7 @@ export const choose = (sentence: ISentence): IPerform => {
   const chooseOptions = chooseOptionScripts.map((e) => ChooseOption.parse(e));
   const fontFamily = webgalStore.getState().userData.optionData.textboxFont;
   const font = fontFamily === textFont.song ? '"思源宋体", serif' : '"WebgalUI", serif';
-  const { playSeEnterChoose, playSeClickChoose } = useSEByWebgalStore();
+  const { playSeEnter, playSeClick } = useSEByWebgalStore();
   // 运行时计算JSX.Element[]
   const runtimeBuildList = (chooseListFull: ChooseOption[]) => {
     return chooseListFull
@@ -68,7 +68,7 @@ export const choose = (sentence: ISentence): IPerform => {
         const className = enable ? styles.Choose_item : styles.Choose_item_disabled;
         const onClick = enable
           ? () => {
-              playSeClickChoose();
+              playSeClick();
               if (e.jumpToScene) {
                 changeScene(e.jump, e.text);
               } else {
@@ -83,7 +83,7 @@ export const choose = (sentence: ISentence): IPerform => {
             style={{ fontFamily: font }}
             key={e.jump + i}
             onClick={onClick}
-            onMouseEnter={playSeEnterChoose}
+            onMouseEnter={playSeEnter}
           >
             {e.text}
           </div>

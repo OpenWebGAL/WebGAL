@@ -9,14 +9,7 @@ import useSoundEffect from '@/hooks/useSoundEffect';
 import { setGuiAsset } from '@/store/GUIReducer';
 
 export function ExtraBgm() {
-  const {
-    playSeClick,
-    playSeClickToNextBgmButton,
-    playSeClickToLastBgmButton,
-    playSeClickBeginBgmButton,
-    playSeClickStopBgmButton,
-    playSeEnterExtraBGMButton,
-  } = useSoundEffect();
+  const { playSeClick, playSeEnter } = useSoundEffect();
   // 检查当前正在播放的bgm是否在bgm列表内
   const currentBgmSrc = useSelector((state: RootState) => state.GUI.titleBgm);
   const extraState = useSelector((state: RootState) => state.userData.appreciationData);
@@ -54,7 +47,7 @@ export function ExtraBgm() {
     return (
       <div
         onClick={() => {
-          playSeClickToNextBgmButton();
+          playSeClick();
           currentPlayingBgmName.set(e.name);
           dispatch(setGuiAsset({ asset: 'titleBgm', value: e.url }));
         }}
@@ -63,7 +56,7 @@ export function ExtraBgm() {
         style={{
           animationDelay: `${i * 150}ms`,
         }}
-        onMouseEnter={playSeEnterExtraBGMButton}
+        onMouseEnter={playSeEnter}
       >
         {e.name}
       </div>
@@ -74,50 +67,50 @@ export function ExtraBgm() {
       <div className={styles.bgmPlayerMain}>
         <div
           onClick={() => {
-            playSeClickToLastBgmButton();
+            playSeClick();
             if (foundCurrentBgmIndex <= 0) {
               setBgmByIndex(bgmListLen - 1);
             } else {
               setBgmByIndex(foundCurrentBgmIndex - 1);
             }
           }}
-          onMouseEnter={playSeEnterExtraBGMButton}
+          onMouseEnter={playSeEnter}
           className={styles.bgmControlButton}
         >
           <GoStart theme="filled" size={iconSize} fill="#fff" strokeWidth={3} strokeLinejoin="miter" />
         </div>
         <div
           onClick={() => {
-            playSeClickBeginBgmButton();
+            playSeClick();
             const bgmControl: HTMLAudioElement = document.getElementById('currentBgm') as HTMLAudioElement;
             bgmControl?.play().then();
           }}
-          onMouseEnter={playSeEnterExtraBGMButton}
+          onMouseEnter={playSeEnter}
           className={styles.bgmControlButton}
         >
           <PlayOne theme="filled" size={iconSize} fill="#fff" strokeWidth={3} strokeLinejoin="miter" />
         </div>
         <div
           onClick={() => {
-            playSeClickToNextBgmButton();
+            playSeClick();
             if (foundCurrentBgmIndex >= bgmListLen - 1) {
               setBgmByIndex(0);
             } else {
               setBgmByIndex(foundCurrentBgmIndex + 1);
             }
           }}
-          onMouseEnter={playSeEnterExtraBGMButton}
+          onMouseEnter={playSeEnter}
           className={styles.bgmControlButton}
         >
           <GoEnd theme="filled" size={iconSize} fill="#fff" strokeWidth={3} strokeLinejoin="miter" />
         </div>
         <div
           onClick={() => {
-            playSeClickStopBgmButton();
+            playSeClick();
             const bgmControl: HTMLAudioElement = document.getElementById('currentBgm') as HTMLAudioElement;
             bgmControl.pause();
           }}
-          onMouseEnter={playSeEnterExtraBGMButton}
+          onMouseEnter={playSeEnter}
           className={styles.bgmControlButton}
         >
           <SquareSmall theme="filled" size={iconSize} fill="#fff" strokeWidth={3} strokeLinejoin="miter" />
@@ -128,7 +121,7 @@ export function ExtraBgm() {
             playSeClick();
             isShowBgmList.set(!isShowBgmList.value);
           }}
-          onMouseEnter={playSeEnterExtraBGMButton}
+          onMouseEnter={playSeEnter}
           className={styles.bgmControlButton}
           style={{ marginLeft: 'auto' }}
         >
