@@ -63,7 +63,7 @@ function isTextboxHidden(stageState: IStageState, GUIState: IGuiState) {
   return false;
 }
 
-var timeoutEventHandle: ReturnType<typeof setTimeout> | null = null;
+let timeoutEventHandle: ReturnType<typeof setTimeout> | null = null;
 
 /**
  * 检查并更新控制可见性
@@ -72,6 +72,7 @@ var timeoutEventHandle: ReturnType<typeof setTimeout> | null = null;
  * @param GUIState GUI状态
  * @param dispatch Redux dispatch函数
  */
+// eslint-disable-next-line max-params
 function updateControlsVisibility(
   event: React.MouseEvent,
   stageState: IStageState,

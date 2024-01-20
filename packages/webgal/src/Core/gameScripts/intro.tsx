@@ -154,6 +154,7 @@ export const intro = (sentence: ISentence): IPerform => {
       <div style={{ padding: '3em 4em 3em 4em' }}>{showIntro}</div>
     </div>
   );
+  // eslint-disable-next-line react/no-deprecated
   ReactDOM.render(intro, document.getElementById('introContainer'));
   const introContainer = document.getElementById('introContainer');
 
