@@ -1,0 +1,12 @@
+[
+  {
+    "shockwaveFilter": 0,
+    "alpha": 0,
+    "duration": 0
+  },
+  {
+    "shockwaveFilter": 3,
+    "alpha": 1,
+    "duration": 2000
+  }
+]

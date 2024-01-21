@@ -1,5 +1,5 @@
-bgm:ontama_piano1_youkoso.mp3 -volume=80 -enter=3000;
-unlockBgm:ontama_piano1_youkoso.mp3 -name=welcome;
+bgm:s_Title.mp3 -volume=80 -enter=3000;
+unlockBgm:s_Title.mp3 -name=welcome;
 intro:*Getting started| The image materials used in this demo game are AI-generated images;
 intro:*Credit| Created By ondoku3.com;
 changeBg:bg.png -next;
