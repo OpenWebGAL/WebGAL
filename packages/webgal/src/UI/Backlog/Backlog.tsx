@@ -14,8 +14,7 @@ import { WebGAL } from '@/Core/WebGAL';
 export const Backlog = () => {
   const t = useTrans('gaming.');
   // logger.info('Backlog render');
-  const { playSeClickBacklogJumpButton, playSeEnter, playSeClickCloseButton, playSeEnterCloseButton } =
-    useSoundEffect();
+  const { playSeEnter, playSeClick } = useSoundEffect();
   const GUIStore = useSelector((state: RootState) => state.GUI);
   const dispatch = useDispatch();
   const iconSize = '0.8em';
@@ -47,7 +46,7 @@ export const Backlog = () => {
             <div className={styles.backlog_item_button_list}>
               <div
                 onClick={(e) => {
-                  playSeClickBacklogJumpButton();
+                  playSeClick();
                   jumpFromBacklog(i);
                   e.preventDefault();
                   e.stopPropagation();
@@ -60,7 +59,7 @@ export const Backlog = () => {
               {backlogItem.currentStageState.vocal ? (
                 <div
                   onClick={() => {
-                    playSeClickBacklogJumpButton();
+                    playSeClick();
                     // 获取到播放 backlog 语音的元素
                     const backlog_audio_element: any = document.getElementById('backlog_audio_play_element_' + i);
                     if (backlog_audio_element) {
@@ -137,11 +136,11 @@ export const Backlog = () => {
             <CloseSmall
               className={styles.backlog_top_icon}
               onClick={() => {
-                playSeClickCloseButton();
+                playSeClick();
                 dispatch(setVisibility({ component: 'showBacklog', visibility: false }));
                 dispatch(setVisibility({ component: 'showTextBox', visibility: true }));
               }}
-              onMouseEnter={playSeEnterCloseButton}
+              onMouseEnter={playSeEnter}
               theme="outline"
               size="4em"
               fill="#ffffff"

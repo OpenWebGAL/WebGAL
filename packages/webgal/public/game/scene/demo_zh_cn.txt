@@ -1,10 +1,13 @@
 bgm:s_Title.mp3 -volume=80 -enter=3000;
 unlockBgm:s_Title.mp3 -name=雲を追いかけて;
 intro:你好|欢迎来到 {egine} 的世界;
+changeBg:WebGalEnter.png -next;
+setTransition: -target=bg-main -exit=shockwaveOut;
+:你好|欢迎来到 {egine} 的世界;
 changeBg:bg.png -next;
+setTransition: -target=bg-main -enter=shockwaveIn -next;
 unlockCg:bg.png -name=良い夜; // 解锁CG并赋予名称
 changeFigure:stand.png -left -enter=enter-from-left -next;
-:你好|欢迎来到 {egine} 的世界;
 miniAvatar:miniavatar.png;
 {heroine}:欢迎使用 {egine}！这是一款全新的网页端视觉小说引擎。 -v1.wav;
 changeFigure:stand2.png -right -next;

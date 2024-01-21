@@ -28,7 +28,7 @@ export default [
     input: `./src/index.ts`,
     output: [
       {
-        file: "./build/cjs/index.js",
+        file: "./build/cjs/index.cjs",
         exports: "named",
         format: "cjs",
         sourcemap: !isProd

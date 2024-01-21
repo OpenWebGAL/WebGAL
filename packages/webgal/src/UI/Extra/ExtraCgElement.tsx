@@ -12,7 +12,7 @@ interface IProps {
 
 export function ExtraCgElement(props: IProps) {
   const showFull = useValue(false);
-  const { playSeEnterExtraElement, playSeClick, playSeClickCGElement } = useSoundEffect();
+  const { playSeEnter, playSeClick } = useSoundEffect();
   return (
     <>
       {showFull.value && (
@@ -22,7 +22,7 @@ export function ExtraCgElement(props: IProps) {
             playSeClick();
           }}
           className={styles.showFullContainer}
-          onMouseEnter={playSeEnterExtraElement}
+          onMouseEnter={playSeEnter}
         >
           <div className={styles.showFullCgMain}>
             <div
@@ -40,9 +40,9 @@ export function ExtraCgElement(props: IProps) {
       <div
         onClick={() => {
           showFull.set(!showFull.value);
-          playSeClickCGElement();
+          playSeClick();
         }}
-        onMouseEnter={playSeEnterExtraElement}
+        onMouseEnter={playSeEnter}
         style={{
           // transform: `rotate(${deg}deg)`,
           animation: `cg_softIn_${props.transformDeg} 1.5s ease-out ${100 + props.index * 100}ms forwards `,

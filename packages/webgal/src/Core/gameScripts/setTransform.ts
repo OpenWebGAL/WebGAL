@@ -71,7 +71,7 @@ function getAnimationObject(animationName: string, target: string, duration: num
     const mappedEffects = effect.effects.map((effect) => {
       const newEffect = cloneDeep({ ...baseTransform, duration: 0 });
       Object.assign(newEffect, effect);
-      newEffect.duration = effect.duration / 1000;
+      newEffect.duration = effect.duration;
       return newEffect;
     });
     logger.debug('装载自定义动画', mappedEffects);

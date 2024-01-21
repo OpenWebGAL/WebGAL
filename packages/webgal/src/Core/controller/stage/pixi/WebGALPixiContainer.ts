@@ -5,15 +5,43 @@ import { GlitchFilter } from '@pixi/filter-glitch';
 import { RGBSplitFilter } from '@pixi/filter-rgb-split';
 import { GodrayFilter } from '@pixi/filter-godray';
 import * as PIXI from 'pixi.js';
+import {
+  getOrCreateShockwaveFilterImpl,
+  getShockwaveFilter,
+  setShockwaveFilter,
+} from '@/Core/controller/stage/pixi/filters/ShockwaveFilter';
+import {
+  getOrCreateRadiusAlphaFilterImpl,
+  getRadiusAlphaFilter,
+  setRadiusAlphaFilter,
+} from '@/Core/controller/stage/pixi/shaders/RadiusAlphaFilter';
 
 export class WebGALPixiContainer extends PIXI.Container {
+  public containerFilters = new Map<string, PIXI.Filter>();
   private baseX = 0;
   private baseY = 0;
 
-  private containerFilters = new Map<string, PIXI.Filter>();
-
   public constructor() {
     super();
+  }
+
+  public addFilter(filter: PIXI.Filter) {
+    if (this.filters) {
+      this.filters.push(filter);
+    } else {
+      this.filters = [filter];
+    }
+  }
+
+  public removeFilter(name: string) {
+    const filter = this.containerFilters.get(name);
+    if (filter) {
+      const index = (this?.filters ?? []).findIndex((e) => e === filter);
+      if (this.filters) {
+        this.filters.splice(index, 1);
+        this.containerFilters.delete(name);
+      }
+    }
   }
 
   public get blur(): number {
@@ -62,7 +90,7 @@ export class WebGALPixiContainer extends PIXI.Container {
     this.y = originalY;
   }
 
-  private getOrCreateBlurFilter() {
+  public getOrCreateBlurFilter() {
     const blurFilterFromMap = this.containerFilters.get('blur');
     if (blurFilterFromMap) {
       return blurFilterFromMap;
@@ -78,9 +106,9 @@ export class WebGALPixiContainer extends PIXI.Container {
 
   /**
    * old film filter
-   * @private
+   * @public
    */
-  private getOrCreateOldFilmFilter(createMode = true) {
+  public getOrCreateOldFilmFilter(createMode = true) {
     const blurFilterFromMap = this.containerFilters.get('oldFilm');
     if (blurFilterFromMap) {
       return blurFilterFromMap;
@@ -109,9 +137,9 @@ export class WebGALPixiContainer extends PIXI.Container {
 
   /**
    * dot film filter
-   * @private
+   * @public
    */
-  private getOrCreateDotFilter(createMode = true) {
+  public getOrCreateDotFilter(createMode = true) {
     const blurFilterFromMap = this.containerFilters.get('dotFilm');
     if (blurFilterFromMap) {
       return blurFilterFromMap;
@@ -140,9 +168,9 @@ export class WebGALPixiContainer extends PIXI.Container {
 
   /**
    * reflection film filter
-   * @private
+   * @public
    */
-  private getOrCreateReflectionFilter(createMode = true) {
+  public getOrCreateReflectionFilter(createMode = true) {
     const blurFilterFromMap = this.containerFilters.get('reflectionFilm');
     if (blurFilterFromMap) {
       return blurFilterFromMap;
@@ -171,9 +199,9 @@ export class WebGALPixiContainer extends PIXI.Container {
 
   /**
    * glitchFilter film filter
-   * @private
+   * @public
    */
-  private getOrCreateGlitchFilter(createMode = true) {
+  public getOrCreateGlitchFilter(createMode = true) {
     const blurFilterFromMap = this.containerFilters.get('glitchFilm');
     if (blurFilterFromMap) {
       return blurFilterFromMap;
@@ -202,9 +230,9 @@ export class WebGALPixiContainer extends PIXI.Container {
 
   /**
    * rgbSplitFilter film filter
-   * @private
+   * @public
    */
-  private getOrCreateRGBSplitFilter(createMode = true) {
+  public getOrCreateRGBSplitFilter(createMode = true) {
     const blurFilterFromMap = this.containerFilters.get('rgbFilm');
     if (blurFilterFromMap) {
       return blurFilterFromMap;
@@ -233,9 +261,9 @@ export class WebGALPixiContainer extends PIXI.Container {
 
   /**
    * godrayFilter film filter
-   * @private
+   * @public
    */
-  private getOrCreateGodrayFilter(createMode = true) {
+  public getOrCreateGodrayFilter(createMode = true) {
     const blurFilterFromMap = this.containerFilters.get('godrayFilm');
     if (blurFilterFromMap) {
       return blurFilterFromMap;
@@ -262,22 +290,31 @@ export class WebGALPixiContainer extends PIXI.Container {
     } else this.getOrCreateGodrayFilter();
   }
 
-  private addFilter(filter: PIXI.Filter) {
-    if (this.filters) {
-      this.filters.push(filter);
-    } else {
-      this.filters = [filter];
-    }
+  /**
+   * ShockwaveFilter
+   */
+
+  public getOrCreateShockwaveFilter(createMode = true) {
+    return getOrCreateShockwaveFilterImpl(this, createMode);
+  }
+  public get shockwaveFilter(): number {
+    return getShockwaveFilter(this);
+  }
+  public set shockwaveFilter(value: number) {
+    setShockwaveFilter(this, value);
   }
 
-  private removeFilter(name: string) {
-    const filter = this.containerFilters.get(name);
-    if (filter) {
-      const index = (this?.filters ?? []).findIndex((e) => e === filter);
-      if (this.filters) {
-        this.filters.splice(index, 1);
-        this.containerFilters.delete(name);
-      }
-    }
+  /**
+   * RadiusAlphaFilter
+   */
+
+  public getOrCreateRadiusAlphaFilter(createMode = true) {
+    return getOrCreateRadiusAlphaFilterImpl(this, createMode);
+  }
+  public get radiusAlphaFilter(): number {
+    return getRadiusAlphaFilter(this);
+  }
+  public set radiusAlphaFilter(value: number) {
+    setRadiusAlphaFilter(this, value);
   }
 }

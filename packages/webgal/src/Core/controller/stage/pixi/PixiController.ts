@@ -426,9 +426,8 @@ export default class PixiStage {
     /**
      * 加载器部分
      */
-    const resourses = Object.keys(loader.resources);
     this.cacheGC();
-    if (!resourses.includes(url)) {
+    if (!loader.resources?.[url]?.texture) {
       this.loadAsset(url, setup);
     } else {
       // 复用
@@ -504,9 +503,8 @@ export default class PixiStage {
     /**
      * 加载器部分
      */
-    const resourses = Object.keys(loader.resources);
     this.cacheGC();
-    if (!resourses.includes(url)) {
+    if (!loader.resources?.[url]?.texture) {
       this.loadAsset(url, setup);
     } else {
       // 复用
