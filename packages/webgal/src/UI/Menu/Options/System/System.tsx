@@ -15,12 +15,14 @@ import languages, { language } from '@/config/language';
 import { useState } from 'react';
 import About from '@/UI/Menu/Options/System/About';
 import { WebGAL } from '@/Core/WebGAL';
+import useSoundEffect from '@/hooks/useSoundEffect';
 
 export function System() {
   const userDataState = useSelector((state: RootState) => state.userData);
   const dispatch = useDispatch();
   const setLanguage = useLanguage();
   const t = useTrans('menu.options.pages.system.options.');
+  const { playSeDialogOpen } = useSoundEffect();
 
   function exportSaves() {
     setStorage();
@@ -61,6 +63,7 @@ export function System() {
       const saves = evR!.target!.result as string;
       try {
         const saveAsObj = JSON.parse(saves);
+        playSeDialogOpen();
         showGlogalDialog({
           title: t('gameSave.dialogs.import.title'),
           leftText: t('$common.yes'),
@@ -124,6 +127,7 @@ export function System() {
               )}
               functionList={[
                 () => {
+                  playSeDialogOpen();
                   showGlogalDialog({
                     title: t('resetData.dialogs.clearGameSave'),
                     leftText: t('$common.yes'),
@@ -136,6 +140,7 @@ export function System() {
                   });
                 },
                 () => {
+                  playSeDialogOpen();
                   showGlogalDialog({
                     title: t('resetData.dialogs.resetSettings'),
                     leftText: t('$common.yes'),
@@ -148,6 +153,7 @@ export function System() {
                   });
                 },
                 () => {
+                  playSeDialogOpen();
                   showGlogalDialog({
                     title: t('resetData.dialogs.clearAll'),
                     leftText: t('$common.yes'),

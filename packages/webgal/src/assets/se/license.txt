@@ -1,55 +1,13 @@
-Book_Page_Flip.mp3
-『书页翻页』 CC-BY许可 作者：菲利普湾 来源：https://www.ear0.com/sound/17890 (信息来自淘声网)
+mouse-enter.mp3
+协议：CC0 作者：deadsillyrabbit 来源：https://www.aigei.com
 
-s-cheremisinov-Click-03.mp3
-『s-cheremisinov Free Sound Pack  » Click 03』 CC0许可 作者：s-cheremisinov 来源：https://freesound.org/s/401103/ (信息来自淘声网)
+dialog.mp3
+协议：CC0 作者：wobbleboxx 来源：https://www.aigei.com
 
-taoshen-01.mp3
-『波的一声』 CC-BY许可 作者：IUiuiuiu 来源：https://www.ear0.com/sound/38724 (信息来自淘声网)
-
-mouseEnter.mp3
-button-16.mp3
-button-20.mp3
-button-50.mp3
-aigei-se-01.mp3
-aigei-se-02.mp3
-aigei-se-03.mp3
-zhanZhang-y1970.mp3
-no license.
-
-click_soft_02.mp3
-Attribution 4.0 International (CC BY 4.0)
-
-maou_se_system22.mp3
-『音楽：魔王魂』https://maou.audio/se_system22/
-
-maou_se_system35.mp3
-『音楽：魔王魂』https://maou.audio/se_system35/
-
-maou_se_system39.mp3
-『音楽：魔王魂』https://maou.audio/se_system39/
-
-maou_se_system40.mp3
-『音楽：魔王魂』https://maou.audio/se_system40/
-
-maou_se_system41.mp3
-『音楽：魔王魂』https://maou.audio/se_system41/
-
-maou_se_system48.mp3
-『音楽：魔王魂』https://maou.audio/se_system48/
-
-Motion-Pop03-4.mp3
-「OtoLogic」
+click.mp3
+协议：CC0 作者：OwlishMedia 来源：https://www.aigei.com
 
 page-flip-1.mp3
 switch-1.wav
 This work has been identified as being free of known restrictions under copyright law, including all related and neighboring rights.
-You can copy, modify, distribute and perform the work, even for commercial purposes, all without asking permission. 
-
-pause.mp3
-CC0 1.0 Universal (CC0 1.0)
-Public Domain Dedication
-
-pausestart.mp3
-CC0 1.0 Universal (CC0 1.0)
-Public Domain Dedication
+You can copy, modify, distribute and perform the work, even for commercial purposes, all without asking permission.

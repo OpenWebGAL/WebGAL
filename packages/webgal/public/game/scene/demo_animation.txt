@@ -1,5 +1,5 @@
-bgm:ontama_piano1_youkoso.mp3 -volume=80 -enter=3000;
-unlockBgm:ontama_piano1_youkoso.mp3 -name=ようこそ;
+bgm:s_Title.mp3 -volume=80 -enter=3000;
+unlockBgm:s_Title.mp3 -name=ようこそ;
 intro:■初めに| このデモゲームで使用している画像素材は、AI生成画像です;
 intro:■クレジット| 「VOICEVOX:小夜/SAYO」;
 intro:まばたき、口パクのアニメーションテストです;

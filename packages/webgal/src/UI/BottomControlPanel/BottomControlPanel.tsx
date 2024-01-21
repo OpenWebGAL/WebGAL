@@ -33,7 +33,7 @@ export const BottomControlPanel = () => {
   const t = useTrans('gaming.');
   const strokeWidth = 2.5;
   const { i18n } = useTranslation();
-  const { playSeEnter, playSeClickBottomControlPanelButton, playSeClickCloseButton } = useSoundEffect();
+  const { playSeEnter, playSeClick, playSeDialogOpen } = useSoundEffect();
   const lang = i18n.language;
   const isFr = lang === 'fr';
   let size = 42;
@@ -84,7 +84,7 @@ export const BottomControlPanel = () => {
               style={{ fontSize }}
               onClick={() => {
                 setComponentVisibility('showTextBox', false);
-                playSeClickBottomControlPanelButton();
+                playSeClick();
               }}
               onMouseEnter={playSeEnter}
             >
@@ -104,7 +104,7 @@ export const BottomControlPanel = () => {
               style={{ fontSize }}
               onClick={() => {
                 setComponentVisibility('showTextBox', true);
-                playSeClickBottomControlPanelButton();
+                playSeClick();
               }}
               onMouseEnter={playSeEnter}
             >
@@ -124,7 +124,7 @@ export const BottomControlPanel = () => {
             onClick={() => {
               setComponentVisibility('showBacklog', true);
               setComponentVisibility('showTextBox', false);
-              playSeClickBottomControlPanelButton();
+              playSeClick();
             }}
             onMouseEnter={playSeEnter}
           >
@@ -147,7 +147,7 @@ export const BottomControlPanel = () => {
                 VocalControl.pause();
                 VocalControl?.play();
               }
-              playSeClickBottomControlPanelButton();
+              playSeClick();
             }}
             onMouseEnter={playSeEnter}
           >
@@ -166,7 +166,7 @@ export const BottomControlPanel = () => {
             style={{ fontSize }}
             onClick={() => {
               switchAuto();
-              playSeClickBottomControlPanelButton();
+              playSeClick();
             }}
             onMouseEnter={playSeEnter}
           >
@@ -179,7 +179,7 @@ export const BottomControlPanel = () => {
             style={{ fontSize }}
             onClick={() => {
               switchFast();
-              playSeClickBottomControlPanelButton();
+              playSeClick();
             }}
             onMouseEnter={playSeEnter}
           >
@@ -197,7 +197,7 @@ export const BottomControlPanel = () => {
             style={{ fontSize }}
             onClick={() => {
               saveGame(0);
-              playSeClickBottomControlPanelButton();
+              playSeClick();
             }}
             onMouseEnter={playSeEnter}
           >
@@ -216,7 +216,7 @@ export const BottomControlPanel = () => {
             style={{ fontSize }}
             onClick={() => {
               loadGame(0);
-              playSeClickBottomControlPanelButton();
+              playSeClick();
             }}
             onMouseEnter={playSeEnter}
           >
@@ -230,7 +230,7 @@ export const BottomControlPanel = () => {
             onClick={() => {
               setMenuPanel(MenuPanelTag.Save);
               setComponentVisibility('showMenuPanel', true);
-              playSeClickBottomControlPanelButton();
+              playSeClick();
             }}
             onMouseEnter={playSeEnter}
           >
@@ -243,7 +243,7 @@ export const BottomControlPanel = () => {
             onClick={() => {
               setMenuPanel(MenuPanelTag.Load);
               setComponentVisibility('showMenuPanel', true);
-              playSeClickBottomControlPanelButton();
+              playSeClick();
             }}
             onMouseEnter={playSeEnter}
           >
@@ -262,7 +262,7 @@ export const BottomControlPanel = () => {
             onClick={() => {
               setMenuPanel(MenuPanelTag.Option);
               setComponentVisibility('showMenuPanel', true);
-              playSeClickBottomControlPanelButton();
+              playSeClick();
             }}
             onMouseEnter={playSeEnter}
           >
@@ -279,6 +279,7 @@ export const BottomControlPanel = () => {
             className={styles.singleButton}
             style={{ fontSize }}
             onClick={() => {
+              playSeDialogOpen();
               showGlogalDialog({
                 title: t('buttons.titleTips'),
                 leftText: t('$common.yes'),
@@ -288,7 +289,6 @@ export const BottomControlPanel = () => {
                 },
                 rightFunc: () => {},
               });
-              playSeClickCloseButton();
             }}
             onMouseEnter={playSeEnter}
           >
@@ -300,7 +300,7 @@ export const BottomControlPanel = () => {
             style={{ fontSize }}
             onClick={() => {
               switchControls();
-              playSeClickBottomControlPanelButton();
+              playSeClick();
             }}
             onMouseEnter={playSeEnter}
           >

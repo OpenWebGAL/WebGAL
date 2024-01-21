@@ -8,19 +8,21 @@
 
 #### 新功能
 
-文本框可以调整透明度
+可以根据变量来控制选择肢显隐和是否可以点击
 
-支持长效（全局）变量
+添加水波纹滤镜
+
+`intro` 可以设置是否在结束时关闭
+
+更换系统音效，使其更加通用
 
 #### 修复
 
-Live2D 口型同步的异常和使用 Live2D 造成的内存泄露问题
+优化控制按钮自动消失的逻辑
 
-Live2D 表情设置问题
+修复相同文件名图像同时加载时冲突的异常
 
-文本框角色名称空格不显示问题
-
-鉴赏文件重复解锁问题
+更换动画库
 
 <!-- English Translation -->
 ## Release Notes
@@ -33,19 +35,21 @@ Live2D 表情设置问题
 
 #### New Features
 
-Textbox can adjust transparency
+Choices can be shown/hidden and clickable based on variables
 
-Support persistent (global) variables
+Added ripple filter
+
+`intro` can be set to not close after it finishes
+
+Replaced system sound effects to be more versatile
 
 #### Fixes
 
-Live2D lip-sync anomaly and memory leak caused by using Live2D
+Optimized the logic for auto-hiding control buttons
 
-Live2D expression setting issue
+Fixed an exception when images with the same file name are loaded at the same time
 
-Textbox character name space not displayed issue
-
-Gallery file repeatedly unlocked issue
+Changed the animation library
 
 
 <!-- Japanese Translation -->
@@ -59,19 +63,21 @@ Gallery file repeatedly unlocked issue
 
 #### 新機能
 
-テキストボックスの透明度を調整可能
+変数によって選択肢の表示・非表示やクリック可能かどうかを制御可能に
 
-永続変数（グローバル変数）に対応
+水波紋フィルターを追加
+
+introは終了時に閉じるかどうかを設定可能に
+
+システム効果音を変更し、より汎用的に
 
 #### 修正
 
-Live2D の口パクの異常と Live2D 使用時のメモリリーク問題
+コントロールボタンの自動消去のロジックを最適化
 
-Live2D の表情設定の問題
+同じファイル名の画像が同時にロードされたときの競合の異常を修正
 
-テキストボックスの役職名に空白が表示されない問題
-
-鑑賞ファイルの重複アンロックの問題
+アニメーションライブラリを変更
 
 
 <!-- French Translation -->
@@ -85,17 +91,19 @@ Live2D の表情設定の問題
 
 #### Nouvelles fonctionnalités
 
-Les zones de texte peuvent maintenant avoir une transparence réglable
+Possibilité de contrôler l'affichage et la sélection des choix en fonction des variables
 
-Support des variables persistantes (globales)
+Ajout d'un filtre d'ondulation
+
+`intro` peut être configuré pour se fermer ou non à la fin
+
+Remplacement des sons système pour les rendre plus universels
 
 #### Corrections
 
-Anomalie de synchronisation labiale Live2D et problème de fuite de mémoire causé par l'utilisation de Live2D
+Optimisation de la logique de disparition automatique des boutons de contrôle
 
-Problème de configuration des expressions Live2D
+Correction de l'exception de conflit lors du chargement simultané d'images portant le même nom
 
-Problème d'espace dans le nom du personnage de la zone de texte
-
-Problème de déverrouillage répété des fichiers d'appréciation
+Remplacement de la bibliothèque d'animations
 

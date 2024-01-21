@@ -1,7 +1,7 @@
 /**
  * You can config the languages display in this file.
  * If you want close someone, please add "//" forward that line.
- * If you want add language, please add the language English abbreviation name into language and languages,
+ * If you want to add language, please add the language English abbreviation name into language and languages,
  * also you need to code the name of it show.
  */
 

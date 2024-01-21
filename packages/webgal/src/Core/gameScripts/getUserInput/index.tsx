@@ -26,20 +26,20 @@ export const getUserInput = (sentence: ISentence): IPerform => {
   const buttonText = (buttonTextFromArgs === 0 ? 'OK' : buttonTextFromArgs) ?? 'OK';
   const fontFamily = webgalStore.getState().userData.optionData.textboxFont;
   const font = fontFamily === textFont.song ? '"思源宋体", serif' : '"WebgalUI", serif';
-  const { playSeEnterChoose, playSeClickChoose } = useSEByWebgalStore();
+  const { playSeEnter, playSeClick } = useSEByWebgalStore();
   const chooseElements = (
     <div style={{ fontFamily: font }} className={styles.glabalDialog_container}>
       <div className={styles.glabalDialog_container_inner}>
         <div className={styles.title}>{title}</div>
         <input id="user-input" className={styles.Choose_item} />
         <div
-          onMouseEnter={playSeEnterChoose}
+          onMouseEnter={playSeEnter}
           onClick={() => {
             const userInput: HTMLInputElement = document.getElementById('user-input') as HTMLInputElement;
             if (userInput) {
               webgalStore.dispatch(setStageVar({ key: varKey, value: userInput?.value ?? '' }));
             }
-            playSeClickChoose();
+            playSeClick();
             WebGAL.gameplay.performController.unmountPerform('userInput');
             nextSentence();
           }}
@@ -50,6 +50,7 @@ export const getUserInput = (sentence: ISentence): IPerform => {
       </div>
     </div>
   );
+  // eslint-disable-next-line react/no-deprecated
   ReactDOM.render(
     <div className={styles.Choose_Main}>{chooseElements}</div>,
     document.getElementById('chooseContainer'),
@@ -59,6 +60,7 @@ export const getUserInput = (sentence: ISentence): IPerform => {
     duration: 1000 * 60 * 60 * 24,
     isHoldOn: false,
     stopFunction: () => {
+      // eslint-disable-next-line react/no-deprecated
       ReactDOM.render(<div />, document.getElementById('chooseContainer'));
     },
     blockingNext: () => true,

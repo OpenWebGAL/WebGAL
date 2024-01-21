@@ -1,6 +1,6 @@
 {
   "name": "webgal-parser",
-  "version": "4.4.8",
+  "version": "4.4.9-fix1",
   "description": "WebGAL script parser",
   "scripts": {
     "test": "vitest",
@@ -11,7 +11,7 @@
   },
   "types": "./build/types/index.d.ts",
   "module": "./build/es/index.js",
-  "main": "./build/cjs/index.js",
+  "main": "./build/cjs/index.cjs",
   "author": "Mahiru <Mahiru_@outlook.com>",
   "license": "MPL-2.0",
   "dependencies": {
