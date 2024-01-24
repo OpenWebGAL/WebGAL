@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState, webgalStore } from '@/store/store';
 import { setVisibility } from '@/store/GUIReducer';
 import { logger } from '@/Core/util/logger';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { ReactNode, useEffect, useMemo, useRef, useState } from 'react';
 import useTrans from '@/hooks/useTrans';
 import { compileSentence, splitChars } from '@/Stage/TextBox/TextBox';
 import useSoundEffect from '@/hooks/useSoundEffect';
@@ -27,9 +27,9 @@ export const Backlog = () => {
     // logger.info('backlogList render');
     for (let i = 0; i < WebGAL.backlogManager.getBacklog().length; i++) {
       const backlogItem = WebGAL.backlogManager.getBacklog()[i];
-      // const showTextArray = splitChars(backlogItem.currentStageState.showText.replaceAll(/[\[\]]/g, ''));
       const showTextArray = compileSentence(backlogItem.currentStageState.showText, 3, true);
-      const showTextElementList = showTextArray.map((e, index) => {
+      const showTextArrayReduced = mergeStringsAndKeepObjects(showTextArray);
+      const showTextElementList = showTextArrayReduced.map((e, index) => {
         if (e === '<br />') {
           return <br key={`br${index}`} />;
         } else {
@@ -165,3 +165,29 @@ export const Backlog = () => {
     </>
   );
 };
+
+function mergeStringsAndKeepObjects(arr: ReactNode[]) {
+  let result = [];
+  let currentString = '';
+
+  // eslint-disable-next-line @typescript-eslint/prefer-for-of
+  for (let i = 0; i < arr.length; i++) {
+    const currentItem = arr[i];
+
+    if (typeof currentItem === 'string') {
+      currentString += currentItem;
+    } else {
+      if (currentString !== '') {
+        result.push(currentString);
+        currentString = '';
+      }
+      result.push(currentItem);
+    }
+  }
+
+  if (currentString !== '') {
+    result.push(currentString);
+  }
+
+  return result;
+}
