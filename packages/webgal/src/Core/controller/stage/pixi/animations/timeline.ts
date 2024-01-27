@@ -3,6 +3,8 @@ import { animate } from 'popmotion';
 import { WebGAL } from '@/Core/WebGAL';
 import { webgalStore } from '@/store/store';
 import { stageActions } from '@/store/stageReducer';
+import omitBy from 'lodash/omitBy';
+import isUndefined from 'lodash/isUndefined';
 
 /**
  * 动画创建模板
@@ -40,10 +42,10 @@ export function generateTimelineObj(
       onUpdate: (updateValue) => {
         if (container) {
           const { scaleX, scaleY, ...val } = updateValue;
-          Object.assign(container, val);
+          Object.assign(container, omitBy(val, isUndefined));
           // 因为 popmotion 不能用嵌套，scale 要手动设置
-          container.scale.x = scaleX;
-          container.scale.y = scaleY;
+          if (!isUndefined(scaleX)) container.scale.x = scaleX;
+          if (!isUndefined(scaleY)) container.scale.y = scaleY;
         }
       },
     });
@@ -58,8 +60,17 @@ export function generateTimelineObj(
   function setStartState() {
     if (target?.pixiContainer) {
       // 不能赋值到 position，因为 x 和 y 被 WebGALPixiContainer 代理，而 position 属性没有代理
-      const { position, ...state } = getStartStateEffect();
-      Object.assign(target?.pixiContainer, { x: position.x, y: position.y, ...state });
+      const { position, scale, ...state } = getStartStateEffect();
+      const assignValue = omitBy({ x: position.x, y: position.y, ...state }, isUndefined);
+      Object.assign(target?.pixiContainer, assignValue);
+      if (target?.pixiContainer) {
+        if (!isUndefined(scale.x)) {
+          target.pixiContainer.scale.x = scale.x;
+        }
+        if (!isUndefined(scale?.y)) {
+          target.pixiContainer.scale.y = scale.y;
+        }
+      }
     }
   }
 
@@ -71,8 +82,18 @@ export function generateTimelineObj(
     animateInstance = null;
     if (target?.pixiContainer) {
       // 不能赋值到 position，因为 x 和 y 被 WebGALPixiContainer 代理，而 position 属性没有代理
-      const { position, ...state } = getEndStateEffect();
-      Object.assign(target?.pixiContainer, { x: position.x, y: position.y, ...state });
+      // 不能赋值到 position，因为 x 和 y 被 WebGALPixiContainer 代理，而 position 属性没有代理
+      const { position, scale, ...state } = getEndStateEffect();
+      const assignValue = omitBy({ x: position.x, y: position.y, ...state }, isUndefined);
+      Object.assign(target?.pixiContainer, assignValue);
+      if (target?.pixiContainer) {
+        if (!isUndefined(scale.x)) {
+          target.pixiContainer.scale.x = scale.x;
+        }
+        if (!isUndefined(scale?.y)) {
+          target.pixiContainer.scale.y = scale.y;
+        }
+      }
     }
   }
 
