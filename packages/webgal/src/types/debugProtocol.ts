@@ -7,6 +7,8 @@ export enum DebugCommand {
   SYNCFC,
   // 同步自编辑器
   SYNCFE,
+  // 执行指令
+  EXE_COMMAND,
 }
 
 export interface IDebugMessage {
@@ -15,5 +17,6 @@ export interface IDebugMessage {
     sentence: number;
     scene: string;
   };
+  message: string;
   stageSyncMsg: IStageState;
 }
