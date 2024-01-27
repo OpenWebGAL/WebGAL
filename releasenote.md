@@ -8,21 +8,15 @@
 
 #### 新功能
 
-可以根据变量来控制选择肢显隐和是否可以点击
-
-添加水波纹滤镜
-
-`intro` 可以设置是否在结束时关闭
-
-更换系统音效，使其更加通用
+从编辑器接受指令
 
 #### 修复
 
-优化控制按钮自动消失的逻辑
+小幅改善 iOS 设备的崩溃状况
 
-修复相同文件名图像同时加载时冲突的异常
+优化 Backlog 性能
 
-更换动画库
+修复动画模块异常
 
 <!-- English Translation -->
 ## Release Notes
@@ -35,21 +29,15 @@
 
 #### New Features
 
-Choices can be shown/hidden and clickable based on variables
-
-Added ripple filter
-
-`intro` can be set to not close after it finishes
-
-Replaced system sound effects to be more versatile
+Accept commands from editor
 
 #### Fixes
 
-Optimized the logic for auto-hiding control buttons
+Slightly improve crash situation on iOS devices
 
-Fixed an exception when images with the same file name are loaded at the same time
+Optimize Backlog performance
 
-Changed the animation library
+Fix abnormal animation module
 
 
 <!-- Japanese Translation -->
@@ -63,21 +51,15 @@ Changed the animation library
 
 #### 新機能
 
-変数によって選択肢の表示・非表示やクリック可能かどうかを制御可能に
-
-水波紋フィルターを追加
-
-introは終了時に閉じるかどうかを設定可能に
-
-システム効果音を変更し、より汎用的に
+エディタからの指示を受け付ける
 
 #### 修正
 
-コントロールボタンの自動消去のロジックを最適化
+iOS デバイスでのクラッシュを若干改善
 
-同じファイル名の画像が同時にロードされたときの競合の異常を修正
+Backlog のパフォーマンスを最適化
 
-アニメーションライブラリを変更
+アニメーションモジュールの異常を修正
 
 
 <!-- French Translation -->
@@ -91,19 +73,13 @@ introは終了時に閉じるかどうかを設定可能に
 
 #### Nouvelles fonctionnalités
 
-Possibilité de contrôler l'affichage et la sélection des choix en fonction des variables
-
-Ajout d'un filtre d'ondulation
-
-`intro` peut être configuré pour se fermer ou non à la fin
-
-Remplacement des sons système pour les rendre plus universels
+Recevoir des instructions de l'éditeur
 
 #### Corrections
 
-Optimisation de la logique de disparition automatique des boutons de contrôle
+Amélioration mineure des plantages sur les appareils iOS
 
-Correction de l'exception de conflit lors du chargement simultané d'images portant le même nom
+Optimisation des performances de Backlog
 
-Remplacement de la bibliothèque d'animations
+Correction d'un bug dans le module d'animation
 
