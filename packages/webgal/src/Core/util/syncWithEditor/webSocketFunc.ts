@@ -3,6 +3,8 @@ import { syncWithOrigine } from '@/Core/util/syncWithEditor/syncWithOrigine';
 import { DebugCommand, IDebugMessage } from '@/types/debugProtocol';
 import { WebGAL } from '@/Core/WebGAL';
 import { webgalStore } from '@/store/store';
+import { WebgalParser } from '@/Core/parser/sceneParser';
+import { runScript } from '@/Core/controller/gamePlay/runScript';
 
 export const webSocketFunc = () => {
   const loc: string = window.location.hostname;
@@ -26,6 +28,7 @@ export const webSocketFunc = () => {
           sentence: WebGAL.sceneManager.sceneData.currentSentenceId,
         },
         stageSyncMsg: webgalStore.getState().stage,
+        message: 'sync',
       };
       socket.send(JSON.stringify(message));
       // logger.debug('传送信息', message);
@@ -39,6 +42,12 @@ export const webSocketFunc = () => {
     const message: IDebugMessage = JSON.parse(str);
     if (message.command === DebugCommand.JUMP) {
       syncWithOrigine(message.sceneMsg.scene, message.sceneMsg.sentence);
+    }
+    if (message.command === DebugCommand.EXE_COMMAND) {
+      const command = message.message;
+      const scene = WebgalParser.parse(command, 'temp.txt', 'temp.txt');
+      const sentence = scene.sentenceList[0];
+      runScript(sentence);
     }
   };
   socket.onerror = (e) => {
