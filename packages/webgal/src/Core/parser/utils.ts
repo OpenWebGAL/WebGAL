@@ -17,7 +17,11 @@ export interface IConfigInterface extends ScriptConfig {
   scriptString: string;
 }
 
-export function ScriptConfig(scriptType: commandType, scriptFunction: ScriptFunction, config?: { next?: boolean }) {
+export function ScriptConfig(
+  scriptType: commandType,
+  scriptFunction: ScriptFunction,
+  config?: Omit<ScriptConfig, 'scriptType' | 'scriptFunction'>,
+): ScriptConfig {
   return { scriptType, scriptFunction, ...config };
 }
 
