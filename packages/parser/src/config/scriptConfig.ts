@@ -45,7 +45,5 @@ export const ADD_NEXT_ARG_LIST = [
   commandType.playEffect,
 ];
 
-export type ConfigMap = Map<
-  string,
-  { scriptString: string; scriptType: commandType }
->;
+export type ConfigMap = Map<string, ConfigItem>;
+export type ConfigItem = { scriptString: string; scriptType: commandType };
