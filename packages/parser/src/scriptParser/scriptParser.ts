@@ -1,9 +1,15 @@
-import { arg, commandType, IAsset, ISentence, parsedCommand } from "../interface/sceneInterface";
-import { commandParser } from "./commandParser";
-import { argsParser } from "./argsParser";
-import { contentParser } from "./contentParser";
-import { assetsScanner } from "./assetsScanner";
-import { subSceneScanner } from "./subSceneScanner";
+import {
+  arg,
+  commandType,
+  IAsset,
+  ISentence,
+  parsedCommand,
+} from '../interface/sceneInterface';
+import { commandParser } from './commandParser';
+import { argsParser } from './argsParser';
+import { contentParser } from './contentParser';
+import { assetsScanner } from './assetsScanner';
+import { subSceneScanner } from './subSceneScanner';
 
 /**
  * 语句解析器
@@ -12,7 +18,12 @@ import { subSceneScanner } from "./subSceneScanner";
  * @param ADD_NEXT_ARG_LIST
  * @param SCRIPT_CONFIG
  */
-export const scriptParser = (sentenceRaw: string, assetSetter: any, ADD_NEXT_ARG_LIST: any, SCRIPT_CONFIG: any): ISentence => {
+export const scriptParser = (
+  sentenceRaw: string,
+  assetSetter: any,
+  ADD_NEXT_ARG_LIST: any,
+  SCRIPT_CONFIG: any[],
+): ISentence => {
   let command: commandType; // 默认为对话
   let content: string; // 语句内容
   let subScene: Array<string>; // 语句携带的子场景（可能没有）
@@ -24,16 +35,16 @@ export const scriptParser = (sentenceRaw: string, assetSetter: any, ADD_NEXT_ARG
   // 正式开始解析
 
   // 去分号，前面已做，这里不再需要
-  let newSentenceRaw = sentenceRaw.split(";")[0];
-  if (newSentenceRaw === "") {
+  let newSentenceRaw = sentenceRaw.split(';')[0];
+  if (newSentenceRaw === '') {
     // 注释提前返回
     return {
       command: commandType.comment, // 语句类型
-      commandRaw: "comment", // 命令原始内容，方便调试
-      content: sentenceRaw.split(";")[1] ?? "", // 语句内容
-      args: [{ key: "next", value: true }], // 参数列表
+      commandRaw: 'comment', // 命令原始内容，方便调试
+      content: sentenceRaw.split(';')[1] ?? '', // 语句内容
+      args: [{ key: 'next', value: true }], // 参数列表
       sentenceAssets: [], // 语句携带的资源列表
-      subScene: [] // 语句携带的子场景
+      subScene: [], // 语句携带的子场景
     };
   }
   // 截取命令
@@ -48,7 +59,7 @@ export const scriptParser = (sentenceRaw: string, assetSetter: any, ADD_NEXT_ARG
     command = parsedCommand.type;
     for (const e of parsedCommand.additionalArgs) {
       // 由于是连续对话，所以我们去除 speaker 参数。
-      if (command === commandType.say && e.key === "speaker") {
+      if (command === commandType.say && e.key === 'speaker') {
         continue;
       }
       args.push(e);
@@ -56,7 +67,10 @@ export const scriptParser = (sentenceRaw: string, assetSetter: any, ADD_NEXT_ARG
   } else {
     commandRaw = newSentenceRaw.substring(0, getCommandResult.index);
     // 划分命令区域和content区域
-    newSentenceRaw = newSentenceRaw.substring(getCommandResult.index + 1, newSentenceRaw.length);
+    newSentenceRaw = newSentenceRaw.substring(
+      getCommandResult.index + 1,
+      newSentenceRaw.length,
+    );
     parsedCommand = commandParser(commandRaw, ADD_NEXT_ARG_LIST, SCRIPT_CONFIG);
     command = parsedCommand.type;
     for (const e of parsedCommand.additionalArgs) {
@@ -67,7 +81,10 @@ export const scriptParser = (sentenceRaw: string, assetSetter: any, ADD_NEXT_ARG
   const getArgsResult = / -/.exec(newSentenceRaw);
   // 获取到参数
   if (getArgsResult) {
-    const argsRaw = newSentenceRaw.substring(getArgsResult.index, sentenceRaw.length);
+    const argsRaw = newSentenceRaw.substring(
+      getArgsResult.index,
+      sentenceRaw.length,
+    );
     newSentenceRaw = newSentenceRaw.substring(0, getArgsResult.index);
     for (const e of argsParser(argsRaw, assetSetter)) {
       args.push(e);
@@ -82,6 +99,6 @@ export const scriptParser = (sentenceRaw: string, assetSetter: any, ADD_NEXT_ARG
     content: content, // 语句内容
     args: args, // 参数列表
     sentenceAssets: sentenceAssets, // 语句携带的资源列表
-    subScene: subScene // 语句携带的子场景
+    subScene: subScene, // 语句携带的子场景
   };
 };

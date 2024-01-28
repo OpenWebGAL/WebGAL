@@ -1,4 +1,4 @@
-import { commandType } from "../interface/sceneInterface";
+import { commandType } from '../interface/sceneInterface';
 
 export const SCRIPT_CONFIG = [
   { scriptString: 'intro', scriptType: commandType.intro },
@@ -6,7 +6,7 @@ export const SCRIPT_CONFIG = [
   { scriptString: 'changeFigure', scriptType: commandType.changeFigure },
   { scriptString: 'miniAvatar', scriptType: commandType.miniAvatar },
   { scriptString: 'changeScene', scriptType: commandType.changeScene },
-  { scriptString: 'choose', scriptType: commandType.choose},
+  { scriptString: 'choose', scriptType: commandType.choose },
   { scriptString: 'end', scriptType: commandType.end },
   { scriptString: 'bgm', scriptType: commandType.bgm },
   { scriptString: 'playVideo', scriptType: commandType.video },
@@ -17,8 +17,8 @@ export const SCRIPT_CONFIG = [
   { scriptString: 'setFilter', scriptType: commandType.setFilter },
   { scriptString: 'pixiInit', scriptType: commandType.pixiInit },
   { scriptString: 'pixiPerform', scriptType: commandType.pixi },
-  { scriptString: 'label', scriptType: commandType.label},
-  { scriptString: 'jumpLabel', scriptType: commandType.jumpLabel},
+  { scriptString: 'label', scriptType: commandType.label },
+  { scriptString: 'jumpLabel', scriptType: commandType.jumpLabel },
   { scriptString: 'setVar', scriptType: commandType.setVar },
   { scriptString: 'callScene', scriptType: commandType.callScene },
   { scriptString: 'showVars', scriptType: commandType.showVars },
@@ -27,7 +27,7 @@ export const SCRIPT_CONFIG = [
   { scriptString: 'say', scriptType: commandType.say },
   { scriptString: 'filmMode', scriptType: commandType.filmMode },
   { scriptString: 'callScene', scriptType: commandType.callScene },
-  { scriptString: 'setTextbox', scriptType: commandType.setTextbox},
+  { scriptString: 'setTextbox', scriptType: commandType.setTextbox },
   { scriptString: 'setAnimation', scriptType: commandType.setAnimation },
   { scriptString: 'playEffect', scriptType: commandType.playEffect },
 ];
