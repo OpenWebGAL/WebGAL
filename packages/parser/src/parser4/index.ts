@@ -155,4 +155,4 @@
 //     defaultRule: "scene"
 //   };
 // }());
-export const parser4 = 'unreleased'
+export const parser4 = 'unreleased';
