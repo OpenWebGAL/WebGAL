@@ -64,7 +64,6 @@ export const SCRIPT_CONFIG: IConfigInterface[] = [
   { scriptString: 'label', scriptType: commandType.label, scriptFunction: label },
   { scriptString: 'jumpLabel', scriptType: commandType.jumpLabel, scriptFunction: jumpLabel },
   { scriptString: 'setVar', scriptType: commandType.setVar, scriptFunction: setVar },
-  { scriptString: 'callScene', scriptType: commandType.callScene, scriptFunction: changeSceneScript },
   { scriptString: 'showVars', scriptType: commandType.showVars, scriptFunction: showVars },
   { scriptString: 'unlockCg', scriptType: commandType.unlockCg, scriptFunction: unlockCg },
   { scriptString: 'unlockBgm', scriptType: commandType.unlockBgm, scriptFunction: unlockBgm },
