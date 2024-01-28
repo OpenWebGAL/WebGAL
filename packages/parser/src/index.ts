@@ -2,6 +2,7 @@ import {
   ADD_NEXT_ARG_LIST,
   SCRIPT_CONFIG,
   ConfigMap,
+  ConfigItem,
 } from './config/scriptConfig';
 import { configParser, WebgalConfig } from './configParser/configParser';
 import { fileType } from './interface/assets';
@@ -17,14 +18,24 @@ export default class SceneParser {
       assetType: fileType,
     ) => string,
     private readonly ADD_NEXT_ARG_LIST: number[],
-    SCRIPT_CONFIG_ARRAY: any[],
+    SCRIPT_CONFIG_INPUT: ConfigItem[] | ConfigMap,
   ) {
-    this.SCRIPT_CONFIG_MAP = new Map();
-    SCRIPT_CONFIG_ARRAY.forEach((config) => {
-      this.SCRIPT_CONFIG_MAP.set(config.scriptString, config);
-    });
+    if (Array.isArray(SCRIPT_CONFIG_INPUT)) {
+      this.SCRIPT_CONFIG_MAP = new Map();
+      SCRIPT_CONFIG_INPUT.forEach((config) => {
+        this.SCRIPT_CONFIG_MAP.set(config.scriptString, config);
+      });
+    } else {
+      this.SCRIPT_CONFIG_MAP = SCRIPT_CONFIG_INPUT;
+    }
   }
-
+  /**
+   * 解析场景
+   * @param rawScene 原始场景
+   * @param sceneName 场景名称
+   * @param sceneUrl 场景url
+   * @return 解析后的场景
+   */
   parse(rawScene: string, sceneName: string, sceneUrl: string) {
     return sceneParser(
       rawScene,
