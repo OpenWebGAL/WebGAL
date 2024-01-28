@@ -8,7 +8,11 @@ import { fileType } from '../interface/assets';
  * @param args 参数列表
  * @return {Array<IAsset>} 语句携带的参数列表
  */
-export const assetsScanner = (command: commandType, content: string, args: Array<arg>): Array<IAsset> => {
+export const assetsScanner = (
+  command: commandType,
+  content: string,
+  args: Array<arg>,
+): Array<IAsset> => {
   let hasVocalArg = false;
   const returnAssetsList: Array<IAsset> = [];
   if (command === commandType.say) {
