@@ -32,6 +32,7 @@ export function defineScripts<R extends Record<string, Omit<IConfigInterface, 's
 ): {
   [K in keyof R]: IConfigInterface;
 } {
+  // eslint-disable-next-line
   const result = {} as Record<keyof R, IConfigInterface>;
   for (const [scriptString, config] of Object.entries(record)) {
     result[scriptString as keyof R] = scriptRegistry[config.scriptType] = { scriptString, ...config };
