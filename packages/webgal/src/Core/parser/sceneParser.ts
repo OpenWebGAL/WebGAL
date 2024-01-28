@@ -68,7 +68,7 @@ export const SCRIPT_TAG_MAP = defineScripts({
   setTransform: ScriptConfig(commandType.setTransform, setTransform),
   setTransition: ScriptConfig(commandType.setTransition, setTransition, { next: true }),
   getUserInput: ScriptConfig(commandType.getUserInput, getUserInput),
-  // if: ScriptConfig(commandType.if, undefined, addNextArg: true }
+  // if: ScriptConfig(commandType.if, undefined, { next: true }),
 });
 
 export const SCRIPT_CONFIG: IConfigInterface[] = Object.values(SCRIPT_TAG_MAP);
