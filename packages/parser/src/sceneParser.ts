@@ -1,7 +1,13 @@
-import { IAsset, IScene, ISentence } from './interface/sceneInterface';
+import {
+  commandType,
+  IAsset,
+  IScene,
+  ISentence,
+} from './interface/sceneInterface';
 import { scriptParser } from './scriptParser/scriptParser';
 import uniqWith from 'lodash/uniqWith';
 import { fileType } from './interface/assets';
+import { ConfigMap } from './config/scriptConfig';
 
 /**
  * 场景解析器
@@ -11,7 +17,7 @@ import { fileType } from './interface/assets';
  * @param assetsPrefetcher
  * @param assetSetter
  * @param ADD_NEXT_ARG_LIST
- * @param SCRIPT_CONFIG
+ * @param SCRIPT_CONFIG_MAP
  * @return {IScene} 解析后的场景
  */
 export const sceneParser = (
@@ -20,8 +26,8 @@ export const sceneParser = (
   sceneUrl: string,
   assetsPrefetcher: (assetList: Array<IAsset>) => void,
   assetSetter: (fileName: string, assetType: fileType) => string,
-  ADD_NEXT_ARG_LIST: any,
-  SCRIPT_CONFIG: any[],
+  ADD_NEXT_ARG_LIST: commandType[],
+  SCRIPT_CONFIG_MAP: ConfigMap,
 ): IScene => {
   const rawSentenceList = rawScene.split('\n'); // 原始句子列表
 
@@ -37,7 +43,7 @@ export const sceneParser = (
         sentence,
         assetSetter,
         ADD_NEXT_ARG_LIST,
-        SCRIPT_CONFIG,
+        SCRIPT_CONFIG_MAP,
       );
       // 在这里解析出语句可能携带的资源和场景，合并到 assetsList 和 subSceneList
       assetsList = [...assetsList, ...returnSentence.sentenceAssets];

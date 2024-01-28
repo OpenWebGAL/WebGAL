@@ -1,10 +1,15 @@
-import { ADD_NEXT_ARG_LIST, SCRIPT_CONFIG } from './config/scriptConfig';
+import {
+  ADD_NEXT_ARG_LIST,
+  SCRIPT_CONFIG,
+  ConfigMap,
+} from './config/scriptConfig';
 import { configParser, WebgalConfig } from './configParser/configParser';
 import { fileType } from './interface/assets';
 import { IAsset } from './interface/sceneInterface';
 import { sceneParser } from './sceneParser';
 
 export default class SceneParser {
+  private readonly SCRIPT_CONFIG_MAP: ConfigMap;
   constructor(
     private readonly assetsPrefetcher: (assetList: IAsset[]) => void,
     private readonly assetSetter: (
@@ -12,12 +17,12 @@ export default class SceneParser {
       assetType: fileType,
     ) => string,
     private readonly ADD_NEXT_ARG_LIST: number[],
-    private readonly SCRIPT_CONFIG: any[],
+    SCRIPT_CONFIG_ARRAY: any[],
   ) {
-    this.assetsPrefetcher = assetsPrefetcher;
-    this.assetSetter = assetSetter;
-    this.ADD_NEXT_ARG_LIST = ADD_NEXT_ARG_LIST;
-    this.SCRIPT_CONFIG = SCRIPT_CONFIG;
+    this.SCRIPT_CONFIG_MAP = new Map();
+    SCRIPT_CONFIG_ARRAY.forEach((config) => {
+      this.SCRIPT_CONFIG_MAP.set(config.scriptString, config);
+    });
   }
 
   parse(rawScene: string, sceneName: string, sceneUrl: string) {
@@ -28,7 +33,7 @@ export default class SceneParser {
       this.assetsPrefetcher,
       this.assetSetter,
       this.ADD_NEXT_ARG_LIST,
-      this.SCRIPT_CONFIG,
+      this.SCRIPT_CONFIG_MAP,
     );
   }
 

@@ -10,19 +10,20 @@ import { argsParser } from './argsParser';
 import { contentParser } from './contentParser';
 import { assetsScanner } from './assetsScanner';
 import { subSceneScanner } from './subSceneScanner';
+import { ConfigMap } from '../config/scriptConfig';
 
 /**
  * 语句解析器
  * @param sentenceRaw 原始语句
  * @param assetSetter
  * @param ADD_NEXT_ARG_LIST
- * @param SCRIPT_CONFIG
+ * @param SCRIPT_CONFIG_MAP
  */
 export const scriptParser = (
   sentenceRaw: string,
   assetSetter: any,
-  ADD_NEXT_ARG_LIST: any,
-  SCRIPT_CONFIG: any[],
+  ADD_NEXT_ARG_LIST: commandType[],
+  SCRIPT_CONFIG_MAP: ConfigMap,
 ): ISentence => {
   let command: commandType; // 默认为对话
   let content: string; // 语句内容
@@ -55,7 +56,7 @@ export const scriptParser = (
   // 没有command，说明这是一条连续对话或单条语句
   if (getCommandResult === null) {
     commandRaw = newSentenceRaw;
-    parsedCommand = commandParser(commandRaw, ADD_NEXT_ARG_LIST, SCRIPT_CONFIG);
+    parsedCommand = commandParser(commandRaw, ADD_NEXT_ARG_LIST, SCRIPT_CONFIG_MAP);
     command = parsedCommand.type;
     for (const e of parsedCommand.additionalArgs) {
       // 由于是连续对话，所以我们去除 speaker 参数。
@@ -71,7 +72,7 @@ export const scriptParser = (
       getCommandResult.index + 1,
       newSentenceRaw.length,
     );
-    parsedCommand = commandParser(commandRaw, ADD_NEXT_ARG_LIST, SCRIPT_CONFIG);
+    parsedCommand = commandParser(commandRaw, ADD_NEXT_ARG_LIST, SCRIPT_CONFIG_MAP);
     command = parsedCommand.type;
     for (const e of parsedCommand.additionalArgs) {
       args.push(e);
