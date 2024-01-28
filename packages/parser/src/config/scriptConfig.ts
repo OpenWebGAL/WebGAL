@@ -44,3 +44,8 @@ export const ADD_NEXT_ARG_LIST = [
   commandType.filmMode,
   commandType.playEffect,
 ];
+
+export type ConfigMap = Map<
+  string,
+  { scriptString: string; scriptType: commandType }
+>;
