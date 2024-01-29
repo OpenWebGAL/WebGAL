@@ -79,6 +79,10 @@ export function useMouseRightClickHotKey() {
   });
 }
 
+let wheelTimeout = setTimeout(() => {
+  // 初始化，什么也不干
+}, 0);
+
 /**
  * 滚轮向上打开历史记录
  * 滚轮向下关闭历史记录
@@ -123,6 +127,12 @@ export function useMouseWheel() {
       }
       // setComponentVisibility('showBacklog', false);
     } else if (isGameActive() && direction === 'down' && !ctrlKey) {
+      clearTimeout(wheelTimeout);
+      WebGAL.gameplay.isFast = true;
+      // 滚轮视作快进
+      setTimeout(() => {
+        WebGAL.gameplay.isFast = false;
+      }, 150);
       next();
     }
   }, []);
