@@ -9,6 +9,7 @@
     "lint": "eslint src/** --fix"
   },
   "dependencies": {
+    "@emotion/css": "^11.11.2",
     "@icon-park/react": "^1.4.2",
     "@reduxjs/toolkit": "^1.8.1",
     "angular-expressions": "^1.1.5",
