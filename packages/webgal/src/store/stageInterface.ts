@@ -157,6 +157,7 @@ export interface IStageState {
   // 测试：电影叙事
   enableFilm: string;
   isDisableTextbox: boolean;
+  replacedUIlable: Record<string, string>;
 }
 
 /**

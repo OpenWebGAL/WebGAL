@@ -14,6 +14,7 @@ import useTrans from '@/hooks/useTrans';
 import { hasFastSaveRecord, loadFastSaveGame } from '@/Core/controller/storage/fastSaveLoad';
 import useSoundEffect from '@/hooks/useSoundEffect';
 import { WebGAL } from '@/Core/WebGAL';
+import useApplyStyle from '@/hooks/useApplyStyle';
 
 /**
  * 标题页
@@ -26,6 +27,8 @@ const Title: FC = () => {
   const showBackground = background === '' ? 'rgba(0,0,0,1)' : `url("${background}")`;
   const t = useTrans('title.');
   const { playSeEnter, playSeClick } = useSoundEffect();
+
+  const applyStyle = useApplyStyle('UI/Title/title.scss');
 
   return (
     <>
@@ -49,7 +52,7 @@ const Title: FC = () => {
         >
           <div className={styles.Title_buttonList}>
             <div
-              className={styles.Title_button}
+              className={applyStyle('Title_button', styles.Title_button)}
               onClick={() => {
                 startGame();
                 playSeClick();
