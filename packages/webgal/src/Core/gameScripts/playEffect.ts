@@ -68,6 +68,8 @@ export const playEffect = (sentence: ISentence): IPerform => {
           },
           blockingNext: () => false,
           blockingAuto: () => {
+            // loop 的话就不 block auto
+            if (isLoop) return false;
             return !isOver;
           },
           stopTimeout: undefined, // 暂时不用，后面会交给自动清除
