@@ -25,7 +25,7 @@ export const showVars = (sentence: ISentence): IPerform => {
   dispatch(setStage({ key: 'showName', value: '展示变量' }));
   logger.debug('展示变量：', allVar);
   setTimeout(() => {
-    WebGAL.eventBus.emit('text-settle');
+    WebGAL.events.textSettle.emit();
   }, 0);
   const performInitName: string = getRandomPerformName();
   const endDelay = 750 - userDataState.optionData.textSpeed * 250;
@@ -34,7 +34,7 @@ export const showVars = (sentence: ISentence): IPerform => {
     duration: endDelay,
     isHoldOn: false,
     stopFunction: () => {
-      WebGAL.eventBus.emit('text-settle');
+      WebGAL.events.textSettle.emit();
     },
     blockingNext: () => false,
     blockingAuto: () => true,

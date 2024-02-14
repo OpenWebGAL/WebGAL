@@ -29,9 +29,9 @@ export default function IMSSTextbox(props: ITextboxProps) {
         e.className = styles.TextBox_textElement_Settled;
       });
     }
-    WebGAL.eventBus.on('text-settle', settleText);
+    WebGAL.events.textSettle.on(settleText);
     return () => {
-      WebGAL.eventBus.off('text-settle', settleText);
+      WebGAL.events.textSettle.off(settleText);
     };
   }, []);
 

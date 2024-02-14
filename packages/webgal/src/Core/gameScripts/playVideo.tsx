@@ -63,9 +63,7 @@ export const playVideo = (sentence: ISentence): IPerform => {
             endPerform();
           };
           // 双击可跳过视频
-          WebGAL.eventBus.on('fullscreen-dbclick', () => {
-            skipVideo();
-          });
+          WebGAL.events.fullscreenDbClick.on(skipVideo);
           // 播放并作为一个特别演出加入
           const perform = {
             performName: performInitName,
@@ -73,6 +71,7 @@ export const playVideo = (sentence: ISentence): IPerform => {
             isOver: false,
             isHoldOn: false,
             stopFunction: () => {
+              WebGAL.events.fullscreenDbClick.off(skipVideo);
               /**
                * 不要播放视频了，因为演出已经没有了。
                */
