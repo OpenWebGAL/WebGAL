@@ -41,7 +41,7 @@ function useRigisterStyleUpdate(url: string, callback: Function) {
     callback();
   };
   useEffect(() => {
-    WebGAL.eventBus.on(`style-update-${url}`, handler);
-    return () => WebGAL.eventBus.off(`style-update-${url}`, handler);
+    WebGAL.events.styleUpdate.on(handler, url);
+    return () => WebGAL.events.styleUpdate.off(handler, url);
   }, []);
 }

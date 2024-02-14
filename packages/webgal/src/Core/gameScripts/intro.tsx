@@ -137,7 +137,7 @@ export const intro = (sentence: ISentence): IPerform => {
   /**
    * 接受 next 事件
    */
-  WebGAL.eventBus.on('__NEXT', toNextIntroElement);
+  WebGAL.events.userInteractNext.on(toNextIntroElement);
 
   const showIntro = introArray.map((e, i) => (
     <div
@@ -171,7 +171,7 @@ export const intro = (sentence: ISentence): IPerform => {
       if (introContainer) {
         introContainer.style.display = 'none';
       }
-      WebGAL.eventBus.off('__NEXT', toNextIntroElement);
+      WebGAL.events.userInteractNext.off(toNextIntroElement);
     },
     blockingNext: () => isBlocking,
     blockingAuto: () => isBlocking,
