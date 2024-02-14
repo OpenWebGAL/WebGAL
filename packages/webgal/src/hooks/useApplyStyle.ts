@@ -31,17 +31,17 @@ export default function useApplyStyle(url: string) {
     updateStyleFile();
   }, []);
 
-  useRigisterStyleUpdate(url, updateStyleFile);
+  useRigisterStyleUpdate(updateStyleFile);
 
   return applyStyle;
 }
 
-function useRigisterStyleUpdate(url: string, callback: Function) {
+function useRigisterStyleUpdate(callback: Function) {
   const handler = () => {
     callback();
   };
   useEffect(() => {
-    WebGAL.events.styleUpdate.on(handler, url);
-    return () => WebGAL.events.styleUpdate.off(handler, url);
+    WebGAL.events.styleUpdate.on(handler);
+    return () => WebGAL.events.styleUpdate.off(handler);
   }, []);
 }
