@@ -19,10 +19,10 @@ export const MenuPanelButton = (props: IMenuPanel) => {
       className={buttonClassName}
       onClick={() => {
         props.clickFunc();
-        playSePageChange();
+        // playSePageChange();
       }}
       onMouseEnter={playSeEnter}
-      style={{ color: props.tagColor }}
+      style={{ ...props.style, color: props.tagColor }}
     >
       <div className={styles.MenuPanel_button_icon}>
         <MenuIconMap iconName={props.iconName} iconColor={props.iconColor} />

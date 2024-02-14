@@ -4,23 +4,27 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: rgba(255, 255, 255, 1);
+  //background-color: rgba(255, 255, 255, 1);
   //box-shadow: 0 0 45px 15px rgba(0, 0, 0, 0.05);
+  padding: 0 35px;
 }
 
 .MenuPanel_button {
-  padding: 0.35em 0 0 0;
+  padding: 0.25em 15px 0 15px;
+  margin-right: 15px;
   display: flex;
   justify-content: center;
   font-size: 200%;
   text-align: center;
   font-weight: bold;
-  width: 20%;
+  border-radius: 4px;
+  //width: 20%;
+  min-width: 12.5%;
   cursor: pointer;
-  color: rgba(8, 8, 8, 0.3);
+  color: rgba(123,144,169, 1);
   background: rgba(0, 0, 0, 0);
   overflow: hidden;
-  border-right: 1.5px solid rgba(0, 0, 0, 0.15);
+  //border-right: 1.5px solid rgba(0, 0, 0, 0.15);
   transition: text-shadow 0.7s, backgroud 0.7s, all 0.33s;
 }
 
