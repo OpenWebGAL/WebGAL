@@ -9,26 +9,32 @@
   height: 10%;
   width: 100%;
   display: flex;
-  background-color: rgba(255, 255, 255, 1);
+  //background-color: rgba(255, 255, 255, 1);
   //box-shadow: 0 0 1.5em 0.1em rgba(0, 0, 0, 0.05);
   animation: Elements_in ease-out 1s forwards;
   //border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  justify-content: center;
 }
 
 .Save_Load_title {
   font-family: "思源宋体", serif;
   letter-spacing: 0.1em;
   width: auto;
-  height: 100%;
-  font-size: 275%;
+  font-size: 500%;
   min-width: 350px;
-  margin: 0 0 0 0.8em;
-  padding: 0 0.8em 0 0.8em;
+  //margin: 0 0 0 0.8em;
+  //padding: 0 0.8em 0 0.8em;
   box-sizing: border-box;
   //border-bottom: 4px solid #77428D;
   display: flex;
   justify-content: center;
   align-items: center;
+  position: absolute;
+  left: 20px;
+  top:0;
+  z-index: -1;
+  opacity: 0.2;
+  transform: translateY(-10px);
 }
 
 .Save_title_text {
@@ -51,7 +57,7 @@
 .Save_Load_top_buttonList {
   height: 100%;
   display: flex;
-  padding: 0 0 0 2em;
+  //padding: 0 0 0 2em;
 }
 
 .Save_Load_top_button {
