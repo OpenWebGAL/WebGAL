@@ -9,10 +9,6 @@ export enum MenuPanelTag {
   Option, // “设置”选项卡
 }
 
-export interface ITheme {
-  textbox: IWebGalTextBoxTheme;
-}
-
 /**
  * @interface IGuiState GUI状态接口
  */
@@ -33,7 +29,6 @@ export interface IGuiState {
   showPanicOverlay: boolean;
   isEnterGame: boolean;
   isShowLogo: boolean;
-  theme: ITheme;
 }
 
 export type componentsVisibility = Pick<

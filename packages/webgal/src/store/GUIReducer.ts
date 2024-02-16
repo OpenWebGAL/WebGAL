@@ -3,7 +3,7 @@
  * @author Mahiru
  */
 import { getStorage } from '@/Core/controller/storage/storageController';
-import { GuiAsset, IGuiState, ITheme, MenuPanelTag, setAssetPayload, setVisibilityPayload } from '@/store/guiInterface';
+import { GuiAsset, IGuiState, MenuPanelTag, setAssetPayload, setVisibilityPayload } from '@/store/guiInterface';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { key } from 'localforage';
 
@@ -27,9 +27,6 @@ const initState: IGuiState = {
   showPanicOverlay: false,
   isEnterGame: false,
   isShowLogo: true,
-  theme: {
-    textbox: 'standard',
-  },
 };
 
 /**
@@ -70,13 +67,10 @@ const GUISlice = createSlice({
     setLogoImage: (state, action: PayloadAction<string[]>) => {
       state.logoImage = [...action.payload];
     },
-    setThemeConfigItem: (state, action: PayloadAction<{ key: keyof ITheme; value: string }>) => {
-      state.theme[action.payload.key] = action.payload.value as any;
-    },
   },
 });
 
-export const { setThemeConfigItem, setVisibility, setMenuPanelTag, setGuiAsset, setLogoImage } = GUISlice.actions;
+export const { setVisibility, setMenuPanelTag, setGuiAsset, setLogoImage } = GUISlice.actions;
 export default GUISlice.reducer;
 
 // export function GuiStateStore(): GuiStore {
