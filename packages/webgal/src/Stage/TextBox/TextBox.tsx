@@ -4,26 +4,13 @@ import { RootState } from '@/store/store';
 import { useFontFamily } from '@/hooks/useFontFamily';
 import { useTextAnimationDuration, useTextDelay } from '@/hooks/useTextOptions';
 import { getTextSize } from '@/UI/getTextSize';
-import StandardTextbox, { ITextboxProps } from '@/Stage/TextBox/themes/standard/StandardTextbox';
-import IMSSTextbox from '@/Stage/TextBox/themes/imss/IMSSTextbox';
-import { IWebGalTextBoxTheme } from '@/Stage/themeInterface';
 import { match } from '@/Core/util/match';
 import { textSize } from '@/store/userDataInterface';
+import IMSSTextbox from '@/Stage/TextBox/IMSSTextbox';
 
 const userAgent = navigator.userAgent;
 const isFirefox = /firefox/i.test(userAgent);
 const isSafari = /^((?!chrome|android).)*safari/i.test(userAgent);
-
-function getTextboxByTheme(theme: IWebGalTextBoxTheme): FC<ITextboxProps> {
-  switch (theme) {
-    case 'standard':
-      return StandardTextbox;
-    case 'imss':
-      return IMSSTextbox;
-    default:
-      return StandardTextbox;
-  }
-}
 
 export const TextBox = () => {
   const [isShowStroke, setIsShowStroke] = useState(true);
@@ -77,9 +64,8 @@ export const TextBox = () => {
   const currentConcatDialogPrev = stageState.currentConcatDialogPrev;
   const currentDialogKey = stageState.currentDialogKey;
   const miniAvatar = stageState.miniAvatar;
-  const theme = useSelector((state: RootState) => state.GUI.theme);
   const textboxOpacity = userDataState.optionData.textboxOpacity;
-  const Textbox = getTextboxByTheme(theme.textbox);
+  const Textbox = IMSSTextbox;
   return (
     <Textbox
       textArray={textArray}

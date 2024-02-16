@@ -3,7 +3,7 @@ import { WebGAL } from '@/Core/WebGAL';
 import axios from 'axios';
 import { IWebGALStyleObj, scss2cssinjsParser } from '@/Core/controller/customUI/scss2cssinjsParser';
 import { useValue } from '@/hooks/useValue';
-import { css } from '@emotion/css';
+import { css, injectGlobal } from '@emotion/css';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 
@@ -30,6 +30,10 @@ export default function useApplyStyle(url: string) {
   useEffect(() => {
     updateStyleFile();
   }, []);
+
+  useEffect(() => {
+    injectGlobal(styleObject.value.others);
+  }, [styleObject.value.others]);
 
   useRigisterStyleUpdate(updateStyleFile);
 
