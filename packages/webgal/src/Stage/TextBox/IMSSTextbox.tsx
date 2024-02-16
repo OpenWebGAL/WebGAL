@@ -1,7 +1,8 @@
-import styles from './imss.module.scss';
+import styles from './textbox.module.scss';
 import { ReactNode, useEffect } from 'react';
 import { WebGAL } from '@/Core/WebGAL';
-import { ITextboxProps } from '../standard/StandardTextbox';
+import { ITextboxProps } from './types';
+import useApplyStyle from '@/hooks/useApplyStyle';
 
 export default function IMSSTextbox(props: ITextboxProps) {
   const {
@@ -21,12 +22,14 @@ export default function IMSSTextbox(props: ITextboxProps) {
     textboxOpacity,
   } = props;
 
+  const applyStyle = useApplyStyle('Stage/TextBox/textbox.scss');
+
   useEffect(() => {
     function settleText() {
       const textElements = document.querySelectorAll('.Textelement_start');
       const textArray = [...textElements];
       textArray.forEach((e) => {
-        e.className = styles.TextBox_textElement_Settled;
+        e.className = applyStyle('TextBox_textElement_Settled', styles.TextBox_textElement_Settled);
       });
     }
     WebGAL.events.textSettle.on(settleText);
@@ -49,14 +52,14 @@ export default function IMSSTextbox(props: ITextboxProps) {
         <span
           // data-text={e}
           id={`${delay}`}
-          className={styles.TextBox_textElement_Settled}
+          className={applyStyle('TextBox_textElement_Settled', styles.TextBox_textElement_Settled)}
           key={currentDialogKey + index}
           style={{ animationDelay: `${delay}ms`, animationDuration: `${textDuration}ms` }}
         >
           <span className={styles.zhanwei}>
             {e}
-            <span className={styles.outer}>{e}</span>
-            {isUseStroke && <span className={styles.inner}>{e}</span>}
+            <span className={applyStyle('outer', styles.outer)}>{e}</span>
+            {isUseStroke && <span className={applyStyle('inner', styles.inner)}>{e}</span>}
           </span>
         </span>
       );
@@ -65,14 +68,14 @@ export default function IMSSTextbox(props: ITextboxProps) {
       <span
         data-text={e}
         id={`${delay}`}
-        className={`${styles.TextBox_textElement_start} Textelement_start`}
+        className={`${applyStyle('TextBox_textElement_start', styles.TextBox_textElement_start)} Textelement_start`}
         key={currentDialogKey + index}
         style={{ animationDelay: `${delay}ms`, position: 'relative' }}
       >
         <span className={styles.zhanwei}>
           {e}
-          <span className={styles.outer}>{e}</span>
-          {isUseStroke && <span className={styles.inner}>{e}</span>}
+          <span className={applyStyle('outer', styles.outer)}>{e}</span>
+          {isUseStroke && <span className={applyStyle('inner', styles.inner)}>{e}</span>}
         </span>
       </span>
     );
@@ -82,7 +85,7 @@ export default function IMSSTextbox(props: ITextboxProps) {
       {isText && (
         <div
           id="textBoxMain"
-          className={styles.TextBox_main}
+          className={applyStyle('TextBox_main', styles.TextBox_main)}
           style={{
             fontFamily: font,
             left: miniAvatar === '' ? 25 : undefined,
@@ -92,14 +95,15 @@ export default function IMSSTextbox(props: ITextboxProps) {
             )`,
           }}
         >
-          {/* <div className={styles.nameContainer}>{stageState.showName !== ''}</div> */}
-          <div id="miniAvatar" className={styles.miniAvatarContainer}>
-            {miniAvatar !== '' && <img className={styles.miniAvatarImg} alt="miniAvatar" src={miniAvatar} />}
+          <div id="miniAvatar" className={applyStyle('miniAvatarContainer', styles.miniAvatarContainer)}>
+            {miniAvatar !== '' && (
+              <img className={applyStyle('miniAvatarImg', styles.miniAvatarImg)} alt="miniAvatar" src={miniAvatar} />
+            )}
           </div>
           {showName !== '' && (
             <div
               key={showName}
-              className={styles.TextBox_showName}
+              className={applyStyle('TextBox_showName', styles.TextBox_showName)}
               style={{
                 fontSize: '200%',
                 background: `rgba(11, 52, 110, ${(textboxOpacity / 100) * 0.9})`,
@@ -112,8 +116,8 @@ export default function IMSSTextbox(props: ITextboxProps) {
                   <span key={e + i} style={{ position: 'relative' }}>
                     <span className={styles.zhanwei}>
                       {e}
-                      <span className={styles.outerName}>{e}</span>
-                      {isUseStroke && <span className={styles.innerName}>{e}</span>}
+                      <span className={applyStyle('outerName', styles.outerName)}>{e}</span>
+                      {isUseStroke && <span className={applyStyle('innerName', styles.innerName)}>{e}</span>}
                     </span>
                   </span>
                 );
@@ -121,7 +125,7 @@ export default function IMSSTextbox(props: ITextboxProps) {
             </div>
           )}
           <div
-            className={styles.text}
+            className={applyStyle('text', styles.text)}
             style={{
               fontSize,
               wordBreak: isSafari || props.isFirefox ? 'break-all' : undefined,

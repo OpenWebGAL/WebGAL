@@ -32,25 +32,24 @@ const Title: FC = () => {
 
   return (
     <>
-      {GUIState.showTitle && <div className={styles.Title_backup_background} />}
+      {GUIState.showTitle && <div className={applyStyle('Title_backup_background', styles.Title_backup_background)} />}
       <div
         id="enter_game_target"
         onClick={() => {
           playBgm(GUIState.titleBgm);
           dispatch(setVisibility({ component: 'isEnterGame', visibility: true }));
-          // setTimeout(resize, 2000);
         }}
         onMouseEnter={playSeEnter}
       />
       {GUIState.showTitle && (
         <div
-          className={styles.Title_main}
+          className={applyStyle('Title_main', styles.Title_main)}
           style={{
             backgroundImage: showBackground,
             backgroundSize: 'cover',
           }}
         >
-          <div className={styles.Title_buttonList}>
+          <div className={applyStyle('Title_buttonList', styles.Title_buttonList)}>
             <div
               className={applyStyle('Title_button', styles.Title_button)}
               onClick={() => {
@@ -59,11 +58,10 @@ const Title: FC = () => {
               }}
               onMouseEnter={playSeEnter}
             >
-              <div className={styles.Title_button_text + ' ' + styles.Title_button_text_up}>{t('start.title')}</div>
-              {/* <div className={styles.Title_button_text}>{t('start.subtitle')}</div> */}
+              <div className={applyStyle('Title_button_text', styles.Title_button_text)}>{t('start.title')}</div>
             </div>
             <div
-              className={styles.Title_button}
+              className={applyStyle('Title_button', styles.Title_button)}
               onClick={async () => {
                 playSeClick();
                 dispatch(setVisibility({ component: 'showTitle', visibility: false }));
@@ -71,11 +69,10 @@ const Title: FC = () => {
               }}
               onMouseEnter={playSeEnter}
             >
-              <div className={styles.Title_button_text + ' ' + styles.Title_button_text_up}>{t('continue.title')}</div>
-              {/* <div className={styles.Title_button_text}>{t('continue.subtitle')}</div> */}
+              <div className={applyStyle('Title_button_text', styles.Title_button_text)}>{t('continue.title')}</div>
             </div>
             <div
-              className={styles.Title_button}
+              className={applyStyle('Title_button', styles.Title_button)}
               onClick={() => {
                 playSeClick();
                 dispatch(setVisibility({ component: 'showMenuPanel', visibility: true }));
@@ -83,11 +80,10 @@ const Title: FC = () => {
               }}
               onMouseEnter={playSeEnter}
             >
-              <div className={styles.Title_button_text + ' ' + styles.Title_button_text_up}>{t('options.title')}</div>
-              {/* <div className={styles.Title_button_text}>{t('options.subtitle')}</div> */}
+              <div className={applyStyle('Title_button_text', styles.Title_button_text)}>{t('options.title')}</div>
             </div>
             <div
-              className={styles.Title_button}
+              className={applyStyle('Title_button', styles.Title_button)}
               onClick={() => {
                 playSeClick();
                 dispatch(setVisibility({ component: 'showMenuPanel', visibility: true }));
@@ -95,30 +91,17 @@ const Title: FC = () => {
               }}
               onMouseEnter={playSeEnter}
             >
-              <div className={styles.Title_button_text + ' ' + styles.Title_button_text_up}>{t('load.title')}</div>
-              {/* <div className={styles.Title_button_text}>{t('load.subtitle')}</div> */}
+              <div className={applyStyle('Title_button_text', styles.Title_button_text)}>{t('load.title')}</div>
             </div>
-            {/* <div */}
-            {/*   className={styles.Title_button} */}
-            {/*   onClick={() => { */}
-            {/*     window.opener = null; */}
-            {/*     window.open('', '_self'); */}
-            {/*     window.close(); */}
-            {/*   }} */}
-            {/* > */}
-            {/*   <div className={styles.Title_button_text + ' ' + styles.Title_button_text_up}>退出游戏</div> */}
-            {/*   <div className={styles.Title_button_text}>EXIT</div> */}
-            {/* </div> */}
             <div
-              className={styles.Title_button}
+              className={applyStyle('Title_button', styles.Title_button)}
               onClick={() => {
                 playSeClick();
                 dispatch(setVisibility({ component: 'showExtra', visibility: true }));
               }}
               onMouseEnter={playSeEnter}
             >
-              <div className={styles.Title_button_text + ' ' + styles.Title_button_text_up}>{t('extra.title')}</div>
-              {/* <div className={styles.Title_button_text}>{t('extra.subtitle')}</div> */}
+              <div className={applyStyle('Title_button_text', styles.Title_button_text)}>{t('extra.title')}</div>
             </div>
           </div>
         </div>

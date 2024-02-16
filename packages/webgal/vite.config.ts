@@ -25,7 +25,7 @@ console.log(env);
           const filePath = relativePath + '/' + v.slice(0, v.lastIndexOf('.'));
           return `import '${filePath}';`;
         })
-        .join('\n'),
+        .join('\n') + '\n',
       { encoding: 'utf-8' },
     );
   }

@@ -5,14 +5,11 @@ import { useFontFamily } from '@/hooks/useFontFamily';
 import { useTextAnimationDuration, useTextDelay } from '@/hooks/useTextOptions';
 import useTrans from '@/hooks/useTrans';
 import { getTextSize } from '@/UI/getTextSize';
-import StandardTextbox from '@/Stage/TextBox/themes/standard/StandardTextbox';
-import IMSSTextbox from '@/Stage/TextBox/themes/imss/IMSSTextbox';
-import { ReactNode } from 'react';
+import IMSSTextbox from '@/Stage/TextBox/IMSSTextbox';
 import { compileSentence } from '@/Stage/TextBox/TextBox';
 
 export const TextPreview = (props: any) => {
   const t = useTrans('menu.options.pages.display.options.');
-  const theme = useSelector((state: RootState) => state.GUI.theme);
   const userDataState = useSelector((state: RootState) => state.userData);
   const stageState = useSelector((state: RootState) => state.stage);
   const previewBackground = stageState.bgName;
@@ -27,12 +24,7 @@ export const TextPreview = (props: any) => {
   const previewText = t('textPreview.text');
   const previewTextArray = compileSentence(previewText, 3);
 
-  const textboxs = new Map([
-    ['standard', StandardTextbox],
-    ['imss', IMSSTextbox],
-  ]);
-
-  const Textbox = textboxs.get(theme.textbox) || StandardTextbox;
+  const Textbox = IMSSTextbox;
 
   const textboxProps = {
     textArray: previewTextArray,
