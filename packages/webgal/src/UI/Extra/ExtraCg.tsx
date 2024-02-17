@@ -10,8 +10,8 @@ import useSoundEffect from '@/hooks/useSoundEffect';
 export function ExtraCg() {
   const cgPerPage = 8;
   const extraState = useSelector((state: RootState) => state.userData.appreciationData);
-  // const pageNumber = Math.ceil(extraState.cg.length / cgPerPage);
-  const pageNumber = 10;
+  const pageNumber = Math.ceil(extraState.cg.length / cgPerPage);
+  // const pageNumber = 10;
   const currentPage = useValue(1);
   const { playSeEnter, playSeClick } = useSoundEffect();
 
