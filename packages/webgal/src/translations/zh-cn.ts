@@ -63,6 +63,13 @@ const zhCn = {
         display: {
           title: '显示',
           options: {
+            fullScreen: {
+              title: '自动全屏',
+              options: {
+                yes: '是',
+                no: '否',
+              },
+            },
             textSpeed: {
               title: '文字显示速度',
               options: {

@@ -11,6 +11,7 @@ import {
   ISetOptionDataPayload,
   ISetUserDataPayload,
   IUserData,
+  fullScreenOption,
   playSpeed,
   textFont,
   textSize,
@@ -34,6 +35,7 @@ const initialOptionSet: IOptionData = {
   textboxOpacity: 75,
   language: language.zhCn,
   voiceInterruption: voiceOption.yes,
+  fullScreen: fullScreenOption.no,
 };
 
 // 初始化用户数据

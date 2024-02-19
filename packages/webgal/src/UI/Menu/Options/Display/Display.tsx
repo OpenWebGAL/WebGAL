@@ -4,7 +4,7 @@ import { RootState } from '@/store/store';
 import { NormalOption } from '@/UI/Menu/Options/NormalOption';
 import { NormalButton } from '@/UI/Menu/Options/NormalButton';
 import { setOptionData } from '@/store/userDataReducer';
-import { playSpeed, textFont, textSize } from '@/store/userDataInterface';
+import { fullScreenOption, playSpeed, textFont, textSize } from '@/store/userDataInterface';
 import { setStorage } from '@/Core/controller/storage/storageController';
 import { TextPreview } from '@/UI/Menu/Options/TextPreview/TextPreview';
 import useTrans from '@/hooks/useTrans';
@@ -17,6 +17,22 @@ export function Display() {
 
   return (
     <div className={styles.Options_main_content_half}>
+      <NormalOption key="fullScreen" title={t('fullScreen.title')}>
+        <NormalButton
+          textList={t('fullScreen.options.yes', 'fullScreen.options.no')}
+          functionList={[
+            () => {
+              dispatch(setOptionData({ key: 'fullScreen', value: fullScreenOption.yes }));
+              setStorage();
+            },
+            () => {
+              dispatch(setOptionData({ key: 'fullScreen', value: fullScreenOption.no }));
+              setStorage();
+            },
+          ]}
+          currentChecked={userDataState.optionData.fullScreen}
+        />
+      </NormalOption>
       <NormalOption key="textSpeed" title={t('textSpeed.title')}>
         <NormalButton
           textList={t('textSpeed.options.slow', 'textSpeed.options.medium', 'textSpeed.options.fast')}
