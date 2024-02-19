@@ -29,6 +29,11 @@ export enum voiceOption {
   no,
 }
 
+export enum fullScreenOption {
+  yes,
+  no,
+}
+
 /**
  * @interface IOptionData 用户设置数据接口
  */
@@ -46,6 +51,7 @@ export interface IOptionData {
   textboxOpacity: number;
   language: language;
   voiceInterruption: voiceOption; // 是否中断语音
+  fullScreen: fullScreenOption;
 }
 
 /**

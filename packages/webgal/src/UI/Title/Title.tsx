@@ -15,14 +15,17 @@ import { hasFastSaveRecord, loadFastSaveGame } from '@/Core/controller/storage/f
 import useSoundEffect from '@/hooks/useSoundEffect';
 import { WebGAL } from '@/Core/WebGAL';
 import useApplyStyle from '@/hooks/useApplyStyle';
+import { fullScreenOption } from '@/store/userDataInterface';
 
 /**
  * 标题页
  * @constructor
  */
 const Title: FC = () => {
+  const userDataState = useSelector((state: RootState) => state.userData);
   const GUIState = useSelector((state: RootState) => state.GUI);
   const dispatch = useDispatch();
+  const fullScreen = userDataState.optionData.fullScreen;
   const background = GUIState.titleBg;
   const showBackground = background === '' ? 'rgba(0,0,0,1)' : `url("${background}")`;
   const t = useTrans('title.');
@@ -38,6 +41,7 @@ const Title: FC = () => {
         onClick={() => {
           playBgm(GUIState.titleBgm);
           dispatch(setVisibility({ component: 'isEnterGame', visibility: true }));
+          if (fullScreen === fullScreenOption.yes) document.documentElement.requestFullscreen();
         }}
         onMouseEnter={playSeEnter}
       />
