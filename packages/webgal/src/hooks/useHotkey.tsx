@@ -18,11 +18,11 @@ export interface HotKeyType {
   MouseWheel: {} | boolean;
   Ctrl: boolean;
   Esc:
-    | {
-        href: string;
-        nav: 'replace' | 'push';
-      }
-    | boolean;
+  | {
+    href: string;
+    nav: 'replace' | 'push';
+  }
+  | boolean;
   AutoSave: {} | boolean;
 }
 
@@ -33,7 +33,7 @@ export function useHotkey(opt?: HotKeyType) {
   useMouseRightClickHotKey();
   useMouseWheel();
   useSkip();
-  useEscape();
+  usePanic();
   useFastSaveBeforeUnloadPage();
   useSpaceAndEnter();
 }
@@ -145,19 +145,18 @@ export function useMouseWheel() {
 }
 
 /**
- * ESC panic button
+ * Panic Button, use Esc and Backquote
  */
-export function useEscape() {
-  const isEscKey = useCallback(
-    (ev: KeyboardEvent) => !ev.isComposing && !ev.defaultPrevented && ev.code === 'Escape',
-    [],
-  );
+export function usePanic() {
+  const panicButtonList = ['Escape', 'Backquote'];
+  const isPanicButton = (ev: KeyboardEvent) =>
+    !ev.isComposing && !ev.defaultPrevented && panicButtonList.includes(ev.code);
   const GUIStore = useGenSyncRef((state: RootState) => state.GUI);
   const isTitleShown = useCallback(() => GUIStore.current.showTitle, [GUIStore]);
   const isPanicOverlayOpen = useIsPanicOverlayOpen(GUIStore);
   const setComponentVisibility = useSetComponentVisibility();
-  const handlePressEsc = useCallback((ev: KeyboardEvent) => {
-    if (!isEscKey(ev) || isTitleShown()) return;
+  const handlePressPanicButton = useCallback((ev: KeyboardEvent) => {
+    if (!isPanicButton(ev) || isTitleShown()) return;
     if (isPanicOverlayOpen()) {
       setComponentVisibility('showPanicOverlay', false);
       // todo: resume
@@ -168,10 +167,10 @@ export function useEscape() {
     }
   }, []);
   useMounted(() => {
-    document.addEventListener('keyup', handlePressEsc);
+    document.addEventListener('keyup', handlePressPanicButton);
   });
   useUnMounted(() => {
-    document.removeEventListener('keyup', handlePressEsc);
+    document.removeEventListener('keyup', handlePressPanicButton);
   });
 }
 
