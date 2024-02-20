@@ -30,8 +30,8 @@ export enum voiceOption {
 }
 
 export enum fullScreenOption {
-  yes,
-  no,
+  on,
+  off,
 }
 
 /**
