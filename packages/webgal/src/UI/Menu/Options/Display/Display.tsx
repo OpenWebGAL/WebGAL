@@ -19,14 +19,14 @@ export function Display() {
     <div className={styles.Options_main_content_half}>
       <NormalOption key="fullScreen" title={t('fullScreen.title')}>
         <NormalButton
-          textList={t('fullScreen.options.yes', 'fullScreen.options.no')}
+          textList={t('fullScreen.options.on', 'fullScreen.options.off')}
           functionList={[
             () => {
-              dispatch(setOptionData({ key: 'fullScreen', value: fullScreenOption.yes }));
+              dispatch(setOptionData({ key: 'fullScreen', value: fullScreenOption.on }));
               setStorage();
             },
             () => {
-              dispatch(setOptionData({ key: 'fullScreen', value: fullScreenOption.no }));
+              dispatch(setOptionData({ key: 'fullScreen', value: fullScreenOption.off }));
               setStorage();
             },
           ]}

@@ -64,10 +64,10 @@ const en = {
           title: 'Display',
           options: {
             fullScreen: {
-              title: 'Auto Full Screen',
+              title: 'Full Screen',
               options: {
-                yes: 'YES',
-                no: 'NO',
+                on: 'ON',
+                off: 'OFF',
               },
             },
             textSpeed: {

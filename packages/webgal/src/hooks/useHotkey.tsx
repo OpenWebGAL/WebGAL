@@ -1,16 +1,19 @@
 import { useGenSyncRef } from '@/hooks/useGenSyncRef';
 import { RootState } from '@/store/store';
 import { useMounted, useUnMounted, useUpdated } from '@/hooks/useLifeCycle';
-import { useCallback, useRef } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import { componentsVisibility, MenuPanelTag } from '@/store/guiInterface';
 import { setVisibility } from '@/store/GUIReducer';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { startFast, stopAll, stopFast } from '@/Core/controller/gamePlay/fastSkip';
 import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
 import styles from '@/UI/Backlog/backlog.module.scss';
 import throttle from 'lodash/throttle';
 import { fastSaveGame } from '@/Core/controller/storage/fastSaveLoad';
 import { WebGAL } from '@/Core/WebGAL';
+import { setOptionData } from '@/store/userDataReducer';
+import { setStorage } from '@/Core/controller/storage/storageController';
+import { fullScreenOption } from '@/store/userDataInterface';
 
 // options备用
 export interface HotKeyType {
@@ -36,6 +39,7 @@ export function useHotkey(opt?: HotKeyType) {
   usePanic();
   useFastSaveBeforeUnloadPage();
   useSpaceAndEnter();
+  useToggleFullScreen();
 }
 
 /**
@@ -363,4 +367,31 @@ export function useSpaceAndEnter() {
 function hasScrollToBottom(dom: Element) {
   const { scrollTop, clientHeight, scrollHeight } = dom;
   return scrollTop === 0;
+}
+
+/**
+ * F11 进入全屏
+ */
+function useToggleFullScreen() {
+  const userDataState = useSelector((state: RootState) => state.userData);
+  const dispatch = useDispatch();
+  const fullScreen = userDataState.optionData.fullScreen;
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.code === 'F11') {
+        e.preventDefault();
+        if (fullScreen !== fullScreenOption.on) {
+          dispatch(setOptionData({ key: 'fullScreen', value: fullScreenOption.on }));
+          setStorage();
+        } else {
+          dispatch(setOptionData({ key: 'fullScreen', value: fullScreenOption.off }));
+          setStorage();
+        }
+      }
+    };
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [fullScreen]);
 }
