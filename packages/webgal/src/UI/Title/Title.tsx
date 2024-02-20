@@ -41,7 +41,7 @@ const Title: FC = () => {
         onClick={() => {
           playBgm(GUIState.titleBgm);
           dispatch(setVisibility({ component: 'isEnterGame', visibility: true }));
-          if (fullScreen === fullScreenOption.yes) document.documentElement.requestFullscreen();
+          if (fullScreen === fullScreenOption.on) document.documentElement.requestFullscreen();
         }}
         onMouseEnter={playSeEnter}
       />
