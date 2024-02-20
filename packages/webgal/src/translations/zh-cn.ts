@@ -64,10 +64,10 @@ const zhCn = {
           title: '显示',
           options: {
             fullScreen: {
-              title: '自动全屏',
+              title: '全屏模式',
               options: {
-                yes: '是',
-                no: '否',
+                on: '开启',
+                off: '关闭',
               },
             },
             textSpeed: {
