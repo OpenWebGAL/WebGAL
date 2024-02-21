@@ -29,6 +29,13 @@ export interface HotKeyType {
   AutoSave: {} | boolean;
 }
 
+export interface Keyboard {
+  lock: (keys: string[]) => Promise<void>;
+  unlock: () => Promise<void>;
+}
+
+export const keyboard: Keyboard | undefined = 'keyboard' in navigator && (navigator.keyboard as any); // FireFox and Safari not support
+
 // export const fastSaveGameKey = `FastSaveKey`;
 // export const isFastSaveKey = `FastSaveActive`;
 

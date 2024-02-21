@@ -4,11 +4,7 @@ import { fullScreenOption } from '@/store/userDataInterface';
 import { setOptionData } from '@/store/userDataReducer';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-
-interface Keyboard {
-  lock: (keys: string[]) => Promise<void>;
-  unlock: () => Promise<void>;
-}
+import { keyboard } from './useHotkey';
 
 export function useFullScreen() {
   const userDataState = useSelector((state: RootState) => state.userData);
@@ -17,7 +13,6 @@ export function useFullScreen() {
   const fullScreen = userDataState.optionData.fullScreen;
   const isEnterGame = GUIState.isEnterGame;
   let currentWindowHeight = window.innerHeight;
-  const keyboard: Keyboard | undefined = 'keyboard' in navigator && (navigator.keyboard as any); // FireFox and Safari not support
 
   useEffect(() => {
     switch (fullScreen) {
