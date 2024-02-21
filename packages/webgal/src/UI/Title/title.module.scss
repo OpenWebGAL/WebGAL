@@ -6,7 +6,6 @@
 }
 
 .Title_buttonList {
-  font-family: "思源宋体", serif;
   display: flex;
   position: absolute;
   left: 0;
@@ -41,9 +40,7 @@
 
 .Title_button_text {
   font-size: 165%;
-  color: transparent;
-  background: linear-gradient(135deg, #fdfbfb 0%, #dcddde 100%);
-  -webkit-background-clip: text;
+  color: #fbfbfb;
   padding: 0 0.5em 0 0.5em;
   letter-spacing: 0.2em;
 }
