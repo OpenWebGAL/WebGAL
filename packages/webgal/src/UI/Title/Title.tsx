@@ -16,6 +16,7 @@ import useSoundEffect from '@/hooks/useSoundEffect';
 import { WebGAL } from '@/Core/WebGAL';
 import useApplyStyle from '@/hooks/useApplyStyle';
 import { fullScreenOption } from '@/store/userDataInterface';
+import { keyboard } from '@/hooks/useHotkey';
 
 /**
  * 标题页
@@ -41,7 +42,10 @@ const Title: FC = () => {
         onClick={() => {
           playBgm(GUIState.titleBgm);
           dispatch(setVisibility({ component: 'isEnterGame', visibility: true }));
-          if (fullScreen === fullScreenOption.on) document.documentElement.requestFullscreen();
+          if (fullScreen === fullScreenOption.on) {
+            document.documentElement.requestFullscreen();
+            if (keyboard) keyboard.lock(['Escape', 'F11']);
+          }
         }}
         onMouseEnter={playSeEnter}
       />
