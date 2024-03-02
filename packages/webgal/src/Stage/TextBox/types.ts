@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 
 export interface ITextboxProps {
-  textArray: ReactNode[];
+  textArray: ReactNode[][];
   textDelay: number;
   currentConcatDialogPrev: string;
   currentDialogKey: string;
