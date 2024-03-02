@@ -129,6 +129,9 @@ const userDataSlice = createSlice({
     setFastSave: (state, action: PayloadAction<ISaveData | null>) => {
       state.quickSaveData = action.payload;
     },
+    resetFastSave: (state) => {
+      state.quickSaveData = null;
+    },
     resetOptionSet(state) {
       Object.assign(state.optionData, initialOptionSet);
     },
@@ -153,6 +156,7 @@ export const {
   resetOptionSet,
   resetSaveData,
   resetAllData,
+  resetFastSave,
 } = userDataSlice.actions;
 export default userDataSlice.reducer;
 
