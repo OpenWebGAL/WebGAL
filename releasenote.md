@@ -8,15 +8,23 @@
 
 #### 新功能
 
-从编辑器接受指令
+调整菜单 UI
+
+移除文本框其他预设，并接入 UI 自定义模块，为下版本编辑器支持 UI 自定义做准备
+
+添加全屏游戏功能
 
 #### 修复
 
-小幅改善 iOS 设备的崩溃状况
+使用鼠标滚轮快进时立绘延迟退出的问题
 
-优化 Backlog 性能
+效果音循环时阻塞自动播放的问题
 
-修复动画模块异常
+iOS 或 Safari 平台下无法正确处理换行和空格的问题
+
+调用 `end` 指令后在某些情况下无法继续游戏的问题
+
+某些情况下音频无法自动播放的问题
 
 <!-- English Translation -->
 ## Release Notes
@@ -27,17 +35,25 @@
 
 ### In this version
 
-#### New Features
+#### New features
 
-Accept commands from editor
+Adjust menu UI
 
-#### Fixes
+Remove other presets of text box, and connect to UI customization module, preparing for UI customization supported by next version of editor
 
-Slightly improve crash situation on iOS devices
+Add full screen game function
 
-Optimize Backlog performance
+#### Bug fixes
 
-Fix abnormal animation module
+Fix the problem that standing pictures exit delay when fast forwarding with mouse wheel
+
+Fix the problem that looping sound effects block automatic playback
+
+Fix the problem that line breaks and spaces cannot be handled correctly on iOS or Safari platforms
+
+Fix the problem that the game cannot continue in some cases after calling the `end` instruction
+
+Fix the problem that audio cannot be played automatically in some cases
 
 
 <!-- Japanese Translation -->
@@ -51,15 +67,23 @@ Fix abnormal animation module
 
 #### 新機能
 
-エディタからの指示を受け付ける
+メニューUIの調整
+
+テキストボックスのその他のプリセットを削除し、UIカスタマイズモジュールに接続して、次バージョンのエディタがUIカスタマイズをサポートできるようにします
+
+全画面ゲーム機能を追加
 
 #### 修正
 
-iOS デバイスでのクラッシュを若干改善
+マウスホイールを使用して早送りすると立ち絵が遅れて終了する問題
 
-Backlog のパフォーマンスを最適化
+効果音が循環すると自動再生がブロックされる問題
 
-アニメーションモジュールの異常を修正
+iOSまたはSafariプラットフォームで改行とスペースが正しく処理されない問題
+
+特定の状況で`end`命令を呼び出した後、ゲームを続行できない問題
+
+特定の状況でオーディオが自動再生されない問題
 
 
 <!-- French Translation -->
@@ -73,13 +97,21 @@ Backlog のパフォーマンスを最適化
 
 #### Nouvelles fonctionnalités
 
-Recevoir des instructions de l'éditeur
+Ajustement de l'interface utilisateur du menu
+
+Suppression des autres préréglages de zone de texte et connexion au module de personnalisation de l'interface utilisateur, en vue de la prise en charge de la personnalisation de l'interface utilisateur dans la prochaine version de l'éditeur
+
+Ajout de la fonctionnalité de jeu en plein écran
 
 #### Corrections
 
-Amélioration mineure des plantages sur les appareils iOS
+Problème de retard de sortie de l'image lors d'une avance rapide à l'aide de la molette de la souris
 
-Optimisation des performances de Backlog
+Problème de blocage de la lecture automatique lors de la mise en boucle des effets sonores
 
-Correction d'un bug dans le module d'animation
+Problème de traitement incorrect des sauts de ligne et des espaces sur les plateformes iOS ou Safari
+
+Problème d'impossibilité de continuer le jeu dans certains cas après avoir appelé l'instruction `end`
+
+Problème d'impossibilité de lecture automatique de l'audio dans certains cas
 
