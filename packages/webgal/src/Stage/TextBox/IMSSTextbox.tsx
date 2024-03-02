@@ -38,12 +38,14 @@ export default function IMSSTextbox(props: ITextboxProps) {
     };
   }, []);
 
+  let allTextIndex = 0;
   const textElementList = textArray.map((line, index) => {
     const textLine = line.map((e, index) => {
       // if (e === '<br />') {
       //   return <br key={`br${index}`} />;
       // }
-      let delay = index * textDelay;
+      let delay = allTextIndex * textDelay;
+      allTextIndex++;
       let prevLength = currentConcatDialogPrev.length;
       if (currentConcatDialogPrev !== '' && index >= prevLength) {
         delay = delay - prevLength * textDelay;
@@ -81,7 +83,18 @@ export default function IMSSTextbox(props: ITextboxProps) {
         </span>
       );
     });
-    return <div key={`text-line-${index}`}>{textLine}</div>;
+    return (
+      <div
+        style={{
+          wordBreak: isSafari || props.isFirefox ? 'break-all' : undefined,
+          display: isSafari ? 'flex' : undefined,
+          flexWrap: isSafari ? 'wrap' : undefined,
+        }}
+        key={`text-line-${index}`}
+      >
+        {textLine}
+      </div>
+    );
   });
   return (
     <>
@@ -131,9 +144,6 @@ export default function IMSSTextbox(props: ITextboxProps) {
             className={applyStyle('text', styles.text)}
             style={{
               fontSize,
-              wordBreak: isSafari || props.isFirefox ? 'break-all' : undefined,
-              display: isSafari ? 'flex' : undefined,
-              flexWrap: isSafari ? 'wrap' : undefined,
               flexFlow: 'column',
               overflow: 'hidden',
               paddingLeft: '0.1em',
