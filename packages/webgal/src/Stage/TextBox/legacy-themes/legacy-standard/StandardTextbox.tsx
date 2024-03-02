@@ -2,25 +2,7 @@ import styles from './standard.module.scss';
 import { textSize } from '@/store/userDataInterface';
 import { ReactNode, useEffect } from 'react';
 import { WebGAL } from '@/Core/WebGAL';
-
-export interface ITextboxProps {
-  textArray: ReactNode[];
-  textDelay: number;
-  currentConcatDialogPrev: string;
-  currentDialogKey: string;
-  isText: boolean;
-  isSafari: boolean;
-  isFirefox: boolean;
-  fontSize: string;
-  miniAvatar: string;
-  showName: string;
-  font: string;
-  textDuration: number;
-  textSizeState: number;
-  lineLimit: number;
-  isUseStroke: boolean;
-  textboxOpacity: number;
-}
+import { ITextboxProps } from '@/Stage/TextBox/types';
 
 export default function StandardTextbox(props: ITextboxProps) {
   const {
@@ -51,9 +33,9 @@ export default function StandardTextbox(props: ITextboxProps) {
         e.className = styles.TextBox_textElement_Settled;
       });
     }
-    WebGAL.eventBus.on('text-settle', settleText);
+    WebGAL.events.textSettle.on(settleText);
     return () => {
-      WebGAL.eventBus.off('text-settle', settleText);
+      WebGAL.events.textSettle.off(settleText);
     };
   }, []);
 

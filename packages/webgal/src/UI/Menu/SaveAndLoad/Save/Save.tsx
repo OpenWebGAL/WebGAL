@@ -37,16 +37,6 @@ export const Save: FC = () => {
     page.push(element);
   }
 
-  const { i18n } = useTranslation();
-  const lang = i18n.language;
-  const isFr = lang === 'fr';
-  const frStyl: CSSProperties = {
-    fontSize: '150%',
-    padding: '0 0.2em 0 0.2em',
-    margin: '0 0 0 0.8em',
-    letterSpacing: '0.05em',
-  };
-
   const tCommon = useTrans('common.');
 
   const showSaves = [];
@@ -115,7 +105,7 @@ export const Save: FC = () => {
   return (
     <div className={styles.Save_Load_main}>
       <div className={styles.Save_Load_top}>
-        <div className={styles.Save_Load_title} style={isFr ? frStyl : undefined}>
+        <div className={styles.Save_Load_title}>
           <div className={styles.Save_title_text}>{t('saving.title')}</div>
         </div>
         <div className={styles.Save_Load_top_buttonList}>{page}</div>

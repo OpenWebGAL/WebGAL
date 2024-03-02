@@ -3,6 +3,7 @@ import mitt from 'mitt';
 import { SceneManager } from '@/Core/Modules/scene';
 import { AnimationManager } from '@/Core/Modules/animations';
 import { Gameplay } from './Modules/gamePlay';
+import { Events } from '@/Core/Modules/events';
 
 export class WebgalCore {
   public sceneManager = new SceneManager();
@@ -11,5 +12,5 @@ export class WebgalCore {
   public gameplay = new Gameplay();
   public gameName = '';
   public gameKey = '';
-  public eventBus = mitt();
+  public events = new Events();
 }

@@ -63,8 +63,15 @@ const en = {
         display: {
           title: 'Display',
           options: {
+            fullScreen: {
+              title: 'Full Screen',
+              options: {
+                on: 'ON',
+                off: 'OFF',
+              },
+            },
             textSpeed: {
-              title: 'Speed of Text Showing',
+              title: 'Text Speed',
               options: {
                 slow: 'Slow',
                 medium: 'Medium',

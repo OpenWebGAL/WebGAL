@@ -55,6 +55,7 @@ export const initState: IStageState = {
   currentConcatDialogPrev: '',
   enableFilm: '',
   isDisableTextbox: false,
+  replacedUIlable: {},
 };
 
 /**
@@ -168,6 +169,9 @@ const stageSlice = createSlice({
         // Update the existing expression
         state.live2dExpression[index].expression = expression;
       }
+    },
+    replaceUIlable: (state, action: PayloadAction<[string, string]>) => {
+      state.replacedUIlable[action.payload[0]] = action.payload[1];
     },
   },
 });

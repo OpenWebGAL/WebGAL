@@ -1,100 +1,79 @@
-import { IScene } from '../controller/scene/sceneInterface';
-import { logger } from '../util/logger';
-import { assetsPrefetcher } from '@/Core/util/prefetcher/assetsPrefetcher';
 import { assetSetter } from '@/Core/util/gameAssetsAccess/assetSetter';
+import { assetsPrefetcher } from '@/Core/util/prefetcher/assetsPrefetcher';
 import SceneParser from 'webgal-parser';
-
-import { commandType, ISentence } from '@/Core/controller/scene/sceneInterface';
-import { intro } from '@/Core/gameScripts/intro';
+import { commandType, IScene } from '../controller/scene/sceneInterface';
+import { logger } from '../util/logger';
+import { bgm } from '@/Core/gameScripts/bgm';
+import { callSceneScript } from '@/Core/gameScripts/callSceneScript';
 import { changeBg } from '@/Core/gameScripts/changeBg';
 import { changeFigure } from '@/Core/gameScripts/changeFigure';
-import { miniAvatar } from '@/Core/gameScripts/miniAvatar';
 import { changeSceneScript } from '@/Core/gameScripts/changeSceneScript';
 import { choose } from '@/Core/gameScripts/choose';
-import { end } from '../gameScripts/end';
-import { bgm } from '@/Core/gameScripts/bgm';
+import { comment } from '@/Core/gameScripts/comment';
+import { filmMode } from '@/Core/gameScripts/filmMode';
+import { getUserInput } from '@/Core/gameScripts/getUserInput';
+import { intro } from '@/Core/gameScripts/intro';
+import { label } from '@/Core/gameScripts/label';
+import { miniAvatar } from '@/Core/gameScripts/miniAvatar';
+import { pixi } from '@/Core/gameScripts/pixi';
+import { playEffect } from '@/Core/gameScripts/playEffect';
 import { playVideo } from '@/Core/gameScripts/playVideo';
+import { setAnimation } from '@/Core/gameScripts/setAnimation';
 import { setComplexAnimation } from '@/Core/gameScripts/setComplexAnimation';
 import { setFilter } from '@/Core/gameScripts/setFilter';
-import { pixiInit } from '../gameScripts/pixi/pixiInit';
-import { pixi } from '@/Core/gameScripts/pixi';
-import { label } from '@/Core/gameScripts/label';
-import { jumpLabel } from '../gameScripts/jumpLabel';
-import { setVar } from '../gameScripts/setVar';
-import { showVars } from '../gameScripts/showVars';
-import { unlockCg } from '@/Core/gameScripts/unlockCg';
-import { unlockBgm } from '@/Core/gameScripts/unlockBgm';
-import { say } from '../gameScripts/say';
-import { filmMode } from '@/Core/gameScripts/filmMode';
-import { callSceneScript } from '@/Core/gameScripts/callSceneScript';
-import { setTextbox } from '@/Core/gameScripts/setTextbox';
-import { setAnimation } from '@/Core/gameScripts/setAnimation';
-import { playEffect } from '@/Core/gameScripts/playEffect';
 import { setTempAnimation } from '@/Core/gameScripts/setTempAnimation';
-import { comment } from '@/Core/gameScripts/comment';
-import { IPerform } from '@/Core/Modules/perform/performInterface';
+import { setTextbox } from '@/Core/gameScripts/setTextbox';
 import { setTransform } from '@/Core/gameScripts/setTransform';
 import { setTransition } from '@/Core/gameScripts/setTransition';
-import { getUserInput } from '@/Core/gameScripts/getUserInput';
+import { unlockBgm } from '@/Core/gameScripts/unlockBgm';
+import { unlockCg } from '@/Core/gameScripts/unlockCg';
+import { end } from '../gameScripts/end';
+import { jumpLabel } from '../gameScripts/jumpLabel';
+import { pixiInit } from '../gameScripts/pixi/pixiInit';
+import { say } from '../gameScripts/say';
+import { setVar } from '../gameScripts/setVar';
+import { showVars } from '../gameScripts/showVars';
+import { defineScripts, IConfigInterface, ScriptConfig, ScriptFunction, scriptRegistry } from './utils';
+import { applyStyle } from '@/Core/gameScripts/applyStyle';
 
-interface IConfigInterface {
-  scriptString: string;
-  scriptType: commandType;
-  scriptFunction: (sentence: ISentence) => IPerform;
-}
+export const SCRIPT_TAG_MAP = defineScripts({
+  intro: ScriptConfig(commandType.intro, intro),
+  changeBg: ScriptConfig(commandType.changeBg, changeBg),
+  changeFigure: ScriptConfig(commandType.changeFigure, changeFigure),
+  miniAvatar: ScriptConfig(commandType.miniAvatar, miniAvatar, { next: true }),
+  changeScene: ScriptConfig(commandType.changeScene, changeSceneScript),
+  choose: ScriptConfig(commandType.choose, choose),
+  end: ScriptConfig(commandType.end, end),
+  bgm: ScriptConfig(commandType.bgm, bgm, { next: true }),
+  playVideo: ScriptConfig(commandType.video, playVideo),
+  setComplexAnimation: ScriptConfig(commandType.setComplexAnimation, setComplexAnimation),
+  setFilter: ScriptConfig(commandType.setFilter, setFilter),
+  pixiInit: ScriptConfig(commandType.pixiInit, pixiInit, { next: true }),
+  pixiPerform: ScriptConfig(commandType.pixi, pixi, { next: true }),
+  label: ScriptConfig(commandType.label, label, { next: true }),
+  jumpLabel: ScriptConfig(commandType.jumpLabel, jumpLabel),
+  setVar: ScriptConfig(commandType.setVar, setVar, { next: true }),
+  showVars: ScriptConfig(commandType.showVars, showVars),
+  unlockCg: ScriptConfig(commandType.unlockCg, unlockCg, { next: true }),
+  unlockBgm: ScriptConfig(commandType.unlockBgm, unlockBgm, { next: true }),
+  say: ScriptConfig(commandType.say, say),
+  filmMode: ScriptConfig(commandType.filmMode, filmMode, { next: true }),
+  callScene: ScriptConfig(commandType.callScene, callSceneScript),
+  setTextbox: ScriptConfig(commandType.setTextbox, setTextbox),
+  setAnimation: ScriptConfig(commandType.setAnimation, setAnimation),
+  playEffect: ScriptConfig(commandType.playEffect, playEffect, { next: true }),
+  setTempAnimation: ScriptConfig(commandType.setTempAnimation, setTempAnimation),
+  __commment: ScriptConfig(commandType.comment, comment, { next: true }),
+  setTransform: ScriptConfig(commandType.setTransform, setTransform),
+  setTransition: ScriptConfig(commandType.setTransition, setTransition, { next: true }),
+  getUserInput: ScriptConfig(commandType.getUserInput, getUserInput),
+  applyStyle: ScriptConfig(commandType.applyStyle, applyStyle, { next: true }),
+  // if: ScriptConfig(commandType.if, undefined, { next: true }),
+});
 
-export const SCRIPT_CONFIG: IConfigInterface[] = [
-  { scriptString: 'intro', scriptType: commandType.intro, scriptFunction: intro },
-  { scriptString: 'changeBg', scriptType: commandType.changeBg, scriptFunction: changeBg },
-  { scriptString: 'changeFigure', scriptType: commandType.changeFigure, scriptFunction: changeFigure },
-  { scriptString: 'miniAvatar', scriptType: commandType.miniAvatar, scriptFunction: miniAvatar },
-  { scriptString: 'changeScene', scriptType: commandType.changeScene, scriptFunction: changeSceneScript },
-  { scriptString: 'choose', scriptType: commandType.choose, scriptFunction: choose },
-  { scriptString: 'end', scriptType: commandType.end, scriptFunction: end },
-  { scriptString: 'bgm', scriptType: commandType.bgm, scriptFunction: bgm },
-  { scriptString: 'playVideo', scriptType: commandType.video, scriptFunction: playVideo },
-  {
-    scriptString: 'setComplexAnimation',
-    scriptType: commandType.setComplexAnimation,
-    scriptFunction: setComplexAnimation,
-  },
-  { scriptString: 'setFilter', scriptType: commandType.setFilter, scriptFunction: setFilter },
-  { scriptString: 'pixiInit', scriptType: commandType.pixiInit, scriptFunction: pixiInit },
-  { scriptString: 'pixiPerform', scriptType: commandType.pixi, scriptFunction: pixi },
-  { scriptString: 'label', scriptType: commandType.label, scriptFunction: label },
-  { scriptString: 'jumpLabel', scriptType: commandType.jumpLabel, scriptFunction: jumpLabel },
-  { scriptString: 'setVar', scriptType: commandType.setVar, scriptFunction: setVar },
-  { scriptString: 'callScene', scriptType: commandType.callScene, scriptFunction: changeSceneScript },
-  { scriptString: 'showVars', scriptType: commandType.showVars, scriptFunction: showVars },
-  { scriptString: 'unlockCg', scriptType: commandType.unlockCg, scriptFunction: unlockCg },
-  { scriptString: 'unlockBgm', scriptType: commandType.unlockBgm, scriptFunction: unlockBgm },
-  { scriptString: 'say', scriptType: commandType.say, scriptFunction: say },
-  { scriptString: 'filmMode', scriptType: commandType.filmMode, scriptFunction: filmMode },
-  { scriptString: 'callScene', scriptType: commandType.callScene, scriptFunction: callSceneScript },
-  { scriptString: 'setTextbox', scriptType: commandType.setTextbox, scriptFunction: setTextbox },
-  { scriptString: 'setAnimation', scriptType: commandType.setAnimation, scriptFunction: setAnimation },
-  { scriptString: 'playEffect', scriptType: commandType.playEffect, scriptFunction: playEffect },
-  { scriptString: 'setTempAnimation', scriptType: commandType.setTempAnimation, scriptFunction: setTempAnimation },
-  { scriptString: '__commment', scriptType: commandType.comment, scriptFunction: comment },
-  { scriptString: 'setTransform', scriptType: commandType.setTransform, scriptFunction: setTransform },
-  { scriptString: 'setTransition', scriptType: commandType.setTransition, scriptFunction: setTransition },
-  { scriptString: 'getUserInput', scriptType: commandType.getUserInput, scriptFunction: getUserInput },
-];
-export const ADD_NEXT_ARG_LIST = [
-  commandType.bgm,
-  commandType.pixi,
-  commandType.pixiInit,
-  commandType.label,
-  commandType.if,
-  commandType.miniAvatar,
-  commandType.setVar,
-  commandType.unlockBgm,
-  commandType.unlockCg,
-  commandType.filmMode,
-  commandType.playEffect,
-  commandType.comment,
-  commandType.setTransition,
-];
+export const SCRIPT_CONFIG: IConfigInterface[] = Object.values(SCRIPT_TAG_MAP);
+
+export const ADD_NEXT_ARG_LIST = SCRIPT_CONFIG.filter((config) => config.next).map((config) => config.scriptType);
 
 /**
  * 场景解析器
@@ -110,3 +89,5 @@ export const sceneParser = (rawScene: string, sceneName: string, sceneUrl: strin
   logger.info(`解析场景：${sceneName}，数据为：`, parsedScene);
   return parsedScene;
 };
+
+export { scriptRegistry, type ScriptFunction };

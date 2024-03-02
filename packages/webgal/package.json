@@ -1,7 +1,7 @@
 {
   "name": "webgal",
   "private": true,
-  "version": "4.4.11",
+  "version": "4.4.12",
   "scripts": {
     "dev": "vite --host --port 3000",
     "build": "cross-env NODE_ENV=production tsc && vite build --base=./",
@@ -9,6 +9,7 @@
     "lint": "eslint src/** --fix"
   },
   "dependencies": {
+    "@emotion/css": "^11.11.2",
     "@icon-park/react": "^1.4.2",
     "@reduxjs/toolkit": "^1.8.1",
     "angular-expressions": "^1.1.5",
@@ -51,6 +52,6 @@
     "prettier": "^2.6.2",
     "rollup-plugin-visualizer": "^5.6.0",
     "typescript": "^4.5.4",
-    "vite": "^4.4.9"
+    "vite": "^4.5.2"
   }
 }
