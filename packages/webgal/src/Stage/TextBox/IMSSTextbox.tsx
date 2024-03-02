@@ -38,23 +38,42 @@ export default function IMSSTextbox(props: ITextboxProps) {
     };
   }, []);
 
-  const textElementList = textArray.map((e, index) => {
-    // if (e === '<br />') {
-    //   return <br key={`br${index}`} />;
-    // }
-    let delay = index * textDelay;
-    let prevLength = currentConcatDialogPrev.length;
-    if (currentConcatDialogPrev !== '' && index >= prevLength) {
-      delay = delay - prevLength * textDelay;
-    }
-    if (index < prevLength) {
+  let allTextIndex = 0;
+  const textElementList = textArray.map((line, index) => {
+    const textLine = line.map((e, index) => {
+      // if (e === '<br />') {
+      //   return <br key={`br${index}`} />;
+      // }
+      let delay = allTextIndex * textDelay;
+      allTextIndex++;
+      let prevLength = currentConcatDialogPrev.length;
+      if (currentConcatDialogPrev !== '' && index >= prevLength) {
+        delay = delay - prevLength * textDelay;
+      }
+      if (index < prevLength) {
+        return (
+          <span
+            // data-text={e}
+            id={`${delay}`}
+            className={applyStyle('TextBox_textElement_Settled', styles.TextBox_textElement_Settled)}
+            key={currentDialogKey + index}
+            style={{ animationDelay: `${delay}ms`, animationDuration: `${textDuration}ms` }}
+          >
+            <span className={styles.zhanwei}>
+              {e}
+              <span className={applyStyle('outer', styles.outer)}>{e}</span>
+              {isUseStroke && <span className={applyStyle('inner', styles.inner)}>{e}</span>}
+            </span>
+          </span>
+        );
+      }
       return (
         <span
-          // data-text={e}
+          data-text={e}
           id={`${delay}`}
-          className={applyStyle('TextBox_textElement_Settled', styles.TextBox_textElement_Settled)}
+          className={`${applyStyle('TextBox_textElement_start', styles.TextBox_textElement_start)} Textelement_start`}
           key={currentDialogKey + index}
-          style={{ animationDelay: `${delay}ms`, animationDuration: `${textDuration}ms` }}
+          style={{ animationDelay: `${delay}ms`, position: 'relative' }}
         >
           <span className={styles.zhanwei}>
             {e}
@@ -63,21 +82,18 @@ export default function IMSSTextbox(props: ITextboxProps) {
           </span>
         </span>
       );
-    }
+    });
     return (
-      <span
-        data-text={e}
-        id={`${delay}`}
-        className={`${applyStyle('TextBox_textElement_start', styles.TextBox_textElement_start)} Textelement_start`}
-        key={currentDialogKey + index}
-        style={{ animationDelay: `${delay}ms`, position: 'relative' }}
+      <div
+        style={{
+          wordBreak: isSafari || props.isFirefox ? 'break-all' : undefined,
+          display: isSafari ? 'flex' : undefined,
+          flexWrap: isSafari ? 'wrap' : undefined,
+        }}
+        key={`text-line-${index}`}
       >
-        <span className={styles.zhanwei}>
-          {e}
-          <span className={applyStyle('outer', styles.outer)}>{e}</span>
-          {isUseStroke && <span className={applyStyle('inner', styles.inner)}>{e}</span>}
-        </span>
-      </span>
+        {textLine}
+      </div>
     );
   });
   return (
@@ -128,12 +144,9 @@ export default function IMSSTextbox(props: ITextboxProps) {
             className={applyStyle('text', styles.text)}
             style={{
               fontSize,
-              wordBreak: isSafari || props.isFirefox ? 'break-all' : undefined,
-              display: isSafari ? 'flex' : undefined,
-              flexWrap: isSafari ? 'wrap' : undefined,
+              flexFlow: 'column',
               overflow: 'hidden',
               paddingLeft: '0.1em',
-              WebkitLineClamp: props.lineLimit,
             }}
           >
             {textElementList}
