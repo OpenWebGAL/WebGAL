@@ -198,8 +198,5 @@ $height: 330px;
 
 .text {
   line-height: 1.9em;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  //-webkit-line-clamp: 2;
   overflow: hidden;
 }

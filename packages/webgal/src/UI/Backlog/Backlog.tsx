@@ -29,12 +29,18 @@ export const Backlog = () => {
       const backlogItem = WebGAL.backlogManager.getBacklog()[i];
       const showTextArray = compileSentence(backlogItem.currentStageState.showText, 3, true);
       const showTextArrayReduced = mergeStringsAndKeepObjects(showTextArray);
-      const showTextElementList = showTextArrayReduced.map((e, index) => {
-        if (e === '<br />') {
-          return <br key={`br${index}`} />;
-        } else {
-          return e;
-        }
+      const showTextElementList = showTextArrayReduced.map((line, index) => {
+        return (
+          <div key={`backlog-line-${index}`}>
+            {line.map((e, index) => {
+              if (e === '<br />') {
+                return <br key={`br${index}`} />;
+              } else {
+                return e;
+              }
+            })}
+          </div>
+        );
       });
       const singleBacklogView = (
         <div
@@ -166,7 +172,7 @@ export const Backlog = () => {
   );
 };
 
-function mergeStringsAndKeepObjects(arr: ReactNode[]) {
+function mergeStringsAndKeepObjects(arr: ReactNode[]): ReactNode[][] {
   let result = [];
   let currentString = '';
 
@@ -189,5 +195,5 @@ function mergeStringsAndKeepObjects(arr: ReactNode[]) {
     result.push(currentString);
   }
 
-  return result;
+  return result as ReactNode[][];
 }
