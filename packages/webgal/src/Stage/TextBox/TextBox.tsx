@@ -1,4 +1,4 @@
-import { FC, ReactNode, useEffect, useState } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import { useFontFamily } from '@/hooks/useFontFamily';
@@ -92,7 +92,7 @@ function isCJK(character: string) {
   return !!character.match(/[\u4e00-\u9fa5]|[\u0800-\u4e00]|[\uac00-\ud7ff]/);
 }
 
-export function compileSentence(sentence: string, lineLimit: number, ignoreLineLimit?: boolean): ReactNode[] {
+export function compileSentence(sentence: string, lineLimit: number, ignoreLineLimit?: boolean): ReactNode[][] {
   // 先拆行
   const lines = sentence.split('|');
   // 对每一行进行注音处理
@@ -118,11 +118,7 @@ export function compileSentence(sentence: string, lineLimit: number, ignoreLineL
     });
     return ln;
   });
-  const ret = nodeLines
-    .slice(0, ignoreLineLimit ? undefined : lineLimit)
-    .reduce((prev, curr, currentIndex) => [...prev, ...curr, <br key={`br-${currentIndex}`} />], []);
-  ret.pop();
-  return ret;
+  return nodeLines.slice(0, ignoreLineLimit ? undefined : lineLimit);
 }
 
 /**
@@ -155,7 +151,7 @@ export function splitChars(sentence: string) {
         words.push(word);
         word = '';
       }
-      words.push(' ');
+      words.push('\u00a0');
       cjkFlag = false;
     } else if (isCJK(character) && !isPunctuation(character)) {
       if (!cjkFlag && word) {
