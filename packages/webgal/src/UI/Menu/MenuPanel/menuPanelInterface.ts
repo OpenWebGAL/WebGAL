@@ -1,3 +1,5 @@
+import { CSSProperties } from 'react';
+
 /**
  * @interface IMenuPanel Menu页面的按钮的参数接口
  */
@@ -8,4 +10,5 @@ export interface IMenuPanel {
   iconColor?: string; // 图标颜色
   tagName?: string; // 标签显示名称
   iconName: string; // 图标名称
+  style?: CSSProperties;
 }

@@ -126,7 +126,7 @@ export const Stage: FC = () => {
           nextSentence();
         }}
         onDoubleClick={() => {
-          WebGAL.eventBus.emit('fullscreen-dbclick');
+          WebGAL.events.fullscreenDbClick.emit();
         }}
         id="FullScreenClick"
         style={{ width: '100%', height: '100%', position: 'absolute', zIndex: '12', top: '0' }}

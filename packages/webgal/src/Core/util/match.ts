@@ -1,39 +1,35 @@
-type Case<T, R> = [T, () => R];
-
 class Matcher<T, R = any> {
-  private cases: Array<Case<T, R>> = [];
-  private readonly subject: T;
-  private defaultCase?: () => R;
+  private subject: T;
+  private result: R | undefined;
+  private isEnd = false;
 
   public constructor(subject: T) {
     this.subject = subject;
   }
 
   public with(pattern: T, fn: () => R): this {
-    this.cases.push([pattern, fn]);
+    if (!this.isEnd && this.subject === pattern) {
+      this.result = fn();
+      this.isEnd = true;
+    }
     return this;
   }
 
   public endsWith(pattern: T, fn: () => R) {
-    this.cases.push([pattern, fn]);
+    if (!this.isEnd && this.subject === pattern) {
+      this.result = fn();
+      this.isEnd = true;
+    }
     return this.evaluate();
   }
 
   public default(fn: () => R) {
-    this.defaultCase = fn;
+    if (!this.isEnd) this.result = fn();
     return this.evaluate();
   }
 
   private evaluate(): R | undefined {
-    for (const [pattern, action] of this.cases) {
-      if (pattern === this.subject) {
-        return action();
-      }
-    }
-    if (this.defaultCase) {
-      return this.defaultCase();
-    }
-    return undefined;
+    return this.result;
   }
 }
 

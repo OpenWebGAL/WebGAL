@@ -37,16 +37,6 @@ export const Load: FC = () => {
     page.push(element);
   }
 
-  const { i18n } = useTranslation();
-  const lang = i18n.language;
-  const isFr = lang === 'fr';
-  const frStyl: CSSProperties = {
-    fontSize: '150%',
-    padding: '0 0.2em 0 0.2em',
-    margin: '0 0 0 0.8em',
-    letterSpacing: '0.05em',
-  };
-
   const showSaves = [];
   // 现在尝试设置10个存档每页
   const start = (userDataState.optionData.slPage - 1) * 10 + 1;
@@ -103,7 +93,7 @@ export const Load: FC = () => {
   return (
     <div className={styles.Save_Load_main}>
       <div className={styles.Save_Load_top}>
-        <div className={styles.Save_Load_title} style={isFr ? frStyl : undefined}>
+        <div className={styles.Save_Load_title}>
           <div className={styles.Load_title_text}>{t('loadSaving.title')}</div>
         </div>
         <div className={styles.Save_Load_top_buttonList}>{page}</div>

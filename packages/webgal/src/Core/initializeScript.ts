@@ -24,8 +24,8 @@ export const isIOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); // 判断是否
 export const initializeScript = (): void => {
   // 打印初始log信息
   logger.info(__INFO.version);
-  logger.info('Github: https://github.com/MakinoharaShoko/WebGAL ');
-  logger.info('Made with ❤ by MakinoharaShoko');
+  logger.info('Github: https://github.com/OpenWebGAL/WebGAL ');
+  logger.info('Made with ❤ by OpenWebGAL');
   // 激活强制缩放
   // 在调整窗口大小时重新计算宽高，设计稿按照 1600*900。
   if (isIOS) {

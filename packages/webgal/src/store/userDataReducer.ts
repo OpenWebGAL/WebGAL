@@ -11,6 +11,7 @@ import {
   ISetOptionDataPayload,
   ISetUserDataPayload,
   IUserData,
+  fullScreenOption,
   playSpeed,
   textFont,
   textSize,
@@ -34,6 +35,7 @@ const initialOptionSet: IOptionData = {
   textboxOpacity: 75,
   language: language.zhCn,
   voiceInterruption: voiceOption.yes,
+  fullScreen: fullScreenOption.off,
 };
 
 // 初始化用户数据
@@ -127,6 +129,9 @@ const userDataSlice = createSlice({
     setFastSave: (state, action: PayloadAction<ISaveData | null>) => {
       state.quickSaveData = action.payload;
     },
+    resetFastSave: (state) => {
+      state.quickSaveData = null;
+    },
     resetOptionSet(state) {
       Object.assign(state.optionData, initialOptionSet);
     },
@@ -151,6 +156,7 @@ export const {
   resetOptionSet,
   resetSaveData,
   resetAllData,
+  resetFastSave,
 } = userDataSlice.actions;
 export default userDataSlice.reducer;
 

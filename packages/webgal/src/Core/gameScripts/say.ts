@@ -98,7 +98,7 @@ export const say = (sentence: ISentence): IPerform => {
     duration: sentenceDelay + endDelay,
     isHoldOn: false,
     stopFunction: () => {
-      WebGAL.eventBus.emit('text-settle');
+      WebGAL.events.textSettle.emit();
     },
     blockingNext: () => false,
     blockingAuto: () => true,

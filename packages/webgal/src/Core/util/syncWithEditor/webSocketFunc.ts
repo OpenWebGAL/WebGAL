@@ -49,6 +49,9 @@ export const webSocketFunc = () => {
       const sentence = scene.sentenceList[0];
       runScript(sentence);
     }
+    if (message.command === DebugCommand.REFETCH_TEMPLATE_FILES) {
+      WebGAL.events.styleUpdate.emit();
+    }
   };
   socket.onerror = (e) => {
     logger.info('当前没有连接到 Terre 编辑器');

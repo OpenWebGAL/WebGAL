@@ -37,7 +37,9 @@ export const getUserInput = (sentence: ISentence): IPerform => {
           onClick={() => {
             const userInput: HTMLInputElement = document.getElementById('user-input') as HTMLInputElement;
             if (userInput) {
-              webgalStore.dispatch(setStageVar({ key: varKey, value: userInput?.value ?? '' }));
+              webgalStore.dispatch(
+                setStageVar({ key: varKey, value: (userInput?.value ?? '') === '' ? ' ' : userInput?.value ?? '' }),
+              );
             }
             playSeClick();
             WebGAL.gameplay.performController.unmountPerform('userInput');

@@ -1,16 +1,19 @@
 import { useGenSyncRef } from '@/hooks/useGenSyncRef';
 import { RootState } from '@/store/store';
 import { useMounted, useUnMounted, useUpdated } from '@/hooks/useLifeCycle';
-import { useCallback, useRef } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import { componentsVisibility, MenuPanelTag } from '@/store/guiInterface';
 import { setVisibility } from '@/store/GUIReducer';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { startFast, stopAll, stopFast } from '@/Core/controller/gamePlay/fastSkip';
 import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
 import styles from '@/UI/Backlog/backlog.module.scss';
 import throttle from 'lodash/throttle';
 import { fastSaveGame } from '@/Core/controller/storage/fastSaveLoad';
 import { WebGAL } from '@/Core/WebGAL';
+import { setOptionData } from '@/store/userDataReducer';
+import { setStorage } from '@/Core/controller/storage/storageController';
+import { fullScreenOption } from '@/store/userDataInterface';
 
 // options备用
 export interface HotKeyType {
@@ -18,13 +21,20 @@ export interface HotKeyType {
   MouseWheel: {} | boolean;
   Ctrl: boolean;
   Esc:
-    | {
-        href: string;
-        nav: 'replace' | 'push';
-      }
-    | boolean;
+  | {
+    href: string;
+    nav: 'replace' | 'push';
+  }
+  | boolean;
   AutoSave: {} | boolean;
 }
+
+export interface Keyboard {
+  lock: (keys: string[]) => Promise<void>;
+  unlock: () => Promise<void>;
+}
+
+export const keyboard: Keyboard | undefined = 'keyboard' in navigator && (navigator.keyboard as any); // FireFox and Safari not support
 
 // export const fastSaveGameKey = `FastSaveKey`;
 // export const isFastSaveKey = `FastSaveActive`;
@@ -33,9 +43,10 @@ export function useHotkey(opt?: HotKeyType) {
   useMouseRightClickHotKey();
   useMouseWheel();
   useSkip();
-  useEscape();
+  usePanic();
   useFastSaveBeforeUnloadPage();
   useSpaceAndEnter();
+  useToggleFullScreen();
 }
 
 /**
@@ -78,6 +89,10 @@ export function useMouseRightClickHotKey() {
     document.removeEventListener('contextmenu', handleContextMenu);
   });
 }
+
+let wheelTimeout = setTimeout(() => {
+  // 初始化，什么也不干
+}, 0);
 
 /**
  * 滚轮向上打开历史记录
@@ -123,6 +138,12 @@ export function useMouseWheel() {
       }
       // setComponentVisibility('showBacklog', false);
     } else if (isGameActive() && direction === 'down' && !ctrlKey) {
+      clearTimeout(wheelTimeout);
+      WebGAL.gameplay.isFast = true;
+      // 滚轮视作快进
+      setTimeout(() => {
+        WebGAL.gameplay.isFast = false;
+      }, 150);
       next();
     }
   }, []);
@@ -135,19 +156,18 @@ export function useMouseWheel() {
 }
 
 /**
- * ESC panic button
+ * Panic Button, use Esc and Backquote
  */
-export function useEscape() {
-  const isEscKey = useCallback(
-    (ev: KeyboardEvent) => !ev.isComposing && !ev.defaultPrevented && ev.code === 'Escape',
-    [],
-  );
+export function usePanic() {
+  const panicButtonList = ['Escape', 'Backquote'];
+  const isPanicButton = (ev: KeyboardEvent) =>
+    !ev.isComposing && !ev.defaultPrevented && panicButtonList.includes(ev.code);
   const GUIStore = useGenSyncRef((state: RootState) => state.GUI);
   const isTitleShown = useCallback(() => GUIStore.current.showTitle, [GUIStore]);
   const isPanicOverlayOpen = useIsPanicOverlayOpen(GUIStore);
   const setComponentVisibility = useSetComponentVisibility();
-  const handlePressEsc = useCallback((ev: KeyboardEvent) => {
-    if (!isEscKey(ev) || isTitleShown()) return;
+  const handlePressPanicButton = useCallback((ev: KeyboardEvent) => {
+    if (!isPanicButton(ev) || isTitleShown()) return;
     if (isPanicOverlayOpen()) {
       setComponentVisibility('showPanicOverlay', false);
       // todo: resume
@@ -158,10 +178,10 @@ export function useEscape() {
     }
   }, []);
   useMounted(() => {
-    document.addEventListener('keyup', handlePressEsc);
+    document.addEventListener('keyup', handlePressPanicButton);
   });
   useUnMounted(() => {
-    document.removeEventListener('keyup', handlePressEsc);
+    document.removeEventListener('keyup', handlePressPanicButton);
   });
 }
 
@@ -354,4 +374,31 @@ export function useSpaceAndEnter() {
 function hasScrollToBottom(dom: Element) {
   const { scrollTop, clientHeight, scrollHeight } = dom;
   return scrollTop === 0;
+}
+
+/**
+ * F11 进入全屏
+ */
+function useToggleFullScreen() {
+  const userDataState = useSelector((state: RootState) => state.userData);
+  const dispatch = useDispatch();
+  const fullScreen = userDataState.optionData.fullScreen;
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.code === 'F11') {
+        e.preventDefault();
+        if (fullScreen !== fullScreenOption.on) {
+          dispatch(setOptionData({ key: 'fullScreen', value: fullScreenOption.on }));
+          setStorage();
+        } else {
+          dispatch(setOptionData({ key: 'fullScreen', value: fullScreenOption.off }));
+          setStorage();
+        }
+      }
+    };
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [fullScreen]);
 }
