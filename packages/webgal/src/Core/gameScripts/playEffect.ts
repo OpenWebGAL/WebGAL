@@ -63,7 +63,6 @@ export const playEffect = (sentence: ISentence): IPerform => {
           skipNextCollect: true,
           stopFunction: () => {
             // 演出已经结束了，所以不用播放效果音了
-            seElement.oncanplay = () => {};
             seElement.pause();
           },
           blockingNext: () => false,
@@ -75,9 +74,7 @@ export const playEffect = (sentence: ISentence): IPerform => {
           stopTimeout: undefined, // 暂时不用，后面会交给自动清除
         };
         resolve(perform);
-        seElement.oncanplay = () => {
-          seElement?.play();
-        };
+        seElement?.play();
         seElement.onended = () => {
           for (const e of WebGAL.gameplay.performController.performList) {
             if (e.performName === performInitName) {

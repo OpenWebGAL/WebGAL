@@ -73,10 +73,6 @@ export const playVideo = (sentence: ISentence): IPerform => {
             stopFunction: () => {
               WebGAL.events.fullscreenDbClick.off(skipVideo);
               /**
-               * 不要播放视频了，因为演出已经没有了。
-               */
-              VocalControl.oncanplay = () => {};
-              /**
                * 恢复音量
                */
               const bgmElement: any = document.getElementById('currentBgm');
@@ -98,23 +94,22 @@ export const playVideo = (sentence: ISentence): IPerform => {
             goNextWhenOver: true,
           };
           resolve(perform);
-          VocalControl.oncanplay = () => {
-            /**
-             * 把bgm和语音的音量设为0
-             */
-            const vocalVol = 0;
-            const bgmVol = 0;
-            const bgmElement: any = document.getElementById('currentBgm');
-            if (bgmElement) {
-              bgmElement.volume = bgmVol.toString();
-            }
-            const vocalElement: any = document.getElementById('currentVocal');
-            if (bgmElement) {
-              vocalElement.volume = vocalVol.toString();
-            }
+          /**
+           * 把bgm和语音的音量设为0
+           */
+          const vocalVol2 = 0;
+          const bgmVol2 = 0;
+          const bgmElement: any = document.getElementById('currentBgm');
+          if (bgmElement) {
+            bgmElement.volume = bgmVol2.toString();
+          }
+          const vocalElement: any = document.getElementById('currentVocal');
+          if (bgmElement) {
+            vocalElement.volume = vocalVol2.toString();
+          }
 
-            VocalControl?.play();
-          };
+          VocalControl?.play();
+
           VocalControl.onended = () => {
             endPerform();
           };
