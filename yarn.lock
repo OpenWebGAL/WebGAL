@@ -609,6 +609,50 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
+"@pixi-spine/base@~3.1.2":
+  version "3.1.2"
+  resolved "https://registry.yarnpkg.com/@pixi-spine/base/-/base-3.1.2.tgz#0bf9ec7a1367d8d8474004f0784d990300328310"
+  integrity sha512-sMOZsCJQW4O11QR7afuHcuu8cSUgJv3paSNzZOh+imxvYB/cOcyG7K+f5sWqlGe+z3J2CLEYCX2WfXeeJi6pHg==
+
+"@pixi-spine/loader-base@~3.1.2":
+  version "3.1.2"
+  resolved "https://registry.yarnpkg.com/@pixi-spine/loader-base/-/loader-base-3.1.2.tgz#b208f14f2cd4b29ff575fc5a32c4f5328e6008f1"
+  integrity sha512-llg0RuuWiqVkyoQA+ceORV0sfUtrWGJj4jQ6erDFn2hMnob+QGzh+qwHSTMAnTNZTINEMfiUxmcwbmUYwTd8Ag==
+  dependencies:
+    "@pixi-spine/base" "~3.1.2"
+
+"@pixi-spine/loader-uni@~3.1.2":
+  version "3.1.2"
+  resolved "https://registry.yarnpkg.com/@pixi-spine/loader-uni/-/loader-uni-3.1.2.tgz#3671675dba01d655f5c207b10723823313e09d00"
+  integrity sha512-5th9gXqNQWMSuOu3euMw2kHETlncxU7LIFvOYqTMsKnwrOAIsPjHSF/4Sat1d3EAvvdMrYm4LmhHklgrAfk6UA==
+  dependencies:
+    "@pixi-spine/base" "~3.1.2"
+    "@pixi-spine/loader-base" "~3.1.2"
+    "@pixi-spine/runtime-3.7" "~3.1.2"
+    "@pixi-spine/runtime-3.8" "~3.1.2"
+    "@pixi-spine/runtime-4.1" "~3.1.2"
+
+"@pixi-spine/runtime-3.7@~3.1.2":
+  version "3.1.2"
+  resolved "https://registry.yarnpkg.com/@pixi-spine/runtime-3.7/-/runtime-3.7-3.1.2.tgz#909ee4b906fe3e1faf8df996025d29c05f2c68b4"
+  integrity sha512-dMcw5x9jG+0itzzbPsJUn8hvhxzRXRzbm/kCUQ51iyFfLZQIK1LoPck4XPVuXckwFjU1qCT+tDZSEGBMYs5//A==
+  dependencies:
+    "@pixi-spine/base" "~3.1.2"
+
+"@pixi-spine/runtime-3.8@~3.1.2":
+  version "3.1.2"
+  resolved "https://registry.yarnpkg.com/@pixi-spine/runtime-3.8/-/runtime-3.8-3.1.2.tgz#be0fe73ce75384d3815a729c826b09c43a9c3db4"
+  integrity sha512-AgS3mUC+5HQ/ehJO5Wo4oBoLg8F+tssF5WXi3FnnjqOaMcO+Ag232ForoL2iYHW40TKx0xMi5MpXsSafgS1i1A==
+  dependencies:
+    "@pixi-spine/base" "~3.1.2"
+
+"@pixi-spine/runtime-4.1@~3.1.2":
+  version "3.1.2"
+  resolved "https://registry.yarnpkg.com/@pixi-spine/runtime-4.1/-/runtime-4.1-3.1.2.tgz#43aa99b71dca01a962db7dee04a38e2fe167d33e"
+  integrity sha512-XtaKAuLTtJ3o3llcUTr0d94dnRTyYHlss+x4VsYm1H38r4DUmQTBS13nisW0pgS3fY60D8AbEJkYVW7mwokxag==
+  dependencies:
+    "@pixi-spine/base" "~3.1.2"
+
 "@pixi/accessibility@6.5.10":
   version "6.5.10"
   resolved "https://registry.yarnpkg.com/@pixi/accessibility/-/accessibility-6.5.10.tgz#53727df881251ad0db545de93f8b273c5b34ff67"
@@ -4132,6 +4176,18 @@ pixi-live2d-display@^0.4.0:
   integrity sha512-xeYC6y4Y0Bxe9ksWNlGFZC1rII/MPrzPQK7t1c3ubA8RhkOISIqHJl38fNumXqhGEs+yItmgDOkFT+9dsyGDjA==
   dependencies:
     gh-pages "^4.0.0"
+
+pixi-spine@^3.1.2:
+  version "3.1.2"
+  resolved "https://registry.yarnpkg.com/pixi-spine/-/pixi-spine-3.1.2.tgz#f63c5c566c2e74eae3e0c99da172f67404227398"
+  integrity sha512-rTTwXhBl5gZFZ793zdM/to0bifU8K4aa1gD0ilOiCqC/pgw5OxCcKnoRW3i05ythjzI3GlN6G0MDblOe2myr3w==
+  dependencies:
+    "@pixi-spine/base" "~3.1.2"
+    "@pixi-spine/loader-base" "~3.1.2"
+    "@pixi-spine/loader-uni" "~3.1.2"
+    "@pixi-spine/runtime-3.7" "~3.1.2"
+    "@pixi-spine/runtime-3.8" "~3.1.2"
+    "@pixi-spine/runtime-4.1" "~3.1.2"
 
 pixi.js@^6.3.0:
   version "6.5.10"
