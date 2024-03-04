@@ -18,7 +18,7 @@ export const whenChecker = (whenValue: string | undefined): boolean => {
     return true;
   }
   // 先把变量解析出来
-  const valExpArr = whenValue.split(/([+\-*\/()><!]|>=|<=|==)/g);
+  const valExpArr = whenValue.split(/([+\-*\/()><!]|>=|<=|==|&&|\|\||!=)/g);
   const valExp = valExpArr
     .map((e) => {
       if (e.match(/[a-zA-Z]/)) {
