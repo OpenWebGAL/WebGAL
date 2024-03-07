@@ -6,6 +6,8 @@
 
 **[Join Discord Server](https://discord.gg/kPrQkJttJy)**
 
+<a href="https://www.producthunt.com/posts/webgal?utm_source=badge-featured&utm_medium=badge&utm_souce=badge-webgal" target="_blank"><img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=443280&theme=light" alt="WebGAL - Galgame&#0032;Editing&#0046;&#0032;Redefined | Product Hunt" style="width: 250px; height: 54px;" width="250" height="54" /></a>
+
 # WebGAL
 
 **A visually appealing, feature-rich, and easy-to-develop new web-based visual novel engine**

@@ -6,6 +6,8 @@
 
 **[Discord 서버 참가하기](https://discord.gg/kPrQkJttJy)**
 
+<a href="https://www.producthunt.com/posts/webgal?utm_source=badge-featured&utm_medium=badge&utm_souce=badge-webgal" target="_blank"><img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=443280&theme=light" alt="WebGAL - Galgame&#0032;Editing&#0046;&#0032;Redefined | Product Hunt" style="width: 250px; height: 54px;" width="250" height="54" /></a>
+
 # WebGAL
 
 **시각적으로 매력적이며, 기능이 풍부하고, 쉽게 개발할 수 있는 새로운 웹 기반 비주얼 노벨 엔진**
