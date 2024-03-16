@@ -7,7 +7,7 @@ import { compile } from 'angular-expressions';
 import { setGlobalVar } from '@/store/userDataReducer';
 import { ActionCreatorWithPayload } from '@reduxjs/toolkit';
 import { ISetGameVar } from '@/store/stageInterface';
-import { syncStorageFast } from '@/Core/controller/storage/storageController';
+import { dumpToStorageFast } from '@/Core/controller/storage/storageController';
 
 /**
  * 设置变量
@@ -61,7 +61,7 @@ export const setVar = (sentence: ISentence): IPerform => {
     }
     if (setGlobal) {
       logger.debug('设置全局变量：', { key, value: webgalStore.getState().userData.globalGameVar[key] });
-      syncStorageFast();
+      dumpToStorageFast();
     } else {
       logger.debug('设置变量：', { key, value: webgalStore.getState().stage.GameVar[key] });
     }

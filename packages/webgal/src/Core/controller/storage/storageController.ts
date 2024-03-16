@@ -51,7 +51,7 @@ function debounce<T, K>(func: (...args: T[]) => K, wait: number) {
   return context;
 }
 
-export const syncStorageFast = () => {
+export const dumpToStorageFast = () => {
   const userDataState = webgalStore.getState().userData;
   localforage.setItem(WebGAL.gameKey, userDataState).then(() => {
     localforage.getItem(WebGAL.gameKey).then((newUserData) => {
