@@ -1,4 +1,4 @@
-import { CSSProperties, FC } from 'react';
+import { CSSProperties, FC, useEffect } from 'react';
 import { loadGame } from '@/Core/controller/storage/loadGame';
 import styles from '../SaveAndLoad.module.scss';
 // import {saveGame} from '@/Core/controller/storage/saveGame';
@@ -9,10 +9,12 @@ import { setSlPage } from '@/store/userDataReducer';
 import useTrans from '@/hooks/useTrans';
 import { useTranslation } from 'react-i18next';
 import useSoundEffect from '@/hooks/useSoundEffect';
+import { getSavesFromStorage } from '@/Core/controller/storage/savesController';
 
 export const Load: FC = () => {
   const { playSeClick, playSeEnter, playSePageChange } = useSoundEffect();
   const userDataState = useSelector((state: RootState) => state.userData);
+  const saveDataState = useSelector((state: RootState) => state.saveData);
   const dispatch = useDispatch();
   const page = [];
   for (let i = 1; i <= 20; i++) {
@@ -41,10 +43,15 @@ export const Load: FC = () => {
   // 现在尝试设置10个存档每页
   const start = (userDataState.optionData.slPage - 1) * 10 + 1;
   const end = start + 9;
+
+  useEffect(() => {
+    getSavesFromStorage(start, end);
+  }, [start, end]);
+
   let animationIndex = 0;
   for (let i = start; i <= end; i++) {
     animationIndex++;
-    const saveData = userDataState.saveData[i];
+    const saveData = saveDataState.saveData[i];
     let saveElementContent = <div />;
     if (saveData) {
       const speaker = saveData.nowStageState.showName === '' ? '\u00A0' : `${saveData.nowStageState.showName}`;

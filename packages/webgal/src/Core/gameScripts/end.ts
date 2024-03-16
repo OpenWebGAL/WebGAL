@@ -8,8 +8,8 @@ import { webgalStore } from '@/store/store';
 import { setVisibility } from '@/store/GUIReducer';
 import { playBgm } from '@/Core/controller/stage/playBgm';
 import { WebGAL } from '@/Core/WebGAL';
-import { resetFastSave } from '@/store/userDataReducer';
-import { syncStorageFast } from '@/Core/controller/storage/storageController';
+import { dumpToStorageFast } from '@/Core/controller/storage/storageController';
+import { saveActions } from '@/store/savesReducer';
 
 /**
  * 结束游戏
@@ -24,8 +24,8 @@ export const end = (sentence: ISentence): IPerform => {
   setTimeout(() => {
     WebGAL.sceneManager.resetScene();
   }, 5);
-  dispatch(resetFastSave());
-  syncStorageFast();
+  dispatch(saveActions.resetFastSave());
+  dumpToStorageFast();
   sceneFetcher(sceneUrl).then((rawScene) => {
     // 场景写入到运行时
     WebGAL.sceneManager.sceneData.currentScene = sceneParser(rawScene, 'start.txt', sceneUrl);
