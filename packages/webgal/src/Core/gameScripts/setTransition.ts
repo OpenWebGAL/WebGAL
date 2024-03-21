@@ -12,7 +12,7 @@ import { WebGAL } from '@/Core/WebGAL';
  */
 export const setTransition = (sentence: ISentence): IPerform => {
   // 根据参数设置指定位置
-  let key = '';
+  let key = '0';
   for (const e of sentence.args) {
     if (e.key === 'target') {
       key = e.value.toString();

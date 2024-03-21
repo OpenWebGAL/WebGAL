@@ -28,7 +28,7 @@ export const setTempAnimation = (sentence: ISentence): IPerform => {
   const newAnimation: IUserAnimation = { name: animationName, effects: animationObj };
   WebGAL.animationManager.addAnimation(newAnimation);
   const animationDuration = getAnimateDuration(animationName);
-  const target = (getSentenceArgByKey(sentence, 'target') ?? 0) as string;
+  const target = (getSentenceArgByKey(sentence, 'target')?.toString() ?? '0') as string;
   const key = `${target}-${animationName}-${animationDuration}`;
   let stopFunction = () => {};
   setTimeout(() => {

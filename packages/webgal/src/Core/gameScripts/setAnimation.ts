@@ -16,7 +16,7 @@ export const setAnimation = (sentence: ISentence): IPerform => {
   const startDialogKey = webgalStore.getState().stage.currentDialogKey;
   const animationName = sentence.content;
   const animationDuration = getAnimateDuration(animationName);
-  const target = (getSentenceArgByKey(sentence, 'target') ?? 'default_id').toString();
+  const target = (getSentenceArgByKey(sentence, 'target')?.toString() ?? 'default_id').toString();
   const key = `${target}-${animationName}-${animationDuration}`;
   let stopFunction;
   setTimeout(() => {
