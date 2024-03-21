@@ -23,7 +23,7 @@ export const setTransform = (sentence: ISentence): IPerform => {
     duration: number;
   })[];
   const duration = getSentenceArgByKey(sentence, 'duration');
-  const target = (getSentenceArgByKey(sentence, 'target') ?? 0) as string;
+  const target = (getSentenceArgByKey(sentence, 'target')?.toString() ?? '0') as string;
   try {
     const frame = JSON.parse(animationString) as ITransform & { duration: number };
     animationObj = generateTransformAnimationObj(target, frame, duration);
