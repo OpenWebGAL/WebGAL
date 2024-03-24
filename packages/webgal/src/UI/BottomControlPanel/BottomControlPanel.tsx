@@ -28,6 +28,8 @@ import useTrans from '@/hooks/useTrans';
 import { useTranslation } from 'react-i18next';
 import useSoundEffect from '@/hooks/useSoundEffect';
 import { showGlogalDialog, switchControls } from '@/UI/GlobalDialog/GlobalDialog';
+import { useEffect } from 'react';
+import { getSavesFromStorage } from '@/Core/controller/storage/savesController';
 
 export const BottomControlPanel = () => {
   const t = useTrans('gaming.');
@@ -52,7 +54,7 @@ export const BottomControlPanel = () => {
     dispatch(setMenuPanelTag(menuPanel));
   };
 
-  const saveData = useSelector((state: RootState) => state.userData.saveData);
+  const saveData = useSelector((state: RootState) => state.saveData.saveData);
   let fastSlPreview = (
     <div style={{ height: '100%', width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
       <div style={{ fontSize: '125%' }}>{t('noSaving')}</div>

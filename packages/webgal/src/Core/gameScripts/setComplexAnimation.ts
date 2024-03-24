@@ -16,7 +16,7 @@ export const setComplexAnimation = (sentence: ISentence): IPerform => {
   const startDialogKey = webgalStore.getState().stage.currentDialogKey;
   const animationName = sentence.content;
   const animationDuration = (getSentenceArgByKey(sentence, 'duration') ?? 0) as number;
-  const target = (getSentenceArgByKey(sentence, 'target') ?? 0) as string;
+  const target = (getSentenceArgByKey(sentence, 'target')?.toString() ?? '0') as string;
   const key = `${target}-${animationName}-${animationDuration}`;
   const animationFunction: Function | null = getAnimationObject(animationName);
   let stopFunction: () => void = () => {};
