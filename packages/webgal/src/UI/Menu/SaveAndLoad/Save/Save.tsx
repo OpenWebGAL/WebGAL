@@ -1,4 +1,4 @@
-import { CSSProperties, FC } from 'react';
+import { CSSProperties, FC, useEffect } from 'react';
 import styles from '../SaveAndLoad.module.scss';
 import { saveGame } from '@/Core/controller/storage/saveGame';
 import { setStorage } from '@/Core/controller/storage/storageController';
@@ -9,6 +9,7 @@ import { showGlogalDialog } from '@/UI/GlobalDialog/GlobalDialog';
 import useTrans from '@/hooks/useTrans';
 import { useTranslation } from 'react-i18next';
 import useSoundEffect from '@/hooks/useSoundEffect';
+import { getSavesFromStorage } from '@/Core/controller/storage/savesController';
 
 export const Save: FC = () => {
   const { playSePageChange, playSeEnter, playSeDialogOpen } = useSoundEffect();
@@ -44,6 +45,11 @@ export const Save: FC = () => {
   // 现在尝试设置10个存档每页
   const start = (userDataState.optionData.slPage - 1) * 10 + 1;
   const end = start + 9;
+
+  useEffect(() => {
+    getSavesFromStorage(start, end);
+  }, [start, end]);
+
   let animationIndex = 0;
   for (let i = start; i <= end; i++) {
     animationIndex++;
