@@ -8,6 +8,8 @@ import { logger } from '@/Core/util/logger';
 import { isIOS } from '@/Core/initializeScript';
 import { WebGALPixiContainer } from '@/Core/controller/stage/pixi/WebGALPixiContainer';
 import { WebGAL } from '@/Core/WebGAL';
+import 'pixi-spine'; // Do this once at the very start of your code. This registers the loader!
+import { Spine } from 'pixi-spine';
 // import { figureCash } from '@/Core/gameScripts/vocal/conentsCash'; // 如果要使用 Live2D，取消这里的注释
 // import { Live2DModel, SoundManager } from 'pixi-live2d-display'; // 如果要使用 Live2D，取消这里的注释
 
@@ -70,7 +72,7 @@ export default class PixiStage {
   // 注册到 Ticker 上的函数
   private stageAnimations: Array<IStageAnimationObject> = [];
   private assetLoader = new PIXI.Loader();
-  private loadQueue: { url: string; callback: () => void }[] = [];
+  private loadQueue: { url: string; callback: () => void; name?: string }[] = [];
   private live2dFigureRecorder: Array<ILive2DRecord> = [];
 
   // 锁定变换对象（对象可能正在执行动画，不能应用变换）
@@ -513,6 +515,93 @@ export default class PixiStage {
   }
 
   /**
+   * 添加 Spine 立绘
+   * @param key 立绘的标识，一般和立绘位置有关
+   * @param url 立绘图片url
+   * @param presetPosition
+   */
+  public addSpineFigure(key: string, url: string, presetPosition: 'left' | 'center' | 'right' = 'center') {
+    const spineId = `spine-${url}`;
+    const loader = this.assetLoader;
+    // 准备用于存放这个立绘的 Container
+    const thisFigureContainer = new WebGALPixiContainer();
+
+    // 是否有相同 key 的立绘
+    const setFigIndex = this.figureObjects.findIndex((e) => e.key === key);
+    const isFigSet = setFigIndex >= 0;
+
+    // 已经有一个这个 key 的立绘存在了
+    if (isFigSet) {
+      this.removeStageObjectByKey(key);
+    }
+
+    // 挂载
+    this.figureContainer.addChild(thisFigureContainer);
+    const figureUuid = uuid();
+    this.figureObjects.push({ uuid: figureUuid, key: key, pixiContainer: thisFigureContainer, sourceUrl: url });
+
+    // 完成图片加载后执行的函数
+    const setup = () => {
+      console.log(this.assetLoader.resources);
+      const spineResource: any = this.assetLoader.resources?.[spineId];
+      // TODO：找一个更好的解法，现在的解法是无论是否复用原来的资源，都设置一个延时以让动画工作正常！
+      setTimeout(() => {
+        if (spineResource && this.getStageObjByUuid(figureUuid)) {
+          const figureSpine = new Spine(spineResource.spineData);
+          const transY = spineResource?.spineData?.y ?? 0;
+          /**
+           * 重设大小
+           */
+          console.log(figureSpine);
+          const originalWidth = figureSpine.width;
+          const originalHeight = figureSpine.height;
+          const scaleX = this.stageWidth / originalWidth;
+          const scaleY = this.stageHeight / originalHeight;
+          // 我也不知道为什么啊啊啊啊
+          figureSpine.y = -(scaleY * transY) / 2;
+          console.log(figureSpine.state);
+          figureSpine.state.setAnimation(0, '07', true);
+          const targetScale = Math.min(scaleX, scaleY);
+          const figureSprite = new PIXI.Sprite();
+          figureSprite.addChild(figureSpine);
+          figureSprite.scale.x = targetScale;
+          figureSprite.scale.y = targetScale;
+          figureSprite.anchor.set(0.5);
+          figureSprite.position.y = this.stageHeight / 2;
+          const targetWidth = originalWidth * targetScale;
+          const targetHeight = originalHeight * targetScale;
+          thisFigureContainer.setBaseY(this.stageHeight / 2);
+          if (targetHeight < this.stageHeight) {
+            thisFigureContainer.setBaseY(this.stageHeight / 2 + this.stageHeight - targetHeight / 2);
+          }
+          if (presetPosition === 'center') {
+            thisFigureContainer.setBaseX(this.stageWidth / 2);
+          }
+          if (presetPosition === 'left') {
+            thisFigureContainer.setBaseX(targetWidth / 2);
+          }
+          if (presetPosition === 'right') {
+            thisFigureContainer.setBaseX(this.stageWidth - targetWidth / 2);
+          }
+          thisFigureContainer.pivot.set(0, this.stageHeight / 2);
+          thisFigureContainer.addChild(figureSprite);
+        }
+      }, 0);
+    };
+
+    /**
+     * 加载器部分
+     */
+    this.cacheGC();
+    if (!loader.resources?.[url]) {
+      this.loadAsset(url, setup, spineId);
+    } else {
+      // 复用
+      setup();
+    }
+  }
+
+  /**
    * Live2d立绘，如果要使用 Live2D，取消这里的注释
    * @param jsonPath
    */
@@ -751,11 +840,11 @@ export default class PixiStage {
     }
   }
 
-  private loadAsset(url: string, callback: () => void) {
+  private loadAsset(url: string, callback: () => void, name?: string) {
     /**
      * Loader 复用疑似有问题，转而采用先前的单独方式
      */
-    this.loadQueue.unshift({ url, callback });
+    this.loadQueue.unshift({ url, callback, name });
     /**
      * 尝试启动加载
      */
@@ -771,10 +860,17 @@ export default class PixiStage {
             front.callback();
             this.callLoader();
           } else {
-            this.assetLoader.add(front.url).load(() => {
-              front.callback();
-              this.callLoader();
-            });
+            if (front.name) {
+              this.assetLoader.add(front.name, front.url).load(() => {
+                front.callback();
+                this.callLoader();
+              });
+            } else {
+              this.assetLoader.add(front.url).load(() => {
+                front.callback();
+                this.callLoader();
+              });
+            }
           }
         } catch (error) {
           logger.fatal('PIXI Loader 故障', error);

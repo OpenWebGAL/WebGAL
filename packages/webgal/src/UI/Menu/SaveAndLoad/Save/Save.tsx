@@ -13,6 +13,7 @@ import useSoundEffect from '@/hooks/useSoundEffect';
 export const Save: FC = () => {
   const { playSePageChange, playSeEnter, playSeDialogOpen } = useSoundEffect();
   const userDataState = useSelector((state: RootState) => state.userData);
+  const savesDataState = useSelector((state: RootState) => state.saveData);
   const dispatch = useDispatch();
   const page = [];
   for (let i = 1; i <= 20; i++) {
@@ -46,7 +47,7 @@ export const Save: FC = () => {
   let animationIndex = 0;
   for (let i = start; i <= end; i++) {
     animationIndex++;
-    const saveData = userDataState.saveData[i];
+    const saveData = savesDataState.saveData[i];
     let saveElementContent = <div />;
     if (saveData) {
       const speaker = saveData.nowStageState.showName === '' ? '\u00A0' : `${saveData.nowStageState.showName}`;
@@ -72,7 +73,7 @@ export const Save: FC = () => {
     const saveElement = (
       <div
         onClick={() => {
-          if (userDataState.saveData[i]) {
+          if (savesDataState.saveData[i]) {
             playSeDialogOpen();
             showGlogalDialog({
               title: t('saving.isOverwrite'),

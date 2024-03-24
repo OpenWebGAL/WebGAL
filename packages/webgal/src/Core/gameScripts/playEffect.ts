@@ -21,7 +21,7 @@ export const playEffect = (sentence: ISentence): IPerform => {
   let isLoop = false;
   // 清除带 id 的效果音
   if (getSentenceArgByKey(sentence, 'id')) {
-    const id = getSentenceArgByKey(sentence, 'id');
+    const id = getSentenceArgByKey(sentence, 'id')?.toString() ?? '';
     performInitName = `effect-sound-${id}`;
     WebGAL.gameplay.performController.unmountPerform(performInitName, true);
     isLoop = true;
