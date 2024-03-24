@@ -8,23 +8,15 @@
 
 #### 新功能
 
-调整菜单 UI
+`-when` 参数使用的条件跳转语句，支持逻辑运算符
 
-移除文本框其他预设，并接入 UI 自定义模块，为下版本编辑器支持 UI 自定义做准备
-
-添加全屏游戏功能
+在引擎层级支持 Spine 作为立绘
 
 #### 修复
 
-使用鼠标滚轮快进时立绘延迟退出的问题
+立绘或背景 id 为纯数字时，效果无法被正确应用
 
-效果音循环时阻塞自动播放的问题
-
-iOS 或 Safari 平台下无法正确处理换行和空格的问题
-
-调用 `end` 指令后在某些情况下无法继续游戏的问题
-
-某些情况下音频无法自动播放的问题
+存读档卡顿
 
 <!-- English Translation -->
 ## Release Notes
@@ -35,25 +27,17 @@ iOS 或 Safari 平台下无法正确处理换行和空格的问题
 
 ### In this version
 
-#### New features
+#### New Features
 
-Adjust menu UI
+Conditional jump statements using the `-when` parameter, supporting logical operators
 
-Remove other presets of text box, and connect to UI customization module, preparing for UI customization supported by next version of editor
+Spine is supported as figure at the engine level
 
-Add full screen game function
+#### Fixes
 
-#### Bug fixes
+Effects cannot be applied correctly when the ID of the figure or background is a pure number
 
-Fix the problem that standing pictures exit delay when fast forwarding with mouse wheel
-
-Fix the problem that looping sound effects block automatic playback
-
-Fix the problem that line breaks and spaces cannot be handled correctly on iOS or Safari platforms
-
-Fix the problem that the game cannot continue in some cases after calling the `end` instruction
-
-Fix the problem that audio cannot be played automatically in some cases
+Saving and loading stalls
 
 
 <!-- Japanese Translation -->
@@ -67,23 +51,15 @@ Fix the problem that audio cannot be played automatically in some cases
 
 #### 新機能
 
-メニューUIの調整
+`-when` パラメータを使用した条件分岐文、論理演算子に対応
 
-テキストボックスのその他のプリセットを削除し、UIカスタマイズモジュールに接続して、次バージョンのエディタがUIカスタマイズをサポートできるようにします
-
-全画面ゲーム機能を追加
+エンジンレベルで Spine を立ち絵としてサポート
 
 #### 修正
 
-マウスホイールを使用して早送りすると立ち絵が遅れて終了する問題
+立ち絵や背景の id が純粋な数字の場合、エフェクトが正しく適用されない
 
-効果音が循環すると自動再生がブロックされる問題
-
-iOSまたはSafariプラットフォームで改行とスペースが正しく処理されない問題
-
-特定の状況で`end`命令を呼び出した後、ゲームを続行できない問題
-
-特定の状況でオーディオが自動再生されない問題
+セーブデータの読み書きがカクつく
 
 
 <!-- French Translation -->
@@ -97,21 +73,13 @@ iOSまたはSafariプラットフォームで改行とスペースが正しく�
 
 #### Nouvelles fonctionnalités
 
-Ajustement de l'interface utilisateur du menu
+Les instructions de saut conditionnel utilisent le paramètre `-when`, qui prend en charge les opérateurs logiques
 
-Suppression des autres préréglages de zone de texte et connexion au module de personnalisation de l'interface utilisateur, en vue de la prise en charge de la personnalisation de l'interface utilisateur dans la prochaine version de l'éditeur
-
-Ajout de la fonctionnalité de jeu en plein écran
+Spine est pris en charge au niveau du moteur en tant qu'illustration
 
 #### Corrections
 
-Problème de retard de sortie de l'image lors d'une avance rapide à l'aide de la molette de la souris
+Lorsque l'ID de l'illustration ou de l'arrière-plan est un nombre pur, l'effet ne peut pas être appliqué correctement
 
-Problème de blocage de la lecture automatique lors de la mise en boucle des effets sonores
-
-Problème de traitement incorrect des sauts de ligne et des espaces sur les plateformes iOS ou Safari
-
-Problème d'impossibilité de continuer le jeu dans certains cas après avoir appelé l'instruction `end`
-
-Problème d'impossibilité de lecture automatique de l'audio dans certains cas
+Enregistrement et chargement de la carte de bégaiement
 
