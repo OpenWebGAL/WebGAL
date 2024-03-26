@@ -1,11 +1,12 @@
 import { useEffect } from 'react';
 import { WebGAL } from '@/Core/WebGAL';
 import axios from 'axios';
-import { IWebGALStyleObj, scss2cssinjsParser } from '@/Core/controller/customUI/scss2cssinjsParser';
+import { scss2cssinjsParser } from '@/Core/controller/customUI/scss2cssinjsParser';
 import { useValue } from '@/hooks/useValue';
 import { css, injectGlobal } from '@emotion/css';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
+import { IWebGALStyleObj } from 'webgal-parser/build/types/styleParser';
 
 export default function useApplyStyle(url: string) {
   const styleObject = useValue<IWebGALStyleObj>({ classNameStyles: {}, others: '' });
