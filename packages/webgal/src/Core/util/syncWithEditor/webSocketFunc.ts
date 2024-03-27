@@ -12,9 +12,9 @@ export const webSocketFunc = () => {
   if (protocol !== 'http:' && protocol !== 'https:') {
     return;
   }
-  let wsUrl = `ws://${loc}:9999`;
+  let wsUrl = `ws://${loc}/api/webgalsync`;
   if (protocol === 'https:') {
-    wsUrl = `wss://${loc}/webgalsync`;
+    wsUrl = `wss://${loc}/api/webgalsync`;
   }
   logger.info('正在启动socket连接位于：' + wsUrl);
   const socket = new WebSocket(wsUrl);
@@ -22,13 +22,16 @@ export const webSocketFunc = () => {
     logger.info('socket已连接');
     function sendStageSyncMessage() {
       const message: IDebugMessage = {
-        command: DebugCommand.SYNCFC,
-        sceneMsg: {
-          scene: WebGAL.sceneManager.sceneData.currentScene.sceneName,
-          sentence: WebGAL.sceneManager.sceneData.currentSentenceId,
+        event: 'message',
+        data: {
+          command: DebugCommand.SYNCFC,
+          sceneMsg: {
+            scene: WebGAL.sceneManager.sceneData.currentScene.sceneName,
+            sentence: WebGAL.sceneManager.sceneData.currentSentenceId,
+          },
+          stageSyncMsg: webgalStore.getState().stage,
+          message: 'sync',
         },
-        stageSyncMsg: webgalStore.getState().stage,
-        message: 'sync',
       };
       socket.send(JSON.stringify(message));
       // logger.debug('传送信息', message);
@@ -39,7 +42,8 @@ export const webSocketFunc = () => {
   socket.onmessage = (e) => {
     // logger.info('收到信息', e.data);
     const str: string = e.data;
-    const message: IDebugMessage = JSON.parse(str);
+    const data: IDebugMessage = JSON.parse(str);
+    const message = data.data;
     if (message.command === DebugCommand.JUMP) {
       syncWithOrigine(message.sceneMsg.scene, message.sceneMsg.sentence);
     }
