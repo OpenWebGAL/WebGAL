@@ -64,6 +64,10 @@ export const webSocketFunc = () => {
       runScript(sentence);
     }
     if (message.command === DebugCommand.REFETCH_TEMPLATE_FILES) {
+      const title = document.getElementById('Title_enter_page');
+      if (title) {
+        title.style.display = 'none';
+      }
       WebGAL.events.styleUpdate.emit();
     }
   };
