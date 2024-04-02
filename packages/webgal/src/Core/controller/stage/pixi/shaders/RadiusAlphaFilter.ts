@@ -28,11 +28,11 @@ void main(void) {
     // 计算片元到圆心的距离
     float dist = distance(aspectCorrectCoord, center * vec2(aspect, 1.0));
 
-    gl_FragColor = color;
+    // 使用smoothstep函数计算alpha值,实现边缘羽化效果
+    float alpha = smoothstep(radius, radius + 0.05, dist);
 
-    if (dist >= radius) {
-        gl_FragColor = color * 0.0;
-    }
+    // 输出最终颜色
+    gl_FragColor = color * (1.0 - alpha);
 }
     `; // 填入上面的fragment shader代码
     super(null as any, fragmentShader);
