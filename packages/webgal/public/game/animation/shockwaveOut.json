@@ -6,7 +6,7 @@
   },
   {
     "shockwaveFilter": 3,
-    "alpha": 0,
+    "alpha": 1,
     "duration": 2000
   }
 ]
