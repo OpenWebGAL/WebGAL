@@ -10,6 +10,7 @@ import { WebGALPixiContainer } from '@/Core/controller/stage/pixi/WebGALPixiCont
 import { WebGAL } from '@/Core/WebGAL';
 import 'pixi-spine'; // Do this once at the very start of your code. This registers the loader!
 import { Spine } from 'pixi-spine';
+import { SCREEN_CONSTANTS } from '@/Core/util/constants';
 // import { figureCash } from '@/Core/gameScripts/vocal/conentsCash'; // 如果要使用 Live2D，取消这里的注释
 // import { Live2DModel, SoundManager } from 'pixi-live2d-display'; // 如果要使用 Live2D，取消这里的注释
 
@@ -77,8 +78,8 @@ export default class PixiStage {
 
   // 锁定变换对象（对象可能正在执行动画，不能应用变换）
   private lockTransformTarget: Array<string> = [];
-  private stageWidth = 2560;
-  private stageHeight = 1440;
+  private stageWidth = SCREEN_CONSTANTS.width;
+  private stageHeight = SCREEN_CONSTANTS.height;
   /**
    * 暂时没用上，以后可能用
    * @private
