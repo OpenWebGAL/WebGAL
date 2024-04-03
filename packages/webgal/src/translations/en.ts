@@ -168,7 +168,7 @@ const en = {
       auto: 'Auto',
       forward: 'Forward',
       quicklySave: 'Quickly Save',
-      quicklyLoad: 'Quickly Save',
+      quicklyLoad: 'Quickly Load',
       save: 'Save',
       load: 'Load',
       options: 'Options',
