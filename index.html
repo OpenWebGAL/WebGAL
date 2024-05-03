@@ -7,8 +7,8 @@
   <link rel="manifest" href="./manifest.json" />
   <!--    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>-->
   <title>WebGAL</title>
-  <script type="module" crossorigin src="./assets/index-99adfccc.js"></script>
-  <link rel="stylesheet" href="./assets/index-d935d359.css">
+  <script type="module" crossorigin src="./assets/index-ea483eb4.js"></script>
+  <link rel="stylesheet" href="./assets/index-866273a2.css">
 </head>
 
 <body>
@@ -79,12 +79,12 @@
         flex-flow: column;
         align-items: center ">
         <div style="padding: 0 0 0.25em 0">
-          Powered by <a href="https://github.com/MakinoharaShoko/WebGAL"
-            onclick="jump(event, 'https://github.com/MakinoharaShoko/WebGAL')">WebGAL</a> Framework
+          Powered by <a href="https://github.com/OpenWebGAL/WebGAL"
+            onclick="jump(event, 'https://github.com/OpenWebGAL/WebGAL')">WebGAL</a> Framework
         </div>
         <div>
-          Made with ❤ by <a href="https://github.com/MakinoharaShoko"
-            onclick="jump(event, 'https://github.com/MakinoharaShoko')">Mahiru</a>
+          Made with ❤ by <a href="https://github.com/OpenWebGAL"
+            onclick="jump(event, 'https://github.com/OpenWebGAL')">OpenWebGAL</a>
         </div>
       </div>
     </div>
@@ -188,12 +188,14 @@
       };
     } else {
       // ios
-      // 创建一个新的 meta 标签
       const meta = document.createElement('meta');
       meta.name = "viewport";
-      meta.content = "width=device-width, initial-scale=0.2, minimum-scale=0.01, maximum-scale=1";
-      // 将该标签添加到 head 中
+      meta.content = "width=device-width, initial-scale=0.22, minimum-scale=0.01, maximum-scale=1";
       document.getElementsByTagName('head')[0].appendChild(meta);
+      const style = document.createElement('style');
+      style.type = 'text/css';
+      style.textContent = '* { font-synthesis: none !important; }';
+      document.head.appendChild(style);
     }
 
   </script>
