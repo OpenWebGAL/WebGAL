@@ -96,60 +96,96 @@ export default function IMSSTextbox(props: ITextboxProps) {
       </div>
     );
   });
+
+  console.log(`${textboxOpacity / 100}`);
+
   return (
     <>
       {isText && (
-        <div
-          id="textBoxMain"
-          className={applyStyle('TextBox_main', styles.TextBox_main)}
-          style={{
-            fontFamily: font,
-            left: miniAvatar === '' ? 25 : undefined,
-            background: `linear-gradient(
-              rgba(245, 247, 250, ${textboxOpacity / 100}) 0%,
-              rgba(189, 198, 222, ${textboxOpacity / 100}) 100%
-            )`,
-          }}
-        >
-          <div id="miniAvatar" className={applyStyle('miniAvatarContainer', styles.miniAvatarContainer)}>
-            {miniAvatar !== '' && (
-              <img className={applyStyle('miniAvatarImg', styles.miniAvatarImg)} alt="miniAvatar" src={miniAvatar} />
-            )}
-          </div>
-          {showName !== '' && (
-            <div
-              key={showName}
-              className={applyStyle('TextBox_showName', styles.TextBox_showName)}
-              style={{
-                fontSize: '200%',
-                background: `rgba(11, 52, 110, ${(textboxOpacity / 100) * 0.9})`,
-                border: `4px solid rgba(255, 255, 255, ${(textboxOpacity / 100) * 0.75})`,
-                boxShadow: `3px 3px 10px rgba(100, 100, 100, ${(textboxOpacity / 100) * 0.5})`,
-              }}
-            >
-              {showName.split('').map((e, i) => {
-                return (
-                  <span key={e + i} style={{ position: 'relative' }}>
-                    <span className={styles.zhanwei}>
-                      {e}
-                      <span className={applyStyle('outerName', styles.outerName)}>{e}</span>
-                      {isUseStroke && <span className={applyStyle('innerName', styles.innerName)}>{e}</span>}
-                    </span>
-                  </span>
-                );
-              })}
-            </div>
-          )}
+        <div className={styles.TextBox_Container}>
           <div
-            className={applyStyle('text', styles.text)}
+            className={
+              applyStyle('TextBox_main', styles.TextBox_main) +
+              ' ' +
+              applyStyle('TextBox_Background', styles.TextBox_Background)
+            }
             style={{
-              fontSize,
-              flexFlow: 'column',
-              overflow: 'hidden',
-              paddingLeft: '0.1em',
+              opacity: `${textboxOpacity / 100}`,
+              left: miniAvatar === '' ? 25 : undefined,
+            }}
+          />
+          <div
+            id="textBoxMain"
+            className={applyStyle('TextBox_main', styles.TextBox_main)}
+            style={{
+              fontFamily: font,
+              left: miniAvatar === '' ? 25 : undefined,
             }}
           >
-            {textElementList}
+            <div id="miniAvatar" className={applyStyle('miniAvatarContainer', styles.miniAvatarContainer)}>
+              {miniAvatar !== '' && (
+                <img className={applyStyle('miniAvatarImg', styles.miniAvatarImg)} alt="miniAvatar" src={miniAvatar} />
+              )}
+            </div>
+            {showName !== '' && (
+              <>
+                <div
+                  className={
+                    applyStyle('TextBox_showName', styles.TextBox_showName) +
+                    ' ' +
+                    applyStyle('TextBox_ShowName_Background', styles.TextBox_ShowName_Background)
+                  }
+                  style={{
+                    opacity: `${textboxOpacity / 100}`,
+                    fontSize: '200%',
+                  }}
+                >
+                  <div style={{ opacity: 0 }}>
+                    {showName.split('').map((e, i) => {
+                      return (
+                        <span key={e + i} style={{ position: 'relative' }}>
+                          <span className={styles.zhanwei}>
+                            {e}
+                            <span className={applyStyle('outerName', styles.outerName)}>{e}</span>
+                            {isUseStroke && <span className={applyStyle('innerName', styles.innerName)}>{e}</span>}
+                          </span>
+                        </span>
+                      );
+                    })}
+                  </div>
+                </div>
+                <div
+                  key={showName}
+                  className={applyStyle('TextBox_showName', styles.TextBox_showName)}
+                  style={{
+                    fontSize: '200%',
+                  }}
+                >
+                  {showName.split('').map((e, i) => {
+                    return (
+                      <span key={e + i} style={{ position: 'relative' }}>
+                        <span className={styles.zhanwei}>
+                          {e}
+                          <span className={applyStyle('outerName', styles.outerName)}>{e}</span>
+                          {isUseStroke && <span className={applyStyle('innerName', styles.innerName)}>{e}</span>}
+                        </span>
+                      </span>
+                    );
+                  })}
+                </div>
+              </>
+            )}
+            <div
+              className={applyStyle('text', styles.text)}
+              style={{
+                fontSize,
+                flexFlow: 'column',
+                overflow: 'hidden',
+                paddingLeft: '0.1em',
+              }}
+            >
+              {textElementList}
+            </div>
           </div>
         </div>
       )}

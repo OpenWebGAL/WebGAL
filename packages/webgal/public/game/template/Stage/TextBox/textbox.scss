@@ -1,6 +1,6 @@
 .TextBox_main {
+  z-index: 3;
   position: absolute;
-  z-index: 6;
   right: 25px;
   min-height: 330px;
   max-height: 330px;
@@ -15,9 +15,13 @@
   display: flex;
   flex-flow: column;
   align-items: flex-start;
-  animation: showSoftly 0.7s ease-out forwards;
   letter-spacing: 0.2em;
   transition: left 0.33s;
+}
+
+.TextBox_Background {
+  z-index: 2;
+  background: linear-gradient(rgba(245, 247, 250, 1) 0%, rgba(189, 198, 222, 1) 100%);
 }
 
 @keyframes showSoftly {
@@ -78,6 +82,15 @@
   height: 80px;
   line-height: 68px;
   border-radius: 40px;
+  z-index: 3;
+  border: 4px solid rgba(255, 255, 255, 0);
+}
+
+.TextBox_ShowName_Background {
+  z-index: 2;
+  background: rgba(11, 52, 110, 1);
+  border: 4px solid rgba(255, 255, 255, 0.75);
+  box-shadow: 3px 3px 10px rgba(100, 100, 100, 0.5);
 }
 
 @keyframes TextDelayShow {
