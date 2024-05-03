@@ -8,15 +8,17 @@
 
 #### 新功能
 
-`-when` 参数使用的条件跳转语句，支持逻辑运算符
+引入标题和文本框的 UI 自定义功能
 
-在引擎层级支持 Spine 作为立绘
+添加了一个新的水波纹进入特效
 
 #### 修复
 
-立绘或背景 id 为纯数字时，效果无法被正确应用
+WebGAL Parser 的部分问题
 
-存读档卡顿
+WebSocket 连接问题
+
+iOS 下字体重叠的问题
 
 <!-- English Translation -->
 ## Release Notes
@@ -29,15 +31,17 @@
 
 #### New Features
 
-Conditional jump statements using the `-when` parameter, supporting logical operators
+Introduced UI customization for title and textbox
 
-Spine is supported as figure at the engine level
+Added a new ripple entrance effect
 
 #### Fixes
 
-Effects cannot be applied correctly when the ID of the figure or background is a pure number
+Some issues in WebGAL Parser
 
-Saving and loading stalls
+WebSocket connection issues
+
+Font overlapping issue on iOS
 
 
 <!-- Japanese Translation -->
@@ -51,15 +55,17 @@ Saving and loading stalls
 
 #### 新機能
 
-`-when` パラメータを使用した条件分岐文、論理演算子に対応
+タイトルとテキストボックスの UI カスタマイズ機能を導入
 
-エンジンレベルで Spine を立ち絵としてサポート
+新しい波紋エフェクトを追加
 
 #### 修正
 
-立ち絵や背景の id が純粋な数字の場合、エフェクトが正しく適用されない
+WebGAL パーサーの一部問題
 
-セーブデータの読み書きがカクつく
+WebSocket 接続の問題
+
+iOS でのフォントの重なり問題
 
 
 <!-- French Translation -->
@@ -73,13 +79,15 @@ Saving and loading stalls
 
 #### Nouvelles fonctionnalités
 
-Les instructions de saut conditionnel utilisent le paramètre `-when`, qui prend en charge les opérateurs logiques
+Ajout de la personnalisation de l'interface utilisateur des titres et des zones de texte
 
-Spine est pris en charge au niveau du moteur en tant qu'illustration
+Ajout d'un nouvel effet d'entrée d'ondulation
 
 #### Corrections
 
-Lorsque l'ID de l'illustration ou de l'arrière-plan est un nombre pur, l'effet ne peut pas être appliqué correctement
+Quelques problèmes avec WebGAL Parser
 
-Enregistrement et chargement de la carte de bégaiement
+Problèmes de connexion WebSocket
+
+Problème de chevauchement des polices sous iOS
 
