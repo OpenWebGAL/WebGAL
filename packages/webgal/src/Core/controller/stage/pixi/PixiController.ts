@@ -10,6 +10,7 @@ import { WebGALPixiContainer } from '@/Core/controller/stage/pixi/WebGALPixiCont
 import { WebGAL } from '@/Core/WebGAL';
 import 'pixi-spine'; // Do this once at the very start of your code. This registers the loader!
 import { Spine } from 'pixi-spine';
+import { SCREEN_CONSTANTS } from '@/Core/util/constants';
 // import { figureCash } from '@/Core/gameScripts/vocal/conentsCash'; // 如果要使用 Live2D，取消这里的注释
 // import { Live2DModel, SoundManager } from 'pixi-live2d-display'; // 如果要使用 Live2D，取消这里的注释
 
@@ -38,6 +39,8 @@ export interface IStageObject {
   pixiContainer: WebGALPixiContainer;
   // 相关的源 url
   sourceUrl: string;
+  sourceExt: string;
+  sourceType: 'img' | 'live2d' | 'spine' | 'gif' | 'video';
 }
 
 export interface ILive2DRecord {
@@ -77,8 +80,8 @@ export default class PixiStage {
 
   // 锁定变换对象（对象可能正在执行动画，不能应用变换）
   private lockTransformTarget: Array<string> = [];
-  private stageWidth = 2560;
-  private stageHeight = 1440;
+  private stageWidth = SCREEN_CONSTANTS.width;
+  private stageHeight = SCREEN_CONSTANTS.height;
   /**
    * 暂时没用上，以后可能用
    * @private
@@ -393,7 +396,14 @@ export default class PixiStage {
     // 挂载
     this.backgroundContainer.addChild(thisBgContainer);
     const bgUuid = uuid();
-    this.backgroundObjects.push({ uuid: bgUuid, key: key, pixiContainer: thisBgContainer, sourceUrl: url });
+    this.backgroundObjects.push({
+      uuid: bgUuid,
+      key: key,
+      pixiContainer: thisBgContainer,
+      sourceUrl: url,
+      sourceType: 'img',
+      sourceExt: this.getExtName(url),
+    });
 
     // 完成图片加载后执行的函数
     const setup = () => {
@@ -460,7 +470,14 @@ export default class PixiStage {
     // 挂载
     this.figureContainer.addChild(thisFigureContainer);
     const figureUuid = uuid();
-    this.figureObjects.push({ uuid: figureUuid, key: key, pixiContainer: thisFigureContainer, sourceUrl: url });
+    this.figureObjects.push({
+      uuid: figureUuid,
+      key: key,
+      pixiContainer: thisFigureContainer,
+      sourceUrl: url,
+      sourceType: 'img',
+      sourceExt: this.getExtName(url),
+    });
 
     // 完成图片加载后执行的函数
     const setup = () => {
@@ -538,7 +555,14 @@ export default class PixiStage {
     // 挂载
     this.figureContainer.addChild(thisFigureContainer);
     const figureUuid = uuid();
-    this.figureObjects.push({ uuid: figureUuid, key: key, pixiContainer: thisFigureContainer, sourceUrl: url });
+    this.figureObjects.push({
+      uuid: figureUuid,
+      key: key,
+      pixiContainer: thisFigureContainer,
+      sourceUrl: url,
+      sourceType: 'live2d',
+      sourceExt: this.getExtName(url),
+    });
 
     // 完成图片加载后执行的函数
     const setup = () => {
@@ -708,6 +732,7 @@ export default class PixiStage {
   public changeModelMotionByKey(key: string, motion: string) {
     // logger.debug(`Applying motion ${motion} to ${key}`);
     const target = this.figureObjects.find((e) => e.key === key);
+    if (target?.sourceType !== 'live2d') return;
     const figureRecordTarget = this.live2dFigureRecorder.find((e) => e.target === key);
     if (target && figureRecordTarget?.motion !== motion) {
       const container = target.pixiContainer;
@@ -728,6 +753,7 @@ export default class PixiStage {
   public changeModelExpressionByKey(key: string, expression: string) {
     // logger.debug(`Applying expression ${expression} to ${key}`);
     const target = this.figureObjects.find((e) => e.key === key);
+    if (target?.sourceType !== 'live2d') return;
     const figureRecordTarget = this.live2dFigureRecorder.find((e) => e.target === key);
     if (target && figureRecordTarget?.expression !== expression) {
       const container = target.pixiContainer;
@@ -744,6 +770,7 @@ export default class PixiStage {
     function mapToZeroOne(value: number) {
       return value < 50 ? 0 : (value - 50) / 50;
     }
+
     const paramY = mapToZeroOne(y);
     const target = this.figureObjects.find((e) => e.key === key);
     if (target) {
@@ -896,6 +923,10 @@ export default class PixiStage {
   private unlockStageObject(targetName: string) {
     const index = this.lockTransformTarget.findIndex((name) => name === targetName);
     if (index >= 0) this.lockTransformTarget.splice(index, 1);
+  }
+
+  private getExtName(url: string) {
+    return url.split('.').pop() ?? 'png';
   }
 }
 

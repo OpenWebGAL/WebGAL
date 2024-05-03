@@ -1,4 +1,4 @@
-import { commandType } from '../interface/sceneInterface';
+import {commandType} from '../interface/sceneInterface';
 
 export const SCRIPT_CONFIG = [
   { scriptString: 'intro', scriptType: commandType.intro },
@@ -30,6 +30,7 @@ export const SCRIPT_CONFIG = [
   { scriptString: 'setTextbox', scriptType: commandType.setTextbox },
   { scriptString: 'setAnimation', scriptType: commandType.setAnimation },
   { scriptString: 'playEffect', scriptType: commandType.playEffect },
+  { scriptString: 'applyStyle', scriptType: commandType.applyStyle },
 ];
 export const ADD_NEXT_ARG_LIST = [
   commandType.bgm,

@@ -9,12 +9,22 @@ import { runScript } from '@/Core/controller/gamePlay/runScript';
 export const webSocketFunc = () => {
   const loc: string = window.location.hostname;
   const protocol: string = window.location.protocol;
+  const port: string = window.location.port; // 获取端口号
+
+  // 默认情况下，不需要在URL中明确指定标准HTTP(80)和HTTPS(443)端口
+  let defaultPort = '';
+  if (port && port !== '80' && port !== '443') {
+    // 如果存在非标准端口号，将其包含在URL中
+    defaultPort = `:${port}`;
+  }
+
   if (protocol !== 'http:' && protocol !== 'https:') {
     return;
   }
-  let wsUrl = `ws://${loc}:9999`;
+  // 根据当前协议构建WebSocket URL，并包括端口号（如果有）
+  let wsUrl = `ws://${loc}${defaultPort}/api/webgalsync`;
   if (protocol === 'https:') {
-    wsUrl = `wss://${loc}/webgalsync`;
+    wsUrl = `wss://${loc}${defaultPort}/api/webgalsync`;
   }
   logger.info('正在启动socket连接位于：' + wsUrl);
   const socket = new WebSocket(wsUrl);
@@ -22,13 +32,16 @@ export const webSocketFunc = () => {
     logger.info('socket已连接');
     function sendStageSyncMessage() {
       const message: IDebugMessage = {
-        command: DebugCommand.SYNCFC,
-        sceneMsg: {
-          scene: WebGAL.sceneManager.sceneData.currentScene.sceneName,
-          sentence: WebGAL.sceneManager.sceneData.currentSentenceId,
+        event: 'message',
+        data: {
+          command: DebugCommand.SYNCFC,
+          sceneMsg: {
+            scene: WebGAL.sceneManager.sceneData.currentScene.sceneName,
+            sentence: WebGAL.sceneManager.sceneData.currentSentenceId,
+          },
+          stageSyncMsg: webgalStore.getState().stage,
+          message: 'sync',
         },
-        stageSyncMsg: webgalStore.getState().stage,
-        message: 'sync',
       };
       socket.send(JSON.stringify(message));
       // logger.debug('传送信息', message);
@@ -39,7 +52,8 @@ export const webSocketFunc = () => {
   socket.onmessage = (e) => {
     // logger.info('收到信息', e.data);
     const str: string = e.data;
-    const message: IDebugMessage = JSON.parse(str);
+    const data: IDebugMessage = JSON.parse(str);
+    const message = data.data;
     if (message.command === DebugCommand.JUMP) {
       syncWithOrigine(message.sceneMsg.scene, message.sceneMsg.sentence);
     }
@@ -50,6 +64,10 @@ export const webSocketFunc = () => {
       runScript(sentence);
     }
     if (message.command === DebugCommand.REFETCH_TEMPLATE_FILES) {
+      const title = document.getElementById('Title_enter_page');
+      if (title) {
+        title.style.display = 'none';
+      }
       WebGAL.events.styleUpdate.emit();
     }
   };

@@ -14,11 +14,14 @@ export enum DebugCommand {
 }
 
 export interface IDebugMessage {
-  command: DebugCommand;
-  sceneMsg: {
-    sentence: number;
-    scene: string;
+  event: string;
+  data: {
+    command: DebugCommand;
+    sceneMsg: {
+      sentence: number;
+      scene: string;
+    };
+    message: string;
+    stageSyncMsg: IStageState;
   };
-  message: string;
-  stageSyncMsg: IStageState;
 }

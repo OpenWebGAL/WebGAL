@@ -7,6 +7,7 @@ import { getTextSize } from '@/UI/getTextSize';
 import { match } from '@/Core/util/match';
 import { textSize } from '@/store/userDataInterface';
 import IMSSTextbox from '@/Stage/TextBox/IMSSTextbox';
+import { SCREEN_CONSTANTS } from '@/Core/util/constants';
 
 const userAgent = navigator.userAgent;
 const isFirefox = /firefox/i.test(userAgent);
@@ -17,8 +18,8 @@ export const TextBox = () => {
 
   useEffect(() => {
     const handleResize = () => {
-      const targetHeight = 1440;
-      const targetWidth = 2560;
+      const targetHeight = SCREEN_CONSTANTS.height;
+      const targetWidth = SCREEN_CONSTANTS.width;
 
       const h = window.innerHeight; // 窗口高度
       const w = window.innerWidth; // 窗口宽度
