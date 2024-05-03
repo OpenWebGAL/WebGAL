@@ -10,23 +10,29 @@ class RadiusAlphaFilter extends PIXI.Filter {
 // 半径透明度的fragment shader
 precision mediump float;
 
-uniform sampler2D uSampler;        // 输入纹理
-varying vec2 vTextureCoord;        // 当前片元的纹理坐标
-uniform vec2 center;               // 圆心坐标
-uniform float radius;              // 圆的半径
+uniform sampler2D uSampler;  // 输入纹理
+varying vec2 vTextureCoord;  // 当前片元的纹理坐标
+uniform vec2 center;         // 圆心坐标
+uniform float radius;        // 圆的半径
 
 void main(void) {
     vec4 color = texture2D(uSampler, vTextureCoord);
-    float dist = 0.0;
-    dist = distance(vTextureCoord, center);  // 使用不同的变量名
 
-    vec4 color2 = color;
+    // 计算屏幕宽高比
+    float aspect = 16.0 / 9.0;
 
-    if (dist < radius) {
-        color2 = color * 0.3;
-    }
+    // 根据宽高比校正纹理坐标
+    vec2 aspectCorrectCoord = vTextureCoord;
+    aspectCorrectCoord.x *= aspect;
 
-    gl_FragColor = color2;
+    // 计算片元到圆心的距离
+    float dist = distance(aspectCorrectCoord, center * vec2(aspect, 1.0));
+
+    // 使用smoothstep函数计算alpha值,实现边缘羽化效果
+    float alpha = smoothstep(radius, radius + 0.05, dist);
+
+    // 输出最终颜色
+    gl_FragColor = color * (1.0 - alpha);
 }
     `; // 填入上面的fragment shader代码
     super(null as any, fragmentShader);
@@ -43,7 +49,6 @@ void main(void) {
   }
 
   public set radius(value: number) {
-    console.log(value);
     this.uniforms.radius = value;
   }
 

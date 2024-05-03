@@ -12,15 +12,21 @@
 
 $height: 330px;
 
-.TextBox_main {
+.TextBox_Container {
   position: absolute;
   z-index: 6;
+  bottom: 0;
+  width: 100%;
+  animation: showSoftly 0.7s ease-out forwards;
+}
+
+.TextBox_main {
+  z-index: 3;
+  position: absolute;
   right: 25px;
   min-height: $height;
   max-height: $height;
-  // background: linear-gradient(rgba(245, 247, 250, 0.95) 0%, rgba(189, 198, 222, 0.95) 100%);
   background-blend-mode: darken;
-  //background: white;
   border-radius: calc($height / 2) 20px 20px calc($height / 2);
   bottom: 20px;
   left: 275px;
@@ -31,10 +37,13 @@ $height: 330px;
   display: flex;
   flex-flow: column;
   align-items: flex-start;
-  animation: showSoftly 0.7s ease-out forwards;
   letter-spacing: 0.2em;
-  //backdrop-filter: blur(5px);
   transition: left 0.33s;
+}
+
+.TextBox_Background {
+  z-index: 2;
+  background: linear-gradient(rgba(245, 247, 250, 1) 0%, rgba(189, 198, 222, 1) 100%);
 }
 
 @keyframes showSoftly {
@@ -67,8 +76,8 @@ $height: 330px;
   top: 0;
   //background-image: linear-gradient(rgba(255, 255, 255, 1) 0%, rgb(225, 237, 255) 100%);
   background-image: linear-gradient(#0B346E 0%,
-      //#f5f7fa 45%,
-      #141423 100%);
+    //#f5f7fa 45%,
+    #141423 100%);
   //background: rgba(255, 255, 255, 1);
   background-clip: text;
   -webkit-background-clip: text;
@@ -132,6 +141,15 @@ $height: 330px;
   border-radius: 40px;
   // border: 4px solid rgba(255, 255, 255, 0.75);
   // box-shadow: 3px 3px 10px rgba(100, 100, 100, 0.5);
+  z-index: 3;
+  border: 4px solid rgba(255, 255, 255, 0);
+}
+
+.TextBox_ShowName_Background {
+  z-index: 2;
+  background: rgba(11, 52, 110, 1);
+  border: 4px solid rgba(255, 255, 255, 0.75);
+  box-shadow: 3px 3px 10px rgba(100, 100, 100, 0.5);
 }
 
 @keyframes TextDelayShow {
