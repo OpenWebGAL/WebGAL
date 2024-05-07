@@ -9,15 +9,9 @@ import { WebGAL } from '@/Core/WebGAL';
  */
 export const assetsPrefetcher = (assetList: Array<IAsset>) => {
   for (const asset of assetList) {
-    // 是否要插入这个标签
-    let isInsert = true;
     // 判断是否已经存在
-    WebGAL.sceneManager.settledAssets.forEach((settledAssetUrl) => {
-      if (settledAssetUrl === asset.url) {
-        isInsert = false;
-      }
-    });
-    if (!isInsert) {
+    const hasPrefetch = WebGAL.sceneManager.settledAssets.includes(asset.url);
+    if (hasPrefetch) {
       logger.warn('该资源已在预加载列表中，无需重复加载');
     } else {
       const newLink = document.createElement('link');
