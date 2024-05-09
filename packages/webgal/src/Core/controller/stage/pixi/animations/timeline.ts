@@ -17,6 +17,12 @@ export function generateTimelineObj(
   targetKey: string,
   duration: number,
 ) {
+  for (const segment of timeline) {
+    // 处理 alphaL
+    // @ts-ignore
+    segment['alphaFilterVal'] = segment.alpha;
+    segment.alpha = 1;
+  }
   const target = WebGAL.gameplay.pixiStage!.getStageObjByKey(targetKey);
   let currentDelay = 0;
   const values = [];
