@@ -38,6 +38,6 @@ function convertTransform(transform: ITransform | undefined) {
   if (!transform) {
     return {};
   }
-  const { position, ...rest } = transform;
-  return { ...rest, x: position.x, y: position.y };
+  const { position, alpha, ...rest } = transform;
+  return { ...rest, x: position.x, y: position.y, alphaFilterVal: alpha };
 }
