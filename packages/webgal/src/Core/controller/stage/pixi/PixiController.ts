@@ -657,6 +657,8 @@ export default class PixiStage {
   //     key: key,
   //     pixiContainer: thisFigureContainer,
   //     sourceUrl: jsonPath,
+  //     sourceType: 'live2d',
+  //     sourceExt: 'json',
   //   });
   //   // eslint-disable-next-line @typescript-eslint/no-this-alias
   //   const instance = this;
@@ -707,9 +709,18 @@ export default class PixiStage {
   //           }
   //           instance.updateL2dExpressionByKey(key, expressionToSet);
   //           model.expression(expressionToSet);
+  //           // @ts-ignore
+  //           if (model.internalModel.eyeBlink) {
+  //             // @ts-ignore
+  //             model.internalModel.eyeBlink.blinkInterval = 1000 * 60 * 60 * 24; // @ts-ignore
+  //             model.internalModel.eyeBlink.nextBlinkTimeLeft = 1000 * 60 * 60 * 24;
+  //           }
   //
   //           // lip-sync is still a problem and you can not.
-  //           SoundManager.volume = 0;
+  //           SoundManager.volume = 0; // @ts-ignore
+  //           if (model.internalModel.angleXParamIndex !== undefined) model.internalModel.angleXParamIndex = 999; // @ts-ignore
+  //           if (model.internalModel.angleYParamIndex !== undefined) model.internalModel.angleYParamIndex = 999; // @ts-ignore
+  //           if (model.internalModel.angleZParamIndex !== undefined) model.internalModel.angleZParamIndex = 999;
   //           thisFigureContainer.addChild(model);
   //         });
   //       })();
