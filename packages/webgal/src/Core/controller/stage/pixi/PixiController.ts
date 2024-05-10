@@ -232,7 +232,7 @@ export default class PixiStage {
         const target = this.getStageObjByKey(thisTickerFunc.targetKey);
         if (target) {
           const targetTransform = {
-            alpha: target.pixiContainer.alpha,
+            alpha: target.pixiContainer.alphaFilterVal,
             scale: {
               x: target.pixiContainer.scale.x,
               y: target.pixiContainer.scale.y,
