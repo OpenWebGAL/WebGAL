@@ -14,7 +14,7 @@ export function generateUniversalSoftOffAnimationObj(targetKey: string, duration
    * 在此书写为动画设置终态的操作
    */
   function setEndState() {
-    if (target) target.pixiContainer.alpha = 0;
+    if (target) target.pixiContainer.alphaFilterVal = 0;
   }
 
   /**
@@ -23,12 +23,12 @@ export function generateUniversalSoftOffAnimationObj(targetKey: string, duration
    */
   function tickerFunc(delta: number) {
     if (target) {
-      const sprite = target.pixiContainer;
+      const targetContainer = target.pixiContainer;
       const baseDuration = WebGAL.gameplay.pixiStage!.frameDuration;
       const currentAddOplityDelta = (duration / baseDuration) * delta;
       const decreasement = 1 / currentAddOplityDelta;
-      if (sprite.alpha > 0) {
-        sprite.alpha -= decreasement;
+      if (targetContainer.alphaFilterVal > 0) {
+        targetContainer.alphaFilterVal -= decreasement;
       }
     }
   }
