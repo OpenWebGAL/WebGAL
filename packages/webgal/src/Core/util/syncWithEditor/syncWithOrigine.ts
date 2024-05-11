@@ -24,7 +24,7 @@ export const syncWithOrigine = (sceneName: string, sentenceId: number) => {
   const sceneUrl: string = assetSetter(sceneName, fileType.scene);
   // 场景写入到运行时
   sceneFetcher(sceneUrl).then((rawScene) => {
-    WebGAL.sceneManager.sceneData.currentScene = sceneParser(rawScene, 'start.txt', sceneUrl);
+    WebGAL.sceneManager.sceneData.currentScene = sceneParser(rawScene, sceneName, sceneUrl);
     // 开始快进到指定语句
     const currentSceneName = WebGAL.sceneManager.sceneData.currentScene.sceneName;
     WebGAL.gameplay.isFast = true;
