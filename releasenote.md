@@ -8,17 +8,15 @@
 
 #### 新功能
 
-引入标题和文本框的 UI 自定义功能
-
-添加了一个新的水波纹进入特效
+Pixi Container 使用 AlphaFilter 代替 alpha 属性，更好地兼容 Live2D
 
 #### 修复
 
-WebGAL Parser 的部分问题
+WebGAL 与编辑器同步的部分问题
 
-WebSocket 连接问题
+提高资源预加载效率
 
-iOS 下字体重叠的问题
+修复 moc3 Live2D 加载问题
 
 <!-- English Translation -->
 ## Release Notes
@@ -31,18 +29,15 @@ iOS 下字体重叠的问题
 
 #### New Features
 
-Introduced UI customization for title and textbox
-
-Added a new ripple entrance effect
+Pixi Container uses AlphaFilter instead of alpha property for better Live2D compatibility
 
 #### Fixes
 
-Some issues in WebGAL Parser
+Some issues with WebGAL syncing with the editor
 
-WebSocket connection issues
+Improved resource preloading efficiency
 
-Font overlapping issue on iOS
-
+Fixed moc3 Live2D loading issues
 
 <!-- Japanese Translation -->
 ## リリースノート
@@ -55,18 +50,15 @@ Font overlapping issue on iOS
 
 #### 新機能
 
-タイトルとテキストボックスの UI カスタマイズ機能を導入
-
-新しい波紋エフェクトを追加
+Pixi Containerがalpha属性の代わりにAlphaFilterを使用するようになり、Live2Dとの互換性が向上しました。
 
 #### 修正
 
-WebGAL パーサーの一部問題
+WebGALとエディターの同期に関するいくつかの問題を修正しました。
 
-WebSocket 接続の問題
+リソースのプリロード効率を向上させました。
 
-iOS でのフォントの重なり問題
-
+moc3 Live2Dのロードに関する問題を修正しました。
 
 <!-- French Translation -->
 ## Notes de version
@@ -79,15 +71,13 @@ iOS でのフォントの重なり問題
 
 #### Nouvelles fonctionnalités
 
-Ajout de la personnalisation de l'interface utilisateur des titres et des zones de texte
+Pixi Container utilise AlphaFilter à la place de la propriété alpha, pour une meilleure compatibilité avec Live2D
 
-Ajout d'un nouvel effet d'entrée d'ondulation
+#### Correctifs
 
-#### Corrections
+Certains problèmes de synchronisation entre WebGAL et l'éditeur
 
-Quelques problèmes avec WebGAL Parser
+Amélioration de l'efficacité du préchargement des ressources
 
-Problèmes de connexion WebSocket
-
-Problème de chevauchement des polices sous iOS
+Correction du problème de chargement de Live2D moc3
 

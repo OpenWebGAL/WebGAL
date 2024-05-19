@@ -21,8 +21,19 @@ export class WebGALPixiContainer extends PIXI.Container {
   private baseX = 0;
   private baseY = 0;
 
+  private alphaFilter = new PIXI.filters.AlphaFilter(1);
+
   public constructor() {
     super();
+    this.addFilter(this.alphaFilter);
+  }
+
+  public get alphaFilterVal() {
+    return this.alphaFilter.alpha;
+  }
+
+  public set alphaFilterVal(value: number) {
+    this.alphaFilter.alpha = value;
   }
 
   public addFilter(filter: PIXI.Filter) {
