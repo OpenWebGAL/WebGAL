@@ -163,14 +163,14 @@ export interface IStageState {
 /**
  * @interface ISetStagePayload 设置舞台状态的Action的Payload的数据接口
  */
-export interface ISetStagePayload {
-  key: keyof IStageState;
-  value: any;
+export interface ISetStagePayload<K extends keyof IStageState = keyof IStageState> {
+  key: K;
+  value: IStageState[K];
 }
 
 export interface IStageStore {
   stageState: IStageState;
-  setStage: <K extends keyof IStageState>(key: K, value: any) => void;
+  setStage: <K extends keyof IStageState>(key: K, value: IStageState[K]) => void;
   getStageState: () => IStageState;
   restoreStage: (newState: IStageState) => void;
 }
