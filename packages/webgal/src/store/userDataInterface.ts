@@ -102,9 +102,9 @@ export interface ISetUserDataPayload {
   value: any;
 }
 
-export interface ISetOptionDataPayload {
-  key: keyof IOptionData;
-  value: any;
+export interface ISetOptionDataPayload<K extends keyof IOptionData = keyof IOptionData> {
+  key: K;
+  value: IOptionData[K];
 }
 
 export interface IUserDataStore {
