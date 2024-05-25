@@ -108,11 +108,11 @@ export interface ISetOptionDataPayload<K extends keyof IOptionData = keyof IOpti
 }
 
 export interface IUserDataStore {
-  userDataState: IUserData;
-  setUserData: <K extends keyof IUserData>(key: K, value: any) => void;
   replaceUserData: (newUserData: IUserData) => void;
-  setOptionData: <K extends keyof IOptionData>(key: K, value: any) => void;
+  setOptionData: <K extends keyof IOptionData>(key: K, value: IOptionData[K]) => void;
   setSlPage: (index: number) => void;
+  setUserData: <K extends keyof IUserData>(key: K, value: IUserData[K]) => void;
+  userDataState: IUserData;
 }
 
 export type UserDataStore = IUserDataStore;
