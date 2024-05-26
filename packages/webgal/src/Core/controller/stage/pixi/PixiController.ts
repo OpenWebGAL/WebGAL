@@ -15,10 +15,10 @@ import { SCREEN_CONSTANTS } from '@/Core/util/constants';
 // import { Live2DModel, SoundManager } from 'pixi-live2d-display'; // 如果要使用 Live2D，取消这里的注释
 
 export interface IAnimationObject {
-  setStartState: Function;
-  setEndState: Function;
+  setStartState: CallableFunction;
+  setEndState: CallableFunction;
   tickerFunc: PIXI.TickerCallback<number>;
-  getEndFilterEffect?: Function;
+  getEndFilterEffect?: CallableFunction;
 }
 
 interface IStageAnimationObject {
