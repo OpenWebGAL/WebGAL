@@ -97,9 +97,9 @@ export interface IUserData {
   appreciationData: IAppreciation;
 }
 
-export interface ISetUserDataPayload<K extends keyof IOptionData = keyof IOptionData> {
+export interface ISetUserDataPayload<K extends keyof IUserData = keyof IUserData> {
   key: K;
-  value: IOptionData[K];
+  value: IUserData[K];
 }
 
 export interface ISetOptionDataPayload<K extends keyof IOptionData = keyof IOptionData> {
