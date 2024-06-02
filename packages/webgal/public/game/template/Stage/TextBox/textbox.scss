@@ -19,6 +19,10 @@
   transition: left 0.33s;
 }
 
+.TextBox_main_miniavatarOff {
+  left: 25px;
+}
+
 .TextBox_Background {
   z-index: 2;
   background: linear-gradient(rgba(245, 247, 250, 1) 0%, rgba(189, 198, 222, 1) 100%);
