@@ -1,5 +1,8 @@
 setVar:a=1;
 WebGAL:a=1? -when=a==1;
 
-; : 解析测试
-WebGAL : test;
+;正常解析
+WebGAL:test;
+
+; : 异常测试
+WebGAL   :   test;
