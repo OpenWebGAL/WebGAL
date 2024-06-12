@@ -49,7 +49,7 @@ export const scriptParser = (
     };
   }
   // 截取命令
-  const getCommandResult = /\s*:\s*/.exec(newSentenceRaw);
+  const getCommandResult = /:/.exec(newSentenceRaw);
   /**
    * 拆分命令和语句，同时处理连续对话。
    */
@@ -99,15 +99,12 @@ export const scriptParser = (
       args.push(e);
     }
   }
-  let trimContent =
-    newSentenceRaw.substring(0, newSentenceRaw.indexOf(':')).trim() +
-    newSentenceRaw.substring(newSentenceRaw.indexOf(':') + 1).trim(); // 内容部分去空处理
-  content = contentParser(trimContent, command, assetSetter); // 将语句内容里的文件名转为相对或绝对路径
+  content = contentParser(newSentenceRaw.trim(), command, assetSetter); // 将语句内容里的文件名转为相对或绝对路径
   sentenceAssets = assetsScanner(command, content, args); // 扫描语句携带资源
   subScene = subSceneScanner(command, content); // 扫描语句携带子场景
   return {
     command: command, // 语句类型
-    commandRaw: commandRaw, // 命令原始内容，方便调试
+    commandRaw: commandRaw.trim(), // 命令原始内容，方便调试
     content: content, // 语句内容
     args: args, // 参数列表
     sentenceAssets: sentenceAssets, // 语句携带的资源列表
