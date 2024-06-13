@@ -12,7 +12,7 @@ export const assetsPrefetcher = (assetList: Array<IAsset>) => {
     // 判断是否已经存在
     const hasPrefetch = WebGAL.sceneManager.settledAssets.includes(asset.url);
     if (hasPrefetch) {
-      logger.warn('该资源已在预加载列表中，无需重复加载');
+      logger.debug(`该资源${asset.url}已在预加载列表中，无需重复加载`);
     } else {
       const newLink = document.createElement('link');
       newLink.setAttribute('rel', 'prefetch');
