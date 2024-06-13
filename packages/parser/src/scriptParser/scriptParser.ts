@@ -35,8 +35,9 @@ export const scriptParser = (
 
   // 正式开始解析
 
-  // 去分号，前面已做，这里不再需要
-  let newSentenceRaw = sentenceRaw.split(';')[0];
+  // 去分号
+  let newSentenceRaw = sentenceRaw.split(/(?<!\\);/)[0];
+  newSentenceRaw = newSentenceRaw.replaceAll('\\;',';');
   if (newSentenceRaw === '') {
     // 注释提前返回
     return {
