@@ -98,7 +98,6 @@ export default function IMSSTextbox(props: ITextboxProps) {
     );
   });
 
-  // console.log(`${textboxOpacity / 100}`);
 
   return (
     <>
