@@ -35,8 +35,9 @@ export const scriptParser = (
 
   // 正式开始解析
 
-  // 去分号，前面已做，这里不再需要
-  let newSentenceRaw = sentenceRaw.split(';')[0];
+  // 去分号
+  let newSentenceRaw = sentenceRaw.split(/(?<!\\);/)[0];
+  newSentenceRaw = newSentenceRaw.replaceAll('\\;',';');
   if (newSentenceRaw === '') {
     // 注释提前返回
     return {
@@ -56,7 +57,11 @@ export const scriptParser = (
   // 没有command，说明这是一条连续对话或单条语句
   if (getCommandResult === null) {
     commandRaw = newSentenceRaw;
-    parsedCommand = commandParser(commandRaw, ADD_NEXT_ARG_LIST, SCRIPT_CONFIG_MAP);
+    parsedCommand = commandParser(
+      commandRaw,
+      ADD_NEXT_ARG_LIST,
+      SCRIPT_CONFIG_MAP,
+    );
     command = parsedCommand.type;
     for (const e of parsedCommand.additionalArgs) {
       // 由于是连续对话，所以我们去除 speaker 参数。
@@ -72,7 +77,11 @@ export const scriptParser = (
       getCommandResult.index + 1,
       newSentenceRaw.length,
     );
-    parsedCommand = commandParser(commandRaw, ADD_NEXT_ARG_LIST, SCRIPT_CONFIG_MAP);
+    parsedCommand = commandParser(
+      commandRaw,
+      ADD_NEXT_ARG_LIST,
+      SCRIPT_CONFIG_MAP,
+    );
     command = parsedCommand.type;
     for (const e of parsedCommand.additionalArgs) {
       args.push(e);
@@ -91,12 +100,12 @@ export const scriptParser = (
       args.push(e);
     }
   }
-  content = contentParser(newSentenceRaw, command, assetSetter); // 将语句内容里的文件名转为相对或绝对路径
+  content = contentParser(newSentenceRaw.trim(), command, assetSetter); // 将语句内容里的文件名转为相对或绝对路径
   sentenceAssets = assetsScanner(command, content, args); // 扫描语句携带资源
   subScene = subSceneScanner(command, content); // 扫描语句携带子场景
   return {
     command: command, // 语句类型
-    commandRaw: commandRaw, // 命令原始内容，方便调试
+    commandRaw: commandRaw.trim(), // 命令原始内容，方便调试
     content: content, // 语句内容
     args: args, // 参数列表
     sentenceAssets: sentenceAssets, // 语句携带的资源列表
