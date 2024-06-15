@@ -22,7 +22,7 @@ export function useSetBg(stageState: IStageState) {
           removeBg(currentBg);
         }
       }
-      WebGAL.gameplay.pixiStage?.addBg(thisBgKey, bgName);
+      addBg(undefined, thisBgKey, bgName);
       setEbg(bgName);
       logger.debug('重设背景');
       const { duration, animation } = getEnterExitAnimation('bg-main', 'enter', true);
@@ -48,4 +48,15 @@ function removeBg(bgObject: IStageObject) {
     WebGAL.gameplay.pixiStage?.removeAnimation('bg-main-softoff');
     WebGAL.gameplay.pixiStage?.removeStageObjectByKey('bg-main-off');
   }, duration);
+}
+
+function addBg(type?: 'image' | 'spine', ...args: any[]) {
+  const url = args[1];
+  if (url.endsWith('.skel')) {
+    // @ts-ignore
+    return WebGAL.gameplay.pixiStage?.addSpineBg(...args);
+  } else {
+    // @ts-ignore
+    return WebGAL.gameplay.pixiStage?.addBg(...args);
+  }
 }
