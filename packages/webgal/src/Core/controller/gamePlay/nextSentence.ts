@@ -63,7 +63,7 @@ export const nextSentence = () => {
   }
 
   // 不处于 allSettled 状态，清除所有普通演出，强制进入settled。
-  logger.warn('提前结束被触发，现在清除普通演出');
+  logger.debug('提前结束被触发，现在清除普通演出');
   let isGoNext = false;
   for (let i = 0; i < WebGAL.gameplay.performController.performList.length; i++) {
     const e = WebGAL.gameplay.performController.performList[i];

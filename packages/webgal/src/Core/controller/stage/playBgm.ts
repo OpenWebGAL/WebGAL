@@ -26,7 +26,7 @@ let emptyBgmTimeout: ReturnType<typeof setTimeout>;
  * @param volume 背景音乐 音量调整（0 - 100）
  */
 export function playBgm(url: string, enter = 0, volume = 100): void {
-  logger.info('playing bgm' + url);
+  logger.debug('playing bgm' + url);
   if (url === '') {
     emptyBgmTimeout = setTimeout(() => {
       // 淡入淡出效果结束后，将 bgm 置空

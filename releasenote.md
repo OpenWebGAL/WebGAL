@@ -8,15 +8,21 @@
 
 #### 新功能
 
-Pixi Container 使用 AlphaFilter 代替 alpha 属性，更好地兼容 Live2D
+解析器增加前后空值剪切和;的转义
+
+在生产环境去除调试输出，提高性能
+
+添加试验性快速预览
+
+支持使用 Spine 做背景
 
 #### 修复
 
-WebGAL 与编辑器同步的部分问题
+UI 自定义可以支持小头像不存在的情况
 
-提高资源预加载效率
+提高唇形同步性能
 
-修复 moc3 Live2D 加载问题
+提高日语翻译质量
 
 <!-- English Translation -->
 ## Release Notes
@@ -29,55 +35,57 @@ WebGAL 与编辑器同步的部分问题
 
 #### New Features
 
-Pixi Container uses AlphaFilter instead of alpha property for better Live2D compatibility
+Parser adds trimming of leading and trailing whitespace and escaping of ;
+
+Remove debug prints in production builds, improving performance
+
+Add experimental fast preview
+
+Support using Spine for backgrounds
 
 #### Fixes
 
-Some issues with WebGAL syncing with the editor
+UI customization can handle the case where small portraits are missing
 
-Improved resource preloading efficiency
+Improved performance of lip syncing
 
-Fixed moc3 Live2D loading issues
+Improved Japanese translation quality
 
 <!-- Japanese Translation -->
-## リリースノート
-
-**このリポジトリではソースコードのみを公開しています**
-
-**ユーザーフレンドリーなグラフィックエディタを使用してWebGALゲームの作成、制作、リアルタイムプレビューを体験したい場合は、[WebGALグラフィックエディタをダウンロードしてください](https://github.com/MakinoharaShoko/WebGAL_Terre/releases)**
-
-### このバージョンでは
-
 #### 新機能
 
-Pixi Containerがalpha属性の代わりにAlphaFilterを使用するようになり、Live2Dとの互換性が向上しました。
+パーサーに前後空白トリムと;のエスケープを追加
+
+本番環境でデバッグ出力を削除し、パフォーマンスを向上
+
+試験的な高速プレビューを追加
+
+Spine を背景として使用することをサポート
 
 #### 修正
 
-WebGALとエディターの同期に関するいくつかの問題を修正しました。
+UI カスタマイズでアバターが存在しない場合をサポート
 
-リソースのプリロード効率を向上させました。
+リップシンクのパフォーマンスを向上
 
-moc3 Live2Dのロードに関する問題を修正しました。
+日本語翻訳の品質を向上
 
 <!-- French Translation -->
-## Notes de version
-
-**Seul le code source est publié dans ce dépôt**
-
-**Si vous souhaitez expérimenter la création, la fabrication et la prévisualisation en temps réel des jeux WebGAL à l'aide d'un éditeur graphique convivial, veuillez [télécharger l'éditeur graphique WebGAL](https://github.com/MakinoharaShoko/WebGAL_Terre/releases)**
-
-### Dans cette version
-
 #### Nouvelles fonctionnalités
 
-Pixi Container utilise AlphaFilter à la place de la propriété alpha, pour une meilleure compatibilité avec Live2D
+L'analyseur ajoute le rognage des espaces vides avant et après et l'échappement des ;
 
-#### Correctifs
+Suppression de la sortie de débogage en environnement de production, amélioration des performances
 
-Certains problèmes de synchronisation entre WebGAL et l'éditeur
+Ajout d'un aperçu rapide expérimental
 
-Amélioration de l'efficacité du préchargement des ressources
+Prise en charge de Spine pour les arrière-plans
 
-Correction du problème de chargement de Live2D moc3
+#### Corrections
+
+La personnalisation de l'interface utilisateur peut prendre en charge les cas où il n'y a pas de petite icône
+
+Amélioration des performances de synchronisation labiale
+
+Amélioration de la qualité de la traduction japonaise
 

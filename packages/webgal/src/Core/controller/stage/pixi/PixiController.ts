@@ -284,36 +284,11 @@ export default class PixiStage {
     // Load mouth texture (reuse if already loaded)
     this.loadAsset(mouthTextureUrls[mouthState], () => {
       const texture = this.assetLoader.resources[mouthTextureUrls[mouthState]].texture;
-      if (!texture) {
+      const sprite = currentFigure?.children?.[0] as PIXI.Sprite;
+      if (!texture || !sprite) {
         return;
       }
-      const originalWidth = texture.width;
-      const originalHeight = texture.height;
-      const scaleX = this.stageWidth / originalWidth;
-      const scaleY = this.stageHeight / originalHeight;
-      const targetScale = Math.min(scaleX, scaleY);
-      const figureSprite = new PIXI.Sprite(texture);
-      figureSprite.scale.x = targetScale;
-      figureSprite.scale.y = targetScale;
-      figureSprite.anchor.set(0.5);
-      figureSprite.position.y = this.stageHeight / 2;
-      const targetWidth = originalWidth * targetScale;
-      const targetHeight = originalHeight * targetScale;
-      currentFigure.setBaseY(this.stageHeight / 2);
-      if (targetHeight < this.stageHeight) {
-        currentFigure.setBaseY(this.stageHeight / 2 + this.stageHeight - targetHeight / 2);
-      }
-      if (presetPosition === 'center') {
-        currentFigure.setBaseX(this.stageWidth / 2);
-      }
-      if (presetPosition === 'left') {
-        currentFigure.setBaseX(targetWidth / 2);
-      }
-      if (presetPosition === 'right') {
-        currentFigure.setBaseX(this.stageWidth - targetWidth / 2);
-      }
-      currentFigure.pivot.set(0, this.stageHeight / 2);
-      currentFigure.addChild(figureSprite);
+      sprite.texture = texture;
     });
   }
 
@@ -337,38 +312,11 @@ export default class PixiStage {
     // Load eye texture (reuse if already loaded)
     this.loadAsset(blinkTextureUrls[blinkState], () => {
       const texture = this.assetLoader.resources[blinkTextureUrls[blinkState]].texture;
-
-      if (!texture) {
+      const sprite = currentFigure?.children?.[0] as PIXI.Sprite;
+      if (!texture || !sprite) {
         return;
       }
-
-      const originalWidth = texture.width;
-      const originalHeight = texture.height;
-      const scaleX = this.stageWidth / originalWidth;
-      const scaleY = this.stageHeight / originalHeight;
-      const targetScale = Math.min(scaleX, scaleY);
-      const figureSprite = new PIXI.Sprite(texture);
-      figureSprite.scale.x = targetScale;
-      figureSprite.scale.y = targetScale;
-      figureSprite.anchor.set(0.5);
-      figureSprite.position.y = this.stageHeight / 2;
-      const targetWidth = originalWidth * targetScale;
-      const targetHeight = originalHeight * targetScale;
-      currentFigure.setBaseY(this.stageHeight / 2);
-      if (targetHeight < this.stageHeight) {
-        currentFigure.setBaseY(this.stageHeight / 2 + this.stageHeight - targetHeight / 2);
-      }
-      if (presetPosition === 'center') {
-        currentFigure.setBaseX(this.stageWidth / 2);
-      }
-      if (presetPosition === 'left') {
-        currentFigure.setBaseX(targetWidth / 2);
-      }
-      if (presetPosition === 'right') {
-        currentFigure.setBaseX(this.stageWidth - targetWidth / 2);
-      }
-      currentFigure.pivot.set(0, this.stageHeight / 2);
-      currentFigure.addChild(figureSprite);
+      sprite.texture = texture;
     });
   }
 
@@ -441,6 +389,84 @@ export default class PixiStage {
     this.cacheGC();
     if (!loader.resources?.[url]?.texture) {
       this.loadAsset(url, setup);
+    } else {
+      // 复用
+      setup();
+    }
+  }
+
+  public addSpineBg(key: string, url: string) {
+    const spineId = `spine-${url}`;
+    const loader = this.assetLoader;
+    // 准备用于存放这个背景的 Container
+    const thisBgContainer = new WebGALPixiContainer();
+
+    // 是否有相同 key 的背景
+    const setBgIndex = this.backgroundObjects.findIndex((e) => e.key === key);
+    const isBgSet = setBgIndex >= 0;
+
+    // 已经有一个这个 key 的背景存在了
+    if (isBgSet) {
+      // 挤占
+      this.removeStageObjectByKey(key);
+    }
+
+    // 挂载
+    this.backgroundContainer.addChild(thisBgContainer);
+    const bgUuid = uuid();
+    this.backgroundObjects.push({
+      uuid: bgUuid,
+      key: key,
+      pixiContainer: thisBgContainer,
+      sourceUrl: url,
+      sourceType: 'live2d',
+      sourceExt: this.getExtName(url),
+    });
+
+    // 完成图片加载后执行的函数
+    const setup = () => {
+      const spineResource: any = this.assetLoader.resources?.[spineId];
+      // TODO：找一个更好的解法，现在的解法是无论是否复用原来的资源，都设置一个延时以让动画工作正常！
+      setTimeout(() => {
+        if (spineResource && this.getStageObjByUuid(bgUuid)) {
+          const bgSpine = new Spine(spineResource.spineData);
+          const transY = spineResource?.spineData?.y ?? 0;
+          /**
+           * 重设大小
+           */
+          const originalWidth = bgSpine.width; // TODO: 视图大小可能小于画布大小，应提供参数指定视图大小
+          const originalHeight = bgSpine.height; // TODO: 视图大小可能小于画布大小，应提供参数指定视图大小
+          const scaleX = this.stageWidth / originalWidth;
+          const scaleY = this.stageHeight / originalHeight;
+          logger.debug('bgSpine state', bgSpine.state);
+          // TODO: 也许应该使用 setAnimation 播放初始动画
+          if (bgSpine.spineData.animations.length > 0) {
+            // 播放首个动画
+            bgSpine.state.setAnimation(0, bgSpine.spineData.animations[0].name, true);
+          }
+          const targetScale = Math.max(scaleX, scaleY);
+          const bgSprite = new PIXI.Sprite();
+          bgSprite.addChild(bgSpine);
+          bgSprite.scale.x = targetScale;
+          bgSprite.scale.y = targetScale;
+          bgSprite.anchor.set(0.5);
+          bgSprite.position.y = this.stageHeight / 2;
+          thisBgContainer.setBaseX(this.stageWidth / 2);
+          thisBgContainer.setBaseY(this.stageHeight / 2);
+          thisBgContainer.pivot.set(0, this.stageHeight / 2);
+
+          // 挂载
+          thisBgContainer.addChild(bgSprite);
+        }
+      }, 0);
+    };
+
+    /**
+     * 加载器部分
+     */
+    this.cacheGC();
+    if (!loader.resources?.[url]) {
+      this.loadAsset(url, setup, spineId);
     } else {
       // 复用
       setup();
@@ -566,7 +592,6 @@ export default class PixiStage {
 
     // 完成图片加载后执行的函数
     const setup = () => {
-      console.log(this.assetLoader.resources);
       const spineResource: any = this.assetLoader.resources?.[spineId];
       // TODO：找一个更好的解法，现在的解法是无论是否复用原来的资源，都设置一个延时以让动画工作正常！
       setTimeout(() => {
@@ -576,14 +601,12 @@ export default class PixiStage {
           /**
            * 重设大小
            */
-          console.log(figureSpine);
           const originalWidth = figureSpine.width;
           const originalHeight = figureSpine.height;
           const scaleX = this.stageWidth / originalWidth;
           const scaleY = this.stageHeight / originalHeight;
           // 我也不知道为什么啊啊啊啊
           figureSpine.y = -(scaleY * transY) / 2;
-          console.log(figureSpine.state);
           figureSpine.state.setAnimation(0, '07', true);
           const targetScale = Math.min(scaleX, scaleY);
           const figureSprite = new PIXI.Sprite();
