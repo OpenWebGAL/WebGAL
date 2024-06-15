@@ -24,37 +24,37 @@ const jp = {
               title: '言語',
             },
             resetData: {
-              title: 'データの削除またに復元',
+              title: 'データの復元と削除',
               options: {
-                clearGameSave: 'すべてのアーカイブを削除',
-                resetSettings: 'デフォルト設置を復元',
+                clearGameSave: 'すべてのセーブデータを削除',
+                resetSettings: '設定を元に戻す',
                 clearAll: 'すべてのデータを削除',
               },
               dialogs: {
-                clearGameSave: 'アーカイブをクリアしてもよろしいですか？',
-                resetSettings: 'デフォルト設定を復元してもよろしいですか？',
-                clearAll: 'すべてのデータを削除してもよろしいですか？',
+                clearGameSave: 'すべてのセーブデータを削除しますか？',
+                resetSettings: '設定を元に戻しますか？',
+                clearAll: 'すべてのデータを削除しますか？',
               },
             },
             gameSave: {
-              title: 'アーカイブとオプションのインポートまたはエクスポート',
+              title: 'セーブデータと設定のインポートとエクスポート',
               options: {
-                export: 'アーカイブとオプションのエクスポート',
-                import: 'アーカイブとオプションのインポート',
+                export: 'セーブデータと設定のエクスポート',
+                import: 'セーブデータと設定のインポート',
               },
               dialogs: {
                 import: {
-                  title: 'アーカイブとオプションをインポートしますか？',
-                  tip: 'インポートアーカイブ',
-                  error: 'アーカイブの解析に失败しました',
+                  title: 'セーブデータと設定をインポートしますか？',
+                  tip: 'セーブデータのインポート',
+                  error: 'セーブデータの読み込みに失敗しました',
                 },
               },
             },
             about: {
-              title: 'WebGALについて',
-              subTitle: 'WebGAL：開源のウェブ基盤視覚小説エンジン',
-              version: '版数',
-              source: '源コード保管所',
+              title: 'WebGAL について',
+              subTitle: 'WebGAL: オープンソースのウェブベースビジュアルノベルエンジン',
+              version: 'バージョン',
+              source: 'ソースコードリポジトリ',
               contributors: '貢献者',
               website: 'ウェブサイト',
             },
@@ -63,6 +63,13 @@ const jp = {
         display: {
           title: 'ウィンドウ',
           options: {
+            fullScreen: {
+              title: 'フルスクリーン',
+              options: {
+                on: 'オン',
+                off: 'オフ',
+              },
+            },
             textSpeed: {
               title: 'テキスト表示速度',
               options: {
@@ -82,29 +89,31 @@ const jp = {
             textFont: {
               title: 'フォント',
               options: {
-                siYuanSimSun: '源ノ明朝',
-                SimHei: '黒体',
-                lxgw: '霞鴎文隷',
+                siYuanSimSun: '源ノ明朝(中国語)',
+                SimHei: 'OPPO Sans',
+                lxgw: 'LXGW WenKai',
               },
             },
             textboxOpacity: {
-              title: 'Textbox Opacity',
+              title: 'テキストボックスの不透明度',
             },
             textPreview: {
               title: 'テキスト表示プレビュー',
-              // todo
-              text: 'プレビューはテキストボックスのテキストサイズとテキスト表示速度です。上記のオプションでフォントも変更できます。',
+              text: 'これはテキストボックスのフォントとサイズ、表示速度のプレビューです。上にある設定で変更できます。',
             },
           },
         },
         sound: {
           title: 'サウンド',
           options: {
-            volumeMain: { title: 'MAIN 音量' },
-            vocalVolume: { title: 'VOICE 音量' },
+            volumeMain: { title: 'メイン音量' },
+            vocalVolume: { title: 'ボイス音量' },
             bgmVolume: { title: 'BGM 音量' },
-            seVolume: { title: 'SE 音量' },
+            seVolume: { title: '効果音音量' },
             uiSeVolume: { title: 'UI 効果音音量' },
+            voiceOption: { title: 'ボイスの中断' },
+            voiceStop: { title: '中断する' },
+            voiceContinue: { title: '中断しない' },
           },
         },
         // language: {
@@ -116,7 +125,7 @@ const jp = {
     },
     saving: {
       title: 'SAVE',
-      isOverwrite: '上書きしますか？',
+      isOverwrite: 'セーブデータを上書きしますか？',
     },
     loadSaving: {
       title: 'LOAD',
@@ -129,7 +138,6 @@ const jp = {
     },
   },
 
-  // todo
   title: {
     start: {
       title: '初めから',
@@ -168,7 +176,7 @@ const jp = {
       load: 'LOAD',
       options: 'CONFIG',
       title: 'HOME',
-      titleTips: 'タイトル画面に戻ることを確認しますか',
+      titleTips: 'タイトル画面に戻りますか？',
     },
   },
 

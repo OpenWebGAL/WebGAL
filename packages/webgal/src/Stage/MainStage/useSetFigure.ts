@@ -187,7 +187,7 @@ function removeFig(figObj: IStageObject, enterTikerKey: string, effects: IEffect
   WebGAL.gameplay.pixiStage?.removeAnimationWithSetEffects(enterTikerKey);
   // 快进，跳过退出动画
   if (WebGAL.gameplay.isFast) {
-    logger.info('快速模式，立刻关闭立绘');
+    logger.debug('快速模式，立刻关闭立绘');
     WebGAL.gameplay.pixiStage?.removeStageObjectByKey(figObj.key);
     return;
   }

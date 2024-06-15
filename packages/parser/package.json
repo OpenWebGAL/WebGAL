@@ -1,6 +1,6 @@
 {
   "name": "webgal-parser",
-  "version": "4.4.15",
+  "version": "4.5.2",
   "description": "WebGAL script parser",
   "scripts": {
     "test": "vitest",

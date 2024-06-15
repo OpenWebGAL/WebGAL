@@ -32,6 +32,7 @@ export default function IMSSTextbox(props: ITextboxProps) {
         e.className = applyStyle('TextBox_textElement_Settled', styles.TextBox_textElement_Settled);
       });
     }
+
     WebGAL.events.textSettle.on(settleText);
     return () => {
       WebGAL.events.textSettle.off(settleText);
@@ -97,7 +98,6 @@ export default function IMSSTextbox(props: ITextboxProps) {
     );
   });
 
-  console.log(`${textboxOpacity / 100}`);
 
   return (
     <>
@@ -107,19 +107,27 @@ export default function IMSSTextbox(props: ITextboxProps) {
             className={
               applyStyle('TextBox_main', styles.TextBox_main) +
               ' ' +
-              applyStyle('TextBox_Background', styles.TextBox_Background)
+              applyStyle('TextBox_Background', styles.TextBox_Background) +
+              ' ' +
+              (miniAvatar === ''
+                ? applyStyle('TextBox_main_miniavatarOff', styles.TextBox_main_miniavatarOff)
+                : undefined)
             }
             style={{
               opacity: `${textboxOpacity / 100}`,
-              left: miniAvatar === '' ? 25 : undefined,
             }}
           />
           <div
             id="textBoxMain"
-            className={applyStyle('TextBox_main', styles.TextBox_main)}
+            className={
+              applyStyle('TextBox_main', styles.TextBox_main) +
+              ' ' +
+              (miniAvatar === ''
+                ? applyStyle('TextBox_main_miniavatarOff', styles.TextBox_main_miniavatarOff)
+                : undefined)
+            }
             style={{
               fontFamily: font,
-              left: miniAvatar === '' ? 25 : undefined,
             }}
           >
             <div id="miniAvatar" className={applyStyle('miniAvatarContainer', styles.miniAvatarContainer)}>
