@@ -284,36 +284,11 @@ export default class PixiStage {
     // Load mouth texture (reuse if already loaded)
     this.loadAsset(mouthTextureUrls[mouthState], () => {
       const texture = this.assetLoader.resources[mouthTextureUrls[mouthState]].texture;
-      if (!texture) {
+      const sprite = currentFigure?.children?.[0] as PIXI.Sprite;
+      if (!texture || !sprite) {
         return;
       }
-      const originalWidth = texture.width;
-      const originalHeight = texture.height;
-      const scaleX = this.stageWidth / originalWidth;
-      const scaleY = this.stageHeight / originalHeight;
-      const targetScale = Math.min(scaleX, scaleY);
-      const figureSprite = new PIXI.Sprite(texture);
-      figureSprite.scale.x = targetScale;
-      figureSprite.scale.y = targetScale;
-      figureSprite.anchor.set(0.5);
-      figureSprite.position.y = this.stageHeight / 2;
-      const targetWidth = originalWidth * targetScale;
-      const targetHeight = originalHeight * targetScale;
-      currentFigure.setBaseY(this.stageHeight / 2);
-      if (targetHeight < this.stageHeight) {
-        currentFigure.setBaseY(this.stageHeight / 2 + this.stageHeight - targetHeight / 2);
-      }
-      if (presetPosition === 'center') {
-        currentFigure.setBaseX(this.stageWidth / 2);
-      }
-      if (presetPosition === 'left') {
-        currentFigure.setBaseX(targetWidth / 2);
-      }
-      if (presetPosition === 'right') {
-        currentFigure.setBaseX(this.stageWidth - targetWidth / 2);
-      }
-      currentFigure.pivot.set(0, this.stageHeight / 2);
-      currentFigure.addChild(figureSprite);
+      sprite.texture = texture;
     });
   }
 
@@ -337,38 +312,11 @@ export default class PixiStage {
     // Load eye texture (reuse if already loaded)
     this.loadAsset(blinkTextureUrls[blinkState], () => {
       const texture = this.assetLoader.resources[blinkTextureUrls[blinkState]].texture;
-
-      if (!texture) {
+      const sprite = currentFigure?.children?.[0] as PIXI.Sprite;
+      if (!texture || !sprite) {
         return;
       }
-
-      const originalWidth = texture.width;
-      const originalHeight = texture.height;
-      const scaleX = this.stageWidth / originalWidth;
-      const scaleY = this.stageHeight / originalHeight;
-      const targetScale = Math.min(scaleX, scaleY);
-      const figureSprite = new PIXI.Sprite(texture);
-      figureSprite.scale.x = targetScale;
-      figureSprite.scale.y = targetScale;
-      figureSprite.anchor.set(0.5);
-      figureSprite.position.y = this.stageHeight / 2;
-      const targetWidth = originalWidth * targetScale;
-      const targetHeight = originalHeight * targetScale;
-      currentFigure.setBaseY(this.stageHeight / 2);
-      if (targetHeight < this.stageHeight) {
-        currentFigure.setBaseY(this.stageHeight / 2 + this.stageHeight - targetHeight / 2);
-      }
-      if (presetPosition === 'center') {
-        currentFigure.setBaseX(this.stageWidth / 2);
-      }
-      if (presetPosition === 'left') {
-        currentFigure.setBaseX(targetWidth / 2);
-      }
-      if (presetPosition === 'right') {
-        currentFigure.setBaseX(this.stageWidth - targetWidth / 2);
-      }
-      currentFigure.pivot.set(0, this.stageHeight / 2);
-      currentFigure.addChild(figureSprite);
+      sprite.texture = texture;
     });
   }
 
