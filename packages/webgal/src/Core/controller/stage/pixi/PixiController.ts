@@ -477,7 +477,6 @@ export default class PixiStage {
 
     // 完成图片加载后执行的函数
     const setup = () => {
-      console.log(this.assetLoader.resources);
       const spineResource: any = this.assetLoader.resources?.[spineId];
       // TODO：找一个更好的解法，现在的解法是无论是否复用原来的资源，都设置一个延时以让动画工作正常！
       setTimeout(() => {
@@ -491,11 +490,11 @@ export default class PixiStage {
           const originalHeight = bgSpine.height; // TODO: 视图大小可能小于画布大小，应提供参数指定视图大小
           const scaleX = this.stageWidth / originalWidth;
           const scaleY = this.stageHeight / originalHeight;
-          console.log(bgSpine.state);
+          logger.debug('bgSpine state', bgSpine.state);
           // TODO: 也许应该使用 setAnimation 播放初始动画
-          for (let animation of bgSpine.spineData.animations) { // 播放首个动画
-            bgSpine.state.setAnimation(0, animation.name, true);
-            break;
+          if (bgSpine.spineData.animations.length > 0) {
+            // 播放首个动画
+            bgSpine.state.setAnimation(0, bgSpine.spineData.animations[0].name, true);
           }
           const targetScale = Math.max(scaleX, scaleY);
           const bgSprite = new PIXI.Sprite();
@@ -514,7 +513,7 @@ export default class PixiStage {
       }, 0);
     };
 
-   /**
+    /**
      * 加载器部分
      */
     this.cacheGC();
@@ -645,7 +644,6 @@ export default class PixiStage {
 
     // 完成图片加载后执行的函数
     const setup = () => {
-      console.log(this.assetLoader.resources);
       const spineResource: any = this.assetLoader.resources?.[spineId];
       // TODO：找一个更好的解法，现在的解法是无论是否复用原来的资源，都设置一个延时以让动画工作正常！
       setTimeout(() => {
@@ -655,14 +653,12 @@ export default class PixiStage {
           /**
            * 重设大小
            */
-          console.log(figureSpine);
           const originalWidth = figureSpine.width;
           const originalHeight = figureSpine.height;
           const scaleX = this.stageWidth / originalWidth;
           const scaleY = this.stageHeight / originalHeight;
           // 我也不知道为什么啊啊啊啊
           figureSpine.y = -(scaleY * transY) / 2;
-          console.log(figureSpine.state);
           figureSpine.state.setAnimation(0, '07', true);
           const targetScale = Math.min(scaleX, scaleY);
           const figureSprite = new PIXI.Sprite();
