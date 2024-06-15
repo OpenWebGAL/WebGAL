@@ -5611,16 +5611,6 @@ void-elements@3.1.0:
   resolved "https://registry.yarnpkg.com/void-elements/-/void-elements-3.1.0.tgz#614f7fbf8d801f0bb5f0661f5b2f5785750e4f09"
   integrity sha512-Dhxzh5HZuiHQhbvTW9AMetFfBHDMYpo23Uo9btPXgdYP+3T5S+p+jgNy7spra+veYhBP2dCSgxR/i2Y02h5/6w==
 
-webgal-parser@latest:
-  version "4.4.15"
-  resolved "https://registry.yarnpkg.com/webgal-parser/-/webgal-parser-4.4.15.tgz#daa99fa523413fe70b76f18160f2ea8ef32b6f2a"
-  integrity sha512-nVSkdJWzTKmKUlgsRwkjDj+s08LnJpp1jqr9+VyTPO7n3ZxoSJm3NyIWSEz7GcplohYovoPS15EOEZm637HqdA==
-  dependencies:
-    chevrotain "^10.5.0"
-    cloudlogjs "^1.0.11"
-    lodash "^4.17.21"
-    tsx "^3.12.7"
-
 webidl-conversions@^3.0.0:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/webidl-conversions/-/webidl-conversions-3.0.1.tgz#24534275e2a7bc6be7bc86611cc16ae0a5654871"
