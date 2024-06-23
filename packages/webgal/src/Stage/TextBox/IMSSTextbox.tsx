@@ -3,6 +3,7 @@ import { ReactNode, useEffect } from 'react';
 import { WebGAL } from '@/Core/WebGAL';
 import { ITextboxProps } from './types';
 import useApplyStyle from '@/hooks/useApplyStyle';
+import { css } from '@emotion/css';
 
 export default function IMSSTextbox(props: ITextboxProps) {
   const {
@@ -41,7 +42,29 @@ export default function IMSSTextbox(props: ITextboxProps) {
 
   let allTextIndex = 0;
   const textElementList = textArray.map((line, index) => {
-    const textLine = line.map((e, index) => {
+    const textLine = line.map((en, index) => {
+      const e = en.reactNode;
+      let style = '';
+      let tips = '';
+      let style_alltext = '';
+      if (en.enhancedValue) {
+        const data = en.enhancedValue;
+        console.log(data);
+        for (const dataElem of data) {
+          const { key, value } = dataElem;
+          switch (key) {
+            case 'style':
+              style = value;
+              break;
+            case 'tips':
+              tips = value;
+              break;
+            case 'style-alltext':
+              style_alltext = value;
+              break;
+          }
+        }
+      }
       // if (e === '<br />') {
       //   return <br key={`br${index}`} />;
       // }
@@ -51,6 +74,8 @@ export default function IMSSTextbox(props: ITextboxProps) {
       if (currentConcatDialogPrev !== '' && index >= prevLength) {
         delay = delay - prevLength * textDelay;
       }
+      const styleClassName = ' ' + css(style);
+      const styleAllText = ' ' + css(style_alltext);
       if (index < prevLength) {
         return (
           <span
@@ -60,26 +85,26 @@ export default function IMSSTextbox(props: ITextboxProps) {
             key={currentDialogKey + index}
             style={{ animationDelay: `${delay}ms`, animationDuration: `${textDuration}ms` }}
           >
-            <span className={styles.zhanwei}>
+            <span className={styles.zhanwei + styleAllText}>
               {e}
-              <span className={applyStyle('outer', styles.outer)}>{e}</span>
-              {isUseStroke && <span className={applyStyle('inner', styles.inner)}>{e}</span>}
+              <span className={applyStyle('outer', styles.outer) + styleClassName + styleAllText}>{e}</span>
+              {isUseStroke && <span className={applyStyle('inner', styles.inner) + styleAllText}>{e}</span>}
             </span>
           </span>
         );
       }
       return (
         <span
-          data-text={e}
+          // data-text={e}
           id={`${delay}`}
           className={`${applyStyle('TextBox_textElement_start', styles.TextBox_textElement_start)} Textelement_start`}
           key={currentDialogKey + index}
           style={{ animationDelay: `${delay}ms`, position: 'relative' }}
         >
-          <span className={styles.zhanwei}>
+          <span className={styles.zhanwei + styleAllText}>
             {e}
-            <span className={applyStyle('outer', styles.outer)}>{e}</span>
-            {isUseStroke && <span className={applyStyle('inner', styles.inner)}>{e}</span>}
+            <span className={applyStyle('outer', styles.outer) + styleClassName + styleAllText}>{e}</span>
+            {isUseStroke && <span className={applyStyle('inner', styles.inner) + styleAllText}>{e}</span>}
           </span>
         </span>
       );
@@ -97,7 +122,6 @@ export default function IMSSTextbox(props: ITextboxProps) {
       </div>
     );
   });
-
 
   return (
     <>

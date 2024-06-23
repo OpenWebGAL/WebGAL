@@ -1,7 +1,7 @@
-import { ReactNode } from 'react';
+import { EnhancedNode } from '@/Stage/TextBox/TextBox';
 
 export interface ITextboxProps {
-  textArray: ReactNode[][];
+  textArray: EnhancedNode[][];
   textDelay: number;
   currentConcatDialogPrev: string;
   currentDialogKey: string;
