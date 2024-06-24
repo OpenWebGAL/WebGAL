@@ -56,6 +56,24 @@ class ChooseOption {
 export const choose = (sentence: ISentence): IPerform => {
   const chooseOptionScripts = sentence.content.split('|');
   const chooseOptions = chooseOptionScripts.map((e) => ChooseOption.parse(e));
+
+  // eslint-disable-next-line react/no-deprecated
+  ReactDOM.render(<Choose chooseOptions={chooseOptions} />, document.getElementById('chooseContainer'));
+  return {
+    performName: 'choose',
+    duration: 1000 * 60 * 60 * 24,
+    isHoldOn: false,
+    stopFunction: () => {
+      // eslint-disable-next-line react/no-deprecated
+      ReactDOM.render(<div />, document.getElementById('chooseContainer'));
+    },
+    blockingNext: () => true,
+    blockingAuto: () => true,
+    stopTimeout: undefined, // 暂时不用，后面会交给自动清除
+  };
+};
+
+function Choose(props: { chooseOptions: ChooseOption[] }) {
   const fontFamily = webgalStore.getState().userData.optionData.textboxFont;
   const font = fontFamily === textFont.song ? '"思源宋体", serif' : '"WebgalUI", serif';
   const { playSeEnter, playSeClick } = useSEByWebgalStore();
@@ -90,21 +108,6 @@ export const choose = (sentence: ISentence): IPerform => {
         );
       });
   };
-  // eslint-disable-next-line react/no-deprecated
-  ReactDOM.render(
-    <div className={styles.Choose_Main}>{runtimeBuildList(chooseOptions)}</div>,
-    document.getElementById('chooseContainer'),
-  );
-  return {
-    performName: 'choose',
-    duration: 1000 * 60 * 60 * 24,
-    isHoldOn: false,
-    stopFunction: () => {
-      // eslint-disable-next-line react/no-deprecated
-      ReactDOM.render(<div />, document.getElementById('chooseContainer'));
-    },
-    blockingNext: () => true,
-    blockingAuto: () => true,
-    stopTimeout: undefined, // 暂时不用，后面会交给自动清除
-  };
-};
+
+  return <div className={styles.Choose_Main}>{runtimeBuildList(props.chooseOptions)}</div>;
+}
