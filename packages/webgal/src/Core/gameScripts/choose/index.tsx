@@ -11,6 +11,7 @@ import { PerformController } from '@/Core/Modules/perform/performController';
 import { useSEByWebgalStore } from '@/hooks/useSoundEffect';
 import { WebGAL } from '@/Core/WebGAL';
 import { whenChecker } from '@/Core/controller/gamePlay/scriptExecutor';
+import useEscape from '@/hooks/useEscape';
 
 class ChooseOption {
   /**
@@ -21,8 +22,7 @@ class ChooseOption {
     const parts = script.split('->');
     const conditonPart = parts.length > 1 ? parts[0] : null;
     const mainPart = parts.length > 1 ? parts[1] : parts[0];
-    const mainPartNodes = mainPart.split(':');
-
+    const mainPartNodes = mainPart.split(/(?<!\\):/g);
     const option = new ChooseOption(mainPartNodes[0], mainPartNodes[1]);
     if (conditonPart !== null) {
       const showConditionPart = conditonPart.match(/\((.*)\)/);
@@ -43,9 +43,9 @@ class ChooseOption {
   public enableCondition?: string;
 
   public constructor(text: string, jump: string) {
-    this.text = text;
+    this.text = useEscape(text);
     this.jump = jump;
-    this.jumpToScene = jump.match(/\./) !== null;
+    this.jumpToScene = jump.match(/(?<!\\)\./) !== null;
   }
 }
 
@@ -54,7 +54,7 @@ class ChooseOption {
  * @param sentence
  */
 export const choose = (sentence: ISentence): IPerform => {
-  const chooseOptionScripts = sentence.content.split('|');
+  const chooseOptionScripts = sentence.content.split(/(?<!\\)\|/);
   const chooseOptions = chooseOptionScripts.map((e) => ChooseOption.parse(e));
 
   // eslint-disable-next-line react/no-deprecated
