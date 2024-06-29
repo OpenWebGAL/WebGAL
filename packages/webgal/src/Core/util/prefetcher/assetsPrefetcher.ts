@@ -8,6 +8,12 @@ import { WebGAL } from '@/Core/WebGAL';
  * @param assetList 场景资源列表
  */
 export const assetsPrefetcher = (assetList: Array<IAsset>) => {
+  // @ts-ignore
+  // 未必要移除，加载到内存里也有用
+  // if (window?.isElectron) {
+  //   return;
+  // }
+
   for (const asset of assetList) {
     // 判断是否已经存在
     const hasPrefetch = WebGAL.sceneManager.settledAssets.includes(asset.url);
@@ -19,7 +25,11 @@ export const assetsPrefetcher = (assetList: Array<IAsset>) => {
       newLink.setAttribute('href', asset.url);
       const head = document.getElementsByTagName('head');
       if (head.length) {
-        head[0].appendChild(newLink);
+        try {
+          head[0].appendChild(newLink);
+        } catch (e) {
+          console.log('预加载出错', e);
+        }
       }
       WebGAL.sceneManager.settledAssets.push(asset.url);
     }
