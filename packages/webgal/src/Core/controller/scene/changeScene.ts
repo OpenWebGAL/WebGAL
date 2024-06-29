@@ -13,6 +13,10 @@ import { WebGAL } from '@/Core/WebGAL';
  * @param sceneName 场景名称
  */
 export const changeScene = (sceneUrl: string, sceneName: string) => {
+  if (WebGAL.sceneManager.lockSceneWrite) {
+    return;
+  }
+  WebGAL.sceneManager.lockSceneWrite = true;
   // 场景写入到运行时
   sceneFetcher(sceneUrl).then((rawScene) => {
     WebGAL.sceneManager.sceneData.currentScene = sceneParser(rawScene, sceneName, sceneUrl);
@@ -23,6 +27,7 @@ export const changeScene = (sceneUrl: string, sceneName: string) => {
     const subSceneListUniq = uniqWith(subSceneList); // 去重
     scenePrefetcher(subSceneListUniq);
     logger.debug('现在切换场景，切换后的结果：', WebGAL.sceneManager.sceneData);
+    WebGAL.sceneManager.lockSceneWrite = false;
     nextSentence();
   });
 };
