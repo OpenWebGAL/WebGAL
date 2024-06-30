@@ -24,7 +24,7 @@ const pixiRain = (rainSpeed: number, number: number) => {
   container.scale.x = 1;
   container.scale.y = 1;
   // container.rotation = -0.2;
-  const bunnyList: any = [];
+  const bunnyList: PIXI.Sprite[] = [];
   // 监听动画更新
   function ticker(delta: number) {
     // 获取长宽，用于控制雪花出现位置
@@ -59,16 +59,19 @@ const pixiRain = (rainSpeed: number, number: number) => {
       container.addChild(bunny);
       // 控制每片雨点
       bunnyList.push(bunny);
+
+      // 控制同屏雨点数
+      if (bunnyList.length >= 2500) {
+        bunnyList.shift()?.destroy();
+        container.removeChild(container.children[0]);
+      }
     }
     // 雨点落下
     for (const e of bunnyList) {
+      // @ts-ignore
       e['dropSpeed'] = e['acc'] * 0.01 + e['dropSpeed'];
+      // @ts-ignore
       e.y += delta * rainSpeed * e['dropSpeed'] * 1.1 + 3;
-    }
-    // 控制同屏雨点数
-    if (bunnyList.length >= 2500) {
-      bunnyList.unshift();
-      container.removeChild(container.children[0]);
     }
   }
   WebGAL.gameplay.pixiStage?.registerAnimation(
