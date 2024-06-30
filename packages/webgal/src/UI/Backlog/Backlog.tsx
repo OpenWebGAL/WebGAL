@@ -7,7 +7,7 @@ import { setVisibility } from '@/store/GUIReducer';
 import { logger } from '@/Core/util/logger';
 import { ReactNode, useEffect, useMemo, useRef, useState } from 'react';
 import useTrans from '@/hooks/useTrans';
-import { compileSentence, splitChars } from '@/Stage/TextBox/TextBox';
+import { compileSentence, EnhancedNode, splitChars } from '@/Stage/TextBox/TextBox';
 import useSoundEffect from '@/hooks/useSoundEffect';
 import { WebGAL } from '@/Core/WebGAL';
 
@@ -28,7 +28,12 @@ export const Backlog = () => {
     for (let i = 0; i < WebGAL.backlogManager.getBacklog().length; i++) {
       const backlogItem = WebGAL.backlogManager.getBacklog()[i];
       const showTextArray = compileSentence(backlogItem.currentStageState.showText, 3, true);
-      const showTextArrayReduced = mergeStringsAndKeepObjects(showTextArray);
+      const showTextArray2 = showTextArray.map((line) => {
+        return line.map((c) => {
+          return c.reactNode;
+        });
+      });
+      const showTextArrayReduced = mergeStringsAndKeepObjects(showTextArray2);
       const showTextElementList = showTextArrayReduced.map((line, index) => {
         return (
           <div key={`backlog-line-${index}`}>

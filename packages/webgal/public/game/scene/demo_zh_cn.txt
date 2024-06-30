@@ -25,6 +25,7 @@ pixiPerform:snow;
 pixiInit;
 WebGAL:接下来介绍一些新版本功能！
 WebGAL:比如这个[注](zhù)[音](yīn)功能，可以为游戏带来更好的体验！
+WebGAL:我们也支持了[文本拓展语法](style=color:#B5495B\;)，可以为[文](wen)[本](ben)带来[富文本支持](style-alltext=font-style:italic\; style=color:#66327C\;)、交互等特性。
 WebGAL:新版本添加了特性：获取用户输入，你要尝试一下吗？
 choose:尝试一下:userInput|算了吧:toNextPart;
 

@@ -68,7 +68,7 @@ const pixiSnow = (snowSpeed: number) => {
     }
     // 控制同屏雪花数
     if (bunnyList.length >= 500) {
-      bunnyList.unshift();
+      bunnyList.shift()?.destroy();
       container.removeChild(container.children[0]);
     }
   }

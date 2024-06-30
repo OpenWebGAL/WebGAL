@@ -11,6 +11,8 @@ import { PerformController } from '@/Core/Modules/perform/performController';
 import { useSEByWebgalStore } from '@/hooks/useSoundEffect';
 import { WebGAL } from '@/Core/WebGAL';
 import { whenChecker } from '@/Core/controller/gamePlay/scriptExecutor';
+import useApplyStyle from '@/hooks/useApplyStyle';
+import { Provider } from 'react-redux';
 
 class ChooseOption {
   /**
@@ -56,43 +58,12 @@ class ChooseOption {
 export const choose = (sentence: ISentence): IPerform => {
   const chooseOptionScripts = sentence.content.split('|');
   const chooseOptions = chooseOptionScripts.map((e) => ChooseOption.parse(e));
-  const fontFamily = webgalStore.getState().userData.optionData.textboxFont;
-  const font = fontFamily === textFont.song ? '"思源宋体", serif' : '"WebgalUI", serif';
-  const { playSeEnter, playSeClick } = useSEByWebgalStore();
-  // 运行时计算JSX.Element[]
-  const runtimeBuildList = (chooseListFull: ChooseOption[]) => {
-    return chooseListFull
-      .filter((e, i) => whenChecker(e.showCondition))
-      .map((e, i) => {
-        const enable = whenChecker(e.enableCondition);
-        const className = enable ? styles.Choose_item : styles.Choose_item_disabled;
-        const onClick = enable
-          ? () => {
-              playSeClick();
-              if (e.jumpToScene) {
-                changeScene(e.jump, e.text);
-              } else {
-                jmp(e.jump);
-              }
-              WebGAL.gameplay.performController.unmountPerform('choose');
-            }
-          : () => {};
-        return (
-          <div
-            className={className}
-            style={{ fontFamily: font }}
-            key={e.jump + i}
-            onClick={onClick}
-            onMouseEnter={playSeEnter}
-          >
-            {e.text}
-          </div>
-        );
-      });
-  };
+
   // eslint-disable-next-line react/no-deprecated
   ReactDOM.render(
-    <div className={styles.Choose_Main}>{runtimeBuildList(chooseOptions)}</div>,
+    <Provider store={webgalStore}>
+      <Choose chooseOptions={chooseOptions} />
+    </Provider>,
     document.getElementById('chooseContainer'),
   );
   return {
@@ -108,3 +79,41 @@ export const choose = (sentence: ISentence): IPerform => {
     stopTimeout: undefined, // 暂时不用，后面会交给自动清除
   };
 };
+
+function Choose(props: { chooseOptions: ChooseOption[] }) {
+  const fontFamily = webgalStore.getState().userData.optionData.textboxFont;
+  const font = fontFamily === textFont.song ? '"思源宋体", serif' : '"WebgalUI", serif';
+  const { playSeEnter, playSeClick } = useSEByWebgalStore();
+  const applyStyle = useApplyStyle('Stage/Choose/choose.scss');
+  // 运行时计算JSX.Element[]
+  const runtimeBuildList = (chooseListFull: ChooseOption[]) => {
+    return chooseListFull
+      .filter((e, i) => whenChecker(e.showCondition))
+      .map((e, i) => {
+        const enable = whenChecker(e.enableCondition);
+        const className = enable
+          ? applyStyle('Choose_item', styles.Choose_item)
+          : applyStyle('Choose_item_disabled', styles.Choose_item_disabled);
+        const onClick = enable
+          ? () => {
+              playSeClick();
+              if (e.jumpToScene) {
+                changeScene(e.jump, e.text);
+              } else {
+                jmp(e.jump);
+              }
+              WebGAL.gameplay.performController.unmountPerform('choose');
+            }
+          : () => {};
+        return (
+          <div className={applyStyle('Choose_item_outer', styles.Choose_item_outer)} key={e.jump + i}>
+            <div className={className} style={{ fontFamily: font }} onClick={onClick} onMouseEnter={playSeEnter}>
+              {e.text}
+            </div>
+          </div>
+        );
+      });
+  };
+
+  return <div className={applyStyle('Choose_Main', styles.Choose_Main)}>{runtimeBuildList(props.chooseOptions)}</div>;
+}

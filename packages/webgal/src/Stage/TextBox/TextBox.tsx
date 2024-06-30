@@ -13,6 +13,11 @@ const userAgent = navigator.userAgent;
 const isFirefox = /firefox/i.test(userAgent);
 const isSafari = /^((?!chrome|android).)*safari/i.test(userAgent);
 
+export interface EnhancedNode {
+  reactNode: ReactNode;
+  enhancedValue?: { key: string; value: string }[];
+}
+
 export const TextBox = () => {
   const [isShowStroke, setIsShowStroke] = useState(true);
 
@@ -93,28 +98,31 @@ function isCJK(character: string) {
   return !!character.match(/[\u4e00-\u9fa5]|[\u0800-\u4e00]|[\uac00-\ud7ff]/);
 }
 
-export function compileSentence(sentence: string, lineLimit: number, ignoreLineLimit?: boolean): ReactNode[][] {
+export function compileSentence(sentence: string, lineLimit: number, ignoreLineLimit?: boolean): EnhancedNode[][] {
   // 先拆行
   const lines = sentence.split('|');
   // 对每一行进行注音处理
   const rubyLines = lines.map((line) => parseString(line));
   const nodeLines = rubyLines.map((line) => {
-    const ln: ReactNode[] = [];
+    const ln: EnhancedNode[] = [];
     line.forEach((node, index) => {
       match(node.type)
         .with(SegmentType.String, () => {
           const chars = splitChars(node.value as string);
-          ln.push(...chars);
+          // eslint-disable-next-line max-nested-callbacks
+          ln.push(...chars.map((c) => ({ reactNode: c })));
         })
         .endsWith(SegmentType.Link, () => {
-          const val = node.value as LinkValue;
-          const rubyNode = (
-            <ruby key={index + val.text}>
-              {val.text}
-              <rt>{val.link}</rt>
-            </ruby>
+          const val = node.value as EnhancedValue;
+          const enhancedNode = (
+            <span className="__enhanced_text" key={val.text + `${index}`}>
+              <ruby key={index + val.text}>
+                {val.text}
+                <rt>{val.ruby}</rt>
+              </ruby>
+            </span>
           );
-          ln.push(rubyNode);
+          ln.push({ reactNode: enhancedNode, enhancedValue: val.values });
         });
     });
     return ln;
@@ -199,14 +207,15 @@ enum SegmentType {
   Link = 'SegmentType.Link',
 }
 
-interface LinkValue {
+interface EnhancedValue {
   text: string;
-  link: string;
+  ruby: string;
+  values: { key: string; value: string }[];
 }
 
 interface Segment {
   type: SegmentType;
-  value: string | LinkValue;
+  value?: string | EnhancedValue;
 }
 
 function parseString(input: string): Segment[] {
@@ -218,13 +227,40 @@ function parseString(input: string): Segment[] {
     if (match[1]) {
       // 链接部分
       const text = match[2];
-      const link = match[3];
-      result.push({ type: SegmentType.Link, value: { text, link } });
+      const enhance = match[3];
+      let parsedEnhanced: KeyValuePair[] = [];
+      let ruby = '';
+      if (enhance.match(/style=|tips=|ruby=/)) {
+        parsedEnhanced = parseEnhancedString(enhance);
+      } else {
+        ruby = enhance;
+      }
+      result.push({ type: SegmentType.Link, value: { text, ruby, values: parsedEnhanced } });
     } else {
       // 普通文本
       const text = match[0];
       result.push({ type: SegmentType.String, value: text });
     }
+  }
+
+  return result;
+}
+
+interface KeyValuePair {
+  key: string;
+  value: string;
+}
+
+function parseEnhancedString(enhanced: string): KeyValuePair[] {
+  const result: KeyValuePair[] = [];
+  const regex = /(\S+)=(.*?)(?=\s+\S+=|\s*$)/g;
+  let match: RegExpExecArray | null;
+
+  while ((match = regex.exec(enhanced)) !== null) {
+    result.push({
+      key: match[1],
+      value: match[2].trim(),
+    });
   }
 
   return result;
