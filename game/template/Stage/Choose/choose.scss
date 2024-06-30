@@ -1,0 +1,54 @@
+.Choose_Main {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 13;
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.Choose_item {
+  font-family: "WebgalUI", serif;
+  cursor: pointer;
+  min-width: 50%;
+  padding: 0.25em 1em 0.25em 1em;
+  font-size: 265%;
+  color: #8E354A;
+  text-align: center;
+  border-radius: 4px;
+  border: 3px solid rgba(0, 0, 0, 0);
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.25);
+  background: rgba(255, 255, 255, 0.65);
+  margin: 0.25em 0 0.25em 0;
+  transition: background-color 0.5s, border 0.5s, font-weight 0.5s, box-shadow 0.5s;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 0 25px rgba(0, 0, 0, 0.35);
+    border: 3px solid #8E354A;
+  }
+}
+
+.Choose_item_disabled {
+  font-family: "WebgalUI", serif;
+  cursor: not-allowed;
+  min-width: 50%;
+  padding: 0.25em 1em 0.25em 1em;
+  font-size: 265%;
+  color: rgba(142, 53, 74, 0.5);
+  text-align: center;
+  border-radius: 4px;
+  border: 3px solid rgba(0, 0, 0, 0);
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.25);
+  background: rgba(255, 255, 255, 0.5);
+  margin: 0.25em 0 0.25em 0;
+  transition: background-color 0.5s, border 0.5s, font-weight 0.5s, box-shadow 0.5s;
+}
+
+.Choose_item_outer {
+  color: #000;
+  min-width: 50%;
+}
