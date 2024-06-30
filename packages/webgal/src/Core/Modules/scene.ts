@@ -27,6 +27,7 @@ export class SceneManager {
   public settledScenes: Array<string> = [];
   public settledAssets: Array<string> = [];
   public sceneData: ISceneData = cloneDeep(initSceneData);
+  public lockSceneWrite = false;
 
   public resetScene() {
     this.sceneData.currentSentenceId = 0;

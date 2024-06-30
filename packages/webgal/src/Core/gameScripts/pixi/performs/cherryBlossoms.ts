@@ -76,7 +76,7 @@ const pixicherryBlossoms = (cherryBlossomsSpeed: number) => {
     // 同じ画面上の桜の数を制御します
     // 控制同屏花数
     if (bunnyList.length >= 200) {
-      bunnyList.unshift();
+      bunnyList.shift()?.destroy();
       container.removeChild(container.children[0]);
     }
   }
