@@ -12,6 +12,8 @@ import { useSEByWebgalStore } from '@/hooks/useSoundEffect';
 import { WebGAL } from '@/Core/WebGAL';
 import { whenChecker } from '@/Core/controller/gamePlay/scriptExecutor';
 import useEscape from '@/hooks/useEscape';
+import useApplyStyle from '@/hooks/useApplyStyle';
+import { Provider } from 'react-redux';
 
 class ChooseOption {
   /**
@@ -58,7 +60,12 @@ export const choose = (sentence: ISentence): IPerform => {
   const chooseOptions = chooseOptionScripts.map((e) => ChooseOption.parse(e));
 
   // eslint-disable-next-line react/no-deprecated
-  ReactDOM.render(<Choose chooseOptions={chooseOptions} />, document.getElementById('chooseContainer'));
+  ReactDOM.render(
+    <Provider store={webgalStore}>
+      <Choose chooseOptions={chooseOptions} />
+    </Provider>,
+    document.getElementById('chooseContainer'),
+  );
   return {
     performName: 'choose',
     duration: 1000 * 60 * 60 * 24,
@@ -77,13 +84,16 @@ function Choose(props: { chooseOptions: ChooseOption[] }) {
   const fontFamily = webgalStore.getState().userData.optionData.textboxFont;
   const font = fontFamily === textFont.song ? '"思源宋体", serif' : '"WebgalUI", serif';
   const { playSeEnter, playSeClick } = useSEByWebgalStore();
+  const applyStyle = useApplyStyle('Stage/Choose/choose.scss');
   // 运行时计算JSX.Element[]
   const runtimeBuildList = (chooseListFull: ChooseOption[]) => {
     return chooseListFull
       .filter((e, i) => whenChecker(e.showCondition))
       .map((e, i) => {
         const enable = whenChecker(e.enableCondition);
-        const className = enable ? styles.Choose_item : styles.Choose_item_disabled;
+        const className = enable
+          ? applyStyle('Choose_item', styles.Choose_item)
+          : applyStyle('Choose_item_disabled', styles.Choose_item_disabled);
         const onClick = enable
           ? () => {
               playSeClick();
@@ -96,18 +106,14 @@ function Choose(props: { chooseOptions: ChooseOption[] }) {
             }
           : () => {};
         return (
-          <div
-            className={className}
-            style={{ fontFamily: font }}
-            key={e.jump + i}
-            onClick={onClick}
-            onMouseEnter={playSeEnter}
-          >
-            {e.text}
+          <div className={applyStyle('Choose_item_outer', styles.Choose_item_outer)} key={e.jump + i}>
+            <div className={className} style={{ fontFamily: font }} onClick={onClick} onMouseEnter={playSeEnter}>
+              {e.text}
+            </div>
           </div>
         );
       });
   };
 
-  return <div className={styles.Choose_Main}>{runtimeBuildList(props.chooseOptions)}</div>;
+  return <div className={applyStyle('Choose_Main', styles.Choose_Main)}>{runtimeBuildList(props.chooseOptions)}</div>;
 }
