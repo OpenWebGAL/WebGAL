@@ -1,6 +1,4 @@
-Voici la traduction du texte en français :
-
-![WebGAL](https://user-images.githubusercontent.com/30483415/227242979-297ff392-f210-47ef-b0e9-d4788ddc8df0.png)
+![WebGAL Slogan](https://github.com/OpenWebGAL/WebGAL/assets/30483415/ede38a39-d054-4fee-a3e9-fc5e764f358d)
 
 **[中文版本](/README.md)**
 **[English](/README_EN.md)**

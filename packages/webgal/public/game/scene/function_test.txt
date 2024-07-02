@@ -1,0 +1,1 @@
+choose:Lip Sync Animation Test:demo_animation.txt | Variable interpolation test:demo_var.txt | Escape test:demo_escape.txt;

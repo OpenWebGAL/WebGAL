@@ -7,6 +7,8 @@ import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
 import { PerformController } from '@/Core/Modules/perform/performController';
 import { logger } from '@/Core/util/logger';
 import { WebGAL } from '@/Core/WebGAL';
+import { replace } from 'lodash';
+import useEscape from '@/hooks/useEscape';
 /**
  * 显示一小段黑屏演示
  * @param sentence
@@ -81,7 +83,7 @@ export const intro = (sentence: ISentence): IPerform => {
     width: '100%',
     height: '100%',
   };
-  const introArray: Array<string> = sentence.content.split(/\|/);
+  const introArray: Array<string> = sentence.content.split(/(?<!\\)\|/).map((val: string) => useEscape(val));
 
   let endWait = 1000;
   let baseDuration = endWait + delayTime * introArray.length;
