@@ -83,7 +83,7 @@ export const intro = (sentence: ISentence): IPerform => {
     width: '100%',
     height: '100%',
   };
-  const introArray: Array<string> = sentence.content.split(/[^\\]\|/).map((val: string) => useEscape(val));
+  const introArray: Array<string> = sentence.content.split(/(?<!\\)\|/).map((val: string) => useEscape(val));
 
   let endWait = 1000;
   let baseDuration = endWait + delayTime * introArray.length;
