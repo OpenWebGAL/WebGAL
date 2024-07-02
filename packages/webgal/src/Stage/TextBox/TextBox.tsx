@@ -101,7 +101,7 @@ function isCJK(character: string) {
 
 export function compileSentence(sentence: string, lineLimit: number, ignoreLineLimit?: boolean): EnhancedNode[][] {
   // 先拆行
-  const lines = sentence.split(/[^\\]\|/).map((val: string) => useEscape(val));
+  const lines = sentence.split(/(?<!\\)\|/).map((val: string) => useEscape(val));
   // 对每一行进行注音处理
   const rubyLines = lines.map((line) => parseString(line));
   const nodeLines = rubyLines.map((line) => {
