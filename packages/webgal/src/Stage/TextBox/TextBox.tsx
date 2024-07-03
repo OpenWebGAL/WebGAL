@@ -8,6 +8,7 @@ import { match } from '@/Core/util/match';
 import { textSize } from '@/store/userDataInterface';
 import IMSSTextbox from '@/Stage/TextBox/IMSSTextbox';
 import { SCREEN_CONSTANTS } from '@/Core/util/constants';
+import useEscape from '@/hooks/useEscape';
 
 const userAgent = navigator.userAgent;
 const isFirefox = /firefox/i.test(userAgent);
@@ -100,7 +101,7 @@ function isCJK(character: string) {
 
 export function compileSentence(sentence: string, lineLimit: number, ignoreLineLimit?: boolean): EnhancedNode[][] {
   // 先拆行
-  const lines = sentence.split('|');
+  const lines = sentence.split(/(?<!\\)\|/).map((val: string) => useEscape(val));
   // 对每一行进行注音处理
   const rubyLines = lines.map((line) => parseString(line));
   const nodeLines = rubyLines.map((line) => {
