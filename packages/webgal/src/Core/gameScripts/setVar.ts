@@ -86,7 +86,7 @@ export function getValueFromState(key: string) {
   const stage = webgalStore.getState().stage;
   const GUI = webgalStore.getState().GUI;
   const userData = webgalStore.getState().userData;
-  const _Merge = { ...GUI, ...stage, ...userData, gameName: WebGAL.gameName, gameKey: WebGAL.gameKey };
+  const _Merge = { ...GUI, ...stage, ...userData, ...WebGAL.ConfigData };
   const is_baseVal = (_obj: object, _val: string) =>
     ['string', 'number', 'boolean'].includes(typeof Reflect.get(_obj, _val));
   let _all: { [key: PropertyKey]: any } = {};
