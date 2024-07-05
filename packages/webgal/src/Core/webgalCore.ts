@@ -1,3 +1,10 @@
+/*
+ * @Author: xuranXYS
+ * @LastEditTime: 2024-07-05 22:55:40
+ * @GitHub: www.github.com/xiaoxustudio
+ * @WebSite: www.xiaoxustudio.top
+ * @Description: By xuranXYS
+ */
 import { BacklogManager } from '@/Core/Modules/backlog';
 import mitt from 'mitt';
 import { SceneManager } from '@/Core/Modules/scene';
@@ -13,4 +20,5 @@ export class WebgalCore {
   public gameName = '';
   public gameKey = '';
   public events = new Events();
+  public ConfigData: { [key: string]: string | boolean | number } = {}; // 存放在config中定义的静态全局变量
 }

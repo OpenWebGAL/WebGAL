@@ -8,7 +8,7 @@ import { setGlobalVar } from '@/store/userDataReducer';
 import { ActionCreatorWithPayload } from '@reduxjs/toolkit';
 import { ISetGameVar } from '@/store/stageInterface';
 import { dumpToStorageFast } from '@/Core/controller/storage/storageController';
-
+import { WebGAL } from '@/Core/WebGAL';
 /**
  * 设置变量
  * @param sentence
@@ -32,6 +32,8 @@ export const setVar = (sentence: ISentence): IPerform => {
     const valExp = sentence.content.split(/=/)[1];
     if (valExp === 'random()') {
       webgalStore.dispatch(targetReducerFunction({ key, value: Math.random() }));
+    } else if (valExp.match(/\$[.a-zA-Z]/)) {
+      webgalStore.dispatch(targetReducerFunction({ key, value: String(getValueFromState(valExp.trim())) }));
     } else if (valExp.match(/[+\-*\/()]/)) {
       // 如果包含加减乘除号，则运算
       // 先取出运算表达式中的变量
@@ -39,8 +41,8 @@ export const setVar = (sentence: ISentence): IPerform => {
       // 将变量替换为变量的值，然后合成表达式字符串
       const valExp2 = valExpArr
         .map((e) => {
-          if (e.match(/[a-zA-Z]/)) {
-            return getValueFromState(e).toString();
+          if (e.match(/\$?[.a-zA-Z]/)) {
+            return String(getValueFromState(e.trim()));
           } else return e;
         })
         .reduce((pre, curr) => pre + curr, '');
@@ -77,12 +79,31 @@ export const setVar = (sentence: ISentence): IPerform => {
   };
 };
 
+type BaseVal = string | number | boolean;
+
 export function getValueFromState(key: string) {
   let ret: number | string | boolean = 0;
-  if (webgalStore.getState().stage.GameVar.hasOwnProperty(key)) {
-    ret = webgalStore.getState().stage.GameVar[key];
-  } else if (webgalStore.getState().userData.globalGameVar.hasOwnProperty(key)) {
-    ret = webgalStore.getState().userData.globalGameVar[key];
+  const stage = webgalStore.getState().stage;
+  const GUI = webgalStore.getState().GUI;
+  const userData = webgalStore.getState().userData;
+  const _Merge = { ...GUI, ...stage, ...userData, ...WebGAL.ConfigData };
+  const is_baseVal = (_obj: object, _val: string) =>
+    ['string', 'number', 'boolean'].includes(typeof Reflect.get(_obj, _val));
+  let _all: { [key: PropertyKey]: any } = {};
+  // 排除GameVar和globalGameVar，因为这两个本来就可以获取
+  for (let i in _Merge) {
+    if (i === 'GameVar') continue;
+    if (i === 'globalGameVar') continue;
+    if (i) {
+      Reflect.set(_all, '$' + i, Reflect.get(_Merge, i) as BaseVal);
+    }
+  }
+  if (stage.GameVar.hasOwnProperty(key)) {
+    ret = stage.GameVar[key];
+  } else if (userData.globalGameVar.hasOwnProperty(key)) {
+    ret = userData.globalGameVar[key];
+  } else if (key.startsWith('$') && is_baseVal(_all, key)) {
+    ret = compile(key)(_all) as BaseVal;
   }
   return ret;
 }
