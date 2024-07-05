@@ -65,8 +65,16 @@ export const infoFetcher = (url: string) => {
             break;
           }
         }
+        let res: any = args[0].trim();
+        if (/^(true|false)$/g.test(args[0])) {
+          res = res === 'true' ? true : false;
+        } else if (/^[0-9]+\.?[0-9]+$/g.test(args[0])) {
+          res = Number(res);
+        }
+        Reflect.set(WebGAL.ConfigData, command, res); // 保存全部configData
       });
     }
+    Object.freeze(WebGAL.ConfigData); // 冻结configData变量，因为它不应该被修改
     window?.renderPromise?.();
     delete window.renderPromise;
     initKey();
