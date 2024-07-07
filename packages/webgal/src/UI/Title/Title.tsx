@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import styles from './title.module.scss';
 import { playBgm } from '@/Core/controller/stage/playBgm';
 import { continueGame, startGame } from '@/Core/controller/gamePlay/startContinueGame';
@@ -17,7 +17,12 @@ import { WebGAL } from '@/Core/WebGAL';
 import useApplyStyle from '@/hooks/useApplyStyle';
 import { fullScreenOption } from '@/store/userDataInterface';
 import { keyboard } from '@/hooks/useHotkey';
-
+import { logger } from '@/Core/util/logger';
+import { assetSetter, fileType } from '@/Core/util/gameAssetsAccess/assetSetter';
+import { setGuiAsset, setLogoImage } from '@/store/GUIReducer';
+import { getStorage, setStorage } from '@/Core/controller/storage/storageController';
+import { getFastSaveFromStorage, getSavesFromStorage } from '@/Core/controller/storage/savesController';
+import { setUserData } from '@/store/userDataReducer';
 /**
  * 标题页
  * @constructor
@@ -33,7 +38,49 @@ const Title: FC = () => {
   const { playSeEnter, playSeClick } = useSoundEffect();
 
   const applyStyle = useApplyStyle('UI/Title/title.scss');
+  useEffect(() => {
+    // configData发生变化
+    const configData = webgalStore.getState().userData.configData;
+    for (let i in configData) {
+      if ((configData[i] as string) !== WebGAL.ConfigData[i]) {
+        const val = configData[i] as string;
+        switch (i) {
+          case 'Title_img': {
+            const titleUrl = assetSetter(val, fileType.background);
+            webgalStore.dispatch(setGuiAsset({ asset: 'titleBg', value: titleUrl }));
+            setEbg(titleUrl);
+            break;
+          }
 
+          case 'Game_Logo': {
+            const logoUrlList = [assetSetter(val, fileType.background)];
+            webgalStore.dispatch(setLogoImage(logoUrlList));
+            break;
+          }
+
+          case 'Title_bgm': {
+            const bgmUrl = assetSetter(val, fileType.bgm);
+            webgalStore.dispatch(setGuiAsset({ asset: 'titleBgm', value: bgmUrl }));
+            break;
+          }
+
+          case 'Game_name': {
+            WebGAL.gameName = val;
+            document.title = val;
+            break;
+          }
+
+          case 'Game_key': {
+            WebGAL.gameKey = val;
+            getStorage();
+            getFastSaveFromStorage();
+            getSavesFromStorage(0, 0);
+            break;
+          }
+        }
+      }
+    }
+  }, [webgalStore.getState().userData.configData]);
   return (
     <>
       {GUIState.showTitle && <div className={applyStyle('Title_backup_background', styles.Title_backup_background)} />}
