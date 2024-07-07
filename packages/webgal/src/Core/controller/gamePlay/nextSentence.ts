@@ -8,6 +8,7 @@ import { IBacklogItem } from '@/Core/Modules/backlog';
 import { SYSTEM_CONFIG } from '@/config';
 import { WebGAL } from '@/Core/WebGAL';
 import { IRunPerform } from '@/store/stageInterface';
+import { setConfigData } from '@/store/userDataReducer';
 
 /**
  * 进行下一句
@@ -18,6 +19,14 @@ export const nextSentence = () => {
    */
   WebGAL.events.userInteractNext.emit();
 
+  // 保存当前更改ConfigData数据（如果它更改了的话）
+  const ConfigDataState = webgalStore.getState().userData.configData;
+  const process_change = (prop: any, val: any) => {
+    webgalStore.dispatch(setConfigData({ key: prop, value: val }));
+  };
+  for (let i in ConfigDataState) {
+    if (ConfigDataState[i] !== WebGAL.ConfigData[i]) process_change(i, ConfigDataState[i]);
+  }
   // 如果当前显示标题，那么不进行下一句
   const GUIState = webgalStore.getState().GUI;
   if (GUIState.showTitle) {

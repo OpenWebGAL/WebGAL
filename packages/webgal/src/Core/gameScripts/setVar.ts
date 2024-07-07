@@ -4,7 +4,7 @@ import { webgalStore } from '@/store/store';
 import { setStageVar } from '@/store/stageReducer';
 import { logger } from '@/Core/util/logger';
 import { compile } from 'angular-expressions';
-import { setGlobalVar } from '@/store/userDataReducer';
+import { setConfigData, setGlobalVar } from '@/store/userDataReducer';
 import { ActionCreatorWithPayload } from '@reduxjs/toolkit';
 import { ISetGameVar } from '@/store/stageInterface';
 import { dumpToStorageFast } from '@/Core/controller/storage/storageController';
@@ -21,15 +21,16 @@ export const setVar = (sentence: ISentence): IPerform => {
     }
   });
   let targetReducerFunction: ActionCreatorWithPayload<ISetGameVar, string>;
+  const configData = webgalStore.getState().userData.configData;
   if (setGlobal) {
     targetReducerFunction = setGlobalVar;
   } else {
     targetReducerFunction = setStageVar;
   }
   // 先把表达式拆分为变量名和赋值语句
-  if (sentence.content.match(/=/)) {
-    const key = sentence.content.split(/=/)[0];
-    const valExp = sentence.content.split(/=/)[1];
+  if (sentence.content.match(/\s*=\s*/)) {
+    const key = sentence.content.split(/\s*=\s*/)[0];
+    const valExp = sentence.content.split(/\s*=\s*/)[1];
     if (valExp === 'random()') {
       webgalStore.dispatch(targetReducerFunction({ key, value: Math.random() }));
     } else if (valExp.match(/\$[.a-zA-Z]/)) {
@@ -59,10 +60,17 @@ export const setVar = (sentence: ISentence): IPerform => {
     } else {
       if (!isNaN(Number(valExp))) {
         webgalStore.dispatch(targetReducerFunction({ key, value: Number(valExp) }));
-      } else webgalStore.dispatch(targetReducerFunction({ key, value: valExp }));
+      } else if (configData[key]) {
+        webgalStore.dispatch(setConfigData({ key, value: valExp }));
+      } else {
+        webgalStore.dispatch(targetReducerFunction({ key, value: valExp }));
+      }
     }
     if (setGlobal) {
       logger.debug('设置全局变量：', { key, value: webgalStore.getState().userData.globalGameVar[key] });
+      dumpToStorageFast();
+    } else if (configData[key]) {
+      logger.debug('设置配置变量：', { key, value: webgalStore.getState().userData.configData[key] });
       dumpToStorageFast();
     } else {
       logger.debug('设置变量：', { key, value: webgalStore.getState().stage.GameVar[key] });
@@ -82,18 +90,19 @@ export const setVar = (sentence: ISentence): IPerform => {
 type BaseVal = string | number | boolean;
 
 export function getValueFromState(key: string) {
-  let ret: number | string | boolean = 0;
+  let ret: any;
   const stage = webgalStore.getState().stage;
   const GUI = webgalStore.getState().GUI;
   const userData = webgalStore.getState().userData;
-  const _Merge = { ...GUI, ...stage, ...userData, ...WebGAL.ConfigData };
-  const is_baseVal = (_obj: object, _val: string) =>
-    ['string', 'number', 'boolean'].includes(typeof Reflect.get(_obj, _val));
+  const _Merge = { ...GUI, ...stage, ...userData };
+  const is_baseVal = (_obj: object, _val: any, no_get = false) =>
+    ['string', 'number', 'boolean'].includes(typeof (no_get ? _val : Reflect.get(_obj, _val)));
   let _all: { [key: PropertyKey]: any } = {};
-  // 排除GameVar和globalGameVar，因为这两个本来就可以获取
+  // 排除GameVar、globalGameVar、configData因为这几个本来就可以获取
   for (let i in _Merge) {
     if (i === 'GameVar') continue;
     if (i === 'globalGameVar') continue;
+    if (i === 'configData') continue;
     if (i) {
       Reflect.set(_all, '$' + i, Reflect.get(_Merge, i) as BaseVal);
     }
@@ -102,8 +111,12 @@ export function getValueFromState(key: string) {
     ret = stage.GameVar[key];
   } else if (userData.globalGameVar.hasOwnProperty(key)) {
     ret = userData.globalGameVar[key];
-  } else if (key.startsWith('$') && is_baseVal(_all, key)) {
+  } else if (is_baseVal(userData.configData, key)) {
+    ret = compile(key)(userData.configData) as BaseVal;
+  } else if (key.startsWith('$') && is_baseVal(_all, compile(key)(_all), true)) {
     ret = compile(key)(_all) as BaseVal;
+  } else {
+    ret = key;
   }
   return ret;
 }

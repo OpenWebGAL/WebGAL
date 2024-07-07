@@ -8,6 +8,7 @@ import {
   IAppreciationAsset,
   IOptionData,
   ISaveData,
+  ISetConfigDataPayload,
   ISetOptionDataPayload,
   ISetUserDataPayload,
   IUserData,
@@ -46,6 +47,7 @@ export const initState: IUserData = {
     bgm: [],
     cg: [],
   },
+  configData: {}, // 存放在config中定义的全局变量
 };
 
 const userDataSlice = createSlice({
@@ -60,6 +62,10 @@ const userDataSlice = createSlice({
     setUserData: (state, action: PayloadAction<ISetUserDataPayload>) => {
       const { key, value } = action.payload;
       state[key] = value;
+    },
+    setConfigData: (state, action: PayloadAction<ISetConfigDataPayload>) => {
+      const { key, value } = action.payload;
+      state.configData[key] = value;
     },
     unlockCgInUserData: (state, action: PayloadAction<IAppreciationAsset>) => {
       const { name, url, series } = action.payload;
@@ -135,6 +141,7 @@ const userDataSlice = createSlice({
 
 export const {
   setUserData,
+  setConfigData,
   resetUserData,
   setOptionData,
   setGlobalVar,
