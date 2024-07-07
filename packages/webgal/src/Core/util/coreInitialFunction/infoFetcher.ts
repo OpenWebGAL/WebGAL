@@ -9,8 +9,7 @@ import { initKey } from '@/Core/controller/storage/fastSaveLoad';
 import { WebgalParser } from '@/Core/parser/sceneParser';
 import { WebGAL } from '@/Core/WebGAL';
 import { getFastSaveFromStorage, getSavesFromStorage } from '@/Core/controller/storage/savesController';
-import { setConfigData, setUserData } from '@/store/userDataReducer';
-import { saveGame } from '@/Core/controller/storage/saveGame';
+import { setGlobalVar } from '@/store/userDataReducer';
 
 declare global {
   interface Window {
@@ -23,9 +22,10 @@ declare global {
  */
 export const infoFetcher = (url: string) => {
   const GUIState = webgalStore.getState().GUI;
+  const ConfigState = webgalStore.getState().userData.globalGameVar;
   const dispatch = webgalStore.dispatch;
+  getStorage();
   axios.get(url).then((r) => {
-    let _GameData = {};
     let gameConfigRaw: string = r.data;
     let gameConfig = WebgalParser.parseConfig(gameConfigRaw);
     logger.info('获取到游戏信息', gameConfig);
@@ -73,23 +73,20 @@ export const infoFetcher = (url: string) => {
         } else if (/^[0-9]+\.?[0-9]+$/g.test(args[0])) {
           res = Number(res);
         }
-        Reflect.set(_GameData, command, res); // 保存全部configData
+        // 添加不存在的值
+        if (!ConfigState[command]) {
+          dispatch(
+            setGlobalVar({
+              key: command,
+              value: res,
+            }),
+          );
+        }
+        setStorage();
       });
     }
     window?.renderPromise?.();
     delete window.renderPromise;
     initKey();
-    getStorage();
-    const configData = webgalStore.getState().userData.configData;
-    if (Object.keys(configData).length === 0) {
-      webgalStore.dispatch(
-        setUserData({
-          key: 'configData',
-          value: _GameData,
-        }),
-      );
-      Reflect.set(WebGAL, 'ConfigData', _GameData);
-      setStorage();
-    }
   });
 };
