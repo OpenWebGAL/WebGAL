@@ -5,3 +5,4 @@ Title_bgm:s_Title.mp3;
 Game_Logo:WebGalEnter.png;
 Debug:true;
 GameNum:10;
+GameNum_Double:20;

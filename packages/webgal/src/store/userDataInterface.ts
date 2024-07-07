@@ -94,11 +94,11 @@ export interface IAppreciation {
 export interface IUserData {
   globalGameVar: IGameVar; // 不跟随存档的全局变量
   optionData: IOptionData; // 用户设置选项数据
-  configData: Record<string, string | boolean | number>; // 存放在config中定义的全局变量
   appreciationData: IAppreciation;
 }
+
 /**
- * @interface IUserData 配置数据接口
+ * @interface IConfigData 配置数据接口
  */
 export interface IConfigData {
   Game_name: string;
@@ -116,7 +116,7 @@ export interface ISetUserDataPayload {
 
 export interface ISetConfigDataPayload {
   key: keyof IConfigData;
-  value: any;
+  value: string | boolean | number;
 }
 
 export interface ISetOptionDataPayload {

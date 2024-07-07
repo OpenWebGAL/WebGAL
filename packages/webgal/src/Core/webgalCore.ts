@@ -13,5 +13,4 @@ export class WebgalCore {
   public gameName = '';
   public gameKey = '';
   public events = new Events();
-  public ConfigData: Record<string, string | boolean | number> = {}; // 存放在config中定义的静态全局变量备份（用于比较更新）
 }
