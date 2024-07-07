@@ -9,7 +9,9 @@ import { initKey } from '@/Core/controller/storage/fastSaveLoad';
 import { WebgalParser } from '@/Core/parser/sceneParser';
 import { WebGAL } from '@/Core/WebGAL';
 import { getFastSaveFromStorage, getSavesFromStorage } from '@/Core/controller/storage/savesController';
-import { setGlobalVar } from '@/store/userDataReducer';
+import { resetUserData, setGlobalVar } from '@/store/userDataReducer';
+import localforage from 'localforage';
+import { IUserData } from '@/store/userDataInterface';
 
 declare global {
   interface Window {
@@ -21,10 +23,9 @@ declare global {
  * @param url 游戏信息路径
  */
 export const infoFetcher = (url: string) => {
-  const GUIState = webgalStore.getState().GUI;
-  const ConfigState = webgalStore.getState().userData.globalGameVar;
-  const dispatch = webgalStore.dispatch;
   getStorage();
+  const GUIState = webgalStore.getState().GUI;
+  const dispatch = webgalStore.dispatch;
   axios.get(url).then((r) => {
     let gameConfigRaw: string = r.data;
     let gameConfig = WebgalParser.parseConfig(gameConfigRaw);
@@ -42,6 +43,7 @@ export const infoFetcher = (url: string) => {
           }
 
           case 'Game_Logo': {
+            // eslint-disable-next-line max-nested-callbacks
             const logoUrlList = args.map((url) => assetSetter(url, fileType.background));
             dispatch(setLogoImage(logoUrlList));
             break;
@@ -73,20 +75,19 @@ export const infoFetcher = (url: string) => {
         } else if (/^[0-9]+\.?[0-9]+$/g.test(args[0])) {
           res = Number(res);
         }
-        // 添加不存在的值
-        if (!ConfigState[command]) {
-          dispatch(
-            setGlobalVar({
-              key: command,
-              value: res,
-            }),
-          );
-        }
-        setStorage();
+        dispatch(
+          setGlobalVar({
+            key: command,
+            value: res,
+          }),
+        );
       });
     }
     window?.renderPromise?.();
     delete window.renderPromise;
     initKey();
+    setTimeout(() => {
+      setStorage();
+    }, 200);
   });
 };
