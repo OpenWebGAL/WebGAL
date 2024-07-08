@@ -85,7 +85,7 @@ export function getValueFromState(key: string) {
   let ret: any = 0;
   const stage = webgalStore.getState().stage;
   const userData = webgalStore.getState().userData;
-  const _Merge = { ...stage, ...userData };
+  const _Merge = { stage, userData }; // 不要直接合并到一起，防止可能的键冲突
   if (stage.GameVar.hasOwnProperty(key)) {
     ret = stage.GameVar[key];
   } else if (userData.globalGameVar.hasOwnProperty(key)) {
