@@ -19,17 +19,16 @@ export function useFullScreen() {
         if (isEnterGame) {
           document.documentElement.requestFullscreen();
           if (keyboard) keyboard.lock(['Escape', 'F11']);
-        };
+        }
         break;
       }
       case fullScreenOption.off: {
         if (document.fullscreenElement) {
           document.exitFullscreen();
           if (keyboard) keyboard.unlock();
-        };
+        }
         break;
       }
     }
   }, [fullScreen]);
-
-};
+}
