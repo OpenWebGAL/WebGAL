@@ -21,11 +21,11 @@ export interface HotKeyType {
   MouseWheel: {} | boolean;
   Ctrl: boolean;
   Esc:
-  | {
-    href: string;
-    nav: 'replace' | 'push';
-  }
-  | boolean;
+    | {
+        href: string;
+        nav: 'replace' | 'push';
+      }
+    | boolean;
   AutoSave: {} | boolean;
 }
 
