@@ -25,12 +25,14 @@ const useConfigData = () => {
           setEbg(titleUrl);
           break;
         }
-
-        case 'Game_Logo': {
-          const logoUrlList = [assetSetter(val, fileType.background)];
-          webgalStore.dispatch(setLogoImage(logoUrlList));
-          break;
-        }
+        /**
+         * TODO：Game_Logo 是个数组，并且改变后会造成进入游戏界面重新渲染，以后再考虑如何处理
+         */
+        // case 'Game_Logo': {
+        //   const logoUrlList = [assetSetter(val, fileType.background)];
+        //   webgalStore.dispatch(setLogoImage(logoUrlList));
+        //   break;
+        // }
 
         case 'Title_bgm': {
           const bgmUrl = assetSetter(val, fileType.bgm);

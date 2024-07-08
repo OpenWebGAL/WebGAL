@@ -8,6 +8,7 @@ import { setGlobalVar } from '@/store/userDataReducer';
 import { ActionCreatorWithPayload } from '@reduxjs/toolkit';
 import { ISetGameVar } from '@/store/stageInterface';
 import { dumpToStorageFast } from '@/Core/controller/storage/storageController';
+import get from 'lodash/get';
 /**
  * 设置变量
  * @param sentence
@@ -83,7 +84,7 @@ export const setVar = (sentence: ISentence): IPerform => {
 type BaseVal = string | number | boolean;
 
 export function getValueFromState(key: string) {
-  let ret: any;
+  let ret: any = 0;
   const stage = webgalStore.getState().stage;
   const userData = webgalStore.getState().userData;
   const _Merge = { ...stage, ...userData };
@@ -91,11 +92,12 @@ export function getValueFromState(key: string) {
     ['string', 'number', 'boolean'].includes(typeof (no_get ? _val : Reflect.get(_obj, _val)));
   let _all: { [key: PropertyKey]: any } = {};
   // 排除GameVar、globalGameVar因为这几个本来就可以获取
-  for (let i in _Merge) {
-    if (i === 'GameVar') continue;
-    if (i === 'globalGameVar') continue;
-    if (i) {
-      _all['$' + i] = Reflect.get(_Merge, i) as BaseVal;
+  for (let propertyName in _Merge) {
+    if (propertyName === 'GameVar') continue;
+    if (propertyName === 'globalGameVar') continue;
+    if (propertyName) {
+      // @ts-ignore
+      _all['$' + propertyName] = get(_Merge, propertyName) as BaseVal;
     }
   }
   if (stage.GameVar.hasOwnProperty(key)) {
@@ -104,8 +106,6 @@ export function getValueFromState(key: string) {
     ret = userData.globalGameVar[key];
   } else if (key.startsWith('$') && is_baseVal(_all, compile(key)(_all), true)) {
     ret = compile(key)(_all) as BaseVal;
-  } else {
-    ret = key;
   }
   return ret;
 }
