@@ -60,7 +60,7 @@ export const scriptExecutor = () => {
     if (contentExp !== null) {
       contentExp.forEach((e) => {
         const contentVarValue = getValueFromState(e.replace(/(?<!\\)\{(.*)\}/, '$1'));
-        retContent = retContent.replace(e, contentVarValue);
+        retContent = retContent.replace(e, contentVarValue ? contentVarValue.toString() : e);
       });
     }
     retContent = retContent.replace(/\\{/g, '{').replace(/\\}/g, '}');

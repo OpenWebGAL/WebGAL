@@ -11,7 +11,7 @@ import useTrans from '@/hooks/useTrans';
 import { hasFastSaveRecord, loadFastSaveGame } from '@/Core/controller/storage/fastSaveLoad';
 import useSoundEffect from '@/hooks/useSoundEffect';
 import useApplyStyle from '@/hooks/useApplyStyle';
-import { fullScreenOption, IConfigData } from '@/store/userDataInterface';
+import { fullScreenOption } from '@/store/userDataInterface';
 import { keyboard } from '@/hooks/useHotkey';
 import useConfigData from '@/hooks/useConfigData';
 /**
@@ -27,10 +27,9 @@ const Title: FC = () => {
   const showBackground = background === '' ? 'rgba(0,0,0,1)' : `url("${background}")`;
   const t = useTrans('title.');
   const { playSeEnter, playSeClick } = useSoundEffect();
-  const configData = useSelector((state: RootState) => state.userData.globalGameVar) as IConfigData;
 
   const applyStyle = useApplyStyle('UI/Title/title.scss');
-  useConfigData(configData); // 监听基础ConfigData变化
+  useConfigData(); // 监听基础ConfigData变化
   return (
     <>
       {GUIState.showTitle && <div className={applyStyle('Title_backup_background', styles.Title_backup_background)} />}

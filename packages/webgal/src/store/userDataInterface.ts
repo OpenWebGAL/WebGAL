@@ -97,26 +97,9 @@ export interface IUserData {
   appreciationData: IAppreciation;
 }
 
-/**
- * @interface IConfigData 配置数据接口
- */
-export interface IConfigData {
-  Game_name: string;
-  Game_key: string;
-  Title_img: string;
-  Title_bgm: string;
-  Game_Logo: string;
-  [key: string]: any;
-}
-
 export interface ISetUserDataPayload {
   key: keyof IUserData;
   value: any;
-}
-
-export interface ISetConfigDataPayload {
-  key: keyof IConfigData;
-  value: string | boolean | number;
 }
 
 export interface ISetOptionDataPayload {

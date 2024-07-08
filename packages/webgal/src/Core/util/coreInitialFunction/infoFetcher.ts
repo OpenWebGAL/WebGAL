@@ -30,64 +30,36 @@ export const infoFetcher = (url: string) => {
     let gameConfigRaw: string = r.data;
     let gameConfig = WebgalParser.parseConfig(gameConfigRaw);
     logger.info('获取到游戏信息', gameConfig);
+    // 先把 key 找到并设置了
+    const keyItem = gameConfig.find((e) => e.command === 'Game_key');
+    const key = (keyItem?.options?.[0].value as string) ?? '';
+    WebGAL.gameKey = key;
+    initKey();
+    getStorage();
+    getFastSaveFromStorage();
+    getSavesFromStorage(0, 0);
     // 按照游戏的配置开始设置对应的状态
     if (GUIState) {
       gameConfig.forEach((e) => {
         const { command, args } = e;
-        switch (command) {
-          case 'Title_img': {
-            const titleUrl = assetSetter(args.join(''), fileType.background);
-            dispatch(setGuiAsset({ asset: 'titleBg', value: titleUrl }));
-            setEbg(titleUrl);
-            break;
-          }
-
-          case 'Game_Logo': {
-            // eslint-disable-next-line max-nested-callbacks
-            const logoUrlList = args.map((url) => assetSetter(url, fileType.background));
-            dispatch(setLogoImage(logoUrlList));
-            break;
-          }
-
-          case 'Title_bgm': {
-            const bgmUrl = assetSetter(args[0], fileType.bgm);
-            dispatch(setGuiAsset({ asset: 'titleBgm', value: bgmUrl }));
-            break;
-          }
-
-          case 'Game_name': {
-            WebGAL.gameName = args[0];
-            document.title = args[0];
-            break;
-          }
-
-          case 'Game_key': {
-            WebGAL.gameKey = args[0];
-            getStorage();
-            getFastSaveFromStorage();
-            getSavesFromStorage(0, 0);
-            break;
-          }
-        }
         let res: any = args[0].trim();
         if (/^(true|false)$/g.test(args[0])) {
-          res = !!(res === 'true');
+          res = !!res;
         } else if (/^[0-9]+\.?[0-9]+$/g.test(args[0])) {
           res = Number(res);
         }
-        dispatch(
-          setGlobalVar({
-            key: command,
-            value: res,
-          }),
-        );
+        if (webgalStore.getState().userData.globalGameVar?.[command] === undefined) {
+          dispatch(
+            setGlobalVar({
+              key: command,
+              value: res,
+            }),
+          );
+        }
       });
     }
     window?.renderPromise?.();
     delete window.renderPromise;
-    initKey();
-    setTimeout(() => {
-      setStorage();
-    }, 200);
+    setStorage();
   });
 };
