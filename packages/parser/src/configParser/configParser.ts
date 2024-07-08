@@ -26,7 +26,7 @@ function configLineParser(inputLine: string): IConfigItem {
     };
   }
   // 截取命令
-  const getCommandResult = /:/.exec(newSentenceRaw);
+  const getCommandResult = /\s*:\s*/.exec(newSentenceRaw);
 
   // 没有command
   if (getCommandResult === null) {

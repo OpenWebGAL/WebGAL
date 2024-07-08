@@ -5,7 +5,7 @@ import { ISentence } from '@/Core/controller/scene/sceneInterface';
  * @interface IGameVar
  */
 export interface IGameVar {
-  [propName: string]: string | boolean | number;
+  [propName: string]: string | boolean | number | Array<string | boolean | number>;
 }
 
 export interface ISetGameVar {
