@@ -4,12 +4,13 @@ import { setEbg } from '@/Core/gameScripts/changeBg/setEbg';
 import { assetSetter, fileType } from '@/Core/util/gameAssetsAccess/assetSetter';
 import { WebGAL } from '@/Core/WebGAL';
 import { setGuiAsset, setLogoImage } from '@/store/GUIReducer';
-import { webgalStore } from '@/store/store';
-import { IConfigData } from '@/store/userDataInterface';
+import { RootState, webgalStore } from '@/store/store';
 import { useEffect } from 'react';
+import { useSelector } from 'react-redux';
 
-const useConfigData = (configData: IConfigData) => {
+const useConfigData = () => {
   const _map = ['Title_img', 'Game_Logo', 'Title_bgm', 'Game_name', 'Game_key'];
+  const configData = useSelector((state: RootState) => state.userData.globalGameVar);
   return useEffect(() => {
     // configData发生变化
     for (let i in configData) {
