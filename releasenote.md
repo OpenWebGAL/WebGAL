@@ -8,15 +8,13 @@
 
 #### 新功能
 
-为对话框中文本提供部分应用样式的支持
+允许使用脚本修改标题画面等游戏配置选项
 
-支持了选项界面的自定义
+允许使用变量获取一部分引擎状态
 
 #### 修复
 
-下雨特效的内存泄露
-
-同时调用多个 callScene 或 changeScene 的冲突问题
+为部分字符添加转义
 
 <!-- English Translation -->
 ## Release Notes
@@ -29,39 +27,52 @@
 
 #### New Features
 
-Added support for partial style application for text in dialog boxes.
+Allow using scripts to modify game configuration options such as title screen
 
-Added support for custom option interfaces.
+Allow using variables to get some engine states
 
-#### Fixes
+#### Bug Fixes
 
-Fixed a memory leak in the rain effect.
-
-Fixed a conflict issue when calling multiple callScene or changeScene simultaneously.
-
+Added escaping for some characters
 
 <!-- Japanese Translation -->
+## リリースノート
+
+**このリポジトリはソースコードのみを公開しています**
+
+**もしあなたが使いやすいグラフィカルエディタでWebGALゲームを作成、制作、リアルタイムプレビューしたい場合は、[WebGALグラフィカルエディタをダウンロードしてください](https://github.com/MakinoharaShoko/WebGAL_Terre/releases)**
+
+### このバージョンについて
+
 #### 新機能
 
-対話ボックスで一部のスタイルを適用できるようになった
+スクリプトを使用してタイトル画面などのゲーム設定オプションを変更できるようになりました
 
-オプション画面のカスタマイズに対応した
+変数を使用して一部のエンジン状態を取得できるようになりました
 
 #### 修正
 
-雨エフェクトのメモリリークを修正
+一部の文字のエスケープを追加しました
 
-複数の callScene または changeScene を同時に呼び出した際の競合の問題を修正
 
-<!-- French Translation -->
-#### Nouvelles fonctionnalités
 
-Prise en charge partielle des styles CSS pour le texte des boîtes de dialogue
 
-Personnalisation de l'interface des choix
 
-#### Corrections
+[//]: # (<!-- French Translation -->)
 
-Fuite de mémoire avec l'effet de pluie
+[//]: # (#### Nouvelles fonctionnalités)
 
-Conflit lors de l'appel simultané de plusieurs callScene ou changeScene
+[//]: # ()
+[//]: # (Prise en charge partielle des styles CSS pour le texte des boîtes de dialogue)
+
+[//]: # ()
+[//]: # (Personnalisation de l'interface des choix)
+
+[//]: # ()
+[//]: # (#### Corrections)
+
+[//]: # ()
+[//]: # (Fuite de mémoire avec l'effet de pluie)
+
+[//]: # ()
+[//]: # (Conflit lors de l'appel simultané de plusieurs callScene ou changeScene)
