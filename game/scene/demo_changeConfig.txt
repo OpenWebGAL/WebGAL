@@ -1,0 +1,15 @@
+webgal:我会修改标题 -hold;
+setVar:Game_name=WebGal_Change -global;
+webgal:游戏标题已经被我修改为{Game_name} -hold;
+webgal:我会修改游戏背景 -hold;
+setVar:Title_img=bg.png -global;
+webgal:游戏背景已经被我修改为{Title_img} -hold;
+webgal:获取Debug值：{Debug} -hold;
+setVar:GameNum=15 -global;
+webgal:获取并修改GameNum的值：{GameNum} -hold;
+setVar:GameNum_Double=GameNum_Double + 5;
+webgal:获取GameNum_Double的值，但我不会修改它原本的值：{GameNum_Double} -hold;
+webgal:获取bgm声音：{$stage.bgm.volume} -hold;
+setVar:bgm_calc= $stage.bgm.volume * 2 ;
+webgal:获取bgm声音的两倍是{bgm_calc} -hold;
+end;
