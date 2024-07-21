@@ -40,15 +40,13 @@ export const infoFetcher = (url: string) => {
         } else if (/^[0-9]+\.?[0-9]+$/g.test(args[0])) {
           res = Number(res);
         }
-        if (!webgalStore.getState().userData.globalGameVar?.[command]) {
-          logger.info('首次写入 Game Config');
-          dispatch(
-            setGlobalVar({
-              key: command,
-              value: res,
-            }),
-          );
-        }
+
+        dispatch(
+          setGlobalVar({
+            key: command,
+            value: res,
+          }),
+        );
       }
     });
 
