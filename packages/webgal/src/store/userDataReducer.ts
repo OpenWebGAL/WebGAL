@@ -41,6 +41,7 @@ const initialOptionSet: IOptionData = {
 // 初始化用户数据
 export const initState: IUserData = {
   optionData: initialOptionSet,
+  scriptManagedGlobalVar: [],
   globalGameVar: {},
   appreciationData: {
     bgm: [],
@@ -114,7 +115,17 @@ const userDataSlice = createSlice({
      * @param action 要改变或添加的变量
      */
     setGlobalVar: (state, action: PayloadAction<ISetGameVar>) => {
+      const isRegistedInUserData = state.scriptManagedGlobalVar.findIndex((key) => key === action.payload.key) >= 0;
+      if (!isRegistedInUserData) {
+        state.globalGameVar[action.payload.key] = action.payload.value;
+      }
+    },
+    setScriptManagedGlobalVar: (state, action: PayloadAction<ISetGameVar>) => {
+      const isRegistedInUserData = state.scriptManagedGlobalVar.findIndex((key) => key === action.payload.key) >= 0;
       state.globalGameVar[action.payload.key] = action.payload.value;
+      if (!isRegistedInUserData) {
+        state.scriptManagedGlobalVar.push(action.payload.key);
+      }
     },
     /**
      * 设置存档/读档页面
@@ -138,6 +149,7 @@ export const {
   resetUserData,
   setOptionData,
   setGlobalVar,
+  setScriptManagedGlobalVar,
   setSlPage,
   unlockCgInUserData,
   unlockBgmInUserData,

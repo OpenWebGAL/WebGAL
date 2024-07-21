@@ -4,7 +4,7 @@ import { webgalStore } from '@/store/store';
 import { setStageVar } from '@/store/stageReducer';
 import { logger } from '@/Core/util/logger';
 import { compile } from 'angular-expressions';
-import { setGlobalVar } from '@/store/userDataReducer';
+import { setScriptManagedGlobalVar } from '@/store/userDataReducer';
 import { ActionCreatorWithPayload } from '@reduxjs/toolkit';
 import { ISetGameVar } from '@/store/stageInterface';
 import { dumpToStorageFast } from '@/Core/controller/storage/storageController';
@@ -22,7 +22,7 @@ export const setVar = (sentence: ISentence): IPerform => {
   });
   let targetReducerFunction: ActionCreatorWithPayload<ISetGameVar, string>;
   if (setGlobal) {
-    targetReducerFunction = setGlobalVar;
+    targetReducerFunction = setScriptManagedGlobalVar;
   } else {
     targetReducerFunction = setStageVar;
   }
