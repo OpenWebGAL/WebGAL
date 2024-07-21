@@ -33,20 +33,22 @@ export const infoFetcher = (url: string) => {
     // 按照游戏的配置开始设置对应的状态
     gameConfig.forEach((e) => {
       const { command, args } = e;
-      let res: any = args[0].trim();
-      if (/^(true|false)$/g.test(args[0])) {
-        res = !!res;
-      } else if (/^[0-9]+\.?[0-9]+$/g.test(args[0])) {
-        res = Number(res);
-      }
-      if (!webgalStore.getState().userData.globalGameVar?.[command]) {
-        logger.info('首次写入 Game Config');
-        dispatch(
-          setGlobalVar({
-            key: command,
-            value: res,
-          }),
-        );
+      if (args.length > 0) {
+        let res: any = args[0].trim();
+        if (/^(true|false)$/g.test(args[0])) {
+          res = !!res;
+        } else if (/^[0-9]+\.?[0-9]+$/g.test(args[0])) {
+          res = Number(res);
+        }
+        if (!webgalStore.getState().userData.globalGameVar?.[command]) {
+          logger.info('首次写入 Game Config');
+          dispatch(
+            setGlobalVar({
+              key: command,
+              value: res,
+            }),
+          );
+        }
       }
     });
 

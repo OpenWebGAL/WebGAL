@@ -39,8 +39,10 @@ export function playBgm(url: string, enter = 0, volume = 100): void {
     clearTimeout(emptyBgmTimeout);
     webgalStore.dispatch(setStage({ key: 'bgm', value: { src: url, enter: enter, volume: volume } }));
   }
-  const audioElement = document.getElementById('currentBgm') as HTMLAudioElement;
-  if (audioElement.src) {
-    audioElement?.play();
-  }
+  setTimeout(() => {
+    const audioElement = document.getElementById('currentBgm') as HTMLAudioElement;
+    if (audioElement.src) {
+      audioElement?.play();
+    }
+  }, 0);
 }
