@@ -92,6 +92,7 @@ export interface IAppreciation {
  * @interface IUserData 用户数据接口
  */
 export interface IUserData {
+  scriptManagedGlobalVar: string[];
   globalGameVar: IGameVar; // 不跟随存档的全局变量
   optionData: IOptionData; // 用户设置选项数据
   appreciationData: IAppreciation;
