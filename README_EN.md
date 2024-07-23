@@ -12,6 +12,10 @@
 
 **A visually appealing, feature-rich, and easy-to-develop new web-based visual novel engine**
 
+# WebGAL Provides Visual Editor
+
+**Who needs to code to create visual novels? Welcome to experience [WebGAL Visual Editor](https://github.com/MakinoharaShoko/WebGAL_Terre/)**
+
 Demo video: https://www.bilibili.com/video/BV1jS4y1i7Wz/
 
 ## Online Experience
