@@ -12,6 +12,10 @@
 
 **시각적으로 매력적이며, 기능이 풍부하고, 쉽게 개발할 수 있는 새로운 웹 기반 비주얼 노벨 엔진**
 
+# WebGAL 시각화 에디터 제공
+
+**비주얼 노벨 제작, 꼭 프로그래밍을 알아야 할까요? [WebGAL 그래픽 에디터](https://github.com/MakinoharaShoko/WebGAL_Terre/)를 체험해 보세요!**
+
 데모 비디오: https://www.bilibili.com/video/BV1jS4y1i7Wz/
 
 ## 온라인 체험

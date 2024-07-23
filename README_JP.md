@@ -12,6 +12,10 @@
 
 **WebGALは、Webベースのビジュアルノベルエンジンです。魅力的な機能が豊富で、ビジュアルノベルゲームの開発が簡単にできます。**
 
+# WebGAL はビジュアルエディターを提供します
+
+**ビジュアルノベルを作るのにプログラミングは必要ですか？ [WebGAL グラフィカルエディター](https://github.com/MakinoharaShoko/WebGAL_Terre/) を体験してください**
+
 デモビデオ: https://youtu.be/S7xxVe9MGXk
 
 ## ゲーム紹介

@@ -12,6 +12,10 @@
 
 **界面美观、功能强大、易于开发的全新网页端视觉小说引擎**
 
+# WebGAL 提供可视化编辑器
+
+**创作视觉小说，何须会编程？欢迎体验 [WebGAL 图形化编辑器](https://github.com/MakinoharaShoko/WebGAL_Terre/)**
+
 ## 在线体验
 
 #### WebGAL 示例游戏，一般会演示最新开发的功能

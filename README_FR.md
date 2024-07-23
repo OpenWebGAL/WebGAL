@@ -13,6 +13,10 @@
 
 **Un moteur de visual novel basé sur le web, attrayant visuellement, riche en fonctionnalités et facile à développer**
 
+# WebGAL propose un éditeur visuel
+
+**Qui a besoin de savoir coder pour créer un visual novel ? Découvrez [l'éditeur graphique WebGAL](https://github.com/MakinoharaShoko/WebGAL_Terre/)**
+
 Vidéo de démonstration : https://www.bilibili.com/video/BV1jS4y1i7Wz/
 
 ## Expérience en ligne
