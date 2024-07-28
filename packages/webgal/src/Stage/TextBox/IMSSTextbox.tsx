@@ -71,12 +71,12 @@ export default function IMSSTextbox(props: ITextboxProps) {
       let delay = allTextIndex * textDelay;
       allTextIndex++;
       let prevLength = currentConcatDialogPrev.length;
-      if (currentConcatDialogPrev !== '' && index >= prevLength) {
+      if (currentConcatDialogPrev !== '' && allTextIndex >= prevLength) {
         delay = delay - prevLength * textDelay;
       }
       const styleClassName = ' ' + css(style);
       const styleAllText = ' ' + css(style_alltext);
-      if (index < prevLength) {
+      if (allTextIndex < prevLength) {
         return (
           <span
             // data-text={e}
