@@ -5,6 +5,7 @@ import { resolve, relative } from 'path';
 import { visualizer } from 'rollup-plugin-visualizer';
 import { readdirSync, watch, writeFileSync } from 'fs';
 import { isEqual } from 'lodash';
+import legacy from '@vitejs/plugin-legacy'
 // https://vitejs.dev/config/
 
 // @ts-ignore
@@ -51,13 +52,11 @@ export default defineConfig({
     loadVersion(),
     // @ts-ignore
     visualizer(),
+    legacy(),
   ],
   resolve: {
     alias: {
       '@': resolve('src'),
     },
-  },
-  build: {
-    sourcemap: true,
-  },
+  }
 });

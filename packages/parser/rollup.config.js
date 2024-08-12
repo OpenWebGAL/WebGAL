@@ -1,6 +1,7 @@
 import typescript from "rollup-plugin-typescript2";
 import resolve from "@rollup/plugin-node-resolve";
 import commonjs from "@rollup/plugin-commonjs";
+import { getBabelOutputPlugin } from '@rollup/plugin-babel'
 
 const mode = process.env.MODE ?? 'prod';
 const isProd = mode === "prod";
@@ -23,6 +24,19 @@ export default [
             declarationDir: "build/es"
           }, include: ["src"]
         }
+      }), 
+      getBabelOutputPlugin({
+        presets: [
+          [
+            '@babel/preset-env',
+            {
+              modules: false,
+              useBuiltIns: 'usage',
+              corejs: '3.6.4',
+            },
+          ],
+        ],
+        plugins: ['@babel/plugin-transform-runtime'],
       })]
   }, {
     input: `./src/index.ts`,
