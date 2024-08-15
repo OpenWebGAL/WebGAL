@@ -4,7 +4,7 @@
   "version": "4.5.4",
   "scripts": {
     "dev": "vite --host --port 3000",
-    "build": "cross-env NODE_ENV=production tsc && vite build --base=./",
+    "build": "cross-env NODE_ENV=production NODE_OPTIONS=--max-old-space-size=4096 tsc && vite build --base=./",
     "preview": "vite preview",
     "lint": "eslint src/** --fix"
   },
