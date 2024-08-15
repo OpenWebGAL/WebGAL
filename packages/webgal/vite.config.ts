@@ -59,4 +59,7 @@ export default defineConfig({
       '@': resolve('src'),
     },
   },
+  build: {
+    sourcemap: true,
+  },
 });
