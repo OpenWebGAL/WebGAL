@@ -87,7 +87,7 @@ export const intro = (sentence: ISentence): IPerform => {
 
   let endWait = 1000;
   let baseDuration = endWait + delayTime * introArray.length;
-  const duration = 1000 + delayTime * introArray.length;
+  const duration = isHold ? 1000 * 60 * 60 * 24 : 1000 + delayTime * introArray.length;
   let isBlocking = true;
   let setBlockingStateTimeout = setTimeout(() => {
     isBlocking = false;
@@ -177,6 +177,6 @@ export const intro = (sentence: ISentence): IPerform => {
     blockingNext: () => isBlocking,
     blockingAuto: () => isBlocking,
     stopTimeout: undefined, // 暂时不用，后面会交给自动清除
-    goNextWhenOver: !isHold,
+    goNextWhenOver: true,
   };
 };
