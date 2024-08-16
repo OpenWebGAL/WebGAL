@@ -72,6 +72,7 @@ export const nextSentence = () => {
         isGoNext = true;
       }
       if (!e.skipNextCollect) {
+        // 由于提前结束使用的不是 unmountPerform 标准 API，所以不会触发两次 nextSentence
         e.stopFunction();
         clearTimeout(e.stopTimeout as unknown as number);
         WebGAL.gameplay.performController.performList.splice(i, 1);
@@ -80,6 +81,7 @@ export const nextSentence = () => {
     }
   }
   if (isGoNext) {
+    // 由于不使用 unmountPerform 标准 API，这里需要手动收集一下 isGoNext
     nextSentence();
   }
 };
