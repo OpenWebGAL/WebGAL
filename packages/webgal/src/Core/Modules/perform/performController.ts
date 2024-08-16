@@ -35,12 +35,10 @@ export class PerformController {
       if (!perform.isHoldOn) {
         // 如果不是保持演出，清除
         this.unmountPerform(perform.performName);
-        if (perform.goNextWhenOver) {
-          // nextSentence();
-          this.goNextWhenOver();
-        }
       }
     }, perform.duration);
+
+    if (script.args.find((e) => e.key === 'continue' && e.value === true)) perform.goNextWhenOver = true;
 
     this.performList.push(perform);
   }
@@ -52,6 +50,10 @@ export class PerformController {
         if (!e.isHoldOn && e.performName === name) {
           e.stopFunction();
           clearTimeout(e.stopTimeout as unknown as number);
+          if (e.goNextWhenOver) {
+            // nextSentence();
+            this.goNextWhenOver();
+          }
           this.performList.splice(i, 1);
           i--;
         }
@@ -62,6 +64,10 @@ export class PerformController {
         if (e.performName === name) {
           e.stopFunction();
           clearTimeout(e.stopTimeout as unknown as number);
+          if (e.goNextWhenOver) {
+            // nextSentence();
+            this.goNextWhenOver();
+          }
           this.performList.splice(i, 1);
           i--;
           /**
