@@ -95,7 +95,7 @@ export class PerformController {
 
   private goNextWhenOver() {
     let isBlockingAuto = false;
-    this.performList.forEach((e) => {
+    this.performList?.forEach((e) => {
       if (e.blockingAuto())
         // 阻塞且没有结束的演出
         isBlockingAuto = true;

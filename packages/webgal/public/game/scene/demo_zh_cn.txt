@@ -13,7 +13,7 @@ miniAvatar:miniavatar.png;
 changeFigure:stand2.png -right -next;
 {egine} 是使用 Web 技术开发的引擎，因此在网页端有良好的表现。 -v2.wav;
 由于这个特性，如果你将 {egine} 部署到服务器或网页托管平台上，玩家只需要一串链接就可以开始游玩！ -v3.wav;
-setAnimation:move-front-and-back -target=fig-left -next;
+setAnimation:move-front-and-back -target=fig-left -continue;
 听起来是不是非常吸引人？ -v4.wav;
 changeFigure:none -right -next;
 setTransform:{"position": {"x": 500,"y": 0}} -target=fig-left -next;
