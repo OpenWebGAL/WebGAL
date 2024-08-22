@@ -40,12 +40,18 @@ export const setVar = (sentence: ISentence): IPerform => {
       const valExp2 = valExpArr
         .map((e) => {
           if (e.match(/\$?[.a-zA-Z]/)) {
-            return String(getValueFromState(e.trim()));
+            const _r = getValueFromState(e.trim());
+            return typeof _r === 'string' ? `'${_r}'` : _r;
           } else return e;
         })
         .reduce((pre, curr) => pre + curr, '');
-      const exp = compile(valExp2);
-      const result = exp();
+      let result = '';
+      try {
+        const exp = compile(valExp2);
+        result = exp();
+      } catch (e) {
+        logger.error('expression compile error', e);
+      }
       webgalStore.dispatch(targetReducerFunction({ key, value: result }));
     } else if (valExp.match(/true|false/)) {
       if (valExp.match(/true/)) {
