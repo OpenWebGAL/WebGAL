@@ -39,11 +39,19 @@ export const setVar = (sentence: ISentence): IPerform => {
       // 将变量替换为变量的值，然后合成表达式字符串
       const valExp2 = valExpArr
         .map((e) => {
-          return getValueFromStateElseKey(e.trim());
+          if (e.match(/\$?[.a-zA-Z]/)) {
+            const _r = getValueFromStateElseKey(e.trim());
+            return typeof _r === 'string' ? `'${_r}'` : _r;
+          } else return e;
         })
         .reduce((pre, curr) => pre + curr, '');
-      const exp = compile(valExp2);
-      const result = exp();
+      let result = '';
+      try {
+        const exp = compile(valExp2);
+        result = exp();
+      } catch (e) {
+        logger.error('expression compile error', e);
+      }
       webgalStore.dispatch(targetReducerFunction({ key, value: result }));
     } else if (valExp.match(/true|false/)) {
       if (valExp.match(/true/)) {
