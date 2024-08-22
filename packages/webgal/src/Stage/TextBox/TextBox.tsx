@@ -67,7 +67,7 @@ export const TextBox = () => {
     .default(() => 2);
   // 拆字
   const textArray = compileSentence(stageState.showText, lineLimit);
-  const showName = stageState.showName;
+  const showName = compileSentence(stageState.showName,lineLimit);
   const currentConcatDialogPrev = stageState.currentConcatDialogPrev;
   const currentDialogKey = stageState.currentDialogKey;
   const miniAvatar = stageState.miniAvatar;
@@ -264,7 +264,7 @@ function parseEnhancedString(enhanced: string): KeyValuePair[] {
   while ((match = regex.exec(enhanced)) !== null) {
     result.push({
       key: match[1],
-      value: match[2].trim(),
+      value: match[2].replace(/~/g,':').trim(),
     });
   }
 

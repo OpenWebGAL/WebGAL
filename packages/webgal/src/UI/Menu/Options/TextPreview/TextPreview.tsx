@@ -30,7 +30,7 @@ export const TextPreview = (props: any) => {
     textArray: previewTextArray,
     isText: true,
     textDelay: textDelay,
-    showName: t('textPreview.title'),
+    showName: compileSentence(t('textPreview.title'),3),
     currentConcatDialogPrev: '',
     fontSize: size,
     currentDialogKey: '',

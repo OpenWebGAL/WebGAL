@@ -41,6 +41,78 @@ export default function IMSSTextbox(props: ITextboxProps) {
   }, []);
 
   let allTextIndex = 0;
+  const nameElementList = showName.map((line, index)=>{
+    const textline = line.map((en,index)=>{
+      const e = en.reactNode;
+      let style = '';
+      let tips = '';
+      let style_alltext = '';
+      if (en.enhancedValue) {
+        const data = en.enhancedValue;
+        console.log(data);
+        for (const dataElem of data) {
+          const { key, value } = dataElem;
+          switch (key) {
+            case 'style':
+              style = value;
+              break;
+            case 'tips':
+              tips = value;
+              break;
+            case 'style-alltext':
+              style_alltext = value;
+              break;
+          }
+        }
+      }
+      let prevLength = currentConcatDialogPrev.length;
+      const styleClassName = ' ' + css(style);
+      const styleAllText = ' ' + css(style_alltext);
+      if (index < prevLength) {
+        return (
+          <span
+            // data-text={e}
+            className={applyStyle('TextBox_textElement_Settled', styles.TextBox_textElement_Settled)}
+            key={currentDialogKey + index}
+            style={{ animationDuration: `${textDuration}ms` }}
+          >
+            <span className={styles.zhanwei + styleAllText}>
+              {e}
+              <span className={applyStyle('outer', styles.outer) + styleClassName + styleAllText}>{e}</span>
+              {isUseStroke && <span className={applyStyle('inner', styles.inner) + styleAllText}>{e}</span>}
+            </span>
+          </span>
+        );
+      }
+      return (
+        <span
+          // data-text={e}
+          className={`${applyStyle('TextBox_textElement_start', styles.TextBox_textElement_start)} Textelement_start`}
+          key={currentDialogKey + index}
+          style={{ position: 'relative' }}
+        >
+          <span className={styles.zhanwei + styleAllText}>
+            {e}
+            <span className={applyStyle('outer', styles.outer) + styleClassName + styleAllText}>{e}</span>
+            {isUseStroke && <span className={applyStyle('inner', styles.inner) + styleAllText}>{e}</span>}
+          </span>
+        </span>
+      );
+      
+    })
+    return (
+      <div
+        style={{
+          wordBreak: isSafari || props.isFirefox ? 'break-all' : undefined,
+          display: isSafari ? 'flex' : undefined,
+          flexWrap: isSafari ? 'wrap' : undefined,
+        }}
+        key={`text-line-${index}`}
+      >
+        {textline}
+      </div>
+    );
+  });
   const textElementList = textArray.map((line, index) => {
     const textLine = line.map((en, index) => {
       const e = en.reactNode;
@@ -159,53 +231,20 @@ export default function IMSSTextbox(props: ITextboxProps) {
                 <img className={applyStyle('miniAvatarImg', styles.miniAvatarImg)} alt="miniAvatar" src={miniAvatar} />
               )}
             </div>
-            {showName !== '' && (
-              <>
-                <div
-                  className={
-                    applyStyle('TextBox_showName', styles.TextBox_showName) +
-                    ' ' +
-                    applyStyle('TextBox_ShowName_Background', styles.TextBox_ShowName_Background)
-                  }
-                  style={{
-                    opacity: `${textboxOpacity / 100}`,
-                    fontSize: '200%',
-                  }}
-                >
-                  <div style={{ opacity: 0 }}>
-                    {showName.split('').map((e, i) => {
-                      return (
-                        <span key={e + i} style={{ position: 'relative' }}>
-                          <span className={styles.zhanwei}>
-                            {e}
-                            <span className={applyStyle('outerName', styles.outerName)}>{e}</span>
-                            {isUseStroke && <span className={applyStyle('innerName', styles.innerName)}>{e}</span>}
-                          </span>
-                        </span>
-                      );
-                    })}
-                  </div>
-                </div>
-                <div
-                  key={showName}
-                  className={applyStyle('TextBox_showName', styles.TextBox_showName)}
-                  style={{
-                    fontSize: '200%',
-                  }}
-                >
-                  {showName.split('').map((e, i) => {
-                    return (
-                      <span key={e + i} style={{ position: 'relative' }}>
-                        <span className={styles.zhanwei}>
-                          {e}
-                          <span className={applyStyle('outerName', styles.outerName)}>{e}</span>
-                          {isUseStroke && <span className={applyStyle('innerName', styles.innerName)}>{e}</span>}
-                        </span>
-                      </span>
-                    );
-                  })}
-                </div>
-              </>
+            {showName !== null && (
+              <div
+                className={
+                  applyStyle('TextBox_showName', styles.TextBox_showName) +
+                  ' ' +
+                  applyStyle('TextBox_ShowName_Background', styles.TextBox_ShowName_Background)
+                }
+                style={{
+                  opacity: `${textboxOpacity / 100}`,
+                  fontSize: '200%',
+                }}
+              >
+                {nameElementList}
+              </div>
             )}
             <div
               className={applyStyle('text', styles.text)}
