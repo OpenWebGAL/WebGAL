@@ -45,8 +45,13 @@ export const setVar = (sentence: ISentence): IPerform => {
           } else return e;
         })
         .reduce((pre, curr) => pre + curr, '');
-      const exp = compile(valExp2);
-      const result = exp();
+      let result = '';
+      try {
+        const exp = compile(valExp2);
+        result = exp();
+      } catch (e) {
+        logger.error('expression compile error', e);
+      }
       webgalStore.dispatch(targetReducerFunction({ key, value: result }));
     } else if (valExp.match(/true|false/)) {
       if (valExp.match(/true/)) {
