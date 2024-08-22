@@ -39,6 +39,10 @@ export const setVar = (sentence: ISentence): IPerform => {
       // 将变量替换为变量的值，然后合成表达式字符串
       const valExp2 = valExpArr
         .map((e) => {
+          if (!e.trim().match(/^[a-zA-Z_][a-zA-Z0-9_]*$/)) {
+            // 检查是否是变量名，不是就返回本身
+            return e;
+          }
           const _r = getValueFromStateElseKey(e.trim());
           return typeof _r === 'string' ? `'${_r}'` : _r;
         })
