@@ -39,10 +39,8 @@ export const setVar = (sentence: ISentence): IPerform => {
       // 将变量替换为变量的值，然后合成表达式字符串
       const valExp2 = valExpArr
         .map((e) => {
-          if (e.match(/\$?[.a-zA-Z]/)) {
-            const _r = getValueFromStateElseKey(e.trim());
-            return typeof _r === 'string' ? `'${_r}'` : _r;
-          } else return e;
+          const _r = getValueFromStateElseKey(e.trim());
+          return typeof _r === 'string' ? `'${_r}'` : _r;
         })
         .reduce((pre, curr) => pre + curr, '');
       let result = '';
@@ -60,7 +58,7 @@ export const setVar = (sentence: ISentence): IPerform => {
       if (valExp.match(/false/)) {
         webgalStore.dispatch(targetReducerFunction({ key, value: false }));
       }
-    } else if (valExp.length == 0) {
+    } else if (valExp.length === 0) {
       webgalStore.dispatch(targetReducerFunction({ key, value: '' }));
     } else {
       if (!isNaN(Number(valExp))) {
@@ -93,7 +91,7 @@ type BaseVal = string | number | boolean | undefined;
  * 取不到时返回 undefined
  */
 export function getValueFromState(key: string) {
-  let ret: any = undefined;
+  let ret: any;
   const stage = webgalStore.getState().stage;
   const userData = webgalStore.getState().userData;
   const _Merge = { stage, userData }; // 不要直接合并到一起，防止可能的键冲突
@@ -113,8 +111,9 @@ export function getValueFromState(key: string) {
  */
 export function getValueFromStateElseKey(key: string) {
   const valueFromState = getValueFromState(key);
-  if (valueFromState == null) {
+  if (valueFromState === null || valueFromState === undefined) {
     logger.warn('valueFromState result null, key = ' + key);
+    return key;
   }
-  return valueFromState != null ? valueFromState : key;
+  return valueFromState;
 }
