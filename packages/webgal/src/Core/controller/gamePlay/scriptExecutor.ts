@@ -4,7 +4,7 @@ import { logger } from '../../util/logger';
 import { IStageState } from '@/store/stageInterface';
 import { restoreScene } from '../scene/restoreScene';
 import { webgalStore } from '@/store/store';
-import { getValueFromState } from '@/Core/gameScripts/setVar';
+import { getValueFromStateElseKey } from '@/Core/gameScripts/setVar';
 import { strIf } from '@/Core/controller/gamePlay/strIf';
 import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
 import cloneDeep from 'lodash/cloneDeep';
@@ -25,7 +25,7 @@ export const whenChecker = (whenValue: string | undefined): boolean => {
         if (e.match(/true/) || e.match(/false/)) {
           return e;
         }
-        return getValueFromState(e).toString();
+        return getValueFromStateElseKey(e);
       } else return e;
     })
     .reduce((pre, curr) => pre + curr, '');
@@ -59,8 +59,8 @@ export const scriptExecutor = () => {
 
     if (contentExp !== null) {
       contentExp.forEach((e) => {
-        const contentVarValue = getValueFromState(e.replace(/(?<!\\)\{(.*)\}/, '$1'));
-        retContent = retContent.replace(e, contentVarValue ? contentVarValue.toString() : e);
+        const contentVarValue = getValueFromStateElseKey(e.replace(/(?<!\\)\{(.*)\}/, '$1'));
+        retContent = retContent.replace(e, contentVarValue);
       });
     }
     retContent = retContent.replace(/\\{/g, '{').replace(/\\}/g, '}');

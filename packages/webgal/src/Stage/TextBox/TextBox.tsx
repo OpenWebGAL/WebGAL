@@ -231,8 +231,12 @@ function parseString(input: string): Segment[] {
       const enhance = match[3];
       let parsedEnhanced: KeyValuePair[] = [];
       let ruby = '';
-      if (enhance.match(/style=|tips=|ruby=/)) {
+      if (enhance.match(/style=|tips=|ruby=|style-alltext=/)) {
         parsedEnhanced = parseEnhancedString(enhance);
+        const rubyKvPair = parsedEnhanced.find((e) => e.key === 'ruby');
+        if (rubyKvPair) {
+          ruby = rubyKvPair.value;
+        }
       } else {
         ruby = enhance;
       }

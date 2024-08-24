@@ -39,13 +39,21 @@ export const setVar = (sentence: ISentence): IPerform => {
       // 将变量替换为变量的值，然后合成表达式字符串
       const valExp2 = valExpArr
         .map((e) => {
-          if (e.match(/\$?[.a-zA-Z]/)) {
-            return String(getValueFromState(e.trim()));
-          } else return e;
+          if (!e.trim().match(/^[a-zA-Z_$][a-zA-Z0-9_.]*$/)) {
+            // 检查是否是变量名，不是就返回本身
+            return e;
+          }
+          const _r = getValueFromStateElseKey(e.trim());
+          return typeof _r === 'string' ? `'${_r}'` : _r;
         })
         .reduce((pre, curr) => pre + curr, '');
-      const exp = compile(valExp2);
-      const result = exp();
+      let result = '';
+      try {
+        const exp = compile(valExp2);
+        result = exp();
+      } catch (e) {
+        logger.error('expression compile error', e);
+      }
       webgalStore.dispatch(targetReducerFunction({ key, value: result }));
     } else if (valExp.match(/true|false/)) {
       if (valExp.match(/true/)) {
@@ -54,11 +62,13 @@ export const setVar = (sentence: ISentence): IPerform => {
       if (valExp.match(/false/)) {
         webgalStore.dispatch(targetReducerFunction({ key, value: false }));
       }
+    } else if (valExp.length === 0) {
+      webgalStore.dispatch(targetReducerFunction({ key, value: '' }));
     } else {
       if (!isNaN(Number(valExp))) {
         webgalStore.dispatch(targetReducerFunction({ key, value: Number(valExp) }));
       } else {
-        webgalStore.dispatch(targetReducerFunction({ key, value: valExp }));
+        webgalStore.dispatch(targetReducerFunction({ key, value: getValueFromStateElseKey(valExp) }));
       }
     }
     if (setGlobal) {
@@ -79,10 +89,13 @@ export const setVar = (sentence: ISentence): IPerform => {
   };
 };
 
-type BaseVal = string | number | boolean;
+type BaseVal = string | number | boolean | undefined;
 
+/**
+ * 取不到时返回 undefined
+ */
 export function getValueFromState(key: string) {
-  let ret: any = 0;
+  let ret: any;
   const stage = webgalStore.getState().stage;
   const userData = webgalStore.getState().userData;
   const _Merge = { stage, userData }; // 不要直接合并到一起，防止可能的键冲突
@@ -92,7 +105,19 @@ export function getValueFromState(key: string) {
     ret = userData.globalGameVar[key];
   } else if (key.startsWith('$')) {
     const propertyKey = key.replace('$', '');
-    ret = get(_Merge, propertyKey, 0) as BaseVal;
+    ret = get(_Merge, propertyKey, undefined) as BaseVal;
   }
   return ret;
+}
+
+/**
+ * 取不到时返回 key
+ */
+export function getValueFromStateElseKey(key: string) {
+  const valueFromState = getValueFromState(key);
+  if (valueFromState === null || valueFromState === undefined) {
+    logger.warn('valueFromState result null, key = ' + key);
+    return key;
+  }
+  return valueFromState;
 }

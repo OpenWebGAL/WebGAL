@@ -127,7 +127,6 @@ export const intro = (sentence: ISentence): IPerform => {
             if (!isHold) {
               timeout = setTimeout(() => {
                 WebGAL.gameplay.performController.unmountPerform(performName);
-                setTimeout(nextSentence, 0);
               }, baseDuration);
             }
           }

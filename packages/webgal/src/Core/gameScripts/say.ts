@@ -8,6 +8,7 @@ import { getRandomPerformName, PerformController } from '@/Core/Modules/perform/
 import { getSentenceArgByKey } from '@/Core/util/getSentenceArg';
 import { textSize, voiceOption } from '@/store/userDataInterface';
 import { WebGAL } from '@/Core/WebGAL';
+import { compileSentence } from '@/Stage/TextBox/TextBox';
 
 /**
  * 进行普通对话的显示
@@ -50,7 +51,9 @@ export const say = (sentence: ISentence): IPerform => {
   // 计算延迟
   const textDelay = useTextDelay(userDataState.optionData.textSpeed);
   // 本句延迟
-  const sentenceDelay = textDelay * sentence.content.length;
+  const textNodes = compileSentence(sentence.content, 3);
+  const len = textNodes.reduce((prev, curr) => prev + curr.length, 0);
+  const sentenceDelay = textDelay * len;
 
   for (const e of sentence.args) {
     if (e.key === 'fontSize') {
