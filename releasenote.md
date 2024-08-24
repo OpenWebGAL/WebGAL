@@ -8,13 +8,34 @@
 
 #### 新功能
 
-允许使用脚本修改标题画面等游戏配置选项
-
-允许使用变量获取一部分引擎状态
+新增参数，用于控制 “在本条语句的演出结束后，执行下一条”。
 
 #### 修复
 
-为部分字符添加转义
+修复了 `-concat` 选项动画在新行中的错误。
+
+修复了样式定义时 ruby 不显示的问题。
+
+修复了 intro 的 hold 问题。
+
+修复了 say 延迟计算问题。
+
+修复了 restoreScene 中的竞争状态。
+
+修复了删除已关闭的自由图形的问题。
+
+修复了变量值处理的问题。
+
+修复了 setVar 进行 compile 字符串时异常的问题。
+
+增强了 getValueFromState。
+
+调整了对 `style-alltext` 键的正则匹配，使其可以触发文本框的样式修改。
+
+修复了变量正则表达式的问题。
+
+修复了 logo 图片的问题。
+
 
 <!-- English Translation -->
 ## Release Notes
@@ -27,13 +48,34 @@
 
 #### New Features
 
-Allow using scripts to modify game configuration options such as title screen
-
-Allow using variables to get some engine states
+Added a new parameter to control "execute the next statement after the performance of this statement is finished".
 
 #### Bug Fixes
 
-Added escaping for some characters
+Fixed an animation error with the `-concat` option in a new line.
+
+Fixed an issue where ruby was not displayed when a style was defined.
+
+Fixed the hold problem of intro.
+
+Fixed the say delay calculation problem.
+
+Fixed a race condition in restoreScene.
+
+Fixed an issue with deleting closed free figures.
+
+Fixed the variable value handling problem.
+
+Fixed an exception when setVar compiled a string.
+
+Enhanced getValueFromState.
+
+Adjusted the regular expression matching for the `style-alltext` key to allow it to trigger text box style modifications.
+
+Fixed the variable regular expression problem.
+
+Fixed the logo image issue.
+
 
 <!-- Japanese Translation -->
 ## リリースノート
@@ -46,33 +88,30 @@ Added escaping for some characters
 
 #### 新機能
 
-スクリプトを使用してタイトル画面などのゲーム設定オプションを変更できるようになりました
-
-変数を使用して一部のエンジン状態を取得できるようになりました
+「このステートメントの演出終了後に次のステートメントを実行する」を制御するための新しいパラメータが追加されました。
 
 #### 修正
 
-一部の文字のエスケープを追加しました
+`-concat` オプションのアニメーションが新しい行でエラーになる問題を修正しました。
 
+スタイルが定義されているときにルビが表示されない問題を修正しました。
 
+イントロのホールド問題を修正しました。
 
+say 遅延計算の問題を修正しました。
 
+restoreScene の競合状態を修正しました。
 
-[//]: # (<!-- French Translation -->)
+閉じたフリーフィギュアを削除する際の問題を修正しました。
 
-[//]: # (#### Nouvelles fonctionnalités)
+変数値処理の問題を修正しました。
 
-[//]: # ()
-[//]: # (Prise en charge partielle des styles CSS pour le texte des boîtes de dialogue)
+setVar が文字列をコンパイルする際の例外を修正しました。
 
-[//]: # ()
-[//]: # (Personnalisation de l'interface des choix)
+getValueFromState を強化しました。
 
-[//]: # ()
-[//]: # (#### Corrections)
+`style-alltext` キーの正規表現マッチングを調整し、テキストボックスのスタイル変更をトリガーできるようにしました。
 
-[//]: # ()
-[//]: # (Fuite de mémoire avec l'effet de pluie)
+変数正規表現の問題を修正しました。
 
-[//]: # ()
-[//]: # (Conflit lors de l'appel simultané de plusieurs callScene ou changeScene)
+ロゴ画像の問題を修正しました。
