@@ -34,19 +34,28 @@ export const infoFetcher = (url: string) => {
     gameConfig.forEach((e) => {
       const { command, args } = e;
       if (args.length > 0) {
-        let res: any = args[0].trim();
-        if (/^(true|false)$/g.test(args[0])) {
-          res = !!res;
-        } else if (/^[0-9]+\.?[0-9]+$/g.test(args[0])) {
-          res = Number(res);
-        }
+        if (args.length > 1) {
+          dispatch(
+            setGlobalVar({
+              key: command,
+              value: args.join('|'),
+            }),
+          );
+        } else {
+          let res: any = args[0].trim();
+          if (/^(true|false)$/g.test(args[0])) {
+            res = !!res;
+          } else if (/^[0-9]+\.?[0-9]+$/g.test(args[0])) {
+            res = Number(res);
+          }
 
-        dispatch(
-          setGlobalVar({
-            key: command,
-            value: res,
-          }),
-        );
+          dispatch(
+            setGlobalVar({
+              key: command,
+              value: res,
+            }),
+          );
+        }
       }
     });
 

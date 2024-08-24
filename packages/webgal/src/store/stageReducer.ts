@@ -137,8 +137,17 @@ const stageSlice = createSlice({
       const newFigure = action.payload;
       const index = currentFreeFigures.findIndex((figure) => figure.key === newFigure.key);
       if (index >= 0) {
-        currentFreeFigures[index].basePosition = newFigure.basePosition;
-        currentFreeFigures[index].name = newFigure.name;
+        if (newFigure.name === '') {
+          // 删掉立绘和相关的动画
+          currentFreeFigures.splice(index, 1);
+          const figureAssociatedAnimationIndex = state.figureAssociatedAnimation.findIndex(
+            (a) => a.targetId === newFigure.key,
+          );
+          state.figureAssociatedAnimation.splice(figureAssociatedAnimationIndex, 1);
+        } else {
+          currentFreeFigures[index].basePosition = newFigure.basePosition;
+          currentFreeFigures[index].name = newFigure.name;
+        }
       } else {
         // 新加
         if (newFigure.name !== '') currentFreeFigures.push(newFigure);

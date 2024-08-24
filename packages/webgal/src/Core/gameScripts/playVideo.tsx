@@ -4,7 +4,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import styles from '@/Stage/FullScreenPerform/fullScreenPerform.module.scss';
 import { webgalStore } from '@/store/store';
-import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
 import { getRandomPerformName, PerformController } from '@/Core/Modules/perform/performController';
 import { getSentenceArgByKey } from '@/Core/util/getSentenceArg';
 import { WebGAL } from '@/Core/WebGAL';
@@ -55,7 +54,6 @@ export const playVideo = (sentence: ISentence): IPerform => {
                 isOver = true;
                 e.stopFunction();
                 WebGAL.gameplay.performController.unmountPerform(e.performName);
-                nextSentence();
               }
             }
           };
