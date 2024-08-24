@@ -34,7 +34,7 @@ const Logo: FC = () => {
       currentLogoIndex.set(0);
       currentTimeOutId.set(setTimeout(nextImg, animationDuration));
     }
-  }, [isEnterGame, logoImage]);
+  }, [isEnterGame]);
 
   const currentLogoUrl = currentLogoIndex.value === -1 ? '' : logoImage[currentLogoIndex.value];
   return (
