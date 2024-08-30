@@ -30,7 +30,7 @@ A complete game:
 
 ### Creating Games with WebGAL
 
-[WebGAL Development Documentation](https://docs.openwebgal.com/)
+[WebGAL Development Documentation](https://docs.openwebgal.com/en)
 
 [Download WebGAL Graphical Editor](https://github.com/MakinoharaShoko/WebGAL_Terre/releases)
 
@@ -52,7 +52,7 @@ Whether using WebGAL scripts or the visual editor for development, everything is
 
 ### Participate in WebGAL Development
 
-**Developers who want to participate in engine development, please read [the participation guide for this project](https://docs.openwebgal.com/developers/)**
+**Developers who want to participate in engine development, please read [the participation guide for this project](https://docs.openwebgal.com/en/developers/)**
 
 ### Sponsorship
 
@@ -60,7 +60,7 @@ WebGAL is an open-source software, so you can use this software for free under t
 
 Even so, your sponsorship can provide motivation for the developers to move forward and make this project even better.
 
-[Sponsor this project](https://docs.openwebgal.com/sponsor/)
+[Sponsor this project](https://docs.openwebgal.com/en/sponsor/)
 
 # Sponsors
 
