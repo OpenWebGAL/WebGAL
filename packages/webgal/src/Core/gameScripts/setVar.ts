@@ -111,13 +111,13 @@ export function getValueFromState(key: string) {
 }
 
 /**
- * 取不到时返回 key
+ * 取不到时返回 {key}
  */
 export function getValueFromStateElseKey(key: string) {
   const valueFromState = getValueFromState(key);
   if (valueFromState === null || valueFromState === undefined) {
     logger.warn('valueFromState result null, key = ' + key);
-    return key;
+    return `{${key}}`;
   }
   return valueFromState;
 }
