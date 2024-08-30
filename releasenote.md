@@ -12,6 +12,8 @@
 
 #### 修复
 
+4.5.6 修复：无法从状态中获取到对应 key 的变量时，返回 {key} 以避免变换不生效
+
 修复了 `-concat` 选项动画在新行中的错误。
 
 修复了样式定义时 ruby 不显示的问题。
@@ -52,6 +54,8 @@ Added a new parameter to control "execute the next statement after the performan
 
 #### Bug Fixes
 
+4.5.6 Fix: When the corresponding key variable cannot be obtained from the state, return {key} to avoid ineffective transformation.
+
 Fixed an animation error with the `-concat` option in a new line.
 
 Fixed an issue where ruby was not displayed when a style was defined.
@@ -91,6 +95,8 @@ Fixed the logo image issue.
 「このステートメントの演出終了後に次のステートメントを実行する」を制御するための新しいパラメータが追加されました。
 
 #### 修正
+
+4.5.6 修正：状態から対応する key の変数が取得できない場合、{key} を返すようにし、変換が無効になるのを回避しました
 
 `-concat` オプションのアニメーションが新しい行でエラーになる問題を修正しました。
 
