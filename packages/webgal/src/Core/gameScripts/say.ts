@@ -112,20 +112,26 @@ export const say = (sentence: ISentence): IPerform => {
   if (vocal) {
     playVocal(sentence);
   } else if (key || pos) {
-    const figureId = String(getSentenceArgByKey(sentence, 'figureId'));
     performSimulateVocalDelay = len * 250;
+    let audioLevel = Math.random() * 100;
     const performSimulateVocal = () => {
-      const audioLevel = Math.random() * 100;
+      let nextAudioLevel = audioLevel + (Math.random() * 60 - 30); // 在 -30 到 +30 之间波动
+      // 确保波动幅度不小于 5
+      if (Math.abs(nextAudioLevel - audioLevel) < 5) {
+        nextAudioLevel = audioLevel + Math.sign(nextAudioLevel - audioLevel) * 5;
+      }
+      // 确保结果在 0 到 100 之间
+      audioLevel = Math.max(0, Math.min(nextAudioLevel, 100));
       const currentStageState = webgalStore.getState().stage;
       const figureAssociatedAnimation = currentStageState.figureAssociatedAnimation;
-      const animationItem = figureAssociatedAnimation.find((tid) => tid.targetId === figureId);
+      const animationItem = figureAssociatedAnimation.find((tid) => tid.targetId === key);
       performMouthAnimation({
         audioLevel,
         OPEN_THRESHOLD: 50,
         HALF_OPEN_THRESHOLD: 25,
         currentMouthValue: 0,
         lerpSpeed: 1,
-        key: figureId ? figureId : `fig-${pos}`,
+        key: key ? key : `fig-${pos}`,
         animationItem,
         pos,
       });
