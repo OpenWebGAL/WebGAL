@@ -108,35 +108,39 @@ export const say = (sentence: ISentence): IPerform => {
       key = `${e.value.toString()}`;
     }
   }
+  let audioLevel = 80;
+  const performSimulateVocal = (end = false) => {
+    let nextAudioLevel = audioLevel + (Math.random() * 60 - 30); // 在 -30 到 +30 之间波动
+    // 确保波动幅度不小于 5
+    if (Math.abs(nextAudioLevel - audioLevel) < 5) {
+      nextAudioLevel = audioLevel + Math.sign(nextAudioLevel - audioLevel) * 5;
+    }
+    // 确保结果在 25 到 100 之间
+    audioLevel = Math.max(15, Math.min(nextAudioLevel, 100));
+    const currentStageState = webgalStore.getState().stage;
+    const figureAssociatedAnimation = currentStageState.figureAssociatedAnimation;
+    const animationItem = figureAssociatedAnimation.find((tid) => tid.targetId === key);
+    const targetKey = key ? key : `fig-${pos}`;
+    if (end) {
+      audioLevel = 0;
+    }
+    performMouthAnimation({
+      audioLevel,
+      OPEN_THRESHOLD: 50,
+      HALF_OPEN_THRESHOLD: 25,
+      currentMouthValue: 0,
+      lerpSpeed: 1,
+      key: targetKey,
+      animationItem,
+      pos,
+    });
+    if (!end) performSimulateVocalTimeout = setTimeout(performSimulateVocal, 50);
+  };
   // 播放一段语音
   if (vocal) {
     playVocal(sentence);
   } else if (key || pos) {
     performSimulateVocalDelay = len * 250;
-    let audioLevel = Math.random() * 100;
-    const performSimulateVocal = () => {
-      let nextAudioLevel = audioLevel + (Math.random() * 60 - 30); // 在 -30 到 +30 之间波动
-      // 确保波动幅度不小于 5
-      if (Math.abs(nextAudioLevel - audioLevel) < 5) {
-        nextAudioLevel = audioLevel + Math.sign(nextAudioLevel - audioLevel) * 5;
-      }
-      // 确保结果在 0 到 100 之间
-      audioLevel = Math.max(0, Math.min(nextAudioLevel, 100));
-      const currentStageState = webgalStore.getState().stage;
-      const figureAssociatedAnimation = currentStageState.figureAssociatedAnimation;
-      const animationItem = figureAssociatedAnimation.find((tid) => tid.targetId === key);
-      performMouthAnimation({
-        audioLevel,
-        OPEN_THRESHOLD: 50,
-        HALF_OPEN_THRESHOLD: 25,
-        currentMouthValue: 0,
-        lerpSpeed: 1,
-        key: key ? key : `fig-${pos}`,
-        animationItem,
-        pos,
-      });
-      performSimulateVocalTimeout = setTimeout(performSimulateVocal, 250);
-    };
     performSimulateVocal();
   }
 
@@ -154,6 +158,7 @@ export const say = (sentence: ISentence): IPerform => {
     stopFunction: () => {
       WebGAL.events.textSettle.emit();
       if (performSimulateVocalTimeout) {
+        performSimulateVocal(true);
         clearTimeout(performSimulateVocalTimeout);
       }
     },
