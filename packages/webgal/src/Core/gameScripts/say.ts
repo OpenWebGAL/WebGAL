@@ -9,6 +9,8 @@ import { getSentenceArgByKey } from '@/Core/util/getSentenceArg';
 import { textSize, voiceOption } from '@/store/userDataInterface';
 import { WebGAL } from '@/Core/WebGAL';
 import { compileSentence } from '@/Stage/TextBox/TextBox';
+import { performMouthAnimation } from '@/Core/gameScripts/vocal/vocalAnimation';
+import { match } from '@/Core/util/match';
 
 /**
  * 进行普通对话的显示
@@ -84,9 +86,52 @@ export const say = (sentence: ISentence): IPerform => {
   }
   dispatch(setStage({ key: 'showName', value: showName }));
 
+  // 模拟说话
+  let performSimulateVocalTimeout: ReturnType<typeof setTimeout> | null = null;
+  let performSimulateVocalDelay = 0;
+  let pos = '';
+  let key = '';
+  for (const e of sentence.args) {
+    if (e.value === true) {
+      match(e.key)
+        .with('left', () => {
+          pos = 'left';
+        })
+        .with('right', () => {
+          pos = 'right';
+        })
+        .endsWith('center', () => {
+          pos = 'center';
+        });
+    }
+    if (e.key === 'figureId') {
+      key = `${e.value.toString()}`;
+    }
+  }
   // 播放一段语音
   if (vocal) {
     playVocal(sentence);
+  } else if (key || pos) {
+    const figureId = String(getSentenceArgByKey(sentence, 'figureId'));
+    performSimulateVocalDelay = len * 250;
+    const performSimulateVocal = () => {
+      const audioLevel = Math.random() * 100;
+      const currentStageState = webgalStore.getState().stage;
+      const figureAssociatedAnimation = currentStageState.figureAssociatedAnimation;
+      const animationItem = figureAssociatedAnimation.find((tid) => tid.targetId === figureId);
+      performMouthAnimation({
+        audioLevel,
+        OPEN_THRESHOLD: 50,
+        HALF_OPEN_THRESHOLD: 25,
+        currentMouthValue: 0,
+        lerpSpeed: 1,
+        key: figureId ? figureId : `fig-${pos}`,
+        animationItem,
+        pos,
+      });
+      performSimulateVocalTimeout = setTimeout(performSimulateVocal, 250);
+    };
+    performSimulateVocal();
   }
 
   const performInitName: string = getRandomPerformName();
@@ -98,10 +143,13 @@ export const say = (sentence: ISentence): IPerform => {
 
   return {
     performName: performInitName,
-    duration: sentenceDelay + endDelay,
+    duration: sentenceDelay + endDelay + performSimulateVocalDelay,
     isHoldOn: false,
     stopFunction: () => {
       WebGAL.events.textSettle.emit();
+      if (performSimulateVocalTimeout) {
+        clearTimeout(performSimulateVocalTimeout);
+      }
     },
     blockingNext: () => false,
     blockingAuto: () => true,
