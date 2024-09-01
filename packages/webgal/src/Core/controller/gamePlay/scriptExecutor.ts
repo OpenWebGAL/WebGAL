@@ -25,7 +25,7 @@ export const whenChecker = (whenValue: string | undefined): boolean => {
         if (e.match(/true/) || e.match(/false/)) {
           return e;
         }
-        return getValueFromStateElseKey(e);
+        return getValueFromStateElseKey(e, true);
       } else return e;
     })
     .reduce((pre, curr) => pre + curr, '');

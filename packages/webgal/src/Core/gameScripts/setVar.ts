@@ -43,7 +43,7 @@ export const setVar = (sentence: ISentence): IPerform => {
             // 检查是否是变量名，不是就返回本身
             return e;
           }
-          const _r = getValueFromStateElseKey(e.trim());
+          const _r = getValueFromStateElseKey(e.trim(), true);
           return typeof _r === 'string' ? `'${_r}'` : _r;
         })
         .reduce((pre, curr) => pre + curr, '');
@@ -68,7 +68,8 @@ export const setVar = (sentence: ISentence): IPerform => {
       if (!isNaN(Number(valExp))) {
         webgalStore.dispatch(targetReducerFunction({ key, value: Number(valExp) }));
       } else {
-        webgalStore.dispatch(targetReducerFunction({ key, value: getValueFromStateElseKey(valExp) }));
+        // 字符串
+        webgalStore.dispatch(targetReducerFunction({ key, value: getValueFromStateElseKey(valExp, true) }));
       }
     }
     if (setGlobal) {
@@ -113,10 +114,13 @@ export function getValueFromState(key: string) {
 /**
  * 取不到时返回 {key}
  */
-export function getValueFromStateElseKey(key: string) {
+export function getValueFromStateElseKey(key: string, useKeyNameAsReturn = false) {
   const valueFromState = getValueFromState(key);
   if (valueFromState === null || valueFromState === undefined) {
     logger.warn('valueFromState result null, key = ' + key);
+    if (useKeyNameAsReturn) {
+      return key;
+    }
     return `{${key}}`;
   }
   return valueFromState;
