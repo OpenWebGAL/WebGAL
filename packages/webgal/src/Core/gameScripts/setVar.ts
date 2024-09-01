@@ -43,7 +43,7 @@ export const setVar = (sentence: ISentence): IPerform => {
             // 检查是否是变量名，不是就返回本身
             return e;
           }
-          const _r = getValueFromStateElseKey(e.trim());
+          const _r = getValueFromStateElseKey(e.trim(), true);
           return typeof _r === 'string' ? `'${_r}'` : _r;
         })
         .reduce((pre, curr) => pre + curr, '');
@@ -114,11 +114,11 @@ export function getValueFromState(key: string) {
 /**
  * 取不到时返回 {key}
  */
-export function getValueFromStateElseKey(key: string, setting = false) {
+export function getValueFromStateElseKey(key: string, useKeyNameAsReturn = false) {
   const valueFromState = getValueFromState(key);
   if (valueFromState === null || valueFromState === undefined) {
     logger.warn('valueFromState result null, key = ' + key);
-    if (setting) {
+    if (useKeyNameAsReturn) {
       return key;
     }
     return `{${key}}`;
