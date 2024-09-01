@@ -68,7 +68,8 @@ export const setVar = (sentence: ISentence): IPerform => {
       if (!isNaN(Number(valExp))) {
         webgalStore.dispatch(targetReducerFunction({ key, value: Number(valExp) }));
       } else {
-        webgalStore.dispatch(targetReducerFunction({ key, value: getValueFromStateElseKey(valExp) }));
+        // 字符串
+        webgalStore.dispatch(targetReducerFunction({ key, value: getValueFromStateElseKey(valExp, true) }));
       }
     }
     if (setGlobal) {
@@ -113,10 +114,13 @@ export function getValueFromState(key: string) {
 /**
  * 取不到时返回 {key}
  */
-export function getValueFromStateElseKey(key: string) {
+export function getValueFromStateElseKey(key: string, setting = false) {
   const valueFromState = getValueFromState(key);
   if (valueFromState === null || valueFromState === undefined) {
     logger.warn('valueFromState result null, key = ' + key);
+    if (setting) {
+      return key;
+    }
     return `{${key}}`;
   }
   return valueFromState;
