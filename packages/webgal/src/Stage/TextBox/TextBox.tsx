@@ -67,6 +67,7 @@ export const TextBox = () => {
     .default(() => 2);
   // 拆字
   const textArray = compileSentence(stageState.showText, lineLimit);
+  const isHasName = stageState.showName !== '';
   const showName = compileSentence(stageState.showName,lineLimit);
   const currentConcatDialogPrev = stageState.currentConcatDialogPrev;
   const currentDialogKey = stageState.currentDialogKey;
@@ -79,6 +80,7 @@ export const TextBox = () => {
       isText={isText}
       textDelay={textDelay}
       showName={showName}
+      isHasName={isHasName}
       currentConcatDialogPrev={currentConcatDialogPrev}
       fontSize={size}
       currentDialogKey={currentDialogKey}

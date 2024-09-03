@@ -15,6 +15,7 @@ export default function StandardTextbox(props: ITextboxProps) {
     isFirefox,
     fontSize,
     miniAvatar,
+    isHasName,
     showName,
     font,
     textDuration,
@@ -101,7 +102,6 @@ export default function StandardTextbox(props: ITextboxProps) {
   });
 
   const padding = isHasMiniAvatar ? 500 : undefined;
-  const isHasName = showName !== null;
   let paddingTop = isHasName ? undefined : 15;
   if (textSizeState === textSize.small && !isHasName) {
     paddingTop = 35;
@@ -132,7 +132,7 @@ export default function StandardTextbox(props: ITextboxProps) {
           <div id="miniAvatar" className={styles.miniAvatarContainer}>
             {miniAvatar !== '' && <img className={styles.miniAvatarImg} alt="miniAvatar" src={miniAvatar} />}
           </div>
-          {showName !== null && (
+          {isHasName && (
             <div className={styles.TextBox_showName} style={{ fontSize: '170%', left: padding }}>
               {nameElementList}
             </div>
