@@ -16,6 +16,7 @@ export default function IMSSTextbox(props: ITextboxProps) {
     isFirefox: boolean,
     fontSize,
     miniAvatar,
+    isHasName,
     showName,
     font,
     textDuration,
@@ -39,7 +40,6 @@ export default function IMSSTextbox(props: ITextboxProps) {
       WebGAL.events.textSettle.off(settleText);
     };
   }, []);
-
   let allTextIndex = 0;
   const nameElementList = showName.map((line, index)=>{
     const textline = line.map((en,index)=>{
@@ -47,7 +47,9 @@ export default function IMSSTextbox(props: ITextboxProps) {
       let style = '';
       let tips = '';
       let style_alltext = '';
+      let isEnhanced = false;
       if (en.enhancedValue) {
+        isEnhanced = true;
         const data = en.enhancedValue;
         console.log(data);
         for (const dataElem of data) {
@@ -65,16 +67,13 @@ export default function IMSSTextbox(props: ITextboxProps) {
           }
         }
       }
-      let prevLength = currentConcatDialogPrev.length;
       const styleClassName = ' ' + css(style);
       const styleAllText = ' ' + css(style_alltext);
-      if (index < prevLength) {
+      if(isEnhanced){
         return (
           <span
-            // data-text={e}
-            className={applyStyle('TextBox_textElement_Settled', styles.TextBox_textElement_Settled)}
-            key={currentDialogKey + index}
-            style={{ animationDuration: `${textDuration}ms` }}
+            key={index}
+            style={{position:'relative'}}
           >
             <span className={styles.zhanwei + styleAllText}>
               {e}
@@ -86,19 +85,16 @@ export default function IMSSTextbox(props: ITextboxProps) {
       }
       return (
         <span
-          // data-text={e}
-          className={`${applyStyle('TextBox_textElement_start', styles.TextBox_textElement_start)} Textelement_start`}
-          key={currentDialogKey + index}
-          style={{ position: 'relative' }}
+          key={index}
+          style={{position:'relative'}}
         >
           <span className={styles.zhanwei + styleAllText}>
             {e}
-            <span className={applyStyle('outer', styles.outer) + styleClassName + styleAllText}>{e}</span>
-            {isUseStroke && <span className={applyStyle('inner', styles.inner) + styleAllText}>{e}</span>}
+            <span className={applyStyle('outerName', styles.outerName) + styleClassName + styleAllText}>{e}</span>
+            {isUseStroke && <span className={applyStyle('innerName', styles.innerName) + styleAllText}>{e}</span>}
           </span>
         </span>
       );
-      
     })
     return (
       <div
@@ -231,20 +227,30 @@ export default function IMSSTextbox(props: ITextboxProps) {
                 <img className={applyStyle('miniAvatarImg', styles.miniAvatarImg)} alt="miniAvatar" src={miniAvatar} />
               )}
             </div>
-            {showName !== null && (
-              <div
-                className={
-                  applyStyle('TextBox_showName', styles.TextBox_showName) +
-                  ' ' +
-                  applyStyle('TextBox_ShowName_Background', styles.TextBox_ShowName_Background)
-                }
+            {isHasName && (
+              <>
+                <div
+                  className={
+                    applyStyle('TextBox_showName', styles.TextBox_showName) +
+                    ' ' +
+                    applyStyle('TextBox_ShowName_Background', styles.TextBox_ShowName_Background)
+                  }
+                  style={{
+                    opacity: `${textboxOpacity / 100}`,
+                    fontSize: '200%',
+                  }}
+                >
+                  {nameElementList}
+                </div>
+                <div
+                className={applyStyle('TextBox_showName', styles.TextBox_showName)}
                 style={{
-                  opacity: `${textboxOpacity / 100}`,
                   fontSize: '200%',
                 }}
-              >
-                {nameElementList}
-              </div>
+                >
+                  {nameElementList}
+                </div>
+              </>
             )}
             <div
               className={applyStyle('text', styles.text)}
