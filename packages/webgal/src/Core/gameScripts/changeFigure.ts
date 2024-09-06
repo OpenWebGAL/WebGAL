@@ -33,6 +33,7 @@ export function changeFigure(sentence: ISentence): IPerform {
   let animationFlag: any = '';
   let mouthAnimationKey: any = 'mouthAnimation';
   let eyesAnimationKey: any = 'blinkAnimation';
+  let overrideBounds = '';
   const dispatch = webgalStore.dispatch;
 
   for (const e of sentence.args) {
@@ -62,6 +63,9 @@ export function changeFigure(sentence: ISentence): IPerform {
         break;
       case 'motion':
         motion = e.value.toString();
+        break;
+      case 'bounds':
+        overrideBounds = String(e.value);
         break;
       case 'expression':
         expression = e.value.toString();
@@ -215,8 +219,10 @@ export function changeFigure(sentence: ISentence): IPerform {
      */
     const freeFigureItem: IFreeFigure = { key, name: content, basePosition: pos };
     setAnimationNames(key, sentence);
-    if (motion) {
-      dispatch(stageActions.setLive2dMotion({ target: key, motion }));
+    if (motion || overrideBounds) {
+      dispatch(
+        stageActions.setLive2dMotion({ target: key, motion, overrideBounds: getOverrideBoundsArr(overrideBounds) }),
+      );
     }
     if (expression) {
       dispatch(stageActions.setLive2dExpression({ target: key, expression }));
@@ -236,8 +242,10 @@ export function changeFigure(sentence: ISentence): IPerform {
 
     key = positionMap[pos];
     setAnimationNames(key, sentence);
-    if (motion) {
-      dispatch(stageActions.setLive2dMotion({ target: key, motion }));
+    if (motion || overrideBounds) {
+      dispatch(
+        stageActions.setLive2dMotion({ target: key, motion, overrideBounds: getOverrideBoundsArr(overrideBounds) }),
+      );
     }
     if (expression) {
       dispatch(stageActions.setLive2dExpression({ target: key, expression }));
@@ -254,4 +262,17 @@ export function changeFigure(sentence: ISentence): IPerform {
     blockingAuto: () => false,
     stopTimeout: undefined, // 暂时不用，后面会交给自动清除
   };
+}
+
+function getOverrideBoundsArr(raw: string): undefined | [number, number, number, number] {
+  const parseOverrideBoundsResult = raw.split(',').map((e) => Number(e));
+  let isPass = true;
+  parseOverrideBoundsResult.forEach((e) => {
+    if (isNaN(e)) {
+      isPass = false;
+    }
+  });
+  isPass = isPass && parseOverrideBoundsResult.length === 4;
+  if (isPass) return parseOverrideBoundsResult as [number, number, number, number];
+  else return undefined;
 }

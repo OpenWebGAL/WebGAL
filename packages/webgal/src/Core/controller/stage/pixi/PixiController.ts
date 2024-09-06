@@ -12,7 +12,7 @@ import 'pixi-spine'; // Do this once at the very start of your code. This regist
 import { Spine } from 'pixi-spine';
 import { SCREEN_CONSTANTS } from '@/Core/util/constants';
 // import { figureCash } from '@/Core/gameScripts/vocal/conentsCash'; // 如果要使用 Live2D，取消这里的注释
-// import { Live2DModel, SoundManager } from 'pixi-live2d-display'; // 如果要使用 Live2D，取消这里的注释
+// import { Live2DModel, SoundManager } from 'pixi-live2d-display-webgal'; // 如果要使用 Live2D，取消这里的注释
 
 export interface IAnimationObject {
   setStartState: Function;
@@ -689,7 +689,23 @@ export default class PixiStage {
   //   const setup = () => {
   //     if (thisFigureContainer) {
   //       (async function () {
-  //         const models = await Promise.all([Live2DModel.from(jsonPath, { autoInteract: false })]);
+  //         let overrideBounds: [number, number, number, number] = [0, 0, 0, 0];
+  //         const mot = webgalStore.getState().stage.live2dMotion.find((e) => e.target === key);
+  //         if (mot?.overrideBounds) {
+  //           overrideBounds = mot.overrideBounds;
+  //         }
+  //         console.log(overrideBounds);
+  //         const models = await Promise.all([
+  //           Live2DModel.from(jsonPath, {
+  //             autoInteract: false,
+  //             overWriteBounds: {
+  //               x0: overrideBounds[0],
+  //               y0: overrideBounds[1],
+  //               x1: overrideBounds[2],
+  //               y1: overrideBounds[3],
+  //             },
+  //           }),
+  //         ]);
   //
   //         models.forEach((model) => {
   //           const scaleX = stageWidth / model.width;

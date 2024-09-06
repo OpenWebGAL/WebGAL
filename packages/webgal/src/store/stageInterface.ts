@@ -108,6 +108,7 @@ export interface IRunPerform {
 export interface ILive2DMotion {
   target: string;
   motion: string;
+  overrideBounds?: [number, number, number, number];
 }
 
 export interface ILive2DExpression {
