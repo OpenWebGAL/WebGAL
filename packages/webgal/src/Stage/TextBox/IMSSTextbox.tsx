@@ -41,8 +41,8 @@ export default function IMSSTextbox(props: ITextboxProps) {
     };
   }, []);
   let allTextIndex = 0;
-  const nameElementList = showName.map((line, index)=>{
-    const textline = line.map((en,index)=>{
+  const nameElementList = showName.map((line, index) => {
+    const textline = line.map((en, index) => {
       const e = en.reactNode;
       let style = '';
       let tips = '';
@@ -51,7 +51,6 @@ export default function IMSSTextbox(props: ITextboxProps) {
       if (en.enhancedValue) {
         isEnhanced = true;
         const data = en.enhancedValue;
-        console.log(data);
         for (const dataElem of data) {
           const { key, value } = dataElem;
           switch (key) {
@@ -67,27 +66,21 @@ export default function IMSSTextbox(props: ITextboxProps) {
           }
         }
       }
-      const styleClassName = ' ' + css(style);
-      const styleAllText = ' ' + css(style_alltext);
-      if(isEnhanced){
+      const styleClassName = ' ' + css(style, { label: 'showname' });
+      const styleAllText = ' ' + css(style_alltext, { label: 'showname' });
+      if (isEnhanced) {
         return (
-          <span
-            key={index}
-            style={{position:'relative'}}
-          >
+          <span key={index} style={{ position: 'relative' }}>
             <span className={styles.zhanwei + styleAllText}>
               {e}
-              <span className={applyStyle('outer', styles.outer) + styleClassName + styleAllText}>{e}</span>
-              {isUseStroke && <span className={applyStyle('inner', styles.inner) + styleAllText}>{e}</span>}
+              <span className={applyStyle('outerName', styles.outerName) + styleClassName + styleAllText}>{e}</span>
+              {isUseStroke && <span className={applyStyle('innerName', styles.innerName) + styleAllText}>{e}</span>}
             </span>
           </span>
         );
       }
       return (
-        <span
-          key={index}
-          style={{position:'relative'}}
-        >
+        <span key={index} style={{ position: 'relative' }}>
           <span className={styles.zhanwei + styleAllText}>
             {e}
             <span className={applyStyle('outerName', styles.outerName) + styleClassName + styleAllText}>{e}</span>
@@ -95,7 +88,7 @@ export default function IMSSTextbox(props: ITextboxProps) {
           </span>
         </span>
       );
-    })
+    });
     return (
       <div
         style={{
@@ -117,7 +110,6 @@ export default function IMSSTextbox(props: ITextboxProps) {
       let style_alltext = '';
       if (en.enhancedValue) {
         const data = en.enhancedValue;
-        console.log(data);
         for (const dataElem of data) {
           const { key, value } = dataElem;
           switch (key) {
@@ -240,13 +232,13 @@ export default function IMSSTextbox(props: ITextboxProps) {
                     fontSize: '200%',
                   }}
                 >
-                  {nameElementList}
+                  <span style={{ opacity: 0 }}>{nameElementList}</span>
                 </div>
                 <div
-                className={applyStyle('TextBox_showName', styles.TextBox_showName)}
-                style={{
-                  fontSize: '200%',
-                }}
+                  className={applyStyle('TextBox_showName', styles.TextBox_showName)}
+                  style={{
+                    fontSize: '200%',
+                  }}
                 >
                   {nameElementList}
                 </div>

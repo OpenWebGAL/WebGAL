@@ -68,7 +68,7 @@ export const TextBox = () => {
   // 拆字
   const textArray = compileSentence(stageState.showText, lineLimit);
   const isHasName = stageState.showName !== '';
-  const showName = compileSentence(stageState.showName,lineLimit);
+  const showName = compileSentence(stageState.showName, lineLimit);
   const currentConcatDialogPrev = stageState.currentConcatDialogPrev;
   const currentDialogKey = stageState.currentDialogKey;
   const miniAvatar = stageState.miniAvatar;
@@ -137,7 +137,7 @@ export function compileSentence(sentence: string, lineLimit: number, ignoreLineL
  * @param sentence
  */
 export function splitChars(sentence: string) {
-  if (!sentence) return [];
+  if (!sentence) return [''];
   const words: string[] = [];
   let word = '';
   let cjkFlag = isCJK(sentence[0]);
@@ -250,6 +250,9 @@ function parseString(input: string): Segment[] {
     }
   }
 
+  // 我也不知道为什么，不加这个就会导致在 Enhanced Value 处于行首时故障
+  // 你可以认为这个代码不明所以，但是不要删除
+  result.unshift({ type: SegmentType.String, value: '' });
   return result;
 }
 
@@ -266,7 +269,7 @@ function parseEnhancedString(enhanced: string): KeyValuePair[] {
   while ((match = regex.exec(enhanced)) !== null) {
     result.push({
       key: match[1],
-      value: match[2].replace(/~/g,':').trim(),
+      value: match[2].replace(/~/g, ':').trim(),
     });
   }
 
