@@ -23,6 +23,9 @@ export const TextPreview = (props: any) => {
   const isSafari = /^((?!chrome|android).)*safari/i.test(userAgent);
   const previewText = t('textPreview.text');
   const previewTextArray = compileSentence(previewText, 3);
+  const showNameText = t('textPreview.title');
+  const showNameArray = compileSentence(showNameText, 3);
+  const isHasName = showNameText !== '';
 
   const Textbox = IMSSTextbox;
 
@@ -30,7 +33,8 @@ export const TextPreview = (props: any) => {
     textArray: previewTextArray,
     isText: true,
     textDelay: textDelay,
-    showName: t('textPreview.title'),
+    isHasName: isHasName,
+    showName: showNameArray,
     currentConcatDialogPrev: '',
     fontSize: size,
     currentDialogKey: '',

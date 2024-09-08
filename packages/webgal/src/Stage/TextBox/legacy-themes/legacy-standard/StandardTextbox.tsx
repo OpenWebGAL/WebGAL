@@ -15,6 +15,7 @@ export default function StandardTextbox(props: ITextboxProps) {
     isFirefox,
     fontSize,
     miniAvatar,
+    isHasName,
     showName,
     font,
     textDuration,
@@ -38,7 +39,25 @@ export default function StandardTextbox(props: ITextboxProps) {
       WebGAL.events.textSettle.off(settleText);
     };
   }, []);
-
+  const nameElementList = showName.map((e,index)=>{
+    let prevLength = currentConcatDialogPrev.length;
+    if (index < prevLength) {
+      return (
+        <span className={styles.zhanwei}>
+          {e}
+          <span className={styles.outer}>{e}</span>
+          {isUseStroke && <span className={styles.inner}>{e}</span>}
+        </span>
+      );
+    }
+    return (
+      <span className={styles.zhanwei}>
+        {e}
+        <span className={styles.outer}>{e}</span>
+        {isUseStroke && <span className={styles.inner}>{e}</span>}
+      </span>
+    );
+  });
   const textElementList = textArray.map((e, index) => {
     // if (e === '<br />') {
     //   return <br key={`br${index}`} />;
@@ -83,7 +102,6 @@ export default function StandardTextbox(props: ITextboxProps) {
   });
 
   const padding = isHasMiniAvatar ? 500 : undefined;
-  const isHasName = showName !== '';
   let paddingTop = isHasName ? undefined : 15;
   if (textSizeState === textSize.small && !isHasName) {
     paddingTop = 35;
@@ -114,19 +132,9 @@ export default function StandardTextbox(props: ITextboxProps) {
           <div id="miniAvatar" className={styles.miniAvatarContainer}>
             {miniAvatar !== '' && <img className={styles.miniAvatarImg} alt="miniAvatar" src={miniAvatar} />}
           </div>
-          {showName !== '' && (
-            <div key={showName} className={styles.TextBox_showName} style={{ fontSize: '170%', left: padding }}>
-              {showName.split('').map((e, i) => {
-                return (
-                  <span key={e + i} style={{ position: 'relative' }}>
-                    <span className={styles.zhanwei}>
-                      {e}
-                      <span className={styles.outer}>{e}</span>
-                      {isUseStroke && <span className={styles.inner}>{e}</span>}
-                    </span>
-                  </span>
-                );
-              })}
+          {isHasName && (
+            <div className={styles.TextBox_showName} style={{ fontSize: '170%', left: padding }}>
+              {nameElementList}
             </div>
           )}
           <div

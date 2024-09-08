@@ -10,7 +10,8 @@ export interface ITextboxProps {
   isFirefox: boolean;
   fontSize: string;
   miniAvatar: string;
-  showName: string;
+  showName: EnhancedNode[][];
+  isHasName: boolean;
   font: string;
   textDuration: number;
   textSizeState: number;
