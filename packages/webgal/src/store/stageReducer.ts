@@ -16,6 +16,7 @@ import {
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import cloneDeep from 'lodash/cloneDeep';
 import { commandType } from '@/Core/controller/scene/sceneInterface';
+import { STAGE_KEYS } from '@/Core/constants';
 
 // 初始化舞台数据
 
@@ -92,6 +93,15 @@ const stageSlice = createSlice({
     },
     updateEffect: (state, action: PayloadAction<IEffect>) => {
       const { target, transform } = action.payload;
+      // 如果找不到目标，不能设置 transform
+      const activeTargets = [
+        STAGE_KEYS.BGMAIN,
+        STAGE_KEYS.FIG_C,
+        STAGE_KEYS.FIG_L,
+        STAGE_KEYS.FIG_R,
+        ...state.freeFigure.map((figure) => figure.key),
+      ];
+      if (!activeTargets.includes(target)) return;
       // 尝试找到待修改的 Effect
       const effectIndex = state.effects.findIndex((e) => e.target === target);
       if (effectIndex >= 0) {
