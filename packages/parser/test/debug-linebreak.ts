@@ -7,6 +7,7 @@ async function debug() {
   const sceneText = sceneRaw.toString();
   const result = sceneTextPreProcess(sceneText)
   console.log(result)
+  console.log(result.split('\n').length)
 }
 
 debug();
