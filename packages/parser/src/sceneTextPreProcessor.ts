@@ -17,8 +17,22 @@ export function sceneTextPreProcess(sceneText: string): string {
       // Empty line handling
       if (isInMultilineSequence) {
         // Check if the next line is a multiline line
-        const nextLine = lines[i + 1] || '';
-        if (nextLine.trim() !== '' && isMultiline(nextLine)) {
+
+        let isStillInMulti = false;
+        for (let j = i + 1; j < lines.length; j++) {
+          const lookForwardLine = lines[j] || ''
+          // 遇到正常语句了，直接中断
+          if (lookForwardLine.trim() !== '' && !isMultiline(lookForwardLine)) {
+            isStillInMulti = false;
+            break;
+          }
+          // 必须找到后面接的是参数，并且中间没有遇到任何正常语句才行
+          if (lookForwardLine.trim() !== '' && isMultiline(lookForwardLine)) {
+            isStillInMulti = true;
+            break;
+          }
+        }
+        if (isStillInMulti) {
           // Still within a multiline sequence
           processedLines.push(';_WEBGAL_LINE_BREAK_');
         } else {
