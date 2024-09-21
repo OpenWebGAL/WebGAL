@@ -7,6 +7,7 @@ import { contentParser } from './scriptParser/contentParser';
 import { assetsScanner } from './scriptParser/assetsScanner';
 import { subSceneScanner } from './scriptParser/subSceneScanner';
 import { uniqWith } from 'lodash';
+import { IWebGALStyleObj, scss2cssinjsParser } from './styleParser';
 export { SyntaxError as parserSyntaxError } from './parser';
 
 export default class SceneParser {
@@ -80,4 +81,9 @@ export default class SceneParser {
                 ''
             );
     }
+
+    public parseScssToWebgalStyleObj(scssString: string): IWebGALStyleObj {
+        return scss2cssinjsParser(scssString);
+    }
+
 }

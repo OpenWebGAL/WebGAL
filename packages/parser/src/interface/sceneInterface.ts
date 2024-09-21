@@ -1,8 +1,8 @@
 /**
  * 语句类型
  */
-import {sceneEntry} from "./runtimeInterface";
-import {fileType} from "./assets";
+import { sceneEntry } from './runtimeInterface';
+import { fileType } from './assets';
 
 export enum commandType {
   say, // 对话
@@ -36,7 +36,8 @@ export enum commandType {
   comment,
   setTransform,
   setTransition,
-  getUserInput
+  getUserInput,
+  applyStyle
 }
 
 /**
@@ -45,7 +46,7 @@ export enum commandType {
  */
 export interface arg {
   key: string; // 参数键
-  value: any; // 参数值
+  value: string | boolean | number; // 参数值
 }
 
 /**
@@ -70,14 +71,6 @@ export interface ISentence {
   args: Array<arg>; // 参数列表
   sentenceAssets: Array<IAsset>; // 语句携带的资源列表
   subScene: Array<string>; // 语句包含子场景列表
-}
-
-/**
- * 错误信息
- */
-export interface IError {
-  location: string; // 错误位置
-  message: string; // 错误消息
 }
 
 /**

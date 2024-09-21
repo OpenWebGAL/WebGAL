@@ -1,5 +1,5 @@
-import { commandType } from "../interface/sceneInterface";
-import { fileType } from "../interface/assets";
+import { commandType } from '../interface/sceneInterface';
+import { fileType } from '../interface/assets';
 
 /**
  * 解析语句内容的函数，主要作用是把文件名改为绝对地址或相对地址（根据使用情况而定）
@@ -8,9 +8,13 @@ import { fileType } from "../interface/assets";
  * @param assetSetter
  * @return {string} 解析后的语句内容
  */
-export const contentParser = (contentRaw: string, type: commandType, assetSetter: any) => {
-  if (contentRaw === "none" || contentRaw === "") {
-    return "";
+export const contentParser = (
+  contentRaw: string,
+  type: commandType,
+  assetSetter: any,
+) => {
+  if (contentRaw === 'none' || contentRaw === '') {
+    return '';
   }
   switch (type) {
     case commandType.playEffect:
@@ -41,12 +45,12 @@ export const contentParser = (contentRaw: string, type: commandType, assetSetter
 };
 
 function getChooseContent(contentRaw: string, assetSetter: any): string {
-  const chooseList = contentRaw.split("|");
+  const chooseList = contentRaw.split(/(?<!\\)\|/);
   const chooseKeyList: Array<string> = [];
   const chooseValueList: Array<string> = [];
   for (const e of chooseList) {
-    chooseKeyList.push(e.split(":")[0] ?? "");
-    chooseValueList.push(e.split(":")[1] ?? "");
+    chooseKeyList.push(e.split(/(?<!\\):/)[0] ?? '');
+    chooseValueList.push(e.split(/(?<!\\):/)[1] ?? '');
   }
   const parsedChooseList = chooseValueList.map((e) => {
     if (e.match(/\./)) {
@@ -55,10 +59,10 @@ function getChooseContent(contentRaw: string, assetSetter: any): string {
       return e;
     }
   });
-  let ret = "";
+  let ret = '';
   for (let i = 0; i < chooseKeyList.length; i++) {
     if (i !== 0) {
-      ret = ret + "|";
+      ret = ret + '|';
     }
     ret = ret + `${chooseKeyList[i]}:${parsedChooseList[i]}`;
   }
