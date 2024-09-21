@@ -19,7 +19,7 @@
     "license": "MPL-2.0",
     "dependencies": {
         "lodash": "^4.17.21",
-        "tsx": "^4.19.0"
+        "tsx": "^3.12.7"
     },
     "devDependencies": {
         "@rollup/plugin-commonjs": "^23.0.2",
