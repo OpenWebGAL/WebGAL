@@ -1,5 +1,5 @@
 {
-  "name": "webgal-parser",
+  "name": "webgal-parser-legacy",
   "version": "4.5.2",
   "description": "WebGAL script parser",
   "scripts": {
