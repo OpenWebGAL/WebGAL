@@ -1,6 +1,7 @@
 changeFigure:a.png -left
   -next
 
+
   -id=id1
 
 intro:aaa
@@ -26,8 +27,12 @@ WebGAL 是使用 Web 技术开发的引擎，因此在网页端有良好的表�
 由于这个特性，如果你将 WebGAL 部署到服务器或网页托管平台上，玩家只需要一串链接就可以开始游玩！ -v3.wav;
 setAnimation:move-front-and-back
   -target=fig-left
+
+
   -next;
+
 听起来是不是非常吸引人？ -v4.wav;
 changeFigure:none -right -next;
 setAnimation:l2c -target=fig-left -next;
-WebGAL 引擎也具有动画系统和特效系统，使用 WebGAL 开发的游戏可以拥有很好的表现效果。 -v5.wav;
+WebGAL 引擎也具有动画系统和特效系统，使用 WebGAL 开发的游戏可以拥有很好的表现效果。
+  -v5.wav;
