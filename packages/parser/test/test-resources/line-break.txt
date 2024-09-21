@@ -1,0 +1,9 @@
+changeFigure:a.png -left
+ -next
+
+ -id=id1
+
+intro:aaa
+|bbb|ccc
+|ddd
+ -next;
