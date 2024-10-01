@@ -26,4 +26,5 @@ dist-ssr
 stats.html
 packages/webgal/public/game.old
 packages/parser/build
+packages/parser_legacy/build
 packages/webgal/src/Core/util/pixiPerformManager/initRegister.ts
