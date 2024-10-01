@@ -192,11 +192,12 @@ function removeFig(figObj: IStageObject, enterTikerKey: string, effects: IEffect
     return;
   }
   const oldFigKey = figObj.key;
-  figObj.key = figObj.key + '-off';
-  WebGAL.gameplay.pixiStage?.removeStageObjectByKey(oldFigKey);
+  const figLeaveAniKey = oldFigKey + '-off';
+  figObj.key = oldFigKey + String(new Date().getTime()) + '-off';
   const figKey = figObj.key;
+  WebGAL.gameplay.pixiStage?.removeStageObjectByKey(oldFigKey);
   const leaveKey = figKey + '-softoff';
-  const { duration, animation } = getEnterExitAnimation(figKey, 'exit');
+  const { duration, animation } = getEnterExitAnimation(figLeaveAniKey, 'exit', false, figKey);
   WebGAL.gameplay.pixiStage!.registerPresetAnimation(animation, leaveKey, figKey, effects);
   setTimeout(() => {
     WebGAL.gameplay.pixiStage?.removeAnimation(leaveKey);

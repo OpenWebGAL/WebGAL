@@ -40,13 +40,15 @@ export function useSetBg(stageState: IStageState) {
 function removeBg(bgObject: IStageObject) {
   WebGAL.gameplay.pixiStage?.removeAnimationWithSetEffects('bg-main-softin');
   const oldBgKey = bgObject.key;
-  bgObject.key = 'bg-main-off';
+  bgObject.key = 'bg-main-off' + String(new Date().getTime());
+  const bgKey = bgObject.key;
+  const bgAniKey = bgObject.key + '-softoff';
   WebGAL.gameplay.pixiStage?.removeStageObjectByKey(oldBgKey);
-  const { duration, animation } = getEnterExitAnimation('bg-main-off', 'exit', true);
-  WebGAL.gameplay.pixiStage!.registerAnimation(animation, 'bg-main-softoff', 'bg-main-off');
+  const { duration, animation } = getEnterExitAnimation('bg-main-off', 'exit', true, bgKey);
+  WebGAL.gameplay.pixiStage!.registerAnimation(animation, bgAniKey, bgKey);
   setTimeout(() => {
-    WebGAL.gameplay.pixiStage?.removeAnimation('bg-main-softoff');
-    WebGAL.gameplay.pixiStage?.removeStageObjectByKey('bg-main-off');
+    WebGAL.gameplay.pixiStage?.removeAnimation(bgAniKey);
+    WebGAL.gameplay.pixiStage?.removeStageObjectByKey(bgKey);
   }, duration);
 }
 

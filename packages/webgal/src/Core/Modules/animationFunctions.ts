@@ -35,10 +35,12 @@ export function getAnimateDuration(animationName: string) {
   return 0;
 }
 
+// eslint-disable-next-line max-params
 export function getEnterExitAnimation(
   target: string,
   type: 'enter' | 'exit',
   isBg = false,
+  realTarget?: string, // 用于立绘和背景移除时，以当前时间打上特殊标记
 ): {
   duration: number;
   animation: {
@@ -57,11 +59,11 @@ export function getEnterExitAnimation(
       setStartState: () => void;
       tickerFunc: (delta: number) => void;
       setEndState: () => void;
-    } | null = generateUniversalSoftInAnimationObj(target, duration);
+    } | null = generateUniversalSoftInAnimationObj(realTarget ?? target, duration);
     const animarionName = WebGAL.animationManager.nextEnterAnimationName.get(target);
     if (animarionName) {
       logger.debug('取代默认进入动画', target);
-      animation = getAnimationObject(animarionName, target, getAnimateDuration(animarionName));
+      animation = getAnimationObject(animarionName, realTarget ?? target, getAnimateDuration(animarionName));
       duration = getAnimateDuration(animarionName);
       // 用后重置
       WebGAL.animationManager.nextEnterAnimationName.delete(target);
@@ -77,11 +79,11 @@ export function getEnterExitAnimation(
       setStartState: () => void;
       tickerFunc: (delta: number) => void;
       setEndState: () => void;
-    } | null = generateUniversalSoftOffAnimationObj(target, duration);
+    } | null = generateUniversalSoftOffAnimationObj(realTarget ?? target, duration);
     const animarionName = WebGAL.animationManager.nextExitAnimationName.get(target);
     if (animarionName) {
       logger.debug('取代默认退出动画', target);
-      animation = getAnimationObject(animarionName, target, getAnimateDuration(animarionName));
+      animation = getAnimationObject(animarionName, realTarget ?? target, getAnimateDuration(animarionName));
       duration = getAnimateDuration(animarionName);
       // 用后重置
       WebGAL.animationManager.nextExitAnimationName.delete(target);
