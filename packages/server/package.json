@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "cloudlogjs": "^1.0.11",
-    "express": "^4.18.1",
+    "express": "^4.20.0",
     "open": "^8.4.0"
   }
 }
