@@ -34,6 +34,7 @@ export function changeFigure(sentence: ISentence): IPerform {
   let mouthAnimationKey: any = 'mouthAnimation';
   let eyesAnimationKey: any = 'blinkAnimation';
   let overrideBounds = '';
+  let zIndex = -1;
   const dispatch = webgalStore.dispatch;
 
   for (const e of sentence.args) {
@@ -96,6 +97,9 @@ export function changeFigure(sentence: ISentence): IPerform {
       case 'none':
         content = '';
         break;
+      case 'zIndex':
+        zIndex = Number(e.value);
+        break;
       default:
         break;
     }
@@ -157,6 +161,9 @@ export function changeFigure(sentence: ISentence): IPerform {
     const deleteKey2 = `${key}`;
     webgalStore.dispatch(stageActions.removeEffectByTargetId(deleteKey));
     webgalStore.dispatch(stageActions.removeEffectByTargetId(deleteKey2));
+    // 重设 figureMetaData，这里是 zIndex，实际上任何键都可以，因为整体是移除那条记录
+    dispatch(stageActions.setFigureMetaData([deleteKey, 'zIndex', 0, true]));
+    dispatch(stageActions.setFigureMetaData([deleteKey2, 'zIndex', 0, true]));
   }
   const setAnimationNames = (key: string, sentence: ISentence) => {
     // 处理 transform 和 默认 transform
@@ -212,10 +219,8 @@ export function changeFigure(sentence: ISentence): IPerform {
     }
   };
   if (isFreeFigure) {
-    const currentFreeFigures = webgalStore.getState().stage.freeFigure;
-
     /**
-     * 重设
+     * 下面的代码是设置自由立绘的
      */
     const freeFigureItem: IFreeFigure = { key, name: content, basePosition: pos };
     setAnimationNames(key, sentence);
@@ -227,8 +232,14 @@ export function changeFigure(sentence: ISentence): IPerform {
     if (expression) {
       dispatch(stageActions.setLive2dExpression({ target: key, expression }));
     }
+    if (zIndex > 0) {
+      dispatch(stageActions.setFigureMetaData([key, 'zIndex', zIndex, false]));
+    }
     dispatch(stageActions.setFreeFigureByKey(freeFigureItem));
   } else {
+    /**
+     * 下面的代码是设置与位置关联的立绘的
+     */
     const positionMap = {
       center: 'fig-center',
       left: 'fig-left',
@@ -249,6 +260,9 @@ export function changeFigure(sentence: ISentence): IPerform {
     }
     if (expression) {
       dispatch(stageActions.setLive2dExpression({ target: key, expression }));
+    }
+    if (zIndex > 0) {
+      dispatch(stageActions.setFigureMetaData([key, 'zIndex', zIndex, false]));
     }
     dispatch(setStage({ key: dispatchMap[pos], value: content }));
   }

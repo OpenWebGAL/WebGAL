@@ -3,7 +3,7 @@ import { v4 as uuid } from 'uuid';
 import { webgalStore } from '@/store/store';
 import { setStage, stageActions } from '@/store/stageReducer';
 import cloneDeep from 'lodash/cloneDeep';
-import { IEffect, IFigureAssociatedAnimation } from '@/store/stageInterface';
+import { IEffect, IFigureAssociatedAnimation, IFigureMetadata } from '@/store/stageInterface';
 import { logger } from '@/Core/util/logger';
 import { isIOS } from '@/Core/initializeScript';
 import { WebGALPixiContainer } from '@/Core/controller/stage/pixi/WebGALPixiContainer';
@@ -125,6 +125,7 @@ export default class PixiStage {
     this.effectsContainer = new PIXI.Container();
     this.effectsContainer.zIndex = 3;
     this.figureContainer = new PIXI.Container();
+    this.figureContainer.sortableChildren = true; // 允许立绘启用 z-index
     this.figureContainer.zIndex = 2;
     this.backgroundContainer = new PIXI.Container();
     this.backgroundContainer.zIndex = 0;
@@ -493,6 +494,12 @@ export default class PixiStage {
       this.removeStageObjectByKey(key);
     }
 
+    const metadata = this.getFigureMetadataByKey(key);
+    if (metadata) {
+      if (metadata.zIndex) {
+        thisFigureContainer.zIndex = metadata.zIndex;
+      }
+    }
     // 挂载
     this.figureContainer.addChild(thisFigureContainer);
     const figureUuid = uuid();
@@ -578,6 +585,12 @@ export default class PixiStage {
       this.removeStageObjectByKey(key);
     }
 
+    const metadata = this.getFigureMetadataByKey(key);
+    if (metadata) {
+      if (metadata.zIndex) {
+        thisFigureContainer.zIndex = metadata.zIndex;
+      }
+    }
     // 挂载
     this.figureContainer.addChild(thisFigureContainer);
     const figureUuid = uuid();
@@ -673,6 +686,12 @@ export default class PixiStage {
   //     this.removeStageObjectByKey(key);
   //   }
   //
+  //   const metadata = this.getFigureMetadataByKey(key);
+  //   if (metadata) {
+  //     if (metadata.zIndex) {
+  //       thisFigureContainer.zIndex = metadata.zIndex;
+  //     }
+  //   }
   //   // 挂载
   //   this.figureContainer.addChild(thisFigureContainer);
   //   this.figureObjects.push({
@@ -977,6 +996,11 @@ export default class PixiStage {
 
   private getExtName(url: string) {
     return url.split('.').pop() ?? 'png';
+  }
+
+  private getFigureMetadataByKey(key: string): IFigureMetadata | undefined {
+    console.log(key, webgalStore.getState().stage.figureMetaData);
+    return webgalStore.getState().stage.figureMetaData[key];
   }
 }
 
