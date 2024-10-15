@@ -5,6 +5,7 @@
 
 import {
   IEffect,
+  IFigureMetadata,
   IFreeFigure,
   ILive2DExpression,
   ILive2DMotion,
@@ -57,6 +58,7 @@ export const initState: IStageState = {
   enableFilm: '',
   isDisableTextbox: false,
   replacedUIlable: {},
+  figureMetaData: {},
 };
 
 /**
@@ -192,6 +194,24 @@ const stageSlice = createSlice({
     },
     replaceUIlable: (state, action: PayloadAction<[string, string]>) => {
       state.replacedUIlable[action.payload[0]] = action.payload[1];
+    },
+    /**
+     * 设置 figure 元数据 [立绘 key, metadata key, 值, 是否重设]
+     * @param state
+     * @param action
+     */
+    setFigureMetaData: (state, action: PayloadAction<[string, keyof IFigureMetadata, any, undefined | boolean]>) => {
+      // 立绘退出，重设
+      if (action.payload[3]) {
+        if (state.figureMetaData[action.payload[0]]) delete state.figureMetaData[action.payload[0]];
+      } else {
+        console.log('yeah');
+        // 初始化对象
+        if (!state.figureMetaData[action.payload[0]]) {
+          state.figureMetaData[action.payload[0]] = {};
+        }
+        state.figureMetaData[action.payload[0]][action.payload[1]] = action.payload[2];
+      }
     },
   },
 });

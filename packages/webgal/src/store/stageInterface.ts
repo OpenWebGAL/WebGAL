@@ -116,6 +116,12 @@ export interface ILive2DExpression {
   expression: string;
 }
 
+export interface IFigureMetadata {
+  zIndex?: number;
+}
+
+type figureMetaData = Record<string, IFigureMetadata>;
+
 /**
  * @interface IStageState 游戏舞台数据接口
  */
@@ -159,6 +165,7 @@ export interface IStageState {
   enableFilm: string;
   isDisableTextbox: boolean;
   replacedUIlable: Record<string, string>;
+  figureMetaData: figureMetaData;
 }
 
 /**
