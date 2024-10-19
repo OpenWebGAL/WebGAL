@@ -9,7 +9,7 @@ import { fileType } from './interface/assets';
 import { IAsset } from './interface/sceneInterface';
 import { sceneParser } from './sceneParser';
 import { IWebGALStyleObj, scss2cssinjsParser } from "./styleParser";
-import { sceneTextPreProcess } from "@/sceneTextPreProcessor";
+import { sceneTextPreProcess } from "./sceneTextPreProcessor";
 
 export default class SceneParser {
   private readonly SCRIPT_CONFIG_MAP: ConfigMap;
@@ -77,4 +77,4 @@ export default class SceneParser {
 }
 
 export { ADD_NEXT_ARG_LIST, SCRIPT_CONFIG };
-export { sceneTextPreProcess }
+export { sceneTextPreProcess };
