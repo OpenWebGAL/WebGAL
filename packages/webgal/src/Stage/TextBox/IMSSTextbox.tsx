@@ -4,6 +4,7 @@ import { WebGAL } from '@/Core/WebGAL';
 import { ITextboxProps } from './types';
 import useApplyStyle from '@/hooks/useApplyStyle';
 import { css } from '@emotion/css';
+import { textSize } from '@/store/userDataInterface';
 
 export default function IMSSTextbox(props: ITextboxProps) {
   const {
@@ -22,6 +23,7 @@ export default function IMSSTextbox(props: ITextboxProps) {
     textDuration,
     isUseStroke,
     textboxOpacity,
+    textSizeState,
   } = props;
 
   const applyStyle = useApplyStyle('Stage/TextBox/textbox.scss');
@@ -251,6 +253,7 @@ export default function IMSSTextbox(props: ITextboxProps) {
                 flexFlow: 'column',
                 overflow: 'hidden',
                 paddingLeft: '0.1em',
+                lineHeight: textSizeState === textSize.medium ? '2.2em' : '2em', // 不加的话上半拼音可能会被截断，同时保持排版整齐
               }}
             >
               {textElementList}
