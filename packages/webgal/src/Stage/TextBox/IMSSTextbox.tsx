@@ -4,6 +4,7 @@ import { WebGAL } from '@/Core/WebGAL';
 import { ITextboxProps } from './types';
 import useApplyStyle from '@/hooks/useApplyStyle';
 import { css } from '@emotion/css';
+import { textSize } from '@/store/userDataInterface';
 
 export default function IMSSTextbox(props: ITextboxProps) {
   const {
@@ -22,6 +23,7 @@ export default function IMSSTextbox(props: ITextboxProps) {
     textDuration,
     isUseStroke,
     textboxOpacity,
+    textSizeState,
   } = props;
 
   const applyStyle = useApplyStyle('Stage/TextBox/textbox.scss');
@@ -175,7 +177,6 @@ export default function IMSSTextbox(props: ITextboxProps) {
           wordBreak: isSafari || props.isFirefox ? 'break-all' : undefined,
           display: isSafari ? 'flex' : undefined,
           flexWrap: isSafari ? 'wrap' : undefined,
-          height: '2.2em', //这里是为了让每一行都有一个固定的高度，不然会出现高度不一致的情况
         }}
         key={`text-line-${index}`}
       >
@@ -252,7 +253,7 @@ export default function IMSSTextbox(props: ITextboxProps) {
                 flexFlow: 'column',
                 overflow: 'hidden',
                 paddingLeft: '0.1em',
-                lineHeight: '3em', //不加的话上半拼音可能会被截断，同时保持排版整齐
+                lineHeight: textSizeState === textSize.medium ? '2.2em' : '2em', // 不加的话上半拼音可能会被截断，同时保持排版整齐
               }}
             >
               {textElementList}
