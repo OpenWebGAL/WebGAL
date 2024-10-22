@@ -71,6 +71,8 @@ $height: 330px;
   position: relative;
   animation: TextDelayShow 1000ms ease-out forwards;
   opacity: 0;
+  display: inline-flex;
+  align-content: space-between
 }
 
 
