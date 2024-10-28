@@ -3,7 +3,7 @@ import { v4 as uuid } from 'uuid';
 import { webgalStore } from '@/store/store';
 import { setStage, stageActions } from '@/store/stageReducer';
 import cloneDeep from 'lodash/cloneDeep';
-import { IEffect, IFigureAssociatedAnimation } from '@/store/stageInterface';
+import { IEffect, IFigureAssociatedAnimation, IFigureMetadata } from '@/store/stageInterface';
 import { logger } from '@/Core/util/logger';
 import { isIOS } from '@/Core/initializeScript';
 import { WebGALPixiContainer } from '@/Core/controller/stage/pixi/WebGALPixiContainer';
@@ -12,7 +12,7 @@ import 'pixi-spine'; // Do this once at the very start of your code. This regist
 import { Spine } from 'pixi-spine';
 import { SCREEN_CONSTANTS } from '@/Core/util/constants';
 // import { figureCash } from '@/Core/gameScripts/vocal/conentsCash'; // 如果要使用 Live2D，取消这里的注释
-// import { Live2DModel, SoundManager } from 'pixi-live2d-display'; // 如果要使用 Live2D，取消这里的注释
+// import { Live2DModel, SoundManager } from 'pixi-live2d-display-webgal'; // 如果要使用 Live2D，取消这里的注释
 
 export interface IAnimationObject {
   setStartState: Function;
@@ -125,6 +125,7 @@ export default class PixiStage {
     this.effectsContainer = new PIXI.Container();
     this.effectsContainer.zIndex = 3;
     this.figureContainer = new PIXI.Container();
+    this.figureContainer.sortableChildren = true; // 允许立绘启用 z-index
     this.figureContainer.zIndex = 2;
     this.backgroundContainer = new PIXI.Container();
     this.backgroundContainer.zIndex = 0;
@@ -493,6 +494,12 @@ export default class PixiStage {
       this.removeStageObjectByKey(key);
     }
 
+    const metadata = this.getFigureMetadataByKey(key);
+    if (metadata) {
+      if (metadata.zIndex) {
+        thisFigureContainer.zIndex = metadata.zIndex;
+      }
+    }
     // 挂载
     this.figureContainer.addChild(thisFigureContainer);
     const figureUuid = uuid();
@@ -578,6 +585,12 @@ export default class PixiStage {
       this.removeStageObjectByKey(key);
     }
 
+    const metadata = this.getFigureMetadataByKey(key);
+    if (metadata) {
+      if (metadata.zIndex) {
+        thisFigureContainer.zIndex = metadata.zIndex;
+      }
+    }
     // 挂载
     this.figureContainer.addChild(thisFigureContainer);
     const figureUuid = uuid();
@@ -673,6 +686,12 @@ export default class PixiStage {
   //     this.removeStageObjectByKey(key);
   //   }
   //
+  //   const metadata = this.getFigureMetadataByKey(key);
+  //   if (metadata) {
+  //     if (metadata.zIndex) {
+  //       thisFigureContainer.zIndex = metadata.zIndex;
+  //     }
+  //   }
   //   // 挂载
   //   this.figureContainer.addChild(thisFigureContainer);
   //   this.figureObjects.push({
@@ -689,7 +708,23 @@ export default class PixiStage {
   //   const setup = () => {
   //     if (thisFigureContainer) {
   //       (async function () {
-  //         const models = await Promise.all([Live2DModel.from(jsonPath, { autoInteract: false })]);
+  //         let overrideBounds: [number, number, number, number] = [0, 0, 0, 0];
+  //         const mot = webgalStore.getState().stage.live2dMotion.find((e) => e.target === key);
+  //         if (mot?.overrideBounds) {
+  //           overrideBounds = mot.overrideBounds;
+  //         }
+  //         console.log(overrideBounds);
+  //         const models = await Promise.all([
+  //           Live2DModel.from(jsonPath, {
+  //             autoInteract: false,
+  //             overWriteBounds: {
+  //               x0: overrideBounds[0],
+  //               y0: overrideBounds[1],
+  //               x1: overrideBounds[2],
+  //               y1: overrideBounds[3],
+  //             },
+  //           }),
+  //         ]);
   //
   //         models.forEach((model) => {
   //           const scaleX = stageWidth / model.width;
@@ -961,6 +996,11 @@ export default class PixiStage {
 
   private getExtName(url: string) {
     return url.split('.').pop() ?? 'png';
+  }
+
+  private getFigureMetadataByKey(key: string): IFigureMetadata | undefined {
+    console.log(key, webgalStore.getState().stage.figureMetaData);
+    return webgalStore.getState().stage.figureMetaData[key];
   }
 }
 

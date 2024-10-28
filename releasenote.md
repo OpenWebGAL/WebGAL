@@ -8,36 +8,21 @@
 
 #### 新功能
 
-新增参数，用于控制 “在本条语句的演出结束后，执行下一条”。
+文本拓展语法对角色名称生效
+
+模拟口型同步
+
+允许修改 Live2D 绘制范围
+
+允许设定立绘的 z-index
 
 #### 修复
 
-4.5.7 修复：无法从状态中获取到对应 key 的变量时，返回 {key} 以避免变换不生效
+修复了文本增强语法在首行不生效的问题
 
-修复了 `-concat` 选项动画在新行中的错误。
+优化为立绘应用效果的性能
 
-修复了样式定义时 ruby 不显示的问题。
-
-修复了 intro 的 hold 问题。
-
-修复了 say 延迟计算问题。
-
-修复了 restoreScene 中的竞争状态。
-
-修复了删除已关闭的自由图形的问题。
-
-修复了变量值处理的问题。
-
-修复了 setVar 进行 compile 字符串时异常的问题。
-
-增强了 getValueFromState。
-
-调整了对 `style-alltext` 键的正则匹配，使其可以触发文本框的样式修改。
-
-修复了变量正则表达式的问题。
-
-修复了 logo 图片的问题。
-
+优化立绘进出场效果的性能
 
 <!-- English Translation -->
 ## Release Notes
@@ -50,36 +35,21 @@
 
 #### New Features
 
-Added a new parameter to control "execute the next statement after the performance of this statement is finished".
+Text extension syntax now affects character names
 
-#### Bug Fixes
+Simulate lip sync
 
-4.5.7 Fix: When the corresponding key variable cannot be obtained from the state, return {key} to avoid ineffective transformation.
+Allow modification of Live2D drawing range
 
-Fixed an animation error with the `-concat` option in a new line.
+Allow setting the z-index of the character sprite
 
-Fixed an issue where ruby was not displayed when a style was defined.
+#### Fixes
 
-Fixed the hold problem of intro.
+Fixed the issue where text enhancement syntax did not take effect on the first line
 
-Fixed the say delay calculation problem.
+Optimized the performance of applying effects to character sprites
 
-Fixed a race condition in restoreScene.
-
-Fixed an issue with deleting closed free figures.
-
-Fixed the variable value handling problem.
-
-Fixed an exception when setVar compiled a string.
-
-Enhanced getValueFromState.
-
-Adjusted the regular expression matching for the `style-alltext` key to allow it to trigger text box style modifications.
-
-Fixed the variable regular expression problem.
-
-Fixed the logo image issue.
-
+Optimized the performance of character sprite entry and exit effects
 
 <!-- Japanese Translation -->
 ## リリースノート
@@ -92,32 +62,18 @@ Fixed the logo image issue.
 
 #### 新機能
 
-「このステートメントの演出終了後に次のステートメントを実行する」を制御するための新しいパラメータが追加されました。
+テキスト拡張文法がキャラクタ名に有効になった
+
+口パク同期
+
+Live2D の描画範囲変更が可能になった
+
+立ち絵の z-index 設定が可能になった
 
 #### 修正
 
-4.5.7 修正：状態から対応する key の変数が取得できない場合、{key} を返すようにし、変換が無効になるのを回避しました
+テキスト拡張文法が先頭行に有効にならない問題を修正
 
-`-concat` オプションのアニメーションが新しい行でエラーになる問題を修正しました。
+立ち絵にエフェクトを適用する時のパフォーマンスを最適化
 
-スタイルが定義されているときにルビが表示されない問題を修正しました。
-
-イントロのホールド問題を修正しました。
-
-say 遅延計算の問題を修正しました。
-
-restoreScene の競合状態を修正しました。
-
-閉じたフリーフィギュアを削除する際の問題を修正しました。
-
-変数値処理の問題を修正しました。
-
-setVar が文字列をコンパイルする際の例外を修正しました。
-
-getValueFromState を強化しました。
-
-`style-alltext` キーの正規表現マッチングを調整し、テキストボックスのスタイル変更をトリガーできるようにしました。
-
-変数正規表現の問題を修正しました。
-
-ロゴ画像の問題を修正しました。
+立ち絵の登場・退場エフェクトのパフォーマンスを最適化
