@@ -78,6 +78,8 @@ $height: 330px;
 
 .outer {
   position: absolute;
+  left:0;
+  top:0;
   white-space: nowrap;
   //background-image: linear-gradient(rgba(255, 255, 255, 1) 0%, rgb(225, 237, 255) 100%);
   background-image: linear-gradient(#0B346E 0%,
@@ -95,6 +97,8 @@ $height: 330px;
 .inner {
   white-space: nowrap;
   position: absolute;
+  left:0;
+  top:0;
   -webkit-text-stroke: 0.1em rgba(255, 255, 255, 1);
   z-index: 1;
   //text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.75);
