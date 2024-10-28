@@ -4,6 +4,7 @@ import { WebGAL } from '@/Core/WebGAL';
 import { ITextboxProps } from './types';
 import useApplyStyle from '@/hooks/useApplyStyle';
 import { css } from '@emotion/css';
+import { textSize } from '@/store/userDataInterface';
 
 export default function IMSSTextbox(props: ITextboxProps) {
   const {
@@ -16,11 +17,13 @@ export default function IMSSTextbox(props: ITextboxProps) {
     isFirefox: boolean,
     fontSize,
     miniAvatar,
+    isHasName,
     showName,
     font,
     textDuration,
     isUseStroke,
     textboxOpacity,
+    textSizeState,
   } = props;
 
   const applyStyle = useApplyStyle('Stage/TextBox/textbox.scss');
@@ -39,8 +42,68 @@ export default function IMSSTextbox(props: ITextboxProps) {
       WebGAL.events.textSettle.off(settleText);
     };
   }, []);
-
   let allTextIndex = 0;
+  const nameElementList = showName.map((line, index) => {
+    const textline = line.map((en, index) => {
+      const e = en.reactNode;
+      let style = '';
+      let tips = '';
+      let style_alltext = '';
+      let isEnhanced = false;
+      if (en.enhancedValue) {
+        isEnhanced = true;
+        const data = en.enhancedValue;
+        for (const dataElem of data) {
+          const { key, value } = dataElem;
+          switch (key) {
+            case 'style':
+              style = value;
+              break;
+            case 'tips':
+              tips = value;
+              break;
+            case 'style-alltext':
+              style_alltext = value;
+              break;
+          }
+        }
+      }
+      const styleClassName = ' ' + css(style, { label: 'showname' });
+      const styleAllText = ' ' + css(style_alltext, { label: 'showname' });
+      if (isEnhanced) {
+        return (
+          <span key={index} style={{ position: 'relative' }}>
+            <span className={styles.zhanwei + styleAllText}>
+              {e}
+              <span className={applyStyle('outerName', styles.outerName) + styleClassName + styleAllText}>{e}</span>
+              {isUseStroke && <span className={applyStyle('innerName', styles.innerName) + styleAllText}>{e}</span>}
+            </span>
+          </span>
+        );
+      }
+      return (
+        <span key={index} style={{ position: 'relative' }}>
+          <span className={styles.zhanwei + styleAllText}>
+            {e}
+            <span className={applyStyle('outerName', styles.outerName) + styleClassName + styleAllText}>{e}</span>
+            {isUseStroke && <span className={applyStyle('innerName', styles.innerName) + styleAllText}>{e}</span>}
+          </span>
+        </span>
+      );
+    });
+    return (
+      <div
+        style={{
+          wordBreak: isSafari || props.isFirefox ? 'break-all' : undefined,
+          display: isSafari ? 'flex' : undefined,
+          flexWrap: isSafari ? 'wrap' : undefined,
+        }}
+        key={`text-line-${index}`}
+      >
+        {textline}
+      </div>
+    );
+  });
   const textElementList = textArray.map((line, index) => {
     const textLine = line.map((en, index) => {
       const e = en.reactNode;
@@ -49,7 +112,6 @@ export default function IMSSTextbox(props: ITextboxProps) {
       let style_alltext = '';
       if (en.enhancedValue) {
         const data = en.enhancedValue;
-        console.log(data);
         for (const dataElem of data) {
           const { key, value } = dataElem;
           switch (key) {
@@ -159,7 +221,7 @@ export default function IMSSTextbox(props: ITextboxProps) {
                 <img className={applyStyle('miniAvatarImg', styles.miniAvatarImg)} alt="miniAvatar" src={miniAvatar} />
               )}
             </div>
-            {showName !== '' && (
+            {isHasName && (
               <>
                 <div
                   className={
@@ -172,38 +234,15 @@ export default function IMSSTextbox(props: ITextboxProps) {
                     fontSize: '200%',
                   }}
                 >
-                  <div style={{ opacity: 0 }}>
-                    {showName.split('').map((e, i) => {
-                      return (
-                        <span key={e + i} style={{ position: 'relative' }}>
-                          <span className={styles.zhanwei}>
-                            {e}
-                            <span className={applyStyle('outerName', styles.outerName)}>{e}</span>
-                            {isUseStroke && <span className={applyStyle('innerName', styles.innerName)}>{e}</span>}
-                          </span>
-                        </span>
-                      );
-                    })}
-                  </div>
+                  <span style={{ opacity: 0 }}>{nameElementList}</span>
                 </div>
                 <div
-                  key={showName}
                   className={applyStyle('TextBox_showName', styles.TextBox_showName)}
                   style={{
                     fontSize: '200%',
                   }}
                 >
-                  {showName.split('').map((e, i) => {
-                    return (
-                      <span key={e + i} style={{ position: 'relative' }}>
-                        <span className={styles.zhanwei}>
-                          {e}
-                          <span className={applyStyle('outerName', styles.outerName)}>{e}</span>
-                          {isUseStroke && <span className={applyStyle('innerName', styles.innerName)}>{e}</span>}
-                        </span>
-                      </span>
-                    );
-                  })}
+                  {nameElementList}
                 </div>
               </>
             )}
@@ -214,6 +253,7 @@ export default function IMSSTextbox(props: ITextboxProps) {
                 flexFlow: 'column',
                 overflow: 'hidden',
                 paddingLeft: '0.1em',
+                lineHeight: textSizeState === textSize.medium ? '2.2em' : '2em', // 不加的话上半拼音可能会被截断，同时保持排版整齐
               }}
             >
               {textElementList}

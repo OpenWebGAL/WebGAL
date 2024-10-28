@@ -33,6 +33,8 @@ export function changeFigure(sentence: ISentence): IPerform {
   let animationFlag: any = '';
   let mouthAnimationKey: any = 'mouthAnimation';
   let eyesAnimationKey: any = 'blinkAnimation';
+  let overrideBounds = '';
+  let zIndex = -1;
   const dispatch = webgalStore.dispatch;
 
   for (const e of sentence.args) {
@@ -63,6 +65,9 @@ export function changeFigure(sentence: ISentence): IPerform {
       case 'motion':
         motion = e.value.toString();
         break;
+      case 'bounds':
+        overrideBounds = String(e.value);
+        break;
       case 'expression':
         expression = e.value.toString();
         break;
@@ -91,6 +96,9 @@ export function changeFigure(sentence: ISentence): IPerform {
         break;
       case 'none':
         content = '';
+        break;
+      case 'zIndex':
+        zIndex = Number(e.value);
         break;
       default:
         break;
@@ -153,6 +161,9 @@ export function changeFigure(sentence: ISentence): IPerform {
     const deleteKey2 = `${key}`;
     webgalStore.dispatch(stageActions.removeEffectByTargetId(deleteKey));
     webgalStore.dispatch(stageActions.removeEffectByTargetId(deleteKey2));
+    // 重设 figureMetaData，这里是 zIndex，实际上任何键都可以，因为整体是移除那条记录
+    dispatch(stageActions.setFigureMetaData([deleteKey, 'zIndex', 0, true]));
+    dispatch(stageActions.setFigureMetaData([deleteKey2, 'zIndex', 0, true]));
   }
   const setAnimationNames = (key: string, sentence: ISentence) => {
     // 处理 transform 和 默认 transform
@@ -208,21 +219,27 @@ export function changeFigure(sentence: ISentence): IPerform {
     }
   };
   if (isFreeFigure) {
-    const currentFreeFigures = webgalStore.getState().stage.freeFigure;
-
     /**
-     * 重设
+     * 下面的代码是设置自由立绘的
      */
     const freeFigureItem: IFreeFigure = { key, name: content, basePosition: pos };
     setAnimationNames(key, sentence);
-    if (motion) {
-      dispatch(stageActions.setLive2dMotion({ target: key, motion }));
+    if (motion || overrideBounds) {
+      dispatch(
+        stageActions.setLive2dMotion({ target: key, motion, overrideBounds: getOverrideBoundsArr(overrideBounds) }),
+      );
     }
     if (expression) {
       dispatch(stageActions.setLive2dExpression({ target: key, expression }));
     }
+    if (zIndex > 0) {
+      dispatch(stageActions.setFigureMetaData([key, 'zIndex', zIndex, false]));
+    }
     dispatch(stageActions.setFreeFigureByKey(freeFigureItem));
   } else {
+    /**
+     * 下面的代码是设置与位置关联的立绘的
+     */
     const positionMap = {
       center: 'fig-center',
       left: 'fig-left',
@@ -236,11 +253,16 @@ export function changeFigure(sentence: ISentence): IPerform {
 
     key = positionMap[pos];
     setAnimationNames(key, sentence);
-    if (motion) {
-      dispatch(stageActions.setLive2dMotion({ target: key, motion }));
+    if (motion || overrideBounds) {
+      dispatch(
+        stageActions.setLive2dMotion({ target: key, motion, overrideBounds: getOverrideBoundsArr(overrideBounds) }),
+      );
     }
     if (expression) {
       dispatch(stageActions.setLive2dExpression({ target: key, expression }));
+    }
+    if (zIndex > 0) {
+      dispatch(stageActions.setFigureMetaData([key, 'zIndex', zIndex, false]));
     }
     dispatch(setStage({ key: dispatchMap[pos], value: content }));
   }
@@ -254,4 +276,17 @@ export function changeFigure(sentence: ISentence): IPerform {
     blockingAuto: () => false,
     stopTimeout: undefined, // 暂时不用，后面会交给自动清除
   };
+}
+
+function getOverrideBoundsArr(raw: string): undefined | [number, number, number, number] {
+  const parseOverrideBoundsResult = raw.split(',').map((e) => Number(e));
+  let isPass = true;
+  parseOverrideBoundsResult.forEach((e) => {
+    if (isNaN(e)) {
+      isPass = false;
+    }
+  });
+  isPass = isPass && parseOverrideBoundsResult.length === 4;
+  if (isPass) return parseOverrideBoundsResult as [number, number, number, number];
+  else return undefined;
 }
