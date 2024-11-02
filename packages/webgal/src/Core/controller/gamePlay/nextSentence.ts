@@ -70,7 +70,7 @@ export const nextSentence = () => {
     if (!e.isHoldOn) {
       if (e.goNextWhenOver) {
         isGoNext = true;
-      }
+      } // 先检查是不是要跳过收集
       if (!e.skipNextCollect) {
         // 由于提前结束使用的不是 unmountPerform 标准 API，所以不会触发两次 nextSentence
         e.stopFunction();
