@@ -124,6 +124,19 @@ const stageSlice = createSlice({
       }
     },
     addPerform: (state, action: PayloadAction<IRunPerform>) => {
+      // 先检查是否有重复的，全部干掉
+      const dupPerformIndex = state.PerformList.findIndex((p) => p.id === action.payload.id);
+      if (dupPerformIndex > -1) {
+        const dupId = action.payload.id;
+        // 删除全部重复演出
+        for (let i = 0; i < state.PerformList.length; i++) {
+          const performItem: IRunPerform = state.PerformList[i];
+          if (performItem.id === dupId) {
+            state.PerformList.splice(i, 1);
+            i--;
+          }
+        }
+      }
       state.PerformList.push(action.payload);
     },
     removePerformByName: (state, action: PayloadAction<string>) => {
