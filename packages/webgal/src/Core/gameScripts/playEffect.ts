@@ -56,7 +56,7 @@ export const playEffect = (sentence: ISentence): IPerform => {
         const seVol = mainVol * 0.01 * (userDataState.optionData?.seVolume ?? 100) * 0.01 * volume * 0.01;
         seElement.volume = seVol;
         seElement.currentTime = 0;
-        const perform = {
+        const perform: IPerform = {
           performName: performInitName,
           duration: 1000 * 60 * 60,
           isHoldOn: isLoop,
@@ -64,6 +64,7 @@ export const playEffect = (sentence: ISentence): IPerform => {
           stopFunction: () => {
             // 演出已经结束了，所以不用播放效果音了
             seElement.pause();
+            seElement.remove();
           },
           blockingNext: () => false,
           blockingAuto: () => {
