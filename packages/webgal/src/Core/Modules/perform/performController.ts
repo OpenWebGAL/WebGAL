@@ -5,6 +5,7 @@ import cloneDeep from 'lodash/cloneDeep';
 import { resetStageState, stageActions } from '@/store/stageReducer';
 import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
 import { IRunPerform } from '@/store/stageInterface';
+import { WEBGAL_NONE } from '@/Core/constants';
 
 /**
  * 获取随机演出名称
@@ -34,7 +35,7 @@ export class PerformController {
     }
 
     // 语句不执行演出
-    if (perform.performName === 'none') {
+    if (perform.performName === WEBGAL_NONE) {
       return;
     }
     // 同步演出状态

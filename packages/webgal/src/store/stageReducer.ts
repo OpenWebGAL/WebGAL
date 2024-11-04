@@ -148,6 +148,9 @@ const stageSlice = createSlice({
         }
       }
     },
+    removeAllPerform: (state) => {
+      state.PerformList.splice(0, state.PerformList.length);
+    },
     removeAllPixiPerforms: (state, action: PayloadAction<undefined>) => {
       for (let i = 0; i < state.PerformList.length; i++) {
         const performItem: IRunPerform = state.PerformList[i];
@@ -218,7 +221,6 @@ const stageSlice = createSlice({
       if (action.payload[3]) {
         if (state.figureMetaData[action.payload[0]]) delete state.figureMetaData[action.payload[0]];
       } else {
-        console.log('yeah');
         // 初始化对象
         if (!state.figureMetaData[action.payload[0]]) {
           state.figureMetaData[action.payload[0]] = {};

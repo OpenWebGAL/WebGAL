@@ -5,6 +5,7 @@ import { getSentenceArgByKey } from '@/Core/util/getSentenceArg';
 import { IPerform } from '@/Core/Modules/perform/performInterface';
 import { useSelector } from 'react-redux';
 import { WebGAL } from '@/Core/WebGAL';
+import { WEBGAL_NONE } from '@/Core/constants';
 
 /**
  * 播放一段效果音
@@ -27,6 +28,21 @@ export const playEffect = (sentence: ISentence): IPerform => {
     isLoop = true;
   }
   let isOver = false;
+  if (!url || url === WEBGAL_NONE) {
+    return {
+      performName: WEBGAL_NONE,
+      duration: 0,
+      isHoldOn: false,
+      blockingAuto(): boolean {
+        return false;
+      },
+      blockingNext(): boolean {
+        return false;
+      },
+      stopFunction(): void {},
+      stopTimeout: undefined,
+    };
+  }
   return {
     performName: 'none',
     blockingAuto(): boolean {
