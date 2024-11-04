@@ -5,6 +5,7 @@ import { getSentenceArgByKey } from '@/Core/util/getSentenceArg';
 import { IPerform } from '@/Core/Modules/perform/performInterface';
 import { useSelector } from 'react-redux';
 import { WebGAL } from '@/Core/WebGAL';
+import { WEBGAL_NONE } from '@/Core/constants';
 
 /**
  * 播放一段效果音
@@ -27,6 +28,21 @@ export const playEffect = (sentence: ISentence): IPerform => {
     isLoop = true;
   }
   let isOver = false;
+  if (!url || url === WEBGAL_NONE) {
+    return {
+      performName: WEBGAL_NONE,
+      duration: 0,
+      isHoldOn: false,
+      blockingAuto(): boolean {
+        return false;
+      },
+      blockingNext(): boolean {
+        return false;
+      },
+      stopFunction(): void {},
+      stopTimeout: undefined,
+    };
+  }
   return {
     performName: 'none',
     blockingAuto(): boolean {
@@ -56,7 +72,7 @@ export const playEffect = (sentence: ISentence): IPerform => {
         const seVol = mainVol * 0.01 * (userDataState.optionData?.seVolume ?? 100) * 0.01 * volume * 0.01;
         seElement.volume = seVol;
         seElement.currentTime = 0;
-        const perform = {
+        const perform: IPerform = {
           performName: performInitName,
           duration: 1000 * 60 * 60,
           isHoldOn: isLoop,
@@ -64,6 +80,7 @@ export const playEffect = (sentence: ISentence): IPerform => {
           stopFunction: () => {
             // 演出已经结束了，所以不用播放效果音了
             seElement.pause();
+            seElement.remove();
           },
           blockingNext: () => false,
           blockingAuto: () => {
