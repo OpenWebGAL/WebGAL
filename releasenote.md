@@ -8,21 +8,15 @@
 
 #### 新功能
 
-文本拓展语法对角色名称生效
-
-模拟口型同步
-
-允许修改 Live2D 绘制范围
-
-允许设定立绘的 z-index
+对话内容支持不间断的连续空格
 
 #### 修复
 
-修复了文本增强语法在首行不生效的问题
+读取存档时意外在状态表中存储了多份演出记录的问题
 
-优化为立绘应用效果的性能
+带有 id 的效果音播放在停止后演出未完全清除的问题
 
-优化立绘进出场效果的性能
+对状态表和演出控制器中的演出列表在插入时去重
 
 <!-- English Translation -->
 ## Release Notes
@@ -35,21 +29,15 @@
 
 #### New Features
 
-Text extension syntax now affects character names
-
-Simulate lip sync
-
-Allow modification of Live2D drawing range
-
-Allow setting the z-index of the character sprite
+Dialogue content now supports continuous spaces.
 
 #### Fixes
 
-Fixed the issue where text enhancement syntax did not take effect on the first line
+Fixed an issue where multiple performance records were unexpectedly stored in the state table when loading a save.
 
-Optimized the performance of applying effects to character sprites
+Fixed an issue where performances with IDs were not completely cleared after stopping sound effects playback.
 
-Optimized the performance of character sprite entry and exit effects
+Deduplicated performance lists in the state table and performance controller upon insertion.
 
 <!-- Japanese Translation -->
 ## リリースノート
@@ -62,18 +50,13 @@ Optimized the performance of character sprite entry and exit effects
 
 #### 新機能
 
-テキスト拡張文法がキャラクタ名に有効になった
-
-口パク同期
-
-Live2D の描画範囲変更が可能になった
-
-立ち絵の z-index 設定が可能になった
+会話内容で連続するスペースが正しく表示されるようになりました。
 
 #### 修正
 
-テキスト拡張文法が先頭行に有効にならない問題を修正
+セーブデータ読み込み時に、ステータステーブルに複数の演出記録が重複して保存される問題を修正しました。
 
-立ち絵にエフェクトを適用する時のパフォーマンスを最適化
+IDを持つ効果音が停止した後、演出が完全にクリアされない問題を修正しました。
 
-立ち絵の登場・退場エフェクトのパフォーマンスを最適化
+ステータステーブルと演出コントローラーの演出リストにおいて、重複した項目が挿入されるのを防ぐように修正しました。
+
