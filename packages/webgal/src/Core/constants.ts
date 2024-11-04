@@ -4,3 +4,5 @@ export const STAGE_KEYS = {
   FIG_L: 'fig-left',
   FIG_R: 'fig-right',
 };
+
+export const WEBGAL_NONE = 'none';

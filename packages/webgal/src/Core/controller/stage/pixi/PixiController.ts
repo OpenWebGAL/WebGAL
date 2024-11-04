@@ -842,7 +842,7 @@ export default class PixiStage {
 
     const paramY = mapToZeroOne(y);
     const target = this.figureObjects.find((e) => e.key === key);
-    if (target) {
+    if (target && target.sourceType === 'live2d') {
       const container = target.pixiContainer;
       const children = container.children;
       for (const model of children) {

@@ -124,6 +124,19 @@ const stageSlice = createSlice({
       }
     },
     addPerform: (state, action: PayloadAction<IRunPerform>) => {
+      // 先检查是否有重复的，全部干掉
+      const dupPerformIndex = state.PerformList.findIndex((p) => p.id === action.payload.id);
+      if (dupPerformIndex > -1) {
+        const dupId = action.payload.id;
+        // 删除全部重复演出
+        for (let i = 0; i < state.PerformList.length; i++) {
+          const performItem: IRunPerform = state.PerformList[i];
+          if (performItem.id === dupId) {
+            state.PerformList.splice(i, 1);
+            i--;
+          }
+        }
+      }
       state.PerformList.push(action.payload);
     },
     removePerformByName: (state, action: PayloadAction<string>) => {
@@ -134,6 +147,9 @@ const stageSlice = createSlice({
           i--;
         }
       }
+    },
+    removeAllPerform: (state) => {
+      state.PerformList.splice(0, state.PerformList.length);
     },
     removeAllPixiPerforms: (state, action: PayloadAction<undefined>) => {
       for (let i = 0; i < state.PerformList.length; i++) {
@@ -205,7 +221,6 @@ const stageSlice = createSlice({
       if (action.payload[3]) {
         if (state.figureMetaData[action.payload[0]]) delete state.figureMetaData[action.payload[0]];
       } else {
-        console.log('yeah');
         // 初始化对象
         if (!state.figureMetaData[action.payload[0]]) {
           state.figureMetaData[action.payload[0]] = {};
