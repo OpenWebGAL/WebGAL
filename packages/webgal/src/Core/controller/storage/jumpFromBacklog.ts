@@ -3,7 +3,7 @@ import { sceneFetcher } from '../scene/sceneFetcher';
 import { sceneParser } from '../../parser/sceneParser';
 import { IStageState } from '@/store/stageInterface';
 import { webgalStore } from '@/store/store';
-import { resetStageState } from '@/store/stageReducer';
+import { resetStageState, stageActions } from '@/store/stageReducer';
 import { setVisibility } from '@/store/GUIReducer';
 import { runScript } from '@/Core/controller/gamePlay/runScript';
 import { stopAllPerform } from '@/Core/controller/gamePlay/stopAllPerform';
@@ -18,7 +18,10 @@ import { WebGAL } from '@/Core/WebGAL';
  */
 export const restorePerform = () => {
   const stageState = webgalStore.getState().stage;
-  stageState.PerformList.forEach((e) => {
+  const performToRestore = cloneDeep(stageState.PerformList);
+  // 清除状态表中演出序列
+  webgalStore.dispatch(stageActions.removeAllPerform());
+  performToRestore.forEach((e) => {
     runScript(e.script);
   });
 };
