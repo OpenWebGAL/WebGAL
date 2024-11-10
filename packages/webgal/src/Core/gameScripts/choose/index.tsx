@@ -14,6 +14,7 @@ import { whenChecker } from '@/Core/controller/gamePlay/scriptExecutor';
 import useEscape from '@/hooks/useEscape';
 import useApplyStyle from '@/hooks/useApplyStyle';
 import { Provider } from 'react-redux';
+import {TIME_AS_INFINITY} from "@/Core/constants";
 
 class ChooseOption {
   /**
@@ -68,7 +69,7 @@ export const choose = (sentence: ISentence): IPerform => {
   );
   return {
     performName: 'choose',
-    duration: 1000 * 60 * 60 * 24,
+    duration: TIME_AS_INFINITY,
     isHoldOn: false,
     stopFunction: () => {
       // eslint-disable-next-line react/no-deprecated

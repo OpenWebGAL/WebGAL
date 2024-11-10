@@ -9,6 +9,7 @@ import { logger } from '@/Core/util/logger';
 import { WebGAL } from '@/Core/WebGAL';
 import { replace } from 'lodash';
 import useEscape from '@/hooks/useEscape';
+import {TIME_AS_INFINITY} from "@/Core/constants";
 /**
  * 显示一小段黑屏演示
  * @param sentence
@@ -69,6 +70,9 @@ export const intro = (sentence: ISentence): IPerform => {
       const parsedValue = parseInt(e.value.toString(), 10);
       delayTime = isNaN(parsedValue) ? delayTime : parsedValue;
     }
+    if (e.key === 'delayTimeInfinity') {
+      delayTime = TIME_AS_INFINITY;
+    }
     if (e.key === 'hold') {
       if (e.value === true) {
         isHold = true;
@@ -87,7 +91,7 @@ export const intro = (sentence: ISentence): IPerform => {
 
   let endWait = 1000;
   let baseDuration = endWait + delayTime * introArray.length;
-  const duration = isHold ? 1000 * 60 * 60 * 24 : 1000 + delayTime * introArray.length;
+  const duration = isHold ? TIME_AS_INFINITY : (endWait + delayTime * introArray.length);
   let isBlocking = true;
   let setBlockingStateTimeout = setTimeout(() => {
     isBlocking = false;
@@ -112,6 +116,7 @@ export const intro = (sentence: ISentence): IPerform => {
         if (currentDelay > 0) {
           node.style.animationDelay = `${currentDelay - delayTime}ms`;
         }
+        logger.info(`children${index}，animationDelay更新：${currentDelay} -> ${node.style.animationDelay}`);
         // 最后一个元素了
         if (index === len - 1) {
           // 并且已经完全显示了，这时候进行下一步

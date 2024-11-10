@@ -13,6 +13,7 @@ import { WebGAL } from '@/Core/WebGAL';
 import { getSentenceArgByKey } from '@/Core/util/getSentenceArg';
 import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
 import { setStageVar } from '@/store/stageReducer';
+import {TIME_AS_INFINITY} from "@/Core/constants";
 
 /**
  * 显示选择枝
@@ -59,7 +60,7 @@ export const getUserInput = (sentence: ISentence): IPerform => {
   );
   return {
     performName: 'userInput',
-    duration: 1000 * 60 * 60 * 24,
+    duration: TIME_AS_INFINITY,
     isHoldOn: false,
     stopFunction: () => {
       // eslint-disable-next-line react/no-deprecated

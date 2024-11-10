@@ -6,3 +6,4 @@ export const STAGE_KEYS = {
 };
 
 export const WEBGAL_NONE = 'none';
+export const TIME_AS_INFINITY = 1000 * 60 * 60 * 24;
