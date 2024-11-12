@@ -71,13 +71,16 @@ $height: 330px;
   position: relative;
   animation: TextDelayShow 1000ms ease-out forwards;
   opacity: 0;
+  display: inline-flex;
+  align-content: space-between
 }
+
 
 .outer {
   position: absolute;
+  left:0;
+  top:0;
   white-space: nowrap;
-  left: 0;
-  top: 0;
   //background-image: linear-gradient(rgba(255, 255, 255, 1) 0%, rgb(225, 237, 255) 100%);
   background-image: linear-gradient(#0B346E 0%,
     //#f5f7fa 45%,
@@ -87,21 +90,28 @@ $height: 330px;
   -webkit-background-clip: text;
   color: transparent;
   z-index: 2;
+  display: inline-block;   /* 与文本对齐 */
+  vertical-align: middle;  /* 确保注音整体的垂直居中 */
 }
 
 .inner {
   white-space: nowrap;
   position: absolute;
-  left: 0;
-  top: 0;
+  left:0;
+  top:0;
   -webkit-text-stroke: 0.1em rgba(255, 255, 255, 1);
   z-index: 1;
   //text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.75);
+  display: inline-block;   /* 内层元素同样行内块布局 */
+  vertical-align: middle;  /* 确保与外层的对齐一致 */
 }
 
 .zhanwei {
   color: transparent;
   white-space: nowrap;
+  display: inline-block;    /* 保持行内块布局 */
+  vertical-align: baseline; /* 确保文本基线对齐 */
+  position: relative;       /* 保持相对定位 */
 }
 
 //
@@ -116,6 +126,8 @@ $height: 330px;
   position: relative;
   @include text_shadow_textElement;
   opacity: 1;
+  display: inline-flex;
+  align-content: space-between
 }
 
 //

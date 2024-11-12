@@ -60,7 +60,7 @@ export const TextBox = () => {
     size = getTextSize(stageState.showTextSize) + '%';
     textSizeState = stageState.showTextSize;
   }
-  const lineLimit = match(userDataState.optionData.textSize)
+  const lineLimit = match(textSizeState)
     .with(textSize.small, () => 3)
     .with(textSize.medium, () => 2)
     .with(textSize.large, () => 2)

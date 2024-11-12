@@ -5,6 +5,7 @@
 
 import {
   IEffect,
+  IFigureMetadata,
   IFreeFigure,
   ILive2DExpression,
   ILive2DMotion,
@@ -57,6 +58,7 @@ export const initState: IStageState = {
   enableFilm: '',
   isDisableTextbox: false,
   replacedUIlable: {},
+  figureMetaData: {},
 };
 
 /**
@@ -122,6 +124,19 @@ const stageSlice = createSlice({
       }
     },
     addPerform: (state, action: PayloadAction<IRunPerform>) => {
+      // 先检查是否有重复的，全部干掉
+      const dupPerformIndex = state.PerformList.findIndex((p) => p.id === action.payload.id);
+      if (dupPerformIndex > -1) {
+        const dupId = action.payload.id;
+        // 删除全部重复演出
+        for (let i = 0; i < state.PerformList.length; i++) {
+          const performItem: IRunPerform = state.PerformList[i];
+          if (performItem.id === dupId) {
+            state.PerformList.splice(i, 1);
+            i--;
+          }
+        }
+      }
       state.PerformList.push(action.payload);
     },
     removePerformByName: (state, action: PayloadAction<string>) => {
@@ -132,6 +147,9 @@ const stageSlice = createSlice({
           i--;
         }
       }
+    },
+    removeAllPerform: (state) => {
+      state.PerformList.splice(0, state.PerformList.length);
     },
     removeAllPixiPerforms: (state, action: PayloadAction<undefined>) => {
       for (let i = 0; i < state.PerformList.length; i++) {
@@ -164,16 +182,17 @@ const stageSlice = createSlice({
       }
     },
     setLive2dMotion: (state, action: PayloadAction<ILive2DMotion>) => {
-      const { target, motion } = action.payload;
+      const { target, motion, overrideBounds } = action.payload;
 
       const index = state.live2dMotion.findIndex((e) => e.target === target);
 
       if (index < 0) {
         // Add a new motion
-        state.live2dMotion.push({ target, motion });
+        state.live2dMotion.push({ target, motion, overrideBounds });
       } else {
         // Update the existing motion
         state.live2dMotion[index].motion = motion;
+        state.live2dMotion[index].overrideBounds = overrideBounds;
       }
     },
     setLive2dExpression: (state, action: PayloadAction<ILive2DExpression>) => {
@@ -191,6 +210,23 @@ const stageSlice = createSlice({
     },
     replaceUIlable: (state, action: PayloadAction<[string, string]>) => {
       state.replacedUIlable[action.payload[0]] = action.payload[1];
+    },
+    /**
+     * 设置 figure 元数据 [立绘 key, metadata key, 值, 是否重设]
+     * @param state
+     * @param action
+     */
+    setFigureMetaData: (state, action: PayloadAction<[string, keyof IFigureMetadata, any, undefined | boolean]>) => {
+      // 立绘退出，重设
+      if (action.payload[3]) {
+        if (state.figureMetaData[action.payload[0]]) delete state.figureMetaData[action.payload[0]];
+      } else {
+        // 初始化对象
+        if (!state.figureMetaData[action.payload[0]]) {
+          state.figureMetaData[action.payload[0]] = {};
+        }
+        state.figureMetaData[action.payload[0]][action.payload[1]] = action.payload[2];
+      }
     },
   },
 });
