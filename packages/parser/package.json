@@ -1,6 +1,6 @@
 {
     "name": "webgal-parser",
-    "version": "5.0.0-beta.2",
+    "version": "4.5.10-beta.2",
     "description": "WebGAL script parser",
     "scripts": {
         "test": "yarn parser && vitest",
