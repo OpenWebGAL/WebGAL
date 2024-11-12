@@ -6,7 +6,7 @@
         "test": "yarn parser && vitest",
         "test-trace": "yarn parser --trace && vitest",
         "coverage": "vitest run --coverage",
-        "build": "yarn parser && rimraf -rf ./build && rollup --config",
+        "build": "rimraf -rf ./build && rollup --config",
         "build-ci": "yarn parser && rollup --config",
         "debug": "tsx test/debug.ts",
         "dev": "tsx src/index.ts",
