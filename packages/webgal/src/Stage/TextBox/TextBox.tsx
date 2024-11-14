@@ -101,7 +101,13 @@ function isCJK(character: string) {
   return !!character.match(/[\u4e00-\u9fa5]|[\u0800-\u4e00]|[\uac00-\ud7ff]/);
 }
 
-export function compileSentence(sentence: string, lineLimit: number, ignoreLineLimit?: boolean): EnhancedNode[][] {
+// eslint-disable-next-line max-params
+export function compileSentence(
+  sentence: string,
+  lineLimit: number,
+  ignoreLineLimit?: boolean,
+  replace_space_with_nbsp = true,
+): EnhancedNode[][] {
   // 先拆行
   const lines = sentence.split(/(?<!\\)\|/).map((val: string) => useEscape(val));
   // 对每一行进行注音处理
@@ -111,7 +117,7 @@ export function compileSentence(sentence: string, lineLimit: number, ignoreLineL
     line.forEach((node, index) => {
       match(node.type)
         .with(SegmentType.String, () => {
-          const chars = splitChars(node.value as string);
+          const chars = splitChars(node.value as string, replace_space_with_nbsp);
           // eslint-disable-next-line max-nested-callbacks
           ln.push(...chars.map((c) => ({ reactNode: c })));
         })
@@ -135,8 +141,9 @@ export function compileSentence(sentence: string, lineLimit: number, ignoreLineL
 
 /**
  * @param sentence
+ * @param replace_space_with_nbsp
  */
-export function splitChars(sentence: string) {
+export function splitChars(sentence: string, replace_space_with_nbsp = true) {
   if (!sentence) return [''];
   const words: string[] = [];
   let word = '';
@@ -157,13 +164,15 @@ export function splitChars(sentence: string) {
     //   cjkFlag = false;
     //   continue;
     // }
-    if (character === ' ') {
+    if (character === ' ' || character === '\u00a0') {
       // Space
       if (word) {
         words.push(word);
         word = '';
       }
-      words.push('\u00a0');
+      if (replace_space_with_nbsp) {
+        words.push('\u00a0');
+      } else words.push(character);
       cjkFlag = false;
     } else if (isCJK(character) && !isPunctuation(character)) {
       if (!cjkFlag && word) {
