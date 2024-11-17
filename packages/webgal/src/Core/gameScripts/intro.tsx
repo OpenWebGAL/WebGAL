@@ -41,6 +41,7 @@ export const intro = (sentence: ISentence): IPerform => {
   let chosenAnimationClass = styles.fadeIn;
   let delayTime = 1500;
   let isHold = false;
+  let isUserForward = false;
 
   for (const e of sentence.args) {
     if (e.key === 'backgroundColor') {
@@ -74,6 +75,14 @@ export const intro = (sentence: ISentence): IPerform => {
         isHold = true;
       }
     }
+    if (e.key === 'userForward') {
+      // 用户手动控制向前步进
+      if (e.value === true) {
+        isUserForward = true;
+        isHold = true; // 用户手动控制向前步进，所以必须是 hold
+        delayTime = 99999999; // 设置一个很大的延迟，这样自然就看起来不自动继续了
+      }
+    }
   }
 
   const introContainerStyle = {
@@ -105,6 +114,30 @@ export const intro = (sentence: ISentence): IPerform => {
     if (introContainer) {
       const children = introContainer.childNodes[0].childNodes[0].childNodes as any;
       const len = children.length;
+      if (isUserForward) {
+        let isEnd = true;
+        for (const node of children) {
+          // 当前语句的延迟显示时间
+          const currentDelay = Number(node.style.animationDelay.split('ms')[0]);
+          // 当前语句还没有显示，降低显示延迟，因为现在时间因为用户操作，相当于向前推进了
+          if (currentDelay > 0) {
+            isEnd = false;
+            // 用 Animation API 操作，浏览器版本太低就无办法了
+            const nodeAnimations = node.getAnimations();
+            node.style.animationDelay = '0ms ';
+            for (const ani of nodeAnimations) {
+              ani.currentTime = 0;
+              ani.play();
+            }
+          }
+        }
+        if (isEnd) {
+          clearTimeout(timeout);
+          clearTimeout(setBlockingStateTimeout);
+          WebGAL.gameplay.performController.unmountPerform(performName);
+        }
+        return;
+      }
       children.forEach((node: HTMLDivElement, index: number) => {
         // 当前语句的延迟显示时间
         const currentDelay = Number(node.style.animationDelay.split('ms')[0]);

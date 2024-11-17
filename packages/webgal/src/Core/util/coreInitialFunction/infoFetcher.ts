@@ -44,7 +44,7 @@ export const infoFetcher = (url: string) => {
         } else {
           let res: any = args[0].trim();
           if (/^(true|false)$/g.test(args[0])) {
-            res = !!res;
+            res = res === 'true';
           } else if (/^[0-9]+\.?[0-9]+$/g.test(args[0])) {
             res = Number(res);
           }
