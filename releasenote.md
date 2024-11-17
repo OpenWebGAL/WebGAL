@@ -8,15 +8,15 @@
 
 #### 新功能
 
-对话内容支持不间断的连续空格
+支持 intro, say 以及参数的多行语法书写方式
+
+支持通过配置文件控制是否要启用紧急回避界面
+
+intro 支持关闭自动展示下一句，只有用户手动点击鼠标或按下键盘时才展示下一句
 
 #### 修复
 
-读取存档时意外在状态表中存储了多份演出记录的问题
-
-带有 id 的效果音播放在停止后演出未完全清除的问题
-
-对状态表和演出控制器中的演出列表在插入时去重
+英语对话渐显和布局问题
 
 <!-- English Translation -->
 ## Release Notes
@@ -29,15 +29,16 @@
 
 #### New Features
 
-Dialogue content now supports continuous spaces.
+Supports multi-line syntax for intro, say, and parameters.
+
+Supports enabling/disabling the emergency skip interface via configuration file.
+
+Intro supports disabling automatic display of the next sentence; only displays the next sentence when the user manually clicks the mouse or presses a key.
+
 
 #### Fixes
 
-Fixed an issue where multiple performance records were unexpectedly stored in the state table when loading a save.
-
-Fixed an issue where performances with IDs were not completely cleared after stopping sound effects playback.
-
-Deduplicated performance lists in the state table and performance controller upon insertion.
+English dialogue fade-in and layout issues.
 
 <!-- Japanese Translation -->
 ## リリースノート
@@ -50,13 +51,13 @@ Deduplicated performance lists in the state table and performance controller upo
 
 #### 新機能
 
-会話内容で連続するスペースが正しく表示されるようになりました。
+intro、say、およびパラメータの複数行構文をサポート
+
+設定ファイルで緊急回避インターフェースを有効にするかどうかを制御可能に
+
+intro で自動的に次の文を表示するのを無効化し、ユーザーがマウスをクリックまたはキーボードを押したときにのみ次の文を表示するように変更
 
 #### 修正
 
-セーブデータ読み込み時に、ステータステーブルに複数の演出記録が重複して保存される問題を修正しました。
-
-IDを持つ効果音が停止した後、演出が完全にクリアされない問題を修正しました。
-
-ステータステーブルと演出コントローラーの演出リストにおいて、重複した項目が挿入されるのを防ぐように修正しました。
+英語の会話のフェードインとレイアウトの問題
 
