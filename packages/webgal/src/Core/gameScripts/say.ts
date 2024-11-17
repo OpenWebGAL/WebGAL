@@ -24,7 +24,7 @@ export const say = (sentence: ISentence): IPerform => {
   let dialogKey = Math.random().toString(); // 生成一个随机的key
   let dialogToShow = sentence.content; // 获取对话内容
   if (dialogToShow) {
-    dialogToShow = String(dialogToShow).replace(/ /g, '\u00a0'); // 替换空格
+    dialogToShow = String(dialogToShow).replace(/ {2,}/g, (match) => '\u00a0'.repeat(match.length)); // 替换连续两个或更多空格
   }
   const isConcat = getSentenceArgByKey(sentence, 'concat'); // 是否是继承语句
   const isNotend = getSentenceArgByKey(sentence, 'notend') as boolean; // 是否有 notend 参数

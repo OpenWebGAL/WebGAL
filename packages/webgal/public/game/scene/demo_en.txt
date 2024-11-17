@@ -11,7 +11,7 @@ Welcome to WebGAL! -e002_Welcome_to_WebGAL.mp3;
 WebGAL is a completely new web visual engine never seen before. -e003_WebGAL_is_a_completely_new_web.mp3;
 changeFigure:stand2.png -right -next;
 It is an engine developed using web technology, so it performs well on web pages. -e004_It_is_an_engine_developedusing_web.mp3;
-Thanks to this feature, once published on your website's platform,|players can simply click a link to play your game on your website anytime, anywhere! -e005_Thanks_to_this_ feature_once.mp3;
+Thanks to this feature, once published on your website's platform, players can simply click a link to play your game on your website anytime, anywhere! -e005_Thanks_to_this_ feature_once.mp3;
 setAnimation:move-front-and-back -target=fig-left -next;
 Very attractive, don't you think? -e006_Very attractive.mp3;
 changeFigure:none -right -next;
