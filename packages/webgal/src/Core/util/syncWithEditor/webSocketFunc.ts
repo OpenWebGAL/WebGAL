@@ -9,6 +9,7 @@ import { backToTitle } from '@/Core/controller/gamePlay/backToTitle';
 import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
 import { setVisibility } from '@/store/GUIReducer';
 import { resetStage } from '@/Core/controller/stage/resetStage';
+import { ISentence } from '@/Core/controller/scene/sceneInterface';
 
 export const webSocketFunc = () => {
   const loc: string = window.location.hostname;
@@ -34,6 +35,7 @@ export const webSocketFunc = () => {
   const socket = new WebSocket(wsUrl);
   socket.onopen = () => {
     logger.info('socket已连接');
+
     function sendStageSyncMessage() {
       const message: IDebugMessage = {
         event: 'message',
@@ -51,6 +53,7 @@ export const webSocketFunc = () => {
       // logger.debug('传送信息', message);
       setTimeout(sendStageSyncMessage, 1000);
     }
+
     sendStageSyncMessage();
   };
   socket.onmessage = (e) => {
@@ -64,7 +67,7 @@ export const webSocketFunc = () => {
     if (message.command === DebugCommand.EXE_COMMAND) {
       const command = message.message;
       const scene = WebgalParser.parse(command, 'temp.txt', 'temp.txt');
-      scene.sentenceList.forEach((sentence) => {
+      scene.sentenceList.forEach((sentence: ISentence) => {
         runScript(sentence);
       });
     }
