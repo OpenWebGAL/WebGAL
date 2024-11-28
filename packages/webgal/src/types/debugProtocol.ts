@@ -13,6 +13,8 @@ export enum DebugCommand {
   REFETCH_TEMPLATE_FILES,
   // 返回标题页面
   BACK_TO_TITLE,
+  // 临时场景
+  TEMP_SCENE,
 }
 
 export interface IDebugMessage {
