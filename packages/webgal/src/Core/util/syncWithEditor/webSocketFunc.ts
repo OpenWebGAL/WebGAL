@@ -3,8 +3,12 @@ import { syncWithOrigine } from '@/Core/util/syncWithEditor/syncWithOrigine';
 import { DebugCommand, IDebugMessage } from '@/types/debugProtocol';
 import { WebGAL } from '@/Core/WebGAL';
 import { webgalStore } from '@/store/store';
-import { WebgalParser } from '@/Core/parser/sceneParser';
+import { sceneParser } from '@/Core/parser/sceneParser';
 import { runScript } from '@/Core/controller/gamePlay/runScript';
+import { backToTitle } from '@/Core/controller/gamePlay/backToTitle';
+import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
+import { setVisibility } from '@/store/GUIReducer';
+import { resetStage } from '@/Core/controller/stage/resetStage';
 
 export const webSocketFunc = () => {
   const loc: string = window.location.hostname;
@@ -59,9 +63,12 @@ export const webSocketFunc = () => {
     }
     if (message.command === DebugCommand.EXE_COMMAND) {
       const command = message.message;
-      const scene = WebgalParser.parse(command, 'temp.txt', 'temp.txt');
-      const sentence = scene.sentenceList[0];
-      runScript(sentence);
+      resetStage(true);
+      WebGAL.sceneManager.sceneData.currentScene = sceneParser(command, 'temp', './temp.txt');
+      webgalStore.dispatch(setVisibility({ component: 'showTitle', visibility: false }));
+      setTimeout(() => {
+        nextSentence();
+      }, 100);
     }
     if (message.command === DebugCommand.REFETCH_TEMPLATE_FILES) {
       const title = document.getElementById('Title_enter_page');
@@ -69,6 +76,9 @@ export const webSocketFunc = () => {
         title.style.display = 'none';
       }
       WebGAL.events.styleUpdate.emit();
+    }
+    if (message.command === DebugCommand.BACK_TO_TITLE) {
+      backToTitle();
     }
   };
   socket.onerror = (e) => {

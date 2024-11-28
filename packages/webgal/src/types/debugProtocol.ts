@@ -11,6 +11,8 @@ export enum DebugCommand {
   EXE_COMMAND,
   // 重新拉取模板样式文件
   REFETCH_TEMPLATE_FILES,
+  // 返回标题页面
+  BACK_TO_TITLE,
 }
 
 export interface IDebugMessage {
