@@ -5,7 +5,6 @@ import { WebGAL } from '@/Core/WebGAL';
 import { webgalStore } from '@/store/store';
 import { sceneParser, WebgalParser } from '@/Core/parser/sceneParser';
 import { runScript } from '@/Core/controller/gamePlay/runScript';
-import { backToTitle } from '@/Core/controller/gamePlay/backToTitle';
 import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
 import { setVisibility } from '@/store/GUIReducer';
 import { resetStage } from '@/Core/controller/stage/resetStage';
@@ -78,14 +77,31 @@ export const webSocketFunc = () => {
       }
       WebGAL.events.styleUpdate.emit();
     }
-    if (message.command === DebugCommand.BACK_TO_TITLE) {
-      backToTitle();
+    if (message.command === DebugCommand.SET_COMPONENT_VISIBILITY) {
+      const commands = message.message;
+      // handle SET_COMPONENT_VISIBILITY message
+      const parse = (commands: string): ({ component: any; visibility: boolean } | undefined)[] => {
+        const command = commands.split(';');
+        return command.map((item) => {
+          const temp = item.split(':');
+          if (temp.length > 1) return { component: temp[0], visibility: Boolean(temp[1]) };
+          return undefined;
+        });
+      };
+      const command = parse(commands);
+      command.forEach((item) => {
+        if (item !== undefined) {
+          webgalStore.dispatch(setVisibility({ component: item.component, visibility: item.visibility }));
+        }
+      });
     }
     if (message.command === DebugCommand.TEMP_SCENE) {
       const command = message.message;
       resetStage(true);
       WebGAL.sceneManager.sceneData.currentScene = sceneParser(command, 'temp', './temp.txt');
       webgalStore.dispatch(setVisibility({ component: 'showTitle', visibility: false }));
+      webgalStore.dispatch(setVisibility({ component: 'showMenuPanel', visibility: false }));
+      // webgalStore.dispatch(setVisibility({ component: 'showPanicOverlay', visibility: false }));
       setTimeout(() => {
         nextSentence();
       }, 100);

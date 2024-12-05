@@ -12,7 +12,7 @@ export enum DebugCommand {
   // 重新拉取模板样式文件
   REFETCH_TEMPLATE_FILES,
   // 返回标题页面
-  BACK_TO_TITLE,
+  SET_COMPONENT_VISIBILITY,
   // 临时场景
   TEMP_SCENE,
 }
