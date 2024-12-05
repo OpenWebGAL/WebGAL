@@ -3,8 +3,12 @@ import { syncWithOrigine } from '@/Core/util/syncWithEditor/syncWithOrigine';
 import { DebugCommand, IDebugMessage } from '@/types/debugProtocol';
 import { WebGAL } from '@/Core/WebGAL';
 import { webgalStore } from '@/store/store';
-import { WebgalParser } from '@/Core/parser/sceneParser';
+import { sceneParser, WebgalParser } from '@/Core/parser/sceneParser';
 import { runScript } from '@/Core/controller/gamePlay/runScript';
+import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
+import { setVisibility } from '@/store/GUIReducer';
+import { resetStage } from '@/Core/controller/stage/resetStage';
+import { ISentence } from '@/Core/controller/scene/sceneInterface';
 
 export const webSocketFunc = () => {
   const loc: string = window.location.hostname;
@@ -30,6 +34,7 @@ export const webSocketFunc = () => {
   const socket = new WebSocket(wsUrl);
   socket.onopen = () => {
     logger.info('socket已连接');
+
     function sendStageSyncMessage() {
       const message: IDebugMessage = {
         event: 'message',
@@ -47,6 +52,7 @@ export const webSocketFunc = () => {
       // logger.debug('传送信息', message);
       setTimeout(sendStageSyncMessage, 1000);
     }
+
     sendStageSyncMessage();
   };
   socket.onmessage = (e) => {
@@ -60,8 +66,9 @@ export const webSocketFunc = () => {
     if (message.command === DebugCommand.EXE_COMMAND) {
       const command = message.message;
       const scene = WebgalParser.parse(command, 'temp.txt', 'temp.txt');
-      const sentence = scene.sentenceList[0];
-      runScript(sentence);
+      scene.sentenceList.forEach((sentence: ISentence) => {
+        runScript(sentence);
+      });
     }
     if (message.command === DebugCommand.REFETCH_TEMPLATE_FILES) {
       const title = document.getElementById('Title_enter_page');
@@ -69,6 +76,35 @@ export const webSocketFunc = () => {
         title.style.display = 'none';
       }
       WebGAL.events.styleUpdate.emit();
+    }
+    if (message.command === DebugCommand.SET_COMPONENT_VISIBILITY) {
+      const commands = message.message;
+      // handle SET_COMPONENT_VISIBILITY message
+      const parse = (commands: string): ({ component: any; visibility: boolean } | undefined)[] => {
+        const command = commands.split(';');
+        return command.map((item) => {
+          const temp = item.split(':');
+          if (temp.length > 1) return { component: temp[0], visibility: Boolean(temp[1]) };
+          return undefined;
+        });
+      };
+      const command = parse(commands);
+      command.forEach((item) => {
+        if (item !== undefined) {
+          webgalStore.dispatch(setVisibility({ component: item.component, visibility: item.visibility }));
+        }
+      });
+    }
+    if (message.command === DebugCommand.TEMP_SCENE) {
+      const command = message.message;
+      resetStage(true);
+      WebGAL.sceneManager.sceneData.currentScene = sceneParser(command, 'temp', './temp.txt');
+      webgalStore.dispatch(setVisibility({ component: 'showTitle', visibility: false }));
+      webgalStore.dispatch(setVisibility({ component: 'showMenuPanel', visibility: false }));
+      // webgalStore.dispatch(setVisibility({ component: 'showPanicOverlay', visibility: false }));
+      setTimeout(() => {
+        nextSentence();
+      }, 100);
     }
   };
   socket.onerror = (e) => {
