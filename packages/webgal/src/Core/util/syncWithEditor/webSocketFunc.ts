@@ -34,7 +34,6 @@ export const webSocketFunc = () => {
   const socket = new WebSocket(wsUrl);
   socket.onopen = () => {
     logger.info('socket已连接');
-
     function sendStageSyncMessage() {
       const message: IDebugMessage = {
         event: 'message',
@@ -52,7 +51,6 @@ export const webSocketFunc = () => {
       // logger.debug('传送信息', message);
       setTimeout(sendStageSyncMessage, 1000);
     }
-
     sendStageSyncMessage();
   };
   socket.onmessage = (e) => {
