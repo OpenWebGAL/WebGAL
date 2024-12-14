@@ -1,6 +1,6 @@
 import { logger } from '../logger';
 import { syncWithOrigine } from '@/Core/util/syncWithEditor/syncWithOrigine';
-import { DebugCommand, IDebugMessage } from '@/types/debugProtocol';
+import { DebugCommand, IComponentVisibilityCommand, IDebugMessage } from '@/types/debugProtocol';
 import { WebGAL } from '@/Core/WebGAL';
 import { webgalStore } from '@/store/store';
 import { sceneParser, WebgalParser } from '@/Core/parser/sceneParser';
@@ -76,19 +76,12 @@ export const webSocketFunc = () => {
       WebGAL.events.styleUpdate.emit();
     }
     if (message.command === DebugCommand.SET_COMPONENT_VISIBILITY) {
-      const commands = message.message;
       // handle SET_COMPONENT_VISIBILITY message
-      const parse = (commands: string): ({ component: any; visibility: boolean } | undefined)[] => {
-        const command = commands.split(';');
-        return command.map((item) => {
-          const temp = item.split(':');
-          if (temp.length > 1) return { component: temp[0], visibility: Boolean(temp[1]) };
-          return undefined;
-        });
-      };
-      const command = parse(commands);
-      command.forEach((item) => {
-        if (item !== undefined) {
+      const command = message.message;
+
+      const commandData = JSON.parse(command) as IComponentVisibilityCommand[];
+      commandData.forEach((item) => {
+        if (item) {
           webgalStore.dispatch(setVisibility({ component: item.component, visibility: item.visibility }));
         }
       });
@@ -99,7 +92,7 @@ export const webSocketFunc = () => {
       WebGAL.sceneManager.sceneData.currentScene = sceneParser(command, 'temp', './temp.txt');
       webgalStore.dispatch(setVisibility({ component: 'showTitle', visibility: false }));
       webgalStore.dispatch(setVisibility({ component: 'showMenuPanel', visibility: false }));
-      // webgalStore.dispatch(setVisibility({ component: 'showPanicOverlay', visibility: false }));
+      webgalStore.dispatch(setVisibility({ component: 'showPanicOverlay', visibility: false }));
       setTimeout(() => {
         nextSentence();
       }, 100);
