@@ -12,7 +12,7 @@
     "@emotion/css": "^11.11.2",
     "@icon-park/react": "^1.4.2",
     "@reduxjs/toolkit": "^1.8.1",
-    "angular-expressions": "^1.1.5",
+    "angular-expressions": "^1.4.3",
     "axios": "^0.28.0",
     "cloudlogjs": "^1.0.9",
     "i18next": "^22.4.15",

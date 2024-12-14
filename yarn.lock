@@ -1448,10 +1448,10 @@ ajv@^6.12.4:
     json-schema-traverse "^0.4.1"
     uri-js "^4.2.2"
 
-angular-expressions@^1.1.5:
-  version "1.2.1"
-  resolved "https://registry.yarnpkg.com/angular-expressions/-/angular-expressions-1.2.1.tgz#b0647a01ed564fa1a6a1b8400f3d50633208d452"
-  integrity sha512-pUnlViwIJ0L3KXh1a5gJGuMuGvxwbTbxkGINt7F6259p5UtksRpQ9Q5GhYb6VyfVfKtR65QAJgDhml3zpgmFuA==
+angular-expressions@^1.4.3:
+  version "1.4.3"
+  resolved "https://registry.yarnpkg.com/angular-expressions/-/angular-expressions-1.4.3.tgz#24fb9e8e9e0278885dd0f7e28512ac88a74037f6"
+  integrity sha512-r7j+dqOuHy0OYiR5AazDixU/Us3TDN2FfuxGX4Dq6d61Y2MhBQHMdUNBfkkLPjDqVm2Is394h31gC3bcBwy9zw==
 
 ansi-escapes@^4.3.0:
   version "4.3.2"
@@ -2067,9 +2067,9 @@ cross-env@^7.0.3:
     cross-spawn "^7.0.1"
 
 cross-spawn@^7.0.0, cross-spawn@^7.0.1, cross-spawn@^7.0.2, cross-spawn@^7.0.3:
-  version "7.0.3"
-  resolved "https://registry.yarnpkg.com/cross-spawn/-/cross-spawn-7.0.3.tgz#f73a85b9d5d41d045551c177e2882d4ac85728a6"
-  integrity sha512-iRDPJKUPVEND7dHPO8rkbOnPpyDygcDFtWjpeWNCgy8WP2rXcxXL8TskReQl6OrB2G7+UJrags1q15Fudc7G6w==
+  version "7.0.6"
+  resolved "https://registry.yarnpkg.com/cross-spawn/-/cross-spawn-7.0.6.tgz#8a58fe78f00dcd70c370451759dfbfaf03e8ee9f"
+  integrity sha512-uV2QOWP2nWzsy2aMp8aRibhi9dlzF5Hgh5SHaB9OiTGEyDTiJJyx0uy51QXdyWbtAHNua4XJzUKca3OzKUd3vA==
   dependencies:
     path-key "^3.1.0"
     shebang-command "^2.0.0"
