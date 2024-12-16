@@ -18,6 +18,7 @@ import { WebGAL } from '@/Core/WebGAL';
 import useSoundEffect from '@/hooks/useSoundEffect';
 import savesReducer, { ISavesData, saveActions } from '@/store/savesReducer';
 import { dumpFastSaveToStorage, dumpSavesToStorage } from '@/Core/controller/storage/savesController';
+import { OptionSlider } from '@/UI/Menu/Options/OptionSlider';
 
 interface IExportGameData {
   userData: IUserData;
@@ -104,23 +105,14 @@ export function System() {
       {!showAbout && (
         <>
           <NormalOption key="option1" title={t('autoSpeed.title')}>
-            <NormalButton
-              textList={t('autoSpeed.options.slow', 'autoSpeed.options.medium', 'autoSpeed.options.fast')}
-              functionList={[
-                () => {
-                  dispatch(setOptionData({ key: 'autoSpeed', value: playSpeed.slow }));
-                  setStorage();
-                },
-                () => {
-                  dispatch(setOptionData({ key: 'autoSpeed', value: playSpeed.normal }));
-                  setStorage();
-                },
-                () => {
-                  dispatch(setOptionData({ key: 'autoSpeed', value: playSpeed.fast }));
-                  setStorage();
-                },
-              ]}
-              currentChecked={userDataState.optionData.autoSpeed}
+            <OptionSlider
+              initValue={userDataState.optionData.autoSpeed}
+              uniqueID={t('autoSpeed.title')}
+              onChange={(event) => {
+                const newValue = event.target.value;
+                dispatch(setOptionData({ key: 'autoSpeed', value: Number(newValue) }));
+                setStorage();
+              }}
             />
           </NormalOption>
           <NormalOption key="option7" title={t('language.title')}>

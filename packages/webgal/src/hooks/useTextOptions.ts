@@ -1,23 +1,15 @@
 import { playSpeed } from '@/store/userDataInterface';
 
-export function useTextDelay(type: playSpeed) {
-  switch (type) {
-    case playSpeed.slow:
-      return 80;
-    case playSpeed.normal:
-      return 35;
-    case playSpeed.fast:
-      return 3;
-  }
+// 范围为 [startRange, step * 100 + startRange]
+export function useTextDelay(data: number) {
+  const startRange = 3;
+  const step = 1.5;
+  return startRange + (100 - data) * step;
 }
 
-export function useTextAnimationDuration(type: playSpeed) {
-  switch (type) {
-    case playSpeed.slow:
-      return 800;
-    case playSpeed.normal:
-      return 350;
-    case playSpeed.fast:
-      return 200;
-  }
+// 范围为 [startRange, step * 100 + startRange]
+export function useTextAnimationDuration(data: number) {
+  const startRange = 200;
+  const step = 15;
+  return startRange + (100 - data) * step;
 }

@@ -58,8 +58,9 @@ export const autoNextSentence = () => {
  * 自动播放的执行函数
  */
 const autoPlay = () => {
-  const delay = webgalStore.getState().userData.optionData.autoSpeed;
-  const autoPlayDelay = 750 - 250 * delay;
+  const data = webgalStore.getState().userData.optionData.autoSpeed;
+  // 范围为 [250, 1750]
+  const autoPlayDelay = 250 + (100 - data) * 15;
   let isBlockingAuto = false;
   WebGAL.gameplay.performController.performList.forEach((e) => {
     if (e.blockingAuto())
