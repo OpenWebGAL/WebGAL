@@ -7,6 +7,7 @@ import { stopFast } from '@/Core/controller/gamePlay/fastSkip';
 import { setEbg } from '@/Core/gameScripts/changeBg/setEbg';
 
 export const backToTitle = () => {
+  if (webgalStore.getState().GUI.showTitle) return;
   const dispatch = webgalStore.dispatch;
   stopAllPerform();
   stopAuto();
