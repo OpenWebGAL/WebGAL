@@ -27,7 +27,7 @@ export enum language {
 }
 
 const languages: Record<string, string> = {
-  zhCn: '中文',
+  zhCn: '简体中文',
   en: 'English',
   jp: '日本語',
   fr: 'Français',
