@@ -39,8 +39,8 @@ export enum fullScreenOption {
  */
 export interface IOptionData {
   volumeMain: number; // 主音量
-  textSpeed: playSpeed; // 文字速度
-  autoSpeed: playSpeed; // 自动播放速度
+  textSpeed: number; // 文字速度
+  autoSpeed: number; // 自动播放速度
   textSize: textSize;
   vocalVolume: number; // 语音音量
   bgmVolume: number; // 背景音乐音量
