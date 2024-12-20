@@ -15,13 +15,13 @@ export const PanicYoozle = () => {
       <div className={styles.yoozle_title}>
         <span>
           <span className={styles.yoozle_blue} style={{ marginRight: '1px' }}>
-            Y
+            W
           </span>
-          <span className={styles.yoozle_red}>o</span>
-          <span className={styles.yoozle_yellow}>o</span>
-          <span className={styles.yoozle_blue}>z</span>
-          <span className={styles.yoozle_green}>l</span>
-          <span className={`${styles.yoozle_red} ${styles.yoozle_e_rotate}`}>e</span>
+          <span className={styles.yoozle_red}>e</span>
+          <span className={styles.yoozle_yellow}>b</span>
+          <span className={styles.yoozle_blue}>g</span>
+          <span className={styles.yoozle_green}>a</span>
+          <span className={`${styles.yoozle_red} ${styles.yoozle_e_rotate}`}>l</span>
         </span>
       </div>
       <div className={styles.yoozle_search}>
