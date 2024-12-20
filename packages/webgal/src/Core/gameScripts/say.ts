@@ -3,7 +3,7 @@ import { IPerform } from '@/Core/Modules/perform/performInterface';
 import { playVocal } from './vocal';
 import { webgalStore } from '@/store/store';
 import { setStage } from '@/store/stageReducer';
-import { useTextDelay } from '@/hooks/useTextOptions';
+import { useTextAnimationDuration, useTextDelay } from '@/hooks/useTextOptions';
 import { getRandomPerformName, PerformController } from '@/Core/Modules/perform/performController';
 import { getSentenceArgByKey } from '@/Core/util/getSentenceArg';
 import { textSize, voiceOption } from '@/store/userDataInterface';
@@ -148,7 +148,7 @@ export const say = (sentence: ISentence): IPerform => {
   }
 
   const performInitName: string = getRandomPerformName();
-  let endDelay = 750 - userDataState.optionData.textSpeed * 250;
+  let endDelay = useTextAnimationDuration(userDataState.optionData.textSpeed) / 2;
   // 如果有 notend 参数，那么就不需要等待
   if (isNotend) {
     endDelay = 0;
