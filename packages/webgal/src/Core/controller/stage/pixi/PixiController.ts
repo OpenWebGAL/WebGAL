@@ -475,6 +475,94 @@ export default class PixiStage {
   }
 
   /**
+   * 添加视频背景
+   * @param key 背景的标识，一般和背景类型有关
+   * @param url 背景图片url
+   */
+  public addVideoBg(key: string, url: string) {
+    const loader = this.assetLoader;
+    // 准备用于存放这个背景的 Container
+    const thisBgContainer = new WebGALPixiContainer();
+
+    // 是否有相同 key 的背景
+    const setBgIndex = this.backgroundObjects.findIndex((e) => e.key === key);
+    const isBgSet = setBgIndex >= 0;
+
+    // 已经有一个这个 key 的背景存在了
+    if (isBgSet) {
+      // 挤占
+      this.removeStageObjectByKey(key);
+    }
+
+    // 挂载
+    this.backgroundContainer.addChild(thisBgContainer);
+    const bgUuid = uuid();
+    this.backgroundObjects.push({
+      uuid: bgUuid,
+      key: key,
+      pixiContainer: thisBgContainer,
+      sourceUrl: url,
+      sourceType: 'video',
+      sourceExt: this.getExtName(url),
+    });
+
+    // 完成加载后执行的函数
+    const setup = () => {
+      // TODO：找一个更好的解法，现在的解法是无论是否复用原来的资源，都设置一个延时以让动画工作正常！
+
+      setTimeout(() => {
+        console.debug('start loaded video: ' + url);
+        let texture;
+        if (!loader.resources?.[url]?.texture) {
+          const video = document.createElement('video');
+          video.src = url;
+          video.preload = 'auto';
+          video.loop = true;
+          video.muted = true;
+          video.autoplay = true;
+          const videoResource = new PIXI.VideoResource(video);
+          videoResource.updateFPS = 30;
+          // @ts-ignore
+          texture = PIXI.Texture.from(videoResource);
+        } else {
+          texture = loader.resources?.[url]?.texture;
+        }
+        if (texture && this.getStageObjByUuid(bgUuid)) {
+          /**
+           * 重设大小
+           */
+          const originalWidth = texture.width;
+          const originalHeight = texture.height;
+          const scaleX = this.stageWidth / originalWidth;
+          const scaleY = this.stageHeight / originalHeight;
+          const targetScale = Math.max(scaleX, scaleY);
+          const bgSprite = new PIXI.Sprite(texture);
+          bgSprite.scale.x = targetScale;
+          bgSprite.scale.y = targetScale;
+          bgSprite.anchor.set(0.5);
+          bgSprite.position.y = this.stageHeight / 2;
+          thisBgContainer.setBaseX(this.stageWidth / 2);
+          thisBgContainer.setBaseY(this.stageHeight / 2);
+          thisBgContainer.pivot.set(0, this.stageHeight / 2);
+          thisBgContainer.addChild(bgSprite);
+          console.debug('loaded video: ' + url);
+        }
+      }, 0);
+    };
+
+    /**
+     * 加载器部分
+     */
+    this.cacheGC();
+    if (!loader.resources?.[url]?.texture) {
+      this.loadAsset(url, setup);
+    } else {
+      // 复用
+      setup();
+    }
+  }
+
+  /**
    * 添加立绘
    * @param key 立绘的标识，一般和立绘位置有关
    * @param url 立绘图片url
