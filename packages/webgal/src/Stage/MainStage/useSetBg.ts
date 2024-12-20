@@ -54,7 +54,10 @@ function removeBg(bgObject: IStageObject) {
 
 function addBg(type?: 'image' | 'spine', ...args: any[]) {
   const url = args[1];
-  if (url.endsWith('.skel')) {
+  if (url.endsWith('.mp4')) {
+    // @ts-ignore
+    return WebGAL.gameplay.pixiStage?.addVideoBg(...args);
+  } else if (url.endsWith('.skel')) {
     // @ts-ignore
     return WebGAL.gameplay.pixiStage?.addSpineBg(...args);
   } else {
