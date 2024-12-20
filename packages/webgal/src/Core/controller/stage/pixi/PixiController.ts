@@ -512,40 +512,36 @@ export default class PixiStage {
 
       setTimeout(() => {
         console.debug('start loaded video: ' + url);
-        let texture;
-        if (!loader.resources?.[url]?.texture) {
-          const video = document.createElement('video');
-          video.src = url;
-          video.preload = 'auto';
-          video.loop = true;
-          video.muted = true;
-          video.autoplay = true;
-          const videoResource = new PIXI.VideoResource(video);
-          videoResource.updateFPS = 30;
-          // @ts-ignore
-          texture = PIXI.Texture.from(videoResource);
-        } else {
-          texture = loader.resources?.[url]?.texture;
-        }
+        const video = document.createElement('video');
+        const videoResource = new PIXI.VideoResource(video);
+        videoResource.src = url;
+        videoResource.source.preload = 'auto';
+        videoResource.source.muted = true;
+        videoResource.source.loop = true;
+        videoResource.source.autoplay = true;
+        videoResource.source.src = url;
+        // @ts-ignore
+        const texture = PIXI.Texture.from(videoResource);
         if (texture && this.getStageObjByUuid(bgUuid)) {
           /**
            * 重设大小
            */
-          const originalWidth = texture.width;
-          const originalHeight = texture.height;
-          const scaleX = this.stageWidth / originalWidth;
-          const scaleY = this.stageHeight / originalHeight;
-          const targetScale = Math.max(scaleX, scaleY);
-          const bgSprite = new PIXI.Sprite(texture);
-          bgSprite.scale.x = targetScale;
-          bgSprite.scale.y = targetScale;
-          bgSprite.anchor.set(0.5);
-          bgSprite.position.y = this.stageHeight / 2;
-          thisBgContainer.setBaseX(this.stageWidth / 2);
-          thisBgContainer.setBaseY(this.stageHeight / 2);
-          thisBgContainer.pivot.set(0, this.stageHeight / 2);
-          thisBgContainer.addChild(bgSprite);
-          console.debug('loaded video: ' + url);
+          texture.baseTexture.resource.load().then(() => {
+            const originalWidth = videoResource.source.videoWidth;
+            const originalHeight = videoResource.source.videoHeight;
+            const scaleX = this.stageWidth / originalWidth;
+            const scaleY = this.stageHeight / originalHeight;
+            const targetScale = Math.max(scaleX, scaleY);
+            const bgSprite = new PIXI.Sprite(texture);
+            bgSprite.scale.x = targetScale;
+            bgSprite.scale.y = targetScale;
+            bgSprite.anchor.set(0.5);
+            bgSprite.position.y = this.stageHeight / 2;
+            thisBgContainer.setBaseX(this.stageWidth / 2);
+            thisBgContainer.setBaseY(this.stageHeight / 2);
+            thisBgContainer.pivot.set(0, this.stageHeight / 2);
+            thisBgContainer.addChild(bgSprite);
+          });
         }
       }, 0);
     };
