@@ -215,8 +215,28 @@
   </script>
   <script type="module" src="/src/main.tsx"></script>
   <!--<script type="module" src="/src/Core/util/resize.ts"></script>-->
-  <!--<script src="lib/live2d.min.js"></script>-->
-  <!--<script src="lib/live2dcubismcore.min.js"></script>-->
+  <script>
+    function loadScript(url) {
+      return new Promise((resolve, reject) => {
+        const script = document.createElement('script');
+        script.src = url;
+        script.onload = () => resolve(`Loaded: ${url}`);
+        script.onerror = (error) => reject(`Failed to load: ${url}`);
+        document.head.appendChild(script);
+      });
+    }
+
+    async function loadLive2D() {
+      try {
+        await loadScript('lib/live2d.min.js');
+        await loadScript('lib/live2dcubismcore.min.js');
+        console.log('Both Live2D scripts loaded successfully.');
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    loadLive2D();
+  </script>
   <script>
     let enterPromise = new Promise(res => window.enterPromise = res);
     let renderPromise = new Promise(res => window.renderPromise = res);

@@ -224,5 +224,5 @@ function addFigure(type?: 'image' | 'live2D' | 'spine', ...args: any[]) {
  */
 function addLive2dFigure(...args: any[]) {
   // @ts-ignore
-  // return WebGAL.gameplay.pixiStage?.addLive2dFigure(...args);
+  return WebGAL.gameplay.pixiStage?.addLive2dFigure(...args);
 }
