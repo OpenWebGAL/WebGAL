@@ -610,7 +610,12 @@ export default class PixiStage {
       setTimeout(() => {
         if (spineResource && this.getStageObjByUuid(figureUuid)) {
           const figureSpine = new Spine(spineResource.spineData);
-          const transY = spineResource?.spineData?.y ?? 0;
+          const spineBounds = figureSpine.getLocalBounds();
+          const spineCenterX = spineBounds.x + spineBounds.width / 2;
+          const spineCenterY = spineBounds.y + spineBounds.height / 2;
+          figureSpine.pivot.set(spineCenterX, spineCenterY);
+          // TODO: set animation 还没做
+          // figureSpine.state.setAnimation()
           /**
            * 重设大小
            */
@@ -618,9 +623,6 @@ export default class PixiStage {
           const originalHeight = figureSpine.height;
           const scaleX = this.stageWidth / originalWidth;
           const scaleY = this.stageHeight / originalHeight;
-          // 我也不知道为什么啊啊啊啊
-          figureSpine.y = -(scaleY * transY) / 2;
-          figureSpine.state.setAnimation(0, '07', true);
           const targetScale = Math.min(scaleX, scaleY);
           const figureSprite = new PIXI.Sprite();
           figureSprite.addChild(figureSpine);
