@@ -34,23 +34,14 @@ export function Display() {
         />
       </NormalOption>
       <NormalOption key="textSpeed" title={t('textSpeed.title')}>
-        <NormalButton
-          textList={t('textSpeed.options.slow', 'textSpeed.options.medium', 'textSpeed.options.fast')}
-          functionList={[
-            () => {
-              dispatch(setOptionData({ key: 'textSpeed', value: playSpeed.slow }));
-              setStorage();
-            },
-            () => {
-              dispatch(setOptionData({ key: 'textSpeed', value: playSpeed.normal }));
-              setStorage();
-            },
-            () => {
-              dispatch(setOptionData({ key: 'textSpeed', value: playSpeed.fast }));
-              setStorage();
-            },
-          ]}
-          currentChecked={userDataState.optionData.textSpeed}
+        <OptionSlider
+          initValue={userDataState.optionData.textSpeed}
+          uniqueID={t('textSpeed.title')}
+          onChange={(event) => {
+            const newValue = event.target.value;
+            dispatch(setOptionData({ key: 'textSpeed', value: Number(newValue) }));
+            setStorage();
+          }}
         />
       </NormalOption>
       <NormalOption key="textSize" title={t('textSize.title')}>
