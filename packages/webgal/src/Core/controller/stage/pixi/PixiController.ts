@@ -3,7 +3,7 @@ import { v4 as uuid } from 'uuid';
 import { webgalStore } from '@/store/store';
 import { setStage, stageActions } from '@/store/stageReducer';
 import cloneDeep from 'lodash/cloneDeep';
-import { IEffect, IFigureAssociatedAnimation, IFigureMetadata } from '@/store/stageInterface';
+import { IEffect, IFigureAssociatedAnimation, IFigureMetadata, ITransform } from '@/store/stageInterface';
 import { logger } from '@/Core/util/logger';
 import { isIOS } from '@/Core/initializeScript';
 import { WebGALPixiContainer } from '@/Core/controller/stage/pixi/WebGALPixiContainer';
@@ -60,6 +60,17 @@ export interface ILive2DRecord {
 window.PIXI = PIXI;
 
 export default class PixiStage {
+  public static assignTransform<T extends ITransform>(target: T, source?: ITransform) {
+    if (!source) return;
+    const targetScale = target.scale;
+    const targetPosition = target.position;
+    if (target.scale) Object.assign(targetScale, source.scale);
+    if (target.position) Object.assign(targetPosition, source.position);
+    Object.assign(target, source);
+    target.scale = targetScale;
+    target.position = targetPosition;
+  }
+
   /**
    * 当前的 PIXI App
    */
@@ -188,7 +199,7 @@ export default class PixiStage {
       const targetPixiContainer = this.getStageObjByKey(target);
       if (targetPixiContainer) {
         const container = targetPixiContainer.pixiContainer;
-        Object.assign(container, effect.transform);
+        PixiStage.assignTransform(container, effect.transform);
       }
       return;
     }

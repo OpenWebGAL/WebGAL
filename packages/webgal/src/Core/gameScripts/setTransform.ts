@@ -1,7 +1,7 @@
 import { ISentence } from '@/Core/controller/scene/sceneInterface';
 import { IPerform } from '@/Core/Modules/perform/performInterface';
 import { getSentenceArgByKey } from '@/Core/util/getSentenceArg';
-import { IAnimationObject } from '@/Core/controller/stage/pixi/PixiController';
+import PixiStage, { IAnimationObject } from '@/Core/controller/stage/pixi/PixiController';
 import { logger } from '@/Core/util/logger';
 import { webgalStore } from '@/store/store';
 import { generateTimelineObj } from '@/Core/controller/stage/pixi/animations/timeline';
@@ -27,6 +27,7 @@ export const setTransform = (sentence: ISentence): IPerform => {
   try {
     const frame = JSON.parse(animationString) as ITransform & { duration: number };
     animationObj = generateTransformAnimationObj(target, frame, duration);
+    console.log('animationObj:', animationObj);
   } catch (e) {
     // 解析都错误了，歇逼吧
     animationObj = [];
@@ -70,7 +71,7 @@ function getAnimationObject(animationName: string, target: string, duration: num
   if (effect) {
     const mappedEffects = effect.effects.map((effect) => {
       const newEffect = cloneDeep({ ...baseTransform, duration: 0 });
-      Object.assign(newEffect, effect);
+      PixiStage.assignTransform(newEffect, effect);
       newEffect.duration = effect.duration;
       return newEffect;
     });

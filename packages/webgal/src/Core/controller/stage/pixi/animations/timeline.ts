@@ -5,6 +5,7 @@ import { webgalStore } from '@/store/store';
 import { stageActions } from '@/store/stageReducer';
 import omitBy from 'lodash/omitBy';
 import isUndefined from 'lodash/isUndefined';
+import PixiStage from '@/Core/controller/stage/pixi/PixiController';
 
 /**
  * 动画创建模板
@@ -48,7 +49,8 @@ export function generateTimelineObj(
       onUpdate: (updateValue) => {
         if (container) {
           const { scaleX, scaleY, ...val } = updateValue;
-          Object.assign(container, omitBy(val, isUndefined));
+          // @ts-ignore
+          PixiStage.assignTransform(container, omitBy(val, isUndefined));
           // 因为 popmotion 不能用嵌套，scale 要手动设置
           if (!isUndefined(scaleX)) container.scale.x = scaleX;
           if (!isUndefined(scaleY)) container.scale.y = scaleY;
@@ -68,7 +70,8 @@ export function generateTimelineObj(
       // 不能赋值到 position，因为 x 和 y 被 WebGALPixiContainer 代理，而 position 属性没有代理
       const { position, scale, ...state } = getStartStateEffect();
       const assignValue = omitBy({ x: position.x, y: position.y, ...state }, isUndefined);
-      Object.assign(target?.pixiContainer, assignValue);
+      // @ts-ignore
+      PixiStage.assignTransform(target?.pixiContainer, assignValue);
       if (target?.pixiContainer) {
         if (!isUndefined(scale.x)) {
           target.pixiContainer.scale.x = scale.x;
@@ -91,7 +94,8 @@ export function generateTimelineObj(
       // 不能赋值到 position，因为 x 和 y 被 WebGALPixiContainer 代理，而 position 属性没有代理
       const { position, scale, ...state } = getEndStateEffect();
       const assignValue = omitBy({ x: position.x, y: position.y, ...state }, isUndefined);
-      Object.assign(target?.pixiContainer, assignValue);
+      // @ts-ignore
+      PixiStage.assignTransform(target?.pixiContainer, assignValue);
       if (target?.pixiContainer) {
         if (!isUndefined(scale.x)) {
           target.pixiContainer.scale.x = scale.x;

@@ -6,6 +6,7 @@ import cloneDeep from 'lodash/cloneDeep';
 import { baseTransform } from '@/store/stageInterface';
 import { generateTimelineObj } from '@/Core/controller/stage/pixi/animations/timeline';
 import { WebGAL } from '@/Core/WebGAL';
+import PixiStage from '@/Core/controller/stage/pixi/PixiController';
 
 export function getAnimationObject(animationName: string, target: string, duration: number) {
   const effect = WebGAL.animationManager.getAnimations().find((ani) => ani.name === animationName);
@@ -13,7 +14,7 @@ export function getAnimationObject(animationName: string, target: string, durati
     const mappedEffects = effect.effects.map((effect) => {
       const targetSetEffect = webgalStore.getState().stage.effects.find((e) => e.target === target);
       const newEffect = cloneDeep({ ...(targetSetEffect?.transform ?? baseTransform), duration: 0 });
-      Object.assign(newEffect, effect);
+      PixiStage.assignTransform(newEffect, effect);
       newEffect.duration = effect.duration;
       return newEffect;
     });

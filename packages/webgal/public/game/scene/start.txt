@@ -1,3 +1,7 @@
+changeFigure:stand.png;
+角色名，留空以继承上句:对话 -fontSize=default;
+setTransform:{"position":{"x":200,"y":-100},"scale":{"x":1.5,"y":1.5}} -target=fig-center -duration=0;
+setTransform:{"position":{"x":-400}} -target=fig-center -duration=0;
 setVar:heroine=WebGAL;
 setVar:egine=WebGAL;
 choose:简体中文:demo_zh_cn.txt|日本語:demo_ja.txt|English:demo_en.txt|Test:function_test.txt;
