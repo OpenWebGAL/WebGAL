@@ -12,6 +12,7 @@ import { ISceneEntry } from '@/Core/Modules/scene';
 import { IBacklogItem } from '@/Core/Modules/backlog';
 import { SYSTEM_CONFIG } from '@/config';
 import { WebGAL } from '@/Core/WebGAL';
+import {callBackFunctionOfUpdate, updateFigureFlag, useSetFigure} from "@/Stage/MainStage/useSetFigure";
 
 export const whenChecker = (whenValue: string | undefined): boolean => {
   if (whenValue === undefined) {
@@ -150,7 +151,10 @@ export const scriptExecutor = () => {
     // 保存 backlog
     if (isSaveBacklog) {
       // WebGAL.backlogManager.isSaveBacklogNext = true;
-      WebGAL.backlogManager.saveCurrentStateToBacklog();
+      const saveFunction = () => WebGAL.backlogManager.saveCurrentStateToBacklog();
+      if (updateFigureFlag) {
+        callBackFunctionOfUpdate.push(saveFunction);
+      } else saveFunction();
     }
   }, 0);
   WebGAL.sceneManager.sceneData.currentSentenceId++;
