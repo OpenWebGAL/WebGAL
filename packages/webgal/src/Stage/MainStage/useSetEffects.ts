@@ -1,6 +1,7 @@
 import { baseTransform, IEffect, IStageState, ITransform } from '@/store/stageInterface';
 
 import { WebGAL } from '@/Core/WebGAL';
+import PixiStage from '@/Core/controller/stage/pixi/PixiController';
 
 export function setStageObjectEffects(stageState: IStageState) {
   const effects = stageState.effects;
@@ -21,13 +22,15 @@ export function setStageEffects(effects: IEffect[]) {
         const targetPixiContainer = WebGAL.gameplay.pixiStage?.getStageObjByKey(key);
         if (targetPixiContainer) {
           const container = targetPixiContainer.pixiContainer;
-          Object.assign(container, convertTransform(effect.transform));
+          // @ts-ignore 没有引入新的子对象
+          PixiStage.assignTransform(container, convertTransform(effect.transform));
         }
       } else {
         const targetPixiContainer = WebGAL.gameplay.pixiStage?.getStageObjByKey(key);
         if (targetPixiContainer) {
           const container = targetPixiContainer.pixiContainer;
-          Object.assign(container, convertTransform(baseTransform));
+          // @ts-ignore 没有引入新的子对象
+          PixiStage.assignTransform(container, convertTransform(baseTransform));
         }
       }
     }
