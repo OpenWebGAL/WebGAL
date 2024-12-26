@@ -8,7 +8,7 @@ export const NormalOption = (props: any) => {
       <div className={styles.NormalOption_title}>{props.title}</div>
       <div
         className={styles.NormalOption_buttonList}
-        style={{ width: props.full ? '100%' : 'auto', overflow: 'hidden' }}
+        style={{ width: props.full ? '100%' : 'auto', overflow: props.full ? 'hidden' : undefined }}
       >
         {props.children}
       </div>
