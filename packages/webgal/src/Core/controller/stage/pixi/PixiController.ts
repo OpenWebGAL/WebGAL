@@ -554,7 +554,7 @@ export default class PixiStage {
       // eslint-disable-next-line @typescript-eslint/no-this-alias
       const instance = this;
 
-      const setup = (t: any) => {
+      const setup = (stage: PixiStage) => {
         if (thisFigureContainer) {
           (async function () {
             let overrideBounds: [number, number, number, number] = [0, 0, 0, 0];
@@ -564,7 +564,7 @@ export default class PixiStage {
             }
             console.log(overrideBounds);
             const models = await Promise.all([
-              t.live2DModel.from(jsonPath, {
+              stage.live2DModel.from(jsonPath, {
                 autoInteract: false,
                 overWriteBounds: {
                   x0: overrideBounds[0],
@@ -624,7 +624,7 @@ export default class PixiStage {
               }
 
               // lip-sync is still a problem and you can not.
-              t.soundManager.volume = 0; // @ts-ignore
+              stage.soundManager.volume = 0; // @ts-ignore
               if (model.internalModel.angleXParamIndex !== undefined) model.internalModel.angleXParamIndex = 999; // @ts-ignore
               if (model.internalModel.angleYParamIndex !== undefined) model.internalModel.angleYParamIndex = 999; // @ts-ignore
               if (model.internalModel.angleZParamIndex !== undefined) model.internalModel.angleZParamIndex = 999;
@@ -854,15 +854,6 @@ export default class PixiStage {
   private unlockStageObject(targetName: string) {
     const index = this.lockTransformTarget.findIndex((name) => name === targetName);
     if (index >= 0) this.lockTransformTarget.splice(index, 1);
-  }
-
-  private getExtName(url: string) {
-    return url.split('.').pop() ?? 'png';
-  }
-
-  private getFigureMetadataByKey(key: string): IFigureMetadata | undefined {
-    console.log(key, webgalStore.getState().stage.figureMetaData);
-    return webgalStore.getState().stage.figureMetaData[key];
   }
 
   private async initialize() {
