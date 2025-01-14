@@ -207,9 +207,12 @@ function removeFig(figObj: IStageObject, enterTikerKey: string, effects: IEffect
 
 function addFigure(type?: 'image' | 'live2D' | 'spine', ...args: any[]) {
   const url = args[1];
+  const baseUrl = window.location.origin;
+  const urlObject = new URL(url, baseUrl);
+  const _type = urlObject.searchParams.get('type') as 'image' | 'live2D' | 'spine' | null;
   if (url.endsWith('.json')) {
     return addLive2dFigure(...args);
-  } else if (url.endsWith('.skel')) {
+  } else if (url.endsWith('.skel') || _type === 'spine') {
     // @ts-ignore
     return WebGAL.gameplay.pixiStage?.addSpineFigure(...args);
   } else {
