@@ -27,6 +27,7 @@ const initState: IGuiState = {
   showPanicOverlay: false,
   isEnterGame: false,
   isShowLogo: true,
+  enableAppreciationMode: false, // Paf87
 };
 
 /**
@@ -67,10 +68,18 @@ const GUISlice = createSlice({
     setLogoImage: (state, action: PayloadAction<string[]>) => {
       state.logoImage = [...action.payload];
     },
+    /**
+     * 设置 enableAppreciationMode 属性
+     * @param state 当前GUI状态
+     * @param action 改变 enableAppreciationMode 属性的Action
+     */
+    setEnableAppreciationMode: (state, action: PayloadAction<boolean>) => {
+      state.enableAppreciationMode = action.payload;
+    },
   },
 });
 
-export const { setVisibility, setMenuPanelTag, setGuiAsset, setLogoImage } = GUISlice.actions;
+export const { setVisibility, setMenuPanelTag, setGuiAsset, setLogoImage, setEnableAppreciationMode } = GUISlice.actions;
 export default GUISlice.reducer;
 
 // export function GuiStateStore(): GuiStore {
