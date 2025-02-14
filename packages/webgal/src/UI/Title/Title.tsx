@@ -97,16 +97,18 @@ const Title: FC = () => {
             >
               <div className={applyStyle('Title_button_text', styles.Title_button_text)}>{t('load.title')}</div>
             </div>
-            <div
-              className={applyStyle('Title_button', styles.Title_button)}
-              onClick={() => {
-                playSeClick();
-                dispatch(setVisibility({ component: 'showExtra', visibility: true }));
-              }}
-              onMouseEnter={playSeEnter}
-            >
-              <div className={applyStyle('Title_button_text', styles.Title_button_text)}>{t('extra.title')}</div>
-            </div>
+            {GUIState.enableAppreciationMode && (
+              <div
+                className={applyStyle('Title_button', styles.Title_button)}
+                onClick={() => {
+                  playSeClick();
+                  dispatch(setVisibility({ component: 'showExtra', visibility: true }));
+                }}
+                onMouseEnter={playSeEnter}
+              >
+                <div className={applyStyle('Title_button_text', styles.Title_button_text)}>{t('extra.title')}</div>
+              </div>
+            )}
           </div>
         </div>
       )}
