@@ -25,6 +25,7 @@ const pixiRain = (rainSpeed: number, number: number) => {
   container.scale.y = 1;
   // container.rotation = -0.2;
   const bunnyList: PIXI.Sprite[] = [];
+  let addBunnyCounter = 0;
   // 监听动画更新
   function ticker(delta: number) {
     // 获取长宽，用于控制雪花出现位置
@@ -33,6 +34,8 @@ const pixiRain = (rainSpeed: number, number: number) => {
     for (let i = 0; i < number; i++) {
       // 创建对象
       const bunny = new PIXI.Sprite(texture);
+      let filterRad = Math.random() * 2.5 + 1.5;
+      bunny.filters = [new PIXI.filters.BlurFilter(filterRad)];
       // 随机雨点大小
       let scaleRand = Math.random();
       if (scaleRand <= 0.5) {
@@ -46,22 +49,22 @@ const pixiRain = (rainSpeed: number, number: number) => {
       bunny.x = Math.random() * stageWidth - 0.5 * stageWidth;
       bunny.y = 0 - 0.5 * stageHeight;
       // @ts-ignore
-      bunny['dropSpeed'] = Math.random() * 2;
+      bunny['dropSpeed'] = Math.random() * 1.5;
       // @ts-ignore
-      bunny['acc'] = Math.random();
+      bunny['acc'] = Math.random() + 0.25;
       bunny['alpha'] = Math.random();
-      if (bunny['alpha'] >= 0.5) {
-        bunny['alpha'] = 0.5;
+      if (bunny['alpha'] >= 0.95) {
+        bunny['alpha'] = 0.95;
       }
-      if (bunny['alpha'] <= 0.2) {
-        bunny['alpha'] = 0.2;
+      if (bunny['alpha'] <= 0.8) {
+        bunny['alpha'] = 0.8;
       }
       container.addChild(bunny);
       // 控制每片雨点
       bunnyList.push(bunny);
 
       // 控制同屏雨点数
-      if (bunnyList.length >= 2500) {
+      if (bunnyList.length >= 500) {
         bunnyList.shift()?.destroy();
         container.removeChild(container.children[0]);
       }
@@ -81,4 +84,4 @@ const pixiRain = (rainSpeed: number, number: number) => {
   return { container, tickerKey: 'rain-Ticker' };
 };
 
-registerPerform('rain', () => pixiRain(6, 10));
+registerPerform('rain', () => pixiRain(6, 3));

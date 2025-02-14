@@ -25,32 +25,38 @@ const pixiSnow = (snowSpeed: number) => {
   container.scale.y = 1;
   // container.rotation = -0.2;
   const bunnyList: any = [];
+  let addBunnyCounter = 0;
+  // 获取长宽，用于控制雪花出现位置
+  const stageWidth = SCREEN_CONSTANTS.width;
+  const stageHeight = SCREEN_CONSTANTS.height;
   // 监听动画更新
   function tickerFn(delta: number) {
-    // 获取长宽，用于控制雪花出现位置
-    const stageWidth = SCREEN_CONSTANTS.width;
-    const stageHeight = SCREEN_CONSTANTS.height;
+    addBunnyCounter++;
     // 创建对象
-    const bunny = new PIXI.Sprite(texture);
-    // 随机雪花大小
-    let scaleRand = Math.random();
-    if (scaleRand <= 0.5) {
-      scaleRand = 0.5;
+    if (addBunnyCounter % 7 === 1) {
+      const bunny = new PIXI.Sprite(texture);
+      let filterRad = Math.random() * 8 + 1;
+      bunny.filters = [new PIXI.filters.BlurFilter(filterRad)];
+      // 随机雪花大小
+      let scaleRand = Math.random();
+      if (scaleRand <= 0.5) {
+        scaleRand = 0.5;
+      }
+      bunny.scale.x = scalePreset * scaleRand;
+      bunny.scale.y = scalePreset * scaleRand;
+      // 设置锚点
+      bunny.anchor.set(0.5);
+      // 随机雪花位置
+      bunny.x = Math.random() * stageWidth - 0.5 * stageWidth;
+      bunny.y = 0 - 0.5 * stageHeight;
+      // @ts-ignore
+      bunny['dropSpeed'] = Math.random() * 2;
+      // @ts-ignore
+      bunny['acc'] = Math.random();
+      container.addChild(bunny);
+      // 控制每片雪花
+      bunnyList.push(bunny);
     }
-    bunny.scale.x = scalePreset * scaleRand;
-    bunny.scale.y = scalePreset * scaleRand;
-    // 设置锚点
-    bunny.anchor.set(0.5);
-    // 随机雪花位置
-    bunny.x = Math.random() * stageWidth - 0.5 * stageWidth;
-    bunny.y = 0 - 0.5 * stageHeight;
-    // @ts-ignore
-    bunny['dropSpeed'] = Math.random() * 2;
-    // @ts-ignore
-    bunny['acc'] = Math.random();
-    container.addChild(bunny);
-    // 控制每片雪花
-    bunnyList.push(bunny);
     let count = 0; // 用于判断雪花往左还是往右飘，是2的倍数则往左
     for (const e of bunnyList) {
       count++;
@@ -67,7 +73,7 @@ const pixiSnow = (snowSpeed: number) => {
       }
     }
     // 控制同屏雪花数
-    if (bunnyList.length >= 500) {
+    if (bunnyList.length >= 100) {
       bunnyList.shift()?.destroy();
       container.removeChild(container.children[0]);
     }
