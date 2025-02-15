@@ -30,6 +30,10 @@ const Title: FC = () => {
 
   const applyStyle = useApplyStyle('UI/Title/title.scss');
   useConfigData(); // 监听基础ConfigData变化
+
+  const appreciationItems = useSelector((state: RootState) => state.userData.appreciationData);
+  const hasAppreciationItems = appreciationItems.bgm.length > 0 || appreciationItems.cg.length > 0;
+
   return (
     <>
       {GUIState.showTitle && <div className={applyStyle('Title_backup_background', styles.Title_backup_background)} />}
@@ -98,12 +102,15 @@ const Title: FC = () => {
               <div className={applyStyle('Title_button_text', styles.Title_button_text)}>{t('load.title')}</div>
             </div>
             <div
-              className={applyStyle('Title_button', styles.Title_button)}
+              className={`${applyStyle('Title_button', styles.Title_button)} ${!hasAppreciationItems ? styles.Title_button_disabled : ''}`}
               onClick={() => {
-                playSeClick();
-                dispatch(setVisibility({ component: 'showExtra', visibility: true }));
+                if (hasAppreciationItems) {
+                  playSeClick();
+                  dispatch(setVisibility({ component: 'showExtra', visibility: true }));
+                }
               }}
               onMouseEnter={playSeEnter}
+              disabled={!hasAppreciationItems}
             >
               <div className={applyStyle('Title_button_text', styles.Title_button_text)}>{t('extra.title')}</div>
             </div>
