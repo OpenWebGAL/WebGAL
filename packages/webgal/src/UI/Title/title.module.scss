@@ -52,3 +52,8 @@
   z-index: 13;
   background: linear-gradient(135deg, #fdfbfb 0%, #dcddde 100%);
 }
+
+.Title_button_disabled {
+  cursor: not-allowed !important;
+  opacity: 0.5;
+}
