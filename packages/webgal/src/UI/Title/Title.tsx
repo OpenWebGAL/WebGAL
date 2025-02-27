@@ -102,7 +102,9 @@ const Title: FC = () => {
               <div className={applyStyle('Title_button_text', styles.Title_button_text)}>{t('load.title')}</div>
             </div>
             <div
-              className={`${applyStyle('Title_button', styles.Title_button)} ${!hasAppreciationItems ? styles.Title_button_disabled : ''}`}
+              className={`${applyStyle('Title_button', styles.Title_button)} ${
+                !hasAppreciationItems ? styles.Title_button_disabled : ''
+              }`}
               onClick={() => {
                 if (hasAppreciationItems) {
                   playSeClick();
@@ -110,7 +112,6 @@ const Title: FC = () => {
                 }
               }}
               onMouseEnter={playSeEnter}
-              disabled={!hasAppreciationItems}
             >
               <div className={applyStyle('Title_button_text', styles.Title_button_text)}>{t('extra.title')}</div>
             </div>
