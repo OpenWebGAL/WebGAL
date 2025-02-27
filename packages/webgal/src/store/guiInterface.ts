@@ -29,6 +29,7 @@ export interface IGuiState {
   showPanicOverlay: boolean;
   isEnterGame: boolean;
   isShowLogo: boolean;
+  enableAppreciationMode: boolean; // Pc102
 }
 
 export type componentsVisibility = Pick<
