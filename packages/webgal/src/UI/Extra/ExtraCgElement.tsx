@@ -5,7 +5,7 @@ import useSoundEffect from '@/hooks/useSoundEffect';
 
 interface IProps {
   name: string;
-  imgUrl: string;
+  resourceUrl: string;
   transformDeg: number;
   index: number;
 }
@@ -27,7 +27,7 @@ export function ExtraCgElement(props: IProps) {
           <div className={styles.showFullCgMain}>
             <div
               style={{
-                backgroundImage: `url('${props.imgUrl}')`,
+                backgroundImage: `url('${props.resourceUrl}')`,
                 backgroundSize: `cover`,
                 backgroundPosition: 'center',
                 width: '100%',
@@ -52,7 +52,7 @@ export function ExtraCgElement(props: IProps) {
       >
         <div
           style={{
-            backgroundImage: `url('${props.imgUrl}')`,
+            backgroundImage: `url('${props.resourceUrl}')`,
             backgroundSize: `cover`,
             backgroundPosition: 'center',
             width: '100%',
