@@ -236,7 +236,7 @@ export const Backlog = () => {
   );
 };
 
-function mergeStringsAndKeepObjects(arr: ReactNode[]): ReactNode[][] {
+export function mergeStringsAndKeepObjects(arr: ReactNode[]): ReactNode[][] {
   let result = [];
   let currentString = '';
 

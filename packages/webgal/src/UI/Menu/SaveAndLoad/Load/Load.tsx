@@ -10,6 +10,7 @@ import useTrans from '@/hooks/useTrans';
 import { useTranslation } from 'react-i18next';
 import useSoundEffect from '@/hooks/useSoundEffect';
 import { getSavesFromStorage } from '@/Core/controller/storage/savesController';
+import { easyCompile } from '@/UI/Menu/SaveAndLoad/Save/Save';
 
 export const Load: FC = () => {
   const { playSeClick, playSeEnter, playSePageChange } = useSoundEffect();
@@ -55,6 +56,7 @@ export const Load: FC = () => {
     let saveElementContent = <div />;
     if (saveData) {
       const speaker = saveData.nowStageState.showName === '' ? '\u00A0' : `${saveData.nowStageState.showName}`;
+      const speakerView = easyCompile(speaker);
       saveElementContent = (
         <>
           <div className={styles.Save_Load_content_element_top}>
@@ -69,8 +71,8 @@ export const Load: FC = () => {
             <img className={styles.Save_Load_content_miniRen_bg} alt="Save_img_preview" src={saveData.previewImage} />
           </div>
           <div className={styles.Save_Load_content_text}>
-            <div className={styles.Save_Load_content_speaker + ' ' + styles.Load_content_speaker}>{speaker}</div>
-            <div className={styles.Save_Load_content_text_padding}>{saveData.nowStageState.showText}</div>
+            <div className={styles.Save_Load_content_speaker + ' ' + styles.Load_content_speaker}>{speakerView}</div>
+            <div className={styles.Save_Load_content_text_padding}>{easyCompile(saveData.nowStageState.showText)}</div>
           </div>
         </>
       );

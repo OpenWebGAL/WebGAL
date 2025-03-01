@@ -30,6 +30,7 @@ import useSoundEffect from '@/hooks/useSoundEffect';
 import { showGlogalDialog, switchControls } from '@/UI/GlobalDialog/GlobalDialog';
 import { useEffect } from 'react';
 import { getSavesFromStorage } from '@/Core/controller/storage/savesController';
+import { easyCompile } from '@/UI/Menu/SaveAndLoad/Save/Save';
 
 export const BottomControlPanel = () => {
   const t = useTrans('gaming.');
@@ -68,8 +69,8 @@ export const BottomControlPanel = () => {
           <img style={{ height: '100%' }} alt="q-save-preview image" src={data.previewImage} />
         </div>
         <div className={styles.textContainer}>
-          <div>{data.nowStageState.showName}</div>
-          <div style={{ fontSize: '75%', color: 'rgb(55,60,56)' }}>{data.nowStageState.showText}</div>
+          <div>{easyCompile(data.nowStageState.showName)}</div>
+          <div style={{ fontSize: '75%', color: 'rgb(55,60,56)' }}>{easyCompile(data.nowStageState.showText)}</div>
         </div>
       </div>
     );
