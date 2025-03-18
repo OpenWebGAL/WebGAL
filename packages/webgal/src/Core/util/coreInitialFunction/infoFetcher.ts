@@ -7,6 +7,7 @@ import { WebgalParser } from '@/Core/parser/sceneParser';
 import { WebGAL } from '@/Core/WebGAL';
 import { getFastSaveFromStorage, getSavesFromStorage } from '@/Core/controller/storage/savesController';
 import { setGlobalVar } from '@/store/userDataReducer';
+import { setEnableAppreciationMode, setVisibility } from '@/store/GUIReducer';
 
 declare global {
   interface Window {
@@ -55,6 +56,10 @@ export const infoFetcher = (url: string) => {
               value: res,
             }),
           );
+
+          if (command === 'Enable_Appreciation') {
+            dispatch(setEnableAppreciationMode(res));
+          }
         }
       }
     });

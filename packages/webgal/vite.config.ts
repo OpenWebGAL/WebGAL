@@ -50,7 +50,7 @@ export default defineConfig({
     react(),
     loadVersion(),
     // @ts-ignore
-    visualizer(),
+    // visualizer(),
   ],
   resolve: {
     alias: {

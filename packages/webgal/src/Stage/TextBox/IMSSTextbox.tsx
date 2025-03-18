@@ -185,6 +185,9 @@ export default function IMSSTextbox(props: ITextboxProps) {
     );
   });
 
+  const lineHeightCssStr = `line-height: ${textSizeState === textSize.medium ? '2.2em' : '2em'}`;
+  const lhCss = css(lineHeightCssStr);
+
   return (
     <>
       {isText && (
@@ -247,13 +250,13 @@ export default function IMSSTextbox(props: ITextboxProps) {
               </>
             )}
             <div
-              className={applyStyle('text', styles.text)}
+              className={`${lhCss} ${applyStyle('text', styles.text)}`}
               style={{
                 fontSize,
                 flexFlow: 'column',
                 overflow: 'hidden',
                 paddingLeft: '0.1em',
-                lineHeight: textSizeState === textSize.medium ? '2.2em' : '2em', // 不加的话上半拼音可能会被截断，同时保持排版整齐
+                // lineHeight: textSizeState === textSize.medium ? '2.2em' : '2em', // 不加的话上半拼音可能会被截断，同时保持排版整齐
               }}
             >
               {textElementList}

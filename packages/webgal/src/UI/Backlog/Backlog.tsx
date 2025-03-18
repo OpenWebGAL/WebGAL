@@ -16,17 +16,52 @@ export const Backlog = () => {
   // logger.info('Backlog render');
   const { playSeEnter, playSeClick } = useSoundEffect();
   const GUIStore = useSelector((state: RootState) => state.GUI);
+  const isBacklogOpen = GUIStore.showBacklog;
   const dispatch = useDispatch();
   const iconSize = '0.8em';
   const [indexHide, setIndexHide] = useState(false);
   const [isDisableScroll, setIsDisableScroll] = useState(false);
+  const [limit, setLimit] = useState(20);
+  useEffect(() => {
+    if (!isBacklogOpen) {
+      return;
+    }
+    let options = {
+      root: null,
+      rootMargin: '0px',
+      threshold: [1.0],
+    };
+
+    let observer = new IntersectionObserver((entries) => {
+      if ((entries?.[0]?.intersectionRatio ?? 0) <= 0) return;
+      setLimit(limit + 20);
+    }, options);
+
+    const observeTarget = document.querySelector(`#backlog_item_${limit - 5}`);
+    if (observeTarget) {
+      observer.observe(observeTarget);
+    }
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [limit, isBacklogOpen]);
+
+  useEffect(() => {
+    if (!isBacklogOpen) {
+      setLimit(20);
+    }
+  }, [isBacklogOpen]);
+
   let timeRef = useRef<ReturnType<typeof setTimeout>>();
   // 缓存一下vdom
   const backlogList = useMemo<any>(() => {
     let backlogs = [];
+    const current_backlog_len = WebGAL.backlogManager.getBacklog().length;
     // logger.info('backlogList render');
-    for (let i = 0; i < WebGAL.backlogManager.getBacklog().length; i++) {
-      const backlogItem = WebGAL.backlogManager.getBacklog()[i];
+    for (let i = 0; i < Math.min(current_backlog_len, limit); i++) {
+      const indexOfBacklog = current_backlog_len - i - 1;
+      const backlogItem = WebGAL.backlogManager.getBacklog()[indexOfBacklog];
       const showTextArray = compileSentence(backlogItem.currentStageState.showText, 3, true, false);
       const showTextArray2 = showTextArray.map((line) => {
         return line.map((c) => {
@@ -70,7 +105,8 @@ export const Backlog = () => {
       const singleBacklogView = (
         <div
           className={styles.backlog_item}
-          style={{ animationDelay: `${20 * (WebGAL.backlogManager.getBacklog().length - i)}ms` }}
+          id={`backlog_item_${i}`}
+          style={{ animationDelay: `${20 * ((i - 1) % 20)}ms` }}
           key={'backlogItem' + backlogItem.currentStageState.showText + backlogItem.saveScene.currentSentenceId}
         >
           <div className={styles.backlog_func_area}>
@@ -78,7 +114,7 @@ export const Backlog = () => {
               <div
                 onClick={(e) => {
                   playSeClick();
-                  jumpFromBacklog(i);
+                  jumpFromBacklog(indexOfBacklog);
                   e.preventDefault();
                   e.stopPropagation();
                 }}
@@ -92,7 +128,9 @@ export const Backlog = () => {
                   onClick={() => {
                     playSeClick();
                     // 获取到播放 backlog 语音的元素
-                    const backlog_audio_element: any = document.getElementById('backlog_audio_play_element_' + i);
+                    const backlog_audio_element: any = document.getElementById(
+                      'backlog_audio_play_element_' + indexOfBacklog,
+                    );
                     if (backlog_audio_element) {
                       backlog_audio_element.currentTime = 0;
                       const userDataStore = webgalStore.getState().userData;
@@ -113,15 +151,16 @@ export const Backlog = () => {
           <div className={styles.backlog_item_content}>
             <span className={styles.backlog_item_content_text}>{showTextElementList}</span>
           </div>
-          <audio id={'backlog_audio_play_element_' + i} src={backlogItem.currentStageState.vocal} />
+          <audio id={'backlog_audio_play_element_' + indexOfBacklog} src={backlogItem.currentStageState.vocal} />
         </div>
       );
-      backlogs.unshift(singleBacklogView);
+      backlogs.push(singleBacklogView);
     }
     return backlogs;
   }, [
     WebGAL.backlogManager.getBacklog()[WebGAL.backlogManager.getBacklog().length - 1]?.saveScene?.currentSentenceId ??
       0,
+    limit,
   ]);
   useEffect(() => {
     /* 切换为展示历史记录时触发 */
@@ -197,7 +236,7 @@ export const Backlog = () => {
   );
 };
 
-function mergeStringsAndKeepObjects(arr: ReactNode[]): ReactNode[][] {
+export function mergeStringsAndKeepObjects(arr: ReactNode[]): ReactNode[][] {
   let result = [];
   let currentString = '';
 

@@ -101,6 +101,13 @@ function isCJK(character: string) {
   return !!character.match(/[\u4e00-\u9fa5]|[\u0800-\u4e00]|[\uac00-\ud7ff]/);
 }
 
+/**
+ * 编译文本拓展语法到增强版节点
+ * @param sentence 原始文本
+ * @param lineLimit 行数限制
+ * @param ignoreLineLimit 是否忽略行数限制
+ * @param replace_space_with_nbsp 是否将空格替换为不间断空格
+ */
 // eslint-disable-next-line max-params
 export function compileSentence(
   sentence: string,

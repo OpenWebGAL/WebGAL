@@ -1,4 +1,4 @@
-import { CSSProperties, FC, useEffect } from 'react';
+import { FC, useEffect } from 'react';
 import styles from '../SaveAndLoad.module.scss';
 import { saveGame } from '@/Core/controller/storage/saveGame';
 import { setStorage } from '@/Core/controller/storage/storageController';
@@ -7,9 +7,10 @@ import { RootState } from '@/store/store';
 import { setSlPage } from '@/store/userDataReducer';
 import { showGlogalDialog } from '@/UI/GlobalDialog/GlobalDialog';
 import useTrans from '@/hooks/useTrans';
-import { useTranslation } from 'react-i18next';
 import useSoundEffect from '@/hooks/useSoundEffect';
 import { getSavesFromStorage } from '@/Core/controller/storage/savesController';
+import { compileSentence } from '@/Stage/TextBox/TextBox';
+import { mergeStringsAndKeepObjects } from '@/UI/Backlog/Backlog';
 
 export const Save: FC = () => {
   const { playSePageChange, playSeEnter, playSeDialogOpen } = useSoundEffect();
@@ -57,6 +58,7 @@ export const Save: FC = () => {
     let saveElementContent = <div />;
     if (saveData) {
       const speaker = saveData.nowStageState.showName === '' ? '\u00A0' : `${saveData.nowStageState.showName}`;
+      const speakerView = easyCompile(speaker);
       saveElementContent = (
         <>
           <div className={styles.Save_Load_content_element_top}>
@@ -67,8 +69,8 @@ export const Save: FC = () => {
             <img className={styles.Save_Load_content_miniRen_bg} alt="Save_img_preview" src={saveData.previewImage} />
           </div>
           <div className={styles.Save_Load_content_text}>
-            <div className={styles.Save_Load_content_speaker}>{speaker}</div>
-            <div className={styles.Save_Load_content_text_padding}>{saveData.nowStageState.showText}</div>
+            <div className={styles.Save_Load_content_speaker}>{speakerView}</div>
+            <div className={styles.Save_Load_content_text_padding}>{easyCompile(saveData.nowStageState.showText)}</div>
           </div>
         </>
       );
@@ -123,3 +125,26 @@ export const Save: FC = () => {
     </div>
   );
 };
+
+export function easyCompile(sentence: string) {
+  const compiledNodes = compileSentence(sentence, 3, true);
+  const rnodes = compiledNodes.map((line) => {
+    return line.map((c) => {
+      return c.reactNode;
+    });
+  });
+  const showNameArrayReduced = mergeStringsAndKeepObjects(rnodes);
+  return showNameArrayReduced.map((line, index) => {
+    return (
+      <div key={`backlog-line-${index}`}>
+        {line.map((e, index) => {
+          if (e === '<br />') {
+            return <br key={`br${index}`} />;
+          } else {
+            return e;
+          }
+        })}
+      </div>
+    );
+  });
+}

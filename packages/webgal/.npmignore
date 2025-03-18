@@ -1,0 +1,8 @@
+
+*
+!dist/index.html
+!dist/assets/**
+!dist/webgal-serviceworker.js
+!package.json
+!README.md
+!LICENSE

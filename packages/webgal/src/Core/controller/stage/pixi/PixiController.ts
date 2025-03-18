@@ -105,6 +105,10 @@ export default class PixiStage {
    */
   private MAX_TEX_COUNT = 10;
 
+  private isLive2dAvailable: undefined | boolean = undefined;
+  private figureCash: any;
+  private live2DModel: any;
+  private soundManager: any;
   public constructor() {
     const app = new PIXI.Application({
       backgroundAlpha: 0,
@@ -160,6 +164,7 @@ export default class PixiStage {
       this.callLoader();
     };
     reload();
+    this.initialize().then(() => {});
   }
 
   public getFigureObjects() {
@@ -414,6 +419,90 @@ export default class PixiStage {
   }
 
   /**
+   * 添加视频背景
+   * @param key 背景的标识，一般和背景类型有关
+   * @param url 背景图片url
+   */
+  public addVideoBg(key: string, url: string) {
+    const loader = this.assetLoader;
+    // 准备用于存放这个背景的 Container
+    const thisBgContainer = new WebGALPixiContainer();
+
+    // 是否有相同 key 的背景
+    const setBgIndex = this.backgroundObjects.findIndex((e) => e.key === key);
+    const isBgSet = setBgIndex >= 0;
+
+    // 已经有一个这个 key 的背景存在了
+    if (isBgSet) {
+      // 挤占
+      this.removeStageObjectByKey(key);
+    }
+
+    // 挂载
+    this.backgroundContainer.addChild(thisBgContainer);
+    const bgUuid = uuid();
+    this.backgroundObjects.push({
+      uuid: bgUuid,
+      key: key,
+      pixiContainer: thisBgContainer,
+      sourceUrl: url,
+      sourceType: 'video',
+      sourceExt: this.getExtName(url),
+    });
+
+    // 完成加载后执行的函数
+    const setup = () => {
+      // TODO：找一个更好的解法，现在的解法是无论是否复用原来的资源，都设置一个延时以让动画工作正常！
+
+      setTimeout(() => {
+        console.debug('start loaded video: ' + url);
+        const video = document.createElement('video');
+        const videoResource = new PIXI.VideoResource(video);
+        videoResource.src = url;
+        videoResource.source.preload = 'auto';
+        videoResource.source.muted = true;
+        videoResource.source.loop = true;
+        videoResource.source.autoplay = true;
+        videoResource.source.src = url;
+        // @ts-ignore
+        const texture = PIXI.Texture.from(videoResource);
+        if (texture && this.getStageObjByUuid(bgUuid)) {
+          /**
+           * 重设大小
+           */
+          texture.baseTexture.resource.load().then(() => {
+            const originalWidth = videoResource.source.videoWidth;
+            const originalHeight = videoResource.source.videoHeight;
+            const scaleX = this.stageWidth / originalWidth;
+            const scaleY = this.stageHeight / originalHeight;
+            const targetScale = Math.max(scaleX, scaleY);
+            const bgSprite = new PIXI.Sprite(texture);
+            bgSprite.scale.x = targetScale;
+            bgSprite.scale.y = targetScale;
+            bgSprite.anchor.set(0.5);
+            bgSprite.position.y = this.stageHeight / 2;
+            thisBgContainer.setBaseX(this.stageWidth / 2);
+            thisBgContainer.setBaseY(this.stageHeight / 2);
+            thisBgContainer.pivot.set(0, this.stageHeight / 2);
+            thisBgContainer.addChild(bgSprite);
+          });
+        }
+      }, 0);
+    };
+
+    /**
+     * 加载器部分
+     */
+    this.cacheGC();
+    if (!loader.resources?.[url]?.texture) {
+      this.loadAsset(url, setup);
+    } else {
+      // 复用
+      setup();
+    }
+  }
+
+  /**
    * 添加立绘
    * @param key 立绘的标识，一般和立绘位置有关
    * @param url 立绘图片url
@@ -508,137 +597,143 @@ export default class PixiStage {
    * @param jsonPath
    */
   // eslint-disable-next-line max-params
-  // public addLive2dFigure(key: string, jsonPath: string, pos: string, motion: string, expression: string) {
-  //   let stageWidth = this.stageWidth;
-  //   let stageHeight = this.stageHeight;
-  //   logger.debug('Using motion:', motion);
-  //
-  //   figureCash.push(jsonPath);
-  //
-  //   const loader = this.assetLoader;
-  //   // 准备用于存放这个立绘的 Container
-  //   const thisFigureContainer = new WebGALPixiContainer();
-  //
-  //   // 是否有相同 key 的立绘
-  //   const setFigIndex = this.figureObjects.findIndex((e) => e.key === key);
-  //   const isFigSet = setFigIndex >= 0;
-  //
-  //   // 已经有一个这个 key 的立绘存在了
-  //   if (isFigSet) {
-  //     this.removeStageObjectByKey(key);
-  //   }
-  //
-  //   const metadata = this.getFigureMetadataByKey(key);
-  //   if (metadata) {
-  //     if (metadata.zIndex) {
-  //       thisFigureContainer.zIndex = metadata.zIndex;
-  //     }
-  //   }
-  //   // 挂载
-  //   this.figureContainer.addChild(thisFigureContainer);
-  //   this.figureObjects.push({
-  //     uuid: uuid(),
-  //     key: key,
-  //     pixiContainer: thisFigureContainer,
-  //     sourceUrl: jsonPath,
-  //     sourceType: 'live2d',
-  //     sourceExt: 'json',
-  //   });
-  //   // eslint-disable-next-line @typescript-eslint/no-this-alias
-  //   const instance = this;
-  //
-  //   const setup = () => {
-  //     if (thisFigureContainer) {
-  //       (async function () {
-  //         let overrideBounds: [number, number, number, number] = [0, 0, 0, 0];
-  //         const mot = webgalStore.getState().stage.live2dMotion.find((e) => e.target === key);
-  //         if (mot?.overrideBounds) {
-  //           overrideBounds = mot.overrideBounds;
-  //         }
-  //         console.log(overrideBounds);
-  //         const models = await Promise.all([
-  //           Live2DModel.from(jsonPath, {
-  //             autoInteract: false,
-  //             overWriteBounds: {
-  //               x0: overrideBounds[0],
-  //               y0: overrideBounds[1],
-  //               x1: overrideBounds[2],
-  //               y1: overrideBounds[3],
-  //             },
-  //           }),
-  //         ]);
-  //
-  //         models.forEach((model) => {
-  //           const scaleX = stageWidth / model.width;
-  //           const scaleY = stageHeight / model.height;
-  //           const targetScale = Math.min(scaleX, scaleY) * 1.5;
-  //           const targetWidth = model.width * targetScale;
-  //           // const targetHeight = model.height * targetScale;
-  //
-  //           model.scale.set(targetScale);
-  //           model.anchor.set(0.5);
-  //           model.position.x = stageWidth / 2;
-  //           model.position.y = stageHeight / 1.2;
-  //
-  //           if (pos === 'left') {
-  //             model.position.x = targetWidth / 2;
-  //           }
-  //           if (pos === 'right') {
-  //             model.position.x = stageWidth - targetWidth / 2;
-  //           }
-  //
-  //           let motionToSet = motion;
-  //           let animation_index = 0;
-  //           let priority_number = 3;
-  //           // var audio_link = voiceCash.pop();
-  //
-  //           // model.motion(category_name, animation_index, priority_number,location.href + audio_link);
-  //           /**
-  //            * 检查 Motion 和 Expression
-  //            */
-  //           const motionFromState = webgalStore.getState().stage.live2dMotion.find((e) => e.target === key);
-  //           const expressionFromState = webgalStore.getState().stage.live2dExpression.find((e) => e.target === key);
-  //           if (motionFromState) {
-  //             motionToSet = motionFromState.motion;
-  //           }
-  //           instance.updateL2dMotionByKey(key, motionToSet);
-  //           model.motion(motionToSet, animation_index, priority_number);
-  //           let expressionToSet = expression;
-  //           if (expressionFromState) {
-  //             expressionToSet = expressionFromState.expression;
-  //           }
-  //           instance.updateL2dExpressionByKey(key, expressionToSet);
-  //           model.expression(expressionToSet);
-  //           // @ts-ignore
-  //           if (model.internalModel.eyeBlink) {
-  //             // @ts-ignore
-  //             model.internalModel.eyeBlink.blinkInterval = 1000 * 60 * 60 * 24; // @ts-ignore
-  //             model.internalModel.eyeBlink.nextBlinkTimeLeft = 1000 * 60 * 60 * 24;
-  //           }
-  //
-  //           // lip-sync is still a problem and you can not.
-  //           SoundManager.volume = 0; // @ts-ignore
-  //           if (model.internalModel.angleXParamIndex !== undefined) model.internalModel.angleXParamIndex = 999; // @ts-ignore
-  //           if (model.internalModel.angleYParamIndex !== undefined) model.internalModel.angleYParamIndex = 999; // @ts-ignore
-  //           if (model.internalModel.angleZParamIndex !== undefined) model.internalModel.angleZParamIndex = 999;
-  //           thisFigureContainer.addChild(model);
-  //         });
-  //       })();
-  //     }
-  //   };
-  //
-  //   /**
-  //    * 加载器部分
-  //    */
-  //   const resourses = Object.keys(loader.resources);
-  //   this.cacheGC();
-  //   if (!resourses.includes(jsonPath)) {
-  //     this.loadAsset(jsonPath, setup);
-  //   } else {
-  //     // 复用
-  //     setup();
-  //   }
-  // }
+  public addLive2dFigure(key: string, jsonPath: string, pos: string, motion: string, expression: string) {
+    if (this.isLive2dAvailable !== true) return;
+    try {
+      let stageWidth = this.stageWidth;
+      let stageHeight = this.stageHeight;
+      logger.debug('Using motion:', motion);
+
+      this.figureCash.push(jsonPath);
+
+      const loader = this.assetLoader;
+      // 准备用于存放这个立绘的 Container
+      const thisFigureContainer = new WebGALPixiContainer();
+
+      // 是否有相同 key 的立绘
+      const setFigIndex = this.figureObjects.findIndex((e) => e.key === key);
+      const isFigSet = setFigIndex >= 0;
+
+      // 已经有一个这个 key 的立绘存在了
+      if (isFigSet) {
+        this.removeStageObjectByKey(key);
+      }
+
+      const metadata = this.getFigureMetadataByKey(key);
+      if (metadata) {
+        if (metadata.zIndex) {
+          thisFigureContainer.zIndex = metadata.zIndex;
+        }
+      }
+      // 挂载
+      this.figureContainer.addChild(thisFigureContainer);
+      this.figureObjects.push({
+        uuid: uuid(),
+        key: key,
+        pixiContainer: thisFigureContainer,
+        sourceUrl: jsonPath,
+        sourceType: 'live2d',
+        sourceExt: 'json',
+      });
+      // eslint-disable-next-line @typescript-eslint/no-this-alias
+      const instance = this;
+
+      const setup = (stage: PixiStage) => {
+        if (thisFigureContainer) {
+          (async function () {
+            let overrideBounds: [number, number, number, number] = [0, 0, 0, 0];
+            const mot = webgalStore.getState().stage.live2dMotion.find((e) => e.target === key);
+            if (mot?.overrideBounds) {
+              overrideBounds = mot.overrideBounds;
+            }
+            console.log(overrideBounds);
+            const models = await Promise.all([
+              stage.live2DModel.from(jsonPath, {
+                autoInteract: false,
+                overWriteBounds: {
+                  x0: overrideBounds[0],
+                  y0: overrideBounds[1],
+                  x1: overrideBounds[2],
+                  y1: overrideBounds[3],
+                },
+              }),
+            ]);
+
+            models.forEach((model) => {
+              const scaleX = stageWidth / model.width;
+              const scaleY = stageHeight / model.height;
+              const targetScale = Math.min(scaleX, scaleY) * 1.5;
+              const targetWidth = model.width * targetScale;
+              // const targetHeight = model.height * targetScale;
+
+              model.scale.set(targetScale);
+              model.anchor.set(0.5);
+              model.position.x = stageWidth / 2;
+              model.position.y = stageHeight / 1.2;
+
+              if (pos === 'left') {
+                model.position.x = targetWidth / 2;
+              }
+              if (pos === 'right') {
+                model.position.x = stageWidth - targetWidth / 2;
+              }
+
+              let motionToSet = motion;
+              let animation_index = 0;
+              let priority_number = 3;
+              // var audio_link = voiceCash.pop();
+
+              // model.motion(category_name, animation_index, priority_number,location.href + audio_link);
+              /**
+               * 检查 Motion 和 Expression
+               */
+              const motionFromState = webgalStore.getState().stage.live2dMotion.find((e) => e.target === key);
+              const expressionFromState = webgalStore.getState().stage.live2dExpression.find((e) => e.target === key);
+              if (motionFromState) {
+                motionToSet = motionFromState.motion;
+              }
+              instance.updateL2dMotionByKey(key, motionToSet);
+              model.motion(motionToSet, animation_index, priority_number);
+              let expressionToSet = expression;
+              if (expressionFromState) {
+                expressionToSet = expressionFromState.expression;
+              }
+              instance.updateL2dExpressionByKey(key, expressionToSet);
+              model.expression(expressionToSet);
+              // @ts-ignore
+              if (model.internalModel.eyeBlink) {
+                // @ts-ignore
+                model.internalModel.eyeBlink.blinkInterval = 1000 * 60 * 60 * 24; // @ts-ignore
+                model.internalModel.eyeBlink.nextBlinkTimeLeft = 1000 * 60 * 60 * 24;
+              }
+
+              // lip-sync is still a problem and you can not.
+              stage.soundManager.volume = 0; // @ts-ignore
+              if (model.internalModel.angleXParamIndex !== undefined) model.internalModel.angleXParamIndex = 999; // @ts-ignore
+              if (model.internalModel.angleYParamIndex !== undefined) model.internalModel.angleYParamIndex = 999; // @ts-ignore
+              if (model.internalModel.angleZParamIndex !== undefined) model.internalModel.angleZParamIndex = 999;
+              thisFigureContainer.addChild(model);
+            });
+          })();
+        }
+      };
+
+      /**
+       * 加载器部分
+       */
+      const resourses = Object.keys(loader.resources);
+      this.cacheGC();
+      if (!resourses.includes(jsonPath)) {
+        this.loadAsset(jsonPath, () => setup(this));
+      } else {
+        // 复用
+        setup(this);
+      }
+    } catch (error) {
+      console.error('Live2d Module err: ' + error);
+      this.isLive2dAvailable = false;
+    }
+  }
 
   public changeModelMotionByKey(key: string, motion: string) {
     // logger.debug(`Applying motion ${motion} to ${key}`);
@@ -843,6 +938,24 @@ export default class PixiStage {
   private unlockStageObject(targetName: string) {
     const index = this.lockTransformTarget.findIndex((name) => name === targetName);
     if (index >= 0) this.lockTransformTarget.splice(index, 1);
+  }
+
+  private async initialize() {
+    // 动态加载 figureCash
+    try {
+      const { figureCash } = await import('@/Core/gameScripts/vocal/conentsCash');
+      this.figureCash = figureCash;
+      const { Live2DModel, SoundManager } = await import('pixi-live2d-display-webgal');
+      this.live2DModel = Live2DModel;
+      this.soundManager = SoundManager;
+    } catch (error) {
+      this.isLive2dAvailable = false;
+      console.info('live2d lib load failed', error);
+    }
+    if (this.isLive2dAvailable === undefined) {
+      this.isLive2dAvailable = true;
+      console.info('live2d lib load success');
+    }
   }
 }
 

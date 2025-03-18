@@ -28,7 +28,7 @@ export function ExtraCg() {
     const temp = (
       <ExtraCgElement
         name={extraState.cg[i].name}
-        imgUrl={extraState.cg[i].url}
+        resourceUrl={extraState.cg[i].url}
         transformDeg={deg}
         index={index}
         key={index.toString() + extraState.cg[i].url}
