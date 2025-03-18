@@ -8,23 +8,25 @@
 
 #### 新功能
 
-进一步优化对 Spine 的支持，支持使用 json 格式的 Spine
+支持视频作为背景
 
-允许更大范围的调整文本显示速度和自动播放速度
+Live2D 改为动态加载模式，现在无需修改源码，只需要引入 Live2D SDK 即可接入
 
-升级引擎的调试协议，使其可以在模板编辑器中被控制以响应正在编辑的文件。
+添加配置项 `Enable_Appreciation` 控制是否启用鉴赏模式
 
-优化紧急回避页面
+重做下雨下雪效果，使其更加自然
+
+支持使用视频作为解锁的 CG
 
 #### 修复
 
-选项界面文本预览区域可能溢出的问题
+修复文本框行距无法自定义的问题
 
-修复 `setTransform` 指令的 `duration` 参数设置为 0 时，动画不立即完成的问题
+提高 Backlog 界面的性能
 
-修复使用 `setTransform` 时部分参数被错误地继承的问题
+在鉴赏模式未解锁任何内容时，禁用鉴赏模式按钮
 
-优化部分文本和翻译
+修复存读档界面文字无法正常处理文本拓展语法的问题
 
 <!-- English Translation -->
 ## Release Notes
@@ -37,24 +39,25 @@
 
 #### New Features
 
-Further optimized Spine support, now supports Spine in JSON format.
+Support for video as background
 
-Allows a wider range of adjustment for text display speed and autoplay speed.
+Live2D changed to dynamic loading mode, now you don't need to modify the source code, just import the Live2D SDK to integrate
 
-Upgraded the engine's debugging protocol, allowing it to be controlled within the template editor to respond to the file being edited.
+Added configuration item `Enable_Appreciation` to control whether to enable appreciation mode
 
-Optimized emergency skip page.
+Redo the rain and snow effects to make them more natural
 
+Support using video as unlockable CG
 
 #### Fixes
 
-Fixed an issue where the text preview area in the options interface could overflow.
+Fixed the issue where the line spacing of the text box could not be customized
 
-Fixed an issue where animations did not complete immediately when the `duration` parameter of the `setTransform` command was set to 0.
+Improve the performance of the Backlog interface
 
-Fixed an issue where some parameters were incorrectly inherited when using `setTransform`.
+Disable the appreciation mode button when no content is unlocked in appreciation mode
 
-Optimized some text and translations.
+Fixed the issue where the text in the save/load interface could not handle text extension syntax correctly
 
 <!-- Japanese Translation -->
 ## リリースノート
@@ -67,20 +70,22 @@ Optimized some text and translations.
 
 #### 新機能
 
-Spineへの対応をさらに最適化し、json形式のSpineもサポートするようになりました。
+背景としてビデオをサポート
 
-テキスト表示速度とオートプレイ速度の調整範囲を拡大しました。
+Live2Dは動的ロードモードに変更されました。ソースコードを変更する必要はなく、Live2D SDKを導入するだけで統合できます。
 
-エンジンのデバッグプロトコルをアップグレードし、テンプレートエディタで編集中のファイルに反応して制御できるようにしました。
+コンフィグ項目`Enable_Appreciation`を追加し、鑑賞モードを有効にするかどうかを制御します
 
-緊急回避ページを最適化しました。
+雨や雪の効果を再構築し、より自然に見えるようにしました
+
+ロック解除のCGとしてビデオを使用することをサポート
 
 #### 修正
 
-選択肢画面のテキストプレビューエリアがはみ出す可能性があった問題を修正しました。
+テキストボックスの行間をカスタマイズできない問題を修正
 
-`setTransform` 命令の `duration` パラメータを0に設定した場合、アニメーションが即座に完了しない問題を修正しました。
+Backlogインターフェースのパフォーマンスを向上
 
-`setTransform` 使用時に一部のパラメータが誤って継承される問題を修正しました。
+鑑賞モードで何もロック解除されていない場合、鑑賞モードボタンを無効化
 
-一部のテキストと翻訳を最適化しました。
+セーブロードインターフェースのテキストがテキスト拡張構文を正常に処理できない問題を修正
