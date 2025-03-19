@@ -8,7 +8,10 @@ import { setScriptManagedGlobalVar } from '@/store/userDataReducer';
 import { ActionCreatorWithPayload } from '@reduxjs/toolkit';
 import { ISetGameVar } from '@/store/stageInterface';
 import { dumpToStorageFast } from '@/Core/controller/storage/storageController';
+import expression from 'angular-expressions';
 import get from 'lodash/get';
+import random from 'lodash/random';
+
 /**
  * 设置变量
  * @param sentence
@@ -30,8 +33,8 @@ export const setVar = (sentence: ISentence): IPerform => {
   if (sentence.content.match(/\s*=\s*/)) {
     const key = sentence.content.split(/\s*=\s*/)[0];
     const valExp = sentence.content.split(/\s*=\s*/)[1];
-    if (valExp === 'random()') {
-      webgalStore.dispatch(targetReducerFunction({ key, value: Math.random() }));
+    if (/^\s*[a-zA-Z_$][\w$]*\s*\(.*\)\s*$/.test(valExp)) {
+      webgalStore.dispatch(targetReducerFunction({ key, value: EvaluateExpression(valExp) }));
     } else if (valExp.match(/[+\-*\/()]/)) {
       // 如果包含加减乘除号，则运算
       // 先取出运算表达式中的变量
@@ -91,6 +94,18 @@ export const setVar = (sentence: ISentence): IPerform => {
 };
 
 type BaseVal = string | number | boolean | undefined;
+
+/**
+ * 执行函数
+ */
+function EvaluateExpression(val: string) {
+  const instance = expression.compile(val);
+  return instance({
+    random: (...args: any[]) => {
+      return args.length ? random(...args) : Math.random();
+    },
+  });
+}
 
 /**
  * 取不到时返回 undefined
