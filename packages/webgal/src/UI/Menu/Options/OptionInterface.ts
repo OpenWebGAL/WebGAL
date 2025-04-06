@@ -13,4 +13,6 @@ export interface ISlider {
   uniqueID: string;
   onChange: (event: ChangeEvent<HTMLInputElement>) => void;
   initValue: number;
+  min?: number;
+  max?: number;
 }
