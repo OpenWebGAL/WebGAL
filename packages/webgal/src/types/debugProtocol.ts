@@ -15,6 +15,8 @@ export enum DebugCommand {
   SET_COMPONENT_VISIBILITY,
   // 临时场景
   TEMP_SCENE,
+  // 字体优化
+  FONT_OPTIMIZATION,
 }
 
 export interface IDebugMessage {

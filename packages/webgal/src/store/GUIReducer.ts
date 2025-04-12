@@ -28,6 +28,7 @@ const initState: IGuiState = {
   isEnterGame: false,
   isShowLogo: true,
   enableAppreciationMode: false, // Paf87
+  fontOptimization: false,
 };
 
 /**
@@ -76,10 +77,20 @@ const GUISlice = createSlice({
     setEnableAppreciationMode: (state, action: PayloadAction<boolean>) => {
       state.enableAppreciationMode = action.payload;
     },
+    setFontOptimization: (state, action: PayloadAction<boolean>) => {
+      state.fontOptimization = action.payload;
+    },
   },
 });
 
-export const { setVisibility, setMenuPanelTag, setGuiAsset, setLogoImage, setEnableAppreciationMode } = GUISlice.actions;
+export const {
+  setVisibility,
+  setMenuPanelTag,
+  setGuiAsset,
+  setLogoImage,
+  setEnableAppreciationMode,
+  setFontOptimization,
+} = GUISlice.actions;
 export default GUISlice.reducer;
 
 // export function GuiStateStore(): GuiStore {
