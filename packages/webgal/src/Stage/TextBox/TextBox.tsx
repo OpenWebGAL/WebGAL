@@ -20,35 +20,8 @@ export interface EnhancedNode {
 }
 
 export const TextBox = () => {
-  const [isShowStroke, setIsShowStroke] = useState(true);
-
-  useEffect(() => {
-    const handleResize = () => {
-      const targetHeight = SCREEN_CONSTANTS.height;
-      const targetWidth = SCREEN_CONSTANTS.width;
-
-      const h = window.innerHeight; // 窗口高度
-      const w = window.innerWidth; // 窗口宽度
-      const zoomH = h / targetHeight; // 以窗口高度为基准的变换比
-      const zoomW = w / targetWidth; // 以窗口宽度为基准的变换比
-      const zoomH2 = w / targetHeight; // 竖屏时以窗口高度为基础的变换比
-      const zoomW2 = h / targetWidth; // 竖屏时以窗口宽度为基础的变换比
-      [zoomH, zoomW, zoomH2, zoomW2].forEach((e) => {
-        if (e <= 0.2) {
-          setIsShowStroke(false);
-        } else {
-          setIsShowStroke(true);
-        }
-      });
-    };
-    window.addEventListener('resize', handleResize);
-    handleResize();
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  }, []);
-
   const stageState = useSelector((state: RootState) => state.stage);
+  const guiState = useSelector((state: RootState) => state.GUI);
   const userDataState = useSelector((state: RootState) => state.userData);
   const textDelay = useTextDelay(userDataState.optionData.textSpeed);
   const textDuration = useTextAnimationDuration(userDataState.optionData.textSpeed);
@@ -74,6 +47,41 @@ export const TextBox = () => {
   const miniAvatar = stageState.miniAvatar;
   const textboxOpacity = userDataState.optionData.textboxOpacity;
   const Textbox = IMSSTextbox;
+  const fontOptimization = guiState.fontOptimization;
+
+  const [isShowStroke, setIsShowStroke] = useState(true);
+
+  useEffect(() => {
+    if (!fontOptimization) {
+      setIsShowStroke(true);
+      return;
+    }
+
+    const handleResize = () => {
+      const targetHeight = SCREEN_CONSTANTS.height;
+      const targetWidth = SCREEN_CONSTANTS.width;
+
+      const h = window.innerHeight; // 窗口高度
+      const w = window.innerWidth; // 窗口宽度
+      const zoomH = h / targetHeight; // 以窗口高度为基准的变换比
+      const zoomW = w / targetWidth; // 以窗口宽度为基准的变换比
+      const zoomH2 = w / targetHeight; // 竖屏时以窗口高度为基础的变换比
+      const zoomW2 = h / targetWidth; // 竖屏时以窗口宽度为基础的变换比
+      [zoomH, zoomW, zoomH2, zoomW2].forEach((e) => {
+        if (e <= 0.2) {
+          setIsShowStroke(false);
+        } else {
+          setIsShowStroke(true);
+        }
+      });
+    };
+    window.addEventListener('resize', handleResize);
+    handleResize();
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [fontOptimization]);
+
   return (
     <Textbox
       textArray={textArray}

@@ -30,6 +30,7 @@ export interface IGuiState {
   isEnterGame: boolean;
   isShowLogo: boolean;
   enableAppreciationMode: boolean; // Pc102
+  fontOptimization: boolean; // 字体优化
 }
 
 export type componentsVisibility = Pick<

@@ -6,7 +6,7 @@ import { webgalStore } from '@/store/store';
 import { sceneParser, WebgalParser } from '@/Core/parser/sceneParser';
 import { runScript } from '@/Core/controller/gamePlay/runScript';
 import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
-import { setVisibility } from '@/store/GUIReducer';
+import { setFontOptimization, setVisibility } from '@/store/GUIReducer';
 import { resetStage } from '@/Core/controller/stage/resetStage';
 import { ISentence } from '@/Core/controller/scene/sceneInterface';
 
@@ -96,6 +96,10 @@ export const webSocketFunc = () => {
       setTimeout(() => {
         nextSentence();
       }, 100);
+    }
+    if (message.command === DebugCommand.FONT_OPTIMIZATION) {
+      const command = message.message;
+      webgalStore.dispatch(setFontOptimization(command === 'true'));
     }
   };
   socket.onerror = (e) => {
