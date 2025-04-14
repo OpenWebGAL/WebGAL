@@ -2,38 +2,36 @@
   width: 100%;
   height: 10%;
   display: flex;
-  justify-content: center;
   align-items: center;
-  //background-color: rgba(255, 255, 255, 1);
-  //box-shadow: 0 0 45px 15px rgba(0, 0, 0, 0.05);
   padding: 0 55px;
 }
 
 .MenuPanel_button {
-  padding: 0.25em 15px 0 15px;
-  margin-right: 15px;
   display: flex;
+  font-family: 'Monomaniac One', WebgalUI, sans-serif;
+  flex-direction: column;
   justify-content: center;
-  font-size: 200%;
-  text-align: center;
-  //font-weight: bold;
+  align-items: center;
   border-radius: 6px;
-  //width: 20%;
-  min-width: 12.5%;
   cursor: pointer;
-  color: rgba(123,144,169, 1);
+  color: rgb(47, 55, 64);
+  font-weight: 600;
   background: rgba(0, 0, 0, 0);
   overflow: hidden;
-  //border-right: 1.5px solid rgba(0, 0, 0, 0.15);
-  transition: text-shadow 0.7s, background-color 0.7s;
+  margin-right: 32px;
+  transition: text-shadow 0.7s, background-color 0.7s, color 0.2s;
+  &:hover {
+    color: #6c6c6c;
+  }
+  :global(.i-icon) {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 }
 
-.MenuPanel_button:last-child{
+.MenuPanel_button:last-child {
   margin-right: 0;
-}
-
-.MenuPanel_button:hover {
-  background-color: rgba(245, 246, 247, 0.15);
 }
 
 .MenuPanel_button:last-child {
@@ -41,11 +39,27 @@
 }
 
 .MenuPanel_button_icon {
-  transform: translate(0, 0.125em);
-  padding: 0 0.15em 0 0;
-  margin: 0 0.15em 0 0;
+  border-radius: 50%;
+  background-color: #f4f4f4;
+  border: 2px solid #bbbbbb;
+  width: 2.5em;
+  height: 2.5em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 4px;
+  transition: text-shadow 0.7s, background-color 0.7s, color 0.2s;
 }
 
-.MenuPanel_button_hl{
-  background-color: rgba(245, 246, 247, 0.35) !important;
+.MenuPanel_button_hl {
+  .MenuPanel_button_icon {
+    background-color: #4e9aff !important;
+    color: #ffffff !important;
+    border: 2px solid #4e9aff !important;
+    &:hover {
+      background-color: #4e9aff !important;
+      color: #ffffff !important;
+      border: 2px solid #4e9aff !important;
+    }
+  }
 }

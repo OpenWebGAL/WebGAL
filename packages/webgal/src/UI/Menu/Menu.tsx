@@ -33,7 +33,7 @@ const Menu: FC = () => {
   return (
     <>
       {GUIState.showMenuPanel && (
-        <div className={styles.Menu_main}>
+        <div className={`${GUIState.currentMenuTag === MenuPanelTag.Save ? styles.Menu_main_save : styles.Menu_main}`}>
           <div className={styles.Menu_TagContent}>{currentTag}</div>
           <MenuPanel />
         </div>

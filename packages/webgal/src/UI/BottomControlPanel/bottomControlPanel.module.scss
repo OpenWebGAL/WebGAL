@@ -34,44 +34,44 @@
   position: relative;
   top: 2px;
   padding: 0 0 0 0;
-  filter: drop-shadow(1px 1px 5px rgba(0, 0, 0, 1));
 }
 
 .button_text {
   position: relative;
   bottom: 8px;
-  color: white;
-  text-shadow: 1px 1px 5px rgba(0, 0, 0, 1);
   padding-left: 3px;
 }
 
 .button_on {
   height: 100%;
+  font-family: 'Monomaniac One', WebgalUI, sans-serif;
   display: inline-block;
   font-size: 150%;
   padding: 0.25em 0.3em 0 0.15em;
-  transition: background-color 0.5s;
-  background: rgba(255, 255, 255, 0.3);
-  border-radius: 4px;
+  transition: background-color 0.2s, color 0.2s;
+  background-color: rgba(255, 255, 255);
+  color: #545454;
+  border-radius: 8px;
   margin: 0 0.1em 0 0.1em;
 }
 
 .singleButton {
-  //border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+  font-family: 'Monomaniac One', WebgalUI, sans-serif;
   height: 100%;
   display: inline-block;
   color: white;
   font-size: 150%;
   padding: 0.3em 0.3em 0 0.15em;
-  transition: background-color 0.5s;
+  transition: background-color 0.2s, color 0.2s;
   cursor: pointer;
-  border-radius: 4px;
+  border-radius: 8px;
   margin: 0 0.1em 0 0.1em;
   position: relative;
 }
 
 .singleButton:hover {
-  background-color: rgba(255, 255, 255, 0.3);
+  background-color: rgba(255, 255, 255);
+  color: #545454;
 }
 
 .fastSlPreview {
