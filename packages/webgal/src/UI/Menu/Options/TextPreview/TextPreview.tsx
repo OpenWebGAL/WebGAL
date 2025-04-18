@@ -7,6 +7,7 @@ import useTrans from '@/hooks/useTrans';
 import { getTextSize } from '@/UI/getTextSize';
 import IMSSTextbox from '@/Stage/TextBox/IMSSTextbox';
 import { compileSentence } from '@/Stage/TextBox/TextBox';
+import { useState } from 'react';
 
 export const TextPreview = (props: any) => {
   const t = useTrans('menu.options.pages.display.options.');
@@ -49,15 +50,22 @@ export const TextPreview = (props: any) => {
     textboxOpacity: textboxOpacity,
   };
 
+  const [previewKey, setPreviewKey] = useState<number>(0);
+
+  const forcePreviewUpdate = () => {
+    setPreviewKey((prevKey) => prevKey + 1);
+  };
+
   return (
     <div
       className={styles.textPreviewMain}
       style={{
         background: previewBackground ? `bottom / cover no-repeat url(${previewBackground})` : 'rgba(0, 0, 0, 0.1)',
       }}
+      onClick={forcePreviewUpdate}
     >
       <div key={`previewTextbox-${textDelay}`} className={styles.textbox}>
-        <Textbox {...textboxProps} />
+        <Textbox key={previewKey} {...textboxProps} />
       </div>
     </div>
   );
