@@ -5,6 +5,8 @@ import { resolve, relative } from 'path';
 import { visualizer } from 'rollup-plugin-visualizer';
 import { readdirSync, watch, writeFileSync } from 'fs';
 import { isEqual } from 'lodash';
+import Info from 'unplugin-info/vite';
+
 // https://vitejs.dev/config/
 
 // @ts-ignore
@@ -49,6 +51,7 @@ export default defineConfig({
   plugins: [
     react(),
     loadVersion(),
+    Info(),
     // @ts-ignore
     // visualizer(),
   ],
