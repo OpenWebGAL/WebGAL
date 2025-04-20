@@ -23,7 +23,7 @@ export const isIOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); // 判断是否
  */
 export const initializeScript = (): void => {
   // 打印初始log信息
-  logger.info(__INFO.version);
+  logger.info(`WebGAL v${__INFO.version}`);
   logger.info('Github: https://github.com/OpenWebGAL/WebGAL ');
   logger.info('Made with ❤ by OpenWebGAL');
   // 激活强制缩放
