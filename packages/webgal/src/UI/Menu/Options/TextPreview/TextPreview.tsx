@@ -30,6 +30,12 @@ export const TextPreview = (props: any) => {
 
   const Textbox = IMSSTextbox;
 
+  const [previewKey, setPreviewKey] = useState<number>(0);
+
+  const forcePreviewUpdate = () => {
+    setPreviewKey((prevKey) => prevKey + 1);
+  };
+
   const textboxProps = {
     textArray: previewTextArray,
     isText: true,
@@ -38,7 +44,7 @@ export const TextPreview = (props: any) => {
     showName: showNameArray,
     currentConcatDialogPrev: '',
     fontSize: size,
-    currentDialogKey: '',
+    currentDialogKey: String(previewKey),
     isSafari: isSafari,
     isFirefox: isFirefox,
     miniAvatar: '',
@@ -50,12 +56,6 @@ export const TextPreview = (props: any) => {
     textboxOpacity: textboxOpacity,
   };
 
-  const [previewKey, setPreviewKey] = useState<number>(0);
-
-  const forcePreviewUpdate = () => {
-    setPreviewKey((prevKey) => prevKey + 1);
-  };
-
   return (
     <div
       className={styles.textPreviewMain}
@@ -65,7 +65,7 @@ export const TextPreview = (props: any) => {
       onClick={forcePreviewUpdate}
     >
       <div key={`previewTextbox-${textDelay}`} className={styles.textbox}>
-        <Textbox key={previewKey} {...textboxProps} />
+        <Textbox {...textboxProps} />
       </div>
     </div>
   );
