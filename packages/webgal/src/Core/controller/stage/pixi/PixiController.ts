@@ -625,6 +625,9 @@ export default class PixiStage {
           thisFigureContainer.zIndex = metadata.zIndex;
         }
       }
+
+      thisFigureContainer.pivot.set(0, this.stageHeight / 2);
+
       // 挂载
       this.figureContainer.addChild(thisFigureContainer);
       this.figureObjects.push({
@@ -668,15 +671,25 @@ export default class PixiStage {
 
               model.scale.set(targetScale);
               model.anchor.set(0.5);
-              model.position.x = stageWidth / 2;
-              model.position.y = stageHeight / 1.2;
 
-              if (pos === 'left') {
-                model.position.x = targetWidth / 2;
+              const targetHeight = model.height * targetScale;
+
+              let baseY = stageHeight / 2;
+              if (targetHeight < stageHeight) {
+                baseY = stageHeight / 2 + (stageHeight - targetHeight) / 2;
               }
-              if (pos === 'right') {
-                model.position.x = stageWidth - targetWidth / 2;
+              thisFigureContainer.setBaseY(baseY);
+
+              if (pos === 'center') {
+                thisFigureContainer.setBaseX(stageWidth / 2);
+              } else if (pos === 'left') {
+                thisFigureContainer.setBaseX(targetWidth / 2);
+              } else if (pos === 'right') {
+                thisFigureContainer.setBaseX(stageWidth - targetWidth / 2);
               }
+
+              model.position.x = 0;
+              model.position.y = stageHeight / 1.2;
 
               let motionToSet = motion;
               let animation_index = 0;
