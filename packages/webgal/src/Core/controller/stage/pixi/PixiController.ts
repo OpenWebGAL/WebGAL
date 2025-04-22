@@ -625,9 +625,6 @@ export default class PixiStage {
           thisFigureContainer.zIndex = metadata.zIndex;
         }
       }
-
-      thisFigureContainer.pivot.set(0, this.stageHeight / 2);
-
       // 挂载
       this.figureContainer.addChild(thisFigureContainer);
       this.figureObjects.push({
@@ -665,21 +662,20 @@ export default class PixiStage {
             models.forEach((model) => {
               const scaleX = stageWidth / model.width;
               const scaleY = stageHeight / model.height;
-              const targetScale = Math.min(scaleX, scaleY) * 1.5;
+              const targetScale = Math.min(scaleX, scaleY);
               const targetWidth = model.width * targetScale;
-              // const targetHeight = model.height * targetScale;
-
-              model.scale.set(targetScale);
-              model.anchor.set(0.5);
-
               const targetHeight = model.height * targetScale;
+              model.scale.x = targetScale;
+              model.scale.y = targetScale;
+              model.anchor.set(0.5);
+              model.position.x = 0;
+              model.position.y = stageHeight / 2;
 
               let baseY = stageHeight / 2;
               if (targetHeight < stageHeight) {
-                baseY = stageHeight / 2 + (stageHeight - targetHeight) / 2;
+                baseY = stageHeight / 2 + stageHeight - targetHeight / 2;
               }
               thisFigureContainer.setBaseY(baseY);
-
               if (pos === 'center') {
                 thisFigureContainer.setBaseX(stageWidth / 2);
               } else if (pos === 'left') {
@@ -688,9 +684,7 @@ export default class PixiStage {
                 thisFigureContainer.setBaseX(stageWidth - targetWidth / 2);
               }
 
-              model.position.x = 0;
-              model.position.y = stageHeight / 1.2;
-
+              thisFigureContainer.pivot.set(0, stageHeight / 2);
               let motionToSet = motion;
               let animation_index = 0;
               let priority_number = 3;
