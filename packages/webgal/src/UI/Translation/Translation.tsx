@@ -32,7 +32,7 @@ export default function Translation() {
           case 'en':
             setLang(language.en);
             break;
-          case 'jp':
+          case 'ja':
             setLang(language.jp);
             break;
           case 'fr':
