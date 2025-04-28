@@ -123,7 +123,7 @@ export function generateTimelineObj(
 
   function getEndFilterEffect() {
     const endSegment = timeline[timeline.length - 1];
-    const { alpha, rotation, blur, duration, scale, position, ...rest } = endSegment;
+    const { alpha, rotation, blur, brightness, contrast, saturation, gamma, colorRed, colorGreen, colorBlue, duration, scale, position, ...rest } = endSegment;
     return rest;
   }
 

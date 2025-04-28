@@ -271,6 +271,13 @@ export default class PixiStage {
             rotation: target.pixiContainer.rotation,
             // @ts-ignore
             blur: target.pixiContainer.blur,
+            brightness: target.pixiContainer.brightness,
+            contrast: target.pixiContainer.contrast,
+            saturation: target.pixiContainer.saturation,
+            gamma: target.pixiContainer.gamma,
+            colorRed: target.pixiContainer.colorRed,
+            colorGreen: target.pixiContainer.colorGreen,
+            colorBlue: target.pixiContainer.colorBlue,
             ...webgalFilters,
           };
           let effect: IEffect = {
