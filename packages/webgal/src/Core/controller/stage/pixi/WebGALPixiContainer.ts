@@ -15,6 +15,7 @@ import {
   getRadiusAlphaFilter,
   setRadiusAlphaFilter,
 } from '@/Core/controller/stage/pixi/shaders/RadiusAlphaFilter';
+import { AdjustmentFilter } from 'pixi-filters';
 
 export class WebGALPixiContainer extends PIXI.Container {
   public containerFilters = new Map<string, PIXI.Filter>();
@@ -113,6 +114,71 @@ export class WebGALPixiContainer extends PIXI.Container {
       this.containerFilters.set('blur', blurFilter);
       return blurFilter;
     }
+  }
+
+  /**
+   * adjustment filter
+   * @public
+   */
+  public getOrCreateAdjustmentFilter(): AdjustmentFilter {
+    const filterFromMap = this.containerFilters.get("adjustment");
+    if (filterFromMap) {
+      return filterFromMap as AdjustmentFilter;
+    } else {
+      const adjustment = new AdjustmentFilter();
+      this.addFilter(adjustment);
+      this.containerFilters.set('adjustment', adjustment);
+      return adjustment;
+    }
+  }
+
+  public get brightness(): number {
+    return this.getOrCreateAdjustmentFilter().brightness;
+  }
+  public set brightness(value: number) {
+    this.getOrCreateAdjustmentFilter().brightness = value;
+  }
+
+  public get contrast(): number {
+    return this.getOrCreateAdjustmentFilter().contrast;
+  }
+  public set contrast(value: number) {
+    this.getOrCreateAdjustmentFilter().contrast = value;
+  }
+
+  public get saturation(): number {
+    return this.getOrCreateAdjustmentFilter().saturation;
+  }
+  public set saturation(value: number) {
+    this.getOrCreateAdjustmentFilter().saturation = value;
+  }
+
+  public get gamma(): number {
+    return this.getOrCreateAdjustmentFilter().gamma;
+  }
+  public set gamma(value: number) {
+    this.getOrCreateAdjustmentFilter().gamma = value;
+  }
+
+  public get colorRed(): number {
+    return this.getOrCreateAdjustmentFilter().red * 255.0;
+  }
+  public set colorRed(value: number) {
+    this.getOrCreateAdjustmentFilter().red = value / 255.0;
+  }
+
+  public get colorGreen(): number {
+    return this.getOrCreateAdjustmentFilter().green * 255.0;
+  }
+  public set colorGreen(value: number) {
+    this.getOrCreateAdjustmentFilter().green = value / 255.0;
+  }
+
+  public get colorBlue(): number {
+    return this.getOrCreateAdjustmentFilter().blue * 255.0;
+  }
+  public set colorBlue(value: number) {
+    this.getOrCreateAdjustmentFilter().blue = value / 255.0;
   }
 
   /**
