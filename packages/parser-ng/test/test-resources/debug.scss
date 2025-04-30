@@ -1,0 +1,64 @@
+.Title_main {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  z-index: 13;
+}
+
+.Title_buttonList {
+  font-family: "思源宋体", serif;
+  display: flex;
+  position: absolute;
+  left: 0;
+  min-width: 25%;
+  height: 100%;
+  justify-content: center;
+  align-items: flex-start;
+  flex-flow: column;
+  transition: background 0.75s;
+  padding-left: 120px;
+}
+
+.Title_button {
+  font-weight: bold;
+  text-align: center;
+  flex: 0 1 auto;
+  cursor: pointer;
+  padding: 1em 2em 1em 2em;
+  margin: 20px 0;
+  transition: all 0.33s;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(5px);
+  border-radius: 4px;
+  transform: skewX(-10deg);
+  background: linear-gradient(to right, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.1));
+
+  &:hover {
+    font-weight: bold;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 1);
+    padding: 1em 6em 1em 3em;
+  }
+  &:active {
+    font-weight: bold;
+  }
+}
+
+.Title_button_text {
+  color: transparent;
+  background: linear-gradient(135deg, #fdfbfb 0%, #dcddde 100%);
+  -webkit-background-clip: text;
+  padding: 0 0.5em 0 0.5em;
+  font-size: 200%;
+  font-family: WebgalUI, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  letter-spacing: 0.15em;
+}
+
+.Title_backup_background {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  z-index: 13;
+  background: linear-gradient(135deg, #fdfbfb 0%, #dcddde 100%);
+}
+
+
