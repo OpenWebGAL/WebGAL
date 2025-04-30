@@ -37,8 +37,7 @@ export enum commandType {
   setTransform,
   setTransition,
   getUserInput,
-  applyStyle,
-  wait
+  applyStyle
 }
 
 /**
