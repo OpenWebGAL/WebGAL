@@ -1,6 +1,6 @@
 {
-    "name": "webgal-parser",
-    "version": "4.5.10-beta.2",
+    "name": "webgal-parser-ng",
+    "version": "4.5.13",
     "description": "WebGAL script parser",
     "scripts": {
         "test": "yarn parser && vitest",
