@@ -121,7 +121,7 @@ export class WebGALPixiContainer extends PIXI.Container {
    * @public
    */
   public getOrCreateAdjustmentFilter(): AdjustmentFilter {
-    const filterFromMap = this.containerFilters.get("adjustment");
+    const filterFromMap = this.containerFilters.get('adjustment');
     if (filterFromMap) {
       return filterFromMap as AdjustmentFilter;
     } else {
