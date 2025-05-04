@@ -41,7 +41,7 @@ export const getUserInput = (sentence: ISentence): IPerform => {
               webgalStore.dispatch(
                 setStageVar({
                   key: varKey,
-                  value: userInput?.value === '' ? defaultValueFromArgs ?? ' ' : userInput?.value ?? '',
+                  value: userInput?.value || defaultValueFromArgs || '',
                 }),
               );
             }
