@@ -70,7 +70,7 @@
   position: relative;
 }
 
-.singleButton:hover {
+.singleButton:hover, .singleButton_active {
   background-color: rgba(255, 255, 255, 0.3);
 }
 
