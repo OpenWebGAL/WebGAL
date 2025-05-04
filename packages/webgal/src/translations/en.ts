@@ -175,6 +175,7 @@ const en = {
       quicklyLoad: 'Quickly Load',
       save: 'Save',
       load: 'Load',
+      fullscreen: 'Full Screen',
       options: 'Options',
       title: 'Title',
       titleTips: 'Confirm return to the title screen',
