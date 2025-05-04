@@ -24,6 +24,7 @@ export const getUserInput = (sentence: ISentence): IPerform => {
   const title = (titleFromArgs === 0 ? 'Please Input' : titleFromArgs) ?? 'Please Input';
   const buttonTextFromArgs = getSentenceArgByKey(sentence, 'buttonText');
   const buttonText = (buttonTextFromArgs === 0 ? 'OK' : buttonTextFromArgs) ?? 'OK';
+  const defaultValueFromArgs = getSentenceArgByKey(sentence, 'defaultValue');
   const fontFamily = webgalStore.getState().userData.optionData.textboxFont;
   const font = fontFamily === textFont.song ? '"思源宋体", serif' : '"WebgalUI", serif';
   const { playSeEnter, playSeClick } = useSEByWebgalStore();
@@ -38,7 +39,10 @@ export const getUserInput = (sentence: ISentence): IPerform => {
             const userInput: HTMLInputElement = document.getElementById('user-input') as HTMLInputElement;
             if (userInput) {
               webgalStore.dispatch(
-                setStageVar({ key: varKey, value: (userInput?.value ?? '') === '' ? ' ' : userInput?.value ?? '' }),
+                setStageVar({
+                  key: varKey,
+                  value: userInput?.value || defaultValueFromArgs || ' ',
+                }),
               );
             }
             playSeClick();
