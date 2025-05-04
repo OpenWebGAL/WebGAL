@@ -174,6 +174,7 @@ const jp = {
       quicklyLoad: 'QUICK LOAD',
       save: 'SAVE',
       load: 'LOAD',
+      fullscrren: 'FULLSCREEN',
       options: 'CONFIG',
       title: 'HOME',
       titleTips: 'タイトル画面に戻りますか？',
