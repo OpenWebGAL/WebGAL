@@ -149,6 +149,10 @@ const fr = {
       title: 'EXTRA',
       subtitle: '',
     },
+    exit: {
+      title: 'QUITTER',
+      subtitle: '',
+    },
   },
 
   gaming: {
