@@ -149,6 +149,10 @@ const de = {
       title: 'EXTRA',
       subtitle: '',
     },
+    exit: {
+      title: 'BEENDEN',
+      subtitle: '',
+    },
   },
 
   gaming: {

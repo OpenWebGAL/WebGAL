@@ -163,6 +163,10 @@ const zhTw = {
       title: 'CG模式',
       subtitle: 'EXTRA',
     },
+    exit: {
+      title: '退出遊戲',
+      subtitle: 'EXIT',
+    },
   },
 
   gaming: {

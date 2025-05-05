@@ -163,6 +163,10 @@ const zhCn = {
       title: '鉴赏模式',
       subtitle: 'EXTRA',
     },
+    exit: {
+      title: '退出游戏',
+      subtitle: 'EXIT',
+    },
   },
 
   gaming: {
