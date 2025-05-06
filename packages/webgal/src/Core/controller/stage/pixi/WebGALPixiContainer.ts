@@ -15,7 +15,7 @@ import {
   getRadiusAlphaFilter,
   setRadiusAlphaFilter,
 } from '@/Core/controller/stage/pixi/shaders/RadiusAlphaFilter';
-import { AdjustmentFilter } from 'pixi-filters';
+import { AdjustmentFilter, AdvancedBloomFilter, BevelFilter} from 'pixi-filters';
 
 export class WebGALPixiContainer extends PIXI.Container {
   public containerFilters = new Map<string, PIXI.Filter>();
@@ -27,6 +27,9 @@ export class WebGALPixiContainer extends PIXI.Container {
   public constructor() {
     super();
     this.addFilter(this.alphaFilter);
+    this.getOrCreateAdjustmentFilter();
+    this.getOrCreateBevelFilter();
+    this.getOrCreateBloomFilter();
   }
 
   public get alphaFilterVal() {
@@ -114,6 +117,140 @@ export class WebGALPixiContainer extends PIXI.Container {
       this.containerFilters.set('blur', blurFilter);
       return blurFilter;
     }
+  }
+
+  public getOrCreateBevelFilter(): BevelFilter {
+    const bevelFilterFromMap = this.containerFilters.get('bevel') as BevelFilter;
+    if (bevelFilterFromMap) {
+      return bevelFilterFromMap;
+    } else {
+      const bevelFilter = new BevelFilter();
+      // 覆盖默认属性
+      bevelFilter.lightAlpha = 0;
+      bevelFilter.shadowAlpha = 0;
+      bevelFilter.thickness = 0;
+      bevelFilter.rotation = 0;
+      this.addFilter(bevelFilter);
+      this.containerFilters.set('bevel', bevelFilter);
+      return bevelFilter;
+    }
+  }
+
+  public get bevel(): number {
+    return this.getOrCreateBevelFilter().lightAlpha;
+  }
+
+  public set bevel(value: number) {
+    this.getOrCreateBevelFilter().lightAlpha = value;
+  }
+
+  public get bevelThickness(): number {
+    return this.getOrCreateBevelFilter().thickness;
+  }
+
+  public set bevelThickness(value: number) {
+    this.getOrCreateBevelFilter().thickness = value;
+  }
+
+  public get bevelRotation(): number {
+    return this.getOrCreateBevelFilter().rotation;
+  }
+
+  public set bevelRotation(value: number) {
+    this.getOrCreateBevelFilter().rotation = value;
+  }
+
+  public get bevelRed(): number {
+    const color = this.getOrCreateBevelFilter().lightColor;
+    const hexStr = color.toString(16).padStart(6, "0");
+    const r = parseInt(hexStr.substring(0, 2), 16);
+    return r;
+  }
+
+  public set bevelRed(value: number) {
+    const r = Math.max(0, Math.min(255, value));
+    const g = this.bevelGreen;
+    const b = this.bevelBlue;
+    const color = (r << 16) | (g << 8) | b;
+    this.getOrCreateBevelFilter().lightColor = color;
+  }
+
+  public get bevelGreen(): number {
+    const color = this.getOrCreateBevelFilter().lightColor;
+    const hexStr = color.toString(16).padStart(6, "0");
+    const g = parseInt(hexStr.substring(2, 4), 16);
+    return g;
+  }
+
+  public set bevelGreen(value: number) {
+    const r = this.bevelRed;
+    const g = Math.max(0, Math.min(255, value));
+    const b = this.bevelBlue;
+    const color = (r << 16) | (g << 8) | b;
+    this.getOrCreateBevelFilter().lightColor = color;
+  }
+
+  public get bevelBlue(): number {
+    const color = this.getOrCreateBevelFilter().lightColor;
+    const hexStr = color.toString(16).padStart(6, "0");
+    const b = parseInt(hexStr.substring(4, 6), 16);
+    return b;
+  }
+
+  public set bevelBlue(value: number) {
+    const r = this.bevelRed;
+    const g = this.bevelGreen;
+    const b = Math.max(0, Math.min(255, value));
+    const color = (r << 16) | (g << 8) | b;
+    this.getOrCreateBevelFilter().lightColor = color;
+  }
+
+  public getOrCreateBloomFilter(): AdvancedBloomFilter {
+    const bloomFilterFromMap = this.containerFilters.get('bloom') as AdvancedBloomFilter;
+    if (bloomFilterFromMap) {
+      return bloomFilterFromMap;
+    } else {
+      const bloomFilter = new AdvancedBloomFilter();
+      // 覆盖默认属性
+      bloomFilter.bloomScale = 0;
+      bloomFilter.blur = 0;
+      bloomFilter.threshold = 0;
+      this.addFilter(bloomFilter);
+      this.containerFilters.set('bloom', bloomFilter);
+      return bloomFilter;
+    }
+  }
+
+  public get bloom(): number {
+    return this.getOrCreateBloomFilter().bloomScale as number;
+  }
+
+  public set bloom(value: number) {
+    this.getOrCreateBloomFilter().bloomScale = value;
+  }
+
+  public get bloomBrightness(): number {
+    return this.getOrCreateBloomFilter().brightness as number;
+  }
+
+  public set bloomBrightness(value: number) {
+    this.getOrCreateBloomFilter().brightness = value;
+  }
+
+  public get bloomBlur(): number {
+    return this.getOrCreateBloomFilter().blur as number;
+  }
+
+  public set bloomBlur(value: number) {
+    this.getOrCreateBloomFilter().blur = value;
+  }
+
+  public get bloomThreshold(): number {
+    return this.getOrCreateBloomFilter().threshold as number;
+  }
+
+  public set bloomThreshold(value: number) {
+    this.getOrCreateBloomFilter().threshold = value;
   }
 
   /**

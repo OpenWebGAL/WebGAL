@@ -39,6 +39,23 @@ export interface ITransform {
   };
   rotation: number;
   blur: number;
+  brightness: number;
+  contrast: number;
+  saturation: number;
+  gamma: number;
+  colorRed: number;
+  colorGreen: number;
+  colorBlue: number;
+  bevel: number;
+  bevelThickness: number;
+  bevelRotation: number;
+  bevelRed: number;
+  bevelGreen: number;
+  bevelBlue: number;
+  bloom: number;
+  bloomBrightness: number;
+  bloomBlur: number;
+  bloomThreshold: number;
 }
 
 /**
@@ -69,6 +86,23 @@ export const baseTransform: ITransform = {
   },
   rotation: 0,
   blur: 0,
+  brightness: 1,
+  contrast: 1,
+  saturation: 1,
+  gamma: 1,
+  colorRed: 255,
+  colorGreen: 255,
+  colorBlue: 255,
+  bevel: 0,
+  bevelThickness: 0,
+  bevelRotation: 0,
+  bevelRed: 255,
+  bevelGreen: 255,
+  bevelBlue: 255,
+  bloom: 0,
+  bloomBrightness: 1,
+  bloomBlur: 0,
+  bloomThreshold: 0,
 };
 
 export interface IFreeFigure {
