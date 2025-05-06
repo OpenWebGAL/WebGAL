@@ -2,7 +2,6 @@ import * as PIXI from 'pixi.js';
 import { registerPerform } from '@/Core/util/pixiPerformManager/pixiPerformManager';
 
 import { WebGAL } from '@/Core/WebGAL';
-import { SCREEN_CONSTANTS } from '@/Core/util/constants';
 
 const pixiSnow = (snowSpeed: number) => {
   // 动画参数
@@ -27,8 +26,8 @@ const pixiSnow = (snowSpeed: number) => {
   const bunnyList: any = [];
   let addBunnyCounter = 0;
   // 获取长宽，用于控制雪花出现位置
-  const stageWidth = SCREEN_CONSTANTS.width;
-  const stageHeight = SCREEN_CONSTANTS.height;
+  const stageWidth = WebGAL.canvasWidth;
+  const stageHeight = WebGAL.canvasHeight;
   // 监听动画更新
   function tickerFn(delta: number) {
     addBunnyCounter++;

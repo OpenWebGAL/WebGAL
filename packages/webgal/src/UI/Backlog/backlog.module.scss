@@ -1,3 +1,5 @@
+@import "../Utils/constants.scss";
+
 .Backlog_main {
   font-family: "思源宋体", serif;
   position: absolute;
@@ -9,6 +11,7 @@
   padding: 2em 0 2em 0;
   animation: backlog_soft_in 0.7s ease-out forwards;
   box-sizing: border-box;
+  justify-items: center;
 }
 
 .Backlog_main_out {
@@ -22,6 +25,7 @@
   padding: 2em 0 2em 0;
   animation: backlog_soft_out 0.7s ease-out forwards;
   box-sizing: border-box;
+  justify-items: center;
 }
 
 // 把z-index置为负数 不然会挡住点击层
@@ -39,6 +43,8 @@
   padding: 0 0 0 1em;
   display: flex;
   height: 10%;
+  width: 100%;
+  max-width: $defaultScreenWidth;
 }
 
 .backlog_top_icon {
@@ -74,9 +80,10 @@
 }
 
 .backlog_content {
-  position: absolute;
+  position: relative;
+  max-width: $defaultScreenWidth;
   height: 80%;
-  padding: 1em 10em 1em 10em;
+  padding: 1em 5em 1em 5em;
   overflow: auto;
   display: flex;
   flex-flow: column-reverse;

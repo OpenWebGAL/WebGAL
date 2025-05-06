@@ -8,7 +8,6 @@ import { logger } from '@/Core/util/logger';
 import { isIOS } from '@/Core/initializeScript';
 import { WebGALPixiContainer } from '@/Core/controller/stage/pixi/WebGALPixiContainer';
 import { WebGAL } from '@/Core/WebGAL';
-import { SCREEN_CONSTANTS } from '@/Core/util/constants';
 import { addSpineBgImpl, addSpineFigureImpl } from '@/Core/controller/stage/pixi/spine';
 // import { figureCash } from '@/Core/gameScripts/vocal/conentsCash'; // 如果要使用 Live2D，取消这里的注释
 // import { Live2DModel, SoundManager } from 'pixi-live2d-display-webgal'; // 如果要使用 Live2D，取消这里的注释
@@ -79,8 +78,8 @@ export default class PixiStage {
   public notUpdateBacklogEffects = false;
   public readonly figureContainer: PIXI.Container;
   public figureObjects: Array<IStageObject> = [];
-  public stageWidth = SCREEN_CONSTANTS.width;
-  public stageHeight = SCREEN_CONSTANTS.height;
+  public stageWidth = WebGAL.canvasWidth;
+  public stageHeight = WebGAL.canvasHeight;
   public assetLoader = new PIXI.Loader();
   public readonly backgroundContainer: PIXI.Container;
   public backgroundObjects: Array<IStageObject> = [];
@@ -133,6 +132,7 @@ export default class PixiStage {
     app.renderer.autoResize = true;
     const appRoot = document.getElementById('root');
     if (appRoot) {
+      this.setRootSize(document);
       app.renderer.resize(appRoot.clientWidth, appRoot.clientHeight);
     }
     if (isIOS) {
@@ -165,6 +165,122 @@ export default class PixiStage {
     };
     reload();
     this.initialize().then(() => {});
+  }
+
+  private setRootSize(document: Document) {
+    /**
+     * 在窗口大小改变时进行强制缩放
+     */
+    const ua = navigator.userAgent;
+    const isIOSDevice = !!ua.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
+    function resize() {
+      const targetHeight = WebGAL.canvasHeight;
+      const targetWidth = WebGAL.canvasWidth;
+
+      const h = window.innerHeight; // 窗口高度
+      const w = window.innerWidth; // 窗口宽度
+      const zoomH = h / targetHeight; // 以窗口高度为基准的变换比
+      const zoomW = w / targetWidth; // 以窗口宽度为基准的变换比
+      const zoomH2 = w / targetHeight; // 竖屏时以窗口高度为基础的变换比
+      const zoomW2 = h / targetWidth; // 竖屏时以窗口宽度为基础的变换比
+      let mh = (targetHeight - h) / 2; // y轴移动距离
+      let mw = (targetWidth - w) / 2; // x轴移动距离
+      let mh2os = targetWidth / 2 - w / 2; // 竖屏时 y轴移动距离
+      let mw2os = targetHeight / 2 - h / 2; // 竖屏时 x轴移动距离
+      let transform = '';
+      let ebgTransform = '';
+      const root = document.getElementById('root'); // 获取根元素
+      const title = document.getElementById('Title_enter_page');
+      const ebg = document.getElementById('ebg');
+      const elements = [root, title];
+      if (root) {
+        root.style.width = `${targetWidth}px`;
+        root.style.height = `${targetHeight}px`;
+      }
+      if (title) {
+        title.style.width = `${targetWidth}px`;
+        title.style.height = `${targetHeight}px`;
+      }
+      if (w > h) {
+        const ebg = document.getElementById('ebg');
+        if (ebg) {
+          ebg.style.height = `100vh`;
+          ebg.style.width = `100vw`;
+          ebgTransform = '';
+        }
+        mw = -mw;
+        mh = -mh;
+        if (w * (targetHeight / targetWidth) >= h) {
+          transform = `translate(${mw}px, ${mh}px) scale(${zoomH},${zoomH})`;
+        }
+        if (w * (targetHeight / targetWidth) < h) {
+          transform = `translate(${mw}px, ${mh}px) scale(${zoomW},${zoomW})`;
+        }
+      } else {
+        /**
+         * 旋转
+         */
+        if (ebg) {
+          ebg.style.height = `${targetHeight}px`;
+          ebg.style.width = `${targetWidth}px`;
+        }
+        mw2os = -mw2os;
+        if (h * (targetHeight / targetWidth) >= w) {
+          ebgTransform = `rotate(90deg) translate(${mw2os}px, ${mh2os}px) scale(${zoomH2 * 1.75},${zoomH2 * 1.75})`;
+          transform = `rotate(90deg) translate(${mw2os}px, ${mh2os}px) scale(${zoomH2},${zoomH2})`;
+        }
+        if (h * (targetHeight / targetWidth) < w) {
+          ebgTransform = `rotate(90deg) translate(${mw2os}px, ${mh2os}px) scale(${zoomW2 * 1.75},${zoomW2 * 1.75})`;
+          transform = `rotate(90deg) translate(${mw2os}px, ${mh2os}px) scale(${zoomW2},${zoomW2})`;
+        }
+        /**
+         * iOS 不强制旋转
+         */
+        if (isIOSDevice) {
+          const zoomWi = w / targetWidth;
+          transform = `translate(${-mw}px, ${-mh}px) scale(${zoomWi},${zoomWi})`
+        }
+      }
+      if (ebg) {
+        ebg.style.transform = ebgTransform;
+      }
+      for (const element of elements) {
+        if (element) {
+          element.style.transform = transform;
+        }
+      }
+    }
+
+    if (!isIOSDevice) {
+      // 创建一个新的 meta 标签
+      const meta = document.createElement('meta');
+      meta.name = "viewport";
+      meta.content = "width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no";
+      // 将该标签添加到 head 中
+      document.getElementsByTagName('head')[0].appendChild(meta);
+      resize();
+      window.onload = resize;
+      window.onresize = resize;
+      // 监听键盘 F11 事件，全屏时触发页面调整
+      document.onkeydown = function (event) {
+        const e = event;
+        if (e && e.key === 'F11') {
+          setTimeout(() => {
+            resize();
+          }, 100);
+        }
+      };
+    } else {
+      // ios
+      const meta = document.createElement('meta');
+      meta.name = "viewport";
+      meta.content = "width=device-width, initial-scale=0.22, minimum-scale=0.01, maximum-scale=1";
+      document.getElementsByTagName('head')[0].appendChild(meta);
+      const style = document.createElement('style');
+      style.type = 'text/css';
+      style.textContent = '* { font-synthesis: none !important; }';
+      document.head.appendChild(style);
+    }
   }
 
   public getFigureObjects() {

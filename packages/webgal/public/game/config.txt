@@ -4,3 +4,5 @@ Title_img:WebGAL_New_Enter_Image.png;
 Title_bgm:s_Title.mp3;
 Game_Logo:WebGalEnter.png;
 Enable_Appreciation:true;
+Canvas_width:2560;
+Canvas_height:1440;

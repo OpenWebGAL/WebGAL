@@ -11,6 +11,7 @@ import { useTranslation } from 'react-i18next';
 import useSoundEffect from '@/hooks/useSoundEffect';
 import { getSavesFromStorage } from '@/Core/controller/storage/savesController';
 import { easyCompile } from '@/UI/Menu/SaveAndLoad/Save/Save';
+import HorizontalScroll from '@/UI/Utils/HorizontalScroll';
 
 export const Load: FC = () => {
   const { playSeClick, playSeEnter, playSePageChange } = useSoundEffect();
@@ -105,7 +106,7 @@ export const Load: FC = () => {
         <div className={styles.Save_Load_title}>
           <div className={styles.Load_title_text}>{t('loadSaving.title')}</div>
         </div>
-        <div className={styles.Save_Load_top_buttonList}>{page}</div>
+        <HorizontalScroll className={styles.Save_Load_top_buttonList}>{page}</HorizontalScroll>
       </div>
       <div className={styles.Save_Load_content} id={'Load_content_page_' + userDataState.optionData.slPage}>
         {showSaves}

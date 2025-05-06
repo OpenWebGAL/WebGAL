@@ -54,6 +54,7 @@ const Title: FC = () => {
           className={applyStyle('Title_main', styles.Title_main)}
           style={{
             backgroundImage: showBackground,
+            backgroundPosition: 'center',
             backgroundSize: 'cover',
           }}
         >

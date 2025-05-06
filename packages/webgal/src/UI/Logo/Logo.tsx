@@ -55,7 +55,7 @@ const Logo: FC = () => {
           className={styles.Logo_main}
           key={currentLogoIndex.value + 'bg'}
           onClick={nextImg}
-          style={{ backgroundImage: `url("${currentLogoUrl}")`, animationDuration: `${animationDuration}ms` }}
+          style={{ backgroundImage: `url("${currentLogoUrl}")`, backgroundPosition: 'center', animationDuration: `${animationDuration}ms` }}
         />
       )}
     </>

@@ -19,7 +19,6 @@ export function ExtraBgm() {
   let foundCurrentBgmName = initName;
   let foundCurrentBgmIndex = -1;
   const iconSize = 39;
-  const bgmPlayerHeight = isShowBgmList.value ? '80%' : '10%';
   const bgmListLen = extraState.bgm.length;
   extraState.bgm.forEach((e, i) => {
     if (e.url === currentBgmSrc) {
@@ -63,7 +62,7 @@ export function ExtraBgm() {
     );
   });
   return (
-    <div className={styles.bgmContainer} style={{ maxHeight: bgmPlayerHeight }}>
+    <div className={styles.bgmContainer}>
       <div className={styles.bgmPlayerMain}>
         <div
           onClick={() => {

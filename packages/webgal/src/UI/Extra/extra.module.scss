@@ -1,3 +1,5 @@
+@import "../Utils/constants.scss";
+
 .extra {
   width: 100%;
   height: 100%;
@@ -8,12 +10,14 @@
   background-image: linear-gradient(135deg, #93a5cf 0%, #e4efe9 100%);;
   padding: 2em 2em 2em 2em;
   box-sizing: border-box;
+  justify-items: center;
 }
 
 .extra_top {
   padding: 0 0 0 0;
   display: flex;
-  height: 10%;
+  width: 100%;
+  max-width: $defaultScreenWidth;
 }
 
 .extra_top_icon {
@@ -51,10 +55,11 @@
 
 .mainContainer {
   box-sizing: border-box;
-  padding: 0 2em 0 2em;
   display: flex;
-  height: 92%;
+  width: 100%;
   flex-flow: column;
+  max-width: $defaultScreenWidth;
+  align-items: center;
 }
 
 .bgmContainer {
@@ -63,8 +68,11 @@
   bottom: 30px;
   position: absolute;
   overflow: auto;
-  //width: 100%;
+  width: 93%;
   //height: 70%;
+  max-width: $defaultScreenWidth;
+  max-height: 70%;
+  justify-self: center;
   box-sizing: border-box;
   display: flex;
   flex-flow: column-reverse;
@@ -89,7 +97,7 @@
   align-items: flex-start;
   margin: 0 0 15px 0;
   flex-wrap: wrap;
-  overflow: auto;
+  overflow-y: auto;
 }
 
 .bgmPlayerMain {
@@ -166,31 +174,39 @@
   width: 100%;
   display: flex;
   flex-wrap: wrap;
-  justify-content: flex-start;
+  justify-content: center;
   align-items: flex-start;
   align-content: flex-start;
-  height: 90%;
+  // height: 90%;
   box-sizing: border-box;
-  padding: 4em 0 0 2em;
+  padding: 4em 2em 4em 2em;
+  height: 1000px;
+  overflow-y: auto;
 }
 
 .cgElement {
-  width: 22.5%;
-  height: 37.5%;
+  height: 300px;
+  width: auto;
   background-color: rgba(255, 255, 255, 0.75);
   box-shadow: 0 0 15px 5px rgba(0, 0, 0, 0.35);
   box-sizing: border-box;
   padding: 0.75em 0.75em 0.75em 0.75em;
   opacity: 0;
-  margin: 1em 1em 1em 1em;
+  margin: 1.5em 1em 1.5em 1em;
   animation-delay: 100ms;
   z-index: 1;
-  position: relative;
+  position: initial;
   cursor: pointer;
 }
 
+.cgImage {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
 .cgShowDiv {
-  height: 8%;
+  // height: 8%;
   width: 100%;
   display: flex;
   flex-flow: row;
@@ -201,11 +217,13 @@
 .cgShowDivWarpper {
   display: flex;
   flex-flow: row;
-  justify-content: center;
+  // justify-content: center;
   align-items: flex-end;
   //background: rgba(255, 255, 255, 0.35);
   border-radius: 7px;
   padding: 12px 15px;
+  overflow-x: auto;
+  // scrollbar-width: none;
 }
 
 .cgNav {
@@ -247,7 +265,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.1);
+  background: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -255,8 +273,6 @@
 
 .showFullCgMain {
   cursor: pointer;
-  width: 80%;
-  height: 80%;
   box-sizing: border-box;
   padding: 2em 2em 2em 2em;
   background: rgba(255, 255, 255, 0.95);

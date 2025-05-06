@@ -1,13 +1,12 @@
 .Options_main {
-  position: absolute;
+  position: relative;
   cursor: default;
-  height: 90%;
+  height: 100%;
   width: 100%;
   //background: rgba(255, 255, 255, 0.65);
 }
 
 .Options_top {
-  height: 15%;
   width: 100%;
   display: flex;
   align-items: flex-start;
@@ -17,7 +16,6 @@
   font-family: "思源宋体", serif;
   letter-spacing: 0.1em;
   font-size: 225%;
-  margin: 0.5em 0 0.5em 0;
   padding: 0.2em 2em 0.2em 1.1em;
   box-sizing: border-box;
   //background-color: rgba(255, 255, 255, 0.99);
@@ -57,10 +55,10 @@
 }
 
 .Options_main_content {
-  display: flex;
+  display: block;
   flex: 1;
   padding: 0 0 0 3em;
-  overflow: auto;
+  overflow-y: auto;
 }
 
 .Options_main_content_half {
@@ -106,7 +104,7 @@
 .Options_page_container {
   height: 85%;
   display: flex;
-  padding: 1em 3.75em 1em 3.75em;
+  padding: 1em 1em 1em 3.75em;
 }
 
 .Options_button_list {

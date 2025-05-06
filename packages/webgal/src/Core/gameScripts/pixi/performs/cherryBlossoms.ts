@@ -2,7 +2,6 @@ import * as PIXI from 'pixi.js';
 import { registerPerform } from '@/Core/util/pixiPerformManager/pixiPerformManager';
 
 import { WebGAL } from '@/Core/WebGAL';
-import { SCREEN_CONSTANTS } from '@/Core/util/constants';
 
 const pixicherryBlossoms = (cherryBlossomsSpeed: number) => {
   // アニメーション パラメータ
@@ -35,8 +34,8 @@ const pixicherryBlossoms = (cherryBlossomsSpeed: number) => {
   function tickerFn(delta: number) {
     // 桜の位置を制御するために使用される長さと幅を取得します
     // 获取长宽，用于控制花出现位置
-    const stageWidth = SCREEN_CONSTANTS.width;
-    const stageHeight = SCREEN_CONSTANTS.height;
+    const stageWidth = WebGAL.canvasWidth;
+    const stageHeight = WebGAL.canvasHeight;
     // オブジェクトを作成
     // 创建对象
     const bunny = new PIXI.Sprite(texture);

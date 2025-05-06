@@ -43,42 +43,43 @@ export const initializeScript = (): void => {
   loadStyle('./game/userStyleSheet.css');
   // 获得 user Animation
   getUserAnimation();
-  // 获取游戏信息
-  infoFetcher('./game/config.txt');
-  // 获取start场景
-  const sceneUrl: string = assetSetter('start.txt', fileType.scene);
-  // 场景写入到运行时
-  sceneFetcher(sceneUrl).then((rawScene) => {
-    WebGAL.sceneManager.sceneData.currentScene = sceneParser(rawScene, 'start.txt', sceneUrl);
-    // 开始场景的预加载
-    const subSceneList = WebGAL.sceneManager.sceneData.currentScene.subSceneList;
-    WebGAL.sceneManager.settledScenes.push(sceneUrl); // 放入已加载场景列表，避免递归加载相同场景
-    const subSceneListUniq = uniqWith(subSceneList); // 去重
-    scenePrefetcher(subSceneListUniq);
-  });
-  /**
-   * 启动Pixi
-   */
-  WebGAL.gameplay.pixiStage = new PixiStage();
+  // 获取游戏信息，并强行等待读取完配置数据
+  infoFetcher('./game/config.txt').then(()=>{
+    // 获取start场景
+    const sceneUrl: string = assetSetter('start.txt', fileType.scene);
+    // 场景写入到运行时
+    sceneFetcher(sceneUrl).then((rawScene) => {
+      WebGAL.sceneManager.sceneData.currentScene = sceneParser(rawScene, 'start.txt', sceneUrl);
+      // 开始场景的预加载
+      const subSceneList = WebGAL.sceneManager.sceneData.currentScene.subSceneList;
+      WebGAL.sceneManager.settledScenes.push(sceneUrl); // 放入已加载场景列表，避免递归加载相同场景
+      const subSceneListUniq = uniqWith(subSceneList); // 去重
+      scenePrefetcher(subSceneListUniq);
+    });
+    /**
+     * 启动Pixi
+     */
+    WebGAL.gameplay.pixiStage = new PixiStage();
 
-  /**
-   * iOS 设备 卸载所有 Service Worker
-   */
-  // if ('serviceWorker' in navigator && isIOS) {
-  //   navigator.serviceWorker.getRegistrations().then((registrations) => {
-  //     for (const registration of registrations) {
-  //       registration.unregister().then(() => {
-  //         logger.info('已卸载 Service Worker');
-  //       });
-  //     }
-  //   });
-  // }
+    /**
+     * iOS 设备 卸载所有 Service Worker
+     */
+    // if ('serviceWorker' in navigator && isIOS) {
+    //   navigator.serviceWorker.getRegistrations().then((registrations) => {
+    //     for (const registration of registrations) {
+    //       registration.unregister().then(() => {
+    //         logger.info('已卸载 Service Worker');
+    //       });
+    //     }
+    //   });
+    // }
 
-  /**
-   * 绑定工具函数
-   */
-  bindExtraFunc();
-  webSocketFunc();
+    /**
+     * 绑定工具函数
+     */
+    bindExtraFunc();
+    webSocketFunc();
+  })
 };
 
 function loadStyle(url: string) {

@@ -11,6 +11,7 @@ import useSoundEffect from '@/hooks/useSoundEffect';
 import { getSavesFromStorage } from '@/Core/controller/storage/savesController';
 import { compileSentence } from '@/Stage/TextBox/TextBox';
 import { mergeStringsAndKeepObjects } from '@/UI/Backlog/Backlog';
+import HorizontalScroll from '@/UI/Utils/HorizontalScroll';
 
 export const Save: FC = () => {
   const { playSePageChange, playSeEnter, playSeDialogOpen } = useSoundEffect();
@@ -117,7 +118,7 @@ export const Save: FC = () => {
         <div className={styles.Save_Load_title}>
           <div className={styles.Save_title_text}>{t('saving.title')}</div>
         </div>
-        <div className={styles.Save_Load_top_buttonList}>{page}</div>
+        <HorizontalScroll className={styles.Save_Load_top_buttonList}>{page}</HorizontalScroll>
       </div>
       <div className={styles.Save_Load_content} id={'Save_content_page_' + userDataState.optionData.slPage}>
         {showSaves}
