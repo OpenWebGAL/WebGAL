@@ -1,11 +1,11 @@
 [
   {
-    "shockwaveFilter": 0,
+    "shockwave": 0,
     "alpha": 1,
     "duration": 0
   },
   {
-    "shockwaveFilter": 3,
+    "shockwave": 3,
     "alpha": 1,
     "duration": 2000
   }

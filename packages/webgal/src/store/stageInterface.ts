@@ -56,6 +56,8 @@ export interface ITransform {
   bloomBrightness: number;
   bloomBlur: number;
   bloomThreshold: number;
+  shockwave: number;
+  radiusAlpha: number;
 }
 
 /**
@@ -103,6 +105,8 @@ export const baseTransform: ITransform = {
   bloomBrightness: 1,
   bloomBlur: 0,
   bloomThreshold: 0,
+  shockwave: 0,
+  radiusAlpha: 0,
 };
 
 export interface IFreeFigure {
