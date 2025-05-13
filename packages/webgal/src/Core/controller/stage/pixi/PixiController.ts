@@ -563,7 +563,7 @@ export default class PixiStage {
           const targetHeight = originalHeight * targetScale;
           thisFigureContainer.setBaseY(this.stageHeight / 2);
           if (targetHeight < this.stageHeight) {
-            thisFigureContainer.setBaseY(this.stageHeight / 2 + this.stageHeight - targetHeight / 2);
+            thisFigureContainer.setBaseY(this.stageHeight / 2 + (this.stageHeight - targetHeight) / 2);
           }
           if (presetPosition === 'center') {
             thisFigureContainer.setBaseX(this.stageWidth / 2);
@@ -673,7 +673,7 @@ export default class PixiStage {
 
               let baseY = stageHeight / 2;
               if (targetHeight < stageHeight) {
-                baseY = stageHeight / 2 + stageHeight - targetHeight / 2;
+                baseY = stageHeight / 2 + (stageHeight - targetHeight) / 2;
               }
               thisFigureContainer.setBaseY(baseY);
               if (pos === 'center') {
