@@ -126,7 +126,7 @@ export async function addSpineFigureImpl(
       const targetHeight = originalHeight * targetScale;
       thisFigureContainer.setBaseY(this.stageHeight / 2);
       if (targetHeight < this.stageHeight) {
-        thisFigureContainer.setBaseY(this.stageHeight / 2 + this.stageHeight - targetHeight / 2);
+        thisFigureContainer.setBaseY(this.stageHeight / 2 + (this.stageHeight - targetHeight) / 2);
       }
       if (presetPosition === 'center') {
         thisFigureContainer.setBaseX(this.stageWidth / 2);
