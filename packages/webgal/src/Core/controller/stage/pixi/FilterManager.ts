@@ -77,6 +77,8 @@ export class FilterManager {
     this.filterMap.set(FilterKey.Shockwave, null);
     this.filterMap.set(FilterKey.RadiusAlpha, null);
     this.filterMap.set(FilterKey.Alpha, null);
+    // 使 Alpha 滤镜常驻
+    this.getOrCreateAlphaFilter(true);
   }
 
   // 更新排序后的滤镜数组
@@ -134,7 +136,8 @@ export class FilterManager {
       const filter = this.getOrCreateAlphaFilter(false);
       if (filter) {
         filter.alpha = value;
-        this.removeAlphaFilterIfNeeded();
+        // 出于一些原因，暂不需要移除此滤镜
+        // this.removeAlphaFilterIfNeeded();
       }
     } else {
       const filter = this.getOrCreateAlphaFilter(true);
@@ -773,7 +776,7 @@ export class FilterManager {
       const filter = this.getOrCreateShockwaveFilter(false);
       if (filter) {
         filter.time = value;
-        // this.removeShockwaveFilterIfNeeded();
+        this.removeShockwaveFilterIfNeeded();
       }
     } else {
       const filter = this.getOrCreateShockwaveFilter(true);
@@ -813,7 +816,7 @@ export class FilterManager {
       const filter = this.getOrCreateRadiusAlphaFilter(false);
       if (filter) {
         filter.radius = value;
-        // this.removeRadiusAlphaFilterIfNeeded();
+        this.removeRadiusAlphaFilterIfNeeded();
       }
     } else {
       const filter = this.getOrCreateRadiusAlphaFilter(true);
