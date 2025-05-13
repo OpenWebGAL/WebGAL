@@ -156,6 +156,10 @@ const en = {
       title: 'EXTRA',
       subtitle: '',
     },
+    exit: {
+      title: 'EXIT',
+      subtitle: '',
+    },
   },
 
   gaming: {

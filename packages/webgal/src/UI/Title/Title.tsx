@@ -117,6 +117,16 @@ const Title: FC = () => {
                 <div className={applyStyle('Title_button_text', styles.Title_button_text)}>{t('extra.title')}</div>
               </div>
             )}
+            <div
+              className={applyStyle('Title_button', styles.Title_button)}
+              onClick={() => {
+                playSeClick();
+                window.close();
+              }}
+              onMouseEnter={playSeEnter}
+            >
+              <div className={applyStyle('Title_button_text', styles.Title_button_text)}>{t('exit.title')}</div>
+            </div>
           </div>
         </div>
       )}

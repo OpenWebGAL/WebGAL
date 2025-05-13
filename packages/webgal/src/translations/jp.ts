@@ -159,6 +159,10 @@ const jp = {
       title: '鑑賞モード',
       subtitle: 'EXTRA',
     },
+    exit: {
+      title: 'ゲーム終了',
+      subtitle: 'EXIT',
+    },
   },
 
   gaming: {
