@@ -627,8 +627,9 @@ export default class PixiStage {
       }
       // 挂载
       this.figureContainer.addChild(thisFigureContainer);
+      const figureUuid = uuid();
       this.figureObjects.push({
-        uuid: uuid(),
+        uuid: figureUuid,
         key: key,
         pixiContainer: thisFigureContainer,
         sourceUrl: jsonPath,
@@ -639,7 +640,7 @@ export default class PixiStage {
       const instance = this;
 
       const setup = (stage: PixiStage) => {
-        if (thisFigureContainer) {
+        if (thisFigureContainer && this.getStageObjByUuid(figureUuid)) {
           (async function () {
             let overrideBounds: [number, number, number, number] = [0, 0, 0, 0];
             const mot = webgalStore.getState().stage.live2dMotion.find((e) => e.target === key);
