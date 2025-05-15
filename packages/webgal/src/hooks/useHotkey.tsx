@@ -380,12 +380,12 @@ function hasScrollToBottom(dom: Element) {
  * F11 进入全屏
  */
 function useToggleFullScreen() {
-  const { isSupported, isFullScreen: isFullScreen, toggle } = useFullScreen();
+  const { isSupported, isFullScreen, toggle } = useFullScreen();
   if (!isSupported) return;
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => e.repeat || e.key === 'F11' && toggle();
+    const handleKeyDown = (e: KeyboardEvent) => e.repeat || (e.key === 'F11' && toggle());
     document.addEventListener('keydown', handleKeyDown);
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
@@ -394,5 +394,5 @@ function useToggleFullScreen() {
   useEffect(() => {
     dispatch(setOptionData({ key: 'fullScreen', value: isFullScreen ? 0 : 1 }));
     setStorage();
-  }, [isFullScreen])
+  }, [isFullScreen]);
 }

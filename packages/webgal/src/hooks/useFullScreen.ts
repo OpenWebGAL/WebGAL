@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
-const _isFullScreen = ()=> !!(document.fullscreenElement || (document as any).webkitFullscreenElement);
-export default function useFullScreen(target: Element=document.documentElement): {
+const _isFullScreen = () => !!(document.fullscreenElement || (document as any).webkitFullscreenElement);
+export default function useFullScreen(target: Element = document.documentElement): {
   isSupported: boolean;
   isFullScreen: boolean;
   enter: () => Promise<void>;
@@ -13,8 +13,7 @@ export default function useFullScreen(target: Element=document.documentElement):
 
   useEffect(() => {
     if (!isSupported) return;
-    const onFullscreenChange = () =>
-      setFullScreen(_isFullScreen());
+    const onFullscreenChange = () => setFullScreen(_isFullScreen());
 
     document.addEventListener('fullscreenchange', onFullscreenChange);
 
@@ -23,14 +22,14 @@ export default function useFullScreen(target: Element=document.documentElement):
     };
   }, []);
 
-  const enter = isSupported ? () => target.requestFullscreen() : async() => { };
-  const exit = isSupported ? () => document.exitFullscreen() : async() => { };
+  const enter = isSupported ? () => target.requestFullscreen() : async () => {};
+  const exit = isSupported ? () => document.exitFullscreen() : async () => {};
 
   return {
     isSupported,
     isFullScreen: isFullScreen,
     enter,
     exit,
-    toggle: () => isFullScreen ? exit() : enter()
+    toggle: () => (isFullScreen ? exit() : enter()),
   };
 }
