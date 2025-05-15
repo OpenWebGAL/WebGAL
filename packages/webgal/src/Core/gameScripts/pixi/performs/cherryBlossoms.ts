@@ -11,7 +11,7 @@ const pixicherryBlossoms = (cherryBlossomsSpeed: number) => {
   // 设置缩放的系数
   const scalePreset = 0.15;
 
-  const effectsContainer = WebGAL!.gameplay!.pixiStage!.effectsContainer;
+  const effectsContainer = WebGAL!.gameplay!.pixiStage!.foregroundEffectsContainer;
   const app = WebGAL!.gameplay!.pixiStage!.currentApp!;
   const container = new PIXI.Container();
   effectsContainer.addChild(container);
@@ -87,4 +87,4 @@ const pixicherryBlossoms = (cherryBlossomsSpeed: number) => {
   return { container, tickerKey: 'cherryBlossoms-Ticker' };
 };
 
-registerPerform('cherryBlossoms', () => pixicherryBlossoms(3));
+registerPerform('cherryBlossoms', { fg: () => pixicherryBlossoms(3) });

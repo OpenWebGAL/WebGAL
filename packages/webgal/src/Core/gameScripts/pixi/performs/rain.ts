@@ -9,7 +9,7 @@ const pixiRain = (rainSpeed: number, number: number) => {
   // 设置缩放的系数
   const scalePreset = 0.48;
 
-  const effectsContainer = WebGAL.gameplay.pixiStage!.effectsContainer!;
+  const effectsContainer = WebGAL.gameplay.pixiStage!.foregroundEffectsContainer!;
   const app = WebGAL.gameplay.pixiStage!.currentApp!;
   const container = new PIXI.Container();
   effectsContainer.addChild(container);
@@ -84,4 +84,4 @@ const pixiRain = (rainSpeed: number, number: number) => {
   return { container, tickerKey: 'rain-Ticker' };
 };
 
-registerPerform('rain', () => pixiRain(6, 3));
+registerPerform('rain', { fg: () => pixiRain(6, 3) });
