@@ -1,38 +1,33 @@
-import styles from '@/UI/Menu/Options/options.module.scss';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '@/store/store';
-import { NormalOption } from '@/UI/Menu/Options/NormalOption';
-import { NormalButton } from '@/UI/Menu/Options/NormalButton';
-import { setOptionData } from '@/store/userDataReducer';
-import { fullScreenOption, playSpeed, textFont, textSize } from '@/store/userDataInterface';
 import { setStorage } from '@/Core/controller/storage/storageController';
+import { NormalButton } from '@/UI/Menu/Options/NormalButton';
+import { NormalOption } from '@/UI/Menu/Options/NormalOption';
 import { TextPreview } from '@/UI/Menu/Options/TextPreview/TextPreview';
+import styles from '@/UI/Menu/Options/options.module.scss';
+import useFullScreen from '@/hooks/useFullScreen';
 import useTrans from '@/hooks/useTrans';
+import { RootState } from '@/store/store';
+import { textFont, textSize } from '@/store/userDataInterface';
+import { setOptionData } from '@/store/userDataReducer';
+import { useDispatch, useSelector } from 'react-redux';
 import { OptionSlider } from '../OptionSlider';
 
 export function Display() {
   const userDataState = useSelector((state: RootState) => state.userData);
   const dispatch = useDispatch();
   const t = useTrans('menu.options.pages.display.options.');
+  const { isSupported: isFullscreenSupported, enter: enterFullscreen, exit: exitFullscreen } = useFullScreen();
 
   return (
     <div className={styles.Options_main_content_half}>
-      <NormalOption key="fullScreen" title={t('fullScreen.title')}>
-        <NormalButton
-          textList={t('fullScreen.options.on', 'fullScreen.options.off')}
-          functionList={[
-            () => {
-              dispatch(setOptionData({ key: 'fullScreen', value: fullScreenOption.on }));
-              setStorage();
-            },
-            () => {
-              dispatch(setOptionData({ key: 'fullScreen', value: fullScreenOption.off }));
-              setStorage();
-            },
-          ]}
-          currentChecked={userDataState.optionData.fullScreen}
-        />
-      </NormalOption>
+      {isFullscreenSupported && (
+        <NormalOption key="fullScreen" title={t('fullScreen.title')}>
+          <NormalButton
+            textList={t('fullScreen.options.on', 'fullScreen.options.off')}
+            functionList={[enterFullscreen, exitFullscreen]}
+            currentChecked={userDataState.optionData.fullScreen}
+          />
+        </NormalOption>
+      )}
       <NormalOption key="textSize" title={t('textSize.title')}>
         <NormalButton
           textList={t('textSize.options.small', 'textSize.options.medium', 'textSize.options.large')}

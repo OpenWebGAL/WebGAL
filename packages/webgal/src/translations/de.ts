@@ -168,6 +168,7 @@ const de = {
       quicklyLoad: 'Quickly Load',
       save: 'Speichern',
       load: 'Laden',
+      fullscrreen: 'Vollbild',
       options: 'Optionen',
       title: 'Titel',
     },

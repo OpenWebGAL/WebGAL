@@ -182,6 +182,7 @@ const zhTw = {
       quicklyLoad: '快速讀檔',
       save: '存檔',
       load: '讀檔',
+      fullscreen: '全螢幕',
       options: '設定',
       title: '主選單',
       titleTips: '確認返回到主選單嗎',
