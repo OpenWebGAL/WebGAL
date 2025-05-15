@@ -39,6 +39,13 @@ export interface ITransform {
   };
   rotation: number;
   blur: number;
+  brightness: number;
+  contrast: number;
+  saturation: number;
+  gamma: number;
+  colorRed: number;
+  colorGreen: number;
+  colorBlue: number;
 }
 
 /**
@@ -69,6 +76,13 @@ export const baseTransform: ITransform = {
   },
   rotation: 0,
   blur: 0,
+  brightness: 1,
+  contrast: 1,
+  saturation: 1,
+  gamma: 1,
+  colorRed: 255,
+  colorGreen: 255,
+  colorBlue: 255,
 };
 
 export interface IFreeFigure {
