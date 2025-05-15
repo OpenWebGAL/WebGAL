@@ -49,7 +49,7 @@ const snow = (
   const SPRITE_HEIGHT = 128;
   const NUM_SPRITES = 10;
 
-  const snowflakeStyleWeights = [20, 10, 5, 10, 5, 5, 5, 5, 5, 5]; // 雪花样式权重
+  const snowflakeStyleWeights = [20, 10, 5, 10, 2, 1, 1, 1, 1, 1]; // 雪花样式权重
 
   const getWeightedRandomIndex = (weights: number[]): number => {
     if (!weights || weights.length === 0) {
@@ -82,7 +82,7 @@ const snow = (
       snowflake.y = -Math.random() * 50 - snowflake.height;
     }
 
-    snowflake.alpha = Math.random() * 0.1 + 0.9; // 随机透明度
+    snowflake.alpha = Math.random() * 0.15 + 0.85; // 随机透明度
     snowflake.vy = (Math.random() * 0.4 + 0.8) * snowSpeed; // 随机垂直速度
     snowflake.vx = (Math.random() - 0.5) * 0.25 * snowSpeed; // 随机水平速度
     snowflake.rotationSpeed = (Math.random() - 0.5) * 0.005; // 随机旋转速度
@@ -214,11 +214,11 @@ const snow = (
 };
 
 registerPerform('snow', {
-  fg: () => snow('snow-foreground', WebGAL.gameplay.pixiStage!.foregroundEffectsContainer!, 3, 250, 0.3),
+  fg: () => snow('snow-foreground', WebGAL.gameplay.pixiStage!.foregroundEffectsContainer!, 3, 250, 0.35),
   bg: () => snow('snow-background', WebGAL.gameplay.pixiStage!.backgroundEffectsContainer!, 1, 750, 0.15),
 });
 
 registerPerform('heavySnow', {
-  fg: () => snow('heavy-snow-foreground', WebGAL.gameplay.pixiStage!.foregroundEffectsContainer!, 10, 500, 0.4),
+  fg: () => snow('heavy-snow-foreground', WebGAL.gameplay.pixiStage!.foregroundEffectsContainer!, 10, 500, 0.45),
   bg: () => snow('heavy-snow-background', WebGAL.gameplay.pixiStage!.backgroundEffectsContainer!, 5, 1500, 0.2),
 });
