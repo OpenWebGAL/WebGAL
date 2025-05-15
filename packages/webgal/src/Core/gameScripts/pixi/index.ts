@@ -28,8 +28,6 @@ export const pixi = (sentence: ISentence): IPerform => {
   const res: IResult = call(sentence.content);
   const { fg, bg } = res;
 
-  console.log(pixiPerformName);
-
   return {
     performName: pixiPerformName,
     duration: 0,

@@ -1,4 +1,4 @@
-import { Container } from 'pixi.js';
+import type { Container } from 'pixi.js';
 import { logger } from '../logger';
 
 export interface ILayerResult {
