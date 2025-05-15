@@ -39,11 +39,11 @@ export default function StandardTextbox(props: ITextboxProps) {
       WebGAL.events.textSettle.off(settleText);
     };
   }, []);
-  const nameElementList = showName.map((e,index)=>{
+  const nameElementList = showName.map((e, index) => {
     let prevLength = currentConcatDialogPrev.length;
     if (index < prevLength) {
       return (
-        <span className={styles.zhanwei}>
+        <span key={currentDialogKey + index} className={styles.zhanwei}>
           {e}
           <span className={styles.outer}>{e}</span>
           {isUseStroke && <span className={styles.inner}>{e}</span>}
@@ -51,7 +51,7 @@ export default function StandardTextbox(props: ITextboxProps) {
       );
     }
     return (
-      <span className={styles.zhanwei}>
+      <span key={currentDialogKey + index} className={styles.zhanwei}>
         {e}
         <span className={styles.outer}>{e}</span>
         {isUseStroke && <span className={styles.inner}>{e}</span>}

@@ -19,16 +19,15 @@ export function Display() {
 
   return (
     <div className={styles.Options_main_content_half}>
-      {isFullscreenSupported && <NormalOption key="fullScreen" title={t('fullScreen.title')}>
-        <NormalButton
-          textList={t('fullScreen.options.on', 'fullScreen.options.off')}
-          functionList={[
-            enterFullscreen,
-            exitFullscreen,
-          ]}
-          currentChecked={userDataState.optionData.fullScreen}
-        />
-      </NormalOption>}
+      {isFullscreenSupported && (
+        <NormalOption key="fullScreen" title={t('fullScreen.title')}>
+          <NormalButton
+            textList={t('fullScreen.options.on', 'fullScreen.options.off')}
+            functionList={[enterFullscreen, exitFullscreen]}
+            currentChecked={userDataState.optionData.fullScreen}
+          />
+        </NormalOption>
+      )}
       <NormalOption key="textSize" title={t('textSize.title')}>
         <NormalButton
           textList={t('textSize.options.small', 'textSize.options.medium', 'textSize.options.large')}
