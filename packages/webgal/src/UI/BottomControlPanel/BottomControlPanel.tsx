@@ -20,6 +20,7 @@ import {
   FullScreen,
   Home,
   Lock,
+  OffScreen,
   PlayOne,
   PreviewCloseOne,
   PreviewOpen,
@@ -260,23 +261,6 @@ export const BottomControlPanel = () => {
             />
             <span className={styles.button_text}>{t('buttons.load')}</span>
           </span>
-          {isFullscreenSupport && (
-            <span
-              className={`${styles.singleButton}${isFullScreen ? ' ' + styles.singleButton_active : ''}`}
-              style={{ fontSize }}
-              onClick={toggleFullscreen}
-              onMouseEnter={playSeEnter}
-            >
-              <FullScreen
-                className={styles.button}
-                theme="outline"
-                size={size}
-                fill="#f5f5f7"
-                strokeWidth={strokeWidth}
-              />
-              <span className={styles.button_text}>{t('buttons.fullscreen')}</span>
-            </span>
-          )}
           <span
             className={styles.singleButton}
             style={{ fontSize }}
@@ -316,6 +300,34 @@ export const BottomControlPanel = () => {
             <Home className={styles.button} theme="outline" size={size} fill="#f5f5f7" strokeWidth={strokeWidth} />
             <span className={styles.button_text}>{t('buttons.title')}</span>
           </span>
+          {isFullscreenSupport && (
+            <span
+              className={`${styles.singleButton}`}
+              style={{ fontSize }}
+              onClick={toggleFullscreen}
+              onMouseEnter={playSeEnter}
+            >
+              {!isFullScreen && (
+                <FullScreen
+                  className={styles.button}
+                  theme="outline"
+                  size={size}
+                  fill="#f5f5f7"
+                  strokeWidth={strokeWidth}
+                />
+              )}
+              {isFullScreen && (
+                <OffScreen
+                  className={styles.button}
+                  theme="outline"
+                  size={size}
+                  fill="#f5f5f7"
+                  strokeWidth={strokeWidth}
+                />
+              )}
+              <span className={styles.button_text}>{t('buttons.fullscreen')}</span>
+            </span>
+          )}
           <span
             className={styles.singleButton}
             style={{ fontSize }}
