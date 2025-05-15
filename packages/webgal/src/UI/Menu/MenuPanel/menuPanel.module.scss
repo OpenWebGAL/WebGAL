@@ -1,12 +1,17 @@
+@import "../../Utils/constants.scss";
+
 .MenuPanel_main {
   width: 100%;
   height: 10%;
+  max-width: $defaultScreenWidth;
   display: flex;
   justify-content: center;
   align-items: center;
   //background-color: rgba(255, 255, 255, 1);
   //box-shadow: 0 0 45px 15px rgba(0, 0, 0, 0.05);
   padding: 0 55px;
+  overflow-x: auto;
+  scrollbar-width: none;
 }
 
 .MenuPanel_button {
@@ -24,6 +29,7 @@
   color: rgba(123,144,169, 1);
   background: rgba(0, 0, 0, 0);
   overflow: hidden;
+  flex-shrink: 0;
   //border-right: 1.5px solid rgba(0, 0, 0, 0.15);
   transition: text-shadow 0.7s, background-color 0.7s;
 }

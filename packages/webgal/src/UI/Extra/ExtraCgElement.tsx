@@ -45,14 +45,9 @@ export function ExtraCgElement(props: IProps) {
       );
     } else if (isImage) {
       return (
-        <div
-          style={{
-            backgroundImage: `url('${props.resourceUrl}')`,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            width: '100%',
-            height: '100%',
-          }}
+        <img
+          className={styles.cgImage}
+          src = {props.resourceUrl}
         />
       );
     } else {

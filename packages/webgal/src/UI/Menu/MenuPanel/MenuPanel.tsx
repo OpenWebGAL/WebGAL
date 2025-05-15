@@ -9,6 +9,7 @@ import { backToTitle } from '@/Core/controller/gamePlay/backToTitle';
 import useTrans from '@/hooks/useTrans';
 import useSoundEffect from '@/hooks/useSoundEffect';
 import { showGlogalDialog } from '@/UI/GlobalDialog/GlobalDialog';
+import HorizontalScroll from '@/UI/Utils/HorizontalScroll';
 
 /**
  * Menu页的底栏
@@ -40,7 +41,7 @@ export const MenuPanel = () => {
     GUIState.currentMenuTag === MenuPanelTag.Option ? `rgba(81, 110, 65, 0.9)` : `rgba(123,144,169,1)`;
 
   return (
-    <div className={styles.MenuPanel_main}>
+    <HorizontalScroll className={styles.MenuPanel_main}>
       <MenuPanelButton
         iconName="save"
         buttonOnClassName={SaveTagOn}
@@ -111,6 +112,6 @@ export const MenuPanel = () => {
         tagName={t('exit.title')}
         key="exitIcon"
       />
-    </div>
+    </HorizontalScroll>
   );
 };

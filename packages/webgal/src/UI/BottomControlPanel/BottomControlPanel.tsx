@@ -31,6 +31,7 @@ import { showGlogalDialog, switchControls } from '@/UI/GlobalDialog/GlobalDialog
 import { useEffect } from 'react';
 import { getSavesFromStorage } from '@/Core/controller/storage/savesController';
 import { easyCompile } from '@/UI/Menu/SaveAndLoad/Save/Save';
+import { HorizontalScroll } from '@/UI/Utils/HorizontalScroll';
 
 export const BottomControlPanel = () => {
   const t = useTrans('gaming.');
@@ -66,7 +67,7 @@ export const BottomControlPanel = () => {
     fastSlPreview = (
       <div className={styles.slPreviewMain}>
         <div className={styles.imgContainer}>
-          <img style={{ height: '100%' }} alt="q-save-preview image" src={data.previewImage} />
+          <img className={styles.previewImg} alt="q-save-preview image" src={data.previewImage} />
         </div>
         <div className={styles.textContainer}>
           <div>{easyCompile(data.nowStageState.showName)}</div>
@@ -80,7 +81,8 @@ export const BottomControlPanel = () => {
     // <div className={styles.ToCenter}>
     <>
       {GUIStore.showTextBox && stageState.enableFilm === '' && (
-        <div className={styles.main} style={{ visibility: GUIStore.controlsVisibility ? 'visible' : 'hidden' }}>
+        <HorizontalScroll className={styles.main} style={{ visibility: GUIStore.controlsVisibility ? 'visible' : 'hidden' }}>
+          <div style={{flexGrow: 1}}/>
           {GUIStore.showTextBox && (
             <span
               className={styles.singleButton}
@@ -313,7 +315,7 @@ export const BottomControlPanel = () => {
               <Unlock className={styles.button} theme="outline" size={size} fill="#f5f5f7" strokeWidth={strokeWidth} />
             )}
           </span>
-        </div>
+        </HorizontalScroll>
       )}
     </>
     // </div>

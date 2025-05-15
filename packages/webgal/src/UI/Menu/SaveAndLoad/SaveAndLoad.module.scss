@@ -1,7 +1,7 @@
 .Save_Load_main {
-  height: 90%;
+  height: 100%;
   width: 100%;
-  position: absolute;
+  position: relative;
   cursor: default;
 }
 
@@ -57,13 +57,15 @@
 .Save_Load_top_buttonList {
   height: 100%;
   display: flex;
+  overflow-x: auto;
+  scrollbar-width: none;
   //padding: 0 0 0 2em;
 }
 
 .Save_Load_top_button {
+  min-width: 100px;
   cursor: pointer;
   font-size: 200%;
-  width: 2.05em;
   text-align: center;
   color: rgba(0, 0, 0, 0.5);
   box-sizing: border-box;
@@ -99,7 +101,7 @@
 
 .Load_top_button_on {
   font-weight: bold;
-  border-bottom: 5px solid #005CAF;
+  border-bottom: 4px solid #005CAF;
   color: #005CAF;
   background-color: rgba(0, 92, 175, 0.1);
 }
@@ -107,7 +109,7 @@
 .Load_top_button:hover {
   color: #005CAF;
   font-weight: bold;
-  border-bottom: 5px solid #005CAF;
+  border-bottom: 4px solid #005CAF;
 }
 
 .Save_Load_content {
@@ -117,6 +119,8 @@
   flex-wrap: wrap;
   justify-content: space-evenly;
   align-items: center;
+  overflow-y: auto;
+  padding: 20px;
 }
 
 .Save_Load_content_element {
@@ -124,8 +128,10 @@
   background: linear-gradient(-45deg, rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.075));
   overflow: hidden;
   //border: 1px solid rgba(255, 255, 255, 1);
-  width: 17.5%;
-  height: 45%;
+  width: 450px;
+  aspect-ratio: 1;
+  display: block;
+  margin: 20px;
   //box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
   animation: Elements_in 1s ease-out forwards, Elements_in_transform 1s ease-out;
   opacity: 0;
@@ -143,7 +149,7 @@
 .Save_Load_content_element_top {
   font-family: "思源宋体", serif;
   width: 100%;
-  height: 12%;
+  height: 15%;
   display: flex;
 }
 
@@ -224,9 +230,9 @@
 }
 
 .Save_Load_content_miniRen_bg {
-  background-size: cover;
   height: 100%;
   width: 100%;
+  object-fit: cover;
   background-position: center;
 }
 

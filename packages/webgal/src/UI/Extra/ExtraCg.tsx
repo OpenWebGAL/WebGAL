@@ -6,6 +6,7 @@ import { useValue } from '@/hooks/useValue';
 import './extraCG_animation_List.scss';
 import { ExtraCgElement } from '@/UI/Extra/ExtraCgElement';
 import useSoundEffect from '@/hooks/useSoundEffect';
+import HorizontalScroll from '@/UI//Utils/HorizontalScroll';
 
 export function ExtraCg() {
   const cgPerPage = 8;
@@ -63,7 +64,7 @@ export function ExtraCg() {
   return (
     <div className={styles.cgMain}>
       <div className={styles.cgShowDiv}>
-        <div className={styles.cgShowDivWarpper}>{showNav}</div>
+        <HorizontalScroll className={styles.cgShowDivWarpper}>{showNav}</HorizontalScroll>
       </div>
       <div className={styles.cgContainer}>{showCgList}</div>
     </div>

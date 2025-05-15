@@ -48,7 +48,9 @@
 
 .NormalOption_buttonList {
   padding: 0.5em 0 0.5em 0;
+  flex: 1;
   display: flex;
+  flex-flow: wrap;
 }
 
 @keyframes Elements_in {

@@ -1,7 +1,5 @@
 @charset "UTF-8";
 
-@import "Core/util/constants";
-
 @font-face {
   font-family: "思源宋体";
   /*noinspection CssUnknownTarget*/
@@ -75,8 +73,6 @@ code {
 }
 
 #root {
-  width: $screenWidth;
-  height: $screenHeight;
   overflow: hidden;
   /*position: absolute;*/
   /*top: 0;*/
