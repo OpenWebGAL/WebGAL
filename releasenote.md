@@ -8,25 +8,43 @@
 
 #### 新功能
 
-支持视频作为背景
+在 random[...] 函数中支持范围参数，便于生成指定区间的随机数
 
-Live2D 改为动态加载模式，现在无需修改源码，只需要引入 Live2D SDK 即可接入
+滑块组件新增动态数值提示，支持悬停和拖拽实时显示
 
-添加配置项 `Enable_Appreciation` 控制是否启用鉴赏模式
+新增调试指令 FONT_OPTIMIZATION，用于快速排查字体渲染性能问题
 
-重做下雨下雪效果，使其更加自然
+文字预览面板支持点击强制刷新
 
-支持使用视频作为解锁的 CG
+构建脚本自动注入版本和提交信息
+
+配置项新增 DefaultLanguage，可预设游戏默认语言
+
+getUserInput 现已支持 default 默认值
+
+新增调整滤镜效果，包括亮度对比度饱和度等
+
+控制栏新增全屏按钮，并解耦全屏逻辑
+
+新增退出游戏按钮
 
 #### 修复
 
-修复文本框行距无法自定义的问题
+修复 jumpLabel 回跳问题 #417
 
-提高 Backlog 界面的性能
+优化文字渲染逻辑，仅重新渲染文本而非整个文本框
 
-在鉴赏模式未解锁任何内容时，禁用鉴赏模式按钮
+修复 Live2D 立绘的锚点和位置偏移，修正缩放变换
 
-修复存读档界面文字无法正常处理文本拓展语法的问题
+修复 Spine 立绘和普通立绘的初始位置异常
+
+修复使用重复 UUID 加载 Live2D 立绘时的异常
+
+修复色彩调整动画丢失问题，当滤镜为默认值时不再使用 AdjustmentFilter
+
+其他若干稳定性与兼容性改进
+
+
 
 <!-- English Translation -->
 ## Release Notes
@@ -39,25 +57,43 @@ Live2D 改为动态加载模式，现在无需修改源码，只需要引入 Liv
 
 #### New Features
 
-Support for video as background
+Range arguments are now supported in the random[...] function for interval based random numbers
 
-Live2D changed to dynamic loading mode, now you don't need to modify the source code, just import the Live2D SDK to integrate
+The slider component gains a dynamic value tooltip that updates on hover or drag
 
-Added configuration item `Enable_Appreciation` to control whether to enable appreciation mode
+Added debug command FONT_OPTIMIZATION for quick font rendering diagnostics
 
-Redo the rain and snow effects to make them more natural
+The text preview panel now supports click to force refresh
 
-Support using video as unlockable CG
+Build scripts automatically inject version and commit information
+
+New config option DefaultLanguage to preset the game default language
+
+getUserInput now supports a default value
+
+Added adjustment filter effects including brightness contrast saturation and more
+
+Added a fullscreen button to the control bar with decoupled logic
+
+Added an exit game button
 
 #### Fixes
 
-Fixed the issue where the line spacing of the text box could not be customized
+Fixed the jumpLabel jumping back issue #417
 
-Improve the performance of the Backlog interface
+Optimized text rendering so only the text not the entire textbox re renders
 
-Disable the appreciation mode button when no content is unlocked in appreciation mode
+Fixed Live2D figure pivot and position offsets and scaling
 
-Fixed the issue where the text in the save/load interface could not handle text extension syntax correctly
+Fixed initial position anomalies for Spine and standard figures
+
+Fixed error when loading a Live2D figure with a duplicate UUID
+
+Fixed missing color adjustment animations and stopped using AdjustmentFilter at default values
+
+Miscellaneous stability and compatibility improvements
+
+
 
 <!-- Japanese Translation -->
 ## リリースノート
@@ -70,22 +106,38 @@ Fixed the issue where the text in the save/load interface could not handle text 
 
 #### 新機能
 
-背景としてビデオをサポート
+random[...] 関数で範囲引数をサポートし指定区間の乱数生成が可能に
 
-Live2Dは動的ロードモードに変更されました。ソースコードを変更する必要はなく、Live2D SDKを導入するだけで統合できます。
+スライダーコンポーネントに動的値ツールチップを追加しホバーとドラッグでリアルタイム表示
 
-コンフィグ項目`Enable_Appreciation`を追加し、鑑賞モードを有効にするかどうかを制御します
+デバッグコマンド FONT_OPTIMIZATION を追加しフォント描画性能を迅速に診断
 
-雨や雪の効果を再構築し、より自然に見えるようにしました
+テキストプレビューでクリックによる強制リフレッシュをサポート
 
-ロック解除のCGとしてビデオを使用することをサポート
+ビルドスクリプトがバージョンとコミット情報を自動挿入
+
+設定ファイルに DefaultLanguage を追加しゲームのデフォルト言語をプリセット可能
+
+getUserInput が default 値をサポート
+
+調整フィルターを追加し明るさコントラスト彩度などを調整可能
+
+コントロールバーにフルスクリーンボタンを追加しロジックを分離
+
+ゲーム退出ボタンを追加
 
 #### 修正
 
-テキストボックスの行間をカスタマイズできない問題を修正
+jumpLabel が戻る問題を修正 #417
 
-Backlogインターフェースのパフォーマンスを向上
+テキスト描画を最適化しテキストボックス全体ではなくテキストのみを再描画
 
-鑑賞モードで何もロック解除されていない場合、鑑賞モードボタンを無効化
+Live2D 立ち絵のアンカーポイントと位置ずれを修正しスケール変換も修正
 
-セーブロードインターフェースのテキストがテキスト拡張構文を正常に処理できない問題を修正
+Spine 立ち絵および通常立ち絵の初期位置異常を修正
+
+重複 UUID で Live2D 立ち絵をロードする際の異常を修正
+
+色調整アニメーションの欠落を修正しデフォルト値の場合は AdjustmentFilter を使用しない
+
+その他の安定性と互換性の向上
