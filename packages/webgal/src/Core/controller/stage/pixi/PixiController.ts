@@ -563,7 +563,7 @@ export default class PixiStage {
           const targetHeight = originalHeight * targetScale;
           thisFigureContainer.setBaseY(this.stageHeight / 2);
           if (targetHeight < this.stageHeight) {
-            thisFigureContainer.setBaseY(this.stageHeight / 2 + this.stageHeight - targetHeight / 2);
+            thisFigureContainer.setBaseY(this.stageHeight / 2 + (this.stageHeight - targetHeight) / 2);
           }
           if (presetPosition === 'center') {
             thisFigureContainer.setBaseX(this.stageWidth / 2);
@@ -627,8 +627,9 @@ export default class PixiStage {
       }
       // 挂载
       this.figureContainer.addChild(thisFigureContainer);
+      const figureUuid = uuid();
       this.figureObjects.push({
-        uuid: uuid(),
+        uuid: figureUuid,
         key: key,
         pixiContainer: thisFigureContainer,
         sourceUrl: jsonPath,
@@ -639,7 +640,7 @@ export default class PixiStage {
       const instance = this;
 
       const setup = (stage: PixiStage) => {
-        if (thisFigureContainer) {
+        if (thisFigureContainer && this.getStageObjByUuid(figureUuid)) {
           (async function () {
             let overrideBounds: [number, number, number, number] = [0, 0, 0, 0];
             const mot = webgalStore.getState().stage.live2dMotion.find((e) => e.target === key);
@@ -662,22 +663,29 @@ export default class PixiStage {
             models.forEach((model) => {
               const scaleX = stageWidth / model.width;
               const scaleY = stageHeight / model.height;
-              const targetScale = Math.min(scaleX, scaleY) * 1.5;
+              const targetScale = Math.min(scaleX, scaleY);
               const targetWidth = model.width * targetScale;
-              // const targetHeight = model.height * targetScale;
-
-              model.scale.set(targetScale);
+              const targetHeight = model.height * targetScale;
+              model.scale.x = targetScale;
+              model.scale.y = targetScale;
               model.anchor.set(0.5);
-              model.position.x = stageWidth / 2;
-              model.position.y = stageHeight / 1.2;
+              model.position.x = 0;
+              model.position.y = stageHeight / 2;
 
-              if (pos === 'left') {
-                model.position.x = targetWidth / 2;
+              let baseY = stageHeight / 2;
+              if (targetHeight < stageHeight) {
+                baseY = stageHeight / 2 + (stageHeight - targetHeight) / 2;
               }
-              if (pos === 'right') {
-                model.position.x = stageWidth - targetWidth / 2;
+              thisFigureContainer.setBaseY(baseY);
+              if (pos === 'center') {
+                thisFigureContainer.setBaseX(stageWidth / 2);
+              } else if (pos === 'left') {
+                thisFigureContainer.setBaseX(targetWidth / 2);
+              } else if (pos === 'right') {
+                thisFigureContainer.setBaseX(stageWidth - targetWidth / 2);
               }
 
+              thisFigureContainer.pivot.set(0, stageHeight / 2);
               let motionToSet = motion;
               let animation_index = 0;
               let priority_number = 3;

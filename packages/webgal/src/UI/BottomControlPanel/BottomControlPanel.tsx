@@ -1,36 +1,37 @@
+import { switchAuto } from '@/Core/controller/gamePlay/autoPlay';
+import { backToTitle } from '@/Core/controller/gamePlay/backToTitle';
+import { switchFast } from '@/Core/controller/gamePlay/fastSkip';
+import { loadGame } from '@/Core/controller/storage/loadGame';
+import { saveGame } from '@/Core/controller/storage/saveGame';
+import { showGlogalDialog, switchControls } from '@/UI/GlobalDialog/GlobalDialog';
+import { easyCompile } from '@/UI/Menu/SaveAndLoad/Save/Save';
+import useFullScreen from '@/hooks/useFullScreen';
+import useSoundEffect from '@/hooks/useSoundEffect';
+import useTrans from '@/hooks/useTrans';
+import { setMenuPanelTag, setVisibility } from '@/store/GUIReducer';
+import { componentsVisibility, MenuPanelTag } from '@/store/guiInterface';
+import { RootState } from '@/store/store';
 import {
   AlignTextLeftOne,
+  DoubleDown,
   DoubleRight,
+  DoubleUp,
   FolderOpen,
+  FullScreen,
   Home,
+  Lock,
+  OffScreen,
   PlayOne,
   PreviewCloseOne,
   PreviewOpen,
   ReplayMusic,
   Save,
   SettingTwo,
-  DoubleDown,
-  DoubleUp,
-  Lock,
   Unlock,
 } from '@icon-park/react';
-import styles from './bottomControlPanel.module.scss';
-import { switchAuto } from '@/Core/controller/gamePlay/autoPlay';
-import { switchFast } from '@/Core/controller/gamePlay/fastSkip';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '@/store/store';
-import { setMenuPanelTag, setVisibility } from '@/store/GUIReducer';
-import { componentsVisibility, MenuPanelTag } from '@/store/guiInterface';
-import { backToTitle } from '@/Core/controller/gamePlay/backToTitle';
-import { saveGame } from '@/Core/controller/storage/saveGame';
-import { loadGame } from '@/Core/controller/storage/loadGame';
-import useTrans from '@/hooks/useTrans';
 import { useTranslation } from 'react-i18next';
-import useSoundEffect from '@/hooks/useSoundEffect';
-import { showGlogalDialog, switchControls } from '@/UI/GlobalDialog/GlobalDialog';
-import { useEffect } from 'react';
-import { getSavesFromStorage } from '@/Core/controller/storage/savesController';
-import { easyCompile } from '@/UI/Menu/SaveAndLoad/Save/Save';
+import { useDispatch, useSelector } from 'react-redux';
+import styles from './bottomControlPanel.module.scss';
 
 export const BottomControlPanel = () => {
   const t = useTrans('gaming.');
@@ -45,6 +46,7 @@ export const BottomControlPanel = () => {
     fontSize = '125%';
     size = 40;
   }
+  const { isSupported: isFullscreenSupport, isFullScreen, toggle: toggleFullscreen } = useFullScreen();
   const GUIStore = useSelector((state: RootState) => state.GUI);
   const stageState = useSelector((state: RootState) => state.stage);
   const dispatch = useDispatch();
@@ -298,6 +300,34 @@ export const BottomControlPanel = () => {
             <Home className={styles.button} theme="outline" size={size} fill="#f5f5f7" strokeWidth={strokeWidth} />
             <span className={styles.button_text}>{t('buttons.title')}</span>
           </span>
+          {isFullscreenSupport && (
+            <span
+              className={`${styles.singleButton}`}
+              style={{ fontSize }}
+              onClick={toggleFullscreen}
+              onMouseEnter={playSeEnter}
+            >
+              {!isFullScreen && (
+                <FullScreen
+                  className={styles.button}
+                  theme="outline"
+                  size={size}
+                  fill="#f5f5f7"
+                  strokeWidth={strokeWidth}
+                />
+              )}
+              {isFullScreen && (
+                <OffScreen
+                  className={styles.button}
+                  theme="outline"
+                  size={size}
+                  fill="#f5f5f7"
+                  strokeWidth={strokeWidth}
+                />
+              )}
+              <span className={styles.button_text}>{t('buttons.fullscreen')}</span>
+            </span>
+          )}
           <span
             className={styles.singleButton}
             style={{ fontSize }}

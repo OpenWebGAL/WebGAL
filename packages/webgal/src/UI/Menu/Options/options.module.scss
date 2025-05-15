@@ -71,12 +71,16 @@
   align-content: flex-start;
   flex-wrap: wrap;
   padding: 0 1em 0 1em;
+  position: relative;
 }
 
 .About_title_text {
   margin: 0.2em 1em 0.2em 1em;
   padding: 0.2em 0.2em 0.2em 0.2em;
-  width: 100%;
+  //width: 100%;
+  position: absolute;
+  top: 10px;
+  right: 10px;
   animation: Elements_in ease-out 0.7s forwards;
   cursor: pointer;
 }
