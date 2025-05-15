@@ -132,10 +132,15 @@ export class WebGALPixiContainer extends PIXI.Container {
     }
   }
 
+  public isAdjustmentFilterExist(): boolean {
+    return this.containerFilters.has('adjustment');
+  }
+
   public get brightness(): number {
     return this.getOrCreateAdjustmentFilter().brightness;
   }
   public set brightness(value: number) {
+    if (value === 1 && !this.isAdjustmentFilterExist()) return;
     this.getOrCreateAdjustmentFilter().brightness = value;
   }
 
@@ -143,6 +148,7 @@ export class WebGALPixiContainer extends PIXI.Container {
     return this.getOrCreateAdjustmentFilter().contrast;
   }
   public set contrast(value: number) {
+    if (value === 1 && !this.isAdjustmentFilterExist()) return;
     this.getOrCreateAdjustmentFilter().contrast = value;
   }
 
@@ -150,6 +156,7 @@ export class WebGALPixiContainer extends PIXI.Container {
     return this.getOrCreateAdjustmentFilter().saturation;
   }
   public set saturation(value: number) {
+    if (value === 1 && !this.isAdjustmentFilterExist()) return;
     this.getOrCreateAdjustmentFilter().saturation = value;
   }
 
@@ -157,6 +164,7 @@ export class WebGALPixiContainer extends PIXI.Container {
     return this.getOrCreateAdjustmentFilter().gamma;
   }
   public set gamma(value: number) {
+    if (value === 1 && !this.isAdjustmentFilterExist()) return;
     this.getOrCreateAdjustmentFilter().gamma = value;
   }
 
@@ -164,6 +172,7 @@ export class WebGALPixiContainer extends PIXI.Container {
     return this.getOrCreateAdjustmentFilter().red * 255.0;
   }
   public set colorRed(value: number) {
+    if (value === 255 && !this.isAdjustmentFilterExist()) return;
     this.getOrCreateAdjustmentFilter().red = value / 255.0;
   }
 
@@ -171,6 +180,7 @@ export class WebGALPixiContainer extends PIXI.Container {
     return this.getOrCreateAdjustmentFilter().green * 255.0;
   }
   public set colorGreen(value: number) {
+    if (value === 255 && !this.isAdjustmentFilterExist()) return;
     this.getOrCreateAdjustmentFilter().green = value / 255.0;
   }
 
@@ -178,6 +188,7 @@ export class WebGALPixiContainer extends PIXI.Container {
     return this.getOrCreateAdjustmentFilter().blue * 255.0;
   }
   public set colorBlue(value: number) {
+    if (value === 255 && !this.isAdjustmentFilterExist()) return;
     this.getOrCreateAdjustmentFilter().blue = value / 255.0;
   }
 
