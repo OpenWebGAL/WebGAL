@@ -30,7 +30,7 @@ WebGAL:新版本添加了特性：获取用户输入，你要尝试一下吗？
 choose:尝试一下:userInput|算了吧:toNextPart;
 
 label:userInput;
-getUserInput:name -title=如何称呼你 -buttonText=确认;
+getUserInput:name -title=如何称呼你 -buttonText=确认 -defaultValue=WebGALPlayer;
 WebGAL:很高兴遇见你，{name}！
 jumpLabel:toNextPart;
 
