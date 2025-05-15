@@ -1,23 +1,21 @@
 .NormalButton {
-  font-size: 150%;
-  box-sizing: border-box;
+  font-size: 120%;
   padding: 0.2em 1em 0.2em 1em;
   background-color: rgba(50, 50, 50, 0.05);
   margin: 0 0.4em 0 0;
   color: rgba(160, 170, 160, 1);
   cursor: pointer;
-  border-bottom: 2px solid transparent;
+  border-radius: 30px;
+  transition: box-shadow 0.1s ease-in-out, color 0.1s ease-in-out;
 }
 
 .NormalButton:hover {
-  border-bottom: 2px solid rgba(81, 110, 65, 0.9);
-  color: rgba(81, 110, 65, 0.9);
-  font-weight: bold;
+  box-shadow: 0 2px 2px 0 rgba(109, 144, 167, 0.97);
+  color: rgba(65, 105, 110, 0.9);
 }
 
 .NormalButtonChecked {
-  background-color: rgba(81, 110, 65, 0.15);
-  border-bottom: 2px solid rgba(81, 110, 65, 0.9);
-  color: rgba(81, 110, 65, 0.9);
-  font-weight: bold;
+  background-color: rgba(65, 105, 110, 0.15);
+  box-shadow: 0 2px 2px 0 rgba(109, 144, 167, 0.97);
+  color: rgba(80, 105, 122, 0.97);
 }

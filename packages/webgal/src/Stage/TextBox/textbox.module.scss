@@ -10,7 +10,7 @@
   //text-shadow: 0 0 3px rgba(81,168,221,1);
 }
 
-$height: 330px;
+$height: 380px;
 
 .TextBox_Container {
   position: absolute;
@@ -23,16 +23,16 @@ $height: 330px;
 .TextBox_main {
   z-index: 3;
   position: absolute;
-  right: 25px;
+  right: 0;
   min-height: $height;
   max-height: $height;
   background-blend-mode: darken;
-  border-radius: calc($height / 2) 20px 20px calc($height / 2);
-  bottom: 20px;
-  left: 275px;
+  border-radius: 20px 20px 0px 0px;
+  bottom: 0;
+  left: 0;
   font-weight: bold;
   color: white;
-  padding: 1em 50px 70px 200px;
+  padding: 1em 50px 70px 330px;
   box-sizing: border-box;
   display: flex;
   flex-flow: column;
@@ -47,7 +47,7 @@ $height: 330px;
 
 .TextBox_Background {
   z-index: 2;
-  background: linear-gradient(rgba(245, 247, 250, 1) 0%, rgba(189, 198, 222, 1) 100%);
+  background: linear-gradient(to top, #000000, #000000a1 80%, #00000000);
 }
 
 @keyframes showSoftly {
@@ -65,53 +65,53 @@ $height: 330px;
 //  animation: showSoftly 1000ms forwards;
 //}
 
-
 .TextBox_textElement_start {
   @include text_shadow_textElement;
   position: relative;
   animation: TextDelayShow 1000ms ease-out forwards;
   opacity: 0;
   display: inline-flex;
-  align-content: space-between
+  align-content: space-between;
 }
-
 
 .outer {
   position: absolute;
-  left:0;
-  top:0;
+  left: 0;
+  top: 0;
   white-space: nowrap;
   //background-image: linear-gradient(rgba(255, 255, 255, 1) 0%, rgb(225, 237, 255) 100%);
-  background-image: linear-gradient(#0B346E 0%,
+  background-image: linear-gradient(
+    #0b346e 0%,
     //#f5f7fa 45%,
-    #141423 100%);
+    #141423 100%
+  );
   //background: rgba(255, 255, 255, 1);
   background-clip: text;
   -webkit-background-clip: text;
   color: transparent;
   z-index: 2;
-  display: inline-block;   /* 与文本对齐 */
-  vertical-align: middle;  /* 确保注音整体的垂直居中 */
+  display: inline-block; /* 与文本对齐 */
+  vertical-align: middle; /* 确保注音整体的垂直居中 */
 }
 
 .inner {
   white-space: nowrap;
   position: absolute;
-  left:0;
-  top:0;
+  left: 0;
+  top: 0;
   -webkit-text-stroke: 0.1em rgba(255, 255, 255, 1);
   z-index: 1;
   //text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.75);
-  display: inline-block;   /* 内层元素同样行内块布局 */
-  vertical-align: middle;  /* 确保与外层的对齐一致 */
+  display: inline-block; /* 内层元素同样行内块布局 */
+  vertical-align: middle; /* 确保与外层的对齐一致 */
 }
 
 .zhanwei {
   color: transparent;
   white-space: nowrap;
-  display: inline-block;    /* 保持行内块布局 */
+  display: inline-block; /* 保持行内块布局 */
   vertical-align: baseline; /* 确保文本基线对齐 */
-  position: relative;       /* 保持相对定位 */
+  position: relative; /* 保持相对定位 */
 }
 
 //
@@ -127,7 +127,7 @@ $height: 330px;
   @include text_shadow_textElement;
   opacity: 1;
   display: inline-flex;
-  align-content: space-between
+  align-content: space-between;
 }
 
 //
@@ -142,30 +142,16 @@ $height: 330px;
 .TextBox_showName {
   @include text_shadow_textElement;
   font-size: 85%;
-  //border-bottom: 3px solid rgb(176, 176, 176);
-  //min-width: 25%;
-  padding: 0 2em 0 2em;
-  //margin: 0 0 0 0;
   position: absolute;
-  left: 150px;
+  left: 320px;
   top: -68px;
   height: 80px;
   line-height: 68px;
-  //display: flex;
-  //align-items: center;
-  // background: rgba(11, 52, 110, 0.9);
-  border-radius: 40px;
-  // border: 4px solid rgba(255, 255, 255, 0.75);
-  // box-shadow: 3px 3px 10px rgba(100, 100, 100, 0.5);
   z-index: 3;
-  border: 4px solid rgba(255, 255, 255, 0);
 }
 
 .TextBox_ShowName_Background {
   z-index: 2;
-  background: rgba(11, 52, 110, 1);
-  border: 4px solid rgba(255, 255, 255, 0.75);
-  box-shadow: 3px 3px 10px rgba(100, 100, 100, 0.5);
 }
 
 @keyframes TextDelayShow {
@@ -183,8 +169,7 @@ $height: 330px;
   height: 450px;
   width: 450px;
   bottom: 0;
-  left: -250px;
-  border-radius: 100% 0 0 100%;
+  left: -37px;
   overflow: hidden;
 }
 
@@ -224,6 +209,7 @@ $height: 330px;
   position: absolute;
   left: 0;
   top: 0;
+  text-shadow: 0 0 3px rgb(14, 30, 41);
   //-webkit-text-stroke: 0.1em rgba(0, 0, 0, 0.25);
   //-webkit-text-stroke: 0.1em rgba(255, 255, 255, 1);
   z-index: 1;

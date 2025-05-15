@@ -21,31 +21,25 @@ export const MenuPanel = () => {
   const { playSeClick, playSeDialogOpen, playSePageChange } = useSoundEffect();
   const GUIState = useSelector((state: RootState) => state.GUI);
   const dispatch = useDispatch();
-  // 设置Menu按钮的高亮
-  const SaveTagOn = GUIState.currentMenuTag === MenuPanelTag.Save ? ` ${styles.MenuPanel_button_hl}` : ``;
-  const LoadTagOn = GUIState.currentMenuTag === MenuPanelTag.Load ? ` ${styles.MenuPanel_button_hl}` : ``;
-  const OptionTagOn = GUIState.currentMenuTag === MenuPanelTag.Option ? ` ${styles.MenuPanel_button_hl}` : ``;
 
-  // 设置Menu按钮的颜色
-  const SaveTagColor = GUIState.currentMenuTag === MenuPanelTag.Save ? `rgba(74, 34, 93, 0.9)` : `rgba(123,144,169,1)`;
-  const LoadTagColor = GUIState.currentMenuTag === MenuPanelTag.Load ? `rgba(11, 52, 110, 0.9)` : `rgba(123,144,169,1)`;
-  const OptionTagColor =
-    GUIState.currentMenuTag === MenuPanelTag.Option ? `rgba(81, 110, 65, 0.9)` : `rgba(123,144,169,1)`;
+  // 获取高亮样式和颜色的辅助函数
+  const getButtonStyle = (tag: MenuPanelTag) => {
+    const isActive = GUIState.currentMenuTag === tag;
+    return {
+      buttonClass: isActive ? ` ${styles.MenuPanel_button_hl}` : '',
+    };
+  };
 
-  // 设置Menu图标的颜色
-  const SaveIconColor = GUIState.currentMenuTag === MenuPanelTag.Save ? `rgba(74, 34, 93, 0.9)` : `rgba(123,144,169,1)`;
-  const LoadIconColor =
-    GUIState.currentMenuTag === MenuPanelTag.Load ? `rgba(11, 52, 110, 0.9)` : `rgba(123,144,169,1)`;
-  const OptionIconColor =
-    GUIState.currentMenuTag === MenuPanelTag.Option ? `rgba(81, 110, 65, 0.9)` : `rgba(123,144,169,1)`;
+  // 获取各菜单项的样式
+  const saveStyle = getButtonStyle(MenuPanelTag.Save);
+  const loadStyle = getButtonStyle(MenuPanelTag.Load);
+  const optionStyle = getButtonStyle(MenuPanelTag.Option);
 
   return (
     <div className={styles.MenuPanel_main}>
       <MenuPanelButton
         iconName="save"
-        buttonOnClassName={SaveTagOn}
-        iconColor={SaveIconColor}
-        tagColor={SaveTagColor}
+        buttonOnClassName={saveStyle.buttonClass}
         clickFunc={() => {
           playSePageChange();
           if (GUIState.showTitle) return;
@@ -56,9 +50,7 @@ export const MenuPanel = () => {
       />
       <MenuPanelButton
         iconName="load"
-        buttonOnClassName={LoadTagOn}
-        iconColor={LoadIconColor}
-        tagColor={LoadTagColor}
+        buttonOnClassName={loadStyle.buttonClass}
         clickFunc={() => {
           playSePageChange();
           dispatch(setMenuPanelTag(MenuPanelTag.Load));
@@ -68,8 +60,6 @@ export const MenuPanel = () => {
       />
       <MenuPanelButton
         iconName="title"
-        iconColor="rgba(123,144,169,1)"
-        tagColor="rgba(123,144,169,1)"
         clickFunc={() => {
           playSeDialogOpen();
           showGlogalDialog({
@@ -88,28 +78,13 @@ export const MenuPanel = () => {
       />
       <MenuPanelButton
         iconName="option"
-        style={{ marginLeft: 'auto' }}
-        buttonOnClassName={OptionTagOn}
-        iconColor={OptionIconColor}
-        tagColor={OptionTagColor}
+        buttonOnClassName={optionStyle.buttonClass}
         clickFunc={() => {
           playSePageChange();
           dispatch(setMenuPanelTag(MenuPanelTag.Option));
         }}
         tagName={t('options.title')}
         key="optionButton"
-      />
-
-      <MenuPanelButton
-        iconName="exit"
-        iconColor="rgba(123,144,169,1)"
-        tagColor="rgba(123,144,169,1)"
-        clickFunc={() => {
-          playSeClick();
-          dispatch(setVisibility({ component: 'showMenuPanel', visibility: false }));
-        }}
-        tagName={t('exit.title')}
-        key="exitIcon"
       />
     </div>
   );

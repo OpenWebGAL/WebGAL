@@ -1,0 +1,157 @@
+/* 存档标签样式 */
+.saveTab {
+  position: relative;
+  width: 350px;
+  height: 220px;
+  margin: 15px;
+  border-radius: 0; /* 移除圆角，使用SVG自带的形状 */
+  box-shadow: none; /* 移除阴影，使用SVG自带的阴影效果 */
+  overflow: visible;
+  transition: transform 0.3s;
+  background-color: transparent; /* 背景透明，让SVG显示 */
+  opacity: 0;
+  animation: fadeInTab 0.5s forwards, Elements_in_transform 0.5s ease-out;
+}
+
+.saveTab:hover {
+  transform: translateY(-5px) scale(1.02);
+}
+
+.tabBorder {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none; /* 确保边框不会影响鼠标事件 */
+}
+
+.tabNumber {
+  position: absolute;
+  top: 4px;
+  left: 16px;
+  width: 50px;
+  height: 30px;
+  background-color: #51a8dd;
+  color: white;
+  font-family: 'Monomaniac One', sans-serif;
+  font-size: 1.3rem;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 4px;
+  z-index: 2;
+}
+
+.load .tabNumber {
+  background-color: #51a8dd;
+}
+
+.save .tabNumber {
+  background-color: #b28fce;
+}
+
+.tabContent {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  z-index: 1;
+  padding-top: 40px; /* 为顶部标签腾出空间 */
+  padding-bottom: 10px; /* 底部间距 */
+  padding-left: 16px; /* 左侧间距 */
+  padding-right: 16px; /* 右侧间距 */
+}
+
+.tabHeader {
+  height: 30px;
+  display: flex;
+  align-items: center;
+  background-color: transparent;
+  color: #333;
+  font-family: 'Monomaniac One', 'WebgalUI', sans-serif;
+  font-size: 0.9rem;
+  margin-bottom: 5px;
+}
+
+.tabTitle {
+  font-weight: bold;
+  margin-right: auto;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 170px;
+  color: #333;
+}
+
+.tabTime {
+  font-size: 0.8rem;
+  margin-right: 10px;
+  color: #666;
+}
+
+.tabImage {
+  width: 100%;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 4px;
+  margin-bottom: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.tabText {
+  height: 60px;
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+}
+
+.tabSpeaker {
+  font-weight: bold;
+  font-size: 0.9rem;
+  color: #005caf;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  padding-bottom: 4px;
+  margin-bottom: 4px;
+}
+
+.load .tabSpeaker {
+  color: #005caf;
+}
+
+.save .tabSpeaker {
+  color: #77428d;
+}
+
+.tabDialogue {
+  font-size: 0.85rem;
+  color: #333;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  line-height: 1.3;
+}
+
+@keyframes fadeInTab {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* 使用SaveAndLoad.module.scss中的转换动画 */
+@keyframes Elements_in_transform {
+  0% {
+    transform: scale(1.05, 1.05) translate(-25px, -20px) rotateY(15deg) rotateX(-15deg);
+  }
+  100% {
+    transform: scale(1, 1) translate(0, 0);
+  }
+}

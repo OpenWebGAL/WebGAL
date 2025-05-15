@@ -5,14 +5,22 @@
   z-index: 16;
   //backdrop-filter: blur(1px);
   animation: Menu_ShowSoftly 0.5s forwards;
-  background-image: linear-gradient(to top, #accbee 0%, #e7f0fd 100%);
+  background-image: linear-gradient(311.76deg, #add1ff 3.58%, #ffffff 59.64%);
+}
+
+.Menu_main_save {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  z-index: 16;
+  animation: Menu_ShowSoftly 0.5s forwards;
+  background-image: linear-gradient(311.76deg, #ffade0 3.58%, #ffffff 59.64%);
 }
 
 .Menu_TagContent {
   width: 100%;
   height: 90%;
 }
-
 
 @keyframes Menu_ShowSoftly {
   0% {

@@ -16,6 +16,7 @@ interface IShowGlobalDialogProps {
   rightText: string;
   leftFunc: Function;
   rightFunc: Function;
+  type?: 'warn' | 'info' | 'danger';
 }
 
 export function showGlogalDialog(props: IShowGlobalDialogProps) {
@@ -31,10 +32,40 @@ export function showGlogalDialog(props: IShowGlobalDialogProps) {
     props.rightFunc();
     hideGlobalDialog();
   };
+  const getSymbol = () => {
+    switch (props.type) {
+      case 'warn':
+        return '!';
+      case 'info':
+        return '?';
+      case 'danger':
+        return 'X';
+      default:
+        return '?';
+    }
+  };
+  const getColor = () => {
+    switch (props.type) {
+      case 'warn':
+        return '#c76a4bee';
+      case 'info':
+        return '#50B6FF';
+      case 'danger':
+        return '#FF5D5A';
+      default:
+        return '#c76a4bee';
+    }
+  };
   const renderElement = (
     <div className={styles.GlobalDialog_main}>
       <div className={styles.glabalDialog_container}>
-        <div className={styles.glabalDialog_container_inner}>
+        <div
+          className={styles.glabalDialog_container_inner}
+          style={{
+            backgroundColor: getColor(),
+          }}
+        >
+          <div>Tips</div>
           <div className={styles.title}>{props.title}</div>
           <div className={styles.button_list}>
             <div className={styles.button} onClick={handleLeft} onMouseEnter={playSeEnter}>
@@ -43,6 +74,9 @@ export function showGlogalDialog(props: IShowGlobalDialogProps) {
             <div className={styles.button} onClick={handleRight} onMouseEnter={playSeEnter}>
               {props.rightText}
             </div>
+          </div>
+          <div className={styles.decorate}>
+            <div className={styles.decorate_symbol}>{getSymbol()}</div>
           </div>
         </div>
       </div>

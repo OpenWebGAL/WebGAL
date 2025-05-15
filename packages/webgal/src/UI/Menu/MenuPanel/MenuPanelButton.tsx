@@ -19,7 +19,6 @@ export const MenuPanelButton = (props: IMenuPanel) => {
       className={buttonClassName}
       onClick={() => {
         props.clickFunc();
-        // playSePageChange();
       }}
       onMouseEnter={playSeEnter}
       style={{ ...props.style, color: props.tagColor }}

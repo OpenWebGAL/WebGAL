@@ -1,19 +1,20 @@
-import { FC, useEffect } from 'react';
+import { FC } from 'react';
 import styles from './title.module.scss';
 import { playBgm } from '@/Core/controller/stage/playBgm';
 import { continueGame, startGame } from '@/Core/controller/gamePlay/startContinueGame';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState, webgalStore } from '@/store/store';
+import { RootState } from '@/store/store';
 import { setMenuPanelTag, setVisibility } from '@/store/GUIReducer';
 import { MenuPanelTag } from '@/store/guiInterface';
 import useTrans from '@/hooks/useTrans';
-// import { resize } from '@/Core/util/resize';
-import { hasFastSaveRecord, loadFastSaveGame } from '@/Core/controller/storage/fastSaveLoad';
 import useSoundEffect from '@/hooks/useSoundEffect';
 import useApplyStyle from '@/hooks/useApplyStyle';
 import { fullScreenOption } from '@/store/userDataInterface';
 import { keyboard } from '@/hooks/useHotkey';
 import useConfigData from '@/hooks/useConfigData';
+import TitleButton from './TitleButton';
+import { DoubleRight, FolderOpen, PlayOne, SettingTwo, Star } from '@icon-park/react';
+
 /**
  * 标题页
  * @constructor
@@ -58,64 +59,55 @@ const Title: FC = () => {
           }}
         >
           <div className={applyStyle('Title_buttonList', styles.Title_buttonList)}>
-            <div
-              className={applyStyle('Title_button', styles.Title_button)}
+            <TitleButton
+              text={t('start.title')}
               onClick={() => {
                 startGame();
-                playSeClick();
               }}
-              onMouseEnter={playSeEnter}
-            >
-              <div className={applyStyle('Title_button_text', styles.Title_button_text)}>{t('start.title')}</div>
-            </div>
-            <div
-              className={applyStyle('Title_button', styles.Title_button)}
+              icon={<PlayOne size="42" fill="#fff" strokeWidth={4} />}
+              subTitle="Start Game"
+            />
+
+            <TitleButton
+              text={t('continue.title')}
               onClick={async () => {
-                playSeClick();
                 dispatch(setVisibility({ component: 'showTitle', visibility: false }));
                 continueGame();
               }}
-              onMouseEnter={playSeEnter}
-            >
-              <div className={applyStyle('Title_button_text', styles.Title_button_text)}>{t('continue.title')}</div>
-            </div>
-            <div
-              className={applyStyle('Title_button', styles.Title_button)}
+              icon={<DoubleRight size="42" fill="#fff" strokeWidth={4} />}
+              subTitle="Continue Game"
+            />
+
+            <TitleButton
+              text={t('options.title')}
               onClick={() => {
-                playSeClick();
                 dispatch(setVisibility({ component: 'showMenuPanel', visibility: true }));
                 dispatch(setMenuPanelTag(MenuPanelTag.Option));
               }}
-              onMouseEnter={playSeEnter}
-            >
-              <div className={applyStyle('Title_button_text', styles.Title_button_text)}>{t('options.title')}</div>
-            </div>
-            <div
-              className={applyStyle('Title_button', styles.Title_button)}
+              icon={<SettingTwo size="36" fill="#fff" strokeWidth={4} />}
+              subTitle="Options"
+            />
+
+            <TitleButton
+              text={t('load.title')}
               onClick={() => {
-                playSeClick();
                 dispatch(setVisibility({ component: 'showMenuPanel', visibility: true }));
                 dispatch(setMenuPanelTag(MenuPanelTag.Load));
               }}
-              onMouseEnter={playSeEnter}
-            >
-              <div className={applyStyle('Title_button_text', styles.Title_button_text)}>{t('load.title')}</div>
-            </div>
+              icon={<FolderOpen size="36" fill="#fff" strokeWidth={4} />}
+              subTitle="Load Game"
+            />
+
             {GUIState.enableAppreciationMode && (
-              <div
-                className={`${applyStyle('Title_button', styles.Title_button)} ${
-                  !hasAppreciationItems ? styles.Title_button_disabled : ''
-                }`}
+              <TitleButton
+                text={t('extra.title')}
+                disabled={!hasAppreciationItems}
                 onClick={() => {
-                  if (hasAppreciationItems) {
-                    playSeClick();
-                    dispatch(setVisibility({ component: 'showExtra', visibility: true }));
-                  }
+                  dispatch(setVisibility({ component: 'showExtra', visibility: true }));
                 }}
-                onMouseEnter={playSeEnter}
-              >
-                <div className={applyStyle('Title_button_text', styles.Title_button_text)}>{t('extra.title')}</div>
-              </div>
+                icon={<Star theme="outline" size="42" fill="#fff" />}
+                subTitle="Extra"
+              />
             )}
             <div
               className={applyStyle('Title_button', styles.Title_button)}
