@@ -30,9 +30,25 @@ interface PropertyConfig {
   overrideGet?: (filter: PIXI.Filter | undefined, defaultValue: number, container: WebGALPixiContainer) => number;
 }
 
+// 滤镜顺序，靠上滤镜的排滤镜数组后面(在上层)
+const enum FilterPriority {
+  ReflectionFilm,
+  RadiusAlpha,
+  ShockWave,
+  Blur,
+  RgbFilm,
+  DotFilm,
+  GlitchFilm,
+  OldFilm,
+  Bloom,
+  GodrayFilm,
+  Bevel,
+  Adjustment,
+}
+
 const FILTER_CONFIGS: Record<string, FilterConfig> = {
   blur: {
-    priority: 100,
+    priority: FilterPriority.Blur,
     create: () => {
       const f = new PIXI.filters.BlurFilter();
       f.blur = 0;
@@ -41,32 +57,32 @@ const FILTER_CONFIGS: Record<string, FilterConfig> = {
     isDefault: (f) => (f as BlurFilter).blur === 0,
   },
   oldFilm: {
-    priority: 90,
+    priority: FilterPriority.OldFilm,
     create: () => new OldFilmFilter(),
   },
   dotFilm: {
-    priority: 90,
+    priority: FilterPriority.DotFilm,
     create: () => new DotFilter(),
   },
   reflectionFilm: {
-    priority: 90,
+    priority: FilterPriority.ReflectionFilm,
     create: () => new ReflectionFilter(),
   },
   glitchFilm: {
-    priority: 90,
+    priority: FilterPriority.GlitchFilm,
     create: () => new GlitchFilter(),
   },
   rgbFilm: {
-    priority: 90,
+    priority: FilterPriority.RgbFilm,
     create: () => new RGBSplitFilter(),
   },
   godrayFilm: {
-    priority: 80,
+    priority: FilterPriority.GodrayFilm,
     create: () => new GodrayFilter(),
   },
   shockwave: {
     // Renamed from shockwaveFilter for consistency
-    priority: 75, // Example priority
+    priority: FilterPriority.ShockWave, // Example priority
     create: () => {
       // The [1280, 720] seems to be the intended center in pixel coordinates.
       // This might need to be dynamic based on the container's actual size/stage size.
@@ -78,7 +94,7 @@ const FILTER_CONFIGS: Record<string, FilterConfig> = {
     isDefault: (f) => (f as ShockwaveFilter).time === 0,
   },
   adjustment: {
-    priority: 70,
+    priority: FilterPriority.Adjustment,
     create: () => new AdjustmentFilter(),
     isDefault: (f) => {
       const a = f as AdjustmentFilter;
@@ -95,7 +111,7 @@ const FILTER_CONFIGS: Record<string, FilterConfig> = {
   },
   radiusAlpha: {
     // Renamed from radiusAlphaFilter for consistency
-    priority: 65, // Example priority
+    priority: FilterPriority.RadiusAlpha, // Example priority
     create: () => {
       // Center (0.5, 0.5) for normalized center of the texture
       const f = new RadiusAlphaFilter(new PIXI.Point(0.5, 0.5), INIT_RAD);
@@ -104,10 +120,10 @@ const FILTER_CONFIGS: Record<string, FilterConfig> = {
     isDefault: (f) => (f as RadiusAlphaFilter).radius === INIT_RAD,
   },
   bevel: {
-    priority: 85, // 示例优先级，请根据需要调整
+    priority: FilterPriority.Bevel, // 示例优先级，请根据需要调整
     create: () => {
       const f = new BevelFilter();
-      // BevelFilter 默认值（基于你的 FilterManager）
+      // BevelFilter 默认值
       f.lightAlpha = 0; // bevel
       f.thickness = 0; // bevelThickness
       f.rotation = 0; // bevelRotation
@@ -129,10 +145,10 @@ const FILTER_CONFIGS: Record<string, FilterConfig> = {
   },
   bloom: {
     // 使用 'bloom' 作为 filterName
-    priority: 82, // 示例优先级
+    priority: FilterPriority.Bloom, // 示例优先级
     create: () => {
       const f = new AdvancedBloomFilter();
-      // AdvancedBloomFilter 默认值（基于你的 FilterManager）
+      // AdvancedBloomFilter 默认值
       f.bloomScale = 0; // bloom
       f.brightness = 1; // bloomBrightness
       f.blur = 0; // bloomBlur
