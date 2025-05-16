@@ -330,8 +330,6 @@ export class WebGALPixiContainer extends PIXI.Container {
     if (idx !== -1) this.filters.splice(idx, 1);
     this.containerFilters.delete(filterName);
     this.filterToName.delete(filter);
-    console.log(this.filters);
-    console.log(this.containerFilters.keys());
   }
 
   // --- Position ---
