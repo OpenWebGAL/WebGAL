@@ -87,9 +87,9 @@ const FILTER_CONFIGS: Record<string, FilterConfig> = {
         a.contrast === 1 &&
         a.saturation === 1 &&
         a.gamma === 1 &&
-        a.red === 255 &&
-        a.green === 255 &&
-        a.blue === 255
+        a.red === 1 &&
+        a.green === 1 &&
+        a.blue === 1
       );
     },
   },
@@ -330,6 +330,8 @@ export class WebGALPixiContainer extends PIXI.Container {
     if (idx !== -1) this.filters.splice(idx, 1);
     this.containerFilters.delete(filterName);
     this.filterToName.delete(filter);
+    console.log(this.filters);
+    console.log(this.containerFilters.keys());
   }
 
   // --- Position ---
