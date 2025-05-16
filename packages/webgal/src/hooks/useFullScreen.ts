@@ -1,34 +1,35 @@
-import { setStorage } from '@/Core/controller/storage/storageController';
-import { RootState } from '@/store/store';
-import { fullScreenOption } from '@/store/userDataInterface';
-import { setOptionData } from '@/store/userDataReducer';
-import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { keyboard } from './useHotkey';
+import { useEffect, useState } from 'react';
 
-export function useFullScreen() {
-  const userDataState = useSelector((state: RootState) => state.userData);
-  const GUIState = useSelector((state: RootState) => state.GUI);
-  const dispatch = useDispatch();
-  const fullScreen = userDataState.optionData.fullScreen;
-  const isEnterGame = GUIState.isEnterGame;
+const _isFullScreen = () => !!(document.fullscreenElement || (document as any).webkitFullscreenElement);
+export default function useFullScreen(target: Element = document.documentElement): {
+  isSupported: boolean;
+  isFullScreen: boolean;
+  enter: () => Promise<void>;
+  exit: () => Promise<void>;
+  toggle: () => Promise<void>;
+} {
+  const isSupported = document.fullscreenEnabled || (document as any).webkitFullscreenEnabled;
+  const [isFullScreen, setFullScreen] = useState<boolean>(_isFullScreen());
 
   useEffect(() => {
-    switch (fullScreen) {
-      case fullScreenOption.on: {
-        if (isEnterGame) {
-          document.documentElement.requestFullscreen();
-          if (keyboard) keyboard.lock(['Escape', 'F11']);
-        }
-        break;
-      }
-      case fullScreenOption.off: {
-        if (document.fullscreenElement) {
-          document.exitFullscreen();
-          if (keyboard) keyboard.unlock();
-        }
-        break;
-      }
-    }
-  }, [fullScreen]);
+    if (!isSupported) return;
+    const onFullscreenChange = () => setFullScreen(_isFullScreen());
+
+    document.addEventListener('fullscreenchange', onFullscreenChange);
+
+    return () => {
+      document.removeEventListener('fullscreenchange', onFullscreenChange);
+    };
+  }, []);
+
+  const enter = isSupported ? () => target.requestFullscreen() : async () => {};
+  const exit = isSupported ? () => document.exitFullscreen() : async () => {};
+
+  return {
+    isSupported,
+    isFullScreen: isFullScreen,
+    enter,
+    exit,
+    toggle: () => (isFullScreen ? exit() : enter()),
+  };
 }

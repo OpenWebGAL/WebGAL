@@ -149,6 +149,10 @@ const fr = {
       title: 'EXTRA',
       subtitle: '',
     },
+    exit: {
+      title: 'QUITTER',
+      subtitle: '',
+    },
   },
 
   gaming: {
@@ -164,6 +168,7 @@ const fr = {
       quicklyLoad: 'Chargement rapide',
       save: 'Sauvegarder',
       load: 'Charger',
+      fullscrren: 'Plein écran',
       options: 'Options',
       title: 'Titre',
       titleTips: "Confirmer le retour à l'écran titre",

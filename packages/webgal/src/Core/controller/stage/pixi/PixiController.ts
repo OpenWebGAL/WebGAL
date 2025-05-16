@@ -563,7 +563,7 @@ export default class PixiStage {
           const targetHeight = originalHeight * targetScale;
           thisFigureContainer.setBaseY(this.stageHeight / 2);
           if (targetHeight < this.stageHeight) {
-            thisFigureContainer.setBaseY(this.stageHeight / 2 + this.stageHeight - targetHeight / 2);
+            thisFigureContainer.setBaseY(this.stageHeight / 2 + (this.stageHeight - targetHeight) / 2);
           }
           if (presetPosition === 'center') {
             thisFigureContainer.setBaseX(this.stageWidth / 2);
@@ -627,8 +627,9 @@ export default class PixiStage {
       }
       // 挂载
       this.figureContainer.addChild(thisFigureContainer);
+      const figureUuid = uuid();
       this.figureObjects.push({
-        uuid: uuid(),
+        uuid: figureUuid,
         key: key,
         pixiContainer: thisFigureContainer,
         sourceUrl: jsonPath,
@@ -639,7 +640,7 @@ export default class PixiStage {
       const instance = this;
 
       const setup = (stage: PixiStage) => {
-        if (thisFigureContainer) {
+        if (thisFigureContainer && this.getStageObjByUuid(figureUuid)) {
           (async function () {
             let overrideBounds: [number, number, number, number] = [0, 0, 0, 0];
             const mot = webgalStore.getState().stage.live2dMotion.find((e) => e.target === key);
@@ -673,7 +674,7 @@ export default class PixiStage {
 
               let baseY = stageHeight / 2;
               if (targetHeight < stageHeight) {
-                baseY = stageHeight / 2 + stageHeight - targetHeight / 2;
+                baseY = stageHeight / 2 + (stageHeight - targetHeight) / 2;
               }
               thisFigureContainer.setBaseY(baseY);
               if (pos === 'center') {

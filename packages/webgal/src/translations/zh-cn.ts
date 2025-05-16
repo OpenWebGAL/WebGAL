@@ -163,6 +163,10 @@ const zhCn = {
       title: '鉴赏模式',
       subtitle: 'EXTRA',
     },
+    exit: {
+      title: '退出游戏',
+      subtitle: 'EXIT',
+    },
   },
 
   gaming: {
@@ -178,6 +182,7 @@ const zhCn = {
       quicklyLoad: '快速读档',
       save: '存档',
       load: '读档',
+      fullscreen: '全屏',
       options: '选项',
       title: '标题',
       titleTips: '确认返回到标题界面吗',
