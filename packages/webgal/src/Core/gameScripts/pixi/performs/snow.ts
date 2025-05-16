@@ -4,6 +4,8 @@ import { registerPerform } from '@/Core/util/pixiPerformManager/pixiPerformManag
 import { WebGAL } from '@/Core/WebGAL';
 import { SCREEN_CONSTANTS } from '@/Core/util/constants';
 
+type containerType = 'foreground' | 'background';
+
 interface SnowflakeSprite extends PIXI.Sprite {
   vy: number;
   vx: number;
@@ -12,22 +14,51 @@ interface SnowflakeSprite extends PIXI.Sprite {
 
 const snow = (
   name: string,
-  effectsContainer: PIXI.Container<PIXI.DisplayObject>,
+  containerType: containerType,
   snowSpeed: number, // 雪花下落速度
   maxSnowflakes: number, // 最大雪花数量
   snowSize: number, // 雪花大小
+  angle: number, // 角度
 ) => {
   const scalePreset = snowSize;
 
-  const app = WebGAL.gameplay.pixiStage?.currentApp;
+  const pixiStage = WebGAL.gameplay.pixiStage;
+
+  if (!pixiStage) {
+    console.error(`[${name}] PixiStage is not available for snow effect.`);
+    return { container: new PIXI.Container(), tickerKey: `${name}-Ticker-ErrorPixiStage` };
+  }
+
+  const app = pixiStage.currentApp;
+
   if (!app) {
     console.error(`[${name}] PixiJS app is not available for snow effect.`);
-    return { container: new PIXI.Container(), tickerKey: `${name}-Ticker-ErrorApp` };
+    return { container: new PIXI.Container(), tickerKey: `${name}-Ticker-ErrorPixiApp` };
   }
-  if (!app.renderer) {
-    console.error(`[${name}] PixiJS renderer is not available. Snow effect cannot be created.`);
-    return { container: new PIXI.Container(), tickerKey: `${name}-Ticker-ErrorRenderer` };
-  }
+
+  const effectsContainer =
+    containerType === 'foreground' ? pixiStage.foregroundEffectsContainer : pixiStage.backgroundEffectsContainer;
+
+  const screenWidth = SCREEN_CONSTANTS.width;
+  const screenHeight = SCREEN_CONSTANTS.height;
+
+  const rotationContainer = new PIXI.Container();
+
+  rotationContainer.angle = angle;
+
+  const angleInRadians = rotationContainer.rotation;
+  const absCos = Math.abs(Math.cos(angleInRadians));
+  const absSin = Math.abs(Math.sin(angleInRadians));
+
+  const stageWidth = screenWidth * absCos + screenHeight * absSin;
+  const stageHeight = screenWidth * absSin + screenHeight * absCos;
+
+  rotationContainer.width = stageWidth;
+  rotationContainer.height = stageHeight;
+  rotationContainer.pivot.set(stageWidth / 2, stageHeight / 2);
+  rotationContainer.position.set(screenWidth / 2, screenHeight / 2);
+
+  effectsContainer.addChild(rotationContainer);
 
   const particleContainer = new PIXI.ParticleContainer(maxSnowflakes, {
     scale: true,
@@ -36,20 +67,18 @@ const snow = (
     alpha: true,
     uvs: false,
   });
-  effectsContainer.addChild(particleContainer);
+
+  rotationContainer.addChild(particleContainer);
 
   const snowflakeTextures: PIXI.Texture[] = [];
   const snowflakes: SnowflakeSprite[] = [];
-
-  const stageWidth = SCREEN_CONSTANTS.width;
-  const stageHeight = SCREEN_CONSTANTS.height;
 
   const baseTexturePath = './game/tex/snow.png';
   const SPRITE_WIDTH = 128;
   const SPRITE_HEIGHT = 128;
   const NUM_SPRITES = 10;
 
-  const snowflakeStyleWeights = [20, 10, 5, 10, 2, 1, 1, 1, 1, 1]; // 雪花样式权重
+  const snowflakeStyleWeights = [10, 2, 2, 2, 1, 1, 1, 1, 2, 2]; // 雪花样式权重
 
   const getWeightedRandomIndex = (weights: number[]): number => {
     if (!weights || weights.length === 0) {
@@ -82,7 +111,7 @@ const snow = (
       snowflake.y = -Math.random() * 50 - snowflake.height;
     }
 
-    snowflake.alpha = Math.random() * 0.15 + 0.85; // 随机透明度
+    snowflake.alpha = Math.random() * 0.2 + 0.8; // 随机透明度
     snowflake.vy = (Math.random() * 0.4 + 0.8) * snowSpeed; // 随机垂直速度
     snowflake.vx = (Math.random() - 0.5) * 0.25 * snowSpeed; // 随机水平速度
     snowflake.rotationSpeed = (Math.random() - 0.5) * 0.005; // 随机旋转速度
@@ -94,7 +123,7 @@ const snow = (
         `[${name}] createSnowflakeInstance called but snowflakeTextures is empty. Using emergency fallback.`,
       );
       const gr = new PIXI.Graphics().beginFill(0xff0000, 0.5).drawCircle(0, 0, 5).endFill();
-      const emergencyTexture = app.renderer.generateTexture(gr);
+      const emergencyTexture = app?.renderer.generateTexture(gr);
       const sf = new PIXI.Sprite(emergencyTexture) as SnowflakeSprite;
       gr.destroy();
       return sf;
@@ -139,10 +168,6 @@ const snow = (
     const finalizeSetup = () => {
       if (!baseTexture.valid) {
         console.error(`[${name}] Base texture ${baseTexturePath} is not valid even after load attempt.`);
-        if (!app.renderer) {
-          console.error(`[${name}] Renderer not available to create fallback texture.`);
-          return;
-        }
         const gr = new PIXI.Graphics().beginFill(0xcccccc).drawRect(0, 0, 10, 10).endFill();
         const placeholderTexture = app.renderer.generateTexture(gr);
         snowflakeTextures.push(placeholderTexture);
@@ -214,11 +239,11 @@ const snow = (
 };
 
 registerPerform('snow', {
-  fg: () => snow('snow-foreground', WebGAL.gameplay.pixiStage!.foregroundEffectsContainer!, 3, 250, 0.35),
-  bg: () => snow('snow-background', WebGAL.gameplay.pixiStage!.backgroundEffectsContainer!, 1, 750, 0.15),
+  fg: () => snow('snow-foreground', 'foreground', 3, 250, 0.4, 0),
+  bg: () => snow('snow-background', 'background', 1, 750, 0.2, 0),
 });
 
 registerPerform('heavySnow', {
-  fg: () => snow('heavy-snow-foreground', WebGAL.gameplay.pixiStage!.foregroundEffectsContainer!, 10, 500, 0.45),
-  bg: () => snow('heavy-snow-background', WebGAL.gameplay.pixiStage!.backgroundEffectsContainer!, 5, 1500, 0.2),
+  fg: () => snow('heavy-snow-foreground', 'foreground', 20, 1000, 0.6, -75),
+  bg: () => snow('heavy-snow-background', 'background', 10, 2000, 0.3, -80),
 });
