@@ -1,14 +1,14 @@
 [
   {
-    "shockwave": 0,
+    "shockwaveFilter": 0,
     "alpha": 1,
-    "radiusAlpha": 0,
+    "radiusAlphaFilter": 0,
     "duration": 0
   },
   {
-    "shockwave": 3.05,
+    "shockwaveFilter": 3.05,
     "alpha": 1,
-    "radiusAlpha": 1.05,
+    "radiusAlphaFilter": 1.05,
     "duration": 2000
   }
 ]

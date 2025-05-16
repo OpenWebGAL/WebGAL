@@ -1,7 +1,7 @@
 import * as PIXI from 'pixi.js';
 import { WebGALPixiContainer } from '@/Core/controller/stage/pixi/WebGALPixiContainer';
 
-const INIT_RAD = 0;
+export const INIT_RAD = 0;
 const FILTER_NAME = 'radiusAlphaFilter';
 
 export class RadiusAlphaFilter extends PIXI.Filter {
