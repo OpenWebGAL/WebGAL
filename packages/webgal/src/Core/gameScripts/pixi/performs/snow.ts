@@ -4,7 +4,7 @@ import { registerPerform } from '@/Core/util/pixiPerformManager/pixiPerformManag
 import { WebGAL } from '@/Core/WebGAL';
 import { SCREEN_CONSTANTS } from '@/Core/util/constants';
 
-type containerType = 'foreground' | 'background';
+type ContainerType = 'foreground' | 'background';
 
 interface SnowflakeSprite extends PIXI.Sprite {
   vy: number;
@@ -13,28 +13,15 @@ interface SnowflakeSprite extends PIXI.Sprite {
 }
 
 const pixiSnow = (
-  name: string,
-  containerType: containerType,
+  tickerKey: string,
+  containerType: ContainerType,
   speed: number, // 下落速度
   maxNumber: number, // 最大数量
-  size: number, // 大小
+  scale: number, // 大小
   angle: number, // 角度
 ) => {
-  const scalePreset = size;
-
-  const pixiStage = WebGAL.gameplay.pixiStage;
-
-  if (!pixiStage) {
-    console.error(`[${name}] PixiStage is not available for snow effect.`);
-    return { container: new PIXI.Container(), tickerKey: `${name}-Ticker-ErrorPixiStage` };
-  }
-
-  const app = pixiStage.currentApp;
-
-  if (!app) {
-    console.error(`[${name}] PixiJS app is not available for snow effect.`);
-    return { container: new PIXI.Container(), tickerKey: `${name}-Ticker-ErrorPixiApp` };
-  }
+  const pixiStage = WebGAL.gameplay.pixiStage!;
+  const app = pixiStage.currentApp!;
 
   const effectsContainer =
     containerType === 'foreground' ? pixiStage.foregroundEffectsContainer : pixiStage.backgroundEffectsContainer;
@@ -100,7 +87,7 @@ const pixiSnow = (
 
   const resetSnowflake = (snowflake: SnowflakeSprite, isInitialSpawn = false) => {
     const randomScaleFactor = Math.random() * 0.5 + 0.5; // 随机缩放因子
-    snowflake.scale.set(scalePreset * randomScaleFactor);
+    snowflake.scale.set(scale * randomScaleFactor);
     snowflake.anchor.set(0.5);
 
     if (isInitialSpawn) {
@@ -118,17 +105,6 @@ const pixiSnow = (
   };
 
   const createSnowflakeInstance = (): SnowflakeSprite => {
-    if (snowflakeTextures.length === 0) {
-      console.warn(
-        `[${name}] createSnowflakeInstance called but snowflakeTextures is empty. Using emergency fallback.`,
-      );
-      const graphic = new PIXI.Graphics().beginFill(0xff0000, 0.5).drawCircle(0, 0, 5).endFill();
-      const emergencyTexture = app?.renderer.generateTexture(graphic);
-      const snowflake = new PIXI.Sprite(emergencyTexture) as SnowflakeSprite;
-      snowflake.destroy();
-      return snowflake;
-    }
-
     let textureIndex: number;
     if (snowflakeTextures.length === NUM_SPRITES) {
       textureIndex = getWeightedRandomIndex(styleWeights);
@@ -158,7 +134,6 @@ const pixiSnow = (
   };
 
   const setupSnowflakesAndAnimation = () => {
-    console.log(`[${name}] Setting up snowflakes and animation. Base texture path: ${baseTexturePath}`);
     snowflakeTextures.length = 0;
     while (snowflakes.length > 0) snowflakes.pop();
     particleContainer.removeChildren();
@@ -166,15 +141,7 @@ const pixiSnow = (
     const baseTexture = PIXI.BaseTexture.from(baseTexturePath);
 
     const finalizeSetup = () => {
-      if (!baseTexture.valid) {
-        console.error(`[${name}] Base texture ${baseTexturePath} is not valid even after load attempt.`);
-        const gr = new PIXI.Graphics().beginFill(0xcccccc).drawRect(0, 0, 10, 10).endFill();
-        const placeholderTexture = app.renderer.generateTexture(gr);
-        snowflakeTextures.push(placeholderTexture);
-        gr.destroy();
-        console.warn(`[${name}] Using placeholder texture for snowflakes due to baseTexture loading issues.`);
-      } else {
-        console.log(`[${name}] Base texture ${baseTexturePath} is valid. Slicing textures.`);
+      if (baseTexture.valid) {
         for (let i = 0; i < NUM_SPRITES; i++) {
           const frame = new PIXI.Rectangle(i * SPRITE_WIDTH, 0, SPRITE_WIDTH, SPRITE_HEIGHT);
           snowflakeTextures.push(new PIXI.Texture(baseTexture, frame));
@@ -182,52 +149,37 @@ const pixiSnow = (
       }
 
       if (snowflakeTextures.length === 0) {
-        console.error(`[${name}] Failed to create any snowflake textures. Cannot create sprites.`);
+        console.error(`Failed to create any snowflake textures. Cannot create sprites.`);
         return;
       }
       if (!snowflakeTextures[0]?.valid) {
-        console.warn(
-          `[${name}] First snowflake texture is invalid after creation. Sprites might not render correctly.`,
-        );
+        console.warn(`First snowflake texture is invalid after creation. Sprites might not render correctly.`);
       }
 
-      console.log(`[${name}] Creating ${maxNumber} snowflake sprites.`);
       for (let i = 0; i < maxNumber; i++) {
         const snowflake = createSnowflakeInstance();
         particleContainer.addChild(snowflake);
         snowflakes.push(snowflake);
       }
-      console.log(`[${name}] ${snowflakes.length} snowflakes created and added to container.`);
 
-      if (WebGAL.gameplay.pixiStage) {
-        console.log(`[${name}] Registering animation ticker.`);
-        WebGAL.gameplay.pixiStage.registerAnimation(
-          {
-            setStartState: () => {
-              particleContainer.visible = true;
-            },
-            setEndState: () => {},
-            tickerFunc: tickerFn,
-          },
-          `${name}-Ticker`,
-        );
-        particleContainer.visible = true;
-      } else {
-        console.error(`[${name}] WebGAL.gameplay.pixiStage is not available to register animation.`);
-      }
+      pixiStage.registerAnimation(
+        {
+          setStartState: () => {},
+          setEndState: () => {},
+          tickerFunc: tickerFn,
+        },
+        tickerKey,
+      );
     };
 
     if (baseTexture.valid) {
-      console.log(`[${name}] Base texture ${baseTexturePath} is already valid.`);
       finalizeSetup();
     } else {
-      console.log(`[${name}] Base texture ${baseTexturePath} is not yet valid. Waiting for load event.`);
       baseTexture.once('loaded', () => {
-        console.log(`[${name}] Base texture ${baseTexturePath} loaded successfully via event.`);
         finalizeSetup();
       });
       baseTexture.once('error', (errorEvent) => {
-        console.error(`[${name}] Error loading base texture ${baseTexturePath}:`, errorEvent);
+        console.error(`Error loading base texture ${baseTexturePath}:`, errorEvent);
         finalizeSetup();
       });
     }
@@ -235,15 +187,15 @@ const pixiSnow = (
 
   setupSnowflakesAndAnimation();
 
-  return { container: particleContainer, tickerKey: `${name}-Ticker` };
+  return { container, tickerKey };
 };
 
 registerPerform('snow', {
-  fg: () => pixiSnow('snow-foreground', 'foreground', 3, 250, 0.4, 0),
-  bg: () => pixiSnow('snow-background', 'background', 1, 750, 0.2, 0),
+  fg: () => pixiSnow('snow-foreground-ticker', 'foreground', 3, 250, 0.4, 0),
+  bg: () => pixiSnow('snow-background-ticker', 'background', 1, 750, 0.2, 0),
 });
 
 registerPerform('heavySnow', {
-  fg: () => pixiSnow('heavy-snow-foreground', 'foreground', 20, 1000, 0.6, -75),
-  bg: () => pixiSnow('heavy-snow-background', 'background', 10, 2000, 0.3, -80),
+  fg: () => pixiSnow('heavy-snow-foreground-ticker', 'foreground', 20, 1000, 0.6, -75),
+  bg: () => pixiSnow('heavy-snow-background-ticker', 'background', 10, 2000, 0.3, -80),
 });
