@@ -57,7 +57,7 @@ class ChooseOption {
  */
 export const choose = (sentence: ISentence): IPerform => {
   const chooseOptionScripts = sentence.content.split(/(?<!\\)\|/);
-  const chooseOptions = chooseOptionScripts.map((e) => ChooseOption.parse(e));
+  const chooseOptions = chooseOptionScripts.map((e) => ChooseOption.parse(e.trim()));
 
   // eslint-disable-next-line react/no-deprecated
   ReactDOM.render(

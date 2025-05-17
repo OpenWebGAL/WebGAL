@@ -26,7 +26,7 @@ export const pixi = (sentence: ISentence): IPerform => {
     }
   });
   const res: IResult = call(sentence.content);
-  const { container, tickerKey } = res;
+  const { fg, bg } = res;
 
   return {
     performName: pixiPerformName,
@@ -34,9 +34,16 @@ export const pixi = (sentence: ISentence): IPerform => {
     isHoldOn: true,
     stopFunction: () => {
       logger.warn('现在正在卸载pixi演出');
-      container.destroy({ texture: true, baseTexture: true });
-      WebGAL.gameplay.pixiStage?.effectsContainer.removeChild(container);
-      WebGAL.gameplay.pixiStage?.removeAnimation(tickerKey);
+      if (fg) {
+        fg.container.destroy({ texture: true, baseTexture: true });
+        WebGAL.gameplay.pixiStage?.foregroundEffectsContainer.removeChild(fg.container);
+        WebGAL.gameplay.pixiStage?.removeAnimation(fg.tickerKey);
+      }
+      if (bg) {
+        bg.container.destroy({ texture: true, baseTexture: true });
+        WebGAL.gameplay.pixiStage?.backgroundEffectsContainer.removeChild(bg.container);
+        WebGAL.gameplay.pixiStage?.removeAnimation(bg.tickerKey);
+      }
     },
     blockingNext: () => false,
     blockingAuto: () => false,

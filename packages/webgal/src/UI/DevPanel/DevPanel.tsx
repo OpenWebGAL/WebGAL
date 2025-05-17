@@ -30,7 +30,7 @@ export default function DevPanel() {
     <>
       <div onClick={() => getPixiSscreenshot()}>Save PIXI Screenshot</div>
       <div>Current Language:{i18n.language}</div>
-      <div onClick={() => WebGAL.gameplay.pixiStage?.removeAnimation('snow-Ticker')}>Remove Snow Ticker</div>
+      <div onClick={() => WebGAL.gameplay.pixiStage?.removeAnimation('snow-ticker')}>Remove Snow Ticker</div>
       <div>Stage State</div>
       <div>{JSON.stringify(stageState, null, '  ')}</div>
     </>

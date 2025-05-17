@@ -1,0 +1,22 @@
+label: performs;
+choose: cherryBlossoms: cherryBlossoms | rain:rain | snow:snow | heavySnow:heavySnow;
+
+label: cherryBlossoms;
+pixiInit;
+pixiPerform: cherryBlossoms;
+jumpLabel: performs;
+
+label: rain;
+pixiInit;
+pixiPerform: rain;
+jumpLabel: performs;
+
+label: snow;
+pixiInit;
+pixiPerform: snow;
+jumpLabel: performs;
+
+label: heavySnow;
+pixiInit;
+pixiPerform: heavySnow;
+jumpLabel: performs;
