@@ -65,7 +65,7 @@ const pixiSnow = (
   const SPRITE_HEIGHT = 128;
   const NUM_SPRITES = 10;
 
-  const styleWeights = [10, 2, 2, 2, 1, 1, 1, 1, 2, 2]; // 雪花样式权重
+  const styleWeights = [10, 2, 2, 2, 1, 1, 1, 2, 2, 2]; // 雪花样式权重
 
   const getWeightedRandomIndex = (weights: number[]): number => {
     if (!weights || weights.length === 0) {
