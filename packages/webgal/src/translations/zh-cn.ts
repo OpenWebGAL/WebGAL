@@ -166,6 +166,7 @@ const zhCn = {
     exit: {
       title: '退出游戏',
       subtitle: 'EXIT',
+      tips: '确定要退出游戏吗？',
     },
   },
 
@@ -185,7 +186,7 @@ const zhCn = {
       fullscreen: '全屏',
       options: '选项',
       title: '标题',
-      titleTips: '确认返回到标题界面吗',
+      titleTips: '确定要返回标题界面吗？',
     },
   },
 

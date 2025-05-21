@@ -152,6 +152,7 @@ const fr = {
     exit: {
       title: 'QUITTER',
       subtitle: '',
+      tips: 'Êtes-vous sûr de vouloir quitter ?',
     },
   },
 
@@ -171,7 +172,7 @@ const fr = {
       fullscrren: 'Plein écran',
       options: 'Options',
       title: 'Titre',
-      titleTips: "Confirmer le retour à l'écran titre",
+      titleTips: "Confirmer le retour à l'écran titre ?",
     },
   },
 
