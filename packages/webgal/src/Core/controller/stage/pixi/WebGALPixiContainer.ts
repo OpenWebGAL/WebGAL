@@ -617,7 +617,8 @@ export class WebGALPixiContainer extends PIXI.Container {
       for (let i = 0; i < this.filters.length; i++) {
         const currentFilter = this.filters[i]!;
         if (currentFilter === this.alphaFilter) {
-          continue;
+          insertIndex = i;
+          break;
         }
         const currentName = this.filterToName.get(currentFilter);
         if (currentName) {
