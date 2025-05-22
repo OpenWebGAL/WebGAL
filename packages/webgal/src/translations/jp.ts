@@ -162,6 +162,7 @@ const jp = {
     exit: {
       title: 'ゲーム終了',
       subtitle: 'EXIT',
+      tips: 'ゲームを終了しますか？',
     },
   },
 
