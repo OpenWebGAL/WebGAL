@@ -138,15 +138,20 @@ export function compileSentence(
         })
         .endsWith(SegmentType.Link, () => {
           const val = node.value as EnhancedValue;
-          const enhancedNode = (
-            <span className="__enhanced_text" key={val.text + `${index}`}>
-              <ruby key={index + val.text}>
-                {val.text}
-                <rt>{val.ruby}</rt>
-              </ruby>
-            </span>
-          );
-          ln.push({ reactNode: enhancedNode, enhancedValue: val.values });
+          // 将带样式的文本也拆分成单个字符
+          const chars = splitChars(val.text, replace_space_with_nbsp);
+          // eslint-disable-next-line max-nested-callbacks
+          chars.forEach((char, charIndex) => {
+            const enhancedNode = (
+              <span className="__enhanced_text" key={val.text + `${index}-${charIndex}`}>
+                <ruby key={index + val.text + charIndex}>
+                  {char}
+                  <rt>{val.ruby}</rt>
+                </ruby>
+              </span>
+            );
+            ln.push({ reactNode: enhancedNode, enhancedValue: val.values });
+          });
         });
     });
     return ln;
