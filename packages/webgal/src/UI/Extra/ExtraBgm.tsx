@@ -62,6 +62,12 @@ export function ExtraBgm() {
       </div>
     );
   });
+
+  // If there are no BGM tracks available, don't render the player controls
+  if (bgmListLen === 0) {
+    return null;
+  }
+
   return (
     <div className={styles.bgmContainer} style={{ maxHeight: bgmPlayerHeight }}>
       <div className={styles.bgmPlayerMain}>
