@@ -11,7 +11,6 @@ export const wait = (sentence: ISentence): IPerform => {
   return {
     performName,
     duration: duration,
-    goNextWhenOver: true,
     isHoldOn: false,
     stopFunction: () => {},
     blockingNext: () => false,
