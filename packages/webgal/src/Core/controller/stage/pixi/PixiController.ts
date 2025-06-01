@@ -357,7 +357,7 @@ export default class PixiStage {
    * @param key 背景的标识，一般和背景类型有关
    * @param url 背景图片url
    */
-  public addBg(key: string, url: string) {
+  public addBg(onLoaded: () => void, key: string, url: string) {
     // const loader = this.assetLoader;
     const loader = this.assetLoader;
     // 准备用于存放这个背景的 Container
@@ -387,32 +387,29 @@ export default class PixiStage {
 
     // 完成图片加载后执行的函数
     const setup = () => {
-      // TODO：找一个更好的解法，现在的解法是无论是否复用原来的资源，都设置一个延时以让动画工作正常！
+      const texture = loader.resources?.[url]?.texture;
+      if (texture && this.getStageObjByUuid(bgUuid)) {
+        /**
+         * 重设大小
+         */
+        const originalWidth = texture.width;
+        const originalHeight = texture.height;
+        const scaleX = this.stageWidth / originalWidth;
+        const scaleY = this.stageHeight / originalHeight;
+        const targetScale = Math.max(scaleX, scaleY);
+        const bgSprite = new PIXI.Sprite(texture);
+        bgSprite.scale.x = targetScale;
+        bgSprite.scale.y = targetScale;
+        bgSprite.anchor.set(0.5);
+        bgSprite.position.y = this.stageHeight / 2;
+        thisBgContainer.setBaseX(this.stageWidth / 2);
+        thisBgContainer.setBaseY(this.stageHeight / 2);
+        thisBgContainer.pivot.set(0, this.stageHeight / 2);
 
-      setTimeout(() => {
-        const texture = loader.resources?.[url]?.texture;
-        if (texture && this.getStageObjByUuid(bgUuid)) {
-          /**
-           * 重设大小
-           */
-          const originalWidth = texture.width;
-          const originalHeight = texture.height;
-          const scaleX = this.stageWidth / originalWidth;
-          const scaleY = this.stageHeight / originalHeight;
-          const targetScale = Math.max(scaleX, scaleY);
-          const bgSprite = new PIXI.Sprite(texture);
-          bgSprite.scale.x = targetScale;
-          bgSprite.scale.y = targetScale;
-          bgSprite.anchor.set(0.5);
-          bgSprite.position.y = this.stageHeight / 2;
-          thisBgContainer.setBaseX(this.stageWidth / 2);
-          thisBgContainer.setBaseY(this.stageHeight / 2);
-          thisBgContainer.pivot.set(0, this.stageHeight / 2);
-
-          // 挂载
-          thisBgContainer.addChild(bgSprite);
-        }
-      }, 0);
+        // 挂载
+        thisBgContainer.addChild(bgSprite);
+      }
+      onLoaded();
     };
 
     /**
@@ -432,7 +429,7 @@ export default class PixiStage {
    * @param key 背景的标识，一般和背景类型有关
    * @param url 背景图片url
    */
-  public addVideoBg(key: string, url: string) {
+  public addVideoBg(onLoaded: () => void, key: string, url: string) {
     const loader = this.assetLoader;
     // 准备用于存放这个背景的 Container
     const thisBgContainer = new WebGALPixiContainer();
@@ -461,42 +458,39 @@ export default class PixiStage {
 
     // 完成加载后执行的函数
     const setup = () => {
-      // TODO：找一个更好的解法，现在的解法是无论是否复用原来的资源，都设置一个延时以让动画工作正常！
-
-      setTimeout(() => {
-        console.debug('start loaded video: ' + url);
-        const video = document.createElement('video');
-        const videoResource = new PIXI.VideoResource(video);
-        videoResource.src = url;
-        videoResource.source.preload = 'auto';
-        videoResource.source.muted = true;
-        videoResource.source.loop = true;
-        videoResource.source.autoplay = true;
-        videoResource.source.src = url;
-        // @ts-ignore
-        const texture = PIXI.Texture.from(videoResource);
-        if (texture && this.getStageObjByUuid(bgUuid)) {
-          /**
-           * 重设大小
-           */
-          texture.baseTexture.resource.load().then(() => {
-            const originalWidth = videoResource.source.videoWidth;
-            const originalHeight = videoResource.source.videoHeight;
-            const scaleX = this.stageWidth / originalWidth;
-            const scaleY = this.stageHeight / originalHeight;
-            const targetScale = Math.max(scaleX, scaleY);
-            const bgSprite = new PIXI.Sprite(texture);
-            bgSprite.scale.x = targetScale;
-            bgSprite.scale.y = targetScale;
-            bgSprite.anchor.set(0.5);
-            bgSprite.position.y = this.stageHeight / 2;
-            thisBgContainer.setBaseX(this.stageWidth / 2);
-            thisBgContainer.setBaseY(this.stageHeight / 2);
-            thisBgContainer.pivot.set(0, this.stageHeight / 2);
-            thisBgContainer.addChild(bgSprite);
-          });
-        }
-      }, 0);
+      console.debug('start loaded video: ' + url);
+      const video = document.createElement('video');
+      const videoResource = new PIXI.VideoResource(video);
+      videoResource.src = url;
+      videoResource.source.preload = 'auto';
+      videoResource.source.muted = true;
+      videoResource.source.loop = true;
+      videoResource.source.autoplay = true;
+      videoResource.source.src = url;
+      // @ts-ignore
+      const texture = PIXI.Texture.from(videoResource);
+      if (texture && this.getStageObjByUuid(bgUuid)) {
+        /**
+         * 重设大小
+         */
+        texture.baseTexture.resource.load().then(() => {
+          const originalWidth = videoResource.source.videoWidth;
+          const originalHeight = videoResource.source.videoHeight;
+          const scaleX = this.stageWidth / originalWidth;
+          const scaleY = this.stageHeight / originalHeight;
+          const targetScale = Math.max(scaleX, scaleY);
+          const bgSprite = new PIXI.Sprite(texture);
+          bgSprite.scale.x = targetScale;
+          bgSprite.scale.y = targetScale;
+          bgSprite.anchor.set(0.5);
+          bgSprite.position.y = this.stageHeight / 2;
+          thisBgContainer.setBaseX(this.stageWidth / 2);
+          thisBgContainer.setBaseY(this.stageHeight / 2);
+          thisBgContainer.pivot.set(0, this.stageHeight / 2);
+          thisBgContainer.addChild(bgSprite);
+        });
+      }
+      onLoaded();
     };
 
     /**
@@ -517,7 +511,7 @@ export default class PixiStage {
    * @param url 立绘图片url
    * @param presetPosition
    */
-  public addFigure(key: string, url: string, presetPosition: 'left' | 'center' | 'right' = 'center') {
+  public addFigure(onLoaded: () => void, key: string, url: string, presetPosition: 'left' | 'center' | 'right' = 'center') {
     const loader = this.assetLoader;
     // 准备用于存放这个立绘的 Container
     const thisFigureContainer = new WebGALPixiContainer();
@@ -551,42 +545,40 @@ export default class PixiStage {
 
     // 完成图片加载后执行的函数
     const setup = () => {
-      // TODO：找一个更好的解法，现在的解法是无论是否复用原来的资源，都设置一个延时以让动画工作正常！
-      setTimeout(() => {
-        const texture = loader.resources?.[url]?.texture;
-        if (texture && this.getStageObjByUuid(figureUuid)) {
-          /**
-           * 重设大小
-           */
-          const originalWidth = texture.width;
-          const originalHeight = texture.height;
-          const scaleX = this.stageWidth / originalWidth;
-          const scaleY = this.stageHeight / originalHeight;
-          const targetScale = Math.min(scaleX, scaleY);
-          const figureSprite = new PIXI.Sprite(texture);
-          figureSprite.scale.x = targetScale;
-          figureSprite.scale.y = targetScale;
-          figureSprite.anchor.set(0.5);
-          figureSprite.position.y = this.stageHeight / 2;
-          const targetWidth = originalWidth * targetScale;
-          const targetHeight = originalHeight * targetScale;
-          thisFigureContainer.setBaseY(this.stageHeight / 2);
-          if (targetHeight < this.stageHeight) {
-            thisFigureContainer.setBaseY(this.stageHeight / 2 + (this.stageHeight - targetHeight) / 2);
-          }
-          if (presetPosition === 'center') {
-            thisFigureContainer.setBaseX(this.stageWidth / 2);
-          }
-          if (presetPosition === 'left') {
-            thisFigureContainer.setBaseX(targetWidth / 2);
-          }
-          if (presetPosition === 'right') {
-            thisFigureContainer.setBaseX(this.stageWidth - targetWidth / 2);
-          }
-          thisFigureContainer.pivot.set(0, this.stageHeight / 2);
-          thisFigureContainer.addChild(figureSprite);
+      const texture = loader.resources?.[url]?.texture;
+      if (texture && this.getStageObjByUuid(figureUuid)) {
+        /**
+         * 重设大小
+         */
+        const originalWidth = texture.width;
+        const originalHeight = texture.height;
+        const scaleX = this.stageWidth / originalWidth;
+        const scaleY = this.stageHeight / originalHeight;
+        const targetScale = Math.min(scaleX, scaleY);
+        const figureSprite = new PIXI.Sprite(texture);
+        figureSprite.scale.x = targetScale;
+        figureSprite.scale.y = targetScale;
+        figureSprite.anchor.set(0.5);
+        figureSprite.position.y = this.stageHeight / 2;
+        const targetWidth = originalWidth * targetScale;
+        const targetHeight = originalHeight * targetScale;
+        thisFigureContainer.setBaseY(this.stageHeight / 2);
+        if (targetHeight < this.stageHeight) {
+          thisFigureContainer.setBaseY(this.stageHeight / 2 + (this.stageHeight - targetHeight) / 2);
         }
-      }, 0);
+        if (presetPosition === 'center') {
+          thisFigureContainer.setBaseX(this.stageWidth / 2);
+        }
+        if (presetPosition === 'left') {
+          thisFigureContainer.setBaseX(targetWidth / 2);
+        }
+        if (presetPosition === 'right') {
+          thisFigureContainer.setBaseX(this.stageWidth - targetWidth / 2);
+        }
+        thisFigureContainer.pivot.set(0, this.stageHeight / 2);
+        thisFigureContainer.addChild(figureSprite);
+      }
+      onLoaded();
     };
 
     /**
@@ -606,7 +598,7 @@ export default class PixiStage {
    * @param jsonPath
    */
   // eslint-disable-next-line max-params
-  public addLive2dFigure(key: string, jsonPath: string, pos: string, motion: string, expression: string) {
+  public addLive2dFigure(onLoaded: () => void, key: string, jsonPath: string, pos: string, motion: string, expression: string) {
     if (this.isLive2dAvailable !== true) return;
     try {
       let stageWidth = this.stageWidth;
@@ -733,6 +725,7 @@ export default class PixiStage {
             });
           })();
         }
+        onLoaded();
       };
 
       /**
