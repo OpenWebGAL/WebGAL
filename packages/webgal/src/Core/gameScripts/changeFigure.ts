@@ -268,10 +268,12 @@ export function changeFigure(sentence: ISentence): IPerform {
   }
 
   return {
-    performName: 'none',
+    performName: `enter-${key}`,
     duration,
     isHoldOn: false,
-    stopFunction: () => {},
+    stopFunction: () => {
+      WebGAL.gameplay.pixiStage?.stopPresetAnimationOnTarget(key);
+    },
     blockingNext: () => false,
     blockingAuto: () => false,
     stopTimeout: undefined, // 暂时不用，后面会交给自动清除
