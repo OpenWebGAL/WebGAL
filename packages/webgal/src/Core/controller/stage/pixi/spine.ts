@@ -2,7 +2,7 @@
 import { WebGALPixiContainer } from '@/Core/controller/stage/pixi/WebGALPixiContainer';
 import { v4 as uuid } from 'uuid';
 import * as PIXI from 'pixi.js';
-import PixiStage from '@/Core/controller/stage/pixi/PixiController';
+import PixiStage, { IStageObject } from '@/Core/controller/stage/pixi/PixiController';
 import { logger } from '@/Core/util/logger';
 // utils/loadPixiSpine.ts
 // @ts-ignore
@@ -81,14 +81,16 @@ export async function addSpineFigureImpl(
   // 挂载
   this.figureContainer.addChild(thisFigureContainer);
   const figureUuid = uuid();
-  this.figureObjects.push({
+  const stageObject: IStageObject = {
     uuid: figureUuid,
     key: key,
     pixiContainer: thisFigureContainer,
+    ignoreOnLoaded: false,
     sourceUrl: url,
     sourceType: 'spine', // 修改为 'spine'
     sourceExt: this.getExtName(url),
-  });
+  };
+  this.figureObjects.push(stageObject);
 
   // 完成图片加载后执行的函数
   const setup = async () => {
@@ -141,7 +143,9 @@ export async function addSpineFigureImpl(
       thisFigureContainer.pivot.set(0, this.stageHeight / 2);
       thisFigureContainer.addChild(figureSprite);
     }
-    onLoaded();
+    if (!stageObject.ignoreOnLoaded) {
+      onLoaded();
+    }
   };
 
   /**
@@ -181,14 +185,16 @@ export async function addSpineBgImpl(this: PixiStage, onLoaded: () => void, key:
   // 挂载
   this.backgroundContainer.addChild(thisBgContainer);
   const bgUuid = uuid();
-  this.backgroundObjects.push({
+  const stageObject: IStageObject = {
     uuid: bgUuid,
     key: key,
     pixiContainer: thisBgContainer,
+    ignoreOnLoaded: false,
     sourceUrl: url,
     sourceType: 'spine', // 修改为 'spine'
     sourceExt: this.getExtName(url),
-  });
+  };
+  this.backgroundObjects.push(stageObject);
 
   // 完成图片加载后执行的函数
   const setup = async () => {
@@ -231,7 +237,9 @@ export async function addSpineBgImpl(this: PixiStage, onLoaded: () => void, key:
       // 挂载
       thisBgContainer.addChild(bgSprite);
     }
-    onLoaded();
+    if (!stageObject.ignoreOnLoaded) {
+      onLoaded();
+    }
   };
 
   /**

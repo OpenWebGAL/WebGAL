@@ -36,6 +36,8 @@ export interface IStageObject {
   // 一般与作用目标有关
   key: string;
   pixiContainer: WebGALPixiContainer;
+  // 不需要执行 onLoaded 函数
+  ignoreOnLoaded: boolean;
   // 相关的源 url
   sourceUrl: string;
   sourceExt: string;
@@ -193,6 +195,10 @@ export default class PixiStage {
   public registerAnimation(animationObject: IAnimationObject | null, key: string, target = 'default') {
     if (!animationObject) return;
     this.stageAnimations.push({ uuid: uuid(), animationObject, key: key, targetKey: target, type: 'common' });
+    const stageObject = this.getStageObjByKey(target);
+    if (stageObject) {
+      stageObject.ignoreOnLoaded = true;
+    }
     // 上锁
     this.lockStageObject(target);
     animationObject.setStartState();
@@ -224,6 +230,10 @@ export default class PixiStage {
       return;
     }
     this.stageAnimations.push({ uuid: uuid(), animationObject, key: key, targetKey: target, type: 'preset' });
+    const stageObject = this.getStageObjByKey(target);
+    if (stageObject) {
+      stageObject.ignoreOnLoaded = true;
+    }
     // 上锁
     this.lockStageObject(target);
     animationObject.setStartState();
@@ -376,14 +386,16 @@ export default class PixiStage {
     // 挂载
     this.backgroundContainer.addChild(thisBgContainer);
     const bgUuid = uuid();
-    this.backgroundObjects.push({
+    const stageObject: IStageObject = {
       uuid: bgUuid,
       key: key,
       pixiContainer: thisBgContainer,
+      ignoreOnLoaded: false,
       sourceUrl: url,
       sourceType: 'img',
       sourceExt: this.getExtName(url),
-    });
+    };
+    this.backgroundObjects.push(stageObject);
 
     // 完成图片加载后执行的函数
     const setup = () => {
@@ -409,7 +421,9 @@ export default class PixiStage {
         // 挂载
         thisBgContainer.addChild(bgSprite);
       }
-      onLoaded();
+      if (!stageObject.ignoreOnLoaded) {
+        onLoaded();
+      }
     };
 
     /**
@@ -447,14 +461,16 @@ export default class PixiStage {
     // 挂载
     this.backgroundContainer.addChild(thisBgContainer);
     const bgUuid = uuid();
-    this.backgroundObjects.push({
+    const stageObject: IStageObject = {
       uuid: bgUuid,
       key: key,
       pixiContainer: thisBgContainer,
+      ignoreOnLoaded: false,
       sourceUrl: url,
       sourceType: 'video',
       sourceExt: this.getExtName(url),
-    });
+    };
+    this.backgroundObjects.push(stageObject);
 
     // 完成加载后执行的函数
     const setup = () => {
@@ -490,7 +506,9 @@ export default class PixiStage {
           thisBgContainer.addChild(bgSprite);
         });
       }
-      onLoaded();
+      if (!stageObject.ignoreOnLoaded) {
+        onLoaded();
+      }
     };
 
     /**
@@ -534,14 +552,16 @@ export default class PixiStage {
     // 挂载
     this.figureContainer.addChild(thisFigureContainer);
     const figureUuid = uuid();
-    this.figureObjects.push({
+    const stageObject: IStageObject = {
       uuid: figureUuid,
       key: key,
       pixiContainer: thisFigureContainer,
+      ignoreOnLoaded: false,
       sourceUrl: url,
       sourceType: 'img',
       sourceExt: this.getExtName(url),
-    });
+    };
+    this.figureObjects.push(stageObject);
 
     // 完成图片加载后执行的函数
     const setup = () => {
@@ -578,7 +598,9 @@ export default class PixiStage {
         thisFigureContainer.pivot.set(0, this.stageHeight / 2);
         thisFigureContainer.addChild(figureSprite);
       }
-      onLoaded();
+      if (!stageObject.ignoreOnLoaded) {
+        onLoaded();
+      }
     };
 
     /**
@@ -629,14 +651,16 @@ export default class PixiStage {
       // 挂载
       this.figureContainer.addChild(thisFigureContainer);
       const figureUuid = uuid();
-      this.figureObjects.push({
+      const stageObject: IStageObject = {
         uuid: figureUuid,
         key: key,
         pixiContainer: thisFigureContainer,
+        ignoreOnLoaded: false,
         sourceUrl: jsonPath,
         sourceType: 'live2d',
         sourceExt: 'json',
-      });
+      };
+      this.figureObjects.push(stageObject);
       // eslint-disable-next-line @typescript-eslint/no-this-alias
       const instance = this;
 
@@ -725,7 +749,9 @@ export default class PixiStage {
             });
           })();
         }
-        onLoaded();
+        if (!stageObject.ignoreOnLoaded) {
+          onLoaded();
+        }
       };
 
       /**
