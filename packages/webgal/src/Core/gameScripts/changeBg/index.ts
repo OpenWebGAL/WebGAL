@@ -93,10 +93,12 @@ export const changeBg = (sentence: ISentence): IPerform => {
   dispatch(setStage({ key: 'bgName', value: sentence.content }));
 
   return {
-    performName: 'none',
+    performName: `bg-main-${sentence.content}`,
     duration,
     isHoldOn: false,
-    stopFunction: () => {},
+    stopFunction: () => {
+      WebGAL.gameplay.pixiStage?.stopPresetAnimationOnTarget('bg-main');
+    },
     blockingNext: () => false,
     blockingAuto: () => true,
     stopTimeout: undefined, // 暂时不用，后面会交给自动清除
