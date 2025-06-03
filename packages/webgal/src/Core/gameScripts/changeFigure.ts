@@ -275,7 +275,7 @@ export function changeFigure(sentence: ISentence): IPerform {
       WebGAL.gameplay.pixiStage?.stopPresetAnimationOnTarget(key);
     },
     blockingNext: () => false,
-    blockingAuto: () => false,
+    blockingAuto: () => true,
     stopTimeout: undefined, // 暂时不用，后面会交给自动清除
   };
 }
