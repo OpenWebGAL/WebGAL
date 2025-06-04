@@ -720,15 +720,21 @@ export default class PixiStage {
               // @ts-ignore
               if (model.internalModel.eyeBlink) {
                 // @ts-ignore
+                // 眨眼动画会覆盖现有动画, 暂不使用, 设置一个极大的时间间隔
                 model.internalModel.eyeBlink.blinkInterval = 1000 * 60 * 60 * 24; // @ts-ignore
                 model.internalModel.eyeBlink.nextBlinkTimeLeft = 1000 * 60 * 60 * 24;
               }
 
               // lip-sync is still a problem and you can not.
               stage.soundManager.volume = 0; // @ts-ignore
+              // 呼吸动画会覆盖现有动画, 暂不使用, 设置一些值使模型找不到对应参数
+              // cubism 2, 保留 PARAM_BREATH
               if (model.internalModel.angleXParamIndex !== undefined) model.internalModel.angleXParamIndex = 999; // @ts-ignore
               if (model.internalModel.angleYParamIndex !== undefined) model.internalModel.angleYParamIndex = 999; // @ts-ignore
               if (model.internalModel.angleZParamIndex !== undefined) model.internalModel.angleZParamIndex = 999;
+              if (model.internalModel.bodyAngleXParamIndex !== undefined) model.internalModel.bodyAngleXParamIndex = 999;
+              // cubism 4
+              if (model.internalModel.breath !== undefined) model.internalModel.breath.setParameters?.([]);
               thisFigureContainer.addChild(model);
             });
           })();
