@@ -678,6 +678,8 @@ export default class PixiStage {
               model.scale.x = targetScale;
               model.scale.y = targetScale;
               model.anchor.set(0.5);
+              model.pivot.x += (overrideBounds[0] + overrideBounds[2]) * 0.5;
+              model.pivot.y += (overrideBounds[1] + overrideBounds[3]) * 0.5;
               model.position.x = 0;
               model.position.y = stageHeight / 2;
 
