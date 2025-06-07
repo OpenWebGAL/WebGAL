@@ -2,8 +2,10 @@ import { ITransform } from '@/store/stageInterface';
 
 export interface IUserAnimation {
   name: string;
-  effects: Array<ITransform & { duration: number }>;
+  effects: Array<AnimationFrame>;
 }
+
+export type AnimationFrame = ITransform & { duration: number; ease: string };
 
 export class AnimationManager {
   public nextEnterAnimationName: Map<string, string> = new Map();
