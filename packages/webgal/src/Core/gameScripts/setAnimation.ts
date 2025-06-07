@@ -19,6 +19,11 @@ export const setAnimation = (sentence: ISentence): IPerform => {
   const target = (getSentenceArgByKey(sentence, 'target')?.toString() ?? 'default_id').toString();
   const writeDefault = (getSentenceArgByKey(sentence, 'writeDefault') as boolean) ?? false;
   const key = `${target}-${animationName}-${animationDuration}`;
+  const keep = getSentenceArgByKey(sentence, 'keep') === true;
+  const performInitName = `animation-${target}`;
+  
+  WebGAL.gameplay.performController.unmountPerform(performInitName, true);
+  
   let stopFunction;
   setTimeout(() => {
     WebGAL.gameplay.pixiStage?.stopPresetAnimationOnTarget(target);
@@ -42,12 +47,12 @@ export const setAnimation = (sentence: ISentence): IPerform => {
   };
 
   return {
-    performName: key,
+    performName: performInitName,
     duration: animationDuration,
-    isHoldOn: false,
+    isHoldOn: keep,
     stopFunction,
     blockingNext: () => false,
-    blockingAuto: () => true,
+    blockingAuto: () => !keep,
     stopTimeout: undefined, // 暂时不用，后面会交给自动清除
   };
 };
