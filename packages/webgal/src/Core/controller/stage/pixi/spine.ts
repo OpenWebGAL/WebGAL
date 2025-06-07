@@ -2,7 +2,7 @@
 import { WebGALPixiContainer } from '@/Core/controller/stage/pixi/WebGALPixiContainer';
 import { v4 as uuid } from 'uuid';
 import * as PIXI from 'pixi.js';
-import PixiStage from '@/Core/controller/stage/pixi/PixiController';
+import PixiStage, { IStageObject } from '@/Core/controller/stage/pixi/PixiController';
 import { logger } from '@/Core/util/logger';
 // utils/loadPixiSpine.ts
 // @ts-ignore
@@ -53,6 +53,7 @@ export async function loadPixiSpine(): Promise<typeof import('pixi-spine') | nul
 // eslint-disable-next-line max-params
 export async function addSpineFigureImpl(
   this: PixiStage,
+  onLoaded: () => void,
   key: string,
   url: string,
   presetPosition: 'left' | 'center' | 'right' = 'center',
@@ -80,14 +81,16 @@ export async function addSpineFigureImpl(
   // 挂载
   this.figureContainer.addChild(thisFigureContainer);
   const figureUuid = uuid();
-  this.figureObjects.push({
+  const stageObject: IStageObject = {
     uuid: figureUuid,
     key: key,
     pixiContainer: thisFigureContainer,
+    ignoreOnLoaded: false,
     sourceUrl: url,
     sourceType: 'spine', // 修改为 'spine'
     sourceExt: this.getExtName(url),
-  });
+  };
+  this.figureObjects.push(stageObject);
 
   // 完成图片加载后执行的函数
   const setup = async () => {
@@ -140,6 +143,9 @@ export async function addSpineFigureImpl(
       thisFigureContainer.pivot.set(0, this.stageHeight / 2);
       thisFigureContainer.addChild(figureSprite);
     }
+    if (!stageObject.ignoreOnLoaded) {
+      onLoaded();
+    }
   };
 
   /**
@@ -161,7 +167,7 @@ export async function addSpineFigureImpl(
  * @param key 背景的标识
  * @param url Spine 数据的 URL
  */
-export async function addSpineBgImpl(this: PixiStage, key: string, url: string) {
+export async function addSpineBgImpl(this: PixiStage, onLoaded: () => void, key: string, url: string) {
   const spineId = `spine-${url}`;
   // 准备用于存放这个背景的 Container
   const thisBgContainer = new WebGALPixiContainer();
@@ -179,14 +185,16 @@ export async function addSpineBgImpl(this: PixiStage, key: string, url: string) 
   // 挂载
   this.backgroundContainer.addChild(thisBgContainer);
   const bgUuid = uuid();
-  this.backgroundObjects.push({
+  const stageObject: IStageObject = {
     uuid: bgUuid,
     key: key,
     pixiContainer: thisBgContainer,
+    ignoreOnLoaded: false,
     sourceUrl: url,
     sourceType: 'spine', // 修改为 'spine'
     sourceExt: this.getExtName(url),
-  });
+  };
+  this.backgroundObjects.push(stageObject);
 
   // 完成图片加载后执行的函数
   const setup = async () => {
@@ -199,39 +207,39 @@ export async function addSpineBgImpl(this: PixiStage, key: string, url: string) 
 
     const { Spine } = pixiSpine;
     const spineResource: any = spineLoader!.resources?.[spineId];
-    // TODO：找一个更好的解法，现在的解法是无论是否复用原来的资源，都设置一个延时以让动画工作正常！
-    setTimeout(() => {
-      if (spineResource && this.getStageObjByUuid(bgUuid)) {
-        const bgSpine = new Spine(spineResource.spineData);
-        const transY = spineResource?.spineData?.y ?? 0;
-        /**
-         * 重设大小
-         */
-        const originalWidth = bgSpine.width; // TODO: 视图大小可能小于画布大小，应提供参数指定视图大小
-        const originalHeight = bgSpine.height; // TODO: 视图大小可能小于画布大小，应提供参数指定视图大小
-        const scaleX = this.stageWidth / originalWidth;
-        const scaleY = this.stageHeight / originalHeight;
-        logger.debug('bgSpine state', bgSpine.state);
-        // TODO: 也许应该使用 setAnimation 播放初始动画
-        if (bgSpine.spineData.animations.length > 0) {
-          // 播放首个动画
-          bgSpine.state.setAnimation(0, bgSpine.spineData.animations[0].name, true);
-        }
-        const targetScale = Math.max(scaleX, scaleY);
-        const bgSprite = new PIXI.Sprite();
-        bgSprite.addChild(bgSpine);
-        bgSprite.scale.x = targetScale;
-        bgSprite.scale.y = targetScale;
-        bgSprite.anchor.set(0.5);
-        bgSprite.position.y = this.stageHeight / 2;
-        thisBgContainer.setBaseX(this.stageWidth / 2);
-        thisBgContainer.setBaseY(this.stageHeight / 2);
-        thisBgContainer.pivot.set(0, this.stageHeight / 2);
-
-        // 挂载
-        thisBgContainer.addChild(bgSprite);
+    if (spineResource && this.getStageObjByUuid(bgUuid)) {
+      const bgSpine = new Spine(spineResource.spineData);
+      const transY = spineResource?.spineData?.y ?? 0;
+      /**
+       * 重设大小
+       */
+      const originalWidth = bgSpine.width; // TODO: 视图大小可能小于画布大小，应提供参数指定视图大小
+      const originalHeight = bgSpine.height; // TODO: 视图大小可能小于画布大小，应提供参数指定视图大小
+      const scaleX = this.stageWidth / originalWidth;
+      const scaleY = this.stageHeight / originalHeight;
+      logger.debug('bgSpine state', bgSpine.state);
+      // TODO: 也许应该使用 setAnimation 播放初始动画
+      if (bgSpine.spineData.animations.length > 0) {
+        // 播放首个动画
+        bgSpine.state.setAnimation(0, bgSpine.spineData.animations[0].name, true);
       }
-    }, 0);
+      const targetScale = Math.max(scaleX, scaleY);
+      const bgSprite = new PIXI.Sprite();
+      bgSprite.addChild(bgSpine);
+      bgSprite.scale.x = targetScale;
+      bgSprite.scale.y = targetScale;
+      bgSprite.anchor.set(0.5);
+      bgSprite.position.y = this.stageHeight / 2;
+      thisBgContainer.setBaseX(this.stageWidth / 2);
+      thisBgContainer.setBaseY(this.stageHeight / 2);
+      thisBgContainer.pivot.set(0, this.stageHeight / 2);
+
+      // 挂载
+      thisBgContainer.addChild(bgSprite);
+    }
+    if (!stageObject.ignoreOnLoaded) {
+      onLoaded();
+    }
   };
 
   /**

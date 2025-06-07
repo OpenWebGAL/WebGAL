@@ -22,12 +22,14 @@ export function useSetBg(stageState: IStageState) {
           removeBg(currentBg);
         }
       }
-      addBg(undefined, thisBgKey, bgName);
-      setEbg(bgName);
-      logger.debug('重设背景');
-      const { duration, animation } = getEnterExitAnimation('bg-main', 'enter', true);
-      WebGAL.gameplay.pixiStage!.registerPresetAnimation(animation, 'bg-main-softin', thisBgKey, stageState.effects);
-      setTimeout(() => WebGAL.gameplay.pixiStage!.removeAnimationWithSetEffects('bg-main-softin'), duration);
+      const onLoaded = () => {
+        setEbg(bgName);
+        logger.debug('重设背景');
+        const { duration, animation } = getEnterExitAnimation('bg-main', 'enter', true);
+        WebGAL.gameplay.pixiStage!.registerPresetAnimation(animation, 'bg-main-softin', thisBgKey, stageState.effects);
+        setTimeout(() => WebGAL.gameplay.pixiStage!.removeAnimationWithSetEffects('bg-main-softin'), duration);
+      };
+      addBg(onLoaded, undefined, thisBgKey, bgName);
     } else {
       const currentBg = WebGAL.gameplay.pixiStage?.getStageObjByKey(thisBgKey);
       if (currentBg) {
@@ -52,16 +54,16 @@ function removeBg(bgObject: IStageObject) {
   }, duration);
 }
 
-function addBg(type?: 'image' | 'spine', ...args: any[]) {
+function addBg(onLoaded: () => void, type?: 'image' | 'spine', ...args: any[]) {
   const url = args[1];
   if (url.endsWith('.mp4')) {
     // @ts-ignore
-    return WebGAL.gameplay.pixiStage?.addVideoBg(...args);
+    return WebGAL.gameplay.pixiStage?.addVideoBg(onLoaded, ...args);
   } else if (url.endsWith('.skel')) {
     // @ts-ignore
-    return WebGAL.gameplay.pixiStage?.addSpineBg(...args);
+    return WebGAL.gameplay.pixiStage?.addSpineBg(onLoaded, ...args);
   } else {
     // @ts-ignore
-    return WebGAL.gameplay.pixiStage?.addBg(...args);
+    return WebGAL.gameplay.pixiStage?.addBg(onLoaded, ...args);
   }
 }
