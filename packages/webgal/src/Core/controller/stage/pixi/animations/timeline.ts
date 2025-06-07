@@ -146,62 +146,62 @@ export function generateTimelineObj(
 const stringToEasing = (ease: string): popmotion.Easing => {
   let easeType = popmotion.easeInOut;
   switch (ease) {
-    case "easeInOut": {
+    case 'easeInOut': {
       easeType = popmotion.easeInOut;
       break;
     }
-    case "easeIn": {
+    case 'easeIn': {
       easeType = popmotion.easeIn;
       break;
     }
-    case "easeOut": {
+    case 'easeOut': {
       easeType = popmotion.easeOut;
       break;
     }
-    case "circInOut": {
+    case 'circInOut': {
       easeType = popmotion.circInOut;
       break;
     }
-    case "circIn": {
+    case 'circIn': {
       easeType = popmotion.circIn;
       break;
     }
-    case "circOut": {
+    case 'circOut': {
       easeType = popmotion.circOut;
       break;
     }
-    case "backInOut": {
+    case 'backInOut': {
       easeType = popmotion.backInOut;
       break;
     }
-    case "backIn": {
+    case 'backIn': {
       easeType = popmotion.backIn;
       break;
     }
-    case "backOut": {
+    case 'backOut': {
       easeType = popmotion.backOut;
       break;
     }
-    case "bounceInOut": {
+    case 'bounceInOut': {
       easeType = popmotion.bounceInOut;
       break;
     }
-    case "bounceIn": {
+    case 'bounceIn': {
       easeType = popmotion.bounceIn;
       break;
     }
-    case "bounceOut": {
+    case 'bounceOut': {
       easeType = popmotion.bounceOut;
       break;
     }
-    case "linear": {
+    case 'linear': {
       easeType = popmotion.linear;
       break;
     }
-    case "anticipate": {
+    case 'anticipate': {
       easeType = popmotion.anticipate;
       break;
     }
   }
   return easeType;
-}
+};

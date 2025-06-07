@@ -22,7 +22,12 @@ export const setAnimation = (sentence: ISentence): IPerform => {
   let stopFunction;
   setTimeout(() => {
     WebGAL.gameplay.pixiStage?.stopPresetAnimationOnTarget(target);
-    const animationObj: IAnimationObject | null = getAnimationObject(animationName, target, animationDuration, writeDefault);
+    const animationObj: IAnimationObject | null = getAnimationObject(
+      animationName,
+      target,
+      animationDuration,
+      writeDefault,
+    );
     if (animationObj) {
       logger.debug(`动画${animationName}作用在${target}`, animationDuration);
       WebGAL.gameplay.pixiStage?.registerAnimation(animationObj, key, target);

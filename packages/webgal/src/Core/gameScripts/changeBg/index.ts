@@ -43,7 +43,7 @@ export const changeBg = (sentence: ISentence): IPerform => {
   // 处理 transform 和 默认 transform
   const transformString = getSentenceArgByKey(sentence, 'transform');
   let duration = getSentenceArgByKey(sentence, 'duration');
-  let ease = (getSentenceArgByKey(sentence, 'ease')?.toString()) ?? "";
+  let ease = getSentenceArgByKey(sentence, 'ease')?.toString() ?? '';
   if (!duration || typeof duration !== 'number') {
     duration = 1000;
   }

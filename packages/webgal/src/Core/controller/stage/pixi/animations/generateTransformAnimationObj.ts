@@ -4,6 +4,7 @@ import isNull from 'lodash/isNull';
 
 type AnimationObj = Array<AnimationFrame>;
 
+// eslint-disable-next-line max-params
 export function generateTransformAnimationObj(
   target: string,
   applyFrame: AnimationFrame,

@@ -1,11 +1,11 @@
-import { ITransform } from "@/store/stageInterface";
+import { ITransform } from '@/store/stageInterface';
 
 export interface IUserAnimation {
   name: string;
   effects: Array<AnimationFrame>;
 }
 
-export type AnimationFrame = ITransform & { duration: number, ease: string };
+export type AnimationFrame = ITransform & { duration: number; ease: string };
 
 export class AnimationManager {
   public nextEnterAnimationName: Map<string, string> = new Map();

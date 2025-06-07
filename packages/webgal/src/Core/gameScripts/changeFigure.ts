@@ -169,7 +169,7 @@ export function changeFigure(sentence: ISentence): IPerform {
     // 处理 transform 和 默认 transform
     const transformString = getSentenceArgByKey(sentence, 'transform');
     const durationFromArg = getSentenceArgByKey(sentence, 'duration');
-    const ease = getSentenceArgByKey(sentence, 'ease')?.toString() ?? "";
+    const ease = getSentenceArgByKey(sentence, 'ease')?.toString() ?? '';
     if (durationFromArg && typeof durationFromArg === 'number') {
       duration = durationFromArg;
     }

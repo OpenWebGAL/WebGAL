@@ -8,6 +8,7 @@ import { generateTimelineObj } from '@/Core/controller/stage/pixi/animations/tim
 import { WebGAL } from '@/Core/WebGAL';
 import PixiStage, { IAnimationObject } from '@/Core/controller/stage/pixi/PixiController';
 
+// eslint-disable-next-line max-params
 export function getAnimationObject(animationName: string, target: string, duration: number, writeDefault: boolean) {
   const effect = WebGAL.animationManager.getAnimations().find((ani) => ani.name === animationName);
   if (effect) {
@@ -16,9 +17,9 @@ export function getAnimationObject(animationName: string, target: string, durati
       let newEffect;
 
       if (!writeDefault && targetSetEffect && targetSetEffect.transform) {
-        newEffect = cloneDeep({ ...targetSetEffect.transform, duration: 0, ease: "" });
+        newEffect = cloneDeep({ ...targetSetEffect.transform, duration: 0, ease: '' });
       } else {
-        newEffect = cloneDeep({ ...baseTransform, duration: 0, ease: "" });
+        newEffect = cloneDeep({ ...baseTransform, duration: 0, ease: '' });
       }
 
       PixiStage.assignTransform(newEffect, effect);
