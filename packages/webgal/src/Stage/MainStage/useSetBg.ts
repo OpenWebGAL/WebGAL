@@ -53,11 +53,11 @@ function removeBg(bgObject: IStageObject) {
 }
 
 function addBg(type?: 'image' | 'spine', ...args: any[]) {
-  const url = args[1];
-  if (url.endsWith('.mp4')) {
+  const url: string = args[1];
+  if (['mp4', 'webm', 'mkv'].some((e) => url.toLocaleLowerCase().endsWith(e))) {
     // @ts-ignore
     return WebGAL.gameplay.pixiStage?.addVideoBg(...args);
-  } else if (url.endsWith('.skel')) {
+  } else if (url.toLocaleLowerCase().endsWith('.skel')) {
     // @ts-ignore
     return WebGAL.gameplay.pixiStage?.addSpineBg(...args);
   } else {
