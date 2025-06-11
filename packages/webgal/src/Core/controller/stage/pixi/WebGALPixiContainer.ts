@@ -4,7 +4,8 @@ import { ReflectionFilter } from '@pixi/filter-reflection';
 import { GlitchFilter } from '@pixi/filter-glitch';
 import { RGBSplitFilter } from '@pixi/filter-rgb-split';
 import { GodrayFilter } from '@pixi/filter-godray';
-import { AdjustmentFilter, AdvancedBloomFilter, BevelFilter, ShockwaveFilter } from 'pixi-filters';
+import { AdjustmentFilter, AdvancedBloomFilter, ShockwaveFilter } from 'pixi-filters';
+import { BevelFilter } from '@/Core/controller/stage/pixi/shaders/BevelFilter'
 import * as PIXI from 'pixi.js';
 import { BlurFilter } from '@pixi/filter-blur';
 import { INIT_RAD, RadiusAlphaFilter } from '@/Core/controller/stage/pixi/shaders/RadiusAlphaFilter';
@@ -127,6 +128,7 @@ const FILTER_CONFIGS: Record<string, FilterConfig> = {
       f.lightAlpha = 0; // bevel
       f.thickness = 0; // bevelThickness
       f.rotation = 0; // bevelRotation
+      f.softness = 0; // bevelSoftness
       // 默认 lightColor (255, 255, 255) -> 0xFFFFFF
       f.lightColor = 0xffffff;
       f.shadowAlpha = 0; // 通常边缘光不需要阴影
@@ -138,6 +140,7 @@ const FILTER_CONFIGS: Record<string, FilterConfig> = {
         b.lightAlpha === 0 &&
         b.thickness === 0 &&
         b.rotation === 0 &&
+        b.softness === 0 &&
         b.lightColor === 0xffffff && // 假设默认白色
         b.shadowAlpha === 0
       );
@@ -245,6 +248,11 @@ const PROPERTY_CONFIGS: Record<string, PropertyConfig> = {
   bevelRotation: {
     filterName: 'bevel',
     filterProperty: 'rotation',
+    defaultValue: 0,
+  },
+  bevelSoftness: {
+    filterName: 'bevel',
+    filterProperty: 'softness',
     defaultValue: 0,
   },
   bevelRed: {
@@ -496,6 +504,13 @@ export class WebGALPixiContainer extends PIXI.Container {
   }
   public set bevelRotation(v: number) {
     this._setPropertyValue('bevelRotation', v);
+  }
+
+  public get bevelSoftness(): number {
+    return this._getPropertyValue('bevelSoftness');
+  }
+  public set bevelSoftness(v: number) {
+    this._setPropertyValue('bevelSoftness', v);
   }
 
   public get bevelRed(): number {

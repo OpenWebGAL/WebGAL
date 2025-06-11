@@ -49,6 +49,7 @@ export interface ITransform {
   bevel: number;
   bevelThickness: number;
   bevelRotation: number;
+  bevelSoftness: number;
   bevelRed: number;
   bevelGreen: number;
   bevelBlue: number;
@@ -98,6 +99,7 @@ export const baseTransform: ITransform = {
   bevel: 0,
   bevelThickness: 0,
   bevelRotation: 0,
+  bevelSoftness: 0,
   bevelRed: 255,
   bevelGreen: 255,
   bevelBlue: 255,
