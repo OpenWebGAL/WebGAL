@@ -5,7 +5,7 @@ import { GlitchFilter } from '@pixi/filter-glitch';
 import { RGBSplitFilter } from '@pixi/filter-rgb-split';
 import { GodrayFilter } from '@pixi/filter-godray';
 import { AdjustmentFilter, AdvancedBloomFilter, ShockwaveFilter } from 'pixi-filters';
-import { BevelFilter } from '@/Core/controller/stage/pixi/shaders/BevelFilter'
+import { BevelFilter } from '@/Core/controller/stage/pixi/shaders/BevelFilter';
 import * as PIXI from 'pixi.js';
 import { BlurFilter } from '@pixi/filter-blur';
 import { INIT_RAD, RadiusAlphaFilter } from '@/Core/controller/stage/pixi/shaders/RadiusAlphaFilter';

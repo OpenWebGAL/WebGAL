@@ -29,7 +29,7 @@ export const setTransform = (sentence: ISentence): IPerform => {
   const performInitName = `animation-${target}`;
 
   WebGAL.gameplay.performController.unmountPerform(performInitName, true);
-  
+
   try {
     const frame = JSON.parse(animationString) as AnimationFrame;
     animationObj = generateTransformAnimationObj(target, frame, duration, ease);

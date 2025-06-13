@@ -21,9 +21,9 @@ export const setAnimation = (sentence: ISentence): IPerform => {
   const key = `${target}-${animationName}-${animationDuration}`;
   const keep = getSentenceArgByKey(sentence, 'keep') === true;
   const performInitName = `animation-${target}`;
-  
+
   WebGAL.gameplay.performController.unmountPerform(performInitName, true);
-  
+
   let stopFunction;
   setTimeout(() => {
     WebGAL.gameplay.pixiStage?.stopPresetAnimationOnTarget(target);
