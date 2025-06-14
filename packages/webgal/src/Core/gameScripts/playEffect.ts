@@ -1,7 +1,7 @@
 import { ISentence } from '@/Core/controller/scene/sceneInterface';
 import { logger } from '@/Core/util/logger';
 import { RootState, webgalStore } from '@/store/store';
-import { getSentenceArgByKey } from '@/Core/util/getSentenceArg';
+import { getNumberArgByKey, getStringArgByKey } from '@/Core/util/getSentenceArg';
 import { IPerform } from '@/Core/Modules/perform/performInterface';
 import { useSelector } from 'react-redux';
 import { WebGAL } from '@/Core/WebGAL';
@@ -21,8 +21,8 @@ export const playEffect = (sentence: ISentence): IPerform => {
   let url = sentence.content;
   let isLoop = false;
   // 清除带 id 的效果音
-  if (getSentenceArgByKey(sentence, 'id')) {
-    const id = getSentenceArgByKey(sentence, 'id')?.toString() ?? '';
+  const id = getStringArgByKey(sentence, 'id');
+  if (id) {
     performInitName = `effect-sound-${id}`;
     WebGAL.gameplay.performController.unmountPerform(performInitName, true);
     isLoop = true;
@@ -59,7 +59,7 @@ export const playEffect = (sentence: ISentence): IPerform => {
     arrangePerformPromise: new Promise((resolve) => {
       // 播放效果音
       setTimeout(() => {
-        const volumeArg = getSentenceArgByKey(sentence, 'volume');
+        const volumeArg = getNumberArgByKey(sentence, 'volume') ?? 0;
         let seElement = document.createElement('audio');
         seElement.src = url;
         if (isLoop) {
@@ -68,7 +68,7 @@ export const playEffect = (sentence: ISentence): IPerform => {
         const userDataState = webgalStore.getState().userData;
         const mainVol = userDataState.optionData.volumeMain;
         // Work when volumeArg is a number between 0 and 100
-        const volume = typeof volumeArg === 'number' && volumeArg >= 0 && volumeArg <= 100 ? volumeArg : 100;
+        const volume = Math.min(Math.max(volumeArg, 0), 100);
         const seVol = mainVol * 0.01 * (userDataState.optionData?.seVolume ?? 100) * 0.01 * volume * 0.01;
         seElement.volume = seVol;
         seElement.currentTime = 0;

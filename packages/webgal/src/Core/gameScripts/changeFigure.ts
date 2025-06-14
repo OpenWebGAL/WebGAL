@@ -3,13 +3,13 @@ import { IPerform } from '@/Core/Modules/perform/performInterface';
 import { webgalStore } from '@/store/store';
 import { setStage, stageActions } from '@/store/stageReducer';
 import cloneDeep from 'lodash/cloneDeep';
-import { getSentenceArgByKey } from '@/Core/util/getSentenceArg';
-import { IFreeFigure, IStageState, ITransform } from '@/store/stageInterface';
+import { getBooleanArgByKey, getNumberArgByKey, getStringArgByKey } from '@/Core/util/getSentenceArg';
+import { baseTransform, IFreeFigure, IStageState, ITransform } from '@/store/stageInterface';
 import { AnimationFrame, IUserAnimation } from '@/Core/Modules/animations';
 import { generateTransformAnimationObj } from '@/Core/controller/stage/pixi/animations/generateTransformAnimationObj';
 import { assetSetter, fileType } from '@/Core/util/gameAssetsAccess/assetSetter';
 import { logger } from '@/Core/util/logger';
-import { getAnimateDuration } from '@/Core/Modules/animationFunctions';
+import { createDefaultEnterExitAnimation, getAnimateDuration } from '@/Core/Modules/animationFunctions';
 import { WebGAL } from '@/Core/WebGAL';
 /**
  * 更改立绘
@@ -17,93 +17,63 @@ import { WebGAL } from '@/Core/WebGAL';
  */
 // eslint-disable-next-line complexity
 export function changeFigure(sentence: ISentence): IPerform {
-  // 根据参数设置指定位置
+
   let pos: 'center' | 'left' | 'right' = 'center';
+  let mouthAnimationKey = 'mouthAnimation';
+  let eyesAnimationKey = 'blinkAnimation';
   let content = sentence.content;
   let isFreeFigure = false;
-  let motion = '';
-  let expression = '';
   let key = '';
   let duration = 500;
-  let mouthOpen = '';
-  let mouthClose = '';
-  let mouthHalfOpen = '';
-  let eyesOpen = '';
-  let eyesClose = '';
-  let animationFlag: any = '';
-  let mouthAnimationKey: any = 'mouthAnimation';
-  let eyesAnimationKey: any = 'blinkAnimation';
-  let overrideBounds = '';
-  let zIndex = -1;
   const dispatch = webgalStore.dispatch;
 
-  for (const e of sentence.args) {
-    switch (e.key) {
-      case 'left':
-        if (e.value === true) {
-          pos = 'left';
-          mouthAnimationKey = 'mouthAnimationLeft';
-          eyesAnimationKey = 'blinkAnimationLeft';
-        }
-        break;
-      case 'right':
-        if (e.value === true) {
-          pos = 'right';
-          mouthAnimationKey = 'mouthAnimationRight';
-          eyesAnimationKey = 'blinkAnimationRight';
-        }
-        break;
-      case 'clear':
-        if (e.value === true) {
-          content = '';
-        }
-        break;
-      case 'id':
-        isFreeFigure = true;
-        key = e.value.toString();
-        break;
-      case 'motion':
-        motion = e.value.toString();
-        break;
-      case 'bounds':
-        overrideBounds = String(e.value);
-        break;
-      case 'expression':
-        expression = e.value.toString();
-        break;
-      case 'mouthOpen':
-        mouthOpen = e.value.toString();
-        mouthOpen = assetSetter(mouthOpen, fileType.figure);
-        break;
-      case 'mouthClose':
-        mouthClose = e.value.toString();
-        mouthClose = assetSetter(mouthClose, fileType.figure);
-        break;
-      case 'mouthHalfOpen':
-        mouthHalfOpen = e.value.toString();
-        mouthHalfOpen = assetSetter(mouthHalfOpen, fileType.figure);
-        break;
-      case 'eyesOpen':
-        eyesOpen = e.value.toString();
-        eyesOpen = assetSetter(eyesOpen, fileType.figure);
-        break;
-      case 'eyesClose':
-        eyesClose = e.value.toString();
-        eyesClose = assetSetter(eyesClose, fileType.figure);
-        break;
-      case 'animationFlag':
-        animationFlag = e.value.toString();
-        break;
-      case 'none':
-        content = '';
-        break;
-      case 'zIndex':
-        zIndex = Number(e.value);
-        break;
-      default:
-        break;
-    }
+  // Figure Position
+  const leftFromArg = getBooleanArgByKey(sentence, 'left') ?? false;
+  const rightFromArg = getBooleanArgByKey(sentence, 'right') ?? false;
+  if (leftFromArg) {
+    pos = 'left';
+    mouthAnimationKey = 'mouthAnimationLeft';
+    eyesAnimationKey = 'blinkAnimationLeft';
   }
+  if (rightFromArg) {
+    pos = 'right';
+    mouthAnimationKey = 'mouthAnimationRight';
+    eyesAnimationKey = 'blinkAnimationRight';
+  }
+
+  // Live2D
+  const motion = getStringArgByKey(sentence, 'motion') ?? '';
+  const expression = getStringArgByKey(sentence, 'expression') ?? '';
+  const overrideBounds = getStringArgByKey(sentence, 'bounds') ?? '';
+
+  // Expression Image
+  const mouthOpenFromArg = getStringArgByKey(sentence, 'mouthOpen');
+  const mouthOpen = mouthOpenFromArg ? assetSetter(mouthOpenFromArg, fileType.figure) : '';
+  const mouthHalfOpenFromArg = getStringArgByKey(sentence, 'mouthHalfOpen');
+  const mouthHalfOpen = mouthHalfOpenFromArg ? assetSetter(mouthHalfOpenFromArg, fileType.figure) : '';
+  const mouthCloseFromArg = getStringArgByKey(sentence, 'mouthClose');
+  const mouthClose = mouthCloseFromArg ? assetSetter(mouthCloseFromArg, fileType.figure) : '';
+  const eyesOpenFromArg = getStringArgByKey(sentence, 'eyesOpen');
+  const eyesOpen = eyesOpenFromArg ? assetSetter(eyesOpenFromArg, fileType.figure) : '';
+  const eyesCloseFromArg = getStringArgByKey(sentence, 'eyesClose');
+  const eyesClose = eyesCloseFromArg ? assetSetter(eyesCloseFromArg, fileType.figure) : '';
+
+  // Other Args
+  const clearFromArg = getBooleanArgByKey(sentence, 'clear') ?? false;
+  if (clearFromArg) {
+    content = '';
+  }
+  const noneFromArg = getBooleanArgByKey(sentence, 'none') ?? false;
+  if (noneFromArg) {
+    content = '';
+  }
+  const idFromArg = getStringArgByKey(sentence, 'id');
+  if (idFromArg) {
+    isFreeFigure = true;
+    key = idFromArg;
+  }
+  const animationFlag = getStringArgByKey(sentence, 'animationFlag') ?? '';
+  const  zIndex = getNumberArgByKey(sentence, 'zIndex') ?? -1;
 
   const id = key ? key : `fig-${pos}`;
 
@@ -153,6 +123,24 @@ export function changeFigure(sentence: ISentence): IPerform {
       }
     }
   }
+
+  // 确定 key
+  if (!isFreeFigure) {
+    const positionMap = {
+      center: 'fig-center',
+      left: 'fig-left',
+      right: 'fig-right',
+    };
+    key = positionMap[pos];
+  }
+  
+  // 储存一下现有的 transform 给退场动画当起始帧用, 因为马上就要清除了
+  const currentEffect = webgalStore.getState().stage.effects.find((e) => e.target === key);
+  let currentTransform = baseTransform;
+  if (currentEffect && currentEffect.transform) {
+    currentTransform = currentEffect.transform;
+  }
+
   /**
    * 处理 Effects
    */
@@ -167,54 +155,43 @@ export function changeFigure(sentence: ISentence): IPerform {
   }
   const setAnimationNames = (key: string, sentence: ISentence) => {
     // 处理 transform 和 默认 transform
-    const transformString = getSentenceArgByKey(sentence, 'transform');
-    const durationFromArg = getSentenceArgByKey(sentence, 'duration');
-    const ease = getSentenceArgByKey(sentence, 'ease')?.toString() ?? '';
-    if (durationFromArg && typeof durationFromArg === 'number') {
-      duration = durationFromArg;
-    }
-    let animationObj: AnimationFrame[];
+    const transformString = getStringArgByKey(sentence, 'transform');
+    const durationFromArg = getNumberArgByKey(sentence, 'duration');
+    duration = durationFromArg ?? duration;
+    const ease = getStringArgByKey(sentence, 'ease') ?? '';
+    
     if (transformString) {
       console.log(transformString);
       try {
-        const frame = JSON.parse(transformString.toString()) as AnimationFrame;
-        animationObj = generateTransformAnimationObj(key, frame, duration, ease);
-        // 因为是切换，必须把一开始的 alpha 改为 0
-        animationObj[0].alpha = 0;
-        const animationName = (Math.random() * 10).toString(16);
-        const newAnimation: IUserAnimation = { name: animationName, effects: animationObj };
-        WebGAL.animationManager.addAnimation(newAnimation);
-        duration = getAnimateDuration(animationName);
-        WebGAL.animationManager.nextEnterAnimationName.set(key, animationName);
+        const transform = JSON.parse(transformString.toString()) as ITransform;
+        const enterFrame = {...transform, duration: 0, ease: ''};
+        const exitFrame = {...currentTransform, duration: 0, ease: ''};
+        createDefaultEnterExitAnimation('enter', key, enterFrame, duration, ease);
+        createDefaultEnterExitAnimation('exit', key, exitFrame, duration, ease);
       } catch (e) {
         // 解析都错误了，歇逼吧
-        applyDefaultTransform();
+        const enterFrame = {...baseTransform, duration: 0, ease: ''};
+        const exitFrame = {...currentTransform, duration: 0, ease: ''};
+        createDefaultEnterExitAnimation('enter', key, enterFrame, duration, ease);
+        createDefaultEnterExitAnimation('exit', key, exitFrame, duration, ease);
       }
     } else {
-      applyDefaultTransform();
+      const enterFrame = {...baseTransform, duration: 0, ease: ''};
+      const exitFrame = {...currentTransform, duration: 0, ease: ''};
+      createDefaultEnterExitAnimation('enter', key, enterFrame, duration, ease);
+      createDefaultEnterExitAnimation('exit', key, exitFrame, duration, ease);
     }
 
-    function applyDefaultTransform() {
-      // 应用默认的
-      const frame = {};
-      animationObj = generateTransformAnimationObj(key, frame as AnimationFrame, duration, ease);
-      // 因为是切换，必须把一开始的 alpha 改为 0
-      animationObj[0].alpha = 0;
-      const animationName = (Math.random() * 10).toString(16);
-      const newAnimation: IUserAnimation = { name: animationName, effects: animationObj };
-      WebGAL.animationManager.addAnimation(newAnimation);
-      duration = getAnimateDuration(animationName);
-      WebGAL.animationManager.nextEnterAnimationName.set(key, animationName);
-    }
-    const enterAnim = getSentenceArgByKey(sentence, 'enter');
-    const exitAnim = getSentenceArgByKey(sentence, 'exit');
+    // 应用动画的优先级更高一点
+    const enterAnim = getStringArgByKey(sentence, 'enter');
+    const exitAnim = getStringArgByKey(sentence, 'exit');
     if (enterAnim) {
-      WebGAL.animationManager.nextEnterAnimationName.set(key, enterAnim.toString());
-      duration = getAnimateDuration(enterAnim.toString());
+      WebGAL.animationManager.nextEnterAnimationName.set(key, enterAnim);
+      duration = getAnimateDuration(enterAnim);
     }
     if (exitAnim) {
-      WebGAL.animationManager.nextExitAnimationName.set(key + '-off', exitAnim.toString());
-      duration = getAnimateDuration(exitAnim.toString());
+      WebGAL.animationManager.nextExitAnimationName.set(key + '-off', exitAnim);
+      duration = getAnimateDuration(exitAnim);
     }
   };
   if (isFreeFigure) {
@@ -239,18 +216,12 @@ export function changeFigure(sentence: ISentence): IPerform {
     /**
      * 下面的代码是设置与位置关联的立绘的
      */
-    const positionMap = {
-      center: 'fig-center',
-      left: 'fig-left',
-      right: 'fig-right',
-    };
     const dispatchMap: Record<string, keyof IStageState> = {
       center: 'figName',
       left: 'figNameLeft',
       right: 'figNameRight',
     };
 
-    key = positionMap[pos];
     setAnimationNames(key, sentence);
     if (motion || overrideBounds) {
       dispatch(
@@ -272,6 +243,7 @@ export function changeFigure(sentence: ISentence): IPerform {
     isHoldOn: false,
     stopFunction: () => {
       WebGAL.gameplay.pixiStage?.stopPresetAnimationOnTarget(key);
+      WebGAL.gameplay.pixiStage?.stopPresetAnimationOnTarget(key + '-old' + '-off');
     },
     blockingNext: () => false,
     blockingAuto: () => true,

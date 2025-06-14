@@ -2,7 +2,7 @@ import { ISentence } from '@/Core/controller/scene/sceneInterface';
 import { logger } from '@/Core/util/logger';
 import { webgalStore } from '@/store/store';
 import { setStage } from '@/store/stageReducer';
-import { getSentenceArgByKey } from '@/Core/util/getSentenceArg';
+import { getNumberArgByKey, getStringArgByKey } from '@/Core/util/getSentenceArg';
 import { IStageState } from '@/store/stageInterface';
 import {
   audioContextWrapper,
@@ -13,6 +13,7 @@ import {
 } from '@/Core/gameScripts/vocal/vocalAnimation';
 import { match } from '../../util/match';
 import { WebGAL } from '@/Core/WebGAL';
+import { get } from 'lodash';
 
 /**
  * 播放一段语音
@@ -21,8 +22,10 @@ import { WebGAL } from '@/Core/WebGAL';
 export const playVocal = (sentence: ISentence) => {
   logger.debug('play vocal');
   const performInitName = 'vocal-play';
-  const url = getSentenceArgByKey(sentence, 'vocal'); // 获取语音的url
-  const volume = getSentenceArgByKey(sentence, 'volume'); // 获取语音的音量比
+  const url = getStringArgByKey(sentence, 'vocal') ?? ''; // 获取语音的url
+  const volumeFromArg = getNumberArgByKey(sentence, 'volume') ?? 0; // 获取语音的音量比
+  const volume = Math.min(Math.max(volumeFromArg, 0), 100);
+  
   let currentStageState: IStageState;
   currentStageState = webgalStore.getState().stage;
   let pos = '';
@@ -75,9 +78,7 @@ export const playVocal = (sentence: ISentence) => {
       setTimeout(() => {
         let VocalControl: any = document.getElementById('currentVocal');
         // 设置语音音量
-        typeof volume === 'number' && volume >= 0 && volume <= 100
-          ? webgalStore.dispatch(setStage({ key: 'vocalVolume', value: volume }))
-          : webgalStore.dispatch(setStage({ key: 'vocalVolume', value: 100 }));
+        webgalStore.dispatch(setStage({ key: 'vocalVolume', value: volume }))
         // 设置语音
         if (VocalControl !== null) {
           VocalControl.currentTime = 0;

@@ -5,7 +5,7 @@ import { webgalStore } from '@/store/store';
 import { setStage } from '@/store/stageReducer';
 import { useTextAnimationDuration, useTextDelay } from '@/hooks/useTextOptions';
 import { getRandomPerformName, PerformController } from '@/Core/Modules/perform/performController';
-import { getSentenceArgByKey } from '@/Core/util/getSentenceArg';
+import { getBooleanArgByKey, getStringArgByKey } from '@/Core/util/getSentenceArg';
 import { textSize, voiceOption } from '@/store/userDataInterface';
 import { WebGAL } from '@/Core/WebGAL';
 import { compileSentence } from '@/Stage/TextBox/TextBox';
@@ -26,11 +26,11 @@ export const say = (sentence: ISentence): IPerform => {
   if (dialogToShow) {
     dialogToShow = String(dialogToShow).replace(/ {2,}/g, (match) => '\u00a0'.repeat(match.length)); // 替换连续两个或更多空格
   }
-  const isConcat = getSentenceArgByKey(sentence, 'concat'); // 是否是继承语句
-  const isNotend = getSentenceArgByKey(sentence, 'notend') as boolean; // 是否有 notend 参数
-  const speaker = getSentenceArgByKey(sentence, 'speaker'); // 获取说话者
-  const clear = getSentenceArgByKey(sentence, 'clear'); // 是否清除说话者
-  const vocal = getSentenceArgByKey(sentence, 'vocal'); // 是否播放语音
+  const isConcat = getBooleanArgByKey(sentence, 'concat') ?? false; // 是否是继承语句
+  const isNotend = getBooleanArgByKey(sentence, 'notend') ?? false; // 是否有 notend 参数
+  const speaker = getStringArgByKey(sentence, 'speaker') ?? ''; // 获取说话者
+  const clear = getBooleanArgByKey(sentence, 'clear') ?? false; // 是否清除说话者
+  const vocal = getStringArgByKey(sentence, 'vocal') ?? ''; // 是否播放语音
 
   // 如果是concat，那么就继承上一句的key，并且继承上一句对话。
   if (isConcat) {
@@ -46,7 +46,7 @@ export const say = (sentence: ISentence): IPerform => {
   dispatch(setStage({ key: 'vocal', value: '' }));
 
   // 清除语音
-  if (!(userDataState.optionData.voiceInterruption === voiceOption.no && vocal === null)) {
+  if (!(userDataState.optionData.voiceInterruption === voiceOption.no && vocal === '')) {
     // 只有开关设置为不中断，并且没有语音的时候，才需要不中断
     dispatch(setStage({ key: 'playVocal', value: '' }));
     WebGAL.gameplay.performController.unmountPerform('vocal-play', true);
@@ -140,7 +140,7 @@ export const say = (sentence: ISentence): IPerform => {
     if (!end) performSimulateVocalTimeout = setTimeout(performSimulateVocal, 50);
   };
   // 播放一段语音
-  if (vocal) {
+  if (vocal !== '') {
     playVocal(sentence);
   } else if (key || pos) {
     performSimulateVocalDelay = len * 250;
