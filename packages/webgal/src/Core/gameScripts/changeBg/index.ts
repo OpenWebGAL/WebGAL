@@ -14,6 +14,52 @@ import cloneDeep from 'lodash/cloneDeep';
 import { getAnimateDuration } from '@/Core/Modules/animationFunctions';
 import { WebGAL } from '@/Core/WebGAL';
 
+function applyTransformAnimation({
+  duration,
+  ease,
+  transformString,
+}: {
+  duration: number;
+  ease: string;
+  transformString?: string;
+}) {
+  let frame: AnimationFrame | {} = {};
+  if (transformString) {
+    frame = JSON.parse(transformString.toString()) as AnimationFrame;
+  } else {
+    frame = {};
+  }
+
+  const animationObj = generateTransformAnimationObj('bg-main', frame as AnimationFrame, duration, ease);
+  // 因为是切换，必须把一开始的 alpha 改为 0
+  animationObj[0].alpha = 0;
+  const animationName = (Math.random() * 10).toString(16);
+  const newAnimation: IUserAnimation = { name: animationName, effects: animationObj };
+  WebGAL.animationManager.addAnimation(newAnimation);
+  WebGAL.animationManager.nextEnterAnimationName.set('bg-main', animationName);
+
+  const oldExitAnimation = WebGAL.animationManager.nextExitAnimationName.get(`bg-main-off`);
+  if (oldExitAnimation) {
+    WebGAL.animationManager.nextExitAnimationName.set(`bg-main-off-temp`, oldExitAnimation);
+  }
+
+  const frame2 = { ...frame };
+  const exitAnimationObj = generateTransformAnimationObj(`bg-main-off`, frame2 as AnimationFrame, duration, ease);
+  exitAnimationObj.reverse();
+  exitAnimationObj[exitAnimationObj.length - 1].alpha = 0;
+  exitAnimationObj[exitAnimationObj.length - 1].duration = exitAnimationObj[0].duration;
+  exitAnimationObj[0].duration = 0;
+  const exitAnimationName = (Math.random() * 10).toString(16);
+  const newExitAnimation: IUserAnimation = { name: exitAnimationName, effects: exitAnimationObj };
+  WebGAL.animationManager.addAnimation(newExitAnimation);
+  WebGAL.animationManager.nextExitAnimationName.set(`bg-main-off`, exitAnimationName);
+
+  if (oldExitAnimation) {
+    WebGAL.animationManager.nextExitAnimationName.set(`bg-main-off`, oldExitAnimation);
+    WebGAL.animationManager.nextExitAnimationName.delete(`bg-main-off-temp`);
+  }
+}
+
 /**
  * 进行背景图片的切换
  * @param sentence 语句
@@ -42,42 +88,32 @@ export const changeBg = (sentence: ISentence): IPerform => {
 
   // 处理 transform 和 默认 transform
   const transformString = getSentenceArgByKey(sentence, 'transform');
-  let duration = getSentenceArgByKey(sentence, 'duration');
+  let durationFromArg = getSentenceArgByKey(sentence, 'duration');
   let ease = getSentenceArgByKey(sentence, 'ease')?.toString() ?? '';
-  if (!duration || typeof duration !== 'number') {
-    duration = 1000;
+  let duration = 1000;
+  if (typeof durationFromArg === 'number' && !isNaN(durationFromArg)) {
+    duration = durationFromArg;
   }
   let animationObj: AnimationFrame[];
   if (transformString) {
     try {
-      const frame = JSON.parse(transformString.toString()) as AnimationFrame;
-      animationObj = generateTransformAnimationObj('bg-main', frame, duration, ease);
-      // 因为是切换，必须把一开始的 alpha 改为 0
-      animationObj[0].alpha = 0;
-      const animationName = (Math.random() * 10).toString(16);
-      const newAnimation: IUserAnimation = { name: animationName, effects: animationObj };
-      WebGAL.animationManager.addAnimation(newAnimation);
-      duration = getAnimateDuration(animationName);
-      WebGAL.animationManager.nextEnterAnimationName.set('bg-main', animationName);
+      applyTransformAnimation({
+        duration,
+        ease,
+        transformString: transformString.toString(),
+      });
     } catch (e) {
       // 解析都错误了，歇逼吧
-      applyDefaultTransform();
+      applyTransformAnimation({
+        duration,
+        ease,
+      });
     }
   } else {
-    applyDefaultTransform();
-  }
-
-  function applyDefaultTransform() {
-    // 应用默认的
-    const frame = {};
-    animationObj = generateTransformAnimationObj('bg-main', frame as AnimationFrame, duration, ease);
-    // 因为是切换，必须把一开始的 alpha 改为 0
-    animationObj[0].alpha = 0;
-    const animationName = (Math.random() * 10).toString(16);
-    const newAnimation: IUserAnimation = { name: animationName, effects: animationObj };
-    WebGAL.animationManager.addAnimation(newAnimation);
-    duration = getAnimateDuration(animationName);
-    WebGAL.animationManager.nextEnterAnimationName.set('bg-main', animationName);
+    applyTransformAnimation({
+      duration,
+      ease,
+    });
   }
 
   // 应用动画的优先级更高一点

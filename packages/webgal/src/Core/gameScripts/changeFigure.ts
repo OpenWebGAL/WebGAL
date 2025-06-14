@@ -8,9 +8,61 @@ import { IFreeFigure, IStageState, ITransform } from '@/store/stageInterface';
 import { AnimationFrame, IUserAnimation } from '@/Core/Modules/animations';
 import { generateTransformAnimationObj } from '@/Core/controller/stage/pixi/animations/generateTransformAnimationObj';
 import { assetSetter, fileType } from '@/Core/util/gameAssetsAccess/assetSetter';
-import { logger } from '@/Core/util/logger';
 import { getAnimateDuration } from '@/Core/Modules/animationFunctions';
 import { WebGAL } from '@/Core/WebGAL';
+
+function applyTransformAnimation({
+  key,
+  duration,
+  ease,
+  transformString,
+}: {
+  key: string;
+  duration: number;
+  ease: string;
+  transformString?: string;
+}) {
+  let frame: AnimationFrame | {} = {};
+  try {
+    if (transformString) {
+      frame = JSON.parse(transformString.toString()) as AnimationFrame;
+    }
+  } catch (e) {
+    // 解析失败，使用空帧
+    frame = {};
+  }
+
+  const animationObj = generateTransformAnimationObj(key, frame as AnimationFrame, duration, ease);
+  // 因为是切换，必须把一开始的 alpha 改为 0
+  animationObj[0].alpha = 0;
+  const animationName = (Math.random() * 10).toString(16);
+  const newAnimation: IUserAnimation = { name: animationName, effects: animationObj };
+  WebGAL.animationManager.addAnimation(newAnimation);
+  WebGAL.animationManager.nextEnterAnimationName.set(key, animationName);
+
+  const frame2 = { ...frame };
+
+  // 在设置新立绘的退出动画之前，先保存旧立绘的退出动画
+  const oldExitAnimation = WebGAL.animationManager.nextExitAnimationName.get(`${key}-off`);
+  if (oldExitAnimation) {
+    WebGAL.animationManager.nextExitAnimationName.set(`${key}-off-temp`, oldExitAnimation);
+  }
+
+  const exitAnimationObj = generateTransformAnimationObj(`${key}-off`, frame2 as AnimationFrame, duration, ease);
+  exitAnimationObj.reverse();
+  exitAnimationObj[exitAnimationObj.length - 1].alpha = 0;
+  exitAnimationObj[exitAnimationObj.length - 1].duration = exitAnimationObj[0].duration;
+  exitAnimationObj[0].duration = 0;
+  const exitAnimationName = (Math.random() * 10).toString(16);
+  const newExitAnimation: IUserAnimation = { name: exitAnimationName, effects: exitAnimationObj };
+  WebGAL.animationManager.addAnimation(newExitAnimation);
+  WebGAL.animationManager.nextExitAnimationName.set(`${key}-off`, exitAnimationName);
+
+  if (oldExitAnimation) {
+    WebGAL.animationManager.nextExitAnimationName.set(`${key}-off`, oldExitAnimation);
+    WebGAL.animationManager.nextExitAnimationName.delete(`${key}-off-temp`);
+  }
+}
 /**
  * 更改立绘
  * @param sentence 语句
@@ -165,47 +217,24 @@ export function changeFigure(sentence: ISentence): IPerform {
     dispatch(stageActions.setFigureMetaData([deleteKey, 'zIndex', 0, true]));
     dispatch(stageActions.setFigureMetaData([deleteKey2, 'zIndex', 0, true]));
   }
+
   const setAnimationNames = (key: string, sentence: ISentence) => {
     // 处理 transform 和 默认 transform
     const transformString = getSentenceArgByKey(sentence, 'transform');
     const durationFromArg = getSentenceArgByKey(sentence, 'duration');
     const ease = getSentenceArgByKey(sentence, 'ease')?.toString() ?? '';
-    if (durationFromArg && typeof durationFromArg === 'number') {
+
+    if (typeof durationFromArg === 'number' && !isNaN(durationFromArg)) {
       duration = durationFromArg;
     }
-    let animationObj: AnimationFrame[];
-    if (transformString) {
-      console.log(transformString);
-      try {
-        const frame = JSON.parse(transformString.toString()) as AnimationFrame;
-        animationObj = generateTransformAnimationObj(key, frame, duration, ease);
-        // 因为是切换，必须把一开始的 alpha 改为 0
-        animationObj[0].alpha = 0;
-        const animationName = (Math.random() * 10).toString(16);
-        const newAnimation: IUserAnimation = { name: animationName, effects: animationObj };
-        WebGAL.animationManager.addAnimation(newAnimation);
-        duration = getAnimateDuration(animationName);
-        WebGAL.animationManager.nextEnterAnimationName.set(key, animationName);
-      } catch (e) {
-        // 解析都错误了，歇逼吧
-        applyDefaultTransform();
-      }
-    } else {
-      applyDefaultTransform();
-    }
 
-    function applyDefaultTransform() {
-      // 应用默认的
-      const frame = {};
-      animationObj = generateTransformAnimationObj(key, frame as AnimationFrame, duration, ease);
-      // 因为是切换，必须把一开始的 alpha 改为 0
-      animationObj[0].alpha = 0;
-      const animationName = (Math.random() * 10).toString(16);
-      const newAnimation: IUserAnimation = { name: animationName, effects: animationObj };
-      WebGAL.animationManager.addAnimation(newAnimation);
-      duration = getAnimateDuration(animationName);
-      WebGAL.animationManager.nextEnterAnimationName.set(key, animationName);
-    }
+    applyTransformAnimation({
+      key,
+      duration,
+      ease,
+      transformString: transformString?.toString(),
+    });
+
     const enterAnim = getSentenceArgByKey(sentence, 'enter');
     const exitAnim = getSentenceArgByKey(sentence, 'exit');
     if (enterAnim) {
@@ -217,6 +246,7 @@ export function changeFigure(sentence: ISentence): IPerform {
       duration = getAnimateDuration(exitAnim.toString());
     }
   };
+
   if (isFreeFigure) {
     /**
      * 下面的代码是设置自由立绘的
