@@ -1,6 +1,6 @@
 import { ISentence } from '@/Core/controller/scene/sceneInterface';
 import { IPerform } from '@/Core/Modules/perform/performInterface';
-import { getSentenceArgByKey } from '@/Core/util/getSentenceArg';
+import { getBooleanArgByKey, getStringArgByKey } from '@/Core/util/getSentenceArg';
 import { IAnimationObject } from '@/Core/controller/stage/pixi/PixiController';
 import { logger } from '@/Core/util/logger';
 import { webgalStore } from '@/store/store';
@@ -10,6 +10,7 @@ import { baseTransform } from '@/store/stageInterface';
 import { IUserAnimation } from '../Modules/animations';
 import { getAnimateDuration, getAnimationObject } from '@/Core/Modules/animationFunctions';
 import { WebGAL } from '@/Core/WebGAL';
+import { get } from 'lodash';
 
 /**
  * 设置临时动画
@@ -28,10 +29,10 @@ export const setTempAnimation = (sentence: ISentence): IPerform => {
   const newAnimation: IUserAnimation = { name: animationName, effects: animationObj };
   WebGAL.animationManager.addAnimation(newAnimation);
   const animationDuration = getAnimateDuration(animationName);
-  const target = (getSentenceArgByKey(sentence, 'target')?.toString() ?? '0') as string;
-  const writeDefault = (getSentenceArgByKey(sentence, 'writeDefault') as boolean) ?? false;
+  const target = getStringArgByKey(sentence, 'target') ?? '0';
+  const writeDefault = getBooleanArgByKey(sentence, 'writeDefault') ?? false;
   const key = `${target}-${animationName}-${animationDuration}`;
-  const keep = getSentenceArgByKey(sentence, 'keep') === true;
+  const keep = getBooleanArgByKey(sentence, 'keep') ?? false;
   const performInitName = `animation-${target}`;
 
   WebGAL.gameplay.performController.unmountPerform(performInitName, true);
