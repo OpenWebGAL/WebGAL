@@ -4,6 +4,7 @@
  */
 
 import {
+  baseTransform,
   IEffect,
   IFigureMetadata,
   IFreeFigure,
@@ -46,7 +47,13 @@ export const initState: IStageState = {
   uiSe: '', // 用户界面音效 文件地址（相对或绝对）
   miniAvatar: '', // 小头像 文件地址（相对或绝对）
   GameVar: {}, // 游戏内变量
-  effects: [], // 应用的效果
+  // 应用的效果
+  effects: [
+    {
+      target: 'stage-main',
+      transform: baseTransform,
+    }
+  ],
   bgFilter: '', // 现在不用，先预留
   bgTransform: '', // 现在不用，先预留
   PerformList: [], // 要启动的演出列表
@@ -97,6 +104,7 @@ const stageSlice = createSlice({
       const { target, transform } = action.payload;
       // 如果找不到目标，不能设置 transform
       const activeTargets = [
+        STAGE_KEYS.STAGE_MAIN,
         STAGE_KEYS.BGMAIN,
         STAGE_KEYS.FIG_C,
         STAGE_KEYS.FIG_L,
