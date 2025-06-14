@@ -25,6 +25,11 @@ export const setTransform = (sentence: ISentence): IPerform => {
   const ease = (getSentenceArgByKey(sentence, 'ease') as string) ?? '';
   const writeDefault = (getSentenceArgByKey(sentence, 'writeDefault') as boolean) ?? false;
   const target = (getSentenceArgByKey(sentence, 'target')?.toString() ?? '0') as string;
+  const keep = getSentenceArgByKey(sentence, 'keep') === true;
+  const performInitName = `animation-${target}`;
+
+  WebGAL.gameplay.performController.unmountPerform(performInitName, true);
+
   try {
     const frame = JSON.parse(animationString) as AnimationFrame;
     animationObj = generateTransformAnimationObj(target, frame, duration, ease);
@@ -62,12 +67,12 @@ export const setTransform = (sentence: ISentence): IPerform => {
   };
 
   return {
-    performName: key,
+    performName: performInitName,
     duration: animationDuration,
-    isHoldOn: false,
+    isHoldOn: keep,
     stopFunction,
     blockingNext: () => false,
-    blockingAuto: () => true,
+    blockingAuto: () => !keep,
     stopTimeout: undefined, // 暂时不用，后面会交给自动清除
   };
 };
