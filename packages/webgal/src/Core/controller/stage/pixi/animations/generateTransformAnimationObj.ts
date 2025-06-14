@@ -42,6 +42,8 @@ export function generateTransformAnimationObj(
     }
     case 'exit': {
       // 在最末尾加上 applyFrame 的 alpha 0 版本, 实现透明度淡出动画
+      // 按理说应该拿 targetEffect 才对, 但是退场动画在调用这个函数前
+      // 就已经把 effect 清掉了, 故需要手动传进来
       applyFrame = { ...applyFrame, duration: 0, ease };
       const effectWithDuration = { ...applyFrame, alpha: 0, duration, ease };
       animationObj.push(applyFrame);
