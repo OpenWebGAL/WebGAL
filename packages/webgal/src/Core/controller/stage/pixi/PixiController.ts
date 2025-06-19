@@ -757,21 +757,46 @@ export default class PixiStage {
   public changeModelMotionByKey(key: string, motion: string) {
     // logger.debug(`Applying motion ${motion} to ${key}`);
     const target = this.figureObjects.find((e) => e.key === key);
-    if (target?.sourceType !== 'live2d') return;
-    const figureRecordTarget = this.live2dFigureRecorder.find((e) => e.target === key);
-    if (target && figureRecordTarget?.motion !== motion) {
-      const container = target.pixiContainer;
-      const children = container.children;
-      for (const model of children) {
-        let category_name = motion;
-        let animation_index = 0;
-        let priority_number = 3; // @ts-ignore
-        const internalModel = model?.internalModel ?? undefined; // 安全访问
-        internalModel?.motionManager?.stopAllMotions?.();
-        // @ts-ignore
-        model.motion(category_name, animation_index, priority_number);
+    if (target?.sourceType === 'live2d') {
+      const figureRecordTarget = this.live2dFigureRecorder.find((e) => e.target === key);
+      if (target && figureRecordTarget?.motion !== motion) {
+        const container = target.pixiContainer;
+        const children = container.children;
+        for (const model of children) {
+          let category_name = motion;
+          let animation_index = 0;
+          let priority_number = 3; // @ts-ignore
+          const internalModel = model?.internalModel ?? undefined; // 安全访问
+          internalModel?.motionManager?.stopAllMotions?.();
+          // @ts-ignore
+          model.motion(category_name, animation_index, priority_number);
+        }
+        this.updateL2dMotionByKey(key, motion);
       }
-      this.updateL2dMotionByKey(key, motion);
+    } else if (target?.sourceType === 'spine') {
+      // 处理 Spine 动画切换
+      this.changeSpineAnimationByKey(key, motion);
+    }
+  }
+
+  public changeSpineAnimationByKey(key: string, animation: string) {
+    const target = this.figureObjects.find((e) => e.key === key);
+    if (target?.sourceType !== 'spine') return;
+    
+    const container = target.pixiContainer;
+    // Spine figure 结构: Container -> Sprite -> Spine
+    const sprite = container.children[0] as PIXI.Container;
+    if (sprite && sprite.children && sprite.children[0]) {
+      const spineObject = sprite.children[0];
+      // @ts-ignore
+      if (spineObject.state && spineObject.spineData) {
+        // @ts-ignore
+        const animationExists = spineObject.spineData.animations.find((anim: any) => anim.name === animation);
+        if (animationExists) {
+          // @ts-ignore
+          spineObject.state.setAnimation(0, animation, true);
+        }
+      }
     }
   }
 

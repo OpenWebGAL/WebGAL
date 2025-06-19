@@ -56,6 +56,7 @@ export async function addSpineFigureImpl(
   key: string,
   url: string,
   presetPosition: 'left' | 'center' | 'right' = 'center',
+  motion: string = '',
 ) {
   const spineId = `spine-${url}`;
   const pixiSpine = await loadPixiSpine();
@@ -105,8 +106,14 @@ export async function addSpineFigureImpl(
       const spineCenterX = spineBounds.x + spineBounds.width / 2;
       const spineCenterY = spineBounds.y + spineBounds.height / 2;
       figureSpine.pivot.set(spineCenterX, spineCenterY);
-      // TODO: set animation 还没做
-      // figureSpine.state.setAnimation(0, figureSpine.spineData.animations[0].name, true)
+      
+      // 设置动画
+      if (motion && figureSpine.spineData.animations.find((anim: any) => anim.name === motion)) {
+        figureSpine.state.setAnimation(0, motion, true);
+      } else if (figureSpine.spineData.animations.length > 0) {
+        // 如果没有指定 motion 或 motion 不存在，播放第一个动画
+        figureSpine.state.setAnimation(0, figureSpine.spineData.animations[0].name, true);
+      }
 
       /**
        * 重设大小
