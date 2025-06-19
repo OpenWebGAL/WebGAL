@@ -40,6 +40,7 @@ export interface IStageObject {
   sourceUrl: string;
   sourceExt: string;
   sourceType: 'img' | 'live2d' | 'spine' | 'gif' | 'video';
+  spineAnimation?: string;
 }
 
 export interface ILive2DRecord {
@@ -782,7 +783,7 @@ export default class PixiStage {
   public changeSpineAnimationByKey(key: string, animation: string) {
     const target = this.figureObjects.find((e) => e.key === key);
     if (target?.sourceType !== 'spine') return;
-    
+
     const container = target.pixiContainer;
     // Spine figure 结构: Container -> Sprite -> Spine
     const sprite = container.children[0] as PIXI.Container;
@@ -792,9 +793,12 @@ export default class PixiStage {
       if (spineObject.state && spineObject.spineData) {
         // @ts-ignore
         const animationExists = spineObject.spineData.animations.find((anim: any) => anim.name === animation);
-        if (animationExists) {
+        let targetCurrentAnimation = target?.spineAnimation ?? '';
+        if (animationExists && targetCurrentAnimation !== animation) {
+          console.log(`setting animation ${animation}`);
+          target!.spineAnimation = animation;
           // @ts-ignore
-          spineObject.state.setAnimation(0, animation, true);
+          spineObject.state.setAnimation(0, animation, false);
         }
       }
     }
