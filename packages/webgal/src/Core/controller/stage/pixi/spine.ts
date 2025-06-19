@@ -4,6 +4,7 @@ import { v4 as uuid } from 'uuid';
 import * as PIXI from 'pixi.js';
 import PixiStage from '@/Core/controller/stage/pixi/PixiController';
 import { logger } from '@/Core/util/logger';
+import { webgalStore } from '@/store/store';
 // utils/loadPixiSpine.ts
 // @ts-ignore
 let pixiSpineModule: typeof import('pixi-spine') | null = null;
@@ -56,7 +57,6 @@ export async function addSpineFigureImpl(
   key: string,
   url: string,
   presetPosition: 'left' | 'center' | 'right' = 'center',
-  motion: string = '',
 ) {
   const spineId = `spine-${url}`;
   const pixiSpine = await loadPixiSpine();
@@ -107,12 +107,20 @@ export async function addSpineFigureImpl(
       const spineCenterY = spineBounds.y + spineBounds.height / 2;
       figureSpine.pivot.set(spineCenterX, spineCenterY);
       
-      // 设置动画
-      if (motion && figureSpine.spineData.animations.find((anim: any) => anim.name === motion)) {
-        figureSpine.state.setAnimation(0, motion, true);
+      // 检查状态中是否有指定的动画
+      const motionFromState = webgalStore.getState().stage.live2dMotion.find((e) => e.target === key);
+      let animationToPlay = '';
+      
+      if (motionFromState && figureSpine.spineData.animations.find((anim: any) => anim.name === motionFromState.motion)) {
+        // 使用状态中指定的动画
+        animationToPlay = motionFromState.motion;
       } else if (figureSpine.spineData.animations.length > 0) {
-        // 如果没有指定 motion 或 motion 不存在，播放第一个动画
-        figureSpine.state.setAnimation(0, figureSpine.spineData.animations[0].name, true);
+        // 播放默认动画（第一个动画）
+        animationToPlay = figureSpine.spineData.animations[0].name;
+      }
+      
+      if (animationToPlay) {
+        figureSpine.state.setAnimation(0, animationToPlay, true);
       }
 
       /**
