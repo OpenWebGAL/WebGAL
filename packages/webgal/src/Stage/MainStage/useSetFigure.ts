@@ -10,27 +10,6 @@ import { WebGAL } from '@/Core/WebGAL';
 
 export function useSetFigure(stageState: IStageState) {
   const { figNameLeft, figName, figNameRight, freeFigure, live2dMotion, live2dExpression } = stageState;
-  
-  // 定义内部的 addFigure 函数
-  function addFigure(type?: 'image' | 'live2D' | 'spine', ...args: any[]) {
-    const key = args[0];
-    const url = args[1];
-    const baseUrl = window.location.origin;
-    const urlObject = new URL(url, baseUrl);
-    const _type = urlObject.searchParams.get('type') as 'image' | 'live2D' | 'spine' | null;
-    if (url.endsWith('.json')) {
-      return addLive2dFigure(...args);
-    } else if (url.endsWith('.skel') || _type === 'spine') {
-      // 从 live2dMotion 中查找对应的 motion
-      const motionInfo = stageState.live2dMotion.find(m => m.target === key);
-      const motion = motionInfo?.motion || '';
-      // @ts-ignore
-      return WebGAL.gameplay.pixiStage?.addSpineFigure(key, url, args[2], motion);
-    } else {
-      // @ts-ignore
-      return WebGAL.gameplay.pixiStage?.addFigure(...args);
-    }
-  }
 
   /**
    * 同步 motion
@@ -226,6 +205,21 @@ function removeFig(figObj: IStageObject, enterTikerKey: string, effects: IEffect
   }, duration);
 }
 
+function addFigure(type?: 'image' | 'live2D' | 'spine', ...args: any[]) {
+  const url = args[1];
+  const baseUrl = window.location.origin;
+  const urlObject = new URL(url, baseUrl);
+  const _type = urlObject.searchParams.get('type') as 'image' | 'live2D' | 'spine' | null;
+  if (url.endsWith('.json')) {
+    return addLive2dFigure(...args);
+  } else if (url.endsWith('.skel') || _type === 'spine') {
+    // @ts-ignore
+    return WebGAL.gameplay.pixiStage?.addSpineFigure(...args);
+  } else {
+    // @ts-ignore
+    return WebGAL.gameplay.pixiStage?.addFigure(...args);
+  }
+}
 
 /**
  * 如果要使用 Live2D，取消这里的注释
