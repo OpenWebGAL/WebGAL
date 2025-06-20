@@ -2,7 +2,7 @@
 
 **[中文版本](/README.md)**
 
-**[번역을 도와주세요 | 翻译协助 | 翻訳のお手伝い ](https://github.com/MakinoharaShoko/WebGAL/tree/dev/packages/webgal/src/translations)**
+**[번역을 도와주세요 | 翻译协助 | 翻訳のお手伝い ](https://github.com/OpenWebGAL/WebGAL/tree/dev/packages/webgal/src/translations)**
 
 **[Discord 서버 참가하기](https://discord.gg/kPrQkJttJy)**
 
@@ -14,7 +14,7 @@
 
 # WebGAL 시각화 에디터 제공
 
-**비주얼 노벨 제작, 꼭 프로그래밍을 알아야 할까요? [WebGAL 그래픽 에디터](https://github.com/MakinoharaShoko/WebGAL_Terre/)를 체험해 보세요!**
+**비주얼 노벨 제작, 꼭 프로그래밍을 알아야 할까요? [WebGAL 그래픽 에디터](https://github.com/OpenWebGAL/WebGAL_Terre/)를 체험해 보세요!**
 
 데모 비디오: https://www.bilibili.com/video/BV1jS4y1i7Wz/
 
@@ -32,7 +32,7 @@ https://demo.openwebgal.com
 
 [WebGAL 개발 문서](https://docs.openwebgal.com/)
 
-[WebGAL 그래픽 에디터 다운로드](https://github.com/MakinoharaShoko/WebGAL_Terre/releases)
+[WebGAL 그래픽 에디터 다운로드](https://github.com/OpenWebGAL/WebGAL_Terre/releases)
 
 ## WebGAL의 장점 및 특징
 
@@ -70,4 +70,4 @@ WebGAL은 오픈소스 소프트웨어이므로 MPL-2.0 오픈소스 라이센�
 
 ## 시간에 따른 사용자 수
 
-[![시간에 따른 사용자 수](https://starchart.cc/MakinoharaShoko/WebGAL.svg)](https://starchart.cc/MakinoharaShoko/WebGAL)
+[![시간에 따른 사용자 수](https://starchart.cc/OpenWebGAL/WebGAL.svg)](https://starchart.cc/OpenWebGAL/WebGAL)
