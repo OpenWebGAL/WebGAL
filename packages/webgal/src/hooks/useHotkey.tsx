@@ -393,6 +393,6 @@ function useToggleFullScreen() {
   }, []);
   useEffect(() => {
     dispatch(setOptionData({ key: 'fullScreen', value: isFullScreen ? 0 : 1 }));
-    setStorage();
+    if (WebGAL.gameKey) setStorage();
   }, [isFullScreen]);
 }
