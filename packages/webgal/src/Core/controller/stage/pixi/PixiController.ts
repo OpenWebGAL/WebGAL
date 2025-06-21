@@ -28,6 +28,7 @@ interface IStageAnimationObject {
   targetKey?: string;
   type: 'common' | 'preset';
   animationObject: IAnimationObject;
+  stopFunction?: () => void;
 }
 
 export interface IStageObject {
@@ -213,6 +214,7 @@ export default class PixiStage {
     key: string,
     target = 'default',
     currentEffects: IEffect[],
+    stopFunction: () => void,
   ) {
     if (!animationObject) return;
     const effect = currentEffects.find((effect) => effect.target === target);
@@ -224,7 +226,7 @@ export default class PixiStage {
       }
       return;
     }
-    this.stageAnimations.push({ uuid: uuid(), animationObject, key: key, targetKey: target, type: 'preset' });
+    this.stageAnimations.push({ uuid: uuid(), animationObject, key: key, targetKey: target, type: 'preset', stopFunction });
     // 上锁
     this.lockStageObject(target);
     animationObject.setStartState();
@@ -248,6 +250,7 @@ export default class PixiStage {
       const thisTickerFunc = this.stageAnimations[index];
       this.currentApp?.ticker.remove(thisTickerFunc.animationObject.tickerFunc);
       thisTickerFunc.animationObject.setEndState();
+      thisTickerFunc.stopFunction?.();
       this.unlockStageObject(thisTickerFunc.targetKey ?? 'default');
       this.stageAnimations.splice(index, 1);
     }
