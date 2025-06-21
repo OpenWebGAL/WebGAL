@@ -17,7 +17,7 @@ export function ExtraCgElement(props: IProps) {
   // Determine if the resource is a video based on file extension
   const isVideo = useMemo(() => {
     const extension = props.resourceUrl.split('.').pop()?.toLowerCase() || '';
-    return ['mp4', 'webm', 'mov', 'avi', 'mkv'].includes(extension);
+    return ['mp4', 'webm', 'mkv'].includes(extension);
   }, [props.resourceUrl]);
 
   // Determine if the resource is an image based on file extension

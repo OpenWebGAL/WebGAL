@@ -5,7 +5,7 @@ import { setStage, stageActions } from '@/store/stageReducer';
 import cloneDeep from 'lodash/cloneDeep';
 import { getSentenceArgByKey } from '@/Core/util/getSentenceArg';
 import { IFreeFigure, IStageState, ITransform } from '@/store/stageInterface';
-import { IUserAnimation } from '@/Core/Modules/animations';
+import { AnimationFrame, IUserAnimation } from '@/Core/Modules/animations';
 import { generateTransformAnimationObj } from '@/Core/controller/stage/pixi/animations/generateTransformAnimationObj';
 import { assetSetter, fileType } from '@/Core/util/gameAssetsAccess/assetSetter';
 import { logger } from '@/Core/util/logger';
@@ -169,17 +169,16 @@ export function changeFigure(sentence: ISentence): IPerform {
     // 处理 transform 和 默认 transform
     const transformString = getSentenceArgByKey(sentence, 'transform');
     const durationFromArg = getSentenceArgByKey(sentence, 'duration');
+    const ease = getSentenceArgByKey(sentence, 'ease')?.toString() ?? '';
     if (durationFromArg && typeof durationFromArg === 'number') {
       duration = durationFromArg;
     }
-    let animationObj: (ITransform & {
-      duration: number;
-    })[];
+    let animationObj: AnimationFrame[];
     if (transformString) {
       console.log(transformString);
       try {
-        const frame = JSON.parse(transformString.toString()) as ITransform & { duration: number };
-        animationObj = generateTransformAnimationObj(key, frame, duration);
+        const frame = JSON.parse(transformString.toString()) as AnimationFrame;
+        animationObj = generateTransformAnimationObj(key, frame, duration, ease);
         // 因为是切换，必须把一开始的 alpha 改为 0
         animationObj[0].alpha = 0;
         const animationName = (Math.random() * 10).toString(16);
@@ -198,7 +197,7 @@ export function changeFigure(sentence: ISentence): IPerform {
     function applyDefaultTransform() {
       // 应用默认的
       const frame = {};
-      animationObj = generateTransformAnimationObj(key, frame as ITransform & { duration: number }, duration);
+      animationObj = generateTransformAnimationObj(key, frame as AnimationFrame, duration, ease);
       // 因为是切换，必须把一开始的 alpha 改为 0
       animationObj[0].alpha = 0;
       const animationName = (Math.random() * 10).toString(16);
@@ -268,12 +267,14 @@ export function changeFigure(sentence: ISentence): IPerform {
   }
 
   return {
-    performName: 'none',
+    performName: `enter-${key}`,
     duration,
     isHoldOn: false,
-    stopFunction: () => {},
+    stopFunction: () => {
+      WebGAL.gameplay.pixiStage?.stopPresetAnimationOnTarget(key);
+    },
     blockingNext: () => false,
-    blockingAuto: () => false,
+    blockingAuto: () => true,
     stopTimeout: undefined, // 暂时不用，后面会交给自动清除
   };
 }

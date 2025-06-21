@@ -29,11 +29,22 @@ export const setTempAnimation = (sentence: ISentence): IPerform => {
   WebGAL.animationManager.addAnimation(newAnimation);
   const animationDuration = getAnimateDuration(animationName);
   const target = (getSentenceArgByKey(sentence, 'target')?.toString() ?? '0') as string;
+  const writeDefault = (getSentenceArgByKey(sentence, 'writeDefault') as boolean) ?? false;
   const key = `${target}-${animationName}-${animationDuration}`;
+  const keep = getSentenceArgByKey(sentence, 'keep') === true;
+  const performInitName = `animation-${target}`;
+
+  WebGAL.gameplay.performController.unmountPerform(performInitName, true);
+
   let stopFunction = () => {};
   setTimeout(() => {
     WebGAL.gameplay.pixiStage?.stopPresetAnimationOnTarget(target);
-    const animationObj: IAnimationObject | null = getAnimationObject(animationName, target, animationDuration);
+    const animationObj: IAnimationObject | null = getAnimationObject(
+      animationName,
+      target,
+      animationDuration,
+      writeDefault,
+    );
     if (animationObj) {
       logger.debug(`动画${animationName}作用在${target}`, animationDuration);
       WebGAL.gameplay.pixiStage?.registerAnimation(animationObj, key, target);
@@ -48,12 +59,12 @@ export const setTempAnimation = (sentence: ISentence): IPerform => {
   };
 
   return {
-    performName: key,
+    performName: performInitName,
     duration: animationDuration,
-    isHoldOn: false,
+    isHoldOn: keep,
     stopFunction,
     blockingNext: () => false,
-    blockingAuto: () => true,
+    blockingAuto: () => !keep,
     stopTimeout: undefined, // 暂时不用，后面会交给自动清除
   };
 };

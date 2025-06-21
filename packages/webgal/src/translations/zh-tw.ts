@@ -166,6 +166,7 @@ const zhTw = {
     exit: {
       title: '退出遊戲',
       subtitle: 'EXIT',
+      tips: '確定要退出遊戲嗎？',
     },
   },
 
@@ -185,7 +186,7 @@ const zhTw = {
       fullscreen: '全螢幕',
       options: '設定',
       title: '主選單',
-      titleTips: '確認返回到主選單嗎',
+      titleTips: '確定要返回主選單嗎？',
     },
   },
 

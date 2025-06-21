@@ -40,6 +40,7 @@ export interface IStageObject {
   sourceUrl: string;
   sourceExt: string;
   sourceType: 'img' | 'live2d' | 'spine' | 'gif' | 'video';
+  spineAnimation?: string;
 }
 
 export interface ILive2DRecord {
@@ -74,7 +75,8 @@ export default class PixiStage {
    * 当前的 PIXI App
    */
   public currentApp: PIXI.Application | null = null;
-  public readonly effectsContainer: PIXI.Container;
+  public readonly foregroundEffectsContainer: PIXI.Container;
+  public readonly backgroundEffectsContainer: PIXI.Container;
   public frameDuration = 16.67;
   public notUpdateBacklogEffects = false;
   public readonly figureContainer: PIXI.Container;
@@ -142,15 +144,23 @@ export default class PixiStage {
     // 设置可排序
     app.stage.sortableChildren = true;
 
-    // 添加 3 个 Container 用于做渲染
-    this.effectsContainer = new PIXI.Container();
-    this.effectsContainer.zIndex = 3;
+    // 添加 4 个 Container 用于做渲染
+    this.foregroundEffectsContainer = new PIXI.Container(); // 前景特效
+    this.foregroundEffectsContainer.zIndex = 3;
     this.figureContainer = new PIXI.Container();
     this.figureContainer.sortableChildren = true; // 允许立绘启用 z-index
     this.figureContainer.zIndex = 2;
+    this.backgroundEffectsContainer = new PIXI.Container(); // 背景特效
+    this.backgroundEffectsContainer.zIndex = 1;
     this.backgroundContainer = new PIXI.Container();
     this.backgroundContainer.zIndex = 0;
-    app.stage.addChild(this.effectsContainer, this.figureContainer, this.backgroundContainer);
+
+    app.stage.addChild(
+      this.foregroundEffectsContainer,
+      this.figureContainer,
+      this.backgroundEffectsContainer,
+      this.backgroundContainer,
+    );
     this.currentApp = app;
     // 每 5s 获取帧率，并且防 loader 死
     const update = () => {
@@ -669,6 +679,8 @@ export default class PixiStage {
               model.scale.x = targetScale;
               model.scale.y = targetScale;
               model.anchor.set(0.5);
+              model.pivot.x += (overrideBounds[0] + overrideBounds[2]) * 0.5;
+              model.pivot.y += (overrideBounds[1] + overrideBounds[3]) * 0.5;
               model.position.x = 0;
               model.position.y = stageHeight / 2;
 
@@ -746,21 +758,49 @@ export default class PixiStage {
   public changeModelMotionByKey(key: string, motion: string) {
     // logger.debug(`Applying motion ${motion} to ${key}`);
     const target = this.figureObjects.find((e) => e.key === key);
-    if (target?.sourceType !== 'live2d') return;
-    const figureRecordTarget = this.live2dFigureRecorder.find((e) => e.target === key);
-    if (target && figureRecordTarget?.motion !== motion) {
-      const container = target.pixiContainer;
-      const children = container.children;
-      for (const model of children) {
-        let category_name = motion;
-        let animation_index = 0;
-        let priority_number = 3; // @ts-ignore
-        const internalModel = model?.internalModel ?? undefined; // 安全访问
-        internalModel?.motionManager?.stopAllMotions?.();
-        // @ts-ignore
-        model.motion(category_name, animation_index, priority_number);
+    if (target?.sourceType === 'live2d') {
+      const figureRecordTarget = this.live2dFigureRecorder.find((e) => e.target === key);
+      if (target && figureRecordTarget?.motion !== motion) {
+        const container = target.pixiContainer;
+        const children = container.children;
+        for (const model of children) {
+          let category_name = motion;
+          let animation_index = 0;
+          let priority_number = 3; // @ts-ignore
+          const internalModel = model?.internalModel ?? undefined; // 安全访问
+          internalModel?.motionManager?.stopAllMotions?.();
+          // @ts-ignore
+          model.motion(category_name, animation_index, priority_number);
+        }
+        this.updateL2dMotionByKey(key, motion);
       }
-      this.updateL2dMotionByKey(key, motion);
+    } else if (target?.sourceType === 'spine') {
+      // 处理 Spine 动画切换
+      this.changeSpineAnimationByKey(key, motion);
+    }
+  }
+
+  public changeSpineAnimationByKey(key: string, animation: string) {
+    const target = this.figureObjects.find((e) => e.key === key);
+    if (target?.sourceType !== 'spine') return;
+
+    const container = target.pixiContainer;
+    // Spine figure 结构: Container -> Sprite -> Spine
+    const sprite = container.children[0] as PIXI.Container;
+    if (sprite && sprite.children && sprite.children[0]) {
+      const spineObject = sprite.children[0];
+      // @ts-ignore
+      if (spineObject.state && spineObject.spineData) {
+        // @ts-ignore
+        const animationExists = spineObject.spineData.animations.find((anim: any) => anim.name === animation);
+        let targetCurrentAnimation = target?.spineAnimation ?? '';
+        if (animationExists && targetCurrentAnimation !== animation) {
+          console.log(`setting animation ${animation}`);
+          target!.spineAnimation = animation;
+          // @ts-ignore
+          spineObject.state.setAnimation(0, animation, false);
+        }
+      }
     }
   }
 

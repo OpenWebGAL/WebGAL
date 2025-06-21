@@ -152,6 +152,7 @@ const de = {
     exit: {
       title: 'BEENDEN',
       subtitle: '',
+      tips: 'Sind Sie sicher, dass Sie das Spiel beenden möchten?',
     },
   },
 

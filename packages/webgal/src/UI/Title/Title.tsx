@@ -14,6 +14,7 @@ import useApplyStyle from '@/hooks/useApplyStyle';
 import { fullScreenOption } from '@/store/userDataInterface';
 import { keyboard } from '@/hooks/useHotkey';
 import useConfigData from '@/hooks/useConfigData';
+import { showGlogalDialog } from '../GlobalDialog/GlobalDialog';
 /**
  * 标题页
  * @constructor
@@ -26,6 +27,7 @@ const Title: FC = () => {
   const background = GUIState.titleBg;
   const showBackground = background === '' ? 'rgba(0,0,0,1)' : `url("${background}")`;
   const t = useTrans('title.');
+  const tCommon = useTrans('common.');
   const { playSeEnter, playSeClick } = useSoundEffect();
 
   const applyStyle = useApplyStyle('UI/Title/title.scss');
@@ -121,7 +123,15 @@ const Title: FC = () => {
               className={applyStyle('Title_button', styles.Title_button)}
               onClick={() => {
                 playSeClick();
-                window.close();
+                showGlogalDialog({
+                  title: t('exit.tips'),
+                  leftText: tCommon('yes'),
+                  rightText: tCommon('no'),
+                  leftFunc: () => {
+                    window.close();
+                  },
+                  rightFunc: () => {},
+                });
               }}
               onMouseEnter={playSeEnter}
             >

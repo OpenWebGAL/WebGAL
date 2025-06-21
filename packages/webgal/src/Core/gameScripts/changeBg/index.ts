@@ -9,7 +9,7 @@ import { unlockCgInUserData } from '@/store/userDataReducer';
 import { logger } from '@/Core/util/logger';
 import { ITransform } from '@/store/stageInterface';
 import { generateTransformAnimationObj } from '@/Core/controller/stage/pixi/animations/generateTransformAnimationObj';
-import { IUserAnimation } from '@/Core/Modules/animations';
+import { AnimationFrame, IUserAnimation } from '@/Core/Modules/animations';
 import cloneDeep from 'lodash/cloneDeep';
 import { getAnimateDuration } from '@/Core/Modules/animationFunctions';
 import { WebGAL } from '@/Core/WebGAL';
@@ -43,16 +43,15 @@ export const changeBg = (sentence: ISentence): IPerform => {
   // 处理 transform 和 默认 transform
   const transformString = getSentenceArgByKey(sentence, 'transform');
   let duration = getSentenceArgByKey(sentence, 'duration');
+  let ease = getSentenceArgByKey(sentence, 'ease')?.toString() ?? '';
   if (!duration || typeof duration !== 'number') {
     duration = 1000;
   }
-  let animationObj: (ITransform & {
-    duration: number;
-  })[];
+  let animationObj: AnimationFrame[];
   if (transformString) {
     try {
-      const frame = JSON.parse(transformString.toString()) as ITransform & { duration: number };
-      animationObj = generateTransformAnimationObj('bg-main', frame, duration);
+      const frame = JSON.parse(transformString.toString()) as AnimationFrame;
+      animationObj = generateTransformAnimationObj('bg-main', frame, duration, ease);
       // 因为是切换，必须把一开始的 alpha 改为 0
       animationObj[0].alpha = 0;
       const animationName = (Math.random() * 10).toString(16);
@@ -71,7 +70,7 @@ export const changeBg = (sentence: ISentence): IPerform => {
   function applyDefaultTransform() {
     // 应用默认的
     const frame = {};
-    animationObj = generateTransformAnimationObj('bg-main', frame as ITransform & { duration: number }, duration);
+    animationObj = generateTransformAnimationObj('bg-main', frame as AnimationFrame, duration, ease);
     // 因为是切换，必须把一开始的 alpha 改为 0
     animationObj[0].alpha = 0;
     const animationName = (Math.random() * 10).toString(16);
@@ -93,10 +92,12 @@ export const changeBg = (sentence: ISentence): IPerform => {
   dispatch(setStage({ key: 'bgName', value: sentence.content }));
 
   return {
-    performName: 'none',
+    performName: `bg-main-${sentence.content}`,
     duration,
     isHoldOn: false,
-    stopFunction: () => {},
+    stopFunction: () => {
+      WebGAL.gameplay.pixiStage?.stopPresetAnimationOnTarget('bg-main');
+    },
     blockingNext: () => false,
     blockingAuto: () => true,
     stopTimeout: undefined, // 暂时不用，后面会交给自动清除

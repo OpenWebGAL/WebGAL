@@ -1,90 +1,134 @@
+/* eslint-disable max-params */
 import * as PIXI from 'pixi.js';
 import { registerPerform } from '@/Core/util/pixiPerformManager/pixiPerformManager';
-
 import { WebGAL } from '@/Core/WebGAL';
 import { SCREEN_CONSTANTS } from '@/Core/util/constants';
 
-const pixicherryBlossoms = (cherryBlossomsSpeed: number) => {
-  // アニメーション パラメータ
-  // 倍率を設定
-  // 动画参数
-  // 设置缩放的系数
-  const scalePreset = 0.15;
+type ContainerType = 'foreground' | 'background';
 
-  const effectsContainer = WebGAL!.gameplay!.pixiStage!.effectsContainer;
-  const app = WebGAL!.gameplay!.pixiStage!.currentApp!;
+interface SakuraSprite extends PIXI.Sprite {
+  speed: number;
+  positionPhase: number;
+  scalePhase: number;
+  rotationSpeed: number;
+}
+
+const pixiCherryBlossoms = (
+  tickerKey: string,
+  containerType: ContainerType,
+  speed: number, // 下落速度
+  horizontal: number, // 横向摆动幅度
+  maxNumber: number, // 最大数量
+  scale: number, // 缩放
+  angle: number, // 角度
+) => {
+  const pixiStage = WebGAL.gameplay.pixiStage!;
+
+  const effectsContainer =
+    containerType === 'foreground' ? pixiStage.foregroundEffectsContainer : pixiStage.backgroundEffectsContainer;
+
+  const screenWidth = SCREEN_CONSTANTS.width;
+  const screenHeight = SCREEN_CONSTANTS.height;
+
   const container = new PIXI.Container();
+
+  container.angle = angle;
+
+  const angleInRadians = container.rotation;
+  const absCos = Math.abs(Math.cos(angleInRadians));
+  const absSin = Math.abs(Math.sin(angleInRadians));
+
+  const stageWidth = screenWidth * absCos + screenHeight * absSin;
+  const stageHeight = screenWidth * absSin + screenHeight * absCos;
+
+  container.width = stageWidth;
+  container.height = stageHeight;
+  container.pivot.set(stageWidth / 2, stageHeight / 2);
+  container.position.set(screenWidth / 2, screenHeight / 2);
+
   effectsContainer.addChild(container);
-  // テクスチャを作成
-  // 创建纹理
+
+  const particleContainer = new PIXI.ParticleContainer(maxNumber, {
+    scale: true,
+    position: true,
+    rotation: true,
+    uvs: false,
+    alpha: true,
+  });
+
+  container.addChild(particleContainer);
+
+  const sakuras: SakuraSprite[] = [];
   const texture = PIXI.Texture.from('./game/tex/cherryBlossoms.png');
-  // コンテナを中央に移動
-  // 将容器移到中心
-  container.x = app.screen.width / 2;
-  container.y = app.screen.height / 2;
-  container.pivot.x = container.width / 2;
-  container.pivot.y = container.height / 2;
-  // ズームを調整
-  // 调整缩放
-  container.scale.x = 1;
-  container.scale.y = 1;
-  // container.rotation = -0.2;
-  const bunnyList: any = [];
-  // アニメーションの更新を監視
-  // 监听动画更新
-  function tickerFn(delta: number) {
-    // 桜の位置を制御するために使用される長さと幅を取得します
-    // 获取长宽，用于控制花出现位置
-    const stageWidth = SCREEN_CONSTANTS.width;
-    const stageHeight = SCREEN_CONSTANTS.height;
-    // オブジェクトを作成
-    // 创建对象
-    const bunny = new PIXI.Sprite(texture);
-    let scaleRand = 0.25;
 
-    bunny.scale.x = scalePreset * scaleRand;
-    bunny.scale.y = scalePreset * scaleRand;
-    // アンカーポイントを設定
-    // 设置锚点
-    bunny.anchor.set(0.5);
-    // ランダムな桜の位置
-    // 随机花位置
-    bunny.x = Math.random() * stageWidth - 0.5 * stageWidth;
-    bunny.y = 0 - 0.5 * stageHeight;
-    // @ts-ignore
-    bunny['dropSpeed'] = Math.random() * 5;
-    // @ts-ignore
-    bunny['acc'] = Math.random();
-    container.addChild(bunny);
-    bunnyList.push(bunny);
+  const randRange = (min: number, max: number): number => min + Math.random() * (max - min);
 
-    let count = 0;
-    for (const e of bunnyList) {
-      count++;
-      const randomNumber = Math.random();
-      e['dropSpeed'] = e['acc'] * 0.01 + e['dropSpeed'];
-      e.y += delta * cherryBlossomsSpeed * e['dropSpeed'] * 0.3 + 0.7;
-      const addX = count % 2 === 0;
-      if (addX) {
-        e.x += delta * randomNumber * 0.5;
-        e.rotation += delta * randomNumber * 0.03;
-      } else {
-        e.x -= delta * randomNumber * 0.5;
-        e.rotation -= delta * randomNumber * 0.03;
+  for (let i = 0; i < maxNumber; i++) {
+    const scalePhase = Math.random() * Math.PI * 2;
+
+    const sakura = PIXI.Sprite.from(texture) as SakuraSprite;
+
+    sakura.anchor.set(0.5);
+    sakura.x = Math.random() * stageWidth;
+    sakura.y = Math.random() * stageHeight;
+    sakura.rotation = Math.random() * Math.PI * 2;
+    sakura.scale.set(Math.cos(scalePhase) * scale, Math.sin(scalePhase) * scale);
+    sakura.speed = (randRange(0.5, 2.0) + randRange(0.1, 1)) * speed;
+    sakura.rotationSpeed = Math.random() * 0.015 * (Math.random() < 0.5 ? 1 : -1);
+    sakura.positionPhase = Math.random() * Math.PI * 2;
+    sakura.scalePhase = scalePhase;
+
+    sakuras.push(sakura);
+    particleContainer.addChild(sakura);
+  }
+
+  function tickerFn(delta: number): void {
+    const currentTime = Date.now() / 1000;
+
+    for (const sakura of sakuras) {
+      const horizontalMovement = Math.sin(currentTime + sakura.positionPhase) * horizontal;
+      sakura.x += horizontalMovement * delta;
+      sakura.y += sakura.speed * delta;
+      sakura.rotation += sakura.rotationSpeed * delta;
+
+      const newScaleX = Math.cos(currentTime + sakura.scalePhase) * scale;
+      const newScaleY = Math.sin(currentTime + sakura.scalePhase) * scale;
+      sakura.scale.set(newScaleX, newScaleY);
+
+      const actualSpriteWidth = Math.abs(sakura.width * scale);
+      const actualSpriteHeight = Math.abs(sakura.height * scale);
+
+      if (sakura.x + actualSpriteWidth / 2 < -stageWidth) {
+        sakura.x = stageWidth + actualSpriteWidth / 2;
+      } else if (sakura.x - actualSpriteWidth / 2 > stageWidth) {
+        sakura.x = -stageWidth - actualSpriteWidth / 2;
+      }
+
+      if (sakura.y - actualSpriteHeight / 2 > stageHeight) {
+        sakura.x = Math.random() * stageWidth;
+        sakura.y = -Math.random() * 50 - actualSpriteHeight;
+
+        sakura.positionPhase = Math.random() * Math.PI * 2;
+        sakura.scalePhase = Math.random() * Math.PI * 2;
+        sakura.speed = (randRange(0.5, 2.0) + randRange(0.1, 1)) * speed;
+        sakura.rotationSpeed = Math.random() * 0.015 * (Math.random() < 0.5 ? 1 : -1);
       }
     }
-    // 同じ画面上の桜の数を制御します
-    // 控制同屏花数
-    if (bunnyList.length >= 200) {
-      bunnyList.shift()?.destroy();
-      container.removeChild(container.children[0]);
-    }
   }
-  WebGAL!.gameplay!.pixiStage!.registerAnimation(
-    { setStartState: () => {}, setEndState: () => {}, tickerFunc: tickerFn },
-    'cherryBlossoms-Ticker',
+
+  pixiStage.registerAnimation(
+    {
+      setStartState: () => {},
+      setEndState: () => {},
+      tickerFunc: tickerFn,
+    },
+    tickerKey,
   );
-  return { container, tickerKey: 'cherryBlossoms-Ticker' };
+
+  return { container, tickerKey };
 };
 
-registerPerform('cherryBlossoms', () => pixicherryBlossoms(3));
+registerPerform('cherryBlossoms', {
+  fg: () => pixiCherryBlossoms('cherry-blossoms-foreground-ticker', 'foreground', 2, 3, 100, 0.05, 0),
+  bg: () => pixiCherryBlossoms('cherry-blossoms-background-ticker', 'background', 1, 2, 300, 0.025, 0),
+});

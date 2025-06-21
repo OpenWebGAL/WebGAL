@@ -7,9 +7,10 @@ import { webgalStore } from '@/store/store';
 import { generateTimelineObj } from '@/Core/controller/stage/pixi/animations/timeline';
 import cloneDeep from 'lodash/cloneDeep';
 import { baseTransform, ITransform } from '@/store/stageInterface';
-import { IUserAnimation } from '../Modules/animations';
+import { AnimationFrame, IUserAnimation } from '../Modules/animations';
 import { generateTransformAnimationObj } from '@/Core/controller/stage/pixi/animations/generateTransformAnimationObj';
 import { WebGAL } from '@/Core/WebGAL';
+import { getAnimateDuration, getAnimationObject } from '../Modules/animationFunctions';
 
 /**
  * 设置变换
@@ -19,14 +20,19 @@ export const setTransform = (sentence: ISentence): IPerform => {
   const startDialogKey = webgalStore.getState().stage.currentDialogKey;
   const animationName = (Math.random() * 10).toString(16);
   const animationString = sentence.content;
-  let animationObj: (ITransform & {
-    duration: number;
-  })[];
+  let animationObj: AnimationFrame[];
   const duration = getSentenceArgByKey(sentence, 'duration');
+  const ease = (getSentenceArgByKey(sentence, 'ease') as string) ?? '';
+  const writeDefault = (getSentenceArgByKey(sentence, 'writeDefault') as boolean) ?? false;
   const target = (getSentenceArgByKey(sentence, 'target')?.toString() ?? '0') as string;
+  const keep = getSentenceArgByKey(sentence, 'keep') === true;
+  const performInitName = `animation-${target}`;
+
+  WebGAL.gameplay.performController.unmountPerform(performInitName, true);
+
   try {
-    const frame = JSON.parse(animationString) as ITransform & { duration: number };
-    animationObj = generateTransformAnimationObj(target, frame, duration);
+    const frame = JSON.parse(animationString) as AnimationFrame;
+    animationObj = generateTransformAnimationObj(target, frame, duration, ease);
     console.log('animationObj:', animationObj);
   } catch (e) {
     // 解析都错误了，歇逼吧
@@ -41,7 +47,12 @@ export const setTransform = (sentence: ISentence): IPerform => {
   let stopFunction = () => {};
   setTimeout(() => {
     WebGAL.gameplay.pixiStage?.stopPresetAnimationOnTarget(target);
-    const animationObj: IAnimationObject | null = getAnimationObject(animationName, target, animationDuration);
+    const animationObj: IAnimationObject | null = getAnimationObject(
+      animationName,
+      target,
+      animationDuration,
+      writeDefault,
+    );
     if (animationObj) {
       logger.debug(`动画${animationName}作用在${target}`, animationDuration);
       WebGAL.gameplay.pixiStage?.registerAnimation(animationObj, key, target);
@@ -56,39 +67,12 @@ export const setTransform = (sentence: ISentence): IPerform => {
   };
 
   return {
-    performName: key,
+    performName: performInitName,
     duration: animationDuration,
-    isHoldOn: false,
+    isHoldOn: keep,
     stopFunction,
     blockingNext: () => false,
-    blockingAuto: () => true,
+    blockingAuto: () => !keep,
     stopTimeout: undefined, // 暂时不用，后面会交给自动清除
   };
 };
-
-function getAnimationObject(animationName: string, target: string, duration: number) {
-  const effect = WebGAL.animationManager.getAnimations().find((ani) => ani.name === animationName);
-  if (effect) {
-    const mappedEffects = effect.effects.map((effect) => {
-      const newEffect = cloneDeep({ ...baseTransform, duration: 0 });
-      PixiStage.assignTransform(newEffect, effect);
-      newEffect.duration = effect.duration;
-      return newEffect;
-    });
-    logger.debug('装载自定义动画', mappedEffects);
-    return generateTimelineObj(mappedEffects, target, duration);
-  }
-  return null;
-}
-
-function getAnimateDuration(animationName: string) {
-  const effect = WebGAL.animationManager.getAnimations().find((ani) => ani.name === animationName);
-  if (effect) {
-    let duration = 0;
-    effect.effects.forEach((e) => {
-      duration += e.duration;
-    });
-    return duration;
-  }
-  return 0;
-}

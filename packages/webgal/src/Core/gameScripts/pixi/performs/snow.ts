@@ -1,88 +1,201 @@
+/* eslint-disable max-params */
 import * as PIXI from 'pixi.js';
 import { registerPerform } from '@/Core/util/pixiPerformManager/pixiPerformManager';
-
 import { WebGAL } from '@/Core/WebGAL';
 import { SCREEN_CONSTANTS } from '@/Core/util/constants';
 
-const pixiSnow = (snowSpeed: number) => {
-  // 动画参数
-  // 设置缩放的系数
-  const scalePreset = 0.144;
+type ContainerType = 'foreground' | 'background';
 
-  const effectsContainer = WebGAL.gameplay.pixiStage!.effectsContainer!;
-  const app = WebGAL.gameplay.pixiStage!.currentApp!;
+interface SnowflakeSprite extends PIXI.Sprite {
+  vy: number;
+  vx: number;
+  rotationSpeed: number;
+}
+
+const pixiSnow = (
+  tickerKey: string,
+  containerType: ContainerType,
+  speed: number, // 下落速度
+  maxNumber: number, // 最大数量
+  scale: number, // 大小
+  angle: number, // 角度
+) => {
+  const pixiStage = WebGAL.gameplay.pixiStage!;
+  const app = pixiStage.currentApp!;
+
+  const effectsContainer =
+    containerType === 'foreground' ? pixiStage.foregroundEffectsContainer : pixiStage.backgroundEffectsContainer;
+
+  const screenWidth = SCREEN_CONSTANTS.width;
+  const screenHeight = SCREEN_CONSTANTS.height;
+
   const container = new PIXI.Container();
+
+  container.angle = angle;
+
+  const angleInRadians = container.rotation;
+  const absCos = Math.abs(Math.cos(angleInRadians));
+  const absSin = Math.abs(Math.sin(angleInRadians));
+
+  const stageWidth = screenWidth * absCos + screenHeight * absSin;
+  const stageHeight = screenWidth * absSin + screenHeight * absCos;
+
+  container.width = stageWidth;
+  container.height = stageHeight;
+  container.pivot.set(stageWidth / 2, stageHeight / 2);
+  container.position.set(screenWidth / 2, screenHeight / 2);
+
   effectsContainer.addChild(container);
-  // 创建纹理
-  const texture = PIXI.Texture.from('./game/tex/snowFlake_min.png');
-  // 将容器移到中心
-  container.x = app.screen.width / 2;
-  container.y = app.screen.height / 2;
-  container.pivot.x = container.width / 2;
-  container.pivot.y = container.height / 2;
-  // 调整缩放
-  container.scale.x = 1;
-  container.scale.y = 1;
-  // container.rotation = -0.2;
-  const bunnyList: any = [];
-  let addBunnyCounter = 0;
-  // 获取长宽，用于控制雪花出现位置
-  const stageWidth = SCREEN_CONSTANTS.width;
-  const stageHeight = SCREEN_CONSTANTS.height;
-  // 监听动画更新
-  function tickerFn(delta: number) {
-    addBunnyCounter++;
-    // 创建对象
-    if (addBunnyCounter % 7 === 1) {
-      const bunny = new PIXI.Sprite(texture);
-      let filterRad = Math.random() * 8 + 1;
-      bunny.filters = [new PIXI.filters.BlurFilter(filterRad)];
-      // 随机雪花大小
-      let scaleRand = Math.random();
-      if (scaleRand <= 0.5) {
-        scaleRand = 0.5;
+
+  const particleContainer = new PIXI.ParticleContainer(maxNumber, {
+    scale: true,
+    position: true,
+    rotation: true,
+    alpha: true,
+    uvs: false,
+  });
+
+  container.addChild(particleContainer);
+
+  const snowflakeTextures: PIXI.Texture[] = [];
+  const snowflakes: SnowflakeSprite[] = [];
+
+  const baseTexturePath = './game/tex/snow.png';
+  const SPRITE_WIDTH = 128;
+  const SPRITE_HEIGHT = 128;
+  const NUM_SPRITES = 10;
+
+  const styleWeights = [10, 2, 2, 2, 1, 1, 1, 2, 2, 2]; // 雪花样式权重
+
+  const getWeightedRandomIndex = (weights: number[]): number => {
+    if (!weights || weights.length === 0) {
+      return 0;
+    }
+    const totalWeight = weights.reduce((sum, weight) => sum + weight, 0);
+    if (totalWeight <= 0) {
+      return Math.floor(Math.random() * weights.length);
+    }
+    let random = Math.random() * totalWeight;
+    for (let i = 0; i < weights.length; i++) {
+      if (random < weights[i]) {
+        return i;
       }
-      bunny.scale.x = scalePreset * scaleRand;
-      bunny.scale.y = scalePreset * scaleRand;
-      // 设置锚点
-      bunny.anchor.set(0.5);
-      // 随机雪花位置
-      bunny.x = Math.random() * stageWidth - 0.5 * stageWidth;
-      bunny.y = 0 - 0.5 * stageHeight;
-      // @ts-ignore
-      bunny['dropSpeed'] = Math.random() * 2;
-      // @ts-ignore
-      bunny['acc'] = Math.random();
-      container.addChild(bunny);
-      // 控制每片雪花
-      bunnyList.push(bunny);
+      random -= weights[i];
     }
-    let count = 0; // 用于判断雪花往左还是往右飘，是2的倍数则往左
-    for (const e of bunnyList) {
-      count++;
-      const randomNumber = Math.random();
-      e['dropSpeed'] = e['acc'] * 0.01 + e['dropSpeed'];
-      e.y += delta * snowSpeed * e['dropSpeed'] * 0.3 + 0.7;
-      const addX = count % 2 === 0;
-      if (addX) {
-        e.x += delta * randomNumber * 0.5;
-        e.rotation += delta * randomNumber * 0.03;
-      } else {
-        e.x -= delta * randomNumber * 0.5;
-        e.rotation -= delta * randomNumber * 0.03;
+    return weights.length - 1;
+  };
+
+  const resetSnowflake = (snowflake: SnowflakeSprite, isInitialSpawn = false) => {
+    const randomScaleFactor = Math.random() * 0.5 + 0.5; // 随机缩放因子
+    snowflake.scale.set(scale * randomScaleFactor);
+    snowflake.anchor.set(0.5);
+
+    if (isInitialSpawn) {
+      snowflake.x = Math.random() * stageWidth;
+      snowflake.y = Math.random() * stageHeight;
+    } else {
+      snowflake.x = Math.random() * stageWidth;
+      snowflake.y = -Math.random() * 50 - snowflake.height;
+    }
+
+    snowflake.alpha = Math.random() * 0.2 + 0.8; // 随机透明度
+    snowflake.vy = (Math.random() * 0.4 + 0.8) * speed; // 随机垂直速度
+    snowflake.vx = (Math.random() - 0.5) * 0.25 * speed; // 随机水平速度
+    snowflake.rotationSpeed = (Math.random() - 0.5) * 0.005; // 随机旋转速度
+  };
+
+  const createSnowflakeInstance = (): SnowflakeSprite => {
+    let textureIndex: number;
+    if (snowflakeTextures.length === NUM_SPRITES) {
+      textureIndex = getWeightedRandomIndex(styleWeights);
+    } else {
+      textureIndex = Math.floor(Math.random() * snowflakeTextures.length);
+    }
+    textureIndex = Math.max(0, Math.min(textureIndex, snowflakeTextures.length - 1));
+
+    const snowflake = new PIXI.Sprite(snowflakeTextures[textureIndex]) as SnowflakeSprite;
+    resetSnowflake(snowflake, true);
+    return snowflake;
+  };
+
+  const tickerFn = (delta: number) => {
+    for (const snowflake of snowflakes) {
+      snowflake.y += snowflake.vy * delta;
+      snowflake.x += snowflake.vx * delta;
+      snowflake.rotation += snowflake.rotationSpeed * delta;
+      if (
+        snowflake.y - snowflake.height / 2 > stageHeight ||
+        snowflake.x < -snowflake.width ||
+        snowflake.x > stageWidth + snowflake.width
+      ) {
+        resetSnowflake(snowflake, false);
       }
     }
-    // 控制同屏雪花数
-    if (bunnyList.length >= 100) {
-      bunnyList.shift()?.destroy();
-      container.removeChild(container.children[0]);
+  };
+
+  const setupSnowflakesAndAnimation = () => {
+    snowflakeTextures.length = 0;
+    while (snowflakes.length > 0) snowflakes.pop();
+    particleContainer.removeChildren();
+
+    const baseTexture = PIXI.BaseTexture.from(baseTexturePath);
+
+    const finalizeSetup = () => {
+      if (baseTexture.valid) {
+        for (let i = 0; i < NUM_SPRITES; i++) {
+          const frame = new PIXI.Rectangle(i * SPRITE_WIDTH, 0, SPRITE_WIDTH, SPRITE_HEIGHT);
+          snowflakeTextures.push(new PIXI.Texture(baseTexture, frame));
+        }
+      }
+
+      if (snowflakeTextures.length === 0) {
+        console.error(`Failed to create any snowflake textures. Cannot create sprites.`);
+        return;
+      }
+      if (!snowflakeTextures[0]?.valid) {
+        console.warn(`First snowflake texture is invalid after creation. Sprites might not render correctly.`);
+      }
+
+      for (let i = 0; i < maxNumber; i++) {
+        const snowflake = createSnowflakeInstance();
+        particleContainer.addChild(snowflake);
+        snowflakes.push(snowflake);
+      }
+
+      pixiStage.registerAnimation(
+        {
+          setStartState: () => {},
+          setEndState: () => {},
+          tickerFunc: tickerFn,
+        },
+        tickerKey,
+      );
+    };
+
+    if (baseTexture.valid) {
+      finalizeSetup();
+    } else {
+      baseTexture.once('loaded', () => {
+        finalizeSetup();
+      });
+      baseTexture.once('error', (errorEvent) => {
+        console.error(`Error loading base texture ${baseTexturePath}:`, errorEvent);
+        finalizeSetup();
+      });
     }
-  }
-  WebGAL.gameplay.pixiStage?.registerAnimation(
-    { setStartState: () => {}, setEndState: () => {}, tickerFunc: tickerFn },
-    'snow-Ticker',
-  );
-  return { container, tickerKey: 'snow-Ticker' };
+  };
+
+  setupSnowflakesAndAnimation();
+
+  return { container, tickerKey };
 };
 
-registerPerform('snow', () => pixiSnow(3));
+registerPerform('snow', {
+  fg: () => pixiSnow('snow-foreground-ticker', 'foreground', 3, 250, 0.4, 0),
+  bg: () => pixiSnow('snow-background-ticker', 'background', 1, 750, 0.2, 0),
+});
+
+registerPerform('heavySnow', {
+  fg: () => pixiSnow('heavy-snow-foreground-ticker', 'foreground', 20, 1000, 0.6, -75),
+  bg: () => pixiSnow('heavy-snow-background-ticker', 'background', 10, 2000, 0.3, -80),
+});
