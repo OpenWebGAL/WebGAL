@@ -8,41 +8,39 @@
 
 #### 新功能
 
-在 random[...] 函数中支持范围参数，便于生成指定区间的随机数
+新增斜角（Bevel）和发光（Bloom）滤镜效果，提供更丰富的视觉特效选项
 
-滑块组件新增动态数值提示，支持悬停和拖拽实时显示
+优化雪花、樱花飘落和雨滴效果的性能表现，提升渲染效果的真实感
 
-新增调试指令 FONT_OPTIMIZATION，用于快速排查字体渲染性能问题
+为 `wait` 命令新增 `goNextWhenOver` 属性，可在等待结束后自动进入下一条指令
 
-文字预览面板支持点击强制刷新
+支持 Spine 立绘动画切换功能，通过 `-motion` 参数控制动画播放
 
-构建脚本自动注入版本和提交信息
+为 `setAnimation` 和 `setTempAnimation` 新增 ease 缓动参数，支持更流畅的动画过渡
 
-配置项新增 DefaultLanguage，可预设游戏默认语言
+新增 `keep` 参数用于保持特定状态
 
-getUserInput 现已支持 default 默认值
+改进带样式文本的逐字显示动画，正确处理 ruby 注音文本
 
-新增调整滤镜效果，包括亮度对比度饱和度等
-
-控制栏新增全屏按钮，并解耦全屏逻辑
-
-新增退出游戏按钮
+新增退出游戏确认对话框，避免误操作
 
 #### 修复
 
-修复 jumpLabel 回跳问题 #417
+修复 Live2D 立绘在边界修改时的初始位置错误
 
-优化文字渲染逻辑，仅重新渲染文本而非整个文本框
+修复启动时错误重置用户数据的问题
 
-修复 Live2D 立绘的锚点和位置偏移，修正缩放变换
+修复 Spine 立绘动画切换异常
 
-修复 Spine 立绘和普通立绘的初始位置异常
+修复带样式文本的逐字动画显示问题
 
-修复使用重复 UUID 加载 Live2D 立绘时的异常
+修复视频背景文件扩展名识别问题
 
-修复色彩调整动画丢失问题，当滤镜为默认值时不再使用 AdjustmentFilter
+优化 `changeFigure` 和 `changeBg` 的停止函数和性能名称处理
 
-其他若干稳定性与兼容性改进
+当没有解锁的背景音乐时，隐藏音轨选择界面
+
+其他性能优化和稳定性改进
 
 
 
@@ -57,41 +55,39 @@ getUserInput 现已支持 default 默认值
 
 #### New Features
 
-Range arguments are now supported in the random[...] function for interval based random numbers
+Added Bevel and Bloom filter effects for richer visual options
 
-The slider component gains a dynamic value tooltip that updates on hover or drag
+Optimized performance of snow, cherry blossom, and rain effects with improved realism
 
-Added debug command FONT_OPTIMIZATION for quick font rendering diagnostics
+Added `goNextWhenOver` property to `wait` command for automatic progression
 
-The text preview panel now supports click to force refresh
+Support for Spine figure animation switching via `-motion` parameter
 
-Build scripts automatically inject version and commit information
+Added ease parameter to `setAnimation` and `setTempAnimation` for smoother transitions
 
-New config option DefaultLanguage to preset the game default language
+Added `keep` parameter to maintain specific states
 
-getUserInput now supports a default value
+Improved character-by-character animation for styled text with ruby annotation support
 
-Added adjustment filter effects including brightness contrast saturation and more
-
-Added a fullscreen button to the control bar with decoupled logic
-
-Added an exit game button
+Added exit game confirmation dialog to prevent accidental exits
 
 #### Fixes
 
-Fixed the jumpLabel jumping back issue #417
+Fixed Live2D figure initial position error when bounds are modified
 
-Optimized text rendering so only the text not the entire textbox re renders
+Fixed erroneous user data reset on startup
 
-Fixed Live2D figure pivot and position offsets and scaling
+Fixed Spine figure animation switching issues
 
-Fixed initial position anomalies for Spine and standard figures
+Fixed character-by-character animation for styled text
 
-Fixed error when loading a Live2D figure with a duplicate UUID
+Fixed video background file extension recognition
 
-Fixed missing color adjustment animations and stopped using AdjustmentFilter at default values
+Optimized `changeFigure` and `changeBg` stop function and performance name handling
 
-Miscellaneous stability and compatibility improvements
+Hide track selection interface when no BGM tracks are unlocked
+
+Other performance optimizations and stability improvements
 
 
 
@@ -106,38 +102,36 @@ Miscellaneous stability and compatibility improvements
 
 #### 新機能
 
-random[...] 関数で範囲引数をサポートし指定区間の乱数生成が可能に
+ベベル（Bevel）とブルーム（Bloom）フィルター効果を追加し、より豊富なビジュアルエフェクトを提供
 
-スライダーコンポーネントに動的値ツールチップを追加しホバーとドラッグでリアルタイム表示
+雪、桜の花びら、雨滴エフェクトのパフォーマンスを最適化し、よりリアルな描画効果を実現
 
-デバッグコマンド FONT_OPTIMIZATION を追加しフォント描画性能を迅速に診断
+`wait` コマンドに `goNextWhenOver` 属性を追加し、待機終了後に自動的に次の命令へ進行
 
-テキストプレビューでクリックによる強制リフレッシュをサポート
+Spine 立ち絵のアニメーション切り替えをサポート、`-motion` パラメータでアニメーション制御
 
-ビルドスクリプトがバージョンとコミット情報を自動挿入
+`setAnimation` と `setTempAnimation` に ease イージングパラメータを追加し、より滑らかなアニメーション遷移を実現
 
-設定ファイルに DefaultLanguage を追加しゲームのデフォルト言語をプリセット可能
+特定の状態を維持するための `keep` パラメータを追加
 
-getUserInput が default 値をサポート
+スタイル付きテキストの一文字ずつのアニメーションを改善し、ルビ注釈テキストを正しく処理
 
-調整フィルターを追加し明るさコントラスト彩度などを調整可能
-
-コントロールバーにフルスクリーンボタンを追加しロジックを分離
-
-ゲーム退出ボタンを追加
+ゲーム終了確認ダイアログを追加し、誤操作を防止
 
 #### 修正
 
-jumpLabel が戻る問題を修正 #417
+境界が変更された際のLive2D立ち絵の初期位置エラーを修正
 
-テキスト描画を最適化しテキストボックス全体ではなくテキストのみを再描画
+起動時にユーザーデータが誤ってリセットされる問題を修正
 
-Live2D 立ち絵のアンカーポイントと位置ずれを修正しスケール変換も修正
+Spine立ち絵のアニメーション切り替え異常を修正
 
-Spine 立ち絵および通常立ち絵の初期位置異常を修正
+スタイル付きテキストの一文字アニメーション表示問題を修正
 
-重複 UUID で Live2D 立ち絵をロードする際の異常を修正
+ビデオ背景ファイルの拡張子認識問題を修正
 
-色調整アニメーションの欠落を修正しデフォルト値の場合は AdjustmentFilter を使用しない
+`changeFigure` と `changeBg` の停止関数とパフォーマンス名の処理を最適化
 
-その他の安定性と互換性の向上
+BGMトラックがアンロックされていない場合、トラック選択インターフェースを非表示に
+
+その他のパフォーマンス最適化と安定性の向上
