@@ -7,6 +7,8 @@ import { baseTransform } from '@/store/stageInterface';
 import { generateTimelineObj } from '@/Core/controller/stage/pixi/animations/timeline';
 import { WebGAL } from '@/Core/WebGAL';
 import PixiStage, { IAnimationObject } from '@/Core/controller/stage/pixi/PixiController';
+import { AnimationFrame, IUserAnimation } from './animations';
+import { generateTransformAnimationObj } from '../controller/stage/pixi/animations/generateTransformAnimationObj';
 
 // eslint-disable-next-line max-params
 export function getAnimationObject(animationName: string, target: string, duration: number, writeDefault: boolean) {
@@ -87,5 +89,25 @@ export function getEnterExitAnimation(
       WebGAL.animationManager.nextExitAnimationName.delete(target);
     }
     return { duration, animation };
+  }
+}
+
+export function createDefaultEnterExitAnimation(type: 'enter' | 'exit', target: string, frame: AnimationFrame, duration: number, ease: string) {
+  if (type === 'enter') {
+    // 设置默认入场动画
+    const enterAnimationObj = generateTransformAnimationObj(target, frame, duration, ease, 'enter');
+    const enterAnimationName = (Math.random() * 10).toString(16);
+    const newEnterAnimation: IUserAnimation = { name: enterAnimationName, effects: enterAnimationObj };
+    WebGAL.animationManager.addAnimation(newEnterAnimation);
+    duration = getAnimateDuration(enterAnimationName);
+    WebGAL.animationManager.nextEnterAnimationName.set(target, enterAnimationName);
+  } else {
+    // 设置默认退场动画
+    const exitAnimationObj = generateTransformAnimationObj(target, frame, duration, ease, 'exit');
+    const exitAnimationName = (Math.random() * 10).toString(16);
+    const newExitAnimation: IUserAnimation = { name: exitAnimationName, effects: exitAnimationObj };
+    WebGAL.animationManager.addAnimation(newExitAnimation);
+    duration = getAnimateDuration(exitAnimationName);
+    WebGAL.animationManager.nextExitAnimationName.set(target + '-off', exitAnimationName);
   }
 }
