@@ -1,0 +1,5 @@
+choose:;
+choose:|;
+choose:fff:;
+choose::ff;
+choose:|:ff;
