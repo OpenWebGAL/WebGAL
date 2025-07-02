@@ -20,6 +20,10 @@ export const intro = (sentence: ISentence): IPerform => {
 
   const performName = `introPerform${Math.random().toString()}`;
   let fontSize: string | undefined;
+  // 'url("/game/template/Intro/bg.webp") center/cover no-repeat, url("/game/template/Intro/bga.webp") center/cover no-repeat'
+  let backgroundImage: any = ['webp', 'png', 'jpg'].reduce((pre, cur, curInd) => {
+    return pre + `${curInd === 0 ? '' : ', '}url("/game/template/Intro/bg.${cur}") center/cover no-repeat`;
+  }, '');
   let backgroundColor: any = 'rgba(0, 0, 0, 1)';
   let color: any = 'rgba(255, 255, 255, 1)';
   const animationClass: any = (type: string, length = 0) => {
@@ -42,8 +46,10 @@ export const intro = (sentence: ISentence): IPerform => {
   let delayTime = 1500;
   let isHold = false;
   let isUserForward = false;
-
   for (const e of sentence.args) {
+    if(e.key === 'backgroundImage'){
+      backgroundImage = `url("/game/template/Intro/${e.value}") center/cover no-repeat`;
+    }
     if (e.key === 'backgroundColor') {
       backgroundColor = e.value || 'rgba(0, 0, 0, 1)';
     }
@@ -86,7 +92,8 @@ export const intro = (sentence: ISentence): IPerform => {
   }
 
   const introContainerStyle = {
-    background: backgroundColor,
+    background: backgroundImage,
+    backgroundColor: backgroundColor,
     color: color,
     fontSize: fontSize || '350%',
     width: '100%',
