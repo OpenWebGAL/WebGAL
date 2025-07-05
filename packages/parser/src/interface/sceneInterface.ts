@@ -1,7 +1,7 @@
 /**
  * 语句类型
  */
-import { sceneEntry } from './runtimeInterface';
+import { sceneEntry, ISceneEntry } from './runtimeInterface';
 import { fileType } from './assets';
 
 export enum commandType {
@@ -38,7 +38,7 @@ export enum commandType {
   setTransition,
   getUserInput,
   applyStyle,
-  wait
+  wait,
 }
 
 /**
@@ -92,7 +92,7 @@ export interface IScene {
  */
 export interface ISceneData {
   currentSentenceId: number; // 当前语句ID
-  sceneStack: Array<sceneEntry>; // 场景栈
+  sceneStack: Array<ISceneEntry>; // 场景栈
   currentScene: IScene; // 当前场景数据
 }
 
