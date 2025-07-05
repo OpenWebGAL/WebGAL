@@ -48,7 +48,7 @@ export const intro = (sentence: ISentence): IPerform => {
   let isUserForward = false;
   for (const e of sentence.args) {
     if(e.key === 'backgroundImage'){
-      backgroundImage = `url("game/template/Intro/${e.value}") center/cover no-repeat`;
+      backgroundImage = `url("game/background/${e.value}") center/cover no-repeat`;
     }
     if (e.key === 'backgroundColor') {
       backgroundColor = e.value || 'rgba(0, 0, 0, 1)';
