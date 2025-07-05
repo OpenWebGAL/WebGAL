@@ -4,6 +4,7 @@ import { v4 as uuid } from 'uuid';
 import * as PIXI from 'pixi.js';
 import PixiStage from '@/Core/controller/stage/pixi/PixiController';
 import { logger } from '@/Core/util/logger';
+import { webgalStore } from '@/store/store';
 // utils/loadPixiSpine.ts
 // @ts-ignore
 let pixiSpineModule: typeof import('pixi-spine') | null = null;
@@ -58,7 +59,6 @@ export async function addSpineFigureImpl(
   presetPosition: 'left' | 'center' | 'right' = 'center',
 ) {
   const spineId = `spine-${url}`;
-  const pixiSpine = await loadPixiSpine();
   // 准备用于存放这个立绘的 Container
   const thisFigureContainer = new WebGALPixiContainer();
 
@@ -87,59 +87,89 @@ export async function addSpineFigureImpl(
     sourceUrl: url,
     sourceType: 'spine', // 修改为 'spine'
     sourceExt: this.getExtName(url),
+    spineAnimation: '_initial',
   });
+  const pixiSpine = await loadPixiSpine();
 
   // 完成图片加载后执行的函数
   const setup = async () => {
-    if (!pixiSpine) {
-      // 无法加载 'pixi-spine'，跳过 Spine 相关逻辑
-      logger.warn(`Spine module not loaded. Skipping Spine figure: ${key}`);
-      return;
-    }
+    setTimeout(() => {
+      console.log('Setting up Spine' + key + url);
+      if (!pixiSpine) {
+        // 无法加载 'pixi-spine'，跳过 Spine 相关逻辑
+        logger.warn(`Spine module not loaded. Skipping Spine figure: ${key}`);
+        return;
+      }
 
-    const { Spine } = pixiSpine;
-    const spineResource: any = spineLoader!.resources?.[spineId];
-    if (spineResource && this.getStageObjByUuid(figureUuid)) {
-      const figureSpine = new Spine(spineResource.spineData);
-      const spineBounds = figureSpine.getLocalBounds();
-      const spineCenterX = spineBounds.x + spineBounds.width / 2;
-      const spineCenterY = spineBounds.y + spineBounds.height / 2;
-      figureSpine.pivot.set(spineCenterX, spineCenterY);
-      // TODO: set animation 还没做
-      // figureSpine.state.setAnimation(0, figureSpine.spineData.animations[0].name, true)
+      const { Spine } = pixiSpine;
+      const spineResource: any = spineLoader!.resources?.[spineId];
+      if (spineResource && this.getStageObjByUuid(figureUuid)) {
+        const figureSpine = new Spine(spineResource.spineData);
+        const spineBounds = figureSpine.getLocalBounds();
+        const spineCenterX = spineBounds.x + spineBounds.width / 2;
+        const spineCenterY = spineBounds.y + spineBounds.height / 2;
+        figureSpine.pivot.set(spineCenterX, spineCenterY);
+        figureSpine.interactive = false;
 
-      /**
-       * 重设大小
-       */
-      const originalWidth = figureSpine.width;
-      const originalHeight = figureSpine.height;
-      const scaleX = this.stageWidth / originalWidth;
-      const scaleY = this.stageHeight / originalHeight;
-      const targetScale = Math.min(scaleX, scaleY);
-      const figureSprite = new PIXI.Sprite();
-      figureSprite.addChild(figureSpine);
-      figureSprite.scale.x = targetScale;
-      figureSprite.scale.y = targetScale;
-      figureSprite.anchor.set(0.5);
-      figureSprite.position.y = this.stageHeight / 2;
-      const targetWidth = originalWidth * targetScale;
-      const targetHeight = originalHeight * targetScale;
-      thisFigureContainer.setBaseY(this.stageHeight / 2);
-      if (targetHeight < this.stageHeight) {
-        thisFigureContainer.setBaseY(this.stageHeight / 2 + (this.stageHeight - targetHeight) / 2);
+        // 检查状态中是否有指定的动画
+        const motionFromState = webgalStore.getState().stage.live2dMotion.find((e) => e.target === key);
+        let animationToPlay = '';
+
+        if (
+          motionFromState &&
+          figureSpine.spineData.animations.find((anim: any) => anim.name === motionFromState.motion)
+        ) {
+          // 使用状态中指定的动画
+          animationToPlay = motionFromState.motion;
+        } else if (figureSpine.spineData.animations.length > 0) {
+          // 播放默认动画（第一个动画）
+          animationToPlay = figureSpine.spineData.animations[0].name;
+        }
+
+        if (animationToPlay) {
+          figureSpine.state.setAnimation(0, animationToPlay, false);
+          figureSpine.autoUpdate = true;
+          const stageObj = this.getStageObjByUuid(figureUuid);
+          if (stageObj) {
+            if (stageObj.spineAnimation) {
+              stageObj.spineAnimation = animationToPlay;
+            }
+          }
+        }
+
+        /**
+         * 重设大小
+         */
+        const originalWidth = figureSpine.width;
+        const originalHeight = figureSpine.height;
+        const scaleX = this.stageWidth / originalWidth;
+        const scaleY = this.stageHeight / originalHeight;
+        const targetScale = Math.min(scaleX, scaleY);
+        const figureSprite = new PIXI.Sprite();
+        figureSprite.addChild(figureSpine);
+        figureSprite.scale.x = targetScale;
+        figureSprite.scale.y = targetScale;
+        figureSprite.anchor.set(0.5);
+        figureSprite.position.y = this.stageHeight / 2;
+        const targetWidth = originalWidth * targetScale;
+        const targetHeight = originalHeight * targetScale;
+        thisFigureContainer.setBaseY(this.stageHeight / 2);
+        if (targetHeight < this.stageHeight) {
+          thisFigureContainer.setBaseY(this.stageHeight / 2 + (this.stageHeight - targetHeight) / 2);
+        }
+        if (presetPosition === 'center') {
+          thisFigureContainer.setBaseX(this.stageWidth / 2);
+        }
+        if (presetPosition === 'left') {
+          thisFigureContainer.setBaseX(targetWidth / 2);
+        }
+        if (presetPosition === 'right') {
+          thisFigureContainer.setBaseX(this.stageWidth - targetWidth / 2);
+        }
+        thisFigureContainer.pivot.set(0, this.stageHeight / 2);
+        thisFigureContainer.addChild(figureSprite);
       }
-      if (presetPosition === 'center') {
-        thisFigureContainer.setBaseX(this.stageWidth / 2);
-      }
-      if (presetPosition === 'left') {
-        thisFigureContainer.setBaseX(targetWidth / 2);
-      }
-      if (presetPosition === 'right') {
-        thisFigureContainer.setBaseX(this.stageWidth - targetWidth / 2);
-      }
-      thisFigureContainer.pivot.set(0, this.stageHeight / 2);
-      thisFigureContainer.addChild(figureSprite);
-    }
+    }, 0);
   };
 
   /**

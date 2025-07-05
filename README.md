@@ -2,7 +2,7 @@
 
 ### **[English Version](/README_EN.md)** | **[日本語版](/README_JP.md)** | **[한국어](/README_KO.md)** | **[Français](/README_FR.md)**
 
-**[Help us with translation | 协助翻译 | 翻訳のお手伝い | 번역을 도와주세요](https://github.com/MakinoharaShoko/WebGAL/tree/dev/packages/webgal/src/translations)**
+**[Help us with translation | 协助翻译 | 翻訳のお手伝い | 번역을 도와주세요](https://github.com/OpenWebGAL/WebGAL/tree/dev/packages/webgal/src/translations)**
 
 **[Join Discord Server | 加入 Discord 讨论 | Discordのディスカッションに参加する](https://discord.gg/kPrQkJttJy)**
 
@@ -14,7 +14,7 @@
 
 # WebGAL 提供可视化编辑器
 
-**创作视觉小说，何须会编程？欢迎体验 [WebGAL 图形化编辑器](https://github.com/MakinoharaShoko/WebGAL_Terre/)**
+**创作视觉小说，何须会编程？欢迎体验 [WebGAL 图形化编辑器](https://github.com/OpenWebGAL/WebGAL_Terre/)**
 
 ## 在线体验
 
@@ -32,9 +32,9 @@ https://demo.openwebgal.com
 
 [WebGAL 开发文档](https://docs.openwebgal.com/)
 
-[下载 WebGAL 图形化编辑器](https://github.com/MakinoharaShoko/WebGAL_Terre/releases)
+[下载 WebGAL 图形化编辑器](https://github.com/OpenWebGAL/WebGAL_Terre/releases)
 
-你也可以使用源代码或 [WebGAL 调试工具](https://github.com/MakinoharaShoko/WebGAL/releases) 制作游戏，并使用 [WebGAL Script VS Code 插件](https://marketplace.visualstudio.com/items?itemName=c6h5-no2.webgal-script-basics) 来启用语法高亮
+你也可以使用源代码或 [WebGAL 调试工具](https://github.com/OpenWebGAL/WebGAL/releases) 制作游戏，并使用 [WebGAL Script VS Code 插件](https://marketplace.visualstudio.com/items?itemName=c6h5-no2.webgal-script-basics) 来启用语法高亮
 
 ## WebGAL 优势与特色
 
@@ -72,4 +72,4 @@ WebGAL 是一款开源软件，因此你可以免费在 MPL-2.0 开源协议的�
 
 ## Stargazers over time
 
-[![Stargazers over time](https://starchart.cc/MakinoharaShoko/WebGAL.svg)](https://starchart.cc/MakinoharaShoko/WebGAL)
+[![Stargazers over time](https://starchart.cc/OpenWebGAL/WebGAL.svg)](https://starchart.cc/OpenWebGAL/WebGAL)

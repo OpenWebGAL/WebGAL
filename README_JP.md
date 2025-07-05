@@ -2,7 +2,7 @@
 
 **[中文版本](/README.md)**
 
-**[Help us with translation | 协助翻译 | 翻訳のお手伝い ](https://github.com/MakinoharaShoko/WebGAL/tree/dev/packages/webgal/src/translations)**
+**[Help us with translation | 协助翻译 | 翻訳のお手伝い ](https://github.com/OpenWebGAL/WebGAL/tree/dev/packages/webgal/src/translations)**
 
 **[Join Discord Server](https://discord.gg/kPrQkJttJy)**
 
@@ -14,7 +14,7 @@
 
 # WebGAL はビジュアルエディターを提供します
 
-**ビジュアルノベルを作るのにプログラミングは必要ですか？ [WebGAL グラフィカルエディター](https://github.com/MakinoharaShoko/WebGAL_Terre/) を体験してください**
+**ビジュアルノベルを作るのにプログラミングは必要ですか？ [WebGAL グラフィカルエディター](https://github.com/OpenWebGAL/WebGAL_Terre/) を体験してください**
 
 デモビデオ: https://youtu.be/S7xxVe9MGXk
 
@@ -33,7 +33,7 @@ https://webgal-jp-demo.onrender.com/
 [WebGAL 開発ドキュメント](https://docs.openwebgal.com/ja)
 ※日本語の開発ドキュメントは準備中です
 
-[WebGAL Webエディターのダウンロードはこちら](https://github.com/MakinoharaShoko/WebGAL_Terre/releases)
+[WebGAL Webエディターのダウンロードはこちら](https://github.com/OpenWebGAL/WebGAL_Terre/releases)
 
 ## WebGALの魅力と機能
 
@@ -63,4 +63,4 @@ WebGAL はオープンソース ソフトウェアであるため、MPL-2.0 オ�
 
 ## Stargazers over time
 
-[![Stargazers over time](https://starchart.cc/MakinoharaShoko/WebGAL.svg)](https://starchart.cc/MakinoharaShoko/WebGAL)
+[![Stargazers over time](https://starchart.cc/OpenWebGAL/WebGAL.svg)](https://starchart.cc/OpenWebGAL/WebGAL)

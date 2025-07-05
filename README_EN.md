@@ -2,7 +2,7 @@
 
 **[中文版本](/README.md)**
 
-**[Help us with translation | 协助翻译 | 翻訳のお手伝い ](https://github.com/MakinoharaShoko/WebGAL/tree/dev/packages/webgal/src/translations)**
+**[Help us with translation | 协助翻译 | 翻訳のお手伝い ](https://github.com/OpenWebGAL/WebGAL/tree/dev/packages/webgal/src/translations)**
 
 **[Join Discord Server](https://discord.gg/kPrQkJttJy)**
 
@@ -14,7 +14,7 @@
 
 # WebGAL Provides Visual Editor
 
-**Who needs to code to create visual novels? Welcome to experience [WebGAL Visual Editor](https://github.com/MakinoharaShoko/WebGAL_Terre/)**
+**Who needs to code to create visual novels? Welcome to experience [WebGAL Visual Editor](https://github.com/OpenWebGAL/WebGAL_Terre/)**
 
 Demo video: https://www.bilibili.com/video/BV1jS4y1i7Wz/
 
@@ -32,7 +32,7 @@ A complete game:
 
 [WebGAL Development Documentation](https://docs.openwebgal.com/en)
 
-[Download WebGAL Graphical Editor](https://github.com/MakinoharaShoko/WebGAL_Terre/releases)
+[Download WebGAL Graphical Editor](https://github.com/OpenWebGAL/WebGAL_Terre/releases)
 
 ## WebGAL Advantages and Features
 
@@ -70,4 +70,4 @@ Even so, your sponsorship can provide motivation for the developers to move forw
 
 ## Stargazers over time
 
-[![Stargazers over time](https://starchart.cc/MakinoharaShoko/WebGAL.svg)](https://starchart.cc/MakinoharaShoko/WebGAL)
+[![Stargazers over time](https://starchart.cc/OpenWebGAL/WebGAL.svg)](https://starchart.cc/OpenWebGAL/WebGAL)
