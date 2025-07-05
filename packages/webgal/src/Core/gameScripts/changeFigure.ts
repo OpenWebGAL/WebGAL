@@ -4,12 +4,12 @@ import { webgalStore } from '@/store/store';
 import { setStage, stageActions } from '@/store/stageReducer';
 import cloneDeep from 'lodash/cloneDeep';
 import { getSentenceArgByKey } from '@/Core/util/getSentenceArg';
-import { IFreeFigure, IStageState, ITransform } from '@/store/stageInterface';
+import { baseTransform, IFreeFigure, IStageState, ITransform } from '@/store/stageInterface';
 import { AnimationFrame, IUserAnimation } from '@/Core/Modules/animations';
 import { generateTransformAnimationObj } from '@/Core/controller/stage/pixi/animations/generateTransformAnimationObj';
 import { assetSetter, fileType } from '@/Core/util/gameAssetsAccess/assetSetter';
 import { logger } from '@/Core/util/logger';
-import { getAnimateDuration } from '@/Core/Modules/animationFunctions';
+import { createDefaultEnterExitAnimation, getAnimateDuration } from '@/Core/Modules/animationFunctions';
 import { WebGAL } from '@/Core/WebGAL';
 /**
  * 更改立绘
@@ -153,6 +153,24 @@ export function changeFigure(sentence: ISentence): IPerform {
       }
     }
   }
+
+  // 确定 key
+  if (!isFreeFigure) {
+    const positionMap = {
+      center: 'fig-center',
+      left: 'fig-left',
+      right: 'fig-right',
+    };
+    key = positionMap[pos];
+  }
+
+  // 储存一下现有的 transform 给退场动画当起始帧用, 因为马上就要清除了
+  const currentEffect = webgalStore.getState().stage.effects.find((e) => e.target === key);
+  let currentTransform = baseTransform;
+  if (currentEffect && currentEffect.transform) {
+    currentTransform = currentEffect.transform;
+  }
+
   /**
    * 处理 Effects
    */
@@ -173,38 +191,27 @@ export function changeFigure(sentence: ISentence): IPerform {
     if (durationFromArg && typeof durationFromArg === 'number') {
       duration = durationFromArg;
     }
-    let animationObj: AnimationFrame[];
+
     if (transformString) {
       console.log(transformString);
       try {
-        const frame = JSON.parse(transformString.toString()) as AnimationFrame;
-        animationObj = generateTransformAnimationObj(key, frame, duration, ease);
-        // 因为是切换，必须把一开始的 alpha 改为 0
-        animationObj[0].alpha = 0;
-        const animationName = (Math.random() * 10).toString(16);
-        const newAnimation: IUserAnimation = { name: animationName, effects: animationObj };
-        WebGAL.animationManager.addAnimation(newAnimation);
-        duration = getAnimateDuration(animationName);
-        WebGAL.animationManager.nextEnterAnimationName.set(key, animationName);
+        const transform = JSON.parse(transformString.toString()) as ITransform;
+        const enterFrame = { ...transform, duration: 0, ease: '' };
+        const exitFrame = { ...currentTransform, duration: 0, ease: '' };
+        createDefaultEnterExitAnimation('enter', key, enterFrame, duration, ease);
+        createDefaultEnterExitAnimation('exit', key, exitFrame, duration, ease);
       } catch (e) {
         // 解析都错误了，歇逼吧
-        applyDefaultTransform();
+        const enterFrame = { ...baseTransform, duration: 0, ease: '' };
+        const exitFrame = { ...currentTransform, duration: 0, ease: '' };
+        createDefaultEnterExitAnimation('enter', key, enterFrame, duration, ease);
+        createDefaultEnterExitAnimation('exit', key, exitFrame, duration, ease);
       }
     } else {
-      applyDefaultTransform();
-    }
-
-    function applyDefaultTransform() {
-      // 应用默认的
-      const frame = {};
-      animationObj = generateTransformAnimationObj(key, frame as AnimationFrame, duration, ease);
-      // 因为是切换，必须把一开始的 alpha 改为 0
-      animationObj[0].alpha = 0;
-      const animationName = (Math.random() * 10).toString(16);
-      const newAnimation: IUserAnimation = { name: animationName, effects: animationObj };
-      WebGAL.animationManager.addAnimation(newAnimation);
-      duration = getAnimateDuration(animationName);
-      WebGAL.animationManager.nextEnterAnimationName.set(key, animationName);
+      const enterFrame = { ...baseTransform, duration: 0, ease: '' };
+      const exitFrame = { ...currentTransform, duration: 0, ease: '' };
+      createDefaultEnterExitAnimation('enter', key, enterFrame, duration, ease);
+      createDefaultEnterExitAnimation('exit', key, exitFrame, duration, ease);
     }
     const enterAnim = getSentenceArgByKey(sentence, 'enter');
     const exitAnim = getSentenceArgByKey(sentence, 'exit');
@@ -239,18 +246,12 @@ export function changeFigure(sentence: ISentence): IPerform {
     /**
      * 下面的代码是设置与位置关联的立绘的
      */
-    const positionMap = {
-      center: 'fig-center',
-      left: 'fig-left',
-      right: 'fig-right',
-    };
     const dispatchMap: Record<string, keyof IStageState> = {
       center: 'figName',
       left: 'figNameLeft',
       right: 'figNameRight',
     };
 
-    key = positionMap[pos];
     setAnimationNames(key, sentence);
     if (motion || overrideBounds) {
       dispatch(
@@ -272,6 +273,7 @@ export function changeFigure(sentence: ISentence): IPerform {
     isHoldOn: false,
     stopFunction: () => {
       WebGAL.gameplay.pixiStage?.stopPresetAnimationOnTarget(key);
+      WebGAL.gameplay.pixiStage?.stopPresetAnimationOnTarget(key + '-old' + '-off');
     },
     blockingNext: () => false,
     blockingAuto: () => true,
