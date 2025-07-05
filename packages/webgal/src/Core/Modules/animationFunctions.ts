@@ -92,7 +92,13 @@ export function getEnterExitAnimation(
   }
 }
 
-export function createDefaultEnterExitAnimation(type: 'enter' | 'exit', target: string, frame: AnimationFrame, duration: number, ease: string) {
+export function createDefaultEnterExitAnimation(
+  type: 'enter' | 'exit',
+  target: string,
+  frame: AnimationFrame,
+  duration: number,
+  ease: string,
+) {
   if (type === 'enter') {
     // 设置默认入场动画
     const enterAnimationObj = generateTransformAnimationObj(target, frame, duration, ease, 'enter');

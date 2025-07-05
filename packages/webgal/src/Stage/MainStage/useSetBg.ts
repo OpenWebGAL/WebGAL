@@ -30,7 +30,13 @@ export function useSetBg(stageState: IStageState) {
       const stopFunction = () => {
         WebGAL.gameplay.pixiStage!.removeAnimationWithSetEffects(softInAniKey);
       };
-      WebGAL.gameplay.pixiStage!.registerPresetAnimation(animation, softInAniKey, thisBgKey, stageState.effects, stopFunction);
+      WebGAL.gameplay.pixiStage!.registerPresetAnimation(
+        animation,
+        softInAniKey,
+        thisBgKey,
+        stageState.effects,
+        stopFunction,
+      );
     } else {
       const currentBg = WebGAL.gameplay.pixiStage?.getStageObjByKey(thisBgKey);
       if (currentBg) {

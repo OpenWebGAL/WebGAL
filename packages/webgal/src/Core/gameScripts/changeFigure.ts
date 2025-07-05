@@ -163,7 +163,7 @@ export function changeFigure(sentence: ISentence): IPerform {
     };
     key = positionMap[pos];
   }
-  
+
   // 储存一下现有的 transform 给退场动画当起始帧用, 因为马上就要清除了
   const currentEffect = webgalStore.getState().stage.effects.find((e) => e.target === key);
   let currentTransform = baseTransform;
@@ -191,25 +191,25 @@ export function changeFigure(sentence: ISentence): IPerform {
     if (durationFromArg && typeof durationFromArg === 'number') {
       duration = durationFromArg;
     }
-    
+
     if (transformString) {
       console.log(transformString);
       try {
         const transform = JSON.parse(transformString.toString()) as ITransform;
-        const enterFrame = {...transform, duration: 0, ease: ''};
-        const exitFrame = {...currentTransform, duration: 0, ease: ''};
+        const enterFrame = { ...transform, duration: 0, ease: '' };
+        const exitFrame = { ...currentTransform, duration: 0, ease: '' };
         createDefaultEnterExitAnimation('enter', key, enterFrame, duration, ease);
         createDefaultEnterExitAnimation('exit', key, exitFrame, duration, ease);
       } catch (e) {
         // 解析都错误了，歇逼吧
-        const enterFrame = {...baseTransform, duration: 0, ease: ''};
-        const exitFrame = {...currentTransform, duration: 0, ease: ''};
+        const enterFrame = { ...baseTransform, duration: 0, ease: '' };
+        const exitFrame = { ...currentTransform, duration: 0, ease: '' };
         createDefaultEnterExitAnimation('enter', key, enterFrame, duration, ease);
         createDefaultEnterExitAnimation('exit', key, exitFrame, duration, ease);
       }
     } else {
-      const enterFrame = {...baseTransform, duration: 0, ease: ''};
-      const exitFrame = {...currentTransform, duration: 0, ease: ''};
+      const enterFrame = { ...baseTransform, duration: 0, ease: '' };
+      const exitFrame = { ...currentTransform, duration: 0, ease: '' };
       createDefaultEnterExitAnimation('enter', key, enterFrame, duration, ease);
       createDefaultEnterExitAnimation('exit', key, exitFrame, duration, ease);
     }

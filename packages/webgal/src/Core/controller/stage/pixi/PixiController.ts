@@ -226,7 +226,14 @@ export default class PixiStage {
       }
       return;
     }
-    this.stageAnimations.push({ uuid: uuid(), animationObject, key: key, targetKey: target, type: 'preset', stopFunction });
+    this.stageAnimations.push({
+      uuid: uuid(),
+      animationObject,
+      key: key,
+      targetKey: target,
+      type: 'preset',
+      stopFunction,
+    });
     // 上锁
     this.lockStageObject(target);
     animationObject.setStartState();
