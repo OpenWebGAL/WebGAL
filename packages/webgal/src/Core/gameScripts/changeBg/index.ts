@@ -40,7 +40,7 @@ export const changeBg = (sentence: ISentence): IPerform => {
   const currentEffect = webgalStore.getState().stage.effects.find((e) => e.target === key);
   let currentTransform = baseTransform;
   if (currentEffect && currentEffect.transform) {
-    currentTransform = currentEffect.transform;
+    currentTransform = cloneDeep(currentEffect.transform);
   }
 
   /**
