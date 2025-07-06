@@ -27,15 +27,11 @@ export function useSetBg(stageState: IStageState) {
       setEbg(bgName);
       logger.debug('重设背景');
       const { duration, animation } = getEnterExitAnimation('bg-main', 'enter', true);
-      const stopFunction = () => {
-        WebGAL.gameplay.pixiStage!.removeAnimationWithSetEffects(softInAniKey);
-      };
       WebGAL.gameplay.pixiStage!.registerPresetAnimation(
         animation,
         softInAniKey,
         thisBgKey,
         stageState.effects,
-        stopFunction,
       );
     } else {
       const currentBg = WebGAL.gameplay.pixiStage?.getStageObjByKey(thisBgKey);
@@ -61,10 +57,7 @@ function removeBg(bgObject: IStageObject, enterTickerKey: string, effects: IEffe
   const bgAniKey = bgObject.key + '-softoff';
   WebGAL.gameplay.pixiStage?.removeStageObjectByKey(oldBgKey);
   const { duration, animation } = getEnterExitAnimation(bgLeaveAniKey, 'exit', true, bgKey);
-  const stopFunction = () => {
-    WebGAL.gameplay.pixiStage?.removeStageObjectByKey(bgKey);
-  };
-  WebGAL.gameplay.pixiStage!.registerPresetAnimation(animation, bgAniKey, bgKey, effects, stopFunction);
+  WebGAL.gameplay.pixiStage!.registerPresetAnimation(animation, bgAniKey, bgKey, effects);
 }
 
 function addBg(type?: 'image' | 'spine', ...args: any[]) {

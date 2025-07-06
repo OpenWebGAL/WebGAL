@@ -22,6 +22,7 @@ import { WebGAL } from '@/Core/WebGAL';
 export const changeBg = (sentence: ISentence): IPerform => {
   const url = sentence.content;
   const key = 'bg-main';
+  let duration = 1000;
   let name = '';
   let series = 'default';
   sentence.args.forEach((e) => {
@@ -50,12 +51,12 @@ export const changeBg = (sentence: ISentence): IPerform => {
 
   // 处理 transform 和 默认 transform
   const transformString = getSentenceArgByKey(sentence, 'transform');
-  let duration = getSentenceArgByKey(sentence, 'duration');
+  let durationFromArg = getSentenceArgByKey(sentence, 'duration');
   let ease = getSentenceArgByKey(sentence, 'ease')?.toString() ?? '';
-  if (!duration || typeof duration !== 'number') {
-    duration = 1000;
+  if (typeof durationFromArg === 'number') {
+    duration = durationFromArg;
   }
-  let animationObj: AnimationFrame[];
+
   if (transformString) {
     console.log(transformString);
     try {
@@ -66,12 +67,13 @@ export const changeBg = (sentence: ISentence): IPerform => {
       createDefaultEnterExitAnimation('exit', key, exitFrame, duration, ease);
     } catch (e) {
       // 解析都错误了，歇逼吧
-      const enterFrame = { ...baseTransform, duration: 0, ease: '' };
-      const exitFrame = { ...currentTransform, duration: 0, ease: '' };
-      createDefaultEnterExitAnimation('enter', key, enterFrame, duration, ease);
-      createDefaultEnterExitAnimation('exit', key, exitFrame, duration, ease);
+      applyDefaultTransform();
     }
   } else {
+    applyDefaultTransform();
+  }
+
+  function applyDefaultTransform() {
     const enterFrame = { ...baseTransform, duration: 0, ease: '' };
     const exitFrame = { ...currentTransform, duration: 0, ease: '' };
     createDefaultEnterExitAnimation('enter', key, enterFrame, duration, ease);
@@ -96,6 +98,8 @@ export const changeBg = (sentence: ISentence): IPerform => {
     stopFunction: () => {
       WebGAL.gameplay.pixiStage?.stopPresetAnimationOnTarget(key);
       WebGAL.gameplay.pixiStage?.stopPresetAnimationOnTarget(key + '-old' + '-off');
+      WebGAL.gameplay.pixiStage?.removeAnimationWithSetEffects(key + '-softin');
+      WebGAL.gameplay.pixiStage?.removeStageObjectByKey(key + '-old' + '-off');
     },
     blockingNext: () => false,
     blockingAuto: () => true,

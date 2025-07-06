@@ -188,7 +188,7 @@ export function changeFigure(sentence: ISentence): IPerform {
     const transformString = getSentenceArgByKey(sentence, 'transform');
     const durationFromArg = getSentenceArgByKey(sentence, 'duration');
     const ease = getSentenceArgByKey(sentence, 'ease')?.toString() ?? '';
-    if (durationFromArg && typeof durationFromArg === 'number') {
+    if (typeof durationFromArg === 'number') {
       duration = durationFromArg;
     }
 
@@ -202,17 +202,19 @@ export function changeFigure(sentence: ISentence): IPerform {
         createDefaultEnterExitAnimation('exit', key, exitFrame, duration, ease);
       } catch (e) {
         // 解析都错误了，歇逼吧
-        const enterFrame = { ...baseTransform, duration: 0, ease: '' };
-        const exitFrame = { ...currentTransform, duration: 0, ease: '' };
-        createDefaultEnterExitAnimation('enter', key, enterFrame, duration, ease);
-        createDefaultEnterExitAnimation('exit', key, exitFrame, duration, ease);
+        applyDefaultTransform();
       }
     } else {
+      applyDefaultTransform();
+    }
+
+    function applyDefaultTransform() {
       const enterFrame = { ...baseTransform, duration: 0, ease: '' };
       const exitFrame = { ...currentTransform, duration: 0, ease: '' };
       createDefaultEnterExitAnimation('enter', key, enterFrame, duration, ease);
       createDefaultEnterExitAnimation('exit', key, exitFrame, duration, ease);
     }
+
     const enterAnim = getSentenceArgByKey(sentence, 'enter');
     const exitAnim = getSentenceArgByKey(sentence, 'exit');
     if (enterAnim) {
@@ -274,6 +276,8 @@ export function changeFigure(sentence: ISentence): IPerform {
     stopFunction: () => {
       WebGAL.gameplay.pixiStage?.stopPresetAnimationOnTarget(key);
       WebGAL.gameplay.pixiStage?.stopPresetAnimationOnTarget(key + '-old' + '-off');
+      WebGAL.gameplay.pixiStage?.removeAnimationWithSetEffects(key + '-softin');
+      WebGAL.gameplay.pixiStage?.removeStageObjectByKey(key + '-old' + '-off');
     },
     blockingNext: () => false,
     blockingAuto: () => true,
