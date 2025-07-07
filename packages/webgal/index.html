@@ -258,7 +258,7 @@
       });
       const target = document.getElementById("enter_game_target");
       if (target) {
-        target.dispatchEvent(event);
+        target.dispatchEvent(event);//手动触发时间
       }
       if (event) {
         const logo = document.getElementById("logo_target");
