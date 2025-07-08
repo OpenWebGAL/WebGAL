@@ -3,7 +3,7 @@ import { v4 as uuid } from 'uuid';
 import { webgalStore } from '@/store/store';
 import { setStage, stageActions } from '@/store/stageReducer';
 import cloneDeep from 'lodash/cloneDeep';
-import { IEffect, IFigureAssociatedAnimation, IFigureMetadata, ITransform } from '@/store/stageInterface';
+import { baseTransform, IEffect, IFigureAssociatedAnimation, IFigureMetadata, ITransform } from '@/store/stageInterface';
 import { logger } from '@/Core/util/logger';
 import { isIOS } from '@/Core/initializeScript';
 import { WebGALPixiContainer } from '@/Core/controller/stage/pixi/WebGALPixiContainer';
@@ -39,7 +39,7 @@ export interface IStageObject {
   // 相关的源 url
   sourceUrl: string;
   sourceExt: string;
-  sourceType: 'img' | 'live2d' | 'spine' | 'gif' | 'video';
+  sourceType: 'img' | 'live2d' | 'spine' | 'gif' | 'video' | 'stage';
   spineAnimation?: string;
 }
 
@@ -75,6 +75,7 @@ export default class PixiStage {
    * 当前的 PIXI App
    */
   public currentApp: PIXI.Application | null = null;
+  public readonly mainStageContainer : WebGALPixiContainer;
   public readonly foregroundEffectsContainer: PIXI.Container;
   public readonly backgroundEffectsContainer: PIXI.Container;
   public frameDuration = 16.67;
@@ -86,6 +87,7 @@ export default class PixiStage {
   public assetLoader = new PIXI.Loader();
   public readonly backgroundContainer: PIXI.Container;
   public backgroundObjects: Array<IStageObject> = [];
+  public mainStageObject: IStageObject;
   /**
    * 添加 Spine 立绘
    * @param key 立绘的标识，一般和立绘位置有关
@@ -141,8 +143,23 @@ export default class PixiStage {
       app.renderer.view.style.zIndex = '-5';
     }
 
+    // 添加主舞台容器
+    this.mainStageContainer = new WebGALPixiContainer();
     // 设置可排序
-    app.stage.sortableChildren = true;
+    this.mainStageContainer.sortableChildren = true;
+    this.mainStageContainer.setBaseX(this.stageWidth / 2);
+    this.mainStageContainer.setBaseY(this.stageHeight / 2);
+    this.mainStageContainer.pivot.set(this.stageWidth / 2, this.stageHeight / 2);
+    app.stage.addChild(this.mainStageContainer);
+
+    this.mainStageObject = {
+      uuid: uuid(),
+      key: 'stage-main',
+      pixiContainer: this.mainStageContainer,
+      sourceUrl: '',
+      sourceType: 'stage',
+      sourceExt: '',
+    };
 
     // 添加 4 个 Container 用于做渲染
     this.foregroundEffectsContainer = new PIXI.Container(); // 前景特效
@@ -154,8 +171,7 @@ export default class PixiStage {
     this.backgroundEffectsContainer.zIndex = 1;
     this.backgroundContainer = new PIXI.Container();
     this.backgroundContainer.zIndex = 0;
-
-    app.stage.addChild(
+    this.mainStageContainer.addChild(
       this.foregroundEffectsContainer,
       this.figureContainer,
       this.backgroundEffectsContainer,
@@ -851,15 +867,15 @@ export default class PixiStage {
    * @param key
    */
   public getStageObjByKey(key: string) {
-    return [...this.figureObjects, ...this.backgroundObjects].find((e) => e.key === key);
+    return [...this.figureObjects, ...this.backgroundObjects, this.mainStageObject].find((e) => e.key === key);
   }
 
   public getStageObjByUuid(objUuid: string) {
-    return [...this.figureObjects, ...this.backgroundObjects].find((e) => e.uuid === objUuid);
+    return [...this.figureObjects, ...this.backgroundObjects, this.mainStageObject].find((e) => e.uuid === objUuid);
   }
 
   public getAllStageObj() {
-    return [...this.figureObjects, ...this.backgroundObjects];
+    return [...this.figureObjects, ...this.backgroundObjects, this.mainStageObject];
   }
 
   /**
