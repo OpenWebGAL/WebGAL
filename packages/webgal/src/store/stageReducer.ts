@@ -4,6 +4,7 @@
  */
 
 import {
+  ICharacterData,
   IEffect,
   IFigureMetadata,
   IFreeFigure,
@@ -227,6 +228,18 @@ const stageSlice = createSlice({
           state.figureMetaData[action.payload[0]] = {};
         }
         state.figureMetaData[action.payload[0]][action.payload[1]] = action.payload[2];
+      }
+    },
+    setCharactersData: (state, action: PayloadAction<ICharacterData>) => {
+      if (!state.charactersData.find((c) => c.id === action.payload.id)) {
+        state.charactersData.push(action.payload);
+      }
+    },
+    updateCharactersData: (state, action: PayloadAction<Partial<ICharacterData> & { name: string }>) => {
+      const { name, ...rest } = action.payload;
+      const ele = state.charactersData.find((c) => c.name === name);
+      if (ele) {
+        Object.assign(ele, rest);
       }
     },
   },

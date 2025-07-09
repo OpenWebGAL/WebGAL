@@ -1,12 +1,16 @@
 import { ISentence } from '@/Core/controller/scene/sceneInterface';
 import { IPerform } from '@/Core/Modules/perform/performInterface';
-import { characters } from '@/character';
+import { webgalStore } from '@/store/store';
+import { stageActions } from '@/store/stageReducer';
 
 /**
  * 通过 ISentence 修改 characters 某个角色的属性，返回新对象（不直接更改原数组）
  * 句子格式如：character.角色名.属性=10
  */
 export const setCharacter = (sentence: ISentence): IPerform => {
+  const characters = webgalStore.getState().stage.charactersData;
+  const dispatch = webgalStore.dispatch;
+  console.log('characters:', sentence);
   if (!sentence.content.match(/\s*=\s*/)) {
     return {
       performName: 'none',
@@ -27,6 +31,9 @@ export const setCharacter = (sentence: ISentence): IPerform => {
   if (arr.length === 3 && arr[0] === 'character') {
     charName = arr[1];
     prop = arr[2];
+    dispatch(
+      stageActions.updateCharactersData({ name: charName, [prop]: isNaN(Number(value)) ? value : Number(value) }),
+    );
   } else {
     return {
       performName: 'none',
@@ -37,13 +44,6 @@ export const setCharacter = (sentence: ISentence): IPerform => {
       blockingAuto: () => true,
       stopTimeout: undefined,
     };
-  }
-
-  // find 角色
-  const found = characters.find((c) => c.name === charName);
-  if (found) {
-    // 这里你可以根据需要做后续处理，比如触发副作用等
-    // 返回IPerform对象，不直接返回新对象
   }
 
   return {

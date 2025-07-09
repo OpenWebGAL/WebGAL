@@ -1,21 +1,18 @@
 import { WebGAL } from '@/Core/WebGAL';
 import { useEffect, useState } from 'react';
 import { characters as initCharacters } from '@/character';
-
-interface CharacterProgressProps {
-  characters: {
-    id: number;
-    name: string;
-    imageUrl: string;
-    progress: number;
-    total: number;
-  }[];
-}
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '@/store/store';
+import { setStage, stageActions } from '@/store/stageReducer';
 
 export default function Character() {
+  const dispatch = useDispatch();
+  // 订阅全局状态
+  const characters = useSelector((state: RootState) => state.stage.charactersData);
+  // 监听状态的重置
+  const currentDialogKey = useSelector((state: RootState) => state.stage.currentDialogKey);
   // 响应式尺寸
   const [startGame, setStartGame] = useState(WebGAL.startGame);
-  const [characters, setCharacters] = useState<CharacterProgressProps['characters']>(initCharacters);
   // 头像尺寸、进度条高度、字体等都用clamp保证在不同屏幕下自适应
   const avatarSize = 'clamp(32px, 5vw, 48px)';
   const barHeight = 'clamp(12px, 2vw, 18px)';
@@ -23,17 +20,29 @@ export default function Character() {
   const containerWidth = 'clamp(180px, 28vw, 340px)';
   const gap = 'clamp(8px, 1vw, 16px)';
 
+  // 挂载定时器，显示完就ok
   useEffect(() => {
     let lastValue = WebGAL.startGame;
     const timer = setInterval(() => {
       if (WebGAL.startGame !== lastValue) {
         lastValue = WebGAL.startGame;
         setStartGame(WebGAL.startGame);
+        console.log('startGame:', WebGAL.startGame);
       }
     }, 50); // 50ms 检查一次
 
     return () => clearInterval(timer);
   }, []);
+
+  // 初始化数据并保持同步
+  useEffect(() => {
+    if (!characters || characters.length === 0) {
+      dispatch(setStage({ key: 'charactersData', value: initCharacters }));
+    }
+  }, [dispatch, characters, currentDialogKey]);
+  if (!characters || characters.length === 0) {
+    return <div>Loading...</div>;
+  }
   return (
     <div
       style={{
@@ -55,9 +64,9 @@ export default function Character() {
       }}
       id="character"
     >
-      {characters.map((character) => (
+      {characters.map((characters) => (
         <div
-          key={character.id}
+          key={characters.id}
           style={{
             display: 'flex',
             alignItems: 'center',
@@ -67,8 +76,8 @@ export default function Character() {
           }}
         >
           <img
-            src={character.imageUrl}
-            alt={character.name}
+            src={characters.imageUrl}
+            alt={characters.name}
             style={{
               width: avatarSize,
               height: avatarSize,
@@ -94,7 +103,7 @@ export default function Character() {
                 whiteSpace: 'nowrap',
               }}
             >
-              {character.name}
+              {characters.name}
             </div>
             <div
               style={{
@@ -109,8 +118,8 @@ export default function Character() {
               <div
                 style={{
                   height: '100%',
-                  width: `${(character.progress / character.total) * 100}%`,
-                  background: character.progress === character.total ? '#e53935' : 'red',
+                  width: `${(characters.progress / characters.total) * 100}%`,
+                  background: characters.progress === characters.total ? '#e53935' : 'red',
                   transition: 'width 0.3s',
                   borderRadius: barHeight,
                   position: 'absolute',
@@ -133,7 +142,7 @@ export default function Character() {
                   pointerEvents: 'none',
                 }}
               >
-                {`${character.progress}/${character.total}`}
+                {`${characters.progress}/${characters.total}`}
               </div>
             </div>
           </div>
