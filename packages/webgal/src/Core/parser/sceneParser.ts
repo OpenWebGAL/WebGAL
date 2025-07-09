@@ -1,7 +1,7 @@
 import { assetSetter } from '@/Core/util/gameAssetsAccess/assetSetter';
 import { assetsPrefetcher } from '@/Core/util/prefetcher/assetsPrefetcher';
 import SceneParser from 'webgal-parser';
-import { commandType, IScene } from '../controller/scene/sceneInterface';
+import { commandType, IScene, ISentence } from '../controller/scene/sceneInterface';
 import { logger } from '../util/logger';
 import { bgm } from '@/Core/gameScripts/bgm';
 import { callSceneScript } from '@/Core/gameScripts/callSceneScript';
@@ -36,6 +36,7 @@ import { showVars } from '../gameScripts/showVars';
 import { defineScripts, IConfigInterface, ScriptConfig, ScriptFunction, scriptRegistry } from './utils';
 import { applyStyle } from '@/Core/gameScripts/applyStyle';
 import { wait } from '@/Core/gameScripts/wait';
+import { setCharacter } from '../gameScripts/setCharacter';
 
 export const SCRIPT_TAG_MAP = defineScripts({
   intro: ScriptConfig(commandType.intro, intro),
@@ -70,6 +71,7 @@ export const SCRIPT_TAG_MAP = defineScripts({
   getUserInput: ScriptConfig(commandType.getUserInput, getUserInput),
   applyStyle: ScriptConfig(commandType.applyStyle, applyStyle, { next: true }),
   wait: ScriptConfig(commandType.wait, wait),
+  setCharacter: ScriptConfig(commandType.setCharacter, setCharacter, { next: true }),
   // if: ScriptConfig(commandType.if, undefined, { next: true }),
 });
 
@@ -89,6 +91,10 @@ export const WebgalParser = new SceneParser(assetsPrefetcher, assetSetter, ADD_N
 export const sceneParser = (rawScene: string, sceneName: string, sceneUrl: string): IScene => {
   const parsedScene = WebgalParser.parse(rawScene, sceneName, sceneUrl);
   logger.info(`解析场景：${sceneName}，数据为：`, parsedScene);
+  parsedScene.sentenceList.map((e) => {
+    console.log(e.args);
+    return e;
+  });
   return parsedScene;
 };
 

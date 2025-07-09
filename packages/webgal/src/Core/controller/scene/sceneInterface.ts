@@ -39,6 +39,8 @@ export enum commandType {
   getUserInput,
   applyStyle,
   wait,
+
+  setCharacter, // 设置角色
 }
 
 /**

@@ -206,6 +206,15 @@ export interface IStageState {
   isDisableTextbox: boolean;
   replacedUIlable: Record<string, string>;
   figureMetaData: figureMetaData;
+  charactersData: Array<ICharacterData>;
+}
+// 人物特征
+export interface ICharacterData {
+  id: number;
+  name: string;
+  imageUrl: string;
+  progress: number;
+  total: number;
 }
 
 /**

@@ -5,7 +5,7 @@ import { webgalStore } from '@/store/store';
 import { setStage } from '@/store/stageReducer';
 import { useTextAnimationDuration, useTextDelay } from '@/hooks/useTextOptions';
 import { getRandomPerformName, PerformController } from '@/Core/Modules/perform/performController';
-import { getSentenceArgByKey } from '@/Core/util/getSentenceArg';
+import { getSentenceArgByKey, getSentenceSpecialValue } from '@/Core/util/getSentenceArg';
 import { textSize, voiceOption } from '@/store/userDataInterface';
 import { WebGAL } from '@/Core/WebGAL';
 import { compileSentence } from '@/Stage/TextBox/TextBox';
@@ -31,7 +31,8 @@ export const say = (sentence: ISentence): IPerform => {
   const speaker = getSentenceArgByKey(sentence, 'speaker'); // 获取说话者
   const clear = getSentenceArgByKey(sentence, 'clear'); // 是否清除说话者
   const vocal = getSentenceArgByKey(sentence, 'vocal'); // 是否播放语音
-
+  // // 获取特定人物状态
+  // const person = getSentenceSpecialValue(sentence, 'speaker', 'person');
   // 如果是concat，那么就继承上一句的key，并且继承上一句对话。
   if (isConcat) {
     dialogKey = stageState.currentDialogKey;

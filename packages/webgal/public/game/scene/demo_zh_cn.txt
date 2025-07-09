@@ -3,7 +3,7 @@ unlockBgm:s_Title.mp3 -name=雲を追いかけて;
 intro:你好|欢迎来到 {egine} 的世界;
 changeBg:WebGalEnter.png -next;
 setTransition: -target=bg-main -exit=shockwaveOut;
-:你好|欢迎来到 {egine} 的世界;
+雪衣:你好|欢迎来到 {egine} 的世界;
 changeBg:bg.png -next;
 setTransition: -target=bg-main -enter=shockwaveIn -next;
 unlockCg:bg.png -name=良い夜; // 解锁CG并赋予名称
