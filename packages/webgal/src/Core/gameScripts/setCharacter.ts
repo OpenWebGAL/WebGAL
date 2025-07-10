@@ -2,6 +2,7 @@ import { ISentence } from '@/Core/controller/scene/sceneInterface';
 import { IPerform } from '@/Core/Modules/perform/performInterface';
 import { webgalStore } from '@/store/store';
 import { stageActions } from '@/store/stageReducer';
+import { WebGAL } from '../WebGAL';
 
 /**
  * 通过 ISentence 修改 characters 某个角色的属性，返回新对象（不直接更改原数组）
@@ -35,6 +36,11 @@ export const setCharacter = (sentence: ISentence): IPerform => {
       stageActions.updateCharactersData({ name: charName, [prop]: isNaN(Number(value)) ? value : Number(value) }),
     );
   } else {
+    if (arr[0] === 'character' && value === 'open') {
+      WebGAL.openCharacter = true;
+    } else if (arr[0] === 'character' && value === 'close') {
+      WebGAL.openCharacter = false;
+    }
     return {
       performName: 'none',
       duration: 0,

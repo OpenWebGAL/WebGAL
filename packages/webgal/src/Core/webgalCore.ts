@@ -13,5 +13,5 @@ export class WebgalCore {
   public gameName = '';
   public gameKey = '';
   public events = new Events();
-  public startGame = false;
+  public openCharacter = false;
 }

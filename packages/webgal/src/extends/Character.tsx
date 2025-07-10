@@ -12,7 +12,7 @@ export default function Character() {
   // 监听状态的重置
   const currentDialogKey = useSelector((state: RootState) => state.stage.currentDialogKey);
   // 响应式尺寸
-  const [startGame, setStartGame] = useState(WebGAL.startGame);
+  const [openCharacter, setOpenCharacter] = useState(WebGAL.openCharacter);
   // 头像尺寸、进度条高度、字体等都用clamp保证在不同屏幕下自适应
   const avatarSize = 'clamp(32px, 5vw, 48px)';
   const barHeight = 'clamp(12px, 2vw, 18px)';
@@ -22,12 +22,12 @@ export default function Character() {
 
   // 挂载定时器，显示完就ok
   useEffect(() => {
-    let lastValue = WebGAL.startGame;
+    let lastValue = WebGAL.openCharacter;
     const timer = setInterval(() => {
-      if (WebGAL.startGame !== lastValue) {
-        lastValue = WebGAL.startGame;
-        setStartGame(WebGAL.startGame);
-        console.log('startGame:', WebGAL.startGame);
+      if (WebGAL.openCharacter !== lastValue) {
+        lastValue = WebGAL.openCharacter;
+        setOpenCharacter(WebGAL.openCharacter);
+        console.log('openCharacter:', WebGAL.openCharacter);
       }
     }, 50); // 50ms 检查一次
 
@@ -54,7 +54,7 @@ export default function Character() {
         borderRadius: '12px',
         boxShadow: '0 4px 16px rgba(0,0,0,0.18)',
         padding: gap,
-        display: startGame ? 'flex' : 'none',
+        display: openCharacter ? 'flex' : 'none',
         flexDirection: 'column',
         alignItems: 'stretch',
         zIndex: 9999,
