@@ -60,7 +60,11 @@ export const initState: IStageState = {
   isDisableTextbox: false,
   replacedUIlable: {},
   figureMetaData: {},
+  // 角色数据
   charactersData: [],
+  // 插入的html
+  customHtml: [],
+  customHtmlStyle: [],
 };
 
 /**
@@ -241,6 +245,39 @@ const stageSlice = createSlice({
       if (ele) {
         Object.assign(ele, rest);
       }
+    },
+    /**
+     * 添加自定义HTML
+     * @param state 当前状态
+     * @param action 要添加的HTML内容
+     */
+    addCustomHtml: (state, action: PayloadAction<{ html: string; style?: string }>) => {
+      state.customHtml.push(action.payload.html);
+      if (action.payload.style) {
+        state.customHtmlStyle.push(action.payload.style);
+      } else {
+        state.customHtmlStyle.push('');
+      }
+    },
+    /**
+     * 移除自定义HTML
+     * @param state 当前状态
+     * @param action 要移除的HTML索引
+     */
+    removeCustomHtml: (state, action: PayloadAction<number>) => {
+      const index = action.payload;
+      if (index >= 0 && index < state.customHtml.length) {
+        state.customHtml.splice(index, 1);
+        state.customHtmlStyle.splice(index, 1);
+      }
+    },
+    /**
+     * 清空所有自定义HTML
+     * @param state 当前状态
+     */
+    clearCustomHtml: (state) => {
+      state.customHtml = [];
+      state.customHtmlStyle = [];
     },
   },
 });

@@ -41,6 +41,7 @@ export enum commandType {
   wait,
 
   setCharacter, // 设置角色
+  setCustomHtml, // 设置自定义html
 }
 
 /**

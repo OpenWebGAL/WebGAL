@@ -9,7 +9,6 @@ import { WebGAL } from '../WebGAL';
  * 句子格式如：character.角色名.属性=10
  */
 export const setCharacter = (sentence: ISentence): IPerform => {
-  const characters = webgalStore.getState().stage.charactersData;
   const dispatch = webgalStore.dispatch;
   console.log('characters:', sentence);
   if (!sentence.content.match(/\s*=\s*/)) {

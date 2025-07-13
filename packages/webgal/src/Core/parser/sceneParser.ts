@@ -37,6 +37,7 @@ import { defineScripts, IConfigInterface, ScriptConfig, ScriptFunction, scriptRe
 import { applyStyle } from '@/Core/gameScripts/applyStyle';
 import { wait } from '@/Core/gameScripts/wait';
 import { setCharacter } from '../gameScripts/setCharacter';
+import { setCustomHtml } from '../gameScripts/setCustonHtml';
 
 export const SCRIPT_TAG_MAP = defineScripts({
   intro: ScriptConfig(commandType.intro, intro),
@@ -72,6 +73,7 @@ export const SCRIPT_TAG_MAP = defineScripts({
   applyStyle: ScriptConfig(commandType.applyStyle, applyStyle, { next: true }),
   wait: ScriptConfig(commandType.wait, wait),
   setCharacter: ScriptConfig(commandType.setCharacter, setCharacter, { next: true }),
+  setCustomHtml: ScriptConfig(commandType.setCustomHtml, setCustomHtml, { next: true }),
   // if: ScriptConfig(commandType.if, undefined, { next: true }),
 });
 
