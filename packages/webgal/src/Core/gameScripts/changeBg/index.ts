@@ -21,6 +21,7 @@ import { WebGAL } from '@/Core/WebGAL';
  */
 export const changeBg = (sentence: ISentence): IPerform => {
   const url = sentence.content;
+  console.log('url:', url);
   let name = '';
   let series = 'default';
   sentence.args.forEach((e) => {

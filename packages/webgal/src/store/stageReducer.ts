@@ -64,7 +64,6 @@ export const initState: IStageState = {
   charactersData: [],
   // 插入的html
   customHtml: [],
-  customHtmlStyle: [],
 };
 
 /**
@@ -253,11 +252,6 @@ const stageSlice = createSlice({
      */
     addCustomHtml: (state, action: PayloadAction<{ html: string; style?: string }>) => {
       state.customHtml.push(action.payload.html);
-      if (action.payload.style) {
-        state.customHtmlStyle.push(action.payload.style);
-      } else {
-        state.customHtmlStyle.push('');
-      }
     },
     /**
      * 移除自定义HTML
@@ -268,7 +262,6 @@ const stageSlice = createSlice({
       const index = action.payload;
       if (index >= 0 && index < state.customHtml.length) {
         state.customHtml.splice(index, 1);
-        state.customHtmlStyle.splice(index, 1);
       }
     },
     /**
@@ -277,7 +270,6 @@ const stageSlice = createSlice({
      */
     clearCustomHtml: (state) => {
       state.customHtml = [];
-      state.customHtmlStyle = [];
     },
   },
 });
