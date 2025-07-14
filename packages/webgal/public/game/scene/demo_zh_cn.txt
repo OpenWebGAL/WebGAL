@@ -3,6 +3,7 @@ unlockBgm:s_Title.mp3 -name=雲を追いかけて;
 intro:你好|欢迎来到 {egine} 的世界;
 changeBg:WebGalEnter.png -next;
 setTransition: -target=bg-main -exit=shockwaveOut;
+setVar: color=blue;
 雪衣:你好|欢迎来到 {egine} 的世界;
 changeBg:bg.png -next;
 setTransition: -target=bg-main -enter=shockwaveIn -next;
@@ -20,6 +21,7 @@ setCharacter: character=open;
 changeFigure:none -right -next;
 setTransform:{"position": {"x": 500,"y": 0}} -target=fig-left -next;
 {egine} 引擎也具有动画系统和特效系统，使用 {egine} 开发的游戏可以拥有很好的表现效果。 -v5.wav;
+Ciallo ～ ( ∠ ・ ω < ) ⌒ ☆;
 pixiInit;
 pixiPerform:snow;
 比如，这个下起小雪的特效。 -v6.wav;
@@ -30,7 +32,7 @@ setCharacter: character.雪衣.progress=0;
 WebGAL:比如这个[注](zhù)[音](yīn)功能，可以为游戏带来更好的体验！
 setCharacter: character.雪衣.progress=10;
 setCharacter: character.小明.progress=5;
-setCustomHtml: <div style="color: red,font-size: 20vw, left: 10vw,top: 10vw">危</div>
+setCustomHtml: <div style="color: {color},font-size: 20vw, left: 10vw,top: 10vw">危</div>
 WebGAL:我们也支持了[文本拓展语法](style=color:#B5495B\;)，可以为[文](wen)[本](ben)带来[富文本支持](style-alltext=font-style:italic\; style=color:#66327C\;)、交互等特性。
 setCharacter: character=close;
 WebGAL:新版本添加了特性：获取用户输入，你要尝试一下吗？

@@ -37,7 +37,7 @@ import { defineScripts, IConfigInterface, ScriptConfig, ScriptFunction, scriptRe
 import { applyStyle } from '@/Core/gameScripts/applyStyle';
 import { wait } from '@/Core/gameScripts/wait';
 import { setCharacter } from '../gameScripts/setCharacter';
-import { setCustomHtml } from '../gameScripts/setCustonHtml';
+import { setCustomHtml } from '../gameScripts/setCustomHtml';
 
 export const SCRIPT_TAG_MAP = defineScripts({
   intro: ScriptConfig(commandType.intro, intro),

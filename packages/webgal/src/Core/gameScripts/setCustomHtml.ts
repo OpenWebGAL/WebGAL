@@ -33,7 +33,7 @@ interface ParsedElement {
 // 解析HTML属性
 function parseAttributes(attrString: string): Record<string, string> {
   const attributes: Record<string, string> = {};
-  const attrRegex = /(\w+)=["']([^"']*)["']/g;
+  const attrRegex = /(\w+)=\"([^\"]*)\"/g;
 
   let match;
   while ((match = attrRegex.exec(attrString)) !== null) {
