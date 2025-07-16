@@ -16,6 +16,7 @@ export const resetStage = (resetBacklog: boolean, resetSceneAndVar = true) => {
   }
 
   // 清空所有演出和timeOut
+  WebGAL.gameplay.pixiStage?.removeAllAnimations();
   WebGAL.gameplay.performController.removeAllPerform();
   WebGAL.gameplay.resetGamePlay();
 

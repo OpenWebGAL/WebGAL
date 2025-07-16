@@ -35,10 +35,17 @@ export const changeBg = (sentence: ISentence): IPerform => {
   const dispatch = webgalStore.dispatch;
   if (name !== '') dispatch(unlockCgInUserData({ name, url, series }));
 
+  let isRemoveEffects = true;
+  if (webgalStore.getState().stage.bgName === sentence.content) {
+    isRemoveEffects = false;
+  }
+
   /**
    * 删掉相关 Effects，因为已经移除了
    */
-  dispatch(stageActions.removeEffectByTargetId(`bg-main`));
+  if (isRemoveEffects) {
+    dispatch(stageActions.removeEffectByTargetId(`bg-main`));
+  }
 
   // 处理 transform 和 默认 transform
   const transformString = getSentenceArgByKey(sentence, 'transform');

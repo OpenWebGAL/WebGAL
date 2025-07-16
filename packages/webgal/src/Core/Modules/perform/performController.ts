@@ -57,6 +57,7 @@ export class PerformController {
     if (script.args.find((e) => e.key === 'continue' && e.value === true)) perform.goNextWhenOver = true;
 
     this.performList.push(perform);
+    this.timeoutList.push(perform.stopTimeout);
   }
 
   public unmountPerform(name: string, force = false) {

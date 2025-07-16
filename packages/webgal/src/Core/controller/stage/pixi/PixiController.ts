@@ -258,8 +258,7 @@ export default class PixiStage {
    * 移除动画
    * @param key
    */
-  public removeAnimation(key: string) {
-    const index = this.stageAnimations.findIndex((e) => e.key === key);
+  removeAnimationByIndex(index:number) {
     if (index >= 0) {
       const thisTickerFunc = this.stageAnimations[index];
       this.currentApp?.ticker.remove(thisTickerFunc.animationObject.tickerFunc);
@@ -267,6 +266,17 @@ export default class PixiStage {
       this.unlockStageObject(thisTickerFunc.targetKey ?? 'default');
       this.stageAnimations.splice(index, 1);
     }
+  }
+
+  public removeAllAnimations() {
+    while (this.stageAnimations.length > 0) {
+      this.removeAnimationByIndex(0);
+    }
+  }
+
+  public removeAnimation(key: string) {
+    const index = this.stageAnimations.findIndex((e) => e.key === key);
+    this.removeAnimationByIndex(index);
   }
 
   public removeAnimationWithSetEffects(key: string) {

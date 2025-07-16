@@ -6,6 +6,7 @@ import { setEbg } from '@/Core/gameScripts/changeBg/setEbg';
 
 import { getEnterExitAnimation } from '@/Core/Modules/animationFunctions';
 import { WebGAL } from '@/Core/WebGAL';
+import { webgalStore } from '@/store/store';
 
 export function useSetBg(stageState: IStageState) {
   const bgName = stageState.bgName;
@@ -25,9 +26,20 @@ export function useSetBg(stageState: IStageState) {
       addBg(undefined, thisBgKey, bgName);
       setEbg(bgName);
       logger.debug('重设背景');
-      const { duration, animation } = getEnterExitAnimation('bg-main', 'enter', true);
-      WebGAL.gameplay.pixiStage!.registerPresetAnimation(animation, 'bg-main-softin', thisBgKey, stageState.effects);
-      setTimeout(() => WebGAL.gameplay.pixiStage!.removeAnimationWithSetEffects('bg-main-softin'), duration);
+      
+      const transformState = webgalStore.getState().stage.effects;
+      const targetEffect = transformState.find((effect) => effect.target === thisBgKey);
+      
+      if (!targetEffect) {
+        const { duration, animation } = getEnterExitAnimation('bg-main', 'enter', true);
+        WebGAL.gameplay.pixiStage!.registerPresetAnimation(
+          animation,
+          'bg-main-softin',
+          thisBgKey,
+          stageState.effects,
+        );
+        setTimeout(() => WebGAL.gameplay.pixiStage!.removeAnimationWithSetEffects('bg-main-softin'), duration);
+      }
     } else {
       const currentBg = WebGAL.gameplay.pixiStage?.getStageObjByKey(thisBgKey);
       if (currentBg) {
