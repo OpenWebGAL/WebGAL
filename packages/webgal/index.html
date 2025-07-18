@@ -211,8 +211,6 @@
       });
     }
   </script>
-  <script type="module" src="/src/main.tsx"></script>
-  <!--<script type="module" src="/src/Core/util/resize.ts"></script>-->
   <script>
     function loadScript(url, type) {
       return new Promise((resolve, reject) => {
@@ -234,6 +232,8 @@
     }
     loadLibScript();
   </script>
+  <script type="module" src="/src/main.tsx"></script>
+  <!--<script type="module" src="/src/Core/util/resize.ts"></script>-->
   <script>
     let enterPromise = new Promise(res => window.enterPromise = res);
     let renderPromise = new Promise(res => window.renderPromise = res);
