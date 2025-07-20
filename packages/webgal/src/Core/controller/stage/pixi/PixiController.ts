@@ -3,7 +3,13 @@ import { v4 as uuid } from 'uuid';
 import { webgalStore } from '@/store/store';
 import { setStage, stageActions } from '@/store/stageReducer';
 import cloneDeep from 'lodash/cloneDeep';
-import { baseTransform, IEffect, IFigureAssociatedAnimation, IFigureMetadata, ITransform } from '@/store/stageInterface';
+import {
+  baseTransform,
+  IEffect,
+  IFigureAssociatedAnimation,
+  IFigureMetadata,
+  ITransform,
+} from '@/store/stageInterface';
 import { logger } from '@/Core/util/logger';
 import { isIOS } from '@/Core/initializeScript';
 import { WebGALPixiContainer } from '@/Core/controller/stage/pixi/WebGALPixiContainer';
@@ -75,7 +81,7 @@ export default class PixiStage {
    * 当前的 PIXI App
    */
   public currentApp: PIXI.Application | null = null;
-  public readonly mainStageContainer : WebGALPixiContainer;
+  public readonly mainStageContainer: WebGALPixiContainer;
   public readonly foregroundEffectsContainer: PIXI.Container;
   public readonly backgroundEffectsContainer: PIXI.Container;
   public frameDuration = 16.67;
@@ -258,7 +264,7 @@ export default class PixiStage {
    * 移除动画
    * @param key
    */
-  removeAnimationByIndex(index:number) {
+  public removeAnimationByIndex(index: number) {
     if (index >= 0) {
       const thisTickerFunc = this.stageAnimations[index];
       this.currentApp?.ticker.remove(thisTickerFunc.animationObject.tickerFunc);

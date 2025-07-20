@@ -26,18 +26,13 @@ export function useSetBg(stageState: IStageState) {
       addBg(undefined, thisBgKey, bgName);
       setEbg(bgName);
       logger.debug('重设背景');
-      
+
       const transformState = webgalStore.getState().stage.effects;
       const targetEffect = transformState.find((effect) => effect.target === thisBgKey);
-      
+
       if (!targetEffect) {
         const { duration, animation } = getEnterExitAnimation('bg-main', 'enter', true);
-        WebGAL.gameplay.pixiStage!.registerPresetAnimation(
-          animation,
-          'bg-main-softin',
-          thisBgKey,
-          stageState.effects,
-        );
+        WebGAL.gameplay.pixiStage!.registerPresetAnimation(animation, 'bg-main-softin', thisBgKey, stageState.effects);
         setTimeout(() => WebGAL.gameplay.pixiStage!.removeAnimationWithSetEffects('bg-main-softin'), duration);
       }
     } else {

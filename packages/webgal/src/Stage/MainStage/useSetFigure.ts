@@ -51,15 +51,10 @@ export function useSetFigure(stageState: IStageState) {
 
       const transformState = webgalStore.getState().stage.effects;
       const targetEffect = transformState.find((effect) => effect.target === thisFigKey);
-      
+
       if (!targetEffect) {
         const { duration, animation } = getEnterExitAnimation(thisFigKey, 'enter');
-        WebGAL.gameplay.pixiStage!.registerPresetAnimation(
-          animation,
-          softInAniKey,
-          thisFigKey,
-          stageState.effects,
-        );
+        WebGAL.gameplay.pixiStage!.registerPresetAnimation(animation, softInAniKey, thisFigKey, stageState.effects);
         setTimeout(() => WebGAL.gameplay.pixiStage!.removeAnimationWithSetEffects(softInAniKey), duration);
       }
     } else {
@@ -91,15 +86,10 @@ export function useSetFigure(stageState: IStageState) {
 
       const transformState = webgalStore.getState().stage.effects;
       const targetEffect = transformState.find((effect) => effect.target === thisFigKey);
-      
+
       if (!targetEffect) {
         const { duration, animation } = getEnterExitAnimation(thisFigKey, 'enter');
-        WebGAL.gameplay.pixiStage!.registerPresetAnimation(
-          animation,
-          softInAniKey,
-          thisFigKey,
-          stageState.effects,
-        );
+        WebGAL.gameplay.pixiStage!.registerPresetAnimation(animation, softInAniKey, thisFigKey, stageState.effects);
         setTimeout(() => WebGAL.gameplay.pixiStage!.removeAnimationWithSetEffects(softInAniKey), duration);
       }
     } else {
@@ -128,18 +118,13 @@ export function useSetFigure(stageState: IStageState) {
       }
       addFigure(undefined, thisFigKey, figNameRight, 'right');
       logger.debug('右立绘已重设');
-      
+
       const transformState = webgalStore.getState().stage.effects;
       const targetEffect = transformState.find((effect) => effect.target === thisFigKey);
-      
+
       if (!targetEffect) {
         const { duration, animation } = getEnterExitAnimation(thisFigKey, 'enter');
-        WebGAL.gameplay.pixiStage!.registerPresetAnimation(
-          animation,
-          softInAniKey,
-          thisFigKey,
-          stageState.effects,
-        );
+        WebGAL.gameplay.pixiStage!.registerPresetAnimation(animation, softInAniKey, thisFigKey, stageState.effects);
         setTimeout(() => WebGAL.gameplay.pixiStage!.removeAnimationWithSetEffects(softInAniKey), duration);
       }
     } else {
@@ -194,12 +179,7 @@ export function useSetFigure(stageState: IStageState) {
 
           if (!targetEffect) {
             const { duration, animation } = getEnterExitAnimation(thisFigKey, 'enter');
-            WebGAL.gameplay.pixiStage!.registerPresetAnimation(
-              animation,
-              softInAniKey,
-              thisFigKey,
-              stageState.effects,
-            );
+            WebGAL.gameplay.pixiStage!.registerPresetAnimation(animation, softInAniKey, thisFigKey, stageState.effects);
             setTimeout(() => WebGAL.gameplay.pixiStage!.removeAnimationWithSetEffects(softInAniKey), duration);
           }
         }
