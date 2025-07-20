@@ -16,7 +16,6 @@ export const getRandomPerformName = (): string => {
 
 export class PerformController {
   public performList: Array<IPerform> = [];
-  public timeoutList: Array<ReturnType<typeof setTimeout>> = [];
 
   public arrangeNewPerform(perform: IPerform, script: ISentence, syncPerformState = true) {
     // 检查演出列表内是否有相同的演出，如果有，一定是出了什么问题
@@ -57,7 +56,6 @@ export class PerformController {
     if (script.args.find((e) => e.key === 'continue' && e.value === true)) perform.goNextWhenOver = true;
 
     this.performList.push(perform);
-    this.timeoutList.push(perform.stopTimeout);
   }
 
   public unmountPerform(name: string, force = false) {
@@ -109,12 +107,10 @@ export class PerformController {
 
   public removeAllPerform() {
     for (const e of this.performList) {
+      clearTimeout(e.stopTimeout);
       e.stopFunction();
     }
     this.performList = [];
-    for (const e of this.timeoutList) {
-      clearTimeout(e);
-    }
   }
 
   private goNextWhenOver() {
