@@ -23,7 +23,7 @@ export default function pixiPerformAutoImport(options: Options): PluginOption {
     throw new Error('scriptDir and managerDir are required options');
   }
   const outputPath = resolve(managerDir, outputFile);
-  const relativePath = relative(managerDir, scriptDir);
+const relativePath = relative(managerDir, scriptDir).replace(/\\/g, '/');
   let lastFiles: string[] = [];
 
   function setInitFile() {
