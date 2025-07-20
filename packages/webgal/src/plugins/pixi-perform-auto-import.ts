@@ -9,6 +9,7 @@ interface Options {
   outputFile?: string;
   watchDebounce?: number;
   clearWhenClose?: boolean;
+  couldReload?: boolean;
 }
 
 export default function pixiPerformAutoImport(options: Options): PluginOption {
@@ -18,6 +19,7 @@ export default function pixiPerformAutoImport(options: Options): PluginOption {
     outputFile = 'initRegister.ts',
     watchDebounce = 100,
     clearWhenClose = false,
+    couldReload = false,
   } = options;
   if (!scriptDir || !managerDir) {
     throw new Error('scriptDir and managerDir are required options');
@@ -70,8 +72,8 @@ const relativePath = relative(managerDir, scriptDir).replace(/\\/g, '/');
           return;
         }
         const shouldReload = getPixiPerformScriptFiles();
-        if (shouldReload) {
-          server.ws.send({ type: 'full-reload', path: outputFile });
+        if (couldReload && shouldReload) {
+          server.ws.send({ type: 'full-reload' });
         }
       }, watchDebounce);
 
