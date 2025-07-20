@@ -208,7 +208,7 @@ export interface IStageState {
   figureMetaData: figureMetaData;
   charactersData: Array<ICharacterData>;
   // 插入的html
-  customHtml: Array<string>;
+  customHtml: Array<{ html: string; _feature?: string }>;
 }
 // 人物特征
 export interface ICharacterData {

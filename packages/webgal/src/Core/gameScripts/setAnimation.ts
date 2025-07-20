@@ -13,6 +13,7 @@ import { WebGAL } from '@/Core/WebGAL';
  * @param sentence
  */
 export const setAnimation = (sentence: ISentence): IPerform => {
+  console.log('setAnimation', sentence);
   const startDialogKey = webgalStore.getState().stage.currentDialogKey;
   const animationName = sentence.content;
   const animationDuration = getAnimateDuration(animationName);

@@ -250,8 +250,8 @@ const stageSlice = createSlice({
      * @param state 当前状态
      * @param action 要添加的HTML内容
      */
-    addCustomHtml: (state, action: PayloadAction<{ html: string; style?: string }>) => {
-      state.customHtml.push(action.payload.html);
+    addCustomHtml: (state, action: PayloadAction<{ html: string; _feature?: string }>) => {
+      state.customHtml.push(action.payload);
     },
     /**
      * 移除自定义HTML

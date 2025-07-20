@@ -3,23 +3,28 @@ import { IPerform } from '@/Core/Modules/perform/performInterface';
 import { webgalStore } from '@/store/store';
 import { stageActions } from '@/store/stageReducer';
 
-// 工具函数：将css字符串转为对象
-function parseCssString(css: string): Record<string, string> {
-  const styleObj: Record<string, string> = css
+// 工具函数：将css字符串转为对象，并返回 feature 字段
+function parseCssString(css: string): { styleObj: Record<string, string>; feature?: string } {
+  const styleObj: Record<string, string> = {};
+  let feature: string | undefined;
+  css
     .replace(/[{}]/g, '')
     .split(',')
     .map((s) => s.trim())
     .filter(Boolean)
-    .reduce<Record<string, string>>((acc, item) => {
+    .forEach((item) => {
       const [key, value] = item.split(':').map((s) => s.trim());
       if (key && value) {
-        // 驼峰化
-        const camelKey = key.replace(/-([a-z])/g, (_, c) => c.toUpperCase());
-        acc[camelKey] = value;
+        if (key === 'feature') {
+          feature = value;
+        } else {
+          // 驼峰化
+          const camelKey = key.replace(/-([a-z])/g, (_, c) => c.toUpperCase());
+          styleObj[camelKey] = value;
+        }
       }
-      return acc;
-    }, {});
-  return styleObj;
+    });
+  return { styleObj, feature };
 }
 
 // 解析HTML元素，提取标签名、属性和内容
@@ -48,53 +53,50 @@ function autoAddPositionFixed(style: string): string {
   // 只要有 left/top/width/height 且没有 position，就加上
   if (!/position\s*:/.test(style) && /(left\s*:|top\s*:|right\s*:|bottom\s*:|width\s*:|height\s*:)/.test(style)) {
     // 逗号分隔
-    return `position: fixed,pointer-events: none, ${style}`;
+    return `position: absolute,pointer-events: none, ${style}`;
   }
   return style;
 }
 // 将解析后的元素转换为带样式的HTML字符串
-function convertToStyledHtml(elements: ParsedElement[]): string {
-  return elements
+// 支持返回 feature 字段
+function convertToStyledHtml(elements: ParsedElement[]): { html: string; feature?: string } {
+  let feature: string | undefined;
+  const html = elements
     .map((element) => {
       let html = `<${element.tagName}`;
-
       // 处理style属性
       if (element.attributes.style) {
         element.attributes.style = autoAddPositionFixed(element.attributes.style);
-        // 将驼峰化的CSS属性转换回CSS格式
-        const styleObj = parseCssString(element.attributes.style);
+        const { styleObj, feature: f } = parseCssString(element.attributes.style);
+        if (f && !feature) feature = f;
         const cssString = Object.entries(styleObj)
           .map(([key, value]) => {
-            // 将驼峰化转换回CSS格式
             const cssKey = key.replace(/([A-Z])/g, '-$1').toLowerCase();
             return `${cssKey}: ${value}`;
           })
           .join('; ');
-
         html += ` style="${cssString}"`;
       }
-
       // 处理其他属性
       Object.entries(element.attributes).forEach(([key, value]) => {
         if (key !== 'style') {
           html += ` ${key}="${value}"`;
         }
       });
-
       html += '>';
-
       // 添加子元素
       if (element.children.length > 0) {
-        html += convertToStyledHtml(element.children);
+        const childResult = convertToStyledHtml(element.children);
+        html += childResult.html;
+        if (childResult.feature && !feature) feature = childResult.feature;
       } else if (element.innerHTML) {
         html += element.innerHTML;
       }
-
       html += `</${element.tagName}>`;
-
       return html;
     })
     .join('');
+  return { html, feature };
 }
 
 // 解析HTML字符串，提取所有元素及其样式
@@ -173,8 +175,9 @@ export const setCustomHtml = (sentence: ISentence): IPerform => {
 
     const html = match[1].trim();
     const css = match[2].trim();
-    const styleObj = parseCssString(css);
+    const { styleObj, feature } = parseCssString(css);
     console.log('styleObj:', styleObj);
+    console.log('feature:', feature);
     console.log('html:', html);
     console.log('css:', css);
 
@@ -186,14 +189,15 @@ export const setCustomHtml = (sentence: ISentence): IPerform => {
           return `${cssKey}: ${value}`;
         })
         .join('; ');
-
       return `<${tagName}${attributes} style="${cssString}">`;
     });
 
     console.log('Styled HTML:', styledHtml);
 
-    // 添加到状态管理
-    webgalStore.dispatch(stageActions.addCustomHtml({ html: styledHtml }));
+    // 添加到状态管理，带 feature 字段
+    // 兼容 store/reducer 类型，feature 作为自定义字段传递
+    console.log('with feature:', feature);
+    webgalStore.dispatch(stageActions.addCustomHtml({ html: styledHtml, _feature: feature }));
   } else {
     // 如果包含HTML标签，直接解析HTML中的样式
     const html = sentence.content.trim();
@@ -201,12 +205,13 @@ export const setCustomHtml = (sentence: ISentence): IPerform => {
 
     // 解析HTML并处理内联样式
     const elements = parseHtmlWithStyles(html);
-    const styledHtml = convertToStyledHtml(elements);
+    const { html: styledHtml, feature } = convertToStyledHtml(elements);
+    console.log('feature:', feature);
 
-    console.log('Final styled HTML:', styledHtml);
+    console.log('Final styled HTML:', styledHtml, 'feature:', feature);
 
-    // 添加到状态管理
-    webgalStore.dispatch(stageActions.addCustomHtml({ html: styledHtml }));
+    // 添加到状态管理，带 feature 字段
+    webgalStore.dispatch(stageActions.addCustomHtml({ html: styledHtml, _feature: feature }));
   }
 
   return {

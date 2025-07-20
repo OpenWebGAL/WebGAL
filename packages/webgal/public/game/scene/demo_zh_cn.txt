@@ -9,9 +9,9 @@ changeBg:bg.png -next;
 setTransition: -target=bg-main -enter=shockwaveIn -next;
 unlockCg:bg.png -name=良い夜; // 解锁CG并赋予名称
 changeFigure:stand.png -left -enter=enter-from-left -next;
+setCustomHtml: <div style="color: {color},font-size: 20vh, feature: left">危</div>
 miniAvatar:miniavatar.png;
 {heroine}:欢迎使用 {egine}！这是一款全新的网页端视觉小说引擎。 -v1.wav;
-setCustomHtml: <img src="./game/dlc/keke.jpg" style="top: 0, left: 0,width:100px,overflow: hidden," />;
 changeFigure:stand2.png -right -next;
 {egine} 是使用 Web 技术开发的引擎，因此在网页端有良好的表现。 -v2.wav;
 由于这个特性，如果你将 {egine} 部署到服务器或网页托管平台上，玩家只需要一串链接就可以开始游玩！ -v3.wav;
@@ -32,7 +32,6 @@ setCharacter: character.雪衣.progress=0;
 WebGAL:比如这个[注](zhù)[音](yīn)功能，可以为游戏带来更好的体验！
 setCharacter: character.雪衣.progress=10;
 setCharacter: character.小明.progress=5;
-setCustomHtml: <div style="color: {color},font-size: 20vw, left: 10vw,top: 10vw">危</div>
 WebGAL:我们也支持了[文本拓展语法](style=color:#B5495B\;)，可以为[文](wen)[本](ben)带来[富文本支持](style-alltext=font-style:italic\; style=color:#66327C\;)、交互等特性。
 setCharacter: character=close;
 WebGAL:新版本添加了特性：获取用户输入，你要尝试一下吗？
