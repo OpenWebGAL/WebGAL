@@ -6,6 +6,7 @@ import { resetStageState, stageActions } from '@/store/stageReducer';
 import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
 import { IRunPerform } from '@/store/stageInterface';
 import { WEBGAL_NONE } from '@/Core/constants';
+import { getBooleanArgByKey } from '@/Core/util/getSentenceArg';
 
 /**
  * 获取随机演出名称
@@ -54,7 +55,8 @@ export class PerformController {
       }
     }, perform.duration);
 
-    if (script.args.find((e) => e.key === 'continue' && e.value === true)) perform.goNextWhenOver = true;
+    const hasContinue = getBooleanArgByKey(script, 'continue') ?? false;
+    if (hasContinue) perform.goNextWhenOver = true;
 
     this.performList.push(perform);
   }
