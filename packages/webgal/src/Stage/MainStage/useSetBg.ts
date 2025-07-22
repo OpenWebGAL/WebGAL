@@ -6,7 +6,6 @@ import { setEbg } from '@/Core/gameScripts/changeBg/setEbg';
 
 import { getEnterExitAnimation } from '@/Core/Modules/animationFunctions';
 import { WebGAL } from '@/Core/WebGAL';
-import { webgalStore } from '@/store/store';
 
 export function useSetBg(stageState: IStageState) {
   const bgName = stageState.bgName;

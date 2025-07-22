@@ -7,7 +7,6 @@ import { generateUniversalSoftOffAnimationObj } from '@/Core/controller/stage/pi
 
 import { getEnterExitAnimation } from '@/Core/Modules/animationFunctions';
 import { WebGAL } from '@/Core/WebGAL';
-import { webgalStore } from '@/store/store';
 
 export function useSetFigure(stageState: IStageState) {
   const { figNameLeft, figName, figNameRight, freeFigure, live2dMotion, live2dExpression } = stageState;
