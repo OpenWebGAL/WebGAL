@@ -194,3 +194,62 @@ test("say statement", async () => {
     subScene: []
   });
 });
+
+test("wait command", async () => {
+  const parser = new SceneParser((assetList) => {
+  }, (fileName, assetType) => {
+    return fileName;
+  }, ADD_NEXT_ARG_LIST, SCRIPT_CONFIG);
+
+  const result = parser.parse(`wait:1000;`, 'test', 'test');
+  expect(result.sentenceList).toContainEqual({
+    command: commandType.wait,
+    commandRaw: "wait",
+    content: "1000",
+    args: [],
+    sentenceAssets: [],
+    subScene: []
+  });
+});
+
+test("changeFigure with duration and animation args", async () => {
+  const parser = new SceneParser((assetList) => {
+  }, (fileName, assetType) => {
+    return fileName;
+  }, ADD_NEXT_ARG_LIST, SCRIPT_CONFIG);
+
+  const result = parser.parse(`changeFigure:stand.png -duration=1000 -enter=fadeIn -exit=fadeOut;`, 'test', 'test');
+  expect(result.sentenceList).toContainEqual({
+    command: commandType.changeFigure,
+    commandRaw: "changeFigure",
+    content: "stand.png",
+    args: [
+      { key: 'duration', value: 1000 },
+      { key: 'enter', value: 'fadeIn' },
+      { key: 'exit', value: 'fadeOut' }
+    ],
+    sentenceAssets: [{ name: "stand.png", url: 'stand.png', type: fileType.figure, lineNumber: 0 }],
+    subScene: []
+  });
+});
+
+test("changeBg with animation parameters", async () => {
+  const parser = new SceneParser((assetList) => {
+  }, (fileName, assetType) => {
+    return fileName;
+  }, ADD_NEXT_ARG_LIST, SCRIPT_CONFIG);
+
+  const result = parser.parse(`changeBg:background.jpg -duration=2000 -enter=slideIn -transform={"alpha":0.8};`, 'test', 'test');
+  expect(result.sentenceList).toContainEqual({
+    command: commandType.changeBg,
+    commandRaw: "changeBg",
+    content: "background.jpg",
+    args: [
+      { key: 'duration', value: 2000 },
+      { key: 'enter', value: 'slideIn' },
+      { key: 'transform', value: '{"alpha":0.8}' }
+    ],
+    sentenceAssets: [{ name: "background.jpg", url: 'background.jpg', type: fileType.background, lineNumber: 0 }],
+    subScene: []
+  });
+});

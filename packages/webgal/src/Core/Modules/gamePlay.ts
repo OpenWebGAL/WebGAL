@@ -13,7 +13,6 @@ export class Gameplay {
   public pixiStage: PixiStage | null = null;
   public performController = new PerformController();
   public resetGamePlay() {
-    this.performController.timeoutList = [];
     this.isAuto = false;
     this.isFast = false;
     const autoInterval = this.autoInterval;
