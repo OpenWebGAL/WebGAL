@@ -27,12 +27,7 @@ export function useSetBg(stageState: IStageState) {
       setEbg(bgName);
       logger.debug('重设背景');
       const { duration, animation } = getEnterExitAnimation('bg-main', 'enter', true);
-      WebGAL.gameplay.pixiStage!.registerPresetAnimation(
-        animation,
-        softInAniKey,
-        thisBgKey,
-        stageState.effects,
-      );
+      WebGAL.gameplay.pixiStage!.registerPresetAnimation(animation, softInAniKey, thisBgKey, stageState.effects);
     } else {
       const currentBg = WebGAL.gameplay.pixiStage?.getStageObjByKey(thisBgKey);
       if (currentBg) {
