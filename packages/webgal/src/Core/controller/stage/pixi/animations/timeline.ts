@@ -23,6 +23,7 @@ export function generateTimelineObj(
     // 处理 alphaL
     // @ts-ignore
     segment['alphaFilterVal'] = segment.alpha;
+    segment.alpha = 1;
   }
   const target = WebGAL.gameplay.pixiStage!.getStageObjByKey(targetKey);
   let currentDelay = 0;
@@ -128,17 +129,11 @@ export function generateTimelineObj(
     return timeline[timeline.length - 1];
   }
 
-  function getEndFilterEffect() {
-    const endSegment = timeline[timeline.length - 1];
-    const { alpha, rotation, blur, duration, scale, position, ...rest } = endSegment;
-    return rest;
-  }
-
   return {
     setStartState,
     setEndState,
     tickerFunc,
-    getEndFilterEffect,
+    getEndStateEffect,
   };
 }
 
