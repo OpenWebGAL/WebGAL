@@ -11,8 +11,15 @@ import { baseTransform, ITransform } from '@/store/stageInterface';
 import { generateTransformAnimationObj } from '@/Core/controller/stage/pixi/animations/generateTransformAnimationObj';
 import { AnimationFrame, IUserAnimation } from '@/Core/Modules/animations';
 import cloneDeep from 'lodash/cloneDeep';
-import { createDefaultEnterExitAnimation, getAnimateDuration } from '@/Core/Modules/animationFunctions';
+import {
+  createDefaultEnterExitAnimation,
+  createEnterExitAnimation,
+  getAnimateDuration,
+  getEnterAnimationKey,
+  getOldTargetKey,
+} from '@/Core/Modules/animationFunctions';
 import { WebGAL } from '@/Core/WebGAL';
+import { STAGE_KEYS } from '@/Core/constants';
 
 /**
  * 进行背景图片的切换
@@ -21,7 +28,7 @@ import { WebGAL } from '@/Core/WebGAL';
  */
 export const changeBg = (sentence: ISentence): IPerform => {
   const url = sentence.content;
-  const key = 'bg-main';
+  const key = STAGE_KEYS.BG_MAIN;
   let duration = 1000;
   let name = '';
   let series = 'default';
@@ -51,46 +58,8 @@ export const changeBg = (sentence: ISentence): IPerform => {
     dispatch(stageActions.removeEffectByTargetId(`bg-main`));
   }
 
-  // 处理 transform 和 默认 transform
-  const transformString = getSentenceArgByKey(sentence, 'transform');
-  let durationFromArg = getSentenceArgByKey(sentence, 'duration');
-  let ease = getSentenceArgByKey(sentence, 'ease')?.toString() ?? '';
-  if (typeof durationFromArg === 'number') {
-    duration = durationFromArg;
-  }
+  duration = createEnterExitAnimation(sentence, key, duration, currentTransform);
 
-  if (transformString) {
-    console.log(transformString);
-    try {
-      const transform = JSON.parse(transformString.toString()) as ITransform;
-      const enterFrame = { ...transform, duration: 0, ease: '' };
-      const exitFrame = { ...currentTransform, duration: 0, ease: '' };
-      createDefaultEnterExitAnimation('enter', key, enterFrame, duration, ease);
-      createDefaultEnterExitAnimation('exit', key, exitFrame, duration, ease);
-    } catch (e) {
-      // 解析都错误了，歇逼吧
-      applyDefaultTransform();
-    }
-  } else {
-    applyDefaultTransform();
-  }
-
-  function applyDefaultTransform() {
-    const enterFrame = { ...baseTransform, duration: 0, ease: '' };
-    const exitFrame = { ...currentTransform, duration: 0, ease: '' };
-    createDefaultEnterExitAnimation('enter', key, enterFrame, duration, ease);
-    createDefaultEnterExitAnimation('exit', key, exitFrame, duration, ease);
-  }
-
-  // 应用动画的优先级更高一点
-  if (getSentenceArgByKey(sentence, 'enter')) {
-    WebGAL.animationManager.nextEnterAnimationName.set(key, getSentenceArgByKey(sentence, 'enter')!.toString());
-    duration = getAnimateDuration(getSentenceArgByKey(sentence, 'enter')!.toString());
-  }
-  if (getSentenceArgByKey(sentence, 'exit')) {
-    WebGAL.animationManager.nextExitAnimationName.set(key + '-off', getSentenceArgByKey(sentence, 'exit')!.toString());
-    duration = getAnimateDuration(getSentenceArgByKey(sentence, 'exit')!.toString());
-  }
   dispatch(setStage({ key: 'bgName', value: sentence.content }));
 
   return {
@@ -98,10 +67,12 @@ export const changeBg = (sentence: ISentence): IPerform => {
     duration,
     isHoldOn: false,
     stopFunction: () => {
+      const oldTargetKey = getOldTargetKey(key);
+      const enterAnimationKey = getEnterAnimationKey(key);
       WebGAL.gameplay.pixiStage?.stopPresetAnimationOnTarget(key);
-      WebGAL.gameplay.pixiStage?.stopPresetAnimationOnTarget(key + '-old' + '-off');
-      WebGAL.gameplay.pixiStage?.removeAnimationWithSetEffects(key + '-softin');
-      WebGAL.gameplay.pixiStage?.removeStageObjectByKey(key + '-old' + '-off');
+      WebGAL.gameplay.pixiStage?.stopPresetAnimationOnTarget(oldTargetKey);
+      WebGAL.gameplay.pixiStage?.removeAnimation(enterAnimationKey, true);
+      WebGAL.gameplay.pixiStage?.removeStageObjectByKey(oldTargetKey);
     },
     blockingNext: () => false,
     blockingAuto: () => true,

@@ -9,8 +9,15 @@ import { AnimationFrame, IUserAnimation } from '@/Core/Modules/animations';
 import { generateTransformAnimationObj } from '@/Core/controller/stage/pixi/animations/generateTransformAnimationObj';
 import { assetSetter, fileType } from '@/Core/util/gameAssetsAccess/assetSetter';
 import { logger } from '@/Core/util/logger';
-import { createDefaultEnterExitAnimation, getAnimateDuration } from '@/Core/Modules/animationFunctions';
+import {
+  createDefaultEnterExitAnimation,
+  createEnterExitAnimation,
+  getAnimateDuration,
+  getEnterAnimationKey,
+  getOldTargetKey,
+} from '@/Core/Modules/animationFunctions';
 import { WebGAL } from '@/Core/WebGAL';
+import { STAGE_KEYS } from '../constants';
 /**
  * 更改立绘
  * @param sentence 语句
@@ -105,7 +112,18 @@ export function changeFigure(sentence: ISentence): IPerform {
     }
   }
 
-  const id = key ? key : `fig-${pos}`;
+  let id = key;
+  if (id === '') {
+    // 如果没有指定 id，则根据位置来设置
+    if (pos === 'center') {
+      id = STAGE_KEYS.FIG_CENTER;
+    } else if (pos === 'left') {
+      id = STAGE_KEYS.FIG_LEFT;
+    } else if (pos === 'right') {
+      id = STAGE_KEYS.FIG_RIGHT;
+    }
+  }
+  // const id = key ? key : `fig-${pos}`;
 
   const currentFigureAssociatedAnimation = webgalStore.getState().stage.figureAssociatedAnimation;
   const filteredFigureAssociatedAnimation = currentFigureAssociatedAnimation.filter((item) => item.targetId !== id);
@@ -157,9 +175,9 @@ export function changeFigure(sentence: ISentence): IPerform {
   // 确定 key
   if (!isFreeFigure) {
     const positionMap = {
-      center: 'fig-center',
-      left: 'fig-left',
-      right: 'fig-right',
+      center: STAGE_KEYS.FIG_CENTER,
+      left: STAGE_KEYS.FIG_LEFT,
+      right: STAGE_KEYS.FIG_RIGHT,
     };
     key = positionMap[pos];
   }
@@ -183,66 +201,26 @@ export function changeFigure(sentence: ISentence): IPerform {
     dispatch(stageActions.setFigureMetaData([deleteKey, 'zIndex', 0, true]));
     dispatch(stageActions.setFigureMetaData([deleteKey2, 'zIndex', 0, true]));
   }
-  const setAnimationNames = (key: string, sentence: ISentence) => {
-    // 处理 transform 和 默认 transform
-    const transformString = getSentenceArgByKey(sentence, 'transform');
-    const durationFromArg = getSentenceArgByKey(sentence, 'duration');
-    const ease = getSentenceArgByKey(sentence, 'ease')?.toString() ?? '';
-    if (typeof durationFromArg === 'number') {
-      duration = durationFromArg;
-    }
 
-    if (transformString) {
-      console.log(transformString);
-      try {
-        const transform = JSON.parse(transformString.toString()) as ITransform;
-        const enterFrame = { ...transform, duration: 0, ease: '' };
-        const exitFrame = { ...currentTransform, duration: 0, ease: '' };
-        createDefaultEnterExitAnimation('enter', key, enterFrame, duration, ease);
-        createDefaultEnterExitAnimation('exit', key, exitFrame, duration, ease);
-      } catch (e) {
-        // 解析都错误了，歇逼吧
-        applyDefaultTransform();
-      }
-    } else {
-      applyDefaultTransform();
-    }
+  duration = createEnterExitAnimation(sentence, key, duration, currentTransform);
 
-    function applyDefaultTransform() {
-      const enterFrame = { ...baseTransform, duration: 0, ease: '' };
-      const exitFrame = { ...currentTransform, duration: 0, ease: '' };
-      createDefaultEnterExitAnimation('enter', key, enterFrame, duration, ease);
-      createDefaultEnterExitAnimation('exit', key, exitFrame, duration, ease);
-    }
+  if (motion || overrideBounds) {
+    dispatch(
+      stageActions.setLive2dMotion({ target: key, motion, overrideBounds: getOverrideBoundsArr(overrideBounds) }),
+    );
+  }
+  if (expression) {
+    dispatch(stageActions.setLive2dExpression({ target: key, expression }));
+  }
+  if (zIndex > 0) {
+    dispatch(stageActions.setFigureMetaData([key, 'zIndex', zIndex, false]));
+  }
 
-    const enterAnim = getSentenceArgByKey(sentence, 'enter');
-    const exitAnim = getSentenceArgByKey(sentence, 'exit');
-    if (enterAnim) {
-      WebGAL.animationManager.nextEnterAnimationName.set(key, enterAnim.toString());
-      duration = getAnimateDuration(enterAnim.toString());
-    }
-    if (exitAnim) {
-      WebGAL.animationManager.nextExitAnimationName.set(key + '-off', exitAnim.toString());
-      duration = getAnimateDuration(exitAnim.toString());
-    }
-  };
   if (isFreeFigure) {
     /**
      * 下面的代码是设置自由立绘的
      */
     const freeFigureItem: IFreeFigure = { key, name: content, basePosition: pos };
-    setAnimationNames(key, sentence);
-    if (motion || overrideBounds) {
-      dispatch(
-        stageActions.setLive2dMotion({ target: key, motion, overrideBounds: getOverrideBoundsArr(overrideBounds) }),
-      );
-    }
-    if (expression) {
-      dispatch(stageActions.setLive2dExpression({ target: key, expression }));
-    }
-    if (zIndex > 0) {
-      dispatch(stageActions.setFigureMetaData([key, 'zIndex', zIndex, false]));
-    }
     dispatch(stageActions.setFreeFigureByKey(freeFigureItem));
   } else {
     /**
@@ -253,19 +231,6 @@ export function changeFigure(sentence: ISentence): IPerform {
       left: 'figNameLeft',
       right: 'figNameRight',
     };
-
-    setAnimationNames(key, sentence);
-    if (motion || overrideBounds) {
-      dispatch(
-        stageActions.setLive2dMotion({ target: key, motion, overrideBounds: getOverrideBoundsArr(overrideBounds) }),
-      );
-    }
-    if (expression) {
-      dispatch(stageActions.setLive2dExpression({ target: key, expression }));
-    }
-    if (zIndex > 0) {
-      dispatch(stageActions.setFigureMetaData([key, 'zIndex', zIndex, false]));
-    }
     dispatch(setStage({ key: dispatchMap[pos], value: content }));
   }
 
@@ -274,10 +239,12 @@ export function changeFigure(sentence: ISentence): IPerform {
     duration,
     isHoldOn: false,
     stopFunction: () => {
+      const oldTargetKey = getOldTargetKey(key);
+      const enterAnimationKey = getEnterAnimationKey(key);
       WebGAL.gameplay.pixiStage?.stopPresetAnimationOnTarget(key);
-      WebGAL.gameplay.pixiStage?.stopPresetAnimationOnTarget(key + '-old' + '-off');
-      WebGAL.gameplay.pixiStage?.removeAnimationWithSetEffects(key + '-softin');
-      WebGAL.gameplay.pixiStage?.removeStageObjectByKey(key + '-old' + '-off');
+      WebGAL.gameplay.pixiStage?.stopPresetAnimationOnTarget(oldTargetKey);
+      WebGAL.gameplay.pixiStage?.removeAnimation(enterAnimationKey, true);
+      WebGAL.gameplay.pixiStage?.removeStageObjectByKey(oldTargetKey);
     },
     blockingNext: () => false,
     blockingAuto: () => true,

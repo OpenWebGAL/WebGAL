@@ -270,38 +270,17 @@ export default class PixiStage {
    * 移除动画
    * @param key
    */
-  public removeAnimationByIndex(index: number) {
+  public removeAnimationByIndex(index: number, setEffect = false) {
     if (index >= 0) {
       const thisTickerFunc = this.stageAnimations[index];
       this.currentApp?.ticker.remove(thisTickerFunc.animationObject.tickerFunc);
       thisTickerFunc.animationObject.setEndState();
       this.unlockStageObject(thisTickerFunc.targetKey ?? 'default');
-      this.stageAnimations.splice(index, 1);
-    }
-  }
 
-  public removeAllAnimations() {
-    while (this.stageAnimations.length > 0) {
-      this.removeAnimationByIndex(0);
-    }
-  }
-
-  public removeAnimation(key: string) {
-    const index = this.stageAnimations.findIndex((e) => e.key === key);
-    this.removeAnimationByIndex(index);
-  }
-
-  public removeAnimationWithSetEffects(key: string) {
-    const index = this.stageAnimations.findIndex((e) => e.key === key);
-    if (index >= 0) {
-      const thisTickerFunc = this.stageAnimations[index];
-      this.currentApp?.ticker.remove(thisTickerFunc.animationObject.tickerFunc);
-      thisTickerFunc.animationObject.setEndState();
-      const webgalFilters = thisTickerFunc.animationObject.getEndFilterEffect?.() ?? {};
-      this.unlockStageObject(thisTickerFunc.targetKey ?? 'default');
-      if (thisTickerFunc.targetKey) {
+      if (setEffect && thisTickerFunc.targetKey) {
         const target = this.getStageObjByKey(thisTickerFunc.targetKey);
         if (target) {
+          const webgalFilters = thisTickerFunc.animationObject.getEndFilterEffect?.() ?? {};
           const targetTransform = {
             alpha: target.pixiContainer.alphaFilterVal,
             scale: {
@@ -329,8 +308,20 @@ export default class PixiStage {
           // if (!this.notUpdateBacklogEffects) updateCurrentBacklogEffects(webgalStore.getState().stage.effects);
         }
       }
+
       this.stageAnimations.splice(index, 1);
     }
+  }
+
+  public removeAllAnimations() {
+    while (this.stageAnimations.length > 0) {
+      this.removeAnimationByIndex(0);
+    }
+  }
+
+  public removeAnimation(key: string, setEffect = false) {
+    const index = this.stageAnimations.findIndex((e) => e.key === key);
+    this.removeAnimationByIndex(index, setEffect);
   }
 
   // eslint-disable-next-line max-params
