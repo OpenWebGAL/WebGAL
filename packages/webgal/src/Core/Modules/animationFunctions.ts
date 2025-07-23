@@ -228,19 +228,29 @@ export function addOrRemoveStageObject(
   addFunction: Function,
 ) {
   if (newUrl !== '') {
-    // 如果对象存在且地址不同，移除旧对象
+    // 如果对象存在且地址不同，移除旧对象, 并添加新对象
     const currentStageObject = WebGAL.gameplay.pixiStage?.getStageObjByKey(targetKey);
-    if (currentStageObject && currentStageObject.sourceUrl !== newUrl) {
-      logger.debug(`移除目标 ${targetKey}: ${currentStageObject.sourceUrl}`);
-      removeStageObjectWithAnimationByKey(targetKey, currentEffects);
+    if (currentStageObject) {
+      if (currentStageObject.sourceUrl !== newUrl) {
+        logger.debug(`移除目标 ${targetKey}: ${currentStageObject.sourceUrl}`);
+        removeStageObjectWithAnimationByKey(targetKey, currentEffects);
+        // 添加新对象
+        logger.debug(`新增目标 ${targetKey}: ${newUrl}`);
+        addFunction();
+        // 注册入场动画
+        const enterAnimationKey = getEnterAnimationKey(targetKey);
+        const { duration, animation } = getEnterExitAnimation(targetKey, 'enter');
+        WebGAL.gameplay.pixiStage!.registerPresetAnimation(animation, enterAnimationKey, targetKey, currentEffects);
+      }
+    } else {
+      // 如果对象不存在，添加新对象
+      logger.debug(`新增目标 ${targetKey}: ${newUrl}`);
+      addFunction();
+      // 注册入场动画
+      const enterAnimationKey = getEnterAnimationKey(targetKey);
+      const { duration, animation } = getEnterExitAnimation(targetKey, 'enter');
+      WebGAL.gameplay.pixiStage!.registerPresetAnimation(animation, enterAnimationKey, targetKey, currentEffects);
     }
-    // 添加新对象
-    logger.debug(`新增目标 ${targetKey}: ${newUrl}`);
-    addFunction();
-    // 注册入场动画
-    const enterAnimationKey = getEnterAnimationKey(targetKey);
-    const { duration, animation } = getEnterExitAnimation(targetKey, 'enter');
-    WebGAL.gameplay.pixiStage!.registerPresetAnimation(animation, enterAnimationKey, targetKey, currentEffects);
   } else {
     // 如果新地址为空，移除对象
     logger.debug(`移除目标 ${targetKey}`);

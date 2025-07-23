@@ -891,6 +891,30 @@ export default class PixiStage {
     return [...this.figureObjects, ...this.backgroundObjects, this.mainStageObject];
   }
 
+  public removeFigureByIndex(index: number) {
+    if (index >= 0) {
+      const stageObject = this.figureObjects[index];
+      for (const element of stageObject.pixiContainer.children) {
+        element.destroy();
+      }
+      stageObject.pixiContainer.destroy();
+      this.figureContainer.removeChild(stageObject.pixiContainer);
+      this.figureObjects.splice(index, 1);
+    }
+  }
+
+  public removeBackgroundByIndex(index: number) {
+    if (index >= 0) {
+      const stageObject = this.backgroundObjects[index];
+      for (const element of stageObject.pixiContainer.children) {
+        element.destroy();
+      }
+      stageObject.pixiContainer.destroy();
+      this.backgroundContainer.removeChild(stageObject.pixiContainer);
+      this.backgroundObjects.splice(index, 1);
+    }
+  }
+
   /**
    * 根据 key 删除舞台上的对象
    * @param key
@@ -898,24 +922,8 @@ export default class PixiStage {
   public removeStageObjectByKey(key: string) {
     const indexFig = this.figureObjects.findIndex((e) => e.key === key);
     const indexBg = this.backgroundObjects.findIndex((e) => e.key === key);
-    if (indexFig >= 0) {
-      const bgSprite = this.figureObjects[indexFig];
-      for (const element of bgSprite.pixiContainer.children) {
-        element.destroy();
-      }
-      bgSprite.pixiContainer.destroy();
-      this.figureContainer.removeChild(bgSprite.pixiContainer);
-      this.figureObjects.splice(indexFig, 1);
-    }
-    if (indexBg >= 0) {
-      const bgSprite = this.backgroundObjects[indexBg];
-      for (const element of bgSprite.pixiContainer.children) {
-        element.destroy();
-      }
-      bgSprite.pixiContainer.destroy();
-      this.backgroundContainer.removeChild(bgSprite.pixiContainer);
-      this.backgroundObjects.splice(indexBg, 1);
-    }
+    this.removeFigureByIndex(indexFig);
+    this.removeBackgroundByIndex(indexBg);
     // /**
     //  * 删掉相关 Effects，因为已经移除了
     //  */
@@ -926,6 +934,15 @@ export default class PixiStage {
     //   newEffects.splice(index, 1);
     // }
     // updateCurrentEffects(newEffects);
+  }
+
+  public removeAllStageObjects() {
+    while (this.figureObjects.length > 0) {
+      this.removeFigureByIndex(0);
+    }
+    while (this.backgroundObjects.length > 0) {
+      this.removeBackgroundByIndex(0);
+    }
   }
 
   public cacheGC() {
