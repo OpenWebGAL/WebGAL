@@ -819,7 +819,7 @@ export default class PixiStage {
     const container = target.pixiContainer;
     // Spine figure 结构: Container -> Sprite -> Spine
     const sprite = container.children[0] as PIXI.Container;
-    if (sprite && sprite.children && sprite.children[0]) {
+    if (sprite?.children?.[0]) {
       const spineObject = sprite.children[0];
       // @ts-ignore
       if (spineObject.state && spineObject.spineData) {
