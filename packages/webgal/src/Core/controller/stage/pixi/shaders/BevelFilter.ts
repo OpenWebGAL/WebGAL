@@ -38,7 +38,7 @@ class BevelFilter extends Filter {
    * @param {number} [options.shadowColor = 0x000000] - Color of the shadow.
    * @param {number} [options.shadowAlpha = 0.7] - Alpha of the shadow.
    */
-  constructor(options?: Partial<BevelFilterOptions>) {
+  public constructor(options?: Partial<BevelFilterOptions>) {
     const fragment = `precision mediump float;
 
 varying vec2 vTextureCoord;
@@ -61,7 +61,7 @@ void main(void) {
 
     // color.rgb = mix(color.rgb, lightColor, clamp((color.a - light) * lightAlpha, 0.0, 1.0));
     // color.rgb = mix(color.rgb, shadowColor, clamp((color.a - shadow) * shadowAlpha, 0.0, 1.0));
-    
+
     // 滤色
     color.rgb = mix(color.rgb, vec3(1.0) - (vec3(1.0) - color.rgb) * (vec3(1.0) - lightColor), clamp((color.a - light) * lightAlpha, 0.0, 1.0));
     // 正片叠底(相乘)
@@ -95,7 +95,8 @@ void main(void) {
     this._blurFilter.kernelSize = 11;
   }
 
-  apply(
+  // eslint-disable-next-line max-params
+  public apply(
     filterManager: FilterSystem,
     input: RenderTexture,
     output: RenderTexture,
@@ -136,10 +137,10 @@ void main(void) {
    * The angle of the light in degrees.
    * @default 45
    */
-  get rotation(): number {
+  public get rotation(): number {
     return this._angle / DEG_TO_RAD;
   }
-  set rotation(value: number) {
+  public set rotation(value: number) {
     this._angle = value * DEG_TO_RAD;
     this._updateTransform();
     this._updateBlur();
@@ -149,10 +150,10 @@ void main(void) {
    * The tickness of the bevel.
    * @default 2
    */
-  get thickness(): number {
+  public get thickness(): number {
     return this._thickness;
   }
-  set thickness(value: number) {
+  public set thickness(value: number) {
     this._thickness = value;
     this._updateTransform();
     this._updateBlur();
@@ -162,10 +163,10 @@ void main(void) {
    * The tickness of the bevel. Range [0, 1]
    * @default 0
    */
-  get softness(): number {
+  public get softness(): number {
     return this._softness;
   }
-  set softness(value: number) {
+  public set softness(value: number) {
     this._softness = Math.min(Math.max(value, 0), 1);
     this._updateBlur();
   }
@@ -174,10 +175,10 @@ void main(void) {
    * Color of the light.
    * @default 0xffffff
    */
-  get lightColor(): number {
+  public get lightColor(): number {
     return rgb2hex(this.uniforms.lightColor);
   }
-  set lightColor(value: number) {
+  public set lightColor(value: number) {
     hex2rgb(value, this.uniforms.lightColor);
   }
 
@@ -185,10 +186,10 @@ void main(void) {
    * Alpha of the light.
    * @default 0.7
    */
-  get lightAlpha(): number {
+  public get lightAlpha(): number {
     return this.uniforms.lightAlpha;
   }
-  set lightAlpha(value: number) {
+  public set lightAlpha(value: number) {
     this.uniforms.lightAlpha = value;
   }
 
@@ -196,10 +197,10 @@ void main(void) {
    * Color of the shadow.
    * @default 0x000000
    */
-  get shadowColor(): number {
+  public get shadowColor(): number {
     return rgb2hex(this.uniforms.shadowColor);
   }
-  set shadowColor(value: number) {
+  public set shadowColor(value: number) {
     hex2rgb(value, this.uniforms.shadowColor);
   }
 
@@ -207,10 +208,10 @@ void main(void) {
    * Alpha of the shadow.
    * @default 0.7
    */
-  get shadowAlpha(): number {
+  public get shadowAlpha(): number {
     return this.uniforms.shadowAlpha;
   }
-  set shadowAlpha(value: number) {
+  public set shadowAlpha(value: number) {
     this.uniforms.shadowAlpha = value;
   }
 }

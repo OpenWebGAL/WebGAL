@@ -14,7 +14,7 @@ import { WebGAL } from '@/Core/WebGAL';
 import { STAGE_KEYS } from '@/Core/constants';
 
 export function useSetFigure(stageState: IStageState) {
-  const { figNameLeft, figName, figNameRight, freeFigure, live2dMotion, live2dExpression } = stageState;
+  const { figNameLeft, figName, figNameRight, freeFigure, live2dMotion, live2dExpression, figureMetaData } = stageState;
 
   /**
    * 同步 motion
@@ -33,6 +33,18 @@ export function useSetFigure(stageState: IStageState) {
       WebGAL.gameplay.pixiStage?.changeModelExpressionByKey(expression.target, expression.expression);
     }
   }, [live2dExpression]);
+
+  /**
+   * 同步元数据
+   */
+  useEffect(() => {
+    Object.entries(figureMetaData).forEach(([key, value]) => {
+      const figureObject = WebGAL.gameplay.pixiStage?.getStageObjByKey(key);
+      if (figureObject && value?.zIndex !== undefined) {
+        figureObject.pixiContainer.zIndex = value.zIndex;
+      }
+    });
+  }, [figureMetaData]);
 
   /**
    * 设置立绘
