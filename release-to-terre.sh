@@ -14,4 +14,5 @@ cd ../../../../../../WebGAL/packages/webgal || exit
 # 复制
 cp -r dist/index.html ../../../WebGAL_Terre/packages/terre2/assets/templates/WebGAL_Template
 cp -r dist/assets ../../../WebGAL_Terre/packages/terre2/assets/templates/WebGAL_Template
+cp -r dist/lib ../../../WebGAL_Terre/packages/terre2/assets/templates/WebGAL_Template
 cp -r dist/webgal-serviceworker.js ../../../WebGAL_Terre/packages/terre2/assets/templates/WebGAL_Template

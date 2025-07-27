@@ -23,7 +23,7 @@ export interface IAnimationObject {
   setStartState: Function;
   setEndState: Function;
   tickerFunc: PIXI.TickerCallback<number>;
-  getEndStateEffect?: Function;
+  getEndFilterEffect?: Function;
 }
 
 interface IStageAnimationObject {
@@ -291,14 +291,33 @@ export default class PixiStage {
       const thisTickerFunc = this.stageAnimations[index];
       this.currentApp?.ticker.remove(thisTickerFunc.animationObject.tickerFunc);
       thisTickerFunc.animationObject.setEndState();
-      const endStateEffect = thisTickerFunc.animationObject.getEndStateEffect?.() ?? {};
+      const webgalFilters = thisTickerFunc.animationObject.getEndFilterEffect?.() ?? {};
       this.unlockStageObject(thisTickerFunc.targetKey ?? 'default');
       if (thisTickerFunc.targetKey) {
         const target = this.getStageObjByKey(thisTickerFunc.targetKey);
         if (target) {
+          const targetTransform = {
+            alpha: target.pixiContainer.alpha,
+            scale: {
+              x: target.pixiContainer.scale.x,
+              y: target.pixiContainer.scale.y,
+            },
+            // pivot: {
+            //   x: target.pixiContainer.pivot.x,
+            //   y: target.pixiContainer.pivot.y,
+            // },
+            position: {
+              x: target.pixiContainer.x,
+              y: target.pixiContainer.y,
+            },
+            rotation: target.pixiContainer.rotation,
+            // @ts-ignore
+            blur: target.pixiContainer.blur,
+            ...webgalFilters,
+          };
           let effect: IEffect = {
             target: thisTickerFunc.targetKey,
-            transform: endStateEffect,
+            transform: targetTransform,
           };
           webgalStore.dispatch(stageActions.updateEffect(effect));
           // if (!this.notUpdateBacklogEffects) updateCurrentBacklogEffects(webgalStore.getState().stage.effects);

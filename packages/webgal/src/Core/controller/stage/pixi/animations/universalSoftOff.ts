@@ -14,7 +14,7 @@ export function generateUniversalSoftOffAnimationObj(targetKey: string, duration
    * 在此书写为动画设置终态的操作
    */
   function setEndState() {
-    if (target) target.pixiContainer.alphaFilterVal = 0;
+    if (target) target.pixiContainer.alpha = 0;
   }
 
   /**
@@ -27,8 +27,8 @@ export function generateUniversalSoftOffAnimationObj(targetKey: string, duration
       const baseDuration = WebGAL.gameplay.pixiStage!.frameDuration;
       const currentAddOplityDelta = (duration / baseDuration) * delta;
       const decreasement = 1 / currentAddOplityDelta;
-      if (targetContainer.alphaFilterVal > 0) {
-        targetContainer.alphaFilterVal -= decreasement;
+      if (targetContainer.alpha > 0) {
+        targetContainer.alpha -= decreasement;
       }
     }
   }
