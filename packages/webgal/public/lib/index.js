@@ -14,7 +14,7 @@ async function loadIifePlugin(pluginPath) {
     await loadScript(pluginPath);
     return true;
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return false;
   }
 }
