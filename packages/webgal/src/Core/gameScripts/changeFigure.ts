@@ -185,7 +185,7 @@ export function changeFigure(sentence: ISentence): IPerform {
   // 储存一下现有的 transform 给退场动画当起始帧用, 因为马上就要清除了
   const currentEffect = webgalStore.getState().stage.effects.find((e) => e.target === key);
   let currentTransform = baseTransform;
-  if (currentEffect && currentEffect.transform) {
+  if (currentEffect?.transform) {
     currentTransform = cloneDeep(currentEffect.transform);
   }
 

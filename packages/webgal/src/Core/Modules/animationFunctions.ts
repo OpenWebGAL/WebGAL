@@ -101,6 +101,7 @@ export function getEnterExitAnimation(
  * @param duration 动画持续时间
  * @param ease 缓动类型
  */
+// eslint-disable-next-line max-params
 export function createDefaultEnterExitAnimation(
   type: 'enter' | 'exit',
   target: string,
@@ -119,6 +120,7 @@ export function createDefaultEnterExitAnimation(
   }
 }
 
+// eslint-disable-next-line max-params
 export function createEnterExitAnimation(
   sentence: ISentence,
   targetKey: string,
@@ -221,6 +223,7 @@ export function removeStageObjectWithAnimationByKey(targetKey: string, currentEf
  * @param currentEffects 当前场景效果列表
  * @param addFunction 添加函数
  */
+// eslint-disable-next-line max-params
 export function addOrRemoveStageObject(
   targetKey: string,
   newUrl: string,
