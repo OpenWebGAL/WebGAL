@@ -1,315 +1,311 @@
 <!DOCTYPE html>
 <html lang="zh-Hans">
-<head>
-  <meta charset="UTF-8"/>
-  <link rel="icon" type="image/x-icon" href="./icons/favicon.ico" />
-  <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png">
-  <link rel="manifest" href="./manifest.json" />
-  <!--    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>-->
-  <title>WebGAL</title>
-</head>
-
-<body>
-  <!--快速显示落地页，让用户感知不到加载的过程-->
-  <div id="ebg"></div>
-  <div id="Title_enter_page" onclick="enter()" style="
-            width: 2560px;
-            height: 1440px;
-            overflow: hidden;
-            position: absolute;
-            top: 0;
-            z-index: 14;
-            opacity: 1;
-            transition: opacity 1.5s;
-">
-    <!--    落地页背景-->
-    <div id="Title_bg_container" style="
-    height: 100%;
-    width: 100%;
-    position: absolute;
-    background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
-    top: 0;
-    opacity: 1;
-    transition: opacity 1s;
-"></div>
-    <!--    点击后的白色渐变-->
-    <div id="Title_white_container" style="
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    top: 0;
-    opacity: 0;
-    background: linear-gradient(165deg,rgba(255,255,255,0.25) 0%,rgba(255,255,255,1) 50%,rgba(255,255,255,0.25) 100%);
-    transition: opacity 1s;
-"></div>
-    <!--    落地页文字-->
-    <div id="Title_enter_text" style="width: 100%;
-    position: absolute;
-    top: 0;
-    height: 100%;
-    opacity: 1;
-    font-size: 175%;
-    transition: opacity 1s;
-    z-index: 15;
-    font-family: '思源宋体',Georgia,serif">
-      <div class="toCenter" style="
-            width: 100%;
-            height: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-">
-        <div class="StartButton" style="
-            letter-spacing: 0.25em ;
-            padding: 2em 2em 2em 2em;
-            text-shadow: 0 0 30px rgba(0,0,0,0.5);
-            transition: text-shadow 1s;
-            font-size: 175%;
-">
-          PRESS THE SCREEN TO START
-        </div>
-      </div>
-      <div style="position: absolute;
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/x-icon" href="./icons/favicon.ico" />
+    <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png" />
+    <link rel="manifest" href="./manifest.json" />
+    <!--    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>-->
+    <title>WebGAL</title>
+    <style>
+      #Title_enter_page {
+        width: 2560px;
+        height: 1440px;
+        overflow: hidden;
+        position: absolute;
+        top: 0;
+        z-index: 14;
+        opacity: 1;
+        transition: opacity 1.5s;
+      }
+      #Title_bg_container {
+        height: 100%;
+        width: 100%;
+        position: absolute;
+        background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+        top: 0;
+        opacity: 1;
+        transition: opacity 1s;
+      }
+      #Title_white_container {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        opacity: 0;
+        background: linear-gradient(
+          165deg,
+          rgba(255, 255, 255, 0.25) 0%,
+          rgba(255, 255, 255, 1) 50%,
+          rgba(255, 255, 255, 0.25) 100%
+        );
+        transition: opacity 1s;
+      }
+      #Title_enter_text {
+        width: 100%;
+        position: absolute;
+        top: 0;
+        height: 100%;
+        opacity: 1;
+        font-size: 175%;
+        transition: opacity 1s;
+        z-index: 15;
+        font-family: '思源宋体', Georgia, serif;
+      }
+      #Title_enter_text > div.toCenter {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      #Title_enter_text > div.toCenter > div.StartButton {
+        letter-spacing: 0.25em;
+        padding: 2em 2em 2em 2em;
+        text-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+        transition: text-shadow 1s;
+        font-size: 175%;
+      }
+      #Title_enter_text > div.link-to-github {
+        position: absolute;
         bottom: 1em;
-        color:#999;
+        color: #999;
         font-size: 75%;
         display: flex;
         justify-content: center;
         width: 100%;
         flex-flow: column;
-        align-items: center ">
-        <div style="padding: 0 0 0.25em 0">
-          Powered by <a href="https://github.com/OpenWebGAL/WebGAL"
-            onclick="jump(event, 'https://github.com/OpenWebGAL/WebGAL')">WebGAL</a> Framework
+        align-items: center;
+      }
+      #Title_enter_text > div.link-to-github > div {
+        padding: 0 0 0.25em 0;
+      }
+    </style>
+  </head>
+  <body>
+    <!--快速显示落地页，让用户感知不到加载的过程-->
+    <div id="ebg"></div>
+    <div id="Title_enter_page" onclick="enter()">
+      <!--    落地页背景-->
+      <div id="Title_bg_container"></div>
+      <!--    点击后的白色渐变-->
+      <div id="Title_white_container"></div>
+      <!--    落地页文字-->
+      <div id="Title_enter_text">
+        <div class="toCenter">
+          <div class="StartButton">PRESS THE SCREEN TO START</div>
+        </div>
+        <div class="link-to-github">
+          <div>
+            Powered by
+            <a
+              href="https://github.com/OpenWebGAL/WebGAL"
+              onclick="jump(event, 'https://github.com/OpenWebGAL/WebGAL')"
+            >
+              WebGAL
+            </a>
+            Framework
+          </div>
         </div>
       </div>
     </div>
-  </div>
-  <div id="panic-overlay"> <!-- 紧急回避 --> </div>
-  <div id="root"></div>
-  <script>
-    /**
-     * 在窗口大小改变时进行强制缩放
-     */
-    const ua = navigator.userAgent;
-    const isIOSDevice = !!ua.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
-    function resize() {
-      const targetHeight = 1440;
-      const targetWidth = 2560;
+    <!-- 紧急回避 -->
+    <div id="panic-overlay"></div>
+    <div id="root"></div>
+    <script>
+      /**
+       * 在窗口大小改变时进行强制缩放
+       */
+      const ua = navigator.userAgent;
+      const isIOSDevice = !!ua.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
+      function resize() {
+        const targetHeight = 1440;
+        const targetWidth = 2560;
 
-      const h = window.innerHeight; // 窗口高度
-      const w = window.innerWidth; // 窗口宽度
-      const zoomH = h / targetHeight; // 以窗口高度为基准的变换比
-      const zoomW = w / targetWidth; // 以窗口宽度为基准的变换比
-      const zoomH2 = w / targetHeight; // 竖屏时以窗口高度为基础的变换比
-      const zoomW2 = h / targetWidth; // 竖屏时以窗口宽度为基础的变换比
-      let mh = (targetHeight - h) / 2; // y轴移动距离
-      let mw = (targetWidth - w) / 2; // x轴移动距离
-      let mh2os = targetWidth / 2 - w / 2; // 竖屏时 y轴移动距离
-      let mw2os = targetHeight / 2 - h / 2; // 竖屏时 x轴移动距离
-      let transform = '';
-      let ebgTransform = '';
-      const root = document.getElementById('root'); // 获取根元素
-      const title = document.getElementById('Title_enter_page');
-      const ebg = document.getElementById('ebg');
-      const elements = [root, title];
-      if (w > h) {
+        const h = window.innerHeight; // 窗口高度
+        const w = window.innerWidth; // 窗口宽度
+        const zoomH = h / targetHeight; // 以窗口高度为基准的变换比
+        const zoomW = w / targetWidth; // 以窗口宽度为基准的变换比
+        const zoomH2 = w / targetHeight; // 竖屏时以窗口高度为基础的变换比
+        const zoomW2 = h / targetWidth; // 竖屏时以窗口宽度为基础的变换比
+        let mh = (targetHeight - h) / 2; // y轴移动距离
+        let mw = (targetWidth - w) / 2; // x轴移动距离
+        let mh2os = targetWidth / 2 - w / 2; // 竖屏时 y轴移动距离
+        let mw2os = targetHeight / 2 - h / 2; // 竖屏时 x轴移动距离
+        let transform = '';
+        let ebgTransform = '';
+        const root = document.getElementById('root'); // 获取根元素
+        const title = document.getElementById('Title_enter_page');
         const ebg = document.getElementById('ebg');
+        const elements = [root, title];
+        if (w > h) {
+          const ebg = document.getElementById('ebg');
+          if (ebg) {
+            ebg.style.height = `100vh`;
+            ebg.style.width = `100vw`;
+            ebgTransform = '';
+          }
+          mw = -mw;
+          mh = -mh;
+          if (w * (9 / 16) >= h) {
+            transform = `translate(${mw}px, ${mh}px) scale(${zoomH},${zoomH})`;
+          }
+          if (w * (9 / 16) < h) {
+            transform = `translate(${mw}px, ${mh}px) scale(${zoomW},${zoomW})`;
+          }
+        } else {
+          /**
+           * 旋转
+           */
+          if (ebg) {
+            ebg.style.height = `${targetHeight}px`;
+            ebg.style.width = `${targetWidth}px`;
+          }
+          mw2os = -mw2os;
+          if (h * (9 / 16) >= w) {
+            ebgTransform = `rotate(90deg) translate(${mw2os}px, ${mh2os}px) scale(${zoomH2 * 1.75},${zoomH2 * 1.75})`;
+            transform = `rotate(90deg) translate(${mw2os}px, ${mh2os}px) scale(${zoomH2},${zoomH2})`;
+          }
+          if (h * (9 / 16) < w) {
+            ebgTransform = `rotate(90deg) translate(${mw2os}px, ${mh2os}px) scale(${zoomW2 * 1.75},${zoomW2 * 1.75})`;
+            transform = `rotate(90deg) translate(${mw2os}px, ${mh2os}px) scale(${zoomW2},${zoomW2})`;
+          }
+          /**
+           * iOS 不强制旋转
+           */
+          if (isIOSDevice) {
+            const zoomWi = w / targetWidth;
+            transform = `translate(${-mw}px, ${-mh}px) scale(${zoomWi},${zoomWi})`;
+          }
+        }
         if (ebg) {
-          ebg.style.height = `100vh`;
-          ebg.style.width = `100vw`;
-          ebgTransform = '';
+          ebg.style.transform = ebgTransform;
         }
-        mw = -mw;
-        mh = -mh;
-        if (w * (9 / 16) >= h) {
-          transform = `translate(${mw}px, ${mh}px) scale(${zoomH},${zoomH})`;
+        for (const element of elements) {
+          if (element) {
+            element.style.transform = transform;
+          }
         }
-        if (w * (9 / 16) < h) {
-          transform = `translate(${mw}px, ${mh}px) scale(${zoomW},${zoomW})`;
-        }
+      }
+
+      if (!isIOSDevice) {
+        // 创建一个新的 meta 标签
+        const meta = document.createElement('meta');
+        meta.name = 'viewport';
+        meta.content = 'width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no';
+        // 将该标签添加到 head 中
+        document.getElementsByTagName('head')[0].appendChild(meta);
+        resize();
+        window.onload = resize;
+        window.onresize = resize;
+        // 监听键盘 F11 事件，全屏时触发页面调整
+        document.onkeydown = function (event) {
+          const e = event;
+          if (e && e.key === 'F11') {
+            setTimeout(() => {
+              resize();
+            }, 100);
+          }
+        };
       } else {
-        /**
-         * 旋转
-         */
-        if (ebg) {
-          ebg.style.height = `${targetHeight}px`;
-          ebg.style.width = `${targetWidth}px`;
-        }
-        mw2os = -mw2os;
-        if (h * (9 / 16) >= w) {
-          ebgTransform = `rotate(90deg) translate(${mw2os}px, ${mh2os}px) scale(${zoomH2 * 1.75},${zoomH2 * 1.75})`;
-          transform = `rotate(90deg) translate(${mw2os}px, ${mh2os}px) scale(${zoomH2},${zoomH2})`;
-        }
-        if (h * (9 / 16) < w) {
-          ebgTransform = `rotate(90deg) translate(${mw2os}px, ${mh2os}px) scale(${zoomW2 * 1.75},${zoomW2 * 1.75})`;
-          transform = `rotate(90deg) translate(${mw2os}px, ${mh2os}px) scale(${zoomW2},${zoomW2})`;
-        }
-        /**
-         * iOS 不强制旋转
-         */
-        if (isIOSDevice) {
-          const zoomWi = w / targetWidth;
-          transform = `translate(${-mw}px, ${-mh}px) scale(${zoomWi},${zoomWi})`
-        }
+        // ios
+        const meta = document.createElement('meta');
+        meta.name = 'viewport';
+        meta.content = 'width=device-width, initial-scale=0.22, minimum-scale=0.01, maximum-scale=1';
+        document.getElementsByTagName('head')[0].appendChild(meta);
+        const style = document.createElement('style');
+        style.type = 'text/css';
+        style.textContent = '* { font-synthesis: none !important; }';
+        document.head.appendChild(style);
       }
-      if (ebg) {
-        ebg.style.transform = ebgTransform;
+    </script>
+    <script>
+      /**
+       * 注册 Service Worker
+       */
+      const u = navigator.userAgent;
+      const isIOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); // 判断是否是 iOS终端
+      if ('serviceWorker' in navigator && !isIOS) {
+        navigator.serviceWorker
+          .register('./webgal-serviceworker.js')
+          .then(function (reg) {
+            // registration worked
+            console.log('Registration succeeded. Scope is ' + reg.scope);
+          })
+          .catch(function (error) {
+            // registration failed
+            console.log('Registration failed with ' + error);
+          });
       }
-      for (const element of elements) {
-        if (element) {
-          element.style.transform = transform;
+    </script>
+    <!--<script type="module" src="/src/Core/util/resize.ts"></script>-->
+    <script>
+      let enterPromise = new Promise((res) => (window.enterPromise = res));
+      let renderPromise = new Promise((res) => (window.renderPromise = res));
+      /**
+       * 将播放bgm的事件发送出去
+       */
+      Promise.all([enterPromise, renderPromise]).then(() => {
+        const event = new MouseEvent('click', {
+          view: window,
+          bubbles: true,
+          cancelable: true,
+        });
+        const target = document.getElementById('enter_game_target');
+        if (target) {
+          target.dispatchEvent(event);
         }
-      }
-    }
-
-    if (!isIOSDevice) {
-      // 创建一个新的 meta 标签
-      const meta = document.createElement('meta');
-      meta.name = "viewport";
-      meta.content = "width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no";
-      // 将该标签添加到 head 中
-      document.getElementsByTagName('head')[0].appendChild(meta);
-      resize();
-      window.onload = resize;
-      window.onresize = resize;
-      // 监听键盘 F11 事件，全屏时触发页面调整
-      document.onkeydown = function (event) {
-        const e = event;
-        if (e && e.key === 'F11') {
-          setTimeout(() => {
-            resize();
-          }, 100);
+        if (event) {
+          const logo = document.getElementById('logo_target');
+          if (logo) {
+            logo.style.display = 'contents';
+          }
         }
-      };
-    } else {
-      // ios
-      const meta = document.createElement('meta');
-      meta.name = "viewport";
-      meta.content = "width=device-width, initial-scale=0.22, minimum-scale=0.01, maximum-scale=1";
-      document.getElementsByTagName('head')[0].appendChild(meta);
-      const style = document.createElement('style');
-      style.type = 'text/css';
-      style.textContent = '* { font-synthesis: none !important; }';
-      document.head.appendChild(style);
-    }
-
-  </script>
-  <script>
-    /**
-     * 注册 Service Worker
-     */
-    const u = navigator.userAgent;
-    const isIOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); // 判断是否是 iOS终端
-    if ("serviceWorker" in navigator && !isIOS) {
-      navigator.serviceWorker.register("./webgal-serviceworker.js").then(function (reg) {
-        // registration worked
-        console.log("Registration succeeded. Scope is " + reg.scope);
-      }).catch(function (error) {
-        // registration failed
-        console.log("Registration failed with " + error);
       });
-    }
-  </script>
-  <script type="module" src="/src/main.tsx"></script>
-  <!--<script type="module" src="/src/Core/util/resize.ts"></script>-->
-  <script>
-    function loadScript(url) {
-      return new Promise((resolve, reject) => {
-        const script = document.createElement('script');
-        script.src = url;
-        script.onload = () => resolve(`Loaded: ${url}`);
-        script.onerror = (error) => reject(`Failed to load: ${url}`);
-        document.head.appendChild(script);
-      });
-    }
 
-    async function loadLive2D() {
-      try {
-        // 尝试加载 Live2D SDK，
-        // 只有在用户自行取得 Live2D 许可并放到下面的目录时，这里才可能加载成功。
-        // 本项目 **没有** 引入 Live2D SDK
-        // Attempt to load the Live2D SDK.
-        // This will only succeed if the user has obtained a Live2D license and placed it in the directory below.
-        // This project **does not** include the Live2D SDK.
-        // Live2D SDK の読み込みを試みます。
-        // ユーザーが Live2D ライセンスを取得し、以下のディレクトリに配置した場合のみ、読み込みが成功します。
-        // このプロジェクトには Live2D SDK は**含まれていません**
-        await loadScript('lib/live2d.min.js');
-        await loadScript('lib/live2dcubismcore.min.js');
-        console.log('Both Live2D scripts loaded successfully.');
-      } catch (error) {
-        console.error(error);
+      function jump(event, url) {
+        // 获取点击事件，阻止点击事件冒泡触发 `enter` 事件
+        event.stopPropagation();
+        // window.location = url;
       }
-    }
-    loadLive2D();
-  </script>
-  <script>
-    let enterPromise = new Promise(res => window.enterPromise = res);
-    let renderPromise = new Promise(res => window.renderPromise = res);
-    /**
-     * 将播放bgm的事件发送出去
-     */
-    Promise.all([enterPromise, renderPromise]).then(() => {
-      const event = new MouseEvent("click", {
-        "view": window,
-        "bubbles": true,
-        "cancelable": true
-      });
-      const target = document.getElementById("enter_game_target");
-      if (target) {
-        target.dispatchEvent(event);
-      }
-      if (event) {
-        const logo = document.getElementById("logo_target");
-        if (logo) {
-          logo.style.display = "contents";
+
+      /**
+       * 点击屏幕，进入引擎主界面
+       */
+      function enter() {
+        const bgContainer = document.getElementById('Title_bg_container');
+        if (bgContainer) {
+          bgContainer.style.opacity = '0'; // 调整标题背景的透明度
         }
-      }
-    });
-
-    function jump(event, url) {
-      // 获取点击事件，阻止点击事件冒泡触发 `enter` 事件
-      event.stopPropagation();
-      // window.location = url;
-    }
-
-    /**
-     * 点击屏幕，进入引擎主界面
-     */
-    function enter() {
-      const bgContainer = document.getElementById("Title_bg_container");
-      if (bgContainer) {
-        bgContainer.style.opacity = "0"; // 调整标题背景的透明度
-      }
-      const enterText = document.getElementById("Title_enter_text");
-      if (enterText) {
-        enterText.style.opacity = "0"; // 调整标题文字的透明度
-      }
-      const whiteContainer = document.getElementById("Title_white_container");
-      setTimeout(() => {
-        if (whiteContainer) {
-          whiteContainer.style.opacity = "1";
+        const enterText = document.getElementById('Title_enter_text');
+        if (enterText) {
+          enterText.style.opacity = '0'; // 调整标题文字的透明度
         }
-      }, 50); // 在50ms后开始显示白色渐变
-      const title = document.getElementById("Title_enter_page");
-      setTimeout(() => {
-        if (title)
-          title.style.opacity = "0";
-      }, 500); //500ms后开始降低落地页透明度
-      if (!isIOS && title) {
-        title.style.pointerEvents = "none"; //落地页不再响应点击
-        title.style.background = "linear-gradient( #a1c4fd 0%, #c2e9fb 100%)"; //改变标题渐变效果
-      }
-      setTimeout(() => {
-        if (title) {
-          title.style.display = "none";
+        const whiteContainer = document.getElementById('Title_white_container');
+        setTimeout(() => {
+          if (whiteContainer) {
+            whiteContainer.style.opacity = '1';
+          }
+        }, 50); // 在50ms后开始显示白色渐变
+        const title = document.getElementById('Title_enter_page');
+        setTimeout(() => {
+          if (title) title.style.opacity = '0';
+        }, 500); //500ms后开始降低落地页透明度
+        if (!isIOS && title) {
+          title.style.pointerEvents = 'none'; //落地页不再响应点击
+          title.style.background = 'linear-gradient( #a1c4fd 0%, #c2e9fb 100%)'; //改变标题渐变效果
         }
-      }, 2000); // 将落地页设置为不显示
-      window.enterPromise();
-      delete window.enterPromise;
-    }
-  </script>
-</body>
-
+        setTimeout(() => {
+          if (title) {
+            title.style.display = 'none';
+          }
+        }, 2000); // 将落地页设置为不显示
+        window.enterPromise();
+        delete window.enterPromise;
+      }
+    </script>
+    <!-- 加载IIFE插件 -->
+    <script type="module" src="/lib/index.js"></script>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
 </html>
