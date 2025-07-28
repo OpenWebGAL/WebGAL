@@ -13,9 +13,10 @@ import {
 import { logger } from '@/Core/util/logger';
 import { isIOS } from '@/Core/initializeScript';
 import { WebGALPixiContainer } from '@/Core/controller/stage/pixi/WebGALPixiContainer';
-import { WebGAL } from '@/Core/WebGAL';
+import { Live2D, WebGAL } from '@/Core/WebGAL';
 import { SCREEN_CONSTANTS } from '@/Core/util/constants';
 import { addSpineBgImpl, addSpineFigureImpl } from '@/Core/controller/stage/pixi/spine';
+import { baseBlinkParam, BlinkParam } from '@/Core/live2DCore';
 // import { figureCash } from '@/Core/gameScripts/vocal/conentsCash'; // 如果要使用 Live2D，取消这里的注释
 // import { Live2DModel, SoundManager } from 'pixi-live2d-display-webgal'; // 如果要使用 Live2D，取消这里的注释
 
@@ -53,6 +54,7 @@ export interface ILive2DRecord {
   target: string;
   motion: string;
   expression: string;
+  blink: BlinkParam;
 }
 
 // export interface IRegisterTickerOpr {
@@ -115,10 +117,7 @@ export default class PixiStage {
    */
   private MAX_TEX_COUNT = 10;
 
-  private isLive2dAvailable: undefined | boolean = undefined;
   private figureCash: any;
-  private live2DModel: any;
-  private soundManager: any;
   public constructor() {
     const app = new PIXI.Application({
       backgroundAlpha: 0,
@@ -640,7 +639,7 @@ export default class PixiStage {
    */
   // eslint-disable-next-line max-params
   public addLive2dFigure(key: string, jsonPath: string, pos: string, motion: string, expression: string) {
-    if (this.isLive2dAvailable !== true) return;
+    if (Live2D.isAvailable !== true) return;
     try {
       let stageWidth = this.stageWidth;
       let stageHeight = this.stageHeight;
@@ -681,7 +680,7 @@ export default class PixiStage {
       // eslint-disable-next-line @typescript-eslint/no-this-alias
       const instance = this;
 
-      const setup = (stage: PixiStage) => {
+      const setup = () => {
         if (thisFigureContainer && this.getStageObjByUuid(figureUuid)) {
           (async function () {
             let overrideBounds: [number, number, number, number] = [0, 0, 0, 0];
@@ -691,7 +690,7 @@ export default class PixiStage {
             }
             console.log(overrideBounds);
             const models = await Promise.all([
-              stage.live2DModel.from(jsonPath, {
+              Live2D.Live2DModel.from(jsonPath, {
                 autoInteract: false,
                 overWriteBounds: {
                   x0: overrideBounds[0],
@@ -752,15 +751,9 @@ export default class PixiStage {
               }
               instance.updateL2dExpressionByKey(key, expressionToSet);
               model.expression(expressionToSet);
-              // @ts-ignore
-              if (model.internalModel.eyeBlink) {
-                // @ts-ignore
-                model.internalModel.eyeBlink.blinkInterval = 1000 * 60 * 60 * 24; // @ts-ignore
-                model.internalModel.eyeBlink.nextBlinkTimeLeft = 1000 * 60 * 60 * 24;
-              }
 
               // lip-sync is still a problem and you can not.
-              stage.soundManager.volume = 0; // @ts-ignore
+              Live2D.SoundManager.volume = 0; // @ts-ignore
               if (model.internalModel.angleXParamIndex !== undefined) model.internalModel.angleXParamIndex = 999; // @ts-ignore
               if (model.internalModel.angleYParamIndex !== undefined) model.internalModel.angleYParamIndex = 999; // @ts-ignore
               if (model.internalModel.angleZParamIndex !== undefined) model.internalModel.angleZParamIndex = 999;
@@ -776,14 +769,14 @@ export default class PixiStage {
       const resourses = Object.keys(loader.resources);
       this.cacheGC();
       if (!resourses.includes(jsonPath)) {
-        this.loadAsset(jsonPath, () => setup(this));
+        this.loadAsset(jsonPath, () => setup());
       } else {
         // 复用
-        setup(this);
+        setup();
       }
     } catch (error) {
       console.error('Live2d Module err: ' + error);
-      this.isLive2dAvailable = false;
+      Live2D.isAvailable = false;
     }
   }
 
@@ -849,6 +842,26 @@ export default class PixiStage {
         model.expression(expression);
       }
       this.updateL2dExpressionByKey(key, expression);
+    }
+  }
+
+  public changeModelBlinkByKey(key: string, blinkParam: BlinkParam) {
+    const target = this.figureObjects.find((e) => e.key === key);
+    if (target?.sourceType !== 'live2d') return;
+    const figureRecordTarget = this.live2dFigureRecorder.find((e) => e.target === key);
+    if (target && figureRecordTarget?.blink !== blinkParam) {
+      const container = target.pixiContainer;
+      const children = container.children;
+      let newBlinkParam: BlinkParam = { ...baseBlinkParam, ...blinkParam };
+      // 继承现有 BlinkParam
+      if (figureRecordTarget?.blink) {
+        newBlinkParam = { ...cloneDeep(figureRecordTarget.blink), ...blinkParam };
+      }
+      for (const model of children) {
+        // @ts-ignore
+        model?.internalModel?.setBlinkParam?.(newBlinkParam);
+      }
+      this.updateL2dBlinkByKey(key, newBlinkParam);
     }
   }
 
@@ -960,7 +973,7 @@ export default class PixiStage {
     if (figureTargetIndex >= 0) {
       this.live2dFigureRecorder[figureTargetIndex].motion = motion;
     } else {
-      this.live2dFigureRecorder.push({ target, motion, expression: '' });
+      this.live2dFigureRecorder.push({ target, motion, expression: '', blink: baseBlinkParam });
     }
   }
 
@@ -969,7 +982,16 @@ export default class PixiStage {
     if (figureTargetIndex >= 0) {
       this.live2dFigureRecorder[figureTargetIndex].expression = expression;
     } else {
-      this.live2dFigureRecorder.push({ target, motion: '', expression });
+      this.live2dFigureRecorder.push({ target, motion: '', expression, blink: baseBlinkParam });
+    }
+  }
+
+  private updateL2dBlinkByKey(target: string, blink: BlinkParam) {
+    const figureTargetIndex = this.live2dFigureRecorder.findIndex((e) => e.target === target);
+    if (figureTargetIndex >= 0) {
+      this.live2dFigureRecorder[figureTargetIndex].blink = blink;
+    } else {
+      this.live2dFigureRecorder.push({ target, motion: '', expression: '', blink });
     }
   }
 
@@ -1025,16 +1047,8 @@ export default class PixiStage {
     try {
       const { figureCash } = await import('@/Core/gameScripts/vocal/conentsCash');
       this.figureCash = figureCash;
-      const { Live2DModel, SoundManager } = await import('pixi-live2d-display-webgal');
-      this.live2DModel = Live2DModel;
-      this.soundManager = SoundManager;
     } catch (error) {
-      this.isLive2dAvailable = false;
-      console.info('live2d lib load failed', error);
-    }
-    if (this.isLive2dAvailable === undefined) {
-      this.isLive2dAvailable = true;
-      console.info('live2d lib load success');
+      console.error('Failed to load figureCash:', error);
     }
   }
 }

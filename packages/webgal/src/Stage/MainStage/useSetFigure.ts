@@ -7,9 +7,19 @@ import { generateUniversalSoftOffAnimationObj } from '@/Core/controller/stage/pi
 
 import { getEnterExitAnimation } from '@/Core/Modules/animationFunctions';
 import { WebGAL } from '@/Core/WebGAL';
+import { use } from 'i18next';
 
 export function useSetFigure(stageState: IStageState) {
-  const { figNameLeft, figName, figNameRight, freeFigure, live2dMotion, live2dExpression, figureMetaData } = stageState;
+  const {
+    figNameLeft,
+    figName,
+    figNameRight,
+    freeFigure,
+    live2dMotion,
+    live2dExpression,
+    live2dBlink,
+    figureMetaData,
+  } = stageState;
 
   /**
    * 同步 motion
@@ -28,6 +38,12 @@ export function useSetFigure(stageState: IStageState) {
       WebGAL.gameplay.pixiStage?.changeModelExpressionByKey(expression.target, expression.expression);
     }
   }, [live2dExpression]);
+
+  useEffect(() => {
+    for (const blink of live2dBlink) {
+      WebGAL.gameplay.pixiStage?.changeModelBlinkByKey(blink.target, blink.blink);
+    }
+  }, [live2dBlink]);
 
   /**
    * 同步元数据
