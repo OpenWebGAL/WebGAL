@@ -16,7 +16,7 @@ import { WebGALPixiContainer } from '@/Core/controller/stage/pixi/WebGALPixiCont
 import { Live2D, WebGAL } from '@/Core/WebGAL';
 import { SCREEN_CONSTANTS } from '@/Core/util/constants';
 import { addSpineBgImpl, addSpineFigureImpl } from '@/Core/controller/stage/pixi/spine';
-import { baseBlinkParam, BlinkParam } from '@/Core/live2DCore';
+import { baseBlinkParam, baseFocusParam, BlinkParam, FocusParam } from '@/Core/live2DCore';
 // import { figureCash } from '@/Core/gameScripts/vocal/conentsCash'; // 如果要使用 Live2D，取消这里的注释
 // import { Live2DModel, SoundManager } from 'pixi-live2d-display-webgal'; // 如果要使用 Live2D，取消这里的注释
 
@@ -55,6 +55,7 @@ export interface ILive2DRecord {
   motion: string;
   expression: string;
   blink: BlinkParam;
+  focus: FocusParam;
 }
 
 // export interface IRegisterTickerOpr {
@@ -754,9 +755,7 @@ export default class PixiStage {
 
               // lip-sync is still a problem and you can not.
               Live2D.SoundManager.volume = 0; // @ts-ignore
-              if (model.internalModel.angleXParamIndex !== undefined) model.internalModel.angleXParamIndex = 999; // @ts-ignore
-              if (model.internalModel.angleYParamIndex !== undefined) model.internalModel.angleYParamIndex = 999; // @ts-ignore
-              if (model.internalModel.angleZParamIndex !== undefined) model.internalModel.angleZParamIndex = 999;
+
               thisFigureContainer.addChild(model);
             });
           })();
@@ -862,6 +861,26 @@ export default class PixiStage {
         model?.internalModel?.setBlinkParam?.(newBlinkParam);
       }
       this.updateL2dBlinkByKey(key, newBlinkParam);
+    }
+  }
+
+  public changeModelFocusByKey(key: string, FocusParam: FocusParam) {
+    const target = this.figureObjects.find((e) => e.key === key);
+    if (target?.sourceType !== 'live2d') return;
+    const figureRecordTarget = this.live2dFigureRecorder.find((e) => e.target === key);
+    if (target && figureRecordTarget?.focus !== FocusParam) {
+      const container = target.pixiContainer;
+      const children = container.children;
+      let newFocusParam: FocusParam = { ...baseFocusParam, ...FocusParam };
+      // 继承现有 FocusParam
+      if (figureRecordTarget?.focus) {
+        newFocusParam = { ...cloneDeep(figureRecordTarget.focus), ...FocusParam };
+      }
+      for (const model of children) {
+        // @ts-ignore
+        model?.internalModel?.focusController.focus(newFocusParam.x, newFocusParam.y, newFocusParam.instant);
+      }
+      this.updateL2dFocusByKey(key, newFocusParam);
     }
   }
 
@@ -973,7 +992,7 @@ export default class PixiStage {
     if (figureTargetIndex >= 0) {
       this.live2dFigureRecorder[figureTargetIndex].motion = motion;
     } else {
-      this.live2dFigureRecorder.push({ target, motion, expression: '', blink: baseBlinkParam });
+      this.live2dFigureRecorder.push({ target, motion, expression: '', blink: baseBlinkParam, focus: baseFocusParam });
     }
   }
 
@@ -982,7 +1001,7 @@ export default class PixiStage {
     if (figureTargetIndex >= 0) {
       this.live2dFigureRecorder[figureTargetIndex].expression = expression;
     } else {
-      this.live2dFigureRecorder.push({ target, motion: '', expression, blink: baseBlinkParam });
+      this.live2dFigureRecorder.push({ target, motion: '', expression, blink: baseBlinkParam, focus: baseFocusParam });
     }
   }
 
@@ -991,7 +1010,16 @@ export default class PixiStage {
     if (figureTargetIndex >= 0) {
       this.live2dFigureRecorder[figureTargetIndex].blink = blink;
     } else {
-      this.live2dFigureRecorder.push({ target, motion: '', expression: '', blink });
+      this.live2dFigureRecorder.push({ target, motion: '', expression: '', blink, focus: baseFocusParam });
+    }
+  }
+
+  private updateL2dFocusByKey(target: string, focus: FocusParam) {
+    const figureTargetIndex = this.live2dFigureRecorder.findIndex((e) => e.target === target);
+    if (figureTargetIndex >= 0) {
+      this.live2dFigureRecorder[figureTargetIndex].focus = focus;
+    } else {
+      this.live2dFigureRecorder.push({ target, motion: '', expression: '', blink: baseBlinkParam, focus });
     }
   }
 

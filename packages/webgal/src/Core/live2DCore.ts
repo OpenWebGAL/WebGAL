@@ -17,6 +17,18 @@ export const baseBlinkParam: BlinkParam = {
   openingDuration: 150,
 };
 
+export interface FocusParam {
+  x: number; // 焦点X位置
+  y: number; // 焦点Y位置
+  instant: boolean; // 是否瞬间切换焦点
+}
+
+export const baseFocusParam: FocusParam = {
+  x: 0,
+  y: 0,
+  instant: false,
+};
+
 export class Live2DCore {
   public isAvailable = false;
 

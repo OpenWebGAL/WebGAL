@@ -18,6 +18,7 @@ export function useSetFigure(stageState: IStageState) {
     live2dMotion,
     live2dExpression,
     live2dBlink,
+    live2dFocus,
     figureMetaData,
   } = stageState;
 
@@ -39,11 +40,23 @@ export function useSetFigure(stageState: IStageState) {
     }
   }, [live2dExpression]);
 
+  /**
+   * 同步 blink
+   */
   useEffect(() => {
     for (const blink of live2dBlink) {
       WebGAL.gameplay.pixiStage?.changeModelBlinkByKey(blink.target, blink.blink);
     }
   }, [live2dBlink]);
+
+  /**
+   * 同步 focus
+   */
+  useEffect(() => {
+    for (const focus of live2dFocus) {
+      WebGAL.gameplay.pixiStage?.changeModelFocusByKey(focus.target, focus.focus);
+    }
+  }, [live2dFocus]);
 
   /**
    * 同步元数据
