@@ -17,6 +17,7 @@ import { Live2D, WebGAL } from '@/Core/WebGAL';
 import { SCREEN_CONSTANTS } from '@/Core/util/constants';
 import { addSpineBgImpl, addSpineFigureImpl } from '@/Core/controller/stage/pixi/spine';
 import { baseBlinkParam, baseFocusParam, BlinkParam, FocusParam } from '@/Core/live2DCore';
+import { isEqual } from 'lodash';
 // import { figureCash } from '@/Core/gameScripts/vocal/conentsCash'; // 如果要使用 Live2D，取消这里的注释
 // import { Live2DModel, SoundManager } from 'pixi-live2d-display-webgal'; // 如果要使用 Live2D，取消这里的注释
 
@@ -848,7 +849,7 @@ export default class PixiStage {
     const target = this.figureObjects.find((e) => e.key === key);
     if (target?.sourceType !== 'live2d') return;
     const figureRecordTarget = this.live2dFigureRecorder.find((e) => e.target === key);
-    if (target && figureRecordTarget?.blink !== blinkParam) {
+    if (target && !isEqual(figureRecordTarget?.blink, blinkParam)) {
       const container = target.pixiContainer;
       const children = container.children;
       let newBlinkParam: BlinkParam = { ...baseBlinkParam, ...blinkParam };
@@ -864,17 +865,17 @@ export default class PixiStage {
     }
   }
 
-  public changeModelFocusByKey(key: string, FocusParam: FocusParam) {
+  public changeModelFocusByKey(key: string, focusParam: FocusParam) {
     const target = this.figureObjects.find((e) => e.key === key);
     if (target?.sourceType !== 'live2d') return;
     const figureRecordTarget = this.live2dFigureRecorder.find((e) => e.target === key);
-    if (target && figureRecordTarget?.focus !== FocusParam) {
+    if (target && !isEqual(figureRecordTarget?.focus, focusParam)) {
       const container = target.pixiContainer;
       const children = container.children;
-      let newFocusParam: FocusParam = { ...baseFocusParam, ...FocusParam };
+      let newFocusParam: FocusParam = { ...baseFocusParam, ...focusParam };
       // 继承现有 FocusParam
       if (figureRecordTarget?.focus) {
-        newFocusParam = { ...cloneDeep(figureRecordTarget.focus), ...FocusParam };
+        newFocusParam = { ...cloneDeep(figureRecordTarget.focus), ...focusParam };
       }
       for (const model of children) {
         // @ts-ignore

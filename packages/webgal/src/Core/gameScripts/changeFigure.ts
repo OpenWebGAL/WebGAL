@@ -251,9 +251,6 @@ export function changeFigure(sentence: ISentence): IPerform {
     if (blink) {
       dispatch(stageActions.setLive2dBlink({ target: key, blink }));
     }
-    if (blink) {
-      dispatch(stageActions.setLive2dBlink({ target: key, blink }));
-    }
     if (focus) {
       dispatch(stageActions.setLive2dFocus({ target: key, focus }));
     }

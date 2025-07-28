@@ -7,7 +7,6 @@ import { generateUniversalSoftOffAnimationObj } from '@/Core/controller/stage/pi
 
 import { getEnterExitAnimation } from '@/Core/Modules/animationFunctions';
 import { WebGAL } from '@/Core/WebGAL';
-import { use } from 'i18next';
 
 export function useSetFigure(stageState: IStageState) {
   const {
