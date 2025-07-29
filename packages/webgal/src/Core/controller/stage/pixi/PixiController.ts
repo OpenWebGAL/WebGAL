@@ -297,7 +297,7 @@ export default class PixiStage {
         const target = this.getStageObjByKey(thisTickerFunc.targetKey);
         if (target) {
           const targetTransform = {
-            alpha: target.pixiContainer.alphaFilterVal,
+            alpha: target.pixiContainer.alpha,
             scale: {
               x: target.pixiContainer.scale.x,
               y: target.pixiContainer.scale.y,
