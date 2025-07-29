@@ -8,7 +8,9 @@ import {
   IEffect,
   IFigureMetadata,
   IFreeFigure,
+  ILive2DBlink,
   ILive2DExpression,
+  ILive2DFocus,
   ILive2DMotion,
   IRunPerform,
   ISetGameVar,
@@ -60,6 +62,8 @@ export const initState: IStageState = {
   currentDialogKey: 'initial',
   live2dMotion: [],
   live2dExpression: [],
+  live2dBlink: [],
+  live2dFocus: [],
   // currentPerformDelay: 0
   currentConcatDialogPrev: '',
   enableFilm: '',
@@ -214,6 +218,30 @@ const stageSlice = createSlice({
       } else {
         // Update the existing expression
         state.live2dExpression[index].expression = expression;
+      }
+    },
+    setLive2dBlink: (state, action: PayloadAction<ILive2DBlink>) => {
+      const { target, blink } = action.payload;
+
+      const index = state.live2dBlink.findIndex((e) => e.target === target);
+      if (index < 0) {
+        // Add a new blink
+        state.live2dBlink.push({ target, blink });
+      } else {
+        // Update the existing blink
+        state.live2dBlink[index].blink = blink;
+      }
+    },
+    setLive2dFocus: (state, action: PayloadAction<ILive2DFocus>) => {
+      const { target, focus } = action.payload;
+
+      const index = state.live2dFocus.findIndex((e) => e.target === target);
+      if (index < 0) {
+        // Add a new focus
+        state.live2dFocus.push({ target, focus });
+      } else {
+        // Update the existing focus
+        state.live2dFocus[index].focus = focus;
       }
     },
     replaceUIlable: (state, action: PayloadAction<[string, string]>) => {
