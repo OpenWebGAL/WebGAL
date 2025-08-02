@@ -6,6 +6,7 @@ import { logger } from '@/Core/util/logger';
 import localforage from 'localforage';
 
 import { WebGAL } from '@/Core/WebGAL';
+import { getStringArgByKey } from '../util/getSentenceArg';
 
 /**
  * 解锁cg
@@ -13,16 +14,8 @@ import { WebGAL } from '@/Core/WebGAL';
  */
 export const unlockCg = (sentence: ISentence): IPerform => {
   const url = sentence.content;
-  let name = sentence.content;
-  let series = 'default';
-  sentence.args.forEach((e) => {
-    if (e.key === 'name') {
-      name = e.value.toString();
-    }
-    if (e.key === 'series') {
-      series = e.value.toString();
-    }
-  });
+  const name = getStringArgByKey(sentence, 'name') ?? sentence.content;
+  const series = getStringArgByKey(sentence, 'series') ?? 'default';
   logger.info(`解锁CG：${name}，路径：${url}，所属系列：${series}`);
   webgalStore.dispatch(unlockCgInUserData({ name, url, series }));
   const userDataState = webgalStore.getState().userData;
