@@ -21,7 +21,11 @@ export const setTransform = (sentence: ISentence): IPerform => {
   const animationName = (Math.random() * 10).toString(16);
   const animationString = sentence.content;
   let animationObj: AnimationFrame[];
-  const duration = getSentenceArgByKey(sentence, 'duration');
+  let duration = 500;
+  const durationFromArg = getSentenceArgByKey(sentence, 'duration');
+  if (durationFromArg && typeof durationFromArg === 'number') {
+    duration = durationFromArg;
+  }
   const ease = (getSentenceArgByKey(sentence, 'ease') as string) ?? '';
   const writeDefault = (getSentenceArgByKey(sentence, 'writeDefault') as boolean) ?? false;
   const target = (getSentenceArgByKey(sentence, 'target')?.toString() ?? '0') as string;
@@ -32,7 +36,7 @@ export const setTransform = (sentence: ISentence): IPerform => {
 
   try {
     const frame = JSON.parse(animationString) as AnimationFrame;
-    animationObj = generateTransformAnimationObj(target, frame, duration, ease);
+    animationObj = generateTransformAnimationObj(target, frame, duration, ease, 'normal');
     console.log('animationObj:', animationObj);
   } catch (e) {
     // 解析都错误了，歇逼吧
@@ -62,7 +66,7 @@ export const setTransform = (sentence: ISentence): IPerform => {
     setTimeout(() => {
       const endDialogKey = webgalStore.getState().stage.currentDialogKey;
       const isHasNext = startDialogKey !== endDialogKey;
-      WebGAL.gameplay.pixiStage?.removeAnimationWithSetEffects(key);
+      WebGAL.gameplay.pixiStage?.removeAnimation(key, true);
     }, 0);
   };
 

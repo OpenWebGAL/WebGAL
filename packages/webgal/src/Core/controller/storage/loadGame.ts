@@ -60,6 +60,7 @@ export function loadGameFromStageData(stageData: ISaveData) {
   }
 
   // 恢复舞台状态
+  WebGAL.gameplay.pixiStage?.removeAllStageObjects();
   const newStageState = cloneDeep(loadFile.nowStageState);
   const dispatch = webgalStore.dispatch;
   dispatch(resetStageState(newStageState));

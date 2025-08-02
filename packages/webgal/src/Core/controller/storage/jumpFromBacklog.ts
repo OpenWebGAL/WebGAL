@@ -67,6 +67,7 @@ export const jumpFromBacklog = (index: number, refetchScene = true) => {
   // 恢复舞台状态
   const newStageState: IStageState = cloneDeep(backlogFile.currentStageState);
 
+  WebGAL.gameplay.pixiStage?.removeAllStageObjects();
   dispatch(resetStageState(newStageState));
 
   // 恢复演出
