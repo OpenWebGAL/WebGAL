@@ -1,6 +1,6 @@
 import { ISentence } from '@/Core/controller/scene/sceneInterface';
 import { IPerform } from '@/Core/Modules/perform/performInterface';
-import { getSentenceArgByKey } from '@/Core/util/getSentenceArg';
+import { getBooleanArgByKey, getNumberArgByKey, getStringArgByKey } from '@/Core/util/getSentenceArg';
 import PixiStage, { IAnimationObject } from '@/Core/controller/stage/pixi/PixiController';
 import { logger } from '@/Core/util/logger';
 import { webgalStore } from '@/store/store';
@@ -21,11 +21,13 @@ export const setTransform = (sentence: ISentence): IPerform => {
   const animationName = (Math.random() * 10).toString(16);
   const animationString = sentence.content;
   let animationObj: AnimationFrame[];
-  const duration = getSentenceArgByKey(sentence, 'duration');
-  const ease = (getSentenceArgByKey(sentence, 'ease') as string) ?? '';
-  const writeDefault = (getSentenceArgByKey(sentence, 'writeDefault') as boolean) ?? false;
-  const target = (getSentenceArgByKey(sentence, 'target')?.toString() ?? '0') as string;
-  const keep = getSentenceArgByKey(sentence, 'keep') === true;
+
+  const duration = getNumberArgByKey(sentence, 'duration') ?? 500;
+  const ease = getStringArgByKey(sentence, 'ease') ?? '';
+  const writeDefault = getBooleanArgByKey(sentence, 'writeDefault') ?? false;
+  const target = getStringArgByKey(sentence, 'target') ?? '0';
+  const keep = getBooleanArgByKey(sentence, 'keep') ?? false;
+
   const performInitName = `animation-${target}`;
 
   WebGAL.gameplay.performController.unmountPerform(performInitName, true);

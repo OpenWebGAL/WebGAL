@@ -12,6 +12,7 @@ import { ISceneEntry } from '@/Core/Modules/scene';
 import { IBacklogItem } from '@/Core/Modules/backlog';
 import { SYSTEM_CONFIG } from '@/config';
 import { WebGAL } from '@/Core/WebGAL';
+import { getBooleanArgByKey, getStringArgByKey } from '@/Core/util/getSentenceArg';
 
 export const whenChecker = (whenValue: string | undefined): boolean => {
   if (whenValue === undefined) {
@@ -85,16 +86,9 @@ export const scriptExecutor = () => {
 
   // 判断这个脚本要不要执行
   let runThis = true;
-  let isHasWhenArg = false;
-  let whenValue = '';
-  currentScript.args.forEach((e) => {
-    if (e.key === 'when') {
-      isHasWhenArg = true;
-      whenValue = e.value.toString();
-    }
-  });
+  let whenValue = getStringArgByKey(currentScript, 'when');
   // 如果语句有 when
-  if (isHasWhenArg) {
+  if (whenValue) {
     runThis = whenChecker(whenValue);
   }
 
@@ -106,21 +100,14 @@ export const scriptExecutor = () => {
     return;
   }
   runScript(currentScript);
-  let isNext = false; // 是否要进行下一句
-  currentScript.args.forEach((e) => {
-    // 判断是否有下一句的参数
-    if (e.key === 'next' && e.value) {
-      isNext = true;
-    }
-  });
+  // 是否要进行下一句
+  let isNext = getBooleanArgByKey(currentScript, 'next') ?? false;
 
   let isSaveBacklog = currentScript.command === commandType.say; // 是否在本句保存backlog（一般遇到对话保存）
   // 检查当前对话是否有 notend 参数
-  currentScript.args.forEach((e) => {
-    if (e.key === 'notend' && e.value === true) {
-      isSaveBacklog = false;
-    }
-  });
+  const hasNotEnd = getBooleanArgByKey(currentScript, 'notend') ?? false;
+  isSaveBacklog = isSaveBacklog && !hasNotEnd;
+
   let currentStageState: IStageState;
 
   // 执行至指定 sentenceID

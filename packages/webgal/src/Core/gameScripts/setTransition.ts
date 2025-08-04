@@ -2,7 +2,7 @@ import { ISentence } from '@/Core/controller/scene/sceneInterface';
 import { IPerform } from '@/Core/Modules/perform/performInterface';
 import { webgalStore } from '@/store/store';
 import cloneDeep from 'lodash/cloneDeep';
-import { getSentenceArgByKey } from '@/Core/util/getSentenceArg';
+import { getStringArgByKey } from '@/Core/util/getSentenceArg';
 import { setStage } from '@/store/stageReducer';
 import { WebGAL } from '@/Core/WebGAL';
 
@@ -12,17 +12,14 @@ import { WebGAL } from '@/Core/WebGAL';
  */
 export const setTransition = (sentence: ISentence): IPerform => {
   // 根据参数设置指定位置
-  let key = '0';
-  for (const e of sentence.args) {
-    if (e.key === 'target') {
-      key = e.value.toString();
-    }
+  let key = getStringArgByKey(sentence, 'target') ?? '0';
+  const enterAnimation = getStringArgByKey(sentence, 'enter');
+  const exitAnimation = getStringArgByKey(sentence, 'exit');
+  if (enterAnimation) {
+    WebGAL.animationManager.nextEnterAnimationName.set(key, enterAnimation);
   }
-  if (getSentenceArgByKey(sentence, 'enter')) {
-    WebGAL.animationManager.nextEnterAnimationName.set(key, getSentenceArgByKey(sentence, 'enter')!.toString());
-  }
-  if (getSentenceArgByKey(sentence, 'exit')) {
-    WebGAL.animationManager.nextExitAnimationName.set(key + '-off', getSentenceArgByKey(sentence, 'exit')!.toString());
+  if (exitAnimation) {
+    WebGAL.animationManager.nextExitAnimationName.set(key + '-off', exitAnimation);
   }
   return {
     performName: 'none',
