@@ -12,7 +12,7 @@ export function generateUniversalSoftInAnimationObj(targetKey: string, duration:
    */
   function setStartState() {
     if (target) {
-      target.pixiContainer.alphaFilterVal = 0;
+      target.pixiContainer.alpha = 0;
     }
   }
 
@@ -22,7 +22,7 @@ export function generateUniversalSoftInAnimationObj(targetKey: string, duration:
    */
   function setEndState() {
     if (target) {
-      target.pixiContainer.alphaFilterVal = 1;
+      target.pixiContainer.alpha = 1;
     }
   }
 
@@ -37,7 +37,7 @@ export function generateUniversalSoftInAnimationObj(targetKey: string, duration:
       const currentAddOplityDelta = (duration / baseDuration) * delta;
       const increasement = 1 / currentAddOplityDelta;
       // const decreasement = 5 / currentAddOplityDelta;
-      if (sprite.alphaFilterVal < 1) {
+      if (sprite.alpha < 1) {
         sprite.alpha += increasement;
       }
     }

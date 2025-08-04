@@ -282,7 +282,7 @@ export default class PixiStage {
         if (target) {
           const webgalFilters = thisTickerFunc.animationObject.getEndFilterEffect?.() ?? {};
           const targetTransform = {
-            alpha: target.pixiContainer.alphaFilterVal,
+            alpha: target.pixiContainer.alpha,
             scale: {
               x: target.pixiContainer.scale.x,
               y: target.pixiContainer.scale.y,

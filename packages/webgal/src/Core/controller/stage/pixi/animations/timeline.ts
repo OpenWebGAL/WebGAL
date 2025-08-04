@@ -20,9 +20,7 @@ export function generateTimelineObj(
   duration: number,
 ): IAnimationObject {
   for (const segment of timeline) {
-    // 处理 alphaL
-    // @ts-ignore
-    segment['alphaFilterVal'] = segment.alpha;
+    // Alpha 现在直接使用原生属性，无需转换为 alphaFilterVal
   }
   const target = WebGAL.gameplay.pixiStage!.getStageObjByKey(targetKey);
   let currentDelay = 0;
