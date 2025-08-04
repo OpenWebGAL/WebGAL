@@ -11,6 +11,7 @@ import { assetSetter, fileType } from '@/Core/util/gameAssetsAccess/assetSetter'
 import { logger } from '@/Core/util/logger';
 import { getAnimateDuration } from '@/Core/Modules/animationFunctions';
 import { WebGAL } from '@/Core/WebGAL';
+import { baseBlinkParam, BlinkParam, FocusParam } from '@/Core/live2DCore';
 /**
  * 更改立绘
  * @param sentence 语句
@@ -23,6 +24,8 @@ export function changeFigure(sentence: ISentence): IPerform {
   let isFreeFigure = false;
   let motion = '';
   let expression = '';
+  let blink: BlinkParam | null = null;
+  let focus: FocusParam | null = null;
   let key = '';
   let duration = 500;
   let mouthOpen = '';
@@ -70,6 +73,20 @@ export function changeFigure(sentence: ISentence): IPerform {
         break;
       case 'expression':
         expression = e.value.toString();
+        break;
+      case 'blink':
+        try {
+          blink = JSON.parse(e.value.toString()) as BlinkParam;
+        } catch (error) {
+          logger.error('Failed to parse blink parameter:', error);
+        }
+        break;
+      case 'focus':
+        try {
+          focus = JSON.parse(e.value.toString()) as FocusParam;
+        } catch (error) {
+          logger.error('Failed to parse focus parameter:', error);
+        }
         break;
       case 'mouthOpen':
         mouthOpen = e.value.toString();
@@ -231,6 +248,12 @@ export function changeFigure(sentence: ISentence): IPerform {
     if (expression) {
       dispatch(stageActions.setLive2dExpression({ target: key, expression }));
     }
+    if (blink) {
+      dispatch(stageActions.setLive2dBlink({ target: key, blink }));
+    }
+    if (focus) {
+      dispatch(stageActions.setLive2dFocus({ target: key, focus }));
+    }
     if (zIndex >= 0) {
       dispatch(stageActions.setFigureMetaData([key, 'zIndex', zIndex, false]));
     }
@@ -259,6 +282,12 @@ export function changeFigure(sentence: ISentence): IPerform {
     }
     if (expression) {
       dispatch(stageActions.setLive2dExpression({ target: key, expression }));
+    }
+    if (blink) {
+      dispatch(stageActions.setLive2dBlink({ target: key, blink }));
+    }
+    if (focus) {
+      dispatch(stageActions.setLive2dFocus({ target: key, focus }));
     }
     if (zIndex >= 0) {
       dispatch(stageActions.setFigureMetaData([key, 'zIndex', zIndex, false]));
