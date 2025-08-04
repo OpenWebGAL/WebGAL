@@ -22,7 +22,7 @@ export const setTransition = (sentence: ISentence): IPerform => {
     WebGAL.animationManager.nextEnterAnimationName.set(key, getSentenceArgByKey(sentence, 'enter')!.toString());
   }
   if (getSentenceArgByKey(sentence, 'exit')) {
-    WebGAL.animationManager.nextExitAnimationName.set(key + '-off', getSentenceArgByKey(sentence, 'exit')!.toString());
+    WebGAL.animationManager.nextExitAnimationName.set(key, getSentenceArgByKey(sentence, 'exit')!.toString());
   }
   return {
     performName: 'none',
