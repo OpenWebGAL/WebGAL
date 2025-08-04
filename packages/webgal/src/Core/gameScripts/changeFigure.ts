@@ -185,7 +185,7 @@ export function changeFigure(sentence: ISentence): IPerform {
     if (expression) {
       dispatch(stageActions.setLive2dExpression({ target: key, expression }));
     }
-    if (zIndex > 0) {
+    if (zIndex >= 0) {
       dispatch(stageActions.setFigureMetaData([key, 'zIndex', zIndex, false]));
     }
     dispatch(stageActions.setFreeFigureByKey(freeFigureItem));
@@ -214,7 +214,7 @@ export function changeFigure(sentence: ISentence): IPerform {
     if (expression) {
       dispatch(stageActions.setLive2dExpression({ target: key, expression }));
     }
-    if (zIndex > 0) {
+    if (zIndex >= 0) {
       dispatch(stageActions.setFigureMetaData([key, 'zIndex', zIndex, false]));
     }
     dispatch(setStage({ key: dispatchMap[pos], value: content }));

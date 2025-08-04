@@ -17,7 +17,6 @@ export const getRandomPerformName = (): string => {
 
 export class PerformController {
   public performList: Array<IPerform> = [];
-  public timeoutList: Array<ReturnType<typeof setTimeout>> = [];
 
   public arrangeNewPerform(perform: IPerform, script: ISentence, syncPerformState = true) {
     // 检查演出列表内是否有相同的演出，如果有，一定是出了什么问题
@@ -110,12 +109,10 @@ export class PerformController {
 
   public removeAllPerform() {
     for (const e of this.performList) {
+      clearTimeout(e.stopTimeout);
       e.stopFunction();
     }
     this.performList = [];
-    for (const e of this.timeoutList) {
-      clearTimeout(e);
-    }
   }
 
   private goNextWhenOver() {

@@ -333,18 +333,9 @@ export class WebGALPixiContainer extends PIXI.Container {
 
   private baseX = 0;
   private baseY = 0;
-  private alphaFilter = new PIXI.filters.AlphaFilter(1);
 
   public constructor() {
     super();
-    this.addInternalFilterInstance(this.alphaFilter);
-  }
-
-  public get alphaFilterVal(): number {
-    return this.alphaFilter.alpha;
-  }
-  public set alphaFilterVal(v: number) {
-    this.alphaFilter.alpha = v;
   }
 
   public removeFilterByName(filterName: string) {
@@ -631,10 +622,6 @@ export class WebGALPixiContainer extends PIXI.Container {
       let insertIndex = this.filters.length;
       for (let i = 0; i < this.filters.length; i++) {
         const currentFilter = this.filters[i]!;
-        if (currentFilter === this.alphaFilter) {
-          insertIndex = i;
-          break;
-        }
         const currentName = this.filterToName.get(currentFilter);
         if (currentName) {
           const currentPriority = FILTER_CONFIGS[currentName]?.priority ?? 0;
@@ -663,13 +650,5 @@ export class WebGALPixiContainer extends PIXI.Container {
     inst = cfg.create() as T;
     this.insertFilterWithPriority(filterName, inst);
     return inst;
-  }
-
-  private addInternalFilterInstance(filter: PIXI.Filter): void {
-    if (!this.filters) {
-      this.filters = [filter];
-    } else {
-      this.filters.push(filter);
-    }
   }
 }

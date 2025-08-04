@@ -52,7 +52,7 @@ export const initState: IStageState = {
     {
       target: 'stage-main',
       transform: baseTransform,
-    }
+    },
   ],
   bgFilter: '', // 现在不用，先预留
   bgTransform: '', // 现在不用，先预留

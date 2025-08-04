@@ -20,7 +20,7 @@
     "mitt": "^3.0.0",
     "modern-css-reset": "^1.4.0",
     "pixi-filters": "^4.2.0",
-    "pixi-live2d-display-webgal": "^0.5.8",
+    "pixi-live2d-display-webgal": "^0.5.11",
     "pixi.js": "^6.3.0",
     "popmotion": "^11.0.5",
     "react": "^17.0.2",

@@ -35,7 +35,9 @@ export const changeBg = (sentence: ISentence): IPerform => {
   /**
    * 删掉相关 Effects，因为已经移除了
    */
-  dispatch(stageActions.removeEffectByTargetId(`bg-main`));
+  if (webgalStore.getState().stage.bgName !== sentence.content) {
+    dispatch(stageActions.removeEffectByTargetId(`bg-main`));
+  }
 
   // 处理 transform 和 默认 transform
   let animationObj: AnimationFrame[];
