@@ -59,7 +59,7 @@ const pixiCherryBlossoms = (
   container.addChild(particleContainer);
 
   const sakuras: SakuraSprite[] = [];
-  const texture = PIXI.Texture.from('./game/tex/cherryBlossoms.png');
+  const texture = PIXI.Texture.from('./game/tex/cherryBlossoms.webp');
 
   const randRange = (min: number, max: number): number => min + Math.random() * (max - min);
 
