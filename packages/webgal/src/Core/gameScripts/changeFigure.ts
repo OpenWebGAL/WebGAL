@@ -145,6 +145,10 @@ export function changeFigure(sentence: ISentence): IPerform {
    */
   if (isUrlChanged) {
     webgalStore.dispatch(stageActions.removeEffectByTargetId(id));
+    const oldStageObject = WebGAL.gameplay.pixiStage?.getStageObjByKey(id);
+    if (oldStageObject) {
+      oldStageObject.isExiting = true;
+    }
   }
   const setAnimationNames = (key: string, sentence: ISentence) => {
     // 处理 transform 和 默认 transform

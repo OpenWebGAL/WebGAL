@@ -49,6 +49,7 @@ export interface IStageObject {
   sourceExt: string;
   sourceType: 'img' | 'live2d' | 'spine' | 'gif' | 'video' | 'stage';
   spineAnimation?: string;
+  isExiting?: boolean;
 }
 
 export interface ILive2DRecord {
@@ -798,7 +799,7 @@ export default class PixiStage {
 
   public changeModelMotionByKey(key: string, motion: string) {
     // logger.debug(`Applying motion ${motion} to ${key}`);
-    const target = this.figureObjects.find((e) => e.key === key);
+    const target = this.figureObjects.find((e) => e.key === key && !e.isExiting);
     if (target?.sourceType === 'live2d') {
       const figureRecordTarget = this.live2dFigureRecorder.find((e) => e.target === key);
       if (target && figureRecordTarget?.motion !== motion) {
@@ -822,7 +823,7 @@ export default class PixiStage {
   }
 
   public changeSpineAnimationByKey(key: string, animation: string) {
-    const target = this.figureObjects.find((e) => e.key === key);
+    const target = this.figureObjects.find((e) => e.key === key && !e.isExiting);
     if (target?.sourceType !== 'spine') return;
 
     const container = target.pixiContainer;
@@ -847,7 +848,7 @@ export default class PixiStage {
 
   public changeModelExpressionByKey(key: string, expression: string) {
     // logger.debug(`Applying expression ${expression} to ${key}`);
-    const target = this.figureObjects.find((e) => e.key === key);
+    const target = this.figureObjects.find((e) => e.key === key && !e.isExiting);
     if (target?.sourceType !== 'live2d') return;
     const figureRecordTarget = this.live2dFigureRecorder.find((e) => e.target === key);
     if (target && figureRecordTarget?.expression !== expression) {
@@ -862,7 +863,7 @@ export default class PixiStage {
   }
 
   public changeModelBlinkByKey(key: string, blinkParam: BlinkParam) {
-    const target = this.figureObjects.find((e) => e.key === key);
+    const target = this.figureObjects.find((e) => e.key === key && !e.isExiting);
     if (target?.sourceType !== 'live2d') return;
     const figureRecordTarget = this.live2dFigureRecorder.find((e) => e.target === key);
     if (target && !isEqual(figureRecordTarget?.blink, blinkParam)) {
@@ -882,7 +883,7 @@ export default class PixiStage {
   }
 
   public changeModelFocusByKey(key: string, focusParam: FocusParam) {
-    const target = this.figureObjects.find((e) => e.key === key);
+    const target = this.figureObjects.find((e) => e.key === key && !e.isExiting);
     if (target?.sourceType !== 'live2d') return;
     const figureRecordTarget = this.live2dFigureRecorder.find((e) => e.target === key);
     if (target && !isEqual(figureRecordTarget?.focus, focusParam)) {
