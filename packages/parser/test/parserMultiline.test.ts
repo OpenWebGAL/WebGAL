@@ -85,14 +85,14 @@ bgm:s_Title.mp3;
 unlockBgm:s_Title.mp3 -name=雲を追いかけて;
 intro:你好
 |欢迎来到 WebGAL 的世界;
-changeBg:bg.png -next;
-unlockCg:bg.png -name=良夜; // 解锁CG并赋予名称
-changeFigure:stand.png -left -next;
+changeBg:bg.webp -next;
+unlockCg:bg.webp -name=良夜; // 解锁CG并赋予名称
+changeFigure:stand.webp -left -next;
 setAnimation:enter-from-left
   -target=fig-left -next;
 WebGAL:欢迎使用 WebGAL！这是一款全新的网页端视觉小说引擎。
   -v1.wav;
-changeFigure:stand2.png
+changeFigure:stand2.webp
   -right -next;
 WebGAL 是使用 Web 技术开发的引擎，因此在网页端有良好的表现。 -v2.wav;
 由于这个特性，如果你将 WebGAL 部署到服务器或网页托管平台上，玩家只需要一串链接就可以开始游玩！ -v3.wav;
@@ -121,14 +121,14 @@ bgm:s_Title.mp3;
 unlockBgm:s_Title.mp3 -name=雲を追いかけて;
 intro:你好
 |欢迎来到 WebGAL 的世界;
-changeBg:bg.png -next;
-unlockCg:bg.png -name=良夜; // 解锁CG并赋予名称
-changeFigure:stand.png -left -next;
+changeBg:bg.webp -next;
+unlockCg:bg.webp -name=良夜; // 解锁CG并赋予名称
+changeFigure:stand.webp -left -next;
 setAnimation:enter-from-left -target=fig-left -next;
 ;_WEBGAL_LINE_BREAK_  -target=fig-left -next;
 WebGAL:欢迎使用 WebGAL！这是一款全新的网页端视觉小说引擎。 -v1.wav;
 ;_WEBGAL_LINE_BREAK_  -v1.wav;
-changeFigure:stand2.png -right -next;
+changeFigure:stand2.webp -right -next;
 ;_WEBGAL_LINE_BREAK_  -right -next;
 WebGAL 是使用 Web 技术开发的引擎，因此在网页端有良好的表现。 -v2.wav;
 由于这个特性，如果你将 WebGAL 部署到服务器或网页托管平台上，玩家只需要一串链接就可以开始游玩！ -v3.wav;

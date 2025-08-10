@@ -1,6 +1,6 @@
 import { ISentence } from '@/Core/controller/scene/sceneInterface';
 import { IPerform } from '@/Core/Modules/perform/performInterface';
-import { getSentenceArgByKey } from '@/Core/util/getSentenceArg';
+import { getNumberArgByKey, getStringArgByKey } from '@/Core/util/getSentenceArg';
 import { webgalAnimations } from '@/Core/controller/stage/pixi/animations';
 import { IAnimationObject } from '@/Core/controller/stage/pixi/PixiController';
 import { logger } from '@/Core/util/logger';
@@ -15,8 +15,9 @@ import { WebGAL } from '@/Core/WebGAL';
 export const setComplexAnimation = (sentence: ISentence): IPerform => {
   const startDialogKey = webgalStore.getState().stage.currentDialogKey;
   const animationName = sentence.content;
-  const animationDuration = (getSentenceArgByKey(sentence, 'duration') ?? 0) as number;
-  const target = (getSentenceArgByKey(sentence, 'target')?.toString() ?? '0') as string;
+  const animationDuration = getNumberArgByKey(sentence, 'duration') ?? 0;
+  const target = getStringArgByKey(sentence, 'target') ?? '0';
+
   const key = `${target}-${animationName}-${animationDuration}`;
   const animationFunction: Function | null = getAnimationObject(animationName);
   let stopFunction: () => void = () => {};

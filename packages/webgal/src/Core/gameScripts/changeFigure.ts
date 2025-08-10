@@ -3,7 +3,7 @@ import { IPerform } from '@/Core/Modules/perform/performInterface';
 import { webgalStore } from '@/store/store';
 import { setStage, stageActions } from '@/store/stageReducer';
 import cloneDeep from 'lodash/cloneDeep';
-import { getSentenceArgByKey } from '@/Core/util/getSentenceArg';
+import { getBooleanArgByKey, getNumberArgByKey, getStringArgByKey } from '@/Core/util/getSentenceArg';
 import { baseTransform, IFreeFigure, IStageState, ITransform } from '@/store/stageInterface';
 import { AnimationFrame, IUserAnimation } from '@/Core/Modules/animations';
 import { generateTransformAnimationObj } from '@/Core/controller/stage/pixi/animations/generateTransformAnimationObj';
@@ -24,106 +24,56 @@ import { STAGE_KEYS } from '../constants';
  */
 // eslint-disable-next-line complexity
 export function changeFigure(sentence: ISentence): IPerform {
+  // 语句内容
+  let content = sentence.content;
+  if (getBooleanArgByKey(sentence, 'clear')) {
+    content = '';
+  }
+
   // 根据参数设置指定位置
   let pos: 'center' | 'left' | 'right' = 'center';
-  let content = sentence.content;
-  let isFreeFigure = false;
-  let motion = '';
-  let expression = '';
-  let key = '';
-  let duration = 500;
-  let mouthOpen = '';
-  let mouthClose = '';
-  let mouthHalfOpen = '';
-  let eyesOpen = '';
-  let eyesClose = '';
-  let animationFlag: any = '';
-  let mouthAnimationKey: any = 'mouthAnimation';
-  let eyesAnimationKey: any = 'blinkAnimation';
-  let overrideBounds = '';
-  let zIndex = -1;
+  let mouthAnimationKey = 'mouthAnimation';
+  let eyesAnimationKey = 'blinkAnimation';
+  const leftFromArgs = getBooleanArgByKey(sentence, 'left') ?? false;
+  const rightFromArgs = getBooleanArgByKey(sentence, 'right') ?? false;
+  if (leftFromArgs) {
+    pos = 'left';
+    mouthAnimationKey = 'mouthAnimationLeft';
+    eyesAnimationKey = 'blinkAnimationLeft';
+  }
+  if (rightFromArgs) {
+    pos = 'right';
+    mouthAnimationKey = 'mouthAnimationRight';
+    eyesAnimationKey = 'blinkAnimationRight';
+  }
+
+  // id 与 自由立绘
+  let key = getStringArgByKey(sentence, 'id') ?? '';
+  const isFreeFigure = key ? true : false;
+  const id = key ? key : `fig-${pos}`;
+
+  // live2d 或 spine 相关
+  let motion = getStringArgByKey(sentence, 'motion') ?? '';
+  let expression = getStringArgByKey(sentence, 'expression') ?? '';
+  let overrideBounds = getStringArgByKey(sentence, 'bounds') ?? '';
+
+  // 图片立绘差分
+  const mouthOpen = assetSetter(getStringArgByKey(sentence, 'mouthOpen') ?? '', fileType.figure);
+  const mouthClose = assetSetter(getStringArgByKey(sentence, 'mouthClose') ?? '', fileType.figure);
+  const mouthHalfOpen = assetSetter(getStringArgByKey(sentence, 'mouthHalfOpen') ?? '', fileType.figure);
+  const eyesOpen = assetSetter(getStringArgByKey(sentence, 'eyesOpen') ?? '', fileType.figure);
+  const eyesClose = assetSetter(getStringArgByKey(sentence, 'eyesClose') ?? '', fileType.figure);
+  const animationFlag = getStringArgByKey(sentence, 'animationFlag') ?? '';
+
+  // 其他参数
+  const transformString = getStringArgByKey(sentence, 'transform');
+  const ease = getStringArgByKey(sentence, 'ease') ?? '';
+  let duration = getNumberArgByKey(sentence, 'duration') ?? 500;
+  const enterAnimation = getStringArgByKey(sentence, 'enter');
+  const exitAnimation = getStringArgByKey(sentence, 'exit');
+  const zIndex = getNumberArgByKey(sentence, 'zIndex') ?? -1;
+
   const dispatch = webgalStore.dispatch;
-
-  for (const e of sentence.args) {
-    switch (e.key) {
-      case 'left':
-        if (e.value === true) {
-          pos = 'left';
-          mouthAnimationKey = 'mouthAnimationLeft';
-          eyesAnimationKey = 'blinkAnimationLeft';
-        }
-        break;
-      case 'right':
-        if (e.value === true) {
-          pos = 'right';
-          mouthAnimationKey = 'mouthAnimationRight';
-          eyesAnimationKey = 'blinkAnimationRight';
-        }
-        break;
-      case 'clear':
-        if (e.value === true) {
-          content = '';
-        }
-        break;
-      case 'id':
-        isFreeFigure = true;
-        key = e.value.toString();
-        break;
-      case 'motion':
-        motion = e.value.toString();
-        break;
-      case 'bounds':
-        overrideBounds = String(e.value);
-        break;
-      case 'expression':
-        expression = e.value.toString();
-        break;
-      case 'mouthOpen':
-        mouthOpen = e.value.toString();
-        mouthOpen = assetSetter(mouthOpen, fileType.figure);
-        break;
-      case 'mouthClose':
-        mouthClose = e.value.toString();
-        mouthClose = assetSetter(mouthClose, fileType.figure);
-        break;
-      case 'mouthHalfOpen':
-        mouthHalfOpen = e.value.toString();
-        mouthHalfOpen = assetSetter(mouthHalfOpen, fileType.figure);
-        break;
-      case 'eyesOpen':
-        eyesOpen = e.value.toString();
-        eyesOpen = assetSetter(eyesOpen, fileType.figure);
-        break;
-      case 'eyesClose':
-        eyesClose = e.value.toString();
-        eyesClose = assetSetter(eyesClose, fileType.figure);
-        break;
-      case 'animationFlag':
-        animationFlag = e.value.toString();
-        break;
-      case 'none':
-        content = '';
-        break;
-      case 'zIndex':
-        zIndex = Number(e.value);
-        break;
-      default:
-        break;
-    }
-  }
-
-  let id = key;
-  if (id === '') {
-    // 如果没有指定 id，则根据位置来设置
-    if (pos === 'center') {
-      id = STAGE_KEYS.FIG_CENTER;
-    } else if (pos === 'left') {
-      id = STAGE_KEYS.FIG_LEFT;
-    } else if (pos === 'right') {
-      id = STAGE_KEYS.FIG_RIGHT;
-    }
-  }
-  // const id = key ? key : `fig-${pos}`;
 
   const currentFigureAssociatedAnimation = webgalStore.getState().stage.figureAssociatedAnimation;
   const filteredFigureAssociatedAnimation = currentFigureAssociatedAnimation.filter((item) => item.targetId !== id);

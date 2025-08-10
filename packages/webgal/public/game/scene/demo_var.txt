@@ -1,10 +1,10 @@
-setVar:bg=bg.png;
+setVar:bg=bg.webp;
 changeBg:{bg} -next;
 setVar:speaker=WebGAL;
 {speaker}:Background now is {bg}.;
 {speaker}:\{bg\} is not use interpolation.;
 setVar:a=3;
-setVar:bg=WebGalEnter.png -when=a>2;
+setVar:bg=WebGalEnter.webp -when=a>2;
 changeBg:{bg} -next;
 setVar:func=variable interpolation;
 {speaker}:Bg changed! Welcome to {speaker} {func}!;

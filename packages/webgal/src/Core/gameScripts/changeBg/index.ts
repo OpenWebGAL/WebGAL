@@ -4,7 +4,7 @@ import { IPerform } from '@/Core/Modules/perform/performInterface';
 import styles from '@/Stage/stage.module.scss';
 import { webgalStore } from '@/store/store';
 import { setStage, stageActions } from '@/store/stageReducer';
-import { getSentenceArgByKey } from '@/Core/util/getSentenceArg';
+import { getNumberArgByKey, getStringArgByKey } from '@/Core/util/getSentenceArg';
 import { unlockCgInUserData } from '@/store/userDataReducer';
 import { logger } from '@/Core/util/logger';
 import { baseTransform, ITransform } from '@/store/stageInterface';
@@ -30,25 +30,22 @@ export const changeBg = (sentence: ISentence): IPerform => {
   const url = sentence.content;
   const key = STAGE_KEYS.BG_MAIN;
   let duration = 1000;
-  let name = '';
-  let series = 'default';
-  sentence.args.forEach((e) => {
-    if (e.key === 'unlockname') {
-      name = e.value.toString();
-    }
-    if (e.key === 'series') {
-      series = e.value.toString();
-    }
-  });
+  const unlockName = getStringArgByKey(sentence, 'unlockname') ?? '';
+  const series = getStringArgByKey(sentence, 'series') ?? 'default';
+  const transformString = getStringArgByKey(sentence, 'transform');
+  let duration = getNumberArgByKey(sentence, 'duration') ?? 1000;
+  const ease = getStringArgByKey(sentence, 'ease') ?? '';
 
   const dispatch = webgalStore.dispatch;
-  if (name !== '') dispatch(unlockCgInUserData({ name, url, series }));
+  if (unlockName !== '') {
+    dispatch(unlockCgInUserData({ name: unlockName, url, series }));
 
   // 储存一下现有的 transform 给退场动画当起始帧用, 因为马上就要清除了
   const currentEffect = webgalStore.getState().stage.effects.find((e) => e.target === key);
   let currentTransform = baseTransform;
   if (currentEffect?.transform) {
     currentTransform = cloneDeep(currentEffect.transform);
+  }
   }
 
   /**

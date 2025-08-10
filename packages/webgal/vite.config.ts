@@ -6,6 +6,7 @@ import { visualizer } from 'rollup-plugin-visualizer';
 import { readdirSync, watch, writeFileSync } from 'fs';
 import { isEqual } from 'lodash';
 import Info from 'unplugin-info/vite';
+import viteCompression from 'vite-plugin-compression';
 
 // https://vitejs.dev/config/
 
@@ -52,6 +53,9 @@ export default defineConfig({
     react(),
     loadVersion(),
     Info(),
+    viteCompression({
+      filter: /^(.*assets).*\.(js|css|ttf)$/,
+    }),
     // @ts-ignore
     // visualizer(),
   ],
