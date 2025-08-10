@@ -11,7 +11,8 @@ import { assetSetter, fileType } from '@/Core/util/gameAssetsAccess/assetSetter'
 import { logger } from '@/Core/util/logger';
 import { getAnimateDuration } from '@/Core/Modules/animationFunctions';
 import { WebGAL } from '@/Core/WebGAL';
-import { baseBlinkParam, BlinkParam, FocusParam } from '@/Core/live2DCore';
+import { baseBlinkParam, baseFocusParam, BlinkParam, FocusParam } from '@/Core/live2DCore';
+import { WEBGAL_NONE } from '../constants';
 /**
  * 更改立绘
  * @param sentence 语句
@@ -20,6 +21,9 @@ import { baseBlinkParam, BlinkParam, FocusParam } from '@/Core/live2DCore';
 export function changeFigure(sentence: ISentence): IPerform {
   // 语句内容
   let content = sentence.content;
+  if (content === WEBGAL_NONE) {
+    content = '';
+  }
   if (getBooleanArgByKey(sentence, 'clear')) {
     content = '';
   }
@@ -49,7 +53,8 @@ export function changeFigure(sentence: ISentence): IPerform {
   // live2d 或 spine 相关
   let motion = getStringArgByKey(sentence, 'motion') ?? '';
   let expression = getStringArgByKey(sentence, 'expression') ?? '';
-  let overrideBounds = getStringArgByKey(sentence, 'bounds') ?? '';
+  const boundsFromArgs = getStringArgByKey(sentence, 'bounds') ?? '';
+  let bounds = getOverrideBoundsArr(boundsFromArgs);
 
   let blink: BlinkParam | null = null;
   const blinkFromArgs = getStringArgByKey(sentence, 'blink');
@@ -85,7 +90,7 @@ export function changeFigure(sentence: ISentence): IPerform {
   let duration = getNumberArgByKey(sentence, 'duration') ?? 500;
   const enterAnimation = getStringArgByKey(sentence, 'enter');
   const exitAnimation = getStringArgByKey(sentence, 'exit');
-  const zIndex = getNumberArgByKey(sentence, 'zIndex') ?? -1;
+  let zIndex = getNumberArgByKey(sentence, 'zIndex') ?? -1;
 
   const dispatch = webgalStore.dispatch;
 
@@ -110,42 +115,36 @@ export function changeFigure(sentence: ISentence): IPerform {
   /**
    * 如果 url 没变，不移除
    */
-  let isRemoveEffects = true;
+  let isUrlChanged = true;
   if (key !== '') {
     const figWithKey = webgalStore.getState().stage.freeFigure.find((e) => e.key === key);
     if (figWithKey) {
       if (figWithKey.name === sentence.content) {
-        isRemoveEffects = false;
+        isUrlChanged = false;
       }
     }
   } else {
     if (pos === 'center') {
       if (webgalStore.getState().stage.figName === sentence.content) {
-        isRemoveEffects = false;
+        isUrlChanged = false;
       }
     }
     if (pos === 'left') {
       if (webgalStore.getState().stage.figNameLeft === sentence.content) {
-        isRemoveEffects = false;
+        isUrlChanged = false;
       }
     }
     if (pos === 'right') {
       if (webgalStore.getState().stage.figNameRight === sentence.content) {
-        isRemoveEffects = false;
+        isUrlChanged = false;
       }
     }
   }
   /**
    * 处理 Effects
    */
-  if (isRemoveEffects) {
-    const deleteKey = `fig-${pos}`;
-    const deleteKey2 = `${key}`;
-    webgalStore.dispatch(stageActions.removeEffectByTargetId(deleteKey));
-    webgalStore.dispatch(stageActions.removeEffectByTargetId(deleteKey2));
-    // 重设 figureMetaData，这里是 zIndex，实际上任何键都可以，因为整体是移除那条记录
-    dispatch(stageActions.setFigureMetaData([deleteKey, 'zIndex', 0, true]));
-    dispatch(stageActions.setFigureMetaData([deleteKey2, 'zIndex', 0, true]));
+  if (isUrlChanged) {
+    webgalStore.dispatch(stageActions.removeEffectByTargetId(id));
   }
   const setAnimationNames = (key: string, sentence: ISentence) => {
     // 处理 transform 和 默认 transform
@@ -192,29 +191,48 @@ export function changeFigure(sentence: ISentence): IPerform {
       duration = getAnimateDuration(exitAnimation);
     }
   };
+
+  function setFigureData() {
+    if (isUrlChanged) {
+      // 当 url 发生变化时，即发生新立绘替换
+      // 应当赋予一些参数以默认值，防止从旧立绘的状态获取数据
+      bounds = bounds ?? [0, 0, 0, 0];
+      blink = blink ?? cloneDeep(baseBlinkParam);
+      focus = focus ?? cloneDeep(baseFocusParam);
+      zIndex = Math.max(zIndex, 0);
+      dispatch(stageActions.setLive2dMotion({ target: key, motion, overrideBounds: bounds }));
+      dispatch(stageActions.setLive2dExpression({ target: key, expression }));
+      dispatch(stageActions.setLive2dBlink({ target: key, blink }));
+      dispatch(stageActions.setLive2dFocus({ target: key, focus }));
+      dispatch(stageActions.setFigureMetaData([key, 'zIndex', zIndex, false]));
+    } else {
+      // 当 url 没有发生变化时，即没有新立绘替换
+      // 应当保留旧立绘的状态，仅在需要时更新
+      if (motion || bounds) {
+        dispatch(stageActions.setLive2dMotion({ target: key, motion, overrideBounds: bounds }));
+      }
+      if (expression) {
+        dispatch(stageActions.setLive2dExpression({ target: key, expression }));
+      }
+      if (blink) {
+        dispatch(stageActions.setLive2dBlink({ target: key, blink }));
+      }
+      if (focus) {
+        dispatch(stageActions.setLive2dFocus({ target: key, focus }));
+      }
+      if (zIndex >= 0) {
+        dispatch(stageActions.setFigureMetaData([key, 'zIndex', zIndex, false]));
+      }
+    }
+  }
+
   if (isFreeFigure) {
     /**
      * 下面的代码是设置自由立绘的
      */
     const freeFigureItem: IFreeFigure = { key, name: content, basePosition: pos };
     setAnimationNames(key, sentence);
-    if (motion || overrideBounds) {
-      dispatch(
-        stageActions.setLive2dMotion({ target: key, motion, overrideBounds: getOverrideBoundsArr(overrideBounds) }),
-      );
-    }
-    if (expression) {
-      dispatch(stageActions.setLive2dExpression({ target: key, expression }));
-    }
-    if (blink) {
-      dispatch(stageActions.setLive2dBlink({ target: key, blink }));
-    }
-    if (focus) {
-      dispatch(stageActions.setLive2dFocus({ target: key, focus }));
-    }
-    if (zIndex >= 0) {
-      dispatch(stageActions.setFigureMetaData([key, 'zIndex', zIndex, false]));
-    }
+    setFigureData();
     dispatch(stageActions.setFreeFigureByKey(freeFigureItem));
   } else {
     /**
@@ -233,23 +251,7 @@ export function changeFigure(sentence: ISentence): IPerform {
 
     key = positionMap[pos];
     setAnimationNames(key, sentence);
-    if (motion || overrideBounds) {
-      dispatch(
-        stageActions.setLive2dMotion({ target: key, motion, overrideBounds: getOverrideBoundsArr(overrideBounds) }),
-      );
-    }
-    if (expression) {
-      dispatch(stageActions.setLive2dExpression({ target: key, expression }));
-    }
-    if (blink) {
-      dispatch(stageActions.setLive2dBlink({ target: key, blink }));
-    }
-    if (focus) {
-      dispatch(stageActions.setLive2dFocus({ target: key, focus }));
-    }
-    if (zIndex >= 0) {
-      dispatch(stageActions.setFigureMetaData([key, 'zIndex', zIndex, false]));
-    }
+    setFigureData();
     dispatch(setStage({ key: dispatchMap[pos], value: content }));
   }
 
