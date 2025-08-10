@@ -4,18 +4,9 @@ import { webgalStore } from '@/store/store';
 import { setStage, stageActions } from '@/store/stageReducer';
 import cloneDeep from 'lodash/cloneDeep';
 import { getBooleanArgByKey, getNumberArgByKey, getStringArgByKey } from '@/Core/util/getSentenceArg';
-import { baseTransform, IFreeFigure, IStageState, ITransform } from '@/store/stageInterface';
-import { AnimationFrame, IUserAnimation } from '@/Core/Modules/animations';
-import { generateTransformAnimationObj } from '@/Core/controller/stage/pixi/animations/generateTransformAnimationObj';
+import { baseTransform, IFreeFigure, IStageState } from '@/store/stageInterface';
 import { assetSetter, fileType } from '@/Core/util/gameAssetsAccess/assetSetter';
-import { logger } from '@/Core/util/logger';
-import {
-  createDefaultEnterExitAnimation,
-  createEnterExitAnimation,
-  getAnimateDuration,
-  getEnterAnimationKey,
-  getOldTargetKey,
-} from '@/Core/Modules/animationFunctions';
+import { createEnterExitAnimation, getEnterAnimationKey, getOldTargetKey } from '@/Core/Modules/animationFunctions';
 import { WebGAL } from '@/Core/WebGAL';
 import { STAGE_KEYS } from '../constants';
 /**
@@ -48,9 +39,17 @@ export function changeFigure(sentence: ISentence): IPerform {
   }
 
   // id 与 自由立绘
-  let key = getStringArgByKey(sentence, 'id') ?? '';
-  const isFreeFigure = key ? true : false;
-  const id = key ? key : `fig-${pos}`;
+  const idFromArgs = getStringArgByKey(sentence, 'id') ?? '';
+  const isFreeFigure = idFromArgs ? true : false;
+  let key = idFromArgs;
+  if (!isFreeFigure) {
+    const positionMap = {
+      center: STAGE_KEYS.FIG_CENTER,
+      left: STAGE_KEYS.FIG_LEFT,
+      right: STAGE_KEYS.FIG_RIGHT,
+    };
+    key = positionMap[pos];
+  }
 
   // live2d 或 spine 相关
   let motion = getStringArgByKey(sentence, 'motion') ?? '';
@@ -66,19 +65,15 @@ export function changeFigure(sentence: ISentence): IPerform {
   const animationFlag = getStringArgByKey(sentence, 'animationFlag') ?? '';
 
   // 其他参数
-  const transformString = getStringArgByKey(sentence, 'transform');
-  const ease = getStringArgByKey(sentence, 'ease') ?? '';
   let duration = getNumberArgByKey(sentence, 'duration') ?? 500;
-  const enterAnimation = getStringArgByKey(sentence, 'enter');
-  const exitAnimation = getStringArgByKey(sentence, 'exit');
   const zIndex = getNumberArgByKey(sentence, 'zIndex') ?? -1;
 
   const dispatch = webgalStore.dispatch;
 
   const currentFigureAssociatedAnimation = webgalStore.getState().stage.figureAssociatedAnimation;
-  const filteredFigureAssociatedAnimation = currentFigureAssociatedAnimation.filter((item) => item.targetId !== id);
+  const filteredFigureAssociatedAnimation = currentFigureAssociatedAnimation.filter((item) => item.targetId !== key);
   const newFigureAssociatedAnimationItem = {
-    targetId: id,
+    targetId: key,
     animationFlag: animationFlag,
     mouthAnimation: {
       open: mouthOpen,
@@ -97,7 +92,7 @@ export function changeFigure(sentence: ISentence): IPerform {
    * 如果 url 没变，不移除
    */
   let isRemoveEffects = true;
-  if (key !== '') {
+  if (isFreeFigure) {
     const figWithKey = webgalStore.getState().stage.freeFigure.find((e) => e.key === key);
     if (figWithKey) {
       if (figWithKey.name === sentence.content) {
@@ -122,16 +117,6 @@ export function changeFigure(sentence: ISentence): IPerform {
     }
   }
 
-  // 确定 key
-  if (!isFreeFigure) {
-    const positionMap = {
-      center: STAGE_KEYS.FIG_CENTER,
-      left: STAGE_KEYS.FIG_LEFT,
-      right: STAGE_KEYS.FIG_RIGHT,
-    };
-    key = positionMap[pos];
-  }
-
   // 储存一下现有的 transform 给退场动画当起始帧用, 因为马上就要清除了
   const currentEffect = webgalStore.getState().stage.effects.find((e) => e.target === key);
   let currentTransform = baseTransform;
@@ -143,13 +128,9 @@ export function changeFigure(sentence: ISentence): IPerform {
    * 处理 Effects
    */
   if (isRemoveEffects) {
-    const deleteKey = `fig-${pos}`;
-    const deleteKey2 = `${key}`;
-    webgalStore.dispatch(stageActions.removeEffectByTargetId(deleteKey));
-    webgalStore.dispatch(stageActions.removeEffectByTargetId(deleteKey2));
+    webgalStore.dispatch(stageActions.removeEffectByTargetId(key));
     // 重设 figureMetaData，这里是 zIndex，实际上任何键都可以，因为整体是移除那条记录
-    dispatch(stageActions.setFigureMetaData([deleteKey, 'zIndex', 0, true]));
-    dispatch(stageActions.setFigureMetaData([deleteKey2, 'zIndex', 0, true]));
+    dispatch(stageActions.setFigureMetaData([key, 'zIndex', 0, true]));
   }
 
   duration = createEnterExitAnimation(sentence, key, duration, currentTransform);

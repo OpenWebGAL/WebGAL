@@ -9,7 +9,7 @@ import { WebGAL } from '@/Core/WebGAL';
 import PixiStage, { IAnimationObject, IStageObject } from '@/Core/controller/stage/pixi/PixiController';
 import { AnimationFrame, IUserAnimation } from './animations';
 import { generateTransformAnimationObj } from '../controller/stage/pixi/animations/generateTransformAnimationObj';
-import { getSentenceArgByKey } from '../util/getSentenceArg';
+import { getNumberArgByKey, getStringArgByKey } from '../util/getSentenceArg';
 import { ISentence } from '../controller/scene/sceneInterface';
 
 // eslint-disable-next-line max-params
@@ -128,13 +128,9 @@ export function createEnterExitAnimation(
   currentTransform: ITransform,
 ): number {
   // 处理 transform 和 默认 transform
-  const transformString = getSentenceArgByKey(sentence, 'transform');
-  const durationFromArg = getSentenceArgByKey(sentence, 'duration');
-  const ease = getSentenceArgByKey(sentence, 'ease')?.toString() ?? '';
-  let duration = defaultDuration;
-  if (typeof durationFromArg === 'number') {
-    duration = durationFromArg;
-  }
+  const transformString = getStringArgByKey(sentence, 'transform');
+  const ease = getStringArgByKey(sentence, 'ease') ?? '';
+  let duration = getNumberArgByKey(sentence, 'duration') ?? defaultDuration;
 
   if (transformString) {
     console.log(transformString);
@@ -159,15 +155,15 @@ export function createEnterExitAnimation(
     createDefaultEnterExitAnimation('exit', targetKey, exitFrame, duration, ease);
   }
 
-  const enterAnim = getSentenceArgByKey(sentence, 'enter');
-  const exitAnim = getSentenceArgByKey(sentence, 'exit');
-  if (enterAnim) {
-    WebGAL.animationManager.nextEnterAnimationName.set(targetKey, enterAnim.toString());
-    duration = getAnimateDuration(enterAnim.toString());
+  const enterAnimation = getStringArgByKey(sentence, 'enter');
+  const exitAnimation = getStringArgByKey(sentence, 'exit');
+  if (enterAnimation) {
+    WebGAL.animationManager.nextEnterAnimationName.set(targetKey, enterAnimation);
+    duration = getAnimateDuration(enterAnimation);
   }
-  if (exitAnim) {
-    WebGAL.animationManager.nextExitAnimationName.set(targetKey, exitAnim.toString());
-    duration = getAnimateDuration(exitAnim.toString());
+  if (exitAnimation) {
+    WebGAL.animationManager.nextExitAnimationName.set(targetKey, exitAnimation);
+    duration = getAnimateDuration(exitAnimation);
   }
 
   return duration;
