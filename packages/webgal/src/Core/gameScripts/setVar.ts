@@ -11,18 +11,14 @@ import { dumpToStorageFast } from '@/Core/controller/storage/storageController';
 import expression from 'angular-expressions';
 import get from 'lodash/get';
 import random from 'lodash/random';
+import { getBooleanArgByKey } from '../util/getSentenceArg';
 
 /**
  * 设置变量
  * @param sentence
  */
 export const setVar = (sentence: ISentence): IPerform => {
-  let setGlobal = false;
-  sentence.args.forEach((e) => {
-    if (e.key === 'global') {
-      setGlobal = true;
-    }
-  });
+  let setGlobal = getBooleanArgByKey(sentence, 'global') ?? false;
   let targetReducerFunction: ActionCreatorWithPayload<ISetGameVar, string>;
   if (setGlobal) {
     targetReducerFunction = setScriptManagedGlobalVar;
