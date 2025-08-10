@@ -640,12 +640,11 @@ export default class PixiStage {
    * @param jsonPath
    */
   // eslint-disable-next-line max-params
-  public addLive2dFigure(key: string, jsonPath: string, pos: string, motion: string, expression: string) {
+  public addLive2dFigure(key: string, jsonPath: string, pos: string) {
     if (Live2D.isAvailable !== true) return;
     try {
       let stageWidth = this.stageWidth;
       let stageHeight = this.stageHeight;
-      logger.debug('Using motion:', motion);
 
       this.figureCash.push(jsonPath);
 
@@ -731,28 +730,45 @@ export default class PixiStage {
               }
 
               thisFigureContainer.pivot.set(0, stageHeight / 2);
-              let motionToSet = motion;
+
               let animation_index = 0;
               let priority_number = 3;
-              // var audio_link = voiceCash.pop();
 
-              // model.motion(category_name, animation_index, priority_number,location.href + audio_link);
-              /**
-               * 检查 Motion 和 Expression
-               */
+              // motion
+              let motionToSet = '';
               const motionFromState = webgalStore.getState().stage.live2dMotion.find((e) => e.target === key);
-              const expressionFromState = webgalStore.getState().stage.live2dExpression.find((e) => e.target === key);
               if (motionFromState) {
                 motionToSet = motionFromState.motion;
               }
               instance.updateL2dMotionByKey(key, motionToSet);
               model.motion(motionToSet, animation_index, priority_number);
-              let expressionToSet = expression;
+
+              // expression
+              let expressionToSet = '';
+              const expressionFromState = webgalStore.getState().stage.live2dExpression.find((e) => e.target === key);
               if (expressionFromState) {
                 expressionToSet = expressionFromState.expression;
               }
               instance.updateL2dExpressionByKey(key, expressionToSet);
               model.expression(expressionToSet);
+
+              // blink
+              let blinkToSet: BlinkParam = baseBlinkParam;
+              const blinkFromState = webgalStore.getState().stage.live2dBlink.find((e) => e.target === key);
+              if (blinkFromState) {
+                blinkToSet = { ...blinkToSet, ...blinkFromState.blink };
+              }
+              instance.updateL2dBlinkByKey(key, blinkToSet);
+              model.internalModel?.setBlinkParam(blinkToSet);
+
+              // focus
+              let focusToSet: FocusParam = baseFocusParam;
+              const focusFromState = webgalStore.getState().stage.live2dFocus.find((e) => e.target === key);
+              if (focusFromState) {
+                focusToSet = { ...focusToSet, ...focusFromState.focus };
+              }
+              instance.updateL2dFocusByKey(key, focusToSet);
+              model.internalModel?.focusController?.focus(focusToSet.x, focusToSet.y, focusToSet.instant);
 
               // lip-sync is still a problem and you can not.
               Live2D.SoundManager.volume = 0; // @ts-ignore
