@@ -19,7 +19,7 @@ export const setTransition = (sentence: ISentence): IPerform => {
     WebGAL.animationManager.nextEnterAnimationName.set(key, enterAnimation);
   }
   if (exitAnimation) {
-    WebGAL.animationManager.nextExitAnimationName.set(key + '-off', exitAnimation);
+    WebGAL.animationManager.nextExitAnimationName.set(key, exitAnimation);
   }
   return {
     performName: 'none',

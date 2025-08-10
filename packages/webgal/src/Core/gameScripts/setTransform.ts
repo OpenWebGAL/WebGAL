@@ -34,7 +34,7 @@ export const setTransform = (sentence: ISentence): IPerform => {
 
   try {
     const frame = JSON.parse(animationString) as AnimationFrame;
-    animationObj = generateTransformAnimationObj(target, frame, duration, ease);
+    animationObj = generateTransformAnimationObj(target, frame, duration, ease, 'normal');
     console.log('animationObj:', animationObj);
   } catch (e) {
     // 解析都错误了，歇逼吧
@@ -64,7 +64,7 @@ export const setTransform = (sentence: ISentence): IPerform => {
     setTimeout(() => {
       const endDialogKey = webgalStore.getState().stage.currentDialogKey;
       const isHasNext = startDialogKey !== endDialogKey;
-      WebGAL.gameplay.pixiStage?.removeAnimationWithSetEffects(key);
+      WebGAL.gameplay.pixiStage?.removeAnimation(key, true);
     }, 0);
   };
 

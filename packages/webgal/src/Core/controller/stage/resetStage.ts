@@ -23,6 +23,7 @@ export const resetStage = (resetBacklog: boolean, resetSceneAndVar = true) => {
   // 清空舞台状态表
   const initSceneDataCopy = cloneDeep(initState);
   const currentVars = webgalStore.getState().stage.GameVar;
+  WebGAL.gameplay.pixiStage?.removeAllStageObjects();
   webgalStore.dispatch(resetStageState(initSceneDataCopy));
   if (!resetSceneAndVar) {
     webgalStore.dispatch(setStage({ key: 'GameVar', value: currentVars }));

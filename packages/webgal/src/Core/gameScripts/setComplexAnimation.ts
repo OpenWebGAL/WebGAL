@@ -29,7 +29,7 @@ export const setComplexAnimation = (sentence: ISentence): IPerform => {
     stopFunction = () => {
       const endDialogKey = webgalStore.getState().stage.currentDialogKey;
       const isHasNext = startDialogKey !== endDialogKey;
-      WebGAL.gameplay.pixiStage?.removeAnimationWithSetEffects(key);
+      WebGAL.gameplay.pixiStage?.removeAnimation(key, true);
     };
   }
   return {
