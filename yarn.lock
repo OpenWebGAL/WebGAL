@@ -2111,6 +2111,13 @@ debug@^4.1.1, debug@^4.3.5:
   dependencies:
     ms "^2.1.3"
 
+debug@^4.3.3:
+  version "4.4.1"
+  resolved "https://registry.yarnpkg.com/debug/-/debug-4.4.1.tgz#e5a8bc6cbc4c6cd3e64308b0693a3d4fa550189b"
+  integrity sha512-KcKCqiftBJcZr++7ykoDIEwSa3XWowTfNPo92BYxjXiyYEVrUQh2aLyhxBCwww+heortUFxEJYcRzosstTEBYQ==
+  dependencies:
+    ms "^2.1.3"
+
 decompress-response@^6.0.0:
   version "6.0.0"
   resolved "https://registry.yarnpkg.com/decompress-response/-/decompress-response-6.0.0.tgz#ca387612ddb7e104bd16d85aab00d5ecf09c66fc"
@@ -4306,10 +4313,10 @@ pixi-filters@^4.2.0:
     "@pixi/filter-twist" "4.2.0"
     "@pixi/filter-zoom-blur" "4.2.0"
 
-pixi-live2d-display-webgal@^0.5.8:
-  version "0.5.8"
-  resolved "https://registry.yarnpkg.com/pixi-live2d-display-webgal/-/pixi-live2d-display-webgal-0.5.8.tgz#1ff7b5016559ff56a5cfaa96abeac84c878a2bbf"
-  integrity sha512-yekmPckXykqziyFcmmgYlZU4ad42rRGGmUFvrm96YJrdRIi+V9uv/xKOrRBMxD/tr3Sckqp6hOr9Wi3UX6NNLw==
+pixi-live2d-display-webgal@^0.5.11:
+  version "0.5.11"
+  resolved "https://registry.yarnpkg.com/pixi-live2d-display-webgal/-/pixi-live2d-display-webgal-0.5.11.tgz#c51052043731b6df3169931ee4410e2a7852e8f8"
+  integrity sha512-uG6ZhWq/WmlOy1xmzoBk3WwsBvB1ivKp++Wl6/IzXS0N5yIypLc8KX8EzhNEfzMSzgTakm/UJTjeAjL/RvYUQg==
   dependencies:
     gh-pages "^4.0.0"
 
@@ -5631,6 +5638,15 @@ vite-node@0.28.5:
     source-map "^0.6.1"
     source-map-support "^0.5.21"
     vite "^3.0.0 || ^4.0.0"
+
+vite-plugin-compression@^0.5.1:
+  version "0.5.1"
+  resolved "https://registry.yarnpkg.com/vite-plugin-compression/-/vite-plugin-compression-0.5.1.tgz#a75b0d8f48357ebb377b65016da9f20885ef39b6"
+  integrity sha512-5QJKBDc+gNYVqL/skgFAP81Yuzo9R+EAf19d+EtsMF/i8kFUpNi3J/H01QD3Oo8zBQn+NzoCIFkpPLynoOzaJg==
+  dependencies:
+    chalk "^4.1.2"
+    debug "^4.3.3"
+    fs-extra "^10.0.0"
 
 vite-plugin-package-version@^1.0.2:
   version "1.1.0"

@@ -4,6 +4,7 @@ import loadVersion from 'vite-plugin-package-version';
 import { resolve } from 'path';
 import { visualizer } from 'rollup-plugin-visualizer';
 import Info from 'unplugin-info/vite';
+import viteCompression from 'vite-plugin-compression';
 import pixiPerformAutoImport from './src/plugins/pixi-perform-auto-import';
 
 // https://vitejs.dev/config/
@@ -13,6 +14,9 @@ export default defineConfig({
     react(),
     loadVersion(),
     Info(),
+    viteCompression({
+      filter: /^(.*assets).*\.(js|css|ttf)$/,
+    }),
     pixiPerformAutoImport({
       scriptDir: resolve('src/Core/gameScripts/pixi/performs'),
       managerDir: resolve('src/Core/util/pixiPerformManager'),
