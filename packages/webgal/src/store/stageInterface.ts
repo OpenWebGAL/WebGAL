@@ -226,4 +226,4 @@ export interface IStageStore {
   restoreStage: (newState: IStageState) => void;
 }
 
-export 输入 StageStore = IStageStore;
+export type StageStore = IStageStore;
