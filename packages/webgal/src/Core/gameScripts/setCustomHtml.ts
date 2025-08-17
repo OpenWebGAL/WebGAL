@@ -49,7 +49,7 @@ function parseAttributes(attrString: string): Record<string, string> {
 }
 
 // 自动添加绝对定位
-function autoAddPositionFixed(style: string): string {
+function autoAddPositionAbsolute(style: string): string {
   // 只要有 left/top/width/height 且没有 position，就加上
   if (!/position\s*:/.test(style) && /(left\s*:|top\s*:|right\s*:|bottom\s*:|width\s*:|height\s*:)/.test(style)) {
     // 逗号分隔
