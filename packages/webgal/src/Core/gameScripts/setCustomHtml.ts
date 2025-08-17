@@ -28,24 +28,6 @@ function parseCssString(css: string): { styleObj: Record<string, string>; featur
   return { styleObj, feature };
 }
 
-// 解析CSS样式字符串为React.CSSProperties对象
-function parseStyleStringToCSSProperties(styleStr: string): React.CSSProperties {
-  const style: Record<string, string> = {};
-  // 分割样式属性
-  const properties = styleStr.split(';');
-
-  properties.forEach((prop) => {
-    const [key, value] = prop.split(':').map((s) => s.trim());
-    if (key && value) {
-      // 转换为驼峰命名
-      const camelKey = key.replace(/-([a-z])/g, (_, c) => c.toUpperCase());
-      style[camelKey] = value;
-    }
-  });
-
-  return style;
-}
-
 // 解析HTML元素，提取标签名、属性和内容
 interface ParsedElement {
   tagName: string;
