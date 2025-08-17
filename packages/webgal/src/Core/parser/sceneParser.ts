@@ -36,7 +36,6 @@ import { showVars } from '../gameScripts/showVars';
 import { defineScripts, IConfigInterface, ScriptConfig, ScriptFunction, scriptRegistry } from './utils';
 import { applyStyle } from '@/Core/gameScripts/applyStyle';
 import { wait } from '@/Core/gameScripts/wait';
-import { setCharacter } from '../gameScripts/setCharacter';
 import { setCustomHtml } from '../gameScripts/setCustomHtml';
 
 export const SCRIPT_TAG_MAP = defineScripts({
