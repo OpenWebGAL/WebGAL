@@ -4,7 +4,6 @@
  */
 
 import {
-  ICharacterData,
   IEffect,
   IFigureMetadata,
   IFreeFigure,

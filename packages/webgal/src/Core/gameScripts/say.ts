@@ -5,7 +5,7 @@ import { webgalStore } from '@/store/store';
 import { setStage } from '@/store/stageReducer';
 import { useTextAnimationDuration, useTextDelay } from '@/hooks/useTextOptions';
 import { getRandomPerformName, PerformController } from '@/Core/Modules/perform/performController';
-import { getSentenceArgByKey, getSentenceSpecialValue } from '@/Core/util/getSentenceArg';
+import { getSentenceArgByKey } from '@/Core/util/getSentenceArg';
 import { textSize, voiceOption } from '@/store/userDataInterface';
 import { WebGAL } from '@/Core/WebGAL';
 import { compileSentence } from '@/Stage/TextBox/TextBox';

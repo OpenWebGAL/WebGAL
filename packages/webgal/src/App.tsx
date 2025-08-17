@@ -10,7 +10,7 @@ import Menu from '@/UI/Menu/Menu';
 import { PanicOverlay } from '@/UI/PanicOverlay/PanicOverlay';
 import Title from '@/UI/Title/Title';
 import Translation from '@/UI/Translation/Translation';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { initializeScript } from './Core/initializeScript';
 import { CustomHtml } from './extends/CustomHtml/CustomHtml';
 

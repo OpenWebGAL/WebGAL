@@ -209,14 +209,6 @@ export interface IStageState {
   // 插入的html
   customHtml: Array<{ html: string; _feature?: string }>;
 }
-// 人物特征
-export interface ICharacterData {
-  id: number;
-  name: string;
-  imageUrl: string;
-  progress: number;
-  total: number;
-}
 
 /**
  * @interface ISetStagePayload 设置舞台状态的Action的Payload的数据接口
