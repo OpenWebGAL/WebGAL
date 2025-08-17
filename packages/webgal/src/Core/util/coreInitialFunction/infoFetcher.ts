@@ -4,7 +4,7 @@ import { getStorage, getStorageAsync, setStorage } from '../../controller/storag
 import { webgalStore } from '@/store/store';
 import { initKey } from '@/Core/controller/storage/fastSaveLoad';
 import { WebgalParser } from '@/Core/parser/sceneParser';
-import { WebGAL } from '@/Core/WebGAL';
+import { Live2D, WebGAL } from '@/Core/WebGAL';
 import { getFastSaveFromStorage, getSavesFromStorage } from '@/Core/controller/storage/savesController';
 import { setGlobalVar } from '@/store/userDataReducer';
 import { setEnableAppreciationMode, setVisibility } from '@/store/GUIReducer';
@@ -59,6 +59,9 @@ export const infoFetcher = (url: string) => {
 
           if (command === 'Enable_Appreciation') {
             dispatch(setEnableAppreciationMode(res));
+          }
+          if (command === 'Legacy_Expression_Blend_Mode') {
+            Live2D.legacyExpressionBlendMode = res === true;
           }
         }
       }
