@@ -85,9 +85,10 @@ function convertElementToStyledHtml(element: ParsedElement): { html: string; fea
     html += ` style="${cssString}"`;
   }
 
-  // 处理其他属性
+  // 处理其他属性，但过滤掉所有on*事件处理器以防止XSS
   Object.entries(element.attributes).forEach(([key, value]) => {
-    if (key !== 'style') {
+    // 禁止所有on*事件处理器属性，防止XSS攻击
+    if (key !== 'style' && !key.startsWith('on')) {
       html += ` ${key}="${value}"`;
     }
   });
