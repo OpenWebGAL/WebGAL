@@ -65,51 +65,54 @@ function autoAddPositionAbsolute(style: string): string {
   return style;
 }
 
-// 将解析后的元素转换为带样式的HTML字符串
+// 将单个解析后的元素转换为带样式的HTML字符串
 // 支持返回 feature 字段
-function convertToStyledHtml(elements: ParsedElement[]): { html: string; feature?: string } {
+function convertElementToStyledHtml(element: ParsedElement): { html: string; feature?: string } {
   let feature: string | undefined;
-  const html = elements
-    .map((element) => {
-      let html = `<${element.tagName}`;
-      // 处理style属性
-      if (element.attributes.style) {
-        element.attributes.style = autoAddPositionAbsolute(element.attributes.style);
-        const { styleObj, feature: f } = parseCssString(element.attributes.style);
-        if (f && !feature) feature = f;
-        const cssString = Object.entries(styleObj)
-          .map(([key, value]) => {
-            const cssKey = key.replace(/([A-Z])/g, '-$1').toLowerCase();
-            return `${cssKey}: ${value}`;
-          })
-          .join('; ');
-        html += ` style="${cssString}"`;
-      }
-      // 处理其他属性
-      Object.entries(element.attributes).forEach(([key, value]) => {
-        if (key !== 'style') {
-          html += ` ${key}="${value}"`;
-        }
-      });
+  let html = `<${element.tagName}`;
 
-      // 处理自闭合标签
-      if (element.selfClosing) {
-        html += '/>';
-      } else {
-        html += '>';
-        // 添加子元素
-        if (element.children.length > 0) {
-          const childResult = convertToStyledHtml(element.children);
-          html += childResult.html;
-          if (childResult.feature && !feature) feature = childResult.feature;
-        } else if (element.innerHTML) {
-          html += element.innerHTML;
-        }
-        html += `</${element.tagName}>`;
-      }
-      return html;
-    })
-    .join('');
+  // 处理style属性
+  if (element.attributes.style) {
+    element.attributes.style = autoAddPositionAbsolute(element.attributes.style);
+    const { styleObj, feature: f } = parseCssString(element.attributes.style);
+    if (f && !feature) feature = f;
+    const cssString = Object.entries(styleObj)
+      .map(([key, value]) => {
+        const cssKey = key.replace(/([A-Z])/g, '-$1').toLowerCase();
+        return `${cssKey}: ${value}`;
+      })
+      .join('; ');
+    html += ` style="${cssString}"`;
+  }
+
+  // 处理其他属性
+  Object.entries(element.attributes).forEach(([key, value]) => {
+    if (key !== 'style') {
+      html += ` ${key}="${value}"`;
+    }
+  });
+
+  // 处理自闭合标签
+  if (element.selfClosing) {
+    html += '/>';
+  } else {
+    html += '>';
+    // 添加子元素
+    if (element.children.length > 0) {
+      // 递归处理所有子元素
+      const childResults = element.children.map((child) => convertElementToStyledHtml(child));
+      html += childResults
+        .map((result) => {
+          if (result.feature && !feature) feature = result.feature;
+          return result.html;
+        })
+        .join('');
+    } else if (element.innerHTML) {
+      html += element.innerHTML;
+    }
+    html += `</${element.tagName}>`;
+  }
+
   return { html, feature };
 }
 
@@ -201,21 +204,26 @@ export const setCustomHtml = (sentence: ISentence): IPerform => {
 
   // 解析HTML并处理内联样式
   const elements = parseHtmlWithStyles(html);
-  const { html: styledHtml, feature } = convertToStyledHtml(elements);
 
-  // 解析样式为React.CSSProperties对象
-  let style: React.CSSProperties = { position: 'absolute' };
-  try {
-    const styleMatch = styledHtml.match(/style\s*=\s*"([^"]*)"/);
-    if (styleMatch) {
-      style = parseStyleStringToCSSProperties(styleMatch[1]);
+  // 为每个元素单独处理和分发action
+  elements.forEach((element) => {
+    const { html: styledHtml, feature } = convertElementToStyledHtml(element);
+
+    // 直接从元素的attributes中提取样式，避免再次解析HTML字符串
+    let style: React.CSSProperties = { position: 'absolute' };
+    if (element.attributes.style) {
+      const processedStyle = autoAddPositionAbsolute(element.attributes.style);
+      const { styleObj } = parseCssString(processedStyle);
+      // 将styleObj转换为React.CSSProperties
+      Object.keys(styleObj).forEach((key) => {
+        // 使用类型断言来避免TypeScript错误
+        (style as any)[key] = styleObj[key];
+      });
     }
-  } catch (e) {
-    console.warn('Failed to parse style:', e);
-  }
 
-  // 添加到状态管理，带 feature 字段和style对象
-  webgalStore.dispatch(stageActions.addCustomHtml({ html: styledHtml, _feature: feature, style }));
+    // 添加到状态管理，带 feature 字段和style对象
+    webgalStore.dispatch(stageActions.addCustomHtml({ html: styledHtml, _feature: feature, style }));
+  });
 
   return {
     performName: 'none',
