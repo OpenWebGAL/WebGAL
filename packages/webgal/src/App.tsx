@@ -12,7 +12,6 @@ import Title from '@/UI/Title/Title';
 import Translation from '@/UI/Translation/Translation';
 import { useEffect, useState } from 'react';
 import { initializeScript } from './Core/initializeScript';
-import Character from './extends/Character';
 import { CustomHtml } from './extends/CustomHtml/CustomHtml';
 
 function App() {
@@ -23,7 +22,6 @@ function App() {
   // Provider用于对各组件提供状态
   return (
     <div className="App">
-      <Character />
       <CustomHtml />
       <Translation />
       <Stage />

@@ -206,7 +206,6 @@ export interface IStageState {
   isDisableTextbox: boolean;
   replacedUIlable: Record<string, string>;
   figureMetaData: figureMetaData;
-  charactersData: Array<ICharacterData>;
   // 插入的html
   customHtml: Array<{ html: string; _feature?: string }>;
 }

@@ -72,7 +72,6 @@ export const SCRIPT_TAG_MAP = defineScripts({
   getUserInput: ScriptConfig(commandType.getUserInput, getUserInput),
   applyStyle: ScriptConfig(commandType.applyStyle, applyStyle, { next: true }),
   wait: ScriptConfig(commandType.wait, wait),
-  setCharacter: ScriptConfig(commandType.setCharacter, setCharacter, { next: true }),
   setCustomHtml: ScriptConfig(commandType.setCustomHtml, setCustomHtml, { next: true }),
   // if: ScriptConfig(commandType.if, undefined, { next: true }),
 });
