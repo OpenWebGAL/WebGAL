@@ -1077,6 +1077,7 @@ export default class PixiStage {
     } catch (error) {
       console.error('Failed to load figureCash:', error);
     }
+    Live2D.initLive2D();
   }
 }
 

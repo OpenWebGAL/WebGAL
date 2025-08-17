@@ -36,11 +36,25 @@ export class Live2DCore {
   public SoundManager: any;
   public Config: any;
 
-  public constructor() {
-    this.initLive2D();
+  // 临时记录未初始化前的数据
+  // 旧版表情混合模式
+  private _legacyExpressionBlendMode = false;
+  public get legacyExpressionBlendMode() {
+    return this._legacyExpressionBlendMode;
+  }
+  public set legacyExpressionBlendMode(value: boolean) {
+    this._legacyExpressionBlendMode = value;
+    if (this.isAvailable) {
+      this.Config.legacyExpressionBlendMode = value;
+    }
   }
 
-  private async initLive2D() {
+  /**
+   * 初始化 Live 2D
+   * 出于某些原因，直接在此类的构造函数初始化
+   * 会导致加载 Live 2D 失败
+   */
+  public async initLive2D() {
     try {
       const { Live2DModel, SoundManager, config } = await import('pixi-live2d-display-webgal');
       this.Live2DModel = Live2DModel;
@@ -48,9 +62,15 @@ export class Live2DCore {
       this.Config = config;
       this.isAvailable = true;
       console.info('live2d lib load success');
+      this.initConfig();
     } catch (error) {
       this.isAvailable = false;
       console.info('live2d lib load failed', error);
     }
+  }
+
+  // 初始化配置
+  private initConfig() {
+    this.Config.legacyExpressionBlendMode = this._legacyExpressionBlendMode;
   }
 }
