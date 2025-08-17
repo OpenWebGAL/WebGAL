@@ -4,7 +4,7 @@ import { IPerform } from '@/Core/Modules/perform/performInterface';
 import styles from '@/Stage/stage.module.scss';
 import { webgalStore } from '@/store/store';
 import { setStage, stageActions } from '@/store/stageReducer';
-import { getSentenceArgByKey } from '@/Core/util/getSentenceArg';
+import { getNumberArgByKey, getStringArgByKey } from '@/Core/util/getSentenceArg';
 import { unlockCgInUserData } from '@/store/userDataReducer';
 import { logger } from '@/Core/util/logger';
 import { ITransform } from '@/store/stageInterface';
@@ -21,32 +21,25 @@ import { WebGAL } from '@/Core/WebGAL';
  */
 export const changeBg = (sentence: ISentence): IPerform => {
   const url = sentence.content;
-  let name = '';
-  let series = 'default';
-  sentence.args.forEach((e) => {
-    if (e.key === 'unlockname') {
-      name = e.value.toString();
-    }
-    if (e.key === 'series') {
-      series = e.value.toString();
-    }
-  });
+  const unlockName = getStringArgByKey(sentence, 'unlockname') ?? '';
+  const series = getStringArgByKey(sentence, 'series') ?? 'default';
+  const transformString = getStringArgByKey(sentence, 'transform');
+  let duration = getNumberArgByKey(sentence, 'duration') ?? 1000;
+  const ease = getStringArgByKey(sentence, 'ease') ?? '';
 
   const dispatch = webgalStore.dispatch;
-  if (name !== '') dispatch(unlockCgInUserData({ name, url, series }));
+  if (unlockName !== '') {
+    dispatch(unlockCgInUserData({ name: unlockName, url, series }));
+  }
 
   /**
    * 删掉相关 Effects，因为已经移除了
    */
-  dispatch(stageActions.removeEffectByTargetId(`bg-main`));
+  if (webgalStore.getState().stage.bgName !== sentence.content) {
+    dispatch(stageActions.removeEffectByTargetId(`bg-main`));
+  }
 
   // 处理 transform 和 默认 transform
-  const transformString = getSentenceArgByKey(sentence, 'transform');
-  let duration = getSentenceArgByKey(sentence, 'duration');
-  let ease = getSentenceArgByKey(sentence, 'ease')?.toString() ?? '';
-  if (!duration || typeof duration !== 'number') {
-    duration = 1000;
-  }
   let animationObj: AnimationFrame[];
   if (transformString) {
     try {
@@ -81,14 +74,17 @@ export const changeBg = (sentence: ISentence): IPerform => {
   }
 
   // 应用动画的优先级更高一点
-  if (getSentenceArgByKey(sentence, 'enter')) {
-    WebGAL.animationManager.nextEnterAnimationName.set('bg-main', getSentenceArgByKey(sentence, 'enter')!.toString());
-    duration = getAnimateDuration(getSentenceArgByKey(sentence, 'enter')!.toString());
+  const enterAnimation = getStringArgByKey(sentence, 'enter');
+  const exitAnimation = getStringArgByKey(sentence, 'exit');
+  if (enterAnimation) {
+    WebGAL.animationManager.nextEnterAnimationName.set('bg-main', enterAnimation);
+    duration = getAnimateDuration(enterAnimation);
   }
-  if (getSentenceArgByKey(sentence, 'exit')) {
-    WebGAL.animationManager.nextExitAnimationName.set('bg-main-off', getSentenceArgByKey(sentence, 'exit')!.toString());
-    duration = getAnimateDuration(getSentenceArgByKey(sentence, 'exit')!.toString());
+  if (exitAnimation) {
+    WebGAL.animationManager.nextExitAnimationName.set('bg-main-off', exitAnimation);
+    duration = getAnimateDuration(exitAnimation);
   }
+
   dispatch(setStage({ key: 'bgName', value: sentence.content }));
 
   return {

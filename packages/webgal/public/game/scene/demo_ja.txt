@@ -2,14 +2,14 @@ bgm:s_Title.mp3 -volume=80 -enter=3000;
 unlockBgm:s_Title.mp3 -name=ようこそ;
 intro:■初めに| このデモゲームで使用している画像素材は、AI生成画像です;
 intro:■クレジット| 「VOICEVOX:小夜/SAYO」;
-changeBg:bg.png -next;
-unlockCg:bg.png -name=良い夜; // CGのロックを解いて、名前をつけます。
-changeFigure:stand.png -left -enter=enter-from-left -next;
-miniAvatar:miniavatar.png;
+changeBg:bg.webp -next;
+unlockCg:bg.webp -name=良い夜; // CGのロックを解いて、名前をつけます。
+changeFigure:stand.webp -left -enter=enter-from-left -next;
+miniAvatar:miniavatar.webp;
 WebGAL:こんにちは。 -001_小夜SAYO（ノーマル）_こんにちは。.wav;
 WebGALへようこそ！ -002_小夜SAYO（ノーマル）_ウェブギャルへよう….wav;
 WebGALは、かつてないまったく新しいビジュアルノベルエンジンです。 -003_小夜SAYO（ノーマル）_ウェブギャルは、か….wav;
-changeFigure:stand2.png -right -next;
+changeFigure:stand2.webp -right -next;
 Web技術を使用して開発されたエンジンであるため、ウェブページで優れたパフォーマンスを発揮します。 -004_小夜SAYO（ノーマル）_Web技術を使用し….wav;
 この機能のおかげで、ウェブサイト上に公開すると、プレイヤーはリンクを押すだけで、 -005_小夜SAYO（ノーマル）_この機能のおかげで….wav;
 いつでも、どこでも、ウェブサイト上でゲームをプレイすることができます！ -006_小夜SAYO（ノーマル）_いつでも、どこでも….wav;
@@ -51,7 +51,7 @@ WebGALのスクリプト言語は、制作の難易度を簡素化するため�
 ;エンド
 label:end;
 ;changeFigure:none -left -next;
-;changeFigure:stand.png -next;
+;changeFigure:stand.webp -next;
 WebGALプロジェクトは、デスクトップ向けのビジュアルノベルゲームエンジンの機能により近づくため、多くのショートカットキーとシーンの戻る機能をサポートしています。 -024_小夜SAYO（ノーマル）_ウェブギャルプロジ….wav;
 メニューの「LOG」ボタンを押すか、マウスホイールを上にスクロールしてみてください！ -025_小夜SAYO（ノーマル）_メニューのログボタ….wav;
 豊富な設定、クイックセーブ、クイックロード、自動モード、スキップモードなどの機能もサポートされています。 -026_小夜SAYO（ノーマル）_豊富な設定、クイッ….wav;

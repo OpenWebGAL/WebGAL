@@ -2,7 +2,7 @@ import { ISentence } from '@/Core/controller/scene/sceneInterface';
 import { logger } from '@/Core/util/logger';
 import { webgalStore } from '@/store/store';
 import { setStage } from '@/store/stageReducer';
-import { getSentenceArgByKey } from '@/Core/util/getSentenceArg';
+import { getBooleanArgByKey, getNumberArgByKey, getStringArgByKey } from '@/Core/util/getSentenceArg';
 import { IStageState } from '@/store/stageInterface';
 import {
   audioContextWrapper,
@@ -21,12 +21,22 @@ import { WebGAL } from '@/Core/WebGAL';
 export const playVocal = (sentence: ISentence) => {
   logger.debug('play vocal');
   const performInitName = 'vocal-play';
-  const url = getSentenceArgByKey(sentence, 'vocal'); // 获取语音的url
-  const volume = getSentenceArgByKey(sentence, 'volume'); // 获取语音的音量比
+
+  const url = getStringArgByKey(sentence, 'vocal') ?? ''; // 获取语音的url
+  let volume = getNumberArgByKey(sentence, 'volume') ?? 100; // 获取语音的音量比
+  volume = Math.max(0, Math.min(volume, 100)); // 限制音量在 0-100 之间
+
   let currentStageState: IStageState;
   currentStageState = webgalStore.getState().stage;
-  let pos = '';
-  let key = '';
+
+  let pos: 'center' | 'left' | 'right' = 'center';
+  const leftFromArgs = getBooleanArgByKey(sentence, 'left') ?? false;
+  const rightFromArgs = getBooleanArgByKey(sentence, 'right') ?? false;
+  if (leftFromArgs) pos = 'left';
+  if (rightFromArgs) pos = 'right';
+
+  let key = getStringArgByKey(sentence, 'figureId') ?? '';
+
   const freeFigure = currentStageState.freeFigure;
   const figureAssociatedAnimation = currentStageState.figureAssociatedAnimation;
   let bufferLength = 0;
@@ -39,24 +49,6 @@ export const playVocal = (sentence: ISentence) => {
   if (VocalControl !== null) {
     VocalControl.currentTime = 0;
     VocalControl.pause();
-  }
-
-  for (const e of sentence.args) {
-    if (e.value === true) {
-      match(e.key)
-        .with('left', () => {
-          pos = 'left';
-        })
-        .with('right', () => {
-          pos = 'right';
-        })
-        .endsWith('center', () => {
-          pos = 'center';
-        });
-    }
-    if (e.key === 'figureId') {
-      key = `${e.value.toString()}`;
-    }
   }
 
   // 获得舞台状态
@@ -75,9 +67,7 @@ export const playVocal = (sentence: ISentence) => {
       setTimeout(() => {
         let VocalControl: any = document.getElementById('currentVocal');
         // 设置语音音量
-        typeof volume === 'number' && volume >= 0 && volume <= 100
-          ? webgalStore.dispatch(setStage({ key: 'vocalVolume', value: volume }))
-          : webgalStore.dispatch(setStage({ key: 'vocalVolume', value: 100 }));
+        webgalStore.dispatch(setStage({ key: 'vocalVolume', value: volume }));
         // 设置语音
         if (VocalControl !== null) {
           VocalControl.currentTime = 0;

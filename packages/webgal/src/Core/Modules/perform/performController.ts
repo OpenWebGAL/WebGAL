@@ -6,6 +6,7 @@ import { resetStageState, stageActions } from '@/store/stageReducer';
 import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
 import { IRunPerform } from '@/store/stageInterface';
 import { WEBGAL_NONE } from '@/Core/constants';
+import { getBooleanArgByKey } from '@/Core/util/getSentenceArg';
 
 /**
  * 获取随机演出名称
@@ -16,7 +17,6 @@ export const getRandomPerformName = (): string => {
 
 export class PerformController {
   public performList: Array<IPerform> = [];
-  public timeoutList: Array<ReturnType<typeof setTimeout>> = [];
 
   public arrangeNewPerform(perform: IPerform, script: ISentence, syncPerformState = true) {
     // 检查演出列表内是否有相同的演出，如果有，一定是出了什么问题
@@ -54,7 +54,8 @@ export class PerformController {
       }
     }, perform.duration);
 
-    if (script.args.find((e) => e.key === 'continue' && e.value === true)) perform.goNextWhenOver = true;
+    const hasContinue = getBooleanArgByKey(script, 'continue') ?? false;
+    if (hasContinue) perform.goNextWhenOver = true;
 
     this.performList.push(perform);
   }
@@ -108,12 +109,10 @@ export class PerformController {
 
   public removeAllPerform() {
     for (const e of this.performList) {
+      clearTimeout(e.stopTimeout);
       e.stopFunction();
     }
     this.performList = [];
-    for (const e of this.timeoutList) {
-      clearTimeout(e);
-    }
   }
 
   private goNextWhenOver() {
