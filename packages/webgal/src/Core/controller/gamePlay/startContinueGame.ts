@@ -16,7 +16,6 @@ import { WebGAL } from '@/Core/WebGAL';
  */
 export const startGame = () => {
   resetStage(true);
-
   // 重新获取初始场景
   const sceneUrl: string = assetSetter('start.txt', fileType.scene);
   // 场景写入到运行时

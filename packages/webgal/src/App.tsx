@@ -12,6 +12,7 @@ import Title from '@/UI/Title/Title';
 import Translation from '@/UI/Translation/Translation';
 import { useEffect } from 'react';
 import { initializeScript } from './Core/initializeScript';
+import { CustomHtml } from './extends/CustomHtml/CustomHtml';
 
 function App() {
   useEffect(() => {
@@ -21,6 +22,7 @@ function App() {
   // Provider用于对各组件提供状态
   return (
     <div className="App">
+      <CustomHtml />
       <Translation />
       <Stage />
       <BottomControlPanel />
