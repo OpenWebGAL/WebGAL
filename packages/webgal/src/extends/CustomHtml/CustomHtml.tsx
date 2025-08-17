@@ -49,88 +49,35 @@ export const CustomHtml: FC = () => {
       {customHtml.map((item, index) => {
         const html = item.html;
         const feature = item._feature;
-        // 解析 style 字符串，提取 left/top 偏移
-        let leftOffset = 0;
-        let topOffset = 0;
-        let leftUnit = '';
-        let topUnit = '';
-        const styleMatch = html.match(/style\s*=\s*"([^"]*)"/);
-        if (styleMatch) {
-          const styleStr = styleMatch[1];
-          // 支持单位 px/vh/vw/%
-          const leftMatch = styleStr.match(/left\s*:\s*([\-\d.]+)(px|vw|vh|%)?/);
-          const topMatch = styleStr.match(/top\s*:\s*([\-\d.]+)(px|vw|vh|%)?/);
-          if (leftMatch) {
-            leftOffset = parseFloat(leftMatch[1]);
-            leftUnit = leftMatch[2] || '';
-          }
-          if (topMatch) {
-            topOffset = parseFloat(topMatch[1]);
-            topUnit = topMatch[2] || '';
-          }
-        }
-        let style: React.CSSProperties = { position: 'absolute', zIndex: 10000 + index };
+
+        // 使用从store中传入的style对象，如果不存在则创建默认样式
+        let style: React.CSSProperties = {
+          position: 'absolute',
+          zIndex: 10000 + index,
+          ...(item.style || {}),
+        };
+
         if (feature) {
           const pos = getFigurePosition(feature);
           if (pos) {
-            // 处理不同单位的偏移量
-            let finalLeft = pos.left ?? 0;
-            let finalTop = pos.top ?? 0;
-
-            if (leftUnit === 'vw') {
-              leftOffset = (leftOffset / 100) * window.innerWidth;
-            } else if (leftUnit === 'vh') {
-              leftOffset = (leftOffset / 100) * window.innerHeight;
-            } else if (leftUnit === '%') {
-              // 对于百分比，需要获取容器的宽度
-              const containerWidth = pixiContainer?.clientWidth || document.body.clientWidth;
-              leftOffset = (leftOffset / 100) * containerWidth;
+            // 使用CSS的calc函数来处理偏移，而不是手动计算像素值
+            if (item.style?.left !== undefined) {
+              style.left = `calc(${pos.left}px + ${item.style.left})`;
+            } else {
+              style.left = `${pos.left}px`;
             }
 
-            if (topUnit === 'vw') {
-              topOffset = (topOffset / 100) * window.innerWidth;
-            } else if (topUnit === 'vh') {
-              topOffset = (topOffset / 100) * window.innerHeight;
-            } else if (topUnit === '%') {
-              // 对于百分比，需要获取容器的高度
-              const containerHeight = pixiContainer?.clientHeight || document.body.clientHeight;
-              topOffset = (topOffset / 100) * containerHeight;
+            if (item.style?.top !== undefined) {
+              style.top = `calc(${pos.top}px + ${item.style.top})`;
+            } else {
+              style.top = `${pos.top}px`;
             }
 
-            style.left = finalLeft + leftOffset;
-            style.top = finalTop + topOffset;
             style.transform = 'translate(-50%, -50%)';
             style.pointerEvents = 'none';
           }
-        } else {
-          // 没有 feature，直接用 left/top 绝对定位
-          // 处理不同单位
-          if (!isNaN(leftOffset)) {
-            if (leftUnit === 'vw') {
-              style.left = `${(leftOffset / 100) * window.innerWidth}px`;
-            } else if (leftUnit === 'vh') {
-              style.left = `${(leftOffset / 100) * window.innerHeight}px`;
-            } else if (leftUnit === '%') {
-              const containerWidth = pixiContainer?.clientWidth || document.body.clientWidth;
-              style.left = `${(leftOffset / 100) * containerWidth}px`;
-            } else {
-              style.left = leftOffset;
-            }
-          }
-
-          if (!isNaN(topOffset)) {
-            if (topUnit === 'vw') {
-              style.top = `${(topOffset / 100) * window.innerWidth}px`;
-            } else if (topUnit === 'vh') {
-              style.top = `${(topOffset / 100) * window.innerHeight}px`;
-            } else if (topUnit === '%') {
-              const containerHeight = pixiContainer?.clientHeight || document.body.clientHeight;
-              style.top = `${(topOffset / 100) * containerHeight}px`;
-            } else {
-              style.top = topOffset;
-            }
-          }
         }
+
         return (
           <div
             key={`custom-html-${index}`}

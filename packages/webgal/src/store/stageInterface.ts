@@ -1,4 +1,5 @@
 import { ISentence } from '@/Core/controller/scene/sceneInterface';
+import React from 'react';
 
 /**
  * 游戏内变量
@@ -207,7 +208,7 @@ export interface IStageState {
   replacedUIlable: Record<string, string>;
   figureMetaData: figureMetaData;
   // 插入的html
-  customHtml: Array<{ html: string; _feature?: string }>;
+  customHtml: Array<{ html: string; _feature?: string; style?: React.CSSProperties }>;
 }
 
 /**

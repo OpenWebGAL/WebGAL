@@ -18,6 +18,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import cloneDeep from 'lodash/cloneDeep';
 import { commandType } from '@/Core/controller/scene/sceneInterface';
 import { STAGE_KEYS } from '@/Core/constants';
+import React from 'react';
 
 // 初始化舞台数据
 
@@ -235,7 +236,7 @@ const stageSlice = createSlice({
      * @param state 当前状态
      * @param action 要添加的HTML内容
      */
-    addCustomHtml: (state, action: PayloadAction<{ html: string; _feature?: string }>) => {
+    addCustomHtml: (state, action: PayloadAction<{ html: string; _feature?: string; style?: React.CSSProperties }>) => {
       state.customHtml.push(action.payload);
     },
     /**
