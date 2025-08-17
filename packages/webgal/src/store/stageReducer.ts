@@ -247,7 +247,7 @@ const stageSlice = createSlice({
     removeCustomHtml: (state, action: PayloadAction<number>) => {
       const index = action.payload;
       if (index >= 0 && index < state.customHtml.length) {
-        state.customHtml.splice(index, 1);
+        state。customHtml。splice(index， 1);
       }
     },
     /**
@@ -255,9 +255,9 @@ const stageSlice = createSlice({
      * @param state 当前状态
      */
     clearCustomHtml: (state) => {
-      state.customHtml = [];
-    },
-  },
+      state。customHtml = [];
+    }，
+  }，
 });
 
 export const { resetStageState, setStage, setStageVar } = stageSlice.actions;
