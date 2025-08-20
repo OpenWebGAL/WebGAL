@@ -10,7 +10,7 @@ import { textFont } from '@/store/userDataInterface';
 import { PerformController } from '@/Core/Modules/perform/performController';
 import { useSEByWebgalStore } from '@/hooks/useSoundEffect';
 import { WebGAL } from '@/Core/WebGAL';
-import { getSentenceArgByKey } from '@/Core/util/getSentenceArg';
+import { getStringArgByKey } from '@/Core/util/getSentenceArg';
 import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
 import { setStageVar } from '@/store/stageReducer';
 
@@ -20,13 +20,16 @@ import { setStageVar } from '@/store/stageReducer';
  */
 export const getUserInput = (sentence: ISentence): IPerform => {
   const varKey = sentence.content.toString().trim();
-  const titleFromArgs = getSentenceArgByKey(sentence, 'title');
-  const title = (titleFromArgs === 0 ? 'Please Input' : titleFromArgs) ?? 'Please Input';
-  const buttonTextFromArgs = getSentenceArgByKey(sentence, 'buttonText');
-  const buttonText = (buttonTextFromArgs === 0 ? 'OK' : buttonTextFromArgs) ?? 'OK';
-  const defaultValueFromArgs = getSentenceArgByKey(sentence, 'defaultValue');
+
+  let title = getStringArgByKey(sentence, 'title') ?? '';
+  title = title === '' ? 'Please Input' : title;
+  let buttonText = getStringArgByKey(sentence, 'buttonText') ?? '';
+  buttonText = buttonText === '' ? 'OK' : buttonText;
+  const defaultValue = getStringArgByKey(sentence, 'defaultValue');
+
   const fontFamily = webgalStore.getState().userData.optionData.textboxFont;
   const font = fontFamily === textFont.song ? '"思源宋体", serif' : '"WebgalUI", serif';
+
   const { playSeEnter, playSeClick } = useSEByWebgalStore();
   const chooseElements = (
     <div style={{ fontFamily: font }} className={styles.glabalDialog_container}>
@@ -41,7 +44,7 @@ export const getUserInput = (sentence: ISentence): IPerform => {
               webgalStore.dispatch(
                 setStageVar({
                   key: varKey,
-                  value: userInput?.value || defaultValueFromArgs || ' ',
+                  value: userInput?.value || defaultValue || ' ',
                 }),
               );
             }
