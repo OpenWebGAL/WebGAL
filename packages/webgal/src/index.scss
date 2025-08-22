@@ -1,39 +1,20 @@
 @charset "UTF-8";
 
-@import "Core/util/constants";
+@import 'Core/util/constants';
 
 @font-face {
-  font-family: "思源宋体";
-  /*noinspection CssUnknownTarget*/
-  src: url("assets/fonts/SourceHanSerifCN-Regular.ttf") format("truetype");
-}
-
-@font-face {
-  font-family: "LXGW";
-  /*noinspection CssUnknownTarget*/
-  src: url("assets/fonts/LXGWWenKai-Regular.ttf") format("truetype");
+  font-family: '思源宋体';
+  src: url('assets/fonts/SourceHanSerifCN-Regular.ttf') format('truetype');
 }
 
 @font-face {
-  font-family: "WebgalUI";
-  /*noinspection CssUnknownTarget*/
-  src: url("assets/fonts/OPPOSans-R.ttf") format("truetype");
+  font-family: 'LXGW';
+  src: url('assets/fonts/LXGWWenKai-Regular.ttf') format('truetype');
 }
 
-.StartButton {
-  animation: StartButton_blink 4s infinite;
-}
-
-@keyframes StartButton_blink {
-  0% {
-    text-shadow: 0 0 15px rgba(0, 0, 0, 0.65);
-  }
-  50% {
-    text-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
-  }
-  100% {
-    text-shadow: 0 0 15px rgba(0, 0, 0, 0.65);
-  }
+@font-face {
+  font-family: 'WebgalUI';
+  src: url('assets/fonts/OPPOSans-R.ttf') format('truetype');
 }
 
 a {
@@ -60,9 +41,8 @@ body {
   background-color: #000;
   font-size: 16px;
   margin: 0;
-  font-family: "WebgalUI", -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-  'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-  sans-serif;
+  font-family: 'WebgalUI', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell',
+    'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow: hidden;
@@ -70,16 +50,13 @@ body {
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-  monospace;
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
 
 #root {
   width: $screenWidth;
   height: $screenHeight;
   overflow: hidden;
-  /*position: absolute;*/
-  /*top: 0;*/
   font-size: 160%;
 }
 
@@ -104,57 +81,6 @@ code {
   -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
 }
 
-#ebg {
-  height: 100vh;
-  width: 100vw;
-  filter: blur(50px);
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-  position: absolute;
-  top: 0;
-  left: 0;
-}
-
-/* ::-webkit-scrollbar-thumb:window-inactive {
-    background:rgba(255,0,0,0.4);
-} */
-
-/*@media screen and (orientation: portrait) {*/
-/*    !*竖屏 css*!*/
-/*    #root {*/
-/*        !*transform-origin: calc(100vw / 2) calc(100vw / 2);*!*/
-/*        transform: rotate(90deg);*/
-/*        width: 1600px;*/
-/*        height: 900px;*/
-/*        overflow: hidden;*/
-/*    }*/
-/*}*/
-
-/*@media screen and (orientation: landscape) {*/
-/*    !*横屏 css*!*/
-/*    #root {*/
-/*        width: 1600px;*/
-/*        height: 900px;*/
-/*        overflow: hidden;*/
-/*    }*/
-/*}*/
-
-
-/*@media screen and (max-width: 1100px) {*/
-/*    !*手机端视图*!*/
-/*    #root {*/
-/*        font-size: 50%;*/
-/*    }*/
-/*}*/
-
-/*@media screen and (max-height: 650px) {*/
-/*    !*手机端视图*!*/
-/*    #root {*/
-/*        font-size: 50%;*/
-/*    }*/
-/*}*/
-
 .App {
   height: 100%;
   width: 100%;
@@ -164,14 +90,6 @@ code {
   -webkit-overflow-scrolling: auto;
 }
 
-*{
-  /*-webkit-overflow-scrolling: auto;*/
-}
-
-#pixiCanvas{
+#pixiCanvas {
   z-index: 5;
-}
-
-#root{
-  /*will-change: transform;*/
 }

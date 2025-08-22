@@ -1,6 +1,4 @@
-/**
- * 眨眼参数，毫秒
- */
+/** 眨眼参数，毫秒 */
 export interface BlinkParam {
   blinkInterval: number; // 眨眼间隔
   blinkIntervalRandom: number; // 眨眼间隔随机范围
@@ -49,27 +47,38 @@ export class Live2DCore {
     }
   }
 
-  /**
-   * 初始化 Live 2D
-   * 出于某些原因，直接在此类的构造函数初始化
-   * 会导致加载 Live 2D 失败
-   */
-  public async initLive2D() {
-    try {
-      const { Live2DModel, SoundManager, config } = await import('pixi-live2d-display-webgal');
-      this.Live2DModel = Live2DModel;
-      this.SoundManager = SoundManager;
-      this.Config = config;
-      this.isAvailable = true;
-      console.info('live2d lib load success');
-      this.initConfig();
-    } catch (error) {
-      this.isAvailable = false;
-      console.info('live2d lib load failed', error);
-    }
+  public constructor() {
+    this.initLive2D();
   }
 
-  // 初始化配置
+  public initLive2D() {
+    // @ts-expect-error live2dPromise is a global variable
+    (window.live2dPromise as Promise<[boolean, boolean]>)
+      .then(async ([live2d2dAvailable, live2d4Available]) => {
+        const _isAvailable = live2d2dAvailable && live2d4Available;
+        if (!_isAvailable) {
+          console.warn('live2d plugin load failed');
+          return;
+        }
+        const { Live2DModel, SoundManager, config } = await import('pixi-live2d-display-webgal');
+        this.Live2DModel = Live2DModel;
+        this.SoundManager = SoundManager;
+        this.Config = config;
+        this.isAvailable = true;
+        console.log('Live2D plugin load success');
+        this.initConfig();
+      })
+      .catch((error) => {
+        this.isAvailable = false;
+        console.warn('Live2D plugin load failed', error);
+      })
+      .finally(() => {
+        // @ts-expect-error live2dPromise is a global variable
+        delete window.live2dPromise;
+      });
+  }
+
+  /** 初始化配置 */
   private initConfig() {
     this.Config.legacyExpressionBlendMode = this._legacyExpressionBlendMode;
   }

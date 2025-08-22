@@ -1,25 +1,16 @@
-import * as PIXI from 'pixi.js';
-import { v4 as uuid } from 'uuid';
 import { webgalStore } from '@/store/store';
+import { IEffect, IFigureAssociatedAnimation, IFigureMetadata, ITransform } from '@/store/stageInterface';
 import { setStage, stageActions } from '@/store/stageReducer';
-import cloneDeep from 'lodash/cloneDeep';
-import {
-  baseTransform,
-  IEffect,
-  IFigureAssociatedAnimation,
-  IFigureMetadata,
-  ITransform,
-} from '@/store/stageInterface';
-import { logger } from '@/Core/util/logger';
+import { Live2D, WebGAL } from '@/Core/WebGAL';
+import { baseBlinkParam, baseFocusParam, BlinkParam, FocusParam } from '@/Core/live2DCore';
 import { isIOS } from '@/Core/initializeScript';
 import { WebGALPixiContainer } from '@/Core/controller/stage/pixi/WebGALPixiContainer';
-import { Live2D, WebGAL } from '@/Core/WebGAL';
-import { SCREEN_CONSTANTS } from '@/Core/util/constants';
 import { addSpineBgImpl, addSpineFigureImpl } from '@/Core/controller/stage/pixi/spine';
-import { baseBlinkParam, baseFocusParam, BlinkParam, FocusParam } from '@/Core/live2DCore';
-import { isEqual } from 'lodash';
-// import { figureCash } from '@/Core/gameScripts/vocal/conentsCash'; // 如果要使用 Live2D，取消这里的注释
-// import { Live2DModel, SoundManager } from 'pixi-live2d-display-webgal'; // 如果要使用 Live2D，取消这里的注释
+import { SCREEN_CONSTANTS } from '@/Core/util/constants';
+import { logger } from '@/Core/util/logger';
+import { v4 as uuid } from 'uuid';
+import { cloneDeep, isEqual } from 'lodash';
+import * as PIXI from 'pixi.js';
 
 export interface IAnimationObject {
   setStartState: Function;
@@ -1077,7 +1068,6 @@ export default class PixiStage {
     } catch (error) {
       console.error('Failed to load figureCash:', error);
     }
-    Live2D.initLive2D();
   }
 }
 

@@ -1,16 +1,15 @@
-import { resetStage } from '@/Core/controller/stage/resetStage';
-import { assetSetter, fileType } from '@/Core/util/gameAssetsAccess/assetSetter';
-import { sceneFetcher } from '@/Core/controller/scene/sceneFetcher';
-import { sceneParser } from '@/Core/parser/sceneParser';
-import { logger } from '../logger';
 import { webgalStore } from '@/store/store';
 import { setVisibility } from '@/store/GUIReducer';
-import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
-
 import { WebGAL } from '@/Core/WebGAL';
-import cloneDeep from 'lodash/cloneDeep';
+import { resetStage } from '@/Core/controller/stage/resetStage';
+import { sceneFetcher } from '@/Core/controller/scene/sceneFetcher';
 import { IScene } from '@/Core/controller/scene/sceneInterface';
 import { jumpFromBacklog } from '@/Core/controller/storage/jumpFromBacklog';
+import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
+import { sceneParser } from '@/Core/parser/sceneParser';
+import { logger } from '@/Core/util/logger';
+import { assetSetter, fileType } from '@/Core/util/gameAssetsAccess/assetSetter';
+import cloneDeep from 'lodash/cloneDeep';
 
 let syncFastTimeout: ReturnType<typeof setTimeout> | undefined;
 
@@ -20,7 +19,7 @@ export const syncWithOrigine = (sceneName: string, sentenceId: number, experment
   dispatch(setVisibility({ component: 'showTitle', visibility: false }));
   dispatch(setVisibility({ component: 'showMenuPanel', visibility: false }));
   dispatch(setVisibility({ component: 'isShowLogo', visibility: false }));
-  const title = document.getElementById('Title_enter_page');
+  const title = document.querySelector('.html-body__title-enter') as HTMLElement;
   if (title) {
     title.style.display = 'none';
   }
