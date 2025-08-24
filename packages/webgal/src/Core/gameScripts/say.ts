@@ -90,11 +90,13 @@ export const say = (sentence: ISentence): IPerform => {
   let performSimulateVocalTimeout: ReturnType<typeof setTimeout> | null = null;
   let performSimulateVocalDelay = 0;
 
-  let pos: 'center' | 'left' | 'right' = 'center';
+  let pos: '' | 'center' | 'left' | 'right' = '';
   const leftFromArgs = getBooleanArgByKey(sentence, 'left') ?? false;
   const rightFromArgs = getBooleanArgByKey(sentence, 'right') ?? false;
+  const centerFromArgs = getBooleanArgByKey(sentence, 'center') ?? false;
   if (leftFromArgs) pos = 'left';
   if (rightFromArgs) pos = 'right';
+  if (centerFromArgs) pos = 'center';
 
   let key = getStringArgByKey(sentence, 'figureId') ?? '';
 
