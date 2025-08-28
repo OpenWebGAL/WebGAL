@@ -76,7 +76,7 @@ export function getEnterExitAnimation(
     }
     return { duration, animation };
   } else {
-    let duration = 750;
+    let duration = 1000;
     if (isBg) {
       duration = 1500;
     }
