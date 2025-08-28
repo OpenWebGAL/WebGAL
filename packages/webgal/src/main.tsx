@@ -1,18 +1,16 @@
-import React from 'react';
+import { StrictMode } from 'react';
 import ReactDOM from 'react-dom';
-import './index.scss';
 import App from './App';
+import './index.scss';
 import './assets/style/animation.scss';
 import 'modern-css-reset/dist/reset.min.css';
 
-/**
- * i18n
- */
+/** i18n */
 import i18n from 'i18next';
 import { initReactI18next, Trans } from 'react-i18next';
 import { defaultLanguage, i18nTranslationResources, language } from './config/language';
-import { webgalStore } from './store/store';
 import { Provider } from 'react-redux';
+import { webgalStore } from './store/store';
 
 i18n
   .use(initReactI18next) // passes i18n down to react-i18next
@@ -32,12 +30,12 @@ i18n
 
 // eslint-disable-next-line react/no-deprecated
 ReactDOM.render(
-  <React.StrictMode>
+  <StrictMode>
     <Trans>
       <Provider store={webgalStore}>
         <App />
       </Provider>
     </Trans>
-  </React.StrictMode>,
-  document.getElementById('root'),
+  </StrictMode>,
+  document.querySelector('#root'),
 );
