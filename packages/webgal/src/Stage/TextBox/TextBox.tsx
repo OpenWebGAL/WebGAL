@@ -33,8 +33,8 @@ export const TextBox = () => {
     size = getTextSize(stageState.showTextSize) + '%';
     textSizeState = stageState.showTextSize;
   }
-  const MaxTextLine = userDataState.globalGameVar.Max_line as number; // congfig定义字体行数
-  const lineLimit = Number.isNaN(Number(MaxTextLine))
+  const MaxTextLine = Number(userDataState.globalGameVar.Max_line); // congfig定义字体行数
+  const lineLimit = Number.isNaN(MaxTextLine)
     ? match(textSizeState)
         .with(textSize.small, () => 3)
         .with(textSize.medium, () => 2)
