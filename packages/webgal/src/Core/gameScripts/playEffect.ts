@@ -100,6 +100,11 @@ export const playEffect = (sentence: ISentence): IPerform => {
             }
           }
         };
+        seElement.addEventListener('error', (e) => {
+          logger.error('播放效果音失败');
+          // 播放失败提前结束
+          seElement.onended?.(e);
+        });
       }, 1);
     }),
   };
