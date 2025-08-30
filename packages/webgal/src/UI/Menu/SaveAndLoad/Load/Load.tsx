@@ -1,6 +1,6 @@
 import { CSSProperties, FC, useEffect } from 'react';
 import { loadGame } from '@/Core/controller/storage/loadGame';
-import styles from '../SaveAndLoad.module.scss';
+import styles from '@/UI/Menu/SaveAndLoad/SaveAndLoad.module.scss';
 // import {saveGame} from '@/Core/controller/storage/saveGame';
 import { setStorage } from '@/Core/controller/storage/storageController';
 import { useDispatch, useSelector } from 'react-redux';
@@ -11,17 +11,36 @@ import { useTranslation } from 'react-i18next';
 import useSoundEffect from '@/hooks/useSoundEffect';
 import { getSavesFromStorage } from '@/Core/controller/storage/savesController';
 import { easyCompile } from '@/UI/Menu/SaveAndLoad/Save/Save';
+import useApplyStyle from '@/hooks/useApplyStyle';
 
 export const Load: FC = () => {
   const { playSeClick, playSeEnter, playSePageChange } = useSoundEffect();
   const userDataState = useSelector((state: RootState) => state.userData);
   const saveDataState = useSelector((state: RootState) => state.saveData);
   const dispatch = useDispatch();
+  const applyStyle = useApplyStyle('UI/Menu/SaveAndLoad/saveAndLoad.scss');
+
+  // 换页时将存档滚动容器拉至顶部
+  useEffect(() => {
+    const saveLoadContent = document.getElementById('saveLoadContent');
+    if (saveLoadContent) {
+      saveLoadContent.scrollTop = 0;
+    }
+  }, [userDataState.optionData.slPage]);
+
   const page = [];
   for (let i = 1; i <= 20; i++) {
-    let classNameOfElement = styles.Save_Load_top_button + ' ' + styles.Load_top_button;
+    let classNameOfElement =
+      applyStyle('save_load_bar_button', styles.save_load_bar_button) +
+      ' ' +
+      applyStyle('load_bar_button', styles.load_bar_button);
     if (i === userDataState.optionData.slPage) {
-      classNameOfElement = classNameOfElement + ' ' + styles.Save_Load_top_button_on + ' ' + styles.Load_top_button_on;
+      classNameOfElement =
+        classNameOfElement +
+        ' ' +
+        applyStyle('save_load_bar_button_active', styles.save_load_bar_button_active) +
+        ' ' +
+        applyStyle('load_bar_button_active', styles.load_bar_button_active);
     }
     const element = (
       <div
@@ -34,7 +53,7 @@ export const Load: FC = () => {
         key={'Load_element_page' + i}
         className={classNameOfElement}
       >
-        <div className={styles.Save_Load_top_button_text}>{i}</div>
+        <div className={applyStyle('save_load_top_button_text', styles.save_load_top_button_text)}>{i}</div>
       </div>
     );
     page.push(element);
@@ -59,20 +78,57 @@ export const Load: FC = () => {
       const speakerView = easyCompile(speaker);
       saveElementContent = (
         <>
-          <div className={styles.Save_Load_content_element_top}>
-            <div className={styles.Save_Load_content_element_top_index + ' ' + styles.Load_content_elememt_top_index}>
-              {saveData.index}
-            </div>
-            <div className={styles.Save_Load_content_element_top_date + ' ' + styles.Load_content_element_top_date}>
-              {saveData.saveTime}
-            </div>
+          <div className={applyStyle('save_load_content_element_preview', styles.save_load_content_element_preview)}>
+            <img
+              className={applyStyle(
+                'save_load_content_element_preview_image',
+                styles.save_load_content_element_preview_image,
+              )}
+              alt="Save_img_preview"
+              src={saveData.previewImage}
+            />
           </div>
-          <div className={styles.Save_Load_content_miniRen}>
-            <img className={styles.Save_Load_content_miniRen_bg} alt="Save_img_preview" src={saveData.previewImage} />
-          </div>
-          <div className={styles.Save_Load_content_text}>
-            <div className={styles.Save_Load_content_speaker + ' ' + styles.Load_content_speaker}>{speakerView}</div>
-            <div className={styles.Save_Load_content_text_padding}>{easyCompile(saveData.nowStageState.showText)}</div>
+          <div className={applyStyle('save_load_content_element_info', styles.save_load_content_element_info)}>
+            <div
+              className={
+                applyStyle('save_load_content_element_info_bar', styles.save_load_content_element_info_bar) +
+                ' ' +
+                applyStyle('load_content_element_info_bar', styles.load_content_element_info_bar)
+              }
+            >
+              <div
+                className={
+                  applyStyle('save_load_content_element_index', styles.save_load_content_element_index) +
+                  ' ' +
+                  applyStyle('load_content_element_index', styles.load_content_element_index)
+                }
+              >
+                {saveData.index}
+              </div>
+              <div
+                className={
+                  applyStyle('save_load_content_element_date', styles.save_load_content_element_date) +
+                  ' ' +
+                  applyStyle('load_content_element_date', styles.load_content_element_date)
+                }
+              >
+                {saveData.saveTime}
+              </div>
+            </div>
+            <div className={applyStyle('save_load_content_dialog', styles.save_load_content_dialog)}>
+              <div
+                className={
+                  applyStyle('save_load_content_speaker', styles.save_load_content_speaker) +
+                  ' ' +
+                  applyStyle('load_content_speaker', styles.load_content_speaker)
+                }
+              >
+                {speakerView}
+              </div>
+              <div className={applyStyle('save_load_content_text', styles.save_load_content_text)}>
+                {easyCompile(saveData.nowStageState.showText)}
+              </div>
+            </div>
           </div>
         </>
       );
@@ -88,8 +144,10 @@ export const Load: FC = () => {
         }}
         onMouseEnter={playSeEnter}
         key={'loadElement_' + i}
-        className={styles.Save_Load_content_element}
-        style={{ animationDelay: `${animationIndex * 30}ms` }}
+        className={applyStyle('save_load_content_element', styles.save_load_content_element)}
+        style={{
+          ['--save-load-content-element-index' as any]: animationIndex,
+        }}
       >
         {saveElementContent}
       </div>
@@ -100,14 +158,9 @@ export const Load: FC = () => {
   const t = useTrans('menu.');
 
   return (
-    <div className={styles.Save_Load_main}>
-      <div className={styles.Save_Load_top}>
-        <div className={styles.Save_Load_title}>
-          <div className={styles.Load_title_text}>{t('loadSaving.title')}</div>
-        </div>
-        <div className={styles.Save_Load_top_buttonList}>{page}</div>
-      </div>
-      <div className={styles.Save_Load_content} id={'Load_content_page_' + userDataState.optionData.slPage}>
+    <div className={applyStyle('save_load_main', styles.save_load_main)}>
+      <div className={applyStyle('save_load_bar', styles.save_load_bar)}>{page}</div>
+      <div className={applyStyle('save_load_content', styles.save_load_content)} id="saveLoadContent">
         {showSaves}
       </div>
     </div>

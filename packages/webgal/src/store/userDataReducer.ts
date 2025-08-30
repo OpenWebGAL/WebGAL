@@ -12,6 +12,7 @@ import {
   ISetUserDataPayload,
   IUserData,
   fullScreenOption,
+  pinnedControlPanelButton,
   playSpeed,
   textFont,
   textSize,
@@ -36,6 +37,8 @@ const initialOptionSet: IOptionData = {
   language: language.zhCn,
   voiceInterruption: voiceOption.yes,
   fullScreen: fullScreenOption.off,
+  uiTransitionDuration: 250,
+  pinnedControlPanelButtons: pinnedControlPanelButton.none,
 };
 
 // 初始化用户数据

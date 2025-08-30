@@ -1,0 +1,268 @@
+.control_panel_main {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 0;
+  justify-self: flex-end;
+  align-items: flex-end;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  max-height: 100%;
+  pointer-events: none;
+  animation: control_panel_main_show var(--ui-transition-duration) cubic-bezier(0.215, 0.610, 0.355, 1) forwards;
+}
+
+@keyframes control_panel_main_show {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.control_panel_main_hide {
+  pointer-events: none;
+  animation: control_panel_main_hide var(--ui-transition-duration) cubic-bezier(0.215, 0.610, 0.355, 1) forwards;
+}
+
+@keyframes control_panel_main_hide {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@mixin control_panel_button_active {
+  background-color: rgb(32, 111, 175);
+  color: rgb(255, 255, 255);
+
+  &:hover {
+    background-color: rgb(31, 101, 158);
+  }
+}
+
+@mixin control_panel_button_icon {
+  line-height: 0;
+}
+
+@mixin control_panel_button_text {
+  text-wrap: nowrap;
+  font-weight: 500;
+  margin-right: auto;
+  padding: 0 1.5vmin;
+}
+
+.control_panel_bar {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  padding: 2vmin 2vmin 0vmin 2vmin;
+  gap: 2vmin;
+  pointer-events: all;
+}
+
+.control_panel_bar_button {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 5vmin;
+  min-height: 10vmin;
+  min-width: 10vmin;
+  transition: background-color 0.5s cubic-bezier(0.215, 0.610, 0.355, 1);
+  gap: 1vmin;
+  background-color: rgba(0, 0, 0, 0.144);
+  font-size: 4vmin;
+  color: rgba(255, 255, 255, 0.877);
+  
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.5);
+    transition: background-color 0s;
+    color: white;
+  }
+}
+
+.control_panel_bar_button_active {
+  @include control_panel_button_active;
+  background-color: rgba(255, 255, 255, 0.178);
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.329);
+    color: white;
+  }
+}
+
+.control_panel_bar_button_icon {
+  @include control_panel_button_icon;
+}
+
+.control_panel_list {
+  position: absolute;
+  top: 0;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  max-height: 100%;
+  padding: 14vmin 2vmin 3vmin 2vmin;
+  gap: 2vmin;
+  overflow: auto;
+  scrollbar-width: none;
+  outline: none;
+  animation: control_panel_list_show var(--ui-transition-duration) cubic-bezier(0.215, 0.610, 0.355, 1) forwards;
+  pointer-events: all;
+}
+
+@keyframes control_panel_list_show {
+  0% {
+    opacity: 0;
+    transform: translateX(5%);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.control_panel_list_hide {
+  pointer-events: none;
+  animation: control_panel_list_hide var(--ui-transition-duration) cubic-bezier(0.215, 0.610, 0.355, 1) forwards;
+}
+
+@keyframes control_panel_list_hide {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.control_panel_list_item {
+  display: flex;
+  gap: 1vmin;
+}
+
+.control_panel_list_button {
+  cursor: pointer;
+  display: flex;
+  min-width: 10vmin;
+  min-height: 10vmin;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background-color: rgb(233, 233, 233);
+  transition: background-color 0.5s cubic-bezier(0.215, 0.610, 0.355, 1);
+  box-shadow: 0 0.5vmin 0vmin rgb(199, 199, 199);
+  border-style: solid;
+  border-width: 1vmin;
+  border-color: rgba(255, 255, 255, 0);
+  border-radius: 5vmin;
+  color: rgb(68, 68, 68);
+  font-size: 3.5vmin;
+  font-weight: 500;
+  padding: 1vmin 2vmin;
+  
+  &:hover {
+    background-color: rgb(255, 255, 255);
+    transition: background-color 0s;
+  }
+  &:last-child {
+    flex-grow: 1
+  }
+}
+
+.control_panel_list_button_active {
+  background-color: rgb(52, 114, 185);
+  box-shadow: 0 0.5vmin 0vmin rgb(74, 105, 190);
+  border-color: rgb(83, 140, 206);
+  color: rgb(255, 255, 255);
+  text-shadow: 0 0.3vmin 0vmin rgb(8, 76, 139);
+
+  &:hover {
+    background-color: rgb(66, 123, 189);
+  }
+}
+
+.control_panel_list_button_icon {
+  @include control_panel_button_icon;
+  font-size: 120%;
+}
+
+.control_panel_list_button_text {
+  @include control_panel_button_text;
+}
+
+.control_panel_fast_sl_preview {
+  pointer-events: none;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  max-width: 60vmin;
+  max-height: 60vmin;
+  display: flex;
+  flex-direction: column;
+  background-color: rgb(233, 233, 233);
+  box-shadow: 0 1vmin 2vmin rgba(0, 0, 0, 0.2);
+  border-radius: 3vmin;
+  border-style: solid;
+  border-width: 1vmin;
+  border-color: transparent;
+  overflow: hidden;
+  opacity: 0;
+  animation: control_panel_fast_sl_preview_show var(--ui-transition-duration) cubic-bezier(0.215, 0.610, 0.355, 1) forwards;
+}
+
+@keyframes control_panel_fast_sl_preview_show {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.control_panel_fast_sl_preview_hide {
+  animation: control_panel_fast_sl_preview_hide var(--ui-transition-duration) cubic-bezier(0.215, 0.610, 0.355, 1) forwards;
+}
+
+@keyframes control_panel_fast_sl_preview_hide {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.control_panel_fast_sl_preview_image {
+  display: flex;
+  width: 100%;
+  object-fit: contain;
+}
+
+.control_panel_fast_sl_preview_dialog_container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  gap: 1vmin;
+  padding: 2vmin 0;
+}
+
+.control_panel_fast_sl_preview_speaker {
+  color: #005caf;
+  font-size: 4vmin;
+  font-weight: 500;
+  padding: 0 2vmin;
+}
+
+.control_panel_fast_sl_preview_text {
+  color: rgb(68, 68, 68);
+  font-size: 3.5vmin;
+  font-weight: 500;
+  padding: 0 2vmin;
+}

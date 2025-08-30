@@ -1,8 +1,6 @@
 import { StrictMode } from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
-import './index.scss';
-import './assets/style/animation.scss';
 import 'modern-css-reset/dist/reset.min.css';
 
 /** i18n */

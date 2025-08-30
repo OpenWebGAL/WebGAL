@@ -1,72 +1,121 @@
 import styles from '@/UI/Extra/extra.module.scss';
-import React from 'react';
+import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import { useValue } from '@/hooks/useValue';
-import './extraCG_animation_List.scss';
 import { ExtraCgElement } from '@/UI/Extra/ExtraCgElement';
 import useSoundEffect from '@/hooks/useSoundEffect';
+import useApplyStyle from '@/hooks/useApplyStyle';
+import { useDelayedVisibility } from '@/hooks/useDelayedVisibility';
+import { IExtraOption } from './Extra';
+import { Icon } from '@icon-park/react/lib/runtime';
+import { Close } from '@icon-park/react';
 
-export function ExtraCg() {
-  const cgPerPage = 8;
+interface IExtraFullScreenBarButtonProps {
+  icon?: Icon;
+  onClick?: () => void;
+}
+
+export function ExtraCg(props: IExtraOption) {
   const extraState = useSelector((state: RootState) => state.userData.appreciationData);
-  const pageNumber = Math.ceil(extraState.cg.length / cgPerPage);
-  // const pageNumber = 10;
   const currentPage = useValue(1);
   const { playSeEnter, playSeClick } = useSoundEffect();
+  const applyStyle = useApplyStyle('UI/Extra/extra.scss');
 
-  // 开始生成立绘鉴赏的图片
-  const showCgList = [];
-  const len = extraState.cg.length;
-  for (
-    let i = (currentPage.value - 1) * cgPerPage;
-    i < Math.min(len, (currentPage.value - 1) * cgPerPage + cgPerPage);
-    i++
-  ) {
-    const index = i - (currentPage.value - 1) * cgPerPage;
-    const deg = Random(-5, 5);
-    const temp = (
+  const [showFull, setShowFull] = useState(false);
+  const delayedShowFull = useDelayedVisibility(showFull);
+  const [currentIndex, setCurrentIndex] = useState(-1);
+  const [mediaType, setMediaType] = useState<'video' | 'image' | 'unknown'>('unknown');
+
+  const extraFullScreenBarButton = (props: IExtraFullScreenBarButtonProps) => {
+    return (
+      <div
+        className={`${applyStyle('extra_cg_full_screen_bar_button', styles.extra_cg_full_screen_bar_button)}`}
+        onClick={props.onClick}
+        onMouseEnter={playSeEnter}
+      >
+        {props.icon && (
+          <props.icon
+            className={applyStyle('extra_cg_full_screen_bar_button_icon', styles.extra_cg_full_screen_bar_button_icon)}
+            strokeWidth={4}
+          />
+        )}
+      </div>
+    );
+  };
+
+  // 根据 series 过滤 CG 列表
+  const filteredCgList = props.series ? extraState.cg.filter((cg) => cg.series === props.series) : extraState.cg;
+
+  const cgList = filteredCgList.map((cg, index) => {
+    return (
       <ExtraCgElement
-        name={extraState.cg[i].name}
-        resourceUrl={extraState.cg[i].url}
-        transformDeg={deg}
+        name={cg.name}
+        series={props.series ? undefined : cg.series}
+        resourceUrl={cg.url}
+        transformDeg={Random(-5, 5)}
         index={index}
-        key={index.toString() + extraState.cg[i].url}
+        key={index.toString() + cg.url}
+        onClick={(idx: number, mediaType: 'video' | 'image' | 'unknown') => {
+          setCurrentIndex(idx);
+          setMediaType(mediaType);
+          setShowFull(true);
+        }}
       />
     );
-    showCgList.push(temp);
-  }
-
-  // 生成cg鉴赏的导航
-  const showNav = [];
-  for (let i = 1; i <= pageNumber; i++) {
-    let className = styles.cgNav;
-    if (currentPage.value === i) {
-      className = className + ' ' + styles.cgNav_active;
-    }
-    const temp = (
-      <div
-        onClick={() => {
-          currentPage.set(i);
-          playSeClick();
-        }}
-        key={'nav' + i}
-        onMouseEnter={playSeEnter}
-        className={className}
-      >
-        {i}
-      </div>
-    );
-    showNav.push(temp);
-  }
+  });
 
   return (
-    <div className={styles.cgMain}>
-      <div className={styles.cgShowDiv}>
-        <div className={styles.cgShowDivWarpper}>{showNav}</div>
+    <>
+      {delayedShowFull && (
+        <div
+          onClick={() => {
+            setShowFull(false);
+            playSeClick();
+          }}
+          className={`${applyStyle('extra_cg_full_screen', styles.extra_cg_full_screen)} ${
+            showFull ? '' : applyStyle('extra_cg_full_screen_hide', styles.extra_cg_full_screen_hide)
+          }`}
+        >
+          {mediaType === 'video' && (
+            <video
+              src={filteredCgList[currentIndex].url}
+              controls
+              autoPlay
+              playsInline
+              className={applyStyle('extra_cg_full_screen_video', styles.extra_cg_full_screen_video)}
+            />
+          )}
+          {mediaType === 'image' && (
+            <img
+              alt={filteredCgList[currentIndex].name}
+              src={filteredCgList[currentIndex].url}
+              className={applyStyle('extra_cg_full_screen_image', styles.extra_cg_full_screen_image)}
+            />
+          )}
+          {mediaType === 'unknown' && (
+            <div
+              className={applyStyle('extra_cg_full_screen_media', styles.extra_cg_full_screen_media)}
+              style={{
+                backgroundImage: `url('${filteredCgList[currentIndex].url}')`,
+              }}
+            />
+          )}
+          <div className={applyStyle('extra_cg_full_screen_bar', styles.extra_cg_full_screen_bar)}>
+            {extraFullScreenBarButton({
+              icon: Close,
+              onClick: () => {
+                setShowFull(true);
+                playSeClick();
+              },
+            })}
+          </div>
+        </div>
+      )}
+      <div className={applyStyle('extra_cg_main', styles.extra_cg_main)}>
+        <div className={applyStyle('extra_cg_container', styles.extra_cg_container)}>{cgList}</div>
       </div>
-      <div className={styles.cgContainer}>{showCgList}</div>
-    </div>
+    </>
   );
 }
 

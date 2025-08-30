@@ -1,4 +1,5 @@
 import { EnhancedNode } from '@/Stage/TextBox/TextBox';
+import { textSize } from '@/store/userDataInterface';
 
 export interface ITextboxProps {
   textArray: EnhancedNode[][];
@@ -8,14 +9,12 @@ export interface ITextboxProps {
   isText: boolean;
   isSafari: boolean;
   isFirefox: boolean;
-  fontSize: string;
   miniAvatar: string;
   showName: EnhancedNode[][];
   isHasName: boolean;
   font: string;
   textDuration: number;
-  textSizeState: number;
-  lineLimit: number;
+  textSizeState: textSize;
   isUseStroke: boolean;
   textboxOpacity: number;
 }

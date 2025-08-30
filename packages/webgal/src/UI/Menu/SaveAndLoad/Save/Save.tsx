@@ -1,27 +1,39 @@
 import { FC, useEffect } from 'react';
-import styles from '../SaveAndLoad.module.scss';
+import styles from '@/UI/Menu/SaveAndLoad/SaveAndLoad.module.scss';
 import { saveGame } from '@/Core/controller/storage/saveGame';
 import { setStorage } from '@/Core/controller/storage/storageController';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import { setSlPage } from '@/store/userDataReducer';
-import { showGlogalDialog } from '@/UI/GlobalDialog/GlobalDialog';
+import { showGlobalDialog } from '@/UI/GlobalDialog/GlobalDialog';
 import useTrans from '@/hooks/useTrans';
 import useSoundEffect from '@/hooks/useSoundEffect';
 import { getSavesFromStorage } from '@/Core/controller/storage/savesController';
 import { compileSentence } from '@/Stage/TextBox/TextBox';
-import { mergeStringsAndKeepObjects } from '@/UI/Backlog/Backlog';
+import { mergeStringsAndKeepObjects } from '@/Stage/Backlog/Backlog';
+import useApplyStyle from '@/hooks/useApplyStyle';
 
 export const Save: FC = () => {
   const { playSePageChange, playSeEnter, playSeDialogOpen } = useSoundEffect();
   const userDataState = useSelector((state: RootState) => state.userData);
   const savesDataState = useSelector((state: RootState) => state.saveData);
   const dispatch = useDispatch();
+  const applyStyle = useApplyStyle('UI/Menu/SaveAndLoad/saveAndLoad.scss');
+
+  // 换页时将存档滚动容器拉至顶部
+  useEffect(() => {
+    const saveLoadContent = document.getElementById('saveLoadContent');
+    if (saveLoadContent) {
+      saveLoadContent.scrollTop = 0;
+    }
+  }, [userDataState.optionData.slPage]);
+
   const page = [];
   for (let i = 1; i <= 20; i++) {
-    let classNameOfElement = styles.Save_Load_top_button;
+    let classNameOfElement = applyStyle('save_load_bar_button', styles.save_load_bar_button);
     if (i === userDataState.optionData.slPage) {
-      classNameOfElement = classNameOfElement + ' ' + styles.Save_Load_top_button_on;
+      classNameOfElement =
+        classNameOfElement + ' ' + applyStyle('save_load_bar_button_active', styles.save_load_bar_button_active);
     }
     const element = (
       <div
@@ -34,7 +46,7 @@ export const Save: FC = () => {
         key={'Save_element_page' + i}
         className={classNameOfElement}
       >
-        <div className={styles.Save_Load_top_button_text}>{i}</div>
+        {i}
       </div>
     );
     page.push(element);
@@ -61,16 +73,35 @@ export const Save: FC = () => {
       const speakerView = easyCompile(speaker);
       saveElementContent = (
         <>
-          <div className={styles.Save_Load_content_element_top}>
-            <div className={styles.Save_Load_content_element_top_index}>{saveData.index}</div>
-            <div className={styles.Save_Load_content_element_top_date}>{saveData.saveTime}</div>
+          <div className={applyStyle('save_load_content_element_preview', styles.save_load_content_element_preview)}>
+            <img
+              className={applyStyle(
+                'save_load_content_element_preview_image',
+                styles.save_load_content_element_preview_image,
+              )}
+              alt="Save_img_preview"
+              src={saveData.previewImage}
+            />
           </div>
-          <div className={styles.Save_Load_content_miniRen}>
-            <img className={styles.Save_Load_content_miniRen_bg} alt="Save_img_preview" src={saveData.previewImage} />
-          </div>
-          <div className={styles.Save_Load_content_text}>
-            <div className={styles.Save_Load_content_speaker}>{speakerView}</div>
-            <div className={styles.Save_Load_content_text_padding}>{easyCompile(saveData.nowStageState.showText)}</div>
+          <div className={applyStyle('save_load_content_element_info', styles.save_load_content_element_info)}>
+            <div
+              className={applyStyle('save_load_content_element_info_bar', styles.save_load_content_element_info_bar)}
+            >
+              <div className={applyStyle('save_load_content_element_index', styles.save_load_content_element_index)}>
+                {saveData.index}
+              </div>
+              <div className={applyStyle('save_load_content_element_date', styles.save_load_content_element_date)}>
+                {saveData.saveTime}
+              </div>
+            </div>
+            <div className={applyStyle('save_load_content_dialog', styles.save_load_content_dialog)}>
+              <div className={applyStyle('save_load_content_speaker', styles.save_load_content_speaker)}>
+                {speakerView}
+              </div>
+              <div className={applyStyle('save_load_content_text', styles.save_load_content_text)}>
+                {easyCompile(saveData.nowStageState.showText)}
+              </div>
+            </div>
           </div>
         </>
       );
@@ -83,15 +114,15 @@ export const Save: FC = () => {
         onClick={() => {
           if (savesDataState.saveData[i]) {
             playSeDialogOpen();
-            showGlogalDialog({
+            showGlobalDialog({
               title: t('saving.isOverwrite'),
-              leftText: tCommon('yes'),
-              rightText: tCommon('no'),
-              leftFunc: () => {
+              leftText: tCommon('cancel'),
+              rightText: tCommon('confirm'),
+              leftFunc: () => {},
+              rightFunc: () => {
                 saveGame(i);
                 setStorage();
               },
-              rightFunc: () => {},
             });
           } else {
             playSePageChange();
@@ -100,8 +131,10 @@ export const Save: FC = () => {
         }}
         onMouseEnter={playSeEnter}
         key={'saveElement_' + i}
-        className={styles.Save_Load_content_element}
-        style={{ animationDelay: `${animationIndex * 30}ms` }}
+        className={applyStyle('save_load_content_element', styles.save_load_content_element)}
+        style={{
+          ['--save-load-content-element-index' as any]: animationIndex,
+        }}
       >
         {saveElementContent}
       </div>
@@ -112,14 +145,11 @@ export const Save: FC = () => {
   const t = useTrans('menu.');
 
   return (
-    <div className={styles.Save_Load_main}>
-      <div className={styles.Save_Load_top}>
-        <div className={styles.Save_Load_title}>
-          <div className={styles.Save_title_text}>{t('saving.title')}</div>
-        </div>
-        <div className={styles.Save_Load_top_buttonList}>{page}</div>
+    <div className={applyStyle('save_load_main', styles.save_load_main)}>
+      <div id="saveLoadBar" className={applyStyle('save_load_bar', styles.save_load_bar)}>
+        {page}
       </div>
-      <div className={styles.Save_Load_content} id={'Save_content_page_' + userDataState.optionData.slPage}>
+      <div className={applyStyle('save_load_content', styles.save_load_content)} id="saveLoadContent">
         {showSaves}
       </div>
     </div>
@@ -127,7 +157,7 @@ export const Save: FC = () => {
 };
 
 export function easyCompile(sentence: string) {
-  const compiledNodes = compileSentence(sentence, 3, true);
+  const compiledNodes = compileSentence(sentence);
   const rnodes = compiledNodes.map((line) => {
     return line.map((c) => {
       return c.reactNode;

@@ -8,6 +8,7 @@ import cloneDeep from 'lodash/cloneDeep';
 import { WebGAL } from '@/Core/WebGAL';
 import { saveActions } from '@/store/savesReducer';
 import { dumpSavesToStorage } from '@/Core/controller/storage/savesController';
+import { SCREEN_CONSTANTS } from '@/Core/util/constants';
 
 /**
  * 保存游戏
@@ -36,9 +37,11 @@ export function generateCurrentStageData(index: number, isSavePreviewImage = tru
     const canvas: HTMLCanvasElement = document.getElementById('pixiCanvas')! as HTMLCanvasElement;
     const canvas2 = document.createElement('canvas');
     const context = canvas2.getContext('2d');
-    canvas2.width = 480;
-    canvas2.height = 270;
-    context!.drawImage(canvas, 0, 0, 480, 270);
+    const previewImageWidth = SCREEN_CONSTANTS.width / 5;
+    const previewImageHeight = SCREEN_CONSTANTS.height / 5;
+    canvas2.width = previewImageWidth;
+    canvas2.height = previewImageHeight;
+    context!.drawImage(canvas, 0, 0, previewImageWidth, previewImageHeight);
     urlToSave = canvas2.toDataURL('image/webp', 0.5);
     canvas2.remove();
   }

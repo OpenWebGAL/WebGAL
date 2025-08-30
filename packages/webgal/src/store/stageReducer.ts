@@ -21,6 +21,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import cloneDeep from 'lodash/cloneDeep';
 import { commandType } from '@/Core/controller/scene/sceneInterface';
 import { STAGE_KEYS } from '@/Core/constants';
+import { textSize } from './userDataInterface';
 
 // 初始化舞台数据
 
@@ -33,7 +34,7 @@ export const initState: IStageState = {
   freeFigure: [],
   figureAssociatedAnimation: [],
   showText: '', // 文字
-  showTextSize: -1,
+  showTextSize: textSize.default,
   showName: '', // 人物名
   command: '', // 语句指令
   choose: [], // 选项列表，现在不用，先预留
