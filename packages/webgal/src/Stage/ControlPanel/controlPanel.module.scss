@@ -199,7 +199,6 @@
 .control_panel_fast_sl_preview {
   pointer-events: none;
   position: absolute;
-  transform: translateY(-50%);
   width: 100%;
   height: 100%;
   max-width: 60vmin;
@@ -240,8 +239,8 @@
 }
 
 .control_panel_fast_sl_preview_image {
+  display: flex;
   width: 100%;
-  height: 100%;
   object-fit: contain;
 }
 
