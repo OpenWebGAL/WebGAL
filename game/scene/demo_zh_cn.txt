@@ -1,16 +1,16 @@
 bgm:s_Title.mp3 -volume=80 -enter=3000;
 unlockBgm:s_Title.mp3 -name=雲を追いかけて;
 intro:你好|欢迎来到 {egine} 的世界;
-changeBg:WebGalEnter.png -next;
+changeBg:WebGalEnter.webp -next;
 setTransition: -target=bg-main -exit=shockwaveOut;
 :你好|欢迎来到 {egine} 的世界;
-changeBg:bg.png -next;
+changeBg:bg.webp -next;
 setTransition: -target=bg-main -enter=shockwaveIn -next;
-unlockCg:bg.png -name=良い夜; // 解锁CG并赋予名称
-changeFigure:stand.png -left -enter=enter-from-left -next;
-miniAvatar:miniavatar.png;
+unlockCg:bg.webp -name=良い夜; // 解锁CG并赋予名称
+changeFigure:stand.webp -left -enter=enter-from-left -next;
+miniAvatar:miniavatar.webp;
 {heroine}:欢迎使用 {egine}！这是一款全新的网页端视觉小说引擎。 -v1.wav;
-changeFigure:stand2.png -right -next;
+changeFigure:stand2.webp -right -next;
 {egine} 是使用 Web 技术开发的引擎，因此在网页端有良好的表现。 -v2.wav;
 由于这个特性，如果你将 {egine} 部署到服务器或网页托管平台上，玩家只需要一串链接就可以开始游玩！ -v3.wav;
 setAnimation:move-front-and-back -target=fig-left -continue;
@@ -62,7 +62,7 @@ label:choose2;
 ;结束分支
 label:end;
 ;changeFigure:none -left -next;
-;changeFigure:stand.png -next;
+;changeFigure:stand.webp -next;
 为了更接近桌面端视觉小说引擎的能力，我们支持很多快捷键以及可跳转的剧情回溯。 -v17.wav;
 按下菜单中的“回想”按钮或者向上滚动鼠标滚轮试试吧！ -v18.wav;
 快速存读挡、丰富的选项、自动播放以及快进等功能，也是应有尽有。 -v19.wav;
