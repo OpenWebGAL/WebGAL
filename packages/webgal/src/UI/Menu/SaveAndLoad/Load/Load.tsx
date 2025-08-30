@@ -1,6 +1,6 @@
 import { CSSProperties, FC, useEffect } from 'react';
 import { loadGame } from '@/Core/controller/storage/loadGame';
-import styles from '../saveAndLoad.module.scss';
+import styles from '@/UI/Menu/SaveAndLoad/SaveAndLoad.module.scss';
 // import {saveGame} from '@/Core/controller/storage/saveGame';
 import { setStorage } from '@/Core/controller/storage/storageController';
 import { useDispatch, useSelector } from 'react-redux';
