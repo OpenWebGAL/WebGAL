@@ -126,18 +126,28 @@ export default class PixiStage {
     if (pixiContainer) {
       pixiContainer.innerHTML = '';
       pixiContainer.appendChild(app.view);
+      // 尺寸适配
+      const fitStage = () => {
+        if (window.innerWidth / window.innerHeight < SCREEN_CONSTANTS.width / SCREEN_CONSTANTS.height) {
+          pixiContainer.style.width = '100%';
+          pixiContainer.style.height = 'auto';
+        } else {
+          pixiContainer.style.width = 'auto';
+          pixiContainer.style.height = '100%';
+        }
+      };
+      pixiContainer.style.aspectRatio = (SCREEN_CONSTANTS.width / SCREEN_CONSTANTS.height).toString();
+      fitStage();
+      window.addEventListener('resize', () => {
+        fitStage();
+      });
     }
 
     // 设置样式
-    app.renderer.view.style.position = 'absolute';
-    app.renderer.view.style.display = 'block';
     app.renderer.view.id = 'pixiCanvas';
     // @ts-ignore
     app.renderer.autoResize = true;
-    const appRoot = document.getElementById('root');
-    if (appRoot) {
-      app.renderer.resize(appRoot.clientWidth, appRoot.clientHeight);
-    }
+    app.renderer.resize(SCREEN_CONSTANTS.width, SCREEN_CONSTANTS.height);
     if (isIOS) {
       app.renderer.view.style.zIndex = '-5';
     }

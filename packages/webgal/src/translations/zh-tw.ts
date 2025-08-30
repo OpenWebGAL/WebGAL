@@ -3,6 +3,8 @@ const zhTw = {
   common: {
     yes: '是',
     no: '否',
+    confirm: '確認',
+    cancel: '取消',
   },
 
   menu: {
@@ -49,14 +51,6 @@ const zhTw = {
                   error: '存檔匯入失敗',
                 },
               },
-            },
-            about: {
-              title: '關於 WebGAL',
-              subTitle: 'WebGAL：開源的線上視覺小說製作引擎',
-              version: '版本號',
-              source: '原始碼倉庫',
-              contributors: '貢獻者',
-              website: '網站',
             },
           },
         },
@@ -116,6 +110,19 @@ const zhTw = {
             voiceContinue: { title: '繼續語音' },
           },
         },
+        about: {
+          title: '關於',
+          options: {
+            webgal: {
+              title: 'WebGAL',
+              subTitle: 'WebGAL：開源的網頁端視覺小說引擎',
+              version: '版本號',
+              source: '源代碼倉庫',
+              contributors: '貢獻者',
+              website: '網站',
+            },
+          },
+        },
         // language: {
         //   title: '語言',
         //   options: {
@@ -152,11 +159,11 @@ const zhTw = {
       subtitle: 'CONTINUE',
     },
     options: {
-      title: '遊戲設定',
+      title: '設定',
       subtitle: 'OPTIONS',
     },
     load: {
-      title: '讀取存檔',
+      title: '讀檔',
       subtitle: 'LOAD',
     },
     extra: {
@@ -187,11 +194,15 @@ const zhTw = {
       options: '設定',
       title: '主選單',
       titleTips: '確定要返回主選單嗎？',
+      lock: '鎖定',
     },
   },
 
   extra: {
     title: 'CG模式',
+    cg: '圖片',
+    bgm: '音樂',
+    defaultSeries: '默認系列',
   },
 };
 

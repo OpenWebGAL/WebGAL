@@ -18,10 +18,18 @@ import { WebGAL } from '@/Core/WebGAL';
 const u = navigator.userAgent;
 export const isIOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); // 判断是否是 iOS终端
 
+enum LoadStatus {
+  USER_ANIMATION,
+  CONFIG,
+  START_SCENE,
+  SUB_SCENE,
+  PIXI_STAGE,
+}
+
 /**
  * 引擎初始化函数
  */
-export const initializeScript = (): void => {
+export const initializeScript = async () => {
   // 打印初始log信息
   logger.info(`WebGAL v${__INFO.version}`);
   logger.info('Github: https://github.com/OpenWebGAL/WebGAL ');
@@ -39,26 +47,52 @@ export const initializeScript = (): void => {
     );
   }
 
-  // 获得 userAnimation
-  loadStyle('./game/userStyleSheet.css');
+  // 加载条
+  const loadingBar = document.getElementById('launchScreenLoadingBar');
+  const loadStatusKeys = Object.keys(LoadStatus).filter((key) => isNaN(Number(key)));
+
+  function updateLoadingStatus(status: LoadStatus): void {
+    if (!loadingBar) return;
+    const progress = (Number(status) + 1) / loadStatusKeys.length;
+    loadingBar.style.width = `${progress * 100}%`;
+  }
+
+  function finishLoadingBar(): void {
+    if (!loadingBar) return;
+    // 此处的等待 500 毫秒仅出于观感考虑
+    setTimeout(() => {
+      loadingBar.style.removeProperty('width');
+      loadingBar.classList.add('launch_screen_loading_bar_loaded');
+    }, 500);
+  }
+
   // 获得 user Animation
-  getUserAnimation();
+  updateLoadingStatus(LoadStatus.USER_ANIMATION);
+  await getUserAnimation();
+
   // 获取游戏信息
-  infoFetcher('./game/config.txt');
+  updateLoadingStatus(LoadStatus.CONFIG);
+  await infoFetcher('./game/config.txt');
+
   // 获取start场景
+  updateLoadingStatus(LoadStatus.START_SCENE);
   const sceneUrl: string = assetSetter('start.txt', fileType.scene);
+
   // 场景写入到运行时
-  sceneFetcher(sceneUrl).then((rawScene) => {
-    WebGAL.sceneManager.sceneData.currentScene = sceneParser(rawScene, 'start.txt', sceneUrl);
-    // 开始场景的预加载
-    const subSceneList = WebGAL.sceneManager.sceneData.currentScene.subSceneList;
-    WebGAL.sceneManager.settledScenes.push(sceneUrl); // 放入已加载场景列表，避免递归加载相同场景
-    const subSceneListUniq = uniqWith(subSceneList); // 去重
-    scenePrefetcher(subSceneListUniq);
-  });
+  const rawScene = await sceneFetcher(sceneUrl);
+  WebGAL.sceneManager.sceneData.currentScene = sceneParser(rawScene, 'start.txt', sceneUrl);
+
+  // 开始场景的预加载
+  updateLoadingStatus(LoadStatus.SUB_SCENE);
+  const subSceneList = WebGAL.sceneManager.sceneData.currentScene.subSceneList;
+  WebGAL.sceneManager.settledScenes.push(sceneUrl); // 放入已加载场景列表，避免递归加载相同场景
+  const subSceneListUniq = uniqWith(subSceneList); // 去重
+  await scenePrefetcher(subSceneListUniq);
+
   /**
    * 启动Pixi
    */
+  updateLoadingStatus(LoadStatus.PIXI_STAGE);
   WebGAL.gameplay.pixiStage = new PixiStage();
 
   /**
@@ -79,30 +113,22 @@ export const initializeScript = (): void => {
    */
   bindExtraFunc();
   webSocketFunc();
+
+  // hideLaunchScreen();
+  finishLoadingBar();
 };
 
-function loadStyle(url: string) {
-  const link = document.createElement('link');
-  link.type = 'text/css';
-  link.rel = 'stylesheet';
-  link.href = url;
-  const head = document.getElementsByTagName('head')[0];
-  head.appendChild(link);
-}
-
-function getUserAnimation() {
-  axios.get('./game/animation/animationTable.json').then((res) => {
-    const animations: Array<string> = res.data;
-    for (const animationName of animations) {
-      axios.get(`./game/animation/${animationName}.json`).then((res) => {
-        if (res.data) {
-          const userAnimation = {
-            name: animationName,
-            effects: res.data,
-          };
-          WebGAL.animationManager.addAnimation(userAnimation);
-        }
-      });
+async function getUserAnimation() {
+  const res = await axios.get('./game/animation/animationTable.json');
+  const animations: Array<string> = res.data;
+  for (const animationName of animations) {
+    const res = await axios.get(`./game/animation/${animationName}.json`);
+    if (res.data) {
+      const userAnimation = {
+        name: animationName,
+        effects: res.data,
+      };
+      WebGAL.animationManager.addAnimation(userAnimation);
     }
-  });
+  }
 }

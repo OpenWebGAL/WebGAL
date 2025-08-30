@@ -1,51 +1,69 @@
-.MenuPanel_main {
-  width: 100%;
-  height: 10%;
+.menu_panel_main {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  //background-color: rgba(255, 255, 255, 1);
-  //box-shadow: 0 0 45px 15px rgba(0, 0, 0, 0.05);
-  padding: 0 55px;
+  flex-direction: column;
+  flex-shrink: 0;
+  position: relative;
+  width: auto;
+  height: 100%;
+  padding: 2vmin 2vmin 2vmin 0;
+  gap: 2vmin;
 }
 
-.MenuPanel_button {
-  padding: 0.25em 15px 0 15px;
-  margin-right: 15px;
-  display: flex;
-  justify-content: center;
-  font-size: 200%;
-  text-align: center;
-  //font-weight: bold;
-  border-radius: 6px;
-  //width: 20%;
-  min-width: 12.5%;
+.menu_panel_button {
   cursor: pointer;
-  color: rgba(123,144,169, 1);
-  background: rgba(0, 0, 0, 0);
-  overflow: hidden;
-  //border-right: 1.5px solid rgba(0, 0, 0, 0.15);
-  transition: text-shadow 0.7s, background-color 0.7s;
+  display: flex;
+  min-width: 10vmin;
+  min-height: 10vmin;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.5s cubic-bezier(0.215, 0.610, 0.355, 1);
+  text-align: center;
+  border-radius: 0 5vmin 5vmin 0;
+  color: rgb(68, 68, 68);
+  font-size: 3.5vmin;
+  font-weight: 500;
+  padding: 1vmin 4vmin 1vmin 4vmin;
+  
+  &:hover {
+    transition: background-color 0s;
+    background-color: rgb(233, 233, 233);
+  }
 }
 
-.MenuPanel_button:last-child{
-  margin-right: 0;
+.menu_panel_button:first-child {
+  margin-bottom: auto;
 }
 
-.MenuPanel_button:hover {
-  background-color: rgba(245, 246, 247, 0.15);
+.menu_panel_button_active {
+  background-color: rgb(233, 233, 233);
+  box-shadow: 0 0.5vmin 0vmin rgb(199, 199, 199);
+  border-color: rgba(255, 255, 255, 0.5);
+
+  &:hover {
+    background-color: rgb(240, 240, 240);
+  }
 }
 
-.MenuPanel_button:last-child {
-  border-right: none;
+.menu_panel_button_disabled {
+  cursor: not-allowed !important;
+  pointer-events: none;
+  opacity: 0.5;
 }
 
-.MenuPanel_button_icon {
-  transform: translate(0, 0.125em);
-  padding: 0 0.15em 0 0;
-  margin: 0 0.15em 0 0;
+.menu_panel_button_icon {
+  line-height: 0;
+  font-size: 120%;
 }
 
-.MenuPanel_button_hl{
-  background-color: rgba(245, 246, 247, 0.35) !important;
+.menu_panel_button_text {
+  display: flex;
+  flex-shrink: 0;
+  padding: 0 1vmin;
+  margin-right: auto;
+}
+
+@container (aspect-ratio < 1.4) {
+  .menu_panel_button_text {
+    display: none;
+  }
 }

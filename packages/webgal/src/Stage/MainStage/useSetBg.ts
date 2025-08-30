@@ -2,7 +2,6 @@ import { IStageState } from '@/store/stageInterface';
 import { useEffect } from 'react';
 import { logger } from '@/Core/util/logger';
 import { IStageObject } from '@/Core/controller/stage/pixi/PixiController';
-import { setEbg } from '@/Core/gameScripts/changeBg/setEbg';
 
 import { getEnterExitAnimation } from '@/Core/Modules/animationFunctions';
 import { WebGAL } from '@/Core/WebGAL';
@@ -23,7 +22,6 @@ export function useSetBg(stageState: IStageState) {
         }
       }
       addBg(undefined, thisBgKey, bgName);
-      setEbg(bgName);
       logger.debug('重设背景');
       const { duration, animation } = getEnterExitAnimation('bg-main', 'enter', true);
       WebGAL.gameplay.pixiStage!.registerPresetAnimation(animation, 'bg-main-softin', thisBgKey, stageState.effects);

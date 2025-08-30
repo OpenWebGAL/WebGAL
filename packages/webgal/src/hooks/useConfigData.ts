@@ -1,6 +1,5 @@
 import { getFastSaveFromStorage, getSavesFromStorage } from '@/Core/controller/storage/savesController';
 import { getStorage } from '@/Core/controller/storage/storageController';
-import { setEbg } from '@/Core/gameScripts/changeBg/setEbg';
 import { assetSetter, fileType } from '@/Core/util/gameAssetsAccess/assetSetter';
 import { WebGAL } from '@/Core/WebGAL';
 import { setGuiAsset, setLogoImage } from '@/store/GUIReducer';
@@ -22,7 +21,6 @@ const useConfigData = () => {
         case 'Title_img': {
           const titleUrl = assetSetter(val, fileType.background);
           webgalStore.dispatch(setGuiAsset({ asset: 'titleBg', value: titleUrl }));
-          setEbg(titleUrl);
           break;
         }
 

@@ -5,19 +5,7 @@ import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
 
 import { WebGAL } from '@/Core/WebGAL';
 import { SYSTEM_CONFIG } from '@/config';
-
-/**
- * 设置 fast 按钮的激活与否
- * @param on
- */
-const setButton = (on: boolean) => {
-  const autoIcon = document.getElementById('Button_ControlPanel_fast');
-  if (autoIcon) {
-    if (on) {
-      autoIcon.className = styles.button_on;
-    } else autoIcon.className = styles.singleButton;
-  }
-};
+import useApplyStyle from '@/hooks/useApplyStyle';
 
 /**
  * 停止快进模式
@@ -27,7 +15,6 @@ export const stopFast = () => {
     return;
   }
   WebGAL.gameplay.isFast = false;
-  setButton(false);
   if (WebGAL.gameplay.fastInterval !== null) {
     clearInterval(WebGAL.gameplay.fastInterval);
     WebGAL.gameplay.fastInterval = null;
@@ -42,7 +29,6 @@ export const startFast = () => {
     return;
   }
   WebGAL.gameplay.isFast = true;
-  setButton(true);
   WebGAL.gameplay.fastInterval = setInterval(() => {
     nextSentence();
   }, SYSTEM_CONFIG.fast_timeout);

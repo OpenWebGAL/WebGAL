@@ -1,22 +1,50 @@
-.devPanelMain {
-  font-size: 150%;
+.dev_panel_main {
+  font-size: 4vmin;
   position: absolute;
   right: 0;
   top: 0;
   bottom: 0;
-  width: 35%;
+  width: 80vmin;
   background: rgba(255, 255, 255, 0.75);
   z-index: 99;
-  overflow: auto;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  backdrop-filter: blur(1vmin);
 }
 
-.devPanelOpener {
+.dev_panel_header {
+  display: flex;
+  align-items: center;
+}
+
+.dev_panel_title {
+  padding-left: 2vmin;
+  flex: 1 1 auto;
+  font-size: 5vmin;
+}
+
+.dev_panel_close_button {
+  font-size: 150%;
+  cursor: pointer;
+}
+
+.dev_panel_content {
+  padding: 10px 10px 10px 10px;
+  overflow: auto;
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.dev_panel_opener {
   position: absolute;
-  right: 5px;
-  top: 5px;
+  right: 1vmin;
+  top: 1vmin;
   background: rgba(255, 255, 255, 0.75);
   z-index: 100;
-  padding: 3px 7px 3px 7px;
-  border-radius: 4px;
+  padding: 1vmin 4vmin;
+  border-radius: 1vmin;
+  font-size: 3vmin;
   cursor: pointer;
 }

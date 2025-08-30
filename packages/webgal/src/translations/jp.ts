@@ -3,6 +3,8 @@ const jp = {
   common: {
     yes: 'はい',
     no: 'いいえ',
+    confirm: '確認',
+    cancel: 'キャンセル',
   },
 
   menu: {
@@ -50,14 +52,6 @@ const jp = {
                 },
               },
             },
-            about: {
-              title: 'WebGAL について',
-              subTitle: 'WebGAL: オープンソースのウェブベースビジュアルノベルエンジン',
-              version: 'バージョン',
-              source: 'ソースコードリポジトリ',
-              contributors: '貢献者',
-              website: 'ウェブサイト',
-            },
           },
         },
         display: {
@@ -69,6 +63,9 @@ const jp = {
                 on: 'オン',
                 off: 'オフ',
               },
+            },
+            uiTransitionDuration: {
+              title: 'UI遷移の持続時間',
             },
             textSpeed: {
               title: 'テキスト表示速度',
@@ -90,7 +87,7 @@ const jp = {
               title: 'フォント',
               options: {
                 siYuanSimSun: '源ノ明朝(中国語)',
-                SimHei: 'OPPO Sans',
+                SimHei: '源ノ角ゴシック(中国語)',
                 lxgw: 'LXGW WenKai',
               },
             },
@@ -111,9 +108,26 @@ const jp = {
             bgmVolume: { title: 'BGM 音量' },
             seVolume: { title: '効果音音量' },
             uiSeVolume: { title: 'UI 効果音音量' },
-            voiceOption: { title: 'ボイスの中断' },
-            voiceStop: { title: '中断する' },
-            voiceContinue: { title: '中断しない' },
+            voiceInterruption: {
+              title: '音声の中断',
+              options: {
+                voiceStop: '音声を停止',
+                voiceContinue: '音声を再開',
+              },
+            },
+          },
+        },
+        about: {
+          title: 'について',
+          options: {
+            webgal: {
+              title: 'WebGAL',
+              subTitle: 'WebGAL: オープンソースのウェブベースビジュアルノベルエンジン',
+              version: 'バージョン',
+              source: 'ソースコードリポジトリ',
+              contributors: '貢献者',
+              website: 'ウェブサイト',
+            },
           },
         },
         // language: {
@@ -179,15 +193,19 @@ const jp = {
       quicklyLoad: 'QUICK LOAD',
       save: 'SAVE',
       load: 'LOAD',
-      fullscrren: 'FULLSCREEN',
+      fullscreen: 'FULLSCREEN',
       options: 'CONFIG',
       title: 'HOME',
       titleTips: 'タイトル画面に戻りますか？',
+      lock: 'LOCK',
     },
   },
 
   extra: {
     title: '鑑賞モード',
+    cg: 'CG',
+    bgm: 'BGM',
+    defaultSeries: 'デフォルトシリーズ',
   },
 };
 

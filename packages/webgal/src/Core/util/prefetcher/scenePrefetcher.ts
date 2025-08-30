@@ -8,13 +8,12 @@ import { logger } from '@/Core/util/logger';
 
 import { WebGAL } from '@/Core/WebGAL';
 
-export const scenePrefetcher = (sceneList: Array<string>): void => {
+export const scenePrefetcher = async (sceneList: Array<string>) => {
   for (const e of sceneList) {
     if (!WebGAL.sceneManager.settledScenes.includes(e)) {
       logger.info(`现在预加载场景${e}`);
-      sceneFetcher(e).then((r) => {
-        sceneParser(r, e, e);
-      });
+      const r = await sceneFetcher(e);
+      sceneParser(r, e, e);
     } else {
       logger.warn(`场景${e}已经加载过，无需再次加载`);
     }

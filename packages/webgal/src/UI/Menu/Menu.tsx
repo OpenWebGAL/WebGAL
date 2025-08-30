@@ -7,6 +7,8 @@ import { Options } from './Options/Options';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import { MenuPanelTag } from '@/store/guiInterface';
+import useApplyStyle from '@/hooks/useApplyStyle';
+import { useDelayedVisibility } from '@/hooks/useDelayedVisibility';
 
 /**
  * Menu 页面，包括存读档、选项等
@@ -14,28 +16,37 @@ import { MenuPanelTag } from '@/store/guiInterface';
  */
 const Menu: FC = () => {
   const GUIState = useSelector((state: RootState) => state.GUI);
+  const userData = useSelector((state: RootState) => state.userData);
+
+  // 菜单延迟退场
+  const delayedShowMenuPanel = useDelayedVisibility(GUIState.showMenuPanel);
+
+  const applyStyle = useApplyStyle('UI/Menu/menu.scss');
   let currentTag;
-  // let menuBgColor = 'linear-gradient(135deg, rgba(253,251,251,0.95) 0%, rgba(235,237,238,1) 100%)';
   switch (GUIState.currentMenuTag) {
     case MenuPanelTag.Save:
       currentTag = <Save />;
-      // menuBgColor = 'linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%)';
       break;
     case MenuPanelTag.Load:
       currentTag = <Load />;
-      // menuBgColor = 'linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%)';
       break;
     case MenuPanelTag.Option:
       currentTag = <Options />;
-      // menuBgColor = 'linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%)';
       break;
   }
   return (
     <>
-      {GUIState.showMenuPanel && (
-        <div className={styles.Menu_main}>
-          <div className={styles.Menu_TagContent}>{currentTag}</div>
+      {delayedShowMenuPanel && (
+        <div
+          className={`${applyStyle('menu_main', styles.menu_main)} ${
+            GUIState.showMenuPanel ? '' : applyStyle('menu_main_hide', styles.menu_main_hide)
+          }`}
+          style={{
+            ['--ui-transition-duration' as any]: `${userData.optionData.uiTransitionDuration}ms`,
+          }}
+        >
           <MenuPanel />
+          <div className={applyStyle('menu_tag_content', styles.menu_tag_content)}>{currentTag}</div>
         </div>
       )}
     </>

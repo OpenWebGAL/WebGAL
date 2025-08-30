@@ -19,7 +19,7 @@ export const syncWithOrigine = (sceneName: string, sentenceId: number, experment
   dispatch(setVisibility({ component: 'showTitle', visibility: false }));
   dispatch(setVisibility({ component: 'showMenuPanel', visibility: false }));
   dispatch(setVisibility({ component: 'isShowLogo', visibility: false }));
-  const title = document.querySelector('.html-body__title-enter') as HTMLElement;
+  const title = document.getElementById('launchScreen');
   if (title) {
     title.style.display = 'none';
   }

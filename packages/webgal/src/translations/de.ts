@@ -3,6 +3,8 @@ const de = {
   common: {
     yes: 'Ja',
     no: 'Nein',
+    confirm: 'Bestätigen',
+    cancel: 'Abbrechen',
   },
 
   menu: {
@@ -63,6 +65,16 @@ const de = {
         display: {
           title: 'Darstellung',
           options: {
+            fullScreen: {
+              title: 'Vollbildmodus',
+              options: {
+                on: 'Aktiviert',
+                off: 'Deaktiviert',
+              },
+            },
+            uiTransitionDuration: {
+              title: 'UI-Übergangsdauer',
+            },
             textSpeed: {
               title: 'Geschwindigkeit der Textanzeige',
               options: {
@@ -104,6 +116,26 @@ const de = {
             bgmVolume: { title: 'Musiklautstärke' },
             seVolume: { title: 'Soundeffektlautstärke' },
             uiSeVolume: { title: 'UI Soundeffektlautstärke' },
+            voiceInterruption: {
+              title: 'Sprachunterbrechung',
+              options: {
+                voiceStop: 'Sprache stoppen',
+                voiceContinue: 'Sprache fortsetzen',
+              },
+            },
+          },
+        },
+        about: {
+          title: 'Über',
+          options: {
+            webgal: {
+              title: 'WebGAL',
+              subTitle: 'WebGAL: Eine Open-Source Web-Based Visual Novel Engine',
+              version: 'Version',
+              source: 'Source Code Repository',
+              contributors: 'Contributors',
+              website: 'Website',
+            },
           },
         },
         // language: {
@@ -169,14 +201,19 @@ const de = {
       quicklyLoad: 'Quickly Load',
       save: 'Speichern',
       load: 'Laden',
-      fullscrreen: 'Vollbild',
+      fullscreen: 'Vollbild',
       options: 'Optionen',
       title: 'Titel',
+      titleTips: 'Sind Sie sicher, dass Sie zum Titelbildschirm zurückkehren möchten?',
+      lock: 'Sperren',
     },
   },
 
   extra: {
     title: 'EXTRA',
+    cg: 'CG',
+    bgm: 'BGM',
+    defaultSeries: 'Standardserie',
   },
 };
 

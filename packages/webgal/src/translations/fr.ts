@@ -3,6 +3,8 @@ const fr = {
   common: {
     yes: 'OK',
     no: 'Annuler',
+    confirm: 'Confirmer',
+    cancel: 'Annuler',
   },
 
   menu: {
@@ -50,19 +52,21 @@ const fr = {
                 },
               },
             },
-            about: {
-              title: 'À propos de WebGAL',
-              subTitle: 'WebGAL: Un moteur de visual novel basé sur le web en open-source',
-              version: 'Version',
-              source: 'Dépôt de code source',
-              contributors: 'Contributeurs',
-              website: 'Site web',
-            },
           },
         },
         display: {
           title: 'Affichage',
           options: {
+            fullScreen: {
+              title: 'Mode plein écran',
+              options: {
+                on: 'Activé',
+                off: 'Désactivé',
+              },
+            },
+            uiTransitionDuration: {
+              title: 'Durée de transition de l’interface',
+            },
             textSpeed: {
               title: "Vitesse d'affichage du texte",
               options: {
@@ -104,6 +108,26 @@ const fr = {
             bgmVolume: { title: 'Volume de la musique de fond' },
             seVolume: { title: 'Volume des effets sonores' },
             uiSeVolume: { title: 'Volume de l’interface utilisateur' },
+            voiceInterruption: {
+              title: 'Interruption de la voix',
+              options: {
+                voiceStop: 'Arrêter la voix',
+                voiceContinue: 'Continuer la voix',
+              },
+            },
+          },
+        },
+        about: {
+          title: 'À propos',
+          options: {
+            webgal: {
+              title: 'WebGAL',
+              subTitle: 'WebGAL: Un moteur de visual novel basé sur le web en open-source',
+              version: 'Version',
+              source: 'Dépôt de code source',
+              contributors: 'Contributeurs',
+              website: 'Site web',
+            },
           },
         },
         // language: {
@@ -169,15 +193,19 @@ const fr = {
       quicklyLoad: 'Chargement rapide',
       save: 'Sauvegarder',
       load: 'Charger',
-      fullscrren: 'Plein écran',
+      fullscreen: 'Plein écran',
       options: 'Options',
       title: 'Titre',
       titleTips: "Confirmer le retour à l'écran titre ?",
+      lock: 'Verrouiller',
     },
   },
 
   extra: {
     title: 'EXTRA',
+    cg: 'CG',
+    bgm: 'BGM',
+    defaultSeries: 'Série par défaut',
   },
 };
 

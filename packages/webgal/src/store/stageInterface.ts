@@ -1,5 +1,6 @@
 import { ISentence } from '@/Core/controller/scene/sceneInterface';
 import { BlinkParam, FocusParam } from '@/Core/live2DCore';
+import { textSize } from './userDataInterface';
 
 /**
  * 游戏内变量
@@ -186,7 +187,7 @@ export interface IStageState {
   freeFigure: Array<IFreeFigure>;
   figureAssociatedAnimation: Array<IFigureAssociatedAnimation>;
   showText: string; // 文字
-  showTextSize: number; // 文字
+  showTextSize: textSize; // 文字
   showName: string; // 人物名
   command: string; // 语句指令
   choose: Array<IChooseItem>; // 选项列表

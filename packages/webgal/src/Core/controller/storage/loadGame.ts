@@ -10,8 +10,6 @@ import { stopAllPerform } from '@/Core/controller/gamePlay/stopAllPerform';
 import cloneDeep from 'lodash/cloneDeep';
 import uniqWith from 'lodash/uniqWith';
 import { scenePrefetcher } from '@/Core/util/prefetcher/scenePrefetcher';
-import { setEbg } from '@/Core/gameScripts/changeBg/setEbg';
-
 import { WebGAL } from '@/Core/WebGAL';
 
 /**
@@ -70,8 +68,4 @@ export function loadGameFromStageData(stageData: ISaveData) {
 
   dispatch(setVisibility({ component: 'showTitle', visibility: false }));
   dispatch(setVisibility({ component: 'showMenuPanel', visibility: false }));
-  /**
-   * 恢复模糊背景
-   */
-  setEbg(webgalStore.getState().stage.bgName);
 }
