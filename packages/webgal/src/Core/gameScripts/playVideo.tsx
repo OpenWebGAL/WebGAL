@@ -5,7 +5,7 @@ import ReactDOM from 'react-dom';
 import styles from '@/Stage/FullScreenPerform/fullScreenPerform.module.scss';
 import { webgalStore } from '@/store/store';
 import { getRandomPerformName, PerformController } from '@/Core/Modules/perform/performController';
-import { getSentenceArgByKey } from '@/Core/util/getSentenceArg';
+import { getBooleanArgByKey } from '@/Core/util/getSentenceArg';
 import { WebGAL } from '@/Core/WebGAL';
 /**
  * 播放一段视频 * @param sentence
@@ -17,11 +17,7 @@ export const playVideo = (sentence: ISentence): IPerform => {
   const bgmVol = mainVol * 0.01 * userDataState.optionData.bgmVolume * 0.01;
   const performInitName: string = getRandomPerformName();
 
-  let blockingNext = getSentenceArgByKey(sentence, 'skipOff');
-  let blockingNextFlag = false;
-  if (blockingNext) {
-    blockingNextFlag = true;
-  }
+  let blockingNextFlag = getBooleanArgByKey(sentence, 'skipOff') ?? false;
 
   // eslint-disable-next-line react/no-deprecated
   ReactDOM.render(

@@ -20,7 +20,7 @@ const escapeMap = [
     val: ';',
   },
   {
-    reg: /\\./g,
+    reg: /\\\./g,
     val: '.',
   },
 ];

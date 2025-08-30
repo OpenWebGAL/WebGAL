@@ -1,14 +1,14 @@
-import { logger } from '../logger';
-import { syncWithOrigine } from '@/Core/util/syncWithEditor/syncWithOrigine';
 import { DebugCommand, IComponentVisibilityCommand, IDebugMessage } from '@/types/debugProtocol';
-import { WebGAL } from '@/Core/WebGAL';
 import { webgalStore } from '@/store/store';
+import { setFontOptimization, setVisibility } from '@/store/GUIReducer';
+import { WebGAL } from '@/Core/WebGAL';
 import { sceneParser, WebgalParser } from '@/Core/parser/sceneParser';
+import { ISentence } from '@/Core/controller/scene/sceneInterface';
 import { runScript } from '@/Core/controller/gamePlay/runScript';
 import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
-import { setFontOptimization, setVisibility } from '@/store/GUIReducer';
 import { resetStage } from '@/Core/controller/stage/resetStage';
-import { ISentence } from '@/Core/controller/scene/sceneInterface';
+import { logger } from '@/Core/util/logger';
+import { syncWithOrigine } from './syncWithOrigine';
 
 export const webSocketFunc = () => {
   const loc: string = window.location.hostname;
@@ -69,7 +69,7 @@ export const webSocketFunc = () => {
       });
     }
     if (message.command === DebugCommand.REFETCH_TEMPLATE_FILES) {
-      const title = document.getElementById('Title_enter_page');
+      const title = document.querySelector('.html-body__title-enter') as HTMLElement;
       if (title) {
         title.style.display = 'none';
       }
@@ -102,7 +102,7 @@ export const webSocketFunc = () => {
       webgalStore.dispatch(setFontOptimization(command === 'true'));
     }
   };
-  socket.onerror = (e) => {
+  socket.onerror = () => {
     logger.info('当前没有连接到 Terre 编辑器');
   };
 };

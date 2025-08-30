@@ -1,6 +1,6 @@
 import { ISentence } from '@/Core/controller/scene/sceneInterface';
 import { IPerform } from '@/Core/Modules/perform/performInterface';
-import { getSentenceArgByKey } from '@/Core/util/getSentenceArg';
+import { getBooleanArgByKey, getStringArgByKey } from '@/Core/util/getSentenceArg';
 import { IAnimationObject } from '@/Core/controller/stage/pixi/PixiController';
 import { logger } from '@/Core/util/logger';
 import { webgalStore } from '@/store/store';
@@ -16,10 +16,12 @@ export const setAnimation = (sentence: ISentence): IPerform => {
   const startDialogKey = webgalStore.getState().stage.currentDialogKey;
   const animationName = sentence.content;
   const animationDuration = getAnimateDuration(animationName);
-  const target = (getSentenceArgByKey(sentence, 'target')?.toString() ?? 'default_id').toString();
-  const writeDefault = (getSentenceArgByKey(sentence, 'writeDefault') as boolean) ?? false;
+  let target = getStringArgByKey(sentence, 'target') ?? '';
+  target = target !== '' ? target : 'default_id';
+  const writeDefault = getBooleanArgByKey(sentence, 'writeDefault') ?? false;
+  const keep = getBooleanArgByKey(sentence, 'keep') ?? false;
+
   const key = `${target}-${animationName}-${animationDuration}`;
-  const keep = getSentenceArgByKey(sentence, 'keep') === true;
   const performInitName = `animation-${target}`;
 
   WebGAL.gameplay.performController.unmountPerform(performInitName, true);

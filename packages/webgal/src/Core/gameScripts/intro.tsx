@@ -7,8 +7,9 @@ import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
 import { PerformController } from '@/Core/Modules/perform/performController';
 import { logger } from '@/Core/util/logger';
 import { WebGAL } from '@/Core/WebGAL';
-import { replace } from 'lodash';
+import { get, replace } from 'lodash';
 import useEscape from '@/hooks/useEscape';
+import { getBooleanArgByKey, getNumberArgByKey, getStringArgByKey } from '../util/getSentenceArg';
 /**
  * 显示一小段黑屏演示
  * @param sentence
@@ -19,10 +20,26 @@ export const intro = (sentence: ISentence): IPerform => {
    */
 
   const performName = `introPerform${Math.random().toString()}`;
-  let fontSize: string | undefined;
-  let backgroundColor: any = 'rgba(0, 0, 0, 1)';
-  let color: any = 'rgba(255, 255, 255, 1)';
-  const animationClass: any = (type: string, length = 0) => {
+
+  const fontSizeFromArgs = getStringArgByKey(sentence, 'fontSize') ?? 'medium';
+  let fontSize = '350%';
+  switch (fontSizeFromArgs) {
+    case 'small':
+      fontSize = '280%';
+      break;
+    case 'medium':
+      fontSize = '350%';
+      break;
+    case 'large':
+      fontSize = '420%';
+      break;
+  }
+  const backgroundImageFromArgs = getStringArgByKey(sentence, 'backgroundImage') ?? '';
+  const backgroundImage = `url("game/background/${backgroundImageFromArgs}") center/cover no-repeat`;
+  const backgroundColor = getStringArgByKey(sentence, 'backgroundColor') ?? 'rgba(0, 0, 0, 1)';
+  const color = getStringArgByKey(sentence, 'fontColor') ?? 'rgba(255, 255, 255, 1)';
+  const animationFromArgs = getStringArgByKey(sentence, 'animation') ?? '';
+  let animationClass: any = (type: string, length = 0) => {
     switch (type) {
       case 'fadeIn':
         return styles.fadeIn;
@@ -38,55 +55,18 @@ export const intro = (sentence: ISentence): IPerform => {
         return styles.fadeIn;
     }
   };
-  let chosenAnimationClass = styles.fadeIn;
-  let delayTime = 1500;
-  let isHold = false;
-  let isUserForward = false;
-
-  for (const e of sentence.args) {
-    if (e.key === 'backgroundColor') {
-      backgroundColor = e.value || 'rgba(0, 0, 0, 1)';
-    }
-    if (e.key === 'fontColor') {
-      color = e.value || 'rgba(255, 255, 255, 1)';
-    }
-    if (e.key === 'fontSize') {
-      switch (e.value) {
-        case 'small':
-          fontSize = '280%';
-          break;
-        case 'medium':
-          fontSize = '350%';
-          break;
-        case 'large':
-          fontSize = '420%';
-          break;
-      }
-    }
-    if (e.key === 'animation') {
-      chosenAnimationClass = animationClass(e.value);
-    }
-    if (e.key === 'delayTime') {
-      const parsedValue = parseInt(e.value.toString(), 10);
-      delayTime = isNaN(parsedValue) ? delayTime : parsedValue;
-    }
-    if (e.key === 'hold') {
-      if (e.value === true) {
-        isHold = true;
-      }
-    }
-    if (e.key === 'userForward') {
-      // 用户手动控制向前步进
-      if (e.value === true) {
-        isUserForward = true;
-        isHold = true; // 用户手动控制向前步进，所以必须是 hold
-        delayTime = 99999999; // 设置一个很大的延迟，这样自然就看起来不自动继续了
-      }
-    }
-  }
+  let chosenAnimationClass = animationClass(animationFromArgs);
+  let delayTime = getNumberArgByKey(sentence, 'delayTime') ?? 1500;
+  let isHold = getBooleanArgByKey(sentence, 'hold') ?? false;
+  let isUserForward = getBooleanArgByKey(sentence, 'userForward') ?? false;
+  // 设置一个很大的延迟，这样自然就看起来不自动继续了
+  delayTime = isUserForward ? 99999999 : delayTime;
+  // 用户手动控制向前步进，所以必须是 hold
+  isHold = isUserForward ? true : isHold;
 
   const introContainerStyle = {
-    background: backgroundColor,
+    background: backgroundImage,
+    backgroundColor: backgroundColor,
     color: color,
     fontSize: fontSize || '350%',
     width: '100%',

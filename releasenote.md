@@ -8,41 +8,25 @@
 
 #### 新功能
 
-新增斜角（Bevel）和发光（Bloom）滤镜效果，提供更丰富的视觉特效选项
+支持在 Intro 中使用背景图片，图片不存在则回退至背景色
 
-优化雪花、樱花飘落和雨滴效果的性能表现，提升渲染效果的真实感
+新增 Live2D 立绘的眨眼（Blink）和焦点（Focus）参数设置
 
-为 `wait` 命令新增 `goNextWhenOver` 属性，可在等待结束后自动进入下一条指令
+新增立绘 Z-Index 变更时应用，用于控制图层顺序
 
-支持 Spine 立绘动画切换功能，通过 `-motion` 参数控制动画播放
-
-为 `setAnimation` 和 `setTempAnimation` 新增 ease 缓动参数，支持更流畅的动画过渡
-
-新增 `keep` 参数用于保持特定状态
-
-改进带样式文本的逐字显示动画，正确处理 ruby 注音文本
-
-新增退出游戏确认对话框，避免误操作
+改进了动画的缓动（Easing）和持续时间处理
 
 #### 修复
 
-修复 Live2D 立绘在边界修改时的初始位置错误
+通过更新 Live2D 库修复了立绘的透明度（Alpha）问题
 
-修复启动时错误重置用户数据的问题
+修复了 Live2D 模型的初始化时机问题，避免加载错误
 
-修复 Spine 立绘动画切换异常
+修复了 `say` 指令中 `center` 参数延迟生效的问题
 
-修复带样式文本的逐字动画显示问题
+修复了部分动画同步缺失的问题
 
-修复视频背景文件扩展名识别问题
-
-优化 `changeFigure` 和 `changeBg` 的停止函数和性能名称处理
-
-当没有解锁的背景音乐时，隐藏音轨选择界面
-
-其他性能优化和稳定性改进
-
-
+通过代码重构和优化构建流程，减小了最终产物体积，提升了稳定性
 
 <!-- English Translation -->
 ## Release Notes
@@ -55,41 +39,25 @@
 
 #### New Features
 
-Added Bevel and Bloom filter effects for richer visual options
+Support for using background images in the Intro, with a fallback to the background color if the image doesn't exist
 
-Optimized performance of snow, cherry blossom, and rain effects with improved realism
+Added support for setting Blink and Focus parameters for Live2D models
 
-Added `goNextWhenOver` property to `wait` command for automatic progression
+Added support for applying z-index to figures to control layer order
 
-Support for Spine figure animation switching via `-motion` parameter
-
-Added ease parameter to `setAnimation` and `setTempAnimation` for smoother transitions
-
-Added `keep` parameter to maintain specific states
-
-Improved character-by-character animation for styled text with ruby annotation support
-
-Added exit game confirmation dialog to prevent accidental exits
+Improved animation easing and duration handling
 
 #### Fixes
 
-Fixed Live2D figure initial position error when bounds are modified
+Fixed alpha (transparency) issues with Live2D models by updating the library
 
-Fixed erroneous user data reset on startup
+Fixed Live2D model initialization timing to prevent loading errors
 
-Fixed Spine figure animation switching issues
+Fixed an issue where the `center` argument in the `say` command was delayed
 
-Fixed character-by-character animation for styled text
+Fixed issues with missing animation synchronization
 
-Fixed video background file extension recognition
-
-Optimized `changeFigure` and `changeBg` stop function and performance name handling
-
-Hide track selection interface when no BGM tracks are unlocked
-
-Other performance optimizations and stability improvements
-
-
+Reduced final bundle size and improved stability through code refactoring and build process optimization
 
 <!-- Japanese Translation -->
 ## リリースノート
@@ -102,36 +70,22 @@ Other performance optimizations and stability improvements
 
 #### 新機能
 
-ベベル（Bevel）とブルーム（Bloom）フィルター効果を追加し、より豊富なビジュアルエフェクトを提供
+イントロで背景画像を使用できるようになり、画像が存在しない場合は背景色にフォールバックします
 
-雪、桜の花びら、雨滴エフェクトのパフォーマンスを最適化し、よりリアルな描画効果を実現
+Live2D立ち絵のまばたき（Blink）と焦点（Focus）パラメータの設定をサポートしました
 
-`wait` コマンドに `goNextWhenOver` 属性を追加し、待機終了後に自動的に次の命令へ進行
+キャラクターのz-index適用をサポートし、レイヤー順序の制御を可能にしました
 
-Spine 立ち絵のアニメーション切り替えをサポート、`-motion` パラメータでアニメーション制御
-
-`setAnimation` と `setTempAnimation` に ease イージングパラメータを追加し、より滑らかなアニメーション遷移を実現
-
-特定の状態を維持するための `keep` パラメータを追加
-
-スタイル付きテキストの一文字ずつのアニメーションを改善し、ルビ注釈テキストを正しく処理
-
-ゲーム終了確認ダイアログを追加し、誤操作を防止
+アニメーションのイージングと持続時間の処理を改善しました
 
 #### 修正
 
-境界が変更された際のLive2D立ち絵の初期位置エラーを修正
+Live2Dライブラリを更新し、立ち絵のアルファ（透明度）の問題を修正しました
 
-起動時にユーザーデータが誤ってリセットされる問題を修正
+Live2Dモデルの初期化タイミングを修正し、読み込みエラーを防止しました
 
-Spine立ち絵のアニメーション切り替え異常を修正
+`say` コマンドの `center` 引数の適用が遅れる問題を修正しました
 
-スタイル付きテキストの一文字アニメーション表示問題を修正
+一部のアニメーション同期が欠落する問題を修正しました
 
-ビデオ背景ファイルの拡張子認識問題を修正
-
-`changeFigure` と `changeBg` の停止関数とパフォーマンス名の処理を最適化
-
-BGMトラックがアンロックされていない場合、トラック選択インターフェースを非表示に
-
-その他のパフォーマンス最適化と安定性の向上
+コードのリファクタリングとビルドプロセスの最適化により、最終的なバンドルサイズを削減し、安定性を向上させました

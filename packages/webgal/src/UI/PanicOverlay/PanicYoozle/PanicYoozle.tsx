@@ -1,7 +1,7 @@
-import styles from './panicYoozle.module.scss';
 import { useEffect } from 'react';
+import styles from './panicYoozle.module.scss';
 
-export const PanicYoozle = () => {
+export default function PanicYoozle() {
   useEffect(() => {
     const panicTitle = 'Yoozle Search';
     const originalTitle = document.title;
@@ -33,4 +33,4 @@ export const PanicYoozle = () => {
       </div>
     </div>
   );
-};
+}

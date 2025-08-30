@@ -41,6 +41,6 @@ function convertTransform(transform: ITransform | undefined) {
   if (!transform) {
     return {};
   }
-  const { position, alpha, ...rest } = transform;
-  return { ...rest, x: position.x, y: position.y, alphaFilterVal: alpha };
+  const { position, ...rest } = transform;
+  return { ...rest, x: position.x, y: position.y };
 }
