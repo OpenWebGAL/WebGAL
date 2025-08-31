@@ -4,23 +4,26 @@ export function generateUniversalSoftInAnimationObj(targetKey: string, duration:
   const target = WebGAL.gameplay.pixiStage!.getStageObjByKey(targetKey);
   let elapsedTime = 0;
 
-  // 先设置一个通用的初态
+  // 新增变量，用于存储动画开始时的初始透明度
+  let startAlpha = 0;
+
   /**
    * 在此书写为动画设置初态的操作
    */
   function setStartState() {
     elapsedTime = 0; // Reset timer when animation starts
     if (target) {
-      target.pixiContainer.alpha = 0;
+      // 修正：不再强制设为 0，而是记录当前的透明度
+      startAlpha = target.pixiContainer.alpha;
     }
   }
 
-  // TODO：通用终态设置
   /**
    * 在此书写为动画设置终态的操作
    */
   function setEndState() {
     if (target) {
+      // 终态是完全不透明，这保持不变
       target.pixiContainer.alpha = 1;
     }
   }
@@ -34,21 +37,19 @@ export function generateUniversalSoftInAnimationObj(targetKey: string, duration:
       const sprite = target.pixiContainer;
       const baseDuration = WebGAL.gameplay.pixiStage!.frameDuration;
 
-      // Increment the elapsed time by the duration of the last frame
       elapsedTime += baseDuration;
 
-      // Ensure elapsedTime does not exceed the total duration
       const realElapsedTime = Math.min(elapsedTime, duration);
-
-      // Calculate the progress of the animation as a value from 0 to 1
       const progress = realElapsedTime / duration;
 
-      // Apply the Cubic Ease-Out function
-      // The formula is: 1 - (1 - progress)^3
+      // 使用 Cubic Ease-Out 函数，这对于“进入”动画感觉更自然
       const easedProgress = 1 - Math.pow(1 - progress, 3);
 
-      // Set the sprite's alpha to the eased value
-      sprite.alpha = easedProgress;
+      // 修正：使用线性插值公式 (lerp)
+      // 公式：最终值 = 初始值 + (目标值 - 初始值) * 进度
+      // 在这里，目标值是 1，所以公式为：
+      // alpha = startAlpha + (1 - startAlpha) * easedProgress
+      sprite.alpha = startAlpha + (1 - startAlpha) * easedProgress;
     }
   }
 
