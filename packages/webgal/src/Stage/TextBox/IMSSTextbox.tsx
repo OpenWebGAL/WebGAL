@@ -1,10 +1,12 @@
 import styles from './textbox.module.scss';
-import { ReactNode, useEffect } from 'react';
+import { useEffect } from 'react';
 import { WebGAL } from '@/Core/WebGAL';
 import { ITextboxProps } from './types';
 import useApplyStyle from '@/hooks/useApplyStyle';
 import { css } from '@emotion/css';
 import { textSize } from '@/store/userDataInterface';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/store/store';
 
 export default function IMSSTextbox(props: ITextboxProps) {
   const {
@@ -185,7 +187,15 @@ export default function IMSSTextbox(props: ITextboxProps) {
     );
   });
 
-  const lineHeightCssStr = `line-height: ${textSizeState === textSize.medium ? '2.2em' : '2em'}`;
+  const userDataState = useSelector((state: RootState) => state.userData);
+  const lineHeightValue = textSizeState === textSize.medium ? 2.2 : 2;
+  const MaxTextLine = Number(userDataState.globalGameVar.Max_line); // config定义字体行数
+  const MaxTextLineHeight = Number(userDataState.globalGameVar.Max_lineHeight); // config 定义字体行数高度
+  const finalLineHeight = !Number.isNaN(MaxTextLine)
+    ? (Number.isNaN(MaxTextLineHeight) ? lineHeightValue : MaxTextLineHeight) * MaxTextLine
+    : lineHeightValue; // Max_LineHeight和Max_Line必定为数字，否则使用默认值
+
+  const lineHeightCssStr = `line-height: ${finalLineHeight}em`;
   const lhCss = css(lineHeightCssStr);
 
   return (
