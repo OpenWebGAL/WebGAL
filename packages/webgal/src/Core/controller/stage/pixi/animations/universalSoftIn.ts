@@ -1,6 +1,7 @@
 import { WebGAL } from '@/Core/WebGAL';
+import { IAnimationObject } from '../PixiController';
 
-export function generateUniversalSoftInAnimationObj(targetKey: string, duration: number) {
+export function generateUniversalSoftInAnimationObj(targetKey: string, duration: number): IAnimationObject {
   const target = WebGAL.gameplay.pixiStage!.getStageObjByKey(targetKey);
   let elapsedTime = 0;
 

@@ -44,7 +44,7 @@ export const setAnimation = (sentence: ISentence): IPerform => {
     setTimeout(() => {
       const endDialogKey = webgalStore.getState().stage.currentDialogKey;
       const isHasNext = startDialogKey !== endDialogKey;
-      WebGAL.gameplay.pixiStage?.removeAnimationWithSetEffects(key);
+      WebGAL.gameplay.pixiStage?.removeAnimation(key, true);
     }, 0);
   };
 

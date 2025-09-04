@@ -4,15 +4,14 @@ import { webgalStore } from '@/store/store';
 import { setStage, stageActions } from '@/store/stageReducer';
 import cloneDeep from 'lodash/cloneDeep';
 import { getBooleanArgByKey, getNumberArgByKey, getStringArgByKey } from '@/Core/util/getSentenceArg';
-import { IFreeFigure, IStageState, ITransform } from '@/store/stageInterface';
-import { AnimationFrame, IUserAnimation } from '@/Core/Modules/animations';
-import { generateTransformAnimationObj } from '@/Core/controller/stage/pixi/animations/generateTransformAnimationObj';
+import { baseTransform, IFreeFigure, IStageState } from '@/store/stageInterface';
 import { assetSetter, fileType } from '@/Core/util/gameAssetsAccess/assetSetter';
-import { logger } from '@/Core/util/logger';
-import { getAnimateDuration } from '@/Core/Modules/animationFunctions';
+import { createEnterExitAnimation } from '@/Core/Modules/animationFunctions';
 import { WebGAL } from '@/Core/WebGAL';
+import { STAGE_KEYS } from '../constants';
 import { baseBlinkParam, baseFocusParam, BlinkParam, FocusParam } from '@/Core/live2DCore';
-import { DEFALUT_FIG_IN_DURATION, WEBGAL_NONE } from '../constants';
+import { DEFAULT_FADING_DURATION, WEBGAL_NONE } from '../constants';
+import { logger } from '../util/logger';
 /**
  * 更改立绘
  * @param sentence 语句
@@ -46,9 +45,17 @@ export function changeFigure(sentence: ISentence): IPerform {
   }
 
   // id 与 自由立绘
-  let key = getStringArgByKey(sentence, 'id') ?? '';
-  const isFreeFigure = key ? true : false;
-  const id = key ? key : `fig-${pos}`;
+  const idFromArgs = getStringArgByKey(sentence, 'id') ?? '';
+  const isFreeFigure = idFromArgs ? true : false;
+  let key = idFromArgs;
+  if (!isFreeFigure) {
+    const positionMap = {
+      center: STAGE_KEYS.FIG_CENTER,
+      left: STAGE_KEYS.FIG_LEFT,
+      right: STAGE_KEYS.FIG_RIGHT,
+    };
+    key = positionMap[pos];
+  }
 
   // live2d 或 spine 相关
   let motion = getStringArgByKey(sentence, 'motion') ?? '';
@@ -85,19 +92,14 @@ export function changeFigure(sentence: ISentence): IPerform {
   const animationFlag = getStringArgByKey(sentence, 'animationFlag') ?? '';
 
   // 其他参数
-  const transformString = getStringArgByKey(sentence, 'transform');
-  const ease = getStringArgByKey(sentence, 'ease') ?? '';
-  let duration = getNumberArgByKey(sentence, 'duration') ?? DEFALUT_FIG_IN_DURATION;
-  const enterAnimation = getStringArgByKey(sentence, 'enter');
-  const exitAnimation = getStringArgByKey(sentence, 'exit');
   let zIndex = getNumberArgByKey(sentence, 'zIndex') ?? -1;
 
   const dispatch = webgalStore.dispatch;
 
   const currentFigureAssociatedAnimation = webgalStore.getState().stage.figureAssociatedAnimation;
-  const filteredFigureAssociatedAnimation = currentFigureAssociatedAnimation.filter((item) => item.targetId !== id);
+  const filteredFigureAssociatedAnimation = currentFigureAssociatedAnimation.filter((item) => item.targetId !== key);
   const newFigureAssociatedAnimationItem = {
-    targetId: id,
+    targetId: key,
     animationFlag: animationFlag,
     mouthAnimation: {
       open: mouthOpen,
@@ -116,7 +118,7 @@ export function changeFigure(sentence: ISentence): IPerform {
    * 如果 url 没变，不移除
    */
   let isUrlChanged = true;
-  if (key !== '') {
+  if (isFreeFigure) {
     const figWithKey = webgalStore.getState().stage.freeFigure.find((e) => e.key === key);
     if (figWithKey) {
       if (figWithKey.name === sentence.content) {
@@ -140,61 +142,26 @@ export function changeFigure(sentence: ISentence): IPerform {
       }
     }
   }
+
+  // 储存一下现有的 transform 给退场动画当起始帧用, 因为马上就要清除了
+  const currentEffect = webgalStore.getState().stage.effects.find((e) => e.target === key);
+  let currentTransform = baseTransform;
+  if (currentEffect?.transform) {
+    currentTransform = cloneDeep(currentEffect.transform);
+  }
+
   /**
    * 处理 Effects
    */
   if (isUrlChanged) {
-    webgalStore.dispatch(stageActions.removeEffectByTargetId(id));
-    const oldStageObject = WebGAL.gameplay.pixiStage?.getStageObjByKey(id);
+    webgalStore.dispatch(stageActions.removeEffectByTargetId(key));
+    const oldStageObject = WebGAL.gameplay.pixiStage?.getStageObjByKey(key);
     if (oldStageObject) {
       oldStageObject.isExiting = true;
     }
   }
-  const setAnimationNames = (key: string, sentence: ISentence) => {
-    // 处理 transform 和 默认 transform
-    let animationObj: AnimationFrame[];
-    if (transformString) {
-      console.log(transformString);
-      try {
-        const frame = JSON.parse(transformString) as AnimationFrame;
-        animationObj = generateTransformAnimationObj(key, frame, duration, ease);
-        // 因为是切换，必须把一开始的 alpha 改为 0
-        animationObj[0].alpha = 0;
-        const animationName = (Math.random() * 10).toString(16);
-        const newAnimation: IUserAnimation = { name: animationName, effects: animationObj };
-        WebGAL.animationManager.addAnimation(newAnimation);
-        duration = getAnimateDuration(animationName);
-        WebGAL.animationManager.nextEnterAnimationName.set(key, animationName);
-      } catch (e) {
-        // 解析都错误了，歇逼吧
-        applyDefaultTransform();
-      }
-    } else {
-      applyDefaultTransform();
-    }
 
-    function applyDefaultTransform() {
-      // 应用默认的
-      const frame = {};
-      animationObj = generateTransformAnimationObj(key, frame as AnimationFrame, duration, ease);
-      // 因为是切换，必须把一开始的 alpha 改为 0
-      animationObj[0].alpha = 0;
-      const animationName = (Math.random() * 10).toString(16);
-      const newAnimation: IUserAnimation = { name: animationName, effects: animationObj };
-      WebGAL.animationManager.addAnimation(newAnimation);
-      duration = getAnimateDuration(animationName);
-      WebGAL.animationManager.nextEnterAnimationName.set(key, animationName);
-    }
-
-    if (enterAnimation) {
-      WebGAL.animationManager.nextEnterAnimationName.set(key, enterAnimation);
-      duration = getAnimateDuration(enterAnimation);
-    }
-    if (exitAnimation) {
-      WebGAL.animationManager.nextExitAnimationName.set(key + '-off', exitAnimation);
-      duration = getAnimateDuration(exitAnimation);
-    }
-  };
+  let duration = createEnterExitAnimation(sentence, key, DEFAULT_FADING_DURATION, currentTransform);
 
   function postFigureStateSet() {
     if (isUrlChanged) {
@@ -237,26 +204,17 @@ export function changeFigure(sentence: ISentence): IPerform {
      * 下面的代码是设置自由立绘的
      */
     const freeFigureItem: IFreeFigure = { key, name: content, basePosition: pos };
-    setAnimationNames(key, sentence);
     postFigureStateSet();
     dispatch(stageActions.setFreeFigureByKey(freeFigureItem));
   } else {
     /**
      * 下面的代码是设置与位置关联的立绘的
      */
-    const positionMap = {
-      center: 'fig-center',
-      left: 'fig-left',
-      right: 'fig-right',
-    };
     const dispatchMap: Record<string, keyof IStageState> = {
       center: 'figName',
       left: 'figNameLeft',
       right: 'figNameRight',
     };
-
-    key = positionMap[pos];
-    setAnimationNames(key, sentence);
     postFigureStateSet();
     dispatch(setStage({ key: dispatchMap[pos], value: content }));
   }
