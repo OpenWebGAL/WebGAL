@@ -239,7 +239,13 @@ export default class PixiStage {
       }
       return;
     }
-    this.stageAnimations.push({ uuid: uuid(), animationObject, key: key, targetKey: target, type: 'preset' });
+    this.stageAnimations.push({
+      uuid: uuid(),
+      animationObject,
+      key: key,
+      targetKey: target,
+      type: 'preset',
+    });
     // 上锁
     this.lockStageObject(target);
     animationObject.setStartState();
@@ -257,38 +263,16 @@ export default class PixiStage {
    * 移除动画
    * @param key
    */
-  public removeAnimationByIndex(index: number) {
+  public removeAnimationByIndex(index: number, setEffect = false) {
     if (index >= 0) {
       const thisTickerFunc = this.stageAnimations[index];
       this.currentApp?.ticker.remove(thisTickerFunc.animationObject.tickerFunc);
       thisTickerFunc.animationObject.setEndState();
       this.unlockStageObject(thisTickerFunc.targetKey ?? 'default');
-      this.stageAnimations.splice(index, 1);
-    }
-  }
-
-  public removeAllAnimations() {
-    while (this.stageAnimations.length > 0) {
-      this.removeAnimationByIndex(0);
-    }
-  }
-
-  public removeAnimation(key: string) {
-    const index = this.stageAnimations.findIndex((e) => e.key === key);
-    this.removeAnimationByIndex(index);
-  }
-
-  public removeAnimationWithSetEffects(key: string) {
-    const index = this.stageAnimations.findIndex((e) => e.key === key);
-    if (index >= 0) {
-      const thisTickerFunc = this.stageAnimations[index];
-      this.currentApp?.ticker.remove(thisTickerFunc.animationObject.tickerFunc);
-      thisTickerFunc.animationObject.setEndState();
-      const endStateEffect = thisTickerFunc.animationObject.getEndStateEffect?.() ?? {};
-      this.unlockStageObject(thisTickerFunc.targetKey ?? 'default');
-      if (thisTickerFunc.targetKey) {
+      if (setEffect && thisTickerFunc.targetKey) {
         const target = this.getStageObjByKey(thisTickerFunc.targetKey);
         if (target) {
+          const endStateEffect = thisTickerFunc.animationObject.getEndStateEffect?.() ?? {};
           let effect: IEffect = {
             target: thisTickerFunc.targetKey,
             transform: endStateEffect,
@@ -299,6 +283,17 @@ export default class PixiStage {
       }
       this.stageAnimations.splice(index, 1);
     }
+  }
+
+  public removeAllAnimations() {
+    while (this.stageAnimations.length > 0) {
+      this.removeAnimationByIndex(0);
+    }
+  }
+
+  public removeAnimation(key: string, setEffect = false) {
+    const index = this.stageAnimations.findIndex((e) => e.key === key);
+    this.removeAnimationByIndex(index, setEffect);
   }
 
   // eslint-disable-next-line max-params
@@ -916,6 +911,30 @@ export default class PixiStage {
     return [...this.figureObjects, ...this.backgroundObjects, this.mainStageObject];
   }
 
+  public removeFigureByIndex(index: number) {
+    if (index >= 0) {
+      const stageObject = this.figureObjects[index];
+      for (const element of stageObject.pixiContainer.children) {
+        element.destroy();
+      }
+      stageObject.pixiContainer.destroy();
+      this.figureContainer.removeChild(stageObject.pixiContainer);
+      this.figureObjects.splice(index, 1);
+    }
+  }
+
+  public removeBackgroundByIndex(index: number) {
+    if (index >= 0) {
+      const stageObject = this.backgroundObjects[index];
+      for (const element of stageObject.pixiContainer.children) {
+        element.destroy();
+      }
+      stageObject.pixiContainer.destroy();
+      this.backgroundContainer.removeChild(stageObject.pixiContainer);
+      this.backgroundObjects.splice(index, 1);
+    }
+  }
+
   /**
    * 根据 key 删除舞台上的对象
    * @param key
@@ -923,24 +942,8 @@ export default class PixiStage {
   public removeStageObjectByKey(key: string) {
     const indexFig = this.figureObjects.findIndex((e) => e.key === key);
     const indexBg = this.backgroundObjects.findIndex((e) => e.key === key);
-    if (indexFig >= 0) {
-      const bgSprite = this.figureObjects[indexFig];
-      for (const element of bgSprite.pixiContainer.children) {
-        element.destroy();
-      }
-      bgSprite.pixiContainer.destroy();
-      this.figureContainer.removeChild(bgSprite.pixiContainer);
-      this.figureObjects.splice(indexFig, 1);
-    }
-    if (indexBg >= 0) {
-      const bgSprite = this.backgroundObjects[indexBg];
-      for (const element of bgSprite.pixiContainer.children) {
-        element.destroy();
-      }
-      bgSprite.pixiContainer.destroy();
-      this.backgroundContainer.removeChild(bgSprite.pixiContainer);
-      this.backgroundObjects.splice(indexBg, 1);
-    }
+    this.removeFigureByIndex(indexFig);
+    this.removeBackgroundByIndex(indexBg);
     // /**
     //  * 删掉相关 Effects，因为已经移除了
     //  */
@@ -951,6 +954,15 @@ export default class PixiStage {
     //   newEffects.splice(index, 1);
     // }
     // updateCurrentEffects(newEffects);
+  }
+
+  public removeAllStageObjects() {
+    while (this.figureObjects.length > 0) {
+      this.removeFigureByIndex(0);
+    }
+    while (this.backgroundObjects.length > 0) {
+      this.removeBackgroundByIndex(0);
+    }
   }
 
   public cacheGC() {

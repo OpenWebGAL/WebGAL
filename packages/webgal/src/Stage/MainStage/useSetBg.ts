@@ -4,8 +4,9 @@ import { logger } from '@/Core/util/logger';
 import { IStageObject } from '@/Core/controller/stage/pixi/PixiController';
 import { setEbg } from '@/Core/gameScripts/changeBg/setEbg';
 
-import { getEnterExitAnimation } from '@/Core/Modules/animationFunctions';
+import { addOrRemoveStageObject } from '@/Core/Modules/animationFunctions';
 import { WebGAL } from '@/Core/WebGAL';
+import { STAGE_KEYS } from '@/Core/constants';
 
 export function useSetBg(stageState: IStageState) {
   const bgName = stageState.bgName;
@@ -14,42 +15,12 @@ export function useSetBg(stageState: IStageState) {
    * 设置背景
    */
   useEffect(() => {
-    const thisBgKey = 'bg-main';
-    if (bgName !== '') {
-      const currentBg = WebGAL.gameplay.pixiStage?.getStageObjByKey(thisBgKey);
-      if (currentBg) {
-        if (currentBg.sourceUrl !== bgName) {
-          removeBg(currentBg);
-        }
-      }
+    const thisBgKey = STAGE_KEYS.BG_MAIN;
+    addOrRemoveStageObject(thisBgKey, bgName, stageState.effects, () => {
       addBg(undefined, thisBgKey, bgName);
       setEbg(bgName);
-      logger.debug('重设背景');
-      const { duration, animation } = getEnterExitAnimation('bg-main', 'enter', true);
-      WebGAL.gameplay.pixiStage!.registerPresetAnimation(animation, 'bg-main-softin', thisBgKey, stageState.effects);
-      setTimeout(() => WebGAL.gameplay.pixiStage!.removeAnimationWithSetEffects('bg-main-softin'), duration);
-    } else {
-      const currentBg = WebGAL.gameplay.pixiStage?.getStageObjByKey(thisBgKey);
-      if (currentBg) {
-        removeBg(currentBg);
-      }
-    }
+    });
   }, [bgName]);
-}
-
-function removeBg(bgObject: IStageObject) {
-  WebGAL.gameplay.pixiStage?.removeAnimationWithSetEffects('bg-main-softin');
-  const oldBgKey = bgObject.key;
-  bgObject.key = 'bg-main-off' + String(new Date().getTime());
-  const bgKey = bgObject.key;
-  const bgAniKey = bgObject.key + '-softoff';
-  WebGAL.gameplay.pixiStage?.removeStageObjectByKey(oldBgKey);
-  const { duration, animation } = getEnterExitAnimation('bg-main-off', 'exit', true, bgKey);
-  WebGAL.gameplay.pixiStage!.registerAnimation(animation, bgAniKey, bgKey);
-  setTimeout(() => {
-    WebGAL.gameplay.pixiStage?.removeAnimation(bgAniKey);
-    WebGAL.gameplay.pixiStage?.removeStageObjectByKey(bgKey);
-  }, duration);
 }
 
 function addBg(type?: 'image' | 'spine', ...args: any[]) {
