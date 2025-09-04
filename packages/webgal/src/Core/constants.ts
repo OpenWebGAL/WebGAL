@@ -1,9 +1,9 @@
 export const STAGE_KEYS = {
   STAGE_MAIN: 'stage-main',
-  BGMAIN: 'bg-main',
-  FIG_C: 'fig-center',
-  FIG_L: 'fig-left',
-  FIG_R: 'fig-right',
+  BG_MAIN: 'bg-main',
+  FIG_CENTER: 'fig-center',
+  FIG_LEFT: 'fig-left',
+  FIG_RIGHT: 'fig-right',
 };
 
 export const WEBGAL_NONE = 'none';

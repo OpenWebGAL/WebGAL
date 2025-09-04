@@ -109,10 +109,10 @@ const stageSlice = createSlice({
       // 如果找不到目标，不能设置 transform
       const activeTargets = [
         STAGE_KEYS.STAGE_MAIN,
-        STAGE_KEYS.BGMAIN,
-        STAGE_KEYS.FIG_C,
-        STAGE_KEYS.FIG_L,
-        STAGE_KEYS.FIG_R,
+        STAGE_KEYS.BG_MAIN,
+        STAGE_KEYS.FIG_CENTER,
+        STAGE_KEYS.FIG_LEFT,
+        STAGE_KEYS.FIG_RIGHT,
         ...state.freeFigure.map((figure) => figure.key),
       ];
       if (!activeTargets.includes(target)) return;
