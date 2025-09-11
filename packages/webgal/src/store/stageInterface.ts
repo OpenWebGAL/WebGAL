@@ -1,5 +1,6 @@
 import { ISentence } from '@/Core/controller/scene/sceneInterface';
 import React from 'react';
+import { BlinkParam, FocusParam } from '@/Core/live2DCore';
 
 /**
  * 游戏内变量
@@ -157,6 +158,16 @@ export interface ILive2DExpression {
   expression: string;
 }
 
+export interface ILive2DBlink {
+  target: string;
+  blink: BlinkParam;
+}
+
+export interface ILive2DFocus {
+  target: string;
+  focus: FocusParam;
+}
+
 export interface IFigureMetadata {
   zIndex?: number;
 }
@@ -199,6 +210,8 @@ export interface IStageState {
   currentDialogKey: string; // 当前对话的key
   live2dMotion: ILive2DMotion[];
   live2dExpression: ILive2DExpression[];
+  live2dBlink: ILive2DBlink[];
+  live2dFocus: ILive2DFocus[];
   // 当前演出的延迟，用于做对话插演出！
   // currentPerformDelay:number
   currentConcatDialogPrev: string;

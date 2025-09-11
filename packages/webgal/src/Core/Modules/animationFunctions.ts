@@ -62,8 +62,12 @@ export function getEnterExitAnimation(
     }
     // 走默认动画
     let animation: IAnimationObject | null = generateUniversalSoftInAnimationObj(realTarget ?? target, duration);
+
+    const transformState = webgalStore.getState().stage.effects;
+    const targetEffect = transformState.find((effect) => effect.target === target);
+
     const animarionName = WebGAL.animationManager.nextEnterAnimationName.get(target);
-    if (animarionName) {
+    if (animarionName && !targetEffect) {
       logger.debug('取代默认进入动画', target);
       animation = getAnimationObject(animarionName, realTarget ?? target, getAnimateDuration(animarionName), false);
       duration = getAnimateDuration(animarionName);
@@ -72,7 +76,7 @@ export function getEnterExitAnimation(
     }
     return { duration, animation };
   } else {
-    let duration = 750;
+    let duration = 1000;
     if (isBg) {
       duration = 1500;
     }

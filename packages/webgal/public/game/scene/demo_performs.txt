@@ -1,5 +1,5 @@
 label: performs;
-choose: cherryBlossoms: cherryBlossoms | rain:rain | snow:snow | heavySnow:heavySnow;
+choose: cherryBlossoms:cherryBlossoms | rain:rain | snow:snow | heavySnow:heavySnow;
 
 label: cherryBlossoms;
 pixiInit;

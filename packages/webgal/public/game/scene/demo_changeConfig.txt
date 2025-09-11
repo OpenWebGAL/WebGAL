@@ -2,7 +2,7 @@ webgal:我会修改标题 -hold;
 setVar:Game_name=WebGal_Change -global;
 webgal:游戏标题已经被我修改为{Game_name} -hold;
 webgal:我会修改游戏背景 -hold;
-setVar:Title_img=bg.png -global;
+setVar:Title_img=bg.webp -global;
 webgal:游戏背景已经被我修改为{Title_img} -hold;
 webgal:获取Debug值：{Debug} -hold;
 setVar:GameNum=15 -global;
