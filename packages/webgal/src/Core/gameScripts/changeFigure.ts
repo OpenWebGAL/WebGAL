@@ -196,10 +196,12 @@ export function changeFigure(sentence: ISentence): IPerform {
     }
   };
 
-  function setFigureData() {
+  function postFigureStateSet() {
     if (isUrlChanged) {
       // 当 url 发生变化时，即发生新立绘替换
       // 应当赋予一些参数以默认值，防止从旧立绘的状态获取数据
+      // 并且关闭一些 hold 动画
+      WebGAL.gameplay.performController.unmountPerform(`animation-${key}`, true);
       bounds = bounds ?? [0, 0, 0, 0];
       blink = blink ?? cloneDeep(baseBlinkParam);
       focus = focus ?? cloneDeep(baseFocusParam);
@@ -236,7 +238,7 @@ export function changeFigure(sentence: ISentence): IPerform {
      */
     const freeFigureItem: IFreeFigure = { key, name: content, basePosition: pos };
     setAnimationNames(key, sentence);
-    setFigureData();
+    postFigureStateSet();
     dispatch(stageActions.setFreeFigureByKey(freeFigureItem));
   } else {
     /**
@@ -255,7 +257,7 @@ export function changeFigure(sentence: ISentence): IPerform {
 
     key = positionMap[pos];
     setAnimationNames(key, sentence);
-    setFigureData();
+    postFigureStateSet();
     dispatch(setStage({ key: dispatchMap[pos], value: content }));
   }
 

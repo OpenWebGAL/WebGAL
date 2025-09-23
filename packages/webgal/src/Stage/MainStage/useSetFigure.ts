@@ -63,7 +63,7 @@ export function useSetFigure(stageState: IStageState) {
   useEffect(() => {
     Object.entries(figureMetaData).forEach(([key, value]) => {
       const figureObject = WebGAL.gameplay.pixiStage?.getStageObjByKey(key);
-      if (figureObject && !figureObject.isExiting && value?.zIndex !== undefined) {
+      if (figureObject && !figureObject.isExiting && value?.zIndex !== undefined && figureObject.pixiContainer) {
         figureObject.pixiContainer.zIndex = value.zIndex;
       }
     });

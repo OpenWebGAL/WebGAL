@@ -34,7 +34,7 @@ export interface IStageObject {
   uuid: string;
   // 一般与作用目标有关
   key: string;
-  pixiContainer: WebGALPixiContainer;
+  pixiContainer: WebGALPixiContainer | null;
   // 相关的源 url
   sourceUrl: string;
   sourceExt: string;
@@ -235,7 +235,7 @@ export default class PixiStage {
       const targetPixiContainer = this.getStageObjByKey(target);
       if (targetPixiContainer) {
         const container = targetPixiContainer.pixiContainer;
-        PixiStage.assignTransform(container, effect.transform);
+        if (container) PixiStage.assignTransform(container, effect.transform);
       }
       return;
     }
@@ -776,6 +776,7 @@ export default class PixiStage {
       const figureRecordTarget = this.live2dFigureRecorder.find((e) => e.target === key);
       if (target && figureRecordTarget?.motion !== motion) {
         const container = target.pixiContainer;
+        if (!container) return;
         const children = container.children;
         for (const model of children) {
           let category_name = motion;
@@ -799,6 +800,7 @@ export default class PixiStage {
     if (target?.sourceType !== 'spine') return;
 
     const container = target.pixiContainer;
+    if (!container) return;
     // Spine figure 结构: Container -> Sprite -> Spine
     const sprite = container.children[0] as PIXI.Container;
     if (sprite?.children?.[0]) {
@@ -825,6 +827,7 @@ export default class PixiStage {
     const figureRecordTarget = this.live2dFigureRecorder.find((e) => e.target === key);
     if (target && figureRecordTarget?.expression !== expression) {
       const container = target.pixiContainer;
+      if (!container) return;
       const children = container.children;
       for (const model of children) {
         // @ts-ignore
@@ -840,6 +843,7 @@ export default class PixiStage {
     const figureRecordTarget = this.live2dFigureRecorder.find((e) => e.target === key);
     if (target && !isEqual(figureRecordTarget?.blink, blinkParam)) {
       const container = target.pixiContainer;
+      if (!container) return;
       const children = container.children;
       let newBlinkParam: BlinkParam = { ...baseBlinkParam, ...blinkParam };
       // 继承现有 BlinkParam
@@ -860,6 +864,7 @@ export default class PixiStage {
     const figureRecordTarget = this.live2dFigureRecorder.find((e) => e.target === key);
     if (target && !isEqual(figureRecordTarget?.focus, focusParam)) {
       const container = target.pixiContainer;
+      if (!container) return;
       const children = container.children;
       let newFocusParam: FocusParam = { ...baseFocusParam, ...focusParam };
       // 继承现有 FocusParam
@@ -883,6 +888,7 @@ export default class PixiStage {
     const target = this.figureObjects.find((e) => e.key === key);
     if (target && target.sourceType === 'live2d') {
       const container = target.pixiContainer;
+      if (!container) return;
       const children = container.children;
       for (const model of children) {
         // @ts-ignore
@@ -925,20 +931,28 @@ export default class PixiStage {
     const indexBg = this.backgroundObjects.findIndex((e) => e.key === key);
     if (indexFig >= 0) {
       const bgSprite = this.figureObjects[indexFig];
-      for (const element of bgSprite.pixiContainer.children) {
-        element.destroy();
+      if (bgSprite.pixiContainer)
+        for (const element of bgSprite.pixiContainer.children) {
+          element.destroy();
+        }
+      if (bgSprite.pixiContainer) {
+        bgSprite.pixiContainer.destroy();
+        this.figureContainer.removeChild(bgSprite.pixiContainer);
       }
-      bgSprite.pixiContainer.destroy();
-      this.figureContainer.removeChild(bgSprite.pixiContainer);
+      bgSprite.pixiContainer = null;
       this.figureObjects.splice(indexFig, 1);
     }
     if (indexBg >= 0) {
       const bgSprite = this.backgroundObjects[indexBg];
-      for (const element of bgSprite.pixiContainer.children) {
-        element.destroy();
+      if (bgSprite.pixiContainer)
+        for (const element of bgSprite.pixiContainer.children) {
+          element.destroy();
+        }
+      if (bgSprite.pixiContainer) {
+        bgSprite.pixiContainer.destroy();
+        this.backgroundContainer.removeChild(bgSprite.pixiContainer);
       }
-      bgSprite.pixiContainer.destroy();
-      this.backgroundContainer.removeChild(bgSprite.pixiContainer);
+      bgSprite.pixiContainer = null;
       this.backgroundObjects.splice(indexBg, 1);
     }
     // /**
