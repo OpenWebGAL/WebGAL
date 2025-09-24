@@ -10,7 +10,7 @@ export function generateTestblurAnimationObj(targetKey: string, duration: number
    * 在此书写为动画设置初态的操作
    */
   function setStartState() {
-    if (target) {
+    if (target?.pixiContainer) {
       target.pixiContainer.alpha = 0;
       // @ts-ignore
       target.pixiContainer.blur = 0;
@@ -22,7 +22,7 @@ export function generateTestblurAnimationObj(targetKey: string, duration: number
    * 在此书写为动画设置终态的操作
    */
   function setEndState() {
-    if (target) {
+    if (target?.pixiContainer) {
       target.pixiContainer.alpha = 1;
       // @ts-ignore
       target.pixiContainer.blur = 5;
@@ -40,9 +40,10 @@ export function generateTestblurAnimationObj(targetKey: string, duration: number
       const currentAddOplityDelta = (duration / baseDuration) * delta;
       const increasement = 1 / currentAddOplityDelta;
       const decreasement = 5 / currentAddOplityDelta;
-      if (container.alpha < 1) {
-        container.alpha += increasement;
-      }
+      if (container)
+        if (container.alpha < 1) {
+          container.alpha += increasement;
+        }
       // @ts-ignore
       if (container.blur < 5) {
         // @ts-ignore

@@ -42,7 +42,6 @@ export function generateTimelineObj(
       times.push(currentDelay / duration);
     } else times.push(0);
   }
-  const container = target?.pixiContainer;
   let animateInstance: ReturnType<typeof popmotion.animate> | null = null;
   // 只有有 duration 的时候才有动画
   if (duration > 0) {
@@ -52,13 +51,13 @@ export function generateTimelineObj(
       duration,
       ease: easeArray,
       onUpdate: (updateValue) => {
-        if (container) {
+        if (target?.pixiContainer) {
           const { scaleX, scaleY, ...val } = updateValue;
           // @ts-ignore
-          PixiStage.assignTransform(container, omitBy(val, isUndefined));
+          PixiStage.assignTransform(target.pixiContainer, omitBy(val, isUndefined));
           // 因为 popmotion 不能用嵌套，scale 要手动设置
-          if (!isUndefined(scaleX)) container.scale.x = scaleX;
-          if (!isUndefined(scaleY)) container.scale.y = scaleY;
+          if (!isUndefined(scaleX)) target.pixiContainer.scale.x = scaleX;
+          if (!isUndefined(scaleY)) target.pixiContainer.scale.y = scaleY;
         }
       },
     });
@@ -77,13 +76,11 @@ export function generateTimelineObj(
       const assignValue = omitBy({ x: position.x, y: position.y, ...state }, isUndefined);
       // @ts-ignore
       PixiStage.assignTransform(target?.pixiContainer, assignValue);
-      if (target?.pixiContainer) {
-        if (!isUndefined(scale.x)) {
-          target.pixiContainer.scale.x = scale.x;
-        }
-        if (!isUndefined(scale?.y)) {
-          target.pixiContainer.scale.y = scale.y;
-        }
+      if (!isUndefined(scale.x)) {
+        target.pixiContainer.scale.x = scale.x;
+      }
+      if (!isUndefined(scale?.y)) {
+        target.pixiContainer.scale.y = scale.y;
       }
     }
   }
@@ -101,13 +98,11 @@ export function generateTimelineObj(
       const assignValue = omitBy({ x: position.x, y: position.y, ...state }, isUndefined);
       // @ts-ignore
       PixiStage.assignTransform(target?.pixiContainer, assignValue);
-      if (target?.pixiContainer) {
-        if (!isUndefined(scale.x)) {
-          target.pixiContainer.scale.x = scale.x;
-        }
-        if (!isUndefined(scale?.y)) {
-          target.pixiContainer.scale.y = scale.y;
-        }
+      if (!isUndefined(scale.x)) {
+        target.pixiContainer.scale.x = scale.x;
+      }
+      if (!isUndefined(scale?.y)) {
+        target.pixiContainer.scale.y = scale.y;
       }
     }
   }

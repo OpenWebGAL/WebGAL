@@ -32,11 +32,18 @@ export const changeBg = (sentence: ISentence): IPerform => {
     dispatch(unlockCgInUserData({ name: unlockName, url, series }));
   }
 
-  /**
-   * 删掉相关 Effects，因为已经移除了
-   */
-  if (webgalStore.getState().stage.bgName !== sentence.content) {
+  // 检测 url 是否变化
+  let isUrlChanged = webgalStore.getState().stage.bgName !== sentence.content;
+  if (isUrlChanged) {
+    // 清除动画
+    WebGAL.gameplay.pixiStage?.removeAnimation('bg-main');
+    // 移除旧的 effect
     dispatch(stageActions.removeEffectByTargetId(`bg-main`));
+    // 标记旧的背景为退出中，防止旧背景继承新参数
+    const oldStageObject = WebGAL.gameplay.pixiStage?.getStageObjByKey('bg-main');
+    if (oldStageObject) {
+      oldStageObject.isExiting = true;
+    }
   }
 
   // 处理 transform 和 默认 transform
