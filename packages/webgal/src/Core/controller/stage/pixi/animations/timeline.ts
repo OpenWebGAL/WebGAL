@@ -129,11 +129,17 @@ export function generateTimelineObj(
     return timeline[timeline.length - 1];
   }
 
+  function forceStopWithoutSetEndState() {
+    if (animateInstance) animateInstance.stop();
+    animateInstance = null;
+  }
+
   return {
     setStartState,
     setEndState,
     tickerFunc,
     getEndStateEffect,
+    forceStopWithoutSetEndState,
   };
 }
 

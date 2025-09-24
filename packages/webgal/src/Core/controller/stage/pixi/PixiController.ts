@@ -17,6 +17,7 @@ export interface IAnimationObject {
   setEndState: Function;
   tickerFunc: PIXI.TickerCallback<number>;
   getEndStateEffect?: Function;
+  forceStopWithoutSetEndState?: Function;
 }
 
 interface IStageAnimationObject {
@@ -262,6 +263,19 @@ export default class PixiStage {
       const thisTickerFunc = this.stageAnimations[index];
       this.currentApp?.ticker.remove(thisTickerFunc.animationObject.tickerFunc);
       thisTickerFunc.animationObject.setEndState();
+      this.unlockStageObject(thisTickerFunc.targetKey ?? 'default');
+      this.stageAnimations.splice(index, 1);
+    }
+  }
+
+  public removeAnimationWithoutSetEndState(key: string) {
+    const index = this.stageAnimations.findIndex((e) => e.key === key);
+    if (index >= 0) {
+      const thisTickerFunc = this.stageAnimations[index];
+      this.currentApp?.ticker.remove(thisTickerFunc.animationObject.tickerFunc);
+      if (thisTickerFunc.animationObject.forceStopWithoutSetEndState) {
+        thisTickerFunc.animationObject.forceStopWithoutSetEndState();
+      }
       this.unlockStageObject(thisTickerFunc.targetKey ?? 'default');
       this.stageAnimations.splice(index, 1);
     }
