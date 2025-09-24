@@ -33,9 +33,14 @@ export const changeBg = (sentence: ISentence): IPerform => {
   }
 
   /**
+   * 判断背景 URL 是否发生了变化
+   */
+  const isUrlChanged = webgalStore.getState().stage.bgName !== sentence.content;
+
+  /**
    * 删掉相关 Effects，因为已经移除了
    */
-  if (webgalStore.getState().stage.bgName !== sentence.content) {
+  if (isUrlChanged) {
     dispatch(stageActions.removeEffectByTargetId(`bg-main`));
   }
 
@@ -85,6 +90,17 @@ export const changeBg = (sentence: ISentence): IPerform => {
     duration = getAnimateDuration(exitAnimation);
   }
 
+  /**
+   * 背景状态后处理
+   */
+  function postBgStateSet() {
+    if (isUrlChanged) {
+      // 当 URL 发生变化时，清理旧的 hold 动画
+      WebGAL.gameplay.performController.unmountPerform(`animation-bg-main`, true);
+    }
+  }
+
+  postBgStateSet();
   dispatch(setStage({ key: 'bgName', value: sentence.content }));
 
   return {
