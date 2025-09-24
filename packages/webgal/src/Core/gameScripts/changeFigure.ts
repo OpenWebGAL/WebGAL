@@ -12,7 +12,7 @@ import { logger } from '@/Core/util/logger';
 import { getAnimateDuration } from '@/Core/Modules/animationFunctions';
 import { WebGAL } from '@/Core/WebGAL';
 import { baseBlinkParam, baseFocusParam, BlinkParam, FocusParam } from '@/Core/live2DCore';
-import { WEBGAL_NONE } from '../constants';
+import { STAGE_KEYS, WEBGAL_NONE } from '../constants';
 /**
  * 更改立绘
  * @param sentence 语句
@@ -46,9 +46,24 @@ export function changeFigure(sentence: ISentence): IPerform {
   }
 
   // id 与 自由立绘
-  let key = getStringArgByKey(sentence, 'id') ?? '';
-  const isFreeFigure = key ? true : false;
-  const id = key ? key : `fig-${pos}`;
+  let idFromArgs = getStringArgByKey(sentence, 'id') ?? '';
+  const isFreeFigure = idFromArgs ? true : false;
+  let key = '';
+  if (isFreeFigure) {
+    key = idFromArgs;
+  } else {
+    switch (pos) {
+      case 'center':
+        key = STAGE_KEYS.FIG_C;
+        break;
+      case 'left':
+        key = STAGE_KEYS.FIG_L;
+        break;
+      case 'right':
+        key = STAGE_KEYS.FIG_R;
+        break;
+    }
+  }
 
   // live2d 或 spine 相关
   let motion = getStringArgByKey(sentence, 'motion') ?? '';
@@ -95,9 +110,9 @@ export function changeFigure(sentence: ISentence): IPerform {
   const dispatch = webgalStore.dispatch;
 
   const currentFigureAssociatedAnimation = webgalStore.getState().stage.figureAssociatedAnimation;
-  const filteredFigureAssociatedAnimation = currentFigureAssociatedAnimation.filter((item) => item.targetId !== id);
+  const filteredFigureAssociatedAnimation = currentFigureAssociatedAnimation.filter((item) => item.targetId !== key);
   const newFigureAssociatedAnimationItem = {
-    targetId: id,
+    targetId: key,
     animationFlag: animationFlag,
     mouthAnimation: {
       open: mouthOpen,
@@ -112,9 +127,7 @@ export function changeFigure(sentence: ISentence): IPerform {
   filteredFigureAssociatedAnimation.push(newFigureAssociatedAnimationItem);
   dispatch(setStage({ key: 'figureAssociatedAnimation', value: filteredFigureAssociatedAnimation }));
 
-  /**
-   * 如果 url 没变，不移除
-   */
+  // 检测 url 是否变化
   let isUrlChanged = true;
   if (key !== '') {
     const figWithKey = webgalStore.getState().stage.freeFigure.find((e) => e.key === key);
@@ -140,12 +153,14 @@ export function changeFigure(sentence: ISentence): IPerform {
       }
     }
   }
-  /**
-   * 处理 Effects
-   */
+
   if (isUrlChanged) {
-    webgalStore.dispatch(stageActions.removeEffectByTargetId(id));
-    const oldStageObject = WebGAL.gameplay.pixiStage?.getStageObjByKey(id);
+    // 清除动画
+    WebGAL.gameplay.pixiStage?.removeAnimation(key);
+    // 移除旧的 effect
+    webgalStore.dispatch(stageActions.removeEffectByTargetId(key));
+    // 标记旧的立绘为退出中，防止旧立绘继承新参数
+    const oldStageObject = WebGAL.gameplay.pixiStage?.getStageObjByKey(key);
     if (oldStageObject) {
       oldStageObject.isExiting = true;
     }
@@ -196,7 +211,7 @@ export function changeFigure(sentence: ISentence): IPerform {
     }
   };
 
-  function setFigureData() {
+  function postFigureStateSet() {
     if (isUrlChanged) {
       // 当 url 发生变化时，即发生新立绘替换
       // 应当赋予一些参数以默认值，防止从旧立绘的状态获取数据
@@ -236,26 +251,20 @@ export function changeFigure(sentence: ISentence): IPerform {
      */
     const freeFigureItem: IFreeFigure = { key, name: content, basePosition: pos };
     setAnimationNames(key, sentence);
-    setFigureData();
+    postFigureStateSet();
     dispatch(stageActions.setFreeFigureByKey(freeFigureItem));
   } else {
     /**
      * 下面的代码是设置与位置关联的立绘的
      */
-    const positionMap = {
-      center: 'fig-center',
-      left: 'fig-left',
-      right: 'fig-right',
-    };
     const dispatchMap: Record<string, keyof IStageState> = {
       center: 'figName',
       left: 'figNameLeft',
       right: 'figNameRight',
     };
 
-    key = positionMap[pos];
     setAnimationNames(key, sentence);
-    setFigureData();
+    postFigureStateSet();
     dispatch(setStage({ key: dispatchMap[pos], value: content }));
   }
 
