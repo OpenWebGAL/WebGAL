@@ -12,7 +12,7 @@ export function generateUniversalSoftOffAnimationObj(targetKey: string, duration
    */
   function setStartState() {
     elapsedTime = 0; // 重置计时器
-    if (target) {
+    if (target?.pixiContainer) {
       // 修正：不再强制设为1，而是记录当前的透明度
       startAlpha = target.pixiContainer.alpha;
     }
@@ -22,7 +22,7 @@ export function generateUniversalSoftOffAnimationObj(targetKey: string, duration
    * 在此书写为动画设置终态的操作
    */
   function setEndState() {
-    if (target) {
+    if (target?.pixiContainer) {
       // 终态是完全透明，这保持不变
       target.pixiContainer.alpha = 0;
     }
@@ -50,7 +50,7 @@ export function generateUniversalSoftOffAnimationObj(targetKey: string, duration
       // 在这里，目标值是 0，所以公式简化为：
       // alpha = startAlpha + (0 - startAlpha) * easedProgress
       // alpha = startAlpha * (1 - easedProgress)
-      targetContainer.alpha = startAlpha * (1 - easedProgress);
+      if (targetContainer) targetContainer.alpha = startAlpha * (1 - easedProgress);
     }
   }
 

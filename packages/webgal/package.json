@@ -1,6 +1,6 @@
 {
   "name": "webgal-engine",
-  "version": "4.5.15-1",
+  "version": "4.5.16",
   "scripts": {
     "dev": "vite --host --port 3000",
     "build": "cross-env NODE_ENV=production tsc && vite build --base=./",
@@ -12,7 +12,7 @@
     "@icon-park/react": "^1.4.2",
     "@reduxjs/toolkit": "^1.8.1",
     "angular-expressions": "^1.4.3",
-    "axios": "^0.28.0",
+    "axios": "^0.30.2",
     "cloudlogjs": "^1.0.9",
     "i18next": "^22.4.15",
     "localforage": "^1.10.0",
