@@ -46,8 +46,11 @@ export const setTransform = (sentence: ISentence): IPerform => {
   const animationDuration = getAnimateDuration(animationName);
 
   const key = `${target}-${animationName}-${animationDuration}`;
-  let stopFunction = () => {};
+  let keepAnimationStopped = false;
   setTimeout(() => {
+    if (keep && keepAnimationStopped) {
+      return;
+    }
     WebGAL.gameplay.pixiStage?.stopPresetAnimationOnTarget(target);
     const animationObj: IAnimationObject | null = getAnimationObject(
       animationName,
@@ -60,10 +63,13 @@ export const setTransform = (sentence: ISentence): IPerform => {
       WebGAL.gameplay.pixiStage?.registerAnimation(animationObj, key, target);
     }
   }, 0);
-  stopFunction = () => {
+  const stopFunction = () => {
+    if (keep) {
+      WebGAL.gameplay.pixiStage?.removeAnimationWithoutSetEndState(key);
+      keepAnimationStopped = true;
+      return;
+    }
     setTimeout(() => {
-      const endDialogKey = webgalStore.getState().stage.currentDialogKey;
-      const isHasNext = startDialogKey !== endDialogKey;
       WebGAL.gameplay.pixiStage?.removeAnimationWithSetEffects(key);
     }, 0);
   };

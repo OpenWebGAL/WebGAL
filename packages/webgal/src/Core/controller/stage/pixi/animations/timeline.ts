@@ -92,6 +92,9 @@ export function generateTimelineObj(
    * 在此书写为动画设置终态的操作
    */
   function setEndState() {
+    if (!container) {
+      return;
+    }
     if (animateInstance) animateInstance.stop();
     animateInstance = null;
     if (target?.pixiContainer) {
@@ -126,11 +129,17 @@ export function generateTimelineObj(
     return timeline[timeline.length - 1];
   }
 
+  function forceStopWithoutSetEndState() {
+    if (animateInstance) animateInstance.stop();
+    animateInstance = null;
+  }
+
   return {
     setStartState,
     setEndState,
     tickerFunc,
     getEndStateEffect,
+    forceStopWithoutSetEndState,
   };
 }
 
