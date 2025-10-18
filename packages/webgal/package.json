@@ -5,7 +5,8 @@
     "dev": "vite --host --port 3000",
     "build": "cross-env NODE_ENV=production tsc && vite build --base=./",
     "preview": "vite preview",
-    "lint": "eslint src/** --fix"
+    "lint": "eslint src/** --fix",
+    "prepublishOnly": "npm run build"
   },
   "dependencies": {
     "@emotion/css": "^11.11.2",
