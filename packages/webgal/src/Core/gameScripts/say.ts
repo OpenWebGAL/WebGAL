@@ -56,7 +56,7 @@ export const say = (sentence: ISentence): IPerform => {
   // 计算延迟
   const textDelay = useTextDelay(userDataState.optionData.textSpeed);
   // 本句延迟
-  const textNodes = compileSentence(sentence.content, 3);
+  const textNodes = compileSentence(sentence.content);
   const len = textNodes.reduce((prev, curr) => prev + curr.length, 0);
   const sentenceDelay = textDelay * len;
 
@@ -72,7 +72,7 @@ export const say = (sentence: ISentence): IPerform => {
       dispatch(setStage({ key: 'showTextSize', value: textSize.large }));
       break;
     default:
-      dispatch(setStage({ key: 'showTextSize', value: -1 }));
+      dispatch(setStage({ key: 'showTextSize', value: textSize.default }));
       break;
   }
 
@@ -137,7 +137,7 @@ export const say = (sentence: ISentence): IPerform => {
   }
 
   const performInitName: string = getRandomPerformName();
-  let endDelay = useTextAnimationDuration(userDataState.optionData.textSpeed) / 2;
+  let endDelay = useTextAnimationDuration(userDataState.optionData.textSpeed) - textDelay;
   // 如果有 notend 参数，那么就不需要等待
   if (isNotend) {
     endDelay = 0;
@@ -145,7 +145,7 @@ export const say = (sentence: ISentence): IPerform => {
 
   return {
     performName: performInitName,
-    duration: sentenceDelay + endDelay + performSimulateVocalDelay,
+    duration: Math.max(sentenceDelay + endDelay, performSimulateVocalDelay),
     isHoldOn: false,
     stopFunction: () => {
       WebGAL.events.textSettle.emit();

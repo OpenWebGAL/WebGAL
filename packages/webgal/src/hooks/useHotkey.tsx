@@ -9,11 +9,13 @@ import { componentsVisibility, MenuPanelTag } from '@/store/guiInterface';
 import { setVisibility } from '@/store/GUIReducer';
 import { RootState } from '@/store/store';
 import { setOptionData } from '@/store/userDataReducer';
-import styles from '@/UI/Backlog/backlog.module.scss';
+import styles from '@/Stage/Backlog/backlog.module.scss';
 import throttle from 'lodash/throttle';
 import { useCallback, useEffect, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import useFullScreen from './useFullScreen';
+import { setTime } from '~build/time';
+import { stopAuto } from '@/Core/controller/gamePlay/autoPlay';
 
 // options备用
 export interface HotKeyType {
@@ -123,6 +125,7 @@ export function useMouseWheel() {
     const ctrlKey = ev.ctrlKey;
     const dom = document.querySelector(`.${styles.backlog_content}`);
     if (isGameActive() && direction === 'up' && !ctrlKey) {
+      stopAll();
       setComponentVisibility('showBacklog', true);
       setComponentVisibility('showTextBox', false);
     } else if (isInBackLog() && direction === 'down' && !ctrlKey) {
@@ -138,6 +141,7 @@ export function useMouseWheel() {
       }
       // setComponentVisibility('showBacklog', false);
     } else if (isGameActive() && direction === 'down' && !ctrlKey) {
+      stopAuto();
       clearTimeout(wheelTimeout);
       WebGAL.gameplay.isFast = true;
       // 滚轮视作快进
@@ -198,17 +202,17 @@ export function useSkip() {
   const isCtrlKey = useCallback((e) => e.keyCode === 17, []);
   const handleCtrlKeydown = useCallback((e) => {
     if (isCtrlKey(e) && isGameActive()) {
+      stopAuto();
       startFast();
     }
   }, []);
   const handleCtrlKeyup = useCallback((e) => {
     if (isCtrlKey(e) && isGameActive()) {
-      stopFast();
+      stopAll();
     }
   }, []);
   const handleWindowBlur = useCallback((e) => {
-    // 停止快进
-    stopFast();
+    stopAll();
   }, []);
   // mounted时绑定事件
   useMounted(() => {
@@ -225,7 +229,7 @@ export function useSkip() {
   // updated时验证状态
   useUpdated(() => {
     if (!isGameActive()) {
-      stopFast();
+      stopAll();
     }
   });
 }
@@ -385,7 +389,14 @@ function useToggleFullScreen() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => e.repeat || (e.key === 'F11' && toggle());
+    const handleKeyDown = (e: KeyboardEvent) => {
+      switch (e.key) {
+        case 'F11':
+          e.preventDefault();
+          toggle();
+          break;
+      }
+    };
     document.addEventListener('keydown', handleKeyDown);
     return () => {
       document.removeEventListener('keydown', handleKeyDown);

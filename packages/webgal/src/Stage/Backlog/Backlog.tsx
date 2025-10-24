@@ -10,16 +10,18 @@ import useTrans from '@/hooks/useTrans';
 import { compileSentence, EnhancedNode } from '@/Stage/TextBox/TextBox';
 import useSoundEffect from '@/hooks/useSoundEffect';
 import { WebGAL } from '@/Core/WebGAL';
+import useApplyStyle from '@/hooks/useApplyStyle';
+import { useDelayedVisibility } from '@/hooks/useDelayedVisibility';
 
 export const Backlog = () => {
   const t = useTrans('gaming.');
   // logger.info('Backlog render');
   const { playSeEnter, playSeClick } = useSoundEffect();
   const GUIStore = useSelector((state: RootState) => state.GUI);
+  const userData = useSelector((state: RootState) => state.userData);
   const isBacklogOpen = GUIStore.showBacklog;
   const dispatch = useDispatch();
-  const iconSize = '0.8em';
-  const [indexHide, setIndexHide] = useState(false);
+  const applyStyle = useApplyStyle('UI/Backlog/backlog.scss');
   const [isDisableScroll, setIsDisableScroll] = useState(false);
   const [limit, setLimit] = useState(20);
   useEffect(() => {
@@ -53,7 +55,6 @@ export const Backlog = () => {
     }
   }, [isBacklogOpen]);
 
-  let timeRef = useRef<ReturnType<typeof setTimeout>>();
   // 缓存一下vdom
   const backlogList = useMemo<any>(() => {
     let backlogs = [];
@@ -62,7 +63,7 @@ export const Backlog = () => {
     for (let i = 0; i < Math.min(current_backlog_len, limit); i++) {
       const indexOfBacklog = current_backlog_len - i - 1;
       const backlogItem = WebGAL.backlogManager.getBacklog()[indexOfBacklog];
-      const showTextArray = compileSentence(backlogItem.currentStageState.showText, 3, true, false);
+      const showTextArray = compileSentence(backlogItem.currentStageState.showText, false);
       const showTextArray2 = showTextArray.map((line) => {
         return line.map((c) => {
           return c.reactNode;
@@ -71,7 +72,10 @@ export const Backlog = () => {
       const showTextArrayReduced = mergeStringsAndKeepObjects(showTextArray2);
       const showTextElementList = showTextArrayReduced.map((line, index) => {
         return (
-          <div key={`backlog-line-${index}`}>
+          <div
+            key={`backlog-line-${index}`}
+            className={applyStyle('backlog_item_content_text', styles.backlog_item_content_text)}
+          >
             {line.map((e, index) => {
               if (e === '<br />') {
                 return <br key={`br${index}`} />;
@@ -82,7 +86,7 @@ export const Backlog = () => {
           </div>
         );
       });
-      const showNameArray = compileSentence(backlogItem.currentStageState.showName, 3, true);
+      const showNameArray = compileSentence(backlogItem.currentStageState.showName);
       const showNameArray2 = showNameArray.map((line) => {
         return line.map((c) => {
           return c.reactNode;
@@ -91,7 +95,10 @@ export const Backlog = () => {
       const showNameArrayReduced = mergeStringsAndKeepObjects(showNameArray2);
       const nameElementList = showNameArrayReduced.map((line, index) => {
         return (
-          <div key={`backlog-line-${index}`}>
+          <div
+            key={`backlog-line-${index}`}
+            className={applyStyle('backlog_item_content_speaker', styles.backlog_item_content_speaker)}
+          >
             {line.map((e, index) => {
               if (e === '<br />') {
                 return <br key={`br${index}`} />;
@@ -104,52 +111,61 @@ export const Backlog = () => {
       });
       const singleBacklogView = (
         <div
-          className={styles.backlog_item}
+          className={applyStyle('styles.backlog_item', styles.backlog_item)}
           id={`backlog_item_${i}`}
-          style={{ animationDelay: `${20 * ((i - 1) % 20)}ms` }}
+          style={{ ['--backlog-item-index' as any]: `${i}` }}
           key={'backlogItem' + backlogItem.currentStageState.showText + backlogItem.saveScene.currentSentenceId}
         >
-          <div className={styles.backlog_func_area}>
-            <div className={styles.backlog_item_button_list}>
+          <div className={applyStyle('backlog_item_button_list', styles.backlog_item_button_list)}>
+            <div
+              onClick={(e) => {
+                playSeClick();
+                jumpFromBacklog(indexOfBacklog);
+                e.preventDefault();
+                e.stopPropagation();
+              }}
+              onMouseEnter={playSeEnter}
+              className={applyStyle('backlog_item_button', styles.backlog_item_button)}
+            >
+              <Return strokeWidth={4} />
+            </div>
+            {backlogItem.currentStageState.vocal ? (
               <div
-                onClick={(e) => {
+                onClick={() => {
                   playSeClick();
-                  jumpFromBacklog(indexOfBacklog);
-                  e.preventDefault();
-                  e.stopPropagation();
+                  // 获取到播放 backlog 语音的元素
+                  const backlog_audio_element: any = document.getElementById(
+                    'backlog_audio_play_element_' + indexOfBacklog,
+                  );
+                  if (backlog_audio_element) {
+                    backlog_audio_element.currentTime = 0;
+                    const userDataStore = webgalStore.getState().userData;
+                    const mainVol = userDataStore.optionData.volumeMain;
+                    backlog_audio_element.volume = mainVol * 0.01 * userDataStore.optionData.vocalVolume * 0.01;
+                    backlog_audio_element?.play();
+                  }
                 }}
                 onMouseEnter={playSeEnter}
-                className={styles.backlog_item_button_element}
+                className={applyStyle('backlog_item_button', styles.backlog_item_button)}
               >
-                <Return theme="outline" size={iconSize} fill="#ffffff" strokeWidth={3} />
+                <VolumeNotice strokeWidth={4} />
               </div>
-              {backlogItem.currentStageState.vocal ? (
-                <div
-                  onClick={() => {
-                    playSeClick();
-                    // 获取到播放 backlog 语音的元素
-                    const backlog_audio_element: any = document.getElementById(
-                      'backlog_audio_play_element_' + indexOfBacklog,
-                    );
-                    if (backlog_audio_element) {
-                      backlog_audio_element.currentTime = 0;
-                      const userDataStore = webgalStore.getState().userData;
-                      const mainVol = userDataStore.optionData.volumeMain;
-                      backlog_audio_element.volume = mainVol * 0.01 * userDataStore.optionData.vocalVolume * 0.01;
-                      backlog_audio_element?.play();
-                    }
-                  }}
-                  onMouseEnter={playSeEnter}
-                  className={styles.backlog_item_button_element}
-                >
-                  <VolumeNotice theme="outline" size={iconSize} fill="#ffffff" strokeWidth={3} />
-                </div>
-              ) : null}
-            </div>
-            <div className={styles.backlog_item_content_name}>{nameElementList}</div>
+            ) : null}
           </div>
-          <div className={styles.backlog_item_content}>
-            <span className={styles.backlog_item_content_text}>{showTextElementList}</span>
+          <div className={applyStyle('backlog_item_content', styles.backlog_item_content)}>
+            <div
+              className={applyStyle(
+                'backlog_item_content_speaker_container',
+                styles.backlog_item_content_speaker_container,
+              )}
+            >
+              {nameElementList}
+            </div>
+            <div
+              className={applyStyle('backlog_item_content_text_container', styles.backlog_item_content_text_container)}
+            >
+              {showTextElementList}
+            </div>
           </div>
           <audio id={'backlog_audio_play_element_' + indexOfBacklog} src={backlogItem.currentStageState.vocal} />
         </div>
@@ -162,49 +178,35 @@ export const Backlog = () => {
       0,
     limit,
   ]);
+
   useEffect(() => {
     /* 切换为展示历史记录时触发 */
+    // 清除延迟定时器
     if (GUIStore.showBacklog) {
-      // logger.info('展示backlog');
-      // 立即清除 防止来回滚动时可能导致的错乱
-      if (timeRef.current) {
-        clearTimeout(timeRef.current);
-      }
-      // setIsDisableScroll(false);
-      // 重新把index调回正数
-      setIndexHide(false);
       // 向上滑动触发回想时会带着backlog一起滑一下 我也不知道为什么，可能是我的鼠标问题 所以先ban掉滚动
       setIsDisableScroll(true);
       // nextTick开启滚动
       setTimeout(() => {
         setIsDisableScroll(false);
       }, 0);
-    } else {
-      /* 隐藏历史记录触发 */
-      // 这里是为了让backlog的z-index降低
-      timeRef.current = setTimeout(() => {
-        setIndexHide(true);
-        // setIsDisableScroll(false);
-        // setIsDisableScroll(true);
-        timeRef.current = undefined;
-        // 700是和动画一样的延时 保险起见多个80ms
-        // 不加也没啥 问题不大
-      }, 700 + 80);
     }
   }, [GUIStore.showBacklog]);
+
+  // 退场时延迟隐藏
+  const delayedShowBacklog = useDelayedVisibility(GUIStore.showBacklog);
+
   return (
     <>
-      {
-        // ${indexHide ? styles.Backlog_main_out_IndexHide : ''}
+      {delayedShowBacklog && (
         <div
-          className={`
-          ${GUIStore.showBacklog ? styles.Backlog_main : styles.Backlog_main_out}
-          ${indexHide ? styles.Backlog_main_out_IndexHide : ''}
-          `}
+          className={`${applyStyle('backlog_main', styles.backlog_main)} ${
+            GUIStore.showBacklog ? '' : applyStyle('backlog_main_hide', styles.backlog_main_hide)
+          }`}
+          style={{ ['--ui-transition-duration' as any]: `${userData.optionData.uiTransitionDuration}ms` }}
         >
-          <div className={styles.backlog_top}>
+          <div className={applyStyle('backlog_bar', styles.backlog_bar)}>
             <CloseSmall
-              className={styles.backlog_top_icon}
+              className={applyStyle('backlog_bar_close_button', styles.backlog_bar_close_button)}
               onClick={() => {
                 playSeClick();
                 dispatch(setVisibility({ component: 'showBacklog', visibility: false }));
@@ -212,26 +214,19 @@ export const Backlog = () => {
               }}
               onMouseEnter={playSeEnter}
               theme="outline"
-              size="4em"
-              fill="#ffffff"
               strokeWidth={3}
             />
-            <div
-              className={styles.backlog_title}
-              onClick={() => {
-                logger.info('Rua! Testing');
-              }}
-            >
-              {t('buttons.backlog')}
-            </div>
+            <div className={applyStyle('backlog_title', styles.backlog_title)}>{t('buttons.backlog')}</div>
           </div>
-          {GUIStore.showBacklog && (
-            <div className={`${styles.backlog_content} ${isDisableScroll ? styles.Backlog_main_DisableScroll : ''}`}>
-              {backlogList}
-            </div>
-          )}
+          <div
+            className={`${applyStyle('backlog_content', styles.backlog_content)} ${
+              isDisableScroll ? applyStyle('backlog_main_disable_scroll', styles.backlog_main_disable_scroll) : ''
+            }`}
+          >
+            {backlogList}
+          </div>
         </div>
-      }
+      )}
     </>
   );
 };

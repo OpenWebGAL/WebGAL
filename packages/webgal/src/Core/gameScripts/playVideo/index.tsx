@@ -2,11 +2,13 @@ import { ISentence } from '@/Core/controller/scene/sceneInterface';
 import { IPerform } from '@/Core/Modules/perform/performInterface';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import styles from '@/Stage/FullScreenPerform/fullScreenPerform.module.scss';
+import styles from './playVideo.module.scss';
 import { webgalStore } from '@/store/store';
 import { getRandomPerformName, PerformController } from '@/Core/Modules/perform/performController';
 import { getBooleanArgByKey } from '@/Core/util/getSentenceArg';
 import { WebGAL } from '@/Core/WebGAL';
+import useApplyStyle from '@/hooks/useApplyStyle';
+import { Provider } from 'react-redux';
 /**
  * 播放一段视频 * @param sentence
  */
@@ -19,11 +21,26 @@ export const playVideo = (sentence: ISentence): IPerform => {
 
   let blockingNextFlag = getBooleanArgByKey(sentence, 'skipOff') ?? false;
 
+  function PlayVideo() {
+    const applyStyle = useApplyStyle('Stage/PlayVideo/playVideo.scss');
+
+    return (
+      <div className={applyStyle('play_video_main', styles.play_video_main)}>
+        <video
+          className={applyStyle('play_video_player', styles.play_video_player)}
+          id="playVideoElement"
+          src={sentence.content}
+          autoPlay={true}
+        />
+      </div>
+    );
+  }
+
   // eslint-disable-next-line react/no-deprecated
   ReactDOM.render(
-    <div className={styles.videoContainer}>
-      <video className={styles.fullScreen_video} id="playVideoElement" src={sentence.content} autoPlay={true} />
-    </div>,
+    <Provider store={webgalStore}>
+      <PlayVideo />
+    </Provider>,
     document.getElementById('videoContainer'),
   );
   let isOver = false;

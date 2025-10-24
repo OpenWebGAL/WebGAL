@@ -4,26 +4,13 @@ import { webgalStore } from '@/store/store';
 import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
 
 import { WebGAL } from '@/Core/WebGAL';
-
-/**
- * 设置 autoplay 按钮的激活与否
- * @param on
- */
-const setButton = (on: boolean) => {
-  const autoIcon = document.getElementById('Button_ControlPanel_auto');
-  if (autoIcon) {
-    if (on) {
-      autoIcon.className = styles.button_on;
-    } else autoIcon.className = styles.singleButton;
-  }
-};
+import useApplyStyle from '@/hooks/useApplyStyle';
 
 /**
  * 停止自动播放
  */
 export const stopAuto = () => {
   WebGAL.gameplay.isAuto = false;
-  setButton(false);
   if (WebGAL.gameplay.autoInterval !== null) {
     clearInterval(WebGAL.gameplay.autoInterval);
     WebGAL.gameplay.autoInterval = null;
@@ -44,7 +31,6 @@ export const switchAuto = () => {
   } else {
     // 当前不在自动播放
     WebGAL.gameplay.isAuto = true;
-    setButton(true);
     WebGAL.gameplay.autoInterval = setInterval(autoPlay, 100);
   }
 };

@@ -1,82 +1,127 @@
-.MainStage_main {
+@import '../Core/util/constants.scss';
+
+.stage_main {
   width: 100%;
   height: 100%;
   position: absolute;
-  z-index: 1;
-  //animation: MainStage_showBgSoftly 100ms forwards;
-  opacity: 1;
+  display: flex;
   overflow: hidden;
+  align-items: center;
+  justify-content: center;
+  container-type: size;
 }
 
-.MainStage_main_container {
-  width: 100%;
-  height: 100%;
+.stage_pixi_container {
   position: absolute;
-  overflow: hidden;
+  display: flex;
+  flex-grow: 1;
+  min-width: 0;
+  min-height: 0;
 }
 
-.MainStage_bgContainer {
+.stage_choose_container {
+  position: absolute;
+  display: flex;
   top: 0;
-  position: absolute;
-  background-size: cover;
   width: 100%;
   height: 100%;
-  z-index: 1;
-  animation: MainStage_showBgSoftly 1s forwards ease-in-out;
+  pointer-events: none;
 }
 
-.MainStage_bgContainer_Settled {
+.stage_get_user_input_container {
+  position: absolute;
+  display: flex;
   top: 0;
-  position: absolute;
-  background-size: cover;
   width: 100%;
   height: 100%;
-  animation: MainStage_showBgSoftly 1ms forwards;
-  z-index: 1;
+  pointer-events: none;
 }
 
-.MainStage_oldBgContainer {
-  background-size: cover;
+.stage_video_container {
+  position: absolute;
+  display: flex;
   top: 0;
-  position: absolute;
   width: 100%;
   height: 100%;
-  z-index: 0;
-  animation: MainStage_oldBgFadeout 3s forwards;
+  pointer-events: none;
 }
 
-.MainStage_oldBgContainer_Settled {
-  background-size: cover;
+.stage_intro_container {
+  position: absolute;
   top: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.stage_full_screen_click {
   position: absolute;
   width: 100%;
   height: 100%;
-  opacity: 0;
+  top: 0;
+  pointer-events: all;
 }
 
-@keyframes MainStage_showBgSoftly {
-  0% {
-    opacity: 0.15;
-  }
-  100% {
-    opacity: 1;
-  }
-}
+// .MainStage_main_container {
+//   width: 100%;
+//   height: 100%;
+//   position: absolute;
+//   overflow: hidden;
+// }
 
-@keyframes MainStage_oldBgFadeout {
-  0% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
-  }
-}
+// .MainStage_bgContainer {
+//   top: 0;
+//   position: absolute;
+//   background-size: cover;
+//   width: 100%;
+//   height: 100%;
+//   z-index: 1;
+//   animation: MainStage_showBgSoftly 1s forwards ease-in-out;
+// }
 
-.pixiContainer{
-  position: absolute;
-  z-index: 5;
-}
+// .MainStage_bgContainer_Settled {
+//   top: 0;
+//   position: absolute;
+//   background-size: cover;
+//   width: 100%;
+//   height: 100%;
+//   animation: MainStage_showBgSoftly 1ms forwards;
+//   z-index: 1;
+// }
 
-.chooseContainer{
-  z-index: 8;
-}
+// .MainStage_oldBgContainer {
+//   background-size: cover;
+//   top: 0;
+//   position: absolute;
+//   width: 100%;
+//   height: 100%;
+//   z-index: 0;
+//   animation: MainStage_oldBgFadeout 3s forwards;
+// }
+
+// .MainStage_oldBgContainer_Settled {
+//   background-size: cover;
+//   top: 0;
+//   position: absolute;
+//   width: 100%;
+//   height: 100%;
+//   opacity: 0;
+// }
+
+// @keyframes MainStage_showBgSoftly {
+//   0% {
+//     opacity: 0.15;
+//   }
+//   100% {
+//     opacity: 1;
+//   }
+// }
+
+// @keyframes MainStage_oldBgFadeout {
+//   0% {
+//     opacity: 1;
+//   }
+//   100% {
+//     opacity: 0;
+//   }
+// }

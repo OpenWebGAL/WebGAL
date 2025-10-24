@@ -13,7 +13,6 @@ export default function StandardTextbox(props: ITextboxProps) {
     isText,
     isSafari,
     isFirefox,
-    fontSize,
     miniAvatar,
     isHasName,
     showName,
@@ -140,13 +139,11 @@ export default function StandardTextbox(props: ITextboxProps) {
           <div
             className={styles.text}
             style={{
-              fontSize,
               wordBreak: isSafari || isFirefox ? 'break-all' : undefined,
               display: isSafari ? 'flex' : undefined,
               flexWrap: isSafari ? 'wrap' : undefined,
               overflow: 'hidden',
               paddingLeft: '0.1em',
-              WebkitLineClamp: props.lineLimit,
             }}
           >
             {textElementList}

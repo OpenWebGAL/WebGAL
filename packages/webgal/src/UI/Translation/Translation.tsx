@@ -1,14 +1,17 @@
 import useLanguage from '@/hooks/useLanguage';
 import { useEffect, useState } from 'react';
-import s from './translation.module.scss';
+import styles from './translation.module.scss';
 import languages, { language } from '@/config/language';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
+import useApplyStyle from '@/hooks/useApplyStyle';
+import { useDelayedVisibility } from '@/hooks/useDelayedVisibility';
 
 export default function Translation() {
   const setLanguage = useLanguage();
 
   const [isShowSelectLanguage, setIsShowSelectLanguage] = useState(false);
+  const delayedIsShowSelectLanguage = useDelayedVisibility(isShowSelectLanguage);
   const globalVar = useSelector((state: RootState) => state.userData.globalGameVar);
   const defaultLang = globalVar['Default_Language'] ?? '';
 
@@ -16,6 +19,8 @@ export default function Translation() {
     setIsShowSelectLanguage(false);
     setLanguage(langId);
   };
+
+  const applyStyle = useApplyStyle('UI/Translation/translation.scss');
 
   useEffect(() => {
     const lang = window?.localStorage.getItem('lang');
@@ -53,21 +58,22 @@ export default function Translation() {
 
   return (
     <>
-      {isShowSelectLanguage && (
-        <div className={s.trans}>
-          <div className={s.langWrapper}>
-            <div className={s.lang}>LANGUAGE SELECT</div>
-            <div className={s.langSelect}>
-              {Object.keys(languages).map((key) => (
-                <div
-                  key={key}
-                  className={s.langSelectButton}
-                  onClick={() => setLang(language[key as unknown as language] as unknown as language)}
-                >
-                  {languages[key]}
-                </div>
-              ))}
-            </div>
+      {delayedIsShowSelectLanguage && (
+        <div
+          className={`${applyStyle('translation_main', styles.translation_main)} ${
+            isShowSelectLanguage ? '' : applyStyle('translation_main_hide', styles.translation_main_hide)
+          }`}
+        >
+          <div className={applyStyle('translation_button_list', styles.translation_button_list)}>
+            {Object.keys(languages).map((key) => (
+              <div
+                key={key}
+                className={applyStyle('translation_button', styles.translation_button)}
+                onClick={() => setLang(language[key as unknown as language] as unknown as language)}
+              >
+                {languages[key]}
+              </div>
+            ))}
           </div>
         </div>
       )}

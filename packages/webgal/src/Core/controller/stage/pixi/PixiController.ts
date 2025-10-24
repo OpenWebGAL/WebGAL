@@ -6,7 +6,6 @@ import { baseBlinkParam, baseFocusParam, BlinkParam, FocusParam } from '@/Core/l
 import { isIOS } from '@/Core/initializeScript';
 import { WebGALPixiContainer } from '@/Core/controller/stage/pixi/WebGALPixiContainer';
 import { addSpineBgImpl, addSpineFigureImpl } from '@/Core/controller/stage/pixi/spine';
-import { SCREEN_CONSTANTS } from '@/Core/util/constants';
 import { logger } from '@/Core/util/logger';
 import { v4 as uuid } from 'uuid';
 import { cloneDeep, isEqual } from 'lodash';
@@ -85,8 +84,6 @@ export default class PixiStage {
   public notUpdateBacklogEffects = false;
   public readonly figureContainer: PIXI.Container;
   public figureObjects: Array<IStageObject> = [];
-  public stageWidth = SCREEN_CONSTANTS.width;
-  public stageHeight = SCREEN_CONSTANTS.height;
   public assetLoader = new PIXI.Loader();
   public readonly backgroundContainer: PIXI.Container;
   public backgroundObjects: Array<IStageObject> = [];
@@ -127,18 +124,28 @@ export default class PixiStage {
     if (pixiContainer) {
       pixiContainer.innerHTML = '';
       pixiContainer.appendChild(app.view);
+      // 尺寸适配
+      const fitStage = () => {
+        if (window.innerWidth / window.innerHeight < WebGAL.stageWidth / WebGAL.stageHeight) {
+          pixiContainer.style.width = '100%';
+          pixiContainer.style.height = 'auto';
+        } else {
+          pixiContainer.style.width = 'auto';
+          pixiContainer.style.height = '100%';
+        }
+      };
+      pixiContainer.style.aspectRatio = (WebGAL.stageWidth / WebGAL.stageHeight).toString();
+      fitStage();
+      window.addEventListener('resize', () => {
+        fitStage();
+      });
     }
 
     // 设置样式
-    app.renderer.view.style.position = 'absolute';
-    app.renderer.view.style.display = 'block';
     app.renderer.view.id = 'pixiCanvas';
     // @ts-ignore
     app.renderer.autoResize = true;
-    const appRoot = document.getElementById('root');
-    if (appRoot) {
-      app.renderer.resize(appRoot.clientWidth, appRoot.clientHeight);
-    }
+    app.renderer.resize(WebGAL.stageWidth, WebGAL.stageHeight);
     if (isIOS) {
       app.renderer.view.style.zIndex = '-5';
     }
@@ -147,9 +154,9 @@ export default class PixiStage {
     this.mainStageContainer = new WebGALPixiContainer();
     // 设置可排序
     this.mainStageContainer.sortableChildren = true;
-    this.mainStageContainer.setBaseX(this.stageWidth / 2);
-    this.mainStageContainer.setBaseY(this.stageHeight / 2);
-    this.mainStageContainer.pivot.set(this.stageWidth / 2, this.stageHeight / 2);
+    this.mainStageContainer.setBaseX(WebGAL.stageWidth / 2);
+    this.mainStageContainer.setBaseY(WebGAL.stageHeight / 2);
+    this.mainStageContainer.pivot.set(WebGAL.stageWidth / 2, WebGAL.stageHeight / 2);
     app.stage.addChild(this.mainStageContainer);
 
     this.mainStageObject = {
@@ -418,17 +425,17 @@ export default class PixiStage {
            */
           const originalWidth = texture.width;
           const originalHeight = texture.height;
-          const scaleX = this.stageWidth / originalWidth;
-          const scaleY = this.stageHeight / originalHeight;
+          const scaleX = WebGAL.stageWidth / originalWidth;
+          const scaleY = WebGAL.stageHeight / originalHeight;
           const targetScale = Math.max(scaleX, scaleY);
           const bgSprite = new PIXI.Sprite(texture);
           bgSprite.scale.x = targetScale;
           bgSprite.scale.y = targetScale;
           bgSprite.anchor.set(0.5);
-          bgSprite.position.y = this.stageHeight / 2;
-          thisBgContainer.setBaseX(this.stageWidth / 2);
-          thisBgContainer.setBaseY(this.stageHeight / 2);
-          thisBgContainer.pivot.set(0, this.stageHeight / 2);
+          bgSprite.position.y = WebGAL.stageHeight / 2;
+          thisBgContainer.setBaseX(WebGAL.stageWidth / 2);
+          thisBgContainer.setBaseY(WebGAL.stageHeight / 2);
+          thisBgContainer.pivot.set(0, WebGAL.stageHeight / 2);
 
           // 挂载
           thisBgContainer.addChild(bgSprite);
@@ -503,17 +510,17 @@ export default class PixiStage {
           texture.baseTexture.resource.load().then(() => {
             const originalWidth = videoResource.source.videoWidth;
             const originalHeight = videoResource.source.videoHeight;
-            const scaleX = this.stageWidth / originalWidth;
-            const scaleY = this.stageHeight / originalHeight;
+            const scaleX = WebGAL.stageWidth / originalWidth;
+            const scaleY = WebGAL.stageHeight / originalHeight;
             const targetScale = Math.max(scaleX, scaleY);
             const bgSprite = new PIXI.Sprite(texture);
             bgSprite.scale.x = targetScale;
             bgSprite.scale.y = targetScale;
             bgSprite.anchor.set(0.5);
-            bgSprite.position.y = this.stageHeight / 2;
-            thisBgContainer.setBaseX(this.stageWidth / 2);
-            thisBgContainer.setBaseY(this.stageHeight / 2);
-            thisBgContainer.pivot.set(0, this.stageHeight / 2);
+            bgSprite.position.y = WebGAL.stageHeight / 2;
+            thisBgContainer.setBaseX(WebGAL.stageWidth / 2);
+            thisBgContainer.setBaseY(WebGAL.stageHeight / 2);
+            thisBgContainer.pivot.set(0, WebGAL.stageHeight / 2);
             thisBgContainer.addChild(bgSprite);
           });
         }
@@ -581,30 +588,30 @@ export default class PixiStage {
            */
           const originalWidth = texture.width;
           const originalHeight = texture.height;
-          const scaleX = this.stageWidth / originalWidth;
-          const scaleY = this.stageHeight / originalHeight;
+          const scaleX = WebGAL.stageWidth / originalWidth;
+          const scaleY = WebGAL.stageHeight / originalHeight;
           const targetScale = Math.min(scaleX, scaleY);
           const figureSprite = new PIXI.Sprite(texture);
           figureSprite.scale.x = targetScale;
           figureSprite.scale.y = targetScale;
           figureSprite.anchor.set(0.5);
-          figureSprite.position.y = this.stageHeight / 2;
+          figureSprite.position.y = WebGAL.stageHeight / 2;
           const targetWidth = originalWidth * targetScale;
           const targetHeight = originalHeight * targetScale;
-          thisFigureContainer.setBaseY(this.stageHeight / 2);
-          if (targetHeight < this.stageHeight) {
-            thisFigureContainer.setBaseY(this.stageHeight / 2 + (this.stageHeight - targetHeight) / 2);
+          thisFigureContainer.setBaseY(WebGAL.stageHeight / 2);
+          if (targetHeight < WebGAL.stageHeight) {
+            thisFigureContainer.setBaseY(WebGAL.stageHeight / 2 + (WebGAL.stageHeight - targetHeight) / 2);
           }
           if (presetPosition === 'center') {
-            thisFigureContainer.setBaseX(this.stageWidth / 2);
+            thisFigureContainer.setBaseX(WebGAL.stageWidth / 2);
           }
           if (presetPosition === 'left') {
             thisFigureContainer.setBaseX(targetWidth / 2);
           }
           if (presetPosition === 'right') {
-            thisFigureContainer.setBaseX(this.stageWidth - targetWidth / 2);
+            thisFigureContainer.setBaseX(WebGAL.stageWidth - targetWidth / 2);
           }
-          thisFigureContainer.pivot.set(0, this.stageHeight / 2);
+          thisFigureContainer.pivot.set(0, WebGAL.stageHeight / 2);
           thisFigureContainer.addChild(figureSprite);
         }
       }, 0);
@@ -630,8 +637,8 @@ export default class PixiStage {
   public addLive2dFigure(key: string, jsonPath: string, pos: string) {
     if (Live2D.isAvailable !== true) return;
     try {
-      let stageWidth = this.stageWidth;
-      let stageHeight = this.stageHeight;
+      let stageWidth = WebGAL.stageWidth;
+      let stageHeight = WebGAL.stageHeight;
 
       this.figureCash.push(jsonPath);
 

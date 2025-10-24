@@ -3,9 +3,9 @@ import { IPerform } from '@/Core/Modules/perform/performInterface';
 import { changeScene } from '@/Core/controller/scene/changeScene';
 import { jmp } from '@/Core/gameScripts/label/jmp';
 import ReactDOM from 'react-dom';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './choose.module.scss';
-import { webgalStore } from '@/store/store';
+import { RootState, webgalStore } from '@/store/store';
 import { textFont } from '@/store/userDataInterface';
 import { PerformController } from '@/Core/Modules/perform/performController';
 import { useSEByWebgalStore } from '@/hooks/useSoundEffect';
@@ -13,7 +13,7 @@ import { WebGAL } from '@/Core/WebGAL';
 import { whenChecker } from '@/Core/controller/gamePlay/scriptExecutor';
 import useEscape from '@/hooks/useEscape';
 import useApplyStyle from '@/hooks/useApplyStyle';
-import { Provider } from 'react-redux';
+import { Provider, useSelector } from 'react-redux';
 
 class ChooseOption {
   /**
@@ -51,6 +51,9 @@ class ChooseOption {
   }
 }
 
+// eslint-disable-next-line no-undef
+let hideChooseTimeout: NodeJS.Timeout | null = null;
+
 /**
  * 显示选择枝
  * @param sentence
@@ -59,6 +62,12 @@ export const choose = (sentence: ISentence): IPerform => {
   const chooseOptionScripts = sentence.content.split(/(?<!\\)\|/);
   const chooseOptions = chooseOptionScripts.map((e) => ChooseOption.parse(e.trim()));
 
+  // 清除上一句的隐藏 choose timeout
+  if (hideChooseTimeout) {
+    clearTimeout(hideChooseTimeout);
+    hideChooseTimeout = null;
+  }
+
   // eslint-disable-next-line react/no-deprecated
   ReactDOM.render(
     <Provider store={webgalStore}>
@@ -66,13 +75,21 @@ export const choose = (sentence: ISentence): IPerform => {
     </Provider>,
     document.getElementById('chooseContainer'),
   );
+
+  window.dispatchEvent(new CustomEvent<boolean>('show-choose', { detail: true }));
+
   return {
     performName: 'choose',
     duration: 1000 * 60 * 60 * 24,
     isHoldOn: false,
     stopFunction: () => {
-      // eslint-disable-next-line react/no-deprecated
-      ReactDOM.render(<div />, document.getElementById('chooseContainer'));
+      // 延迟退场
+      window.dispatchEvent(new CustomEvent<boolean>('show-choose', { detail: false }));
+      const uiTransitionDuration = webgalStore.getState().userData.optionData.uiTransitionDuration;
+      hideChooseTimeout = setTimeout(() => {
+        // eslint-disable-next-line react/no-deprecated
+        ReactDOM.render(<div />, document.getElementById('chooseContainer'));
+      }, uiTransitionDuration);
     },
     blockingNext: () => true,
     blockingAuto: () => true,
@@ -81,19 +98,29 @@ export const choose = (sentence: ISentence): IPerform => {
 };
 
 function Choose(props: { chooseOptions: ChooseOption[] }) {
-  const fontFamily = webgalStore.getState().userData.optionData.textboxFont;
-  const font = fontFamily === textFont.song ? '"思源宋体", serif' : '"WebgalUI", serif';
   const { playSeEnter, playSeClick } = useSEByWebgalStore();
   const applyStyle = useApplyStyle('Stage/Choose/choose.scss');
+  const optionData = useSelector((state: RootState) => state.userData.optionData);
+  const [show, setShow] = useState(true);
+  useEffect(() => {
+    const handler = (event: Event) => {
+      const customEvent = event as CustomEvent<boolean>;
+      setShow(customEvent.detail);
+    };
+    window.addEventListener('show-choose', handler);
+    return () => window.removeEventListener('show-choose', handler);
+  }, []);
+
   // 运行时计算JSX.Element[]
   const runtimeBuildList = (chooseListFull: ChooseOption[]) => {
     return chooseListFull
       .filter((e, i) => whenChecker(e.showCondition))
       .map((e, i) => {
         const enable = whenChecker(e.enableCondition);
-        const className = enable
-          ? applyStyle('Choose_item', styles.Choose_item)
-          : applyStyle('Choose_item_disabled', styles.Choose_item_disabled);
+        const className =
+          applyStyle('choose_button', styles.choose_button) +
+          ' ' +
+          (enable ? '' : applyStyle('choose_button_disabled', styles.choose_button_disabled));
         const onClick = enable
           ? () => {
               playSeClick();
@@ -106,14 +133,27 @@ function Choose(props: { chooseOptions: ChooseOption[] }) {
             }
           : () => {};
         return (
-          <div className={applyStyle('Choose_item_outer', styles.Choose_item_outer)} key={e.jump + i}>
-            <div className={className} style={{ fontFamily: font }} onClick={onClick} onMouseEnter={playSeEnter}>
-              {e.text}
-            </div>
+          <div className={className} onClick={onClick} onMouseEnter={playSeEnter} key={e.jump + i}>
+            {e.text}
           </div>
         );
       });
   };
 
-  return <div className={applyStyle('Choose_Main', styles.Choose_Main)}>{runtimeBuildList(props.chooseOptions)}</div>;
+  return (
+    <div
+      className={`${applyStyle('choose_main', styles.choose_main)} ${
+        show ? '' : applyStyle('choose_main_hide', styles.choose_main_hide)
+      }`}
+      style={{ ['--ui-transition-duration' as any]: `${optionData.uiTransitionDuration}ms` }}
+      onWheel={(e) => {
+        // 防止触发 useWheel
+        e.stopPropagation();
+      }}
+    >
+      <div className={`${applyStyle('choose_button_list', styles.choose_button_list)}`}>
+        {runtimeBuildList(props.chooseOptions)}
+      </div>
+    </div>
+  );
 }
