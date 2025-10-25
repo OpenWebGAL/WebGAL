@@ -1,4 +1,4 @@
-import { startFast, stopAll, stopFast } from '@/Core/controller/gamePlay/fastSkip';
+import { setFastButton, startFast, stopAll, stopFast } from '@/Core/controller/gamePlay/fastSkip';
 import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
 import { fastSaveGame } from '@/Core/controller/storage/fastSaveLoad';
 import { setStorage } from '@/Core/controller/storage/storageController';
@@ -10,7 +10,6 @@ import { setVisibility } from '@/store/GUIReducer';
 import { RootState } from '@/store/store';
 import { setOptionData } from '@/store/userDataReducer';
 import styles from '@/UI/Backlog/backlog.module.scss';
-import bottomControlPanelStyles from '@/UI/BottomControlPanel/bottomControlPanel.module.scss';
 import throttle from 'lodash/throttle';
 import { useCallback, useEffect, useRef } from 'react';
 import { useDispatch } from 'react-redux';
@@ -141,17 +140,13 @@ export function useMouseWheel() {
     } else if (isGameActive() && direction === 'down' && !ctrlKey) {
       clearTimeout(wheelTimeout);
       // 已开启快进模式
-      if (WebGAL.gameplay.fastInterval !== null) {
-        clearInterval(WebGAL.gameplay.fastInterval);
-        WebGAL.gameplay.fastInterval = null;
-      }
-      const autoIcon = document.getElementById('Button_ControlPanel_fast');
+      if (WebGAL.gameplay.isFast) stopFast();
       WebGAL.gameplay.isFast = true;
       // 滚轮视作快进
-      if (autoIcon) autoIcon.className = bottomControlPanelStyles.button_on;
+      setFastButton(true);
       setTimeout(() => {
         WebGAL.gameplay.isFast = false;
-        if (autoIcon) autoIcon.className = bottomControlPanelStyles.singleButton;
+        setFastButton(false);
       }, 150);
       next();
     }
