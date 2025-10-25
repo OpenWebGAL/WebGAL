@@ -9,6 +9,8 @@ import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
 import { resetStage } from '@/Core/controller/stage/resetStage';
 import { logger } from '@/Core/util/logger';
 import { syncWithOrigine } from './syncWithOrigine';
+import { stageActions } from '@/store/stageReducer';
+import { baseTransform, IEffect } from '@/store/stageInterface';
 
 export const webSocketFunc = () => {
   const loc: string = window.location.hostname;
@@ -100,6 +102,29 @@ export const webSocketFunc = () => {
     if (message.command === DebugCommand.FONT_OPTIMIZATION) {
       const command = message.message;
       webgalStore.dispatch(setFontOptimization(command === 'true'));
+    }
+    if (message.command === DebugCommand.SET_EFFECT) {
+      try {
+        const effect = JSON.parse(message.message) as IEffect;
+        const targetEffect = webgalStore.getState().stage.effects.find((e) => e.target === effect.target);
+        const targetTransform = targetEffect?.transform ? targetEffect.transform : baseTransform;
+        const newTransform = {
+          ...targetTransform,
+          ...(effect.transform ?? {}),
+          position: {
+            ...targetTransform.position,
+            ...(effect.transform?.position ?? {}),
+          },
+          scale: {
+            ...targetTransform.scale,
+            ...(effect.transform?.scale ?? {}),
+          },
+        };
+        webgalStore.dispatch(stageActions.updateEffect({ target: effect.target, transform: newTransform }));
+      } catch (e) {
+        logger.error(`无法设置效果 ${message.message}, ${e}`);
+        return;
+      }
     }
   };
   socket.onerror = () => {

@@ -17,6 +17,8 @@ export enum DebugCommand {
   TEMP_SCENE,
   // 字体优化
   FONT_OPTIMIZATION,
+  // 直接设置效果
+  SET_EFFECT,
 }
 
 export interface IDebugMessage {
