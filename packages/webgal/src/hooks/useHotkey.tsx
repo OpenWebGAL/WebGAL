@@ -1,4 +1,4 @@
-import { startFast, stopAll, stopFast } from '@/Core/controller/gamePlay/fastSkip';
+import { setFastButton, startFast, stopAll, stopFast } from '@/Core/controller/gamePlay/fastSkip';
 import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
 import { fastSaveGame } from '@/Core/controller/storage/fastSaveLoad';
 import { setStorage } from '@/Core/controller/storage/storageController';
@@ -139,10 +139,14 @@ export function useMouseWheel() {
       // setComponentVisibility('showBacklog', false);
     } else if (isGameActive() && direction === 'down' && !ctrlKey) {
       clearTimeout(wheelTimeout);
+      // 已开启快进模式
+      if (WebGAL.gameplay.isFast) stopFast();
       WebGAL.gameplay.isFast = true;
       // 滚轮视作快进
+      setFastButton(true);
       setTimeout(() => {
         WebGAL.gameplay.isFast = false;
+        setFastButton(false);
       }, 150);
       next();
     }
