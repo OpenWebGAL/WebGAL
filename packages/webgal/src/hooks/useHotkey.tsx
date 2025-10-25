@@ -10,6 +10,7 @@ import { setVisibility } from '@/store/GUIReducer';
 import { RootState } from '@/store/store';
 import { setOptionData } from '@/store/userDataReducer';
 import styles from '@/UI/Backlog/backlog.module.scss';
+import bottomControlPanelStyles from '@/UI/BottomControlPanel/bottomControlPanel.module.scss';
 import throttle from 'lodash/throttle';
 import { useCallback, useEffect, useRef } from 'react';
 import { useDispatch } from 'react-redux';
@@ -139,10 +140,18 @@ export function useMouseWheel() {
       // setComponentVisibility('showBacklog', false);
     } else if (isGameActive() && direction === 'down' && !ctrlKey) {
       clearTimeout(wheelTimeout);
+      // 已开启快进模式
+      if (WebGAL.gameplay.fastInterval !== null) {
+        clearInterval(WebGAL.gameplay.fastInterval);
+        WebGAL.gameplay.fastInterval = null;
+      }
+      const autoIcon = document.getElementById('Button_ControlPanel_fast');
       WebGAL.gameplay.isFast = true;
       // 滚轮视作快进
+      if (autoIcon) autoIcon.className = bottomControlPanelStyles.button_on;
       setTimeout(() => {
         WebGAL.gameplay.isFast = false;
+        if (autoIcon) autoIcon.className = bottomControlPanelStyles.singleButton;
       }, 150);
       next();
     }
