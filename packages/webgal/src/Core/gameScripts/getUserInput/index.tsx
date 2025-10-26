@@ -6,13 +6,13 @@ import ReactDOM from 'react-dom';
 import React from 'react';
 import styles from './getUserInput.module.scss';
 import { webgalStore } from '@/store/store';
-import { textFont } from '@/store/userDataInterface';
 import { PerformController } from '@/Core/Modules/perform/performController';
 import { useSEByWebgalStore } from '@/hooks/useSoundEffect';
 import { WebGAL } from '@/Core/WebGAL';
 import { getStringArgByKey } from '@/Core/util/getSentenceArg';
 import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
 import { setStageVar } from '@/store/stageReducer';
+import { getCurrentFontFamily } from '@/hooks/useFontFamily';
 
 /**
  * 显示选择枝
@@ -27,8 +27,7 @@ export const getUserInput = (sentence: ISentence): IPerform => {
   buttonText = buttonText === '' ? 'OK' : buttonText;
   const defaultValue = getStringArgByKey(sentence, 'defaultValue');
 
-  const fontFamily = webgalStore.getState().userData.optionData.textboxFont;
-  const font = fontFamily === textFont.song ? '"思源宋体", serif' : '"WebgalUI", serif';
+  const font = getCurrentFontFamily();
 
   const { playSeEnter, playSeClick } = useSEByWebgalStore();
   const chooseElements = (

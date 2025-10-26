@@ -1,5 +1,3 @@
-import { IWebGalTextBoxTheme } from '@/Stage/themeInterface';
-
 /**
  * 当前Menu页面显示的Tag
  */
@@ -13,6 +11,7 @@ export enum MenuPanelTag {
  * @interface IGuiState GUI状态接口
  */
 export interface IGuiState {
+  fontOptions: FontOption[];
   showStarter: boolean; // 是否显示初始界面（用于使得bgm可以播放)
   showTitle: boolean; // 是否显示标题界面
   showMenuPanel: boolean; // 是否显示Menu界面
@@ -35,7 +34,7 @@ export interface IGuiState {
 
 export type componentsVisibility = Pick<
   IGuiState,
-  Exclude<keyof IGuiState, 'currentMenuTag' | 'titleBg' | 'titleBgm' | 'logoImage' | 'theme'>
+  Exclude<keyof IGuiState, 'currentMenuTag' | 'titleBg' | 'titleBgm' | 'logoImage' | 'theme' | 'fontOptions'>
 >;
 // 标题资源
 export type GuiAsset = Pick<IGuiState, 'titleBgm' | 'titleBg'>;
@@ -58,3 +57,12 @@ export interface setAssetPayload {
 }
 
 export type GuiStore = IGuiStore;
+
+export type FontOptionSource = 'default' | 'template';
+
+export interface FontOption {
+  family: string;
+  source: FontOptionSource;
+  labelKey?: string;
+  label?: string;
+}

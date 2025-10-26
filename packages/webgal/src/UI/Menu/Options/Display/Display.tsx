@@ -6,7 +6,7 @@ import styles from '@/UI/Menu/Options/options.module.scss';
 import useFullScreen from '@/hooks/useFullScreen';
 import useTrans from '@/hooks/useTrans';
 import { RootState } from '@/store/store';
-import { textFont, textSize } from '@/store/userDataInterface';
+import { textSize } from '@/store/userDataInterface';
 import { setOptionData } from '@/store/userDataReducer';
 import { useDispatch, useSelector } from 'react-redux';
 import { OptionSlider } from '../OptionSlider';
@@ -16,6 +16,15 @@ export function Display() {
   const dispatch = useDispatch();
   const t = useTrans('menu.options.pages.display.options.');
   const { isSupported: isFullscreenSupported, enter: enterFullscreen, exit: exitFullscreen } = useFullScreen();
+  const fontOptions = useSelector((state: RootState) => state.GUI.fontOptions);
+  const fontOptionTexts = fontOptions.map((option) => {
+    if (option.labelKey) return t(option.labelKey);
+    if (option.label) return option.label;
+    return option.family;
+  });
+  const currentFontIndex = fontOptions.length
+    ? Math.min(userDataState.optionData.textboxFont, fontOptions.length - 1)
+    : 0;
 
   return (
     <div className={styles.Options_main_content_half}>
@@ -50,22 +59,12 @@ export function Display() {
       </NormalOption>
       <NormalOption key="textFont" title={t('textFont.title')}>
         <NormalButton
-          textList={t('textFont.options.siYuanSimSun', 'textFont.options.SimHei', 'textFont.options.lxgw')}
-          functionList={[
-            () => {
-              dispatch(setOptionData({ key: 'textboxFont', value: textFont.song }));
-              setStorage();
-            },
-            () => {
-              dispatch(setOptionData({ key: 'textboxFont', value: textFont.hei }));
-              setStorage();
-            },
-            () => {
-              dispatch(setOptionData({ key: 'textboxFont', value: textFont.lxgw }));
-              setStorage();
-            },
-          ]}
-          currentChecked={userDataState.optionData.textboxFont}
+          textList={fontOptionTexts}
+          functionList={fontOptions.map((_, index) => () => {
+            dispatch(setOptionData({ key: 'textboxFont', value: index }));
+            setStorage();
+          })}
+          currentChecked={currentFontIndex}
         />
       </NormalOption>
       <NormalOption key="textSpeed" title={t('textSpeed.title')}>

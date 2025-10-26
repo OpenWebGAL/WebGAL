@@ -2,6 +2,10 @@ import axios from 'axios';
 import { logger } from '@/Core/util/logger';
 import { WebGAL } from '@/Core/WebGAL';
 import { TemplateFontDescriptor, WebgalTemplate } from '@/types/template';
+import { buildFontOptionsFromTemplate } from '@/Core/util/fonts/fontOptions';
+import { webgalStore } from '@/store/store';
+import { setFontOptions } from '@/store/GUIReducer';
+import { setOptionData } from '@/store/userDataReducer';
 
 const TEMPLATE_PATH = './game/template/template.json';
 const TEMPLATE_FONT_STYLE_SELECTOR = 'style[data-webgal-template-fonts]';
@@ -10,11 +14,24 @@ export async function loadTemplate(): Promise<WebgalTemplate | null> {
   try {
     const { data } = await axios.get<WebgalTemplate>(TEMPLATE_PATH);
     WebGAL.template = data;
-    injectTemplateFonts(data.fonts ?? []);
+    const fonts = data.fonts ?? [];
+    injectTemplateFonts(fonts);
+    updateFontOptions(fonts);
     return data;
   } catch (error) {
     logger.warn('加载模板文件失败', error);
+    updateFontOptions([]);
     return null;
+  }
+}
+
+function updateFontOptions(fonts: TemplateFontDescriptor[]): void {
+  const options = buildFontOptionsFromTemplate(fonts);
+  webgalStore.dispatch(setFontOptions(options));
+  const currentIndex = webgalStore.getState().userData.optionData.textboxFont ?? 0;
+  if (options.length === 0) return;
+  if (currentIndex >= options.length) {
+    webgalStore.dispatch(setOptionData({ key: 'textboxFont', value: 0 }));
   }
 }
 
