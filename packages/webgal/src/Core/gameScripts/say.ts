@@ -26,6 +26,7 @@ export const say = (sentence: ISentence): IPerform => {
   if (dialogToShow) {
     dialogToShow = String(dialogToShow).replace(/ {2,}/g, (match) => '\u00a0'.repeat(match.length)); // 替换连续两个或更多空格
   }
+
   const isConcat = getBooleanArgByKey(sentence, 'concat') ?? false; // 是否是继承语句
   const isNotend = getBooleanArgByKey(sentence, 'notend') ?? false; // 是否有 notend 参数
   const speaker = getStringArgByKey(sentence, 'speaker'); // 获取说话者

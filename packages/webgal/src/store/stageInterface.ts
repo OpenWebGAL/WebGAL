@@ -1,4 +1,5 @@
 import { ISentence } from '@/Core/controller/scene/sceneInterface';
+import React from 'react';
 import { BlinkParam, FocusParam } from '@/Core/live2DCore';
 
 /**
@@ -219,6 +220,8 @@ export interface IStageState {
   isDisableTextbox: boolean;
   replacedUIlable: Record<string, string>;
   figureMetaData: figureMetaData;
+  // 插入的html
+  customHtml: Array<{ html: string; _feature?: string; style?: React.CSSProperties }>;
 }
 
 /**

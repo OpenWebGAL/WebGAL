@@ -21,6 +21,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import cloneDeep from 'lodash/cloneDeep';
 import { commandType } from '@/Core/controller/scene/sceneInterface';
 import { STAGE_KEYS } from '@/Core/constants';
+import React from 'react';
 
 // 初始化舞台数据
 
@@ -70,6 +71,8 @@ export const initState: IStageState = {
   isDisableTextbox: false,
   replacedUIlable: {},
   figureMetaData: {},
+  // 插入的html
+  customHtml: [],
 };
 
 /**
@@ -263,6 +266,32 @@ const stageSlice = createSlice({
         }
         state.figureMetaData[action.payload[0]][action.payload[1]] = action.payload[2];
       }
+    },
+    /**
+     * 添加自定义HTML
+     * @param state 当前状态
+     * @param action 要添加的HTML内容
+     */
+    addCustomHtml: (state, action: PayloadAction<{ html: string; _feature?: string; style?: React.CSSProperties }>) => {
+      state.customHtml.push(action.payload);
+    },
+    /**
+     * 移除自定义HTML
+     * @param state 当前状态
+     * @param action 要移除的HTML索引
+     */
+    removeCustomHtml: (state, action: PayloadAction<number>) => {
+      const index = action.payload;
+      if (index >= 0 && index < state.customHtml.length) {
+        state.customHtml.splice(index, 1);
+      }
+    },
+    /**
+     * 清空所有自定义HTML
+     * @param state 当前状态
+     */
+    clearCustomHtml: (state) => {
+      state.customHtml = [];
     },
   },
 });
