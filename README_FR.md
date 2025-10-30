@@ -27,7 +27,7 @@ https://demo.openwebgal.com
 
 Un jeu complet :
 
-[铃色☆记忆](http://hoshinasuzu.cn/) de Hoshinasuzu [Lien de secours](http://hoshinasuzu.cc/)
+[Présentation officielle des jeux WebGAL](https://www.openwebgal.com/games/)
 
 ### Créer des jeux avec WebGAL
 
