@@ -17,8 +17,6 @@ export const playEffect = (sentence: ISentence): IPerform => {
   // 如果有ID，这里被覆写，一般用于循环的情况
   // 有循环参数且有 ID，就循环
   let performInitName = `effect-sound-${uniqueId()}`;
-  // 清除先前的效果音
-  WebGAL.gameplay.performController.unmountPerform(performInitName, true);
   let url = sentence.content;
   let isLoop = false;
   // 清除带 id 的效果音
