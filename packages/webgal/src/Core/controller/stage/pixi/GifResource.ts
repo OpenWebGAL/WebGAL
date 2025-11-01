@@ -30,7 +30,6 @@ const findFrame = (frames: PrecomputedFrame[], time: number) => {
 
 export class GifResource extends BaseImageResource {
   public static override test(_src: unknown, ext?: string): boolean {
-    console.log(_src, ext);
     return (
       ext === 'gif' ||
       (typeof _src === 'string' && _src.trim().toLowerCase().endsWith('.gif')) ||
@@ -70,7 +69,6 @@ export class GifResource extends BaseImageResource {
     this._loadPromise = (async () => {
       const res = await settings.ADAPTER.fetch(this.url);
       this._arrayBuffer = await res.arrayBuffer();
-      console.log(this._arrayBuffer);
 
       const buffer = this._arrayBuffer;
       if (!buffer?.byteLength) throw new Error('Invalid GIF buffer');
