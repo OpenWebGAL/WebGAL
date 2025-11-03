@@ -29,6 +29,9 @@ export class SteamIntegration {
 
     try {
       const result = await Promise.resolve(bridge.initialize(appId));
+      if (result) {
+        logger.info(`Steam integration initialized with AppID ${appId}`);
+      }
       this.initialized = result;
       return result;
     } catch (error) {
