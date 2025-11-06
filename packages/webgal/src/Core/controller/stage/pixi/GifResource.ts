@@ -76,7 +76,7 @@ export class GifResource extends BaseImageResource {
       if (!gifFrames.length) throw new Error('Invalid GIF file');
 
       const canvas = document.createElement('canvas');
-      const ctx = canvas.getContext('2d')!;
+      const ctx = canvas.getContext('2d', { willReadFrequently: true })!;
       const patchCanvas = document.createElement('canvas');
       const patchCtx = patchCanvas.getContext('2d')!;
 
