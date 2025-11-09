@@ -26,7 +26,7 @@ https://webgal-jp-demo.onrender.com/
 
 現在公開されているゲーム（中国語）:
 
-[ベルカラー☆メモリー](http://hoshinasuzu.cn/suzu.html) by Hoshinasuzu  [代替リンク](http://hoshinasuzu.cc/)
+[WebGAL公式ゲーム紹介ページ](https://www.openwebgal.com/games/)
 
 ### WebGALでゲームを作成
 
