@@ -6,6 +6,7 @@ import { IPerform } from '@/Core/Modules/perform/performInterface';
 import { useSelector } from 'react-redux';
 import { WebGAL } from '@/Core/WebGAL';
 import { WEBGAL_NONE } from '@/Core/constants';
+import { end } from './end';
 
 /**
  * 播放一段效果音
@@ -91,7 +92,7 @@ export const playEffect = (sentence: ISentence): IPerform => {
         };
         resolve(perform);
         seElement?.play();
-        seElement.onended = () => {
+        const endFunc = () => {
           for (const e of WebGAL.gameplay.performController.performList) {
             if (e.performName === performInitName) {
               isOver = true;
@@ -100,10 +101,11 @@ export const playEffect = (sentence: ISentence): IPerform => {
             }
           }
         };
+        seElement.onended = endFunc;
         seElement.addEventListener('error', (e) => {
           logger.error(`播放效果音失败: ${url}`);
           // 播放失败提前结束
-          seElement.onended?.(e);
+          endFunc();
         });
       }, 1);
     }),
