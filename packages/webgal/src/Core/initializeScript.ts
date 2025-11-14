@@ -46,7 +46,7 @@ export const initializeScript = (): void => {
   // 获得 user Animation
   getUserAnimation();
   // 获取游戏信息
-  infoFetcher('./game/config.txt');
+  infoFetcher('./game/config.json');
   // 获取start场景
   const sceneUrl: string = assetSetter('start.txt', fileType.scene);
   // 场景写入到运行时

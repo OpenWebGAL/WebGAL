@@ -9,7 +9,7 @@ import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 
 const useConfigData = () => {
-  const _map = ['Title_img', 'Game_Logo', 'Title_bgm', 'Game_name', 'Game_key'];
+  const _map = ['titleImage', 'gameLogo', 'titleBgm', 'gameName', 'gameKey'];
   const configData = useSelector((state: RootState) => state.userData.globalGameVar);
   return useEffect(() => {
     // configData发生变化
@@ -19,33 +19,33 @@ const useConfigData = () => {
       }
       const val = configData[i] as string;
       switch (i) {
-        case 'Title_img': {
+        case 'titleImage': {
           const titleUrl = assetSetter(val, fileType.background);
           webgalStore.dispatch(setGuiAsset({ asset: 'titleBg', value: titleUrl }));
           setEbg(titleUrl);
           break;
         }
 
-        case 'Game_Logo': {
+        case 'gameLogo': {
           const logos = val.split('|');
           const logoUrlList = logos.map((val) => assetSetter(val, fileType.background));
           webgalStore.dispatch(setLogoImage(logoUrlList));
           break;
         }
 
-        case 'Title_bgm': {
+        case 'titleBgm': {
           const bgmUrl = assetSetter(val, fileType.bgm);
           webgalStore.dispatch(setGuiAsset({ asset: 'titleBgm', value: bgmUrl }));
           break;
         }
 
-        case 'Game_name': {
+        case 'gameName': {
           WebGAL.gameName = val;
           document.title = val;
           break;
         }
 
-        case 'Game_key': {
+        case 'gameKey': {
           WebGAL.gameKey = val;
           getStorage();
           getFastSaveFromStorage();
@@ -55,6 +55,6 @@ const useConfigData = () => {
       }
     }
     return () => {};
-  }, [configData.Game_Logo, configData.Game_key, configData.Game_name, configData.Title_bgm, configData.Title_img]);
+  }, [configData.gameLogo, configData.gameKey, configData.gameName, configData.titleBgm, configData.titleImage]);
 };
 export default useConfigData;
