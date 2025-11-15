@@ -61,19 +61,22 @@ export function getEnterExitAnimation(
     if (isBg) {
       duration = 1500;
     }
+    duration =
+      webgalStore.getState().stage.animationSettings.find((setting) => setting.target === target)?.enterDuration ??
+      duration;
     // 走默认动画
     let animation: IAnimationObject | null = generateUniversalSoftInAnimationObj(realTarget ?? target, duration);
 
     const transformState = webgalStore.getState().stage.effects;
     const targetEffect = transformState.find((effect) => effect.target === target);
 
-    const animarionName = WebGAL.animationManager.nextEnterAnimationName.get(target);
+    const animarionName = webgalStore
+      .getState()
+      .stage.animationSettings.find((setting) => setting.target === target)?.enterAnimationName;
     if (animarionName && !targetEffect) {
       logger.debug('取代默认进入动画', target);
       animation = getAnimationObject(animarionName, realTarget ?? target, getAnimateDuration(animarionName), false);
       duration = getAnimateDuration(animarionName);
-      // 用后重置
-      WebGAL.animationManager.nextEnterAnimationName.delete(target);
     }
     return { duration, animation };
   } else {
@@ -82,15 +85,18 @@ export function getEnterExitAnimation(
     if (isBg) {
       duration = 1500;
     }
+    duration =
+      webgalStore.getState().stage.animationSettings.find((setting) => setting.target + '-off' === target)
+        ?.exitDuration ?? duration;
     // 走默认动画
     let animation: IAnimationObject | null = generateUniversalSoftOffAnimationObj(realTarget ?? target, duration);
-    const animarionName = WebGAL.animationManager.nextExitAnimationName.get(target);
+    const animarionName = webgalStore
+      .getState()
+      .stage.animationSettings.find((setting) => setting.target + '-off' === target)?.exitAnimationName;
     if (animarionName) {
       logger.debug('取代默认退出动画', target);
       animation = getAnimationObject(animarionName, realTarget ?? target, getAnimateDuration(animarionName), false);
       duration = getAnimateDuration(animarionName);
-      // 用后重置
-      WebGAL.animationManager.nextExitAnimationName.delete(target);
     }
     return { duration, animation };
   }

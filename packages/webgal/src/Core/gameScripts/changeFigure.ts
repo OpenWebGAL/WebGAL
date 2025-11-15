@@ -91,6 +91,9 @@ export function changeFigure(sentence: ISentence): IPerform {
   const enterAnimation = getStringArgByKey(sentence, 'enter');
   const exitAnimation = getStringArgByKey(sentence, 'exit');
   let zIndex = getNumberArgByKey(sentence, 'zIndex') ?? -1;
+  const enterDuration = getNumberArgByKey(sentence, 'enterDuration') ?? duration;
+  duration = enterDuration;
+  const exitDuration = getNumberArgByKey(sentence, 'exitDurationOfPrev');
 
   const dispatch = webgalStore.dispatch;
 
@@ -145,6 +148,7 @@ export function changeFigure(sentence: ISentence): IPerform {
    */
   if (isUrlChanged) {
     webgalStore.dispatch(stageActions.removeEffectByTargetId(id));
+    webgalStore.dispatch(stageActions.removeAnimationSettingsByTarget(id));
     const oldStageObject = WebGAL.gameplay.pixiStage?.getStageObjByKey(id);
     if (oldStageObject) {
       oldStageObject.isExiting = true;
@@ -164,7 +168,9 @@ export function changeFigure(sentence: ISentence): IPerform {
         const newAnimation: IUserAnimation = { name: animationName, effects: animationObj };
         WebGAL.animationManager.addAnimation(newAnimation);
         duration = getAnimateDuration(animationName);
-        WebGAL.animationManager.nextEnterAnimationName.set(key, animationName);
+        webgalStore.dispatch(
+          stageActions.updateAnimationSettings({ target: key, key: 'enterAnimationName', value: animationName }),
+        );
       } catch (e) {
         // 解析都错误了，歇逼吧
         applyDefaultTransform();
@@ -183,16 +189,32 @@ export function changeFigure(sentence: ISentence): IPerform {
       const newAnimation: IUserAnimation = { name: animationName, effects: animationObj };
       WebGAL.animationManager.addAnimation(newAnimation);
       duration = getAnimateDuration(animationName);
-      WebGAL.animationManager.nextEnterAnimationName.set(key, animationName);
+      webgalStore.dispatch(
+        stageActions.updateAnimationSettings({ target: key, key: 'enterAnimationName', value: animationName }),
+      );
     }
 
     if (enterAnimation) {
-      WebGAL.animationManager.nextEnterAnimationName.set(key, enterAnimation);
+      webgalStore.dispatch(
+        stageActions.updateAnimationSettings({ target: key, key: 'enterAnimationName', value: enterAnimation }),
+      );
       duration = getAnimateDuration(enterAnimation);
     }
     if (exitAnimation) {
-      WebGAL.animationManager.nextExitAnimationName.set(key + '-off', exitAnimation);
+      webgalStore.dispatch(
+        stageActions.updateAnimationSettings({ target: key, key: 'exitAnimationName', value: exitAnimation }),
+      );
       duration = getAnimateDuration(exitAnimation);
+    }
+    if (enterDuration) {
+      webgalStore.dispatch(
+        stageActions.updateAnimationSettings({ target: key, key: 'enterDuration', value: enterDuration }),
+      );
+    }
+    if (exitDuration) {
+      webgalStore.dispatch(
+        stageActions.updateAnimationSettings({ target: key, key: 'exitDuration', value: exitDuration }),
+      );
     }
   };
 
