@@ -994,7 +994,6 @@ export default class PixiStage {
   }
 
   public getFigureMetadataByKey(key: string): IFigureMetadata | undefined {
-    console.log(key, webgalStore.getState().stage.figureMetaData);
     return webgalStore.getState().stage.figureMetaData[key];
   }
 
