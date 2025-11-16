@@ -3,6 +3,8 @@ const zhCn = {
   common: {
     yes: '是',
     no: '否',
+    confirm: '确认',
+    cancel: '取消',
   },
 
   menu: {
@@ -50,14 +52,6 @@ const zhCn = {
                 },
               },
             },
-            about: {
-              title: '关于 WebGAL',
-              subTitle: 'WebGAL：开源的网页端视觉小说引擎',
-              version: '版本号',
-              source: '源代码仓库',
-              contributors: '贡献者',
-              website: '网站',
-            },
           },
         },
         display: {
@@ -69,6 +63,9 @@ const zhCn = {
                 on: '开启',
                 off: '关闭',
               },
+            },
+            uiTransitionDuration: {
+              title: '界面切换持续时间',
             },
             textSpeed: {
               title: '文字显示速度',
@@ -111,9 +108,26 @@ const zhCn = {
             bgmVolume: { title: '背景音乐音量' },
             seVolume: { title: '音效音量' },
             uiSeVolume: { title: '用户界面音效音量' },
-            voiceOption: { title: '是否中断语音' },
-            voiceStop: { title: '停止语音' },
-            voiceContinue: { title: '继续语音' },
+            voiceInterruption: {
+              title: '是否中断语音',
+              options: {
+                voiceStop: '停止语音',
+                voiceContinue: '继续语音',
+              },
+            },
+          },
+        },
+        about: {
+          title: '关于',
+          options: {
+            webgal: {
+              title: 'WebGAL',
+              subTitle: 'WebGAL：开源的网页端视觉小说引擎',
+              version: '版本号',
+              source: '源代码仓库',
+              contributors: '贡献者',
+              website: '网站',
+            },
           },
         },
         // language: {
@@ -187,11 +201,15 @@ const zhCn = {
       options: '选项',
       title: '标题',
       titleTips: '确定要返回标题界面吗？',
+      lock: '锁定',
     },
   },
 
   extra: {
     title: '鉴赏模式',
+    cg: '图片',
+    bgm: '音乐',
+    defaultSeries: '默认系列',
   },
 };
 

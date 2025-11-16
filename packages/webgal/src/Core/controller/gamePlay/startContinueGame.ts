@@ -5,7 +5,6 @@ import { resetStage } from '@/Core/controller/stage/resetStage';
 import { webgalStore } from '@/store/store';
 import { setVisibility } from '@/store/GUIReducer';
 import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
-import { setEbg } from '@/Core/gameScripts/changeBg/setEbg';
 import { restorePerform } from '@/Core/controller/storage/jumpFromBacklog';
 
 import { hasFastSaveRecord, loadFastSaveGame } from '@/Core/controller/storage/fastSaveLoad';
@@ -29,10 +28,6 @@ export const startGame = () => {
 };
 
 export async function continueGame() {
-  /**
-   * 重设模糊背景
-   */
-  setEbg(webgalStore.getState().stage.bgName);
   // 当且仅当游戏未开始时使用快速存档
   // 当游戏开始后 使用原来的逻辑
   if ((await hasFastSaveRecord()) && WebGAL.sceneManager.sceneData.currentSentenceId === 0) {

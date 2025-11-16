@@ -5,6 +5,7 @@ import * as PIXI from 'pixi.js';
 import PixiStage from '@/Core/controller/stage/pixi/PixiController';
 import { logger } from '@/Core/util/logger';
 import { webgalStore } from '@/store/store';
+import { WebGAL } from '@/Core/WebGAL';
 // utils/loadPixiSpine.ts
 // @ts-ignore
 let pixiSpineModule: typeof import('pixi-spine') | null = null;
@@ -142,31 +143,31 @@ export async function addSpineFigureImpl(
          */
         const originalWidth = figureSpine.width;
         const originalHeight = figureSpine.height;
-        const scaleX = this.stageWidth / originalWidth;
-        const scaleY = this.stageHeight / originalHeight;
+        const scaleX = WebGAL.stageWidth / originalWidth;
+        const scaleY = WebGAL.stageHeight / originalHeight;
         const targetScale = Math.min(scaleX, scaleY);
         const figureSprite = new PIXI.Sprite();
         figureSprite.addChild(figureSpine);
         figureSprite.scale.x = targetScale;
         figureSprite.scale.y = targetScale;
         figureSprite.anchor.set(0.5);
-        figureSprite.position.y = this.stageHeight / 2;
+        figureSprite.position.y = WebGAL.stageHeight / 2;
         const targetWidth = originalWidth * targetScale;
         const targetHeight = originalHeight * targetScale;
-        thisFigureContainer.setBaseY(this.stageHeight / 2);
-        if (targetHeight < this.stageHeight) {
-          thisFigureContainer.setBaseY(this.stageHeight / 2 + (this.stageHeight - targetHeight) / 2);
+        thisFigureContainer.setBaseY(WebGAL.stageHeight / 2);
+        if (targetHeight < WebGAL.stageHeight) {
+          thisFigureContainer.setBaseY(WebGAL.stageHeight / 2 + (WebGAL.stageHeight - targetHeight) / 2);
         }
         if (presetPosition === 'center') {
-          thisFigureContainer.setBaseX(this.stageWidth / 2);
+          thisFigureContainer.setBaseX(WebGAL.stageWidth / 2);
         }
         if (presetPosition === 'left') {
           thisFigureContainer.setBaseX(targetWidth / 2);
         }
         if (presetPosition === 'right') {
-          thisFigureContainer.setBaseX(this.stageWidth - targetWidth / 2);
+          thisFigureContainer.setBaseX(WebGAL.stageWidth - targetWidth / 2);
         }
-        thisFigureContainer.pivot.set(0, this.stageHeight / 2);
+        thisFigureContainer.pivot.set(0, WebGAL.stageHeight / 2);
         thisFigureContainer.addChild(figureSprite);
       }
     }, 0);
@@ -239,8 +240,8 @@ export async function addSpineBgImpl(this: PixiStage, key: string, url: string) 
          */
         const originalWidth = bgSpine.width; // TODO: 视图大小可能小于画布大小，应提供参数指定视图大小
         const originalHeight = bgSpine.height; // TODO: 视图大小可能小于画布大小，应提供参数指定视图大小
-        const scaleX = this.stageWidth / originalWidth;
-        const scaleY = this.stageHeight / originalHeight;
+        const scaleX = WebGAL.stageWidth / originalWidth;
+        const scaleY = WebGAL.stageHeight / originalHeight;
         logger.debug('bgSpine state', bgSpine.state);
         // TODO: 也许应该使用 setAnimation 播放初始动画
         if (bgSpine.spineData.animations.length > 0) {
@@ -253,10 +254,10 @@ export async function addSpineBgImpl(this: PixiStage, key: string, url: string) 
         bgSprite.scale.x = targetScale;
         bgSprite.scale.y = targetScale;
         bgSprite.anchor.set(0.5);
-        bgSprite.position.y = this.stageHeight / 2;
-        thisBgContainer.setBaseX(this.stageWidth / 2);
-        thisBgContainer.setBaseY(this.stageHeight / 2);
-        thisBgContainer.pivot.set(0, this.stageHeight / 2);
+        bgSprite.position.y = WebGAL.stageHeight / 2;
+        thisBgContainer.setBaseX(WebGAL.stageWidth / 2);
+        thisBgContainer.setBaseY(WebGAL.stageHeight / 2);
+        thisBgContainer.pivot.set(0, WebGAL.stageHeight / 2);
 
         // 挂载
         thisBgContainer.addChild(bgSprite);

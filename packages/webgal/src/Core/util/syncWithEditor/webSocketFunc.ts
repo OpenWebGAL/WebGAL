@@ -71,7 +71,7 @@ export const webSocketFunc = () => {
       });
     }
     if (message.command === DebugCommand.REFETCH_TEMPLATE_FILES) {
-      const title = document.querySelector('.html-body__title-enter') as HTMLElement;
+      const title = document.getElementById('launchScreen');
       if (title) {
         title.style.display = 'none';
       }

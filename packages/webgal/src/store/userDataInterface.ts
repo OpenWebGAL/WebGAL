@@ -13,6 +13,7 @@ export enum playSpeed {
 }
 
 export enum textSize {
+  default,
   small,
   medium,
   large,
@@ -34,6 +35,24 @@ export enum fullScreenOption {
   off,
 }
 
+// 钉固控制面板按钮
+export enum pinnedControlPanelButton {
+  none = 0,
+  save = 1 << 0,
+  load = 1 << 1,
+  quickSave = 1 << 2,
+  quickLoad = 1 << 3,
+  autoPlay = 1 << 4,
+  fastForward = 1 << 5,
+  title = 1 << 6,
+  options = 1 << 7,
+  backlog = 1 << 8,
+  replay = 1 << 9,
+  hideTextbox = 1 << 10,
+  fullScreen = 1 << 11,
+  lock = 1 << 12,
+}
+
 /**
  * @interface IOptionData 用户设置数据接口
  */
@@ -52,6 +71,8 @@ export interface IOptionData {
   language: language;
   voiceInterruption: voiceOption; // 是否中断语音
   fullScreen: fullScreenOption;
+  uiTransitionDuration: number; // 用户界面切换持续时间
+  pinnedControlPanelButtons: pinnedControlPanelButton; // 钉固控制面板按钮
 }
 
 /**

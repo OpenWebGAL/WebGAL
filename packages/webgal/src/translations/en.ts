@@ -3,6 +3,8 @@ const en = {
   common: {
     yes: 'OK',
     no: 'Cancel',
+    confirm: 'Confirm',
+    cancel: 'Cancel',
   },
 
   menu: {
@@ -50,14 +52,6 @@ const en = {
                 },
               },
             },
-            about: {
-              title: 'About WebGAL',
-              subTitle: 'WebGAL: An Open-Source Web-Based Visual Novel Engine',
-              version: 'Version',
-              source: 'Source Code Repository',
-              contributors: 'Contributors',
-              website: 'Website',
-            },
           },
         },
         display: {
@@ -69,6 +63,9 @@ const en = {
                 on: 'ON',
                 off: 'OFF',
               },
+            },
+            uiTransitionDuration: {
+              title: 'UI Transition Duration',
             },
             textSpeed: {
               title: 'Text Speed',
@@ -111,6 +108,26 @@ const en = {
             bgmVolume: { title: 'BGM Volume' },
             seVolume: { title: 'Sound Effects Volume' },
             uiSeVolume: { title: 'UI Sound Effects Volume' },
+            voiceInterruption: {
+              title: 'Voice Interruption',
+              options: {
+                voiceStop: 'Stop Voice',
+                voiceContinue: 'Continue Voice',
+              },
+            },
+          },
+        },
+        about: {
+          title: 'About',
+          options: {
+            webgal: {
+              title: 'WebGAL',
+              subTitle: 'WebGAL: An Open-Source Web-Based Visual Novel Engine',
+              version: 'Version',
+              source: 'Source Code Repository',
+              contributors: 'Contributors',
+              website: 'Website',
+            },
           },
         },
         // language: {
@@ -180,11 +197,15 @@ const en = {
       options: 'Options',
       title: 'Title',
       titleTips: 'Confirm return to the title screen',
+      lock: 'Lock',
     },
   },
 
   extra: {
     title: 'EXTRA',
+    cg: 'CG',
+    bgm: 'BGM',
+    defaultSeries: 'Default Series',
   },
 };
 

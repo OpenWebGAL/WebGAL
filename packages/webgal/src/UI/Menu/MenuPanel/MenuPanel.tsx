@@ -1,6 +1,4 @@
 import styles from './menuPanel.module.scss';
-import { MenuPanelButton } from './MenuPanelButton';
-import { playBgm } from '@/Core/controller/stage/playBgm';
 import { MenuPanelTag } from '@/store/guiInterface';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
@@ -8,7 +6,19 @@ import { setMenuPanelTag, setVisibility } from '@/store/GUIReducer';
 import { backToTitle } from '@/Core/controller/gamePlay/backToTitle';
 import useTrans from '@/hooks/useTrans';
 import useSoundEffect from '@/hooks/useSoundEffect';
-import { showGlogalDialog } from '@/UI/GlobalDialog/GlobalDialog';
+import { showGlobalDialog } from '@/UI/GlobalDialog/GlobalDialog';
+import useApplyStyle from '@/hooks/useApplyStyle';
+import { Icon } from '@icon-park/react/lib/runtime';
+import { FolderOpen, Home, Left, SdCard, SettingTwo } from '@icon-park/react';
+
+interface IMenuPanelButtonProps {
+  key?: string;
+  text?: string;
+  icon?: Icon;
+  active?: boolean;
+  disabled?: boolean;
+  onClick?: () => void;
+}
 
 /**
  * Menu页的底栏
@@ -18,99 +28,93 @@ export const MenuPanel = () => {
   // 国际化
   const t = useTrans('menu.');
 
-  const { playSeClick, playSeDialogOpen, playSePageChange } = useSoundEffect();
+  const { playSeClick, playSeDialogOpen, playSePageChange, playSeEnter } = useSoundEffect();
   const GUIState = useSelector((state: RootState) => state.GUI);
   const dispatch = useDispatch();
-  // 设置Menu按钮的高亮
-  const SaveTagOn = GUIState.currentMenuTag === MenuPanelTag.Save ? ` ${styles.MenuPanel_button_hl}` : ``;
-  const LoadTagOn = GUIState.currentMenuTag === MenuPanelTag.Load ? ` ${styles.MenuPanel_button_hl}` : ``;
-  const OptionTagOn = GUIState.currentMenuTag === MenuPanelTag.Option ? ` ${styles.MenuPanel_button_hl}` : ``;
 
-  // 设置Menu按钮的颜色
-  const SaveTagColor = GUIState.currentMenuTag === MenuPanelTag.Save ? `rgba(74, 34, 93, 0.9)` : `rgba(123,144,169,1)`;
-  const LoadTagColor = GUIState.currentMenuTag === MenuPanelTag.Load ? `rgba(11, 52, 110, 0.9)` : `rgba(123,144,169,1)`;
-  const OptionTagColor =
-    GUIState.currentMenuTag === MenuPanelTag.Option ? `rgba(81, 110, 65, 0.9)` : `rgba(123,144,169,1)`;
+  const applyStyle = useApplyStyle('UI/Menu/MenuPanel/menuPanel.scss');
 
-  // 设置Menu图标的颜色
-  const SaveIconColor = GUIState.currentMenuTag === MenuPanelTag.Save ? `rgba(74, 34, 93, 0.9)` : `rgba(123,144,169,1)`;
-  const LoadIconColor =
-    GUIState.currentMenuTag === MenuPanelTag.Load ? `rgba(11, 52, 110, 0.9)` : `rgba(123,144,169,1)`;
-  const OptionIconColor =
-    GUIState.currentMenuTag === MenuPanelTag.Option ? `rgba(81, 110, 65, 0.9)` : `rgba(123,144,169,1)`;
+  const menuPanelButton = (props: IMenuPanelButtonProps) => {
+    return (
+      <div
+        className={`${applyStyle('menu_panel_button', styles.menu_panel_button)} ${
+          props.disabled ? applyStyle('menu_panel_button_disabled', styles.menu_panel_button_disabled) : ''
+        } ${props.active ? applyStyle('menu_panel_button_active', styles.menu_panel_button_active) : ''}`}
+        onClick={props.onClick}
+        onMouseEnter={playSeEnter}
+        key={props.key}
+      >
+        {props.icon && (
+          <props.icon className={applyStyle('menu_panel_button_icon', styles.menu_panel_button_icon)} strokeWidth={4} />
+        )}
+        {props.text && (
+          <div className={applyStyle('menu_panel_button_text', styles.menu_panel_button_text)}>{props.text}</div>
+        )}
+      </div>
+    );
+  };
 
   return (
-    <div className={styles.MenuPanel_main}>
-      <MenuPanelButton
-        iconName="save"
-        buttonOnClassName={SaveTagOn}
-        iconColor={SaveIconColor}
-        tagColor={SaveTagColor}
-        clickFunc={() => {
-          playSePageChange();
-          if (GUIState.showTitle) return;
-          dispatch(setMenuPanelTag(MenuPanelTag.Save));
-        }}
-        tagName={t('saving.title')}
-        key="saveButton"
-      />
-      <MenuPanelButton
-        iconName="load"
-        buttonOnClassName={LoadTagOn}
-        iconColor={LoadIconColor}
-        tagColor={LoadTagColor}
-        clickFunc={() => {
-          playSePageChange();
-          dispatch(setMenuPanelTag(MenuPanelTag.Load));
-        }}
-        tagName={t('loadSaving.title')}
-        key="loadButton"
-      />
-      <MenuPanelButton
-        iconName="title"
-        iconColor="rgba(123,144,169,1)"
-        tagColor="rgba(123,144,169,1)"
-        clickFunc={() => {
+    <div className={applyStyle('menu_panel_main', styles.menu_panel_main)}>
+      {menuPanelButton({
+        key: 'exitButton',
+        icon: Left,
+        text: t('exit.title'),
+        onClick: () => {
+          playSeClick();
+          dispatch(setVisibility({ component: 'showMenuPanel', visibility: false }));
+        },
+      })}
+      {menuPanelButton({
+        key: 'titleButton',
+        icon: Home,
+        text: t('title.title'),
+        onClick: () => {
           playSeDialogOpen();
-          showGlogalDialog({
+          showGlobalDialog({
             title: t('$gaming.buttons.titleTips'),
-            leftText: t('$common.yes'),
-            rightText: t('$common.no'),
-            leftFunc: () => {
+            leftText: t('$common.cancel'),
+            rightText: t('$common.confirm'),
+            leftFunc: () => {},
+            rightFunc: () => {
               backToTitle();
               dispatch(setVisibility({ component: 'showMenuPanel', visibility: false }));
             },
-            rightFunc: () => {},
           });
-        }}
-        tagName={t('title.title')}
-        key="titleIcon"
-      />
-      <MenuPanelButton
-        iconName="option"
-        style={{ marginLeft: 'auto' }}
-        buttonOnClassName={OptionTagOn}
-        iconColor={OptionIconColor}
-        tagColor={OptionTagColor}
-        clickFunc={() => {
+        },
+      })}
+      {menuPanelButton({
+        key: 'saveButton',
+        icon: SdCard,
+        text: t('saving.title'),
+        active: GUIState.currentMenuTag === MenuPanelTag.Save,
+        disabled: GUIState.showTitle,
+        onClick: () => {
+          playSePageChange();
+          if (GUIState.showTitle) return;
+          dispatch(setMenuPanelTag(MenuPanelTag.Save));
+        },
+      })}
+      {menuPanelButton({
+        key: 'loadButton',
+        icon: FolderOpen,
+        text: t('loadSaving.title'),
+        active: GUIState.currentMenuTag === MenuPanelTag.Load,
+        onClick: () => {
+          playSePageChange();
+          dispatch(setMenuPanelTag(MenuPanelTag.Load));
+        },
+      })}
+      {menuPanelButton({
+        key: 'optionButton',
+        icon: SettingTwo,
+        text: t('options.title'),
+        active: GUIState.currentMenuTag === MenuPanelTag.Option,
+        onClick: () => {
           playSePageChange();
           dispatch(setMenuPanelTag(MenuPanelTag.Option));
-        }}
-        tagName={t('options.title')}
-        key="optionButton"
-      />
-
-      <MenuPanelButton
-        iconName="exit"
-        iconColor="rgba(123,144,169,1)"
-        tagColor="rgba(123,144,169,1)"
-        clickFunc={() => {
-          playSeClick();
-          dispatch(setVisibility({ component: 'showMenuPanel', visibility: false }));
-        }}
-        tagName={t('exit.title')}
-        key="exitIcon"
-      />
+        },
+      })}
     </div>
   );
 };

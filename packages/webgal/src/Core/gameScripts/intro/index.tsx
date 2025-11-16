@@ -1,15 +1,20 @@
 import { ISentence } from '@/Core/controller/scene/sceneInterface';
 import { IPerform } from '@/Core/Modules/perform/performInterface';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
-import styles from '@/Stage/FullScreenPerform/fullScreenPerform.module.scss';
-import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
-import { PerformController } from '@/Core/Modules/perform/performController';
-import { logger } from '@/Core/util/logger';
+import styles from './intro.module.scss';
 import { WebGAL } from '@/Core/WebGAL';
-import { get, replace } from 'lodash';
 import useEscape from '@/hooks/useEscape';
-import { getBooleanArgByKey, getNumberArgByKey, getStringArgByKey } from '../util/getSentenceArg';
+import useApplyStyle from '@/hooks/useApplyStyle';
+import { Provider } from 'react-redux';
+import { webgalStore } from '@/store/store';
+import { getBooleanArgByKey, getNumberArgByKey, getStringArgByKey } from '@/Core/util/getSentenceArg';
+import { useFontFamily } from '@/hooks/useFontFamily';
+import { textFont } from '@/store/userDataInterface';
+
+// eslint-disable-next-line no-undef
+let hideIntroTimeout: NodeJS.Timeout | null = null;
+
 /**
  * 显示一小段黑屏演示
  * @param sentence
@@ -19,43 +24,35 @@ export const intro = (sentence: ISentence): IPerform => {
    * intro 内部控制
    */
 
+  // 清除上一句的隐藏 intro timeout
+  if (hideIntroTimeout) {
+    clearTimeout(hideIntroTimeout);
+    hideIntroTimeout = null;
+  }
+
   const performName = `introPerform${Math.random().toString()}`;
 
-  const fontSizeFromArgs = getStringArgByKey(sentence, 'fontSize') ?? 'medium';
-  let fontSize = '350%';
-  switch (fontSizeFromArgs) {
-    case 'small':
-      fontSize = '280%';
+  const font = webgalStore.getState().userData.optionData.textboxFont;
+  let fontToUse = '';
+  switch (font) {
+    case textFont.song:
+      fontToUse = '"思源宋体", serif';
       break;
-    case 'medium':
-      fontSize = '350%';
+    case textFont.lxgw:
+      fontToUse = '"LXGW", serif';
       break;
-    case 'large':
-      fontSize = '420%';
+    case textFont.hei:
+    default:
+      fontToUse = '"WebgalUI", serif';
       break;
   }
+
+  const fontSizeFromArgs = getStringArgByKey(sentence, 'fontSize') ?? 'medium';
   const backgroundImageFromArgs = getStringArgByKey(sentence, 'backgroundImage') ?? '';
   const backgroundImage = `url("game/background/${backgroundImageFromArgs}") center/cover no-repeat`;
   const backgroundColor = getStringArgByKey(sentence, 'backgroundColor') ?? 'rgba(0, 0, 0, 1)';
   const color = getStringArgByKey(sentence, 'fontColor') ?? 'rgba(255, 255, 255, 1)';
   const animationFromArgs = getStringArgByKey(sentence, 'animation') ?? '';
-  let animationClass: any = (type: string, length = 0) => {
-    switch (type) {
-      case 'fadeIn':
-        return styles.fadeIn;
-      case 'slideIn':
-        return styles.slideIn;
-      case 'typingEffect':
-        return `${styles.typingEffect} ${length}`;
-      case 'pixelateEffect':
-        return styles.pixelateEffect;
-      case 'revealAnimation':
-        return styles.revealAnimation;
-      default:
-        return styles.fadeIn;
-    }
-  };
-  let chosenAnimationClass = animationClass(animationFromArgs);
   let delayTime = getNumberArgByKey(sentence, 'delayTime') ?? 1500;
   let isHold = getBooleanArgByKey(sentence, 'hold') ?? false;
   let isUserForward = getBooleanArgByKey(sentence, 'userForward') ?? false;
@@ -64,13 +61,12 @@ export const intro = (sentence: ISentence): IPerform => {
   // 用户手动控制向前步进，所以必须是 hold
   isHold = isUserForward ? true : isHold;
 
-  const introContainerStyle = {
+  const introContainerStyle: React.CSSProperties = {
+    fontFamily: fontToUse,
+    color: color,
     background: backgroundImage,
     backgroundColor: backgroundColor,
-    color: color,
-    fontSize: fontSize || '350%',
-    width: '100%',
-    height: '100%',
+    ['--ui-transition-duration' as any]: `${webgalStore.getState().userData.optionData.uiTransitionDuration}ms`,
   };
   const introArray: Array<string> = sentence.content.split(/(?<!\\)\|/).map((val: string) => useEscape(val));
 
@@ -153,38 +149,98 @@ export const intro = (sentence: ISentence): IPerform => {
    */
   WebGAL.events.userInteractNext.on(toNextIntroElement);
 
-  const showIntro = introArray.map((e, i) => (
-    <div
-      key={'introtext' + i + Math.random().toString()}
-      style={{ animationDelay: `${delayTime * i}ms` }}
-      className={chosenAnimationClass}
-    >
-      {e}
-      {e === '' ? '\u00a0' : ''}
-    </div>
-  ));
-  const intro = (
-    <div style={introContainerStyle}>
-      <div style={{ padding: '3em 4em 3em 4em' }}>{showIntro}</div>
-    </div>
-  );
-  // eslint-disable-next-line react/no-deprecated
-  ReactDOM.render(intro, document.getElementById('introContainer'));
-  const introContainer = document.getElementById('introContainer');
+  function Intro() {
+    const [show, setShow] = useState(true);
+    useEffect(() => {
+      const handler = (event: Event) => {
+        const customEvent = event as CustomEvent<boolean>;
+        setShow(customEvent.detail);
+      };
+      window.addEventListener('show-intro', handler);
+      return () => window.removeEventListener('show-intro', handler);
+    }, []);
+    const applyStyle = useApplyStyle('Stage/Intro/intro.scss');
 
-  if (introContainer) {
-    introContainer.style.display = 'block';
+    const fontSizeClass = (size: string) => {
+      switch (size) {
+        case 'small':
+          return applyStyle('intro_text_small', styles.intro_text_small);
+        case 'medium':
+          return applyStyle('intro_text_medium', styles.intro_text_medium);
+        case 'large':
+          return applyStyle('intro_text_large', styles.intro_text_large);
+        default:
+          return applyStyle('intro_text_medium', styles.intro_text_medium);
+      }
+    };
+
+    const animationClass = (type: string, length = 0) => {
+      switch (type) {
+        case 'fadeIn':
+          return applyStyle('intro_fade_in', styles.intro_fade_in);
+        case 'slideIn':
+          return applyStyle('intro_slide_in', styles.intro_slide_in);
+        case 'typingEffect':
+          return applyStyle('intro_typing_effect', styles.intro_typing_effect);
+        case 'pixelateEffect':
+          return applyStyle('intro_pixelate_effect', styles.intro_pixelate_effect);
+        case 'revealAnimation':
+          return applyStyle('intro_reveal_animation', styles.intro_reveal_animation);
+        default:
+          return applyStyle('intro_fade_in', styles.intro_fade_in);
+      }
+    };
+
+    const showIntro = introArray.map((e, i) => (
+      <div
+        key={'introtext' + i + Math.random().toString()}
+        style={{ animationDelay: `${delayTime * i}ms` }}
+        className={
+          applyStyle('intro_text', styles.intro_text) +
+          ' ' +
+          fontSizeClass(fontSizeFromArgs) +
+          ' ' +
+          animationClass(animationFromArgs)
+        }
+      >
+        {e}
+        {e === '' ? '\u00a0' : ''}
+      </div>
+    ));
+
+    return (
+      <div
+        style={introContainerStyle}
+        className={`${applyStyle('intro_main', styles.intro_main)} ${
+          show ? '' : applyStyle('intro_main_hide', styles.intro_main_hide)
+        }`}
+      >
+        <div className={applyStyle('intro_text_container', styles.intro_text_container)}>{showIntro}</div>
+      </div>
+    );
   }
+
+  // eslint-disable-next-line react/no-deprecated
+  ReactDOM.render(
+    <Provider store={webgalStore}>
+      <Intro />
+    </Provider>,
+    document.getElementById('introContainer'),
+  );
+
+  window.dispatchEvent(new CustomEvent<boolean>('show-intro', { detail: true }));
 
   return {
     performName,
     duration,
     isHoldOn: false,
     stopFunction: () => {
-      const introContainer = document.getElementById('introContainer');
-      if (introContainer) {
-        introContainer.style.display = 'none';
-      }
+      window.dispatchEvent(new CustomEvent<boolean>('show-intro', { detail: false }));
+      const uiTransitionDuration = webgalStore.getState().userData.optionData.uiTransitionDuration;
+      hideIntroTimeout = setTimeout(() => {
+        // eslint-disable-next-line react/no-deprecated
+        ReactDOM.render(<div />, document.getElementById('introContainer'));
+      }, uiTransitionDuration);
       WebGAL.events.userInteractNext.off(toNextIntroElement);
     },
     blockingNext: () => isBlocking,

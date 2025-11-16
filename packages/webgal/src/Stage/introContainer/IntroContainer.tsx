@@ -1,5 +1,7 @@
-import styles from './introContainer.module.scss';
+import useApplyStyle from '@/hooks/useApplyStyle';
+import styles from '@/Core/gameScripts/intro/intro.module.scss';
 
 export default function IntroContainer() {
-  return <div className={styles.introContainer} id="introContainer" />;
+  const applyStyle = useApplyStyle('Stage/Intro/intro.scss');
+  return <div className={applyStyle('intro_container', styles.intro_container)} id="introContainer" />;
 }

@@ -7,8 +7,8 @@ import { getTextSize } from '@/UI/getTextSize';
 import { match } from '@/Core/util/match';
 import { textSize } from '@/store/userDataInterface';
 import IMSSTextbox from '@/Stage/TextBox/IMSSTextbox';
-import { SCREEN_CONSTANTS } from '@/Core/util/constants';
 import useEscape from '@/hooks/useEscape';
+import { WebGAL } from '@/Core/WebGAL';
 
 const userAgent = navigator.userAgent;
 const isFirefox = /firefox/i.test(userAgent);
@@ -25,23 +25,16 @@ export const TextBox = () => {
   const userDataState = useSelector((state: RootState) => state.userData);
   const textDelay = useTextDelay(userDataState.optionData.textSpeed);
   const textDuration = useTextAnimationDuration(userDataState.optionData.textSpeed);
-  let size = getTextSize(userDataState.optionData.textSize) + '%';
   const font = useFontFamily();
   const isText = stageState.showText !== '' || stageState.showName !== '';
   let textSizeState = userDataState.optionData.textSize;
-  if (isText && stageState.showTextSize !== -1) {
-    size = getTextSize(stageState.showTextSize) + '%';
+  if (isText && stageState.showTextSize !== textSize.default) {
     textSizeState = stageState.showTextSize;
   }
-  const lineLimit = match(textSizeState)
-    .with(textSize.small, () => 3)
-    .with(textSize.medium, () => 2)
-    .with(textSize.large, () => 2)
-    .default(() => 2);
   // 拆字
-  const textArray = compileSentence(stageState.showText, lineLimit);
+  const textArray = compileSentence(stageState.showText);
   const isHasName = stageState.showName !== '';
-  const showName = compileSentence(stageState.showName, lineLimit);
+  const showName = compileSentence(stageState.showName);
   const currentConcatDialogPrev = stageState.currentConcatDialogPrev;
   const currentDialogKey = stageState.currentDialogKey;
   const miniAvatar = stageState.miniAvatar;
@@ -58,8 +51,8 @@ export const TextBox = () => {
     }
 
     const handleResize = () => {
-      const targetHeight = SCREEN_CONSTANTS.height;
-      const targetWidth = SCREEN_CONSTANTS.width;
+      const targetHeight = WebGAL.stageHeight;
+      const targetWidth = WebGAL.stageWidth;
 
       const h = window.innerHeight; // 窗口高度
       const w = window.innerWidth; // 窗口宽度
@@ -90,7 +83,6 @@ export const TextBox = () => {
       showName={showName}
       isHasName={isHasName}
       currentConcatDialogPrev={currentConcatDialogPrev}
-      fontSize={size}
       currentDialogKey={currentDialogKey}
       isSafari={isSafari}
       isFirefox={isFirefox}
@@ -98,7 +90,6 @@ export const TextBox = () => {
       textDuration={textDuration}
       font={font}
       textSizeState={textSizeState}
-      lineLimit={lineLimit}
       isUseStroke={isShowStroke}
       textboxOpacity={textboxOpacity}
     />
@@ -117,12 +108,7 @@ function isCJK(character: string) {
  * @param replace_space_with_nbsp 是否将空格替换为不间断空格
  */
 // eslint-disable-next-line max-params
-export function compileSentence(
-  sentence: string,
-  lineLimit: number,
-  ignoreLineLimit?: boolean,
-  replace_space_with_nbsp = true,
-): EnhancedNode[][] {
+export function compileSentence(sentence: string, replace_space_with_nbsp = true): EnhancedNode[][] {
   // 先拆行
   const lines = sentence.split(/(?<!\\)\|/).map((val: string) => useEscape(val));
   // 对每一行进行注音处理
@@ -167,7 +153,7 @@ export function compileSentence(
     });
     return ln;
   });
-  return nodeLines.slice(0, ignoreLineLimit ? undefined : lineLimit);
+  return nodeLines;
 }
 
 /**
@@ -186,15 +172,6 @@ export function splitChars(sentence: string, replace_space_with_nbsp = true) {
   };
 
   for (const character of sentence) {
-    // if (character === '|') {
-    //   if (word) {
-    //     words.push(word);
-    //     word = '';
-    //   }
-    //   words.push('<br />');
-    //   cjkFlag = false;
-    //   continue;
-    // }
     if (character === ' ' || character === '\u00a0') {
       // Space
       if (word) {

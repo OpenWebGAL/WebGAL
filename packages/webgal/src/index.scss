@@ -17,6 +17,22 @@
   src: url('assets/fonts/OPPOSans-R.ttf') format('truetype');
 }
 
+.StartButton {
+  animation: StartButton_blink 4s infinite;
+}
+
+@keyframes StartButton_blink {
+  0% {
+    text-shadow: 0 0 15px rgba(0, 0, 0, 0.65);
+  }
+  50% {
+    text-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+  }
+  100% {
+    text-shadow: 0 0 15px rgba(0, 0, 0, 0.65);
+  }
+}
+
 a {
   transition: color 1s;
 }
@@ -37,12 +53,38 @@ a:active {
   color: #434343;
 }
 
+html {
+  overflow: hidden;
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  transform-origin: center center;
+  transition: transform 0.5s cubic-bezier(0.215, 0.610, 0.355, 1);
+}
+
+// @media (max-aspect-ratio: 1/1) {
+//   html {
+//     width: 100vh;
+//     height: 100vw;
+//     transform: translate(-50%, -50%) rotate(90deg);
+//   }
+// }
+
+.html_rotate {
+  width: 100vh;
+  height: 100vw;
+  transform: translate(-50%, -50%) rotate(90deg);
+}
+
 body {
   background-color: #000;
-  font-size: 16px;
   margin: 0;
-  font-family: 'WebgalUI', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell',
-    'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  font-family: "WebgalUI", -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+  'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow: hidden;
@@ -50,35 +92,149 @@ body {
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+  monospace;
 }
 
-#root {
-  width: $screenWidth;
-  height: $screenHeight;
+.launch_screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: 100%;
   overflow: hidden;
-  font-size: 160%;
+  position: absolute;
+  background-color: #000000;
+  z-index: 14;
+}
+
+.launch_screen_off {
+  pointer-events: none;
+  animation: launch_screen_fade_out 0.5s cubic-bezier(0.215, 0.610, 0.355, 1) forwards;
+}
+
+@keyframes launch_screen_fade_out {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    display: none;
+  }
+}
+
+.launch_screen_logo_container {
+  position: absolute;
+  top: 20%;
+  left: 20%;
+  right: 20%;
+  bottom: 30%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.launch_screen_logo {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  pointer-events: none;
+}
+
+
+.launch_screen_loading_container {
+  position: absolute;
+  bottom: 15%;
+  height: auto;
+  // opacity: 0;
+  // 出于观感
+  // 延迟一段时间再显示加载条
+  // animation: launch_screen_loading_fade_in 0.5s ease-in-out 1s forwards;
+  // background-color: #434343;
+  display: flex;
+  justify-content: center;
+  max-width: 512px;
+  width: 90%;
+  justify-self: center;
+  transform: translateY(50%);
+}
+
+@keyframes launch_screen_loading_fade_in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.launch_screen_loading_bar {
+  height: 1vmin;
+  width: 0%;
+  border-radius: 0.5vmin;
+  background-color: rgb(255, 255, 255);
+  transition: width 0.5s ease-out;
+  font-size: 0vmin;
+  font-weight: bolder;
+  text-align: center;
+  align-content: center;
+  transition: width 0.5s ease-out;
+}
+
+.launch_screen_loading_bar_loaded {
+  transition: 0.5s cubic-bezier(0.215, 0.610, 0.355, 1);
+  width: 32vmin;
+  height: 8vmin;
+  border-radius: 4vmin;
+  padding: 0 4vmin 0 4vmin;
+  font-size: 4vmin;
+  cursor: pointer;
+  animation: launch_screen_loading_bar_highlight 1s ease-out infinite;
+}
+
+@keyframes launch_screen_loading_bar_highlight {
+  0% {
+    scale: 1;
+  }
+  50% {
+    scale: 1;
+  }
+  70% {
+    scale: 1.1;
+  }
+  100% {
+    scale: 1;
+  }
 }
 
 /* 设置滚动条的样式 */
 ::-webkit-scrollbar {
-  width: 12px;
+  background-color: transparent;
+  width: 2vmin;
+  height: 2vmin;
 }
 
 /* 滚动槽 */
 ::-webkit-scrollbar-track {
-  box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
-  -webkit-box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 10px;
+  background-color: transparent;
+}
+
+::-webkit-scrollbar-corner {
+  background-color: transparent;
 }
 
 /* 滚动条滑块 */
 ::-webkit-scrollbar-thumb {
-  border-radius: 10px;
-  background: rgba(255, 255, 255, 0.5);
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
-  -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+  background-color: rgba(128, 128, 128, 0.5);
+  // background-color: rgba(0, 0, 0, 0.25);
+  border-radius: 1vmin;
+}
+
+#root {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
 }
 
 .App {
@@ -88,8 +244,4 @@ code {
   overflow: hidden;
   perspective: 0;
   -webkit-overflow-scrolling: auto;
-}
-
-#pixiCanvas {
-  z-index: 5;
 }

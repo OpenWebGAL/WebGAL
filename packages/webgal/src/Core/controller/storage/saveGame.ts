@@ -36,9 +36,11 @@ export function generateCurrentStageData(index: number, isSavePreviewImage = tru
     const canvas: HTMLCanvasElement = document.getElementById('pixiCanvas')! as HTMLCanvasElement;
     const canvas2 = document.createElement('canvas');
     const context = canvas2.getContext('2d');
-    canvas2.width = 480;
-    canvas2.height = 270;
-    context!.drawImage(canvas, 0, 0, 480, 270);
+    const previewImageWidth = WebGAL.stageWidth / 5;
+    const previewImageHeight = WebGAL.stageHeight / 5;
+    canvas2.width = previewImageWidth;
+    canvas2.height = previewImageHeight;
+    context!.drawImage(canvas, 0, 0, previewImageWidth, previewImageHeight);
     urlToSave = canvas2.toDataURL('image/webp', 0.5);
     canvas2.remove();
   }

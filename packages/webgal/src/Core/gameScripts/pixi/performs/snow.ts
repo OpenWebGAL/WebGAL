@@ -2,7 +2,6 @@
 import * as PIXI from 'pixi.js';
 import { registerPerform } from '@/Core/util/pixiPerformManager/pixiPerformManager';
 import { WebGAL } from '@/Core/WebGAL';
-import { SCREEN_CONSTANTS } from '@/Core/util/constants';
 
 type ContainerType = 'foreground' | 'background';
 
@@ -26,8 +25,8 @@ const pixiSnow = (
   const effectsContainer =
     containerType === 'foreground' ? pixiStage.foregroundEffectsContainer : pixiStage.backgroundEffectsContainer;
 
-  const screenWidth = SCREEN_CONSTANTS.width;
-  const screenHeight = SCREEN_CONSTANTS.height;
+  const screenWidth = WebGAL.stageWidth;
+  const screenHeight = WebGAL.stageHeight;
 
   const container = new PIXI.Container();
 

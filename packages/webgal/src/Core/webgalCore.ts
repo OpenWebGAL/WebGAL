@@ -4,6 +4,7 @@ import { SceneManager } from '@/Core/Modules/scene';
 import { AnimationManager } from '@/Core/Modules/animations';
 import { Gameplay } from './Modules/gamePlay';
 import { Events } from '@/Core/Modules/events';
+import { SCREEN_CONSTANTS } from './util/constants';
 
 export class WebgalCore {
   public sceneManager = new SceneManager();
@@ -13,4 +14,6 @@ export class WebgalCore {
   public gameName = '';
   public gameKey = '';
   public events = new Events();
+  public stageWidth = SCREEN_CONSTANTS.defaultWidth;
+  public stageHeight = SCREEN_CONSTANTS.defaultHeight;
 }

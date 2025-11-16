@@ -1,23 +1,31 @@
-.NormalButton {
-  font-size: 150%;
-  box-sizing: border-box;
-  padding: 0.2em 1em 0.2em 1em;
-  background-color: rgba(50, 50, 50, 0.05);
-  margin: 0 0.4em 0 0;
-  color: rgba(160, 170, 160, 1);
-  cursor: pointer;
-  border-bottom: 2px solid transparent;
+.options_normal_button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 8vmin;
+  min-width: 8vmin;
+  padding: 1vmin 4vmin;
+  border-radius: 3vmin;
+  transition: background-color 0.5s cubic-bezier(0.215, 0.610, 0.355, 1);
+
+  color: #474747;
+  font-weight: 500;
+  font-size: 3.8vmin;
 }
 
-.NormalButton:hover {
-  border-bottom: 2px solid rgba(81, 110, 65, 0.9);
-  color: rgba(81, 110, 65, 0.9);
-  font-weight: bold;
+.options_normal_button:hover {
+  background-color: rgb(199, 199, 199);
+  transition: background-color 0s;
 }
 
-.NormalButtonChecked {
-  background-color: rgba(81, 110, 65, 0.15);
-  border-bottom: 2px solid rgba(81, 110, 65, 0.9);
-  color: rgba(81, 110, 65, 0.9);
-  font-weight: bold;
+.options_normal_button_active {
+  transform: translateY(-0.5vmin);
+  background-color: rgb(52, 114, 185);
+  box-shadow: 0 0.5vmin 0vmin rgb(32, 96, 148);
+  color: rgb(255, 255, 255);
+  text-shadow: 0 0.3vmin 0 rgb(32, 96, 148);
+}
+
+.options_normal_button_active:hover {
+  background-color: rgb(52, 109, 175);
 }

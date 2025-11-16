@@ -2,207 +2,48 @@
 <html lang="zh-Hans">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/x-icon" href="/icons/favicon.ico" />
-    <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
-    <link rel="manifest" href="/manifest.json" />
+    <link rel="icon" type="image/x-icon" href="./icons/favicon.ico" />
+    <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png" />
+    <link rel="manifest" href="./manifest.json" />
+    <link rel="stylesheet" href="./src/index.scss" />
+    <link rel="stylesheet" href="./game/userStyleSheet.css" />
     <title>WebGAL</title>
-    <style>
-      .html-body__effect-background {
-        height: 100vh;
-        width: 100vw;
-        filter: blur(50px);
-        background-position: center;
-        background-repeat: no-repeat;
-        background-size: cover;
-        position: absolute;
-        top: 0;
-        left: 0;
-      }
-
-      .html-body__title-enter {
-        width: 2560px;
-        height: 1440px;
-        overflow: hidden;
-        position: absolute;
-        top: 0;
-        z-index: 14;
-        opacity: 1;
-        transition: opacity 1.5s;
-      }
-
-      .title-enter__initial-background {
-        height: 100%;
-        width: 100%;
-        position: absolute;
-        background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
-        top: 0;
-        opacity: 1;
-        transition: opacity 1s;
-      }
-
-      .title-enter__white-background {
-        width: 100%;
-        height: 100%;
-        position: absolute;
-        top: 0;
-        opacity: 0;
-        background: linear-gradient(
-          165deg,
-          rgba(255, 255, 255, 0.25) 0%,
-          rgba(255, 255, 255, 1) 50%,
-          rgba(255, 255, 255, 0.25) 100%
-        );
-        transition: opacity 1s;
-      }
-
-      .title-enter__container {
-        width: 100%;
-        position: absolute;
-        top: 0;
-        height: 100%;
-        opacity: 1;
-        font-size: 175%;
-        transition: opacity 1s;
-        z-index: 15;
-        font-family: '思源宋体', Georgia, serif;
-      }
-
-      .title-enter-container__center-text {
-        width: 100%;
-        height: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      }
-
-      .title-enter-container__center-text > div {
-        letter-spacing: 0.25em;
-        padding: 2em 2em 2em 2em;
-        text-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
-        transition: text-shadow 1s;
-        font-size: 175%;
-        animation: title-enter-container__center-text--blink 4s infinite;
-      }
-
-      @keyframes title-enter-container__center-text--blink {
-        0% {
-          text-shadow: 0 0 15px rgba(0, 0, 0, 0.65);
-        }
-        50% {
-          text-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
-        }
-        100% {
-          text-shadow: 0 0 15px rgba(0, 0, 0, 0.65);
-        }
-      }
-
-      .title-enter-container__link-to-github {
-        position: absolute;
-        bottom: 1em;
-        color: #999;
-        font-size: 75%;
-        display: flex;
-        justify-content: center;
-        width: 100%;
-        flex-flow: column;
-        align-items: center;
-      }
-
-      .title-enter-container__link-to-github > div {
-        padding: 0 0 0.25em 0;
-      }
-    </style>
   </head>
   <body>
-    <!-- 背景模糊 -->
-    <div class="html-body__effect-background"></div>
-    <!-- 落地页 -->
-    <div class="html-body__title-enter">
-      <div class="title-enter__initial-background"></div>
-      <div class="title-enter__white-background"></div>
-      <div class="title-enter__container">
-        <div class="title-enter-container__center-text">
-          <div>PRESS THE SCREEN TO START</div>
-        </div>
-        <div class="title-enter-container__link-to-github">
-          <div>Powered by <a> WebGAL </a> Framework</div>
+    <!--先盖一层 LOGO 挡住下面正在加载的组件-->
+    <div id="launchScreen" class="launch_screen">
+      <div class="launch_screen_logo_container">
+        <img id="gameLogo" alt="Game Logo" class="launch_screen_logo" />
+      </div>
+      <div class="launch_screen_loading_container">
+        <div id="launchScreenLoadingBar" class="launch_screen_loading_bar">
+          PLAY
         </div>
       </div>
     </div>
     <!-- 紧急回避页挂载点 -->
-    <div id="html-body__panic-overlay"></div>
+    <div id="panicOverlay"></div>
     <!-- 应用挂载点 -->
     <div id="root"></div>
-    <!-- 在窗口大小改变时进行强制缩放 -->
+    <!-- 加载 Logo -->
+    <script type="module">
+      import defaultLogo from './src/assets/logo/logo.png';
+      (() => {
+        function loadLogo(src) {
+          const img = document.getElementById('gameLogo');
+          img.onerror = function () {
+            // 路径不存在时回退到默认 logo
+            img.onerror = null; // 防止死循环
+            img.src = defaultLogo;
+          };
+          img.src = src;
+        }
+        loadLogo('./game/logo.png');
+      })();
+    </script>
     <script>
       (() => {
         const isIOS = !!navigator.userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
-        const resize = () => {
-          const targetHeight = 1440; // 目标高度
-          const targetWidth = 2560; // 目标宽度
-
-          const h = window.innerHeight; // 窗口高度
-          const w = window.innerWidth; // 窗口宽度
-          const zoomH = h / targetHeight; // 以窗口高度为基准的变换比
-          const zoomW = w / targetWidth; // 以窗口宽度为基准的变换比
-          const zoomH2 = w / targetHeight; // 竖屏时以窗口高度为基础的变换比
-          const zoomW2 = h / targetWidth; // 竖屏时以窗口宽度为基础的变换比
-          let mh = (targetHeight - h) / 2; // y轴移动距离
-          let mw = (targetWidth - w) / 2; // x轴移动距离
-          let mh2os = targetWidth / 2 - w / 2; // 竖屏时 y轴移动距离
-          let mw2os = targetHeight / 2 - h / 2; // 竖屏时 x轴移动距离
-          let transform = '';
-          let effectBackgroundTransform = '';
-          const root = document.querySelector('#root'); // 获取根元素
-          const titleEnter = document.querySelector('.html-body__title-enter');
-          const effectBackground = document.querySelector('.html-body__effect-background');
-          const elements = [root, titleEnter];
-          if (w > h) {
-            if (effectBackground) {
-              effectBackground.style.height = `100vh`;
-              effectBackground.style.width = `100vw`;
-              effectBackgroundTransform = '';
-            }
-            mw = -mw;
-            mh = -mh;
-            if (w * (9 / 16) >= h) {
-              transform = `translate(${mw}px, ${mh}px) ` + `scale(${zoomH}, ${zoomH}) `;
-            }
-            if (w * (9 / 16) < h) {
-              transform = `translate(${mw}px, ${mh}px) ` + `scale(${zoomW}, ${zoomW}) `;
-            }
-          } else {
-            // 旋转
-            if (effectBackground) {
-              effectBackground.style.height = `${targetHeight}px `;
-              effectBackground.style.width = `${targetWidth}px `;
-            }
-            mw2os = -mw2os;
-            if (h * (9 / 16) >= w) {
-              effectBackgroundTransform =
-                `rotate(90deg) ` + `translate(${mw2os}px, ${mh2os}px) ` + `scale(${zoomH2 * 1.75}, ${zoomH2 * 1.75}) `;
-              transform = `rotate(90deg) ` + `translate(${mw2os}px, ${mh2os}px) ` + `scale(${zoomH2},${zoomH2}) `;
-            }
-            if (h * (9 / 16) < w) {
-              effectBackgroundTransform =
-                `rotate(90deg) ` + ` translate(${mw2os}px, ${mh2os}px) ` + `scale(${zoomW2 * 1.75}, ${zoomW2 * 1.75}) `;
-              transform = `rotate(90deg) ` + `translate(${mw2os}px, ${mh2os}px) ` + `scale(${zoomW2},${zoomW2}) `;
-            }
-            // iOS 不强制旋转
-            if (isIOS) {
-              const zoomWi = w / targetWidth;
-              transform = `translate(${-mw}px, ${-mh}px) ` + `scale(${zoomWi},${zoomWi}) `;
-            }
-          }
-          if (effectBackground) {
-            effectBackground.style.transform = effectBackgroundTransform;
-          }
-          for (const element of elements) {
-            if (element) {
-              element.style.transform = transform;
-            }
-          }
-        };
         if (!isIOS) {
           // 非 IOS
           // 创建一个新的 meta 标签
@@ -211,17 +52,6 @@
           metaTag.content = 'width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no';
           // 将该标签添加到 head 中
           document.head.appendChild(metaTag);
-          resize();
-          window.onload = resize;
-          window.onresize = resize;
-          // 监听键盘 F11 键按下事件，全屏时触发页面调整
-          document.onkeydown = (e) => {
-            if (e && e.key === 'F11') {
-              setTimeout(() => {
-                resize();
-              }, 100);
-            }
-          };
         } else {
           // IOS
           const metaTag = document.createElement('meta');
@@ -272,51 +102,20 @@
             bubbles: true,
             cancelable: true,
           });
-          const target = document.querySelector('.title__enter-game-target');
+          const target = document.getElementById('enter_game_target');
           if (target) {
             target.dispatchEvent(event);
           }
         });
-        /** 点击屏幕，进入引擎主界面 */
+
         const enter = () => {
-          const initialBackground = document.querySelector('.title-enter__initial-background');
-          if (initialBackground) {
-            initialBackground.style.opacity = '0';
-          }
-          const container = document.querySelector('.title-enter__container');
-          if (container) {
-            container.style.opacity = '0';
-          }
-          const whiteBackground = document.querySelector('.title-enter__white-background');
-          setTimeout(() => {
-            if (whiteBackground) {
-              whiteBackground.style.opacity = '1';
-            }
-          }, 50); // 在50ms后开始显示白色渐变
-          const titleEnter = document.querySelector('.html-body__title-enter');
-          setTimeout(() => {
-            if (titleEnter) titleEnter.style.opacity = '0';
-          }, 500); // 500ms后开始降低落地页透明度
-          if (!isIOS && titleEnter) {
-            titleEnter.style.pointerEvents = 'none'; // 落地页不再响应点击
-            titleEnter.style.background = 'linear-gradient( #a1c4fd 0%, #c2e9fb 100%)'; // 改变标题渐变效果
-          }
-          setTimeout(() => {
-            if (titleEnter) {
-              titleEnter.style.display = 'none';
-            }
-          }, 2000); // 将落地页设置为不显示
+          // 玩家任何时候都可以点击关闭 launchScreen，不需要阻止
           enterPromiseResolve();
         };
-        const titleEnter = document.querySelector('.html-body__title-enter');
-        if (titleEnter) {
-          titleEnter.onclick = enter;
-        }
-        const linkToGithub = document.querySelector('.title-enter-container__link-to-github');
-        const aTag = linkToGithub?.querySelector('a');
-        if (aTag) {
-          aTag.href = 'https://github.com/OpenWebGAL/WebGAL';
-          aTag.onclick = (event) => event.stopPropagation();
+
+        const launchScreen = document.getElementById('launchScreen');
+        if (launchScreen) {
+          launchScreen.onclick = enter;
         }
       })();
     </script>
@@ -358,6 +157,6 @@
       })();
     </script>
     <!-- main文件 -->
-    <script type="module" src="/src/main.tsx"></script>
+    <script type="module" src="./src/main.tsx"></script>
   </body>
 </html>

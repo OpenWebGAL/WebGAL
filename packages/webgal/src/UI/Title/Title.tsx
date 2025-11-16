@@ -10,8 +10,19 @@ import { keyboard } from '@/hooks/useHotkey';
 import useConfigData from '@/hooks/useConfigData';
 import { playBgm } from '@/Core/controller/stage/playBgm';
 import { continueGame, startGame } from '@/Core/controller/gamePlay/startContinueGame';
-import { showGlogalDialog } from '../GlobalDialog/GlobalDialog';
+import { showGlobalDialog } from '../GlobalDialog/GlobalDialog';
 import styles from './title.module.scss';
+
+import { Icon } from '@icon-park/react/lib/runtime';
+import { FolderOpen, GoOn, PlayOne, Power, SettingTwo, Star } from '@icon-park/react';
+import { useDelayedVisibility } from '@/hooks/useDelayedVisibility';
+
+interface ITitleButtonProps {
+  text?: string;
+  icon?: Icon;
+  disabled?: boolean;
+  onClick?: () => void;
+}
 
 /** 标题页 */
 export default function Title() {
@@ -31,11 +42,31 @@ export default function Title() {
   const appreciationItems = useSelector((state: RootState) => state.userData.appreciationData);
   const hasAppreciationItems = appreciationItems.bgm.length > 0 || appreciationItems.cg.length > 0;
 
+  const titleButton = (props: ITitleButtonProps) => {
+    return (
+      <div
+        className={`${applyStyle('title_button', styles.title_button)} ${
+          props.disabled ? applyStyle('title_button_disabled', styles.title_button_disabled) : ''
+        }`}
+        onClick={props.onClick}
+        onMouseEnter={playSeEnter}
+      >
+        {props.icon && (
+          <props.icon className={applyStyle('title_button_icon', styles.title_button_icon)} strokeWidth={4} />
+        )}
+        {props.text && <div className={applyStyle('title_button_text', styles.title_button_text)}>{props.text}</div>}
+      </div>
+    );
+  };
+
+  const delayedShowTitle = useDelayedVisibility(GUIState.showTitle);
+  const optionData = useSelector((state: RootState) => state.userData.optionData);
+
   return (
     <>
-      {GUIState.showTitle && <div className={applyStyle('Title_backup_background', styles.Title_backup_background)} />}
+      {GUIState.showTitle && <div className={applyStyle('title_backup_background', styles.title_backup_background)} />}
       <div
-        className="title__enter-game-target"
+        id="enter_game_target"
         onClick={() => {
           playBgm(GUIState.titleBgm);
           dispatch(setVisibility({ component: 'isEnterGame', visibility: true }));
@@ -43,95 +74,92 @@ export default function Title() {
             document.documentElement.requestFullscreen();
             if (keyboard) keyboard.lock(['Escape', 'F11']);
           }
+          const launchScreen = document.getElementById('launchScreen');
+          if (launchScreen) {
+            launchScreen.classList.add('launch_screen_off');
+          }
         }}
         onMouseEnter={playSeEnter}
       />
-      {GUIState.showTitle && (
+      {delayedShowTitle && (
         <div
-          className={applyStyle('Title_main', styles.Title_main)}
+          className={`${applyStyle('title_main', styles.title_main)} ${
+            GUIState.showTitle ? '' : applyStyle('title_main_hide', styles.title_main_hide)
+          }`}
           style={{
-            backgroundImage: showBackground,
-            backgroundSize: 'cover',
+            ['--ui-transition-duration' as any]: `${optionData.uiTransitionDuration}ms`,
           }}
         >
-          <div className={applyStyle('Title_buttonList', styles.Title_buttonList)}>
-            <div
-              className={applyStyle('Title_button', styles.Title_button)}
-              onClick={() => {
+          <div
+            className={applyStyle('title_background', styles.title_background)}
+            style={{
+              backgroundImage: showBackground,
+            }}
+          />
+          <div className={applyStyle('title_button_list', styles.title_button_list)}>
+            {titleButton({
+              text: t('start.title'),
+              icon: PlayOne,
+              onClick: () => {
                 startGame();
                 playSeClick();
-              }}
-              onMouseEnter={playSeEnter}
-            >
-              <div className={applyStyle('Title_button_text', styles.Title_button_text)}>{t('start.title')}</div>
-            </div>
-            <div
-              className={applyStyle('Title_button', styles.Title_button)}
-              onClick={async () => {
+              },
+            })}
+            {titleButton({
+              text: t('continue.title'),
+              icon: GoOn,
+              onClick: () => {
                 playSeClick();
                 dispatch(setVisibility({ component: 'showTitle', visibility: false }));
                 continueGame();
-              }}
-              onMouseEnter={playSeEnter}
-            >
-              <div className={applyStyle('Title_button_text', styles.Title_button_text)}>{t('continue.title')}</div>
-            </div>
-            <div
-              className={applyStyle('Title_button', styles.Title_button)}
-              onClick={() => {
-                playSeClick();
-                dispatch(setVisibility({ component: 'showMenuPanel', visibility: true }));
-                dispatch(setMenuPanelTag(MenuPanelTag.Option));
-              }}
-              onMouseEnter={playSeEnter}
-            >
-              <div className={applyStyle('Title_button_text', styles.Title_button_text)}>{t('options.title')}</div>
-            </div>
-            <div
-              className={applyStyle('Title_button', styles.Title_button)}
-              onClick={() => {
+              },
+            })}
+            {titleButton({
+              text: t('load.title'),
+              icon: FolderOpen,
+              onClick: () => {
                 playSeClick();
                 dispatch(setVisibility({ component: 'showMenuPanel', visibility: true }));
                 dispatch(setMenuPanelTag(MenuPanelTag.Load));
-              }}
-              onMouseEnter={playSeEnter}
-            >
-              <div className={applyStyle('Title_button_text', styles.Title_button_text)}>{t('load.title')}</div>
-            </div>
-            {GUIState.enableAppreciationMode && (
-              <div
-                className={`${applyStyle('Title_button', styles.Title_button)} ${
-                  !hasAppreciationItems ? styles.Title_button_disabled : ''
-                }`}
-                onClick={() => {
+              },
+            })}
+            {titleButton({
+              text: t('options.title'),
+              icon: SettingTwo,
+              onClick: () => {
+                playSeClick();
+                dispatch(setVisibility({ component: 'showMenuPanel', visibility: true }));
+                dispatch(setMenuPanelTag(MenuPanelTag.Option));
+              },
+            })}
+            {GUIState.enableAppreciationMode &&
+              titleButton({
+                text: t('extra.title'),
+                icon: Star,
+                disabled: !hasAppreciationItems,
+                onClick: () => {
                   if (hasAppreciationItems) {
                     playSeClick();
                     dispatch(setVisibility({ component: 'showExtra', visibility: true }));
                   }
-                }}
-                onMouseEnter={playSeEnter}
-              >
-                <div className={applyStyle('Title_button_text', styles.Title_button_text)}>{t('extra.title')}</div>
-              </div>
-            )}
-            <div
-              className={applyStyle('Title_button', styles.Title_button)}
-              onClick={() => {
+                },
+              })}
+            {titleButton({
+              text: t('exit.title'),
+              icon: Power,
+              onClick: () => {
                 playSeClick();
-                showGlogalDialog({
+                showGlobalDialog({
                   title: t('exit.tips'),
-                  leftText: tCommon('yes'),
-                  rightText: tCommon('no'),
-                  leftFunc: () => {
+                  leftText: tCommon('cancel'),
+                  rightText: tCommon('confirm'),
+                  leftFunc: () => {},
+                  rightFunc: () => {
                     window.close();
                   },
-                  rightFunc: () => {},
                 });
-              }}
-              onMouseEnter={playSeEnter}
-            >
-              <div className={applyStyle('Title_button_text', styles.Title_button_text)}>{t('exit.title')}</div>
-            </div>
+              },
+            })}
           </div>
         </div>
       )}

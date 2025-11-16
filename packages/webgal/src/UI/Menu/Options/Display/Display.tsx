@@ -9,16 +9,18 @@ import { RootState } from '@/store/store';
 import { textFont, textSize } from '@/store/userDataInterface';
 import { setOptionData } from '@/store/userDataReducer';
 import { useDispatch, useSelector } from 'react-redux';
-import { OptionSlider } from '../OptionSlider';
+import { NormalSlider } from '../NormalSlider';
+import useApplyStyle from '@/hooks/useApplyStyle';
 
 export function Display() {
   const userDataState = useSelector((state: RootState) => state.userData);
   const dispatch = useDispatch();
   const t = useTrans('menu.options.pages.display.options.');
   const { isSupported: isFullscreenSupported, enter: enterFullscreen, exit: exitFullscreen } = useFullScreen();
+  const applyStyle = useApplyStyle('UI/Menu/Options/options.scss');
 
   return (
-    <div className={styles.Options_main_content_half}>
+    <div className={applyStyle('options_page_container', styles.options_page_container)}>
       {isFullscreenSupported && (
         <NormalOption key="fullScreen" title={t('fullScreen.title')}>
           <NormalButton
@@ -28,6 +30,19 @@ export function Display() {
           />
         </NormalOption>
       )}
+      <NormalOption key="uiTransitionDuration" title={t('uiTransitionDuration.title')}>
+        <NormalSlider
+          initValue={userDataState.optionData.uiTransitionDuration}
+          uniqueID={t('uiTransitionDuration.title')}
+          onChange={(event) => {
+            const newValue = event.target.value;
+            dispatch(setOptionData({ key: 'uiTransitionDuration', value: Number(newValue) }));
+            setStorage();
+          }}
+          min={0}
+          max={1000}
+        />
+      </NormalOption>
       <NormalOption key="textSize" title={t('textSize.title')}>
         <NormalButton
           textList={t('textSize.options.small', 'textSize.options.medium', 'textSize.options.large')}
@@ -45,7 +60,7 @@ export function Display() {
               setStorage();
             },
           ]}
-          currentChecked={userDataState.optionData.textSize}
+          currentChecked={userDataState.optionData.textSize - 1}
         />
       </NormalOption>
       <NormalOption key="textFont" title={t('textFont.title')}>
@@ -69,7 +84,7 @@ export function Display() {
         />
       </NormalOption>
       <NormalOption key="textSpeed" title={t('textSpeed.title')}>
-        <OptionSlider
+        <NormalSlider
           initValue={userDataState.optionData.textSpeed}
           uniqueID={t('textSpeed.title')}
           onChange={(event) => {
@@ -80,7 +95,7 @@ export function Display() {
         />
       </NormalOption>
       <NormalOption key="textboxOpacity" title={t('textboxOpacity.title')}>
-        <OptionSlider
+        <NormalSlider
           initValue={userDataState.optionData.textboxOpacity}
           uniqueID={t('textboxOpacity.title')}
           onChange={(event) => {
