@@ -39,6 +39,7 @@ export enum commandType {
   getUserInput,
   applyStyle,
   wait,
+  callSteam, // 调用Steam功能
 }
 
 /**

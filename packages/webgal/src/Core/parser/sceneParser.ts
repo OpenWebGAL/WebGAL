@@ -27,6 +27,7 @@ import { setTransform } from '@/Core/gameScripts/setTransform';
 import { setTransition } from '@/Core/gameScripts/setTransition';
 import { unlockBgm } from '@/Core/gameScripts/unlockBgm';
 import { unlockCg } from '@/Core/gameScripts/unlockCg';
+import { callSteam } from '@/Core/gameScripts/callSteam';
 import { end } from '../gameScripts/end';
 import { jumpLabel } from '../gameScripts/jumpLabel';
 import { pixiInit } from '../gameScripts/pixi/pixiInit';
@@ -72,6 +73,7 @@ export const SCRIPT_TAG_MAP = defineScripts({
   getUserInput: ScriptConfig(commandType.getUserInput, getUserInput),
   applyStyle: ScriptConfig(commandType.applyStyle, applyStyle, { next: true }),
   wait: ScriptConfig(commandType.wait, wait),
+  callSteam: ScriptConfig(commandType.callSteam, callSteam, { next: true }),
 });
 
 export const SCRIPT_CONFIG: IConfigInterface[] = Object.values(SCRIPT_TAG_MAP);
