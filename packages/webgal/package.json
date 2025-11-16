@@ -15,6 +15,7 @@
     "angular-expressions": "^1.4.3",
     "axios": "^0.30.2",
     "cloudlogjs": "^1.0.9",
+    "gifuct-js": "^2.1.2",
     "i18next": "^22.4.15",
     "localforage": "^1.10.0",
     "lodash": "^4.17.21",
