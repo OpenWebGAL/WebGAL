@@ -12,7 +12,7 @@ import { logger } from '@/Core/util/logger';
 import { getAnimateDuration } from '@/Core/Modules/animationFunctions';
 import { WebGAL } from '@/Core/WebGAL';
 import { baseBlinkParam, baseFocusParam, BlinkParam, FocusParam } from '@/Core/live2DCore';
-import { DEFAULT_FIG_IN_DURATION, WEBGAL_NONE } from '../constants';
+import { DEFAULT_FIG_IN_DURATION, DEFAULT_FIG_OUT_DURATION, WEBGAL_NONE } from '../constants';
 /**
  * 更改立绘
  * @param sentence 语句
@@ -93,7 +93,7 @@ export function changeFigure(sentence: ISentence): IPerform {
   let zIndex = getNumberArgByKey(sentence, 'zIndex') ?? -1;
   const enterDuration = getNumberArgByKey(sentence, 'enterDuration') ?? duration;
   duration = enterDuration;
-  const exitDuration = getNumberArgByKey(sentence, 'exitDurationOfPrev');
+  const exitDuration = getNumberArgByKey(sentence, 'exitDurationOfPrev') ?? DEFAULT_FIG_OUT_DURATION;
 
   const dispatch = webgalStore.dispatch;
 
@@ -206,12 +206,12 @@ export function changeFigure(sentence: ISentence): IPerform {
       );
       duration = getAnimateDuration(exitAnimation);
     }
-    if (enterDuration) {
+    if (enterDuration >= 0) {
       webgalStore.dispatch(
         stageActions.updateAnimationSettings({ target: key, key: 'enterDuration', value: enterDuration }),
       );
     }
-    if (exitDuration) {
+    if (exitDuration >= 0) {
       webgalStore.dispatch(
         stageActions.updateAnimationSettings({ target: key, key: 'exitDuration', value: exitDuration }),
       );

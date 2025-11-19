@@ -13,6 +13,7 @@ import { AnimationFrame, IUserAnimation } from '@/Core/Modules/animations';
 import cloneDeep from 'lodash/cloneDeep';
 import { getAnimateDuration } from '@/Core/Modules/animationFunctions';
 import { WebGAL } from '@/Core/WebGAL';
+import { DEFAULT_BG_OUT_DURATION } from '@/Core/constants';
 
 /**
  * 进行背景图片的切换
@@ -24,10 +25,10 @@ export const changeBg = (sentence: ISentence): IPerform => {
   const unlockName = getStringArgByKey(sentence, 'unlockname') ?? '';
   const series = getStringArgByKey(sentence, 'series') ?? 'default';
   const transformString = getStringArgByKey(sentence, 'transform');
-  let duration = getNumberArgByKey(sentence, 'duration') ?? 1000;
+  let duration = getNumberArgByKey(sentence, 'duration') ?? DEFAULT_BG_OUT_DURATION;
   const enterDuration = getNumberArgByKey(sentence, 'enterDuration') ?? duration;
   duration = enterDuration;
-  const exitDuration = getNumberArgByKey(sentence, 'exitDurationOfPrev');
+  const exitDuration = getNumberArgByKey(sentence, 'exitDurationOfPrev') ?? DEFAULT_BG_OUT_DURATION;
   const ease = getStringArgByKey(sentence, 'ease') ?? '';
 
   const dispatch = webgalStore.dispatch;
@@ -101,12 +102,12 @@ export const changeBg = (sentence: ISentence): IPerform => {
     );
     duration = getAnimateDuration(exitAnimation);
   }
-  if (enterDuration) {
+  if (enterDuration >= 0) {
     webgalStore.dispatch(
       stageActions.updateAnimationSettings({ target: 'bg-main', key: 'enterDuration', value: enterDuration }),
     );
   }
-  if (exitDuration) {
+  if (exitDuration >= 0) {
     webgalStore.dispatch(
       stageActions.updateAnimationSettings({ target: 'bg-main', key: 'exitDuration', value: exitDuration }),
     );
