@@ -93,7 +93,7 @@ export function changeFigure(sentence: ISentence): IPerform {
   let zIndex = getNumberArgByKey(sentence, 'zIndex') ?? -1;
   const enterDuration = getNumberArgByKey(sentence, 'enterDuration') ?? duration;
   duration = enterDuration;
-  const exitDuration = getNumberArgByKey(sentence, 'exitDurationOfPrev') ?? DEFAULT_FIG_OUT_DURATION;
+  const exitDuration = getNumberArgByKey(sentence, 'exitDuration') ?? DEFAULT_FIG_OUT_DURATION;
 
   const dispatch = webgalStore.dispatch;
 

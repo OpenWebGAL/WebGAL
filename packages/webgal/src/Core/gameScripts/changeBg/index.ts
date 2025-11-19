@@ -28,7 +28,7 @@ export const changeBg = (sentence: ISentence): IPerform => {
   let duration = getNumberArgByKey(sentence, 'duration') ?? DEFAULT_BG_OUT_DURATION;
   const enterDuration = getNumberArgByKey(sentence, 'enterDuration') ?? duration;
   duration = enterDuration;
-  const exitDuration = getNumberArgByKey(sentence, 'exitDurationOfPrev') ?? DEFAULT_BG_OUT_DURATION;
+  const exitDuration = getNumberArgByKey(sentence, 'exitDuration') ?? DEFAULT_BG_OUT_DURATION;
   const ease = getStringArgByKey(sentence, 'ease') ?? '';
 
   const dispatch = webgalStore.dispatch;
