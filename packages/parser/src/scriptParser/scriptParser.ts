@@ -37,10 +37,10 @@ export const scriptParser = (
 
   // 去分号
   const commentSplit = sentenceRaw.split(/(?<!\\);/);
-  let newSentenceRaw = commentSplit[0].trim();
+  let newSentenceRaw = commentSplit[0];
   newSentenceRaw = newSentenceRaw.replaceAll('\\;',';');
   const sentenceComment = commentSplit[1] ?? '';
-  if (newSentenceRaw === '') {
+  if (newSentenceRaw.trim() === '') {
     // 注释提前返回
     return {
       command: commandType.comment, // 语句类型
