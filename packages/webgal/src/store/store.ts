@@ -17,6 +17,7 @@ export const webgalStore = configureStore({
   middleware: getDefaultMiddleware({
     serializableCheck: false,
   }),
+  devTools: process.env.NODE_ENV !== 'production',
 });
 
 // 在 TS 中的类型声明

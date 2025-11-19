@@ -6,7 +6,7 @@ import { FullScreenPerform } from './FullScreenPerform/FullScreenPerform';
 import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
 import { stopAll } from '@/Core/controller/gamePlay/fastSkip';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '@/store/store';
+import { RootState, webgalStore } from '@/store/store';
 import { setVisibility } from '@/store/GUIReducer';
 import { TextBoxFilm } from '@/Stage/TextBox/TextBoxFilm';
 import { useHotkey } from '@/hooks/useHotkey';
@@ -18,52 +18,12 @@ import { IGuiState } from '@/store/guiInterface';
 import { IStageState } from '@/store/stageInterface';
 // import OldStage from '@/Components/Stage/OldStage/OldStage';
 
-function inTextBox(event: React.MouseEvent) {
-  const tb = document.getElementById('textBoxMain');
-  if (!tb) {
-    return false;
-  }
-  let bounds = tb.getBoundingClientRect();
-  return (
-    event.clientX > bounds.left &&
-    event.clientX < bounds.right &&
-    event.clientY > bounds.top &&
-    event.clientY < bounds.bottom
-  );
-}
-
-function checkMousePosition(event: React.MouseEvent, GUIState: IGuiState, dispatch: ReturnType<typeof useDispatch>) {
-  if (!GUIState.controlsVisibility && inTextBox(event)) {
-    dispatch(setVisibility({ component: 'controlsVisibility', visibility: true }));
-  }
-  if (GUIState.controlsVisibility && !inTextBox(event)) {
-    dispatch(setVisibility({ component: 'controlsVisibility', visibility: false }));
-  }
-}
-
-function isTextboxHidden(stageState: IStageState, GUIState: IGuiState) {
-  if (!GUIState.showTextBox) {
-    return true;
-  }
-
-  if (stageState.isDisableTextbox) {
-    return true;
-  }
-
-  const isText = stageState.showText !== '' || stageState.showName !== '';
-  if (!isText) {
-    return true;
-  }
-
-  const isInIntro = document.getElementById('introContainer')?.style.display === 'block';
-  if (isInIntro) {
-    return true;
-  }
-
-  return false;
-}
-
 let timeoutEventHandle: ReturnType<typeof setTimeout> | null = null;
+// 视为“未移动”的最小移动阈值（像素^2），例如 4px -> 16
+const MOVE_THRESHOLD_SQ = 16;
+let lastMouseX = 0;
+let lastMouseY = 0;
+let hasLastMousePos = false;
 
 /**
  * 检查并更新控制可见性
@@ -79,22 +39,38 @@ function updateControlsVisibility(
   GUIState: IGuiState,
   dispatch: ReturnType<typeof useDispatch>,
 ) {
-  if (isTextboxHidden(stageState, GUIState)) {
-    // 当文本框被隐藏时
-    // 逻辑：鼠标移动时显示，一段时间（默认：1秒）后隐藏
-    if (timeoutEventHandle) {
-      clearTimeout(timeoutEventHandle);
-    }
-
-    dispatch(setVisibility({ component: 'controlsVisibility', visibility: true }));
-    timeoutEventHandle = setTimeout(() => {
-      dispatch(setVisibility({ component: 'controlsVisibility', visibility: false }));
-    }, 1000);
+  // 新逻辑：超过阈值的鼠标移动立刻显示，2s 无操作后隐藏（未锁定时）
+  const { clientX, clientY } = event;
+  let movedEnough = false;
+  if (!hasLastMousePos) {
+    movedEnough = true; // 第一次移动视为足够
+    hasLastMousePos = true;
   } else {
-    // 当文本框正常显示时
-    // 逻辑：鼠标位置在文本框内时显示
-    checkMousePosition(event, GUIState, dispatch);
+    const dx = clientX - lastMouseX;
+    const dy = clientY - lastMouseY;
+    movedEnough = dx * dx + dy * dy >= MOVE_THRESHOLD_SQ;
   }
+  lastMouseX = clientX;
+  lastMouseY = clientY;
+
+  if (!movedEnough) {
+    // 微小移动，视为无操作，不重置计时器
+    return;
+  }
+
+  if (timeoutEventHandle) {
+    clearTimeout(timeoutEventHandle);
+  }
+
+  if (!GUIState.controlsVisibility) {
+    dispatch(setVisibility({ component: 'controlsVisibility', visibility: true }));
+  }
+
+  timeoutEventHandle = setTimeout(() => {
+    if (!webgalStore.getState().GUI.showControls) {
+      dispatch(setVisibility({ component: 'controlsVisibility', visibility: false }));
+    }
+  }, 2000);
 }
 
 export const Stage: FC = () => {

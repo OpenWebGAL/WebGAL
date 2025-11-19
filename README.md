@@ -24,7 +24,7 @@ https://demo.openwebgal.com
 
 #### 完整的游戏
 
-[铃色☆记忆](http://hoshinasuzu.cn/) by 星奈组  [备用链接](http://hoshinasuzu.cc/)
+[WebGAL 官方游戏展示页](https://www.openwebgal.com/games/)
 
 [Elf of Era Idols Project](https://store.steampowered.com/app/2414730/Elf_of_Era_Idols_Project/) (通过 Steam 获取)
 

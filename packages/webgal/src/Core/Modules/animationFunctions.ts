@@ -7,6 +7,7 @@ import { baseTransform } from '@/store/stageInterface';
 import { generateTimelineObj } from '@/Core/controller/stage/pixi/animations/timeline';
 import { WebGAL } from '@/Core/WebGAL';
 import PixiStage, { IAnimationObject } from '@/Core/controller/stage/pixi/PixiController';
+import { DEFALUT_FIG_IN_DURATION, DEFALUT_FIG_OUT_DURATION } from '../constants';
 
 // eslint-disable-next-line max-params
 export function getAnimationObject(animationName: string, target: string, duration: number, writeDefault: boolean) {
@@ -56,7 +57,7 @@ export function getEnterExitAnimation(
   animation: IAnimationObject | null;
 } {
   if (type === 'enter') {
-    let duration = 500;
+    let duration = DEFALUT_FIG_IN_DURATION;
     if (isBg) {
       duration = 1500;
     }
@@ -76,7 +77,8 @@ export function getEnterExitAnimation(
     }
     return { duration, animation };
   } else {
-    let duration = 1000;
+    // exit
+    let duration = DEFALUT_FIG_OUT_DURATION;
     if (isBg) {
       duration = 1500;
     }
