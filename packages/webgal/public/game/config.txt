@@ -4,5 +4,3 @@ Title_img:WebGAL_New_Enter_Image.webp;
 Title_bgm:s_Title.mp3;
 Game_Logo:WebGalEnter.webp;
 Enable_Appreciation:true;
-Max_line:4;
-Max_lineHeight:0.25;
