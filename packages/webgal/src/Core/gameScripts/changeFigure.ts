@@ -12,7 +12,7 @@ import { logger } from '@/Core/util/logger';
 import { getAnimateDuration } from '@/Core/Modules/animationFunctions';
 import { WebGAL } from '@/Core/WebGAL';
 import { baseBlinkParam, baseFocusParam, BlinkParam, FocusParam } from '@/Core/live2DCore';
-import { DEFALUT_FIG_IN_DURATION, WEBGAL_NONE } from '../constants';
+import { DEFAULT_FIG_IN_DURATION, WEBGAL_NONE } from '../constants';
 /**
  * 更改立绘
  * @param sentence 语句
@@ -87,7 +87,7 @@ export function changeFigure(sentence: ISentence): IPerform {
   // 其他参数
   const transformString = getStringArgByKey(sentence, 'transform');
   const ease = getStringArgByKey(sentence, 'ease') ?? '';
-  let duration = getNumberArgByKey(sentence, 'duration') ?? DEFALUT_FIG_IN_DURATION;
+  let duration = getNumberArgByKey(sentence, 'duration') ?? DEFAULT_FIG_IN_DURATION;
   const enterAnimation = getStringArgByKey(sentence, 'enter');
   const exitAnimation = getStringArgByKey(sentence, 'exit');
   let zIndex = getNumberArgByKey(sentence, 'zIndex') ?? -1;

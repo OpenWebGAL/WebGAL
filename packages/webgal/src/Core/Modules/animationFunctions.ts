@@ -7,7 +7,7 @@ import { baseTransform } from '@/store/stageInterface';
 import { generateTimelineObj } from '@/Core/controller/stage/pixi/animations/timeline';
 import { WebGAL } from '@/Core/WebGAL';
 import PixiStage, { IAnimationObject } from '@/Core/controller/stage/pixi/PixiController';
-import { DEFALUT_FIG_IN_DURATION, DEFALUT_FIG_OUT_DURATION } from '../constants';
+import { DEFAULT_FIG_IN_DURATION, DEFAULT_FIG_OUT_DURATION } from '../constants';
 
 // eslint-disable-next-line max-params
 export function getAnimationObject(animationName: string, target: string, duration: number, writeDefault: boolean) {
@@ -57,7 +57,7 @@ export function getEnterExitAnimation(
   animation: IAnimationObject | null;
 } {
   if (type === 'enter') {
-    let duration = DEFALUT_FIG_IN_DURATION;
+    let duration = DEFAULT_FIG_IN_DURATION;
     if (isBg) {
       duration = 1500;
     }
@@ -70,18 +70,18 @@ export function getEnterExitAnimation(
     const transformState = webgalStore.getState().stage.effects;
     const targetEffect = transformState.find((effect) => effect.target === target);
 
-    const animarionName = webgalStore
+    const animationName = webgalStore
       .getState()
       .stage.animationSettings.find((setting) => setting.target === target)?.enterAnimationName;
-    if (animarionName && !targetEffect) {
+    if (animationName && !targetEffect) {
       logger.debug('取代默认进入动画', target);
-      animation = getAnimationObject(animarionName, realTarget ?? target, getAnimateDuration(animarionName), false);
-      duration = getAnimateDuration(animarionName);
+      animation = getAnimationObject(animationName, realTarget ?? target, getAnimateDuration(animationName), false);
+      duration = getAnimateDuration(animationName);
     }
     return { duration, animation };
   } else {
     // exit
-    let duration = DEFALUT_FIG_OUT_DURATION;
+    let duration = DEFAULT_FIG_OUT_DURATION;
     if (isBg) {
       duration = 1500;
     }
@@ -90,13 +90,13 @@ export function getEnterExitAnimation(
         ?.exitDuration ?? duration;
     // 走默认动画
     let animation: IAnimationObject | null = generateUniversalSoftOffAnimationObj(realTarget ?? target, duration);
-    const animarionName = webgalStore
+    const animationName = webgalStore
       .getState()
       .stage.animationSettings.find((setting) => setting.target + '-off' === target)?.exitAnimationName;
-    if (animarionName) {
+    if (animationName) {
       logger.debug('取代默认退出动画', target);
-      animation = getAnimationObject(animarionName, realTarget ?? target, getAnimateDuration(animarionName), false);
-      duration = getAnimateDuration(animarionName);
+      animation = getAnimationObject(animationName, realTarget ?? target, getAnimateDuration(animationName), false);
+      duration = getAnimateDuration(animationName);
     }
     return { duration, animation };
   }
