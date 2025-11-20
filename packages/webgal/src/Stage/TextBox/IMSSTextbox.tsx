@@ -189,13 +189,9 @@ export default function IMSSTextbox(props: ITextboxProps) {
 
   const userDataState = useSelector((state: RootState) => state.userData);
   const lineHeightValue = textSizeState === textSize.medium ? 2.2 : 2;
-  const MaxTextLine = Number(userDataState.globalGameVar.Max_line); // config定义字体行数
-  const MaxTextLineHeight = Number(userDataState.globalGameVar.Max_lineHeight); // config 定义字体行数高度
-  const finalLineHeight = !Number.isNaN(MaxTextLine)
-    ? (Number.isNaN(MaxTextLineHeight) ? lineHeightValue : MaxTextLineHeight) * MaxTextLine
-    : lineHeightValue; // Max_LineHeight和Max_Line必定为数字，否则使用默认值
-
-  const lineHeightCssStr = `line-height: ${finalLineHeight}em`;
+  const textLineHeight = userDataState.globalGameVar.LineHeight;
+  const finalTextLineHeight = textLineHeight ? Number(textLineHeight) : lineHeightValue;
+  const lineHeightCssStr = `line-height: ${finalTextLineHeight}em`;
   const lhCss = css(lineHeightCssStr);
 
   return (
