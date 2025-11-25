@@ -19,6 +19,8 @@ const setButton = (on: boolean) => {
   }
 };
 
+export { setButton as setFastButton };
+
 /**
  * 停止快进模式
  */

@@ -12,7 +12,7 @@ import { logger } from '@/Core/util/logger';
 import { getAnimateDuration } from '@/Core/Modules/animationFunctions';
 import { WebGAL } from '@/Core/WebGAL';
 import { baseBlinkParam, baseFocusParam, BlinkParam, FocusParam } from '@/Core/live2DCore';
-import { DEFALUT_FIG_IN_DURATION, WEBGAL_NONE } from '../constants';
+import { DEFAULT_FIG_IN_DURATION, DEFAULT_FIG_OUT_DURATION, WEBGAL_NONE } from '../constants';
 /**
  * 更改立绘
  * @param sentence 语句
@@ -87,10 +87,13 @@ export function changeFigure(sentence: ISentence): IPerform {
   // 其他参数
   const transformString = getStringArgByKey(sentence, 'transform');
   const ease = getStringArgByKey(sentence, 'ease') ?? '';
-  let duration = getNumberArgByKey(sentence, 'duration') ?? DEFALUT_FIG_IN_DURATION;
+  let duration = getNumberArgByKey(sentence, 'duration') ?? DEFAULT_FIG_IN_DURATION;
   const enterAnimation = getStringArgByKey(sentence, 'enter');
   const exitAnimation = getStringArgByKey(sentence, 'exit');
   let zIndex = getNumberArgByKey(sentence, 'zIndex') ?? -1;
+  const enterDuration = getNumberArgByKey(sentence, 'enterDuration') ?? duration;
+  duration = enterDuration;
+  const exitDuration = getNumberArgByKey(sentence, 'exitDuration') ?? DEFAULT_FIG_OUT_DURATION;
 
   const dispatch = webgalStore.dispatch;
 
@@ -145,6 +148,7 @@ export function changeFigure(sentence: ISentence): IPerform {
    */
   if (isUrlChanged) {
     webgalStore.dispatch(stageActions.removeEffectByTargetId(id));
+    webgalStore.dispatch(stageActions.removeAnimationSettingsByTarget(id));
     const oldStageObject = WebGAL.gameplay.pixiStage?.getStageObjByKey(id);
     if (oldStageObject) {
       oldStageObject.isExiting = true;
@@ -164,7 +168,9 @@ export function changeFigure(sentence: ISentence): IPerform {
         const newAnimation: IUserAnimation = { name: animationName, effects: animationObj };
         WebGAL.animationManager.addAnimation(newAnimation);
         duration = getAnimateDuration(animationName);
-        WebGAL.animationManager.nextEnterAnimationName.set(key, animationName);
+        webgalStore.dispatch(
+          stageActions.updateAnimationSettings({ target: key, key: 'enterAnimationName', value: animationName }),
+        );
       } catch (e) {
         // 解析都错误了，歇逼吧
         applyDefaultTransform();
@@ -183,16 +189,32 @@ export function changeFigure(sentence: ISentence): IPerform {
       const newAnimation: IUserAnimation = { name: animationName, effects: animationObj };
       WebGAL.animationManager.addAnimation(newAnimation);
       duration = getAnimateDuration(animationName);
-      WebGAL.animationManager.nextEnterAnimationName.set(key, animationName);
+      webgalStore.dispatch(
+        stageActions.updateAnimationSettings({ target: key, key: 'enterAnimationName', value: animationName }),
+      );
     }
 
     if (enterAnimation) {
-      WebGAL.animationManager.nextEnterAnimationName.set(key, enterAnimation);
+      webgalStore.dispatch(
+        stageActions.updateAnimationSettings({ target: key, key: 'enterAnimationName', value: enterAnimation }),
+      );
       duration = getAnimateDuration(enterAnimation);
     }
     if (exitAnimation) {
-      WebGAL.animationManager.nextExitAnimationName.set(key + '-off', exitAnimation);
+      webgalStore.dispatch(
+        stageActions.updateAnimationSettings({ target: key, key: 'exitAnimationName', value: exitAnimation }),
+      );
       duration = getAnimateDuration(exitAnimation);
+    }
+    if (enterDuration >= 0) {
+      webgalStore.dispatch(
+        stageActions.updateAnimationSettings({ target: key, key: 'enterDuration', value: enterDuration }),
+      );
+    }
+    if (exitDuration >= 0) {
+      webgalStore.dispatch(
+        stageActions.updateAnimationSettings({ target: key, key: 'exitDuration', value: exitDuration }),
+      );
     }
   };
 

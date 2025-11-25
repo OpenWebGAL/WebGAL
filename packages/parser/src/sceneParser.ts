@@ -29,7 +29,7 @@ export const sceneParser = (
   ADD_NEXT_ARG_LIST: commandType[],
   SCRIPT_CONFIG_MAP: ConfigMap,
 ): IScene => {
-  const rawSentenceList = rawScene.split('\n'); // 原始句子列表
+  const rawSentenceList = rawScene.replaceAll('\r', '').split('\n'); // 原始句子列表
 
   // 去分号留到后面去做了，现在注释要单独处理
   const rawSentenceListWithoutEmpty = rawSentenceList;
