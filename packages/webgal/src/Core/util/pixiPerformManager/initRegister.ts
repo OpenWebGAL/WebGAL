@@ -1,3 +1,1 @@
-import '../../gameScripts/pixi/performs/cherryBlossoms';
-import '../../gameScripts/pixi/performs/rain';
-import '../../gameScripts/pixi/performs/snow';
+import.meta.glob('../../gameScripts/pixi/performs/*.{ts,js,tsx,jsx}', { eager: true });

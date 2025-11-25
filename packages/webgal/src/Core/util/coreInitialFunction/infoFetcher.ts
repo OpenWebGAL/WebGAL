@@ -58,6 +58,10 @@ export const infoFetcher = (url: string) => {
           if (command === 'Legacy_Expression_Blend_Mode') {
             Live2D.legacyExpressionBlendMode = res === true;
           }
+          if (command === 'Steam_AppID') {
+            const appId = String(res);
+            WebGAL.steam.initialize(appId);
+          }
         }
       }
     });
