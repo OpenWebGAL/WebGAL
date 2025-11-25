@@ -71,6 +71,22 @@ export interface IEffect {
   transform?: ITransform; // 变换
 }
 
+export interface IStageAnimationSetting {
+  target: string;
+  enterAnimationName?: string;
+  exitAnimationName?: string;
+  enterDuration?: number;
+  exitDuration?: number;
+}
+
+export type StageAnimationSettingUpdatableKey = Exclude<keyof IStageAnimationSetting, 'target'>;
+
+export interface IUpdateAnimationSettingPayload {
+  target: string;
+  key: StageAnimationSettingUpdatableKey;
+  value: IStageAnimationSetting[StageAnimationSettingUpdatableKey];
+}
+
 /**
  * 基本变换预设
  */
@@ -203,6 +219,7 @@ export interface IStageState {
   miniAvatar: string; // 小头像 文件地址（相对或绝对）
   GameVar: IGameVar; // 游戏内变量
   effects: Array<IEffect>; // 应用的变换
+  animationSettings: Array<IStageAnimationSetting>;
   bgTransform: string;
   bgFilter: string;
   PerformList: Array<IRunPerform>; // 要启动的演出列表
