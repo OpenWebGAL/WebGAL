@@ -15,7 +15,9 @@ import {
   IRunPerform,
   ISetGameVar,
   ISetStagePayload,
+  IStageAnimationSetting,
   IStageState,
+  IUpdateAnimationSettingPayload,
 } from '@/store/stageInterface';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import cloneDeep from 'lodash/cloneDeep';
@@ -56,6 +58,7 @@ export const initState: IStageState = {
       transform: baseTransform,
     },
   ],
+  animationSettings: [],
   bgFilter: '', // 现在不用，先预留
   bgTransform: '', // 现在不用，先预留
   PerformList: [], // 要启动的演出列表
@@ -133,6 +136,27 @@ const stageSlice = createSlice({
       const index = state.effects.findIndex((e) => e.target === action.payload);
       if (index >= 0) {
         state.effects.splice(index, 1);
+      }
+    },
+    updateAnimationSettings: (state, action: PayloadAction<IUpdateAnimationSettingPayload>) => {
+      const { target, key, value } = action.payload;
+      const animationIndex = state.animationSettings.findIndex((a) => a.target === target);
+      if (animationIndex >= 0) {
+        state.animationSettings[animationIndex] = {
+          ...state.animationSettings[animationIndex],
+          [key]: value,
+        };
+      } else {
+        state.animationSettings.push({
+          target,
+          [key]: value,
+        });
+      }
+    },
+    removeAnimationSettingsByTarget: (state, action: PayloadAction<string>) => {
+      const index = state.animationSettings.findIndex((a) => a.target === action.payload);
+      if (index >= 0) {
+        state.animationSettings.splice(index, 1);
       }
     },
     addPerform: (state, action: PayloadAction<IRunPerform>) => {
