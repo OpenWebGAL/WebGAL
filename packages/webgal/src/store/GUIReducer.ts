@@ -1,16 +1,20 @@
-/**
- * @file 记录当前GUI的状态信息，引擎初始化时会重置。
- * @author Mahiru
- */
 import { getStorage } from '@/Core/controller/storage/storageController';
-import { GuiAsset, IGuiState, MenuPanelTag, setAssetPayload, setVisibilityPayload } from '@/store/guiInterface';
+import {
+  FontOption,
+  GuiAsset,
+  IGuiState,
+  MenuPanelTag,
+  setAssetPayload,
+  setVisibilityPayload,
+} from '@/store/guiInterface';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { key } from 'localforage';
+import { DEFAULT_FONT_OPTIONS } from '@/Core/util/fonts/fontOptions';
 
 /**
  * 初始GUI状态表
  */
 const initState: IGuiState = {
+  fontOptions: [...DEFAULT_FONT_OPTIONS],
   showBacklog: false,
   showStarter: true,
   showTitle: true,
@@ -80,6 +84,9 @@ const GUISlice = createSlice({
     setFontOptimization: (state, action: PayloadAction<boolean>) => {
       state.fontOptimization = action.payload;
     },
+    setFontOptions: (state, action: PayloadAction<FontOption[]>) => {
+      state.fontOptions = [...action.payload];
+    },
   },
 });
 
@@ -90,6 +97,7 @@ export const {
   setLogoImage,
   setEnableAppreciationMode,
   setFontOptimization,
+  setFontOptions,
 } = GUISlice.actions;
 export default GUISlice.reducer;
 

@@ -5,6 +5,7 @@ import { AnimationManager } from '@/Core/Modules/animations';
 import { Gameplay } from './Modules/gamePlay';
 import { Events } from '@/Core/Modules/events';
 import { SteamIntegration } from '@/Core/integration/steamIntegration';
+import { WebgalTemplate } from '@/types/template';
 
 export class WebgalCore {
   public sceneManager = new SceneManager();
@@ -15,4 +16,5 @@ export class WebgalCore {
   public gameKey = '';
   public events = new Events();
   public steam = new SteamIntegration();
+  public template: WebgalTemplate | null = null;
 }
