@@ -1,18 +1,23 @@
 import { useSelector } from 'react-redux';
-import { RootState } from '@/store/store';
-import { textFont } from '@/store/userDataInterface';
-import { match } from '@/Core/util/match';
+import { RootState, webgalStore } from '@/store/store';
+import { FALLBACK_FONT_FAMILY } from '@/Core/util/fonts/fontOptions';
 
-export function useFontFamily() {
-  const fontFamily = useSelector((state: RootState) => state.userData.optionData.textboxFont);
+export function useFontFamily(): string {
+  return useSelector(selectFontFamily);
+}
 
-  function getFont() {
-    return match(fontFamily)
-      .with(textFont.song, () => '"思源宋体", serif')
-      .with(textFont.lxgw, () => '"LXGW", serif')
-      .with(textFont.hei, () => '"WebgalUI", serif')
-      .default(() => '"WebgalUI", serif');
+export function getCurrentFontFamily(): string {
+  return selectFontFamily(webgalStore.getState());
+}
+
+export function selectFontFamily(state: RootState): string {
+  const index = state.userData.optionData.textboxFont ?? 0;
+  const fonts = state.GUI.fontOptions;
+  if (fonts[index]) {
+    return fonts[index].family;
   }
-
-  return getFont();
+  if (fonts.length > 0) {
+    return fonts[0].family;
+  }
+  return FALLBACK_FONT_FAMILY;
 }

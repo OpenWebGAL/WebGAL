@@ -8,15 +8,27 @@
 
 #### 新功能
 
-调整了立绘进入和退出的动画，改善流畅性
+模板文件中的字体会自动加载，并可在选项中选择模板或内置字体
+
+文本框支持配置最大行数和行高，便于自定义排版
+
+新增 Steam 集成，可通过 Steam_AppID 配置与 callSteam 指令解锁成就
+
+舞台渲染支持 GIF 资源
+
+立绘和背景支持用 enterDuration / exitDuration 单独设置进退场动画时长
 
 #### 修复
 
-修复了对已销毁容器应用变换（transform）的问题
+修复鼠标滚轮触发快进后无法正常取消且按钮状态异常的问题
 
-修复了连续变换动画的衔接问题
+改进效果音播放的错误处理，缺失或失败不会再阻塞播放或自动前进
 
-修复了背景状态设置时机不正确的问题
+修复脚本解析对空白语句、注释和 Windows 换行的处理，避免错误裁剪
+
+修复切换语音文件时可能不重新加载导致语音缺失的问题（#791）
+
+修复立绘和背景自定义进退场时长的参数键名与 0 时长处理，确保配置生效
 
 <!-- English Translation -->
 ## Release Notes
@@ -29,15 +41,27 @@
 
 #### New Features
 
-Adjusted the entrance and exit animations for figures to improve smoothness
+Template fonts are now loaded from game/template/template.json, and the options menu lets you pick template or built-in fonts
+
+Textbox layout can be customized with max line count and line height settings
+
+Added Steam integration: set Steam_AppID and use the callSteam script to unlock achievements
+
+Stage rendering now supports GIF assets
+
+Figures and backgrounds accept enterDuration / exitDuration to override enter/exit animation durations
 
 #### Fixes
 
-Fixed an issue with applying transforms to a destroyed container
+Fixed fast-forward triggered by mouse wheel not stopping correctly or resetting the button state
 
-Fixed connection issues with continuous transform animations
+Improved error handling for effect audio so missing or failed sounds no longer block playback or auto-advance
 
-Fixed an issue with incorrect timing for setting background state
+Fixed script parsing of blank lines, comments, and Windows line endings to avoid trimming mistakes
+
+Fixed voice lines sometimes not reloading when switching audio files (#791)
+
+Fixed animation duration configuration keys and zero-duration handling so custom enter/exit timings take effect for figures and backgrounds
 
 <!-- Japanese Translation -->
 ## リリースノート
@@ -50,12 +74,24 @@ Fixed an issue with incorrect timing for setting background state
 
 #### 新機能
 
-立ち絵の登場・退場アニメーションを調整し、スムーズさを改善しました
+テンプレート（game/template/template.json）のフォントを読み込み、オプションでテンプレート／内蔵フォントを選べるようになりました
+
+テキストボックスの最大行数と行間を設定でカスタマイズできるようになりました
+
+Steam 連携を追加し、Steam_AppID を設定して callSteam スクリプトで実績を解除できます
+
+ステージ描画が GIF アセットに対応しました
+
+立ち絵と背景の登場／退場アニメに enterDuration / exitDuration で時間を上書きできるようになりました
 
 #### 修正
 
-破棄されたコンテナにトランスフォームを適用する問題を修正しました
+マウスホイールでの早送りが正しく解除されずボタン状態が戻らない問題を修正しました
 
-連続するトランスフォームアニメーションの接続に関する問題を修正しました
+存在しない効果音などで再生が失敗しても再生や自動進行が止まらないようエラーハンドリングを改善しました
 
-背景の状態設定タイミングが不適切だった問題を修正しました
+空行や空のセリフ、Windows の改行を含むスクリプトのパース処理を修正しました
+
+ボイス切り替え時に音声が更新されない場合がある不具合を修正しました（#791）
+
+立ち絵／背景の入退場アニメの時間設定でキー名や 0 ミリ秒を扱えない問題を修正しました

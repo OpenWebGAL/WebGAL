@@ -36,14 +36,16 @@ export const scriptParser = (
   // 正式开始解析
 
   // 去分号
-  let newSentenceRaw = sentenceRaw.split(/(?<!\\);/)[0];
+  const commentSplit = sentenceRaw.split(/(?<!\\);/);
+  let newSentenceRaw = commentSplit[0];
   newSentenceRaw = newSentenceRaw.replaceAll('\\;',';');
-  if (newSentenceRaw === '') {
+  const sentenceComment = commentSplit[1] ?? '';
+  if (newSentenceRaw.trim() === '') {
     // 注释提前返回
     return {
       command: commandType.comment, // 语句类型
       commandRaw: 'comment', // 命令原始内容，方便调试
-      content: sentenceRaw.split(';')[1] ?? '', // 语句内容
+      content: sentenceComment.trim(), // 语句内容
       args: [{ key: 'next', value: true }], // 参数列表
       sentenceAssets: [], // 语句携带的资源列表
       subScene: [], // 语句携带的子场景

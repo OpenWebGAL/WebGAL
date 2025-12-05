@@ -13,7 +13,6 @@ import {
   IUserData,
   fullScreenOption,
   playSpeed,
-  textFont,
   textSize,
   voiceOption,
 } from '@/store/userDataInterface';
@@ -31,7 +30,7 @@ const initialOptionSet: IOptionData = {
   bgmVolume: 25, // 背景音乐音量
   seVolume: 100, // 音效音量
   uiSeVolume: 50, // UI音效音量
-  textboxFont: textFont.song,
+  textboxFont: 0,
   textboxOpacity: 75,
   language: language.zhCn,
   voiceInterruption: voiceOption.yes,

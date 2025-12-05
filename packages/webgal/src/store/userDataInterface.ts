@@ -18,12 +18,6 @@ export enum textSize {
   large,
 }
 
-export enum textFont {
-  song,
-  hei,
-  lxgw,
-}
-
 export enum voiceOption {
   yes,
   no,
@@ -47,7 +41,7 @@ export interface IOptionData {
   seVolume: number; // 音效音量
   uiSeVolume: number; // 用户界面音效音量
   slPage: number; // 存读档界面所在页面
-  textboxFont: textFont;
+  textboxFont: number;
   textboxOpacity: number;
   language: language;
   voiceInterruption: voiceOption; // 是否中断语音

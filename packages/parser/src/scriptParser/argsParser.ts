@@ -23,10 +23,10 @@ export function argsParser(
   });
   rawArgsList.forEach((e) => {
     const equalSignIndex = e.indexOf('=');
-    let argName = e.slice(0, equalSignIndex);
-    let argValue: string | undefined = e.slice(equalSignIndex + 1);
+    let argName = e.slice(0, equalSignIndex).trim();
+    let argValue: string | undefined = e.slice(equalSignIndex + 1).trim();
     if (equalSignIndex < 0) {
-      argName = e;
+      argName = e.trim();
       argValue = undefined;
     }
     // 判断是不是语音参数

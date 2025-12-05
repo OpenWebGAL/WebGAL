@@ -1,11 +1,12 @@
 {
   "name": "webgal-parser",
-  "version": "4.5.13",
+  "version": "4.5.17",
   "description": "WebGAL script parser",
   "scripts": {
     "test": "vitest",
     "coverage": "vitest run --coverage",
     "build": "rimraf -rf ./build && rollup --config",
+    "prepublishOnly": "npm run build",
     "build-ci": "rollup --config",
     "debug": "tsx test/debug.ts",
     "debug-scss-parser": "tsx test/debugCssParser.ts",

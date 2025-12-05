@@ -124,7 +124,7 @@ export const AudioContainer = () => {
         loop={true}
         autoPlay={isEnterGame}
       />
-      <audio id="currentVocal" src={stageStore.playVocal} />
+      <audio key={stageStore.playVocal} id="currentVocal" src={stageStore.playVocal} />
     </div>
   );
 };

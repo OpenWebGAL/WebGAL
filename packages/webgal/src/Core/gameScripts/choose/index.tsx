@@ -6,7 +6,6 @@ import ReactDOM from 'react-dom';
 import React from 'react';
 import styles from './choose.module.scss';
 import { webgalStore } from '@/store/store';
-import { textFont } from '@/store/userDataInterface';
 import { PerformController } from '@/Core/Modules/perform/performController';
 import { useSEByWebgalStore } from '@/hooks/useSoundEffect';
 import { WebGAL } from '@/Core/WebGAL';
@@ -14,6 +13,7 @@ import { whenChecker } from '@/Core/controller/gamePlay/scriptExecutor';
 import useEscape from '@/hooks/useEscape';
 import useApplyStyle from '@/hooks/useApplyStyle';
 import { Provider } from 'react-redux';
+import { useFontFamily } from '@/hooks/useFontFamily';
 
 class ChooseOption {
   /**
@@ -81,8 +81,7 @@ export const choose = (sentence: ISentence): IPerform => {
 };
 
 function Choose(props: { chooseOptions: ChooseOption[] }) {
-  const fontFamily = webgalStore.getState().userData.optionData.textboxFont;
-  const font = fontFamily === textFont.song ? '"思源宋体", serif' : '"WebgalUI", serif';
+  const font = useFontFamily();
   const { playSeEnter, playSeClick } = useSEByWebgalStore();
   const applyStyle = useApplyStyle('Stage/Choose/choose.scss');
   // 运行时计算JSX.Element[]
