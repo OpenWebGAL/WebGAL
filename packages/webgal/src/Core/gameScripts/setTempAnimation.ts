@@ -8,8 +8,9 @@ import { generateTimelineObj } from '@/Core/controller/stage/pixi/animations/tim
 import cloneDeep from 'lodash/cloneDeep';
 import { baseTransform } from '@/store/stageInterface';
 import { IUserAnimation } from '../Modules/animations';
-import { getAnimateDuration, getAnimationObject } from '@/Core/Modules/animationFunctions';
+import { getAnimateDurationFromObj, getAnimationObject } from '@/Core/Modules/animationFunctions';
 import { WebGAL } from '@/Core/WebGAL';
+import { v4 as uuid } from 'uuid';
 
 /**
  * 设置临时动画
@@ -17,7 +18,7 @@ import { WebGAL } from '@/Core/WebGAL';
  */
 export const setTempAnimation = (sentence: ISentence): IPerform => {
   const startDialogKey = webgalStore.getState().stage.currentDialogKey;
-  const animationName = (Math.random() * 10).toString(16);
+  const animationName = uuid();
   const animationString = sentence.content;
   let animationObj;
   try {
@@ -27,15 +28,16 @@ export const setTempAnimation = (sentence: ISentence): IPerform => {
   }
   const newAnimation: IUserAnimation = { name: animationName, effects: animationObj };
   WebGAL.animationManager.addAnimation(newAnimation);
-  const animationDuration = getAnimateDuration(animationName);
+  const animationDuration = getAnimateDurationFromObj(newAnimation);
   const target = getStringArgByKey(sentence, 'target') ?? '0';
   const writeDefault = getBooleanArgByKey(sentence, 'writeDefault') ?? false;
   const keep = getBooleanArgByKey(sentence, 'keep') ?? false;
+  const parallel = getBooleanArgByKey(sentence, 'parallel') ?? false;
 
   const key = `${target}-${animationName}-${animationDuration}`;
   const performInitName = `animation-${target}`;
 
-  WebGAL.gameplay.performController.unmountPerform(performInitName, true);
+  if (!parallel) WebGAL.gameplay.performController.unmountPerform(performInitName, true);
 
   let stopFunction = () => {};
   setTimeout(() => {
@@ -67,5 +69,6 @@ export const setTempAnimation = (sentence: ISentence): IPerform => {
     blockingNext: () => false,
     blockingAuto: () => !keep,
     stopTimeout: undefined, // 暂时不用，后面会交给自动清除
+    isParallel: parallel,
   };
 };
