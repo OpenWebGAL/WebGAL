@@ -50,7 +50,7 @@ export class PerformController {
       // perform.isOver = true;
       if (!perform.isHoldOn) {
         // 如果不是保持演出，清除
-        this.unmountPerform(perform.performName);
+        this.softUnmountPerformObject(perform);
       }
     }, perform.duration);
 
@@ -101,6 +101,26 @@ export class PerformController {
         }
       }
     }
+  }
+
+  public softUnmountPerformObject(perform: IPerform) {
+    const idx = this.performList.indexOf(perform)
+    if (idx < 0) return;
+    perform.stopFunction();
+    clearTimeout(perform.stopTimeout as unknown as number);
+    /**
+     * 在演出列表里删除演出对象的操作必须在调用 goNextWhenOver 之前
+     * 因为 goNextWhenOver 会调用 nextSentence，而 nextSentence 会清除目前未结束的演出
+     * 那么 nextSentence 函数就会删除这个演出，但是此时，在这个上下文，i 已经被确定了
+     * 所以 goNextWhenOver 后的代码会多删东西，解决方法就是在调用 goNextWhenOver 前先删掉这个演出对象
+     * 此问题对所有 goNextWhenOver 属性为真的演出都有影响，但只有 2 个演出有此问题
+     */
+    this.performList.splice(idx, 1);
+    if (perform.goNextWhenOver) {
+      // nextSentence();
+      this.goNextWhenOver();
+    }
+    
   }
 
   public erasePerformFromState(name: string) {
