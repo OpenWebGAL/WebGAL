@@ -33,7 +33,7 @@ export function generateTimelineObj(
     currentDelay += segmentDuration;
     const { position, scale, ...segmentValues } = segment;
     // 不能用 scale，因为 popmotion 不能用嵌套
-    values.push({ x: position.x, y: position.y, scaleX: scale.x, scaleY: scale.y, ...segmentValues });
+    values.push({ x: position?.x, y: position?.y, scaleX: scale?.x, scaleY: scale?.y, ...segmentValues });
     // Easing 需要比 values 的长度少一个
     if (i > 0) {
       easeArray.push(stringToEasing(segment.ease));
@@ -74,11 +74,11 @@ export function generateTimelineObj(
     if (target?.pixiContainer) {
       // 不能赋值到 position，因为 x 和 y 被 WebGALPixiContainer 代理，而 position 属性没有代理
       const { position, scale, ...state } = getStartStateEffect();
-      const assignValue = omitBy({ x: position.x, y: position.y, ...state }, isUndefined);
+      const assignValue = omitBy({ x: position?.x, y: position?.y, ...state }, isUndefined);
       // @ts-ignore
       PixiStage.assignTransform(target?.pixiContainer, assignValue);
-      if (target?.pixiContainer) {
-        if (!isUndefined(scale.x)) {
+      if (scale && target?.pixiContainer) {
+        if (!isUndefined(scale?.x)) {
           target.pixiContainer.scale.x = scale.x;
         }
         if (!isUndefined(scale?.y)) {
@@ -101,11 +101,11 @@ export function generateTimelineObj(
       // 不能赋值到 position，因为 x 和 y 被 WebGALPixiContainer 代理，而 position 属性没有代理
       // 不能赋值到 position，因为 x 和 y 被 WebGALPixiContainer 代理，而 position 属性没有代理
       const { position, scale, ...state } = getEndStateEffect();
-      const assignValue = omitBy({ x: position.x, y: position.y, ...state }, isUndefined);
+      const assignValue = omitBy({ x: position?.x, y: position?.y, ...state }, isUndefined);
       // @ts-ignore
       PixiStage.assignTransform(target?.pixiContainer, assignValue);
-      if (target?.pixiContainer) {
-        if (!isUndefined(scale.x)) {
+      if (scale && target?.pixiContainer) {
+        if (!isUndefined(scale?.x)) {
           target.pixiContainer.scale.x = scale.x;
         }
         if (!isUndefined(scale?.y)) {

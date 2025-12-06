@@ -19,17 +19,19 @@ export class PerformController {
   public performList: Array<IPerform> = [];
 
   public arrangeNewPerform(perform: IPerform, script: ISentence, syncPerformState = true) {
-    // 检查演出列表内是否有相同的演出，如果有，一定是出了什么问题
-    const dupPerformIndex = this.performList.findIndex((p) => p.performName === perform.performName);
-    if (dupPerformIndex > -1) {
-      // 结束并删除全部重复演出
-      for (let i = 0; i < this.performList.length; i++) {
-        const e = this.performList[i];
-        if (e.performName === perform.performName) {
-          e.stopFunction();
-          clearTimeout(e.stopTimeout as unknown as number);
-          this.performList.splice(i, 1);
-          i--;
+    if (!perform.isParallel){
+      // 检查演出列表内是否有相同的演出，如果有，一定是出了什么问题
+      const dupPerformIndex = this.performList.findIndex((p) => p.performName === perform.performName);
+      if (dupPerformIndex > -1) {
+        // 结束并删除全部重复演出
+        for (let i = 0; i < this.performList.length; i++) {
+          const e = this.performList[i];
+          if (e.performName === perform.performName) {
+            e.stopFunction();
+            clearTimeout(e.stopTimeout as unknown as number);
+            this.performList.splice(i, 1);
+            i--;
+          }
         }
       }
     }

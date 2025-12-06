@@ -2,6 +2,7 @@ import { baseTransform, IEffect, IStageState, ITransform } from '@/store/stageIn
 
 import { WebGAL } from '@/Core/WebGAL';
 import PixiStage from '@/Core/controller/stage/pixi/PixiController';
+import { isUndefined, omitBy } from 'lodash';
 
 export function setStageObjectEffects(stageState: IStageState) {
   const effects = stageState.effects;
@@ -42,5 +43,5 @@ function convertTransform(transform: ITransform | undefined) {
     return {};
   }
   const { position, ...rest } = transform;
-  return { ...rest, x: position.x, y: position.y };
+  return omitBy({ ...rest, x: position?.x, y: position?.y },isUndefined);
 }
