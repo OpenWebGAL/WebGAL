@@ -124,13 +124,17 @@ const stageSlice = createSlice({
       const effectIndex = state.effects.findIndex((e) => e.target === target);
       if (effectIndex >= 0) {
         // Update the existing effect
-        const targetScale = state.effects[effectIndex]!.transform!.scale;
-        const targetPosition = state.effects[effectIndex]!.transform!.position;
-        if (transform!.scale) Object.assign(targetScale!, omitBy(transform!.scale,isUndefined));
-        if (transform!.position) Object.assign(targetPosition!, omitBy(transform!.position,isUndefined));
-        Object.assign(state.effects[effectIndex]!.transform!, omitBy(transform,isUndefined))
-        state.effects[effectIndex].transform!.scale = targetScale;
-        state.effects[effectIndex].transform!.position = targetPosition;
+        if (!state.effects[effectIndex].transform) {
+          state.effects[effectIndex].transform = transform;
+        } else if (transform) {
+          const targetScale = state.effects[effectIndex].transform!.scale || {};
+          const targetPosition = state.effects[effectIndex].transform!.position || {};
+          if (transform.scale) Object.assign(targetScale, omitBy(transform.scale, isUndefined));
+          if (transform.position) Object.assign(targetPosition, omitBy(transform.position, isUndefined));
+          Object.assign(state.effects[effectIndex].transform!, omitBy(transform, isUndefined));
+          state.effects[effectIndex].transform!.scale = targetScale;
+          state.effects[effectIndex].transform!.position = targetPosition;
+        }
       } else {
         // Add a new effect
         state.effects.push({

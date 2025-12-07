@@ -43,5 +43,5 @@ function convertTransform(transform: ITransform | undefined) {
     return {};
   }
   const { position, ...rest } = transform;
-  return omitBy({ ...rest, x: position?.x, y: position?.y },isUndefined);
+  return omitBy({ ...rest, x: position?.x, y: position?.y }, isUndefined);
 }

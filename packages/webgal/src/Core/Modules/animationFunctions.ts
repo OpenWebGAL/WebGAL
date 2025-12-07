@@ -33,11 +33,11 @@ export function getAnimationObject(animationName: string, target: string, durati
       let newEffect;
 
       if (!writeDefault && targetSetEffect && targetSetEffect.transform) {
-        const targetScale = pickBy(targetSetEffect.transform.scale, (source, key)=> unionScaleKeys.has(key))
-        const targetPosition = pickBy(targetSetEffect.transform.position, (source, key)=> unionPositionKeys.has(key))
-        const originalTransform = { ...pickBy(targetSetEffect.transform, (source, key)=> unionKeys.has(key))};
-        originalTransform.scale = targetScale
-        originalTransform.position = targetPosition
+        const targetScale = pickBy(targetSetEffect.transform.scale || {}, (source, key) => unionScaleKeys.has(key));
+        const targetPosition = pickBy(targetSetEffect.transform.position || {}, (s, key) => unionPositionKeys.has(key));
+        const originalTransform = { ...pickBy(targetSetEffect.transform, (source, key) => unionKeys.has(key)) };
+        originalTransform.scale = targetScale;
+        originalTransform.position = targetPosition;
         newEffect = cloneDeep({ ...originalTransform, duration: 0, ease: '' });
       } else {
         newEffect = cloneDeep({ ...baseTransform, duration: 0, ease: '' });
@@ -64,14 +64,6 @@ export function getAnimateDuration(animationName: string) {
     return duration;
   }
   return 0;
-}
-
-export function getAnimateDurationFromObj(animation: IUserAnimation) {
-    let duration = 0;
-    animation.effects.forEach((e) => {
-      duration += e.duration;
-    });
-    return duration;
 }
 
 // eslint-disable-next-line max-params

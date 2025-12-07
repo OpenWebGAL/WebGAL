@@ -23,7 +23,7 @@ export interface IPerform {
   arrangePerformPromise?: Promise<IPerform>;
   // 跳过由 nextSentence 函数引发的演出回收
   skipNextCollect?: boolean;
-  // 
+  //
   isParallel?: boolean;
 }
 

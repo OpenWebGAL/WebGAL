@@ -19,7 +19,7 @@ export class PerformController {
   public performList: Array<IPerform> = [];
 
   public arrangeNewPerform(perform: IPerform, script: ISentence, syncPerformState = true) {
-    if (!perform.isParallel){
+    if (!perform.isParallel) {
       // 检查演出列表内是否有相同的演出，如果有，一定是出了什么问题
       const dupPerformIndex = this.performList.findIndex((p) => p.performName === perform.performName);
       if (dupPerformIndex > -1) {
@@ -106,7 +106,7 @@ export class PerformController {
   }
 
   public softUnmountPerformObject(perform: IPerform) {
-    const idx = this.performList.indexOf(perform)
+    const idx = this.performList.indexOf(perform);
     if (idx < 0) return;
     perform.stopFunction();
     clearTimeout(perform.stopTimeout as unknown as number);
@@ -122,7 +122,6 @@ export class PerformController {
       // nextSentence();
       this.goNextWhenOver();
     }
-    
   }
 
   public erasePerformFromState(name: string) {

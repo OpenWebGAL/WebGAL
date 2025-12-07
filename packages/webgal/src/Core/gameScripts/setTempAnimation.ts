@@ -8,7 +8,7 @@ import { generateTimelineObj } from '@/Core/controller/stage/pixi/animations/tim
 import cloneDeep from 'lodash/cloneDeep';
 import { baseTransform } from '@/store/stageInterface';
 import { IUserAnimation } from '../Modules/animations';
-import { getAnimateDurationFromObj, getAnimationObject } from '@/Core/Modules/animationFunctions';
+import { getAnimateDuration, getAnimationObject } from '@/Core/Modules/animationFunctions';
 import { WebGAL } from '@/Core/WebGAL';
 import { v4 as uuid } from 'uuid';
 
@@ -28,7 +28,7 @@ export const setTempAnimation = (sentence: ISentence): IPerform => {
   }
   const newAnimation: IUserAnimation = { name: animationName, effects: animationObj };
   WebGAL.animationManager.addAnimation(newAnimation);
-  const animationDuration = getAnimateDurationFromObj(newAnimation);
+  const animationDuration = getAnimateDuration(animationName);
   const target = getStringArgByKey(sentence, 'target') ?? '0';
   const writeDefault = getBooleanArgByKey(sentence, 'writeDefault') ?? false;
   const keep = getBooleanArgByKey(sentence, 'keep') ?? false;

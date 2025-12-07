@@ -10,7 +10,7 @@ import { baseTransform, ITransform } from '@/store/stageInterface';
 import { AnimationFrame, IUserAnimation } from '../Modules/animations';
 import { generateTransformAnimationObj } from '@/Core/controller/stage/pixi/animations/generateTransformAnimationObj';
 import { WebGAL } from '@/Core/WebGAL';
-import { getAnimateDurationFromObj, getAnimationObject } from '../Modules/animationFunctions';
+import { getAnimateDuration, getAnimationObject } from '../Modules/animationFunctions';
 import { v4 as uuid } from 'uuid';
 /**
  * 设置变换
@@ -45,7 +45,7 @@ export const setTransform = (sentence: ISentence): IPerform => {
 
   const newAnimation: IUserAnimation = { name: animationName, effects: animationObj };
   WebGAL.animationManager.addAnimation(newAnimation);
-  const animationDuration = getAnimateDurationFromObj(newAnimation);
+  const animationDuration = getAnimateDuration(animationName);
   const key = `${target}-${animationName}-${animationDuration}`;
   let keepAnimationStopped = false;
   setTimeout(() => {

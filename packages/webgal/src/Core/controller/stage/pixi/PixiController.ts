@@ -73,9 +73,9 @@ export default class PixiStage {
     if (!source) return;
     const targetScale = target.scale;
     const targetPosition = target.position;
-    if (target.scale) Object.assign(targetScale!, omitBy(source.scale,isUndefined));
-    if (target.position) Object.assign(targetPosition!, omitBy(source.position,isUndefined));
-    Object.assign(target, omitBy(source,isUndefined));
+    if (target.scale) Object.assign(targetScale!, omitBy(source.scale || {}, isUndefined));
+    if (target.position) Object.assign(targetPosition!, omitBy(source.position || {}, isUndefined));
+    Object.assign(target, omitBy(source, isUndefined));
     target.scale = targetScale;
     target.position = targetPosition;
   }

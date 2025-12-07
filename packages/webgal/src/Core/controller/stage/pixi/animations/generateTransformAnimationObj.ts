@@ -11,7 +11,7 @@ export function generateTransformAnimationObj(
   applyFrame: AnimationFrame,
   duration: number | string | boolean | null,
   ease: string,
-  writeFullEffect: boolean = true,
+  writeFullEffect = true,
 ): AnimationObj {
   let animationObj;
   // 获取那个 target 的当前变换
@@ -30,13 +30,16 @@ export function generateTransformAnimationObj(
     if (writeFullEffect) {
       const effectWithDuration = { ...targetEffect!.transform!, duration: 0, ease };
       animationObj.unshift(effectWithDuration);
-    }
-    else {
-      const targetScale = pickBy(targetEffect!.transform!.scale, (source, key)=> has(applyFrame.scale, key))
-      const targetPosition = pickBy(targetEffect!.transform!.position, (source, key)=> has(applyFrame.position, key))
-      const effectWithDuration = { ...pickBy(targetEffect!.transform!, (source, key)=> has(applyFrame, key) ), duration: 0, ease };
-      effectWithDuration.scale = targetScale
-      effectWithDuration.position = targetPosition
+    } else {
+      const targetScale = pickBy(targetEffect.transform?.scale || {}, (source, key) => has(applyFrame.scale, key));
+      const targetPosition = pickBy(targetEffect.transform?.position || {}, (sr, key) => has(applyFrame.position, key));
+      const effectWithDuration = {
+        ...pickBy(targetEffect.transform || {}, (source, key) => has(applyFrame, key)),
+        duration: 0,
+        ease,
+      };
+      effectWithDuration.scale = targetScale;
+      effectWithDuration.position = targetPosition;
       animationObj.unshift(effectWithDuration);
     }
   } else {
