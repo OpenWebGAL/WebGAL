@@ -24,6 +24,8 @@ export const restorePerform = () => {
   performToRestore.forEach((e) => {
     runScript(e.script);
   });
+  // 重新渲染
+  WebGAL.gameplay.pixiStage?.requestRender();
 };
 
 /**

@@ -88,12 +88,12 @@ export default class PixiStage {
   public frameDuration = 16.67;
   public notUpdateBacklogEffects = false;
   public readonly figureContainer: PIXI.Container;
-  public figureObjects: Array<IStageObject> = [];
+  public figureObjects = this.createReactiveList<IStageObject>([]);
   public stageWidth = SCREEN_CONSTANTS.width;
   public stageHeight = SCREEN_CONSTANTS.height;
   public assetLoader = new PIXI.Loader();
   public readonly backgroundContainer: PIXI.Container;
-  public backgroundObjects: Array<IStageObject> = [];
+  public backgroundObjects = this.createReactiveList<IStageObject>([]);
   public mainStageObject: IStageObject;
   /**
    * 添加 Spine 立绘
@@ -104,11 +104,15 @@ export default class PixiStage {
   public addSpineFigure = addSpineFigureImpl.bind(this);
   public addSpineBg = addSpineBgImpl.bind(this);
   // 注册到 Ticker 上的函数
-  private stageAnimations: Array<IStageAnimationObject> = [];
+  private stageAnimations = this.createReactiveList<IStageAnimationObject>([]);
   private loadQueue: { url: string; callback: () => void; name?: string }[] = [];
   private live2dFigureRecorder: Array<ILive2DRecord> = [];
   // 锁定变换对象（对象可能正在执行动画，不能应用变换）
   private lockTransformTarget: Array<string> = [];
+  // 手动请求渲染防抖标记
+  private isRenderPending = false;
+  // 更新 ticker 状态的防抖标记
+  private isTickerUpdatePending = false;
 
   /**
    * 暂时没用上，以后可能用
@@ -121,6 +125,7 @@ export default class PixiStage {
     const app = new PIXI.Application({
       backgroundAlpha: 0,
       preserveDrawingBuffer: true,
+      autoStart: false,
     });
     // @ts-ignore
 
@@ -194,7 +199,22 @@ export default class PixiStage {
       this.callLoader();
     };
     reload();
-    this.initialize().then(() => {});
+    this.initialize().then(() => { });
+    this.requestRender();
+  }
+
+  public requestRender() {
+    if (this.isRenderPending) return;
+    this.isRenderPending = true;
+
+    Promise.resolve().then(() => {
+      requestAnimationFrame(() => {
+        this.isRenderPending = false;
+        if (!this.currentApp?.ticker.started) {
+          this.currentApp?.render();
+        }
+      });
+    });
   }
 
   public getFigureObjects() {
@@ -346,6 +366,7 @@ export default class PixiStage {
         return;
       }
       sprite.texture = texture;
+      this.requestRender();
     });
   }
 
@@ -374,6 +395,7 @@ export default class PixiStage {
         return;
       }
       sprite.texture = texture;
+      this.requestRender();
     });
   }
 
@@ -436,6 +458,7 @@ export default class PixiStage {
 
           // 挂载
           thisBgContainer.addChild(bgSprite);
+          this.requestRender();
         }
       }, 0);
     };
@@ -610,6 +633,7 @@ export default class PixiStage {
           }
           thisFigureContainer.pivot.set(0, this.stageHeight / 2);
           thisFigureContainer.addChild(figureSprite);
+          this.requestRender();
         }
       }, 0);
     };
@@ -1099,6 +1123,60 @@ export default class PixiStage {
     } catch (error) {
       console.error('Failed to load figureCash:', error);
     }
+  }
+
+  private createReactiveList<T extends object>(array: T[]): T[] {
+    return new Proxy(array, {
+      // eslint-disable-next-line max-params
+      set: (target, property, value, receiver) => {
+        const result = Reflect.set(target, property, value, receiver);
+        if (property !== 'length') {
+          this.updateTickerStatus();
+        } else {
+          this.updateTickerStatus();
+        }
+        return result;
+      },
+      deleteProperty: (target, property) => {
+        const result = Reflect.deleteProperty(target, property);
+        this.updateTickerStatus();
+        return result;
+      },
+    });
+  }
+
+  private updateTickerStatus() {
+    if (this.isTickerUpdatePending) return;
+    this.isTickerUpdatePending = true;
+
+    Promise.resolve().then(() => {
+      this.isTickerUpdatePending = false;
+      const app = this.currentApp;
+      if (!app) return;
+
+      const hasActiveAnimations = this.stageAnimations.length > 0;
+      const hasLive2D = this.figureObjects.some((fig) => fig.sourceType === 'live2d');
+      const hasSpine = this.figureObjects.some((fig) => fig.sourceType === 'spine');
+      const hasDynamicBg = this.backgroundObjects.some((bg) => bg.sourceType === 'video' || bg.sourceType === 'gif');
+      const hasGifFigure = this.figureObjects.some((fig) => fig.sourceType === 'gif');
+
+      const shouldRun = hasActiveAnimations || hasLive2D || hasSpine || hasDynamicBg || hasGifFigure;
+
+      if (shouldRun) {
+        if (!app.ticker.started) {
+          app.ticker.start();
+          logger.debug('Ticker: STARTED');
+        }
+      } else {
+        if (app.ticker.started) {
+          app.ticker.stop();
+          this.currentApp?.render();
+          logger.debug('Ticker: STOPPED');
+        } else {
+          this.requestRender();
+        }
+      }
+    });
   }
 }
 
