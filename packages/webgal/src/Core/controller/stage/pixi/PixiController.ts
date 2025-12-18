@@ -207,13 +207,11 @@ export default class PixiStage {
     if (this.isRenderPending) return;
     this.isRenderPending = true;
 
-    Promise.resolve().then(() => {
-      requestAnimationFrame(() => {
-        this.isRenderPending = false;
-        if (!this.currentApp?.ticker.started) {
-          this.currentApp?.render();
-        }
-      });
+    requestAnimationFrame(() => {
+      this.isRenderPending = false;
+      if (!this.currentApp?.ticker.started) {
+        this.currentApp?.render();
+      }
     });
   }
 
@@ -1130,11 +1128,7 @@ export default class PixiStage {
       // eslint-disable-next-line max-params
       set: (target, property, value, receiver) => {
         const result = Reflect.set(target, property, value, receiver);
-        if (property !== 'length') {
-          this.updateTickerStatus();
-        } else {
-          this.updateTickerStatus();
-        }
+        this.updateTickerStatus();
         return result;
       },
       deleteProperty: (target, property) => {
@@ -1155,12 +1149,16 @@ export default class PixiStage {
       if (!app) return;
 
       const hasActiveAnimations = this.stageAnimations.length > 0;
-      const hasLive2D = this.figureObjects.some((fig) => fig.sourceType === 'live2d');
-      const hasSpine = this.figureObjects.some((fig) => fig.sourceType === 'spine');
-      const hasDynamicBg = this.backgroundObjects.some((bg) => bg.sourceType === 'video' || bg.sourceType === 'gif');
-      const hasGifFigure = this.figureObjects.some((fig) => fig.sourceType === 'gif');
+      const allObjects = [...this.figureObjects, ...this.backgroundObjects];
+      const hasDynamicObjects = allObjects.some(
+        (obj) =>
+          obj.sourceType === 'live2d' ||
+          obj.sourceType === 'spine' ||
+          obj.sourceType === 'video' ||
+          obj.sourceType === 'gif',
+      );
 
-      const shouldRun = hasActiveAnimations || hasLive2D || hasSpine || hasDynamicBg || hasGifFigure;
+      const shouldRun = hasActiveAnimations || hasDynamicObjects;
 
       if (shouldRun) {
         if (!app.ticker.started) {
