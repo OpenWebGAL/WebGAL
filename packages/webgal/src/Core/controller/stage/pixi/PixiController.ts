@@ -85,7 +85,6 @@ export default class PixiStage {
   public readonly mainStageContainer: WebGALPixiContainer;
   public readonly foregroundEffectsContainer: PIXI.Container;
   public readonly backgroundEffectsContainer: PIXI.Container;
-  public frameDuration = 16.67;
   public notUpdateBacklogEffects = false;
   public readonly figureContainer: PIXI.Container;
   public figureObjects = this.createReactiveList<IStageObject>([]);
@@ -187,19 +186,13 @@ export default class PixiStage {
       this.backgroundContainer,
     );
     this.currentApp = app;
-    // 每 5s 获取帧率，并且防 loader 死
-    const update = () => {
-      this.updateFps();
-      setTimeout(update, 10000);
-    };
-    update();
     // loader 防死
     const reload = () => {
       setTimeout(reload, 500);
       this.callLoader();
     };
     reload();
-    this.initialize().then(() => { });
+    this.initialize();
     this.requestRender();
   }
 
@@ -1097,13 +1090,6 @@ export default class PixiStage {
     }
   }
 
-  private updateFps() {
-    getScreenFps?.(120).then((fps) => {
-      this.frameDuration = 1000 / (fps as number);
-      // logger.info('当前帧率', fps);
-    });
-  }
-
   private lockStageObject(targetName: string) {
     this.lockTransformTarget.push(targetName);
   }
@@ -1188,40 +1174,3 @@ function updateCurrentBacklogEffects(newEffects: IEffect[]) {
 
   webgalStore.dispatch(setStage({ key: 'effects', value: newEffects }));
 }
-
-/**
- * @param {number} targetCount 不小于1的整数，表示经过targetCount帧之后返回结果
- * @return {Promise<number>}
- */
-const getScreenFps = (() => {
-  // 先做一下兼容性处理
-  const nextFrame = [
-    window.requestAnimationFrame,
-    // @ts-ignore
-    window.webkitRequestAnimationFrame,
-    // @ts-ignore
-    window.mozRequestAnimationFrame,
-  ].find((fn) => fn);
-  if (!nextFrame) {
-    console.error('requestAnimationFrame is not supported!');
-    return;
-  }
-  return (targetCount = 60) => {
-    // 判断参数是否合规
-    if (targetCount < 1) throw new Error('targetCount cannot be less than 1.');
-    const beginDate = Date.now();
-    let count = 0;
-    return new Promise((resolve) => {
-      (function log() {
-        nextFrame(() => {
-          if (++count >= targetCount) {
-            const diffDate = Date.now() - beginDate;
-            const fps = (count / diffDate) * 1000;
-            return resolve(fps);
-          }
-          log();
-        });
-      })();
-    });
-  };
-})();
