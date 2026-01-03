@@ -47,7 +47,7 @@ export const getUserInput = (sentence: ISentence): IPerform => {
             if (rule) {
               const reg = tryToRegex(rule, ruleFlag);
               if (reg && !reg.test(userInput.value)) {
-                if (ruleText) alert(ruleText);
+                if (ruleText) alert(ruleText.replaceAll(/\$0/g, userInput.value));
                 return;
               }
               if (!reg) {
