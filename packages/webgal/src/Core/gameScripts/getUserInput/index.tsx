@@ -13,6 +13,8 @@ import { getStringArgByKey } from '@/Core/util/getSentenceArg';
 import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
 import { setStageVar } from '@/store/stageReducer';
 import { getCurrentFontFamily } from '@/hooks/useFontFamily';
+import { logger } from '@/Core/util/logger';
+import { tryToRegex } from '@/Core/util/global';
 
 /**
  * 显示选择枝
@@ -26,6 +28,9 @@ export const getUserInput = (sentence: ISentence): IPerform => {
   let buttonText = getStringArgByKey(sentence, 'buttonText') ?? '';
   buttonText = buttonText === '' ? 'OK' : buttonText;
   const defaultValue = getStringArgByKey(sentence, 'defaultValue');
+  const rule = getStringArgByKey(sentence, 'rule');
+  const ruleFlag = getStringArgByKey(sentence, 'ruleFlag');
+  const ruleText = getStringArgByKey(sentence, 'ruleText');
 
   const font = getCurrentFontFamily();
 
@@ -39,6 +44,16 @@ export const getUserInput = (sentence: ISentence): IPerform => {
           onMouseEnter={playSeEnter}
           onClick={() => {
             const userInput: HTMLInputElement = document.getElementById('user-input') as HTMLInputElement;
+            if (rule) {
+              const reg = tryToRegex(rule, ruleFlag);
+              if (reg && !reg.test(userInput.value)) {
+                if (ruleText) alert(ruleText);
+                return;
+              }
+              if (!reg) {
+                logger.warn(`getUserInput: rule ${rule} is not a valid regex`);
+              }
+            }
             if (userInput) {
               webgalStore.dispatch(
                 setStageVar({
