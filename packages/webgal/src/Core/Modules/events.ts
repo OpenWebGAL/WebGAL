@@ -11,6 +11,7 @@ export class Events {
   public userInteractNext = formEvent('__NEXT');
   public fullscreenDbClick = formEvent('fullscreen-dbclick');
   public styleUpdate = formEvent('style-update');
+  public afterStyleUpdate = formEvent('after-style-update');
 }
 
 const eventBus = mitt();
