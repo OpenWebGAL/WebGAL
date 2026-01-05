@@ -25,7 +25,7 @@ export default function Title() {
   const tCommon = useTrans('common.');
   const { playSeEnter, playSeClick } = useSoundEffect();
 
-  const applyStyle = useApplyStyle('UI/Title/title.scss');
+  const applyStyle = useApplyStyle('title');
   useConfigData(); // 监听基础ConfigData变化
 
   const appreciationItems = useSelector((state: RootState) => state.userData.appreciationData);

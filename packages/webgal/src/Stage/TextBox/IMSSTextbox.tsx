@@ -28,7 +28,7 @@ export default function IMSSTextbox(props: ITextboxProps) {
     textSizeState,
   } = props;
 
-  const applyStyle = useApplyStyle('Stage/TextBox/textbox.scss');
+  const applyStyle = useApplyStyle('textbox');
 
   useEffect(() => {
     function settleText() {

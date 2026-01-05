@@ -6,6 +6,8 @@ import { buildFontOptionsFromTemplate } from '@/Core/util/fonts/fontOptions';
 import { webgalStore } from '@/store/store';
 import { setFontOptions } from '@/store/GUIReducer';
 import { setOptionData } from '@/store/userDataReducer';
+import { scss2cssinjsParser } from '@/Core/controller/customUI/scss2cssinjsParser';
+import { injectGlobal } from '@emotion/css';
 
 const TEMPLATE_PATH = './game/template/template.json';
 const TEMPLATE_FONT_STYLE_SELECTOR = 'style[data-webgal-template-fonts]';
@@ -17,6 +19,8 @@ export async function loadTemplate(): Promise<WebgalTemplate | null> {
     const fonts = data.fonts ?? [];
     injectTemplateFonts(fonts);
     updateFontOptions(fonts);
+    await loadStyleFiles();
+    WebGAL.events.styleUpdate.on(loadStyleFiles);
     return data;
   } catch (error) {
     logger.warn('加载模板文件失败', error);
@@ -75,4 +79,30 @@ function resolveTemplateAssetPath(path: string): string {
   }
   const normalized = path.replace(/^[./]+/, '');
   return `./game/template/${normalized}`;
+}
+
+async function loadStyleFiles() {
+  // TODO: 以后应该改成从 templates.json 读取，而不是现在这样写死
+  const TEMPLATES: { ui: string; path: string }[] = [
+    { ui: 'title', path: 'UI/Title/title.scss' },
+    { ui: 'textbox', path: 'Stage/TextBox/textbox.scss' },
+    { ui: 'choose', path: 'Stage/Choose/choose.scss' },
+  ];
+
+  await Promise.all(
+    TEMPLATES.map(async (templatePath) => {
+      try {
+        logger.info(`加载模板样式文件: ${templatePath.path}`);
+        const resp = await axios.get(`game/template/${templatePath.path}`);
+        const scssStr = resp.data;
+        const styleObject = scss2cssinjsParser(scssStr);
+        WebGAL.styleObjects.set(templatePath.ui, styleObject);
+        injectGlobal(styleObject.others);
+      } catch (error) {
+        logger.warn(`加载模板样式文件失败: ${templatePath.path}`, error);
+      }
+    }),
+  );
+
+  WebGAL.events.afterStyleUpdate.emit();
 }
