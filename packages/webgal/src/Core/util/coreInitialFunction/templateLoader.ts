@@ -101,7 +101,7 @@ async function loadStyleFiles() {
       } catch (error) {
         logger.warn(`加载模板样式文件失败: ${templatePath.path}`, error);
       }
-    })
+    }),
   );
 
   WebGAL.events.afterStyleUpdate.emit();

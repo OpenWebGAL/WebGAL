@@ -33,6 +33,7 @@ export default function useApplyStyle(ui: string) {
 }
 
 function useRegisterAfterStyleUpdate(callback: Function) {
+  // TODO : 这里可能需要加个依赖项数组？但是当前由于使用了 useValue，状态过期问题可能被规避了，并且之前一直表现正常
   const handler = () => {
     callback();
   };
