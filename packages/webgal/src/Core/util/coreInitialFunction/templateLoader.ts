@@ -89,18 +89,20 @@ async function loadStyleFiles() {
     { ui: 'choose', path: 'Stage/Choose/choose.scss' },
   ];
 
-  for (const templatePath of TEMPLATES) {
-    try {
-      logger.info(`加载模板样式文件: ${templatePath.path}`);
-      const resp = await axios.get(`game/template/${templatePath.path}`);
-      const scssStr = resp.data;
-      const styleObject = scss2cssinjsParser(scssStr);
-      WebGAL.styleObjects.set(templatePath.ui, styleObject);
-      injectGlobal(styleObject.others);
-    } catch (error) {
-      logger.warn(`加载模板样式文件失败: ${templatePath.path}`, error);
-    }
-  }
+  await Promise.all(
+    TEMPLATES.map(async (templatePath) => {
+      try {
+        logger.info(`加载模板样式文件: ${templatePath.path}`);
+        const resp = await axios.get(`game/template/${templatePath.path}`);
+        const scssStr = resp.data;
+        const styleObject = scss2cssinjsParser(scssStr);
+        WebGAL.styleObjects.set(templatePath.ui, styleObject);
+        injectGlobal(styleObject.others);
+      } catch (error) {
+        logger.warn(`加载模板样式文件失败: ${templatePath.path}`, error);
+      }
+    })
+  );
 
   WebGAL.events.afterStyleUpdate.emit();
 }
