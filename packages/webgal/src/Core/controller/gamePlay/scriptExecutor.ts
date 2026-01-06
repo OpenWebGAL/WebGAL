@@ -23,10 +23,10 @@ export const whenChecker = (whenValue: string | undefined): boolean => {
   const valExp = valExpArr
     .map((e) => {
       if (e.match(/[a-zA-Z]/)) {
-        if (e.match(/true/) || e.match(/false/)) {
+        if (e.match(/^(true|false)$/)) {
           return e;
         }
-        return getValueFromStateElseKey(e, true);
+        return getValueFromStateElseKey(e, true, true);
       } else return e;
     })
     .reduce((pre, curr) => pre + curr, '');
