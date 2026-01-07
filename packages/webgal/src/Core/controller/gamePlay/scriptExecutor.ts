@@ -21,12 +21,13 @@ export const whenChecker = (whenValue: string | undefined): boolean => {
   // 先把变量解析出来
   const valExpArr = whenValue.split(/([+\-*\/()><!]|>=|<=|==|&&|\|\||!=)/g);
   const valExp = valExpArr
-    .map((e) => {
+    .map((_e) => {
+      const e = _e.trim();
       if (e.match(/[a-zA-Z]/)) {
-        if (e.match(/true/) || e.match(/false/)) {
+        if (e.match(/^(true|false)$/)) {
           return e;
         }
-        return getValueFromStateElseKey(e, true);
+        return getValueFromStateElseKey(e, true, true);
       } else return e;
     })
     .reduce((pre, curr) => pre + curr, '');

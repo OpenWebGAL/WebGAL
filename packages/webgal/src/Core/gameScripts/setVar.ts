@@ -125,7 +125,7 @@ export function getValueFromState(key: string) {
 /**
  * 取不到时返回 {key}
  */
-export function getValueFromStateElseKey(key: string, useKeyNameAsReturn = false) {
+export function getValueFromStateElseKey(key: string, useKeyNameAsReturn = false, quoteString = false) {
   const valueFromState = getValueFromState(key);
   if (valueFromState === null || valueFromState === undefined) {
     logger.warn('valueFromState result null, key = ' + key);
@@ -133,6 +133,10 @@ export function getValueFromStateElseKey(key: string, useKeyNameAsReturn = false
       return key;
     }
     return `{${key}}`;
+  }
+  // 用 "" 包裹字符串，用于使用 compile 条件判断，处理字符串类型的变量
+  if (quoteString && typeof valueFromState === 'string') {
+    return `"${valueFromState.replaceAll('"', '\\"')}"`;
   }
   return valueFromState;
 }
