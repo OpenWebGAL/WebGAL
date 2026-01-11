@@ -156,7 +156,22 @@ const stageSlice = createSlice({
     removeAnimationSettingsByTarget: (state, action: PayloadAction<string>) => {
       const index = state.animationSettings.findIndex((a) => a.target === action.payload);
       if (index >= 0) {
+        const prev = state.animationSettings[index];
         state.animationSettings.splice(index, 1);
+
+        const prevTarget = `${action.payload}-off`;
+        const prevSetting = {
+          ...prev,
+          target: prevTarget,
+        };
+
+        const prevIndex = state.animationSettings.findIndex((a) => a.target === prevTarget);
+
+        if (prevIndex >= 0) {
+          state.animationSettings.splice(prevIndex, 1, prevSetting);
+        } else {
+          state.animationSettings.push(prevSetting);
+        }
       }
     },
     addPerform: (state, action: PayloadAction<IRunPerform>) => {
