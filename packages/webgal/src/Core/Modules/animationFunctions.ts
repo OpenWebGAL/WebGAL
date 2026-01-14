@@ -13,6 +13,7 @@ import {
   DEFAULT_FIG_IN_DURATION,
   DEFAULT_FIG_OUT_DURATION,
 } from '../constants';
+import { stageActions } from '@/store/stageReducer';
 
 // eslint-disable-next-line max-params
 export function getAnimationObject(animationName: string, target: string, duration: number, writeDefault: boolean) {
@@ -102,6 +103,9 @@ export function getEnterExitAnimation(
       logger.debug('取代默认退出动画', target);
       animation = getAnimationObject(animationName, realTarget ?? target, getAnimateDuration(animationName), false);
       duration = getAnimateDuration(animationName);
+      // 退出动画拿完后，删了这个设定
+      webgalStore.dispatch(stageActions.removeAnimationSettingsByTargetOff(target));
+      logger.debug('删除退出动画设定', target);
     }
     return { duration, animation };
   }
