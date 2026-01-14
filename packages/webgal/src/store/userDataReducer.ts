@@ -138,7 +138,7 @@ const userDataSlice = createSlice({
       Object.assign(state.optionData, initialOptionSet);
     },
     resetAllData(state) {
-      Object.assign(state, cloneDeep(initState));
+      Object.assign(state, { ...cloneDeep(initState), globalGameVar: cloneDeep(window.gameConfigInit) });
     },
   },
 });
