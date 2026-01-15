@@ -67,12 +67,19 @@ window.PIXI = PIXI;
 INSTALLED.push(GifResource);
 
 export default class PixiStage {
-  public static assignTransform<T extends ITransform>(target: T, source?: ITransform) {
+  public static assignTransform<T extends ITransform>(target: T, source?: ITransform, convertAlpha = true) {
     if (!source) return;
     const targetScale = target.scale;
     const targetPosition = target.position;
     if (target.scale) Object.assign(targetScale, source.scale);
     if (target.position) Object.assign(targetPosition, source.position);
+    if (convertAlpha) {
+      const sourceAlpha = source.alpha;
+      if (sourceAlpha !== undefined) {
+        source.alpha = 1;
+        (source as any).alphaFilterVal = sourceAlpha;
+      }
+    }
     Object.assign(target, source);
     target.scale = targetScale;
     target.position = targetPosition;

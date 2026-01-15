@@ -29,7 +29,7 @@ export function getAnimationObject(animationName: string, target: string, durati
         newEffect = cloneDeep({ ...baseTransform, duration: 0, ease: '' });
       }
 
-      PixiStage.assignTransform(newEffect, effect);
+      PixiStage.assignTransform(newEffect, effect, false);
       newEffect.duration = effect.duration;
       newEffect.ease = effect.ease;
       return newEffect;
