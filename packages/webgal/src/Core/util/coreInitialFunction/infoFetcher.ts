@@ -1,5 +1,5 @@
 import { webgalStore } from '@/store/store';
-import { setGlobalVar } from '@/store/userDataReducer';
+import { setGlobalVar, setUserData } from '@/store/userDataReducer';
 import { setEnableAppreciationMode } from '@/store/GUIReducer';
 import { Live2D, WebGAL } from '@/Core/WebGAL';
 import { WebgalParser } from '@/Core/parser/sceneParser';
@@ -71,7 +71,7 @@ export const infoFetcher = (url: string) => {
       }
     });
 
-    window.gameConfigInit = gameConfigInit;
+    dispatch(setUserData({ key: 'gameConfigInit', value: gameConfigInit }));
     // @ts-expect-error renderPromiseResolve is a global variable
     window.renderPromiseResolve();
     setStorage();

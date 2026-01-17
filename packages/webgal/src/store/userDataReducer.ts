@@ -46,6 +46,7 @@ export const initState: IUserData = {
     bgm: [],
     cg: [],
   },
+  gameConfigInit: {},
 };
 
 const userDataSlice = createSlice({
@@ -138,7 +139,8 @@ const userDataSlice = createSlice({
       Object.assign(state.optionData, initialOptionSet);
     },
     resetAllData(state) {
-      Object.assign(state, { ...cloneDeep(initState), globalGameVar: cloneDeep(window.gameConfigInit || {}) });
+      const { gameConfigInit } = state;
+      Object.assign(state, { ...cloneDeep(initState), globalGameVar: cloneDeep(gameConfigInit), gameConfigInit });
     },
   },
 });
