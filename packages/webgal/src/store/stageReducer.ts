@@ -156,6 +156,31 @@ const stageSlice = createSlice({
     removeAnimationSettingsByTarget: (state, action: PayloadAction<string>) => {
       const index = state.animationSettings.findIndex((a) => a.target === action.payload);
       if (index >= 0) {
+        const prev = state.animationSettings[index];
+        state.animationSettings.splice(index, 1);
+
+        if (prev.exitAnimationName) {
+          // 如果有退出动画设定，保留一个 -off 的设定
+          const prevTarget = `${action.payload}-off`;
+          const prevSetting = {
+            ...prev,
+            target: prevTarget,
+          };
+
+          const prevIndex = state.animationSettings.findIndex((a) => a.target === prevTarget);
+
+          if (prevIndex >= 0) {
+            state.animationSettings.splice(prevIndex, 1, prevSetting);
+          } else {
+            state.animationSettings.push(prevSetting);
+          }
+        }
+      }
+    },
+    removeAnimationSettingsByTargetOff: (state, action: PayloadAction<string>) => {
+      // 这里不加 -off 因为传入的就是带 -off 的
+      const index = state.animationSettings.findIndex((a) => a.target === `${action.payload}`);
+      if (index >= 0) {
         state.animationSettings.splice(index, 1);
       }
     },
