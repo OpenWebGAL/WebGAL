@@ -102,6 +102,13 @@ export const scriptParser = (
       args.push(e);
     }
   }
+
+  // 保留注释
+  const trimmedComment = sentenceComment.trim();
+  if (trimmedComment) {
+    args.push({ key: 'comment', value: trimmedComment });
+  }
+
   content = contentParser(newSentenceRaw.trim(), command, assetSetter); // 将语句内容里的文件名转为相对或绝对路径
   sentenceAssets = assetsScanner(command, content, args); // 扫描语句携带资源
   subScene = subSceneScanner(command, content); // 扫描语句携带子场景
