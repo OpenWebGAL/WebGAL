@@ -90,6 +90,7 @@ export interface IUserData {
   globalGameVar: IGameVar; // 不跟随存档的全局变量
   optionData: IOptionData; // 用户设置选项数据
   appreciationData: IAppreciation;
+  gameConfigInit: IGameVar;
 }
 
 export interface ISetUserDataPayload {
