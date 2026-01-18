@@ -104,8 +104,9 @@ export const scriptParser = (
   }
 
   // 保留注释
-  if (sentenceComment.trim() !== '') {
-    args.push({ key: 'comment', value: sentenceComment.trim() });
+  const trimmedComment = sentenceComment.trim();
+  if (trimmedComment) {
+    args.push({ key: 'comment', value: trimmedComment });
   }
 
   content = contentParser(newSentenceRaw.trim(), command, assetSetter); // 将语句内容里的文件名转为相对或绝对路径
