@@ -1,0 +1,85 @@
+.GlobalDialog_main {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  z-index: 20;
+  background: rgba(15, 37, 64, 0.39);
+  color: white;
+  opacity: 0.5;
+  animation: showGlobalDialog 0.33s forwards;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  //font-family: "WebgalUI", -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  font-family: "思源宋体", serif;
+}
+
+.glabalDialog_container_inner {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-flow: column;
+  background: linear-gradient(to right,
+    rgba(0, 92, 175, 0) 0%,
+    rgba(0, 92, 175, 0.5) 33%,
+    rgba(0, 92, 175, 0.85) 50%,
+    rgba(0, 92, 175, 0.5) 66%,
+    rgba(0, 92, 175, 0) 100%
+  );
+  padding: 1em 5em 1.5em 5em;
+}
+
+.glabalDialog_container {
+  height: 20%;
+  width: 100%;
+  border-top: 4px solid;
+  border-bottom: 4px solid;
+  border-image: linear-gradient(to right,
+    rgba(255, 255, 255, 0.05) 0%,
+    rgba(255, 255, 255, 0.85) 33%,
+    rgba(255, 255, 255, 1) 50%,
+    rgba(255, 255, 255, 0.85) 66%,
+    rgba(255, 255, 255, 0.05) 100%
+  ) 1;
+  //padding: 1px 1px 1px 1px;
+}
+
+.title {
+  font-size: 300%;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+.button_list {
+  display: flex;
+  margin: auto 0 0 0;
+}
+
+.button {
+  font-size: 200%;
+  padding: 0.15em 1em 0.15em 1em;
+  margin: 0.2em 1em 0.2em 1em;
+  cursor: pointer;
+  transition: background-color 0.33s, color 0.33s, font-weight 0.33s, transform 0.33s;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 1);
+  border-radius: 5px;
+  //background: rgba(0, 0, 0, 0.05);
+}
+
+.button:hover {
+  font-weight: bold;
+  color: #005caf;
+  transform: scale(1.1, 1.1);
+  text-shadow: 0 0 15px rgba(0, 0, 0, 0);
+  background: rgba(255, 255, 255, 0.85);
+}
+
+@keyframes showGlobalDialog {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}

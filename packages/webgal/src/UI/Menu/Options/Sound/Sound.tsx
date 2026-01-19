@@ -8,14 +8,16 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import useTrans from '@/hooks/useTrans';
 import { voiceOption } from '@/store/userDataInterface';
+import useApplyStyle from '@/hooks/useApplyStyle';
 
 export function Sound() {
+  const applyStyle = useApplyStyle('menuOptions');
   const userDataState = useSelector((state: RootState) => state.userData);
   const dispatch = useDispatch();
   const t = useTrans('menu.options.pages.sound.options.');
 
   return (
-    <div className={styles.Options_main_content_half}>
+    <div className={applyStyle('Options_main_content_half', styles.Options_main_content_half)}>
       <NormalOption key="option4" title={t('volumeMain.title')}>
         <OptionSlider
           initValue={userDataState.optionData.volumeMain}

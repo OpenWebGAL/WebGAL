@@ -1,0 +1,128 @@
+//.ToCenter {
+//  display: flex;
+//  justify-content: center;
+//  position: absolute;
+//  bottom: 0;
+//  left: 0;
+//  width: 100%;
+//  z-index: 9;
+//}
+
+.main {
+  //border-bottom: 2px solid rgba(255,255,255,0.25);
+  position: absolute;
+  bottom: 20px;
+  //will-change: z-index;
+  z-index: 9;
+  display: flex;
+  //background-image: linear-gradient(rgba(245, 247, 250, 0.7) 0%, rgba(195, 207, 226, 0.7) 100%);
+  flex-flow: row;
+  justify-content: center;
+  align-items: center;
+  //width: 100%;
+  height: 70px;
+  right: 20px;
+  border-radius: 35px;
+  //backdrop-filter: blur(5px);
+  padding: 0.15em 1.75em 0.15em 1.75em;
+  //background: linear-gradient(rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.25) 100%);
+  //border-radius: 10px;
+  font-size: 80%;
+}
+
+.button {
+  position: relative;
+  top: 2px;
+  padding: 0 0 0 0;
+  filter: drop-shadow(1px 1px 5px rgba(0, 0, 0, 1));
+}
+
+.button_text {
+  position: relative;
+  bottom: 8px;
+  color: white;
+  text-shadow: 1px 1px 5px rgba(0, 0, 0, 1);
+  padding-left: 3px;
+}
+
+.button_on {
+  height: 100%;
+  display: inline-block;
+  font-size: 150%;
+  padding: 0.25em 0.3em 0 0.15em;
+  transition: background-color 0.5s;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+  margin: 0 0.1em 0 0.1em;
+}
+
+.singleButton {
+  //border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+  height: 100%;
+  display: inline-block;
+  color: white;
+  font-size: 150%;
+  padding: 0.3em 0.3em 0 0.15em;
+  transition: background-color 0.5s;
+  cursor: pointer;
+  border-radius: 4px;
+  margin: 0 0.1em 0 0.1em;
+  position: relative;
+}
+
+.singleButton:hover, .singleButton_active {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+.fastSlPreview {
+  position: absolute;
+  top: -250px;
+  right: 0;
+  background: linear-gradient(315deg, rgba(253, 251, 251, 0.9) 0%, rgba(235, 237, 238, 0.85) 100%);
+  width: 900px;
+  height: 230px;
+  color: #005caf;
+  border-radius: 5px;
+  display: none;
+  animation: fastSlEnter 0.33s;
+  transition: opacity 0.33s;
+}
+
+.fastsave:hover .fastSPreview {
+  display: block;
+}
+
+.fastload:hover .fastLPreview {
+  display: block;
+}
+
+@keyframes fastSlEnter {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.slPreviewMain {
+  padding: 0.5em 0.5em 0.5em 0.5em;
+  display: flex;
+  box-sizing: border-box;
+  height: 100%;
+  width: 100%;
+}
+
+.imgContainer {
+  display: flex;
+  overflow: hidden;
+  border-radius: 5px;
+  //outline: 4px solid #005caf;
+  flex-shrink: 0;
+  height: 100%;
+}
+
+.textContainer {
+  overflow: hidden;
+  padding: 0 0 0 0.5em;
+}

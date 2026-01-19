@@ -1,0 +1,63 @@
+.Logo_main {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  animation: change-img-anim 5s forwards;
+  background-size: cover;
+  z-index: 14;
+}
+@keyframes change-img-anim {
+  0%{
+    opacity: 0;
+  }
+  35%{
+    opacity: 1;
+  }
+  65%{
+    opacity: 1;
+  }
+  99%{
+    opacity: 0;
+  }
+  100%{
+    opacity: 0;
+    display: none;
+  }
+}
+.Logo_Back {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  opacity: 1;
+  bottom: 0;
+  background-size: cover;
+  z-index: 14;
+  background: white;
+}
+
+.animationActive{
+  animation: fadeout 5s forwards;
+}
+
+@keyframes fadeout {
+  0%{
+    opacity: 1;
+  }
+  65%{
+    opacity: 1;
+  }
+  99%{
+    opacity: 0;
+  }
+  100%{
+    opacity: 0;
+    display: none;
+  }
+}

@@ -7,6 +7,7 @@ import { RootState } from '@/store/store';
 import { useTranslation } from 'react-i18next';
 
 import { WebGAL } from '@/Core/WebGAL';
+import useApplyStyle from '@/hooks/useApplyStyle';
 
 export default function DevPanel() {
   // 控制显隐
@@ -25,6 +26,7 @@ export default function DevPanel() {
   const isShow = isShowDevPanel();
 
   const { t, i18n } = useTranslation();
+  const applyStyle = useApplyStyle('devPanel');
 
   const devMainArea = (
     <>
@@ -38,7 +40,7 @@ export default function DevPanel() {
   return (
     <>
       {isShow && isOpenDevPanel.value && (
-        <div className={styles.devPanelMain}>
+        <div className={applyStyle('devPanelMain', styles.devPanelMain)}>
           <div style={{ display: 'flex', alignItems: 'center' }}>
             <div
               onClick={() => isOpenDevPanel.set(false)}
@@ -52,7 +54,7 @@ export default function DevPanel() {
         </div>
       )}
       {!isOpenDevPanel.value && isShow && (
-        <div onClick={() => isOpenDevPanel.set(true)} className={styles.devPanelOpener}>
+        <div onClick={() => isOpenDevPanel.set(true)} className={applyStyle('devPanelOpener', styles.devPanelOpener)}>
           Open Dev Panel
         </div>
       )}
