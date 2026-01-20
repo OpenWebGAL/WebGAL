@@ -49,6 +49,7 @@ export const scriptParser = (
       args: [{ key: 'next', value: true }], // 参数列表
       sentenceAssets: [], // 语句携带的资源列表
       subScene: [], // 语句携带的子场景
+      inlineComment: '', // 行内注释
     };
   }
   // 截取命令
@@ -103,12 +104,6 @@ export const scriptParser = (
     }
   }
 
-  // 保留注释
-  const trimmedComment = sentenceComment.trim();
-  if (trimmedComment) {
-    args.push({ key: 'comment', value: trimmedComment });
-  }
-
   content = contentParser(newSentenceRaw.trim(), command, assetSetter); // 将语句内容里的文件名转为相对或绝对路径
   sentenceAssets = assetsScanner(command, content, args); // 扫描语句携带资源
   subScene = subSceneScanner(command, content); // 扫描语句携带子场景
@@ -119,5 +114,6 @@ export const scriptParser = (
     args: args, // 参数列表
     sentenceAssets: sentenceAssets, // 语句携带的资源列表
     subScene: subScene, // 语句携带的子场景
+    inlineComment: sentenceComment.trim(), // 行内注释
   };
 };
