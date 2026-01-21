@@ -9,8 +9,8 @@ import { RootState } from '@/store/store';
 import { IWebGALStyleObj } from 'webgal-parser/build/types/styleParser';
 import { logger } from '@/Core/util/logger';
 
-export default function useApplyStyle(url: string) {
-  const styleObject = useValue<IWebGALStyleObj>({ classNameStyles: {}, others: '' });
+export default function useApplyStyle(ui: string) {
+  const styleObject = useValue<IWebGALStyleObj>(WebGAL.styleObjects.get(ui) ?? { classNameStyles: {}, others: '' });
   const replaced = useSelector((state: RootState) => state.stage.replacedUIlable);
 
   const applyStyle = (classNameLable: string, fallbackClassName: string) => {
@@ -23,32 +23,22 @@ export default function useApplyStyle(url: string) {
     return fallbackClassName;
   };
 
-  const updateStyleFile = async () => {
-    logger.debug('更新 Scss 文件', url);
-    const resp = await axios.get(`game/template/${url}`);
-    const scssStr = resp.data;
-    styleObject.set(scss2cssinjsParser(scssStr));
+  const updateStyleObject = () => {
+    styleObject.value = WebGAL.styleObjects.get(ui) ?? { classNameStyles: {}, others: '' };
   };
 
-  useEffect(() => {
-    updateStyleFile();
-  }, []);
-
-  useEffect(() => {
-    injectGlobal(styleObject.value.others);
-  }, [styleObject.value.others]);
-
-  useRigisterStyleUpdate(updateStyleFile);
+  useRegisterAfterStyleUpdate(updateStyleObject);
 
   return applyStyle;
 }
 
-function useRigisterStyleUpdate(callback: Function) {
+function useRegisterAfterStyleUpdate(callback: Function) {
+  // TODO : 这里可能需要加个依赖项数组？但是当前由于使用了 useValue，状态过期问题可能被规避了，并且之前一直表现正常
   const handler = () => {
     callback();
   };
   useEffect(() => {
-    WebGAL.events.styleUpdate.on(handler);
-    return () => WebGAL.events.styleUpdate.off(handler);
+    WebGAL.events.afterStyleUpdate.on(handler);
+    return () => WebGAL.events.afterStyleUpdate.off(handler);
   }, []);
 }

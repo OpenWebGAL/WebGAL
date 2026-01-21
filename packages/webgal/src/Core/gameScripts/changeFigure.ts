@@ -155,6 +155,10 @@ export function changeFigure(sentence: ISentence): IPerform {
     }
   }
   const setAnimationNames = (key: string, sentence: ISentence) => {
+    // 如果立绘被关闭了，那么就不用设置了
+    if (content === '') {
+      return;
+    }
     // 处理 transform 和 默认 transform
     let animationObj: AnimationFrame[];
     if (transformString) {
