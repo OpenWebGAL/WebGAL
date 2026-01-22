@@ -20,7 +20,7 @@
   "dependencies": {
     "chevrotain": "^10.5.0",
     "cloudlogjs": "^1.0.11",
-    "lodash": "^4.17.21",
+    "lodash": "^4.17.23",
     "tsx": "^3.12.7"
   },
   "devDependencies": {
