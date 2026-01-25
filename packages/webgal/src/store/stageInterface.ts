@@ -185,6 +185,7 @@ export interface ILive2DFocus {
 
 export interface IFigureMetadata {
   zIndex?: number;
+  blendMode?: string;
 }
 
 type figureMetaData = Record<string, IFigureMetadata>;
