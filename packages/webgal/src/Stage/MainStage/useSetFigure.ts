@@ -63,8 +63,13 @@ export function useSetFigure(stageState: IStageState) {
   useEffect(() => {
     Object.entries(figureMetaData).forEach(([key, value]) => {
       const figureObject = WebGAL.gameplay.pixiStage?.getStageObjByKey(key);
-      if (figureObject && !figureObject.isExiting && value?.zIndex !== undefined && figureObject.pixiContainer) {
-        figureObject.pixiContainer.zIndex = value.zIndex;
+      if (figureObject && !figureObject.isExiting && figureObject.pixiContainer) {
+        if (value.zIndex !== undefined) {
+          figureObject.pixiContainer.zIndex = value.zIndex;
+        }
+        if (value.blendMode !== undefined) {
+          figureObject.pixiContainer.blendMode = value.blendMode;
+        }
       }
     });
   }, [figureMetaData]);
