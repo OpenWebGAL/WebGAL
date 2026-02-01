@@ -160,7 +160,7 @@ const stageSlice = createSlice({
         const prev = state.animationSettings[index];
         state.animationSettings.splice(index, 1);
 
-        if (prev.exitAnimationName) {
+        if (prev.exitAnimationName || prev.exitDuration !== undefined) {
           // 如果有退出动画设定，保留一个 -off 的设定
           const prevTarget = `${action.payload}-off`;
           const prevSetting = {
