@@ -9,6 +9,7 @@ import { BevelFilter } from '@/Core/controller/stage/pixi/shaders/BevelFilter';
 import * as PIXI from 'pixi.js';
 import { BlurFilter } from '@pixi/filter-blur';
 import { INIT_RAD, RadiusAlphaFilter } from '@/Core/controller/stage/pixi/shaders/RadiusAlphaFilter';
+import { logger } from '@/Core/util/logger';
 
 /**
  * Filter configuration for creation and default state detection.
@@ -347,6 +348,40 @@ export class WebGALPixiContainer extends PIXI.Container {
     this.alphaFilter.alpha = v;
   }
 
+  public get blendMode(): string {
+    switch (this.alphaFilter.blendMode) {
+      case PIXI.BLEND_MODES.NORMAL:
+        return 'normal';
+      case PIXI.BLEND_MODES.ADD:
+        return 'add';
+      case PIXI.BLEND_MODES.MULTIPLY:
+        return 'multiply';
+      case PIXI.BLEND_MODES.SCREEN:
+        return 'screen';
+      default:
+        logger.warn(`Unknown blend mode: ${this.alphaFilter.blendMode}, returning normal.`);
+        return 'normal';
+    }
+  }
+  public set blendMode(v: string) {
+    switch (v) {
+      case 'normal':
+        this.alphaFilter.blendMode = PIXI.BLEND_MODES.NORMAL;
+        break;
+      case 'add':
+        this.alphaFilter.blendMode = PIXI.BLEND_MODES.ADD;
+        break;
+      case 'multiply':
+        this.alphaFilter.blendMode = PIXI.BLEND_MODES.MULTIPLY;
+        break;
+      case 'screen':
+        this.alphaFilter.blendMode = PIXI.BLEND_MODES.SCREEN;
+        break;
+      default:
+        logger.warn(`Unknown blend mode: ${v}, setting to normal.`);
+        this.alphaFilter.blendMode = PIXI.BLEND_MODES.NORMAL;
+    }
+  }
   public removeFilterByName(filterName: string) {
     const filter = this.containerFilters.get(filterName);
     if (!filter || !this.filters) return;

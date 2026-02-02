@@ -69,7 +69,7 @@ const userDataSlice = createSlice({
       state.appreciationData.cg.forEach((e) => {
         if (url === e.url) {
           isExist = true;
-          e.url = url;
+          e.name = name;
           e.series = series;
         }
       });
@@ -84,7 +84,7 @@ const userDataSlice = createSlice({
       state.appreciationData.bgm.forEach((e) => {
         if (url === e.url) {
           isExist = true;
-          e.url = url;
+          e.name = name;
           e.series = series;
         }
       });

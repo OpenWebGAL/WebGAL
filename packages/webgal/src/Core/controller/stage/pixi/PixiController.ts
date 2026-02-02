@@ -570,6 +570,9 @@ export default class PixiStage {
       if (metadata.zIndex) {
         thisFigureContainer.zIndex = metadata.zIndex;
       }
+      if (metadata.blendMode) {
+        thisFigureContainer.blendMode = metadata.blendMode;
+      }
     }
     // 挂载
     this.figureContainer.addChild(thisFigureContainer);
@@ -665,6 +668,9 @@ export default class PixiStage {
       if (metadata) {
         if (metadata.zIndex) {
           thisFigureContainer.zIndex = metadata.zIndex;
+        }
+        if (metadata.blendMode) {
+          thisFigureContainer.blendMode = metadata.blendMode;
         }
       }
       // 挂载
