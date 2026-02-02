@@ -11,14 +11,14 @@ import { AnimationFrame, IUserAnimation } from '../Modules/animations';
 import { generateTransformAnimationObj } from '@/Core/controller/stage/pixi/animations/generateTransformAnimationObj';
 import { WebGAL } from '@/Core/WebGAL';
 import { getAnimateDuration, getAnimationObject } from '../Modules/animationFunctions';
-
+import { v4 as uuid } from 'uuid';
 /**
  * 设置变换
  * @param sentence
  */
 export const setTransform = (sentence: ISentence): IPerform => {
   const startDialogKey = webgalStore.getState().stage.currentDialogKey;
-  const animationName = (Math.random() * 10).toString(16);
+  const animationName = uuid();
   const animationString = sentence.content;
   let animationObj: AnimationFrame[];
 
@@ -27,14 +27,16 @@ export const setTransform = (sentence: ISentence): IPerform => {
   const writeDefault = getBooleanArgByKey(sentence, 'writeDefault') ?? false;
   const target = getStringArgByKey(sentence, 'target') ?? '0';
   const keep = getBooleanArgByKey(sentence, 'keep') ?? false;
+  const parallel = getBooleanArgByKey(sentence, 'parallel') ?? false;
 
   const performInitName = `animation-${target}`;
 
-  WebGAL.gameplay.performController.unmountPerform(performInitName, true);
+  if (!parallel) WebGAL.gameplay.performController.unmountPerform(performInitName, true);
 
   try {
     const frame = JSON.parse(animationString) as AnimationFrame;
-    animationObj = generateTransformAnimationObj(target, frame, duration, ease);
+    // writeDefault时需要完整的当前effect，其他时候不需要
+    animationObj = generateTransformAnimationObj(target, frame, duration, ease, writeDefault);
     console.log('animationObj:', animationObj);
   } catch (e) {
     // 解析都错误了，歇逼吧
@@ -44,7 +46,6 @@ export const setTransform = (sentence: ISentence): IPerform => {
   const newAnimation: IUserAnimation = { name: animationName, effects: animationObj };
   WebGAL.animationManager.addAnimation(newAnimation);
   const animationDuration = getAnimateDuration(animationName);
-
   const key = `${target}-${animationName}-${animationDuration}`;
   let keepAnimationStopped = false;
   setTimeout(() => {
@@ -82,5 +83,6 @@ export const setTransform = (sentence: ISentence): IPerform => {
     blockingNext: () => false,
     blockingAuto: () => !keep,
     stopTimeout: undefined, // 暂时不用，后面会交给自动清除
+    isParallel: parallel,
   };
 };

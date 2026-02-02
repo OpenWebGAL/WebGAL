@@ -20,11 +20,12 @@ export const setAnimation = (sentence: ISentence): IPerform => {
   target = target !== '' ? target : 'default_id';
   const writeDefault = getBooleanArgByKey(sentence, 'writeDefault') ?? false;
   const keep = getBooleanArgByKey(sentence, 'keep') ?? false;
+  const parallel = getBooleanArgByKey(sentence, 'parallel') ?? false;
 
   const key = `${target}-${animationName}-${animationDuration}`;
   const performInitName = `animation-${target}`;
 
-  WebGAL.gameplay.performController.unmountPerform(performInitName, true);
+  if (!parallel) WebGAL.gameplay.performController.unmountPerform(performInitName, true);
 
   let stopFunction;
   setTimeout(() => {
@@ -56,5 +57,6 @@ export const setAnimation = (sentence: ISentence): IPerform => {
     blockingNext: () => false,
     blockingAuto: () => !keep,
     stopTimeout: undefined, // 暂时不用，后面会交给自动清除
+    isParallel: parallel,
   };
 };
