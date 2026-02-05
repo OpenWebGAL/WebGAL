@@ -1,0 +1,25 @@
+{
+  "name": "WebGAL",
+  "version": "4.5.17",
+  "type": "official",
+  "webgalVersion": "4.5.17",
+  "description": "界面美观、功能强大、易于开发的全新网页端视觉小说引擎",
+  "descriptions": {
+    "en": "A brand new web Visual Novel engine with a beautiful interface, powerful features, and easy development",
+    "ja": "美しいインターフェース、強力な機能、簡単な開発を備えた全く新しいウェブビジュアルノベルエンジン"
+  },
+  "author": {
+    "name": "Mahiru",
+    "email": "Mahiru_@outlook.com"
+  },
+  "license": "MPL-2.0",
+  "icon": "icons/icon-512.png",
+  "urls": {
+    "homepage": "https://openwebgal.com",
+    "repository": "https://github.com/OpenWebGAL/WebGAL",
+    "bugs": "https://github.com/OpenWebGAL/WebGAL/issues",
+    "documentation": "https://docs.openwebgal.com",
+    "demo": "https://demo.openwebgal.com",
+    "discord": "https://discord.gg/kPrQkJttJy"
+  }
+}
