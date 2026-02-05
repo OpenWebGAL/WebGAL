@@ -13,19 +13,16 @@ export const wait = (sentence: ISentence): IPerform => {
   const performName = `wait${Math.random().toString()}`;
   const nobreak = getBooleanArgByKey(sentence, 'nobreak') ?? false;
 
-  if (nobreak) {
-    webgalStore.dispatch(setWaitNoBreak(true));
-    setTimeout(() => {
-      webgalStore.dispatch(setWaitNoBreak(false));
-    }, duration);
-  }
+  if (nobreak) webgalStore.dispatch(setWaitNoBreak(true));
 
   return {
     performName,
     duration: duration,
     goNextWhenOver: true,
     isHoldOn: false,
-    stopFunction: () => {},
+    stopFunction: () => {
+      webgalStore.dispatch(setWaitNoBreak(false));
+    },
     blockingNext: () => false,
     blockingAuto: () => true,
     stopTimeout: undefined, // 暂时不用，后面会交给自动清除
