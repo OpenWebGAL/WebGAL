@@ -30,6 +30,7 @@ export interface IGuiState {
   isShowLogo: boolean;
   enableAppreciationMode: boolean; // Pc102
   fontOptimization: boolean; // 字体优化
+  waitNoBreak: boolean; // 处于不可中断的等待
 }
 
 export type componentsVisibility = Pick<

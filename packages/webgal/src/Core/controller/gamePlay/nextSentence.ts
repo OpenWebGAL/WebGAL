@@ -24,6 +24,11 @@ export const nextSentence = () => {
     return;
   }
 
+  // 如果处于 wait 指令的不可中断状态，那么不进行下一句
+  if (GUIState.waitNoBreak) {
+    return;
+  }
+
   // 第一步，检查是否存在 blockNext 的演出
   let isBlockingNext = false;
   WebGAL.gameplay.performController.performList.forEach((e) => {

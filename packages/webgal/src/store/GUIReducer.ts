@@ -33,6 +33,7 @@ const initState: IGuiState = {
   isShowLogo: true,
   enableAppreciationMode: false, // Paf87
   fontOptimization: false,
+  waitNoBreak: false,
 };
 
 /**
@@ -87,6 +88,10 @@ const GUISlice = createSlice({
     setFontOptions: (state, action: PayloadAction<FontOption[]>) => {
       state.fontOptions = [...action.payload];
     },
+
+    setWaitNoBreak: (state, action: PayloadAction<boolean>) => {
+      state.waitNoBreak = action.payload;
+    },
   },
 });
 
@@ -98,6 +103,7 @@ export const {
   setEnableAppreciationMode,
   setFontOptimization,
   setFontOptions,
+  setWaitNoBreak,
 } = GUISlice.actions;
 export default GUISlice.reducer;
 
