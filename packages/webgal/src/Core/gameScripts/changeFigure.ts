@@ -9,7 +9,11 @@ import { AnimationFrame, IUserAnimation } from '@/Core/Modules/animations';
 import { generateTransformAnimationObj } from '@/Core/controller/stage/pixi/animations/generateTransformAnimationObj';
 import { assetSetter, fileType } from '@/Core/util/gameAssetsAccess/assetSetter';
 import { logger } from '@/Core/util/logger';
-import { getAnimateDuration } from '@/Core/Modules/animationFunctions';
+import {
+  getAnimateDuration,
+  registerTimelineAnimation,
+  removeTimelineAnimation,
+} from '@/Core/Modules/animationFunctions';
 import { WebGAL } from '@/Core/WebGAL';
 import { baseBlinkParam, baseFocusParam, BlinkParam, FocusParam } from '@/Core/live2DCore';
 import { DEFAULT_FIG_IN_DURATION, DEFAULT_FIG_OUT_DURATION, WEBGAL_NONE } from '../constants';
@@ -88,6 +92,7 @@ export function changeFigure(sentence: ISentence): IPerform {
   const transformString = getStringArgByKey(sentence, 'transform');
   const ease = getStringArgByKey(sentence, 'ease') ?? '';
   let duration = getNumberArgByKey(sentence, 'duration') ?? DEFAULT_FIG_IN_DURATION;
+  const writeDefault = getBooleanArgByKey(sentence, 'writeDefault') ?? false;
   const enterAnimation = getStringArgByKey(sentence, 'enter');
   const exitAnimation = getStringArgByKey(sentence, 'exit');
   let zIndex = getNumberArgByKey(sentence, 'zIndex') ?? -1;
@@ -155,6 +160,10 @@ export function changeFigure(sentence: ISentence): IPerform {
       oldStageObject.isExiting = true;
     }
   }
+
+  const animationName = (Math.random() * 10).toString(16);
+  const animationKey = `${id}-${animationName}`;
+
   const setAnimationNames = (key: string, sentence: ISentence) => {
     // 如果立绘被关闭了，那么就不用设置了
     if (content === '') {
@@ -167,15 +176,16 @@ export function changeFigure(sentence: ISentence): IPerform {
       try {
         const frame = JSON.parse(transformString) as AnimationFrame;
         animationObj = generateTransformAnimationObj(key, frame, duration, ease);
-        // 因为是切换，必须把一开始的 alpha 改为 0
-        animationObj[0].alpha = 0;
-        const animationName = (Math.random() * 10).toString(16);
         const newAnimation: IUserAnimation = { name: animationName, effects: animationObj };
         WebGAL.animationManager.addAnimation(newAnimation);
         duration = getAnimateDuration(animationName);
-        webgalStore.dispatch(
-          stageActions.updateAnimationSettings({ target: key, key: 'enterAnimationName', value: animationName }),
-        );
+        if (isUrlChanged) {
+          webgalStore.dispatch(
+            stageActions.updateAnimationSettings({ target: key, key: 'enterAnimationName', value: animationName }),
+          );
+        } else {
+          registerTimelineAnimation(animationName, animationKey, id, duration, writeDefault, false, false);
+        }
       } catch (e) {
         // 解析都错误了，歇逼吧
         applyDefaultTransform();
@@ -188,15 +198,16 @@ export function changeFigure(sentence: ISentence): IPerform {
       // 应用默认的
       const frame = {};
       animationObj = generateTransformAnimationObj(key, frame as AnimationFrame, duration, ease);
-      // 因为是切换，必须把一开始的 alpha 改为 0
-      animationObj[0].alpha = 0;
-      const animationName = (Math.random() * 10).toString(16);
       const newAnimation: IUserAnimation = { name: animationName, effects: animationObj };
       WebGAL.animationManager.addAnimation(newAnimation);
       duration = getAnimateDuration(animationName);
-      webgalStore.dispatch(
-        stageActions.updateAnimationSettings({ target: key, key: 'enterAnimationName', value: animationName }),
-      );
+      if (isUrlChanged) {
+        webgalStore.dispatch(
+          stageActions.updateAnimationSettings({ target: key, key: 'enterAnimationName', value: animationName }),
+        );
+      } else {
+        registerTimelineAnimation(animationName, animationKey, id, duration, writeDefault, false, false);
+      }
     }
 
     if (enterAnimation) {
@@ -298,7 +309,11 @@ export function changeFigure(sentence: ISentence): IPerform {
     duration,
     isHoldOn: false,
     stopFunction: () => {
-      WebGAL.gameplay.pixiStage?.stopPresetAnimationOnTarget(key);
+      if (isUrlChanged) {
+        WebGAL.gameplay.pixiStage?.stopPresetAnimationOnTarget(key);
+      } else {
+        removeTimelineAnimation(animationKey, false);
+      }
     },
     blockingNext: () => false,
     blockingAuto: () => true,

@@ -110,3 +110,42 @@ export function getEnterExitAnimation(
     return { duration, animation };
   }
 }
+
+// eslint-disable-next-line max-params
+export function registerTimelineAnimation(
+  animationName: string,
+  animationKey: string,
+  target: string,
+  animationDuration: number,
+  writeDefault: boolean,
+  keep: boolean,
+  keepAnimationStopped: boolean,
+) {
+  setTimeout(() => {
+    if (keep && keepAnimationStopped) {
+      return;
+    }
+    WebGAL.gameplay.pixiStage?.stopPresetAnimationOnTarget(target);
+    const animationObj: IAnimationObject | null = getAnimationObject(
+      animationName,
+      target,
+      animationDuration,
+      writeDefault,
+    );
+    if (animationObj) {
+      logger.debug(`动画${animationName}作用在${target}`, animationDuration);
+      WebGAL.gameplay.pixiStage?.registerAnimation(animationObj, animationKey, target);
+    }
+  }, 0);
+}
+
+export function removeTimelineAnimation(animationKey: string, keep: boolean): boolean {
+  if (keep) {
+    WebGAL.gameplay.pixiStage?.removeAnimationWithoutSetEndState(animationKey);
+    return true;
+  }
+  setTimeout(() => {
+    WebGAL.gameplay.pixiStage?.removeAnimationWithSetEffects(animationKey);
+  }, 0);
+  return false;
+}

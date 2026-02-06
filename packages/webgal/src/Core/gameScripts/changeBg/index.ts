@@ -4,14 +4,18 @@ import { IPerform } from '@/Core/Modules/perform/performInterface';
 import styles from '@/Stage/stage.module.scss';
 import { webgalStore } from '@/store/store';
 import { setStage, stageActions } from '@/store/stageReducer';
-import { getNumberArgByKey, getStringArgByKey } from '@/Core/util/getSentenceArg';
+import { getBooleanArgByKey, getNumberArgByKey, getStringArgByKey } from '@/Core/util/getSentenceArg';
 import { unlockCgInUserData } from '@/store/userDataReducer';
 import { logger } from '@/Core/util/logger';
 import { ITransform } from '@/store/stageInterface';
 import { generateTransformAnimationObj } from '@/Core/controller/stage/pixi/animations/generateTransformAnimationObj';
 import { AnimationFrame, IUserAnimation } from '@/Core/Modules/animations';
 import cloneDeep from 'lodash/cloneDeep';
-import { getAnimateDuration } from '@/Core/Modules/animationFunctions';
+import {
+  getAnimateDuration,
+  registerTimelineAnimation,
+  removeTimelineAnimation,
+} from '@/Core/Modules/animationFunctions';
 import { WebGAL } from '@/Core/WebGAL';
 import { DEFAULT_BG_OUT_DURATION } from '@/Core/constants';
 import localforage from 'localforage';
@@ -27,6 +31,7 @@ export const changeBg = (sentence: ISentence): IPerform => {
   const series = getStringArgByKey(sentence, 'series') ?? 'default';
   const transformString = getStringArgByKey(sentence, 'transform');
   let duration = getNumberArgByKey(sentence, 'duration') ?? DEFAULT_BG_OUT_DURATION;
+  const writeDefault = getBooleanArgByKey(sentence, 'writeDefault') ?? false;
   const enterDuration = getNumberArgByKey(sentence, 'enterDuration') ?? duration;
   duration = enterDuration;
   const exitDuration = getNumberArgByKey(sentence, 'exitDuration') ?? DEFAULT_BG_OUT_DURATION;
@@ -52,21 +57,25 @@ export const changeBg = (sentence: ISentence): IPerform => {
     dispatch(stageActions.removeAnimationSettingsByTarget(`bg-main`));
   }
 
+  const animationName = (Math.random() * 10).toString(16);
+  const animationKey = `bg-main-${animationName}`;
+
   // 处理 transform 和 默认 transform
   let animationObj: AnimationFrame[];
   if (transformString) {
     try {
       const frame = JSON.parse(transformString.toString()) as AnimationFrame;
       animationObj = generateTransformAnimationObj('bg-main', frame, enterDuration, ease);
-      // 因为是切换，必须把一开始的 alpha 改为 0
-      animationObj[0].alpha = 0;
-      const animationName = (Math.random() * 10).toString(16);
       const newAnimation: IUserAnimation = { name: animationName, effects: animationObj };
       WebGAL.animationManager.addAnimation(newAnimation);
       duration = getAnimateDuration(animationName);
-      webgalStore.dispatch(
-        stageActions.updateAnimationSettings({ target: 'bg-main', key: 'enterAnimationName', value: animationName }),
-      );
+      if (isUrlChanged) {
+        webgalStore.dispatch(
+          stageActions.updateAnimationSettings({ target: 'bg-main', key: 'enterAnimationName', value: animationName }),
+        );
+      } else {
+        registerTimelineAnimation(animationName, animationKey, 'bg-main', duration, writeDefault, false, false);
+      }
     } catch (e) {
       // 解析都错误了，歇逼吧
       applyDefaultTransform();
@@ -79,15 +88,16 @@ export const changeBg = (sentence: ISentence): IPerform => {
     // 应用默认的
     const frame = {};
     animationObj = generateTransformAnimationObj('bg-main', frame as AnimationFrame, duration, ease);
-    // 因为是切换，必须把一开始的 alpha 改为 0
-    animationObj[0].alpha = 0;
-    const animationName = (Math.random() * 10).toString(16);
     const newAnimation: IUserAnimation = { name: animationName, effects: animationObj };
     WebGAL.animationManager.addAnimation(newAnimation);
     duration = getAnimateDuration(animationName);
-    webgalStore.dispatch(
-      stageActions.updateAnimationSettings({ target: 'bg-main', key: 'enterAnimationName', value: animationName }),
-    );
+    if (isUrlChanged) {
+      webgalStore.dispatch(
+        stageActions.updateAnimationSettings({ target: 'bg-main', key: 'enterAnimationName', value: animationName }),
+      );
+    } else {
+      registerTimelineAnimation(animationName, animationKey, 'bg-main', duration, writeDefault, false, false);
+    }
   }
 
   // 应用动画的优先级更高一点
@@ -134,7 +144,11 @@ export const changeBg = (sentence: ISentence): IPerform => {
     duration,
     isHoldOn: false,
     stopFunction: () => {
-      WebGAL.gameplay.pixiStage?.stopPresetAnimationOnTarget('bg-main');
+      if (isUrlChanged) {
+        WebGAL.gameplay.pixiStage?.stopPresetAnimationOnTarget('bg-main');
+      } else {
+        removeTimelineAnimation(animationKey, false);
+      }
     },
     blockingNext: () => false,
     blockingAuto: () => true,
