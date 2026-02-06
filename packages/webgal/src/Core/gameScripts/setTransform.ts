@@ -10,14 +10,13 @@ import { baseTransform, ITransform } from '@/store/stageInterface';
 import { AnimationFrame, IUserAnimation } from '../Modules/animations';
 import { generateTransformAnimationObj } from '@/Core/controller/stage/pixi/animations/generateTransformAnimationObj';
 import { WebGAL } from '@/Core/WebGAL';
-import { getAnimateDuration, getAnimationObject } from '../Modules/animationFunctions';
+import { getAnimateDuration, registerTimelineAnimation, removeTimelineAnimation } from '../Modules/animationFunctions';
 
 /**
  * 设置变换
  * @param sentence
  */
 export const setTransform = (sentence: ISentence): IPerform => {
-  const startDialogKey = webgalStore.getState().stage.currentDialogKey;
   const animationName = (Math.random() * 10).toString(16);
   const animationString = sentence.content;
   let animationObj: AnimationFrame[];
@@ -29,7 +28,6 @@ export const setTransform = (sentence: ISentence): IPerform => {
   const keep = getBooleanArgByKey(sentence, 'keep') ?? false;
 
   const performInitName = `animation-${target}`;
-
   WebGAL.gameplay.performController.unmountPerform(performInitName, true);
 
   try {
@@ -45,33 +43,18 @@ export const setTransform = (sentence: ISentence): IPerform => {
   WebGAL.animationManager.addAnimation(newAnimation);
   const animationDuration = getAnimateDuration(animationName);
 
-  const key = `${target}-${animationName}-${animationDuration}`;
+  const animationKey = `${target}-${animationName}-${animationDuration}`;
   let keepAnimationStopped = false;
+
   setTimeout(() => {
     if (keep && keepAnimationStopped) {
       return;
     }
-    WebGAL.gameplay.pixiStage?.stopPresetAnimationOnTarget(target);
-    const animationObj: IAnimationObject | null = getAnimationObject(
-      animationName,
-      target,
-      animationDuration,
-      writeDefault,
-    );
-    if (animationObj) {
-      logger.debug(`动画${animationName}作用在${target}`, animationDuration);
-      WebGAL.gameplay.pixiStage?.registerAnimation(animationObj, key, target);
-    }
+    registerTimelineAnimation(animationName, animationKey, target, animationDuration, writeDefault);
   }, 0);
+
   const stopFunction = () => {
-    if (keep) {
-      WebGAL.gameplay.pixiStage?.removeAnimationWithoutSetEndState(key);
-      keepAnimationStopped = true;
-      return;
-    }
-    setTimeout(() => {
-      WebGAL.gameplay.pixiStage?.removeAnimationWithSetEffects(key);
-    }, 0);
+    keepAnimationStopped = removeTimelineAnimation(animationKey, keep);
   };
 
   return {
