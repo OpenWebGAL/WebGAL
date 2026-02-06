@@ -17,7 +17,6 @@ import { getAnimateDuration, getAnimationObject } from '../Modules/animationFunc
  * @param sentence
  */
 export const setTransform = (sentence: ISentence): IPerform => {
-  const startDialogKey = webgalStore.getState().stage.currentDialogKey;
   const animationName = (Math.random() * 10).toString(16);
   const animationString = sentence.content;
   let animationObj: AnimationFrame[];
