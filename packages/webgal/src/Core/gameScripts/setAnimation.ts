@@ -29,15 +29,12 @@ export const setAnimation = (sentence: ISentence): IPerform => {
   const animationKey = `${target}-${animationName}-${animationDuration}`;
   let keepAnimationStopped = false;
 
-  registerTimelineAnimation(
-    animationName,
-    animationKey,
-    target,
-    animationDuration,
-    writeDefault,
-    keep,
-    keepAnimationStopped,
-  );
+  setTimeout(() => {
+    if (keep && keepAnimationStopped) {
+      return;
+    }
+    registerTimelineAnimation(animationName, animationKey, target, animationDuration, writeDefault);
+  }, 0);
 
   const stopFunction = () => {
     keepAnimationStopped = removeTimelineAnimation(animationKey, keep);

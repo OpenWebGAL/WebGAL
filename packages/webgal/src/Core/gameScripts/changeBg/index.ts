@@ -74,7 +74,9 @@ export const changeBg = (sentence: ISentence): IPerform => {
           stageActions.updateAnimationSettings({ target: 'bg-main', key: 'enterAnimationName', value: animationName }),
         );
       } else {
-        registerTimelineAnimation(animationName, animationKey, 'bg-main', duration, writeDefault, false, false);
+        setTimeout(() => {
+          registerTimelineAnimation(animationName, animationKey, 'bg-main', duration, writeDefault);
+        }, 0);
       }
     } catch (e) {
       // 解析都错误了，歇逼吧
@@ -96,7 +98,9 @@ export const changeBg = (sentence: ISentence): IPerform => {
         stageActions.updateAnimationSettings({ target: 'bg-main', key: 'enterAnimationName', value: animationName }),
       );
     } else {
-      registerTimelineAnimation(animationName, animationKey, 'bg-main', duration, writeDefault, false, false);
+      setTimeout(() => {
+        registerTimelineAnimation(animationName, animationKey, 'bg-main', duration, writeDefault);
+      }, 0);
     }
   }
 

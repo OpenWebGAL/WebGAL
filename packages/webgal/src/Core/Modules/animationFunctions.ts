@@ -118,25 +118,18 @@ export function registerTimelineAnimation(
   target: string,
   animationDuration: number,
   writeDefault: boolean,
-  keep: boolean,
-  keepAnimationStopped: boolean,
 ) {
-  setTimeout(() => {
-    if (keep && keepAnimationStopped) {
-      return;
-    }
-    WebGAL.gameplay.pixiStage?.stopPresetAnimationOnTarget(target);
-    const animationObj: IAnimationObject | null = getAnimationObject(
-      animationName,
-      target,
-      animationDuration,
-      writeDefault,
-    );
-    if (animationObj) {
-      logger.debug(`动画${animationName}作用在${target}`, animationDuration);
-      WebGAL.gameplay.pixiStage?.registerAnimation(animationObj, animationKey, target);
-    }
-  }, 0);
+  WebGAL.gameplay.pixiStage?.stopPresetAnimationOnTarget(target);
+  const animationObj: IAnimationObject | null = getAnimationObject(
+    animationName,
+    target,
+    animationDuration,
+    writeDefault,
+  );
+  if (animationObj) {
+    logger.debug(`动画${animationName}作用在${target}`, animationDuration);
+    WebGAL.gameplay.pixiStage?.registerAnimation(animationObj, animationKey, target);
+  }
 }
 
 export function removeTimelineAnimation(animationKey: string, keep: boolean): boolean {

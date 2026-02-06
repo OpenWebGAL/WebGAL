@@ -184,7 +184,9 @@ export function changeFigure(sentence: ISentence): IPerform {
             stageActions.updateAnimationSettings({ target: key, key: 'enterAnimationName', value: animationName }),
           );
         } else {
-          registerTimelineAnimation(animationName, animationKey, id, duration, writeDefault, false, false);
+          setTimeout(() => {
+            registerTimelineAnimation(animationName, animationKey, id, duration, writeDefault);
+          }, 0);
         }
       } catch (e) {
         // 解析都错误了，歇逼吧
@@ -206,7 +208,9 @@ export function changeFigure(sentence: ISentence): IPerform {
           stageActions.updateAnimationSettings({ target: key, key: 'enterAnimationName', value: animationName }),
         );
       } else {
-        registerTimelineAnimation(animationName, animationKey, id, duration, writeDefault, false, false);
+        setTimeout(() => {
+          registerTimelineAnimation(animationName, animationKey, id, duration, writeDefault);
+        }, 0);
       }
     }
 
