@@ -74,6 +74,8 @@ export const changeBg = (sentence: ISentence): IPerform => {
           stageActions.updateAnimationSettings({ target: 'bg-main', key: 'enterAnimationName', value: animationName }),
         );
       } else {
+        const animationPerformInitName = `animation-bg-main`;
+        WebGAL.gameplay.performController.unmountPerform(animationPerformInitName, true);
         setTimeout(() => {
           registerTimelineAnimation(animationName, animationKey, 'bg-main', duration, writeDefault);
         }, 0);
@@ -97,7 +99,9 @@ export const changeBg = (sentence: ISentence): IPerform => {
       webgalStore.dispatch(
         stageActions.updateAnimationSettings({ target: 'bg-main', key: 'enterAnimationName', value: animationName }),
       );
-    } else {
+    } else if (transformString) {
+      const animationPerformInitName = `animation-bg-main`;
+      WebGAL.gameplay.performController.unmountPerform(animationPerformInitName, true);
       setTimeout(() => {
         registerTimelineAnimation(animationName, animationKey, 'bg-main', duration, writeDefault);
       }, 0);

@@ -184,6 +184,8 @@ export function changeFigure(sentence: ISentence): IPerform {
             stageActions.updateAnimationSettings({ target: key, key: 'enterAnimationName', value: animationName }),
           );
         } else {
+          const animationPerformInitName = `animation-${id}`;
+          WebGAL.gameplay.performController.unmountPerform(animationPerformInitName, true);
           setTimeout(() => {
             registerTimelineAnimation(animationName, animationKey, id, duration, writeDefault);
           }, 0);
@@ -207,7 +209,9 @@ export function changeFigure(sentence: ISentence): IPerform {
         webgalStore.dispatch(
           stageActions.updateAnimationSettings({ target: key, key: 'enterAnimationName', value: animationName }),
         );
-      } else {
+      } else if (transformString) {
+        const animationPerformInitName = `animation-${id}`;
+        WebGAL.gameplay.performController.unmountPerform(animationPerformInitName, true);
         setTimeout(() => {
           registerTimelineAnimation(animationName, animationKey, id, duration, writeDefault);
         }, 0);
