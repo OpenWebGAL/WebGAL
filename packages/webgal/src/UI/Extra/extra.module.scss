@@ -201,11 +201,12 @@
 .cgShowDivWarpper {
   display: flex;
   flex-flow: row;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: flex-end;
   //background: rgba(255, 255, 255, 0.35);
   border-radius: 7px;
   padding: 12px 15px;
+  width: 100%;
   max-width: 100%;
   overflow-x: auto;
   overflow-y: hidden;
