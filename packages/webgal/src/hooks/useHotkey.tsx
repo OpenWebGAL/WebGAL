@@ -143,18 +143,12 @@ export function useMouseWheel() {
       if (WebGAL.gameplay.isFast) stopFast();
       WebGAL.gameplay.isFast = true;
       // 滚轮视作快进
-      setFastButton(true);
       setTimeout(() => {
         WebGAL.gameplay.isFast = false;
-        setFastButton(false);
       }, 150);
       next();
     }
   }, []);
-
-  useEffect(() => {
-    setFastButton(WebGAL.gameplay.isFast);
-  }, [WebGAL.gameplay.isFast]);
 
   useMounted(() => {
     document.addEventListener('wheel', handleMouseWheel);
