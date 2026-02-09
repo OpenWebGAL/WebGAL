@@ -151,6 +151,11 @@ export function useMouseWheel() {
       next();
     }
   }, []);
+
+  useEffect(() => {
+    setFastButton(WebGAL.gameplay.isFast);
+  }, [WebGAL.gameplay.isFast]);
+
   useMounted(() => {
     document.addEventListener('wheel', handleMouseWheel);
   });
