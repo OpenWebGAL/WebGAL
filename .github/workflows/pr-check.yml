@@ -27,6 +27,10 @@ jobs:
       - name: Install
         run: npm install yarn -g && yarn install
 
+      # 运行 parser 测试
+      - name: Parser Test
+        run: yarn parser:test --run
+
       # 生成静态文件
       - name: Build
         run: yarn build && cd ./packages/webgal && touch dist/.nojekyll
