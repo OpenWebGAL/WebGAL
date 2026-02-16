@@ -19,9 +19,6 @@ export function generateTimelineObj(
   targetKey: string,
   duration: number,
 ): IAnimationObject {
-  for (const segment of timeline) {
-    // Alpha 现在直接使用原生属性，无需转换为 alphaFilterVal
-  }
   const target = WebGAL.gameplay.pixiStage!.getStageObjByKey(targetKey);
   let currentDelay = 0;
   const values = [];
@@ -44,8 +41,8 @@ export function generateTimelineObj(
   }
   const container = target?.pixiContainer;
   let animateInstance: ReturnType<typeof popmotion.animate> | null = null;
-  // 只有有 duration 的时候才有动画
-  if (duration > 0) {
+  // 只有有 duration 且 timeline 长度大于 1 的时候才有动画
+  if (duration > 0 && timeline.length > 1) {
     animateInstance = popmotion.animate({
       to: values,
       offset: times,

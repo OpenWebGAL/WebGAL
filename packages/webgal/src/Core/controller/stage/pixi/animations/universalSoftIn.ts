@@ -14,7 +14,7 @@ export function generateUniversalSoftInAnimationObj(targetKey: string, duration:
     elapsedTime = 0; // Reset timer when animation starts
     if (target?.pixiContainer) {
       // 修正：不再强制设为 0，而是记录当前的透明度
-      startAlpha = target.pixiContainer.alpha;
+      startAlpha = target.pixiContainer.alphaFilterVal;
     }
   }
 
@@ -24,7 +24,7 @@ export function generateUniversalSoftInAnimationObj(targetKey: string, duration:
   function setEndState() {
     if (target?.pixiContainer) {
       // 终态是完全不透明，这保持不变
-      target.pixiContainer.alpha = 1;
+      target.pixiContainer.alphaFilterVal = 1;
     }
   }
 
@@ -49,7 +49,7 @@ export function generateUniversalSoftInAnimationObj(targetKey: string, duration:
       // 公式：最终值 = 初始值 + (目标值 - 初始值) * 进度
       // 在这里，目标值是 1，所以公式为：
       // alpha = startAlpha + (1 - startAlpha) * easedProgress
-      if (sprite) sprite.alpha = startAlpha + (1 - startAlpha) * easedProgress;
+      if (sprite) sprite.alphaFilterVal = startAlpha + (1 - startAlpha) * easedProgress;
     }
   }
 

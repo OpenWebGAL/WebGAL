@@ -28,7 +28,7 @@ export default function IMSSTextbox(props: ITextboxProps) {
     textSizeState,
   } = props;
 
-  const applyStyle = useApplyStyle('Stage/TextBox/textbox.scss');
+  const applyStyle = useApplyStyle('textbox');
 
   useEffect(() => {
     function settleText() {
@@ -189,7 +189,7 @@ export default function IMSSTextbox(props: ITextboxProps) {
 
   const userDataState = useSelector((state: RootState) => state.userData);
   const lineHeightValue = textSizeState === textSize.medium ? 2.2 : 2;
-  const textLineHeight = userDataState.globalGameVar.LineHeight;
+  const textLineHeight = userDataState.globalGameVar.Line_height;
   const finalTextLineHeight = textLineHeight ? Number(textLineHeight) : lineHeightValue;
   const lineHeightCssStr = `line-height: ${finalTextLineHeight}em`;
   const lhCss = css(lineHeightCssStr);

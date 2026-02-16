@@ -91,6 +91,7 @@ export function changeFigure(sentence: ISentence): IPerform {
   const enterAnimation = getStringArgByKey(sentence, 'enter');
   const exitAnimation = getStringArgByKey(sentence, 'exit');
   let zIndex = getNumberArgByKey(sentence, 'zIndex') ?? -1;
+  let blendMode = getStringArgByKey(sentence, 'blendMode');
   const enterDuration = getNumberArgByKey(sentence, 'enterDuration') ?? duration;
   duration = enterDuration;
   const exitDuration = getNumberArgByKey(sentence, 'exitDuration') ?? DEFAULT_FIG_OUT_DURATION;
@@ -155,6 +156,10 @@ export function changeFigure(sentence: ISentence): IPerform {
     }
   }
   const setAnimationNames = (key: string, sentence: ISentence) => {
+    // 如果立绘被关闭了，那么就不用设置了
+    if (content === '') {
+      return;
+    }
     // 处理 transform 和 默认 transform
     let animationObj: AnimationFrame[];
     if (transformString) {
@@ -228,11 +233,13 @@ export function changeFigure(sentence: ISentence): IPerform {
       blink = blink ?? cloneDeep(baseBlinkParam);
       focus = focus ?? cloneDeep(baseFocusParam);
       zIndex = Math.max(zIndex, 0);
+      blendMode = blendMode ?? 'normal';
       dispatch(stageActions.setLive2dMotion({ target: key, motion, overrideBounds: bounds }));
       dispatch(stageActions.setLive2dExpression({ target: key, expression }));
       dispatch(stageActions.setLive2dBlink({ target: key, blink }));
       dispatch(stageActions.setLive2dFocus({ target: key, focus }));
       dispatch(stageActions.setFigureMetaData([key, 'zIndex', zIndex, false]));
+      dispatch(stageActions.setFigureMetaData([key, 'blendMode', blendMode, false]));
     } else {
       // 当 url 没有发生变化时，即没有新立绘替换
       // 应当保留旧立绘的状态，仅在需要时更新
@@ -250,6 +257,9 @@ export function changeFigure(sentence: ISentence): IPerform {
       }
       if (zIndex >= 0) {
         dispatch(stageActions.setFigureMetaData([key, 'zIndex', zIndex, false]));
+      }
+      if (blendMode) {
+        dispatch(stageActions.setFigureMetaData([key, 'blendMode', blendMode, false]));
       }
     }
   }

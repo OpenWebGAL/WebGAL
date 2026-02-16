@@ -24,7 +24,8 @@ test("label", async () => {
       { key: "next", value: true }
     ],
     sentenceAssets: [],
-    subScene: []
+    subScene: [],
+    inlineComment: ""
   };
   expect(result.sentenceList).toContainEqual(expectSentenceItem);
 });
@@ -49,7 +50,8 @@ test("args", async () => {
       { key: "next", value: true }
     ],
     sentenceAssets: [{ name: "m2.png", url: 'm2.png', type: fileType.figure, lineNumber: 0 }],
-    subScene: []
+    subScene: [],
+    inlineComment: ""
   };
   expect(result.sentenceList).toContainEqual(expectSentenceItem);
 });
@@ -71,7 +73,8 @@ test("choose", async () => {
     content: "",
     args: [],
     sentenceAssets: [],
-    subScene: []
+    subScene: [],
+    inlineComment: ""
   };
   expect(result.sentenceList).toContainEqual(expectSentenceItem);
 });
@@ -98,7 +101,8 @@ test("long-script", async () => {
       { key: "next", value: true }
     ],
     sentenceAssets: [],
-    subScene: []
+    subScene: [],
+    inlineComment: ""
   };
   expect(result.sentenceList).toContainEqual(expectSentenceItem);
 });
@@ -120,7 +124,8 @@ test("var", async () => {
     content: "a=1?",
     args: [{ key: 'speaker', value: 'WebGAL' }, { key: 'when', value: "a==1" }],
     sentenceAssets: [],
-    subScene: []
+    subScene: [],
+    inlineComment: ""
   };
   expect(result.sentenceList).toContainEqual(expectSentenceItem);
 });
@@ -185,14 +190,16 @@ test("say statement", async () => {
   }, ADD_NEXT_ARG_LIST, SCRIPT_CONFIG);
 
   const result = parser.parse(`say:123 -speaker=xx;`, 'test', 'test');
-  expect(result.sentenceList).toContainEqual({
+  const expectSentenceItem: ISentence = {
     command: commandType.say,
     commandRaw: "say",
     content: "123",
     args: [{ key: 'speaker', value: 'xx' }],
     sentenceAssets: [],
-    subScene: []
-  });
+    subScene: [],
+    inlineComment: ""
+  };
+  expect(result.sentenceList).toContainEqual(expectSentenceItem);
 });
 
 test("wait command", async () => {
@@ -202,14 +209,16 @@ test("wait command", async () => {
   }, ADD_NEXT_ARG_LIST, SCRIPT_CONFIG);
 
   const result = parser.parse(`wait:1000;`, 'test', 'test');
-  expect(result.sentenceList).toContainEqual({
+  const expectSentenceItem: ISentence = {
     command: commandType.wait,
     commandRaw: "wait",
     content: "1000",
     args: [],
     sentenceAssets: [],
-    subScene: []
-  });
+    subScene: [],
+    inlineComment: ""
+  };
+  expect(result.sentenceList).toContainEqual(expectSentenceItem);
 });
 
 test("changeFigure with duration and animation args", async () => {
@@ -219,7 +228,7 @@ test("changeFigure with duration and animation args", async () => {
   }, ADD_NEXT_ARG_LIST, SCRIPT_CONFIG);
 
   const result = parser.parse(`changeFigure:stand.webp -duration=1000 -enter=fadeIn -exit=fadeOut;`, 'test', 'test');
-  expect(result.sentenceList).toContainEqual({
+  const expectSentenceItem: ISentence = {
     command: commandType.changeFigure,
     commandRaw: "changeFigure",
     content: "stand.webp",
@@ -229,8 +238,10 @@ test("changeFigure with duration and animation args", async () => {
       { key: 'exit', value: 'fadeOut' }
     ],
     sentenceAssets: [{ name: "stand.webp", url: 'stand.webp', type: fileType.figure, lineNumber: 0 }],
-    subScene: []
-  });
+    subScene: [],
+    inlineComment: ""
+  };
+  expect(result.sentenceList).toContainEqual(expectSentenceItem);
 });
 
 test("changeBg with animation parameters", async () => {
@@ -240,7 +251,7 @@ test("changeBg with animation parameters", async () => {
   }, ADD_NEXT_ARG_LIST, SCRIPT_CONFIG);
 
   const result = parser.parse(`changeBg:background.jpg -duration=2000 -enter=slideIn -transform={"alpha":0.8};`, 'test', 'test');
-  expect(result.sentenceList).toContainEqual({
+  const expectSentenceItem: ISentence = {
     command: commandType.changeBg,
     commandRaw: "changeBg",
     content: "background.jpg",
@@ -250,6 +261,65 @@ test("changeBg with animation parameters", async () => {
       { key: 'transform', value: '{"alpha":0.8}' }
     ],
     sentenceAssets: [{ name: "background.jpg", url: 'background.jpg', type: fileType.background, lineNumber: 0 }],
-    subScene: []
-  });
+    subScene: [],
+    inlineComment: ""
+  };
+  expect(result.sentenceList).toContainEqual(expectSentenceItem);
+});
+
+test("inline comment is preserved on normal statement", async () => {
+  const parser = new SceneParser((assetList) => {
+  }, (fileName, assetType) => {
+    return fileName;
+  }, ADD_NEXT_ARG_LIST, SCRIPT_CONFIG);
+
+  const result = parser.parse(`say:123 -speaker=xx; // this is an inline comment`, 'test', 'test');
+  const expectSentenceItem: ISentence = {
+    command: commandType.say,
+    commandRaw: "say",
+    content: "123",
+    args: [{ key: 'speaker', value: 'xx' }],
+    sentenceAssets: [],
+    subScene: [],
+    inlineComment: "// this is an inline comment"
+  };
+  expect(result.sentenceList).toContainEqual(expectSentenceItem);
+});
+
+test("escaped semicolon is preserved in content and inline comment is preserved", async () => {
+  const parser = new SceneParser((assetList) => {
+  }, (fileName, assetType) => {
+    return fileName;
+  }, ADD_NEXT_ARG_LIST, SCRIPT_CONFIG);
+
+  const result = parser.parse(String.raw`say:price\;100;comment-part`, 'test', 'test');
+  const expectSentenceItem: ISentence = {
+    command: commandType.say,
+    commandRaw: "say",
+    content: "price;100",
+    args: [],
+    sentenceAssets: [],
+    subScene: [],
+    inlineComment: "comment-part"
+  };
+  expect(result.sentenceList).toContainEqual(expectSentenceItem);
+});
+
+test("comment-only line keeps comment in content", async () => {
+  const parser = new SceneParser((assetList) => {
+  }, (fileName, assetType) => {
+    return fileName;
+  }, ADD_NEXT_ARG_LIST, SCRIPT_CONFIG);
+
+  const result = parser.parse(`; only comment here`, 'test', 'test');
+  const expectSentenceItem: ISentence = {
+    command: commandType.comment,
+    commandRaw: "comment",
+    content: "only comment here",
+    args: [{ key: 'next', value: true }],
+    sentenceAssets: [],
+    subScene: [],
+    inlineComment: ""
+  };
+  expect(result.sentenceList).toContainEqual(expectSentenceItem);
 });

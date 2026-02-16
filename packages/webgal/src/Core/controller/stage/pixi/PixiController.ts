@@ -67,7 +67,7 @@ window.PIXI = PIXI;
 INSTALLED.push(GifResource);
 
 export default class PixiStage {
-  public static assignTransform<T extends ITransform>(target: T, source?: ITransform) {
+  public static assignTransform<T extends ITransform>(target: T, source?: ITransform, convertAlpha = true) {
     if (!source) return;
     const targetScale = target.scale;
     const targetPosition = target.position;
@@ -76,6 +76,13 @@ export default class PixiStage {
     Object.assign(target, source);
     target.scale = targetScale;
     target.position = targetPosition;
+    if (convertAlpha) {
+      const sourceAlpha = source.alpha;
+      if (sourceAlpha !== undefined) {
+        target.alpha = 1;
+        (target as any).alphaFilterVal = sourceAlpha;
+      }
+    }
   }
 
   /**
@@ -561,6 +568,9 @@ export default class PixiStage {
       if (metadata.zIndex) {
         thisFigureContainer.zIndex = metadata.zIndex;
       }
+      if (metadata.blendMode) {
+        thisFigureContainer.blendMode = metadata.blendMode;
+      }
     }
     // 挂载
     this.figureContainer.addChild(thisFigureContainer);
@@ -656,6 +666,9 @@ export default class PixiStage {
       if (metadata) {
         if (metadata.zIndex) {
           thisFigureContainer.zIndex = metadata.zIndex;
+        }
+        if (metadata.blendMode) {
+          thisFigureContainer.blendMode = metadata.blendMode;
         }
       }
       // 挂载

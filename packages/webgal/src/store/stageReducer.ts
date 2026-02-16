@@ -23,6 +23,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import cloneDeep from 'lodash/cloneDeep';
 import { commandType } from '@/Core/controller/scene/sceneInterface';
 import { STAGE_KEYS } from '@/Core/constants';
+import { baseBlinkParam, baseFocusParam } from '@/Core/live2DCore';
 
 // 初始化舞台数据
 
@@ -156,6 +157,31 @@ const stageSlice = createSlice({
     removeAnimationSettingsByTarget: (state, action: PayloadAction<string>) => {
       const index = state.animationSettings.findIndex((a) => a.target === action.payload);
       if (index >= 0) {
+        const prev = state.animationSettings[index];
+        state.animationSettings.splice(index, 1);
+
+        if (prev.exitAnimationName || prev.exitDuration !== undefined) {
+          // 如果有退出动画设定，保留一个 -off 的设定
+          const prevTarget = `${action.payload}-off`;
+          const prevSetting = {
+            ...prev,
+            target: prevTarget,
+          };
+
+          const prevIndex = state.animationSettings.findIndex((a) => a.target === prevTarget);
+
+          if (prevIndex >= 0) {
+            state.animationSettings.splice(prevIndex, 1, prevSetting);
+          } else {
+            state.animationSettings.push(prevSetting);
+          }
+        }
+      }
+    },
+    removeAnimationSettingsByTargetOff: (state, action: PayloadAction<string>) => {
+      // 这里不加 -off 因为传入的就是带 -off 的
+      const index = state.animationSettings.findIndex((a) => a.target === `${action.payload}`);
+      if (index >= 0) {
         state.animationSettings.splice(index, 1);
       }
     },
@@ -250,10 +276,12 @@ const stageSlice = createSlice({
       const index = state.live2dBlink.findIndex((e) => e.target === target);
       if (index < 0) {
         // Add a new blink
-        state.live2dBlink.push({ target, blink });
+        const fullBlink = { ...baseBlinkParam, ...blink };
+        state.live2dBlink.push({ target, blink: fullBlink });
       } else {
         // Update the existing blink
-        state.live2dBlink[index].blink = blink;
+        const fullBlink = { ...state.live2dBlink[index].blink, ...blink };
+        state.live2dBlink[index].blink = fullBlink;
       }
     },
     setLive2dFocus: (state, action: PayloadAction<ILive2DFocus>) => {
@@ -262,10 +290,12 @@ const stageSlice = createSlice({
       const index = state.live2dFocus.findIndex((e) => e.target === target);
       if (index < 0) {
         // Add a new focus
-        state.live2dFocus.push({ target, focus });
+        const fullFocus = { ...baseFocusParam, ...focus };
+        state.live2dFocus.push({ target, focus: fullFocus });
       } else {
         // Update the existing focus
-        state.live2dFocus[index].focus = focus;
+        const fullFocus = { ...state.live2dFocus[index].focus, ...focus };
+        state.live2dFocus[index].focus = fullFocus;
       }
     },
     replaceUIlable: (state, action: PayloadAction<[string, string]>) => {

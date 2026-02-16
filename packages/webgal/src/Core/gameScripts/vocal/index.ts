@@ -130,9 +130,12 @@ export const playVocal = (sentence: ISentence) => {
             audioContextWrapper.dataArray = new Uint8Array(bufferLength);
             let vocalControl = document.getElementById('currentVocal') as HTMLMediaElement;
 
-            if (!audioContextWrapper.source) {
+            if (!audioContextWrapper.source || audioContextWrapper.source.mediaElement !== vocalControl) {
+              if (audioContextWrapper.source) {
+                audioContextWrapper.source.disconnect();
+              }
               audioContextWrapper.source = audioContextWrapper.audioContext.createMediaElementSource(vocalControl);
-              audioContextWrapper.source.connect(audioContextWrapper.analyser);
+              audioContextWrapper.source.connect(audioContextWrapper.analyser!);
             }
 
             audioContextWrapper.analyser.connect(audioContextWrapper.audioContext.destination);

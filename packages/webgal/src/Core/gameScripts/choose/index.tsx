@@ -83,7 +83,7 @@ export const choose = (sentence: ISentence): IPerform => {
 function Choose(props: { chooseOptions: ChooseOption[] }) {
   const font = useFontFamily();
   const { playSeEnter, playSeClick } = useSEByWebgalStore();
-  const applyStyle = useApplyStyle('Stage/Choose/choose.scss');
+  const applyStyle = useApplyStyle('choose');
   // 运行时计算JSX.Element[]
   const runtimeBuildList = (chooseListFull: ChooseOption[]) => {
     return chooseListFull

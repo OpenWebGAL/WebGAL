@@ -4,6 +4,8 @@ import { playBgm } from '@/Core/controller/stage/playBgm';
 import { getNumberArgByKey, getStringArgByKey } from '@/Core/util/getSentenceArg';
 import { webgalStore } from '@/store/store';
 import { unlockBgmInUserData } from '@/store/userDataReducer';
+import localforage from 'localforage';
+import { WebGAL } from '../WebGAL';
 
 /**
  * 播放一段bgm
@@ -20,6 +22,8 @@ export const bgm = (sentence: ISentence): IPerform => {
 
   if (name !== '') {
     webgalStore.dispatch(unlockBgmInUserData({ name, url, series }));
+    const userDataState = webgalStore.getState().userData;
+    localforage.setItem(WebGAL.gameKey, userDataState).then(() => {});
   }
 
   playBgm(url, enter, volume);

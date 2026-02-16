@@ -7,6 +7,10 @@
     <link rel="manifest" href="/manifest.json" />
     <title>WebGAL</title>
     <style>
+      body {
+        background: black;
+      }
+
       .html-body__effect-background {
         height: 100vh;
         width: 100vw;
@@ -17,6 +21,20 @@
         position: absolute;
         top: 0;
         left: 0;
+        background-color: black;
+      }
+
+      .html-body__effect-background-overlay {
+        height: 100%;
+        width: 100%;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+        position: absolute;
+        top: 0;
+        left: 0;
+        background-color: black;
+        opacity: 0;
       }
 
       .html-body__title-enter {
@@ -115,7 +133,9 @@
   </head>
   <body>
     <!-- 背景模糊 -->
-    <div class="html-body__effect-background"></div>
+    <div id="ebg" class="html-body__effect-background">
+      <div id="ebgOverlay" class="html-body__effect-background-overlay"></div>
+    </div>
     <!-- 落地页 -->
     <div class="html-body__title-enter">
       <div class="title-enter__initial-background"></div>

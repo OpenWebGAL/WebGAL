@@ -13,6 +13,7 @@ import {
   DEFAULT_FIG_IN_DURATION,
   DEFAULT_FIG_OUT_DURATION,
 } from '../constants';
+import { stageActions } from '@/store/stageReducer';
 
 // eslint-disable-next-line max-params
 export function getAnimationObject(animationName: string, target: string, duration: number, writeDefault: boolean) {
@@ -28,7 +29,7 @@ export function getAnimationObject(animationName: string, target: string, durati
         newEffect = cloneDeep({ ...baseTransform, duration: 0, ease: '' });
       }
 
-      PixiStage.assignTransform(newEffect, effect);
+      PixiStage.assignTransform(newEffect, effect, false);
       newEffect.duration = effect.duration;
       newEffect.ease = effect.ease;
       return newEffect;
@@ -90,18 +91,22 @@ export function getEnterExitAnimation(
     if (isBg) {
       duration = DEFAULT_BG_OUT_DURATION;
     }
-    duration =
-      webgalStore.getState().stage.animationSettings.find((setting) => setting.target + '-off' === target)
-        ?.exitDuration ?? duration;
+    const animationSettings = webgalStore
+      .getState()
+      .stage.animationSettings.find((setting) => setting.target === target);
+    duration = animationSettings?.exitDuration ?? duration;
     // 走默认动画
     let animation: IAnimationObject | null = generateUniversalSoftOffAnimationObj(realTarget ?? target, duration);
-    const animationName = webgalStore
-      .getState()
-      .stage.animationSettings.find((setting) => setting.target + '-off' === target)?.exitAnimationName;
+    const animationName = animationSettings?.exitAnimationName;
     if (animationName) {
       logger.debug('取代默认退出动画', target);
       animation = getAnimationObject(animationName, realTarget ?? target, getAnimateDuration(animationName), false);
       duration = getAnimateDuration(animationName);
+    }
+    if (animationSettings) {
+      // 退出动画拿完后，删了这个设定
+      webgalStore.dispatch(stageActions.removeAnimationSettingsByTargetOff(target));
+      logger.debug('删除退出动画设定', target);
     }
     return { duration, animation };
   }
