@@ -77,4 +77,7 @@ export const jumpFromBacklog = (index: number, refetchScene = true) => {
 
   // 重新显示 TextBox
   dispatch(setVisibility({ component: 'showTextBox', visibility: true }));
+
+  // 重新渲染
+  setTimeout(() => WebGAL.gameplay.pixiStage?.requestRender(), 100);
 };

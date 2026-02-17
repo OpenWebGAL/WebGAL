@@ -92,15 +92,14 @@ export default class PixiStage {
   public readonly mainStageContainer: WebGALPixiContainer;
   public readonly foregroundEffectsContainer: PIXI.Container;
   public readonly backgroundEffectsContainer: PIXI.Container;
-  public frameDuration = 16.67;
   public notUpdateBacklogEffects = false;
   public readonly figureContainer: PIXI.Container;
-  public figureObjects: Array<IStageObject> = [];
+  public figureObjects = this.createReactiveList<IStageObject>([]);
   public stageWidth = SCREEN_CONSTANTS.width;
   public stageHeight = SCREEN_CONSTANTS.height;
   public assetLoader = new PIXI.Loader();
   public readonly backgroundContainer: PIXI.Container;
-  public backgroundObjects: Array<IStageObject> = [];
+  public backgroundObjects = this.createReactiveList<IStageObject>([]);
   public mainStageObject: IStageObject;
   /**
    * 添加 Spine 立绘
@@ -111,11 +110,15 @@ export default class PixiStage {
   public addSpineFigure = addSpineFigureImpl.bind(this);
   public addSpineBg = addSpineBgImpl.bind(this);
   // 注册到 Ticker 上的函数
-  private stageAnimations: Array<IStageAnimationObject> = [];
+  private stageAnimations = this.createReactiveList<IStageAnimationObject>([]);
   private loadQueue: { url: string; callback: () => void; name?: string }[] = [];
   private live2dFigureRecorder: Array<ILive2DRecord> = [];
   // 锁定变换对象（对象可能正在执行动画，不能应用变换）
   private lockTransformTarget: Array<string> = [];
+  // 手动请求渲染防抖标记
+  private isRenderPending = false;
+  // 更新 ticker 状态的防抖标记
+  private isTickerUpdatePending = false;
 
   /**
    * 暂时没用上，以后可能用
@@ -128,6 +131,7 @@ export default class PixiStage {
     const app = new PIXI.Application({
       backgroundAlpha: 0,
       preserveDrawingBuffer: true,
+      autoStart: false,
     });
     // @ts-ignore
 
@@ -189,19 +193,26 @@ export default class PixiStage {
       this.backgroundContainer,
     );
     this.currentApp = app;
-    // 每 5s 获取帧率，并且防 loader 死
-    const update = () => {
-      this.updateFps();
-      setTimeout(update, 10000);
-    };
-    update();
     // loader 防死
     const reload = () => {
       setTimeout(reload, 500);
       this.callLoader();
     };
     reload();
-    this.initialize().then(() => {});
+    this.initialize();
+    this.requestRender();
+  }
+
+  public requestRender() {
+    if (this.isRenderPending) return;
+    this.isRenderPending = true;
+
+    requestAnimationFrame(() => {
+      this.isRenderPending = false;
+      if (!this.currentApp?.ticker.started) {
+        this.currentApp?.render();
+      }
+    });
   }
 
   public getFigureObjects() {
@@ -353,6 +364,7 @@ export default class PixiStage {
         return;
       }
       sprite.texture = texture;
+      this.requestRender();
     });
   }
 
@@ -381,6 +393,7 @@ export default class PixiStage {
         return;
       }
       sprite.texture = texture;
+      this.requestRender();
     });
   }
 
@@ -443,6 +456,7 @@ export default class PixiStage {
 
           // 挂载
           thisBgContainer.addChild(bgSprite);
+          this.requestRender();
         }
       }, 0);
     };
@@ -620,6 +634,7 @@ export default class PixiStage {
           }
           thisFigureContainer.pivot.set(0, this.stageHeight / 2);
           thisFigureContainer.addChild(figureSprite);
+          this.requestRender();
         }
       }, 0);
     };
@@ -1088,13 +1103,6 @@ export default class PixiStage {
     }
   }
 
-  private updateFps() {
-    getScreenFps?.(120).then((fps) => {
-      this.frameDuration = 1000 / (fps as number);
-      // logger.info('当前帧率', fps);
-    });
-  }
-
   private lockStageObject(targetName: string) {
     this.lockTransformTarget.push(targetName);
   }
@@ -1113,6 +1121,60 @@ export default class PixiStage {
       console.error('Failed to load figureCash:', error);
     }
   }
+
+  private createReactiveList<T extends object>(array: T[]): T[] {
+    return new Proxy(array, {
+      // eslint-disable-next-line max-params
+      set: (target, property, value, receiver) => {
+        const result = Reflect.set(target, property, value, receiver);
+        this.updateTickerStatus();
+        return result;
+      },
+      deleteProperty: (target, property) => {
+        const result = Reflect.deleteProperty(target, property);
+        this.updateTickerStatus();
+        return result;
+      },
+    });
+  }
+
+  private updateTickerStatus() {
+    if (this.isTickerUpdatePending) return;
+    this.isTickerUpdatePending = true;
+
+    Promise.resolve().then(() => {
+      this.isTickerUpdatePending = false;
+      const app = this.currentApp;
+      if (!app) return;
+
+      const hasActiveAnimations = this.stageAnimations.length > 0;
+      const allObjects = [...this.figureObjects, ...this.backgroundObjects];
+      const hasDynamicObjects = allObjects.some(
+        (obj) =>
+          obj.sourceType === 'live2d' ||
+          obj.sourceType === 'spine' ||
+          obj.sourceType === 'video' ||
+          obj.sourceType === 'gif',
+      );
+
+      const shouldRun = hasActiveAnimations || hasDynamicObjects;
+
+      if (shouldRun) {
+        if (!app.ticker.started) {
+          app.ticker.start();
+          logger.debug('Ticker: STARTED');
+        }
+      } else {
+        if (app.ticker.started) {
+          app.ticker.stop();
+          this.currentApp?.render();
+          logger.debug('Ticker: STOPPED');
+        } else {
+          this.requestRender();
+        }
+      }
+    });
+  }
 }
 
 function updateCurrentBacklogEffects(newEffects: IEffect[]) {
@@ -1125,40 +1187,3 @@ function updateCurrentBacklogEffects(newEffects: IEffect[]) {
 
   webgalStore.dispatch(setStage({ key: 'effects', value: newEffects }));
 }
-
-/**
- * @param {number} targetCount 不小于1的整数，表示经过targetCount帧之后返回结果
- * @return {Promise<number>}
- */
-const getScreenFps = (() => {
-  // 先做一下兼容性处理
-  const nextFrame = [
-    window.requestAnimationFrame,
-    // @ts-ignore
-    window.webkitRequestAnimationFrame,
-    // @ts-ignore
-    window.mozRequestAnimationFrame,
-  ].find((fn) => fn);
-  if (!nextFrame) {
-    console.error('requestAnimationFrame is not supported!');
-    return;
-  }
-  return (targetCount = 60) => {
-    // 判断参数是否合规
-    if (targetCount < 1) throw new Error('targetCount cannot be less than 1.');
-    const beginDate = Date.now();
-    let count = 0;
-    return new Promise((resolve) => {
-      (function log() {
-        nextFrame(() => {
-          if (++count >= targetCount) {
-            const diffDate = Date.now() - beginDate;
-            const fps = (count / diffDate) * 1000;
-            return resolve(fps);
-          }
-          log();
-        });
-      })();
-    });
-  };
-})();
