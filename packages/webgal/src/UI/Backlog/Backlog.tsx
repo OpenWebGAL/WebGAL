@@ -10,11 +10,13 @@ import useTrans from '@/hooks/useTrans';
 import { compileSentence, EnhancedNode } from '@/Stage/TextBox/TextBox';
 import useSoundEffect from '@/hooks/useSoundEffect';
 import { WebGAL } from '@/Core/WebGAL';
+import useApplyStyle from '@/hooks/useApplyStyle';
 
 export const Backlog = () => {
   const t = useTrans('gaming.');
   // logger.info('Backlog render');
   const { playSeEnter, playSeClick } = useSoundEffect();
+  const applyStyle = useApplyStyle('backlog');
   const GUIStore = useSelector((state: RootState) => state.GUI);
   const isBacklogOpen = GUIStore.showBacklog;
   const dispatch = useDispatch();
@@ -104,13 +106,13 @@ export const Backlog = () => {
       });
       const singleBacklogView = (
         <div
-          className={styles.backlog_item}
+          className={applyStyle('backlog_item', styles.backlog_item)}
           id={`backlog_item_${i}`}
           style={{ animationDelay: `${20 * ((i - 1) % 20)}ms` }}
           key={'backlogItem' + backlogItem.currentStageState.showText + backlogItem.saveScene.currentSentenceId}
         >
-          <div className={styles.backlog_func_area}>
-            <div className={styles.backlog_item_button_list}>
+          <div className={applyStyle('backlog_func_area', styles.backlog_func_area)}>
+            <div className={applyStyle('backlog_item_button_list', styles.backlog_item_button_list)}>
               <div
                 onClick={(e) => {
                   playSeClick();
@@ -119,7 +121,7 @@ export const Backlog = () => {
                   e.stopPropagation();
                 }}
                 onMouseEnter={playSeEnter}
-                className={styles.backlog_item_button_element}
+                className={applyStyle('backlog_item_button_element', styles.backlog_item_button_element)}
               >
                 <Return theme="outline" size={iconSize} fill="#ffffff" strokeWidth={3} />
               </div>
@@ -140,16 +142,20 @@ export const Backlog = () => {
                     }
                   }}
                   onMouseEnter={playSeEnter}
-                  className={styles.backlog_item_button_element}
+                  className={applyStyle('backlog_item_button_element', styles.backlog_item_button_element)}
                 >
                   <VolumeNotice theme="outline" size={iconSize} fill="#ffffff" strokeWidth={3} />
                 </div>
               ) : null}
             </div>
-            <div className={styles.backlog_item_content_name}>{nameElementList}</div>
+            <div className={applyStyle('backlog_item_content_name', styles.backlog_item_content_name)}>
+              {nameElementList}
+            </div>
           </div>
-          <div className={styles.backlog_item_content}>
-            <span className={styles.backlog_item_content_text}>{showTextElementList}</span>
+          <div className={applyStyle('backlog_item_content', styles.backlog_item_content)}>
+            <span className={applyStyle('backlog_item_content_text', styles.backlog_item_content_text)}>
+              {showTextElementList}
+            </span>
           </div>
           <audio id={'backlog_audio_play_element_' + indexOfBacklog} src={backlogItem.currentStageState.vocal} />
         </div>
@@ -198,13 +204,13 @@ export const Backlog = () => {
         // ${indexHide ? styles.Backlog_main_out_IndexHide : ''}
         <div
           className={`
-          ${GUIStore.showBacklog ? styles.Backlog_main : styles.Backlog_main_out}
-          ${indexHide ? styles.Backlog_main_out_IndexHide : ''}
+          ${GUIStore.showBacklog ? applyStyle('Backlog_main', styles.Backlog_main) : applyStyle('Backlog_main_out', styles.Backlog_main_out)}
+          ${indexHide ? applyStyle('Backlog_main_out_IndexHide', styles.Backlog_main_out_IndexHide) : ''}
           `}
         >
-          <div className={styles.backlog_top}>
+          <div className={applyStyle('backlog_top', styles.backlog_top)}>
             <CloseSmall
-              className={styles.backlog_top_icon}
+              className={applyStyle('backlog_top_icon', styles.backlog_top_icon)}
               onClick={() => {
                 playSeClick();
                 dispatch(setVisibility({ component: 'showBacklog', visibility: false }));
@@ -217,7 +223,7 @@ export const Backlog = () => {
               strokeWidth={3}
             />
             <div
-              className={styles.backlog_title}
+              className={applyStyle('backlog_title', styles.backlog_title)}
               onClick={() => {
                 logger.info('Rua! Testing');
               }}
@@ -226,7 +232,11 @@ export const Backlog = () => {
             </div>
           </div>
           {GUIStore.showBacklog && (
-            <div className={`${styles.backlog_content} ${isDisableScroll ? styles.Backlog_main_DisableScroll : ''}`}>
+            <div
+              className={`${applyStyle('backlog_content', styles.backlog_content)} ${
+                isDisableScroll ? applyStyle('Backlog_main_DisableScroll', styles.Backlog_main_DisableScroll) : ''
+              }`}
+            >
               {backlogList}
             </div>
           )}

@@ -6,6 +6,7 @@ import { useValue } from '@/hooks/useValue';
 import './extraCG_animation_List.scss';
 import { ExtraCgElement } from '@/UI/Extra/ExtraCgElement';
 import useSoundEffect from '@/hooks/useSoundEffect';
+import useApplyStyle from '@/hooks/useApplyStyle';
 
 export function ExtraCg() {
   const cgPerPage = 8;
@@ -14,6 +15,7 @@ export function ExtraCg() {
   // const pageNumber = 10;
   const currentPage = useValue(1);
   const { playSeEnter, playSeClick } = useSoundEffect();
+  const applyStyle = useApplyStyle('extra');
 
   // 开始生成立绘鉴赏的图片
   const showCgList = [];
@@ -40,9 +42,9 @@ export function ExtraCg() {
   // 生成cg鉴赏的导航
   const showNav = [];
   for (let i = 1; i <= pageNumber; i++) {
-    let className = styles.cgNav;
+    let className = applyStyle('cgNav', styles.cgNav);
     if (currentPage.value === i) {
-      className = className + ' ' + styles.cgNav_active;
+      className = className + ' ' + applyStyle('cgNav_active', styles.cgNav_active);
     }
     const temp = (
       <div
@@ -61,11 +63,11 @@ export function ExtraCg() {
   }
 
   return (
-    <div className={styles.cgMain}>
-      <div className={styles.cgShowDiv}>
-        <div className={styles.cgShowDivWarpper}>{showNav}</div>
+    <div className={applyStyle('cgMain', styles.cgMain)}>
+      <div className={applyStyle('cgShowDiv', styles.cgShowDiv)}>
+        <div className={applyStyle('cgShowDivWarpper', styles.cgShowDivWarpper)}>{showNav}</div>
       </div>
-      <div className={styles.cgContainer}>{showCgList}</div>
+      <div className={applyStyle('cgContainer', styles.cgContainer)}>{showCgList}</div>
     </div>
   );
 }

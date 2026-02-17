@@ -1,0 +1,220 @@
+.Backlog_main {
+  font-family: "思源宋体", serif;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+  background: rgba(0, 0, 0, 0.7);
+  padding: 2em 0 2em 0;
+  animation: backlog_soft_in 0.7s ease-out forwards;
+  box-sizing: border-box;
+}
+
+.Backlog_main_out {
+  font-family: "思源宋体", serif;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+  background: rgba(0, 0, 0, 0.7);
+  padding: 2em 0 2em 0;
+  animation: backlog_soft_out 0.7s ease-out forwards;
+  box-sizing: border-box;
+}
+
+// 把z-index置为负数 不然会挡住点击层
+.Backlog_main_out_IndexHide {
+  z-index: -10;
+}
+
+// 暂时禁用滚动
+.Backlog_main_DisableScroll {
+  overflow: hidden !important;
+}
+
+
+.backlog_top {
+  padding: 0 0 0 1em;
+  display: flex;
+  height: 10%;
+}
+
+.backlog_top_icon {
+  padding: 0.6em 0.6em 0 0.6em;
+  border-radius: 1000px;
+  transform: translate(0, -13px);
+  cursor: pointer;
+}
+
+.backlog_top_icon:hover {
+  background: rgba(255, 255, 255, 0.25);
+  animation: backlog_icon_softin 0.25s ease-out forwards;
+}
+
+@keyframes backlog_icon_softin {
+  0% {
+    background: rgba(255, 255, 255, 0);
+  }
+  100% {
+    background: rgba(255, 255, 255, 0.25);
+  }
+}
+
+
+.backlog_title {
+  height: 100%;
+  line-height: 100%;
+  font-size: 360%;
+  font-weight: bold;
+  color: transparent;
+  background: linear-gradient(150deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 1) 35%, rgba(165, 212, 228, 1) 100%);
+  -webkit-background-clip: text;
+}
+
+.backlog_content {
+  position: absolute;
+  height: 80%;
+  padding: 1em 10em 1em 10em;
+  overflow: auto;
+  display: flex;
+  flex-flow: column-reverse;
+  font-weight: normal;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+
+.backlog_item {
+  display: flex;
+  color: white;
+  font-size: 165%;
+  opacity: 0;
+  animation: backlog_item_in 0.5s ease-out forwards;
+  margin: 1.25em 0 0 0;
+  width: 100%;
+}
+
+.backlog_item_out {
+  display: flex;
+  color: white;
+  font-size: 165%;
+  opacity: 0;
+  animation: backlog_item_out 0.5s ease-out forwards;
+  margin: 1.25em 0 0 0;
+  width: 100%;
+}
+
+.backlog_func_area {
+  display: flex;
+  flex-flow: row;
+  align-items: flex-start;
+  width: 30%;
+  max-width: 30%;
+  min-width: 30%;
+}
+
+.backlog_item_content_name {
+  font-weight: bold;
+  color: transparent;
+  //background: linear-gradient(150deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 1) 55%, rgb(210, 243, 255) 100%);
+  background: linear-gradient(150deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 1) 35%, rgba(165, 212, 228, 1) 100%);
+  -webkit-background-clip: text;
+  //width: 20%;
+  margin: 0 0 0 auto;
+  overflow-wrap: break-word;
+  box-sizing: border-box;
+  //background: rgba(255, 255, 255, 0.175);
+  border-radius: 7px;
+  padding: 0.2em 0.5em 0.2em 0.5em;
+  font-size: 115%;
+  width: 50%;
+  text-align: left;
+  //font-family: WebgalUI, serif;
+  letter-spacing: 0.1em;
+}
+
+.backlog_item_content {
+  //display: flex;
+  font-size: 115%;
+  width: 82.5%;
+  box-sizing: border-box;
+  padding: 0.2em 0 0 1em;
+  //font-family: WebgalUI, serif;
+  letter-spacing: 0.05em;
+}
+
+.backlog_item_button_list {
+  display: flex;
+  //padding: 0 2em 0 0.3em;
+  flex-flow: row;
+  align-items: flex-start;
+  margin: 0.35em 0 0 0;
+}
+
+.backlog_item_button_element {
+  cursor: pointer;
+  padding: 0.01em 0.75em 0 0.75em;
+  margin: 0 0 0 0.5em;
+  background: rgba(255, 255, 255, 0.075);
+  border-radius: 7px;
+  display: flex;
+  //border: 1px solid rgba(255, 255, 255, 0.15);
+  //box-shadow: 0 0 15px rgba(255, 255, 255, 0.25);
+}
+
+.backlog_item_button_element:hover {
+  background: rgba(255, 255, 255, 0.25);
+  //border: 1px solid rgba(255, 255, 255, 0);
+  //box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+}
+
+
+.backlog_item_content_text {
+  //width: 80%;
+  box-sizing: border-box;
+}
+
+
+@keyframes backlog_soft_in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes backlog_soft_out {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes backlog_item_in {
+  0% {
+    opacity: 0;
+    transform: scale(1.05, 1.05) translate(-15px, 10px) rotateX(-5deg) rotateY(-5deg);
+    //background-color: rgba(255, 255, 255, 0.2);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1, 1) translate(0, 0);
+  }
+}
+
+@keyframes backlog_item_out {
+  0% {
+    opacity: 1;
+    transform: scale(1, 1) translate(0, 0);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.05, 1.05) translate(-15px, 10px) rotateX(-5deg) rotateY(-5deg);
+    background-color: rgba(255, 255, 255, 0.2);
+  }
+}

@@ -10,8 +10,10 @@ import { textSize } from '@/store/userDataInterface';
 import { setOptionData } from '@/store/userDataReducer';
 import { useDispatch, useSelector } from 'react-redux';
 import { OptionSlider } from '../OptionSlider';
+import useApplyStyle from '@/hooks/useApplyStyle';
 
 export function Display() {
+  const applyStyle = useApplyStyle('menuOptions');
   const userDataState = useSelector((state: RootState) => state.userData);
   const dispatch = useDispatch();
   const t = useTrans('menu.options.pages.display.options.');
@@ -27,7 +29,7 @@ export function Display() {
     : 0;
 
   return (
-    <div className={styles.Options_main_content_half}>
+    <div className={applyStyle('Options_main_content_half', styles.Options_main_content_half)}>
       {isFullscreenSupported && (
         <NormalOption key="fullScreen" title={t('fullScreen.title')}>
           <NormalButton

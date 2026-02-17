@@ -2,6 +2,7 @@ import { useValue } from '@/hooks/useValue';
 import styles from '@/UI/Extra/extra.module.scss';
 import React, { useMemo } from 'react';
 import useSoundEffect from '@/hooks/useSoundEffect';
+import useApplyStyle from '@/hooks/useApplyStyle';
 
 interface IProps {
   name: string;
@@ -13,6 +14,7 @@ interface IProps {
 export function ExtraCgElement(props: IProps) {
   const showFull = useValue(false);
   const { playSeEnter, playSeClick } = useSoundEffect();
+  const applyStyle = useApplyStyle('extra');
 
   // Determine if the resource is a video based on file extension
   const isVideo = useMemo(() => {
@@ -79,10 +81,10 @@ export function ExtraCgElement(props: IProps) {
             showFull.set(!showFull.value);
             playSeClick();
           }}
-          className={styles.showFullContainer}
+          className={applyStyle('showFullContainer', styles.showFullContainer)}
           onMouseEnter={playSeEnter}
         >
-          <div className={styles.showFullCgMain}>{renderMedia(true)}</div>
+          <div className={applyStyle('showFullCgMain', styles.showFullCgMain)}>{renderMedia(true)}</div>
         </div>
       )}
       <div
@@ -95,7 +97,7 @@ export function ExtraCgElement(props: IProps) {
           animation: `cg_softIn_${props.transformDeg} 1.5s ease-out ${100 + props.index * 100}ms forwards`,
         }}
         key={props.name}
-        className={styles.cgElement}
+        className={applyStyle('cgElement', styles.cgElement)}
       >
         {renderMedia(false)}
       </div>

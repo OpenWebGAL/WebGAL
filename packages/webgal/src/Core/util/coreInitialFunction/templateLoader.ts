@@ -87,6 +87,23 @@ async function loadStyleFiles() {
     { ui: 'title', path: 'UI/Title/title.scss' },
     { ui: 'textbox', path: 'Stage/TextBox/textbox.scss' },
     { ui: 'choose', path: 'Stage/Choose/choose.scss' },
+    { ui: 'backlog', path: 'UI/Backlog/backlog.scss' },
+    { ui: 'bottomControlPanel', path: 'UI/BottomControlPanel/bottomControlPanel.scss' },
+    { ui: 'bottomControlPanelFilm', path: 'UI/BottomControlPanel/bottomControlPanelFilm.scss' },
+    { ui: 'devPanel', path: 'UI/DevPanel/devPanel.scss' },
+    { ui: 'extra', path: 'UI/Extra/extra.scss' },
+    { ui: 'globalDialog', path: 'UI/GlobalDialog/globalDialog.scss' },
+    { ui: 'logo', path: 'UI/Logo/logo.scss' },
+    { ui: 'menu', path: 'UI/Menu/menu.scss' },
+    { ui: 'menuPanel', path: 'UI/Menu/menuPanel.scss' },
+    { ui: 'menuSaveAndLoad', path: 'UI/Menu/saveAndLoad.scss' },
+    { ui: 'menuOptions', path: 'UI/Menu/options.scss' },
+    { ui: 'menuNormalButton', path: 'UI/Menu/normalButton.scss' },
+    { ui: 'menuNormalOption', path: 'UI/Menu/normalOption.scss' },
+    { ui: 'menuTextPreview', path: 'UI/Menu/textPreview.scss' },
+    { ui: 'menuAbout', path: 'UI/Menu/about.scss' },
+    { ui: 'menuSlider', path: 'UI/Menu/slider.scss' },
+    { ui: 'panicOverlay', path: 'UI/PanicOverlay/panicOverlay.scss' },
   ];
 
   await Promise.all(

@@ -9,6 +9,7 @@ import { backToTitle } from '@/Core/controller/gamePlay/backToTitle';
 import useTrans from '@/hooks/useTrans';
 import useSoundEffect from '@/hooks/useSoundEffect';
 import { showGlogalDialog } from '@/UI/GlobalDialog/GlobalDialog';
+import useApplyStyle from '@/hooks/useApplyStyle';
 
 /**
  * Menu页的底栏
@@ -19,12 +20,22 @@ export const MenuPanel = () => {
   const t = useTrans('menu.');
 
   const { playSeClick, playSeDialogOpen, playSePageChange } = useSoundEffect();
+  const applyStyle = useApplyStyle('menuPanel');
   const GUIState = useSelector((state: RootState) => state.GUI);
   const dispatch = useDispatch();
   // 设置Menu按钮的高亮
-  const SaveTagOn = GUIState.currentMenuTag === MenuPanelTag.Save ? ` ${styles.MenuPanel_button_hl}` : ``;
-  const LoadTagOn = GUIState.currentMenuTag === MenuPanelTag.Load ? ` ${styles.MenuPanel_button_hl}` : ``;
-  const OptionTagOn = GUIState.currentMenuTag === MenuPanelTag.Option ? ` ${styles.MenuPanel_button_hl}` : ``;
+  const SaveTagOn =
+    GUIState.currentMenuTag === MenuPanelTag.Save
+      ? ` ${applyStyle('MenuPanel_button_hl', styles.MenuPanel_button_hl)}`
+      : ``;
+  const LoadTagOn =
+    GUIState.currentMenuTag === MenuPanelTag.Load
+      ? ` ${applyStyle('MenuPanel_button_hl', styles.MenuPanel_button_hl)}`
+      : ``;
+  const OptionTagOn =
+    GUIState.currentMenuTag === MenuPanelTag.Option
+      ? ` ${applyStyle('MenuPanel_button_hl', styles.MenuPanel_button_hl)}`
+      : ``;
 
   // 设置Menu按钮的颜色
   const SaveTagColor = GUIState.currentMenuTag === MenuPanelTag.Save ? `rgba(74, 34, 93, 0.9)` : `rgba(123,144,169,1)`;
@@ -40,7 +51,7 @@ export const MenuPanel = () => {
     GUIState.currentMenuTag === MenuPanelTag.Option ? `rgba(81, 110, 65, 0.9)` : `rgba(123,144,169,1)`;
 
   return (
-    <div className={styles.MenuPanel_main}>
+    <div className={applyStyle('MenuPanel_main', styles.MenuPanel_main)}>
       <MenuPanelButton
         iconName="save"
         buttonOnClassName={SaveTagOn}
