@@ -11,9 +11,10 @@
     "webgal:dev": "cd packages/webgal && yarn dev",
     "webgal:build": "cd packages/webgal && yarn build",
     "parser:test": "cd packages/parser && yarn test",
-    "parser:test-coverage": "cd packages/parser && yarn coverage",
     "parser:build": "cd packages/parser && yarn build",
-    "parser:build-ci": "cd packages/parser && yarn build-ci"
+    "parser:build-ci": "cd packages/parser && yarn build-ci",
+    "test": "vitest run",
+    "test:e2e": "vitest run -c vitest.config.e2e.ts"
   },
   "license": "MPL-2.0",
   "workspaces": {
@@ -25,5 +26,9 @@
   "engines": {
     "node": ">=18"
   },
-  "packageManager": "yarn@1.22.22"
+  "packageManager": "yarn@1.22.22",
+  "devDependencies": {
+    "playwright-chromium": "^1.58.2",
+    "vitest": "^4.0.18"
+  }
 }

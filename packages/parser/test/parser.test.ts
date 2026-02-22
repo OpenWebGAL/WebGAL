@@ -3,11 +3,16 @@ import { ADD_NEXT_ARG_LIST, SCRIPT_CONFIG } from "../src/config/scriptConfig";
 import { expect, test } from "vitest";
 import { commandType, ISentence } from "../src/interface/sceneInterface";
 import * as fsp from 'fs/promises';
+import * as path from 'path';
+import { fileURLToPath } from 'url';
 import { fileType } from "../src/interface/assets";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const res = (file: string) => path.resolve(__dirname, 'test-resources', file);
 
 test("label", async () => {
 
-  const sceneRaw = await fsp.readFile('test/test-resources/start.txt');
+  const sceneRaw = await fsp.readFile(res('start.txt'));
   const sceneText = sceneRaw.toString();
 
   const parser = new SceneParser((assetList) => {
@@ -32,7 +37,7 @@ test("label", async () => {
 
 test("args", async () => {
 
-  const sceneRaw = await fsp.readFile('test/test-resources/start.txt');
+  const sceneRaw = await fsp.readFile(res('start.txt'));
   const sceneText = sceneRaw.toString();
 
   const parser = new SceneParser((assetList) => {
@@ -58,7 +63,7 @@ test("args", async () => {
 
 test("choose", async () => {
 
-  const sceneRaw = await fsp.readFile('test/test-resources/choose.txt');
+  const sceneRaw = await fsp.readFile(res('choose.txt'));
   const sceneText = sceneRaw.toString();
 
   const parser = new SceneParser((assetList) => {
@@ -81,7 +86,7 @@ test("choose", async () => {
 
 test("long-script", async () => {
 
-  const sceneRaw = await fsp.readFile('test/test-resources/long-script.txt');
+  const sceneRaw = await fsp.readFile(res('long-script.txt'));
   const sceneText = sceneRaw.toString();
 
   const parser = new SceneParser((assetList) => {
@@ -109,7 +114,7 @@ test("long-script", async () => {
 
 test("var", async () => {
 
-  const sceneRaw = await fsp.readFile('test/test-resources/var.txt');
+  const sceneRaw = await fsp.readFile(res('var.txt'));
   const sceneText = sceneRaw.toString();
 
   const parser = new SceneParser((assetList) => {

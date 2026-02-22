@@ -4,7 +4,6 @@
   "description": "WebGAL script parser",
   "scripts": {
     "test": "vitest",
-    "coverage": "vitest run --coverage",
     "build": "rimraf -rf ./build && rollup --config",
     "prepublishOnly": "npm run build",
     "build-ci": "rollup --config",
@@ -30,15 +29,13 @@
     "@rollup/plugin-typescript": "^9.0.2",
     "@types/lodash": "^4.14.189",
     "@types/node": "^18.14.0",
-    "@vitest/coverage-c8": "^0.28.5",
     "rollup": "^3.29.5",
     "rollup-plugin-babel": "^4.4.0",
     "rollup-plugin-terser": "^7.0.2",
     "rollup-plugin-typescript2": "^0.34.1",
     "ts-node": "^10.9.1",
     "tslib": "^2.4.1",
-    "typescript": "^4.9.3",
-    "vitest": "^0.28.5"
+    "typescript": "^4.9.3"
   },
   "type": "module"
 }
