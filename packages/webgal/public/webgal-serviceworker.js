@@ -50,6 +50,24 @@ async function cacheFirst(request) {
   return response;
 }
 
+async function prefetchFromMessage(urlString) {
+  const requestUrl = new URL(urlString, self.location.origin).toString();
+  const request = new Request(requestUrl, { method: 'GET' });
+  if (!isCriticalGameRequest(request)) {
+    return;
+  }
+  const cache = await caches.open(CACHE_NAME);
+  const hasCached = await cache.match(requestUrl);
+  if (hasCached) {
+    return;
+  }
+  const response = await fetch(request);
+  if (response.ok && response.status === 200) {
+    await cache.put(requestUrl, response.clone());
+    logOnce(`message-cache:${requestUrl}`, 'message cached:', new URL(requestUrl).pathname);
+  }
+}
+
 self.addEventListener('fetch', (event) => {
   const { request } = event;
   if (!isCriticalGameRequest(request)) return;
@@ -64,6 +82,18 @@ self.addEventListener('fetch', (event) => {
   event.respondWith(
     cacheFirst(request).catch(() => {
       return fetch(request);
+    }),
+  );
+});
+
+self.addEventListener('message', (event) => {
+  const data = event.data || {};
+  if (data.type !== 'WEBGAL_PREFETCH_ASSET' || typeof data.url !== 'string') {
+    return;
+  }
+  event.waitUntil(
+    prefetchFromMessage(data.url).catch((error) => {
+      console.warn(LOG_PREFIX, 'message prefetch failed:', error);
     }),
   );
 });

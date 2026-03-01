@@ -8,8 +8,6 @@ import { setVisibility } from '@/store/GUIReducer';
 import { runScript } from '@/Core/controller/gamePlay/runScript';
 import { stopAllPerform } from '@/Core/controller/gamePlay/stopAllPerform';
 import cloneDeep from 'lodash/cloneDeep';
-import uniqWith from 'lodash/uniqWith';
-import { scenePrefetcher } from '@/Core/util/prefetcher/scenePrefetcher';
 
 import { WebGAL } from '@/Core/WebGAL';
 
@@ -44,11 +42,7 @@ export const jumpFromBacklog = (index: number, refetchScene = true) => {
         backlogFile.saveScene.sceneName,
         backlogFile.saveScene.sceneUrl,
       );
-      // 开始场景的预加载
-      const subSceneList = WebGAL.sceneManager.sceneData.currentScene.subSceneList;
       WebGAL.sceneManager.settledScenes.push(WebGAL.sceneManager.sceneData.currentScene.sceneUrl); // 放入已加载场景列表，避免递归加载相同场景
-      const subSceneListUniq = uniqWith(subSceneList); // 去重
-      scenePrefetcher(subSceneListUniq);
     });
   WebGAL.sceneManager.sceneData.currentSentenceId = backlogFile.saveScene.currentSentenceId;
   WebGAL.sceneManager.sceneData.sceneStack = cloneDeep(backlogFile.saveScene.sceneStack);
