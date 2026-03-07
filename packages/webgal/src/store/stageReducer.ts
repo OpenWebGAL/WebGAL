@@ -13,9 +13,9 @@ import {
   ILive2DFocus,
   ILive2DMotion,
   IRunPerform,
+  ISceneArgumentPayload,
   ISetGameVar,
   ISetStagePayload,
-  IStageAnimationSetting,
   IStageState,
   IUpdateAnimationSettingPayload,
 } from '@/store/stageInterface';
@@ -74,6 +74,7 @@ export const initState: IStageState = {
   isDisableTextbox: false,
   replacedUIlable: {},
   figureMetaData: {},
+  sceneArguments: {},
 };
 
 /**
@@ -317,6 +318,9 @@ const stageSlice = createSlice({
         }
         state.figureMetaData[action.payload[0]][action.payload[1]] = action.payload[2];
       }
+    },
+    addSceneArgument: (state, action: PayloadAction<ISceneArgumentPayload>) => {
+      state.sceneArguments[action.payload.url] = action.payload.value;
     },
   },
 });

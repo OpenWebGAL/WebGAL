@@ -6,13 +6,17 @@ import uniqWith from 'lodash/uniqWith';
 import { scenePrefetcher } from '@/Core/util/prefetcher/scenePrefetcher';
 
 import { WebGAL } from '@/Core/WebGAL';
+import { arg } from './sceneInterface';
+import { webgalStore } from '@/store/store';
+import { stageActions } from '@/store/stageReducer';
 
 /**
  * 调用场景
  * @param sceneUrl 场景路径
  * @param sceneName 场景名称
+ * @param args 参数
  */
-export const callScene = (sceneUrl: string, sceneName: string) => {
+export const callScene = (sceneUrl: string, sceneName: string, args: Array<arg>) => {
   if (WebGAL.sceneManager.lockSceneWrite) {
     return;
   }
@@ -35,6 +39,13 @@ export const callScene = (sceneUrl: string, sceneName: string) => {
       scenePrefetcher(subSceneListUniq);
       logger.debug('现在调用场景，调用结果：', WebGAL.sceneManager.sceneData);
       WebGAL.sceneManager.lockSceneWrite = false;
+      // 写入场景调用参数
+      webgalStore.dispatch(
+        stageActions.addSceneArgument({
+          url: sceneUrl,
+          value: args,
+        }),
+      );
       nextSentence();
     })
     .catch((e) => {

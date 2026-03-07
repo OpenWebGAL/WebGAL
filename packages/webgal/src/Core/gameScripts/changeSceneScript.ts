@@ -9,7 +9,7 @@ import { changeScene } from '../controller/scene/changeScene';
 export const changeSceneScript = (sentence: ISentence): IPerform => {
   const sceneNameArray: Array<string> = sentence.content.split('/');
   const sceneName = sceneNameArray[sceneNameArray.length - 1];
-  changeScene(sentence.content, sceneName);
+  changeScene(sentence.content, sceneName, sentence.args);
   return {
     performName: 'none',
     duration: 0,

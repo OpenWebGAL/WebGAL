@@ -1,4 +1,4 @@
-import { ISentence } from '@/Core/controller/scene/sceneInterface';
+import { arg, ISentence } from '@/Core/controller/scene/sceneInterface';
 import { IPerform } from '@/Core/Modules/perform/performInterface';
 import { changeScene } from '@/Core/controller/scene/changeScene';
 import { jmp } from '@/Core/gameScripts/label/jmp';
@@ -62,7 +62,7 @@ export const choose = (sentence: ISentence): IPerform => {
   // eslint-disable-next-line react/no-deprecated
   ReactDOM.render(
     <Provider store={webgalStore}>
-      <Choose chooseOptions={chooseOptions} />
+      <Choose chooseOptions={chooseOptions} args={sentence.args} />
     </Provider>,
     document.getElementById('chooseContainer'),
   );
@@ -80,7 +80,7 @@ export const choose = (sentence: ISentence): IPerform => {
   };
 };
 
-function Choose(props: { chooseOptions: ChooseOption[] }) {
+function Choose(props: { chooseOptions: ChooseOption[]; args: Array<arg> }) {
   const font = useFontFamily();
   const { playSeEnter, playSeClick } = useSEByWebgalStore();
   const applyStyle = useApplyStyle('choose');
@@ -97,7 +97,7 @@ function Choose(props: { chooseOptions: ChooseOption[] }) {
           ? () => {
               playSeClick();
               if (e.jumpToScene) {
-                changeScene(e.jump, e.text);
+                changeScene(e.jump, e.text, props.args);
               } else {
                 jmp(e.jump);
               }

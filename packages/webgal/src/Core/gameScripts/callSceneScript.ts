@@ -9,7 +9,7 @@ import { callScene } from '../controller/scene/callScene';
 export const callSceneScript = (sentence: ISentence): IPerform => {
   const sceneNameArray: Array<string> = sentence.content.split('/');
   const sceneName = sceneNameArray[sceneNameArray.length - 1];
-  callScene(sentence.content, sceneName);
+  callScene(sentence.content, sceneName, sentence.args);
   return {
     performName: 'none',
     duration: 0,

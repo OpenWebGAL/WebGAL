@@ -12,6 +12,7 @@ import expression from 'angular-expressions';
 import get from 'lodash/get';
 import random from 'lodash/random';
 import { getBooleanArgByKey } from '../util/getSentenceArg';
+import { WebGAL } from '../WebGAL';
 
 /**
  * 设置变量
@@ -95,10 +96,21 @@ type BaseVal = string | number | boolean | undefined;
  * 执行函数
  */
 function EvaluateExpression(val: string) {
+  const sceneUrl = WebGAL.sceneManager.sceneData.currentScene.sceneUrl;
+  const sceneArguments = webgalStore.getState().stage.sceneArguments;
   const instance = expression.compile(val);
   return instance({
-    random: (...args: any[]) => {
+    // 随机函数
+    random(...args: any[]) {
       return args.length ? random(...args) : Math.random();
+    },
+    // 获取场景调用参数
+    getArg(key: string) {
+      const target = sceneArguments[sceneUrl];
+      if (target) {
+        return target.filter((item) => item.key === key)[0]?.value ?? null;
+      }
+      return null;
     },
   });
 }
