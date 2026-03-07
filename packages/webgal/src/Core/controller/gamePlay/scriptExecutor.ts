@@ -4,34 +4,18 @@ import { logger } from '../../util/logger';
 import { IStageState } from '@/store/stageInterface';
 import { restoreScene } from '../scene/restoreScene';
 import { webgalStore } from '@/store/store';
-import { getValueFromStateElseKey } from '@/Core/gameScripts/setVar';
-import { strIf } from '@/Core/controller/gamePlay/strIf';
 import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
 import cloneDeep from 'lodash/cloneDeep';
 import { ISceneEntry } from '@/Core/Modules/scene';
-import { IBacklogItem } from '@/Core/Modules/backlog';
-import { SYSTEM_CONFIG } from '@/config';
 import { WebGAL } from '@/Core/WebGAL';
 import { getBooleanArgByKey, getStringArgByKey } from '@/Core/util/getSentenceArg';
+import { EvaluateExpression } from '@/Core/util/evalSentenceFn';
 
 export const whenChecker = (whenValue: string | undefined): boolean => {
   if (whenValue === undefined) {
     return true;
   }
-  // 先把变量解析出来
-  const valExpArr = whenValue.split(/([+\-*\/()><!]|>=|<=|==|&&|\|\||!=)/g);
-  const valExp = valExpArr
-    .map((_e) => {
-      const e = _e.trim();
-      if (e.match(/[a-zA-Z]/)) {
-        if (e.match(/^(true|false)$/)) {
-          return e;
-        }
-        return getValueFromStateElseKey(e, true, true);
-      } else return e;
-    })
-    .reduce((pre, curr) => pre + curr, '');
-  return !!strIf(valExp);
+  return !!EvaluateExpression(whenValue, { ErrorReturnsBoolean: true });
 };
 
 /**
@@ -62,7 +46,8 @@ export const scriptExecutor = () => {
 
     if (contentExp !== null) {
       contentExp.forEach((e) => {
-        const contentVarValue = getValueFromStateElseKey(e.replace(/(?<!\\)\{(.*)\}/, '$1'));
+        const likeExpr = e.replace(/(?<!\\)\{(.*)\}/, '$1');
+        const contentVarValue = EvaluateExpression(likeExpr, { InvalidValueReturns: 'block' });
         retContent = retContent.replace(e, contentVarValue);
       });
     }
