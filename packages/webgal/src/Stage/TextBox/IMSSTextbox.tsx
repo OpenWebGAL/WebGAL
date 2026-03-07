@@ -1,5 +1,5 @@
 import styles from './textbox.module.scss';
-import { useEffect } from 'react';
+import { isValidElement, ReactNode, useEffect } from 'react';
 import { WebGAL } from '@/Core/WebGAL';
 import { ITextboxProps } from './types';
 import useApplyStyle from '@/hooks/useApplyStyle';
@@ -7,6 +7,26 @@ import { css } from '@emotion/css';
 import { textSize } from '@/store/userDataInterface';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
+
+const EMOJI_REGEX = /\p{Extended_Pictographic}|\p{Emoji_Presentation}/u;
+
+function getNodeTextContent(node: ReactNode): string {
+  if (typeof node === 'string' || typeof node === 'number') {
+    return String(node);
+  }
+  if (Array.isArray(node)) {
+    return node.map((item) => getNodeTextContent(item)).join('');
+  }
+  if (isValidElement(node)) {
+    return getNodeTextContent(node.props.children);
+  }
+  return '';
+}
+
+function shouldRenderPlainText(node: ReactNode): boolean {
+  const text = getNodeTextContent(node);
+  return EMOJI_REGEX.test(text);
+}
 
 export default function IMSSTextbox(props: ITextboxProps) {
   const {
@@ -72,6 +92,13 @@ export default function IMSSTextbox(props: ITextboxProps) {
       }
       const styleClassName = ' ' + css(style, { label: 'showname' });
       const styleAllText = ' ' + css(style_alltext, { label: 'showname' });
+      if (shouldRenderPlainText(e)) {
+        return (
+          <span key={index} style={{ position: 'relative' }} className={styleClassName + styleAllText}>
+            {e}
+          </span>
+        );
+      }
       if (isEnhanced) {
         return (
           <span key={index} style={{ position: 'relative' }}>
@@ -140,6 +167,8 @@ export default function IMSSTextbox(props: ITextboxProps) {
       }
       const styleClassName = ' ' + css(style);
       const styleAllText = ' ' + css(style_alltext);
+      const isPlainText = shouldRenderPlainText(e);
+
       if (allTextIndex < prevLength) {
         return (
           <span
@@ -149,11 +178,15 @@ export default function IMSSTextbox(props: ITextboxProps) {
             key={currentDialogKey + index}
             style={{ animationDelay: `${delay}ms`, animationDuration: `${textDuration}ms` }}
           >
-            <span className={styles.zhanwei + styleAllText}>
-              {e}
-              <span className={applyStyle('outer', styles.outer) + styleClassName + styleAllText}>{e}</span>
-              {isUseStroke && <span className={applyStyle('inner', styles.inner) + styleAllText}>{e}</span>}
-            </span>
+        {isPlainText ? (
+              <span className={styleClassName + styleAllText}>{e}</span>
+            ) : (
+              <span className={styles.zhanwei + styleAllText}>
+                {e}
+                <span className={applyStyle('outer', styles.outer) + styleClassName + styleAllText}>{e}</span>
+                {isUseStroke && <span className={applyStyle('inner', styles.inner) + styleAllText}>{e}</span>}
+              </span>
+            )}
           </span>
         );
       }
@@ -165,11 +198,15 @@ export default function IMSSTextbox(props: ITextboxProps) {
           key={currentDialogKey + index}
           style={{ animationDelay: `${delay}ms`, position: 'relative' }}
         >
-          <span className={styles.zhanwei + styleAllText}>
-            {e}
-            <span className={applyStyle('outer', styles.outer) + styleClassName + styleAllText}>{e}</span>
-            {isUseStroke && <span className={applyStyle('inner', styles.inner) + styleAllText}>{e}</span>}
-          </span>
+        {isPlainText ? (
+            <span className={styleClassName + styleAllText}>{e}</span>
+          ) : (
+            <span className={styles.zhanwei + styleAllText}>
+              {e}
+              <span className={applyStyle('outer', styles.outer) + styleClassName + styleAllText}>{e}</span>
+              {isUseStroke && <span className={applyStyle('inner', styles.inner) + styleAllText}>{e}</span>}
+            </span>
+          )}
         </span>
       );
     });
