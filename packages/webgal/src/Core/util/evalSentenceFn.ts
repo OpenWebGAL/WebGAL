@@ -47,7 +47,7 @@ export const EvaluateExpression = (val: string, options: EvaluateExpressionOptio
       getArg(key: string) {
         const target = sceneArguments[sceneUrl];
         if (target) {
-          return target.filter((item) => item.key === key)[0]?.value ?? null;
+          return target.find((item) => item.key === key)?.value ?? null;
         }
         return null;
       },
