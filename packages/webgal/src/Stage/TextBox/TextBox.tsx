@@ -265,7 +265,7 @@ interface Segment {
 }
 
 function parseString(input: string): Segment[] {
-  const regex = /(\[(.*?)\]\((.*?)\))|([^\[\]]+)/g;
+  const regex = /(\[([^\]]+)\]\(([^)]+)\))|([\s\S]+?(?=\[|$))/g;
   const result: Segment[] = [];
   let match: RegExpExecArray | null;
 
