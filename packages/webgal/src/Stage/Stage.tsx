@@ -16,6 +16,7 @@ import { isIOS } from '@/Core/initializeScript';
 import { WebGAL } from '@/Core/WebGAL';
 import { IGuiState } from '@/store/guiInterface';
 import { IStageState } from '@/store/stageInterface';
+import IframeContainer from './Iframe/IframeContainer';
 // import OldStage from '@/Components/Stage/OldStage/OldStage';
 
 let timeoutEventHandle: ReturnType<typeof setTimeout> | null = null;
@@ -107,7 +108,9 @@ export const Stage: FC = () => {
         id="FullScreenClick"
         style={{ width: '100%', height: '100%', position: 'absolute', zIndex: '12', top: '0' }}
         onMouseMove={(e) => !GUIState.showControls && updateControlsVisibility(e, stageState, GUIState, dispatch)}
-      />
+      >
+        <IframeContainer />
+      </div>
       <IntroContainer />
     </div>
   );

@@ -39,6 +39,8 @@ export const SCRIPT_CONFIG = [
   { scriptString: 'applyStyle', scriptType: commandType.applyStyle },
   { scriptString: 'wait', scriptType: commandType.wait },
   { scriptString: 'callSteam', scriptType: commandType.callSteam },
+  { scriptString: 'createFrame', scriptType: commandType.createFrame },
+  { scriptString: 'removeFrame', scriptType: commandType.removeFrame },
 ];
 export const ADD_NEXT_ARG_LIST = [
   commandType.bgm,

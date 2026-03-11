@@ -8,6 +8,7 @@ import {
   IEffect,
   IFigureMetadata,
   IFreeFigure,
+  IIFrame,
   ILive2DBlink,
   ILive2DExpression,
   ILive2DFocus,
@@ -74,6 +75,7 @@ export const initState: IStageState = {
   isDisableTextbox: false,
   replacedUIlable: {},
   figureMetaData: {},
+  frames: [], // 当前iframe的列表
 };
 
 /**
@@ -317,6 +319,15 @@ const stageSlice = createSlice({
         }
         state.figureMetaData[action.payload[0]][action.payload[1]] = action.payload[2];
       }
+    },
+    addFrame: (state, action: PayloadAction<IIFrame>) => {
+      state.frames.push(action.payload);
+    },
+    removeFrame: (state, action: PayloadAction<string>) => {
+      state.frames = state.frames.filter((e) => e.id !== action.payload);
+    },
+    resetFrame: (state) => {
+      state.frames = [];
     },
   },
 });

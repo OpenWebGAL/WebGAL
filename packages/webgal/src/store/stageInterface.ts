@@ -1,6 +1,16 @@
 import { ISentence } from '@/Core/controller/scene/sceneInterface';
 import { BlinkParam, FocusParam } from '@/Core/live2DCore';
 
+export interface IIFrame {
+  id: string;
+  src: string;
+  sandbox: string;
+  width?: number;
+  height?: number;
+  isDestroy?: boolean;
+  isActive?: boolean;
+}
+
 /**
  * 游戏内变量
  * @interface IGameVar
@@ -237,6 +247,7 @@ export interface IStageState {
   isDisableTextbox: boolean;
   replacedUIlable: Record<string, string>;
   figureMetaData: figureMetaData;
+  frames: IIFrame[];
 }
 
 /**
