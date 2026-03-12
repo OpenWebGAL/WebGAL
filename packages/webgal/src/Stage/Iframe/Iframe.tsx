@@ -4,7 +4,8 @@ import { RootState, webgalStore } from '@/store/store';
 import { useSelector } from 'react-redux';
 import { isEqual } from 'lodash';
 import { ReactiveWatcher, WebGalAPI } from './interface';
-import { stageActions } from '@/store/stageReducer';
+import { setStageVar, stageActions } from '@/store/stageReducer';
+import { setScriptManagedGlobalVar } from '@/store/userDataReducer';
 
 export default function Iframe({ id, sandbox, src, width, height, wait, returnValue }: IIFrame) {
   const iframeRef = useRef<HTMLIFrameElement>(null);
@@ -106,10 +107,12 @@ export default function Iframe({ id, sandbox, src, width, height, wait, returnVa
     api.getGUIState = () => store.GUI;
     api.getUserData = () => store.userData;
     api.getSaveData = () => store.saveData;
-    // 获取变量
+    // 操作
+    api.closeFrame = () => webgalStore.dispatch(stageActions.removeFrame(id));
     api.getGameVar = (key: string) => store.stage.GameVar[key];
     api.getGlobalGameVar = (key: string) => store.userData.globalGameVar[key];
-    // 通知主进程iframe已完成
+    api.setGameVar = (key: string, value: any) => webgalStore.dispatch(setStageVar({ key, value }));
+    api.setGlobalGameVar = (key: string, value: any) => webgalStore.dispatch(setScriptManagedGlobalVar({ key, value }));
     api.complete = (returnValue?: any) => {
       if (wait) {
         window.parent.postMessage(

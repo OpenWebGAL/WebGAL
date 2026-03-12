@@ -12,10 +12,12 @@ export interface WebGalAPI {
   getGUIState: () => RootState['GUI'];
   getUserData: () => RootState['userData'];
   getSaveData: () => RootState['saveData'];
-  // 获取变量
+  // 操作
   getGameVar: (key: string) => any;
   getGlobalGameVar: (key: string) => any;
-  // 通知主进程iframe已完成
+  setGameVar: (key: string, value: any) => void;
+  setGlobalGameVar: (key: string, value: any) => void;
+  closeFrame: () => void;
   complete: (returnValue?: any) => void;
 }
 
