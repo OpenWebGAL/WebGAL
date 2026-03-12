@@ -41,11 +41,13 @@ export const createFrame = (sentence: ISentence): IPerform => {
       stopTimeout: undefined,
     };
   }
+
   let rawSrc = src;
   // 处理src
   if (!rawSrc.startsWith('http') || !rawSrc.startsWith('https')) {
     rawSrc = './game/' + rawSrc;
   }
+
   const frameData: IIFrame = {
     id,
     src: rawSrc,
