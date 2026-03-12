@@ -114,6 +114,15 @@ $height: 330px;
   position: relative;       /* 保持相对定位 */
 }
 
+.emojiText {
+  color: inherit;
+  white-space: nowrap;
+  display: inline-block;
+  vertical-align: baseline;
+  position: relative;
+  font-family: inherit, "Segoe UI Emoji", sans-serif;
+}
+
 //
 //.TextBox_textElement_start::before{
 //  animation: TextDelayShow 700ms ease-out forwards;
