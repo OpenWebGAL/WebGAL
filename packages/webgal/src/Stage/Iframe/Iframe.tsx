@@ -1,8 +1,9 @@
+import { useEffect, useMemo, useRef, useCallback } from 'react';
 import { IIFrame } from '@/store/stageInterface';
 import { RootState } from '@/store/store';
-import { useEffect, useMemo, useRef, useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import { isEqual } from 'lodash';
+import { ReactiveWatcher, WebGalAPI } from './interface';
 
 export default function Iframe({ id, sandbox, src, width, height }: IIFrame) {
   const iframeRef = useRef<HTMLIFrameElement>(null);
@@ -13,17 +14,7 @@ export default function Iframe({ id, sandbox, src, width, height }: IIFrame) {
 
   const store = useMemo(() => ({ stage, GUI, userData, saveData }), [stage, GUI, userData, saveData]);
 
-  const watchersRef = useRef<
-    Map<
-      number,
-      {
-        source: string | string[] | ((store: RootState) => any);
-        callback: (newValue: any, oldValue: any) => void;
-        options: { immediate?: boolean; deep?: boolean };
-        oldValue: any;
-      }
-    >
-  >(new Map());
+  const watchersRef = useRef<Map<number, ReactiveWatcher>>(new Map());
   const watcherIdRef = useRef(0);
 
   // 获取嵌套属性的值
@@ -81,14 +72,10 @@ export default function Iframe({ id, sandbox, src, width, height }: IIFrame) {
     });
   }, [watchedValues]);
 
-  const apiInstance = useMemo(() => {
-    const api = Object.create(null);
+  const apiInstance = useMemo((): WebGalAPI => {
+    const api: WebGalAPI = Object.create(null);
     // 获取响应式状态的方法
-    api.getReactiveStore = (
-      source: string | string[] | ((store: RootState) => any),
-      callback: (newValue: any, oldValue: any) => void,
-      options: { immediate?: boolean; deep?: boolean } = {},
-    ) => {
+    api.getReactiveStore = (source, callback, options = {}) => {
       // 创建新的watcher ID
       const watcherId = watcherIdRef.current++;
 
