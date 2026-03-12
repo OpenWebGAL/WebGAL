@@ -135,22 +135,29 @@ export default function Iframe({ id, sandbox, src, width, height, wait, returnVa
     return null;
   }
 
-  useEffect(() => {
-    if (iframeRef.current) {
-      const contentWindow = iframeRef.current.contentWindow;
-      Object.defineProperty(contentWindow, 'webgal', {
+  const onLoad = useCallback(() => {
+    if (iframeRef.current?.contentWindow) {
+      Object.defineProperty(iframeRef.current.contentWindow, 'webgal', {
         value: apiInstance,
         configurable: true,
         enumerable: true,
       });
     }
+  }, [apiInstance]);
+
+  useEffect(() => {
+    const iframe = iframeRef.current;
     return () => {
-      if (iframeRef.current) {
-        const contentWindow = iframeRef.current.contentWindow;
-        delete (contentWindow as any).webgal;
+      if (iframe?.contentWindow) {
+        try {
+          delete (iframe.contentWindow as any).webgal;
+        } catch (e) {
+          // If the iframe has navigated to a different origin, this will fail.
+          // This is expected and can be ignored.
+        }
       }
     };
-  }, [apiInstance]);
+  }, []);
 
   return (
     <iframe
@@ -161,6 +168,7 @@ export default function Iframe({ id, sandbox, src, width, height, wait, returnVa
       src={src}
       sandbox={sandbox}
       onError={onError}
+      onLoad={onLoad}
     />
   );
 }

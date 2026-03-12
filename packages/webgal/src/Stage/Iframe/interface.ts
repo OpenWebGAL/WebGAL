@@ -5,7 +5,7 @@ export interface WebGalAPI {
   getReactiveStore: (
     source: string | string[] | ((store: RootState) => any),
     callback: (newValue: any, oldValue: any) => void,
-    options?: { immediate?: boolean; deep?: boolean },
+    options?: { immediate?: boolean },
   ) => () => void;
   // 获取特定状态的方法
   getStageState: () => RootState['stage'];
@@ -22,6 +22,6 @@ export interface WebGalAPI {
 export interface ReactiveWatcher {
   source: string | string[] | ((store: RootState) => any);
   callback: (newValue: any, oldValue: any) => void;
-  options: { immediate?: boolean; deep?: boolean };
+  options: { immediate?: boolean };
   oldValue: any;
 }

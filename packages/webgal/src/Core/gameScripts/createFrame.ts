@@ -46,7 +46,7 @@ export const createFrame = (sentence: ISentence): IPerform => {
 
   let rawSrc = src;
   // 处理src
-  if (!rawSrc.startsWith('http') || !rawSrc.startsWith('https')) {
+  if (!rawSrc.startsWith('http://') && !rawSrc.startsWith('https://')) {
     rawSrc = './game/' + rawSrc;
   }
 
@@ -76,7 +76,12 @@ export const createFrame = (sentence: ISentence): IPerform => {
     let isCompleted = false;
     // 监听iframe完成消息
     const handleFrameComplete = (event: MessageEvent) => {
-      if (event.data.type === 'webgal-frame-complete' && event.data.frameId === id) {
+      if (
+        event.data &&
+        typeof event.data === 'object' &&
+        event.data.type === 'webgal-frame-complete' &&
+        event.data.frameId === id
+      ) {
         isCompleted = true;
         // 如果有returnValue，则存储到游戏变量中
         if (returnValue && event.data.returnValue !== undefined) {
