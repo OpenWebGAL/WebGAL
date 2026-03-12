@@ -118,7 +118,7 @@ export default function Iframe({ id, sandbox, src, width, height, wait, returnVa
             frameId: id,
             returnValue,
           },
-          '*',
+          window.location.origin, // 使用当前页面的源
         );
       }
     };
