@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 import { isEqual } from 'lodash';
 import { ReactiveWatcher, WebGalAPI } from './interface';
 
-export default function Iframe({ id, sandbox, src, width, height }: IIFrame) {
+export default function Iframe({ id, sandbox, src, width, height, wait, returnValue }: IIFrame) {
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const stage = useSelector((state: RootState) => state.stage, isEqual);
   const GUI = useSelector((state: RootState) => state.GUI, isEqual);
@@ -108,8 +108,21 @@ export default function Iframe({ id, sandbox, src, width, height }: IIFrame) {
     // 获取变量
     api.getGameVar = (key: string) => store.stage.GameVar[key];
     api.getGlobalGameVar = (key: string) => store.userData.globalGameVar[key];
+    // 通知主进程iframe已完成
+    api.complete = (returnValue?: any) => {
+      if (wait) {
+        window.parent.postMessage(
+          {
+            type: 'webgal-frame-complete',
+            frameId: id,
+            returnValue,
+          },
+          '*',
+        );
+      }
+    };
     return api;
-  }, [store]);
+  }, [store, id, wait]);
 
   if (!src) {
     return null;

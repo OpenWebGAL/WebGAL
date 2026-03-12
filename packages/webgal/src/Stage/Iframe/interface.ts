@@ -15,6 +15,8 @@ export interface WebGalAPI {
   // 获取变量
   getGameVar: (key: string) => any;
   getGlobalGameVar: (key: string) => any;
+  // 通知主进程iframe已完成
+  complete: (returnValue?: any) => void;
 }
 
 export interface ReactiveWatcher {

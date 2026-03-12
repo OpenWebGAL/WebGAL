@@ -1,6 +1,6 @@
 import { ISentence } from '@/Core/controller/scene/sceneInterface';
 import { IPerform } from '@/Core/Modules/perform/performInterface';
-import { getNumberArgByKey, getStringArgByKey } from '../util/getSentenceArg';
+import { getBooleanArgByKey, getNumberArgByKey, getStringArgByKey } from '../util/getSentenceArg';
 import { IIFrame } from '@/store/stageInterface';
 import { webgalStore } from '@/store/store';
 import { stageActions } from '@/store/stageReducer';
@@ -28,6 +28,8 @@ const allSandboxProperties = {
 export const createFrame = (sentence: ISentence): IPerform => {
   const src = sentence.content;
   const id = getStringArgByKey(sentence, 'id') ?? '';
+  const wait = getBooleanArgByKey(sentence, 'wait') ?? false;
+  const returnValue = getStringArgByKey(sentence, 'returnValue') ?? null;
   const width = getNumberArgByKey(sentence, 'width') ?? undefined;
   const height = getNumberArgByKey(sentence, 'height') ?? undefined;
   if (!id || !src) {
@@ -56,6 +58,8 @@ export const createFrame = (sentence: ISentence): IPerform => {
     height,
     isActive: true,
     isDestroy: false,
+    wait,
+    returnValue,
   };
 
   for (const [key, value] of Object.entries(allSandboxProperties)) {
@@ -66,6 +70,43 @@ export const createFrame = (sentence: ISentence): IPerform => {
   }
 
   webgalStore.dispatch(stageActions.addFrame(frameData));
+
+  // 如果需要等待iframe完成，则返回阻塞的perform
+  if (wait) {
+    let isCompleted = false;
+    // 监听iframe完成消息
+    const handleFrameComplete = (event: MessageEvent) => {
+      if (event.data.type === 'webgal-frame-complete' && event.data.frameId === id) {
+        isCompleted = true;
+        // 如果有returnValue，则存储到游戏变量中
+        if (returnValue && event.data.returnValue !== undefined) {
+          webgalStore.dispatch(
+            stageActions.setStageVar({
+              key: returnValue,
+              value: event.data.returnValue,
+            }),
+          );
+        }
+        // 移除事件监听器
+        window.removeEventListener('message', handleFrameComplete);
+      }
+    };
+
+    // 添加事件监听器
+    window.addEventListener('message', handleFrameComplete);
+
+    return {
+      performName: `frame-wait-${id}`,
+      duration: 0,
+      isHoldOn: true,
+      stopFunction: () => {
+        window.removeEventListener('message', handleFrameComplete);
+      },
+      blockingNext: () => !isCompleted,
+      blockingAuto: () => !isCompleted,
+      stopTimeout: undefined,
+    };
+  }
 
   return {
     performName: 'none',
