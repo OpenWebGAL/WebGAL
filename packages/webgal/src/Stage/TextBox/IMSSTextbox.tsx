@@ -1,5 +1,5 @@
 import styles from './textbox.module.scss';
-import { isValidElement, ReactNode, useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { WebGAL } from '@/Core/WebGAL';
 import { ITextboxProps } from './types';
 import useApplyStyle from '@/hooks/useApplyStyle';
@@ -8,125 +8,10 @@ import { textSize } from '@/store/userDataInterface';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 
-const EMOJI_REGEX = /\p{Extended_Pictographic}|\p{Emoji_Presentation}/u;
-const EMOJI_SEGMENT_REGEX = /(\p{Extended_Pictographic}|\p{Emoji_Presentation})(\uFE0F|\uFE0E)?/gu;
-
-interface TextSegment {
-  text: string;
-  isEmoji: boolean;
-}
-
-function getNodeTextContent(node: ReactNode): string {
-  if (typeof node === 'string' || typeof node === 'number') {
-    return String(node);
-  }
-  if (Array.isArray(node)) {
-    return node.map((item) => getNodeTextContent(item)).join('');
-  }
-  if (isValidElement(node)) {
-    return getNodeTextContent(node.props.children);
-  }
-  return '';
-}
-
-function splitTextSegments(text: string): TextSegment[] {
-  if (!text) return [{ text: '', isEmoji: false }];
-
-  const segments: TextSegment[] = [];
-  let lastIndex = 0;
-
-  for (const match of text.matchAll(EMOJI_SEGMENT_REGEX)) {
-    const matchedText = match[0];
-    const matchIndex = match.index ?? 0;
-
-    if (matchIndex > lastIndex) {
-      segments.push({
-        text: text.slice(lastIndex, matchIndex),
-        isEmoji: false,
-      });
-    }
-
-    segments.push({
-      text: matchedText,
-      isEmoji: true,
-    });
-    lastIndex = matchIndex + matchedText.length;
-  }
-
-  if (lastIndex < text.length) {
-    segments.push({
-      text: text.slice(lastIndex),
-      isEmoji: false,
-    });
-  }
-
-  return segments;
-}
-
-function splitNodeSegments(node: ReactNode): TextSegment[] | null {
-  if (typeof node === 'string' || typeof node === 'number') {
-    return splitTextSegments(String(node));
-  }
-
-  if (isValidElement(node)) {
-    const text = getNodeTextContent(node);
-    if (!text || !EMOJI_REGEX.test(text)) {
-      return null;
-    }
-    return splitTextSegments(text);
-  }
-
-  return null;
-}
-
-function renderStyledText(
-  text: ReactNode,
-  styleClassName: string,
-  styleAllText: string,
-  isUseStroke: boolean,
-  applyStyle: ReturnType<typeof useApplyStyle>,
-  outerClassName: string,
-  innerClassName: string,
-) {
-  return (
-    <span className={styles.zhanwei + styleAllText}>
-      {text}
-      <span className={applyStyle(outerClassName, styles[outerClassName]) + styleClassName + styleAllText}>{text}</span>
-      {isUseStroke && <span className={applyStyle(innerClassName, styles[innerClassName]) + styleAllText}>{text}</span>}
-    </span>
-  );
-}
-
-function renderSegments(
-  segments: TextSegment[],
-  styleClassName: string,
-  styleAllText: string,
-  isUseStroke: boolean,
-  applyStyle: ReturnType<typeof useApplyStyle>,
-  outerClassName: 'outer' | 'outerName',
-  innerClassName: 'inner' | 'innerName',
-  keyPrefix: string,
-) {
-  return segments.map((segment, segmentIndex) => {
-    if (!segment.text) return null;
-    if (segment.isEmoji) {
-      return (
-        <span
-          key={`${keyPrefix}-emoji-${segmentIndex}`}
-          className={`${styles.emojiText}${styleClassName}${styleAllText}`}
-        >
-          {segment.text}
-        </span>
-      );
-    }
-
-    return (
-      <span key={`${keyPrefix}-text-${segmentIndex}`}>
-        {renderStyledText(segment.text, styleClassName, styleAllText, isUseStroke, applyStyle, outerClassName, innerClassName)}
-      </span>
-    );
-  });
-}
+const hasEmoji = (text: any): boolean => {
+  if (typeof text !== 'string') return false;
+  return /\p{Emoji}/u.test(text);
+};
 
 export default function IMSSTextbox(props: ITextboxProps) {
   const {
@@ -192,39 +77,18 @@ export default function IMSSTextbox(props: ITextboxProps) {
       }
       const styleClassName = ' ' + css(style, { label: 'showname' });
       const styleAllText = ' ' + css(style_alltext, { label: 'showname' });
-      const segments = splitNodeSegments(e);
-      if (isEnhanced) {
-        return (
-          <span key={index} style={{ position: 'relative' }}>
-            {segments
-              ? renderSegments(
-                  segments,
-                  styleClassName,
-                  styleAllText,
-                  isUseStroke,
-                  applyStyle,
-                  'outerName',
-                  'innerName',
-                  `showname-${index}`,
-                )
-              : renderStyledText(e, styleClassName, styleAllText, isUseStroke, applyStyle, 'outerName', 'innerName')}
-          </span>
-        );
-      }
+      const skipEffect = hasEmoji(e);
       return (
         <span key={index} style={{ position: 'relative' }}>
-          {segments
-            ? renderSegments(
-                segments,
-                styleClassName,
-                styleAllText,
-                isUseStroke,
-                applyStyle,
-                'outerName',
-                'innerName',
-                `showname-${index}`,
-              )
-            : renderStyledText(e, styleClassName, styleAllText, isUseStroke, applyStyle, 'outerName', 'innerName')}
+          {skipEffect ? (
+            <span className={styleClassName + styleAllText}>{e}</span>
+          ) : (
+            <span className={styles.zhanwei + styleAllText}>
+              {e}
+              <span className={applyStyle('outerName', styles.outerName) + styleClassName + styleAllText}>{e}</span>
+              {isUseStroke && <span className={applyStyle('innerName', styles.innerName) + styleAllText}>{e}</span>}
+            </span>
+          )}
         </span>
       );
     });
@@ -275,52 +139,44 @@ export default function IMSSTextbox(props: ITextboxProps) {
       }
       const styleClassName = ' ' + css(style);
       const styleAllText = ' ' + css(style_alltext);
-      const segments = splitNodeSegments(e);
+      const skipEffect = hasEmoji(e);
 
       if (allTextIndex < prevLength) {
         return (
           <span
-            // data-text={e}
             id={`${delay}`}
             className={applyStyle('TextBox_textElement_Settled', styles.TextBox_textElement_Settled)}
             key={currentDialogKey + index}
             style={{ animationDelay: `${delay}ms`, animationDuration: `${textDuration}ms` }}
           >
-            {segments
-              ? renderSegments(
-                  segments,
-                  styleClassName,
-                  styleAllText,
-                  isUseStroke,
-                  applyStyle,
-                  'outer',
-                  'inner',
-                  `${currentDialogKey}-${index}-settled`,
-                )
-              : renderStyledText(e, styleClassName, styleAllText, isUseStroke, applyStyle, 'outer', 'inner')}
+            {skipEffect ? (
+              <span className={styleClassName + styleAllText}>{e}</span>
+            ) : (
+              <span className={styles.zhanwei + styleAllText}>
+                {e}
+                <span className={applyStyle('outer', styles.outer) + styleClassName + styleAllText}>{e}</span>
+                {isUseStroke && <span className={applyStyle('inner', styles.inner) + styleAllText}>{e}</span>}
+              </span>
+            )}
           </span>
         );
       }
       return (
         <span
-          // data-text={e}
           id={`${delay}`}
           className={`${applyStyle('TextBox_textElement_start', styles.TextBox_textElement_start)} Textelement_start`}
           key={currentDialogKey + index}
           style={{ animationDelay: `${delay}ms`, position: 'relative' }}
         >
-          {segments
-            ? renderSegments(
-                segments,
-                styleClassName,
-                styleAllText,
-                isUseStroke,
-                applyStyle,
-                'outer',
-                'inner',
-                `${currentDialogKey}-${index}-start`,
-              )
-            : renderStyledText(e, styleClassName, styleAllText, isUseStroke, applyStyle, 'outer', 'inner')}
+          {skipEffect ? (
+            <span className={styleClassName + styleAllText}>{e}</span>
+          ) : (
+            <span className={styles.zhanwei + styleAllText}>
+              {e}
+              <span className={applyStyle('outer', styles.outer) + styleClassName + styleAllText}>{e}</span>
+              {isUseStroke && <span className={applyStyle('inner', styles.inner) + styleAllText}>{e}</span>}
+            </span>
+          )}
         </span>
       );
     });
@@ -373,7 +229,7 @@ export default function IMSSTextbox(props: ITextboxProps) {
                 : undefined)
             }
             style={{
-              fontFamily: `${font}, "Segoe UI Emoji"`,
+              fontFamily: font,
             }}
           >
             <div id="miniAvatar" className={applyStyle('miniAvatarContainer', styles.miniAvatarContainer)}>
