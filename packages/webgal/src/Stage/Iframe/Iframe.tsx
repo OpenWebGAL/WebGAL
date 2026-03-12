@@ -1,9 +1,10 @@
-import { useEffect, useMemo, useRef, useCallback } from 'react';
+import { useEffect, useMemo, useRef, useCallback, SyntheticEvent } from 'react';
 import { IIFrame } from '@/store/stageInterface';
-import { RootState } from '@/store/store';
+import { RootState, webgalStore } from '@/store/store';
 import { useSelector } from 'react-redux';
 import { isEqual } from 'lodash';
 import { ReactiveWatcher, WebGalAPI } from './interface';
+import { stageActions } from '@/store/stageReducer';
 
 export default function Iframe({ id, sandbox, src, width, height, wait, returnValue }: IIFrame) {
   const iframeRef = useRef<HTMLIFrameElement>(null);
@@ -124,6 +125,12 @@ export default function Iframe({ id, sandbox, src, width, height, wait, returnVa
     return api;
   }, [store, id, wait]);
 
+  const onError = useCallback((e: SyntheticEvent<HTMLIFrameElement, Event>) => {
+    console.error('iframe加载失败', e);
+    // 加载失败，则移除该Frame
+    webgalStore.dispatch(stageActions.removeFrame(id));
+  }, []);
+
   if (!src) {
     return null;
   }
@@ -145,5 +152,15 @@ export default function Iframe({ id, sandbox, src, width, height, wait, returnVa
     };
   }, [apiInstance]);
 
-  return <iframe ref={iframeRef} width={width} height={height} id={`iframe-${id}`} src={src} sandbox={sandbox} />;
+  return (
+    <iframe
+      ref={iframeRef}
+      width={width}
+      height={height}
+      id={`iframe-${id}`}
+      src={src}
+      sandbox={sandbox}
+      onError={onError}
+    />
+  );
 }
