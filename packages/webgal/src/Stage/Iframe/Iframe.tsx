@@ -6,6 +6,8 @@ import { isEqual } from 'lodash';
 import { ReactiveWatcher, WebGalAPI } from './interface';
 import { setStageVar, stageActions } from '@/store/stageReducer';
 import { setScriptManagedGlobalVar } from '@/store/userDataReducer';
+import { WebGAL } from '@/Core/WebGAL';
+import { nextSentence as nextSentenceController } from '@/Core/controller/gamePlay/nextSentence';
 
 export default function Iframe({ id, sandbox, src, width, height, wait }: IIFrame) {
   const iframeRef = useRef<HTMLIFrameElement>(null);
@@ -108,6 +110,22 @@ export default function Iframe({ id, sandbox, src, width, height, wait }: IIFram
     api.getUserData = () => store.userData;
     api.getSaveData = () => store.saveData;
     // 操作
+    api.isBlockSentence = () => {
+      // 判断当前是否有阻塞语句执行的演出
+      const performList = store.stage.PerformList;
+      for (const perform of performList) {
+        // 检查演出是否阻塞下一句
+        const performObj = WebGAL.gameplay.performController.performList.find((p) => p.performName === perform.id);
+        if (performObj?.blockingNext?.() || performObj?.blockingAuto?.()) {
+          return true;
+        }
+      }
+      return false;
+    };
+    api.nextSentence = () => {
+      // 触发下一句执行
+      nextSentenceController();
+    };
     api.closeFrame = () => webgalStore.dispatch(stageActions.removeFrame(id));
     api.getGameVar = (key: string) => store.stage.GameVar[key];
     api.getGlobalGameVar = (key: string) => store.userData.globalGameVar[key];

@@ -57,7 +57,6 @@ export const createFrame = (sentence: ISentence): IPerform => {
     width,
     height,
     isActive: true,
-    isDestroy: false,
     wait,
     returnValue,
   };
