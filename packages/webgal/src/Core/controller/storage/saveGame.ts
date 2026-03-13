@@ -17,6 +17,7 @@ export const saveGame = (index: number) => {
   const saveData: ISaveData = generateCurrentStageData(index);
   webgalStore.dispatch(saveActions.saveGame({ index, saveData }));
   dumpSavesToStorage(index, index);
+  WebGAL.events.save.emit(index);
 };
 
 /**

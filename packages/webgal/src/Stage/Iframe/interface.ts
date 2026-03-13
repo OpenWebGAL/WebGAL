@@ -2,8 +2,8 @@ import { RootState } from '@/store/store';
 
 export type WebGalAPIEventsKeyNames =
   | 'sentence' // 语句执行
-  | 'save' // 保存
-  | 'load'; // 加载
+  | 'save' // 保存存档
+  | 'load'; // 加载存档
 
 export interface WebGalAPI {
   // 获取响应式状态的方法

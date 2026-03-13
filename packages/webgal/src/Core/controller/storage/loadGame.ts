@@ -3,7 +3,7 @@ import { logger } from '../../util/logger';
 import { sceneFetcher } from '../scene/sceneFetcher';
 import { sceneParser } from '../../parser/sceneParser';
 import { webgalStore } from '@/store/store';
-import { resetStageState } from '@/store/stageReducer';
+import { resetStageState, stageActions } from '@/store/stageReducer';
 import { setVisibility } from '@/store/GUIReducer';
 import { restorePerform } from './jumpFromBacklog';
 import { stopAllPerform } from '@/Core/controller/gamePlay/stopAllPerform';
@@ -25,6 +25,7 @@ export const loadGame = (index: number) => {
   logger.debug('读取的存档数据', loadFile);
   // 加载存档
   loadGameFromStageData(loadFile);
+  WebGAL.events.load.emit(index);
 };
 
 export function loadGameFromStageData(stageData: ISaveData) {
@@ -51,6 +52,8 @@ export function loadGameFromStageData(stageData: ISaveData) {
 
   // 强制停止所有演出
   stopAllPerform();
+  // 清空frames
+  webgalStore.dispatch(stageActions.resetFrame());
 
   // 恢复backlog
   const newBacklog = loadFile.backlog;
@@ -61,6 +64,7 @@ export function loadGameFromStageData(stageData: ISaveData) {
 
   // 恢复舞台状态
   const newStageState = cloneDeep(loadFile.nowStageState);
+  newStageState.frames = []; // frames将被指令创建，我们不需要使用存档中的frames
   const dispatch = webgalStore.dispatch;
   dispatch(resetStageState(newStageState));
 

@@ -3,7 +3,7 @@ import { IIFrame } from '@/store/stageInterface';
 import { RootState, webgalStore } from '@/store/store';
 import { useSelector } from 'react-redux';
 import { isEqual } from 'lodash';
-import { ReactiveWatcher, WebGalAPI } from './interface';
+import { ReactiveWatcher, WebGalAPI, WebGalAPIEventsKeyNames } from './interface';
 import { setStageVar, stageActions } from '@/store/stageReducer';
 import { setScriptManagedGlobalVar } from '@/store/userDataReducer';
 import { WebGAL } from '@/Core/WebGAL';
@@ -20,6 +20,10 @@ export default function Iframe({ id, sandbox, src, width, height, wait }: IIFram
 
   const watchersRef = useRef<Map<number, ReactiveWatcher>>(new Map());
   const watcherIdRef = useRef(0);
+  const eventsMap = useMemo(
+    () => ({ save: WebGAL.events.save, load: WebGAL.events.load, sentence: WebGAL.events.userInteractNext }),
+    [],
+  );
 
   // 获取嵌套属性的值
   const getNestedValue = useCallback((obj: any, path: string) => {
@@ -125,6 +129,21 @@ export default function Iframe({ id, sandbox, src, width, height, wait }: IIFram
     api.nextSentence = () => {
       // 触发下一句执行
       nextSentenceController();
+    };
+    // 事件
+    api.on = (event: WebGalAPIEventsKeyNames, callback: (data?: any) => void) => {
+      if (!eventsMap[event]) {
+        console.error(`无效的事件类型: ${event}`);
+        return;
+      }
+      eventsMap[event].on(callback);
+    };
+    api.off = (event: WebGalAPIEventsKeyNames, callback: (data?: any) => void) => {
+      if (!eventsMap[event]) {
+        console.error(`无效的事件类型: ${event}`);
+        return;
+      }
+      eventsMap[event].off(callback);
     };
     api.closeFrame = () => webgalStore.dispatch(stageActions.removeFrame(id));
     api.getGameVar = (key: string) => store.stage.GameVar[key];
