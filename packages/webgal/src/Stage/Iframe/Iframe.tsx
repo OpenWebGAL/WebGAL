@@ -7,7 +7,7 @@ import { ReactiveWatcher, WebGalAPI } from './interface';
 import { setStageVar, stageActions } from '@/store/stageReducer';
 import { setScriptManagedGlobalVar } from '@/store/userDataReducer';
 
-export default function Iframe({ id, sandbox, src, width, height, wait, returnValue }: IIFrame) {
+export default function Iframe({ id, sandbox, src, width, height, wait }: IIFrame) {
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const stage = useSelector((state: RootState) => state.stage, isEqual);
   const GUI = useSelector((state: RootState) => state.GUI, isEqual);
@@ -134,11 +134,12 @@ export default function Iframe({ id, sandbox, src, width, height, wait, returnVa
     webgalStore.dispatch(stageActions.removeFrame(id));
   }, []);
 
-  if (!src) {
+  if (!src || !id) {
     return null;
   }
 
-  const onLoad = useCallback(() => {
+  useEffect(() => {
+    const iframe = iframeRef.current;
     if (iframeRef.current?.contentWindow) {
       Object.defineProperty(iframeRef.current.contentWindow, 'webgal', {
         value: apiInstance,
@@ -146,10 +147,6 @@ export default function Iframe({ id, sandbox, src, width, height, wait, returnVa
         enumerable: true,
       });
     }
-  }, [apiInstance]);
-
-  useEffect(() => {
-    const iframe = iframeRef.current;
     return () => {
       if (iframe?.contentWindow) {
         try {
@@ -171,7 +168,6 @@ export default function Iframe({ id, sandbox, src, width, height, wait, returnVa
       src={src}
       sandbox={sandbox}
       onError={onError}
-      onLoad={onLoad}
     />
   );
 }
