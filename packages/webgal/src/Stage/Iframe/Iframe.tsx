@@ -10,6 +10,7 @@ import { WebGAL } from '@/Core/WebGAL';
 import { nextSentence as nextSentenceController } from '@/Core/controller/gamePlay/nextSentence';
 
 export default function Iframe({ id, sandbox, src, width, height, wait }: IIFrame) {
+  const idString = `iframe-${id}`;
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const stage = useSelector((state: RootState) => state.stage, isEqual);
   const GUI = useSelector((state: RootState) => state.GUI, isEqual);
@@ -199,12 +200,15 @@ export default function Iframe({ id, sandbox, src, width, height, wait }: IIFram
   return (
     <iframe
       ref={iframeRef}
-      width={width}
-      height={height}
-      id={`iframe-${id}`}
+      id={idString}
       src={src}
       sandbox={sandbox}
       onError={onError}
+      data-frame-id={idString}
+      style={{
+        width,
+        height,
+      }}
     />
   );
 }

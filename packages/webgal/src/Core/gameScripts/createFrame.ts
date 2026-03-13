@@ -30,8 +30,8 @@ export const createFrame = (sentence: ISentence): IPerform => {
   const id = getStringArgByKey(sentence, 'id') ?? '';
   const wait = getBooleanArgByKey(sentence, 'wait') ?? false;
   const returnValue = getStringArgByKey(sentence, 'returnValue') ?? null;
-  const width = getNumberArgByKey(sentence, 'width') ?? undefined;
-  const height = getNumberArgByKey(sentence, 'height') ?? undefined;
+  const width = getStringArgByKey(sentence, 'width') ?? undefined;
+  const height = getStringArgByKey(sentence, 'height') ?? undefined;
   if (!id || !src) {
     return {
       performName: 'none',

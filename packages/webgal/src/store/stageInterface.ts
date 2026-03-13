@@ -5,8 +5,8 @@ export interface IIFrame {
   id: string;
   src: string;
   sandbox: string;
-  width?: number;
-  height?: number;
+  width?: string;
+  height?: string;
   isActive?: boolean;
   wait?: boolean; // 是否等待iframe完成
   returnValue?: string | null; // iframe返回值的变量名
