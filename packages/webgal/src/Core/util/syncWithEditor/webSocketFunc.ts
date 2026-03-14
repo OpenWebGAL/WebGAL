@@ -120,6 +120,7 @@ export const webSocketFunc = () => {
             ...(effect.transform?.scale ?? {}),
           },
         };
+        WebGAL.gameplay.pixiStage?.removeAnimationByTargetKey(effect.target);
         webgalStore.dispatch(stageActions.updateEffect({ target: effect.target, transform: newTransform }));
       } catch (e) {
         logger.error(`无法设置效果 ${message.message}, ${e}`);
