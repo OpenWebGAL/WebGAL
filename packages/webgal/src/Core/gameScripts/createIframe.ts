@@ -68,7 +68,7 @@ export const createIframe = (sentence: ISentence): IPerform => {
     }
   }
 
-  webgalStore.dispatch(stageActions.addFrame(frameData));
+  webgalStore.dispatch(stageActions.addIframe(frameData));
 
   // 如果需要等待iframe完成，则返回阻塞的perform
   if (wait) {

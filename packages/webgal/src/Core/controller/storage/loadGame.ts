@@ -53,7 +53,7 @@ export function loadGameFromStageData(stageData: ISaveData) {
   // 强制停止所有演出
   stopAllPerform();
   // 清空frames
-  webgalStore.dispatch(stageActions.resetFrame());
+  webgalStore.dispatch(stageActions.resetIframe());
 
   // 恢复backlog
   const newBacklog = loadFile.backlog;
@@ -64,7 +64,7 @@ export function loadGameFromStageData(stageData: ISaveData) {
 
   // 恢复舞台状态
   const newStageState = cloneDeep(loadFile.nowStageState);
-  newStageState.frames = []; // frames将被指令创建，我们不需要使用存档中的frames
+  newStageState.iframes = []; // iframes将被指令创建，我们不需要使用存档中的iframes
   const dispatch = webgalStore.dispatch;
   dispatch(resetStageState(newStageState));
 

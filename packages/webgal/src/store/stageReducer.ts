@@ -319,13 +319,13 @@ const stageSlice = createSlice({
         state.figureMetaData[action.payload[0]][action.payload[1]] = action.payload[2];
       }
     },
-    addFrame: (state, action: PayloadAction<IIFrame>) => {
+    addIframe: (state, action: PayloadAction<IIFrame>) => {
       state.iframes.push(action.payload);
     },
-    removeFrame: (state, action: PayloadAction<string>) => {
+    removeIframe: (state, action: PayloadAction<string>) => {
       state.iframes = state.iframes.filter((e) => e.id !== action.payload);
     },
-    resetFrame: (state) => {
+    resetIframe: (state) => {
       state.iframes = [];
     },
   },

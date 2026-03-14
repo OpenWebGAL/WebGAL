@@ -20,7 +20,7 @@ export const removeIframe = (sentence: ISentence): IPerform => {
       stopTimeout: undefined,
     };
   }
-  webgalStore.dispatch(stageActions.removeFrame(id));
+  webgalStore.dispatch(stageActions.removeIframe(id));
 
   return {
     performName: 'none',
