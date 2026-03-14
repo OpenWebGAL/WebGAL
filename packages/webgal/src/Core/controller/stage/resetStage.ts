@@ -29,5 +29,5 @@ export const resetStage = (resetBacklog: boolean, resetSceneAndVar = true) => {
   }
 
   // 清空frames
-  webgalStore.dispatch(stageActions.resetFrame());
+  webgalStore.dispatch(stageActions.resetIframe());
 };
