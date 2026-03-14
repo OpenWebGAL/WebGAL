@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '@/store/store';
+import { RootState, webgalStore } from '@/store/store';
 import React from 'react';
 import styles from '@/UI/Extra/extra.module.scss';
 import { useValue } from '@/hooks/useValue';
@@ -7,12 +7,16 @@ import { setStage } from '@/store/stageReducer';
 import { GoEnd, GoStart, MusicList, PlayOne, SquareSmall } from '@icon-park/react';
 import useSoundEffect from '@/hooks/useSoundEffect';
 import { setGuiAsset } from '@/store/GUIReducer';
+import { bgmManager } from '@/Core/Modules/audio/bgmManager';
 
 export function ExtraBgm() {
   const { playSeClick, playSeEnter } = useSoundEffect();
   // 检查当前正在播放的bgm是否在bgm列表内
   const currentBgmSrc = useSelector((state: RootState) => state.GUI.titleBgm);
   const extraState = useSelector((state: RootState) => state.userData.appreciationData);
+  const userDataState = useSelector((state: RootState) => state.userData);
+  const mainVol = userDataState.optionData.volumeMain;
+  const bgmVol = mainVol * 0.01 * userDataState.optionData.bgmVolume * 0.01;
   const initName = 'Title_BGM';
   // 是否展示 bgm 列表
   const isShowBgmList = useValue(false);
@@ -88,8 +92,7 @@ export function ExtraBgm() {
         <div
           onClick={() => {
             playSeClick();
-            const bgmControl: HTMLAudioElement = document.getElementById('currentBgm') as HTMLAudioElement;
-            bgmControl?.play().then();
+            bgmManager.play(currentBgmSrc, { volume: bgmVol, fade: 1000 });
           }}
           onMouseEnter={playSeEnter}
           className={styles.bgmControlButton}
@@ -113,8 +116,7 @@ export function ExtraBgm() {
         <div
           onClick={() => {
             playSeClick();
-            const bgmControl: HTMLAudioElement = document.getElementById('currentBgm') as HTMLAudioElement;
-            bgmControl.pause();
+            bgmManager.stop({ fade: 1000 });
           }}
           onMouseEnter={playSeEnter}
           className={styles.bgmControlButton}

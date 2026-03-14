@@ -37,7 +37,6 @@ export default function Title() {
       <div
         className="title__enter-game-target"
         onClick={() => {
-          playBgm(GUIState.titleBgm);
           dispatch(setVisibility({ component: 'isEnterGame', visibility: true }));
           if (fullScreen === fullScreenOption.on) {
             document.documentElement.requestFullscreen();
@@ -100,9 +99,8 @@ export default function Title() {
             </div>
             {GUIState.enableAppreciationMode && (
               <div
-                className={`${applyStyle('Title_button', styles.Title_button)} ${
-                  !hasAppreciationItems ? styles.Title_button_disabled : ''
-                }`}
+                className={`${applyStyle('Title_button', styles.Title_button)} ${!hasAppreciationItems ? styles.Title_button_disabled : ''
+                  }`}
                 onClick={() => {
                   if (hasAppreciationItems) {
                     playSeClick();
@@ -125,7 +123,7 @@ export default function Title() {
                   leftFunc: () => {
                     window.close();
                   },
-                  rightFunc: () => {},
+                  rightFunc: () => { },
                 });
               }}
               onMouseEnter={playSeEnter}

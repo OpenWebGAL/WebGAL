@@ -7,6 +7,7 @@ import { webgalStore } from '@/store/store';
 import { getRandomPerformName, PerformController } from '@/Core/Modules/perform/performController';
 import { getBooleanArgByKey } from '@/Core/util/getSentenceArg';
 import { WebGAL } from '@/Core/WebGAL';
+import { bgmManager } from '../Modules/audio/bgmManager';
 /**
  * 播放一段视频 * @param sentence
  */
@@ -31,7 +32,7 @@ export const playVideo = (sentence: ISentence): IPerform => {
     performName: 'none',
     duration: 0,
     isHoldOn: false,
-    stopFunction: () => {},
+    stopFunction: () => { },
     blockingNext: () => blockingNextFlag,
     blockingAuto: () => true,
     stopTimeout: undefined, // 暂时不用，后面会交给自动清除
@@ -69,12 +70,9 @@ export const playVideo = (sentence: ISentence): IPerform => {
               /**
                * 恢复音量
                */
-              const bgmElement: any = document.getElementById('currentBgm');
-              if (bgmElement) {
-                bgmElement.volume = bgmVol.toString();
-              }
+              bgmManager.resume({ volume: bgmVol, fade: 1000 });
               const vocalElement: any = document.getElementById('currentVocal');
-              if (bgmElement) {
+              if (vocalElement) {
                 vocalElement.volume = vocalVol.toString();
               }
               // eslint-disable-next-line react/no-deprecated
@@ -93,12 +91,9 @@ export const playVideo = (sentence: ISentence): IPerform => {
            */
           const vocalVol2 = 0;
           const bgmVol2 = 0;
-          const bgmElement: any = document.getElementById('currentBgm');
-          if (bgmElement) {
-            bgmElement.volume = bgmVol2.toString();
-          }
+          bgmManager.pause({ fade: 1000 });
           const vocalElement: any = document.getElementById('currentVocal');
-          if (bgmElement) {
+          if (vocalElement) {
             vocalElement.volume = vocalVol2.toString();
           }
 
