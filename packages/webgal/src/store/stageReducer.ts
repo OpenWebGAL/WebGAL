@@ -16,7 +16,6 @@ import {
   IRunPerform,
   ISetGameVar,
   ISetStagePayload,
-  IStageAnimationSetting,
   IStageState,
   IUpdateAnimationSettingPayload,
 } from '@/store/stageInterface';
@@ -75,7 +74,7 @@ export const initState: IStageState = {
   isDisableTextbox: false,
   replacedUIlable: {},
   figureMetaData: {},
-  frames: [], // 当前iframe的列表
+  iframes: [], // 当前iframe的列表
 };
 
 /**
@@ -321,13 +320,13 @@ const stageSlice = createSlice({
       }
     },
     addFrame: (state, action: PayloadAction<IIFrame>) => {
-      state.frames.push(action.payload);
+      state.iframes.push(action.payload);
     },
     removeFrame: (state, action: PayloadAction<string>) => {
-      state.frames = state.frames.filter((e) => e.id !== action.payload);
+      state.iframes = state.iframes.filter((e) => e.id !== action.payload);
     },
     resetFrame: (state) => {
-      state.frames = [];
+      state.iframes = [];
     },
   },
 });

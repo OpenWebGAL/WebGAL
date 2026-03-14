@@ -28,8 +28,8 @@ import { setTransition } from '@/Core/gameScripts/setTransition';
 import { unlockBgm } from '@/Core/gameScripts/unlockBgm';
 import { unlockCg } from '@/Core/gameScripts/unlockCg';
 import { callSteam } from '@/Core/gameScripts/callSteam';
-import { createFrame } from '@/Core/gameScripts/createFrame';
-import { removeFrame } from '@/Core/gameScripts/removeFrame';
+import { createIframe } from '@/Core/gameScripts/createIframe';
+import { removeIframe } from '@/Core/gameScripts/removeIframe';
 import { end } from '../gameScripts/end';
 import { jumpLabel } from '../gameScripts/jumpLabel';
 import { pixiInit } from '../gameScripts/pixi/pixiInit';
@@ -76,8 +76,8 @@ export const SCRIPT_TAG_MAP = defineScripts({
   applyStyle: ScriptConfig(commandType.applyStyle, applyStyle, { next: true }),
   wait: ScriptConfig(commandType.wait, wait),
   callSteam: ScriptConfig(commandType.callSteam, callSteam, { next: true }),
-  createFrame: ScriptConfig(commandType.createFrame, createFrame),
-  removeFrame: ScriptConfig(commandType.removeFrame, removeFrame),
+  createIframe: ScriptConfig(commandType.createIframe, createIframe),
+  removeIframe: ScriptConfig(commandType.removeIframe, removeIframe),
 });
 
 export const SCRIPT_CONFIG: IConfigInterface[] = Object.values(SCRIPT_TAG_MAP);

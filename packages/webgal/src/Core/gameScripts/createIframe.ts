@@ -1,6 +1,6 @@
 import { ISentence } from '@/Core/controller/scene/sceneInterface';
 import { IPerform } from '@/Core/Modules/perform/performInterface';
-import { getBooleanArgByKey, getNumberArgByKey, getStringArgByKey } from '../util/getSentenceArg';
+import { getBooleanArgByKey, getStringArgByKey } from '../util/getSentenceArg';
 import { IIFrame } from '@/store/stageInterface';
 import { webgalStore } from '@/store/store';
 import { stageActions } from '@/store/stageReducer';
@@ -25,7 +25,7 @@ const allSandboxProperties = {
  * 创建框架
  * @param sentence
  */
-export const createFrame = (sentence: ISentence): IPerform => {
+export const createIframe = (sentence: ISentence): IPerform => {
   const src = sentence.content;
   const id = getStringArgByKey(sentence, 'id') ?? '';
   const wait = getBooleanArgByKey(sentence, 'wait') ?? false;

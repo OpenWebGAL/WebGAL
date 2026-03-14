@@ -7,7 +7,7 @@ import { webgalStore } from '@/store/store';
  * 移除框架
  * @param sentence
  */
-export const removeFrame = (sentence: ISentence): IPerform => {
+export const removeIframe = (sentence: ISentence): IPerform => {
   const id = sentence.content;
   if (!id) {
     return {

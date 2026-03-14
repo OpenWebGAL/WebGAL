@@ -40,8 +40,8 @@ export enum commandType {
   applyStyle,
   wait,
   callSteam, // 调用Steam功能
-  createFrame, // 创建框架
-  removeFrame, // 移除框架
+  createIframe, // 创建框架
+  removeIframe, // 移除框架
 }
 
 /**
