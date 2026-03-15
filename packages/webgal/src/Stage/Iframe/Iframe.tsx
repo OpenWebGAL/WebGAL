@@ -146,7 +146,7 @@ export default function Iframe({ id, sandbox, src, width, height, wait }: IIFram
       }
       eventsMap[event].off(callback);
     };
-    api.closeFrame = () => webgalStore.dispatch(stageActions.removeIframe(id));
+    api.closeIframe = () => webgalStore.dispatch(stageActions.removeIframe(id));
     api.getGameVar = (key: string) => store.stage.GameVar[key];
     api.getGlobalGameVar = (key: string) => store.userData.globalGameVar[key];
     api.setGameVar = (key: string, value: any) => webgalStore.dispatch(setStageVar({ key, value }));
@@ -168,7 +168,7 @@ export default function Iframe({ id, sandbox, src, width, height, wait }: IIFram
 
   const onError = useCallback((e: SyntheticEvent<HTMLIFrameElement, Event>) => {
     console.error('iframe加载失败', e);
-    // 加载失败，则移除该Frame
+    // 加载失败，则移除该iframe
     webgalStore.dispatch(stageActions.removeIframe(id));
   }, []);
 

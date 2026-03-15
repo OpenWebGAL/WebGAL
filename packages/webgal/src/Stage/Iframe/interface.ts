@@ -22,7 +22,7 @@ export interface WebGalAPI {
   getGlobalGameVar: (key: string) => any;
   setGameVar: (key: string, value: any) => void;
   setGlobalGameVar: (key: string, value: any) => void;
-  closeFrame: () => void;
+  closeIframe: () => void;
   nextSentence: () => void;
   isBlockSentence: () => boolean;
   complete: (returnValue?: any) => void;
