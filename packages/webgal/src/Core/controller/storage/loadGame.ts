@@ -64,9 +64,19 @@ export function loadGameFromStageData(stageData: ISaveData) {
 
   // 恢复舞台状态
   const newStageState = cloneDeep(loadFile.nowStageState);
-  newStageState.iframes = []; // iframes将被指令创建，我们不需要使用存档中的iframes
+  // 保存iframes的持久化数据
+  const iframePersistentData = new Map<string, Record<string, any>>();
+  newStageState.iframes.forEach((iframe) => {
+    if (iframe.persistentData) {
+      iframePersistentData.set(iframe.id, iframe.persistentData);
+    }
+  });
+  // iframes将被指令创建，我们不需要使用存档中的iframes
+  newStageState.iframes = [];
   const dispatch = webgalStore.dispatch;
   dispatch(resetStageState(newStageState));
+  // 将持久化数据存储到全局变量中，供后续创建iframe时使用
+  (window as any).__iframePersistentData = iframePersistentData;
 
   // 恢复演出
   setTimeout(restorePerform, 0);

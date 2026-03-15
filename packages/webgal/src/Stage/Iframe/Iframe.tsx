@@ -17,6 +17,22 @@ export default function Iframe({ id, sandbox, src, width, height, wait }: IIFram
   const userData = useSelector((state: RootState) => state.userData, isEqual);
   const saveData = useSelector((state: RootState) => state.saveData, isEqual);
 
+  // 尝试从全局变量中恢复持久化数据
+  useEffect(() => {
+    const globalPersistentData = (window as any).__iframePersistentData;
+    if (globalPersistentData?.has(id)) {
+      const persistentData = globalPersistentData.get(id);
+      webgalStore.dispatch(
+        stageActions.updateIframePersistentData({
+          id,
+          persistentData,
+        }),
+      );
+      // 恢复后从全局变量中删除
+      globalPersistentData.delete(id);
+    }
+  }, [id]);
+
   const store = useMemo(() => ({ stage, GUI, userData, saveData }), [stage, GUI, userData, saveData]);
 
   const watchersRef = useRef<Map<number, ReactiveWatcher>>(new Map());
@@ -157,6 +173,56 @@ export default function Iframe({ id, sandbox, src, width, height, wait }: IIFram
             returnValue,
           },
           window.location.origin, // 使用当前页面的源
+        );
+      }
+    };
+    // 持久化数据方法
+    api.getPersistentData = (key?: string) => {
+      const iframe = stage.iframes.find((e) => e.id === id);
+      if (!iframe?.persistentData) {
+        return key ? undefined : {};
+      }
+      return key ? iframe.persistentData[key] : iframe.persistentData;
+    };
+    api.setPersistentData = (key: string, value: any) => {
+      const iframe = stage.iframes.find((e) => e.id === id);
+      if (!iframe) {
+        console.error(`找不到id为${id}的iframe`);
+        return;
+      }
+      const currentData = iframe.persistentData || {};
+      webgalStore.dispatch(
+        stageActions.updateIframePersistentData({
+          id,
+          persistentData: { ...currentData, [key]: value },
+        }),
+      );
+    };
+    api.clearPersistentData = (key?: string) => {
+      const iframe = stage.iframes.find((e) => e.id === id);
+      if (!iframe) {
+        console.error(`找不到id为${id}的iframe`);
+        return null;
+      }
+      if (key) {
+        // 清除指定key的数据
+        if (iframe.persistentData?.[key]) {
+          const newData = { ...iframe.persistentData };
+          delete newData[key];
+          webgalStore.dispatch(
+            stageActions.updateIframePersistentData({
+              id,
+              persistentData: newData,
+            }),
+          );
+        }
+      } else {
+        // 清除所有持久化数据
+        webgalStore.dispatch(
+          stageActions.updateIframePersistentData({
+            id,
+            persistentData: {},
+          }),
         );
       }
     };

@@ -10,6 +10,7 @@ export interface IIFrame {
   isActive?: boolean;
   wait?: boolean; // 是否等待iframe完成
   returnValue?: string | null; // iframe返回值的变量名
+  persistentData?: Record<string, any>; // iframe的持久化数据
 }
 
 /**

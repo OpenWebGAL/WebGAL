@@ -328,6 +328,12 @@ const stageSlice = createSlice({
     resetIframe: (state) => {
       state.iframes = [];
     },
+    updateIframePersistentData: (state, action: PayloadAction<{ id: string; persistentData: Record<string, any> }>) => {
+      const iframe = state.iframes.find((e) => e.id === action.payload.id);
+      if (iframe) {
+        iframe.persistentData = { ...iframe.persistentData, ...action.payload.persistentData };
+      }
+    },
   },
 });
 

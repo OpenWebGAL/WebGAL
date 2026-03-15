@@ -29,6 +29,10 @@ export interface WebGalAPI {
   // 事件
   on: (event: WebGalAPIEventsKeyNames, callback: (data?: any) => void) => void;
   off: (event: WebGalAPIEventsKeyNames, callback: (data?: any) => void) => void;
+  // 持久化数据
+  getPersistentData: (key?: string) => any;
+  setPersistentData: (key: string, value: any) => void;
+  clearPersistentData: (key?: string) => void;
 }
 
 export interface ReactiveWatcher {
