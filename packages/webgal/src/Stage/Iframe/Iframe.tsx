@@ -116,16 +116,13 @@ export default function Iframe({ id, sandbox, src, width, height, wait }: IIFram
     api.getSaveData = () => store.saveData;
     // 操作
     api.isBlockSentence = () => {
-      // 判断当前是否有阻塞语句执行的演出
-      const performList = store.stage.PerformList;
-      for (const perform of performList) {
-        // 检查演出是否阻塞下一句
-        const performObj = WebGAL.gameplay.performController.performList.find((p) => p.performName === perform.id);
-        if (performObj?.blockingNext?.() || performObj?.blockingAuto?.()) {
-          return true;
-        }
-      }
-      return false;
+      let isBlockingNext = false;
+      WebGAL.gameplay.performController.performList.forEach((e) => {
+        if (e.blockingNext())
+          // 阻塞且没有结束的演出
+          isBlockingNext = true;
+      });
+      return isBlockingNext;
     };
     api.nextSentence = () => {
       // 触发下一句执行
