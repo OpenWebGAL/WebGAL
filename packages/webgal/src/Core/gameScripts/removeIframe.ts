@@ -2,6 +2,7 @@ import { ISentence } from '@/Core/controller/scene/sceneInterface';
 import { IPerform } from '@/Core/Modules/perform/performInterface';
 import { stageActions } from '@/store/stageReducer';
 import { webgalStore } from '@/store/store';
+import { getBooleanArgByKey } from '../util/getSentenceArg';
 
 /**
  * 移除框架
@@ -9,6 +10,7 @@ import { webgalStore } from '@/store/store';
  */
 export const removeIframe = (sentence: ISentence): IPerform => {
   const id = sentence.content;
+  const save = getBooleanArgByKey(sentence, 'save') ?? false;
   if (!id) {
     return {
       performName: 'none',
@@ -20,7 +22,8 @@ export const removeIframe = (sentence: ISentence): IPerform => {
       stopTimeout: undefined,
     };
   }
-  webgalStore.dispatch(stageActions.removeIframe(id));
+
+  webgalStore.dispatch(stageActions.removeIframe({ id, isActive: save }));
 
   return {
     performName: 'none',

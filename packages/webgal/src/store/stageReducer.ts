@@ -322,8 +322,12 @@ const stageSlice = createSlice({
     addIframe: (state, action: PayloadAction<IIFrame>) => {
       state.iframes.push(action.payload);
     },
-    removeIframe: (state, action: PayloadAction<string>) => {
-      state.iframes = state.iframes.filter((e) => e.id !== action.payload);
+    removeIframe: (state, action: PayloadAction<{ id: string; isActive?: boolean }>) => {
+      if (!action.payload.isActive) {
+        state.iframes = state.iframes.filter((e) => e.id !== action.payload.id);
+      } else {
+        state.iframes = state.iframes.map((e) => (e.id === action.payload.id ? { ...e, isActive: false } : e));
+      }
     },
     resetIframe: (state) => {
       state.iframes = [];

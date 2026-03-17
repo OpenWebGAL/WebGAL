@@ -159,7 +159,30 @@ export default function Iframe({ id, sandbox, src, width, height, wait }: IIFram
       }
       eventsMap[event].off(callback);
     };
-    api.closeIframe = () => webgalStore.dispatch(stageActions.removeIframe(id));
+    api.closeIframe = (key?: string) => {
+      if (key) {
+        webgalStore.dispatch(stageActions.removeIframe({ id: key }));
+      } else {
+        webgalStore.dispatch(stageActions.removeIframe({ id }));
+      }
+    };
+    api.openIframe = (key?: string) => {
+      if (!key) {
+        console.warn('openIframe 需要指定 iframe 的 key');
+        return;
+      }
+      // 从 stage.iframes 中查找指定 key 的 iframe
+      const iframe = stage.iframes.find((e) => e.id === key);
+      if (!iframe) {
+        console.error(`找不到 id 为 ${key} 的 iframe`);
+        return;
+      }
+      // 如果 iframe 已经存在且被关闭，则重新添加到 iframes 列表中
+      const existingIndex = stage.iframes.findIndex((e) => e.id === key);
+      if (existingIndex === -1) {
+        webgalStore.dispatch(stageActions.addIframe(iframe));
+      }
+    };
     api.getGameVar = (key: string) => store.stage.GameVar[key];
     api.getGlobalGameVar = (key: string) => store.userData.globalGameVar[key];
     api.setGameVar = (key: string, value: any) => webgalStore.dispatch(setStageVar({ key, value }));
@@ -232,7 +255,7 @@ export default function Iframe({ id, sandbox, src, width, height, wait }: IIFram
   const onError = useCallback((e: SyntheticEvent<HTMLIFrameElement, Event>) => {
     console.error('iframe加载失败', e);
     // 加载失败，则移除该iframe
-    webgalStore.dispatch(stageActions.removeIframe(id));
+    webgalStore.dispatch(stageActions.removeIframe({ id }));
   }, []);
 
   if (!src || !id) {

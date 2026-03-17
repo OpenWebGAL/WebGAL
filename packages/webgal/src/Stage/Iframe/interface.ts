@@ -22,10 +22,11 @@ export interface WebGalAPI {
   getGlobalGameVar: (key: string) => any;
   setGameVar: (key: string, value: any) => void;
   setGlobalGameVar: (key: string, value: any) => void;
-  closeIframe: () => void;
-  nextSentence: () => void;
-  isBlockSentence: () => boolean;
-  complete: (returnValue?: any) => void;
+  openIframe: (key?: string) => void; // 打开已加载的iframe
+  closeIframe: (key?: string) => void; // 关闭已加载/本iframe
+  nextSentence: () => void; // 执行下一条语句
+  isBlockSentence: () => boolean; // 是否阻塞语句执行
+  complete: (returnValue?: any) => void; // 语句执行完成回调
   // 事件
   on: (event: WebGalAPIEventsKeyNames, callback: (data?: any) => void) => void;
   off: (event: WebGalAPIEventsKeyNames, callback: (data?: any) => void) => void;
