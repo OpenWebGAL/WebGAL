@@ -320,6 +320,7 @@ const stageSlice = createSlice({
       }
     },
     addIframe: (state, action: PayloadAction<IIFrame>) => {
+      action.payload.isActive = true;
       state.iframes.push(action.payload);
     },
     removeIframe: (state, action: PayloadAction<{ id: string; isActive?: boolean }>) => {
