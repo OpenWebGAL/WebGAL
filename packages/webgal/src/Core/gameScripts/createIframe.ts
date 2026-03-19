@@ -50,6 +50,11 @@ export const createIframe = (sentence: ISentence): IPerform => {
     rawSrc = './game/' + rawSrc;
   }
 
+  // 查询所有参数(以@开头)
+  const args = sentence.args;
+  const injectArgs =
+    args.filter((arg) => arg.key.startsWith('@')).map((arg) => ({ key: arg.key.slice(1), value: arg.value })) ?? {};
+
   const frameData: IIFrame = {
     id,
     src: rawSrc,
@@ -59,6 +64,7 @@ export const createIframe = (sentence: ISentence): IPerform => {
     isActive: true,
     wait,
     returnValue,
+    injectArgs,
   };
 
   for (const [key, value] of Object.entries(allSandboxProperties)) {

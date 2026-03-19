@@ -9,7 +9,7 @@ import { setScriptManagedGlobalVar } from '@/store/userDataReducer';
 import { WebGAL } from '@/Core/WebGAL';
 import { nextSentence as nextSentenceController } from '@/Core/controller/gamePlay/nextSentence';
 
-export default function Iframe({ id, sandbox, src, width, height, wait }: IIFrame) {
+export default function Iframe({ id, sandbox, src, width, height, wait, injectArgs }: IIFrame) {
   const idString = `iframe-${id}`;
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const stage = useSelector((state: RootState) => state.stage, isEqual);
@@ -265,11 +265,21 @@ export default function Iframe({ id, sandbox, src, width, height, wait }: IIFram
   useEffect(() => {
     const iframe = iframeRef.current;
     if (iframeRef.current?.contentWindow) {
+      // 将apiInstance注入到window.webgal
       Object.defineProperty(iframeRef.current.contentWindow, 'webgal', {
         value: apiInstance,
         configurable: true,
         enumerable: true,
       });
+
+      // 将injectArgs注入到window.webgal.params
+      if (injectArgs && Object.keys(injectArgs).length > 0) {
+        Object.defineProperty(apiInstance, 'params', {
+          value: injectArgs,
+          configurable: true,
+          enumerable: true,
+        });
+      }
     }
     return () => {
       if (iframe?.contentWindow) {
@@ -281,7 +291,7 @@ export default function Iframe({ id, sandbox, src, width, height, wait }: IIFram
         }
       }
     };
-  }, []);
+  }, [injectArgs]);
 
   return (
     <iframe

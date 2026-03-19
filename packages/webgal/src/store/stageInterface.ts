@@ -11,6 +11,7 @@ export interface IIFrame {
   wait?: boolean; // 是否等待iframe完成
   returnValue?: string | null; // iframe返回值的变量名
   persistentData?: Record<string, any>; // iframe的持久化数据
+  injectArgs: Record<string, any>; // iframe注入的参数，将挂载在window.webgal.params中
 }
 
 /**
