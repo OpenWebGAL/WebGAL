@@ -1,5 +1,6 @@
 import { ISentence } from '@/Core/controller/scene/sceneInterface';
 import { BlinkParam, FocusParam } from '@/Core/live2DCore';
+import { CSSProperties } from 'react';
 
 export interface IIFrame {
   id: string;
@@ -7,6 +8,7 @@ export interface IIFrame {
   sandbox: string;
   width?: string;
   height?: string;
+  style: CSSProperties;
   isActive?: boolean;
   wait?: boolean; // 是否等待iframe完成
   returnValue?: string | null; // iframe返回值的变量名

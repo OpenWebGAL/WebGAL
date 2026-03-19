@@ -9,7 +9,7 @@ import { setScriptManagedGlobalVar } from '@/store/userDataReducer';
 import { WebGAL } from '@/Core/WebGAL';
 import { nextSentence as nextSentenceController } from '@/Core/controller/gamePlay/nextSentence';
 
-export default function Iframe({ id, sandbox, src, width, height, wait, injectArgs }: IIFrame) {
+export default function Iframe({ id, sandbox, src, width, height, wait, injectArgs, style }: IIFrame) {
   const idString = `iframe-${id}`;
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const stage = useSelector((state: RootState) => state.stage, isEqual);
@@ -333,6 +333,7 @@ export default function Iframe({ id, sandbox, src, width, height, wait, injectAr
       onError={onError}
       data-frame-id={idString}
       style={{
+        ...style,
         width,
         height,
       }}

@@ -4,6 +4,7 @@ import { getBooleanArgByKey, getStringArgByKey } from '../util/getSentenceArg';
 import { IIFrame } from '@/store/stageInterface';
 import { webgalStore } from '@/store/store';
 import { stageActions } from '@/store/stageReducer';
+import { CSSProperties } from 'react';
 
 const allSandboxProperties = {
   'allow-forms': 'allowForms', // 允许iframe内提交表单
@@ -29,6 +30,7 @@ export const createIframe = (sentence: ISentence): IPerform => {
   const src = sentence.content;
   const id = getStringArgByKey(sentence, 'id') ?? '';
   const wait = getBooleanArgByKey(sentence, 'wait') ?? false;
+  const hidden = getBooleanArgByKey(sentence, 'hidden') ?? false;
   const returnValue = getStringArgByKey(sentence, 'returnValue') ?? null;
   const width = getStringArgByKey(sentence, 'width') ?? undefined;
   const height = getStringArgByKey(sentence, 'height') ?? undefined;
@@ -42,6 +44,14 @@ export const createIframe = (sentence: ISentence): IPerform => {
       blockingAuto: () => true,
       stopTimeout: undefined,
     };
+  }
+
+  // 可能后续会增加更多的样式，所以我们先定义一个空对象
+  // 还没想好如何优雅的使用指令定义样式，所以暂时使用已知参数定义样式
+  let styleCSSProperties: CSSProperties = {};
+  if (hidden) {
+    styleCSSProperties.display = 'none';
+    styleCSSProperties.opacity = 0;
   }
 
   let rawSrc = src;
@@ -65,6 +75,7 @@ export const createIframe = (sentence: ISentence): IPerform => {
     wait,
     returnValue,
     injectArgs,
+    style: styleCSSProperties,
   };
 
   for (const [key, value] of Object.entries(allSandboxProperties)) {
