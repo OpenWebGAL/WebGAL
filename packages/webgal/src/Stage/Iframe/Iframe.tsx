@@ -37,6 +37,8 @@ export default function Iframe({ id, sandbox, src, width, height, wait, injectAr
 
   const watchersRef = useRef<Map<number, ReactiveWatcher>>(new Map());
   const watcherIdRef = useRef(0);
+
+  // 通过webgal的EventBus触发，我们只做桥接
   const eventsMap = useMemo(
     () => ({ save: WebGAL.events.save, load: WebGAL.events.load, sentence: WebGAL.events.userInteractNext }),
     [],
@@ -247,6 +249,35 @@ export default function Iframe({ id, sandbox, src, width, height, wait, injectAr
             persistentData: {},
           }),
         );
+      }
+    };
+    api.postIframeMessage = (key: string, data?: any) => {
+      // 查找目标iframe
+      const targetIframe = stage.iframes.find((e) => e.id === key);
+      if (!targetIframe) {
+        console.error(`找不到id为${key}的iframe`);
+        return;
+      }
+
+      // 查找目标iframe的DOM元素
+      const targetIframeElement = document.getElementById(`iframe-${key}`) as HTMLIFrameElement;
+      if (!targetIframeElement) {
+        console.error(`找不到id为iframe-${key}的iframe元素`);
+        return;
+      }
+
+      // 向目标iframe发送消息
+      try {
+        targetIframeElement.contentWindow?.postMessage(
+          {
+            type: 'webgal-iframe-message',
+            sourceId: id,
+            data,
+          },
+          window.location.origin,
+        );
+      } catch (e) {
+        console.error(`向iframe ${key} 发送消息失败:`, e);
       }
     };
     return api;

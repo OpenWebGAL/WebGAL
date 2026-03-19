@@ -30,6 +30,7 @@ export interface WebGalAPI {
   // 事件
   on: (event: WebGalAPIEventsKeyNames, callback: (data?: any) => void) => void;
   off: (event: WebGalAPIEventsKeyNames, callback: (data?: any) => void) => void;
+  postIframeMessage: (key: string, data?: any) => void; // 向指定iframe发送消息
   // 持久化数据
   getPersistentData: (key?: string) => any;
   setPersistentData: (key: string, value: any) => void;
