@@ -9,7 +9,6 @@ import { getFastSaveFromStorage, getSavesFromStorage } from '@/Core/controller/s
 import { logger } from '@/Core/util/logger';
 import axios from 'axios';
 import { IGameVar } from '@/store/stageInterface';
-import VConsole from 'vconsole';
 
 /**
  * 获取游戏信息
@@ -70,12 +69,9 @@ export const infoFetcher = (url: string) => {
           }
           if (command === 'Show_Console') {
             if (res === true) {
-              WebGAL.vconsole = new VConsole({
-                disableLogScrolling: false,
-                target: document.querySelector('body') as HTMLElement,
-              });
+              WebGAL.vconsole?.show();
             } else {
-              WebGAL.vconsole?.destroy();
+              WebGAL.vconsole?.hide();
             }
           }
         }
