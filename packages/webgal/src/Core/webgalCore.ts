@@ -1,5 +1,5 @@
 import { BacklogManager } from '@/Core/Modules/backlog';
-import mitt from 'mitt';
+import VConsole from 'vconsole';
 import { SceneManager } from '@/Core/Modules/scene';
 import { AnimationManager } from '@/Core/Modules/animations';
 import { Gameplay } from './Modules/gamePlay';
@@ -19,4 +19,5 @@ export class WebgalCore {
   public steam = new SteamIntegration();
   public template: WebgalTemplate | null = null;
   public styleObjects: Map<string, IWebGALStyleObj> = new Map();
+  public vconsole: VConsole | null = null;
 }
