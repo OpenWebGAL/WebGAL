@@ -7,7 +7,9 @@
     <link rel="manifest" href="/manifest.json" />
     <title>WebGAL</title>
     <style>
+      html,
       body {
+        margin: 0;
         background: black;
       }
 
@@ -129,6 +131,34 @@
       .title-enter-container__link-to-github > div {
         padding: 0 0 0.25em 0;
       }
+
+      html.ios-phone-viewport,
+      html.ios-phone-viewport body {
+        overflow: hidden;
+        overscroll-behavior: none;
+        background: black;
+      }
+
+      html.ios-phone-viewport body {
+        width: 2560px;
+        height: 1440px;
+        position: relative;
+      }
+
+      html.ios-phone-viewport #ebg {
+        display: none;
+      }
+
+      html.ios-phone-viewport #root,
+      html.ios-phone-viewport .html-body__title-enter {
+        width: 2560px;
+        height: 1440px;
+        position: absolute;
+        top: 0;
+        left: 0;
+        transform: none !important;
+        transform-origin: top left;
+      }
     </style>
   </head>
   <body>
@@ -156,11 +186,34 @@
     <!-- 在窗口大小改变时进行强制缩放 -->
     <script>
       (() => {
-        const isIOS = !!navigator.userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
-        const resize = () => {
-          const targetHeight = 1440; // 目标高度
-          const targetWidth = 2560; // 目标宽度
+        const targetHeight = 1440;
+        const targetWidth = 2560;
+        const userAgent = navigator.userAgent;
+        const platform = navigator.platform;
+        const maxTouchPoints = navigator.maxTouchPoints || 0;
+        const isIPhoneLike = /iPhone|iPod/i.test(userAgent);
+        const isIPadLike = /iPad/i.test(userAgent) || (platform === 'MacIntel' && maxTouchPoints > 1);
+        const isIOS = isIPhoneLike || isIPadLike;
+        const isIOSPhone = isIOS && isIPhoneLike;
+        const html = document.documentElement;
+        const body = document.body;
+        const root = document.querySelector('#root');
+        const titleEnter = document.querySelector('.html-body__title-enter');
+        const effectBackground = document.querySelector('.html-body__effect-background');
+        let viewportMeta = document.querySelector('meta[name="viewport"]');
 
+        window.__WEBGAL_DEVICE_INFO__ = { isIOS, isIOSPhone };
+
+        const ensureViewportMeta = () => {
+          if (!viewportMeta) {
+            viewportMeta = document.createElement('meta');
+            viewportMeta.name = 'viewport';
+            document.head.appendChild(viewportMeta);
+          }
+          return viewportMeta;
+        };
+
+        const resize = () => {
           const h = window.innerHeight; // 窗口高度
           const w = window.innerWidth; // 窗口宽度
           const zoomH = h / targetHeight; // 以窗口高度为基准的变换比
@@ -173,9 +226,6 @@
           let mw2os = targetHeight / 2 - h / 2; // 竖屏时 x轴移动距离
           let transform = '';
           let effectBackgroundTransform = '';
-          const root = document.querySelector('#root'); // 获取根元素
-          const titleEnter = document.querySelector('.html-body__title-enter');
-          const effectBackground = document.querySelector('.html-body__effect-background');
           const elements = [root, titleEnter];
           if (w > h) {
             if (effectBackground) {
@@ -224,13 +274,7 @@
           }
         };
         if (!isIOS) {
-          // 非 IOS
-          // 创建一个新的 meta 标签
-          const metaTag = document.createElement('meta');
-          metaTag.name = 'viewport';
-          metaTag.content = 'width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no';
-          // 将该标签添加到 head 中
-          document.head.appendChild(metaTag);
+          ensureViewportMeta().content = 'width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no';
           resize();
           window.onload = resize;
           window.onresize = resize;
@@ -243,22 +287,33 @@
             }
           };
         } else {
-          // IOS
-          const metaTag = document.createElement('meta');
-          metaTag.name = 'viewport';
-          metaTag.content = 'width=device-width, initial-scale=0.22, minimum-scale=0.01, maximum-scale=1';
-          // 将该标签添加到 head 中
-          document.head.appendChild(metaTag);
           const styleTag = document.createElement('style');
           styleTag.textContent = '* { font-synthesis: none !important; }';
           document.head.appendChild(styleTag);
+          if (isIOSPhone) {
+            html.classList.add('ios-phone-viewport');
+            body.classList.add('ios-phone-viewport');
+            ensureViewportMeta().content = `width=${targetWidth}, height=${targetHeight}, user-scalable=no, viewport-fit=cover`;
+            if (effectBackground) {
+              effectBackground.style.transform = '';
+            }
+            for (const element of [root, titleEnter]) {
+              if (element) {
+                element.style.left = '0';
+                element.style.top = '0';
+                element.style.transform = 'none';
+              }
+            }
+          } else {
+            ensureViewportMeta().content = 'width=device-width, initial-scale=0.22, minimum-scale=0.01, maximum-scale=1';
+          }
         }
       })();
     </script>
     <!-- 注册 Service Worker -->
     <script>
       (() => {
-        const isIOS = !!navigator.userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
+        const isIOS = window.__WEBGAL_DEVICE_INFO__?.isIOS ?? !!navigator.userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
         if ('serviceWorker' in navigator && !isIOS) {
           navigator.serviceWorker
             .register('./webgal-serviceworker.js')
@@ -274,7 +329,7 @@
     <!-- 首屏加载 -->
     <script>
       (() => {
-        const isIOS = !!navigator.userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
+        const isIOS = window.__WEBGAL_DEVICE_INFO__?.isIOS ?? !!navigator.userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
         let enterPromiseResolve;
         const enterPromise = new Promise((res) => {
           enterPromiseResolve = res;
