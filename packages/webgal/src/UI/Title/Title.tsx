@@ -110,7 +110,7 @@ export default function Title() {
             {GUIState.enableAppreciationMode && (
               <div
                 className={`${applyStyle('Title_button', styles.Title_button)} ${
-                  !hasAppreciationItems ? styles.Title_button_disabled : ''
+                  !hasAppreciationItems ? applyStyle('Title_button_disabled', styles.Title_button_disabled) : ''
                 }`}
                 onClick={() => {
                   if (hasAppreciationItems) {
