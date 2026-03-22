@@ -159,22 +159,44 @@
     <div id="html-body__panic-overlay"></div>
     <!-- 应用挂载点 -->
     <div id="root"></div>
+    <script>
+      (() => {
+        const userAgent = navigator.userAgent || '';
+        const platform = navigator.userAgentData?.platform || navigator.platform || '';
+        const maxTouchPoints = navigator.maxTouchPoints || 0;
+        const isIOSPhone = /iPhone|iPod/i.test(userAgent);
+        const isIPad = /iPad/i.test(userAgent) || (/Mac/i.test(platform) && maxTouchPoints > 1);
+
+        window.__WEBGAL_DEVICE_INFO__ = {
+          isIOS: isIOSPhone || isIPad,
+          isIOSPhone,
+          isIPad,
+        };
+      })();
+    </script>
     <!-- 在窗口大小改变时进行强制缩放 -->
     <script>
       (() => {
-        const userAgent = navigator.userAgent;
-        const platform = navigator.platform;
-        const maxTouchPoints = navigator.maxTouchPoints || 0;
-        const isIPhoneLike = /iPhone|iPod/i.test(userAgent);
-        const isIPadLike = /iPad/i.test(userAgent) || (platform === 'MacIntel' && maxTouchPoints > 1);
-        const isIOS = isIPhoneLike || isIPadLike;
-        const isIOSPhone = isIOS && isIPhoneLike;
+        const deviceInfo = window.__WEBGAL_DEVICE_INFO__ ?? { isIOS: false };
+        const isIOS = deviceInfo.isIOS;
+        const layoutConfig = isIOS
+          ? {
+              bottomInset: 15,
+              resizeDelay: 500,
+              viewport:
+                'width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover',
+              hideEffectBackground: true,
+            }
+          : {
+              bottomInset: 0,
+              resizeDelay: 0,
+              viewport: 'width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no',
+              hideEffectBackground: false,
+            };
         const root = document.querySelector('#root');
         const titleEnter = document.querySelector('.html-body__title-enter');
         const effectBackground = document.querySelector('.html-body__effect-background');
         let viewportMeta = document.querySelector('meta[name="viewport"]');
-
-        window.__WEBGAL_DEVICE_INFO__ = { isIOS, isIOSPhone };
 
         const ensureViewportMeta = () => {
           if (!viewportMeta) {
@@ -190,8 +212,7 @@
           const targetWidth = 2560; // 目标宽度
           const h = window.innerHeight; // 窗口高度
           const w = window.innerWidth; // 窗口宽度
-          const iosBottomInset = isIOS ? 15 : 0;
-          const layoutHeight = Math.max(h - iosBottomInset, 1);
+          const layoutHeight = Math.max(h - layoutConfig.bottomInset, 1);
           const zoomH = layoutHeight / targetHeight; // 以窗口高度为基准的变换比
           const zoomW = w / targetWidth; // 以窗口宽度为基准的变换比
           const zoomH2 = w / targetHeight; // 竖屏时以窗口高度为基础的变换比
@@ -256,33 +277,32 @@
         };
         let iosResizeTimer = null;
         const scheduleResize = () => {
-          if (isIOS) {
+          if (layoutConfig.resizeDelay > 0) {
             if (iosResizeTimer) {
               window.clearTimeout(iosResizeTimer);
             }
             iosResizeTimer = window.setTimeout(() => {
               resize();
               iosResizeTimer = null;
-            }, 500);
+            }, layoutConfig.resizeDelay);
             return;
           }
           resize();
         };
         if (isIOS) {
           const styleTag = document.createElement('style');
-          styleTag.textContent = `
-            * { font-synthesis: none !important; }
-            #ebg,
-            #ebgOverlay {
-              display: none !important;
-            }
-          `;
+          styleTag.textContent = `* { font-synthesis: none !important; }`;
+          if (layoutConfig.hideEffectBackground) {
+            styleTag.textContent += `
+              #ebg,
+              #ebgOverlay {
+                display: none !important;
+              }
+            `;
+          }
           document.head.appendChild(styleTag);
-          ensureViewportMeta().content =
-            'width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover';
-        } else {
-          ensureViewportMeta().content = 'width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no';
         }
+        ensureViewportMeta().content = layoutConfig.viewport;
         scheduleResize();
         window.onload = scheduleResize;
         window.onresize = scheduleResize;
@@ -299,7 +319,7 @@
     <!-- 注册 Service Worker -->
     <script>
       (() => {
-        const isIOS = window.__WEBGAL_DEVICE_INFO__?.isIOS ?? !!navigator.userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
+        const isIOS = window.__WEBGAL_DEVICE_INFO__?.isIOS ?? false;
         if ('serviceWorker' in navigator && !isIOS) {
           navigator.serviceWorker
             .register('./webgal-serviceworker.js')
@@ -315,7 +335,10 @@
     <!-- 首屏加载 -->
     <script>
       (() => {
-        const isIOS = window.__WEBGAL_DEVICE_INFO__?.isIOS ?? !!navigator.userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
+        const isIOS = window.__WEBGAL_DEVICE_INFO__?.isIOS ?? false;
+        const enterConfig = isIOS
+          ? { skipAnimation: true, hideDelay: 0 }
+          : { skipAnimation: false, hideDelay: 2000 };
         let enterPromiseResolve;
         const enterPromise = new Promise((res) => {
           enterPromiseResolve = res;
@@ -341,7 +364,7 @@
         /** 点击屏幕，进入引擎主界面 */
         const enter = () => {
           const titleEnter = document.querySelector('.html-body__title-enter');
-          if (isIOS) {
+          if (enterConfig.skipAnimation) {
             if (titleEnter) {
               titleEnter.style.pointerEvents = 'none';
               titleEnter.style.transition = 'none';
@@ -376,7 +399,7 @@
             if (titleEnter) {
               titleEnter.style.display = 'none';
             }
-          }, 2000); // 将落地页设置为不显示
+          }, enterConfig.hideDelay); // 将落地页设置为不显示
           enterPromiseResolve();
         };
         const titleEnter = document.querySelector('.html-body__title-enter');
