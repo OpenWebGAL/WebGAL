@@ -11,13 +11,9 @@
       body {
         margin: 0;
         background: black;
-      }
-
-      html {
-        --ios-safe-area-top: env(safe-area-inset-top, 0px);
-        --ios-safe-area-right: env(safe-area-inset-right, 0px);
-        --ios-safe-area-bottom: env(safe-area-inset-bottom, 0px);
-        --ios-safe-area-left: env(safe-area-inset-left, 0px);
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
       }
 
       .html-body__effect-background {
@@ -139,33 +135,6 @@
         padding: 0 0 0.25em 0;
       }
 
-      html.ios-phone-viewport,
-      html.ios-phone-viewport body {
-        width: 100%;
-        height: 100%;
-        overflow: hidden;
-        overscroll-behavior: none;
-        background: black;
-      }
-
-      html.ios-phone-viewport body {
-        position: fixed;
-        inset: 0;
-      }
-
-      html.ios-phone-viewport #ebg {
-        display: none;
-      }
-
-      html.ios-phone-viewport #root,
-      html.ios-phone-viewport .html-body__title-enter {
-        width: 2560px;
-        height: 1440px;
-        position: absolute;
-        top: 0;
-        left: 0;
-        transform-origin: top left;
-      }
     </style>
   </head>
   <body>
@@ -193,8 +162,6 @@
     <!-- 在窗口大小改变时进行强制缩放 -->
     <script>
       (() => {
-        const targetHeight = 1440;
-        const targetWidth = 2560;
         const userAgent = navigator.userAgent;
         const platform = navigator.platform;
         const maxTouchPoints = navigator.maxTouchPoints || 0;
@@ -202,15 +169,10 @@
         const isIPadLike = /iPad/i.test(userAgent) || (platform === 'MacIntel' && maxTouchPoints > 1);
         const isIOS = isIPhoneLike || isIPadLike;
         const isIOSPhone = isIOS && isIPhoneLike;
-        const html = document.documentElement;
-        const body = document.body;
         const root = document.querySelector('#root');
         const titleEnter = document.querySelector('.html-body__title-enter');
         const effectBackground = document.querySelector('.html-body__effect-background');
         let viewportMeta = document.querySelector('meta[name="viewport"]');
-        let iosPhoneLayoutFrame = 0;
-        let touchStartX = 0;
-        let touchStartY = 0;
 
         window.__WEBGAL_DEVICE_INFO__ = { isIOS, isIOSPhone };
 
@@ -223,163 +185,21 @@
           return viewportMeta;
         };
 
-        const parseInset = (value) => {
-          const parsed = Number.parseFloat(value);
-          return Number.isFinite(parsed) ? parsed : 0;
-        };
-
-        const getSafeAreaInsets = () => {
-          const computedStyle = window.getComputedStyle(html);
-          return {
-            top: parseInset(computedStyle.getPropertyValue('--ios-safe-area-top')),
-            right: parseInset(computedStyle.getPropertyValue('--ios-safe-area-right')),
-            bottom: parseInset(computedStyle.getPropertyValue('--ios-safe-area-bottom')),
-            left: parseInset(computedStyle.getPropertyValue('--ios-safe-area-left')),
-          };
-        };
-
-        const applyIOSPhoneLayout = () => {
-          const safeArea = getSafeAreaInsets();
-          const viewportWidth = window.innerWidth;
-          const viewportHeight = window.innerHeight;
-          const usableWidth = Math.max(viewportWidth - safeArea.left - safeArea.right, 1);
-          const usableHeight = Math.max(viewportHeight - safeArea.top - safeArea.bottom, 1);
-          const scale = Math.max(Math.min(usableWidth / targetWidth, usableHeight / targetHeight), 0.01);
-          const left = safeArea.left + Math.max((usableWidth - targetWidth * scale) / 2, 0);
-          const top = safeArea.top + Math.max((usableHeight - targetHeight * scale) / 2, 0);
-          const transform = `translate(${left}px, ${top}px) scale(${scale})`;
-
-          if (effectBackground) {
-            effectBackground.style.transform = '';
-          }
-          for (const element of [root, titleEnter]) {
-            if (element) {
-              element.style.transform = transform;
-            }
-          }
-        };
-
-        const scheduleIOSPhoneLayout = () => {
-          if (iosPhoneLayoutFrame) {
-            window.cancelAnimationFrame(iosPhoneLayoutFrame);
-          }
-          iosPhoneLayoutFrame = window.requestAnimationFrame(() => {
-            iosPhoneLayoutFrame = 0;
-            applyIOSPhoneLayout();
-          });
-        };
-
-        const canScrollInDirection = (element, deltaX, deltaY) => {
-          const style = window.getComputedStyle(element);
-          const overflowY = style.overflowY;
-          const overflowX = style.overflowX;
-          const canScrollY = /(auto|scroll|overlay)/.test(overflowY) && element.scrollHeight > element.clientHeight + 1;
-          const canScrollX = /(auto|scroll|overlay)/.test(overflowX) && element.scrollWidth > element.clientWidth + 1;
-
-          if (Math.abs(deltaY) >= Math.abs(deltaX) && canScrollY) {
-            const maxScrollTop = element.scrollHeight - element.clientHeight;
-            if (deltaY > 0 && element.scrollTop > 0) return true;
-            if (deltaY < 0 && element.scrollTop < maxScrollTop) return true;
-          }
-
-          if (Math.abs(deltaX) > Math.abs(deltaY) && canScrollX) {
-            const maxScrollLeft = element.scrollWidth - element.clientWidth;
-            if (deltaX > 0 && element.scrollLeft > 0) return true;
-            if (deltaX < 0 && element.scrollLeft < maxScrollLeft) return true;
-          }
-
-          return false;
-        };
-
-        const findScrollableAncestor = (startElement, deltaX, deltaY) => {
-          let current = startElement;
-          while (current && current !== body) {
-            if (current instanceof HTMLElement && canScrollInDirection(current, deltaX, deltaY)) {
-              return current;
-            }
-            current = current.parentElement;
-          }
-          return null;
-        };
-
-        const installIOSPhoneGestureGuards = () => {
-          const blockEvent = (event) => {
-            event.preventDefault();
-          };
-
-          document.addEventListener(
-            'gesturestart',
-            (event) => {
-              blockEvent(event);
-            },
-            { passive: false },
-          );
-          document.addEventListener(
-            'gesturechange',
-            (event) => {
-              blockEvent(event);
-            },
-            { passive: false },
-          );
-          document.addEventListener(
-            'gestureend',
-            (event) => {
-              blockEvent(event);
-            },
-            { passive: false },
-          );
-
-          document.addEventListener(
-            'touchstart',
-            (event) => {
-              if (event.touches.length > 1) {
-                blockEvent(event);
-                return;
-              }
-              const touch = event.touches[0];
-              if (touch) {
-                touchStartX = touch.clientX;
-                touchStartY = touch.clientY;
-              }
-            },
-            { passive: false },
-          );
-
-          document.addEventListener(
-            'touchmove',
-            (event) => {
-              if (event.touches.length > 1) {
-                blockEvent(event);
-                return;
-              }
-              const touch = event.touches[0];
-              if (!touch) {
-                return;
-              }
-              const deltaX = touch.clientX - touchStartX;
-              const deltaY = touch.clientY - touchStartY;
-              const target = event.target instanceof Element ? event.target : null;
-              const scrollableAncestor = target ? findScrollableAncestor(target, deltaX, deltaY) : null;
-
-              if (!scrollableAncestor) {
-                blockEvent(event);
-              }
-            },
-            { passive: false },
-          );
-        };
-
         const resize = () => {
+          const targetHeight = 1440; // 目标高度
+          const targetWidth = 2560; // 目标宽度
           const h = window.innerHeight; // 窗口高度
           const w = window.innerWidth; // 窗口宽度
-          const zoomH = h / targetHeight; // 以窗口高度为基准的变换比
+          const iosBottomInset = isIOS ? 15 : 0;
+          const layoutHeight = Math.max(h - iosBottomInset, 1);
+          const zoomH = layoutHeight / targetHeight; // 以窗口高度为基准的变换比
           const zoomW = w / targetWidth; // 以窗口宽度为基准的变换比
           const zoomH2 = w / targetHeight; // 竖屏时以窗口高度为基础的变换比
-          const zoomW2 = h / targetWidth; // 竖屏时以窗口宽度为基础的变换比
-          let mh = (targetHeight - h) / 2; // y轴移动距离
+          const zoomW2 = layoutHeight / targetWidth; // 竖屏时以窗口宽度为基础的变换比
+          let mh = (targetHeight - layoutHeight) / 2; // y轴移动距离
           let mw = (targetWidth - w) / 2; // x轴移动距离
           let mh2os = targetWidth / 2 - w / 2; // 竖屏时 y轴移动距离
-          let mw2os = targetHeight / 2 - h / 2; // 竖屏时 x轴移动距离
+          let mw2os = targetHeight / 2 - layoutHeight / 2; // 竖屏时 x轴移动距离
           let transform = '';
           let effectBackgroundTransform = '';
           const elements = [root, titleEnter];
@@ -417,6 +237,11 @@
             // iOS 不强制旋转
             if (isIOS) {
               const zoomWi = w / targetWidth;
+              if (effectBackground) {
+                effectBackground.style.height = `100vh`;
+                effectBackground.style.width = `100vw`;
+                effectBackgroundTransform = '';
+              }
               transform = `translate(${-mw}px, ${-mh}px) ` + `scale(${zoomWi},${zoomWi}) `;
             }
           }
@@ -429,39 +254,46 @@
             }
           }
         };
-        if (!isIOS) {
-          ensureViewportMeta().content = 'width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no';
-          resize();
-          window.onload = resize;
-          window.onresize = resize;
-          // 监听键盘 F11 键按下事件，全屏时触发页面调整
-          document.onkeydown = (e) => {
-            if (e && e.key === 'F11') {
-              setTimeout(() => {
-                resize();
-              }, 100);
+        let iosResizeTimer = null;
+        const scheduleResize = () => {
+          if (isIOS) {
+            if (iosResizeTimer) {
+              window.clearTimeout(iosResizeTimer);
             }
-          };
-        } else {
-          const styleTag = document.createElement('style');
-          styleTag.textContent = '* { font-synthesis: none !important; }';
-          document.head.appendChild(styleTag);
-          if (isIOSPhone) {
-            html.classList.add('ios-phone-viewport');
-            body.classList.add('ios-phone-viewport');
-            ensureViewportMeta().content = 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover';
-            installIOSPhoneGestureGuards();
-            scheduleIOSPhoneLayout();
-            window.addEventListener('load', scheduleIOSPhoneLayout);
-            window.addEventListener('resize', scheduleIOSPhoneLayout);
-            window.addEventListener('orientationchange', () => {
-              scheduleIOSPhoneLayout();
-              setTimeout(scheduleIOSPhoneLayout, 300);
-            });
-          } else {
-            ensureViewportMeta().content = 'width=device-width, initial-scale=0.22, minimum-scale=0.01, maximum-scale=1';
+            iosResizeTimer = window.setTimeout(() => {
+              resize();
+              iosResizeTimer = null;
+            }, 500);
+            return;
           }
+          resize();
+        };
+        if (isIOS) {
+          const styleTag = document.createElement('style');
+          styleTag.textContent = `
+            * { font-synthesis: none !important; }
+            #ebg,
+            #ebgOverlay {
+              display: none !important;
+            }
+          `;
+          document.head.appendChild(styleTag);
+          ensureViewportMeta().content =
+            'width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover';
+        } else {
+          ensureViewportMeta().content = 'width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no';
         }
+        scheduleResize();
+        window.onload = scheduleResize;
+        window.onresize = scheduleResize;
+        // 监听键盘 F11 键按下事件，全屏时触发页面调整
+        document.onkeydown = (e) => {
+          if (e && e.key === 'F11') {
+            setTimeout(() => {
+              scheduleResize();
+            }, 100);
+          }
+        };
       })();
     </script>
     <!-- 注册 Service Worker -->
@@ -508,6 +340,17 @@
         });
         /** 点击屏幕，进入引擎主界面 */
         const enter = () => {
+          const titleEnter = document.querySelector('.html-body__title-enter');
+          if (isIOS) {
+            if (titleEnter) {
+              titleEnter.style.pointerEvents = 'none';
+              titleEnter.style.transition = 'none';
+              titleEnter.style.opacity = '0';
+              titleEnter.style.display = 'none';
+            }
+            enterPromiseResolve();
+            return;
+          }
           const initialBackground = document.querySelector('.title-enter__initial-background');
           if (initialBackground) {
             initialBackground.style.opacity = '0';
@@ -522,7 +365,6 @@
               whiteBackground.style.opacity = '1';
             }
           }, 50); // 在50ms后开始显示白色渐变
-          const titleEnter = document.querySelector('.html-body__title-enter');
           setTimeout(() => {
             if (titleEnter) titleEnter.style.opacity = '0';
           }, 500); // 500ms后开始降低落地页透明度

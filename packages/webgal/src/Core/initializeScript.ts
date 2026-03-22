@@ -30,14 +30,14 @@ export const initializeScript = (): void => {
   loadTemplate();
   // 激活强制缩放
   // 在调整窗口大小时重新计算宽高，设计稿按照 1600*900。
-  if (isIOS) {
+  if (isIOS && window.innerWidth <= window.innerHeight) {
     /**
      * iOS
      */
     alert(
-      `iOS 用户请横屏使用以获得最佳体验
-| Please use landscape mode on iOS for the best experience
-| iOS ユーザーは横画面での使用をお勧めします`,
+      `iOS 用户请横屏后刷新页面，以获得最佳体验
+| Please rotate to landscape and refresh the page on iOS for the best experience
+| iOS ユーザーは横画面にしてからページを再読み込みしてください`,
     );
   }
 
