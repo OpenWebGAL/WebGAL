@@ -52,6 +52,7 @@ export function changeFigure(sentence: ISentence): IPerform {
 
   // live2d 或 spine 相关
   let motion = getStringArgByKey(sentence, 'motion') ?? '';
+  const skin = getStringArgByKey(sentence, 'skin') ?? '';
   let expression = getStringArgByKey(sentence, 'expression') ?? '';
   const boundsFromArgs = getStringArgByKey(sentence, 'bounds') ?? '';
   let bounds = getOverrideBoundsArr(boundsFromArgs);
@@ -234,7 +235,7 @@ export function changeFigure(sentence: ISentence): IPerform {
       focus = focus ?? cloneDeep(baseFocusParam);
       zIndex = Math.max(zIndex, 0);
       blendMode = blendMode ?? 'normal';
-      dispatch(stageActions.setLive2dMotion({ target: key, motion, overrideBounds: bounds }));
+      dispatch(stageActions.setLive2dMotion({ target: key, motion, skin, overrideBounds: bounds }));
       dispatch(stageActions.setLive2dExpression({ target: key, expression }));
       dispatch(stageActions.setLive2dBlink({ target: key, blink }));
       dispatch(stageActions.setLive2dFocus({ target: key, focus }));
@@ -243,8 +244,8 @@ export function changeFigure(sentence: ISentence): IPerform {
     } else {
       // 当 url 没有发生变化时，即没有新立绘替换
       // 应当保留旧立绘的状态，仅在需要时更新
-      if (motion || bounds) {
-        dispatch(stageActions.setLive2dMotion({ target: key, motion, overrideBounds: bounds }));
+      if (motion || skin || bounds) {
+        dispatch(stageActions.setLive2dMotion({ target: key, motion, skin, overrideBounds: bounds }));
       }
       if (expression) {
         dispatch(stageActions.setLive2dExpression({ target: key, expression }));

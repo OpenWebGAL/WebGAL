@@ -177,6 +177,7 @@ export interface IRunPerform {
 export interface ILive2DMotion {
   target: string;
   motion: string;
+  skin?: string;
   overrideBounds?: [number, number, number, number];
 }
 
