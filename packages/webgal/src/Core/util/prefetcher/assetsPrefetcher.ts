@@ -89,14 +89,30 @@ const runAssetsPrefetchQueue = () => {
   isAssetPrefetchQueueRunning = true;
   const nextAsset = assetPrefetchQueue.shift() as IAsset;
   setTimeout(() => {
-    const useServiceWorker = prefetchByServiceWorkerMessage(nextAsset.url);
-    if (!useServiceWorker) {
-      prefetchByLinkElement(nextAsset);
+    try {
+      const useServiceWorker = prefetchByServiceWorkerMessage(nextAsset.url);
+      if (!useServiceWorker) {
+        prefetchByLinkElement(nextAsset);
+      }
+    } catch (e) {
+      logger.warn(`预加载资源失败，将允许重试：${nextAsset.url}`, e);
+      WebGAL.sceneManager.settledAssets.delete(nextAsset.url);
+    } finally {
+      queuedAssetUrlSet.delete(nextAsset.url);
+      isAssetPrefetchQueueRunning = false;
+      runAssetsPrefetchQueue();
     }
-    queuedAssetUrlSet.delete(nextAsset.url);
-    isAssetPrefetchQueueRunning = false;
-    runAssetsPrefetchQueue();
   }, ASSET_PREFETCH_INTERVAL_MS);
+};
+
+/**
+ * 清理 <head> 中的 prefetch link 元素，在切换场景时调用以避免累积。
+ */
+export const clearPrefetchLinks = () => {
+  const head = document.getElementsByTagName('head')[0];
+  if (!head) return;
+  const links = head.querySelectorAll('link[rel="prefetch"]');
+  links.forEach((link) => link.remove());
 };
 
 /**
@@ -117,12 +133,12 @@ export const assetsPrefetcher = (assetList: Array<IAsset>, options: IAssetsPrefe
   });
   for (const asset of filteredAssetList) {
     // 判断是否已经存在
-    const hasPrefetch = WebGAL.sceneManager.settledAssets.includes(asset.url) || queuedAssetUrlSet.has(asset.url);
+    const hasPrefetch = WebGAL.sceneManager.settledAssets.has(asset.url) || queuedAssetUrlSet.has(asset.url);
     if (hasPrefetch) {
       logger.debug(`该资源${asset.url}已在预加载列表中，无需重复加载`);
     } else {
       logger.info(`现在预加载资源${asset.url}，触发行号：${asset.lineNumber}`);
-      WebGAL.sceneManager.settledAssets.push(asset.url);
+      WebGAL.sceneManager.settledAssets.add(asset.url);
       queuedAssetUrlSet.add(asset.url);
       assetPrefetchQueue.push(asset);
       runAssetsPrefetchQueue();

@@ -22,13 +22,14 @@ const runScenePrefetchQueue = () => {
   isScenePrefetchQueueRunning = true;
   const sceneUrl = scenePrefetchQueue.shift() as string;
   setTimeout(async () => {
-    queuedSceneUrlSet.delete(sceneUrl);
-    if (WebGAL.sceneManager.settledScenes.includes(sceneUrl)) {
+    if (WebGAL.sceneManager.settledScenes.has(sceneUrl)) {
+      queuedSceneUrlSet.delete(sceneUrl);
       isScenePrefetchQueueRunning = false;
       runScenePrefetchQueue();
       return;
     }
-    WebGAL.sceneManager.settledScenes.push(sceneUrl);
+    WebGAL.sceneManager.settledScenes.add(sceneUrl);
+    queuedSceneUrlSet.delete(sceneUrl);
     try {
       logger.info(`现在预加载场景${sceneUrl}`);
       const rawScene = await sceneFetcher(sceneUrl);
@@ -37,10 +38,7 @@ const runScenePrefetchQueue = () => {
       sceneParser(rawScene, sceneUrl, sceneUrl);
     } catch (e) {
       logger.error(`场景预加载失败：${sceneUrl}`, e);
-      const settledIndex = WebGAL.sceneManager.settledScenes.indexOf(sceneUrl);
-      if (settledIndex !== -1) {
-        WebGAL.sceneManager.settledScenes.splice(settledIndex, 1);
-      }
+      WebGAL.sceneManager.settledScenes.delete(sceneUrl);
     } finally {
       isScenePrefetchQueueRunning = false;
       runScenePrefetchQueue();
@@ -50,7 +48,7 @@ const runScenePrefetchQueue = () => {
 
 export const scenePrefetcher = (sceneList: Array<string>): void => {
   for (const sceneUrl of uniqueSceneUrls(sceneList)) {
-    if (WebGAL.sceneManager.settledScenes.includes(sceneUrl) || queuedSceneUrlSet.has(sceneUrl)) {
+    if (WebGAL.sceneManager.settledScenes.has(sceneUrl) || queuedSceneUrlSet.has(sceneUrl)) {
       continue;
     }
     queuedSceneUrlSet.add(sceneUrl);

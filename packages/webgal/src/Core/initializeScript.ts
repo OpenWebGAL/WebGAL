@@ -49,7 +49,7 @@ export const initializeScript = (): void => {
   // 场景写入到运行时
   sceneFetcher(sceneUrl).then((rawScene) => {
     WebGAL.sceneManager.sceneData.currentScene = sceneParser(rawScene, 'start.txt', sceneUrl);
-    WebGAL.sceneManager.settledScenes.push(sceneUrl); // 放入已加载场景列表，避免递归加载相同场景
+    WebGAL.sceneManager.settledScenes.add(sceneUrl); // 放入已加载场景列表，避免递归加载相同场景
   });
   /**
    * 启动Pixi
