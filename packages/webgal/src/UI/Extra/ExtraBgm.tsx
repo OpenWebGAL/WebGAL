@@ -13,10 +13,12 @@ export function ExtraBgm() {
   const { playSeClick, playSeEnter } = useSoundEffect();
   // 检查当前正在播放的bgm是否在bgm列表内
   const currentBgmSrc = useSelector((state: RootState) => state.GUI.titleBgm);
+  const stageStore = useSelector((webgalStore: RootState) => webgalStore.stage);
   const extraState = useSelector((state: RootState) => state.userData.appreciationData);
   const userDataState = useSelector((state: RootState) => state.userData);
   const mainVol = userDataState.optionData.volumeMain;
   const bgmVol = mainVol * 0.01 * userDataState.optionData.bgmVolume * 0.01;
+  const bgmEnter = stageStore.bgm.enter;
   const initName = 'Title_BGM';
   // 是否展示 bgm 列表
   const isShowBgmList = useValue(false);
@@ -92,7 +94,7 @@ export function ExtraBgm() {
         <div
           onClick={() => {
             playSeClick();
-            bgmManager.play(currentBgmSrc, { volume: bgmVol, fade: 1000 });
+            bgmManager.play({ src: currentBgmSrc, volume: bgmVol, fade: bgmEnter });
           }}
           onMouseEnter={playSeEnter}
           className={styles.bgmControlButton}
@@ -116,7 +118,7 @@ export function ExtraBgm() {
         <div
           onClick={() => {
             playSeClick();
-            bgmManager.stop({ fade: 1000 });
+            bgmManager.stop({ fade: bgmEnter });
           }}
           onMouseEnter={playSeEnter}
           className={styles.bgmControlButton}

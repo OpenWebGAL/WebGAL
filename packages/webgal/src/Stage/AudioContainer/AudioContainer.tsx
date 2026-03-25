@@ -24,9 +24,9 @@ export const AudioContainer = () => {
     if (!isEnterGame) return;
 
     if (isShowTitle) {
-      bgmManager.play(titleBgm, { volume: bgmVol, fade: bgmEnter });
+      bgmManager.play({ src: titleBgm, volume: bgmVol, fade: bgmEnter });
     } else {
-      bgmManager.play(stageStore.bgm.src, { volume: bgmVol, fade: bgmEnter });
+      bgmManager.play({ src: stageStore.bgm.src, volume: bgmVol, fade: bgmEnter });
     }
   }, [isEnterGame, isShowTitle, titleBgm, stageStore.bgm.src]);
 

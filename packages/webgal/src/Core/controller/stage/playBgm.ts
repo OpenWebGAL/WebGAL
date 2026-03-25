@@ -18,5 +18,5 @@ export function playBgm(url: string, enter = 0, volume = 100): void {
   } else {
     webgalStore.dispatch(setStage({ key: 'bgm', value: { src: url, enter: enter, volume: volume } }));
   }
-  bgmManager.play(url, { volume: volume / 100, fade: enter });
+  bgmManager.play({ src: url, volume: volume / 100, fade: enter });
 }
