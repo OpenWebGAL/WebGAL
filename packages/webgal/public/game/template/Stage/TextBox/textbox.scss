@@ -1,0 +1,172 @@
+.TextBox_main {
+  z-index: 3;
+  position: absolute;
+  min-height: 430px;
+  max-height: 430px;
+  background-blend-mode: darken;
+  border-radius: 0;
+  bottom: -2px;
+  right: -2px;
+  left: 0;
+  font-weight: bold;
+  color: white;
+  padding: calc(1em + 100px) 50px 70px 490px;
+  box-sizing: border-box;
+  display: flex;
+  flex-flow: column;
+  align-items: flex-start;
+  letter-spacing: 0.2em;
+  transition: left 0.33s;
+}
+
+.TextBox_main_miniavatarOff {
+  left: 0;
+}
+
+.TextBox_Background {
+  z-index: 2;
+  background-color: rgba(167, 186, 214, 0.28);
+  background-image:
+    linear-gradient(118deg, rgba(147, 165, 207, 0.9) 0%, rgba(182, 198, 222, 0.82) 48%, rgba(228, 239, 233, 0.82) 100%);
+  mask-image:
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.04) 0, rgba(0, 0, 0, 0.28) 10%, #000 75%),
+    linear-gradient(to right, rgba(0, 0, 0, 0.08) 0, rgba(0, 0, 0, 0.28) 10%, #000 42%);
+  mask-composite: intersect;
+}
+
+@keyframes showSoftly {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+.TextBox_textElement_start {
+  position: relative;
+  animation: TextDelayShow 1000ms ease-out forwards;
+  opacity: 0;
+}
+
+.outer {
+  position: absolute;
+  white-space: nowrap;
+  left: 0;
+  top: 0;
+  background-image: linear-gradient(#0B346E 0%, #141423 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  z-index: 2;
+}
+
+.inner {
+  white-space: nowrap;
+  position: absolute;
+  left: 0;
+  top: 0;
+  -webkit-text-stroke: 0.1em rgba(255, 255, 255, 1);
+  z-index: 1;
+}
+
+.zhanwei {
+  color: transparent;
+  white-space: nowrap;
+}
+
+
+.TextBox_textElement_Settled {
+  position: relative;
+  opacity: 1;
+}
+
+
+.TextBox_showName {
+  font-size: 85%;
+  padding: 0 1em 10px 0;
+  min-width: 50%;
+  position: absolute;
+  left: 490px;
+  top: 26px;
+  height: 90px;
+  line-height: 68px;
+  border-radius: 0;
+  z-index: 3;
+  border: 4px solid rgba(255, 255, 255, 0);
+}
+
+.TextBox_ShowName_Background {
+  z-index: 2;
+  background: transparent;
+  border: 0;
+  border-bottom: 3px solid transparent;
+  border-image: linear-gradient(
+      to right,
+      rgba(255, 255, 255, 0.2) 0%,
+      rgba(255, 255, 255, 0.5) 5%,
+      rgba(255, 255, 255, 0) 100%
+    )
+    1;
+  box-shadow: none;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  -webkit-mask-image: none;
+  mask-image: none;
+}
+
+@keyframes TextDelayShow {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+.miniAvatarContainer {
+  position: absolute;
+  height: 450px;
+  width: 450px;
+  bottom: 0;
+  left: 0;
+  overflow: visible;
+}
+
+.miniAvatarImg {
+  max-height: 100%;
+  max-width: 100%;
+  position: absolute;
+  bottom: 0;
+  filter: drop-shadow(15px 0 3px rgba(0, 0, 0, 0.5));
+}
+
+.nameContainer {
+  position: absolute;
+  left: 2em;
+  top: -3.5em;
+}
+
+.outerName {
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: #0b346e;
+  z-index: 2;
+  text-shadow: 0 2px 8px rgba(255, 255, 255, 0.35), 0 2px 6px rgba(0, 0, 0, 0.18);
+}
+
+.innerName {
+  position: absolute;
+  left: 0;
+  top: 0;
+  -webkit-text-stroke: 0.08em rgba(255, 255, 255, 0.98);
+  z-index: 1;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.18);
+}
+
+.text {
+  overflow: hidden;
+}
