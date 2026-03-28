@@ -32,11 +32,9 @@ export default function Title() {
   const hasAppreciationItems = appreciationItems.bgm.length > 0 || appreciationItems.cg.length > 0;
   const renderButtonText = (text: string) => (
     <div className={applyStyle('Title_button_text', styles.Title_button_text)}>
-      <span className={applyStyle('Title_button_text_placeholder', styles.Title_button_text_placeholder)}>
-        {text}
-        <span className={applyStyle('Title_button_text_outer', styles.Title_button_text_outer)}>{text}</span>
-        <span className={applyStyle('Title_button_text_inner', styles.Title_button_text_inner)}>{text}</span>
-      </span>
+      {text}
+      <span className={applyStyle('Title_button_text_outer', styles.Title_button_text_outer)}>{text}</span>
+      <span className={applyStyle('Title_button_text_inner', styles.Title_button_text_inner)}>{text}</span>
     </div>
   );
 
