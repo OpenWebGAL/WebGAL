@@ -31,6 +31,13 @@ export default function Title() {
 
   const appreciationItems = useSelector((state: RootState) => state.userData.appreciationData);
   const hasAppreciationItems = appreciationItems.bgm.length > 0 || appreciationItems.cg.length > 0;
+  const renderButtonText = (text: string) => (
+    <div className={applyStyle('Title_button_text', styles.Title_button_text)}>
+      {text}
+      <span className={applyStyle('Title_button_text_outer', styles.Title_button_text_outer)}>{text}</span>
+      <span className={applyStyle('Title_button_text_inner', styles.Title_button_text_inner)}>{text}</span>
+    </div>
+  );
 
   return (
     <>
@@ -64,7 +71,7 @@ export default function Title() {
               }}
               onMouseEnter={playSeEnter}
             >
-              <div className={applyStyle('Title_button_text', styles.Title_button_text)}>{t('start.title')}</div>
+              {renderButtonText(t('start.title'))}
             </div>
             <div
               className={applyStyle('Title_button', styles.Title_button)}
@@ -75,7 +82,7 @@ export default function Title() {
               }}
               onMouseEnter={playSeEnter}
             >
-              <div className={applyStyle('Title_button_text', styles.Title_button_text)}>{t('continue.title')}</div>
+              {renderButtonText(t('continue.title'))}
             </div>
             <div
               className={applyStyle('Title_button', styles.Title_button)}
@@ -86,7 +93,7 @@ export default function Title() {
               }}
               onMouseEnter={playSeEnter}
             >
-              <div className={applyStyle('Title_button_text', styles.Title_button_text)}>{t('options.title')}</div>
+              {renderButtonText(t('options.title'))}
             </div>
             <div
               className={applyStyle('Title_button', styles.Title_button)}
@@ -97,12 +104,13 @@ export default function Title() {
               }}
               onMouseEnter={playSeEnter}
             >
-              <div className={applyStyle('Title_button_text', styles.Title_button_text)}>{t('load.title')}</div>
+              {renderButtonText(t('load.title'))}
             </div>
             {GUIState.enableAppreciationMode && (
               <div
-                className={`${applyStyle('Title_button', styles.Title_button)} ${!hasAppreciationItems ? styles.Title_button_disabled : ''
-                  }`}
+                className={`${applyStyle('Title_button', styles.Title_button)} ${
+                  !hasAppreciationItems ? applyStyle('Title_button_disabled', styles.Title_button_disabled) : ''
+                }`}
                 onClick={() => {
                   if (hasAppreciationItems) {
                     playSeClick();
@@ -111,7 +119,7 @@ export default function Title() {
                 }}
                 onMouseEnter={playSeEnter}
               >
-                <div className={applyStyle('Title_button_text', styles.Title_button_text)}>{t('extra.title')}</div>
+                {renderButtonText(t('extra.title'))}
               </div>
             )}
             <div
@@ -130,7 +138,7 @@ export default function Title() {
               }}
               onMouseEnter={playSeEnter}
             >
-              <div className={applyStyle('Title_button_text', styles.Title_button_text)}>{t('exit.title')}</div>
+              {renderButtonText(t('exit.title'))}
             </div>
           </div>
         </div>

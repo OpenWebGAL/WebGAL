@@ -21,32 +21,70 @@
 
 .Title_button {
   font-weight: bold;
-  text-align: center;
+  text-align: left;
   flex: 0 1 auto;
   cursor: pointer;
-  padding: 1em 2em 1em 2em;
-  margin: 20px 0;
-  transition: all 0.33s;
-  background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(5px);
-  border-radius: 4px;
-  transform: skewX(-10deg);
-  background: linear-gradient(to right, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.1));
+  padding: 0.7em 0;
+  margin: 18px 0;
+  transition: transform 0.22s ease, opacity 0.22s ease;
+  background: transparent;
+  backdrop-filter: none;
+  border: 0;
+  border-radius: 0;
+  transform: none;
+  overflow: visible;
+  text-shadow: none;
 
   &:hover {
-    text-shadow: 0 0 10px rgba(255, 255, 255, 1);
-    padding: 1em 6em 1em 3em;
+    transform: translate3d(0, -3px, 0) scale(1.02);
+    padding: 0.7em 0;
+    filter: drop-shadow(0 10px 16px rgba(6, 10, 18, 0.12))
+      drop-shadow(0 5px 8px rgba(6, 10, 18, 0.07))
+      drop-shadow(1px 1px 0 rgba(6, 10, 18, 0.05));
   }
 }
 
 .Title_button_text {
-  color: transparent;
-  background: linear-gradient(135deg, #fdfbfb 0%, #dcddde 100%);
-  -webkit-background-clip: text;
-  padding: 0 0.5em 0 0.5em;
+  position: relative;
+  z-index: 1;
+  display: inline-block;
+  padding: 0.08em 0.55em 0.12em 0.35em;
   font-size: 200%;
   font-family: WebgalUI, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
-  letter-spacing: 0.15em;
+  letter-spacing: 0.16em;
+  line-height: 1.2;
+  transform-origin: left center;
+  transition: transform 0.22s ease;
+  color: transparent;
+  white-space: nowrap;
+}
+
+.Title_button_text_outer {
+  display: block;
+  position: absolute;
+  left: 0;
+  top: 0;
+  white-space: nowrap;
+  background-image: none;
+  background-clip: border-box;
+  -webkit-background-clip: border-box;
+  color: #ffffff;
+  -webkit-text-fill-color: #ffffff;
+  z-index: 2;
+  text-shadow:
+    0 3px 10px rgba(7, 12, 20, 0.22),
+    0 1px 3px rgba(7, 12, 20, 0.16);
+}
+
+.Title_button_text_inner {
+  display: block;
+  white-space: nowrap;
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: inherit;
+  -webkit-text-stroke: 0.09em rgba(12, 20, 32, 0.7);
+  z-index: 1;
 }
 
 .Title_backup_background {
@@ -55,4 +93,9 @@
   position: absolute;
   z-index: 13;
   background: linear-gradient(135deg, #fdfbfb 0%, #dcddde 100%);
+}
+
+.Title_button_disabled {
+  cursor: not-allowed !important;
+  opacity: 0.45;
 }
