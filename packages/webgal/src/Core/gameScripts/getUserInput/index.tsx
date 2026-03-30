@@ -15,6 +15,7 @@ import { setStageVar } from '@/store/stageReducer';
 import { getCurrentFontFamily } from '@/hooks/useFontFamily';
 import { logger } from '@/Core/util/logger';
 import { tryToRegex } from '@/Core/util/global';
+import { showGlogalDialog } from '@/UI/GlobalDialog/GlobalDialog';
 
 /**
  * 显示选择枝
@@ -47,7 +48,11 @@ export const getUserInput = (sentence: ISentence): IPerform => {
             if (rule) {
               const reg = tryToRegex(rule, ruleFlag);
               if (reg && !reg.test(userInput.value)) {
-                if (ruleText) alert(ruleText.replaceAll(/\$0/g, userInput.value));
+                if (ruleText)
+                  showGlogalDialog({
+                    title: ruleText.replaceAll(/\$0/g, userInput.value),
+                    leftText: 'OK',
+                  });
                 return;
               }
               if (!reg) {
