@@ -6,7 +6,7 @@ import { sceneParser } from '@/Core/parser/sceneParser';
 import { resetStage } from '@/Core/controller/stage/resetStage';
 import { webgalStore } from '@/store/store';
 import { setVisibility } from '@/store/GUIReducer';
-import { playBgm } from '@/Core/controller/stage/playBgm';
+import bgmManager from '@/Core/Modules/audio/bgmManager';
 import { WebGAL } from '@/Core/WebGAL';
 import { dumpToStorageFast } from '@/Core/controller/storage/storageController';
 import { saveActions } from '@/store/savesReducer';
@@ -31,12 +31,12 @@ export const end = (sentence: ISentence): IPerform => {
     WebGAL.sceneManager.sceneData.currentScene = sceneParser(rawScene, 'start.txt', sceneUrl);
   });
   dispatch(setVisibility({ component: 'showTitle', visibility: true }));
-  playBgm(webgalStore.getState().GUI.titleBgm);
+  bgmManager.play({ src: webgalStore.getState().GUI.titleBgm, volume: 100, enter: 2000 });
   return {
     performName: 'none',
     duration: 0,
     isHoldOn: false,
-    stopFunction: () => {},
+    stopFunction: () => { },
     blockingNext: () => false,
     blockingAuto: () => true,
     stopTimeout: undefined, // 暂时不用，后面会交给自动清除

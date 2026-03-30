@@ -7,18 +7,13 @@ import { setStage } from '@/store/stageReducer';
 import { GoEnd, GoStart, MusicList, PlayOne, SquareSmall } from '@icon-park/react';
 import useSoundEffect from '@/hooks/useSoundEffect';
 import { setGuiAsset } from '@/store/GUIReducer';
-import { bgmManager } from '@/Core/Modules/audio/bgmManager';
+import bgmManager from '@/Core/Modules/audio/bgmManager';
 
 export function ExtraBgm() {
   const { playSeClick, playSeEnter } = useSoundEffect();
   // 检查当前正在播放的bgm是否在bgm列表内
   const currentBgmSrc = useSelector((state: RootState) => state.GUI.titleBgm);
-  const stageStore = useSelector((webgalStore: RootState) => webgalStore.stage);
   const extraState = useSelector((state: RootState) => state.userData.appreciationData);
-  const userDataState = useSelector((state: RootState) => state.userData);
-  const mainVol = userDataState.optionData.volumeMain;
-  const bgmVol = mainVol * 0.01 * userDataState.optionData.bgmVolume * 0.01;
-  const bgmEnter = stageStore.bgm.enter;
   const initName = 'Title_BGM';
   // 是否展示 bgm 列表
   const isShowBgmList = useValue(false);
@@ -94,7 +89,7 @@ export function ExtraBgm() {
         <div
           onClick={() => {
             playSeClick();
-            bgmManager.play({ src: currentBgmSrc, volume: bgmVol, fade: bgmEnter });
+            bgmManager.play({ src: currentBgmSrc, volume: 100, enter: 500, exit: 500 });
           }}
           onMouseEnter={playSeEnter}
           className={styles.bgmControlButton}
@@ -118,7 +113,7 @@ export function ExtraBgm() {
         <div
           onClick={() => {
             playSeClick();
-            bgmManager.stop({ fade: bgmEnter });
+            bgmManager.stop(500);
           }}
           onMouseEnter={playSeEnter}
           className={styles.bgmControlButton}

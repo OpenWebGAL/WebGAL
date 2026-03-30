@@ -1,3 +1,5 @@
+import { setStage } from '@/store/stageReducer';
+import { webgalStore } from '@/store/store';
 import gsap from 'gsap';
 
 class BgmManager {
@@ -10,218 +12,258 @@ class BgmManager {
     return BgmManager.instance;
   }
 
-  private _audios: [HTMLAudioElement, HTMLAudioElement];
-  private _currentIndex = 0;
-  private _targetVolume = 1;
-  private _loop = true;
-  private _muted = false;
-  private _progressListeners: Set<(p: { currentTime: number; duration: number }) => void> = new Set();
+  private audios: [HTMLAudioElement, HTMLAudioElement];
+  private currentIndex = 0;
+  private src = '';
+  private targetVolume = 100;
+  private progressListeners: Set<(p: { currentTime: number; duration: number }) => void> = new Set();
 
   private constructor() {
-    this._audios = [new Audio(), new Audio()];
-    this._audios.forEach((audio) => {
-      audio.loop = this._loop;
+    this.audios = [new Audio(), new Audio()];
+    this.audios.forEach((audio) => {
+      audio.loop = true;
       audio.preload = 'auto';
       audio.crossOrigin = 'anonymous';
-      audio.addEventListener('timeupdate', this._onTimeUpdate);
+      audio.addEventListener('timeupdate', this.onTimeUpdate);
     });
   }
 
-  public async play(options: { src?: string; loop?: boolean; volume?: number; fade?: number } = {}): Promise<void> {
-    const fade = options.fade ?? 0;
-    if (options.volume !== undefined) this._targetVolume = options.volume;
-    if (options.loop !== undefined) this.loop = options.loop;
+  /**
+   * 播放bgm
+   * @param options.src bgm路径
+   * @param options.volume 背景音乐 音量调整（0 - 100）
+   * @param options.enter 淡入时间（单位毫秒）
+   * @param options.exit 淡出时间（单位毫秒）
+   * @param options.loop 是否循环播放
+   */
+  public async play(
+    options: { src?: string; volume?: number; enter?: number; exit?: number; loop?: boolean } = {},
+  ): Promise<void> {
+    const src = options.src ?? this.src;
+    const enter = options.enter ?? 0;
+    const exit = options.exit ?? enter;
+    const volume = Math.max(0, Math.min(100, Math.trunc(options.volume ?? this.targetVolume)));
+    const loop = options.loop ?? this.loop;
 
-    if (!options.src) {
-      const current = this._audio;
-      if (current.src) {
-        if (current.paused) {
-          current.volume = 0;
-          await current.play();
-        }
-        await this._setVolume({ index: this._currentIndex, volume: this._targetVolume, fade });
-      }
+    this.targetVolume = volume;
+    this.loop = loop;
+
+    if (src === '') {
+      await this.stop(exit);
       return;
     }
 
-    const oldIndex = this._currentIndex;
-    const nextIndex = (this._currentIndex + 1) % 2;
-    const oldAudio = this._audios[oldIndex];
-    const nextAudio = this._audios[nextIndex];
+    webgalStore.dispatch(setStage({ key: 'bgm', value: { src, volume, enter, exit } }));
 
-    nextAudio.src = options.src;
-    nextAudio.volume = fade > 0 ? 0 : this._targetVolume;
-    nextAudio.muted = this._muted;
+    if (src === this.src) {
+      if (this.audio.paused) {
+        this.audio.volume = 0;
+        await this.audio.play();
+      }
+      await this.setVolume({ audio: this.audio, volume: this.targetVolume, duration: enter });
+      return;
+    }
+
+    const oldIndex = this.currentIndex;
+    const nextIndex = (this.currentIndex + 1) % 2;
+    const oldAudio = this.audios[oldIndex];
+    const nextAudio = this.audios[nextIndex];
+
+    nextAudio.pause();
+    nextAudio.src = src;
+    nextAudio.volume = 0;
 
     try {
       nextAudio.load();
       await new Promise((resolve, reject) => {
-        const onCanPlay = () => {
-          nextAudio.removeEventListener('error', onError);
+        const cleanup = () => {
+          nextAudio.removeEventListener('canplaythrough', onResolve);
+          nextAudio.removeEventListener('error', onReject);
+        };
+
+        const onResolve = () => {
+          cleanup();
           resolve(null);
         };
-        const onError = (e: any) => {
-          nextAudio.removeEventListener('canplaythrough', onCanPlay);
+
+        const onReject = (e: Event) => {
+          cleanup();
           reject(e);
         };
-        nextAudio.addEventListener('canplaythrough', onCanPlay, { once: true });
-        nextAudio.addEventListener('error', onError, { once: true });
+        nextAudio.addEventListener('canplaythrough', onResolve, { once: true });
+        nextAudio.addEventListener('error', onReject, { once: true });
       });
 
       await nextAudio.play();
-      this._currentIndex = nextIndex;
+      this.currentIndex = nextIndex;
 
-      if (fade > 0) {
+      if (enter > 0) {
         await Promise.all([
-          this._setVolume({ index: oldIndex, volume: 0, fade, stopOnEnd: true }),
-          this._setVolume({ index: nextIndex, volume: this._targetVolume, fade }),
+          this.setVolume({ audio: oldAudio, volume: 0, duration: exit, stopOnEnd: true }),
+          this.setVolume({ audio: nextAudio, volume: this.targetVolume, duration: enter }),
         ]);
       } else {
-        this._stopAudio(oldAudio);
+        this.resetAudio(oldAudio);
       }
+
+      this.src = src;
     } catch (e) {
       console.error('BGM Playback failed:', e);
-      this._stopAudio(nextAudio);
+      this.resetAudio(nextAudio);
     }
   }
 
-  public async pause({ fade = 0 }: { fade?: number }): Promise<void> {
-    if (fade > 0) {
-      await this._setVolume({ index: this._currentIndex, volume: 0, fade, pauseOnEnd: true });
+  public async pause(value = 0): Promise<void> {
+    if (value > 0) {
+      await this.setVolume({ audio: this.audio, volume: 0, duration: value, pauseOnEnd: true });
     } else {
-      this._audio.pause();
+      this.audio.pause();
     }
   }
 
-  public async stop({ fade = 0 }: { fade?: number }): Promise<void> {
-    if (fade > 0) {
-      await this._setVolume({ index: this._currentIndex, volume: 0, fade, stopOnEnd: true });
+  public async stop(value = 0): Promise<void> {
+    this.src = '';
+    this.targetVolume = 100;
+    webgalStore.dispatch(setStage({ key: 'bgm', value: { src: '', volume: 100, enter: 0, exit: 0 } }));
+    if (value > 0) {
+      await this.setVolume({ audio: this.audio, volume: 0, duration: value, stopOnEnd: true });
     } else {
-      this._audios.forEach((_, i) => this._stopAudio(this._audios[i]));
+      this.audios.forEach((_, i) => this.resetAudio(this.audios[i]));
     }
   }
 
-  public async fade({ volume, fade = 0 }: { volume: number; fade?: number }): Promise<void> {
-    this._targetVolume = volume;
-    return this._setVolume({ index: this._currentIndex, volume, fade });
+  public async resume(value = 0): Promise<void> {
+    return this.play({ enter: value });
   }
 
-  public async resume({ fade = 0 }: { fade?: number }): Promise<void> {
-    return this.play({ fade });
+  public refreshVolume() {
+    this.volume = this.targetVolume;
   }
 
   public addProgressListener(cb: (p: { currentTime: number; duration: number }) => void): () => void {
-    this._progressListeners.add(cb);
+    this.progressListeners.add(cb);
 
     return () => {
-      this._progressListeners.delete(cb);
+      this.progressListeners.delete(cb);
     };
   }
 
   public clearListeners(): void {
-    this._progressListeners.clear();
+    this.progressListeners.clear();
   }
 
-  private get _audio() {
-    return this._audios[this._currentIndex];
+  private get audio() {
+    return this.audios[this.currentIndex];
   }
 
   public get currentTime() {
-    return this._audio.currentTime;
+    return this.audio.currentTime;
   }
   public set currentTime(value: number) {
-    this._audio.currentTime = value;
+    this.audio.currentTime = value;
   }
 
   public get duration() {
-    return this._audio.duration;
+    return this.audio.duration;
   }
   public get paused() {
-    return this._audio.paused;
+    return this.audio.paused;
   }
 
   public get volume() {
-    return this._targetVolume;
+    return this.targetVolume;
   }
   public set volume(value: number) {
-    this._targetVolume = value;
-    gsap.killTweensOf(this._audio, 'volume');
-    this._audio.volume = Math.max(0, Math.min(1, value));
+    const volume = Math.max(0, Math.min(100, Math.trunc(value)));
+    this.targetVolume = volume;
+
+    const computedVolume = this.getComputedVolume(volume);
+
+    const activeTweens = gsap.getTweensOf(this.audio, true);
+    if (activeTweens.length > 0) {
+      activeTweens.forEach((tween) => {
+        tween.vars.volume = computedVolume;
+        tween.invalidate();
+      });
+    } else {
+      this.audio.volume = computedVolume;
+    }
   }
 
   public get loop() {
-    return this._loop;
+    return this.audio.loop;
   }
   public set loop(value: boolean) {
-    this._loop = value;
-    this._audios.forEach((a) => {
+    this.audios.forEach((a) => {
       a.loop = value;
     });
   }
 
-  public get muted() {
-    return this._muted;
-  }
-  public set muted(value: boolean) {
-    this._muted = value;
-    this._audios.forEach((a) => {
-      a.muted = value;
-    });
+  public getComputedVolume(value?: number): number {
+    const { userData, stage } = webgalStore.getState();
+    const { optionData } = userData;
+
+    const main = optionData.volumeMain * 0.01;
+    const group = optionData.bgmVolume * 0.01;
+    const current = (value ?? stage.bgm.volume) * 0.01;
+
+    return main * group * current;
   }
 
-  private _setVolume(params: {
-    index: number;
+  private setVolume(options: {
+    audio: HTMLAudioElement;
     volume: number;
-    fade: number;
+    duration: number;
     stopOnEnd?: boolean;
     pauseOnEnd?: boolean;
   }): Promise<void> {
-    const { index, volume, fade, stopOnEnd, pauseOnEnd } = params;
+    const { audio, volume, duration, stopOnEnd, pauseOnEnd } = options;
 
-    const audio = this._audios[index];
-
-    if (!audio.src || audio.src === window.location.href) {
+    if (!audio.src || audio.src === '' || audio.src === window.location.href) {
       return Promise.resolve();
     }
 
-    gsap.killTweensOf(audio, 'volume');
-
     return new Promise((resolve) => {
-      if (fade <= 0) {
-        audio.volume = volume;
-        if (stopOnEnd) this._stopAudio(audio);
-        else if (pauseOnEnd) audio.pause();
-        resolve();
-        return;
-      }
-
-      gsap.to(audio, {
-        volume,
-        duration: fade / 1000,
-        ease: volume > audio.volume ? 'sine.out' : 'sine.in',
+      const computedVolume = this.getComputedVolume(volume);
+      const vars: gsap.TweenVars = {
+        volume: computedVolume,
+        duration: duration / 1000,
+        ease: computedVolume > audio.volume ? 'sine.out' : 'sine.in',
         overwrite: 'auto',
         onComplete: () => {
-          if (stopOnEnd) this._stopAudio(audio);
+          if (stopOnEnd) this.resetAudio(audio);
           else if (pauseOnEnd) audio.pause();
           resolve();
         },
         onInterrupt: () => resolve(),
-      });
+      };
+
+      if (duration <= 0) {
+        gsap.set(audio, vars);
+      } else {
+        gsap.to(audio, vars);
+      }
     });
   }
 
-  private _onTimeUpdate = () => {
-    if (!this._audio.src || this._progressListeners.size === 0) return;
-    const { currentTime, duration } = this._audio;
-    this._progressListeners.forEach((listener) => listener({ currentTime, duration }));
+  private onTimeUpdate = () => {
+    if (this.src === '' || this.progressListeners.size === 0) return;
+    const { currentTime, duration } = this.audio;
+    this.progressListeners.forEach((listener) => listener({ currentTime, duration }));
   };
 
-  private _stopAudio(audio: HTMLAudioElement) {
-    gsap.killTweensOf(audio, 'volume');
+  private resetAudio(audio: HTMLAudioElement) {
+    gsap.killTweensOf(audio);
+
     audio.pause();
+    audio.volume = 0;
+    audio.loop = true;
+
     audio.removeAttribute('src');
     audio.load();
   }
 }
 
-export const bgmManager = BgmManager.getInstance();
+const bgmManager = BgmManager.getInstance();
+
+export default bgmManager;

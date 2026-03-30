@@ -3,40 +3,33 @@ import { RootState, webgalStore } from '@/store/store';
 import { setStage } from '@/store/stageReducer';
 import { useEffect, useState } from 'react';
 import { logger } from '@/Core/util/logger';
-import { bgmManager } from '@/Core/Modules/audio/bgmManager';
+import bgmManager from '@/Core/Modules/audio/bgmManager';
 
 export const AudioContainer = () => {
   const stageStore = useSelector((webgalStore: RootState) => webgalStore.stage);
-  const titleBgm = useSelector((webgalStore: RootState) => webgalStore.GUI.titleBgm);
-  const isShowTitle = useSelector((webgalStore: RootState) => webgalStore.GUI.showTitle);
   const userDataState = useSelector((state: RootState) => state.userData);
   const mainVol = userDataState.optionData.volumeMain;
   const vocalBaseVol = mainVol * 0.01 * userDataState.optionData.vocalVolume * 0.01;
   const vocalVol = vocalBaseVol * stageStore.vocalVolume * 0.01;
   const bgmVol = mainVol * 0.01 * userDataState.optionData.bgmVolume * 0.01 * stageStore.bgm.volume * 0.01;
   const bgmEnter = stageStore.bgm.enter;
+  const bgmExit = stageStore.bgm.exit;
   const uiSoundEffects = stageStore.uiSe;
   const seVol = mainVol * 0.01 * (userDataState.optionData?.seVolume ?? 100) * 0.01;
   const uiSeVol = mainVol * 0.01 * (userDataState.optionData.uiSeVolume ?? 50) * 0.01;
-  const isEnterGame = useSelector((state: RootState) => state.GUI.isEnterGame);
-
-  useEffect(() => {
-    if (!isEnterGame) return;
-
-    if (isShowTitle) {
-      bgmManager.play({ src: titleBgm, volume: bgmVol, fade: bgmEnter });
-    } else {
-      bgmManager.play({ src: stageStore.bgm.src, volume: bgmVol, fade: bgmEnter });
-    }
-  }, [isEnterGame, isShowTitle, titleBgm, stageStore.bgm.src]);
 
   useEffect(() => {
     logger.debug(`设置背景音量：${bgmVol}`);
+    bgmManager.refreshVolume();
   }, [bgmVol]);
 
   useEffect(() => {
     logger.debug(`设置背景音量淡入时间: ${bgmEnter}`);
   }, [bgmEnter]);
+
+  useEffect(() => {
+    logger.debug(`设置背景音量淡出时间: ${bgmExit}`);
+  }, [bgmExit]);
 
   useEffect(() => {
     logger.debug(`设置语音音量：${vocalVol}`);
