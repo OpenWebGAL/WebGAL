@@ -55,7 +55,7 @@
   white-space: nowrap;
   left: 0;
   top: 0;
-  background-image: linear-gradient(#005CAF 0%, #1D1D1F 100%);
+  background-image: linear-gradient(180deg, #ffffff 0%, #f5f5f5 40%, #ebebeb 55%, #f8f8f8 100%);
   background-clip: text;
   -webkit-background-clip: text;
   color: transparent;
@@ -67,7 +67,9 @@
   position: absolute;
   left: 0;
   top: 0;
-  -webkit-text-stroke: 0.1em rgba(255, 255, 255, 1);
+  -webkit-text-stroke: 0.12em #2e2312;
+  text-shadow: 0.05em 0.05em 0.02em rgba(0, 0, 0, 0.85),
+    0.05em 0.05em 0.03em rgba(0, 0, 0, 0.5);
   z-index: 1;
 }
 
@@ -105,7 +107,8 @@
   border-image: linear-gradient(
       to right,
       rgba(255, 255, 255, 0.2) 0%,
-      rgba(255, 255, 255, 0.85) 5%,
+      rgba(255, 255, 255, 0.95) 5%,
+      rgba(255, 255, 255, 0) 50%,
       rgba(255, 255, 255, 0) 100%
     )
     1;
@@ -153,18 +156,21 @@
   position: absolute;
   left: 0;
   top: 0;
-  color: #0B346E;
+  background-image: linear-gradient(180deg, #ffffff 0%, #f5f5f5 40%, #ebebeb 55%, #f8f8f8 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
   z-index: 2;
-  text-shadow: 0 2px 8px rgba(255, 255, 255, 0.35), 0 2px 6px rgba(0, 0, 0, 0.18);
 }
 
 .innerName {
   position: absolute;
   left: 0;
   top: 0;
-  -webkit-text-stroke: 0.08em rgba(255, 255, 255, 0.98);
+  -webkit-text-stroke: 0.12em #2e2312;
+  text-shadow: 0.05em 0.05em 0.02em rgba(0, 0, 0, 0.85),
+    0.05em 0.05em 0.03em rgba(0, 0, 0, 0.5);
   z-index: 1;
-  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.18);
 }
 
 .text {
