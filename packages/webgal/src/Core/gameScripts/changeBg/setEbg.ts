@@ -6,11 +6,11 @@ let animation: Animation | null = null;
 export function setEbg(url: string, duration = DEFAULT_BG_IN_DURATION, ease = 'ease-in-out') {
   const ebg = document.getElementById('ebg') as HTMLElement;
   if (ebg) {
-    ebg.style.backgroundImage = `url("${url}")`;
+    ebg.style.backgroundImage = getValidBgImage(url);
   }
   const ebgOverlay = document.getElementById('ebgOverlay') as HTMLElement;
   if (ebgOverlay) {
-    ebgOverlay.style.backgroundImage = `url("${previousImageUrl}")`;
+    ebgOverlay.style.backgroundImage = getValidBgImage(previousImageUrl);
     if (animation) {
       animation.cancel();
     }
@@ -21,3 +21,12 @@ export function setEbg(url: string, duration = DEFAULT_BG_IN_DURATION, ease = 'e
   }
   previousImageUrl = url;
 }
+
+function getValidBgImage(url: string): string {
+  if (url === '') {
+    return 'none';
+  } else {
+    return `url("${url}")`;
+  }
+}
+
