@@ -3,6 +3,7 @@ import styles from './logo.module.scss';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import { useValue } from '@/hooks/useValue';
+import useApplyStyle from '@/hooks/useApplyStyle';
 
 /**
  * 标识
@@ -12,6 +13,7 @@ const Logo: FC = () => {
   const GUIState = useSelector((state: RootState) => state.GUI);
   const logoImage = GUIState.logoImage;
   const isEnterGame = GUIState.isEnterGame;
+  const applyStyle = useApplyStyle('logo');
   const currentLogoIndex = useValue(-1);
   const currentTimeOutId = useValue<any>(-1);
   const animationDuration = 5000;
@@ -43,7 +45,11 @@ const Logo: FC = () => {
         <div
           key={currentLogoIndex.value + 'wh'}
           className={
-            styles.Logo_Back + ' ' + (currentLogoIndex.value === logoImage.length - 1 ? styles.animationActive : '')
+            applyStyle('Logo_Back', styles.Logo_Back) +
+            ' ' +
+            (currentLogoIndex.value === logoImage.length - 1
+              ? applyStyle('animationActive', styles.animationActive)
+              : '')
           }
           style={{
             animationDuration: `${animationDuration}ms`,
@@ -52,7 +58,7 @@ const Logo: FC = () => {
       )}
       {currentLogoUrl !== '' && (
         <div
-          className={styles.Logo_main}
+          className={applyStyle('Logo_main', styles.Logo_main)}
           key={currentLogoIndex.value + 'bg'}
           onClick={nextImg}
           style={{ backgroundImage: `url("${currentLogoUrl}")`, animationDuration: `${animationDuration}ms` }}

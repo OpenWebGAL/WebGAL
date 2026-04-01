@@ -1,0 +1,106 @@
+input[type=range] {
+  -webkit-appearance: none; /* 去掉底部的 track 默认样式，就是整个灰条 */
+  width: 500px; /* Firefox 需要指定明确的宽度 */
+  height: 50px;
+  background: transparent; /* 否则在 Chrome 中是白色背景 */
+  font-size: 100%;
+}
+
+/* 去掉 webkit 内核 滑块 的样式 */
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+}
+
+input[type=range]:focus {
+  outline: none; /* 去除获取焦点时蓝色的外边框，你也可以自己定制其他你想要的效果 */
+}
+
+/*以下是自定义样式*/
+
+/*滑块样式*/
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  /*border: 1px solid #000000;*/
+  height: 375%;
+  width: 7.2%;
+  border-radius: 5em;
+  background: #ffffff;
+  cursor: pointer;
+  margin-top: -14px; /* 在 Chrome 中你需要给定一个明确的 margin，但是在 Firefox 和 IE 中这个是固定的 */
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5); /* 添加一条炫酷的效果为你的 thumb */
+}
+
+/*轨道样式*/
+input[type=range]::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 20%;
+  cursor: pointer;
+  box-shadow: 1px 1px 7px rgba(0, 0, 0, 0.3);
+  background: rgba(81, 110, 65, 0.9);
+  border-radius: 2em;
+}
+
+input[type=range]:focus::-webkit-slider-runnable-track {
+  background: rgba(81, 110, 65, 0.9);
+}
+
+/* Firefox 同上 */
+input[type=range]::-moz-range-thumb {
+  height: 36px;
+  width: 7.2%;
+  border-radius: 5em;
+  background: #ffffff;
+  cursor: pointer;
+  /*margin-top: -14px; !* 在 Chrome 中你需要给定一个明确的 margin，但是在 Firefox 和 IE 中这个是固定的 *!*/
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5); /* 添加一条炫酷的效果为你的 thumb */
+}
+
+input[type=range]::-moz-range-track {
+  width: 100%;
+  height: 20%;
+  cursor: pointer;
+  box-shadow: 1px 1px 7px rgba(0, 0, 0, 0.3);
+  background: rgba(81, 110, 65, 0.9);
+  border-radius: 2em;
+}
+
+.Option_WebGAL_slider {
+  position: relative;
+}
+
+.bubble {
+  position: absolute;
+  bottom: calc(100% + 10px);
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.85);
+  color: white;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-weight: bold;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  animation: bubbleFadeIn 0.2s ease-out forwards;
+}
+
+.bubble::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 6px;
+  border-style: solid;
+  border-color: rgba(0, 0, 0, 0.85) transparent transparent transparent;
+}
+
+@keyframes bubbleFadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}

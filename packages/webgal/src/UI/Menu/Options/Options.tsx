@@ -7,6 +7,7 @@ import { Display } from '@/UI/Menu/Options/Display/Display';
 import { Sound } from '@/UI/Menu/Options/Sound/Sound';
 import useTrans from '@/hooks/useTrans';
 import useSoundEffect from '@/hooks/useSoundEffect';
+import useApplyStyle from '@/hooks/useApplyStyle';
 
 enum optionPage {
   'System',
@@ -16,26 +17,29 @@ enum optionPage {
 
 export const Options: FC = () => {
   const { playSeEnter, playSeSwitch } = useSoundEffect();
+  const applyStyle = useApplyStyle('menuOptions');
   const currentOptionPage = useValue(optionPage.System);
   useEffect(getStorage, []);
 
   function getClassName(page: optionPage) {
+    const baseClass = applyStyle('Options_page_button', styles.Options_page_button);
     if (page === currentOptionPage.value) {
-      return styles.Options_page_button + ' ' + styles.Options_page_button_active;
-    } else return styles.Options_page_button;
+      return `${baseClass} ${applyStyle('Options_page_button_active', styles.Options_page_button_active)}`;
+    }
+    return baseClass;
   }
 
   const t = useTrans('menu.options.');
 
   return (
-    <div className={styles.Options_main}>
-      <div className={styles.Options_top}>
-        <div className={styles.Options_title}>
-          <div className={styles.Option_title_text}>{t('title')}</div>
+    <div className={applyStyle('Options_main', styles.Options_main)}>
+      <div className={applyStyle('Options_top', styles.Options_top)}>
+        <div className={applyStyle('Options_title', styles.Options_title)}>
+          <div className={applyStyle('Option_title_text', styles.Option_title_text)}>{t('title')}</div>
         </div>
       </div>
-      <div className={styles.Options_page_container}>
-        <div className={styles.Options_button_list}>
+      <div className={applyStyle('Options_page_container', styles.Options_page_container)}>
+        <div className={applyStyle('Options_button_list', styles.Options_button_list)}>
           <div
             onClick={() => {
               currentOptionPage.set(optionPage.System);
@@ -67,7 +71,7 @@ export const Options: FC = () => {
             {t('pages.sound.title')}
           </div>
         </div>
-        <div className={styles.Options_main_content}>
+        <div className={applyStyle('Options_main_content', styles.Options_main_content)}>
           {currentOptionPage.value === optionPage.Display && <Display />}
           {currentOptionPage.value === optionPage.System && <System />}
           {currentOptionPage.value === optionPage.Sound && <Sound />}

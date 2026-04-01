@@ -17,11 +17,15 @@ export default function PanicYoozle() {
           <span className={styles.yoozle_blue} style={{ marginRight: '1px' }}>
             W
           </span>
-          <span className={`${styles.yoozle_red}`}>e</span>
+          <span className={styles.yoozle_red}>e</span>
           <span className={styles.yoozle_yellow}>b</span>
           <span className={styles.yoozle_blue}>g</span>
-          <span className={`${styles.yoozle_green} ${styles.yoozle_e_rotate}`}>a</span>
-          <span className={`${styles.yoozle_red}`}>l</span>
+          <span
+            className={`${styles.yoozle_green} ${styles.yoozle_e_rotate}`}
+          >
+            a
+          </span>
+          <span className={styles.yoozle_red}>l</span>
         </span>
       </div>
       <div className={styles.yoozle_search}>

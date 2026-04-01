@@ -7,6 +7,7 @@ import { Options } from './Options/Options';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import { MenuPanelTag } from '@/store/guiInterface';
+import useApplyStyle from '@/hooks/useApplyStyle';
 
 /**
  * Menu 页面，包括存读档、选项等
@@ -14,6 +15,7 @@ import { MenuPanelTag } from '@/store/guiInterface';
  */
 const Menu: FC = () => {
   const GUIState = useSelector((state: RootState) => state.GUI);
+  const applyStyle = useApplyStyle('menu');
   let currentTag;
   // let menuBgColor = 'linear-gradient(135deg, rgba(253,251,251,0.95) 0%, rgba(235,237,238,1) 100%)';
   switch (GUIState.currentMenuTag) {
@@ -33,8 +35,8 @@ const Menu: FC = () => {
   return (
     <>
       {GUIState.showMenuPanel && (
-        <div className={styles.Menu_main}>
-          <div className={styles.Menu_TagContent}>{currentTag}</div>
+        <div className={applyStyle('Menu_main', styles.Menu_main)}>
+          <div className={applyStyle('Menu_TagContent', styles.Menu_TagContent)}>{currentTag}</div>
           <MenuPanel />
         </div>
       )}

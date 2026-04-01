@@ -8,9 +8,11 @@ import { getTextSize } from '@/UI/getTextSize';
 import IMSSTextbox from '@/Stage/TextBox/IMSSTextbox';
 import { compileSentence } from '@/Stage/TextBox/TextBox';
 import { useState } from 'react';
+import useApplyStyle from '@/hooks/useApplyStyle';
 
 export const TextPreview = (props: any) => {
   const t = useTrans('menu.options.pages.display.options.');
+  const applyStyle = useApplyStyle('menuTextPreview');
   const userDataState = useSelector((state: RootState) => state.userData);
   const stageState = useSelector((state: RootState) => state.stage);
   const previewBackground = stageState.bgName;
@@ -58,13 +60,13 @@ export const TextPreview = (props: any) => {
 
   return (
     <div
-      className={styles.textPreviewMain}
+      className={applyStyle('textPreviewMain', styles.textPreviewMain)}
       style={{
         background: previewBackground ? `bottom / cover no-repeat url(${previewBackground})` : 'rgba(0, 0, 0, 0.1)',
       }}
       onClick={forcePreviewUpdate}
     >
-      <div key={`previewTextbox-${textDelay}`} className={styles.textbox}>
+      <div key={`previewTextbox-${textDelay}`} className={applyStyle('textbox', styles.textbox)}>
         <Textbox {...textboxProps} />
       </div>
     </div>

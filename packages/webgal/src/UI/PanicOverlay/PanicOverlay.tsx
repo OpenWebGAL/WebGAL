@@ -4,10 +4,12 @@ import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import PanicYoozle from './PanicYoozle/PanicYoozle';
 import styles from './panicOverlay.module.scss';
+import useApplyStyle from '@/hooks/useApplyStyle';
 
 export default function PanicOverlay() {
   const GUIStore = useSelector((state: RootState) => state.GUI);
   const [showOverlay, setShowOverlay] = useState(false);
+  const applyStyle = useApplyStyle('panicOverlay');
   const globalVars = useSelector((state: RootState) => state.userData.globalGameVar);
   const panic = globalVars['Show_panic'];
   const hidePanic = panic === false;
@@ -16,7 +18,9 @@ export default function PanicOverlay() {
     setShowOverlay(isShowOverlay);
   }, [GUIStore.showPanicOverlay, hidePanic]);
   return ReactDOM.createPortal(
-    <div className={showOverlay ? styles.panic_overlay_main : ''}>{showOverlay && <PanicYoozle />}</div>,
+    <div className={showOverlay ? applyStyle('panic_overlay_main', styles.panic_overlay_main) : ''}>
+      {showOverlay && <PanicYoozle />}
+    </div>,
     document.querySelector('#html-body__panic-overlay')!,
   );
 }

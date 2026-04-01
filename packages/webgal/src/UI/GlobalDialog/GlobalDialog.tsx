@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import { RootState, webgalStore } from '@/store/store';
 import { setVisibility } from '@/store/GUIReducer';
 import { useSEByWebgalStore } from '@/hooks/useSoundEffect';
+import useApplyStyle from '@/hooks/useApplyStyle';
 
 export default function GlobalDialog() {
   const isGlobalDialogShow = useSelector((state: RootState) => state.GUI.showGlobalDialog);
@@ -18,8 +19,38 @@ interface IShowGlobalDialogProps {
   rightFunc: Function;
 }
 
+interface IGlobalDialogContentProps {
+  title: string;
+  leftText: string;
+  rightText: string;
+  onLeft: () => void;
+  onRight: () => void;
+}
+
+function GlobalDialogContent(props: IGlobalDialogContentProps) {
+  const applyStyle = useApplyStyle('globalDialog');
+  const { playSeEnter } = useSEByWebgalStore();
+  return (
+    <div className={applyStyle('GlobalDialog_main', styles.GlobalDialog_main)}>
+      <div className={applyStyle('glabalDialog_container', styles.glabalDialog_container)}>
+        <div className={applyStyle('glabalDialog_container_inner', styles.glabalDialog_container_inner)}>
+          <div className={applyStyle('title', styles.title)}>{props.title}</div>
+          <div className={applyStyle('button_list', styles.button_list)}>
+            <div className={applyStyle('button', styles.button)} onClick={props.onLeft} onMouseEnter={playSeEnter}>
+              {props.leftText}
+            </div>
+            <div className={applyStyle('button', styles.button)} onClick={props.onRight} onMouseEnter={playSeEnter}>
+              {props.rightText}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export function showGlogalDialog(props: IShowGlobalDialogProps) {
-  const { playSeClick, playSeEnter } = useSEByWebgalStore();
+  const { playSeClick } = useSEByWebgalStore();
   webgalStore.dispatch(setVisibility({ component: 'showGlobalDialog', visibility: true }));
   const handleLeft = () => {
     playSeClick();
@@ -32,21 +63,13 @@ export function showGlogalDialog(props: IShowGlobalDialogProps) {
     hideGlobalDialog();
   };
   const renderElement = (
-    <div className={styles.GlobalDialog_main}>
-      <div className={styles.glabalDialog_container}>
-        <div className={styles.glabalDialog_container_inner}>
-          <div className={styles.title}>{props.title}</div>
-          <div className={styles.button_list}>
-            <div className={styles.button} onClick={handleLeft} onMouseEnter={playSeEnter}>
-              {props.leftText}
-            </div>
-            <div className={styles.button} onClick={handleRight} onMouseEnter={playSeEnter}>
-              {props.rightText}
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    <GlobalDialogContent
+      title={props.title}
+      leftText={props.leftText}
+      rightText={props.rightText}
+      onLeft={handleLeft}
+      onRight={handleRight}
+    />
   );
   setTimeout(() => {
     // eslint-disable-next-line react/no-deprecated

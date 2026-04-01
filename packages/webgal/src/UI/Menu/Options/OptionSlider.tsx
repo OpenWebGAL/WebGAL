@@ -2,9 +2,11 @@ import './slider.css';
 import { ISlider } from '@/UI/Menu/Options/OptionInterface';
 import { useEffect, useState, useRef } from 'react';
 import useSoundEffect from '@/hooks/useSoundEffect';
+import useApplyStyle from '@/hooks/useApplyStyle';
 
 export const OptionSlider = (props: ISlider) => {
   const { playSeEnter } = useSoundEffect();
+  const applyStyle = useApplyStyle('menuSlider');
   const [currentValue, setCurrentValue] = useState(props.initValue);
   const [isHovered, setIsHovered] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
@@ -32,7 +34,7 @@ export const OptionSlider = (props: ISlider) => {
   };
 
   return (
-    <div className="Option_WebGAL_slider">
+    <div className={applyStyle('Option_WebGAL_slider', 'Option_WebGAL_slider')}>
       <input
         id={props.uniqueID}
         ref={inputRef}
@@ -61,7 +63,7 @@ export const OptionSlider = (props: ISlider) => {
       />
       {(isHovered || isDragging) && (
         <div
-          className="bubble"
+          className={applyStyle('bubble', 'bubble')}
           style={{
             left: `${calculateBubblePosition()}px`,
           }}

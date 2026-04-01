@@ -1,0 +1,22 @@
+.devPanelMain {
+  font-size: 150%;
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 35%;
+  background: rgba(255, 255, 255, 0.75);
+  z-index: 99;
+  overflow: auto;
+}
+
+.devPanelOpener {
+  position: absolute;
+  right: 5px;
+  top: 5px;
+  background: rgba(255, 255, 255, 0.75);
+  z-index: 100;
+  padding: 3px 7px 3px 7px;
+  border-radius: 4px;
+  cursor: pointer;
+}

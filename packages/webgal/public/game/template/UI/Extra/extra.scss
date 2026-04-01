@@ -1,0 +1,279 @@
+.extra {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 14;
+  background-image: linear-gradient(135deg, #93a5cf 0%, #e4efe9 100%);;
+  padding: 2em 2em 2em 2em;
+  box-sizing: border-box;
+}
+
+.extra_top {
+  padding: 0 0 0 0;
+  display: flex;
+  height: 10%;
+}
+
+.extra_top_icon {
+  padding: 0.6em 0.6em 0 0.6em;
+  border-radius: 1000px;
+  transform: translate(0, -13px);
+  cursor: pointer;
+}
+
+.extra_top_icon:hover {
+  background: rgba(255, 255, 255, 0.25);
+  animation: extra_icon_softin 0.25s ease-out forwards;
+}
+
+@keyframes extra_icon_softin {
+  0% {
+    background: rgba(255, 255, 255, 0);
+  }
+  100% {
+    background: rgba(0, 0, 0, 0.25);
+  }
+}
+
+
+.extra_title {
+  font-family: "思源宋体", serif;
+  height: 100%;
+  line-height: 100%;
+  font-size: 325%;
+  font-weight: bold;
+  color: transparent;
+  background: linear-gradient(150deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 1) 75%, #51A8DD 100%);
+  -webkit-background-clip: text;
+}
+
+.mainContainer {
+  box-sizing: border-box;
+  padding: 0 2em 0 2em;
+  display: flex;
+  height: 92%;
+  flex-flow: column;
+}
+
+.bgmContainer {
+  left: 50px;
+  right: 50px;
+  bottom: 30px;
+  position: absolute;
+  overflow: auto;
+  //width: 100%;
+  //height: 70%;
+  box-sizing: border-box;
+  display: flex;
+  flex-flow: column-reverse;
+  align-content: center;
+  background-image: linear-gradient(315deg, rgba(163, 189, 237, 0.95) 0%, rgba(105, 145, 199, 0.95) 100%);
+  padding: 1em 2em 1em 2em;
+  border-radius: 4px;
+  transition: max-height 0.5s;
+  z-index: 2;
+}
+
+.bgmListContainer {
+  z-index: 2;
+  bottom: 0;
+  //overflow: hidden;
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  flex: 1;
+  flex-flow: row;
+  justify-content: flex-start;
+  align-items: flex-start;
+  margin: 0 0 15px 0;
+  flex-wrap: wrap;
+  overflow: auto;
+}
+
+.bgmPlayerMain {
+  display: flex;
+}
+
+.bgmControlButton {
+  padding: 0.6em 1.2em 0.2em 1.2em;
+  margin: 0 5px 0 5px;
+  box-sizing: border-box;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  transition: background-color 0.33s, color 0.33s;
+  flex-shrink: 0;
+}
+
+.bgmControlButton:hover {
+  box-shadow: 0 0 10px 5px rgba(255, 255, 255, 0.35);
+}
+
+.bgmName {
+  color: rgba(255, 255, 255, 0.8);
+  font-family: "思源宋体", serif;
+  font-size: 155%;
+  margin: 5px 5px 0 15px;
+  overflow: hidden;
+}
+
+.bgmElement {
+  font-family: "思源宋体", serif;
+  padding: 0.5em 1em 0.5em 1em;
+  overflow: hidden;
+  background-color: rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  color: white;
+  font-size: 125%;
+  margin: 0.5em 1em 0.5em 0.5em;
+  transition: background-color 1s, color 1s;
+  opacity: 1;
+  //animation: bgmElement_In 0.5s forwards ease-out;
+  cursor: pointer;
+  width: 28%;
+  flex-shrink: 0;
+}
+
+@keyframes bgmElement_In {
+  0% {
+    opacity: 0.95;
+    //transform: translate(-50px, 0);
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.bgmElement:hover {
+  background-color: rgba(255, 255, 255, 0.65);
+  color: #666;
+  transition: background-color 0.5s, color 0.5s;
+}
+
+.bgmElement_active {
+  background-color: rgba(255, 255, 255, 0.85) !important;
+  color: #666;
+}
+
+.cgMain {
+  width: 100%;
+  height: 88%;
+}
+
+.cgContainer {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: flex-start;
+  align-content: flex-start;
+  height: 90%;
+  box-sizing: border-box;
+  padding: 4em 0 0 2em;
+}
+
+.cgElement {
+  width: 22.5%;
+  height: 37.5%;
+  background-color: rgba(255, 255, 255, 0.75);
+  box-shadow: 0 0 15px 5px rgba(0, 0, 0, 0.35);
+  box-sizing: border-box;
+  padding: 0.75em 0.75em 0.75em 0.75em;
+  opacity: 0;
+  margin: 1em 1em 1em 1em;
+  animation-delay: 100ms;
+  z-index: 1;
+  position: relative;
+  cursor: pointer;
+}
+
+.cgShowDiv {
+  height: 8%;
+  width: 100%;
+  display: flex;
+  flex-flow: row;
+  justify-content: center;
+  align-items: flex-end;
+}
+
+.cgShowDivWarpper {
+  display: flex;
+  flex-flow: row;
+  justify-content: center;
+  align-items: flex-end;
+  //background: rgba(255, 255, 255, 0.35);
+  border-radius: 7px;
+  padding: 12px 15px;
+}
+
+.cgNav {
+  font-size: 170%;
+  background-color: rgba(255,255,255,0.5);
+  color: #666;
+  padding: 0.12em 1em 0.12em 1em;
+  margin: 0 0.25em 0 0.25em;
+  //width: 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: background-color 0.5s, color 0.5s, font-weight 0.5s;
+  border-radius: 7px;
+}
+
+.cgNav:first-child {
+  margin-left: 0;
+}
+
+.cgNav:last-child {
+  margin-right: 0;
+}
+
+.cgNav_active {
+  background-color: rgba(255,255,255,0.7) !important;
+  color: #005CAF;
+}
+
+.cgNav:hover {
+  color: #005CAF;
+  background-color: rgba(255,255,255,0.6);
+}
+
+
+.showFullContainer {
+  z-index: 13;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.showFullCgMain {
+  cursor: pointer;
+  width: 80%;
+  height: 80%;
+  box-sizing: border-box;
+  padding: 2em 2em 2em 2em;
+  background: rgba(255, 255, 255, 0.95);
+  animation: fullCgIn 0.5s ease-out forwards;
+  opacity: 0;
+}
+
+$initialTransform: scale(1.05, 1.05) translate(-25px, -50px) rotateX(-10deg) rotateY(10deg);
+$endTransform: scale(1, 1) translate3d(0, 0, 0);
+
+@keyframes fullCgIn {
+  0% {
+    opacity: 0;
+    transform: $initialTransform;
+  }
+  100% {
+    opacity: 1;
+    transform: $endTransform;
+  }
+}

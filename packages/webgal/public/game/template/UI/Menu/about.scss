@@ -1,0 +1,46 @@
+.backButton{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 50px;
+  height: 50px;
+  background: rgba(0,0,0,0.1);
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.backButton:hover{
+  background: rgba(0,0,0,0.2);
+}
+
+.about{
+  padding: 10px 0 0 0;
+}
+
+.icon{
+  display: inline-flex;
+}
+
+.title{
+  color: transparent;
+  background: linear-gradient(to left, #227D51, rgba(81, 110, 65, 1));
+  -webkit-background-clip: text;
+  font-size: 200%;
+  //border-bottom: 2px solid rgba(81, 110, 65, 0.9);
+  padding: 0.15em 0.5em 0.15em 0.1em;
+  font-weight: bold;
+  margin-top: 20px;
+}
+
+.text{
+  color: rgba(81, 110, 65, 1);
+  padding: 0 0 0 10px;
+  font-size: 135%;
+  a{
+    color: rgba(81, 110, 65, 1);
+  }
+}
+
+.contributor{
+  padding: 0 10px 0 0;
+}

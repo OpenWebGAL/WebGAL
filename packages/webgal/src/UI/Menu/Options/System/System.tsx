@@ -20,6 +20,7 @@ import savesReducer, { ISavesData, saveActions } from '@/store/savesReducer';
 import { dumpFastSaveToStorage, dumpSavesToStorage } from '@/Core/controller/storage/savesController';
 import { OptionSlider } from '@/UI/Menu/Options/OptionSlider';
 import { Info } from '@icon-park/react';
+import useApplyStyle from '@/hooks/useApplyStyle';
 
 interface IExportGameData {
   userData: IUserData;
@@ -33,6 +34,7 @@ export function System() {
   const setLanguage = useLanguage();
   const t = useTrans('menu.options.pages.system.options.');
   const { playSeDialogOpen } = useSoundEffect();
+  const applyStyle = useApplyStyle('menuOptions');
 
   function exportSaves() {
     const gameData: IExportGameData = {
@@ -101,7 +103,7 @@ export function System() {
   }
 
   return (
-    <div className={styles.Options_main_content_half}>
+    <div className={applyStyle('Options_main_content_half', styles.Options_main_content_half)}>
       {showAbout && <About onClose={toggleAbout} />}
       {!showAbout && (
         <>
@@ -187,7 +189,7 @@ export function System() {
               currentChecked={2}
             />
           </NormalOption>
-          <div className={styles.About_title_text} onClick={toggleAbout}>
+          <div className={applyStyle('About_title_text', styles.About_title_text)} onClick={toggleAbout}>
             <Info theme="outline" size="32" fill="#227D515F" />
           </div>
         </>

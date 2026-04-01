@@ -7,9 +7,11 @@ import { setStage } from '@/store/stageReducer';
 import { GoEnd, GoStart, MusicList, PlayOne, SquareSmall } from '@icon-park/react';
 import useSoundEffect from '@/hooks/useSoundEffect';
 import { setGuiAsset } from '@/store/GUIReducer';
+import useApplyStyle from '@/hooks/useApplyStyle';
 
 export function ExtraBgm() {
   const { playSeClick, playSeEnter } = useSoundEffect();
+  const applyStyle = useApplyStyle('extra');
   // 检查当前正在播放的bgm是否在bgm列表内
   const currentBgmSrc = useSelector((state: RootState) => state.GUI.titleBgm);
   const extraState = useSelector((state: RootState) => state.userData.appreciationData);
@@ -40,9 +42,9 @@ export function ExtraBgm() {
   }
 
   const showBgmList = extraState.bgm.map((e, i) => {
-    let className = styles.bgmElement;
+    let className = applyStyle('bgmElement', styles.bgmElement);
     if (e.name === currentPlayingBgmName.value) {
-      className = className + ' ' + styles.bgmElement_active;
+      className = className + ' ' + applyStyle('bgmElement_active', styles.bgmElement_active);
     }
     return (
       <div
@@ -69,8 +71,8 @@ export function ExtraBgm() {
   }
 
   return (
-    <div className={styles.bgmContainer} style={{ maxHeight: bgmPlayerHeight }}>
-      <div className={styles.bgmPlayerMain}>
+    <div className={applyStyle('bgmContainer', styles.bgmContainer)} style={{ maxHeight: bgmPlayerHeight }}>
+      <div className={applyStyle('bgmPlayerMain', styles.bgmPlayerMain)}>
         <div
           onClick={() => {
             playSeClick();
@@ -81,7 +83,7 @@ export function ExtraBgm() {
             }
           }}
           onMouseEnter={playSeEnter}
-          className={styles.bgmControlButton}
+          className={applyStyle('bgmControlButton', styles.bgmControlButton)}
         >
           <GoStart theme="filled" size={iconSize} fill="#fff" strokeWidth={3} strokeLinejoin="miter" />
         </div>
@@ -92,7 +94,7 @@ export function ExtraBgm() {
             bgmControl?.play().then();
           }}
           onMouseEnter={playSeEnter}
-          className={styles.bgmControlButton}
+          className={applyStyle('bgmControlButton', styles.bgmControlButton)}
         >
           <PlayOne theme="filled" size={iconSize} fill="#fff" strokeWidth={3} strokeLinejoin="miter" />
         </div>
@@ -106,7 +108,7 @@ export function ExtraBgm() {
             }
           }}
           onMouseEnter={playSeEnter}
-          className={styles.bgmControlButton}
+          className={applyStyle('bgmControlButton', styles.bgmControlButton)}
         >
           <GoEnd theme="filled" size={iconSize} fill="#fff" strokeWidth={3} strokeLinejoin="miter" />
         </div>
@@ -117,24 +119,26 @@ export function ExtraBgm() {
             bgmControl.pause();
           }}
           onMouseEnter={playSeEnter}
-          className={styles.bgmControlButton}
+          className={applyStyle('bgmControlButton', styles.bgmControlButton)}
         >
           <SquareSmall theme="filled" size={iconSize} fill="#fff" strokeWidth={3} strokeLinejoin="miter" />
         </div>
-        <div className={styles.bgmName}>{foundCurrentBgmName}</div>
+        <div className={applyStyle('bgmName', styles.bgmName)}>{foundCurrentBgmName}</div>
         <div
           onClick={() => {
             playSeClick();
             isShowBgmList.set(!isShowBgmList.value);
           }}
           onMouseEnter={playSeEnter}
-          className={styles.bgmControlButton}
+          className={applyStyle('bgmControlButton', styles.bgmControlButton)}
           style={{ marginLeft: 'auto' }}
         >
           <MusicList theme="filled" size={iconSize} fill="#fff" strokeWidth={3} strokeLinejoin="miter" />
         </div>
       </div>
-      {isShowBgmList.value && <div className={styles.bgmListContainer}> {showBgmList}</div>}
+      {isShowBgmList.value && (
+        <div className={applyStyle('bgmListContainer', styles.bgmListContainer)}> {showBgmList}</div>
+      )}
     </div>
   );
 }
