@@ -36,11 +36,11 @@
   text-shadow: none;
 
   &:hover {
-    transform: translate3d(0, -3px, 0) scale(1.02);
+    transform: translate3d(0, -3px, 0) scale(1.01);
     padding: 0.7em 0;
-    filter: drop-shadow(0 10px 16px rgba(6, 10, 18, 0.12))
-      drop-shadow(0 5px 8px rgba(6, 10, 18, 0.07))
-      drop-shadow(1px 1px 0 rgba(6, 10, 18, 0.05));
+    text-shadow: none;
+    filter: drop-shadow(0 6px 8px rgba(6, 10, 18, 0.06))
+      drop-shadow(0 3px 4px rgba(6, 10, 18, 0.04));
   }
 }
 
@@ -72,8 +72,8 @@
   -webkit-text-fill-color: #ffffff;
   z-index: 2;
   text-shadow:
-    0 3px 10px rgba(7, 12, 20, 0.22),
-    0 1px 3px rgba(7, 12, 20, 0.16);
+    0 2px 6px rgba(7, 12, 20, 0.15),
+    0 1px 2px rgba(7, 12, 20, 0.1);
 }
 
 .Title_button_text_inner {
