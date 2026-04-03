@@ -29,8 +29,10 @@ export function generateTimelineObj(
     const segmentDuration = segment.duration;
     currentDelay += segmentDuration;
     const { position, scale, ...segmentValues } = segment;
+    // 移除所有值类型不是 number 的属性
+    const filteredSegmentValues = omitBy(segmentValues, (value) => typeof value !== 'number');
     // 不能用 scale，因为 popmotion 不能用嵌套
-    values.push({ x: position?.x, y: position?.y, scaleX: scale?.x, scaleY: scale?.y, ...segmentValues });
+    values.push({ x: position?.x, y: position?.y, scaleX: scale?.x, scaleY: scale?.y, ...filteredSegmentValues });
     // Easing 需要比 values 的长度少一个
     if (i > 0) {
       easeArray.push(stringToEasing(segment.ease));
