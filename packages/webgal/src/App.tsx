@@ -12,6 +12,7 @@ import Menu from '@/UI/Menu/Menu';
 import GlobalDialog from '@/UI/GlobalDialog/GlobalDialog';
 import PanicOverlay from '@/UI/PanicOverlay/PanicOverlay';
 import DevPanel from '@/UI/DevPanel/DevPanel';
+import { StatusBar } from '@/UI/StatusBar/StatusBar';
 
 export default function App() {
   useEffect(() => {
@@ -31,6 +32,7 @@ export default function App() {
       <GlobalDialog />
       <PanicOverlay />
       <DevPanel />
+      <StatusBar />
     </div>
   );
 }

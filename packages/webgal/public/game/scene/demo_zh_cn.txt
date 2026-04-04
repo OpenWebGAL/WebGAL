@@ -1,6 +1,7 @@
 bgm:s_Title.mp3 -volume=80 -enter=3000;
 unlockBgm:s_Title.mp3 -name=雲を追いかけて;
 intro:你好|欢迎来到 {egine} 的世界;
+setStatusBar:Chapter 0 欢迎来到 {egine};
 changeBg:WebGalEnter.webp -next;
 setTransition: -target=bg-main -exit=shockwaveOut;
 :你好|欢迎来到 {egine} 的世界;
@@ -23,6 +24,7 @@ pixiPerform:snow;
 比如，这个下起小雪的特效。 -v6.wav;
 除此以外，分支选择的功能也必不可少。 -v7.wav;
 pixiInit;
+setStatusBar:none;
 WebGAL:接下来介绍一些新版本功能！
 WebGAL:比如这个[注](zhù)[音](yīn)功能，可以为游戏带来更好的体验！
 WebGAL:我们也支持了[文本拓展语法](style=color:#B5495B\;)，可以为[文](wen)[本](ben)带来[富文本支持](style-alltext=font-style:italic\; style=color:#66327C\;)、交互等特性。
