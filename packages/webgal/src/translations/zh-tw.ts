@@ -89,9 +89,9 @@ const zhTw = {
             textFont: {
               title: '文字字體',
               options: {
+                resourceHanRounded: '資源圓體',
                 siYuanSimSun: '思源宋體',
                 SimHei: '黑體',
-                lxgw: '霞鶩文楷',
               },
             },
             textboxOpacity: {

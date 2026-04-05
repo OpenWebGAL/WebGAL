@@ -305,6 +305,14 @@ export default class PixiStage {
     this.removeAnimationByIndex(index);
   }
 
+  public removeAnimationByTargetKey(targetKey: string) {
+    let index = this.stageAnimations.findIndex((e) => e.targetKey === targetKey);
+    while (index !== -1) {
+      this.removeAnimationByIndex(index);
+      index = this.stageAnimations.findIndex((e) => e.targetKey === targetKey);
+    }
+  }
+
   public removeAnimationWithSetEffects(key: string) {
     const index = this.stageAnimations.findIndex((e) => e.key === key);
     if (index >= 0) {

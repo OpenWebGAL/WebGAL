@@ -17,7 +17,6 @@ import { v4 as uuid } from 'uuid';
  * @param sentence
  */
 export const setTempAnimation = (sentence: ISentence): IPerform => {
-  const startDialogKey = webgalStore.getState().stage.currentDialogKey;
   const animationName = uuid();
   const animationString = sentence.content;
   let animationObj;
@@ -36,11 +35,15 @@ export const setTempAnimation = (sentence: ISentence): IPerform => {
 
   const key = `${target}-${animationName}-${animationDuration}`;
   const performInitName = `animation-${target}`;
+  let keepAnimationStopped = false;
 
   if (!parallel) WebGAL.gameplay.performController.unmountPerform(performInitName, true);
 
   let stopFunction = () => {};
   setTimeout(() => {
+    if (keep && keepAnimationStopped) {
+      return;
+    }
     WebGAL.gameplay.pixiStage?.stopPresetAnimationOnTarget(target);
     const animationObj: IAnimationObject | null = getAnimationObject(
       animationName,
@@ -54,9 +57,12 @@ export const setTempAnimation = (sentence: ISentence): IPerform => {
     }
   }, 0);
   stopFunction = () => {
+    if (keep) {
+      WebGAL.gameplay.pixiStage?.removeAnimationWithoutSetEndState(key);
+      keepAnimationStopped = true;
+      return;
+    }
     setTimeout(() => {
-      const endDialogKey = webgalStore.getState().stage.currentDialogKey;
-      const isHasNext = startDialogKey !== endDialogKey;
       WebGAL.gameplay.pixiStage?.removeAnimationWithSetEffects(key);
     }, 0);
   };

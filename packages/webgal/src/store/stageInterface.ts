@@ -58,6 +58,12 @@ export interface ITransform {
   bloomBrightness?: number;
   bloomBlur?: number;
   bloomThreshold?: number;
+  oldFilm?: number;
+  dotFilm?: number;
+  reflectionFilm?: number;
+  glitchFilm?: number;
+  rgbFilm?: number;
+  godrayFilm?: number;
   shockwaveFilter?: number;
   radiusAlphaFilter?: number;
 }
@@ -124,6 +130,12 @@ export const baseTransform: ITransform = {
   bloomBrightness: 1,
   bloomBlur: 0,
   bloomThreshold: 0,
+  oldFilm: 0,
+  dotFilm: 0,
+  reflectionFilm: 0,
+  glitchFilm: 0,
+  rgbFilm: 0,
+  godrayFilm: 0,
   shockwaveFilter: 0,
   radiusAlphaFilter: 0,
 };

@@ -17,7 +17,6 @@ import { v4 as uuid } from 'uuid';
  * @param sentence
  */
 export const setTransform = (sentence: ISentence): IPerform => {
-  const startDialogKey = webgalStore.getState().stage.currentDialogKey;
   const animationName = uuid();
   const animationString = sentence.content;
   let animationObj: AnimationFrame[];

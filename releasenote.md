@@ -8,27 +8,41 @@
 
 #### 新功能
 
-模板文件中的字体会自动加载，并可在选项中选择模板或内置字体
+-when 指令支持字符串条件判断，变量表达式中的空白会自动裁剪
 
-文本框支持配置最大行数和行高，便于自定义排版
+解析器新增行内注释保留能力，语句可读取 inlineComment 字段
 
-新增 Steam 集成，可通过 Steam_AppID 配置与 callSteam 指令解锁成就
+changeFigure 支持 blendMode 参数，可设置 normal / add / multiply / screen 混合模式
 
-舞台渲染支持 GIF 资源
+黑边填充背景切换支持淡入淡出过渡
 
-立绘和背景支持用 enterDuration / exitDuration 单独设置进退场动画时长
+模板样式文件（标题、文本框、选项）会在启动时预加载并支持热更新
+
+文本框行高支持通过全局变量 Line_height 调整
+
+鉴赏模式中解锁的 CG / BGM 会立即写入本地存储，减少异常退出导致的解锁丢失
 
 #### 修复
 
-修复鼠标滚轮触发快进后无法正常取消且按钮状态异常的问题
+修复语音播放时音量倍率在切换语音后可能不正确的问题
 
-改进效果音播放的错误处理，缺失或失败不会再阻塞播放或自动前进
+修复切换语音资源时口型分析节点未重建导致口型动画异常的问题
 
-修复脚本解析对空白语句、注释和 Windows 换行的处理，避免错误裁剪
+修复 changeBg / changeFigure 的退出动画与时长设置在部分场景不生效或残留的问题
 
-修复切换语音文件时可能不重新加载导致语音缺失的问题（#791）
+修复 keep 动画停止与 timeline 单关键帧时的异常行为
 
-修复立绘和背景自定义进退场时长的参数键名与 0 时长处理，确保配置生效
+修复透明度滤镜场景下默认进退场动画与 alpha 恢复不一致的问题
+
+修复 setTransform 在透明度转换场景下误修改源 transform，导致后续变换异常的问题
+
+修复 Live2D blink / focus 在部分参数更新时被错误覆盖的问题
+
+修复解析器在行末注释与转义分号场景下的语句解析问题
+
+修复鉴赏模式数据更新与持久化问题，并在清除全部数据时保留 config 初始全局变量
+
+修复鉴赏界面 CG 导航溢出及 Logo 淡出期间背景闪烁问题
 
 <!-- English Translation -->
 ## Release Notes
@@ -41,27 +55,41 @@
 
 #### New Features
 
-Template fonts are now loaded from game/template/template.json, and the options menu lets you pick template or built-in fonts
+The -when command now supports string condition checks, and whitespace in expressions is trimmed automatically
 
-Textbox layout can be customized with max line count and line height settings
+The parser now preserves inline comments, exposed via the inlineComment field on sentences
 
-Added Steam integration: set Steam_AppID and use the callSteam script to unlock achievements
+changeFigure now supports a blendMode argument with normal / add / multiply / screen modes
 
-Stage rendering now supports GIF assets
+Black-border fill background switching now supports fade transitions
 
-Figures and backgrounds accept enterDuration / exitDuration to override enter/exit animation durations
+Template style files (title, textbox, choose) are preloaded on startup and support hot style refresh
+
+Textbox line height can now be controlled through the global variable Line_height
+
+Unlocked CG / BGM entries in appreciation mode are now persisted immediately to local storage to reduce data loss on unexpected exit
 
 #### Fixes
 
-Fixed fast-forward triggered by mouse wheel not stopping correctly or resetting the button state
+Fixed incorrect vocal volume scaling after switching voice playback
 
-Improved error handling for effect audio so missing or failed sounds no longer block playback or auto-advance
+Fixed lip-sync analyzer nodes not being reconnected when switching vocal media sources
 
-Fixed script parsing of blank lines, comments, and Windows line endings to avoid trimming mistakes
+Fixed cases where changeBg / changeFigure exit animations and durations did not apply correctly or were left behind
 
-Fixed voice lines sometimes not reloading when switching audio files (#791)
+Fixed abnormal behavior when stopping keep animations and when timeline animations had only a single keyframe
 
-Fixed animation duration configuration keys and zero-duration handling so custom enter/exit timings take effect for figures and backgrounds
+Fixed inconsistencies in default enter/exit fades and alpha restoration under alpha-filter-based rendering
+
+Fixed source transform data being mutated during alpha conversion in setTransform paths, which caused later transforms to behave incorrectly
+
+Fixed Live2D blink / focus updates incorrectly overwriting partial parameter updates
+
+Fixed parser issues with end-of-line comments and escaped semicolon scenarios
+
+Fixed appreciation data update/persistence issues, and now preserves initial config globals when clearing all data
+
+Fixed CG navigation overflow in Extra UI and logo fade background flicker
 
 <!-- Japanese Translation -->
 ## リリースノート
@@ -74,24 +102,38 @@ Fixed animation duration configuration keys and zero-duration handling so custom
 
 #### 新機能
 
-テンプレート（game/template/template.json）のフォントを読み込み、オプションでテンプレート／内蔵フォントを選べるようになりました
+-when コマンドで文字列条件の判定に対応し、式中の空白を自動でトリミングするようになりました
 
-テキストボックスの最大行数と行間を設定でカスタマイズできるようになりました
+パーサーが行内コメントを保持するようになり、文オブジェクトの inlineComment から参照できます
 
-Steam 連携を追加し、Steam_AppID を設定して callSteam スクリプトで実績を解除できます
+changeFigure で blendMode 引数をサポートし、normal / add / multiply / screen を指定できます
 
-ステージ描画が GIF アセットに対応しました
+黒縁塗りつぶし背景の切り替えにフェード遷移を追加しました
 
-立ち絵と背景の登場／退場アニメに enterDuration / exitDuration で時間を上書きできるようになりました
+テンプレートのスタイルファイル（タイトル・テキストボックス・選択肢）を起動時にプリロードし、スタイル更新にも追従します
+
+テキストボックスの行間をグローバル変数 Line_height で調整できるようになりました
+
+鑑賞モードで解放した CG / BGM を即時にローカル保存するようにし、異常終了時の取りこぼしを減らしました
 
 #### 修正
 
-マウスホイールでの早送りが正しく解除されずボタン状態が戻らない問題を修正しました
+ボイス切り替え後に音量倍率が正しく反映されない問題を修正しました
 
-存在しない効果音などで再生が失敗しても再生や自動進行が止まらないようエラーハンドリングを改善しました
+ボイス音源の切り替え時に口パク解析ノードが再接続されず、口パクが乱れる問題を修正しました
 
-空行や空のセリフ、Windows の改行を含むスクリプトのパース処理を修正しました
+changeBg / changeFigure の退場アニメーションと時間設定が一部で効かない、または残留する問題を修正しました
 
-ボイス切り替え時に音声が更新されない場合がある不具合を修正しました（#791）
+keep アニメーション停止時と timeline が単一キーフレームの場合の異常動作を修正しました
 
-立ち絵／背景の入退場アニメの時間設定でキー名や 0 ミリ秒を扱えない問題を修正しました
+アルファフィルター適用時にデフォルト入退場フェードと透明度復元が一致しない問題を修正しました
+
+setTransform の透明度変換処理で元の transform が不正に書き換わり、後続の変換が崩れる問題を修正しました
+
+Live2D の blink / focus で一部パラメータ更新時に設定が不正に上書きされる問題を修正しました
+
+行末コメントやエスケープされたセミコロンを含む場合のパーサー解析不具合を修正しました
+
+鑑賞モードのデータ更新・永続化の不具合を修正し、全データ削除時に config 初期グローバル変数を保持するようにしました
+
+Extra 画面の CG ナビゲーションのはみ出しと、ロゴフェード時の背景ちらつきを修正しました
