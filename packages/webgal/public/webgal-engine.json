@@ -1,5 +1,7 @@
 {
-  "name": "webgal",
+  "schemaVersion": "1.0.0",
+  "id": "open-webgal.webgal",
+  "name": "WebGAL",
   "version": "4.5.18",
   "type": "official",
   "webgalVersion": "4.5.18",
@@ -10,30 +12,12 @@
     "ko": "시각적으로 매력적이며, 기능이 풍부하고, 쉽게 개발할 수 있는 새로운 웹 기반 비주얼 노벨 엔진",
     "fr": "Un moteur de visual novel basé sur le web, attrayant visuellement, riche en fonctionnalités et facile à développer"
   },
-  "author": {
-    "name": "Mahiru",
-    "email": "Mahiru_@outlook.com"
+  "maintainer": {
+    "name": "OpenWebGAL",
+    "email": "contact@openwebgal.com"
   },
   "license": "MPL-2.0",
   "icon": "icons/icon-512.png",
-  "readme": "README.md",
-  "readmes": {
-    "en": "README_EN.md",
-    "ja": "README_JP.md",
-    "ko": "README_KO.md",
-    "fr": "README_FR.md"
-  },
-  "keywords": [
-    "visual-novel",
-    "galgame",
-    "webgal",
-    "game-engine",
-    "web",
-    "official",
-    "original"
-  ],
-  "live2dSupport": false,
-  "spineSupport": false,
   "urls": {
     "homepage": "https://openwebgal.com",
     "repository": "https://github.com/OpenWebGAL/WebGAL",
