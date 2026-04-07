@@ -32,6 +32,7 @@ export const getUserInput = (sentence: ISentence): IPerform => {
   const rule = getStringArgByKey(sentence, 'rule');
   const ruleFlag = getStringArgByKey(sentence, 'ruleFlag');
   const ruleText = getStringArgByKey(sentence, 'ruleText');
+  const ruleButtonText = getStringArgByKey(sentence, 'ruleButtonText') ?? 'OK';
 
   const font = getCurrentFontFamily();
 
@@ -51,7 +52,7 @@ export const getUserInput = (sentence: ISentence): IPerform => {
                 if (ruleText)
                   showGlogalDialog({
                     title: ruleText.replaceAll(/\$0/g, userInput.value),
-                    leftText: 'OK',
+                    leftText: ruleButtonText,
                   });
                 return;
               }
