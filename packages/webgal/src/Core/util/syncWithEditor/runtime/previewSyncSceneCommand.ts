@@ -11,6 +11,7 @@ import { logger } from '@/Core/util/logger';
 import { assetSetter, fileType } from '@/Core/util/gameAssetsAccess/assetSetter';
 import { SyncScenePayload } from '../../../../types/editorPreviewProtocol';
 import cloneDeep from 'lodash/cloneDeep';
+import isEqual from 'lodash/isEqual';
 
 let fastForwardTimeout: ReturnType<typeof setTimeout> | undefined;
 
@@ -31,17 +32,14 @@ export function executePreviewSyncSceneCommand({ sceneName, sentenceId, syncMode
   const sceneUrl = assetSetter(sceneName, fileType.scene);
 
   sceneFetcher(sceneUrl).then((rawScene) => {
-    const lastSharedSentenceId = findLastSharedSentence(
-      previousScene,
-      WebGAL.sceneManager.sceneData.currentScene,
-      sentenceId,
-    );
+    const nextScene = sceneParser(rawScene, sceneName, sceneUrl);
+    const lastSharedSentenceId = findLastSharedSentence(previousScene, nextScene, sentenceId);
     const recoverySentenceId = Math.min(sentenceId, lastSharedSentenceId);
     const backlogIndex = findLastAvailableBacklogEntry(recoverySentenceId, sceneName);
     const allowBacklogRecovery = backlogIndex >= 0 && syncMode === 'fast';
 
     resetStage(!allowBacklogRecovery);
-    WebGAL.sceneManager.sceneData.currentScene = sceneParser(rawScene, sceneName, sceneUrl);
+    WebGAL.sceneManager.sceneData.currentScene = nextScene;
     WebGAL.gameplay.isFast = true;
 
     if (allowBacklogRecovery) {
@@ -71,12 +69,14 @@ export function fastForwardToSentence(targetSentenceId: number, currentSceneName
 
 function findLastSharedSentence(previousScene: IScene, currentScene: IScene, targetSentenceId: number): number {
   let lastSharedSentenceId = 0;
+  const comparableSentenceCount = Math.min(
+    targetSentenceId,
+    previousScene.sentenceList.length,
+    currentScene.sentenceList.length,
+  );
 
-  for (let index = 0; index < targetSentenceId && index < previousScene.sentenceList.length; index += 1) {
-    const previousSentence = JSON.stringify(previousScene.sentenceList[index]);
-    const currentSentence = JSON.stringify(currentScene.sentenceList[index]);
-
-    if (previousSentence !== currentSentence) {
+  for (let index = 0; index < comparableSentenceCount; index += 1) {
+    if (!isEqual(previousScene.sentenceList[index], currentScene.sentenceList[index])) {
       break;
     }
 

@@ -474,6 +474,23 @@ describe('startPreviewSyncRuntime runtime behavior', () => {
     });
   });
 
+  it('skips snapshot serialization when the subscribed store update keeps the same snapshot inputs', async () => {
+    const harness = await setupWebSocketRuntimeHarness();
+    const stringifySpy = vi.spyOn(JSON, 'stringify');
+    const parseSpy = vi.spyOn(JSON, 'parse');
+
+    await completeRegisterPreviewHandshake(harness);
+    stringifySpy.mockClear();
+    parseSpy.mockClear();
+
+    harness.emitStoreUpdate();
+    await flushMicrotasks();
+
+    expect(harness.socket.sentMessages).toHaveLength(3);
+    expect(stringifySpy).not.toHaveBeenCalled();
+    expect(parseSpy).not.toHaveBeenCalled();
+  });
+
   it('forwards sync-scene requests to the scene sync executor and replies with a success envelope', async () => {
     const harness = await setupWebSocketRuntimeHarness();
 

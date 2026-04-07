@@ -27,6 +27,7 @@ import { resetStage } from '@/Core/controller/stage/resetStage';
 import { logger } from '@/Core/util/logger';
 import { stageActions } from '@/store/stageReducer';
 import { baseTransform } from '@/store/stageInterface';
+import type { IStageState } from '@/store/stageInterface';
 import { requestEmbeddedLaunchId } from './runtime/embeddedPreviewBootstrap';
 import {
   createPreviewSyncTransport,
@@ -36,6 +37,7 @@ import {
 import { executePreviewSyncSceneCommand } from './runtime/previewSyncSceneCommand';
 
 let previewSyncRuntimeStarted = false;
+type StageStateSnapshot = IStageState;
 
 interface RegisterPreviewLogContext {
   requestId: string;
@@ -66,7 +68,9 @@ export const startPreviewSyncRuntime = () => {
   let registered = false;
   let pendingRegisterRequestId: string | null = null;
   let pendingRegisterContext: RegisterPreviewLogContext | null = null;
-  let lastSnapshotSignature = '';
+  let lastPublishedSceneName: string | null = null;
+  let lastPublishedSentenceId: number | null = null;
+  let lastPublishedStageState: StageStateSnapshot | null = null;
   const embeddedLaunchIdPromise = requestEmbeddedLaunchId();
   let transport!: PreviewSyncTransport;
 
@@ -77,11 +81,13 @@ export const startPreviewSyncRuntime = () => {
     registered = false;
     pendingRegisterRequestId = null;
     pendingRegisterContext = null;
-    lastSnapshotSignature = '';
+    lastPublishedSceneName = null;
+    lastPublishedSentenceId = null;
+    lastPublishedStageState = null;
   };
 
-  const buildStageStateSnapshot = (): StageSnapshotUpdatedPayload['stageState'] => {
-    return JSON.parse(JSON.stringify(webgalStore.getState().stage)) as StageSnapshotUpdatedPayload['stageState'];
+  const buildStageStateSnapshot = (stageState: StageStateSnapshot): StageSnapshotUpdatedPayload['stageState'] => {
+    return JSON.parse(JSON.stringify(stageState)) as StageSnapshotUpdatedPayload['stageState'];
   };
 
   const publishReady = () => {
@@ -97,19 +103,29 @@ export const startPreviewSyncRuntime = () => {
       return;
     }
 
-    const payload = {
-      sceneName: WebGAL.sceneManager.sceneData.currentScene.sceneName,
-      sentenceId: WebGAL.sceneManager.sceneData.currentSentenceId,
-      stageState: buildStageStateSnapshot(),
-    };
-    const nextSignature = JSON.stringify(payload);
-    if (!force && nextSignature === lastSnapshotSignature) {
+    const stageState = webgalStore.getState().stage;
+    const sceneName = WebGAL.sceneManager.sceneData.currentScene.sceneName;
+    const sentenceId = WebGAL.sceneManager.sceneData.currentSentenceId;
+    const snapshotUnchanged =
+      stageState === lastPublishedStageState &&
+      sceneName === lastPublishedSceneName &&
+      sentenceId === lastPublishedSentenceId;
+
+    if (!force && snapshotUnchanged) {
       return;
     }
 
+    const payload = {
+      sceneName,
+      sentenceId,
+      stageState: buildStageStateSnapshot(stageState),
+    };
+
     const sent = transport.send(createEventEnvelope('stage.snapshot.updated', payload));
     if (sent) {
-      lastSnapshotSignature = nextSignature;
+      lastPublishedSceneName = sceneName;
+      lastPublishedSentenceId = sentenceId;
+      lastPublishedStageState = stageState;
     }
   };
 
