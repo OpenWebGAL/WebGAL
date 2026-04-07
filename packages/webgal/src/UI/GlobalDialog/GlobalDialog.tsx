@@ -12,7 +12,7 @@ export default function GlobalDialog() {
 
 interface IShowGlobalDialogProps {
   title: string;
-  leftText?: string;
+  leftText: string;
   rightText?: string;
   leftFunc?: Function;
   rightFunc?: Function;
