@@ -1,5 +1,5 @@
-import { syncFast } from '@/Core/util/syncWithEditor/syncWithOrigine';
+import { fastForwardToSentence } from '@/Core/util/syncWithEditor/runtime/previewSyncSceneCommand';
 
 export const bindExtraFunc = () => {
-  (window as any).JMP = syncFast;
+  (window as any).JMP = fastForwardToSentence;
 };
