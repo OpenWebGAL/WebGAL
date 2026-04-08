@@ -18,20 +18,27 @@ export const getRandomPerformName = (): string => {
 export class PerformController {
   public performList: Array<IPerform> = [];
 
+  /**
+   * 判断 perform 名称是否匹配（支持前缀匹配，用于清理并行演出）
+   * 并行演出的 performName 格式为 "baseName#uuid"，匹配时需要同时命中精确匹配和前缀匹配
+   */
+  private matchPerformName(performName: string, name: string): boolean {
+    return performName === name || performName.startsWith(name + '#');
+  }
+
   public arrangeNewPerform(perform: IPerform, script: ISentence, syncPerformState = true) {
-    if (!perform.isParallel) {
-      // 检查演出列表内是否有相同的演出，如果有，一定是出了什么问题
-      const dupPerformIndex = this.performList.findIndex((p) => p.performName === perform.performName);
-      if (dupPerformIndex > -1) {
-        // 结束并删除全部重复演出
-        for (let i = 0; i < this.performList.length; i++) {
-          const e = this.performList[i];
-          if (e.performName === perform.performName) {
-            e.stopFunction();
-            clearTimeout(e.stopTimeout as unknown as number);
-            this.performList.splice(i, 1);
-            i--;
-          }
+    // 检查演出列表内是否有相同的演出，如果有，一定是出了什么问题
+    // 并行演出的 performName 带有唯一后缀，因此不会命中去重
+    const dupPerformIndex = this.performList.findIndex((p) => p.performName === perform.performName);
+    if (dupPerformIndex > -1) {
+      // 结束并删除全部重复演出
+      for (let i = 0; i < this.performList.length; i++) {
+        const e = this.performList[i];
+        if (e.performName === perform.performName) {
+          e.stopFunction();
+          clearTimeout(e.stopTimeout as unknown as number);
+          this.performList.splice(i, 1);
+          i--;
         }
       }
     }
@@ -66,7 +73,7 @@ export class PerformController {
     if (!force) {
       for (let i = 0; i < this.performList.length; i++) {
         const e = this.performList[i];
-        if (!e.isHoldOn && e.performName === name) {
+        if (!e.isHoldOn && this.matchPerformName(e.performName, name)) {
           e.stopFunction();
           clearTimeout(e.stopTimeout as unknown as number);
           /**
@@ -87,15 +94,18 @@ export class PerformController {
     } else {
       for (let i = 0; i < this.performList.length; i++) {
         const e = this.performList[i];
-        if (e.performName === name) {
+        if (this.matchPerformName(e.performName, name)) {
           e.stopFunction();
           clearTimeout(e.stopTimeout as unknown as number);
+          /**
+           * 在演出列表里删除演出对象的操作必须在调用 goNextWhenOver 之前（同上）
+           */
+          this.performList.splice(i, 1);
+          i--;
           if (e.goNextWhenOver) {
             // nextSentence();
             this.goNextWhenOver();
           }
-          this.performList.splice(i, 1);
-          i--;
           /**
            * 从状态表里清除演出
            */

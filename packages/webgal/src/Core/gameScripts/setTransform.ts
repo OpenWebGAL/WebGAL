@@ -29,6 +29,7 @@ export const setTransform = (sentence: ISentence): IPerform => {
   const parallel = getBooleanArgByKey(sentence, 'parallel') ?? false;
 
   const performInitName = `animation-${target}`;
+  const performName = parallel ? `${performInitName}#${animationName}` : performInitName;
 
   if (!parallel) WebGAL.gameplay.performController.unmountPerform(performInitName, true);
 
@@ -75,7 +76,7 @@ export const setTransform = (sentence: ISentence): IPerform => {
   };
 
   return {
-    performName: performInitName,
+    performName: performName,
     duration: animationDuration,
     isHoldOn: keep,
     stopFunction,

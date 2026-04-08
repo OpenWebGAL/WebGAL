@@ -137,10 +137,10 @@ const stageSlice = createSlice({
           state.effects[effectIndex].transform!.position = targetPosition;
         }
       } else {
-        // Add a new effect
+        // Add a new effect, use baseTransform as default to ensure completeness
         state.effects.push({
           target,
-          transform,
+          transform: transform ? { ...baseTransform, ...transform } : { ...baseTransform },
         });
       }
     },
@@ -213,9 +213,10 @@ const stageSlice = createSlice({
       state.PerformList.push(action.payload);
     },
     removePerformByName: (state, action: PayloadAction<string>) => {
+      const name = action.payload;
       for (let i = 0; i < state.PerformList.length; i++) {
         const performItem: IRunPerform = state.PerformList[i];
-        if (performItem.id === action.payload) {
+        if (performItem.id === name || performItem.id.startsWith(name + '#')) {
           state.PerformList.splice(i, 1);
           i--;
         }

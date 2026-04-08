@@ -35,6 +35,7 @@ export const setTempAnimation = (sentence: ISentence): IPerform => {
 
   const key = `${target}-${animationName}-${animationDuration}`;
   const performInitName = `animation-${target}`;
+  const performName = parallel ? `${performInitName}#${animationName}` : performInitName;
   let keepAnimationStopped = false;
 
   if (!parallel) WebGAL.gameplay.performController.unmountPerform(performInitName, true);
@@ -68,7 +69,7 @@ export const setTempAnimation = (sentence: ISentence): IPerform => {
   };
 
   return {
-    performName: performInitName,
+    performName: performName,
     duration: animationDuration,
     isHoldOn: keep,
     stopFunction,
