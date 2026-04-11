@@ -33,7 +33,7 @@ const initialOptionSet: IOptionData = {
   textboxFont: 0,
   textboxOpacity: 75,
   language: language.zhCn,
-  voiceInterruption: voiceOption.yes,
+  voiceInterruption: voiceOption.no,
   fullScreen: fullScreenOption.off,
 };
 

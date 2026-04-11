@@ -303,6 +303,14 @@ export default class PixiStage {
     this.removeAnimationByIndex(index);
   }
 
+  public removeAnimationByTargetKey(targetKey: string) {
+    let index = this.stageAnimations.findIndex((e) => e.targetKey === targetKey);
+    while (index !== -1) {
+      this.removeAnimationByIndex(index);
+      index = this.stageAnimations.findIndex((e) => e.targetKey === targetKey);
+    }
+  }
+
   public removeAnimationWithSetEffects(key: string) {
     const index = this.stageAnimations.findIndex((e) => e.key === key);
     if (index >= 0) {
@@ -848,6 +856,62 @@ export default class PixiStage {
           spineObject.state.setAnimation(0, animation, false);
         }
       }
+    }
+  }
+
+  public changeSpineSkinByKey(key: string, skin: string) {
+    if (!skin) return;
+
+    const target = this.figureObjects.find((e) => e.key === key && !e.isExiting);
+    if (target?.sourceType !== 'spine') return;
+
+    const container = target.pixiContainer;
+    if (!container) return;
+    const sprite = container.children[0] as PIXI.Container;
+    if (sprite?.children?.[0]) {
+      const spineObject = sprite.children[0];
+      // @ts-ignore
+      const skeleton = spineObject.skeleton;
+      // @ts-ignore
+      const skeletonData = skeleton?.data ?? spineObject.spineData;
+      const skinObject =
+        // @ts-ignore
+        skeletonData?.findSkin?.(skin) ??
+        // @ts-ignore
+        skeletonData?.skins?.find((item: any) => item.name === skin);
+
+      if (!skeleton || !skinObject) {
+        logger.warn(`Spine skin not found: ${skin} on ${key}`);
+        return;
+      }
+
+      try {
+        // @ts-ignore
+        if (typeof skeleton.setSkinByName === 'function') {
+          // @ts-ignore
+          skeleton.setSkinByName(skin);
+        } else {
+          // @ts-ignore
+          skeleton.setSkin(skinObject);
+        }
+      } catch (error) {
+        // @ts-ignore
+        skeleton.setSkin?.(skinObject);
+      }
+
+      // @ts-ignore
+      if (typeof skeleton.setSlotsToSetupPose === 'function') {
+        // @ts-ignore
+        skeleton.setSlotsToSetupPose();
+      } else {
+        // @ts-ignore
+        skeleton.setupPoseSlots?.();
+      }
+
+      // @ts-ignore
+      spineObject.state?.apply?.(skeleton);
+      // @ts-ignore
+      skeleton.updateWorldTransform?.();
     }
   }
 
