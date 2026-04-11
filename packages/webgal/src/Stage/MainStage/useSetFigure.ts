@@ -26,6 +26,9 @@ export function useSetFigure(stageState: IStageState) {
    */
   useEffect(() => {
     for (const motion of live2dMotion) {
+      if (motion.skin) {
+        WebGAL.gameplay.pixiStage?.changeSpineSkinByKey(motion.target, motion.skin);
+      }
       WebGAL.gameplay.pixiStage?.changeModelMotionByKey(motion.target, motion.motion);
     }
   }, [live2dMotion]);
