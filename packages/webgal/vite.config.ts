@@ -9,7 +9,11 @@ import viteCompression from 'vite-plugin-compression';
 
 // @ts-ignore
 const env = process.env.NODE_ENV;
+const isTestMode = process.env.WEBGAL_TEST === 'true';
 console.log(env);
+if (isTestMode) {
+  console.log('[WebGAL] Test mode enabled');
+}
 
 export default defineConfig({
   plugins: [
@@ -26,6 +30,9 @@ export default defineConfig({
     alias: {
       '@': resolve('src'),
     },
+  },
+  define: {
+    __WEBGAL_TEST__: JSON.stringify(isTestMode),
   },
   build: {
     // sourcemap: true,
