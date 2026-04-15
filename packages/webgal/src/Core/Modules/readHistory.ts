@@ -81,22 +81,22 @@ export class ReadHistoryManager {
     this.saveReadHistory(scenarioName);
   }
 
-  public checkIsReaded() {
+  public checkIsRead() {
     this.checkLoad();
 
     const scenarioName = this.sceneManager.sceneData.currentScene.sceneName;
     const index = this.sceneManager.sceneData.currentSentenceId;
 
-    let isReaded = false;
+    let isRead = false;
     if (this.history.has(scenarioName)) {
       const bitset = this.history.get(scenarioName)!;
-      isReaded = (bitset[index >> 3] & (1 << (index & 7))) !== 0;
+      isRead = (bitset[index >> 3] & (1 << (index & 7))) !== 0;
     }
     webgalStore.dispatch(setStage({
       key: 'isRead',
-      value: isReaded,
+      value: isRead,
     }));
-    if (!isReaded) {
+    if (!isRead) {
       this.addReadHistory();
     }
   }
