@@ -35,6 +35,7 @@ const initialOptionSet: IOptionData = {
   language: language.zhCn,
   voiceInterruption: voiceOption.no,
   fullScreen: fullScreenOption.off,
+  skipAll: false,
 };
 
 // 初始化用户数据

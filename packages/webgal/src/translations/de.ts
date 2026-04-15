@@ -58,6 +58,13 @@ const de = {
               contributors: 'Contributors',
               website: 'Website',
             },
+            skipAll: {
+              title: 'Schnellvorlauf-Modus',
+              options: {
+                read: 'Gelesen',
+                all: 'Alle',
+              }
+            }
           },
         },
         display: {
