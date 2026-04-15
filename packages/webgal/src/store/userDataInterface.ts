@@ -91,6 +91,7 @@ export interface IUserData {
   optionData: IOptionData; // 用户设置选项数据
   appreciationData: IAppreciation;
   gameConfigInit: IGameVar;
+  readHistory: Record<string, string>;
 }
 
 export interface ISetUserDataPayload {

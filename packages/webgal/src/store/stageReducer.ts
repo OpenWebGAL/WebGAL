@@ -35,6 +35,7 @@ export const initState: IStageState = {
   figNameRight: '', // 立绘_右 文件地址（相对或绝对）
   freeFigure: [],
   figureAssociatedAnimation: [],
+  isRead: false,
   showText: '', // 文字
   showTextSize: -1,
   showName: '', // 人物名

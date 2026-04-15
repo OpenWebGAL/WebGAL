@@ -42,6 +42,8 @@ export class BacklogManager {
     // 存一下 Backlog
     const currentStageState = webgalStore.getState().stage;
     const stageStateToBacklog = cloneDeep(currentStageState);
+    // 确保原先未读的文本在使用 backlog 时能正确显示为已读文本
+    stageStateToBacklog.isRead = true;
     stageStateToBacklog.PerformList.forEach((ele) => {
       ele.script.args.forEach((argelement) => {
         if (argelement.key === 'concat') {
