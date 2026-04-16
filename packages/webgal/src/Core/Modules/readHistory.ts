@@ -33,7 +33,6 @@ export class ReadHistoryManager {
         for (let i = 0; i < binary.length; i++) {
           uint8[i] = binary.charCodeAt(i);
         }
-        console.log('Camille Load', uint8);
         this.history.set(key, uint8);
       }
     });
@@ -58,7 +57,12 @@ export class ReadHistoryManager {
       }));
     } catch {
       // 浏览器环境下没有 Buffer 时的兜底逻辑
-      const base64 = btoa(String.fromCharCode(...bitset));
+      let binary = '';
+      const len = bitset.length;
+      for (let i = 0; i < len; i++) {
+        binary += String.fromCharCode(bitset[i]);
+      }
+      const base64 = btoa(binary);
       webgalStore.dispatch(setReadHistory({
         key,
         value: base64,
@@ -75,8 +79,19 @@ export class ReadHistoryManager {
       const length = this.sceneManager.sceneData.currentScene.sentenceList.length;
       this.history.set(scenarioName, new Uint8Array(Math.ceil(length / 8)));
     }
-    const bitset = this.history.get(scenarioName)!;
-    bitset[index >> 3] |= (1 << (index & 7));
+    let bitset = this.history.get(scenarioName)!;
+
+    // 处理因剧本更新可能导致的 index 溢出问题
+    const requiredIndex = index >> 3;
+    if (requiredIndex >= bitset.length) {
+      const length = this.sceneManager.sceneData.currentScene.sentenceList.length;
+      const newBitset = new Uint8Array(Math.ceil(length / 8));
+      newBitset.set(bitset);
+      bitset = newBitset;
+      this.history.set(scenarioName, bitset);
+    }
+
+    bitset[requiredIndex] |= (1 << (index & 7));
 
     this.saveReadHistory(scenarioName);
   }
