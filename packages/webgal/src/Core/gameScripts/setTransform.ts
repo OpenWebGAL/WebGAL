@@ -35,8 +35,8 @@ export const setTransform = (sentence: ISentence): IPerform => {
 
   try {
     const frame = JSON.parse(animationString) as AnimationFrame;
-    // writeDefault时需要完整的当前effect，其他时候不需要
-    animationObj = generateTransformAnimationObj(target, frame, duration, ease, writeDefault);
+    // 保持 writeDefault 的旧语义；是否写完整字段由 parallel 单独控制
+    animationObj = generateTransformAnimationObj(target, frame, duration, ease, !parallel);
     console.log('animationObj:', animationObj);
   } catch (e) {
     // 解析都错误了，歇逼吧
@@ -58,6 +58,7 @@ export const setTransform = (sentence: ISentence): IPerform => {
       target,
       animationDuration,
       writeDefault,
+      !parallel,
     );
     if (animationObj) {
       logger.debug(`动画${animationName}作用在${target}`, animationDuration);
@@ -83,6 +84,5 @@ export const setTransform = (sentence: ISentence): IPerform => {
     blockingNext: () => false,
     blockingAuto: () => !keep,
     stopTimeout: undefined, // 暂时不用，后面会交给自动清除
-    isParallel: parallel,
   };
 };

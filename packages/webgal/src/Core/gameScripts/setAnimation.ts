@@ -39,6 +39,7 @@ export const setAnimation = (sentence: ISentence): IPerform => {
       target,
       animationDuration,
       writeDefault,
+      !parallel,
     );
     if (animationObj) {
       logger.debug(`动画${animationName}作用在${target}`, animationDuration);
@@ -64,6 +65,5 @@ export const setAnimation = (sentence: ISentence): IPerform => {
     blockingNext: () => false,
     blockingAuto: () => !keep,
     stopTimeout: undefined, // 暂时不用，后面会交给自动清除
-    isParallel: parallel,
   };
 };

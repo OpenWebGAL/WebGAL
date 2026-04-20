@@ -23,8 +23,6 @@ export interface IPerform {
   arrangePerformPromise?: Promise<IPerform>;
   // 跳过由 nextSentence 函数引发的演出回收
   skipNextCollect?: boolean;
-  // 标记此演出是否为并行演出，允许同一 target 上同时运行多个互不干扰的演出
-  isParallel?: boolean;
 }
 
 // next之后，可以被打断的演出会被打断，不能被打断的演出会继续，阻塞next的演出会阻止next被响应。
