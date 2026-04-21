@@ -26,6 +26,7 @@ pixiInit;
 WebGAL:接下来介绍一些新版本功能！
 WebGAL:比如这个[注](zhù)[音](yīn)功能，可以为游戏带来更好的体验！
 WebGAL:我们也支持了[文本拓展语法](style=color:#B5495B\; style-alltext=-webkit-text-stroke-color:#ffffff\;)，可以为[文](wen)[本](ben)带来[富文本支持](style-alltext=font-style:italic\;-webkit-text-stroke-color:#ffffff\; style=color:#66327C\;)、交互等特性。
+changeFigure:thinking.webp -left -transform={"position":{"x":500,"y":0}} -next;
 WebGAL:新版本添加了特性：获取用户输入，你要尝试一下吗？
 choose:尝试一下:userInput|算了吧:toNextPart;
 
@@ -35,6 +36,7 @@ WebGAL:很高兴遇见你，{name}！
 jumpLabel:toNextPart;
 
 label:toNextPart;
+changeFigure:stand.webp -left -transform={"position":{"x":500,"y":0}} -animationFlag=on -eyesOpen=stand.webp -eyesClose=stand.webp -mouthOpen=open_mouth.webp -mouthHalfOpen=open_mouth.webp -mouthClose=stand.webp -next;
 你可以通过以下两个分支了解 {engine} 的更多故事。 -v8.wav -left;
 choose:{engine} 发展历程:choose1|{engine} 冷知识:choose2;
 
