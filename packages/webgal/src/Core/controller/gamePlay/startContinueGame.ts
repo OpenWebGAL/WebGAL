@@ -10,6 +10,7 @@ import { restorePerform } from '@/Core/controller/storage/jumpFromBacklog';
 
 import { hasFastSaveRecord, loadFastSaveGame } from '@/Core/controller/storage/fastSaveLoad';
 import { WebGAL } from '@/Core/WebGAL';
+import { stageActions } from '@/store/stageReducer';
 
 /**
  * 从头开始游戏
@@ -40,6 +41,7 @@ export async function continueGame() {
     await loadFastSaveGame();
     return;
   }
+  webgalStore.dispatch(stageActions.resetIframe());
   if (
     WebGAL.sceneManager.sceneData.currentSentenceId === 0 &&
     WebGAL.sceneManager.sceneData.currentScene.sceneName === 'start.txt'

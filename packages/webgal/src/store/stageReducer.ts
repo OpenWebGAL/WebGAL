@@ -8,6 +8,7 @@ import {
   IEffect,
   IFigureMetadata,
   IFreeFigure,
+  IIFrame,
   ILive2DBlink,
   ILive2DExpression,
   ILive2DFocus,
@@ -15,7 +16,6 @@ import {
   IRunPerform,
   ISetGameVar,
   ISetStagePayload,
-  IStageAnimationSetting,
   IStageState,
   IUpdateAnimationSettingPayload,
 } from '@/store/stageInterface';
@@ -75,6 +75,7 @@ export const initState: IStageState = {
   isDisableTextbox: false,
   replacedUIlable: {},
   figureMetaData: {},
+  iframes: [], // 当前iframe的列表
 };
 
 /**
@@ -329,6 +330,26 @@ const stageSlice = createSlice({
           state.figureMetaData[action.payload[0]] = {};
         }
         state.figureMetaData[action.payload[0]][action.payload[1]] = action.payload[2];
+      }
+    },
+    addIframe: (state, action: PayloadAction<IIFrame>) => {
+      action.payload.isActive = true;
+      state.iframes.push(action.payload);
+    },
+    removeIframe: (state, action: PayloadAction<{ id: string; isActive?: boolean }>) => {
+      if (!action.payload.isActive) {
+        state.iframes = state.iframes.filter((e) => e.id !== action.payload.id);
+      } else {
+        state.iframes = state.iframes.map((e) => (e.id === action.payload.id ? { ...e, isActive: false } : e));
+      }
+    },
+    resetIframe: (state) => {
+      state.iframes = [];
+    },
+    updateIframePersistentData: (state, action: PayloadAction<{ id: string; persistentData: Record<string, any> }>) => {
+      const iframe = state.iframes.find((e) => e.id === action.payload.id);
+      if (iframe) {
+        iframe.persistentData = { ...iframe.persistentData, ...action.payload.persistentData };
       }
     },
   },

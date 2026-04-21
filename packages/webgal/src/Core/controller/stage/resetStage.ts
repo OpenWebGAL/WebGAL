@@ -1,4 +1,4 @@
-import { initState, resetStageState, setStage } from '@/store/stageReducer';
+import { initState, resetStageState, setStage, stageActions } from '@/store/stageReducer';
 import { webgalStore } from '@/store/store';
 import cloneDeep from 'lodash/cloneDeep';
 import { WebGAL } from '@/Core/WebGAL';
@@ -27,4 +27,7 @@ export const resetStage = (resetBacklog: boolean, resetSceneAndVar = true) => {
   if (!resetSceneAndVar) {
     webgalStore.dispatch(setStage({ key: 'GameVar', value: currentVars }));
   }
+
+  // 清空frames
+  webgalStore.dispatch(stageActions.resetIframe());
 };

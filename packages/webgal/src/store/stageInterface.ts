@@ -1,5 +1,20 @@
 import { ISentence } from '@/Core/controller/scene/sceneInterface';
 import { BlinkParam, FocusParam } from '@/Core/live2DCore';
+import { CSSProperties } from 'react';
+
+export interface IIFrame {
+  id: string;
+  src: string;
+  sandbox: string;
+  width?: string;
+  height?: string;
+  style: CSSProperties;
+  isActive?: boolean;
+  wait?: boolean; // 是否等待iframe完成
+  returnValue?: string | null; // iframe返回值的变量名
+  persistentData?: Record<string, any>; // iframe的持久化数据
+  injectArgs: Record<string, any>; // iframe注入的参数，将挂载在window.webgal.params中
+}
 
 /**
  * 游戏内变量
@@ -250,6 +265,7 @@ export interface IStageState {
   isDisableTextbox: boolean;
   replacedUIlable: Record<string, string>;
   figureMetaData: figureMetaData;
+  iframes: IIFrame[];
 }
 
 /**
