@@ -46,6 +46,7 @@ export const startFast = (force = false) => {
   WebGAL.gameplay.fastInterval = setInterval(() => {
     if (!skipAll && !webgalStore.getState().stage.isRead) {
       stopFast();
+      return;
     }
     nextSentence();
   }, SYSTEM_CONFIG.fast_timeout);
