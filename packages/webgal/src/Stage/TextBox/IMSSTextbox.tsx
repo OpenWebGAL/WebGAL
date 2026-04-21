@@ -1,5 +1,5 @@
 import styles from './textbox.module.scss';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { WebGAL } from '@/Core/WebGAL';
 import { ITextboxProps } from './types';
 import useApplyStyle from '@/hooks/useApplyStyle';
@@ -7,6 +7,11 @@ import { css } from '@emotion/css';
 import { textSize } from '@/store/userDataInterface';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
+
+const hasEmoji = (text: any): boolean => {
+  if (typeof text !== 'string') return false;
+  return /\p{Emoji}/u.test(text);
+};
 
 export default function IMSSTextbox(props: ITextboxProps) {
   const {
@@ -72,24 +77,18 @@ export default function IMSSTextbox(props: ITextboxProps) {
       }
       const styleClassName = ' ' + css(style, { label: 'showname' });
       const styleAllText = ' ' + css(style_alltext, { label: 'showname' });
-      if (isEnhanced) {
-        return (
-          <span key={index} style={{ position: 'relative' }}>
+      const skipEffect = hasEmoji(e);
+      return (
+        <span key={index} style={{ position: 'relative' }}>
+          {skipEffect ? (
+            <span className={styleClassName + styleAllText}>{e}</span>
+          ) : (
             <span className={styles.zhanwei + styleAllText}>
               {e}
               <span className={applyStyle('outerName', styles.outerName) + styleClassName + styleAllText}>{e}</span>
               {isUseStroke && <span className={applyStyle('innerName', styles.innerName) + styleAllText}>{e}</span>}
             </span>
-          </span>
-        );
-      }
-      return (
-        <span key={index} style={{ position: 'relative' }}>
-          <span className={styles.zhanwei + styleAllText}>
-            {e}
-            <span className={applyStyle('outerName', styles.outerName) + styleClassName + styleAllText}>{e}</span>
-            {isUseStroke && <span className={applyStyle('innerName', styles.innerName) + styleAllText}>{e}</span>}
-          </span>
+          )}
         </span>
       );
     });
@@ -140,36 +139,44 @@ export default function IMSSTextbox(props: ITextboxProps) {
       }
       const styleClassName = ' ' + css(style);
       const styleAllText = ' ' + css(style_alltext);
+      const skipEffect = hasEmoji(e);
+
       if (allTextIndex < prevLength) {
         return (
           <span
-            // data-text={e}
             id={`${delay}`}
             className={applyStyle('TextBox_textElement_Settled', styles.TextBox_textElement_Settled)}
             key={currentDialogKey + index}
             style={{ animationDelay: `${delay}ms`, animationDuration: `${textDuration}ms` }}
           >
-            <span className={styles.zhanwei + styleAllText}>
-              {e}
-              <span className={applyStyle('outer', styles.outer) + styleClassName + styleAllText}>{e}</span>
-              {isUseStroke && <span className={applyStyle('inner', styles.inner) + styleAllText}>{e}</span>}
-            </span>
+            {skipEffect ? (
+              <span className={styleClassName + styleAllText}>{e}</span>
+            ) : (
+              <span className={styles.zhanwei + styleAllText}>
+                {e}
+                <span className={applyStyle('outer', styles.outer) + styleClassName + styleAllText}>{e}</span>
+                {isUseStroke && <span className={applyStyle('inner', styles.inner) + styleAllText}>{e}</span>}
+              </span>
+            )}
           </span>
         );
       }
       return (
         <span
-          // data-text={e}
           id={`${delay}`}
           className={`${applyStyle('TextBox_textElement_start', styles.TextBox_textElement_start)} Textelement_start`}
           key={currentDialogKey + index}
           style={{ animationDelay: `${delay}ms`, position: 'relative' }}
         >
-          <span className={styles.zhanwei + styleAllText}>
-            {e}
-            <span className={applyStyle('outer', styles.outer) + styleClassName + styleAllText}>{e}</span>
-            {isUseStroke && <span className={applyStyle('inner', styles.inner) + styleAllText}>{e}</span>}
-          </span>
+          {skipEffect ? (
+            <span className={styleClassName + styleAllText}>{e}</span>
+          ) : (
+            <span className={styles.zhanwei + styleAllText}>
+              {e}
+              <span className={applyStyle('outer', styles.outer) + styleClassName + styleAllText}>{e}</span>
+              {isUseStroke && <span className={applyStyle('inner', styles.inner) + styleAllText}>{e}</span>}
+            </span>
+          )}
         </span>
       );
     });
