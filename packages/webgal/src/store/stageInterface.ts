@@ -215,6 +215,7 @@ export interface IStageState {
   // 自由立绘
   freeFigure: Array<IFreeFigure>;
   figureAssociatedAnimation: Array<IFigureAssociatedAnimation>;
+  isRead: boolean; // 是否已读
   showText: string; // 文字
   showTextSize: number; // 文字
   showName: string; // 人物名

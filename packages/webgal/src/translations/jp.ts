@@ -58,6 +58,13 @@ const jp = {
               contributors: '貢献者',
               website: 'ウェブサイト',
             },
+            skipAll: {
+              title: 'スキップモード',
+              options: {
+                read: '既読',
+                all: 'すべて',
+              }
+            }
           },
         },
         display: {
