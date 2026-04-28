@@ -3,11 +3,7 @@ import { IPerform } from '@/Core/Modules/perform/performInterface';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import styles from '@/Stage/FullScreenPerform/fullScreenPerform.module.scss';
-import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
-import { PerformController } from '@/Core/Modules/perform/performController';
-import { logger } from '@/Core/util/logger';
 import { WebGAL } from '@/Core/WebGAL';
-import { get, replace } from 'lodash';
 import useEscape from '@/hooks/useEscape';
 import { getBooleanArgByKey, getNumberArgByKey, getStringArgByKey } from '../util/getSentenceArg';
 /**
@@ -78,16 +74,14 @@ export const intro = (sentence: ISentence): IPerform => {
   let baseDuration = endWait + delayTime * introArray.length;
   const duration = isHold ? 1000 * 60 * 60 * 24 : 1000 + delayTime * introArray.length;
   let isBlocking = true;
-  let setBlockingStateTimeout = setTimeout(() => {
-    isBlocking = false;
-  }, baseDuration);
 
-  let timeout = setTimeout(() => {});
+  let setBlockingStateTimeout: ReturnType<typeof setTimeout> | undefined;
+  let timeout: ReturnType<typeof setTimeout> | undefined;
   const toNextIntroElement = () => {
     const introContainer = document.getElementById('introContainer');
     // 由于用户操作，相当于时间向前推进，这时候更新这个演出的预计完成时间
     baseDuration -= delayTime;
-    clearTimeout(setBlockingStateTimeout);
+    if (setBlockingStateTimeout) clearTimeout(setBlockingStateTimeout);
     setBlockingStateTimeout = setTimeout(() => {
       isBlocking = false;
     }, baseDuration);
@@ -112,8 +106,8 @@ export const intro = (sentence: ISentence): IPerform => {
           }
         }
         if (isEnd) {
-          clearTimeout(timeout);
-          clearTimeout(setBlockingStateTimeout);
+          if (timeout) clearTimeout(timeout);
+          if (setBlockingStateTimeout) clearTimeout(setBlockingStateTimeout);
           WebGAL.gameplay.performController.unmountPerform(performName);
         }
         return;
@@ -129,13 +123,13 @@ export const intro = (sentence: ISentence): IPerform => {
         if (index === len - 1) {
           // 并且已经完全显示了，这时候进行下一步
           if (currentDelay === 0) {
-            clearTimeout(timeout);
+            if (timeout) clearTimeout(timeout);
             WebGAL.gameplay.performController.unmountPerform(performName);
             // 卸载函数发生在 nextSentence 生效前，所以不需要做下一行的操作。
             // setTimeout(nextSentence, 0);
           } else {
             // 还没有完全显示，但是因为时间的推进，要提前完成演出，更新用于结束演出的计时器
-            clearTimeout(timeout);
+            if (timeout) clearTimeout(timeout);
             // 如果 Hold 了，自然不要自动结束
             if (!isHold) {
               timeout = setTimeout(() => {
@@ -149,10 +143,8 @@ export const intro = (sentence: ISentence): IPerform => {
   };
 
   /**
-   * 接受 next 事件
+   * 构造 intro 视图。真正挂载必须等 commit 后的 startFunction。
    */
-  WebGAL.events.userInteractNext.on(toNextIntroElement);
-
   const showIntro = introArray.map((e, i) => (
     <div
       key={'introtext' + i + Math.random().toString()}
@@ -168,28 +160,36 @@ export const intro = (sentence: ISentence): IPerform => {
       <div style={{ padding: '3em 4em 3em 4em' }}>{showIntro}</div>
     </div>
   );
-  // eslint-disable-next-line react/no-deprecated
-  ReactDOM.render(intro, document.getElementById('introContainer'));
-  const introContainer = document.getElementById('introContainer');
-
-  if (introContainer) {
-    introContainer.style.display = 'block';
-  }
 
   return {
     performName,
     duration,
     isHoldOn: false,
+    startFunction: () => {
+      isBlocking = true;
+      setBlockingStateTimeout = setTimeout(() => {
+        isBlocking = false;
+      }, baseDuration);
+      WebGAL.events.userInteractNext.on(toNextIntroElement);
+      // eslint-disable-next-line react/no-deprecated
+      ReactDOM.render(intro, document.getElementById('introContainer'));
+      const introContainer = document.getElementById('introContainer');
+
+      if (introContainer) {
+        introContainer.style.display = 'block';
+      }
+    },
     stopFunction: () => {
       const introContainer = document.getElementById('introContainer');
       if (introContainer) {
         introContainer.style.display = 'none';
       }
+      if (timeout) clearTimeout(timeout);
+      if (setBlockingStateTimeout) clearTimeout(setBlockingStateTimeout);
       WebGAL.events.userInteractNext.off(toNextIntroElement);
     },
     blockingNext: () => isBlocking,
     blockingAuto: () => isBlocking,
-    stopTimeout: undefined, // 暂时不用，后面会交给自动清除
     goNextWhenOver: true,
   };
 };

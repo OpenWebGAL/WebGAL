@@ -64,7 +64,7 @@ export function loadGameFromStageData(stageData: ISaveData) {
   // 确保原先未读的文本在 load 时能正确显示为已读文本
   newStageState.isRead = true;
   const dispatch = webgalStore.dispatch;
-  stageStateManager.resetAllStageState(newStageState);
+  stageStateManager.replaceCalculationStageState(newStageState);
 
   // 恢复演出
   setTimeout(restorePerform, 0);
@@ -75,5 +75,5 @@ export function loadGameFromStageData(stageData: ISaveData) {
   /**
    * 恢复模糊背景
    */
-  setEbg(stageStateManager.getViewStageState().bgName);
+  setEbg(newStageState.bgName);
 }

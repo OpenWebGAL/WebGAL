@@ -77,7 +77,6 @@ export const choose = (sentence: ISentence): IPerform => {
     },
     blockingNext: () => true,
     blockingAuto: () => true,
-    stopTimeout: undefined, // 暂时不用，后面会交给自动清除
   };
 };
 

@@ -9,7 +9,6 @@ import {
   performMouthAnimation,
   updateThresholds,
 } from '@/Core/gameScripts/vocal/vocalAnimation';
-import { match } from '../../util/match';
 import { WebGAL } from '@/Core/WebGAL';
 import { stageStateManager } from '@/Core/Modules/stage/stageStateManager';
 
@@ -43,149 +42,125 @@ export const playVocal = (sentence: ISentence) => {
   const lerpSpeed = 1;
 
   // 先停止之前的语音
-  let VocalControl: any = document.getElementById('currentVocal');
   WebGAL.gameplay.performController.unmountPerform('vocal-play', true);
-  if (VocalControl !== null) {
-    VocalControl.currentTime = 0;
-    VocalControl.pause();
-  }
 
   // 获得舞台状态
   stageStateManager.setStage('playVocal', url);
   stageStateManager.setStage('vocal', url);
+  stageStateManager.setStage('vocalVolume', volume);
 
   let isOver = false;
+  let startTimer: ReturnType<typeof setTimeout> | undefined;
+  let blinkEndTimer: ReturnType<typeof setTimeout> | undefined;
 
   /**
    * 嘴型同步
    */
 
   return {
-    arrangePerformPromise: new Promise((resolve) => {
-      // 播放语音
-      setTimeout(() => {
-        let VocalControl: any = document.getElementById('currentVocal');
-        // 设置语音音量
-        stageStateManager.setStageAndCommit('vocalVolume', volume);
-        // 设置语音
-        if (VocalControl !== null) {
-          VocalControl.currentTime = 0;
-          // 播放并作为一个特别演出加入
-          const perform = {
-            performName: performInitName,
-            duration: 1000 * 60 * 60,
-            isOver: false,
-            isHoldOn: false,
-            stopFunction: () => {
-              clearInterval(audioContextWrapper.audioLevelInterval);
-              VocalControl.pause();
-              key = key ? key : `fig-${pos}`;
-              const animationItem = figureAssociatedAnimation.find((tid) => tid.targetId === key);
-              performMouthAnimation({
-                audioLevel: 0,
-                OPEN_THRESHOLD: 1,
-                HALF_OPEN_THRESHOLD: 1,
-                currentMouthValue,
-                lerpSpeed,
-                key,
-                animationItem,
-                pos,
-              });
-              clearTimeout(audioContextWrapper.blinkTimerID);
-            },
-            blockingNext: () => false,
-            blockingAuto: () => {
-              return !isOver;
-            },
-            skipNextCollect: true,
-            stopTimeout: undefined, // 暂时不用，后面会交给自动清除
-          };
-          WebGAL.gameplay.performController.arrangeNewPerform(perform, sentence, false);
-          key = key ? key : `fig-${pos}`;
-          const animationItem = figureAssociatedAnimation.find((tid) => tid.targetId === key);
-          if (animationItem) {
-            let maxAudioLevel = 0;
+    performName: performInitName,
+    duration: 1000 * 60 * 60,
+    isHoldOn: false,
+    skipNextCollect: true,
+    startFunction: () => {
+      startTimer = setTimeout(() => {
+        const VocalControl = document.getElementById('currentVocal') as HTMLMediaElement | null;
+        if (VocalControl === null) {
+          isOver = true;
+          return;
+        }
+        VocalControl.currentTime = 0;
+        key = key ? key : `fig-${pos}`;
+        const animationItem = figureAssociatedAnimation.find((tid) => tid.targetId === key);
+        if (animationItem) {
+          const foundFigure = freeFigure.find((figure) => figure.key === key);
 
-            const foundFigure = freeFigure.find((figure) => figure.key === key);
-
-            if (foundFigure) {
-              pos = foundFigure.basePosition;
-            }
-
-            if (!audioContextWrapper.audioContext) {
-              let audioContext: AudioContext | null;
-              audioContext = new AudioContext();
-              audioContextWrapper.analyser = audioContext.createAnalyser();
-              audioContextWrapper.analyser.fftSize = 256;
-              audioContextWrapper.dataArray = new Uint8Array(audioContextWrapper.analyser.frequencyBinCount);
-            }
-
-            if (!audioContextWrapper.analyser) {
-              audioContextWrapper.analyser = audioContextWrapper.audioContext.createAnalyser();
-              audioContextWrapper.analyser.fftSize = 256;
-            }
-
-            bufferLength = audioContextWrapper.analyser.frequencyBinCount;
-            audioContextWrapper.dataArray = new Uint8Array(bufferLength);
-            let vocalControl = document.getElementById('currentVocal') as HTMLMediaElement;
-
-            if (!audioContextWrapper.source || audioContextWrapper.source.mediaElement !== vocalControl) {
-              if (audioContextWrapper.source) {
-                audioContextWrapper.source.disconnect();
-              }
-              audioContextWrapper.source = audioContextWrapper.audioContext.createMediaElementSource(vocalControl);
-              audioContextWrapper.source.connect(audioContextWrapper.analyser!);
-            }
-
-            audioContextWrapper.analyser.connect(audioContextWrapper.audioContext.destination);
-
-            // Lip-snc Animation
-            audioContextWrapper.audioLevelInterval = setInterval(() => {
-              const audioLevel = getAudioLevel(
-                audioContextWrapper.analyser!,
-                audioContextWrapper.dataArray!,
-                bufferLength,
-              );
-              const { OPEN_THRESHOLD, HALF_OPEN_THRESHOLD } = updateThresholds(audioLevel);
-
-              performMouthAnimation({
-                audioLevel,
-                OPEN_THRESHOLD,
-                HALF_OPEN_THRESHOLD,
-                currentMouthValue,
-                lerpSpeed,
-                key,
-                animationItem,
-                pos,
-              });
-            }, 50);
-
-            // blinkAnimation
-            let animationEndTime: number;
-
-            // 10sec
-            animationEndTime = Date.now() + 10000;
-            performBlinkAnimation({ key, animationItem, pos, animationEndTime });
-
-            // 10sec
-            setTimeout(() => {
-              clearTimeout(audioContextWrapper.blinkTimerID);
-            }, 10000);
+          if (foundFigure) {
+            pos = foundFigure.basePosition;
           }
 
-          VocalControl?.play();
+          if (!audioContextWrapper.analyser) {
+            audioContextWrapper.analyser = audioContextWrapper.audioContext.createAnalyser();
+            audioContextWrapper.analyser.fftSize = 256;
+          }
 
-          VocalControl.onended = () => {
-            for (const e of WebGAL.gameplay.performController.performList) {
-              if (e.performName === performInitName) {
-                isOver = true;
-                e.stopFunction();
-                WebGAL.gameplay.performController.unmountPerform(e.performName);
-              }
+          bufferLength = audioContextWrapper.analyser.frequencyBinCount;
+          audioContextWrapper.dataArray = new Uint8Array(bufferLength);
+          const vocalControl = document.getElementById('currentVocal') as HTMLMediaElement;
+
+          if (!audioContextWrapper.source || audioContextWrapper.source.mediaElement !== vocalControl) {
+            if (audioContextWrapper.source) {
+              audioContextWrapper.source.disconnect();
             }
-          };
+            audioContextWrapper.source = audioContextWrapper.audioContext.createMediaElementSource(vocalControl);
+            audioContextWrapper.source.connect(audioContextWrapper.analyser);
+          }
+
+          audioContextWrapper.analyser.connect(audioContextWrapper.audioContext.destination);
+
+          // Lip-sync Animation
+          audioContextWrapper.audioLevelInterval = setInterval(() => {
+            const audioLevel = getAudioLevel(
+              audioContextWrapper.analyser!,
+              audioContextWrapper.dataArray!,
+              bufferLength,
+            );
+            const { OPEN_THRESHOLD, HALF_OPEN_THRESHOLD } = updateThresholds(audioLevel);
+
+            performMouthAnimation({
+              audioLevel,
+              OPEN_THRESHOLD,
+              HALF_OPEN_THRESHOLD,
+              currentMouthValue,
+              lerpSpeed,
+              key,
+              animationItem,
+              pos,
+            });
+          }, 50);
+
+          const animationEndTime = Date.now() + 10000;
+          performBlinkAnimation({ key, animationItem, pos, animationEndTime });
+
+          blinkEndTimer = setTimeout(() => {
+            clearTimeout(audioContextWrapper.blinkTimerID);
+          }, 10000);
         }
+
+        VocalControl.play().catch(() => {});
+
+        VocalControl.onended = () => {
+          isOver = true;
+          WebGAL.gameplay.performController.unmountPerform(performInitName);
+        };
       }, 1);
-    }),
+    },
+    stopFunction: () => {
+      if (startTimer) clearTimeout(startTimer);
+      if (blinkEndTimer) clearTimeout(blinkEndTimer);
+      clearInterval(audioContextWrapper.audioLevelInterval);
+      const VocalControl = document.getElementById('currentVocal') as HTMLMediaElement | null;
+      if (VocalControl) {
+        VocalControl.pause();
+        VocalControl.onended = null;
+      }
+      key = key ? key : `fig-${pos}`;
+      const animationItem = figureAssociatedAnimation.find((tid) => tid.targetId === key);
+      performMouthAnimation({
+        audioLevel: 0,
+        OPEN_THRESHOLD: 1,
+        HALF_OPEN_THRESHOLD: 1,
+        currentMouthValue,
+        lerpSpeed,
+        key,
+        animationItem,
+        pos,
+      });
+      clearTimeout(audioContextWrapper.blinkTimerID);
+    },
+    blockingNext: () => false,
+    blockingAuto: () => {
+      return !isOver;
+    },
   };
 };

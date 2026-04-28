@@ -15,6 +15,7 @@ import {
   DEFAULT_FIG_OUT_DURATION,
 } from '../constants';
 import { stageStateManager } from '@/Core/Modules/stage/stageStateManager';
+import { AnimationFrame } from '@/Core/Modules/animations';
 
 // eslint-disable-next-line max-params
 export function getAnimationObject(
@@ -23,7 +24,34 @@ export function getAnimationObject(
   duration: number,
   writeDefault: boolean,
   writeFullEffect = true,
+  syncEndStateToStageState = true,
 ) {
+  const mappedEffects = getAnimationTimeline(animationName, target, writeDefault, writeFullEffect);
+  if (mappedEffects) {
+    return generateTimelineObj(mappedEffects, target, duration, syncEndStateToStageState);
+  }
+  return null;
+}
+
+export function applyAnimationEndState(
+  animationName: string,
+  target: string,
+  writeDefault: boolean,
+  writeFullEffect = true,
+) {
+  const mappedEffects = getAnimationTimeline(animationName, target, writeDefault, writeFullEffect);
+  if (!mappedEffects || mappedEffects.length === 0) return null;
+  const { duration, ease, ...endState } = mappedEffects[mappedEffects.length - 1];
+  stageStateManager.updateEffect({ target, transform: endState });
+  return mappedEffects;
+}
+
+export function getAnimationTimeline(
+  animationName: string,
+  target: string,
+  writeDefault: boolean,
+  writeFullEffect = true,
+): AnimationFrame[] | null {
   const effect = WebGAL.animationManager.getAnimations().find((ani) => ani.name === animationName);
   if (effect) {
     const unionKeys = new Set<string>();
@@ -61,7 +89,7 @@ export function getAnimationObject(
       return newEffect;
     });
     logger.debug('装载自定义动画', mappedEffects);
-    return generateTimelineObj(mappedEffects, target, duration);
+    return mappedEffects;
   }
   return null;
 }

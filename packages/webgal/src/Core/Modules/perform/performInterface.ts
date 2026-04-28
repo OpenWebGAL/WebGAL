@@ -11,18 +11,16 @@ export interface IPerform {
   isHoldOn: boolean;
   // 启动演出的函数；只在状态 commit 后调用
   startFunction?: () => void;
+  // 演出是否已经启动；未 commit 的演出被清理时不调用卸载函数
+  isStarted?: boolean;
   // 卸载演出的函数
   stopFunction: () => void;
   // 演出是否阻塞游戏流程继续（一个函数，返回 boolean类型的结果，判断要不要阻塞）
   blockingNext: () => boolean;
   // 演出是否阻塞自动模式（一个函数，返回 boolean类型的结果，判断要不要阻塞）
   blockingAuto: () => boolean;
-  // 自动回收使用的 Timeout
-  stopTimeout: undefined | ReturnType<typeof setTimeout>;
   // 演出结束后转到下一句
   goNextWhenOver?: boolean;
-  // 对于延迟触发的演出，使用 Promise
-  arrangePerformPromise?: Promise<IPerform>;
   // 跳过由 nextSentence 函数引发的演出回收
   skipNextCollect?: boolean;
 }
@@ -42,5 +40,4 @@ export const initPerform: IPerform = {
   stopFunction: () => {},
   blockingNext: () => false,
   blockingAuto: () => true,
-  stopTimeout: undefined,
 };

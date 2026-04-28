@@ -10,7 +10,6 @@ import { RootState, webgalStore } from '@/store/store';
 import { setVisibility } from '@/store/GUIReducer';
 import { TextBoxFilm } from '@/Stage/TextBox/TextBoxFilm';
 import { useHotkey } from '@/hooks/useHotkey';
-import { MainStage } from '@/Stage/MainStage/MainStage';
 import IntroContainer from '@/Stage/introContainer/IntroContainer';
 import { isIOS } from '@/Core/initializeScript';
 import { WebGAL } from '@/Core/WebGAL';
@@ -86,7 +85,6 @@ export const Stage: FC = () => {
       <FullScreenPerform />
       {/* 已弃用旧的立绘与背景舞台 */}
       {/* <OldStage /> */}
-      <MainStage />
       <div id="pixiContianer" className={styles.pixiContainer} style={{ zIndex: isIOS ? '-5' : undefined }} />
       <div id="chooseContainer" className={styles.chooseContainer} />
       {GUIState.showTextBox && stageState.enableFilm === '' && !stageState.isDisableTextbox && <TextBox />}

@@ -11,10 +11,12 @@ import { webSocketFunc } from '@/Core/util/syncWithEditor/webSocketFunc';
 import uniqWith from 'lodash/uniqWith';
 import { scenePrefetcher } from './util/prefetcher/scenePrefetcher';
 import PixiStage from '@/Core/controller/stage/pixi/PixiController';
+import { syncPixiStageState } from '@/Core/controller/stage/pixi/syncPixiStageState';
 import axios from 'axios';
 import { __INFO } from '@/config/info';
 import { WebGAL } from '@/Core/WebGAL';
 import { loadTemplate } from '@/Core/util/coreInitialFunction/templateLoader';
+import { stageStateManager } from '@/Core/Modules/stage/stageStateManager';
 
 export const isIOS = window.__WEBGAL_DEVICE_INFO__?.isIOS ?? false; // 判断是否是 iOS 终端
 
@@ -61,6 +63,7 @@ export const initializeScript = (): void => {
    * 启动Pixi
    */
   WebGAL.gameplay.pixiStage = new PixiStage();
+  stageStateManager.setCommitHandler(syncPixiStageState);
 
   /**
    * iOS 设备 卸载所有 Service Worker

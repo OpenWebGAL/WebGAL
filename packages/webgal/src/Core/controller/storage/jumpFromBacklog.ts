@@ -21,10 +21,17 @@ export const restorePerform = () => {
   const performToRestore = cloneDeep(stageState.PerformList);
   // 清除状态表中演出序列
   stageStateManager.removeAllPerform();
-  performToRestore.forEach((e) => {
-    runScript(e.script);
-  });
-  stageStateManager.commit();
+  WebGAL.gameplay.performController.beginCollectingPerforms();
+  try {
+    performToRestore.forEach((e) => {
+      runScript(e.script);
+    });
+  } finally {
+    WebGAL.gameplay.performController.endCollectingPerforms();
+  }
+  stageStateManager.commit({ applyPixiEffects: false });
+  WebGAL.gameplay.performController.commitPendingPerforms();
+  stageStateManager.applyCommittedPixiEffects();
 };
 
 /**
@@ -71,7 +78,7 @@ export const jumpFromBacklog = (index: number, refetchScene = true) => {
   // 确保原先未读的文本在使用 backlog 时能正确显示为已读文本
   newStageState.isRead = true;
 
-  stageStateManager.resetAllStageState(newStageState);
+  stageStateManager.replaceCalculationStageState(newStageState);
 
   // 恢复演出
   setTimeout(restorePerform, 0);

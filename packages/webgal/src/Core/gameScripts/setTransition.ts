@@ -25,6 +25,5 @@ export const setTransition = (sentence: ISentence): IPerform => {
     stopFunction: () => {},
     blockingNext: () => false,
     blockingAuto: () => false,
-    stopTimeout: undefined, // 暂时不用，后面会交给自动清除
   };
 };

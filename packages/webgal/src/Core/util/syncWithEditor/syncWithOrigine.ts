@@ -3,18 +3,16 @@ import { setVisibility } from '@/store/GUIReducer';
 import { WebGAL } from '@/Core/WebGAL';
 import { resetStage } from '@/Core/controller/stage/resetStage';
 import { sceneFetcher } from '@/Core/controller/scene/sceneFetcher';
-import { IScene } from '@/Core/controller/scene/sceneInterface';
-import { jumpFromBacklog } from '@/Core/controller/storage/jumpFromBacklog';
-import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
+import { commitForward, forward } from '@/Core/controller/gamePlay/nextSentence';
 import { sceneParser } from '@/Core/parser/sceneParser';
 import { logger } from '@/Core/util/logger';
 import { assetSetter, fileType } from '@/Core/util/gameAssetsAccess/assetSetter';
-import cloneDeep from 'lodash/cloneDeep';
-
-let syncFastTimeout: ReturnType<typeof setTimeout> | undefined;
 
 export const syncWithOrigine = (sceneName: string, sentenceId: number, expermental = false) => {
   logger.warn('正在跳转到' + sceneName + ':' + sentenceId);
+  if (expermental) {
+    logger.warn('实时预览已使用瞬间跳转，实验性 Backlog 恢复路径被跳过');
+  }
   const dispatch = webgalStore.dispatch;
   dispatch(setVisibility({ component: 'showTitle', visibility: false }));
   dispatch(setVisibility({ component: 'showMenuPanel', visibility: false }));
@@ -23,65 +21,58 @@ export const syncWithOrigine = (sceneName: string, sentenceId: number, experment
   if (title) {
     title.style.display = 'none';
   }
-  const pastScene = cloneDeep(WebGAL.sceneManager.sceneData.currentScene);
   // 重新获取场景
   const sceneUrl: string = assetSetter(sceneName, fileType.scene);
   // 场景写入到运行时
   sceneFetcher(sceneUrl).then((rawScene) => {
-    // 等等，先检查一下能不能恢复场景
-    const lastSameSentence = findLastSameSentence(pastScene, WebGAL.sceneManager.sceneData.currentScene, sentenceId);
-    const lastRecoverySentenceId = Math.min(sentenceId, lastSameSentence);
-    const recId = findLastAvailableBacklog(lastRecoverySentenceId, sceneName);
-    const isCanRec = recId >= 0 && expermental;
-    resetStage(!isCanRec);
+    resetStage(true);
     WebGAL.sceneManager.sceneData.currentScene = sceneParser(rawScene, sceneName, sceneUrl);
     // 开始快进到指定语句
     const currentSceneName = WebGAL.sceneManager.sceneData.currentScene.sceneName;
-    WebGAL.gameplay.isFast = true;
-    if (isCanRec) {
-      jumpFromBacklog(recId, false);
-    }
-    if (syncFastTimeout) {
-      // 之前发生的跳转要清理掉
-      clearTimeout(syncFastTimeout);
-    }
     syncFast(sentenceId, currentSceneName);
   });
 };
 
 export function syncFast(sentenceId: number, currentSceneName: string) {
-  if (
-    WebGAL.sceneManager.sceneData.currentSentenceId < sentenceId &&
-    WebGAL.sceneManager.sceneData.currentScene.sceneName === currentSceneName
-  ) {
-    nextSentence();
-    syncFastTimeout = setTimeout(() => syncFast(sentenceId, currentSceneName), 2);
-  } else {
+  WebGAL.gameplay.isFast = true;
+  let forwardCount = 0;
+  const maxForwardCount = Math.max(sentenceId + 1000, 1000);
+
+  try {
+    while (
+      WebGAL.sceneManager.sceneData.currentSentenceId < sentenceId &&
+      WebGAL.sceneManager.sceneData.currentScene.sceneName === currentSceneName
+    ) {
+      const prevSentenceId = WebGAL.sceneManager.sceneData.currentSentenceId;
+      const prevSceneName = WebGAL.sceneManager.sceneData.currentScene.sceneName;
+      const isForwarded = forward();
+      forwardCount++;
+
+      if (!isForwarded) {
+        break;
+      }
+
+      if (WebGAL.gameplay.performController.hasPendingBlockingNextPerform()) {
+        logger.warn('实时预览在阻塞步进的演出前停止演算');
+        break;
+      }
+
+      if (
+        WebGAL.sceneManager.sceneData.currentSentenceId === prevSentenceId &&
+        WebGAL.sceneManager.sceneData.currentScene.sceneName === prevSceneName
+      ) {
+        logger.warn('实时预览跳转停止：本次 forward 没有推进语句指针');
+        break;
+      }
+
+      if (forwardCount > maxForwardCount) {
+        logger.warn('实时预览跳转停止：超过最大演算次数');
+        break;
+      }
+    }
+  } finally {
     WebGAL.gameplay.isFast = false;
   }
-}
 
-function findLastSameSentence(oldScene: IScene, newScene: IScene, sentenceId: number): number {
-  let lastSameSentence = 0;
-  for (let i = 0; i < sentenceId && i < oldScene.sentenceList.length; i++) {
-    const oldSentenceStr = JSON.stringify(oldScene.sentenceList[i]);
-    const newSentenceStr = JSON.stringify(newScene.sentenceList[i]);
-    if (oldSentenceStr !== newSentenceStr) {
-      break;
-    }
-    lastSameSentence = i;
-  }
-  return lastSameSentence;
-}
-
-function findLastAvailableBacklog(targetSentence: number, sceneName: string) {
-  let lastAvailable = -1;
-  WebGAL.backlogManager.getBacklog().forEach((e, i) => {
-    const recSentenceId = e.saveScene.currentSentenceId;
-    const recSceneName = e.saveScene.sceneName;
-    if (recSentenceId <= targetSentence && recSceneName === sceneName) {
-      lastAvailable = i;
-    }
-  });
-  return lastAvailable;
+  commitForward();
 }

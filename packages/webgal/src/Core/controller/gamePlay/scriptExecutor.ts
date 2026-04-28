@@ -10,6 +10,9 @@ import { ISceneEntry } from '@/Core/Modules/scene';
 import { WebGAL } from '@/Core/WebGAL';
 import { getBooleanArgByKey, getStringArgByKey } from '@/Core/util/getSentenceArg';
 import { stageStateManager } from '@/Core/Modules/stage/stageStateManager';
+import { jumpToLabel } from '@/Core/gameScripts/label/jumpToLabel';
+
+const MAX_FORWARD_SCRIPT_EXECUTION = 10000;
 
 export const whenChecker = (whenValue: string | undefined): boolean => {
   if (whenValue === undefined) {
@@ -35,7 +38,12 @@ export const whenChecker = (whenValue: string | undefined): boolean => {
  * 语句执行器
  * 执行语句，同步场景状态，并根据情况立即执行下一句或者加入backlog
  */
-export const scriptExecutor = () => {
+export const scriptExecutor = (depth = 0) => {
+  if (depth > MAX_FORWARD_SCRIPT_EXECUTION) {
+    logger.error('forward 中执行的语句数量超过限制，可能存在 jumpLabel 或 -next 死循环');
+    return;
+  }
+
   // 超过总语句数量，则从场景栈拿出一个需要继续的场景，然后继续流程。若场景栈清空，则停止流程
   if (
     WebGAL.sceneManager.sceneData.currentSentenceId >
@@ -94,9 +102,21 @@ export const scriptExecutor = () => {
   if (!runThis) {
     logger.warn('不满足条件，跳过本句！');
     WebGAL.sceneManager.sceneData.currentSentenceId++;
-    scriptExecutor();
+    scriptExecutor(depth + 1);
     return;
   }
+
+  if (currentScript.command === commandType.jumpLabel) {
+    // jumpLabel 是内核流程控制：只改变语句指针，并在本次 forward 内继续演算，不触发 commit。
+    const isJumped = jumpToLabel(currentScript.content);
+    if (!isJumped) {
+      logger.warn(`未找到标签 ${currentScript.content}，跳过 jumpLabel`);
+      WebGAL.sceneManager.sceneData.currentSentenceId++;
+    }
+    scriptExecutor(depth + 1);
+    return;
+  }
+
   WebGAL.readHistoryManager.checkIsRead();
   runScript(currentScript);
   // 是否要进行下一句
@@ -114,10 +134,18 @@ export const scriptExecutor = () => {
   //   return;
   // }
 
-  // 执行“下一句”
-  if (isNext) {
+  const hasPendingBlockingNextPerform = WebGAL.gameplay.performController.hasPendingBlockingNextPerform();
+  const saveBacklogIfNeeded = () => {
+    if (isSaveBacklog) {
+      WebGAL.backlogManager.saveCurrentStateToBacklog();
+    }
+  };
+
+  // 执行“下一句”。如果本句已经产生了阻塞步进的演出控制块，状态演算必须在本句结束。
+  if (isNext && !hasPendingBlockingNextPerform) {
     WebGAL.sceneManager.sceneData.currentSentenceId++;
-    scriptExecutor();
+    saveBacklogIfNeeded();
+    scriptExecutor(depth + 1);
     return;
   }
 
@@ -129,7 +157,5 @@ export const scriptExecutor = () => {
   };
   logger.debug('本条语句执行结果', allState);
   // 保存 backlog
-  if (isSaveBacklog) {
-    WebGAL.backlogManager.saveCurrentStateToBacklog();
-  }
+  saveBacklogIfNeeded();
 };

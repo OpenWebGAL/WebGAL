@@ -77,7 +77,7 @@ export const playVideo = (sentence: ISentence): IPerform => {
             vocalElement.volume = '0';
           }
 
-          VocalControl?.play();
+          VocalControl?.play().catch(() => {});
 
           VocalControl.onended = () => {
             endPerform();
@@ -88,7 +88,6 @@ export const playVideo = (sentence: ISentence): IPerform => {
     stopFunction: restoreVolumeAndUnmount,
     blockingNext: () => blockingNextFlag,
     blockingAuto: () => !isOver,
-    stopTimeout: undefined, // 暂时不用，后面会交给自动清除
     goNextWhenOver: true,
   };
 };

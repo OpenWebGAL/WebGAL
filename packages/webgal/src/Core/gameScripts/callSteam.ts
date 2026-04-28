@@ -32,7 +32,6 @@ export const callSteam = (sentence: ISentence): IPerform => {
     stopFunction: () => {},
     blockingNext: () => false,
     blockingAuto: () => true,
-    stopTimeout: undefined,
   };
 
   return noperform;

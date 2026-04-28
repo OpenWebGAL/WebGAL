@@ -10,27 +10,9 @@ import { stageStateManager } from '@/Core/Modules/stage/stageStateManager';
  * @param sentence
  */
 export const pixiInit = (sentence: ISentence): IPerform => {
-  WebGAL.gameplay.performController.performList.forEach((e) => {
-    if (e.performName.match(/PixiPerform/)) {
-      logger.warn('pixi 被脚本重新初始化', e.performName);
-      /**
-       * 卸载演出
-       */
-      for (let i = 0; i < WebGAL.gameplay.performController.performList.length; i++) {
-        const e2 = WebGAL.gameplay.performController.performList[i];
-        if (e2.performName === e.performName) {
-          e2.stopFunction();
-          clearTimeout(e2.stopTimeout as unknown as number);
-          WebGAL.gameplay.performController.performList.splice(i, 1);
-          i--;
-        }
-      }
-      /**
-       * 从状态表里清除演出
-       */
-      stageStateManager.removeAllPixiPerforms();
-    }
-  });
+  logger.warn('pixi 被脚本重新初始化');
+  WebGAL.gameplay.performController.unmountPerformByPrefix('PixiPerform', true);
+  stageStateManager.removeAllPixiPerforms();
   return {
     performName: 'none',
     duration: 0,
@@ -38,6 +20,5 @@ export const pixiInit = (sentence: ISentence): IPerform => {
     stopFunction: () => {},
     blockingNext: () => false,
     blockingAuto: () => true,
-    stopTimeout: undefined, // 暂时不用，后面会交给自动清除
   };
 };

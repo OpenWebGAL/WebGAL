@@ -87,7 +87,6 @@ export const say = (sentence: ISentence): IPerform => {
 
   // 模拟说话
   let performSimulateVocalTimeout: ReturnType<typeof setTimeout> | null = null;
-  let performSimulateVocalDelay = 0;
 
   let pos: '' | 'center' | 'left' | 'right' = '';
   const leftFromArgs = getBooleanArgByKey(sentence, 'left') ?? false;
@@ -129,11 +128,10 @@ export const say = (sentence: ISentence): IPerform => {
   };
   // 播放一段语音
   if (vocal) {
-    playVocal(sentence);
-  } else if (key || pos) {
-    performSimulateVocalDelay = len * 250;
-    performSimulateVocal();
+    WebGAL.gameplay.performController.arrangeNewPerform(playVocal(sentence), sentence, false);
   }
+  const shouldSimulateVocal = !vocal && (key !== '' || pos !== '');
+  const performSimulateVocalDelay = shouldSimulateVocal ? len * 250 : 0;
 
   const performInitName: string = getRandomPerformName();
   let endDelay = useTextAnimationDuration(userDataState.optionData.textSpeed) / 2;
@@ -146,6 +144,11 @@ export const say = (sentence: ISentence): IPerform => {
     performName: performInitName,
     duration: sentenceDelay + endDelay + performSimulateVocalDelay,
     isHoldOn: false,
+    startFunction: () => {
+      if (shouldSimulateVocal) {
+        performSimulateVocal();
+      }
+    },
     stopFunction: () => {
       WebGAL.events.textSettle.emit();
       if (performSimulateVocalTimeout) {
@@ -155,7 +158,6 @@ export const say = (sentence: ISentence): IPerform => {
     },
     blockingNext: () => false,
     blockingAuto: () => true,
-    stopTimeout: undefined, // 暂时不用，后面会交给自动清除
     goNextWhenOver: isNotend,
   };
 };

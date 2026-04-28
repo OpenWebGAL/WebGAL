@@ -21,11 +21,19 @@ export const setComplexAnimation = (sentence: ISentence): IPerform => {
   const key = `${target}-${animationName}-${animationDuration}`;
   const animationFunction: Function | null = getAnimationObject(animationName);
   let stopFunction: () => void = () => {};
+  let startFunction: () => void = () => {};
   if (animationFunction) {
-    logger.debug(`动画${animationName}作用在${target}`, animationDuration);
-    const animationObj: IAnimationObject = animationFunction(target, animationDuration);
-    WebGAL.gameplay.pixiStage?.stopPresetAnimationOnTarget(target);
-    WebGAL.gameplay.pixiStage?.registerAnimation(animationObj, key, target);
+    const calculationAnimationObj: IAnimationObject = animationFunction(target, animationDuration);
+    const endStateEffect = calculationAnimationObj.getEndStateEffect?.();
+    if (endStateEffect) {
+      stageStateManager.updateEffect({ target, transform: endStateEffect });
+    }
+    startFunction = () => {
+      logger.debug(`动画${animationName}作用在${target}`, animationDuration);
+      const animationObj: IAnimationObject = animationFunction(target, animationDuration);
+      WebGAL.gameplay.pixiStage?.stopPresetAnimationOnTarget(target);
+      WebGAL.gameplay.pixiStage?.registerAnimation(animationObj, key, target);
+    };
     stopFunction = () => {
       const endDialogKey = stageStateManager.getCalculationStageState().currentDialogKey;
       const isHasNext = startDialogKey !== endDialogKey;
@@ -36,10 +44,10 @@ export const setComplexAnimation = (sentence: ISentence): IPerform => {
     performName: key,
     duration: animationDuration,
     isHoldOn: false,
+    startFunction,
     stopFunction,
     blockingNext: () => false,
     blockingAuto: () => true,
-    stopTimeout: undefined, // 暂时不用，后面会交给自动清除
   };
 };
 

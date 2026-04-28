@@ -23,20 +23,21 @@ export const showVars = (sentence: ISentence): IPerform => {
   stageStateManager.setStage('showText', JSON.stringify(allVar));
   stageStateManager.setStage('showName', '展示变量');
   logger.debug('展示变量：', allVar);
-  setTimeout(() => {
-    WebGAL.events.textSettle.emit();
-  }, 0);
   const performInitName: string = getRandomPerformName();
   const endDelay = 750 - userDataState.optionData.textSpeed * 250;
   return {
     performName: performInitName,
     duration: endDelay,
     isHoldOn: false,
+    startFunction: () => {
+      setTimeout(() => {
+        WebGAL.events.textSettle.emit();
+      }, 0);
+    },
     stopFunction: () => {
       WebGAL.events.textSettle.emit();
     },
     blockingNext: () => false,
     blockingAuto: () => true,
-    stopTimeout: undefined, // 暂时不用，后面会交给自动清除
   };
 };

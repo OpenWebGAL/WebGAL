@@ -19,6 +19,19 @@ import {
 } from '@/Core/Modules/stage/stageInterface';
 
 type StageStateListener = (stageState: IStageState) => void;
+export interface IStageCommitOptions {
+  syncPixiStage?: boolean;
+  applyPixiEffects?: boolean;
+  notifyReact?: boolean;
+}
+
+export interface IResolvedStageCommitOptions {
+  syncPixiStage: boolean;
+  applyPixiEffects: boolean;
+  notifyReact: boolean;
+}
+
+type StageCommitHandler = (stageState: IStageState, options: IResolvedStageCommitOptions) => void;
 
 export const initState: IStageState = {
   oldBgName: '',
@@ -77,6 +90,7 @@ export class StageStateManager {
   private calculationStageState: IStageState = cloneDeep(initState);
   private viewStageState: IStageState = cloneDeep(initState);
   private listeners = new Set<StageStateListener>();
+  private commitHandler: StageCommitHandler | null = null;
 
   public getCalculationStageState(): IStageState {
     return this.calculationStageState;
@@ -109,10 +123,8 @@ export class StageStateManager {
   }
 
   public replaceAllStageState(stageState: IStageState) {
-    const nextState = cloneDeep(stageState);
-    this.calculationStageState = cloneDeep(nextState);
-    this.viewStageState = nextState;
-    this.notify();
+    this.calculationStageState = cloneDeep(stageState);
+    this.commit();
   }
 
   public resetCalculationStageState(stageState: IStageState) {
@@ -228,6 +240,12 @@ export class StageStateManager {
     );
   }
 
+  public removePerformByPrefix(prefix: string) {
+    this.calculationStageState.PerformList = this.calculationStageState.PerformList.filter(
+      (performItem) => !performItem.id.startsWith(prefix),
+    );
+  }
+
   public removeAllPerform() {
     this.calculationStageState.PerformList.splice(0, this.calculationStageState.PerformList.length);
   }
@@ -334,9 +352,29 @@ export class StageStateManager {
     this.commit();
   }
 
-  public commit() {
+  public commit(options: IStageCommitOptions = {}) {
+    const resolvedOptions: IResolvedStageCommitOptions = {
+      syncPixiStage: options.syncPixiStage ?? true,
+      applyPixiEffects: options.applyPixiEffects ?? true,
+      notifyReact: options.notifyReact ?? true,
+    };
     this.viewStageState = cloneDeep(this.calculationStageState);
-    this.notify();
+    this.commitHandler?.(this.viewStageState, resolvedOptions);
+    if (resolvedOptions.notifyReact) {
+      this.notify();
+    }
+  }
+
+  public applyCommittedPixiEffects() {
+    this.commitHandler?.(this.viewStageState, {
+      syncPixiStage: false,
+      applyPixiEffects: true,
+      notifyReact: false,
+    });
+  }
+
+  public setCommitHandler(handler: StageCommitHandler | null) {
+    this.commitHandler = handler;
   }
 
   public subscribe(listener: StageStateListener) {

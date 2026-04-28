@@ -17,6 +17,7 @@ export function generateTimelineObj(
   timeline: Array<AnimationFrame>,
   targetKey: string,
   duration: number,
+  syncEndStateToStageState = true,
 ): IAnimationObject {
   const target = WebGAL.gameplay.pixiStage!.getStageObjByKey(targetKey);
   let currentDelay = 0;
@@ -60,8 +61,10 @@ export function generateTimelineObj(
     });
   }
 
-  const { duration: sliceDuration, ...endState } = getEndStateEffect();
-  stageStateManager.updateEffect({ target: targetKey, transform: endState });
+  if (syncEndStateToStageState) {
+    const { duration: sliceDuration, ease, ...endState } = getEndStateEffect();
+    stageStateManager.updateEffect({ target: targetKey, transform: endState });
+  }
 
   /**
    * 在此书写为动画设置初态的操作

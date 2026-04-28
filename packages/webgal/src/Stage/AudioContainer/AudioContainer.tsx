@@ -68,8 +68,11 @@ export const AudioContainer = () => {
     // 如果当前背景音乐元素存在，则淡入淡出
     if (bgmElement) {
       bgmEnter === 0 ? (bgmElement.volume = bgmVol) : bgmFadeIn(bgmElement, bgmVol, bgmEnter);
+      if (bgmElement.src && isEnterGame) {
+        bgmElement.play().catch(() => {});
+      }
     }
-  }, [isShowTitle, titleBgm, stageStore.bgm.src, bgmVol, bgmEnter]);
+  }, [isShowTitle, titleBgm, stageStore.bgm.src, bgmVol, bgmEnter, isEnterGame]);
 
   useEffect(() => {
     logger.debug(`设置背景音量：${bgmVol}`);

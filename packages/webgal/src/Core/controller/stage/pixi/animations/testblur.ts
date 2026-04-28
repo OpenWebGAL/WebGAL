@@ -52,9 +52,14 @@ export function generateTestblurAnimationObj(targetKey: string, duration: number
     }
   }
 
+  function getEndStateEffect() {
+    return { alpha: 1 };
+  }
+
   return {
     setStartState,
     setEndState,
     tickerFunc,
+    getEndStateEffect,
   };
 }
