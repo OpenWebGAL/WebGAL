@@ -1,9 +1,8 @@
 import { logger } from '../../util/logger';
 import { sceneFetcher } from '../scene/sceneFetcher';
 import { sceneParser } from '../../parser/sceneParser';
-import { IStageState } from '@/store/stageInterface';
+import { IStageState } from '@/Core/Modules/stage/stageInterface';
 import { webgalStore } from '@/store/store';
-import { resetStageState, stageActions } from '@/store/stageReducer';
 import { setVisibility } from '@/store/GUIReducer';
 import { runScript } from '@/Core/controller/gamePlay/runScript';
 import { stopAllPerform } from '@/Core/controller/gamePlay/stopAllPerform';
@@ -12,18 +11,20 @@ import uniqWith from 'lodash/uniqWith';
 import { scenePrefetcher } from '@/Core/util/prefetcher/scenePrefetcher';
 
 import { WebGAL } from '@/Core/WebGAL';
+import { stageStateManager } from '@/Core/Modules/stage/stageStateManager';
 
 /**
  * 恢复演出
  */
 export const restorePerform = () => {
-  const stageState = webgalStore.getState().stage;
+  const stageState = stageStateManager.getCalculationStageState();
   const performToRestore = cloneDeep(stageState.PerformList);
   // 清除状态表中演出序列
-  webgalStore.dispatch(stageActions.removeAllPerform());
+  stageStateManager.removeAllPerform();
   performToRestore.forEach((e) => {
     runScript(e.script);
   });
+  stageStateManager.commit();
 };
 
 /**
@@ -70,7 +71,7 @@ export const jumpFromBacklog = (index: number, refetchScene = true) => {
   // 确保原先未读的文本在使用 backlog 时能正确显示为已读文本
   newStageState.isRead = true;
 
-  dispatch(resetStageState(newStageState));
+  stageStateManager.resetAllStageState(newStageState);
 
   // 恢复演出
   setTimeout(restorePerform, 0);

@@ -1,9 +1,7 @@
 import { ISentence } from '@/Core/controller/scene/sceneInterface';
 import { logger } from '@/Core/util/logger';
-import { webgalStore } from '@/store/store';
-import { setStage } from '@/store/stageReducer';
 import { getBooleanArgByKey, getNumberArgByKey, getStringArgByKey } from '@/Core/util/getSentenceArg';
-import { IStageState } from '@/store/stageInterface';
+import { IStageState } from '@/Core/Modules/stage/stageInterface';
 import {
   audioContextWrapper,
   getAudioLevel,
@@ -13,6 +11,7 @@ import {
 } from '@/Core/gameScripts/vocal/vocalAnimation';
 import { match } from '../../util/match';
 import { WebGAL } from '@/Core/WebGAL';
+import { stageStateManager } from '@/Core/Modules/stage/stageStateManager';
 
 /**
  * 播放一段语音
@@ -27,7 +26,7 @@ export const playVocal = (sentence: ISentence) => {
   volume = Math.max(0, Math.min(volume, 100)); // 限制音量在 0-100 之间
 
   let currentStageState: IStageState;
-  currentStageState = webgalStore.getState().stage;
+  currentStageState = stageStateManager.getCalculationStageState();
 
   let pos: 'center' | 'left' | 'right' = 'center';
   const leftFromArgs = getBooleanArgByKey(sentence, 'left') ?? false;
@@ -52,8 +51,8 @@ export const playVocal = (sentence: ISentence) => {
   }
 
   // 获得舞台状态
-  webgalStore.dispatch(setStage({ key: 'playVocal', value: url }));
-  webgalStore.dispatch(setStage({ key: 'vocal', value: url }));
+  stageStateManager.setStage('playVocal', url);
+  stageStateManager.setStage('vocal', url);
 
   let isOver = false;
 
@@ -67,7 +66,7 @@ export const playVocal = (sentence: ISentence) => {
       setTimeout(() => {
         let VocalControl: any = document.getElementById('currentVocal');
         // 设置语音音量
-        webgalStore.dispatch(setStage({ key: 'vocalVolume', value: volume }));
+        stageStateManager.setStageAndCommit('vocalVolume', volume);
         // 设置语音
         if (VocalControl !== null) {
           VocalControl.currentTime = 0;

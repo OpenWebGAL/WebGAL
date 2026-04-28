@@ -15,7 +15,8 @@ import IntroContainer from '@/Stage/introContainer/IntroContainer';
 import { isIOS } from '@/Core/initializeScript';
 import { WebGAL } from '@/Core/WebGAL';
 import { IGuiState } from '@/store/guiInterface';
-import { IStageState } from '@/store/stageInterface';
+import { IStageState } from '@/Core/Modules/stage/stageInterface';
+import { useStageState } from '@/hooks/useStageState';
 // import OldStage from '@/Components/Stage/OldStage/OldStage';
 
 let timeoutEventHandle: ReturnType<typeof setTimeout> | null = null;
@@ -74,7 +75,7 @@ function updateControlsVisibility(
 }
 
 export const Stage: FC = () => {
-  const stageState = useSelector((state: RootState) => state.stage);
+  const stageState = useStageState();
   const GUIState = useSelector((state: RootState) => state.GUI);
   const dispatch = useDispatch();
 

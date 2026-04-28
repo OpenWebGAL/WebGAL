@@ -1,4 +1,4 @@
-import { IStageState } from '@/store/stageInterface';
+import { IStageState } from '@/Core/Modules/stage/stageInterface';
 
 export enum DebugCommand {
   // 跳转

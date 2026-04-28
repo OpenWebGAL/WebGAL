@@ -1,18 +1,15 @@
 import { commandType, ISentence } from '@/Core/controller/scene/sceneInterface';
 import { runScript } from './runScript';
 import { logger } from '../../util/logger';
-import { IStageState } from '@/store/stageInterface';
 import { restoreScene } from '../scene/restoreScene';
 import { webgalStore } from '@/store/store';
 import { getValueFromStateElseKey } from '@/Core/gameScripts/setVar';
 import { strIf } from '@/Core/controller/gamePlay/strIf';
-import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
 import cloneDeep from 'lodash/cloneDeep';
 import { ISceneEntry } from '@/Core/Modules/scene';
-import { IBacklogItem } from '@/Core/Modules/backlog';
-import { SYSTEM_CONFIG } from '@/config';
 import { WebGAL } from '@/Core/WebGAL';
 import { getBooleanArgByKey, getStringArgByKey } from '@/Core/util/getSentenceArg';
+import { stageStateManager } from '@/Core/Modules/stage/stageStateManager';
 
 export const whenChecker = (whenValue: string | undefined): boolean => {
   if (whenValue === undefined) {
@@ -97,7 +94,7 @@ export const scriptExecutor = () => {
   if (!runThis) {
     logger.warn('不满足条件，跳过本句！');
     WebGAL.sceneManager.sceneData.currentSentenceId++;
-    nextSentence();
+    scriptExecutor();
     return;
   }
   WebGAL.readHistoryManager.checkIsRead();
@@ -109,8 +106,6 @@ export const scriptExecutor = () => {
   // 检查当前对话是否有 notend 参数
   const hasNotEnd = getBooleanArgByKey(currentScript, 'notend') ?? false;
   isSaveBacklog = isSaveBacklog && !hasNotEnd;
-
-  let currentStageState: IStageState;
 
   // 执行至指定 sentenceID
   // if (runToSentence >= 0 && runtime_currentSceneData.currentSentenceId < runToSentence) {
@@ -126,22 +121,15 @@ export const scriptExecutor = () => {
     return;
   }
 
-  /**
-   * 为了让 backlog 拿到连续执行了多条语句后正确的数据，放到下一个宏任务中执行（我也不知道为什么这样能正常，有能力的可以研究一下
-   */
-  setTimeout(() => {
-    // 同步当前舞台数据
-    currentStageState = webgalStore.getState().stage;
-    const allState = {
-      currentStageState: currentStageState,
-      globalGameVar: webgalStore.getState().userData.globalGameVar,
-    };
-    logger.debug('本条语句执行结果', allState);
-    // 保存 backlog
-    if (isSaveBacklog) {
-      // WebGAL.backlogManager.isSaveBacklogNext = true;
-      WebGAL.backlogManager.saveCurrentStateToBacklog();
-    }
-  }, 0);
   WebGAL.sceneManager.sceneData.currentSentenceId++;
+  const currentStageState = stageStateManager.getCalculationStageState();
+  const allState = {
+    currentStageState: currentStageState,
+    globalGameVar: webgalStore.getState().userData.globalGameVar,
+  };
+  logger.debug('本条语句执行结果', allState);
+  // 保存 backlog
+  if (isSaveBacklog) {
+    WebGAL.backlogManager.saveCurrentStateToBacklog();
+  }
 };

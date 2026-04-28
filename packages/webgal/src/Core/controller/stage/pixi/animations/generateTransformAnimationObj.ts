@@ -1,7 +1,7 @@
 import { AnimationFrame } from '@/Core/Modules/animations';
-import { webgalStore } from '@/store/store';
 import { has, pickBy } from 'lodash';
 import isNull from 'lodash/isNull';
+import { stageStateManager } from '@/Core/Modules/stage/stageStateManager';
 
 type AnimationObj = Array<AnimationFrame>;
 
@@ -15,7 +15,7 @@ export function generateTransformAnimationObj(
 ): AnimationObj {
   let animationObj;
   // 获取那个 target 的当前变换
-  const transformState = webgalStore.getState().stage.effects;
+  const transformState = stageStateManager.getCalculationStageState().effects;
   const targetEffect = transformState.find((effect) => effect.target === target);
 
   applyFrame.duration = 500;

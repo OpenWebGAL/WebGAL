@@ -1,12 +1,9 @@
 import { IPerform } from '@/Core/Modules/perform/performInterface';
 import { ISentence } from '@/Core/controller/scene/sceneInterface';
-import { webgalStore } from '@/store/store';
-import cloneDeep from 'lodash/cloneDeep';
-import { resetStageState, stageActions } from '@/store/stageReducer';
 import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
-import { IRunPerform } from '@/store/stageInterface';
 import { WEBGAL_NONE } from '@/Core/constants';
 import { getBooleanArgByKey } from '@/Core/util/getSentenceArg';
+import { stageStateManager } from '@/Core/Modules/stage/stageStateManager';
 
 /**
  * 获取随机演出名称
@@ -15,8 +12,16 @@ export const getRandomPerformName = (): string => {
   return Math.random().toString().substring(0, 10);
 };
 
+interface IPendingPerform {
+  perform: IPerform;
+  script: ISentence;
+  syncPerformState: boolean;
+}
+
 export class PerformController {
   public performList: Array<IPerform> = [];
+  private pendingPerformList: Array<IPendingPerform> = [];
+  private isCollectingPerforms = false;
 
   /**
    * 判断 perform 名称是否匹配（支持前缀匹配，用于清理并行演出）
@@ -24,6 +29,14 @@ export class PerformController {
    */
   private matchPerformName(performName: string, name: string): boolean {
     return performName === name || performName.startsWith(name + '#');
+  }
+
+  public beginCollectingPerforms() {
+    this.isCollectingPerforms = true;
+  }
+
+  public endCollectingPerforms() {
+    this.isCollectingPerforms = false;
   }
 
   public arrangeNewPerform(perform: IPerform, script: ISentence, syncPerformState = true) {
@@ -42,16 +55,81 @@ export class PerformController {
         }
       }
     }
+    this.pendingPerformList = this.pendingPerformList.filter((p) => p.perform.performName !== perform.performName);
 
     // 语句不执行演出
     if (perform.performName === WEBGAL_NONE) {
       return;
     }
+
     // 同步演出状态
     if (syncPerformState) {
       const performToAdd = { id: perform.performName, isHoldOn: perform.isHoldOn, script: script };
-      webgalStore.dispatch(stageActions.addPerform(performToAdd));
+      if (this.isCollectingPerforms) {
+        stageStateManager.addPerform(performToAdd);
+      } else {
+        stageStateManager.addPerform(performToAdd);
+        stageStateManager.commit();
+      }
     }
+
+    if (this.isCollectingPerforms) {
+      this.pendingPerformList.push({ perform, script, syncPerformState });
+      return;
+    }
+
+    this.startPerform(perform, script);
+  }
+
+  public commitPendingPerforms() {
+    const performsToStart = this.pendingPerformList;
+    this.pendingPerformList = [];
+    performsToStart.forEach(({ perform, script }) => {
+      this.startPerform(perform, script);
+    });
+  }
+
+  public discardUncommittedNonHoldPerforms() {
+    this.pendingPerformList = this.pendingPerformList.filter(({ perform }) => perform.isHoldOn);
+  }
+
+  public hasBlockingNextPerform() {
+    return this.performList.some((e) => e.blockingNext());
+  }
+
+  public hasUnsettledNonHoldPerform() {
+    return this.performList.some((e) => !e.isHoldOn && !e.skipNextCollect);
+  }
+
+  public settleNonHoldPerforms() {
+    let isGoNext = false;
+    for (let i = 0; i < this.performList.length; i++) {
+      const e = this.performList[i];
+      if (!e.isHoldOn) {
+        if (e.goNextWhenOver) {
+          isGoNext = true;
+        }
+        if (!e.skipNextCollect) {
+          e.stopFunction();
+          clearTimeout(e.stopTimeout as unknown as number);
+          this.performList.splice(i, 1);
+          i--;
+          this.erasePerformFromState(e.performName);
+        }
+      }
+    }
+    stageStateManager.commit();
+    if (isGoNext) {
+      nextSentence();
+    }
+  }
+
+  public clearNonHoldPerformsFromStageState() {
+    stageStateManager.clearUncommittedNonHoldPerforms();
+  }
+
+  private startPerform(perform: IPerform, script: ISentence) {
+    perform.startFunction?.();
 
     // 时间到后自动清理演出
     perform.stopTimeout = setTimeout(() => {
@@ -70,6 +148,10 @@ export class PerformController {
   }
 
   public unmountPerform(name: string, force = false) {
+    this.pendingPerformList = this.pendingPerformList.filter(({ perform }) => {
+      const matched = this.matchPerformName(perform.performName, name);
+      return force ? !matched : !(matched && !perform.isHoldOn);
+    });
     if (!force) {
       for (let i = 0; i < this.performList.length; i++) {
         const e = this.performList[i];
@@ -89,6 +171,7 @@ export class PerformController {
             // nextSentence();
             this.goNextWhenOver();
           }
+          this.erasePerformFromState(name);
         }
       }
     } else {
@@ -128,6 +211,8 @@ export class PerformController {
      * 此问题对所有 goNextWhenOver 属性为真的演出都有影响，但只有 2 个演出有此问题
      */
     this.performList.splice(idx, 1);
+    this.erasePerformFromState(perform.performName);
+    stageStateManager.commit();
     if (perform.goNextWhenOver) {
       // nextSentence();
       this.goNextWhenOver();
@@ -135,10 +220,11 @@ export class PerformController {
   }
 
   public erasePerformFromState(name: string) {
-    webgalStore.dispatch(stageActions.removePerformByName(name));
+    stageStateManager.removePerformByName(name);
   }
 
   public removeAllPerform() {
+    this.pendingPerformList = [];
     for (const e of this.performList) {
       clearTimeout(e.stopTimeout);
       e.stopFunction();
@@ -146,7 +232,7 @@ export class PerformController {
     this.performList = [];
   }
 
-  private goNextWhenOver() {
+  private goNextWhenOver = () => {
     let isBlockingAuto = false;
     this.performList?.forEach((e) => {
       if (e.blockingAuto())
@@ -159,5 +245,5 @@ export class PerformController {
     } else {
       nextSentence();
     }
-  }
+  };
 }

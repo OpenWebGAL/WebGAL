@@ -1,12 +1,11 @@
-import { ITransform } from '@/store/stageInterface';
+import { ITransform } from '@/Core/Modules/stage/stageInterface';
 import * as popmotion from 'popmotion';
 import { WebGAL } from '@/Core/WebGAL';
-import { webgalStore } from '@/store/store';
-import { stageActions } from '@/store/stageReducer';
 import omitBy from 'lodash/omitBy';
 import isUndefined from 'lodash/isUndefined';
 import PixiStage, { IAnimationObject } from '@/Core/controller/stage/pixi/PixiController';
 import { AnimationFrame } from '@/Core/Modules/animations';
+import { stageStateManager } from '@/Core/Modules/stage/stageStateManager';
 
 /**
  * 动画创建模板
@@ -62,7 +61,7 @@ export function generateTimelineObj(
   }
 
   const { duration: sliceDuration, ...endState } = getEndStateEffect();
-  webgalStore.dispatch(stageActions.updateEffect({ target: targetKey, transform: endState }));
+  stageStateManager.updateEffect({ target: targetKey, transform: endState });
 
   /**
    * 在此书写为动画设置初态的操作

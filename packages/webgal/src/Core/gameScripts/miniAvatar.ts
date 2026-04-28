@@ -1,7 +1,6 @@
 import { ISentence } from '@/Core/controller/scene/sceneInterface';
 import { IPerform } from '@/Core/Modules/perform/performInterface';
-import { webgalStore } from '@/store/store';
-import { setStage } from '@/store/stageReducer';
+import { stageStateManager } from '@/Core/Modules/stage/stageStateManager';
 
 /**
  * 显示小头像
@@ -12,7 +11,7 @@ export const miniAvatar = (sentence: ISentence): IPerform => {
   if (sentence.content === 'none' || sentence.content === '') {
     content = '';
   }
-  webgalStore.dispatch(setStage({ key: 'miniAvatar', value: content }));
+  stageStateManager.setStage('miniAvatar', content);
   return {
     performName: 'none',
     duration: 0,

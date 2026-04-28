@@ -6,7 +6,6 @@ import ReactDOM from 'react-dom';
 import React from 'react';
 import styles from './choose.module.scss';
 import { webgalStore } from '@/store/store';
-import { PerformController } from '@/Core/Modules/perform/performController';
 import { useSEByWebgalStore } from '@/hooks/useSoundEffect';
 import { WebGAL } from '@/Core/WebGAL';
 import { whenChecker } from '@/Core/controller/gamePlay/scriptExecutor';
@@ -59,17 +58,19 @@ export const choose = (sentence: ISentence): IPerform => {
   const chooseOptionScripts = sentence.content.split(/(?<!\\)\|/);
   const chooseOptions = chooseOptionScripts.map((e) => ChooseOption.parse(e.trim()));
 
-  // eslint-disable-next-line react/no-deprecated
-  ReactDOM.render(
-    <Provider store={webgalStore}>
-      <Choose chooseOptions={chooseOptions} />
-    </Provider>,
-    document.getElementById('chooseContainer'),
-  );
   return {
     performName: 'choose',
     duration: 1000 * 60 * 60 * 24,
     isHoldOn: false,
+    startFunction: () => {
+      // eslint-disable-next-line react/no-deprecated
+      ReactDOM.render(
+        <Provider store={webgalStore}>
+          <Choose chooseOptions={chooseOptions} />
+        </Provider>,
+        document.getElementById('chooseContainer'),
+      );
+    },
     stopFunction: () => {
       // eslint-disable-next-line react/no-deprecated
       ReactDOM.render(<div />, document.getElementById('chooseContainer'));

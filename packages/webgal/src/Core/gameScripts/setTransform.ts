@@ -6,7 +6,7 @@ import { logger } from '@/Core/util/logger';
 import { webgalStore } from '@/store/store';
 import { generateTimelineObj } from '@/Core/controller/stage/pixi/animations/timeline';
 import cloneDeep from 'lodash/cloneDeep';
-import { baseTransform, ITransform } from '@/store/stageInterface';
+import { baseTransform, ITransform } from '@/Core/Modules/stage/stageInterface';
 import { AnimationFrame, IUserAnimation } from '../Modules/animations';
 import { generateTransformAnimationObj } from '@/Core/controller/stage/pixi/animations/generateTransformAnimationObj';
 import { WebGAL } from '@/Core/WebGAL';

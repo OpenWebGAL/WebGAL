@@ -9,8 +9,8 @@ import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
 import { resetStage } from '@/Core/controller/stage/resetStage';
 import { logger } from '@/Core/util/logger';
 import { syncWithOrigine } from './syncWithOrigine';
-import { stageActions } from '@/store/stageReducer';
-import { baseTransform, IEffect } from '@/store/stageInterface';
+import { baseTransform, IEffect } from '@/Core/Modules/stage/stageInterface';
+import { stageStateManager } from '@/Core/Modules/stage/stageStateManager';
 
 export const webSocketFunc = () => {
   const loc: string = window.location.hostname;
@@ -45,7 +45,7 @@ export const webSocketFunc = () => {
             scene: WebGAL.sceneManager.sceneData.currentScene.sceneName,
             sentence: WebGAL.sceneManager.sceneData.currentSentenceId,
           },
-          stageSyncMsg: webgalStore.getState().stage,
+          stageSyncMsg: stageStateManager.getCalculationStageState(),
           message: 'sync',
         },
       };
@@ -106,7 +106,7 @@ export const webSocketFunc = () => {
     if (message.command === DebugCommand.SET_EFFECT) {
       try {
         const effect = JSON.parse(message.message) as IEffect;
-        const targetEffect = webgalStore.getState().stage.effects.find((e) => e.target === effect.target);
+        const targetEffect = stageStateManager.getCalculationStageState().effects.find((e) => e.target === effect.target);
         const targetTransform = targetEffect?.transform ? targetEffect.transform : baseTransform;
         const newTransform = {
           ...targetTransform,
@@ -121,7 +121,7 @@ export const webSocketFunc = () => {
           },
         };
         WebGAL.gameplay.pixiStage?.removeAnimationByTargetKey(effect.target);
-        webgalStore.dispatch(stageActions.updateEffect({ target: effect.target, transform: newTransform }));
+        stageStateManager.updateEffectAndCommit({ target: effect.target, transform: newTransform });
       } catch (e) {
         logger.error(`无法设置效果 ${message.message}, ${e}`);
         return;

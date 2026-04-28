@@ -1,4 +1,4 @@
-import { IEffect, IStageState } from '@/store/stageInterface';
+import { IEffect, IStageState } from '@/Core/Modules/stage/stageInterface';
 import { useEffect } from 'react';
 import { logger } from '@/Core/util/logger';
 import { generateUniversalSoftInAnimationObj } from '@/Core/controller/stage/pixi/animations/universalSoftIn';

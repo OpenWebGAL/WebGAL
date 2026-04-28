@@ -1,4 +1,4 @@
-import { baseTransform, IEffect, IStageState, ITransform } from '@/store/stageInterface';
+import { baseTransform, IEffect, IStageState, ITransform } from '@/Core/Modules/stage/stageInterface';
 
 import { WebGAL } from '@/Core/WebGAL';
 import PixiStage from '@/Core/controller/stage/pixi/PixiController';

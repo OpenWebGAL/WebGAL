@@ -1,13 +1,13 @@
 /**
  * 当前的backlog
  */
-import { IEffect, IStageState } from '@/store/stageInterface';
-import { webgalStore } from '@/store/store';
+import { IEffect, IStageState } from '@/Core/Modules/stage/stageInterface';
 import { ISaveScene } from '@/store/userDataInterface';
 import cloneDeep from 'lodash/cloneDeep';
 
 import { SYSTEM_CONFIG } from '@/config';
 import { SceneManager } from '@/Core/Modules/scene';
+import { stageStateManager } from '@/Core/Modules/stage/stageStateManager';
 
 export interface IBacklogItem {
   currentStageState: IStageState;
@@ -40,7 +40,7 @@ export class BacklogManager {
   }
   public saveCurrentStateToBacklog() {
     // 存一下 Backlog
-    const currentStageState = webgalStore.getState().stage;
+    const currentStageState = stageStateManager.getCalculationStageState();
     const stageStateToBacklog = cloneDeep(currentStageState);
     stageStateToBacklog.PerformList.forEach((ele) => {
       ele.script.args.forEach((argelement) => {

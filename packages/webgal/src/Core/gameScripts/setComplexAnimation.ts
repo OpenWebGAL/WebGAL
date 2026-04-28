@@ -4,16 +4,16 @@ import { getNumberArgByKey, getStringArgByKey } from '@/Core/util/getSentenceArg
 import { webgalAnimations } from '@/Core/controller/stage/pixi/animations';
 import { IAnimationObject } from '@/Core/controller/stage/pixi/PixiController';
 import { logger } from '@/Core/util/logger';
-import { webgalStore } from '@/store/store';
 
 import { WebGAL } from '@/Core/WebGAL';
+import { stageStateManager } from '@/Core/Modules/stage/stageStateManager';
 
 /**
  * 设置背景动画
  * @param sentence
  */
 export const setComplexAnimation = (sentence: ISentence): IPerform => {
-  const startDialogKey = webgalStore.getState().stage.currentDialogKey;
+  const startDialogKey = stageStateManager.getCalculationStageState().currentDialogKey;
   const animationName = sentence.content;
   const animationDuration = getNumberArgByKey(sentence, 'duration') ?? 0;
   const target = getStringArgByKey(sentence, 'target') ?? '0';
@@ -27,7 +27,7 @@ export const setComplexAnimation = (sentence: ISentence): IPerform => {
     WebGAL.gameplay.pixiStage?.stopPresetAnimationOnTarget(target);
     WebGAL.gameplay.pixiStage?.registerAnimation(animationObj, key, target);
     stopFunction = () => {
-      const endDialogKey = webgalStore.getState().stage.currentDialogKey;
+      const endDialogKey = stageStateManager.getCalculationStageState().currentDialogKey;
       const isHasNext = startDialogKey !== endDialogKey;
       WebGAL.gameplay.pixiStage?.removeAnimationWithSetEffects(key);
     };

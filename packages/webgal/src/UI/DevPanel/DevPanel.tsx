@@ -2,11 +2,10 @@ import styles from './devPanel.module.scss';
 import { useValue } from '@/hooks/useValue';
 import { getPixiSscreenshot } from '@/UI/DevPanel/devFunctions/getPixiSscreenshot';
 import { useEffect } from 'react';
-import { useSelector } from 'react-redux';
-import { RootState } from '@/store/store';
 import { useTranslation } from 'react-i18next';
 
 import { WebGAL } from '@/Core/WebGAL';
+import { useStageState } from '@/hooks/useStageState';
 
 export default function DevPanel() {
   // 控制显隐
@@ -16,7 +15,7 @@ export default function DevPanel() {
   }
   const isOpenDevPanel = useValue(false);
   const hash = useValue(window.location.hash);
-  const stageState = useSelector((state: RootState) => state.stage);
+  const stageState = useStageState();
   useEffect(() => {
     window.onhashchange = () => {
       hash.set(window.location.hash);

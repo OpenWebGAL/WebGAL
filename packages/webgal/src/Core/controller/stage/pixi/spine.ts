@@ -4,7 +4,7 @@ import { v4 as uuid } from 'uuid';
 import * as PIXI from 'pixi.js';
 import PixiStage from '@/Core/controller/stage/pixi/PixiController';
 import { logger } from '@/Core/util/logger';
-import { webgalStore } from '@/store/store';
+import { stageStateManager } from '@/Core/Modules/stage/stageStateManager';
 // utils/loadPixiSpine.ts
 // @ts-ignore
 let pixiSpineModule: typeof import('pixi-spine') | null = null;
@@ -111,7 +111,7 @@ export async function addSpineFigureImpl(
         figureSpine.pivot.set(spineCenterX, spineCenterY);
         figureSpine.interactive = false;
 
-        const motionFromState = webgalStore.getState().stage.live2dMotion.find((e) => e.target === key);
+        const motionFromState = stageStateManager.getViewStageState().live2dMotion.find((e) => e.target === key);
         let animationToPlay = '';
         if (motionFromState?.skin) {
           if (!applySpineSkin(figureSpine, motionFromState.skin)) {

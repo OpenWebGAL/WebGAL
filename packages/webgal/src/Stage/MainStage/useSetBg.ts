@@ -1,4 +1,4 @@
-import { IStageState } from '@/store/stageInterface';
+import { IStageState } from '@/Core/Modules/stage/stageInterface';
 import { useEffect } from 'react';
 import { logger } from '@/Core/util/logger';
 import { IStageObject } from '@/Core/controller/stage/pixi/PixiController';
