@@ -102,6 +102,12 @@ export class PerformController {
     return this.pendingPerformList.some(({ perform }) => perform.blockingNext());
   }
 
+  public hasPendingBlockingStateCalculationPerform() {
+    return this.pendingPerformList.some(({ perform }) =>
+      perform.blockingStateCalculation ? perform.blockingStateCalculation() : perform.blockingNext(),
+    );
+  }
+
   public hasBlockingNextPerform() {
     return this.performList.some((e) => e.blockingNext());
   }
