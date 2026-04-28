@@ -1,8 +1,6 @@
 import { ISentence } from '@/Core/controller/scene/sceneInterface';
 import { IPerform } from '@/Core/Modules/perform/performInterface';
-import { setWaitNoBreak } from '@/store/GUIReducer';
-import { webgalStore } from '@/store/store';
-import { getBooleanArgByKey } from '../util/getSentenceArg';
+import { getBooleanArgByKey } from '@/Core/util/getSentenceArg';
 
 /**
  * 等待 n 毫秒
@@ -13,18 +11,16 @@ export const wait = (sentence: ISentence): IPerform => {
   const performName = `wait${Math.random().toString()}`;
   const nobreak = getBooleanArgByKey(sentence, 'nobreak') ?? false;
 
-  if (nobreak) webgalStore.dispatch(setWaitNoBreak(true));
-
   return {
     performName,
     duration: duration,
     goNextWhenOver: true,
     isHoldOn: false,
     stopFunction: () => {
-      webgalStore.dispatch(setWaitNoBreak(false));
+      // 无需状态清理
     },
-    blockingNext: () => false,
-    blockingAuto: () => true,
+    blockingNext: () => nobreak,
+    blockingAuto: () => nobreak,
     stopTimeout: undefined, // 暂时不用，后面会交给自动清除
   };
 };
