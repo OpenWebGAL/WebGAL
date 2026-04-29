@@ -245,16 +245,17 @@ const stageSlice = createSlice({
       }
     },
     setLive2dMotion: (state, action: PayloadAction<ILive2DMotion>) => {
-      const { target, motion, overrideBounds } = action.payload;
+      const { target, motion, skin, overrideBounds } = action.payload;
 
       const index = state.live2dMotion.findIndex((e) => e.target === target);
 
       if (index < 0) {
         // Add a new motion
-        state.live2dMotion.push({ target, motion, overrideBounds });
+        state.live2dMotion.push({ target, motion, skin, overrideBounds });
       } else {
         // Update the existing motion
         state.live2dMotion[index].motion = motion;
+        state.live2dMotion[index].skin = skin;
         state.live2dMotion[index].overrideBounds = overrideBounds;
       }
     },
