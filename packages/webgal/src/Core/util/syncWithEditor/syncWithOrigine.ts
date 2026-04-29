@@ -10,6 +10,7 @@ import { assetSetter, fileType } from '@/Core/util/gameAssetsAccess/assetSetter'
 
 export const syncWithOrigine = (sceneName: string, sentenceId: number) => {
   logger.warn('正在跳转到' + sceneName + ':' + sentenceId);
+  WebGAL.gameplay.isFastPreview = false;
   const dispatch = webgalStore.dispatch;
   dispatch(setVisibility({ component: 'showTitle', visibility: false }));
   dispatch(setVisibility({ component: 'showMenuPanel', visibility: false }));
@@ -21,17 +22,24 @@ export const syncWithOrigine = (sceneName: string, sentenceId: number) => {
   // 重新获取场景
   const sceneUrl: string = assetSetter(sceneName, fileType.scene);
   // 场景写入到运行时
-  sceneFetcher(sceneUrl).then((rawScene) => {
-    resetStage(true);
-    WebGAL.sceneManager.sceneData.currentScene = sceneParser(rawScene, sceneName, sceneUrl);
-    // 开始快进到指定语句
-    const currentSceneName = WebGAL.sceneManager.sceneData.currentScene.sceneName;
-    syncFast(sentenceId, currentSceneName);
-  });
+  sceneFetcher(sceneUrl)
+    .then((rawScene) => {
+      resetStage(true);
+      WebGAL.sceneManager.sceneData.currentScene = sceneParser(rawScene, sceneName, sceneUrl);
+      // 开始快进到指定语句
+      const currentSceneName = WebGAL.sceneManager.sceneData.currentScene.sceneName;
+      syncFast(sentenceId, currentSceneName);
+    })
+    .catch((e) => {
+      WebGAL.gameplay.isFast = false;
+      WebGAL.gameplay.isFastPreview = false;
+      logger.error('实时预览跳转错误', e);
+    });
 };
 
 export function syncFast(sentenceId: number, currentSceneName: string) {
   WebGAL.gameplay.isFast = true;
+  WebGAL.gameplay.isFastPreview = true;
   let forwardCount = 0;
   const maxForwardCount = Math.max(sentenceId + 1000, 1000);
 
@@ -69,6 +77,7 @@ export function syncFast(sentenceId: number, currentSceneName: string) {
     }
   } finally {
     WebGAL.gameplay.isFast = false;
+    WebGAL.gameplay.isFastPreview = false;
   }
 
   commitForward();
