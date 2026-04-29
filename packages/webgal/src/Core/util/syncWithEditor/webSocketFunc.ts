@@ -61,7 +61,7 @@ export const webSocketFunc = () => {
     const data: IDebugMessage = JSON.parse(str);
     const message = data.data;
     if (message.command === DebugCommand.JUMP) {
-      syncWithOrigine(message.sceneMsg.scene, message.sceneMsg.sentence, message.message === 'exp');
+      syncWithOrigine(message.sceneMsg.scene, message.sceneMsg.sentence);
     }
     if (message.command === DebugCommand.EXE_COMMAND) {
       const command = message.message;

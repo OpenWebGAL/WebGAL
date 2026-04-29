@@ -8,11 +8,8 @@ import { sceneParser } from '@/Core/parser/sceneParser';
 import { logger } from '@/Core/util/logger';
 import { assetSetter, fileType } from '@/Core/util/gameAssetsAccess/assetSetter';
 
-export const syncWithOrigine = (sceneName: string, sentenceId: number, expermental = false) => {
+export const syncWithOrigine = (sceneName: string, sentenceId: number) => {
   logger.warn('正在跳转到' + sceneName + ':' + sentenceId);
-  if (expermental) {
-    logger.warn('实时预览已使用瞬间跳转，实验性 Backlog 恢复路径被跳过');
-  }
   const dispatch = webgalStore.dispatch;
   dispatch(setVisibility({ component: 'showTitle', visibility: false }));
   dispatch(setVisibility({ component: 'showMenuPanel', visibility: false }));
