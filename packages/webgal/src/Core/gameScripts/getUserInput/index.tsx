@@ -92,5 +92,6 @@ export const getUserInput = (sentence: ISentence): IPerform => {
     },
     blockingNext: () => true,
     blockingAuto: () => true,
+    blockingStateCalculation: () => true,
   };
 };

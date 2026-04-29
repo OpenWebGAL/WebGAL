@@ -98,14 +98,8 @@ export class PerformController {
     this.pendingPerformList = this.pendingPerformList.filter(({ perform }) => perform.isHoldOn);
   }
 
-  public hasPendingBlockingNextPerform() {
-    return this.pendingPerformList.some(({ perform }) => perform.blockingNext());
-  }
-
   public hasPendingBlockingStateCalculationPerform() {
-    return this.pendingPerformList.some(({ perform }) =>
-      perform.blockingStateCalculation ? perform.blockingStateCalculation() : perform.blockingNext(),
-    );
+    return this.pendingPerformList.some(({ perform }) => perform.blockingStateCalculation?.() ?? false);
   }
 
   public hasBlockingNextPerform() {

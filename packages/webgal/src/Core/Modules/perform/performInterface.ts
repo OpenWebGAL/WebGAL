@@ -19,7 +19,7 @@ export interface IPerform {
   blockingNext: () => boolean;
   // 演出是否阻塞自动模式（一个函数，返回 boolean类型的结果，判断要不要阻塞）
   blockingAuto: () => boolean;
-  // 演出是否阻塞状态演算；默认沿用 blockingNext，只有 intro 这类可跳过演出需要覆盖
+  // 演出是否阻塞状态演算；默认不阻塞，只有需要外部输入才能确定后续状态的演出需要覆盖
   blockingStateCalculation?: () => boolean;
   // 演出结束后转到下一句
   goNextWhenOver?: boolean;

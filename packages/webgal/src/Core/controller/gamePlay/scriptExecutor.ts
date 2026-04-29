@@ -134,15 +134,16 @@ export const scriptExecutor = (depth = 0) => {
   //   return;
   // }
 
-  const hasPendingBlockingNextPerform = WebGAL.gameplay.performController.hasPendingBlockingNextPerform();
+  const hasPendingBlockingStateCalculationPerform =
+    WebGAL.gameplay.performController.hasPendingBlockingStateCalculationPerform();
   const saveBacklogIfNeeded = () => {
     if (isSaveBacklog) {
       WebGAL.backlogManager.saveCurrentStateToBacklog();
     }
   };
 
-  // 执行“下一句”。如果本句已经产生了阻塞步进的演出控制块，状态演算必须在本句结束。
-  if (isNext && !hasPendingBlockingNextPerform) {
+  // 执行“下一句”。只有需要外部输入才能确定后续状态的演出，才会阻塞状态演算。
+  if (isNext && !hasPendingBlockingStateCalculationPerform) {
     WebGAL.sceneManager.sceneData.currentSentenceId++;
     saveBacklogIfNeeded();
     scriptExecutor(depth + 1);

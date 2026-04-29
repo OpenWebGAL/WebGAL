@@ -53,7 +53,7 @@ export function syncFast(sentenceId: number, currentSceneName: string) {
       }
 
       if (WebGAL.gameplay.performController.hasPendingBlockingStateCalculationPerform()) {
-        logger.warn('实时预览在阻塞步进的演出前停止演算');
+        logger.warn('实时预览在需要外部输入的语句前停止演算');
         break;
       }
 

@@ -77,6 +77,7 @@ export const choose = (sentence: ISentence): IPerform => {
     },
     blockingNext: () => true,
     blockingAuto: () => true,
+    blockingStateCalculation: () => true,
   };
 };
 

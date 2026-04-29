@@ -190,7 +190,6 @@ export const intro = (sentence: ISentence): IPerform => {
     },
     blockingNext: () => isBlocking,
     blockingAuto: () => isBlocking,
-    blockingStateCalculation: () => false,
     goNextWhenOver: true,
   };
 };
