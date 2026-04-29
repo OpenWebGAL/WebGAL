@@ -27,6 +27,7 @@ export const TextBox = () => {
   const textDuration = useTextAnimationDuration(userDataState.optionData.textSpeed);
   let size = getTextSize(userDataState.optionData.textSize) + '%';
   const font = useFontFamily();
+  const isRead = stageState.isRead;
   const isText = stageState.showText !== '' || stageState.showName !== '';
   let textSizeState = userDataState.optionData.textSize;
   if (isText && stageState.showTextSize !== -1) {
@@ -88,6 +89,7 @@ export const TextBox = () => {
   return (
     <Textbox
       textArray={textArray}
+      isRead={isRead}
       isText={isText}
       textDelay={textDelay}
       showName={showName}

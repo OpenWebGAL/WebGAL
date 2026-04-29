@@ -58,6 +58,13 @@ const zhCn = {
               contributors: '贡献者',
               website: '网站',
             },
+            skipAll: {
+              title: '快进模式',
+              options: {
+                read: '已读',
+                all: '全部',
+              }
+            }
           },
         },
         display: {

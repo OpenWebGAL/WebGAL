@@ -58,6 +58,13 @@ const fr = {
               contributors: 'Contributeurs',
               website: 'Site web',
             },
+            skipAll: {
+              title: 'Mode Avance Rapide',
+              options: {
+                read: 'Lu',
+                all: 'Tout',
+              }
+            }
           },
         },
         display: {

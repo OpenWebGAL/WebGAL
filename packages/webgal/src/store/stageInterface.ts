@@ -25,47 +25,47 @@ export interface IChooseItem {
 }
 
 export interface ITransform {
-  alpha: number;
-  scale: {
-    x: number;
-    y: number;
+  alpha?: number;
+  scale?: {
+    x?: number;
+    y?: number;
   };
   // pivot: {
   //   x: number;
   //   y: number;
   // };
-  position: {
-    x: number;
-    y: number;
+  position?: {
+    x?: number;
+    y?: number;
   };
-  rotation: number;
-  blur: number;
-  brightness: number;
-  contrast: number;
-  saturation: number;
-  gamma: number;
-  colorRed: number;
-  colorGreen: number;
-  colorBlue: number;
-  bevel: number;
-  bevelThickness: number;
-  bevelRotation: number;
-  bevelSoftness: number;
-  bevelRed: number;
-  bevelGreen: number;
-  bevelBlue: number;
-  bloom: number;
-  bloomBrightness: number;
-  bloomBlur: number;
-  bloomThreshold: number;
-  oldFilm: number;
-  dotFilm: number;
-  reflectionFilm: number;
-  glitchFilm: number;
-  rgbFilm: number;
-  godrayFilm: number;
-  shockwaveFilter: number;
-  radiusAlphaFilter: number;
+  rotation?: number;
+  blur?: number;
+  brightness?: number;
+  contrast?: number;
+  saturation?: number;
+  gamma?: number;
+  colorRed?: number;
+  colorGreen?: number;
+  colorBlue?: number;
+  bevel?: number;
+  bevelThickness?: number;
+  bevelRotation?: number;
+  bevelSoftness?: number;
+  bevelRed?: number;
+  bevelGreen?: number;
+  bevelBlue?: number;
+  bloom?: number;
+  bloomBrightness?: number;
+  bloomBlur?: number;
+  bloomThreshold?: number;
+  oldFilm?: number;
+  dotFilm?: number;
+  reflectionFilm?: number;
+  glitchFilm?: number;
+  rgbFilm?: number;
+  godrayFilm?: number;
+  shockwaveFilter?: number;
+  radiusAlphaFilter?: number;
 }
 
 /**
@@ -215,6 +215,7 @@ export interface IStageState {
   // 自由立绘
   freeFigure: Array<IFreeFigure>;
   figureAssociatedAnimation: Array<IFigureAssociatedAnimation>;
+  isRead: boolean; // 是否已读
   showText: string; // 文字
   showTextSize: number; // 文字
   showName: string; // 人物名

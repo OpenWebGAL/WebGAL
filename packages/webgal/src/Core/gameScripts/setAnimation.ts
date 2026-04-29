@@ -19,12 +19,14 @@ export const setAnimation = (sentence: ISentence): IPerform => {
   target = target !== '' ? target : 'default_id';
   const writeDefault = getBooleanArgByKey(sentence, 'writeDefault') ?? false;
   const keep = getBooleanArgByKey(sentence, 'keep') ?? false;
+  const parallel = getBooleanArgByKey(sentence, 'parallel') ?? false;
 
   const key = `${target}-${animationName}-${animationDuration}`;
   const performInitName = `animation-${target}`;
+  const performName = parallel ? `${performInitName}#${animationName}` : performInitName;
   let keepAnimationStopped = false;
 
-  WebGAL.gameplay.performController.unmountPerform(performInitName, true);
+  if (!parallel) WebGAL.gameplay.performController.unmountPerform(performInitName, true);
 
   let stopFunction;
   setTimeout(() => {
@@ -37,6 +39,7 @@ export const setAnimation = (sentence: ISentence): IPerform => {
       target,
       animationDuration,
       writeDefault,
+      !parallel,
     );
     if (animationObj) {
       logger.debug(`动画${animationName}作用在${target}`, animationDuration);
@@ -55,7 +58,7 @@ export const setAnimation = (sentence: ISentence): IPerform => {
   };
 
   return {
-    performName: performInitName,
+    performName: performName,
     duration: animationDuration,
     isHoldOn: keep,
     stopFunction,

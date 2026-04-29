@@ -14,6 +14,7 @@ export default function IMSSTextbox(props: ITextboxProps) {
     textDelay,
     currentConcatDialogPrev,
     currentDialogKey,
+    isRead,
     isText,
     isSafari,
     isFirefox: boolean,
@@ -167,7 +168,7 @@ export default function IMSSTextbox(props: ITextboxProps) {
         >
           <span className={styles.zhanwei + styleAllText}>
             {e}
-            <span className={applyStyle('outer', styles.outer) + styleClassName + styleAllText}>{e}</span>
+            <span className={applyStyle('outer', styles.outer) + `${isRead ? ` ${applyStyle('read', styles.read)}` : ''}` + styleClassName + styleAllText}>{e}</span>
             {isUseStroke && <span className={applyStyle('inner', styles.inner) + styleAllText}>{e}</span>}
           </span>
         </span>

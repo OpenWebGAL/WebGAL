@@ -1,4 +1,5 @@
 import { BacklogManager } from '@/Core/Modules/backlog';
+import { ReadHistoryManager } from './Modules/readHistory';
 import mitt from 'mitt';
 import { SceneManager } from '@/Core/Modules/scene';
 import { AnimationManager } from '@/Core/Modules/animations';
@@ -11,6 +12,7 @@ import { IWebGALStyleObj } from 'webgal-parser/build/types/styleParser';
 export class WebgalCore {
   public sceneManager = new SceneManager();
   public backlogManager = new BacklogManager(this.sceneManager);
+  public readHistoryManager = new ReadHistoryManager(this.sceneManager);
   public animationManager = new AnimationManager();
   public gameplay = new Gameplay();
   public gameName = '';
