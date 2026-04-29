@@ -29,16 +29,122 @@ import { callScene } from '@/Core/controller/scene/callScene';
 import { restoreScene } from '@/Core/controller/scene/restoreScene';
 import { sceneFetcher } from '@/Core/controller/scene/sceneFetcher';
 import { sceneParser, WebgalParser } from '@/Core/parser/sceneParser';
+import { syncWithOrigine } from '@/Core/util/syncWithEditor/syncWithOrigine';
 
 // ─── Redux actions ───
-import { setStage, resetStageState } from '@/store/stageReducer';
+import { initState, setStage, resetStageState } from '@/store/stageReducer';
 import { setVisibility } from '@/store/GUIReducer';
+import { setOptionData } from '@/store/userDataReducer';
 
 // ─── 配置 & 类型 ───
 import { SYSTEM_CONFIG, PERFORM_CONFIG } from '@/config';
 
 import cloneDeep from 'lodash/cloneDeep';
-import type { IWebGALTestAPI, IGameStateSnapshot } from '@/test/types';
+import type {
+  IBackgroundObjectSnapshot,
+  IGameStateSnapshot,
+  IRuntimeAnimationSnapshot,
+  IStageObjectSnapshot,
+  ITestMetadata,
+  ITextRuntimeSnapshot,
+  IWebGALTestAPI,
+} from '@/test/types';
+
+const TEST_API_VERSION = 2;
+
+const metadata: ITestMetadata = {
+  testMode: true,
+  apiVersion: TEST_API_VERSION,
+  exposedAt: Date.now(),
+  locationHref: window.location.href,
+};
+
+function serializeTransform(obj: { pixiContainer: any } | undefined | null): IStageObjectSnapshot['transform'] {
+  const container = obj?.pixiContainer;
+  if (!container) return null;
+  return {
+    x: container.x,
+    y: container.y,
+    scaleX: container.scale.x,
+    scaleY: container.scale.y,
+    rotation: container.rotation,
+    alpha: container.alphaFilterVal ?? container.alpha,
+    visible: container.visible,
+    zIndex: container.zIndex,
+  };
+}
+
+function serializeStageObject(obj: any): IStageObjectSnapshot | IBackgroundObjectSnapshot {
+  return {
+    uuid: obj.uuid,
+    key: obj.key,
+    sourceUrl: obj.sourceUrl,
+    sourceExt: obj.sourceExt,
+    sourceType: obj.sourceType,
+    isExiting: obj.isExiting ?? false,
+    transform: serializeTransform(obj),
+  };
+}
+
+function getActiveAnimations(): IRuntimeAnimationSnapshot[] {
+  const pixiStage = WebGAL.gameplay.pixiStage as any;
+  const stageAnimations = pixiStage?.stageAnimations ?? [];
+  return stageAnimations.map((animation: any) => ({
+    key: animation.key,
+    targetKey: animation.targetKey ?? 'default',
+    type: animation.type,
+  }));
+}
+
+function getTextState(): ITextRuntimeSnapshot {
+  const state = webgalStore.getState();
+  const textRoot = document.querySelector('#textBoxMain');
+  const allElements = Array.from(textRoot?.querySelectorAll('[class*="TextBox_textElement"]') ?? []);
+  const pendingElements = Array.from(document.querySelectorAll('.Textelement_start'));
+  const settledElements = allElements.filter((element) => !element.classList.contains('Textelement_start'));
+
+  return {
+    shownText: state.stage.showText,
+    shownName: state.stage.showName,
+    currentDialogKey: state.stage.currentDialogKey,
+    totalElements: allElements.length,
+    pendingElements: pendingElements.length,
+    settledElements: settledElements.length,
+    visibleText: textRoot?.textContent ?? '',
+  };
+}
+
+function settleAnimations(): void {
+  const pixiStage = WebGAL.gameplay.pixiStage as any;
+  const stageAnimations = [...(pixiStage?.stageAnimations ?? [])];
+  for (const animation of stageAnimations) {
+    pixiStage?.removeAnimationWithSetEffects(animation.key);
+  }
+}
+
+function clearPixiObjects(): void {
+  const pixiStage = WebGAL.gameplay.pixiStage;
+  if (!pixiStage) return;
+  for (const obj of [...pixiStage.figureObjects, ...pixiStage.backgroundObjects]) {
+    pixiStage.removeStageObjectByKey(obj.key);
+  }
+}
+
+function resetRuntime(): void {
+  stopAuto();
+  stopFast();
+  WebGAL.gameplay.pixiStage?.removeAllAnimations();
+  WebGAL.gameplay.performController.removeAllPerform();
+  resetStage(true, true);
+  clearPixiObjects();
+  WebGAL.sceneManager.resetScene();
+  WebGAL.backlogManager.makeBacklogEmpty();
+  webgalStore.dispatch(resetStageState(cloneDeep(initState)));
+  webgalStore.dispatch(setVisibility({ component: 'showTitle', visibility: false }));
+  webgalStore.dispatch(setVisibility({ component: 'showTextBox', visibility: true }));
+  webgalStore.dispatch(setVisibility({ component: 'showBacklog', visibility: false }));
+  webgalStore.dispatch(setVisibility({ component: 'showMenuPanel', visibility: false }));
+}
 
 /**
  * 拍摄当前状态快照（包含完整的舞台、视觉、演出状态）
@@ -48,6 +154,8 @@ function takeSnapshot(): IGameStateSnapshot {
   const pixiStage = WebGAL.gameplay.pixiStage;
 
   return {
+    metadata,
+
     // Redux 状态
     stageState: cloneDeep(state.stage),
     guiState: cloneDeep(state.GUI),
@@ -75,43 +183,26 @@ function takeSnapshot(): IGameStateSnapshot {
       blockingNext: p.blockingNext(),
       blockingAuto: p.blockingAuto(),
       goNextWhenOver: p.goNextWhenOver ?? false,
+      skipNextCollect: p.skipNextCollect ?? false,
     })),
     performListLength: WebGAL.gameplay.performController.performList.length,
 
     // Pixi 舞台视觉状态
     pixiState: pixiStage
       ? {
-          figureObjects: pixiStage.figureObjects.map((obj) => ({
-            uuid: obj.uuid,
-            key: obj.key,
-            sourceUrl: obj.sourceUrl,
-            sourceExt: obj.sourceExt,
-            sourceType: obj.sourceType,
-            isExiting: obj.isExiting ?? false,
-            transform: obj.pixiContainer
-              ? {
-                  x: obj.pixiContainer.x,
-                  y: obj.pixiContainer.y,
-                  scaleX: obj.pixiContainer.scale.x,
-                  scaleY: obj.pixiContainer.scale.y,
-                  rotation: obj.pixiContainer.rotation,
-                  alpha: obj.pixiContainer.alpha,
-                  visible: obj.pixiContainer.visible,
-                  zIndex: obj.pixiContainer.zIndex,
-                }
-              : null,
-          })),
-          backgroundObjects: pixiStage.backgroundObjects.map((obj) => ({
-            uuid: obj.uuid,
-            key: obj.key,
-            sourceUrl: obj.sourceUrl,
-            sourceType: obj.sourceType,
-            isExiting: obj.isExiting ?? false,
-          })),
+          figureObjects: pixiStage.figureObjects.map((obj) => serializeStageObject(obj) as IStageObjectSnapshot),
+          backgroundObjects: pixiStage.backgroundObjects.map(
+            (obj) => serializeStageObject(obj) as IBackgroundObjectSnapshot,
+          ),
+          allObjects: pixiStage.getAllStageObj().map((obj) => serializeStageObject(obj)),
+          activeAnimations: getActiveAnimations(),
+          lockedTargets: cloneDeep(pixiStage.getAllLockedObject()),
           stageWidth: pixiStage.stageWidth,
           stageHeight: pixiStage.stageHeight,
         }
       : null,
+
+    textState: getTextState(),
 
     // 游戏播放状态
     gameplayState: {
@@ -132,8 +223,8 @@ function takeSnapshot(): IGameStateSnapshot {
 /**
  * 注入测试场景：直接用原始脚本文本创建场景并执行
  */
-function injectScene(rawSceneText: string, sceneName = '__test__'): void {
-  const parsed = sceneParser(rawSceneText, sceneName, `memory://${sceneName}`);
+function injectScene(rawSceneText: string, sceneName = '__test__', sceneUrl = `memory://${sceneName}`): void {
+  const parsed = sceneParser(rawSceneText, sceneName, sceneUrl);
   WebGAL.sceneManager.sceneData.currentScene = parsed;
   WebGAL.sceneManager.sceneData.currentSentenceId = 0;
 }
@@ -141,10 +232,13 @@ function injectScene(rawSceneText: string, sceneName = '__test__'): void {
 /**
  * 注入测试场景并开始执行
  */
-function injectSceneAndRun(rawSceneText: string, sceneName = '__test__'): void {
-  // 先停止当前所有演出
-  WebGAL.gameplay.performController.removeAllPerform();
-  injectScene(rawSceneText, sceneName);
+function injectSceneAndRun(
+  rawSceneText: string,
+  sceneName = '__test__',
+  sceneUrl = `memory://${sceneName}`,
+): void {
+  resetRuntime();
+  injectScene(rawSceneText, sceneName, sceneUrl);
   nextSentence();
 }
 
@@ -164,6 +258,8 @@ function injectParsedScene(sentenceList: unknown[], sceneName = '__test__'): voi
 
 export function exposeTestAPI(): void {
   const api: IWebGALTestAPI = {
+    metadata,
+
     // ═══ 核心实例（完整的内部访问） ═══
     core: WebGAL,
     live2d: Live2D,
@@ -225,6 +321,7 @@ export function exposeTestAPI(): void {
       changeScene,
       callScene,
       restoreScene,
+      syncWithOrigine,
     },
 
     // ═══ 场景解析 & 注入 ═══
@@ -254,6 +351,26 @@ export function exposeTestAPI(): void {
 
     // ═══ 状态快照 ═══
     takeSnapshot,
+
+    // ═══ 测试专用运行时工具 ═══
+    testTools: {
+      resetRuntime,
+      settleText: () => WebGAL.events.textSettle.emit(),
+      settleAnimations,
+      getTextState,
+      getActiveAnimations,
+      getLockedTargets: () => cloneDeep(WebGAL.gameplay.pixiStage?.getAllLockedObject() ?? []),
+      getStageObjectByKey: (key: string) => {
+        const obj = WebGAL.gameplay.pixiStage?.getStageObjByKey(key);
+        return obj ? serializeStageObject(obj) : null;
+      },
+      getEffectByTarget: (target: string) => {
+        const effect = webgalStore.getState().stage.effects.find((item) => item.target === target);
+        return effect ? cloneDeep(effect) : null;
+      },
+      setOptionData: (key: string, value: unknown) => webgalStore.dispatch(setOptionData({ key: key as any, value })),
+      flushBrowserTasks: (ms = 0) => new Promise((resolve) => setTimeout(resolve, ms)),
+    },
 
     // ═══ 工具 ═══
     utils: {

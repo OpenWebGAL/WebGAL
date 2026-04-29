@@ -72,6 +72,7 @@ interface Perform {
   blockingNext: () => boolean;
   blockingAuto: () => boolean;
   goNextWhenOver?: boolean;
+  skipNextCollect?: boolean;
 }
 
 interface PerformControllerInstance {
@@ -189,6 +190,13 @@ interface WebGALCoreInstance {
 // ─── 完整 API ───
 
 interface WebGALTestAPI {
+  readonly metadata: {
+    testMode: true;
+    apiVersion: number;
+    exposedAt: number;
+    locationHref: string;
+  };
+
   // 核心实例
   core: WebGALCoreInstance;
   live2d: Live2DInstance;
@@ -235,6 +243,7 @@ interface WebGALTestAPI {
     changeScene(sceneUrl: string, sceneName: string): void;
     callScene(sceneUrl: string, sceneName: string): void;
     restoreScene(entry: unknown): void;
+    syncWithOrigine(sceneName: string, sentenceId: number, experimental?: boolean): void;
   };
 
   // 场景解析 & 注入
@@ -242,8 +251,8 @@ interface WebGALTestAPI {
     sceneParser(rawScene: string, sceneName: string, sceneUrl: string): unknown;
     sceneFetcher(sceneUrl: string): Promise<string>;
     webgalParser: unknown;
-    injectScene(rawSceneText: string, sceneName?: string): void;
-    injectSceneAndRun(rawSceneText: string, sceneName?: string): void;
+    injectScene(rawSceneText: string, sceneName?: string, sceneUrl?: string): void;
+    injectSceneAndRun(rawSceneText: string, sceneName?: string, sceneUrl?: string): void;
     injectParsedScene(sentenceList: unknown[], sceneName?: string): void;
   };
 
@@ -263,6 +272,12 @@ interface WebGALTestAPI {
 
   // 状态快照
   takeSnapshot(): {
+    metadata: {
+      testMode: true;
+      apiVersion: number;
+      exposedAt: number;
+      locationHref: string;
+    };
     stageState: Record<string, unknown>;
     guiState: Record<string, unknown>;
     userData: Record<string, unknown>;
@@ -308,18 +323,62 @@ interface WebGALTestAPI {
         uuid: string;
         key: string;
         sourceUrl: string;
+        sourceExt: string;
         sourceType: string;
         isExiting: boolean;
+        transform: {
+          x: number;
+          y: number;
+          scaleX: number;
+          scaleY: number;
+          rotation: number;
+          alpha: number;
+          visible: boolean;
+          zIndex: number;
+        } | null;
       }>;
+      allObjects: unknown[];
+      activeAnimations: Array<{ key: string; targetKey: string; type: 'common' | 'preset' }>;
+      lockedTargets: string[];
       stageWidth: number;
       stageHeight: number;
     } | null;
+    textState: {
+      shownText: string;
+      shownName: string;
+      currentDialogKey: string;
+      totalElements: number;
+      pendingElements: number;
+      settledElements: number;
+      visibleText: string;
+    };
     gameplayState: {
       isAuto: boolean;
       isFast: boolean;
     };
     animations: Array<{ name: string; frameCount: number }>;
     timestamp: number;
+  };
+
+  testTools: {
+    resetRuntime(): void;
+    settleText(): void;
+    settleAnimations(): void;
+    getTextState(): {
+      shownText: string;
+      shownName: string;
+      currentDialogKey: string;
+      totalElements: number;
+      pendingElements: number;
+      settledElements: number;
+      visibleText: string;
+    };
+    getActiveAnimations(): Array<{ key: string; targetKey: string; type: 'common' | 'preset' }>;
+    getLockedTargets(): string[];
+    getStageObjectByKey(key: string): unknown;
+    getEffectByTarget(target: string): unknown;
+    setOptionData(key: string, value: unknown): void;
+    flushBrowserTasks(ms?: number): Promise<void>;
   };
 
   // 工具

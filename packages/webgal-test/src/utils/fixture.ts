@@ -33,6 +33,11 @@ export async function createTestPage(): Promise<Page> {
   const page = await context.newPage();
   await page.goto(WEBGAL_URL, { waitUntil: 'domcontentloaded' });
   await waitForTestAPI(page, 30_000);
+  await page.waitForSelector('#FullScreenClick', { timeout: 30_000 });
+  const metadata = await page.evaluate(() => window.webgalTest?.metadata);
+  if (!metadata?.testMode) {
+    throw new Error('window.webgalTest is present but test metadata is missing.');
+  }
   return page;
 }
 

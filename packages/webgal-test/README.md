@@ -6,9 +6,17 @@
 
 ### 一键运行（本地开发 / CI）
 
+在仓库根目录运行：
+
 ```bash
 # globalSetup 会自动检测 dist 是否存在，不存在则自动构建
 yarn test:integration
+```
+
+如果当前目录已经是 `packages/webgal-test`，运行：
+
+```bash
+yarn test
 ```
 
 ### 分步运行（CI 推荐，可缓存构建产物）
@@ -17,8 +25,14 @@ yarn test:integration
 # Step 1: 构建测试包（包含 window.webgalTest 暴露）
 yarn build:test
 
-# Step 2: 运行测试（从 dist 启动静态服务器 + 无头浏览器）
+# Step 2: 运行测试（从仓库根目录执行，从 dist 启动静态服务器 + 无头浏览器）
 yarn test:integration
+```
+
+或在 `packages/webgal-test` 目录执行：
+
+```bash
+yarn test
 ```
 
 ### 本地调试（显示浏览器窗口）
@@ -78,7 +92,11 @@ packages/webgal-test     (测试包 - 本目录)
           ├── backlog.test.ts           Backlog 回溯一致性测试
           ├── scene-injection.test.ts   场景注入测试
           ├── pixi-stage.test.ts        Pixi 舞台状态测试
-          └── perform-manager.test.ts   演出管理器测试
+          ├── perform-manager.test.ts   演出管理器测试
+          ├── test-mode-exposure.test.ts       测试构建暴露校验
+          ├── click-settle-semantics.test.ts   点击先终止当前演出语义
+          ├── animation-transform-backlog.test.ts 复杂变换与 backlog 测试
+          └── complex-state-consistency.test.ts   复杂演出多路径状态收敛测试
 ```
 
 ## 暴露的 API
@@ -98,11 +116,13 @@ packages/webgal-test     (测试包 - 本目录)
 | `performController` | 演出管理器（performList, arrangeNewPerform, removeAllPerform） |
 | `gameplay` | Gameplay 状态（isAuto, isFast） |
 | `events` | 事件系统（textSettle, userInteractNext, styleUpdate 等） |
-| `controllers` | 游戏控制函数（nextSentence, switchAuto, saveGame, loadGame, changeScene 等） |
-| `sceneTools` | 场景解析/注入（sceneParser, injectScene, injectSceneAndRun, injectParsedScene） |
+| `controllers` | 游戏控制函数（nextSentence, switchAuto, saveGame, loadGame, changeScene, syncWithOrigine 等） |
+| `sceneTools` | 场景解析/注入（sceneParser, injectScene, injectSceneAndRun, injectParsedScene；注入时可指定 sceneUrl） |
 | `dispatch` | Redux dispatch 快捷方法（setStage, resetStageState, setVisibility） |
 | `config` | 系统配置（SYSTEM_CONFIG, PERFORM_CONFIG） |
 | `takeSnapshot()` | 完整状态快照（Redux, scene, backlog, performs, pixi, gameplay, animations） |
+| `metadata` | 测试构建元数据（testMode, apiVersion, locationHref） |
+| `testTools` | 测试专用工具（resetRuntime, settleText, settleAnimations, 文本状态、动画队列、锁定目标、内部 effects、选项设置） |
 | `utils` | 工具函数（cloneDeep） |
 
 ## 环境变量
@@ -112,21 +132,39 @@ packages/webgal-test     (测试包 - 本目录)
 | `WEBGAL_TEST_URL` | `http://localhost:4173` | 由 globalSetup 自动设置，也可手动覆盖 |
 | `WEBGAL_TEST_PORT` | `4173` | 静态服务器端口 |
 | `WEBGAL_TEST_HEADLESS` | `true` | 设为 `false` 显示浏览器窗口（调试用） |
-| `WEBGAL_TEST_SKIP_BUILD` | `false` | 设为 `true` 时，dist 不存在会直接报错而非自动构建 |
+| `WEBGAL_TEST_SKIP_BUILD` | `false` | 设为 `true` 时，dist 不存在或不是测试构建会直接报错而非自动构建 |
+| `WEBGAL_TEST_FORCE_BUILD` | `false` | 设为 `true` 时，忽略现有 dist 并强制重新构建测试产物 |
 
 ## 测试说明
 
-### auto-mode.test.ts (3 tests)
+### test-mode-exposure.test.ts
+- 验证浏览器实际加载的是含 `window.webgalTest` 的测试构建产物
+- 验证测试元数据、Pixi 动画队列、动画锁、文本渐显状态等运行时观测 API 可用
+
+### click-settle-semantics.test.ts
+- 验证对话文字仍在渐显时，第一次点击只触发当前对话终态
+- 验证当前对话终态后，再次点击才推进到下一句
+
+### animation-transform-backlog.test.ts
+- 验证复杂 `setTransform` 动画会锁定目标，并能通过测试 API 观察 active animation
+- 验证点击中断动画会写入 Pixi 容器终态和 stage `effects` 内部变换
+- 验证复杂变换后的 backlog 跳转能恢复同一终态
+
+### complex-state-consistency.test.ts
+- 构造多立绘、背景、交叠动画、复杂滤镜/位移/缩放/透明度变换的同一场景
+- 验证手动点击、Fast Skip、Auto、编辑器 `syncWithOrigine` 快速同步、`loadGameFromStageData` 到达同一 checkpoint 后，稳定舞台状态与 Pixi 关键状态一致
+- 验证从 checkpoint 继续推进后，存读档和 backlog 跳转都能恢复同一稳定状态
+- 稳定状态比较会排除随机动画名、对话 key、时间戳等不稳定字段，但保留 `effects`、Pixi transform、锁定目标、活动动画、文本终态、backlog 长度等关键属性
+
+### auto-mode.test.ts (2 tests)
 - 验证自动模式开启后游戏自动推进
-- 验证推进过程中存档/读档状态一致
 - 验证停止后不再推进
 
-### fast-mode.test.ts (4 tests)
+### fast-mode.test.ts (3 tests)
 - 验证快进模式快速推进（比自动模式快）
-- 验证快进中存档/读档状态一致
 - 验证停止后不再推进
 
-### random-click.test.ts (5 tests)
+### random-click.test.ts (4 tests)
 - 模拟用户不规律点击，验证游戏不崩溃
 - 模拟疯狂连点，验证不出现状态损坏
 - 验证随机操作中存档/读档一致
@@ -137,7 +175,7 @@ packages/webgal-test     (测试包 - 本目录)
 - 验证多个存档槽位互不干扰
 - 验证存档数据包含正确的 backlog 和场景信息
 
-### backlog.test.ts (5 tests)
+### backlog.test.ts (4 tests)
 - 验证推进过程中 backlog 正确累积
 - 验证 backlog 跳转后状态恢复
 - 验证连续多次跳转的一致性
@@ -168,12 +206,12 @@ packages/webgal-test     (测试包 - 本目录)
 
 1. **编译标志**：`WEBGAL_TEST=true` 环境变量触发 Vite `define` 注入 `__WEBGAL_TEST__`
 2. **API 暴露**：测试模式下 `main.tsx` 动态加载 `src/test/`，将 WebGAL 核心、Redux store、Pixi 舞台、控制器、场景工具等绑定到 `window.webgalTest`
-3. **自动构建**：vitest `globalSetup` 检测 `packages/webgal/dist/` 是否存在，不存在则自动执行 `yarn build:test`
+3. **自动构建**：vitest `globalSetup` 检测 `packages/webgal/dist/` 是否存在，且会扫描构建产物确认其中包含测试 API；缺失或不是测试构建则自动执行 `yarn build:test`
 4. **内建服务器**：globalSetup 启动零依赖 Node.js 静态文件服务器（`src/server.ts`），服务构建产物
 5. **浏览器桥接**：vitest 通过 Playwright 打开无头 Chromium，导航到内建服务器，通过 `page.evaluate()` 调用 `window.webgalTest` 上的方法
-6. **场景注入**：`injectSceneAndRun()` 直接将 WebGAL 脚本文本解析为场景并替换当前场景，无需实际文件，方便测试
-7. **状态快照**：`takeSnapshot()` 深拷贝 Redux state、场景数据、backlog、演出列表、Pixi 舞台可视状态、gameplay 状态、动画列表
-8. **一致性比较**：`compareSnapshots()` 排除不稳定字段（PerformList、currentDialogKey 等）后进行 JSON 比较
+6. **场景注入**：`injectSceneAndRun()` 会先清理演出、动画、backlog、舞台对象和场景状态，再直接将 WebGAL 脚本文本解析为场景并替换当前场景
+7. **状态快照**：`takeSnapshot()` 深拷贝 Redux state、场景数据、backlog、演出列表、Pixi 舞台对象、active animations、动画锁、文本渐显状态、gameplay 状态、动画列表
+8. **一致性比较**：`compareSnapshots()` 排除不稳定字段（PerformList、currentDialogKey 等）后进行递归稳定 JSON 比较；复杂视觉路径使用 `compareStableRuntimeSnapshots()` 比较稳定舞台/Pixi 关键字段
 9. **自动清理**：测试完成后 globalSetup teardown 自动关闭静态服务器
 
 ## CI 示例（GitHub Actions）

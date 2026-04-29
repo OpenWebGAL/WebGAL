@@ -39,11 +39,17 @@ const MIME: Record<string, string> = {
 };
 
 function createStaticServer(root: string): http.Server {
+  const normalizedRoot = path.resolve(root);
   return http.createServer((req, res) => {
     const url = new URL(req.url || '/', `http://${req.headers.host}`);
     const pathname = decodeURIComponent(url.pathname);
 
-    let filePath = path.join(root, pathname);
+    let filePath = path.resolve(normalizedRoot, `.${pathname}`);
+    if (filePath !== normalizedRoot && !filePath.startsWith(normalizedRoot + path.sep)) {
+      res.writeHead(403, { 'Content-Type': 'text/plain' });
+      res.end('Forbidden');
+      return;
+    }
 
     // 目录 → index.html
     try {
@@ -53,7 +59,7 @@ function createStaticServer(root: string): http.Server {
       }
     } catch {
       // 文件不存在，SPA 回退到 index.html
-      const indexPath = path.join(root, 'index.html');
+      const indexPath = path.join(normalizedRoot, 'index.html');
       if (fs.existsSync(indexPath)) {
         filePath = indexPath;
       }
@@ -81,11 +87,9 @@ export function startServer(root: string, port: number): Promise<http.Server> {
   return new Promise((resolve, reject) => {
     server.on('error', (err: NodeJS.ErrnoException) => {
       if (err.code === 'EADDRINUSE') {
-        console.warn(`⚠️  Port ${port} in use, retrying in 1s...`);
-        setTimeout(() => {
-          server.close();
-          server.listen(port, () => resolve(server));
-        }, 1000);
+        console.warn(`Port ${port} in use, trying ${port + 1}...`);
+        server.close();
+        startServer(root, port + 1).then(resolve, reject);
       } else {
         reject(err);
       }

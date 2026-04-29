@@ -1,6 +1,16 @@
-import { IStageState } from '@/store/stageInterface';
+import { IEffect, IStageState, ITransform } from '@/store/stageInterface';
 import { IUserData } from '@/store/userDataInterface';
 import { IGuiState } from '@/store/guiInterface';
+
+/**
+ * 测试模式元数据
+ */
+export interface ITestMetadata {
+  testMode: true;
+  apiVersion: number;
+  exposedAt: number;
+  locationHref: string;
+}
 
 /**
  * 演出项快照
@@ -12,6 +22,7 @@ export interface IPerformSnapshot {
   blockingNext: boolean;
   blockingAuto: boolean;
   goNextWhenOver: boolean;
+  skipNextCollect: boolean;
 }
 
 /**
@@ -43,8 +54,10 @@ export interface IBackgroundObjectSnapshot {
   uuid: string;
   key: string;
   sourceUrl: string;
+  sourceExt: string;
   sourceType: string;
   isExiting: boolean;
+  transform: IStageObjectSnapshot['transform'];
 }
 
 /**
@@ -53,14 +66,41 @@ export interface IBackgroundObjectSnapshot {
 export interface IPixiStateSnapshot {
   figureObjects: IStageObjectSnapshot[];
   backgroundObjects: IBackgroundObjectSnapshot[];
+  allObjects: Array<IStageObjectSnapshot | IBackgroundObjectSnapshot>;
+  activeAnimations: IRuntimeAnimationSnapshot[];
+  lockedTargets: string[];
   stageWidth: number;
   stageHeight: number;
+}
+
+/**
+ * Pixi 动画运行时快照
+ */
+export interface IRuntimeAnimationSnapshot {
+  key: string;
+  targetKey: string;
+  type: 'common' | 'preset';
+}
+
+/**
+ * 文本渐显运行时快照
+ */
+export interface ITextRuntimeSnapshot {
+  shownText: string;
+  shownName: string;
+  currentDialogKey: string;
+  totalElements: number;
+  pendingElements: number;
+  settledElements: number;
+  visibleText: string;
 }
 
 /**
  * 游戏完整状态快照（包含视觉、演出、舞台全部状态）
  */
 export interface IGameStateSnapshot {
+  metadata: ITestMetadata;
+
   // Redux 状态
   stageState: IStageState;
   guiState: IGuiState;
@@ -87,6 +127,9 @@ export interface IGameStateSnapshot {
   // Pixi 舞台视觉状态
   pixiState: IPixiStateSnapshot | null;
 
+  // 文本渐显状态
+  textState: ITextRuntimeSnapshot;
+
   // 游戏播放状态
   gameplayState: {
     isAuto: boolean;
@@ -103,6 +146,9 @@ export interface IGameStateSnapshot {
  * 暴露到 window 的完整测试 API
  */
 export interface IWebGALTestAPI {
+  // ═══ 测试模式元数据 ═══
+  readonly metadata: ITestMetadata;
+
   // ═══ 核心实例（完整的内部访问） ═══
   /** WebGAL 核心单例 — 可访问 sceneManager, backlogManager, gameplay, events 等全部子模块 */
   core: typeof import('@/Core/WebGAL').WebGAL;
@@ -153,6 +199,7 @@ export interface IWebGALTestAPI {
     changeScene: typeof import('@/Core/controller/scene/changeScene').changeScene;
     callScene: typeof import('@/Core/controller/scene/callScene').callScene;
     restoreScene: typeof import('@/Core/controller/scene/restoreScene').restoreScene;
+    syncWithOrigine: typeof import('@/Core/util/syncWithEditor/syncWithOrigine').syncWithOrigine;
   };
 
   // ═══ 场景解析 & 注入 ═══
@@ -164,9 +211,9 @@ export interface IWebGALTestAPI {
     /** WebGAL Parser 实例 */
     webgalParser: typeof import('@/Core/parser/sceneParser').WebgalParser;
     /** 注入场景（仅设置，不执行） */
-    injectScene: (rawSceneText: string, sceneName?: string) => void;
+    injectScene: (rawSceneText: string, sceneName?: string, sceneUrl?: string) => void;
     /** 注入场景并开始执行 */
-    injectSceneAndRun: (rawSceneText: string, sceneName?: string) => void;
+    injectSceneAndRun: (rawSceneText: string, sceneName?: string, sceneUrl?: string) => void;
     /** 注入已解析的 ISentence 数组 */
     injectParsedScene: (sentenceList: unknown[], sceneName?: string) => void;
   };
@@ -188,6 +235,30 @@ export interface IWebGALTestAPI {
 
   // ═══ 状态快照 ═══
   takeSnapshot: () => IGameStateSnapshot;
+
+  // ═══ 测试专用运行时工具 ═══
+  testTools: {
+    /** 清理演出、动画、backlog、场景和舞台状态，进入可注入场景的空测试态 */
+    resetRuntime: () => void;
+    /** 触发文本直接进入终态 */
+    settleText: () => void;
+    /** 将所有 Pixi 动画直接写入终态并清除动画队列 */
+    settleAnimations: () => void;
+    /** 读取文本渐显 DOM 状态 */
+    getTextState: () => ITextRuntimeSnapshot;
+    /** 读取当前 Pixi 动画运行时队列 */
+    getActiveAnimations: () => IRuntimeAnimationSnapshot[];
+    /** 读取当前被动画锁定、不能应用内部变换的目标 */
+    getLockedTargets: () => string[];
+    /** 按 key 读取舞台对象快照 */
+    getStageObjectByKey: (key: string) => IStageObjectSnapshot | IBackgroundObjectSnapshot | null;
+    /** 按 target 读取舞台内部变换记录 */
+    getEffectByTarget: (target: string) => IEffect | null;
+    /** 设置用户选项，便于控制文字速度、自动速度等测试条件 */
+    setOptionData: (key: string, value: unknown) => void;
+    /** 等待浏览器宏任务推进 */
+    flushBrowserTasks: (ms?: number) => Promise<void>;
+  };
 
   // ═══ 工具 ═══
   utils: {
