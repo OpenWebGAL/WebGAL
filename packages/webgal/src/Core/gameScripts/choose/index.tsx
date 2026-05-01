@@ -1,4 +1,4 @@
-import { ISentence } from '@/Core/controller/scene/sceneInterface';
+import { arg, ISentence } from '@/Core/controller/scene/sceneInterface';
 import { IPerform } from '@/Core/Modules/perform/performInterface';
 import { changeScene } from '@/Core/controller/scene/changeScene';
 import { jmp } from '@/Core/gameScripts/label/jmp';
@@ -65,13 +65,13 @@ export const choose = (sentence: ISentence): IPerform => {
   // eslint-disable-next-line react/no-deprecated
   ReactDOM.render(
     <Provider store={webgalStore}>
-      <Choose chooseOptions={chooseOptions} />
+      <Choose chooseOptions={chooseOptions} args={sentence.args} />
     </Provider>,
     document.getElementById('chooseContainer'),
   );
   if (previewChoice) {
     setTimeout(() => {
-      selectChooseOption(previewChoice);
+      selectChooseOption(previewChoice, sentence.args);
       WebGAL.gameplay.performController.unmountPerform('choose');
     }, 0);
   }
@@ -101,15 +101,15 @@ function getDefaultPreviewChoice(chooseOptions: ChooseOption[], defaultChoose: n
   return defaultOption ?? null;
 }
 
-function selectChooseOption(option: ChooseOption) {
+function selectChooseOption(option: ChooseOption, args: arg[]) {
   if (option.jumpToScene) {
-    changeScene(option.jump, option.text);
+    changeScene(option.jump, option.text, args);
   } else {
     jmp(option.jump);
   }
 }
 
-function Choose(props: { chooseOptions: ChooseOption[] }) {
+function Choose(props: { chooseOptions: ChooseOption[]; args: arg[] }) {
   const font = useFontFamily();
   const { playSeEnter, playSeClick } = useSEByWebgalStore();
   const applyStyle = useApplyStyle('choose');
@@ -125,7 +125,7 @@ function Choose(props: { chooseOptions: ChooseOption[] }) {
         const onClick = enable
           ? () => {
               playSeClick();
-              selectChooseOption(e);
+              selectChooseOption(e, props.args);
               WebGAL.gameplay.performController.unmountPerform('choose');
             }
           : () => {};
