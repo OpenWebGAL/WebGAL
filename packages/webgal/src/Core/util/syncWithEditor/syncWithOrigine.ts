@@ -38,6 +38,7 @@ export const syncWithOrigine = (sceneName: string, sentenceId: number) => {
 };
 
 export function syncFast(sentenceId: number, currentSceneName: string) {
+  const fastPreviewStartTime = performance.now();
   WebGAL.gameplay.isFast = true;
   WebGAL.gameplay.isFastPreview = true;
   let forwardCount = 0;
@@ -81,4 +82,10 @@ export function syncFast(sentenceId: number, currentSceneName: string) {
   }
 
   commitForward();
+  const forwardedLineCount =
+    WebGAL.sceneManager.sceneData.currentScene.sceneName === currentSceneName
+      ? Math.min(WebGAL.sceneManager.sceneData.currentSentenceId, sentenceId)
+      : sentenceId;
+  const fastPreviewElapsedMs = Math.round(performance.now() - fastPreviewStartTime);
+  logger.info(`实时预览快进完成：快进 ${forwardedLineCount} 行，用时 ${fastPreviewElapsedMs}ms`);
 }
