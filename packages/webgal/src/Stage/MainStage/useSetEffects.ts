@@ -36,6 +36,7 @@ export function setStageEffects(effects: IEffect[]) {
       }
     }
   }
+  WebGAL.gameplay.pixiStage?.requestRender();
 }
 
 function convertTransform(transform: ITransform | undefined) {
