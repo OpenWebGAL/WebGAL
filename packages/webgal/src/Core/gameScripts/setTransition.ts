@@ -1,5 +1,5 @@
 import { ISentence } from '@/Core/controller/scene/sceneInterface';
-import { IPerform } from '@/Core/Modules/perform/performInterface';
+import { createNonePerform, IPerform } from '@/Core/Modules/perform/performInterface';
 import { getStringArgByKey } from '@/Core/util/getSentenceArg';
 import { stageStateManager } from '@/Core/Modules/stage/stageStateManager';
 
@@ -18,12 +18,5 @@ export const setTransition = (sentence: ISentence): IPerform => {
   if (exitAnimation) {
     stageStateManager.updateAnimationSettings({ target: key, key: 'exitAnimationName', value: exitAnimation });
   }
-  return {
-    performName: 'none',
-    duration: 0,
-    isHoldOn: false,
-    stopFunction: () => {},
-    blockingNext: () => false,
-    blockingAuto: () => false,
-  };
+  return createNonePerform({ blockingAuto: false });
 };

@@ -1,5 +1,5 @@
 import { ISentence } from '@/Core/controller/scene/sceneInterface';
-import { IPerform } from '@/Core/Modules/perform/performInterface';
+import { createNonePerform, IPerform } from '@/Core/Modules/perform/performInterface';
 import { changeScene } from '@/Core/controller/scene/changeScene';
 import { jmp } from '@/Core/gameScripts/label/jmp';
 import ReactDOM from 'react-dom';
@@ -14,7 +14,6 @@ import useApplyStyle from '@/hooks/useApplyStyle';
 import { Provider } from 'react-redux';
 import { useFontFamily } from '@/hooks/useFontFamily';
 import { getNumberArgByKey } from '@/Core/util/getSentenceArg';
-import { WEBGAL_NONE } from '@/Core/constants';
 
 class ChooseOption {
   /**
@@ -64,7 +63,7 @@ export const choose = (sentence: ISentence): IPerform => {
 
   if (defaultPreviewChoice) {
     selectChooseOption(defaultPreviewChoice, false);
-    return createNonePerform();
+    return createNonePerform({ blockingAuto: false });
   }
 
   return {
@@ -89,17 +88,6 @@ export const choose = (sentence: ISentence): IPerform => {
     blockingStateCalculation: () => true,
   };
 };
-
-function createNonePerform(): IPerform {
-  return {
-    performName: WEBGAL_NONE,
-    duration: 0,
-    isHoldOn: false,
-    stopFunction: () => {},
-    blockingNext: () => false,
-    blockingAuto: () => false,
-  };
-}
 
 function getDefaultPreviewChoice(chooseOptions: ChooseOption[], defaultChoose: number | null): ChooseOption | null {
   // Only realtime preview may consume defaultChoose automatically; ordinary fast-forward must still wait.

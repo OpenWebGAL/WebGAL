@@ -1,5 +1,5 @@
 import { ISentence } from '@/Core/controller/scene/sceneInterface';
-import { IPerform } from '@/Core/Modules/perform/performInterface';
+import { createNonePerform, IPerform } from '@/Core/Modules/perform/performInterface';
 import { callScene } from '../controller/scene/callScene';
 
 /**
@@ -10,12 +10,5 @@ export const callSceneScript = (sentence: ISentence): IPerform => {
   const sceneNameArray: Array<string> = sentence.content.split('/');
   const sceneName = sceneNameArray[sceneNameArray.length - 1];
   callScene(sentence.content, sceneName);
-  return {
-    performName: 'none',
-    duration: 0,
-    isHoldOn: true,
-    stopFunction: () => {},
-    blockingNext: () => false,
-    blockingAuto: () => true,
-  };
+  return createNonePerform({ isHoldOn: true });
 };

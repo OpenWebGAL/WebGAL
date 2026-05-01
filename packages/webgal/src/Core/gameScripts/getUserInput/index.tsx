@@ -1,5 +1,5 @@
 import { ISentence } from '@/Core/controller/scene/sceneInterface';
-import { IPerform } from '@/Core/Modules/perform/performInterface';
+import { createNonePerform, IPerform } from '@/Core/Modules/perform/performInterface';
 import { changeScene } from '@/Core/controller/scene/changeScene';
 import { jmp } from '@/Core/gameScripts/label/jmp';
 import ReactDOM from 'react-dom';
@@ -14,7 +14,6 @@ import { logger } from '@/Core/util/logger';
 import { tryToRegex } from '@/Core/util/global';
 import { showGlogalDialog } from '@/UI/GlobalDialog/GlobalDialog';
 import { stageStateManager } from '@/Core/Modules/stage/stageStateManager';
-import { WEBGAL_NONE } from '@/Core/constants';
 
 /**
  * 显示选择枝
@@ -39,7 +38,7 @@ export const getUserInput = (sentence: ISentence): IPerform => {
       key: varKey,
       value: defaultValue ?? '',
     });
-    return createNonePerform();
+    return createNonePerform({ blockingAuto: false });
   }
 
   const font = getCurrentFontFamily();
@@ -105,14 +104,3 @@ export const getUserInput = (sentence: ISentence): IPerform => {
     blockingStateCalculation: () => true,
   };
 };
-
-function createNonePerform(): IPerform {
-  return {
-    performName: WEBGAL_NONE,
-    duration: 0,
-    isHoldOn: false,
-    stopFunction: () => {},
-    blockingNext: () => false,
-    blockingAuto: () => false,
-  };
-}

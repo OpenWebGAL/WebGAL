@@ -1,5 +1,5 @@
 import { ISentence } from '@/Core/controller/scene/sceneInterface';
-import { IPerform } from '@/Core/Modules/perform/performInterface';
+import { createNonePerform, IPerform } from '@/Core/Modules/perform/performInterface';
 import { stageStateManager } from '@/Core/Modules/stage/stageStateManager';
 
 /**
@@ -12,12 +12,5 @@ export const miniAvatar = (sentence: ISentence): IPerform => {
     content = '';
   }
   stageStateManager.setStage('miniAvatar', content);
-  return {
-    performName: 'none',
-    duration: 0,
-    isHoldOn: true,
-    stopFunction: () => {},
-    blockingNext: () => false,
-    blockingAuto: () => true,
-  };
+  return createNonePerform({ isHoldOn: true });
 };

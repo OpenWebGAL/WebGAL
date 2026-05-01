@@ -1,5 +1,5 @@
 import { ISentence } from '@/Core/controller/scene/sceneInterface';
-import { IPerform } from '@/Core/Modules/perform/performInterface';
+import { createNonePerform, IPerform } from '@/Core/Modules/perform/performInterface';
 import { webgalStore } from '@/store/store';
 import { logger } from '@/Core/util/logger';
 import { compile } from 'angular-expressions';
@@ -78,14 +78,7 @@ export const setVar = (sentence: ISentence): IPerform => {
       logger.debug('设置变量：', { key, value: stageStateManager.getCalculationStageState().GameVar[key] });
     }
   }
-  return {
-    performName: 'none',
-    duration: 0,
-    isHoldOn: false,
-    stopFunction: () => {},
-    blockingNext: () => false,
-    blockingAuto: () => true,
-  };
+  return createNonePerform();
 };
 
 type BaseVal = string | number | boolean | undefined;

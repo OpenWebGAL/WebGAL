@@ -1,3 +1,5 @@
+import { WEBGAL_NONE } from '@/Core/constants';
+
 /**
  * 描述演出的接口，主要用于控制演出，而不是执行（在演出开始时被调用演出的执行器返回）
  * @interface IPerform
@@ -43,3 +45,20 @@ export const initPerform: IPerform = {
   blockingNext: () => false,
   blockingAuto: () => true,
 };
+
+export interface INonePerformOptions {
+  isHoldOn?: boolean;
+  blockingAuto?: boolean;
+}
+
+export function createNonePerform(options: INonePerformOptions = {}): IPerform {
+  const { isHoldOn = false, blockingAuto = true } = options;
+  return {
+    performName: WEBGAL_NONE,
+    duration: 0,
+    isHoldOn,
+    stopFunction: () => {},
+    blockingNext: () => false,
+    blockingAuto: () => blockingAuto,
+  };
+}

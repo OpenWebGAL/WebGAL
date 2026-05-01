@@ -1,9 +1,8 @@
 import { ISentence } from '@/Core/controller/scene/sceneInterface';
-import { IPerform } from '@/Core/Modules/perform/performInterface';
+import { createNonePerform, IPerform } from '@/Core/Modules/perform/performInterface';
 import { WebGAL } from '@/Core/WebGAL';
 import { logger } from '@/Core/util/logger';
 import { getStringArgByKey } from '@/Core/util/getSentenceArg';
-import { WEBGAL_NONE } from '../constants';
 
 /**
  * Unlocks a Steam achievement via the renderer → Electron bridge.
@@ -25,14 +24,5 @@ export const callSteam = (sentence: ISentence): IPerform => {
       }
     }
   }
-  const noperform: IPerform = {
-    performName: WEBGAL_NONE,
-    duration: 0,
-    isHoldOn: false,
-    stopFunction: () => {},
-    blockingNext: () => false,
-    blockingAuto: () => true,
-  };
-
-  return noperform;
+  return createNonePerform();
 };

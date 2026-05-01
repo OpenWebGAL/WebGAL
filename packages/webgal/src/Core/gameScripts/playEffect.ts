@@ -2,7 +2,7 @@ import { ISentence } from '@/Core/controller/scene/sceneInterface';
 import { logger } from '@/Core/util/logger';
 import { webgalStore } from '@/store/store';
 import { getNumberArgByKey, getStringArgByKey } from '@/Core/util/getSentenceArg';
-import { IPerform } from '@/Core/Modules/perform/performInterface';
+import { createNonePerform, IPerform } from '@/Core/Modules/perform/performInterface';
 import { WebGAL } from '@/Core/WebGAL';
 import { WEBGAL_NONE } from '@/Core/constants';
 
@@ -29,18 +29,7 @@ export const playEffect = (sentence: ISentence): IPerform => {
   let isOver = false;
   let seElement: HTMLAudioElement | null = null;
   if (!url || url === WEBGAL_NONE) {
-    return {
-      performName: WEBGAL_NONE,
-      duration: 0,
-      isHoldOn: false,
-      blockingAuto(): boolean {
-        return false;
-      },
-      blockingNext(): boolean {
-        return false;
-      },
-      stopFunction(): void {},
-    };
+    return createNonePerform({ blockingAuto: false });
   }
   return {
     performName: performInitName,

@@ -1,5 +1,5 @@
 import { ISentence } from '@/Core/controller/scene/sceneInterface';
-import { IPerform } from '@/Core/Modules/perform/performInterface';
+import { createNonePerform, IPerform } from '@/Core/Modules/perform/performInterface';
 import { webgalStore } from '@/store/store';
 import { unlockCgInUserData } from '@/store/userDataReducer';
 import { logger } from '@/Core/util/logger';
@@ -20,12 +20,5 @@ export const unlockCg = (sentence: ISentence): IPerform => {
   webgalStore.dispatch(unlockCgInUserData({ name, url, series }));
   const userDataState = webgalStore.getState().userData;
   localforage.setItem(WebGAL.gameKey, userDataState).then(() => {});
-  return {
-    performName: 'none',
-    duration: 0,
-    isHoldOn: false,
-    stopFunction: () => {},
-    blockingNext: () => false,
-    blockingAuto: () => true,
-  };
+  return createNonePerform();
 };
