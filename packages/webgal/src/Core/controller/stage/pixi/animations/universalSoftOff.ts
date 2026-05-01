@@ -35,9 +35,9 @@ export function generateUniversalSoftOffAnimationObj(targetKey: string, duration
   function tickerFunc(delta: number) {
     if (target) {
       const targetContainer = target.pixiContainer;
-      const baseDuration = WebGAL.gameplay.pixiStage!.frameDuration;
+      const currentDeltaMS = WebGAL.gameplay.pixiStage!.currentApp!.ticker.deltaMS;
 
-      elapsedTime += baseDuration;
+      elapsedTime += currentDeltaMS;
 
       const realElapsedTime = Math.min(elapsedTime, duration);
       const progress = realElapsedTime / duration;

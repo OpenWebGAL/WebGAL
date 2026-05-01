@@ -14,6 +14,7 @@ import useEscape from '@/hooks/useEscape';
 import useApplyStyle from '@/hooks/useApplyStyle';
 import { Provider } from 'react-redux';
 import { useFontFamily } from '@/hooks/useFontFamily';
+import { getNumberArgByKey } from '@/Core/util/getSentenceArg';
 
 class ChooseOption {
   /**
@@ -58,6 +59,8 @@ class ChooseOption {
 export const choose = (sentence: ISentence): IPerform => {
   const chooseOptionScripts = sentence.content.split(/(?<!\\)\|/);
   const chooseOptions = chooseOptionScripts.map((e) => ChooseOption.parse(e.trim()));
+  const defaultChoose = getNumberArgByKey(sentence, 'defaultChoose');
+  const previewChoice = getDefaultPreviewChoice(chooseOptions, defaultChoose);
 
   // eslint-disable-next-line react/no-deprecated
   ReactDOM.render(
@@ -66,6 +69,12 @@ export const choose = (sentence: ISentence): IPerform => {
     </Provider>,
     document.getElementById('chooseContainer'),
   );
+  if (previewChoice) {
+    setTimeout(() => {
+      selectChooseOption(previewChoice, sentence.args);
+      WebGAL.gameplay.performController.unmountPerform('choose');
+    }, 0);
+  }
   return {
     performName: 'choose',
     duration: 1000 * 60 * 60 * 24,
@@ -80,7 +89,27 @@ export const choose = (sentence: ISentence): IPerform => {
   };
 };
 
-function Choose(props: { chooseOptions: ChooseOption[]; args: Array<arg> }) {
+function getDefaultPreviewChoice(chooseOptions: ChooseOption[], defaultChoose: number | null): ChooseOption | null {
+  if (!WebGAL.gameplay.isFastPreview || defaultChoose === null) {
+    return null;
+  }
+  const chooseIndex = Math.floor(defaultChoose) - 1;
+  if (chooseIndex < 0) {
+    return null;
+  }
+  const defaultOption = chooseOptions[chooseIndex];
+  return defaultOption ?? null;
+}
+
+function selectChooseOption(option: ChooseOption, args: arg[]) {
+  if (option.jumpToScene) {
+    changeScene(option.jump, option.text, args);
+  } else {
+    jmp(option.jump);
+  }
+}
+
+function Choose(props: { chooseOptions: ChooseOption[]; args: arg[] }) {
   const font = useFontFamily();
   const { playSeEnter, playSeClick } = useSEByWebgalStore();
   const applyStyle = useApplyStyle('choose');
@@ -96,11 +125,7 @@ function Choose(props: { chooseOptions: ChooseOption[]; args: Array<arg> }) {
         const onClick = enable
           ? () => {
               playSeClick();
-              if (e.jumpToScene) {
-                changeScene(e.jump, e.text, props.args);
-              } else {
-                jmp(e.jump);
-              }
+              selectChooseOption(e, props.args);
               WebGAL.gameplay.performController.unmountPerform('choose');
             }
           : () => {};
