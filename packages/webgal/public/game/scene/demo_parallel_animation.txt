@@ -1,0 +1,31 @@
+changeBg:WebGalEnter.webp -next;
+changeFigure:stand.webp -id=figure01 -transform={"position":{"x":1000,"y":720}};
+;演示setAnimation平行执行
+setAnimation:shockwaveIn -target=figure01 -next
+setAnimation:move-front-and-back -target=figure01 -parallel
+;演示通过-continue接续执行两个常规setTransform正常运作、不被打断
+setTransform:{"position":{"x":-1000}} -duration=5000 -target=figure01 -continue
+setTransform:{"position":{"x":1000}} -duration=5000 -target=figure01
+;演示setTransform平行执行
+setTransform:{"position":{"x":-1000},"scale":{"x":0.5},"contrast":0.5} -duration=5000 -target=figure01 -ease=easeOut -next -keep
+wait:2000
+setTransform:{"position":{"y":0},"scale":{"y":0.5},"saturation":0} -duration=5000 -target=figure01 -ease=linear -parallel -continue
+setTransform:{"position":{"y":-720},"scale":{"y":1},"saturation":1} -duration=5000 -target=figure01 -ease=linear -next
+setTransform:{"position":{"x":1000},"scale":{"x":1},"contrast":1} -duration=5000 -target=figure01 -ease=easeIn -parallel;
+;演示参数解耦改动后setTempAnimation普通运作是否正常
+setTempAnimation:[{"duration":0}, {"duration":500,"position":{"x":-1000}}, {"duration":500,"position":{"y":720},"scale":{"y":0.5},"saturation":0}, {"duration":500,"position":{"x":-1000, "y":720}}, {"duration":500}, {"duration":500,"position":{"x":-1000},"scale":{"x":0.5},"contrast":0.5}] -target=figure01
+setTempAnimation:[{"duration":0}, {"duration":500,"position":{"x":1000}}, {"duration":500,"position":{"y":720}}, {"duration":500,"position":{"x":1000, "y":720}}, {"duration":500}, {"duration":500,"position":{"x":1000}}] -target=figure01
+;演示参数解耦改动后setTransform的-writeDefault参数是否运作正常
+setTransform:{} -writeDefault -target=figure01 -duration=500
+setTransform:{"position":{"x":1000,"y":720}} -target=figure01 -next;
+setAnimation:shockwaveOut -target=figure01 -parallel
+;演示setTempAnimation平行执行
+setTempAnimation:[{"duration":0},{"position":{"x":-1000},"scale":{"x":0.5},"contrast":0.5,"duration":5000,"ease":"easeOut"},{"position":{"x":-1000},"scale":{"x":0.5},"contrast":0.5,"duration":2000},{"position":{"x":600},"scale":{"x":1},"contrast":1,"duration":5000,"ease":"easeIn"},{"duration":2000}] -target=figure01 -next;
+setTempAnimation:[{"duration":2000},{"position":{"y":0},"scale":{"y":0.5},"saturation":0,"duration":5000,"ease":"linear"},{"position":{"y":-720},"scale":{"y":1},"saturation":1,"duration":5000,"ease":"linear"},{"duration":2000}] -target=figure01 -parallel -continue;
+;演示并行执行多条终止时间点不一致的setTransform
+setTransform:{"position":{"x":-1000}} -duration=5000 -next -target=figure01;
+setTransform:{"position":{"y":0}} -duration=3000 -parallel -target=figure01;
+setTransform:{"position":{"x":1000}} -duration=3000 -next -target=figure01;
+setTransform:{"position":{"y":-720}} -duration=5000 -parallel -target=figure01;
+changeBg: -next;
+changeFigure: -id=figure01

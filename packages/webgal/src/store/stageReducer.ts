@@ -24,6 +24,7 @@ import cloneDeep from 'lodash/cloneDeep';
 import { commandType } from '@/Core/controller/scene/sceneInterface';
 import { STAGE_KEYS } from '@/Core/constants';
 import { baseBlinkParam, baseFocusParam } from '@/Core/live2DCore';
+import { isUndefined, omitBy } from 'lodash';
 
 // 初始化舞台数据
 
@@ -35,6 +36,7 @@ export const initState: IStageState = {
   figNameRight: '', // 立绘_右 文件地址（相对或绝对）
   freeFigure: [],
   figureAssociatedAnimation: [],
+  isRead: false,
   showText: '', // 文字
   showTextSize: -1,
   showName: '', // 人物名
@@ -124,12 +126,22 @@ const stageSlice = createSlice({
       const effectIndex = state.effects.findIndex((e) => e.target === target);
       if (effectIndex >= 0) {
         // Update the existing effect
-        state.effects[effectIndex].transform = transform;
+        if (!state.effects[effectIndex].transform) {
+          state.effects[effectIndex].transform = transform;
+        } else if (transform) {
+          const targetScale = state.effects[effectIndex].transform!.scale || {};
+          const targetPosition = state.effects[effectIndex].transform!.position || {};
+          if (transform.scale) Object.assign(targetScale, omitBy(transform.scale, isUndefined));
+          if (transform.position) Object.assign(targetPosition, omitBy(transform.position, isUndefined));
+          Object.assign(state.effects[effectIndex].transform!, omitBy(transform, isUndefined));
+          state.effects[effectIndex].transform!.scale = targetScale;
+          state.effects[effectIndex].transform!.position = targetPosition;
+        }
       } else {
-        // Add a new effect
+        // Add a new effect, use baseTransform as default to ensure completeness
         state.effects.push({
           target,
-          transform,
+          transform: transform ? { ...baseTransform, ...transform } : { ...baseTransform },
         });
       }
     },
@@ -160,7 +172,7 @@ const stageSlice = createSlice({
         const prev = state.animationSettings[index];
         state.animationSettings.splice(index, 1);
 
-        if (prev.exitAnimationName) {
+        if (prev.exitAnimationName || prev.exitDuration !== undefined) {
           // 如果有退出动画设定，保留一个 -off 的设定
           const prevTarget = `${action.payload}-off`;
           const prevSetting = {
@@ -202,9 +214,10 @@ const stageSlice = createSlice({
       state.PerformList.push(action.payload);
     },
     removePerformByName: (state, action: PayloadAction<string>) => {
+      const name = action.payload;
       for (let i = 0; i < state.PerformList.length; i++) {
         const performItem: IRunPerform = state.PerformList[i];
-        if (performItem.id === action.payload) {
+        if (performItem.id === name || performItem.id.startsWith(name + '#')) {
           state.PerformList.splice(i, 1);
           i--;
         }
@@ -244,16 +257,17 @@ const stageSlice = createSlice({
       }
     },
     setLive2dMotion: (state, action: PayloadAction<ILive2DMotion>) => {
-      const { target, motion, overrideBounds } = action.payload;
+      const { target, motion, skin, overrideBounds } = action.payload;
 
       const index = state.live2dMotion.findIndex((e) => e.target === target);
 
       if (index < 0) {
         // Add a new motion
-        state.live2dMotion.push({ target, motion, overrideBounds });
+        state.live2dMotion.push({ target, motion, skin, overrideBounds });
       } else {
         // Update the existing motion
         state.live2dMotion[index].motion = motion;
+        state.live2dMotion[index].skin = skin;
         state.live2dMotion[index].overrideBounds = overrideBounds;
       }
     },
