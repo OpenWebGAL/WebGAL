@@ -143,14 +143,13 @@ export function useMouseWheel() {
       if (WebGAL.gameplay.isFast) stopFast();
       WebGAL.gameplay.isFast = true;
       // 滚轮视作快进
-      setFastButton(true);
       setTimeout(() => {
         WebGAL.gameplay.isFast = false;
-        setFastButton(false);
       }, 150);
       next();
     }
   }, []);
+
   useMounted(() => {
     document.addEventListener('wheel', handleMouseWheel);
   });
@@ -202,7 +201,8 @@ export function useSkip() {
   const isCtrlKey = useCallback((e) => e.keyCode === 17, []);
   const handleCtrlKeydown = useCallback((e) => {
     if (isCtrlKey(e) && isGameActive()) {
-      startFast();
+      // 按下 ctrl 键快进时，强制全文快进
+      startFast(true);
     }
   }, []);
   const handleCtrlKeyup = useCallback((e) => {

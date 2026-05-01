@@ -58,6 +58,13 @@ const jp = {
               contributors: '貢献者',
               website: 'ウェブサイト',
             },
+            skipAll: {
+              title: 'スキップモード',
+              options: {
+                read: '既読',
+                all: 'すべて',
+              }
+            }
           },
         },
         display: {
@@ -89,9 +96,9 @@ const jp = {
             textFont: {
               title: 'フォント',
               options: {
+                resourceHanRounded: 'Resource Han Rounded',
                 siYuanSimSun: '源ノ明朝(中国語)',
                 SimHei: 'OPPO Sans',
-                lxgw: 'LXGW WenKai',
               },
             },
             textboxOpacity: {

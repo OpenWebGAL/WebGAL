@@ -1,4 +1,5 @@
 import { BacklogManager } from '@/Core/Modules/backlog';
+import { ReadHistoryManager } from './Modules/readHistory';
 import VConsole from 'vconsole';
 import { SceneManager } from '@/Core/Modules/scene';
 import { AnimationManager } from '@/Core/Modules/animations';
@@ -23,6 +24,7 @@ vconsole.hide();
 export class WebgalCore {
   public sceneManager = new SceneManager();
   public backlogManager = new BacklogManager(this.sceneManager);
+  public readHistoryManager = new ReadHistoryManager(this.sceneManager);
   public animationManager = new AnimationManager();
   public gameplay = new Gameplay();
   public gameName = '';

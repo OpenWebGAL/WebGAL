@@ -67,6 +67,9 @@ export const jumpFromBacklog = (index: number, refetchScene = true) => {
   // 恢复舞台状态
   const newStageState: IStageState = cloneDeep(backlogFile.currentStageState);
 
+  // 确保原先未读的文本在使用 backlog 时能正确显示为已读文本
+  newStageState.isRead = true;
+
   dispatch(resetStageState(newStageState));
 
   // 恢复演出
@@ -77,4 +80,7 @@ export const jumpFromBacklog = (index: number, refetchScene = true) => {
 
   // 重新显示 TextBox
   dispatch(setVisibility({ component: 'showTextBox', visibility: true }));
+
+  // 重新渲染
+  setTimeout(() => WebGAL.gameplay.pixiStage?.requestRender(), 100);
 };
