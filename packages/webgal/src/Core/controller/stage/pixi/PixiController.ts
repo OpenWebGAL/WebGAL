@@ -431,13 +431,14 @@ export default class PixiStage {
     // 挂载
     this.backgroundContainer.addChild(thisBgContainer);
     const bgUuid = uuid();
+    const sourceExt = this.getExtName(url);
     this.backgroundObjects.push({
       uuid: bgUuid,
       key: key,
       pixiContainer: thisBgContainer,
       sourceUrl: url,
-      sourceType: 'img',
-      sourceExt: this.getExtName(url),
+      sourceType: sourceExt === 'gif' ? 'gif' : 'img',
+      sourceExt,
     });
 
     // 完成图片加载后执行的函数
@@ -599,13 +600,14 @@ export default class PixiStage {
     // 挂载
     this.figureContainer.addChild(thisFigureContainer);
     const figureUuid = uuid();
+    const sourceExt = this.getExtName(url);
     this.figureObjects.push({
       uuid: figureUuid,
       key: key,
       pixiContainer: thisFigureContainer,
       sourceUrl: url,
-      sourceType: 'img',
-      sourceExt: this.getExtName(url),
+      sourceType: sourceExt === 'gif' ? 'gif' : 'img',
+      sourceExt,
     });
 
     // 完成图片加载后执行的函数
@@ -1084,7 +1086,7 @@ export default class PixiStage {
   }
 
   public getExtName(url: string) {
-    return url.split('.').pop() ?? 'png';
+    return (url.split(/[?#]/)[0].split('.').pop() ?? 'png').toLowerCase();
   }
 
   public getFigureMetadataByKey(key: string): IFigureMetadata | undefined {
