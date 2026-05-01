@@ -94,8 +94,16 @@ export class PerformController {
     });
   }
 
-  public discardUncommittedNonHoldPerforms() {
-    this.pendingPerformList = this.pendingPerformList.filter(({ perform }) => perform.isHoldOn);
+  public discardUncommittedNonHoldPerforms(settleDiscardedState = false) {
+    this.pendingPerformList = this.pendingPerformList.filter(({ perform }) => {
+      if (perform.isHoldOn) {
+        return true;
+      }
+      if (settleDiscardedState) {
+        perform.settleStateOnDiscard?.();
+      }
+      return false;
+    });
   }
 
   public hasPendingBlockingStateCalculationPerform() {

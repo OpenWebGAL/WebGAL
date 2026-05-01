@@ -7,7 +7,7 @@ import { AnimationFrame, IUserAnimation } from '@/Core/Modules/animations';
 import { generateTransformAnimationObj } from '@/Core/controller/stage/pixi/animations/generateTransformAnimationObj';
 import { assetSetter, fileType } from '@/Core/util/gameAssetsAccess/assetSetter';
 import { logger } from '@/Core/util/logger';
-import { getAnimateDuration } from '@/Core/Modules/animationFunctions';
+import { applyAnimationEndState, getAnimateDuration } from '@/Core/Modules/animationFunctions';
 import { WebGAL } from '@/Core/WebGAL';
 import { baseBlinkParam, baseFocusParam, BlinkParam, FocusParam } from '@/Core/live2DCore';
 import { DEFAULT_FIG_IN_DURATION, DEFAULT_FIG_OUT_DURATION, WEBGAL_NONE } from '../constants';
@@ -283,6 +283,17 @@ export function changeFigure(sentence: ISentence): IPerform {
     performName: `enter-${key}`,
     duration,
     isHoldOn: false,
+    settleStateOnDiscard: () => {
+      if (content === '' || !isUrlChanged) {
+        return;
+      }
+      const animationName = stageStateManager
+        .getCalculationStageState()
+        .animationSettings.find((setting) => setting.target === key)?.enterAnimationName;
+      if (animationName) {
+        applyAnimationEndState(animationName, key, false);
+      }
+    },
     stopFunction: () => {
       WebGAL.gameplay.pixiStage?.stopPresetAnimationOnTarget(key);
     },

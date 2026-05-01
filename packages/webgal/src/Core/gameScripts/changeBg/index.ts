@@ -10,7 +10,7 @@ import { ITransform } from '@/Core/Modules/stage/stageInterface';
 import { generateTransformAnimationObj } from '@/Core/controller/stage/pixi/animations/generateTransformAnimationObj';
 import { AnimationFrame, IUserAnimation } from '@/Core/Modules/animations';
 import cloneDeep from 'lodash/cloneDeep';
-import { getAnimateDuration } from '@/Core/Modules/animationFunctions';
+import { applyAnimationEndState, getAnimateDuration } from '@/Core/Modules/animationFunctions';
 import { WebGAL } from '@/Core/WebGAL';
 import { DEFAULT_BG_OUT_DURATION } from '@/Core/constants';
 import localforage from 'localforage';
@@ -121,6 +121,17 @@ export const changeBg = (sentence: ISentence): IPerform => {
     performName: `bg-main-${sentence.content}`,
     duration,
     isHoldOn: false,
+    settleStateOnDiscard: () => {
+      if (sentence.content === '' || !isUrlChanged) {
+        return;
+      }
+      const animationName = stageStateManager
+        .getCalculationStageState()
+        .animationSettings.find((setting) => setting.target === 'bg-main')?.enterAnimationName;
+      if (animationName) {
+        applyAnimationEndState(animationName, 'bg-main', false);
+      }
+    },
     stopFunction: () => {
       WebGAL.gameplay.pixiStage?.stopPresetAnimationOnTarget('bg-main');
     },

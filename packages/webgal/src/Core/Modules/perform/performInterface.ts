@@ -23,6 +23,8 @@ export interface IPerform {
   blockingAuto: () => boolean;
   // 演出是否阻塞状态演算；默认不阻塞，只有需要外部输入才能确定后续状态的演出需要覆盖
   blockingStateCalculation?: () => boolean;
+  // 未 commit 的演出被丢弃时，将它的终态同步到演算状态
+  settleStateOnDiscard?: () => void;
   // 演出结束后转到下一句
   goNextWhenOver?: boolean;
   // 跳过由 nextSentence 函数引发的演出回收
