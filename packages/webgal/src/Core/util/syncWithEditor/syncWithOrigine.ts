@@ -58,7 +58,6 @@ export function syncFast(
   let forwardCount = 0;
   let isTimedOut = false;
   let timeoutElapsedMs = 0;
-  const maxForwardCount = Math.max(sentenceId + 1000, 1000);
 
   try {
     while (
@@ -96,10 +95,6 @@ export function syncFast(
         break;
       }
 
-      if (forwardCount > maxForwardCount) {
-        logger.warn('实时预览跳转停止：超过最大演算次数');
-        break;
-      }
     }
   } finally {
     WebGAL.gameplay.isFast = false;
