@@ -102,6 +102,7 @@ function createNonePerform(): IPerform {
 }
 
 function getDefaultPreviewChoice(chooseOptions: ChooseOption[], defaultChoose: number | null): ChooseOption | null {
+  // Only realtime preview may consume defaultChoose automatically; ordinary fast-forward must still wait.
   if (!WebGAL.gameplay.isFastPreview || defaultChoose === null) {
     return null;
   }

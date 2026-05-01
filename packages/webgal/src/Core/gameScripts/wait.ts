@@ -21,6 +21,5 @@ export const wait = (sentence: ISentence): IPerform => {
     },
     blockingNext: () => nobreak,
     blockingAuto: () => nobreak,
-    blockingStateCalculation: () => nobreak,
   };
 };

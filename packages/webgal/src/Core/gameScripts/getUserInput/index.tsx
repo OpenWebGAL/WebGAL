@@ -14,6 +14,7 @@ import { logger } from '@/Core/util/logger';
 import { tryToRegex } from '@/Core/util/global';
 import { showGlogalDialog } from '@/UI/GlobalDialog/GlobalDialog';
 import { stageStateManager } from '@/Core/Modules/stage/stageStateManager';
+import { WEBGAL_NONE } from '@/Core/constants';
 
 /**
  * 显示选择枝
@@ -32,6 +33,15 @@ export const getUserInput = (sentence: ISentence): IPerform => {
   const ruleText = getStringArgByKey(sentence, 'ruleText');
   const ruleButtonText = getStringArgByKey(sentence, 'ruleButtonText') ?? 'OK';
 
+  // Only realtime preview may synthesize input; ordinary fast-forward must still wait for the user.
+  if (WebGAL.gameplay.isFastPreview) {
+    stageStateManager.setStageVar({
+      key: varKey,
+      value: defaultValue ?? '',
+    });
+    return createNonePerform();
+  }
+
   const font = getCurrentFontFamily();
 
   const { playSeEnter, playSeClick } = useSEByWebgalStore();
@@ -39,7 +49,7 @@ export const getUserInput = (sentence: ISentence): IPerform => {
     <div style={{ fontFamily: font }} className={styles.glabalDialog_container}>
       <div className={styles.glabalDialog_container_inner}>
         <div className={styles.title}>{title}</div>
-        <input id="user-input" className={styles.Choose_item} />
+        <input id="user-input" className={styles.Choose_item} defaultValue={defaultValue ?? ''} />
         <div
           onMouseEnter={playSeEnter}
           onClick={() => {
@@ -95,3 +105,14 @@ export const getUserInput = (sentence: ISentence): IPerform => {
     blockingStateCalculation: () => true,
   };
 };
+
+function createNonePerform(): IPerform {
+  return {
+    performName: WEBGAL_NONE,
+    duration: 0,
+    isHoldOn: false,
+    stopFunction: () => {},
+    blockingNext: () => false,
+    blockingAuto: () => false,
+  };
+}
