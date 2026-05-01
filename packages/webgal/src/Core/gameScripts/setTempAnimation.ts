@@ -10,14 +10,14 @@ import { baseTransform } from '@/store/stageInterface';
 import { IUserAnimation } from '../Modules/animations';
 import { getAnimateDuration, getAnimationObject } from '@/Core/Modules/animationFunctions';
 import { WebGAL } from '@/Core/WebGAL';
+import { v4 as uuid } from 'uuid';
 
 /**
  * 设置临时动画
  * @param sentence
  */
 export const setTempAnimation = (sentence: ISentence): IPerform => {
-  const startDialogKey = webgalStore.getState().stage.currentDialogKey;
-  const animationName = (Math.random() * 10).toString(16);
+  const animationName = uuid();
   const animationString = sentence.content;
   let animationObj;
   try {
@@ -31,20 +31,27 @@ export const setTempAnimation = (sentence: ISentence): IPerform => {
   const target = getStringArgByKey(sentence, 'target') ?? '0';
   const writeDefault = getBooleanArgByKey(sentence, 'writeDefault') ?? false;
   const keep = getBooleanArgByKey(sentence, 'keep') ?? false;
+  const parallel = getBooleanArgByKey(sentence, 'parallel') ?? false;
 
   const key = `${target}-${animationName}-${animationDuration}`;
   const performInitName = `animation-${target}`;
+  const performName = parallel ? `${performInitName}#${animationName}` : performInitName;
+  let keepAnimationStopped = false;
 
-  WebGAL.gameplay.performController.unmountPerform(performInitName, true);
+  if (!parallel) WebGAL.gameplay.performController.unmountPerform(performInitName, true);
 
   let stopFunction = () => {};
   setTimeout(() => {
+    if (keep && keepAnimationStopped) {
+      return;
+    }
     WebGAL.gameplay.pixiStage?.stopPresetAnimationOnTarget(target);
     const animationObj: IAnimationObject | null = getAnimationObject(
       animationName,
       target,
       animationDuration,
       writeDefault,
+      !parallel,
     );
     if (animationObj) {
       logger.debug(`动画${animationName}作用在${target}`, animationDuration);
@@ -52,15 +59,18 @@ export const setTempAnimation = (sentence: ISentence): IPerform => {
     }
   }, 0);
   stopFunction = () => {
+    if (keep) {
+      WebGAL.gameplay.pixiStage?.removeAnimationWithoutSetEndState(key);
+      keepAnimationStopped = true;
+      return;
+    }
     setTimeout(() => {
-      const endDialogKey = webgalStore.getState().stage.currentDialogKey;
-      const isHasNext = startDialogKey !== endDialogKey;
       WebGAL.gameplay.pixiStage?.removeAnimationWithSetEffects(key);
     }, 0);
   };
 
   return {
-    performName: performInitName,
+    performName: performName,
     duration: animationDuration,
     isHoldOn: keep,
     stopFunction,

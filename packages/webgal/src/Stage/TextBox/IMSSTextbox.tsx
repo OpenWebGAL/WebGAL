@@ -14,6 +14,7 @@ export default function IMSSTextbox(props: ITextboxProps) {
     textDelay,
     currentConcatDialogPrev,
     currentDialogKey,
+    isRead,
     isText,
     isSafari,
     isFirefox: boolean,
@@ -28,7 +29,7 @@ export default function IMSSTextbox(props: ITextboxProps) {
     textSizeState,
   } = props;
 
-  const applyStyle = useApplyStyle('Stage/TextBox/textbox.scss');
+  const applyStyle = useApplyStyle('textbox');
 
   useEffect(() => {
     function settleText() {
@@ -167,7 +168,7 @@ export default function IMSSTextbox(props: ITextboxProps) {
         >
           <span className={styles.zhanwei + styleAllText}>
             {e}
-            <span className={applyStyle('outer', styles.outer) + styleClassName + styleAllText}>{e}</span>
+            <span className={applyStyle('outer', styles.outer) + `${isRead ? ` ${applyStyle('read', styles.read)}` : ''}` + styleClassName + styleAllText}>{e}</span>
             {isUseStroke && <span className={applyStyle('inner', styles.inner) + styleAllText}>{e}</span>}
           </span>
         </span>
@@ -189,7 +190,7 @@ export default function IMSSTextbox(props: ITextboxProps) {
 
   const userDataState = useSelector((state: RootState) => state.userData);
   const lineHeightValue = textSizeState === textSize.medium ? 2.2 : 2;
-  const textLineHeight = userDataState.globalGameVar.LineHeight;
+  const textLineHeight = userDataState.globalGameVar.Line_height;
   const finalTextLineHeight = textLineHeight ? Number(textLineHeight) : lineHeightValue;
   const lineHeightCssStr = `line-height: ${finalTextLineHeight}em`;
   const lhCss = css(lineHeightCssStr);

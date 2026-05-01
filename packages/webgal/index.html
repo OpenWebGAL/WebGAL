@@ -7,6 +7,15 @@
     <link rel="manifest" href="/manifest.json" />
     <title>WebGAL</title>
     <style>
+      html,
+      body {
+        margin: 0;
+        background: black;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+      }
+
       .html-body__effect-background {
         height: 100vh;
         width: 100vw;
@@ -17,6 +26,20 @@
         position: absolute;
         top: 0;
         left: 0;
+        background-color: black;
+      }
+
+      .html-body__effect-background-overlay {
+        height: 100%;
+        width: 100%;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+        position: absolute;
+        top: 0;
+        left: 0;
+        background-color: black;
+        opacity: 0;
       }
 
       .html-body__title-enter {
@@ -111,11 +134,14 @@
       .title-enter-container__link-to-github > div {
         padding: 0 0 0.25em 0;
       }
+
     </style>
   </head>
   <body>
     <!-- 背景模糊 -->
-    <div class="html-body__effect-background"></div>
+    <div id="ebg" class="html-body__effect-background">
+      <div id="ebgOverlay" class="html-body__effect-background-overlay"></div>
+    </div>
     <!-- 落地页 -->
     <div class="html-body__title-enter">
       <div class="title-enter__initial-background"></div>
@@ -133,29 +159,70 @@
     <div id="html-body__panic-overlay"></div>
     <!-- 应用挂载点 -->
     <div id="root"></div>
+    <script>
+      (() => {
+        const userAgent = navigator.userAgent || '';
+        const platform = navigator.userAgentData?.platform || navigator.platform || '';
+        const maxTouchPoints = navigator.maxTouchPoints || 0;
+        const isIOSPhone = /iPhone|iPod/i.test(userAgent);
+        const isIPad = /iPad/i.test(userAgent) || (/Mac/i.test(platform) && maxTouchPoints > 1);
+
+        window.__WEBGAL_DEVICE_INFO__ = {
+          isIOS: isIOSPhone || isIPad,
+          isIOSPhone,
+          isIPad,
+        };
+      })();
+    </script>
     <!-- 在窗口大小改变时进行强制缩放 -->
     <script>
       (() => {
-        const isIOS = !!navigator.userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
+        const deviceInfo = window.__WEBGAL_DEVICE_INFO__ ?? { isIOS: false };
+        const isIOS = deviceInfo.isIOS;
+        const layoutConfig = isIOS
+          ? {
+              bottomInset: 15,
+              resizeDelay: 500,
+              viewport:
+                'width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover',
+              hideEffectBackground: true,
+            }
+          : {
+              bottomInset: 0,
+              resizeDelay: 0,
+              viewport: 'width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no',
+              hideEffectBackground: false,
+            };
+        const root = document.querySelector('#root');
+        const titleEnter = document.querySelector('.html-body__title-enter');
+        const effectBackground = document.querySelector('.html-body__effect-background');
+        let viewportMeta = document.querySelector('meta[name="viewport"]');
+
+        const ensureViewportMeta = () => {
+          if (!viewportMeta) {
+            viewportMeta = document.createElement('meta');
+            viewportMeta.name = 'viewport';
+            document.head.appendChild(viewportMeta);
+          }
+          return viewportMeta;
+        };
+
         const resize = () => {
           const targetHeight = 1440; // 目标高度
           const targetWidth = 2560; // 目标宽度
-
           const h = window.innerHeight; // 窗口高度
           const w = window.innerWidth; // 窗口宽度
-          const zoomH = h / targetHeight; // 以窗口高度为基准的变换比
+          const layoutHeight = Math.max(h - layoutConfig.bottomInset, 1);
+          const zoomH = layoutHeight / targetHeight; // 以窗口高度为基准的变换比
           const zoomW = w / targetWidth; // 以窗口宽度为基准的变换比
           const zoomH2 = w / targetHeight; // 竖屏时以窗口高度为基础的变换比
-          const zoomW2 = h / targetWidth; // 竖屏时以窗口宽度为基础的变换比
-          let mh = (targetHeight - h) / 2; // y轴移动距离
+          const zoomW2 = layoutHeight / targetWidth; // 竖屏时以窗口宽度为基础的变换比
+          let mh = (targetHeight - layoutHeight) / 2; // y轴移动距离
           let mw = (targetWidth - w) / 2; // x轴移动距离
           let mh2os = targetWidth / 2 - w / 2; // 竖屏时 y轴移动距离
-          let mw2os = targetHeight / 2 - h / 2; // 竖屏时 x轴移动距离
+          let mw2os = targetHeight / 2 - layoutHeight / 2; // 竖屏时 x轴移动距离
           let transform = '';
           let effectBackgroundTransform = '';
-          const root = document.querySelector('#root'); // 获取根元素
-          const titleEnter = document.querySelector('.html-body__title-enter');
-          const effectBackground = document.querySelector('.html-body__effect-background');
           const elements = [root, titleEnter];
           if (w > h) {
             if (effectBackground) {
@@ -191,6 +258,11 @@
             // iOS 不强制旋转
             if (isIOS) {
               const zoomWi = w / targetWidth;
+              if (effectBackground) {
+                effectBackground.style.height = `100vh`;
+                effectBackground.style.width = `100vw`;
+                effectBackgroundTransform = '';
+              }
               transform = `translate(${-mw}px, ${-mh}px) ` + `scale(${zoomWi},${zoomWi}) `;
             }
           }
@@ -203,42 +275,51 @@
             }
           }
         };
-        if (!isIOS) {
-          // 非 IOS
-          // 创建一个新的 meta 标签
-          const metaTag = document.createElement('meta');
-          metaTag.name = 'viewport';
-          metaTag.content = 'width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no';
-          // 将该标签添加到 head 中
-          document.head.appendChild(metaTag);
-          resize();
-          window.onload = resize;
-          window.onresize = resize;
-          // 监听键盘 F11 键按下事件，全屏时触发页面调整
-          document.onkeydown = (e) => {
-            if (e && e.key === 'F11') {
-              setTimeout(() => {
-                resize();
-              }, 100);
+        let iosResizeTimer = null;
+        const scheduleResize = () => {
+          if (layoutConfig.resizeDelay > 0) {
+            if (iosResizeTimer) {
+              window.clearTimeout(iosResizeTimer);
             }
-          };
-        } else {
-          // IOS
-          const metaTag = document.createElement('meta');
-          metaTag.name = 'viewport';
-          metaTag.content = 'width=device-width, initial-scale=0.22, minimum-scale=0.01, maximum-scale=1';
-          // 将该标签添加到 head 中
-          document.head.appendChild(metaTag);
+            iosResizeTimer = window.setTimeout(() => {
+              resize();
+              iosResizeTimer = null;
+            }, layoutConfig.resizeDelay);
+            return;
+          }
+          resize();
+        };
+        if (isIOS) {
           const styleTag = document.createElement('style');
-          styleTag.textContent = '* { font-synthesis: none !important; }';
+          styleTag.textContent = `* { font-synthesis: none !important; }`;
+          if (layoutConfig.hideEffectBackground) {
+            styleTag.textContent += `
+              #ebg,
+              #ebgOverlay {
+                display: none !important;
+              }
+            `;
+          }
           document.head.appendChild(styleTag);
         }
+        ensureViewportMeta().content = layoutConfig.viewport;
+        scheduleResize();
+        window.onload = scheduleResize;
+        window.onresize = scheduleResize;
+        // 监听键盘 F11 键按下事件，全屏时触发页面调整
+        document.onkeydown = (e) => {
+          if (e && e.key === 'F11') {
+            setTimeout(() => {
+              scheduleResize();
+            }, 100);
+          }
+        };
       })();
     </script>
     <!-- 注册 Service Worker -->
     <script>
       (() => {
-        const isIOS = !!navigator.userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
+        const isIOS = window.__WEBGAL_DEVICE_INFO__?.isIOS ?? false;
         if ('serviceWorker' in navigator && !isIOS) {
           navigator.serviceWorker
             .register('./webgal-serviceworker.js')
@@ -254,7 +335,10 @@
     <!-- 首屏加载 -->
     <script>
       (() => {
-        const isIOS = !!navigator.userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
+        const isIOS = window.__WEBGAL_DEVICE_INFO__?.isIOS ?? false;
+        const enterConfig = isIOS
+          ? { skipAnimation: true, hideDelay: 0 }
+          : { skipAnimation: false, hideDelay: 2000 };
         let enterPromiseResolve;
         const enterPromise = new Promise((res) => {
           enterPromiseResolve = res;
@@ -279,6 +363,17 @@
         });
         /** 点击屏幕，进入引擎主界面 */
         const enter = () => {
+          const titleEnter = document.querySelector('.html-body__title-enter');
+          if (enterConfig.skipAnimation) {
+            if (titleEnter) {
+              titleEnter.style.pointerEvents = 'none';
+              titleEnter.style.transition = 'none';
+              titleEnter.style.opacity = '0';
+              titleEnter.style.display = 'none';
+            }
+            enterPromiseResolve();
+            return;
+          }
           const initialBackground = document.querySelector('.title-enter__initial-background');
           if (initialBackground) {
             initialBackground.style.opacity = '0';
@@ -293,7 +388,6 @@
               whiteBackground.style.opacity = '1';
             }
           }, 50); // 在50ms后开始显示白色渐变
-          const titleEnter = document.querySelector('.html-body__title-enter');
           setTimeout(() => {
             if (titleEnter) titleEnter.style.opacity = '0';
           }, 500); // 500ms后开始降低落地页透明度
@@ -305,7 +399,7 @@
             if (titleEnter) {
               titleEnter.style.display = 'none';
             }
-          }, 2000); // 将落地页设置为不显示
+          }, enterConfig.hideDelay); // 将落地页设置为不显示
           enterPromiseResolve();
         };
         const titleEnter = document.querySelector('.html-body__title-enter');

@@ -10,6 +10,8 @@ import { SCREEN_CONSTANTS } from '@/Core/util/constants';
 import { logger } from '@/Core/util/logger';
 import { v4 as uuid } from 'uuid';
 import { cloneDeep, isEqual } from 'lodash';
+import omitBy from 'lodash/omitBy';
+import isUndefined from 'lodash/isUndefined';
 import * as PIXI from 'pixi.js';
 import { INSTALLED } from 'pixi.js';
 import { GifResource } from './GifResource';
@@ -67,15 +69,22 @@ window.PIXI = PIXI;
 INSTALLED.push(GifResource);
 
 export default class PixiStage {
-  public static assignTransform<T extends ITransform>(target: T, source?: ITransform) {
+  public static assignTransform<T extends ITransform>(target: T, source?: ITransform, convertAlpha = true) {
     if (!source) return;
     const targetScale = target.scale;
     const targetPosition = target.position;
-    if (target.scale) Object.assign(targetScale, source.scale);
-    if (target.position) Object.assign(targetPosition, source.position);
-    Object.assign(target, source);
+    if (target.scale) Object.assign(targetScale!, omitBy(source.scale || {}, isUndefined));
+    if (target.position) Object.assign(targetPosition!, omitBy(source.position || {}, isUndefined));
+    Object.assign(target, omitBy(source, isUndefined));
     target.scale = targetScale;
     target.position = targetPosition;
+    if (convertAlpha) {
+      const sourceAlpha = source.alpha;
+      if (sourceAlpha !== undefined) {
+        target.alpha = 1;
+        (target as any).alphaFilterVal = sourceAlpha;
+      }
+    }
   }
 
   /**
@@ -305,6 +314,14 @@ export default class PixiStage {
   public removeAnimation(key: string) {
     const index = this.stageAnimations.findIndex((e) => e.key === key);
     this.removeAnimationByIndex(index);
+  }
+
+  public removeAnimationByTargetKey(targetKey: string) {
+    let index = this.stageAnimations.findIndex((e) => e.targetKey === targetKey);
+    while (index !== -1) {
+      this.removeAnimationByIndex(index);
+      index = this.stageAnimations.findIndex((e) => e.targetKey === targetKey);
+    }
   }
 
   public removeAnimationWithSetEffects(key: string) {
@@ -575,6 +592,9 @@ export default class PixiStage {
       if (metadata.zIndex) {
         thisFigureContainer.zIndex = metadata.zIndex;
       }
+      if (metadata.blendMode) {
+        thisFigureContainer.blendMode = metadata.blendMode;
+      }
     }
     // 挂载
     this.figureContainer.addChild(thisFigureContainer);
@@ -671,6 +691,9 @@ export default class PixiStage {
       if (metadata) {
         if (metadata.zIndex) {
           thisFigureContainer.zIndex = metadata.zIndex;
+        }
+        if (metadata.blendMode) {
+          thisFigureContainer.blendMode = metadata.blendMode;
         }
       }
       // 挂载
@@ -850,6 +873,62 @@ export default class PixiStage {
           spineObject.state.setAnimation(0, animation, false);
         }
       }
+    }
+  }
+
+  public changeSpineSkinByKey(key: string, skin: string) {
+    if (!skin) return;
+
+    const target = this.figureObjects.find((e) => e.key === key && !e.isExiting);
+    if (target?.sourceType !== 'spine') return;
+
+    const container = target.pixiContainer;
+    if (!container) return;
+    const sprite = container.children[0] as PIXI.Container;
+    if (sprite?.children?.[0]) {
+      const spineObject = sprite.children[0];
+      // @ts-ignore
+      const skeleton = spineObject.skeleton;
+      // @ts-ignore
+      const skeletonData = skeleton?.data ?? spineObject.spineData;
+      const skinObject =
+        // @ts-ignore
+        skeletonData?.findSkin?.(skin) ??
+        // @ts-ignore
+        skeletonData?.skins?.find((item: any) => item.name === skin);
+
+      if (!skeleton || !skinObject) {
+        logger.warn(`Spine skin not found: ${skin} on ${key}`);
+        return;
+      }
+
+      try {
+        // @ts-ignore
+        if (typeof skeleton.setSkinByName === 'function') {
+          // @ts-ignore
+          skeleton.setSkinByName(skin);
+        } else {
+          // @ts-ignore
+          skeleton.setSkin(skinObject);
+        }
+      } catch (error) {
+        // @ts-ignore
+        skeleton.setSkin?.(skinObject);
+      }
+
+      // @ts-ignore
+      if (typeof skeleton.setSlotsToSetupPose === 'function') {
+        // @ts-ignore
+        skeleton.setSlotsToSetupPose();
+      } else {
+        // @ts-ignore
+        skeleton.setupPoseSlots?.();
+      }
+
+      // @ts-ignore
+      spineObject.state?.apply?.(skeleton);
+      // @ts-ignore
+      skeleton.updateWorldTransform?.();
     }
   }
 

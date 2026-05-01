@@ -73,6 +73,7 @@ export interface ISentence {
   args: Array<arg>; // 参数列表
   sentenceAssets: Array<IAsset>; // 语句携带的资源列表
   subScene: Array<string>; // 语句包含子场景列表
+  inlineComment: string; // 行内注释
 }
 
 /**

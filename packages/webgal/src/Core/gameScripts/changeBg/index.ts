@@ -14,6 +14,7 @@ import cloneDeep from 'lodash/cloneDeep';
 import { getAnimateDuration } from '@/Core/Modules/animationFunctions';
 import { WebGAL } from '@/Core/WebGAL';
 import { DEFAULT_BG_OUT_DURATION } from '@/Core/constants';
+import localforage from 'localforage';
 
 /**
  * 进行背景图片的切换
@@ -34,6 +35,8 @@ export const changeBg = (sentence: ISentence): IPerform => {
   const dispatch = webgalStore.dispatch;
   if (unlockName !== '') {
     dispatch(unlockCgInUserData({ name: unlockName, url, series }));
+    const userDataState = webgalStore.getState().userData;
+    localforage.setItem(WebGAL.gameKey, userDataState).then(() => {});
   }
 
   /**

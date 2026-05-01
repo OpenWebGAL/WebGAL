@@ -10,7 +10,8 @@ export const AudioContainer = () => {
   const isShowTitle = useSelector((webgalStore: RootState) => webgalStore.GUI.showTitle);
   const userDataState = useSelector((state: RootState) => state.userData);
   const mainVol = userDataState.optionData.volumeMain;
-  const vocalVol = mainVol * 0.01 * userDataState.optionData.vocalVolume * 0.01 * stageStore.vocalVolume * 0.01;
+  const vocalBaseVol = mainVol * 0.01 * userDataState.optionData.vocalVolume * 0.01;
+  const vocalVol = vocalBaseVol * stageStore.vocalVolume * 0.01;
   const bgmVol = mainVol * 0.01 * userDataState.optionData.bgmVolume * 0.01 * stageStore.bgm.volume * 0.01;
   const bgmEnter = stageStore.bgm.enter;
   const uiSoundEffects = stageStore.uiSe;
@@ -83,7 +84,7 @@ export const AudioContainer = () => {
     if (vocalElement) {
       vocalElement.volume = vocalVol.toString();
     }
-  }, [vocalVol]);
+  }, [vocalVol, stageStore.playVocal]);
 
   useEffect(() => {
     if (uiSoundEffects === '') return;

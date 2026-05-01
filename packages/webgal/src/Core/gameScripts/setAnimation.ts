@@ -13,27 +13,33 @@ import { WebGAL } from '@/Core/WebGAL';
  * @param sentence
  */
 export const setAnimation = (sentence: ISentence): IPerform => {
-  const startDialogKey = webgalStore.getState().stage.currentDialogKey;
   const animationName = sentence.content;
   const animationDuration = getAnimateDuration(animationName);
   let target = getStringArgByKey(sentence, 'target') ?? '';
   target = target !== '' ? target : 'default_id';
   const writeDefault = getBooleanArgByKey(sentence, 'writeDefault') ?? false;
   const keep = getBooleanArgByKey(sentence, 'keep') ?? false;
+  const parallel = getBooleanArgByKey(sentence, 'parallel') ?? false;
 
   const key = `${target}-${animationName}-${animationDuration}`;
   const performInitName = `animation-${target}`;
+  const performName = parallel ? `${performInitName}#${animationName}` : performInitName;
+  let keepAnimationStopped = false;
 
-  WebGAL.gameplay.performController.unmountPerform(performInitName, true);
+  if (!parallel) WebGAL.gameplay.performController.unmountPerform(performInitName, true);
 
   let stopFunction;
   setTimeout(() => {
+    if (keep && keepAnimationStopped) {
+      return;
+    }
     WebGAL.gameplay.pixiStage?.stopPresetAnimationOnTarget(target);
     const animationObj: IAnimationObject | null = getAnimationObject(
       animationName,
       target,
       animationDuration,
       writeDefault,
+      !parallel,
     );
     if (animationObj) {
       logger.debug(`动画${animationName}作用在${target}`, animationDuration);
@@ -41,15 +47,18 @@ export const setAnimation = (sentence: ISentence): IPerform => {
     }
   }, 0);
   stopFunction = () => {
+    if (keep) {
+      WebGAL.gameplay.pixiStage?.removeAnimationWithoutSetEndState(key);
+      keepAnimationStopped = true;
+      return;
+    }
     setTimeout(() => {
-      const endDialogKey = webgalStore.getState().stage.currentDialogKey;
-      const isHasNext = startDialogKey !== endDialogKey;
       WebGAL.gameplay.pixiStage?.removeAnimationWithSetEffects(key);
     }, 0);
   };
 
   return {
-    performName: performInitName,
+    performName: performName,
     duration: animationDuration,
     isHoldOn: keep,
     stopFunction,

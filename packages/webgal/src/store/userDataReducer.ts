@@ -33,8 +33,9 @@ const initialOptionSet: IOptionData = {
   textboxFont: 0,
   textboxOpacity: 75,
   language: language.zhCn,
-  voiceInterruption: voiceOption.yes,
+  voiceInterruption: voiceOption.no,
   fullScreen: fullScreenOption.off,
+  skipAll: false,
 };
 
 // 初始化用户数据
@@ -46,6 +47,8 @@ export const initState: IUserData = {
     bgm: [],
     cg: [],
   },
+  gameConfigInit: {},
+  readHistory: {},
 };
 
 const userDataSlice = createSlice({
@@ -68,7 +71,7 @@ const userDataSlice = createSlice({
       state.appreciationData.cg.forEach((e) => {
         if (url === e.url) {
           isExist = true;
-          e.url = url;
+          e.name = name;
           e.series = series;
         }
       });
@@ -83,7 +86,7 @@ const userDataSlice = createSlice({
       state.appreciationData.bgm.forEach((e) => {
         if (url === e.url) {
           isExist = true;
-          e.url = url;
+          e.name = name;
           e.series = series;
         }
       });
@@ -138,7 +141,11 @@ const userDataSlice = createSlice({
       Object.assign(state.optionData, initialOptionSet);
     },
     resetAllData(state) {
-      Object.assign(state, cloneDeep(initState));
+      const { gameConfigInit } = state;
+      Object.assign(state, { ...cloneDeep(initState), globalGameVar: cloneDeep(gameConfigInit), gameConfigInit });
+    },
+    setReadHistory: (state, action: PayloadAction<Record<'key' | 'value', string>>) => {
+      state.readHistory[action.payload.key] = action.payload.value;
     },
   },
 });
@@ -154,6 +161,7 @@ export const {
   unlockBgmInUserData,
   resetOptionSet,
   resetAllData,
+  setReadHistory,
 } = userDataSlice.actions;
 export default userDataSlice.reducer;
 

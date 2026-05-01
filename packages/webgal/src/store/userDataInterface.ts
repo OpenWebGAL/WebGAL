@@ -46,6 +46,7 @@ export interface IOptionData {
   language: language;
   voiceInterruption: voiceOption; // 是否中断语音
   fullScreen: fullScreenOption;
+  skipAll: boolean; // 快进已读/快进全文
 }
 
 /**
@@ -90,6 +91,8 @@ export interface IUserData {
   globalGameVar: IGameVar; // 不跟随存档的全局变量
   optionData: IOptionData; // 用户设置选项数据
   appreciationData: IAppreciation;
+  gameConfigInit: IGameVar;
+  readHistory: Record<string, string>;
 }
 
 export interface ISetUserDataPayload {

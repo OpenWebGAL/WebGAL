@@ -8,27 +8,31 @@
 
 #### 新功能
 
-模板文件中的字体会自动加载，并可在选项中选择模板或内置字体
+getUserInput 支持正则校验参数 rule / ruleFlag / ruleText / ruleButtonText，可在输入不匹配时弹窗提示，ruleText 中可用 $0 引用用户输入值
 
-文本框支持配置最大行数和行高，便于自定义排版
+changeFigure 支持 skin 参数，可切换 Spine 模型皮肤
 
-新增 Steam 集成，可通过 Steam_AppID 配置与 callSteam 指令解锁成就
+setTransform 新增 oldFilm / dotFilm / reflectionFilm / glitchFilm / rgbFilm / godrayFilm 滤镜属性
 
-舞台渲染支持 GIF 资源
+添加引擎描述文件 webgal-engine.json 及版本自动同步机制
 
-立绘和背景支持用 enterDuration / exitDuration 单独设置进退场动画时长
+标题按钮文字支持多层渲染（outer / inner），方便模板自定义描边与阴影效果
+
+内置默认字体更换为「资源圆体」(Resource Han Rounded)
 
 #### 修复
 
-修复鼠标滚轮触发快进后无法正常取消且按钮状态异常的问题
+修复 removeAnimationByTargetKey 无法移除同一目标上多个动画的问题
 
-改进效果音播放的错误处理，缺失或失败不会再阻塞播放或自动前进
+修复 setEffect 前未先移除旧动画导致效果叠加异常的问题
 
-修复脚本解析对空白语句、注释和 Windows 换行的处理，避免错误裁剪
+修复自动播放与快进按钮状态在部分操作后与实际状态不同步的问题
 
-修复切换语音文件时可能不重新加载导致语音缺失的问题（#791）
+修复 Safari / iOS 下视口大小与缩放异常的问题
 
-修复立绘和背景自定义进退场时长的参数键名与 0 时长处理，确保配置生效
+重构 Service Worker，采用 cache-first 策略缓存游戏关键资源，修复旧缓存逻辑缺陷
+
+修复标题界面样式与布局问题
 
 <!-- English Translation -->
 ## Release Notes
@@ -41,27 +45,31 @@
 
 #### New Features
 
-Template fonts are now loaded from game/template/template.json, and the options menu lets you pick template or built-in fonts
+getUserInput now supports regex validation via rule / ruleFlag / ruleText / ruleButtonText arguments, showing a dialog when input does not match; ruleText supports $0 to reference the user's input value
 
-Textbox layout can be customized with max line count and line height settings
+changeFigure now supports a skin argument for switching Spine model skins
 
-Added Steam integration: set Steam_AppID and use the callSteam script to unlock achievements
+setTransform adds new filter properties: oldFilm / dotFilm / reflectionFilm / glitchFilm / rgbFilm / godrayFilm
 
-Stage rendering now supports GIF assets
+Added engine description file webgal-engine.json and automatic version synchronization mechanism
 
-Figures and backgrounds accept enterDuration / exitDuration to override enter/exit animation durations
+Title button text now supports layered rendering (outer / inner) for easier template customization of strokes and shadows
+
+Default built-in font changed to Resource Han Rounded (资源圆体)
 
 #### Fixes
 
-Fixed fast-forward triggered by mouse wheel not stopping correctly or resetting the button state
+Fixed removeAnimationByTargetKey not removing all animations sharing the same target key
 
-Improved error handling for effect audio so missing or failed sounds no longer block playback or auto-advance
+Fixed old animations not being removed before setEffect, causing effects to stack incorrectly
 
-Fixed script parsing of blank lines, comments, and Windows line endings to avoid trimming mistakes
+Fixed auto-play and fast-forward button states becoming out of sync with actual state after certain operations
 
-Fixed voice lines sometimes not reloading when switching audio files (#791)
+Fixed viewport sizing and scaling issues on Safari / iOS
 
-Fixed animation duration configuration keys and zero-duration handling so custom enter/exit timings take effect for figures and backgrounds
+Refactored Service Worker with a cache-first strategy for critical game assets, fixing legacy caching logic issues
+
+Fixed title screen style and layout issues
 
 <!-- Japanese Translation -->
 ## リリースノート
@@ -74,24 +82,28 @@ Fixed animation duration configuration keys and zero-duration handling so custom
 
 #### 新機能
 
-テンプレート（game/template/template.json）のフォントを読み込み、オプションでテンプレート／内蔵フォントを選べるようになりました
+getUserInput で正規表現バリデーション引数 rule / ruleFlag / ruleText / ruleButtonText をサポートし、入力が一致しない場合にダイアログを表示できるようになりました。ruleText 内で $0 を使用してユーザー入力値を参照できます
 
-テキストボックスの最大行数と行間を設定でカスタマイズできるようになりました
+changeFigure で skin 引数をサポートし、Spine モデルのスキンを切り替えられるようになりました
 
-Steam 連携を追加し、Steam_AppID を設定して callSteam スクリプトで実績を解除できます
+setTransform に oldFilm / dotFilm / reflectionFilm / glitchFilm / rgbFilm / godrayFilm フィルター属性を追加しました
 
-ステージ描画が GIF アセットに対応しました
+エンジン記述ファイル webgal-engine.json およびバージョン自動同期メカニズムを追加しました
 
-立ち絵と背景の登場／退場アニメに enterDuration / exitDuration で時間を上書きできるようになりました
+タイトルボタンのテキストが多層レンダリング（outer / inner）に対応し、テンプレートでのストロークやシャドウのカスタマイズが容易になりました
+
+デフォルト内蔵フォントを「資源圓體」(Resource Han Rounded) に変更しました
 
 #### 修正
 
-マウスホイールでの早送りが正しく解除されずボタン状態が戻らない問題を修正しました
+removeAnimationByTargetKey が同一ターゲット上の複数アニメーションを削除できない問題を修正しました
 
-存在しない効果音などで再生が失敗しても再生や自動進行が止まらないようエラーハンドリングを改善しました
+setEffect の前に旧アニメーションが削除されず、エフェクトが不正に重複する問題を修正しました
 
-空行や空のセリフ、Windows の改行を含むスクリプトのパース処理を修正しました
+一部操作後に自動再生・早送りボタンの状態が実際の状態と同期しなくなる問題を修正しました
 
-ボイス切り替え時に音声が更新されない場合がある不具合を修正しました（#791）
+Safari / iOS でのビューポートサイズとスケーリングの異常を修正しました
 
-立ち絵／背景の入退場アニメの時間設定でキー名や 0 ミリ秒を扱えない問題を修正しました
+Service Worker をリファクタリングし、ゲームの重要なアセットに cache-first 戦略を採用、レガシーキャッシュロジックの不具合を修正しました
+
+タイトル画面のスタイルとレイアウトの問題を修正しました

@@ -1,6 +1,6 @@
 {
   "name": "webgal-parser",
-  "version": "4.5.17",
+  "version": "4.5.18",
   "description": "WebGAL script parser",
   "scripts": {
     "test": "vitest",
@@ -20,7 +20,7 @@
   "dependencies": {
     "chevrotain": "^10.5.0",
     "cloudlogjs": "^1.0.11",
-    "lodash": "^4.17.21",
+    "lodash": "^4.17.23",
     "tsx": "^3.12.7"
   },
   "devDependencies": {

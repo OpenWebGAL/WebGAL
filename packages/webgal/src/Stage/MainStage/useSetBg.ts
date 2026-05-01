@@ -6,6 +6,7 @@ import { setEbg } from '@/Core/gameScripts/changeBg/setEbg';
 
 import { getEnterExitAnimation } from '@/Core/Modules/animationFunctions';
 import { WebGAL } from '@/Core/WebGAL';
+import { DEFAULT_BG_OUT_DURATION } from '@/Core/constants';
 
 export function useSetBg(stageState: IStageState) {
   const bgName = stageState.bgName;
@@ -23,21 +24,23 @@ export function useSetBg(stageState: IStageState) {
         }
       }
       addBg(undefined, thisBgKey, bgName);
-      setEbg(bgName);
       logger.debug('重设背景');
       const { duration, animation } = getEnterExitAnimation('bg-main', 'enter', true);
+      setEbg(bgName, duration);
       WebGAL.gameplay.pixiStage!.registerPresetAnimation(animation, 'bg-main-softin', thisBgKey, stageState.effects);
       setTimeout(() => WebGAL.gameplay.pixiStage!.removeAnimationWithSetEffects('bg-main-softin'), duration);
     } else {
+      let exitDuration = DEFAULT_BG_OUT_DURATION;
       const currentBg = WebGAL.gameplay.pixiStage?.getStageObjByKey(thisBgKey);
       if (currentBg) {
-        removeBg(currentBg);
+        exitDuration = removeBg(currentBg);
       }
+      setEbg(bgName, exitDuration, 'cubic-bezier(0.5, 0, 0.75, 0)');
     }
   }, [bgName]);
 }
 
-function removeBg(bgObject: IStageObject) {
+function removeBg(bgObject: IStageObject): number {
   WebGAL.gameplay.pixiStage?.removeAnimationWithSetEffects('bg-main-softin');
   const oldBgKey = bgObject.key;
   bgObject.key = 'bg-main-off' + String(new Date().getTime());
@@ -50,6 +53,7 @@ function removeBg(bgObject: IStageObject) {
     WebGAL.gameplay.pixiStage?.removeAnimation(bgAniKey);
     WebGAL.gameplay.pixiStage?.removeStageObjectByKey(bgKey);
   }, duration);
+  return duration;
 }
 
 function addBg(type?: 'image' | 'spine', ...args: any[]) {
