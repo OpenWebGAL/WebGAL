@@ -10,6 +10,8 @@ import { SCREEN_CONSTANTS } from '@/Core/util/constants';
 import { logger } from '@/Core/util/logger';
 import { v4 as uuid } from 'uuid';
 import { cloneDeep, isEqual } from 'lodash';
+import omitBy from 'lodash/omitBy';
+import isUndefined from 'lodash/isUndefined';
 import * as PIXI from 'pixi.js';
 import { INSTALLED } from 'pixi.js';
 import { GifResource } from './GifResource';
@@ -71,9 +73,9 @@ export default class PixiStage {
     if (!source) return;
     const targetScale = target.scale;
     const targetPosition = target.position;
-    if (target.scale) Object.assign(targetScale, source.scale);
-    if (target.position) Object.assign(targetPosition, source.position);
-    Object.assign(target, source);
+    if (target.scale) Object.assign(targetScale!, omitBy(source.scale || {}, isUndefined));
+    if (target.position) Object.assign(targetPosition!, omitBy(source.position || {}, isUndefined));
+    Object.assign(target, omitBy(source, isUndefined));
     target.scale = targetScale;
     target.position = targetPosition;
     if (convertAlpha) {

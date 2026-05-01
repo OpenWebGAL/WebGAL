@@ -100,6 +100,7 @@ export const scriptExecutor = () => {
     nextSentence();
     return;
   }
+  WebGAL.readHistoryManager.checkIsRead();
   runScript(currentScript);
   // 是否要进行下一句
   let isNext = getBooleanArgByKey(currentScript, 'next') ?? false;
