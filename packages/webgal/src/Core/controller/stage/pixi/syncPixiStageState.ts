@@ -37,6 +37,7 @@ export function applyStageEffects(effects: IEffect[]) {
     // @ts-ignore WebGALPixiContainer exposes transform-like fields.
     PixiStage.assignTransform(container, convertTransform(effect?.transform ?? baseTransform));
   }
+  pixiStage.requestRender();
 }
 
 function syncBg(stageState: IStageState) {

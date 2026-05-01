@@ -261,6 +261,7 @@ export default class PixiStage {
         const container = targetPixiContainer.pixiContainer;
         if (container) PixiStage.assignTransform(container, effect.transform);
       }
+      this.requestRender();
       return;
     }
     this.stageAnimations.push({ uuid: uuid(), animationObject, key: key, targetKey: target, type: 'preset' });
