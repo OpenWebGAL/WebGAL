@@ -36,8 +36,8 @@ export function generateTestblurAnimationObj(targetKey: string, duration: number
   function tickerFunc(delta: number) {
     if (target) {
       const container = target.pixiContainer;
-      const baseDuration = WebGAL.gameplay.pixiStage!.frameDuration;
-      const currentAddOplityDelta = (duration / baseDuration) * delta;
+      const currentDeltaMS = WebGAL.gameplay.pixiStage!.currentApp!.ticker.deltaMS;
+      const currentAddOplityDelta = (duration / currentDeltaMS) * delta;
       const increasement = 1 / currentAddOplityDelta;
       const decreasement = 5 / currentAddOplityDelta;
       if (container)

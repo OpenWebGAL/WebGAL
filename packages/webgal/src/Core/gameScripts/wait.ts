@@ -1,5 +1,6 @@
 import { ISentence } from '@/Core/controller/scene/sceneInterface';
 import { IPerform } from '@/Core/Modules/perform/performInterface';
+import { getBooleanArgByKey } from '@/Core/util/getSentenceArg';
 
 /**
  * 等待 n 毫秒
@@ -8,13 +9,18 @@ import { IPerform } from '@/Core/Modules/perform/performInterface';
 export const wait = (sentence: ISentence): IPerform => {
   const duration = Number(sentence.content);
   const performName = `wait${Math.random().toString()}`;
+  const nobreak = getBooleanArgByKey(sentence, 'nobreak') ?? false;
+
   return {
     performName,
     duration: duration,
     goNextWhenOver: true,
     isHoldOn: false,
-    stopFunction: () => {},
-    blockingNext: () => false,
-    blockingAuto: () => true,
+    stopFunction: () => {
+      // 无需状态清理
+    },
+    blockingNext: () => nobreak,
+    blockingAuto: () => nobreak,
+    blockingStateCalculation: () => nobreak,
   };
 };
