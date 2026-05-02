@@ -63,6 +63,11 @@ export const choose = (sentence: ISentence): IPerform => {
 
   if (defaultPreviewChoice) {
     selectChooseOption(defaultPreviewChoice, false);
+    if (!defaultPreviewChoice.jumpToScene) {
+      // The default preview choice is resolved during script calculation.
+      // Let scriptExecutor continue from the target label in this same forward.
+      sentence.args.push({ key: 'next', value: true });
+    }
     return createNonePerform({ blockingAuto: false });
   }
 

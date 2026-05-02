@@ -9,6 +9,11 @@ import { stageStateManager } from '@/Core/Modules/stage/stageStateManager';
  * 步进前工作：检查阻塞，并在当前演出未完成时提前结束普通演出。
  */
 export const preForward = () => {
+  if (WebGAL.sceneManager.lockSceneWrite) {
+    logger.warn('next 被场景切换阻塞！');
+    return false;
+  }
+
   if (WebGAL.gameplay.performController.hasBlockingNextPerform()) {
     logger.warn('next 被阻塞！');
     return false;
@@ -28,6 +33,11 @@ export const preForward = () => {
  * 执行一条语句或由 -next 连接的语句序列，只修改演算状态并收集演出。
  */
 export const forward = () => {
+  if (WebGAL.sceneManager.lockSceneWrite) {
+    logger.warn('forward 被场景切换阻塞！');
+    return false;
+  }
+
   if (WebGAL.gameplay.performController.hasBlockingNextPerform()) {
     logger.warn('forward 被阻塞！');
     return false;
