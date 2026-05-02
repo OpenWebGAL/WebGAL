@@ -134,8 +134,8 @@ function Choose(props: { chooseOptions: ChooseOption[] }) {
         const onClick = enable
           ? () => {
               playSeClick();
-              selectChooseOption(e);
               WebGAL.gameplay.performController.unmountPerform('choose');
+              selectChooseOption(e);
             }
           : () => {};
         return (
