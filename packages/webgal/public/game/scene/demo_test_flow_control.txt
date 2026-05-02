@@ -1,0 +1,32 @@
+流程控制测试 1 开始：验证 jumpLabel 会跳过当前路径并继续执行。
+jumpLabel:flow_jump_target;
+流程控制测试 1 异常路径：如果看到这句话，说明 jumpLabel 没有跳过中间语句。
+label:flow_jump_target;
+流程控制测试 1 结束：预期状态：没有看到“异常路径”，并成功到达 flow_jump_target。
+
+流程控制测试 2 开始：验证 choose 跳转到标签；快速预览默认选择第 2 项。
+choose:路径 A:flow_choose_a|路径 B:flow_choose_b -defaultChoose=2;
+label:flow_choose_a;
+setVar:flowChoice=A;
+流程控制测试 2 路径 A：手动选择 A 时会看到这里。
+jumpLabel:flow_choose_end;
+label:flow_choose_b;
+setVar:flowChoice=B;
+流程控制测试 2 路径 B：快速预览默认选择 B 时会看到这里。
+label:flow_choose_end;
+流程控制测试 2 结束：预期状态：快速预览时 flowChoice={flowChoice}，应为 B；手动运行时应等于所选路径。
+
+流程控制测试 3 开始：验证 callScene 子场景执行后会回到父场景继续。
+setVar:flowChildDone=0;
+callScene:demo_test_flow_control_child.txt;
+流程控制测试 3 结束：预期状态：已从子场景返回，flowChildDone={flowChildDone}，应为 1。
+
+流程控制测试 4 开始：验证连续 jumpLabel 能落到统一出口，不进入中间路径。
+jumpLabel:flow_chain_1;
+流程控制测试 4 异常路径 A：如果看到这句话，说明第一段跳转失败。
+label:flow_chain_1;
+jumpLabel:flow_chain_2;
+流程控制测试 4 异常路径 B：如果看到这句话，说明第二段跳转失败。
+label:flow_chain_2;
+流程控制测试 4 结束：预期状态：直接到达 flow_chain_2，未显示异常路径。
+end;
