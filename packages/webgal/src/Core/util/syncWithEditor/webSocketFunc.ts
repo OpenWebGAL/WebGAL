@@ -124,6 +124,7 @@ export const webSocketFunc = () => {
       WebGAL.sceneManager.sceneData.currentScene = sceneParser(command, 'temp', './temp.txt');
       webgalStore.dispatch(setVisibility({ component: 'showTitle', visibility: false }));
       webgalStore.dispatch(setVisibility({ component: 'showMenuPanel', visibility: false }));
+      webgalStore.dispatch(setVisibility({ component: 'isEnterGame', visibility: true }));
       webgalStore.dispatch(setVisibility({ component: 'showPanicOverlay', visibility: false }));
       setTimeout(() => {
         nextSentence();

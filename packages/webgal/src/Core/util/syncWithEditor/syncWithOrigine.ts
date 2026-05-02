@@ -24,6 +24,7 @@ export const syncWithOrigine = (
   const dispatch = webgalStore.dispatch;
   dispatch(setVisibility({ component: 'showTitle', visibility: false }));
   dispatch(setVisibility({ component: 'showMenuPanel', visibility: false }));
+  dispatch(setVisibility({ component: 'isEnterGame', visibility: true }));
   dispatch(setVisibility({ component: 'isShowLogo', visibility: false }));
   const title = document.querySelector('.html-body__title-enter') as HTMLElement;
   if (title) {
