@@ -2,9 +2,9 @@
   "schemaVersion": "1.0.0",
   "id": "open-webgal.webgal",
   "name": "WebGAL",
-  "version": "4.5.19",
+  "version": "4.6.0",
   "type": "official",
-  "webgalVersion": "4.5.19",
+  "webgalVersion": "4.6.0",
   "description": "界面美观、功能强大、易于开发的全新网页端视觉小说引擎",
   "descriptions": {
     "en": "A brand new web Visual Novel engine with a beautiful interface, powerful features, and easy development",
