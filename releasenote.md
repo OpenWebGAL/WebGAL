@@ -1,109 +1,97 @@
 ## 发布日志
 
-**本仓库发布源代码，并在 Release 中附带 WebGAL 引擎网页版压缩包**
+**本仓库发布源代码，并在 Release 中附带 WebGAL 引擎网页版压缩包。**
 
-**如果你想要体验使用便捷的图形化编辑器创建、制作并实时预览 WebGAL 游戏，请 [下载 WebGAL 图形化编辑器](https://github.com/OpenWebGAL/WebGAL_Terre/releases)**
+**如果你想要体验使用便捷的图形化编辑器创建、制作并实时预览 WebGAL 游戏，请 [下载 WebGAL 图形化编辑器](https://github.com/OpenWebGAL/WebGAL_Terre/releases)。**
 
 ### 在此版本中
 
 #### 新功能
 
-setAnimation / setTempAnimation / setTransform 支持 parallel 参数，可在同一目标上并行动画
+优化舞台画面表现，提升背景、立绘、Spine、Live2D、变换和特效在播放、读档、回溯和快速预览中的一致性。
 
-wait 支持 nobreak 参数，可阻止等待被点击或自动播放跳过
+优化快速预览和正常播放的演出同步，减少预览结果与实际播放不一致的情况。
 
-新增已读历史记录与快进模式设置，支持按已读快进或全文快进，已读文本默认以浅灰色显示
+优化场景切换、子场景调用、回溯跳转、读档和返回标题后的画面恢复，减少旧画面元素残留。
 
-快速预览中的 choose 支持 defaultChoose 参数，可自动选择指定选项
+优化 BGM、语音、视频、背景、立绘、特效和变量相关演出在快速预览中的表现。
 
-资源预加载改为随剧情进度按窗口预取，支持资源与场景去重、队列限速，减少一次性资源请求
-
-Pixi 舞台支持按需渲染，仅在动画或动态资源存在时运行 ticker，降低空闲资源消耗
-
-背景与立绘资源识别支持带 query / hash 的扩展名，并可正确识别 gif 资源
+快速预览超时时会通知编辑器，便于定位循环跳转或过长快进造成的问题。
 
 #### 修复
 
-修复 setTransform 连续作用同一目标时动画被错误中断或覆盖的问题
+修复快速预览中自动选择选项后流程继续推进异常的问题。
 
-修复语音播放时 AudioContext 被浏览器挂起导致口型分析或语音演出异常的问题
+修复 BGM 在快速预览中可能不播放或状态不同步的问题。
 
-修复背景清空时仍拼接空 url、可能产生无效资源请求，以及 EBG 淡出异常的问题
+修复部分异步演出在快速预览或状态恢复时可能提前推进的问题。
 
-修复 Service Worker 在本地预览、Electron、iOS 环境中可能产生缓存干扰的问题，并改为只缓存带 hash 的构建资源
+修复 setTransform / changeFigure / changeBg 在部分状态恢复场景下表现不同步的问题。
 
-修复旧版用户数据字段缺失时被整体重置的问题，改为补齐默认字段并兼容旧存档
+修复 Pixi 条件渲染在状态变化后可能未及时刷新的问题。
 
 <!-- English Translation -->
 ## Release Notes
 
-**This repository releases source code and includes a WebGAL engine web package in each Release**
+**This repository releases source code and includes a WebGAL engine web package in each Release.**
 
-**If you want to experience creating, making, and real-time previewing WebGAL games using a user-friendly graphical editor, please [download the WebGAL graphical editor](https://github.com/OpenWebGAL/WebGAL_Terre/releases)**
+**If you want to create, edit, and preview WebGAL games with a graphical editor, please [download the WebGAL graphical editor](https://github.com/OpenWebGAL/WebGAL_Terre/releases).**
 
 ### In this version
 
 #### New Features
 
-setAnimation / setTempAnimation / setTransform now support the parallel argument, allowing animations to run in parallel on the same target
+Improved stage visuals, making backgrounds, figures, Spine, Live2D, transforms, and effects more consistent during playback, save loading, backlog jumps, and fast preview.
 
-wait now supports the nobreak argument to prevent waits from being skipped by clicks or auto-play
+Improved perform synchronization between fast preview and normal playback, reducing cases where preview results differ from actual playback.
 
-Added read history and skip mode settings, supporting read-text skip or full skip; read text is now shown in light gray by default
+Improved screen restoration after scene changes, child scene calls, backlog jumps, save loading, and returning to title, reducing stale visual elements.
 
-choose in fast preview now supports the defaultChoose argument for automatically selecting a specified option
+Improved BGM, voice, video, background, figure, effect, and variable behavior during fast preview.
 
-Resource prefetching now follows story progress with a lookahead window, deduplicated asset and scene queues, and throttled requests
-
-The Pixi stage now supports on-demand rendering, running the ticker only while animations or dynamic resources exist to reduce idle resource usage
-
-Background and figure source detection now supports extensions with query / hash suffixes and correctly identifies gif resources
+Fast preview timeout now notifies the editor, making it easier to locate loop jumps or excessively long fast-forward calculations.
 
 #### Fixes
 
-Fixed setTransform animations being incorrectly interrupted or overwritten when applied continuously to the same target
+Fixed fast preview flow continuing incorrectly after automatically selecting a choose option.
 
-Fixed lip-sync analysis or vocal performs failing when the browser suspends AudioContext before playback
+Fixed BGM possibly not playing or desynchronizing during fast preview.
 
-Fixed empty background changes still producing empty url references, unnecessary resource requests, and abnormal EBG fade-out behavior
+Fixed some asynchronous performs advancing too early during fast preview or state restoration.
 
-Fixed Service Worker cache interference in local preview, Electron, and iOS environments; only hashed build assets are now cached
+Fixed setTransform / changeFigure / changeBg desynchronization in some state restoration scenarios.
 
-Fixed old user data being fully reset when fields are missing; missing default fields are now migrated into existing saves
+Fixed Pixi conditional rendering sometimes not refreshing immediately after state changes.
 
 <!-- Japanese Translation -->
 ## リリースノート
 
-**このリポジトリではソースコードを公開し、Release には WebGAL エンジンの Web 版パッケージも同梱しています**
+**このリポジトリではソースコードを公開し、Release には WebGAL エンジンの Web 版パッケージも同梱しています。**
 
-**もしあなたが使いやすいグラフィカルエディタでWebGALゲームを作成、制作、リアルタイムプレビューしたい場合は、[WebGALグラフィカルエディタをダウンロードしてください](https://github.com/OpenWebGAL/WebGAL_Terre/releases)**
+**グラフィカルエディターで WebGAL ゲームを作成、編集、リアルタイムプレビューしたい場合は、[WebGAL グラフィカルエディターをダウンロードしてください](https://github.com/OpenWebGAL/WebGAL_Terre/releases)。**
 
 ### このバージョンについて
 
 #### 新機能
 
-setAnimation / setTempAnimation / setTransform が parallel 引数に対応し、同じターゲット上で複数のアニメーションを並列実行できるようになりました
+舞台画面の表示を改善し、背景、立ち絵、Spine、Live2D、変換、エフェクトが再生、ロード、バックログジャンプ、高速プレビューでより一貫して表示されるようにしました。
 
-wait が nobreak 引数に対応し、待機がクリックや自動再生でスキップされるのを防げるようになりました
+高速プレビューと通常再生の演出同期を改善し、プレビュー結果と実際の再生結果が異なるケースを減らしました。
 
-既読履歴とスキップモード設定を追加し、既読のみスキップ / 全文スキップを選択できるようになりました。既読テキストは既定で薄いグレー表示になります
+シーン切り替え、子シーン呼び出し、バックログジャンプ、ロード、タイトルへ戻る操作後の画面復元を改善し、古い画面要素が残りにくくなりました。
 
-高速プレビュー中の choose が defaultChoose 引数に対応し、指定した選択肢を自動選択できるようになりました
+BGM、ボイス、動画、背景、立ち絵、エフェクト、変数関連演出の高速プレビュー中の挙動を改善しました。
 
-リソースのプリフェッチを進行状況に応じた先読み方式に変更し、アセットとシーンの重複排除、キュー制御、リクエスト間隔の制御に対応しました
-
-Pixi ステージがオンデマンドレンダリングに対応し、アニメーションや動的リソースが存在する場合のみ ticker を実行してアイドル時の負荷を削減します
-
-背景と立ち絵のリソース判定が query / hash 付き拡張子に対応し、gif リソースも正しく識別できるようになりました
+高速プレビューのタイムアウトをエディターへ通知するようになり、ループジャンプや長すぎる早送り計算を特定しやすくなりました。
 
 #### 修正
 
-setTransform を同じターゲットに連続適用した際、アニメーションが誤って中断または上書きされる問題を修正しました
+高速プレビューで選択肢を自動選択した後、フローが正しく進まない問題を修正しました。
 
-ブラウザによって AudioContext が停止され、口パク解析やボイス演出が異常になる問題を修正しました
+高速プレビュー中に BGM が再生されない、または状態が同期しない場合がある問題を修正しました。
 
-背景を空にした際に空の url が生成される、不要なリソースリクエストが発生する、または EBG のフェードアウトが不自然になる問題を修正しました
+一部の非同期演出が高速プレビューや状態復元中に早く進みすぎる問題を修正しました。
 
-ローカルプレビュー、Electron、iOS 環境で Service Worker のキャッシュが干渉する問題を修正し、ハッシュ付きビルドアセットのみをキャッシュするようにしました
+setTransform / changeFigure / changeBg が一部の状態復元シナリオで同期しない問題を修正しました。
 
-旧バージョンのユーザーデータでフィールドが不足している場合に全体がリセットされる問題を修正し、既存セーブに既定フィールドを補完するようにしました
+Pixi の条件付きレンダリングが状態変更後すぐに更新されない場合がある問題を修正しました。

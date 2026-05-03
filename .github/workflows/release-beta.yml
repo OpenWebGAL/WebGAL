@@ -1,18 +1,42 @@
-name: Release WebGAL
+name: Release WebGAL Beta
 
 on:
   push:
     tags:
-      - '*.*'
-      - '!*beta*'
+      - '*beta*'
 
 permissions:
   contents: write
 
 jobs:
+  check-dev-tag:
+    name: Check beta tag is on dev
+    runs-on: ubuntu-latest
+    outputs:
+      should_release: ${{ steps.check.outputs.should_release }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Check tag commit is on dev
+        id: check
+        shell: bash
+        run: |
+          git fetch origin dev --prune
+          TAG_COMMIT="$(git rev-list -n 1 "$GITHUB_REF_NAME")"
+          if git merge-base --is-ancestor "$TAG_COMMIT" origin/dev; then
+            echo "should_release=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "::notice::Beta release skipped because tag ${GITHUB_REF_NAME} is not on dev."
+            echo "should_release=false" >> "$GITHUB_OUTPUT"
+          fi
+
   build-webgal-static-webpage:
     name: Build WebGAL Static Webpage
     runs-on: ubuntu-latest
+    needs: check-dev-tag
+    if: ${{ needs.check-dev-tag.outputs.should_release == 'true' }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -46,7 +70,8 @@ jobs:
   release:
     name: Release
     runs-on: ubuntu-latest
-    needs: build-webgal-static-webpage
+    needs: [check-dev-tag, build-webgal-static-webpage]
+    if: ${{ needs.check-dev-tag.outputs.should_release == 'true' }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -66,7 +91,7 @@ jobs:
           release_name: WebGAL ${{ github.ref }}
           body_path: releasenote.md
           draft: true
-          prerelease: false
+          prerelease: true
 
       - name: Upload WebGAL Engine Web
         uses: actions/upload-release-asset@v1
