@@ -67,6 +67,13 @@ export const infoFetcher = (url: string) => {
             const appId = String(res);
             WebGAL.steam.initialize(appId);
           }
+          if (command === 'Show_Console') {
+            if (res === true) {
+              WebGAL.vconsole?.show();
+            } else {
+              WebGAL.vconsole?.hide();
+            }
+          }
         }
       }
     });
