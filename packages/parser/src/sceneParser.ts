@@ -38,12 +38,13 @@ export const sceneParser = (
   let assetsList: Array<IAsset> = []; // 场景资源列表
   let subSceneList: Array<string> = []; // 子场景列表
   const sentenceList: Array<ISentence> = rawSentenceListWithoutEmpty.map(
-    (sentence) => {
+    (sentence, index) => {
       const returnSentence: ISentence = scriptParser(
         sentence,
         assetSetter,
         ADD_NEXT_ARG_LIST,
         SCRIPT_CONFIG_MAP,
+        index,
       );
       // 在这里解析出语句可能携带的资源和场景，合并到 assetsList 和 subSceneList
       assetsList = [...assetsList, ...returnSentence.sentenceAssets];

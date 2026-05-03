@@ -58,6 +58,13 @@ const zhTw = {
               contributors: '貢獻者',
               website: '網站',
             },
+            skipAll: {
+              title: '快進模式',
+              options: {
+                read: '已讀',
+                all: '全部',
+              }
+            }
           },
         },
         display: {

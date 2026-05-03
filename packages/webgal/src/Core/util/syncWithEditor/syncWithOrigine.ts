@@ -15,6 +15,7 @@ let syncFastTimeout: ReturnType<typeof setTimeout> | undefined;
 
 export const syncWithOrigine = (sceneName: string, sentenceId: number, expermental = false) => {
   logger.warn('正在跳转到' + sceneName + ':' + sentenceId);
+  WebGAL.gameplay.isFastPreview = false;
   const dispatch = webgalStore.dispatch;
   dispatch(setVisibility({ component: 'showTitle', visibility: false }));
   dispatch(setVisibility({ component: 'showMenuPanel', visibility: false }));
@@ -27,26 +28,32 @@ export const syncWithOrigine = (sceneName: string, sentenceId: number, experment
   // 重新获取场景
   const sceneUrl: string = assetSetter(sceneName, fileType.scene);
   // 场景写入到运行时
-  sceneFetcher(sceneUrl).then((rawScene) => {
-    // 等等，先检查一下能不能恢复场景
-    const lastSameSentence = findLastSameSentence(pastScene, WebGAL.sceneManager.sceneData.currentScene, sentenceId);
-    const lastRecoverySentenceId = Math.min(sentenceId, lastSameSentence);
-    const recId = findLastAvailableBacklog(lastRecoverySentenceId, sceneName);
-    const isCanRec = recId >= 0 && expermental;
-    resetStage(!isCanRec);
-    WebGAL.sceneManager.sceneData.currentScene = sceneParser(rawScene, sceneName, sceneUrl);
-    // 开始快进到指定语句
-    const currentSceneName = WebGAL.sceneManager.sceneData.currentScene.sceneName;
-    WebGAL.gameplay.isFast = true;
-    if (isCanRec) {
-      jumpFromBacklog(recId, false);
-    }
-    if (syncFastTimeout) {
-      // 之前发生的跳转要清理掉
-      clearTimeout(syncFastTimeout);
-    }
-    syncFast(sentenceId, currentSceneName);
-  });
+  sceneFetcher(sceneUrl)
+    .then((rawScene) => {
+      // 等等，先检查一下能不能恢复场景
+      const lastSameSentence = findLastSameSentence(pastScene, WebGAL.sceneManager.sceneData.currentScene, sentenceId);
+      const lastRecoverySentenceId = Math.min(sentenceId, lastSameSentence);
+      const recId = findLastAvailableBacklog(lastRecoverySentenceId, sceneName);
+      const isCanRec = recId >= 0 && expermental;
+      resetStage(!isCanRec);
+      WebGAL.sceneManager.sceneData.currentScene = sceneParser(rawScene, sceneName, sceneUrl);
+      // 开始快进到指定语句
+      const currentSceneName = WebGAL.sceneManager.sceneData.currentScene.sceneName;
+      WebGAL.gameplay.isFast = true;
+      WebGAL.gameplay.isFastPreview = true;
+      if (isCanRec) {
+        jumpFromBacklog(recId, false);
+      }
+      if (syncFastTimeout) {
+        // 之前发生的跳转要清理掉
+        clearTimeout(syncFastTimeout);
+      }
+      syncFast(sentenceId, currentSceneName);
+    })
+    .catch((e) => {
+      WebGAL.gameplay.isFastPreview = false;
+      logger.error('快速预览跳转错误', e);
+    });
 };
 
 export function syncFast(sentenceId: number, currentSceneName: string) {
@@ -58,6 +65,7 @@ export function syncFast(sentenceId: number, currentSceneName: string) {
     syncFastTimeout = setTimeout(() => syncFast(sentenceId, currentSceneName), 2);
   } else {
     WebGAL.gameplay.isFast = false;
+    WebGAL.gameplay.isFastPreview = false;
   }
 }
 
