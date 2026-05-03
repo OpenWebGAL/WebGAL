@@ -33,8 +33,9 @@ const initialOptionSet: IOptionData = {
   textboxFont: 0,
   textboxOpacity: 75,
   language: language.zhCn,
-  voiceInterruption: voiceOption.yes,
+  voiceInterruption: voiceOption.no,
   fullScreen: fullScreenOption.off,
+  skipAll: false,
 };
 
 // 初始化用户数据
@@ -47,6 +48,7 @@ export const initState: IUserData = {
     cg: [],
   },
   gameConfigInit: {},
+  readHistory: {},
 };
 
 const userDataSlice = createSlice({
@@ -142,6 +144,9 @@ const userDataSlice = createSlice({
       const { gameConfigInit } = state;
       Object.assign(state, { ...cloneDeep(initState), globalGameVar: cloneDeep(gameConfigInit), gameConfigInit });
     },
+    setReadHistory: (state, action: PayloadAction<Record<'key' | 'value', string>>) => {
+      state.readHistory[action.payload.key] = action.payload.value;
+    },
   },
 });
 
@@ -156,6 +161,7 @@ export const {
   unlockBgmInUserData,
   resetOptionSet,
   resetAllData,
+  setReadHistory,
 } = userDataSlice.actions;
 export default userDataSlice.reducer;
 

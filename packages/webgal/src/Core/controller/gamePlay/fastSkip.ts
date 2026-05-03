@@ -4,13 +4,14 @@ import styles from '@/UI/BottomControlPanel/bottomControlPanel.module.scss';
 import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
 
 import { WebGAL } from '@/Core/WebGAL';
+import { webgalStore } from "@/store/store";
 import { SYSTEM_CONFIG } from '@/config';
 
 /**
  * 设置 fast 按钮的激活与否
  * @param on
  */
-const setButton = (on: boolean) => {
+export const setFastButton = (on: boolean) => {
   const autoIcon = document.getElementById('Button_ControlPanel_fast');
   if (autoIcon) {
     if (on) {
@@ -18,8 +19,6 @@ const setButton = (on: boolean) => {
     } else autoIcon.className = styles.singleButton;
   }
 };
-
-export { setButton as setFastButton };
 
 /**
  * 停止快进模式
@@ -29,7 +28,6 @@ export const stopFast = () => {
     return;
   }
   WebGAL.gameplay.isFast = false;
-  setButton(false);
   if (WebGAL.gameplay.fastInterval !== null) {
     clearInterval(WebGAL.gameplay.fastInterval);
     WebGAL.gameplay.fastInterval = null;
@@ -39,13 +37,17 @@ export const stopFast = () => {
 /**
  * 开启快进
  */
-export const startFast = () => {
+export const startFast = (force = false) => {
   if (isFast()) {
     return;
   }
   WebGAL.gameplay.isFast = true;
-  setButton(true);
+  const skipAll = force || webgalStore.getState().userData.optionData.skipAll;
   WebGAL.gameplay.fastInterval = setInterval(() => {
+    if (!skipAll && !webgalStore.getState().stage.isRead) {
+      stopFast();
+      return;
+    }
     nextSentence();
   }, SYSTEM_CONFIG.fast_timeout);
 };

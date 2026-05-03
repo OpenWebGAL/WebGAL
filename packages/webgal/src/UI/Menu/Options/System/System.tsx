@@ -116,6 +116,19 @@ export function System() {
               }}
             />
           </NormalOption>
+          <NormalOption key="skipAll" title={t('skipAll.title')}>
+            <NormalButton
+              textList={t('skipAll.options.read', 'skipAll.options.all')}
+              functionList={[() => {
+                dispatch(setOptionData({ key: 'skipAll', value: false }));
+                setStorage();
+              }, () => {
+                dispatch(setOptionData({ key: 'skipAll', value: true }));
+                setStorage();
+              }]}
+              currentChecked={userDataState.optionData.skipAll ? 1 : 0}
+            />
+          </NormalOption>
           <NormalOption key="option7" title={t('language.title')}>
             <NormalButton
               currentChecked={userDataState.optionData.language}

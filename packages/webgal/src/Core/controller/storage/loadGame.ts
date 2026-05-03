@@ -55,6 +55,8 @@ export function loadGameFromStageData(stageData: ISaveData) {
 
   // 恢复舞台状态
   const newStageState = cloneDeep(loadFile.nowStageState);
+  // 确保原先未读的文本在 load 时能正确显示为已读文本
+  newStageState.isRead = true;
   const dispatch = webgalStore.dispatch;
   dispatch(resetStageState(newStageState));
 

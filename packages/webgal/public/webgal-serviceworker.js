@@ -34,16 +34,33 @@ function isCriticalGameRequest(request) {
   return CRITICAL_PATHS.some((prefix) => url.pathname.startsWith(prefix));
 }
 
-async function cacheFirst(request) {
+// Stale-while-revalidate: return cached response immediately, then update cache in background.
+async function staleWhileRevalidate(request) {
   const cache = await caches.open(CACHE_NAME);
   const cached = await cache.match(request.url);
+
+  const fetchAndUpdate = async () => {
+    try {
+      const response = await fetch(request);
+      if (response.ok) {
+        await cache.put(request.url, response.clone());
+      }
+      return response;
+    } catch (e) {
+      return null;
+    }
+  };
+
   if (cached) {
-    logOnce(`hit:${request.url}`, 'cache hit:', new URL(request.url).pathname);
+    logOnce(`hit:${request.url}`, 'cache hit (revalidating):', new URL(request.url).pathname);
+    // Revalidate in background — don't await
+    fetchAndUpdate();
     return cached;
   }
 
+  // No cache — must wait for network
   const response = await fetch(request);
-  if (response.ok && response.status === 200) {
+  if (response.ok) {
     await cache.put(request.url, response.clone());
     logOnce(`cache:${request.url}`, 'cached:', new URL(request.url).pathname);
   }
@@ -80,7 +97,7 @@ self.addEventListener('fetch', (event) => {
   }
 
   event.respondWith(
-    cacheFirst(request).catch(() => {
+    staleWhileRevalidate(request).catch(() => {
       return fetch(request);
     }),
   );
