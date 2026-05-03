@@ -53,9 +53,14 @@ export function generateUniversalSoftInAnimationObj(targetKey: string, duration:
     }
   }
 
+  function getEndStateEffect() {
+    return { alpha: 1 };
+  }
+
   return {
     setStartState,
     setEndState,
     tickerFunc,
+    getEndStateEffect,
   };
 }

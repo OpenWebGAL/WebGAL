@@ -4,14 +4,13 @@ import axios from 'axios';
 import { scss2cssinjsParser } from '@/Core/controller/customUI/scss2cssinjsParser';
 import { useValue } from '@/hooks/useValue';
 import { css, injectGlobal } from '@emotion/css';
-import { useSelector } from 'react-redux';
-import { RootState } from '@/store/store';
 import { IWebGALStyleObj } from 'webgal-parser/build/types/styleParser';
 import { logger } from '@/Core/util/logger';
+import { useStageState } from '@/hooks/useStageState';
 
 export default function useApplyStyle(ui: string) {
   const styleObject = useValue<IWebGALStyleObj>(WebGAL.styleObjects.get(ui) ?? { classNameStyles: {}, others: '' });
-  const replaced = useSelector((state: RootState) => state.stage.replacedUIlable);
+  const replaced = useStageState().replacedUIlable;
 
   const applyStyle = (classNameLable: string, fallbackClassName: string) => {
     // 先看看是否被用户用 applyStyle 指令替换了类名

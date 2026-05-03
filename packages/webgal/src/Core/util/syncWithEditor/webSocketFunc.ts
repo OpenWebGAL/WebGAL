@@ -1,4 +1,9 @@
-import { DebugCommand, IComponentVisibilityCommand, IDebugMessage } from '@/types/debugProtocol';
+import {
+  DebugCommand,
+  IComponentVisibilityCommand,
+  IDebugMessage,
+  type IFastPreviewTimeoutPayload,
+} from '@/types/debugProtocol';
 import { webgalStore } from '@/store/store';
 import { setFontOptimization, setVisibility } from '@/store/GUIReducer';
 import { WebGAL } from '@/Core/WebGAL';
@@ -9,8 +14,36 @@ import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
 import { resetStage } from '@/Core/controller/stage/resetStage';
 import { logger } from '@/Core/util/logger';
 import { syncWithOrigine } from './syncWithOrigine';
-import { stageActions } from '@/store/stageReducer';
-import { baseTransform, IEffect } from '@/store/stageInterface';
+import { baseTransform, IEffect } from '@/Core/Modules/stage/stageInterface';
+import { stageStateManager } from '@/Core/Modules/stage/stageStateManager';
+
+let editorSocket: WebSocket | null = null;
+
+export function sendDebugMessageToEditor(data: IDebugMessage['data']) {
+  if (!editorSocket || editorSocket.readyState !== WebSocket.OPEN) {
+    return false;
+  }
+
+  const message: IDebugMessage = {
+    event: 'message',
+    data,
+  };
+
+  editorSocket.send(JSON.stringify(message));
+  return true;
+}
+
+function sendFastPreviewTimeoutMessage(payload: IFastPreviewTimeoutPayload) {
+  sendDebugMessageToEditor({
+    command: DebugCommand.FAST_PREVIEW_TIMEOUT,
+    sceneMsg: {
+      scene: payload.scene,
+      sentence: payload.sentence,
+    },
+    stageSyncMsg: stageStateManager.getCalculationStageState(),
+    message: JSON.stringify(payload),
+  });
+}
 
 export const webSocketFunc = () => {
   const loc: string = window.location.hostname;
@@ -36,20 +69,17 @@ export const webSocketFunc = () => {
   const socket = new WebSocket(wsUrl);
   socket.onopen = () => {
     logger.info('socket已连接');
+    editorSocket = socket;
     function sendStageSyncMessage() {
-      const message: IDebugMessage = {
-        event: 'message',
-        data: {
-          command: DebugCommand.SYNCFC,
-          sceneMsg: {
-            scene: WebGAL.sceneManager.sceneData.currentScene.sceneName,
-            sentence: WebGAL.sceneManager.sceneData.currentSentenceId,
-          },
-          stageSyncMsg: webgalStore.getState().stage,
-          message: 'sync',
+      sendDebugMessageToEditor({
+        command: DebugCommand.SYNCFC,
+        sceneMsg: {
+          scene: WebGAL.sceneManager.sceneData.currentScene.sceneName,
+          sentence: WebGAL.sceneManager.sceneData.currentSentenceId,
         },
-      };
-      socket.send(JSON.stringify(message));
+        stageSyncMsg: stageStateManager.getCalculationStageState(),
+        message: 'sync',
+      });
       // logger.debug('传送信息', message);
       setTimeout(sendStageSyncMessage, 1000);
     }
@@ -61,7 +91,7 @@ export const webSocketFunc = () => {
     const data: IDebugMessage = JSON.parse(str);
     const message = data.data;
     if (message.command === DebugCommand.JUMP) {
-      syncWithOrigine(message.sceneMsg.scene, message.sceneMsg.sentence, message.message === 'exp');
+      syncWithOrigine(message.sceneMsg.scene, message.sceneMsg.sentence, sendFastPreviewTimeoutMessage);
     }
     if (message.command === DebugCommand.EXE_COMMAND) {
       const command = message.message;
@@ -94,6 +124,7 @@ export const webSocketFunc = () => {
       WebGAL.sceneManager.sceneData.currentScene = sceneParser(command, 'temp', './temp.txt');
       webgalStore.dispatch(setVisibility({ component: 'showTitle', visibility: false }));
       webgalStore.dispatch(setVisibility({ component: 'showMenuPanel', visibility: false }));
+      webgalStore.dispatch(setVisibility({ component: 'isEnterGame', visibility: true }));
       webgalStore.dispatch(setVisibility({ component: 'showPanicOverlay', visibility: false }));
       setTimeout(() => {
         nextSentence();
@@ -106,7 +137,7 @@ export const webSocketFunc = () => {
     if (message.command === DebugCommand.SET_EFFECT) {
       try {
         const effect = JSON.parse(message.message) as IEffect;
-        const targetEffect = webgalStore.getState().stage.effects.find((e) => e.target === effect.target);
+        const targetEffect = stageStateManager.getCalculationStageState().effects.find((e) => e.target === effect.target);
         const targetTransform = targetEffect?.transform ? targetEffect.transform : baseTransform;
         const newTransform = {
           ...targetTransform,
@@ -121,7 +152,7 @@ export const webSocketFunc = () => {
           },
         };
         WebGAL.gameplay.pixiStage?.removeAnimationByTargetKey(effect.target);
-        webgalStore.dispatch(stageActions.updateEffect({ target: effect.target, transform: newTransform }));
+        stageStateManager.updateEffectAndCommit({ target: effect.target, transform: newTransform });
       } catch (e) {
         logger.error(`无法设置效果 ${message.message}, ${e}`);
         return;
@@ -129,6 +160,10 @@ export const webSocketFunc = () => {
     }
   };
   socket.onerror = () => {
+    editorSocket = null;
     logger.info('当前没有连接到 Terre 编辑器');
+  };
+  socket.onclose = () => {
+    editorSocket = null;
   };
 };

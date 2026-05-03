@@ -5,8 +5,8 @@
 import { webgalStore } from "@/store/store";
 import { SceneManager } from "./scene";
 import { setReadHistory } from "@/store/userDataReducer";
-import { setStage } from "@/store/stageReducer";
 import { setStorage } from "../controller/storage/storageController";
+import { stageStateManager } from '@/Core/Modules/stage/stageStateManager';
 
 export class ReadHistoryManager {
   private history: Map<string, Uint8Array> = new Map();
@@ -107,10 +107,7 @@ export class ReadHistoryManager {
       const bitset = this.history.get(scenarioName)!;
       isRead = (bitset[index >> 3] & (1 << (index & 7))) !== 0;
     }
-    webgalStore.dispatch(setStage({
-      key: 'isRead',
-      value: isRead,
-    }));
+    stageStateManager.setStage('isRead', isRead);
     if (!isRead) {
       this.addReadHistory();
     }

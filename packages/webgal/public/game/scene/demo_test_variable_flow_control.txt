@@ -1,0 +1,38 @@
+变量流程控制测试 1 开始：验证数值变量驱动 jumpLabel -when。
+setVar:varScore=2;
+jumpLabel:var_score_high -when=varScore>1;
+变量流程控制测试 1 异常路径：varScore>1 时不应看到这里。
+jumpLabel:var_score_end;
+label:var_score_high;
+变量流程控制测试 1 命中路径：varScore={varScore}，条件跳转生效。
+label:var_score_end;
+变量流程控制测试 1 结束：预期状态：varScore={varScore}，应为 2，并且只经过命中路径。
+
+变量流程控制测试 2 开始：验证 choose 的显示条件、启用条件和默认选择。
+setVar:varHasTicket=true;
+setVar:varDoorPower=1;
+choose:(varHasTicket==true)->进入可见路径:var_ticket_ok|[varDoorPower>1]->能量路径:var_power_path|(varScore<0)->隐藏路径:var_hidden -defaultChoose=1;
+label:var_ticket_ok;
+setVar:varChoice=ticket;
+变量流程控制测试 2 可见路径：快速预览默认选择这里。
+jumpLabel:var_choose_end;
+label:var_power_path;
+setVar:varChoice=power;
+变量流程控制测试 2 能量路径：只有 varDoorPower>1 时才能手动选择。
+jumpLabel:var_choose_end;
+label:var_hidden;
+setVar:varChoice=hidden;
+变量流程控制测试 2 隐藏路径：varScore<0 时才应显示。
+label:var_choose_end;
+变量流程控制测试 2 结束：预期状态：快速预览时 varChoice={varChoice}，应为 ticket；能量路径应显示但不可选，隐藏路径不应显示。
+
+变量流程控制测试 3 开始：验证快速预览下后续测试继承前面变量状态。
+setVar:varScore=varScore + 3;
+jumpLabel:var_inherited_ok -when=varScore>4;
+变量流程控制测试 3 异常路径：varScore 继承并加 3 后应大于 4。
+jumpLabel:var_inherited_end;
+label:var_inherited_ok;
+变量流程控制测试 3 命中路径：varScore={varScore}，varChoice={varChoice}。
+label:var_inherited_end;
+变量流程控制测试 3 结束：预期状态：varScore={varScore}，应为 5；varChoice={varChoice}，应保持 ticket。
+end;

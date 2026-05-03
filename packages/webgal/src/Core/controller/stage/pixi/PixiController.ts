@@ -1,6 +1,4 @@
-import { webgalStore } from '@/store/store';
-import { IEffect, IFigureAssociatedAnimation, IFigureMetadata, ITransform } from '@/store/stageInterface';
-import { setStage, stageActions } from '@/store/stageReducer';
+import { IEffect, IFigureAssociatedAnimation, IFigureMetadata, ITransform } from '@/Core/Modules/stage/stageInterface';
 import { Live2D, WebGAL } from '@/Core/WebGAL';
 import { baseBlinkParam, baseFocusParam, BlinkParam, FocusParam } from '@/Core/live2DCore';
 import { isIOS } from '@/Core/initializeScript';
@@ -15,6 +13,7 @@ import isUndefined from 'lodash/isUndefined';
 import * as PIXI from 'pixi.js';
 import { INSTALLED } from 'pixi.js';
 import { GifResource } from './GifResource';
+import { stageStateManager } from '@/Core/Modules/stage/stageStateManager';
 
 export interface IAnimationObject {
   setStartState: Function;
@@ -262,6 +261,7 @@ export default class PixiStage {
         const container = targetPixiContainer.pixiContainer;
         if (container) PixiStage.assignTransform(container, effect.transform);
       }
+      this.requestRender();
       return;
     }
     this.stageAnimations.push({ uuid: uuid(), animationObject, key: key, targetKey: target, type: 'preset' });
@@ -339,8 +339,8 @@ export default class PixiStage {
             target: thisTickerFunc.targetKey,
             transform: endStateEffect,
           };
-          webgalStore.dispatch(stageActions.updateEffect(effect));
-          // if (!this.notUpdateBacklogEffects) updateCurrentBacklogEffects(webgalStore.getState().stage.effects);
+          stageStateManager.updateEffect(effect);
+          // if (!this.notUpdateBacklogEffects) updateCurrentBacklogEffects(stageStateManager.getViewStageState().effects);
         }
       }
       this.stageAnimations.splice(index, 1);
@@ -716,7 +716,7 @@ export default class PixiStage {
         if (thisFigureContainer && this.getStageObjByUuid(figureUuid)) {
           (async function () {
             let overrideBounds: [number, number, number, number] = [0, 0, 0, 0];
-            const mot = webgalStore.getState().stage.live2dMotion.find((e) => e.target === key);
+            const mot = stageStateManager.getViewStageState().live2dMotion.find((e) => e.target === key);
             if (mot?.overrideBounds) {
               overrideBounds = mot.overrideBounds;
             }
@@ -767,7 +767,7 @@ export default class PixiStage {
 
               // motion
               let motionToSet = '';
-              const motionFromState = webgalStore.getState().stage.live2dMotion.find((e) => e.target === key);
+              const motionFromState = stageStateManager.getViewStageState().live2dMotion.find((e) => e.target === key);
               if (motionFromState) {
                 motionToSet = motionFromState.motion;
               }
@@ -776,7 +776,9 @@ export default class PixiStage {
 
               // expression
               let expressionToSet = '';
-              const expressionFromState = webgalStore.getState().stage.live2dExpression.find((e) => e.target === key);
+              const expressionFromState = stageStateManager
+                .getViewStageState()
+                .live2dExpression.find((e) => e.target === key);
               if (expressionFromState) {
                 expressionToSet = expressionFromState.expression;
               }
@@ -785,7 +787,7 @@ export default class PixiStage {
 
               // blink
               let blinkToSet: BlinkParam = baseBlinkParam;
-              const blinkFromState = webgalStore.getState().stage.live2dBlink.find((e) => e.target === key);
+              const blinkFromState = stageStateManager.getViewStageState().live2dBlink.find((e) => e.target === key);
               if (blinkFromState) {
                 blinkToSet = { ...blinkToSet, ...blinkFromState.blink };
               }
@@ -794,7 +796,7 @@ export default class PixiStage {
 
               // focus
               let focusToSet: FocusParam = baseFocusParam;
-              const focusFromState = webgalStore.getState().stage.live2dFocus.find((e) => e.target === key);
+              const focusFromState = stageStateManager.getViewStageState().live2dFocus.find((e) => e.target === key);
               if (focusFromState) {
                 focusToSet = { ...focusToSet, ...focusFromState.focus };
               }
@@ -1072,7 +1074,7 @@ export default class PixiStage {
     // /**
     //  * 删掉相关 Effects，因为已经移除了
     //  */
-    // const prevEffects = webgalStore.getState().stage.effects;
+    // const prevEffects = stageStateManager.getViewStageState().effects;
     // const newEffects = __.cloneDeep(prevEffects);
     // const index = newEffects.findIndex((e) => e.target === key);
     // if (index >= 0) {
@@ -1090,7 +1092,7 @@ export default class PixiStage {
   }
 
   public getFigureMetadataByKey(key: string): IFigureMetadata | undefined {
-    return webgalStore.getState().stage.figureMetaData[key];
+    return stageStateManager.getViewStageState().figureMetaData[key];
   }
 
   public loadAsset(url: string, callback: () => void, name?: string) {
@@ -1253,5 +1255,5 @@ function updateCurrentBacklogEffects(newEffects: IEffect[]) {
     WebGAL.backlogManager.editLastBacklogItemEffect(cloneDeep(newEffects));
   }, 50);
 
-  webgalStore.dispatch(setStage({ key: 'effects', value: newEffects }));
+  stageStateManager.setStageAndCommit('effects', newEffects);
 }

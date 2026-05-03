@@ -1,4 +1,4 @@
-import { ITransform } from '@/store/stageInterface';
+import { ITransform } from '@/Core/Modules/stage/stageInterface';
 
 export interface IUserAnimation {
   name: string;

@@ -1,9 +1,8 @@
 import { generateUniversalSoftInAnimationObj } from '@/Core/controller/stage/pixi/animations/universalSoftIn';
 import { logger } from '@/Core/util/logger';
 import { generateUniversalSoftOffAnimationObj } from '@/Core/controller/stage/pixi/animations/universalSoftOff';
-import { webgalStore } from '@/store/store';
 import cloneDeep from 'lodash/cloneDeep';
-import { baseTransform } from '@/store/stageInterface';
+import { baseTransform } from '@/Core/Modules/stage/stageInterface';
 import { generateTimelineObj } from '@/Core/controller/stage/pixi/animations/timeline';
 import { WebGAL } from '@/Core/WebGAL';
 import PixiStage, { IAnimationObject } from '@/Core/controller/stage/pixi/PixiController';
@@ -15,7 +14,8 @@ import {
   DEFAULT_FIG_IN_DURATION,
   DEFAULT_FIG_OUT_DURATION,
 } from '../constants';
-import { stageActions } from '@/store/stageReducer';
+import { stageStateManager } from '@/Core/Modules/stage/stageStateManager';
+import { AnimationFrame } from '@/Core/Modules/animations';
 
 // eslint-disable-next-line max-params
 export function getAnimationObject(
@@ -24,7 +24,34 @@ export function getAnimationObject(
   duration: number,
   writeDefault: boolean,
   writeFullEffect = true,
+  syncEndStateToStageState = true,
 ) {
+  const mappedEffects = getAnimationTimeline(animationName, target, writeDefault, writeFullEffect);
+  if (mappedEffects) {
+    return generateTimelineObj(mappedEffects, target, duration, syncEndStateToStageState);
+  }
+  return null;
+}
+
+export function applyAnimationEndState(
+  animationName: string,
+  target: string,
+  writeDefault: boolean,
+  writeFullEffect = true,
+) {
+  const mappedEffects = getAnimationTimeline(animationName, target, writeDefault, writeFullEffect);
+  if (!mappedEffects || mappedEffects.length === 0) return null;
+  const { duration, ease, ...endState } = mappedEffects[mappedEffects.length - 1];
+  stageStateManager.updateEffect({ target, transform: endState });
+  return mappedEffects;
+}
+
+export function getAnimationTimeline(
+  animationName: string,
+  target: string,
+  writeDefault: boolean,
+  writeFullEffect = true,
+): AnimationFrame[] | null {
   const effect = WebGAL.animationManager.getAnimations().find((ani) => ani.name === animationName);
   if (effect) {
     const unionKeys = new Set<string>();
@@ -38,7 +65,7 @@ export function getAnimationObject(
       });
     }
     const mappedEffects = effect.effects.map((effect) => {
-      const targetSetEffect = webgalStore.getState().stage.effects.find((e) => e.target === target);
+      const targetSetEffect = stageStateManager.getCalculationStageState().effects.find((e) => e.target === target);
       let newEffect;
 
       if (!writeDefault && targetSetEffect && targetSetEffect.transform) {
@@ -62,7 +89,7 @@ export function getAnimationObject(
       return newEffect;
     });
     logger.debug('装载自定义动画', mappedEffects);
-    return generateTimelineObj(mappedEffects, target, duration);
+    return mappedEffects;
   }
   return null;
 }
@@ -95,17 +122,18 @@ export function getEnterExitAnimation(
       duration = DEFAULT_BG_IN_DURATION;
     }
     duration =
-      webgalStore.getState().stage.animationSettings.find((setting) => setting.target === target)?.enterDuration ??
+      stageStateManager.getCalculationStageState().animationSettings.find((setting) => setting.target === target)
+        ?.enterDuration ??
       duration;
     // 走默认动画
     let animation: IAnimationObject | null = generateUniversalSoftInAnimationObj(realTarget ?? target, duration);
 
-    const transformState = webgalStore.getState().stage.effects;
+    const transformState = stageStateManager.getCalculationStageState().effects;
     const targetEffect = transformState.find((effect) => effect.target === target);
 
-    const animationName = webgalStore
-      .getState()
-      .stage.animationSettings.find((setting) => setting.target === target)?.enterAnimationName;
+    const animationName = stageStateManager
+      .getCalculationStageState()
+      .animationSettings.find((setting) => setting.target === target)?.enterAnimationName;
     if (animationName && !targetEffect) {
       logger.debug('取代默认进入动画', target);
       animation = getAnimationObject(animationName, realTarget ?? target, getAnimateDuration(animationName), false);
@@ -118,9 +146,9 @@ export function getEnterExitAnimation(
     if (isBg) {
       duration = DEFAULT_BG_OUT_DURATION;
     }
-    const animationSettings = webgalStore
-      .getState()
-      .stage.animationSettings.find((setting) => setting.target === target);
+    const animationSettings = stageStateManager
+      .getCalculationStageState()
+      .animationSettings.find((setting) => setting.target === target);
     duration = animationSettings?.exitDuration ?? duration;
     // 走默认动画
     let animation: IAnimationObject | null = generateUniversalSoftOffAnimationObj(realTarget ?? target, duration);
@@ -132,7 +160,7 @@ export function getEnterExitAnimation(
     }
     if (animationSettings) {
       // 退出动画拿完后，删了这个设定
-      webgalStore.dispatch(stageActions.removeAnimationSettingsByTargetOff(target));
+      stageStateManager.removeAnimationSettingsByTargetOff(target);
       logger.debug('删除退出动画设定', target);
     }
     return { duration, animation };

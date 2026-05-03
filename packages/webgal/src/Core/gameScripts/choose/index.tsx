@@ -1,12 +1,11 @@
 import { ISentence } from '@/Core/controller/scene/sceneInterface';
-import { IPerform } from '@/Core/Modules/perform/performInterface';
+import { createNonePerform, IPerform } from '@/Core/Modules/perform/performInterface';
 import { changeScene } from '@/Core/controller/scene/changeScene';
 import { jmp } from '@/Core/gameScripts/label/jmp';
 import ReactDOM from 'react-dom';
 import React from 'react';
 import styles from './choose.module.scss';
 import { webgalStore } from '@/store/store';
-import { PerformController } from '@/Core/Modules/perform/performController';
 import { useSEByWebgalStore } from '@/hooks/useSoundEffect';
 import { WebGAL } from '@/Core/WebGAL';
 import { whenChecker } from '@/Core/controller/gamePlay/scriptExecutor';
@@ -60,36 +59,43 @@ export const choose = (sentence: ISentence): IPerform => {
   const chooseOptionScripts = sentence.content.split(/(?<!\\)\|/);
   const chooseOptions = chooseOptionScripts.map((e) => ChooseOption.parse(e.trim()));
   const defaultChoose = getNumberArgByKey(sentence, 'defaultChoose');
-  const previewChoice = getDefaultPreviewChoice(chooseOptions, defaultChoose);
+  const defaultPreviewChoice = getDefaultPreviewChoice(chooseOptions, defaultChoose);
 
-  // eslint-disable-next-line react/no-deprecated
-  ReactDOM.render(
-    <Provider store={webgalStore}>
-      <Choose chooseOptions={chooseOptions} />
-    </Provider>,
-    document.getElementById('chooseContainer'),
-  );
-  if (previewChoice) {
-    setTimeout(() => {
-      selectChooseOption(previewChoice);
-      WebGAL.gameplay.performController.unmountPerform('choose');
-    }, 0);
+  if (defaultPreviewChoice) {
+    selectChooseOption(defaultPreviewChoice, false);
+    if (!defaultPreviewChoice.jumpToScene) {
+      // The default preview choice is resolved during script calculation.
+      // Let scriptExecutor continue from the target label in this same forward.
+      sentence.args.push({ key: 'next', value: true });
+    }
+    return createNonePerform({ blockingAuto: false });
   }
+
   return {
     performName: 'choose',
     duration: 1000 * 60 * 60 * 24,
     isHoldOn: false,
+    startFunction: () => {
+      // eslint-disable-next-line react/no-deprecated
+      ReactDOM.render(
+        <Provider store={webgalStore}>
+          <Choose chooseOptions={chooseOptions} />
+        </Provider>,
+        document.getElementById('chooseContainer'),
+      );
+    },
     stopFunction: () => {
       // eslint-disable-next-line react/no-deprecated
       ReactDOM.render(<div />, document.getElementById('chooseContainer'));
     },
     blockingNext: () => true,
     blockingAuto: () => true,
-    stopTimeout: undefined, // 暂时不用，后面会交给自动清除
+    blockingStateCalculation: () => true,
   };
 };
 
 function getDefaultPreviewChoice(chooseOptions: ChooseOption[], defaultChoose: number | null): ChooseOption | null {
+  // Only realtime preview may consume defaultChoose automatically; ordinary fast-forward must still wait.
   if (!WebGAL.gameplay.isFastPreview || defaultChoose === null) {
     return null;
   }
@@ -98,14 +104,17 @@ function getDefaultPreviewChoice(chooseOptions: ChooseOption[], defaultChoose: n
     return null;
   }
   const defaultOption = chooseOptions[chooseIndex];
-  return defaultOption ?? null;
+  if (!defaultOption || !whenChecker(defaultOption.showCondition) || !whenChecker(defaultOption.enableCondition)) {
+    return null;
+  }
+  return defaultOption;
 }
 
-function selectChooseOption(option: ChooseOption) {
+function selectChooseOption(option: ChooseOption, autoNext = true) {
   if (option.jumpToScene) {
     changeScene(option.jump, option.text);
   } else {
-    jmp(option.jump);
+    jmp(option.jump, autoNext);
   }
 }
 
@@ -125,8 +134,8 @@ function Choose(props: { chooseOptions: ChooseOption[] }) {
         const onClick = enable
           ? () => {
               playSeClick();
-              selectChooseOption(e);
               WebGAL.gameplay.performController.unmountPerform('choose');
+              selectChooseOption(e);
             }
           : () => {};
         return (

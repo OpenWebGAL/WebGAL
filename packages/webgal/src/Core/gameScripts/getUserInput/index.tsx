@@ -1,21 +1,19 @@
 import { ISentence } from '@/Core/controller/scene/sceneInterface';
-import { IPerform } from '@/Core/Modules/perform/performInterface';
+import { createNonePerform, IPerform } from '@/Core/Modules/perform/performInterface';
 import { changeScene } from '@/Core/controller/scene/changeScene';
 import { jmp } from '@/Core/gameScripts/label/jmp';
 import ReactDOM from 'react-dom';
 import React from 'react';
 import styles from './getUserInput.module.scss';
-import { webgalStore } from '@/store/store';
-import { PerformController } from '@/Core/Modules/perform/performController';
 import { useSEByWebgalStore } from '@/hooks/useSoundEffect';
 import { WebGAL } from '@/Core/WebGAL';
 import { getStringArgByKey } from '@/Core/util/getSentenceArg';
 import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
-import { setStageVar } from '@/store/stageReducer';
 import { getCurrentFontFamily } from '@/hooks/useFontFamily';
 import { logger } from '@/Core/util/logger';
 import { tryToRegex } from '@/Core/util/global';
 import { showGlogalDialog } from '@/UI/GlobalDialog/GlobalDialog';
+import { stageStateManager } from '@/Core/Modules/stage/stageStateManager';
 
 /**
  * 显示选择枝
@@ -34,6 +32,15 @@ export const getUserInput = (sentence: ISentence): IPerform => {
   const ruleText = getStringArgByKey(sentence, 'ruleText');
   const ruleButtonText = getStringArgByKey(sentence, 'ruleButtonText') ?? 'OK';
 
+  // Only realtime preview may synthesize input; ordinary fast-forward must still wait for the user.
+  if (WebGAL.gameplay.isFastPreview) {
+    stageStateManager.setStageVar({
+      key: varKey,
+      value: defaultValue ?? '',
+    });
+    return createNonePerform({ blockingAuto: false });
+  }
+
   const font = getCurrentFontFamily();
 
   const { playSeEnter, playSeClick } = useSEByWebgalStore();
@@ -41,7 +48,7 @@ export const getUserInput = (sentence: ISentence): IPerform => {
     <div style={{ fontFamily: font }} className={styles.glabalDialog_container}>
       <div className={styles.glabalDialog_container_inner}>
         <div className={styles.title}>{title}</div>
-        <input id="user-input" className={styles.Choose_item} />
+        <input id="user-input" className={styles.Choose_item} defaultValue={defaultValue ?? ''} />
         <div
           onMouseEnter={playSeEnter}
           onClick={() => {
@@ -61,12 +68,10 @@ export const getUserInput = (sentence: ISentence): IPerform => {
               }
             }
             if (userInput) {
-              webgalStore.dispatch(
-                setStageVar({
-                  key: varKey,
-                  value: userInput?.value || defaultValue || ' ',
-                }),
-              );
+              stageStateManager.setStageVarAndCommit({
+                key: varKey,
+                value: userInput?.value || defaultValue || ' ',
+              });
             }
             playSeClick();
             WebGAL.gameplay.performController.unmountPerform('userInput');
@@ -79,21 +84,23 @@ export const getUserInput = (sentence: ISentence): IPerform => {
       </div>
     </div>
   );
-  // eslint-disable-next-line react/no-deprecated
-  ReactDOM.render(
-    <div className={styles.Choose_Main}>{chooseElements}</div>,
-    document.getElementById('chooseContainer'),
-  );
   return {
     performName: 'userInput',
     duration: 1000 * 60 * 60 * 24,
     isHoldOn: false,
+    startFunction: () => {
+      // eslint-disable-next-line react/no-deprecated
+      ReactDOM.render(
+        <div className={styles.Choose_Main}>{chooseElements}</div>,
+        document.getElementById('chooseContainer'),
+      );
+    },
     stopFunction: () => {
       // eslint-disable-next-line react/no-deprecated
       ReactDOM.render(<div />, document.getElementById('chooseContainer'));
     },
     blockingNext: () => true,
     blockingAuto: () => true,
-    stopTimeout: undefined, // 暂时不用，后面会交给自动清除
+    blockingStateCalculation: () => true,
   };
 };
