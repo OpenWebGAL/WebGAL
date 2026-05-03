@@ -62,26 +62,6 @@ const prefetchByLinkElement = (asset: IAsset) => {
   }
 };
 
-const prefetchByServiceWorkerMessage = (assetUrl: string): boolean => {
-  if (typeof navigator === 'undefined' || !('serviceWorker' in navigator)) {
-    return false;
-  }
-  const controller = navigator.serviceWorker.controller;
-  if (!controller) {
-    return false;
-  }
-  try {
-    controller.postMessage({
-      type: 'WEBGAL_PREFETCH_ASSET',
-      url: assetUrl,
-    });
-    return true;
-  } catch (e) {
-    logger.warn('通过 Service Worker 发送预加载消息失败，将回退 link prefetch：', e);
-    return false;
-  }
-};
-
 const runAssetsPrefetchQueue = () => {
   if (isAssetPrefetchQueueRunning || assetPrefetchQueue.length === 0) {
     return;
@@ -90,10 +70,7 @@ const runAssetsPrefetchQueue = () => {
   const nextAsset = assetPrefetchQueue.shift() as IAsset;
   setTimeout(() => {
     try {
-      const useServiceWorker = prefetchByServiceWorkerMessage(nextAsset.url);
-      if (!useServiceWorker) {
-        prefetchByLinkElement(nextAsset);
-      }
+      prefetchByLinkElement(nextAsset);
     } catch (e) {
       logger.warn(`预加载资源失败，将允许重试：${nextAsset.url}`, e);
       WebGAL.sceneManager.settledAssets.delete(nextAsset.url);
