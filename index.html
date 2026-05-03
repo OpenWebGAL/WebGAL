@@ -136,8 +136,8 @@
       }
 
     </style>
-    <script type="module" crossorigin src="./assets/index-MdzLVmuf.js"></script>
-    <link rel="stylesheet" crossorigin href="./assets/index-CkOq6uhz.css">
+    <script type="module" crossorigin src="./assets/index-C-qIUAWt.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-KtfF1_Zy.css">
   </head>
   <body>
     <!-- 背景模糊 -->
@@ -322,16 +322,68 @@
     <script>
       (() => {
         const isIOS = window.__WEBGAL_DEVICE_INFO__?.isIOS ?? false;
-        if ('serviceWorker' in navigator && !isIOS) {
-          navigator.serviceWorker
-            .register('./webgal-serviceworker.js')
-            .then((reg) => {
-              console.log('Registration succeeded. Scope is ' + reg.scope);
-            })
-            .catch((error) => {
-              console.log('Registration failed with ' + error);
-            });
+        const localHostnames = ['localhost', '127.0.0.1', '::1'];
+        const isLocalPreview = localHostnames.includes(window.location.hostname) || window.location.protocol === 'file:';
+        const isElectron = Boolean(window.electronFuncs) || /Electron/i.test(navigator.userAgent || '');
+        const shouldBypassServiceWorker = isIOS || isLocalPreview || isElectron;
+        const webgalServiceWorkerUrl = new URL('./webgal-serviceworker.js', window.location.href).href;
+        const bypassReloadKey = 'webgal-sw-bypass-reloaded';
+        const isWebGALRegistration = (registration) => {
+          const workers = [registration.active, registration.installing, registration.waiting];
+          return workers.some((worker) => worker?.scriptURL === webgalServiceWorkerUrl);
+        };
+        const markBypassReload = () => {
+          try {
+            if (sessionStorage.getItem(bypassReloadKey) === 'true') {
+              return false;
+            }
+            sessionStorage.setItem(bypassReloadKey, 'true');
+            return true;
+          } catch {
+            return false;
+          }
+        };
+        const clearBypassReloadMark = () => {
+          try {
+            sessionStorage.removeItem(bypassReloadKey);
+          } catch {}
+        };
+        const clearWebGALServiceWorker = async () => {
+          try {
+            const registrations = await navigator.serviceWorker.getRegistrations();
+            const webgalRegistrations = registrations.filter(isWebGALRegistration);
+            const hasWebGALController = navigator.serviceWorker.controller?.scriptURL === webgalServiceWorkerUrl;
+            await Promise.all(webgalRegistrations.map((registration) => registration.unregister()));
+            if ('caches' in window) {
+              const cacheKeys = await caches.keys();
+              await Promise.all(cacheKeys.filter((key) => key.startsWith('webgal-')).map((key) => caches.delete(key)));
+            }
+            if ((webgalRegistrations.length > 0 || hasWebGALController) && navigator.serviceWorker.controller && markBypassReload()) {
+              window.location.reload();
+            }
+          } catch (error) {
+            console.warn('Failed to clear WebGAL Service Worker cache', error);
+          }
+        };
+        if (!('serviceWorker' in navigator)) {
+          return;
         }
+        if (shouldBypassServiceWorker) {
+          clearWebGALServiceWorker();
+          return;
+        }
+        if (!window.isSecureContext) {
+          return;
+        }
+        clearBypassReloadMark();
+        navigator.serviceWorker
+          .register('./webgal-serviceworker.js')
+          .then((reg) => {
+            console.log('Registration succeeded. Scope is ' + reg.scope);
+          })
+          .catch((error) => {
+            console.log('Registration failed with ' + error);
+          });
       })();
     </script>
     <!-- 首屏加载 -->
