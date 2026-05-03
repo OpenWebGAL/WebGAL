@@ -8,41 +8,31 @@
 
 #### 新功能
 
--when 指令支持字符串条件判断，变量表达式中的空白会自动裁剪
+getUserInput 支持正则校验参数 rule / ruleFlag / ruleText / ruleButtonText，可在输入不匹配时弹窗提示，ruleText 中可用 $0 引用用户输入值
 
-解析器新增行内注释保留能力，语句可读取 inlineComment 字段
+changeFigure 支持 skin 参数，可切换 Spine 模型皮肤
 
-changeFigure 支持 blendMode 参数，可设置 normal / add / multiply / screen 混合模式
+setTransform 新增 oldFilm / dotFilm / reflectionFilm / glitchFilm / rgbFilm / godrayFilm 滤镜属性
 
-黑边填充背景切换支持淡入淡出过渡
+添加引擎描述文件 webgal-engine.json 及版本自动同步机制
 
-模板样式文件（标题、文本框、选项）会在启动时预加载并支持热更新
+标题按钮文字支持多层渲染（outer / inner），方便模板自定义描边与阴影效果
 
-文本框行高支持通过全局变量 Line_height 调整
-
-鉴赏模式中解锁的 CG / BGM 会立即写入本地存储，减少异常退出导致的解锁丢失
+内置默认字体更换为「资源圆体」(Resource Han Rounded)
 
 #### 修复
 
-修复语音播放时音量倍率在切换语音后可能不正确的问题
+修复 removeAnimationByTargetKey 无法移除同一目标上多个动画的问题
 
-修复切换语音资源时口型分析节点未重建导致口型动画异常的问题
+修复 setEffect 前未先移除旧动画导致效果叠加异常的问题
 
-修复 changeBg / changeFigure 的退出动画与时长设置在部分场景不生效或残留的问题
+修复自动播放与快进按钮状态在部分操作后与实际状态不同步的问题
 
-修复 keep 动画停止与 timeline 单关键帧时的异常行为
+修复 Safari / iOS 下视口大小与缩放异常的问题
 
-修复透明度滤镜场景下默认进退场动画与 alpha 恢复不一致的问题
+重构 Service Worker，采用 cache-first 策略缓存游戏关键资源，修复旧缓存逻辑缺陷
 
-修复 setTransform 在透明度转换场景下误修改源 transform，导致后续变换异常的问题
-
-修复 Live2D blink / focus 在部分参数更新时被错误覆盖的问题
-
-修复解析器在行末注释与转义分号场景下的语句解析问题
-
-修复鉴赏模式数据更新与持久化问题，并在清除全部数据时保留 config 初始全局变量
-
-修复鉴赏界面 CG 导航溢出及 Logo 淡出期间背景闪烁问题
+修复标题界面样式与布局问题
 
 <!-- English Translation -->
 ## Release Notes
@@ -55,41 +45,31 @@ changeFigure 支持 blendMode 参数，可设置 normal / add / multiply / scree
 
 #### New Features
 
-The -when command now supports string condition checks, and whitespace in expressions is trimmed automatically
+getUserInput now supports regex validation via rule / ruleFlag / ruleText / ruleButtonText arguments, showing a dialog when input does not match; ruleText supports $0 to reference the user's input value
 
-The parser now preserves inline comments, exposed via the inlineComment field on sentences
+changeFigure now supports a skin argument for switching Spine model skins
 
-changeFigure now supports a blendMode argument with normal / add / multiply / screen modes
+setTransform adds new filter properties: oldFilm / dotFilm / reflectionFilm / glitchFilm / rgbFilm / godrayFilm
 
-Black-border fill background switching now supports fade transitions
+Added engine description file webgal-engine.json and automatic version synchronization mechanism
 
-Template style files (title, textbox, choose) are preloaded on startup and support hot style refresh
+Title button text now supports layered rendering (outer / inner) for easier template customization of strokes and shadows
 
-Textbox line height can now be controlled through the global variable Line_height
-
-Unlocked CG / BGM entries in appreciation mode are now persisted immediately to local storage to reduce data loss on unexpected exit
+Default built-in font changed to Resource Han Rounded (资源圆体)
 
 #### Fixes
 
-Fixed incorrect vocal volume scaling after switching voice playback
+Fixed removeAnimationByTargetKey not removing all animations sharing the same target key
 
-Fixed lip-sync analyzer nodes not being reconnected when switching vocal media sources
+Fixed old animations not being removed before setEffect, causing effects to stack incorrectly
 
-Fixed cases where changeBg / changeFigure exit animations and durations did not apply correctly or were left behind
+Fixed auto-play and fast-forward button states becoming out of sync with actual state after certain operations
 
-Fixed abnormal behavior when stopping keep animations and when timeline animations had only a single keyframe
+Fixed viewport sizing and scaling issues on Safari / iOS
 
-Fixed inconsistencies in default enter/exit fades and alpha restoration under alpha-filter-based rendering
+Refactored Service Worker with a cache-first strategy for critical game assets, fixing legacy caching logic issues
 
-Fixed source transform data being mutated during alpha conversion in setTransform paths, which caused later transforms to behave incorrectly
-
-Fixed Live2D blink / focus updates incorrectly overwriting partial parameter updates
-
-Fixed parser issues with end-of-line comments and escaped semicolon scenarios
-
-Fixed appreciation data update/persistence issues, and now preserves initial config globals when clearing all data
-
-Fixed CG navigation overflow in Extra UI and logo fade background flicker
+Fixed title screen style and layout issues
 
 <!-- Japanese Translation -->
 ## リリースノート
@@ -102,38 +82,28 @@ Fixed CG navigation overflow in Extra UI and logo fade background flicker
 
 #### 新機能
 
--when コマンドで文字列条件の判定に対応し、式中の空白を自動でトリミングするようになりました
+getUserInput で正規表現バリデーション引数 rule / ruleFlag / ruleText / ruleButtonText をサポートし、入力が一致しない場合にダイアログを表示できるようになりました。ruleText 内で $0 を使用してユーザー入力値を参照できます
 
-パーサーが行内コメントを保持するようになり、文オブジェクトの inlineComment から参照できます
+changeFigure で skin 引数をサポートし、Spine モデルのスキンを切り替えられるようになりました
 
-changeFigure で blendMode 引数をサポートし、normal / add / multiply / screen を指定できます
+setTransform に oldFilm / dotFilm / reflectionFilm / glitchFilm / rgbFilm / godrayFilm フィルター属性を追加しました
 
-黒縁塗りつぶし背景の切り替えにフェード遷移を追加しました
+エンジン記述ファイル webgal-engine.json およびバージョン自動同期メカニズムを追加しました
 
-テンプレートのスタイルファイル（タイトル・テキストボックス・選択肢）を起動時にプリロードし、スタイル更新にも追従します
+タイトルボタンのテキストが多層レンダリング（outer / inner）に対応し、テンプレートでのストロークやシャドウのカスタマイズが容易になりました
 
-テキストボックスの行間をグローバル変数 Line_height で調整できるようになりました
-
-鑑賞モードで解放した CG / BGM を即時にローカル保存するようにし、異常終了時の取りこぼしを減らしました
+デフォルト内蔵フォントを「資源圓體」(Resource Han Rounded) に変更しました
 
 #### 修正
 
-ボイス切り替え後に音量倍率が正しく反映されない問題を修正しました
+removeAnimationByTargetKey が同一ターゲット上の複数アニメーションを削除できない問題を修正しました
 
-ボイス音源の切り替え時に口パク解析ノードが再接続されず、口パクが乱れる問題を修正しました
+setEffect の前に旧アニメーションが削除されず、エフェクトが不正に重複する問題を修正しました
 
-changeBg / changeFigure の退場アニメーションと時間設定が一部で効かない、または残留する問題を修正しました
+一部操作後に自動再生・早送りボタンの状態が実際の状態と同期しなくなる問題を修正しました
 
-keep アニメーション停止時と timeline が単一キーフレームの場合の異常動作を修正しました
+Safari / iOS でのビューポートサイズとスケーリングの異常を修正しました
 
-アルファフィルター適用時にデフォルト入退場フェードと透明度復元が一致しない問題を修正しました
+Service Worker をリファクタリングし、ゲームの重要なアセットに cache-first 戦略を採用、レガシーキャッシュロジックの不具合を修正しました
 
-setTransform の透明度変換処理で元の transform が不正に書き換わり、後続の変換が崩れる問題を修正しました
-
-Live2D の blink / focus で一部パラメータ更新時に設定が不正に上書きされる問題を修正しました
-
-行末コメントやエスケープされたセミコロンを含む場合のパーサー解析不具合を修正しました
-
-鑑賞モードのデータ更新・永続化の不具合を修正し、全データ削除時に config 初期グローバル変数を保持するようにしました
-
-Extra 画面の CG ナビゲーションのはみ出しと、ロゴフェード時の背景ちらつきを修正しました
+タイトル画面のスタイルとレイアウトの問題を修正しました

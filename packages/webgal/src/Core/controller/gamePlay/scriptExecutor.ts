@@ -13,6 +13,7 @@ import { IBacklogItem } from '@/Core/Modules/backlog';
 import { SYSTEM_CONFIG } from '@/config';
 import { WebGAL } from '@/Core/WebGAL';
 import { getBooleanArgByKey, getStringArgByKey } from '@/Core/util/getSentenceArg';
+import { prefetchCurrentSceneByProgress } from '@/Core/util/prefetcher/progressPrefetcher';
 
 export const whenChecker = (whenValue: string | undefined): boolean => {
   if (whenValue === undefined) {
@@ -39,6 +40,7 @@ export const whenChecker = (whenValue: string | undefined): boolean => {
  * 执行语句，同步场景状态，并根据情况立即执行下一句或者加入backlog
  */
 export const scriptExecutor = () => {
+  prefetchCurrentSceneByProgress();
   // 超过总语句数量，则从场景栈拿出一个需要继续的场景，然后继续流程。若场景栈清空，则停止流程
   if (
     WebGAL.sceneManager.sceneData.currentSentenceId >
@@ -100,6 +102,7 @@ export const scriptExecutor = () => {
     nextSentence();
     return;
   }
+  WebGAL.readHistoryManager.checkIsRead();
   runScript(currentScript);
   // 是否要进行下一句
   let isNext = getBooleanArgByKey(currentScript, 'next') ?? false;
