@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '@/store/store';
+import { RootState, webgalStore } from '@/store/store';
 import React from 'react';
 import styles from '@/UI/Extra/extra.module.scss';
 import { useValue } from '@/hooks/useValue';
@@ -7,6 +7,7 @@ import { setStage } from '@/store/stageReducer';
 import { GoEnd, GoStart, MusicList, PlayOne, SquareSmall } from '@icon-park/react';
 import useSoundEffect from '@/hooks/useSoundEffect';
 import { setGuiAsset } from '@/store/GUIReducer';
+import bgmManager from '@/Core/Modules/audio/bgmManager';
 
 export function ExtraBgm() {
   const { playSeClick, playSeEnter } = useSoundEffect();
@@ -88,8 +89,7 @@ export function ExtraBgm() {
         <div
           onClick={() => {
             playSeClick();
-            const bgmControl: HTMLAudioElement = document.getElementById('currentBgm') as HTMLAudioElement;
-            bgmControl?.play().then();
+            bgmManager.play({ src: currentBgmSrc, volume: 100, enter: 500, exit: 500 });
           }}
           onMouseEnter={playSeEnter}
           className={styles.bgmControlButton}
@@ -113,8 +113,7 @@ export function ExtraBgm() {
         <div
           onClick={() => {
             playSeClick();
-            const bgmControl: HTMLAudioElement = document.getElementById('currentBgm') as HTMLAudioElement;
-            bgmControl.pause();
+            bgmManager.stop(500);
           }}
           onMouseEnter={playSeEnter}
           className={styles.bgmControlButton}
