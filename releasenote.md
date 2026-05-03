@@ -1,6 +1,6 @@
 ## 发布日志
 
-**本仓库只发布源代码**
+**本仓库发布源代码，并在 Release 中附带 WebGAL 引擎网页版压缩包**
 
 **如果你想要体验使用便捷的图形化编辑器创建、制作并实时预览 WebGAL 游戏，请 [下载 WebGAL 图形化编辑器](https://github.com/OpenWebGAL/WebGAL_Terre/releases)**
 
@@ -8,36 +8,36 @@
 
 #### 新功能
 
-getUserInput 支持正则校验参数 rule / ruleFlag / ruleText / ruleButtonText，可在输入不匹配时弹窗提示，ruleText 中可用 $0 引用用户输入值
+setAnimation / setTempAnimation / setTransform 支持 parallel 参数，可在同一目标上并行动画
 
-changeFigure 支持 skin 参数，可切换 Spine 模型皮肤
+wait 支持 nobreak 参数，可阻止等待被点击或自动播放跳过
 
-setTransform 新增 oldFilm / dotFilm / reflectionFilm / glitchFilm / rgbFilm / godrayFilm 滤镜属性
+新增已读历史记录与快进模式设置，支持按已读快进或全文快进，已读文本默认以浅灰色显示
 
-添加引擎描述文件 webgal-engine.json 及版本自动同步机制
+快速预览中的 choose 支持 defaultChoose 参数，可自动选择指定选项
 
-标题按钮文字支持多层渲染（outer / inner），方便模板自定义描边与阴影效果
+资源预加载改为随剧情进度按窗口预取，支持资源与场景去重、队列限速，减少一次性资源请求
 
-内置默认字体更换为「资源圆体」(Resource Han Rounded)
+Pixi 舞台支持按需渲染，仅在动画或动态资源存在时运行 ticker，降低空闲资源消耗
+
+背景与立绘资源识别支持带 query / hash 的扩展名，并可正确识别 gif 资源
 
 #### 修复
 
-修复 removeAnimationByTargetKey 无法移除同一目标上多个动画的问题
+修复 setTransform 连续作用同一目标时动画被错误中断或覆盖的问题
 
-修复 setEffect 前未先移除旧动画导致效果叠加异常的问题
+修复语音播放时 AudioContext 被浏览器挂起导致口型分析或语音演出异常的问题
 
-修复自动播放与快进按钮状态在部分操作后与实际状态不同步的问题
+修复背景清空时仍拼接空 url、可能产生无效资源请求，以及 EBG 淡出异常的问题
 
-修复 Safari / iOS 下视口大小与缩放异常的问题
+修复 Service Worker 在本地预览、Electron、iOS 环境中可能产生缓存干扰的问题，并改为只缓存带 hash 的构建资源
 
-重构 Service Worker，采用 cache-first 策略缓存游戏关键资源，修复旧缓存逻辑缺陷
-
-修复标题界面样式与布局问题
+修复旧版用户数据字段缺失时被整体重置的问题，改为补齐默认字段并兼容旧存档
 
 <!-- English Translation -->
 ## Release Notes
 
-**Only source code is released in this repository**
+**This repository releases source code and includes a WebGAL engine web package in each Release**
 
 **If you want to experience creating, making, and real-time previewing WebGAL games using a user-friendly graphical editor, please [download the WebGAL graphical editor](https://github.com/OpenWebGAL/WebGAL_Terre/releases)**
 
@@ -45,36 +45,36 @@ setTransform 新增 oldFilm / dotFilm / reflectionFilm / glitchFilm / rgbFilm / 
 
 #### New Features
 
-getUserInput now supports regex validation via rule / ruleFlag / ruleText / ruleButtonText arguments, showing a dialog when input does not match; ruleText supports $0 to reference the user's input value
+setAnimation / setTempAnimation / setTransform now support the parallel argument, allowing animations to run in parallel on the same target
 
-changeFigure now supports a skin argument for switching Spine model skins
+wait now supports the nobreak argument to prevent waits from being skipped by clicks or auto-play
 
-setTransform adds new filter properties: oldFilm / dotFilm / reflectionFilm / glitchFilm / rgbFilm / godrayFilm
+Added read history and skip mode settings, supporting read-text skip or full skip; read text is now shown in light gray by default
 
-Added engine description file webgal-engine.json and automatic version synchronization mechanism
+choose in fast preview now supports the defaultChoose argument for automatically selecting a specified option
 
-Title button text now supports layered rendering (outer / inner) for easier template customization of strokes and shadows
+Resource prefetching now follows story progress with a lookahead window, deduplicated asset and scene queues, and throttled requests
 
-Default built-in font changed to Resource Han Rounded (资源圆体)
+The Pixi stage now supports on-demand rendering, running the ticker only while animations or dynamic resources exist to reduce idle resource usage
+
+Background and figure source detection now supports extensions with query / hash suffixes and correctly identifies gif resources
 
 #### Fixes
 
-Fixed removeAnimationByTargetKey not removing all animations sharing the same target key
+Fixed setTransform animations being incorrectly interrupted or overwritten when applied continuously to the same target
 
-Fixed old animations not being removed before setEffect, causing effects to stack incorrectly
+Fixed lip-sync analysis or vocal performs failing when the browser suspends AudioContext before playback
 
-Fixed auto-play and fast-forward button states becoming out of sync with actual state after certain operations
+Fixed empty background changes still producing empty url references, unnecessary resource requests, and abnormal EBG fade-out behavior
 
-Fixed viewport sizing and scaling issues on Safari / iOS
+Fixed Service Worker cache interference in local preview, Electron, and iOS environments; only hashed build assets are now cached
 
-Refactored Service Worker with a cache-first strategy for critical game assets, fixing legacy caching logic issues
-
-Fixed title screen style and layout issues
+Fixed old user data being fully reset when fields are missing; missing default fields are now migrated into existing saves
 
 <!-- Japanese Translation -->
 ## リリースノート
 
-**このリポジトリはソースコードのみを公開しています**
+**このリポジトリではソースコードを公開し、Release には WebGAL エンジンの Web 版パッケージも同梱しています**
 
 **もしあなたが使いやすいグラフィカルエディタでWebGALゲームを作成、制作、リアルタイムプレビューしたい場合は、[WebGALグラフィカルエディタをダウンロードしてください](https://github.com/OpenWebGAL/WebGAL_Terre/releases)**
 
@@ -82,28 +82,28 @@ Fixed title screen style and layout issues
 
 #### 新機能
 
-getUserInput で正規表現バリデーション引数 rule / ruleFlag / ruleText / ruleButtonText をサポートし、入力が一致しない場合にダイアログを表示できるようになりました。ruleText 内で $0 を使用してユーザー入力値を参照できます
+setAnimation / setTempAnimation / setTransform が parallel 引数に対応し、同じターゲット上で複数のアニメーションを並列実行できるようになりました
 
-changeFigure で skin 引数をサポートし、Spine モデルのスキンを切り替えられるようになりました
+wait が nobreak 引数に対応し、待機がクリックや自動再生でスキップされるのを防げるようになりました
 
-setTransform に oldFilm / dotFilm / reflectionFilm / glitchFilm / rgbFilm / godrayFilm フィルター属性を追加しました
+既読履歴とスキップモード設定を追加し、既読のみスキップ / 全文スキップを選択できるようになりました。既読テキストは既定で薄いグレー表示になります
 
-エンジン記述ファイル webgal-engine.json およびバージョン自動同期メカニズムを追加しました
+高速プレビュー中の choose が defaultChoose 引数に対応し、指定した選択肢を自動選択できるようになりました
 
-タイトルボタンのテキストが多層レンダリング（outer / inner）に対応し、テンプレートでのストロークやシャドウのカスタマイズが容易になりました
+リソースのプリフェッチを進行状況に応じた先読み方式に変更し、アセットとシーンの重複排除、キュー制御、リクエスト間隔の制御に対応しました
 
-デフォルト内蔵フォントを「資源圓體」(Resource Han Rounded) に変更しました
+Pixi ステージがオンデマンドレンダリングに対応し、アニメーションや動的リソースが存在する場合のみ ticker を実行してアイドル時の負荷を削減します
+
+背景と立ち絵のリソース判定が query / hash 付き拡張子に対応し、gif リソースも正しく識別できるようになりました
 
 #### 修正
 
-removeAnimationByTargetKey が同一ターゲット上の複数アニメーションを削除できない問題を修正しました
+setTransform を同じターゲットに連続適用した際、アニメーションが誤って中断または上書きされる問題を修正しました
 
-setEffect の前に旧アニメーションが削除されず、エフェクトが不正に重複する問題を修正しました
+ブラウザによって AudioContext が停止され、口パク解析やボイス演出が異常になる問題を修正しました
 
-一部操作後に自動再生・早送りボタンの状態が実際の状態と同期しなくなる問題を修正しました
+背景を空にした際に空の url が生成される、不要なリソースリクエストが発生する、または EBG のフェードアウトが不自然になる問題を修正しました
 
-Safari / iOS でのビューポートサイズとスケーリングの異常を修正しました
+ローカルプレビュー、Electron、iOS 環境で Service Worker のキャッシュが干渉する問題を修正し、ハッシュ付きビルドアセットのみをキャッシュするようにしました
 
-Service Worker をリファクタリングし、ゲームの重要なアセットに cache-first 戦略を採用、レガシーキャッシュロジックの不具合を修正しました
-
-タイトル画面のスタイルとレイアウトの問題を修正しました
+旧バージョンのユーザーデータでフィールドが不足している場合に全体がリセットされる問題を修正し、既存セーブに既定フィールドを補完するようにしました

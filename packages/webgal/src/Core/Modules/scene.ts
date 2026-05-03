@@ -24,8 +24,8 @@ export const initSceneData = {
 };
 
 export class SceneManager {
-  public settledScenes: Array<string> = [];
-  public settledAssets: Array<string> = [];
+  public settledScenes: Set<string> = new Set();
+  public settledAssets: Set<string> = new Set();
   public sceneData: ISceneData = cloneDeep(initSceneData);
   public lockSceneWrite = false;
   public sceneWritePromise: Promise<void> | null = null;
@@ -35,5 +35,7 @@ export class SceneManager {
     this.sceneData.sceneStack = [];
     this.sceneData.currentScene = cloneDeep(initSceneData.currentScene);
     this.sceneWritePromise = null;
+    this.settledScenes.clear();
+    this.settledAssets.clear();
   }
 }

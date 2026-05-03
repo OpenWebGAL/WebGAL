@@ -5,13 +5,55 @@ on:
     tags:
       - '*.*'
 
+permissions:
+  contents: write
+
 jobs:
-  release:
-    name: Release
+  build-webgal-static-webpage:
+    name: Build WebGAL Static Webpage
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+        with:
+          persist-credentials: false
+
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v3
+        with:
+          node-version-file: package.json
+          cache: 'yarn'
+
+      - name: Install
+        run: npm install yarn -g && yarn install
+
+      - name: Build
+        run: yarn build
+
+      - name: Package WebGAL Engine Web
+        run: |
+          cd packages/webgal/dist
+          zip -r "$GITHUB_WORKSPACE/webgal-engine-web.zip" .
+
+      - name: Upload WebGAL Engine Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: webgal-engine-web
+          path: webgal-engine-web.zip
+          if-no-files-found: error
+
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+    needs: build-webgal-static-webpage
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Download WebGAL Engine Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: webgal-engine-web
 
       - name: Create Release
         id: create_release
@@ -24,3 +66,13 @@ jobs:
           body_path: releasenote.md
           draft: true
           prerelease: false
+
+      - name: Upload WebGAL Engine Web
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: webgal-engine-web.zip
+          asset_name: WebGAL-${{ github.ref_name }}-web.zip
+          asset_content_type: application/zip

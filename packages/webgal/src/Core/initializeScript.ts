@@ -8,8 +8,6 @@ import { sceneFetcher } from './controller/scene/sceneFetcher';
 import { sceneParser } from './parser/sceneParser';
 import { bindExtraFunc } from '@/Core/util/coreInitialFunction/bindExtraFunc';
 import { webSocketFunc } from '@/Core/util/syncWithEditor/webSocketFunc';
-import uniqWith from 'lodash/uniqWith';
-import { scenePrefetcher } from './util/prefetcher/scenePrefetcher';
 import PixiStage from '@/Core/controller/stage/pixi/PixiController';
 import { syncPixiStageState } from '@/Core/controller/stage/pixi/syncPixiStageState';
 import axios from 'axios';
@@ -53,11 +51,7 @@ export const initializeScript = (): void => {
   // 场景写入到运行时
   sceneFetcher(sceneUrl).then((rawScene) => {
     WebGAL.sceneManager.sceneData.currentScene = sceneParser(rawScene, 'start.txt', sceneUrl);
-    // 开始场景的预加载
-    const subSceneList = WebGAL.sceneManager.sceneData.currentScene.subSceneList;
-    WebGAL.sceneManager.settledScenes.push(sceneUrl); // 放入已加载场景列表，避免递归加载相同场景
-    const subSceneListUniq = uniqWith(subSceneList); // 去重
-    scenePrefetcher(subSceneListUniq);
+    WebGAL.sceneManager.settledScenes.add(sceneUrl); // 放入已加载场景列表，避免递归加载相同场景
   });
   /**
    * 启动Pixi
