@@ -40,6 +40,7 @@ export enum commandType {
   applyStyle,
   wait,
   callSteam, // 调用Steam功能
+  setStatusBar, // 设置顶部状态框
 }
 
 /**

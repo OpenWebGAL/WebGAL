@@ -251,6 +251,7 @@ export interface IStageState {
   isDisableTextbox: boolean;
   replacedUIlable: Record<string, string>;
   figureMetaData: figureMetaData;
+  statusBarText: string; // 顶部状态框文本
 }
 
 /**
