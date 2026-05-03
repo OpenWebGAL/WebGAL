@@ -5,6 +5,7 @@ import { getNumberArgByKey, getStringArgByKey } from '@/Core/util/getSentenceArg
 import { createNonePerform, IPerform } from '@/Core/Modules/perform/performInterface';
 import { WebGAL } from '@/Core/WebGAL';
 import { WEBGAL_NONE } from '@/Core/constants';
+import { uniqueId } from 'lodash';
 
 /**
  * 播放一段效果音
@@ -14,9 +15,7 @@ export const playEffect = (sentence: ISentence): IPerform => {
   logger.debug('play SE');
   // 如果有ID，这里被覆写，一般用于循环的情况
   // 有循环参数且有 ID，就循环
-  let performInitName = 'effect-sound';
-  // 清除先前的效果音
-  WebGAL.gameplay.performController.unmountPerform(performInitName, true);
+  let performInitName = `effect-sound-${uniqueId()}`;
   let url = sentence.content;
   let isLoop = false;
   // 清除带 id 的效果音
