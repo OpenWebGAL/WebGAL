@@ -1,9 +1,8 @@
 import styles from './fullScreenPerform.module.scss';
-import { useSelector } from 'react-redux';
-import { RootState } from '@/store/store';
+import { useStageState } from '@/hooks/useStageState';
 
 export const FullScreenPerform = () => {
-  const stageState = useSelector((state: RootState) => state.stage);
+  const stageState = useStageState();
   let stageWidth = '100%';
   let stageHeight = '100%';
   let top = '0';

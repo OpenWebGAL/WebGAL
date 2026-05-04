@@ -1,0 +1,30 @@
+DOM 管理测试 1 开始：验证 intro 创建 introContainer 后会自动清理。
+intro:DOM 测试第一段|自动结束 -delayTime=80 -fontSize=small -animation=fadeIn;
+DOM 管理测试 1 结束：预期状态：第一段 intro 结束后回到对话，introContainer 不应继续遮挡画面。
+
+DOM 管理测试 2 开始：验证连续 intro 不残留前一个 DOM 内容。
+intro:DOM 测试第二段|如果第一段文字仍可见就是异常 -delayTime=80 -fontSize=small -animation=slideIn -backgroundColor=rgba(16,16,16,1);
+DOM 管理测试 2 结束：预期状态：只显示过第二段 intro，结束后没有残留黑屏内容。
+
+DOM 管理测试 3 开始：验证 chooseContainer 在选择后清理；快速预览默认选择第 2 项。
+choose:手动 DOM 路径:dom_choice_manual|快速预览 DOM 路径:dom_choice_fast -defaultChoose=2;
+label:dom_choice_manual;
+setVar:domChoice=manual;
+DOM 管理测试 3 手动路径：手动选择第 1 项时会看到这里。
+jumpLabel:dom_choice_after;
+label:dom_choice_fast;
+setVar:domChoice=fast;
+DOM 管理测试 3 默认路径：快速预览默认选择第 2 项。
+label:dom_choice_after;
+DOM 管理测试 3 结束：预期状态：domChoice={domChoice}；选择结束后 chooseContainer 不应残留按钮。
+
+DOM 管理测试 4 开始：验证 getUserInput 的输入框 DOM 在确认后清理，快速预览写入默认值。
+getUserInput:domInput -title=DOM 输入测试 -buttonText=确认 -defaultValue=DOMDefault;
+DOM 管理测试 4 结束：预期状态：快速预览时 domInput={domInput}，应为 DOMDefault；普通运行或普通快进确认后输入框 DOM 被清理。
+
+DOM 管理测试 5 开始：验证 setTextbox hide/on 后文本框能恢复。
+setTextbox:hide -next;
+wait:300;
+setTextbox:on -next;
+DOM 管理测试 5 结束：预期状态：这句话可见，文本框已恢复显示，introContainer 和 chooseContainer 没有可见残留。
+end;

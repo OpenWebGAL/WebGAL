@@ -1,1 +1,1 @@
-choose: Lip Sync Animation Test:demo_animation.txt | Variable interpolation test:demo_var.txt | Change Config:demo_changeConfig.txt | Performs:demo_performs.txt;
+choose: Lip Sync Animation Test:demo_animation.txt | Variable interpolation test:demo_var.txt | Change Config:demo_changeConfig.txt | Performs:demo_performs.txt | Flow Control Test:demo_test_flow_control.txt | Variable Flow Control Test:demo_test_variable_flow_control.txt | Input Flow Control Test:demo_test_input_flow_control.txt | DOM Lifecycle Test:demo_test_dom_control.txt;

@@ -1,6 +1,6 @@
-import { setStage } from '@/store/stageReducer';
 import { webgalStore } from '@/store/store';
 import gsap from 'gsap';
+import { stageStateManager } from '../stage/stageStateManager';
 
 class BgmManager {
   private static instance: BgmManager;
@@ -53,7 +53,7 @@ class BgmManager {
       return;
     }
 
-    webgalStore.dispatch(setStage({ key: 'bgm', value: { src, volume, enter, exit } }));
+    stageStateManager.setStageAndCommit( 'bgm', { src, volume, enter, exit });
 
     if (src === this.src) {
       if (this.audio.paused) {
@@ -124,7 +124,7 @@ class BgmManager {
   public async stop(value = 0): Promise<void> {
     this.src = '';
     this.targetVolume = 100;
-    webgalStore.dispatch(setStage({ key: 'bgm', value: { src: '', volume: 100, enter: 0, exit: 0 } }));
+    stageStateManager.setStageAndCommit( 'bgm', { src: '', volume: 100, enter: 0, exit: 0 } );
     if (value > 0) {
       await this.setVolume({ audio: this.audio, volume: 0, duration: value, stopOnEnd: true });
     } else {
@@ -200,12 +200,13 @@ class BgmManager {
   }
 
   public getComputedVolume(value?: number): number {
-    const { userData, stage } = webgalStore.getState();
+    const stageState = stageStateManager.getCalculationStageState();
+    const { userData } = webgalStore.getState();
     const { optionData } = userData;
 
     const main = optionData.volumeMain * 0.01;
     const group = optionData.bgmVolume * 0.01;
-    const current = (value ?? stage.bgm.volume) * 0.01;
+    const current = (value ?? stageState.bgm.volume) * 0.01;
 
     return main * group * current;
   }

@@ -13,9 +13,9 @@ export default function GlobalDialog() {
 interface IShowGlobalDialogProps {
   title: string;
   leftText: string;
-  rightText: string;
-  leftFunc: Function;
-  rightFunc: Function;
+  rightText?: string;
+  leftFunc?: Function;
+  rightFunc?: Function;
 }
 
 export function showGlogalDialog(props: IShowGlobalDialogProps) {
@@ -23,12 +23,12 @@ export function showGlogalDialog(props: IShowGlobalDialogProps) {
   webgalStore.dispatch(setVisibility({ component: 'showGlobalDialog', visibility: true }));
   const handleLeft = () => {
     playSeClick();
-    props.leftFunc();
+    props.leftFunc?.();
     hideGlobalDialog();
   };
   const handleRight = () => {
     playSeClick();
-    props.rightFunc();
+    props.rightFunc?.();
     hideGlobalDialog();
   };
   const renderElement = (
@@ -37,12 +37,16 @@ export function showGlogalDialog(props: IShowGlobalDialogProps) {
         <div className={styles.glabalDialog_container_inner}>
           <div className={styles.title}>{props.title}</div>
           <div className={styles.button_list}>
-            <div className={styles.button} onClick={handleLeft} onMouseEnter={playSeEnter}>
-              {props.leftText}
-            </div>
-            <div className={styles.button} onClick={handleRight} onMouseEnter={playSeEnter}>
-              {props.rightText}
-            </div>
+            {props.leftText && (
+              <div className={styles.button} onClick={handleLeft} onMouseEnter={playSeEnter}>
+                {props.leftText}
+              </div>
+            )}
+            {props.rightText && (
+              <div className={styles.button} onClick={handleRight} onMouseEnter={playSeEnter}>
+                {props.rightText}
+              </div>
+            )}
           </div>
         </div>
       </div>

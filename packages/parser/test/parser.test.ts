@@ -49,7 +49,7 @@ test("args", async () => {
       { key: "left", value: true },
       { key: "next", value: true }
     ],
-    sentenceAssets: [{ name: "m2.png", url: 'm2.png', type: fileType.figure, lineNumber: 0 }],
+    sentenceAssets: [{ name: "m2.png", url: 'm2.png', type: fileType.figure, lineNumber: 24 }],
     subScene: [],
     inlineComment: ""
   };

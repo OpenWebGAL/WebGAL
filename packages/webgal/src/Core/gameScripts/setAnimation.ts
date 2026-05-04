@@ -3,10 +3,10 @@ import { IPerform } from '@/Core/Modules/perform/performInterface';
 import { getBooleanArgByKey, getStringArgByKey } from '@/Core/util/getSentenceArg';
 import { IAnimationObject } from '@/Core/controller/stage/pixi/PixiController';
 import { logger } from '@/Core/util/logger';
-import { webgalStore } from '@/store/store';
 
-import { getAnimateDuration, getAnimationObject } from '@/Core/Modules/animationFunctions';
+import { applyAnimationEndState, getAnimateDuration } from '@/Core/Modules/animationFunctions';
 import { WebGAL } from '@/Core/WebGAL';
+import { generateTimelineObj } from '@/Core/controller/stage/pixi/animations/timeline';
 
 /**
  * 设置背景动画
@@ -19,48 +19,45 @@ export const setAnimation = (sentence: ISentence): IPerform => {
   target = target !== '' ? target : 'default_id';
   const writeDefault = getBooleanArgByKey(sentence, 'writeDefault') ?? false;
   const keep = getBooleanArgByKey(sentence, 'keep') ?? false;
+  const parallel = getBooleanArgByKey(sentence, 'parallel') ?? false;
 
   const key = `${target}-${animationName}-${animationDuration}`;
   const performInitName = `animation-${target}`;
+  const performName = parallel ? `${performInitName}#${animationName}` : performInitName;
   let keepAnimationStopped = false;
 
-  WebGAL.gameplay.performController.unmountPerform(performInitName, true);
+  if (!parallel) WebGAL.gameplay.performController.unmountPerform(performInitName, true);
+  const animationTimeline = applyAnimationEndState(animationName, target, writeDefault, !parallel);
 
-  let stopFunction;
-  setTimeout(() => {
+  const startFunction = () => {
     if (keep && keepAnimationStopped) {
       return;
     }
     WebGAL.gameplay.pixiStage?.stopPresetAnimationOnTarget(target);
-    const animationObj: IAnimationObject | null = getAnimationObject(
-      animationName,
-      target,
-      animationDuration,
-      writeDefault,
-    );
+    const animationObj: IAnimationObject | null = animationTimeline
+      ? generateTimelineObj(animationTimeline, target, animationDuration, false)
+      : null;
     if (animationObj) {
       logger.debug(`动画${animationName}作用在${target}`, animationDuration);
       WebGAL.gameplay.pixiStage?.registerAnimation(animationObj, key, target);
     }
-  }, 0);
-  stopFunction = () => {
+  };
+  const stopFunction = () => {
     if (keep) {
       WebGAL.gameplay.pixiStage?.removeAnimationWithoutSetEndState(key);
       keepAnimationStopped = true;
       return;
     }
-    setTimeout(() => {
-      WebGAL.gameplay.pixiStage?.removeAnimationWithSetEffects(key);
-    }, 0);
+    WebGAL.gameplay.pixiStage?.removeAnimationWithSetEffects(key);
   };
 
   return {
-    performName: performInitName,
+    performName: performName,
     duration: animationDuration,
     isHoldOn: keep,
+    startFunction,
     stopFunction,
     blockingNext: () => false,
     blockingAuto: () => !keep,
-    stopTimeout: undefined, // 暂时不用，后面会交给自动清除
   };
 };

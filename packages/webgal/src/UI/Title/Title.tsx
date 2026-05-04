@@ -15,7 +15,6 @@ import bgmManager from '@/Core/Modules/audio/bgmManager';
 
 /** 标题页 */
 export default function Title() {
-  const stageStore = useSelector((webgalStore: RootState) => webgalStore.stage);
   const userDataState = useSelector((state: RootState) => state.userData);
   const GUIState = useSelector((state: RootState) => state.GUI);
   const dispatch = useDispatch();

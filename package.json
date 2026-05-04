@@ -1,6 +1,6 @@
 {
   "name": "@webgal/base",
-  "version": "4.5",
+  "version": "4.6.0-beta.0",
   "description": "A brand new web Visual Novel engine.",
   "repository": "https://github.com/OpenWebGAL/WebGAL.git",
   "author": "Mahiru <Mahiru_@outlook.com>",

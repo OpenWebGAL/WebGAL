@@ -1,0 +1,115 @@
+/**
+ * 已读历史记录
+ */
+
+import { webgalStore } from "@/store/store";
+import { SceneManager } from "./scene";
+import { setReadHistory } from "@/store/userDataReducer";
+import { setStorage } from "../controller/storage/storageController";
+import { stageStateManager } from '@/Core/Modules/stage/stageStateManager';
+
+export class ReadHistoryManager {
+  private history: Map<string, Uint8Array> = new Map();
+
+  private load: boolean = false;
+
+  private readonly sceneManager: SceneManager;
+
+  public constructor(sceneManager: SceneManager) {
+    this.sceneManager = sceneManager;
+  }
+
+  private loadReadHistory() {
+    const readHistory = webgalStore.getState().userData.readHistory;
+
+    Object.entries(readHistory).forEach(([key, value]) => {
+      try {
+        const uint8 = Uint8Array.from(Buffer.from(value, 'base64'));
+        this.history.set(key, uint8);
+      } catch {
+        // 浏览器环境下没有 Buffer 时的兜底逻辑
+        const binary = atob(value);
+        const uint8 = new Uint8Array(binary.length);
+        for (let i = 0; i < binary.length; i++) {
+          uint8[i] = binary.charCodeAt(i);
+        }
+        this.history.set(key, uint8);
+      }
+    });
+
+    this.load = true;
+  }
+
+  private checkLoad() {
+    if (!this.load) {
+      this.loadReadHistory();
+    }
+  }
+
+  private saveReadHistory(key: string) {
+    const bitset = this.history.get(key)!;
+
+    try {
+      const base64 = Buffer.from(bitset).toString('base64');
+      webgalStore.dispatch(setReadHistory({
+        key,
+        value: base64,
+      }));
+    } catch {
+      // 浏览器环境下没有 Buffer 时的兜底逻辑
+      let binary = '';
+      const len = bitset.length;
+      for (let i = 0; i < len; i++) {
+        binary += String.fromCharCode(bitset[i]);
+      }
+      const base64 = btoa(binary);
+      webgalStore.dispatch(setReadHistory({
+        key,
+        value: base64,
+      }));
+    }
+    setStorage();
+  }
+
+  private addReadHistory() {
+    const scenarioName = this.sceneManager.sceneData.currentScene.sceneName;
+    const index = this.sceneManager.sceneData.currentSentenceId;
+
+    if (!this.history.has(scenarioName)) {
+      const length = this.sceneManager.sceneData.currentScene.sentenceList.length;
+      this.history.set(scenarioName, new Uint8Array(Math.ceil(length / 8)));
+    }
+    let bitset = this.history.get(scenarioName)!;
+
+    // 处理因剧本更新可能导致的 index 溢出问题
+    const requiredIndex = index >> 3;
+    if (requiredIndex >= bitset.length) {
+      const length = this.sceneManager.sceneData.currentScene.sentenceList.length;
+      const newBitset = new Uint8Array(Math.ceil(length / 8));
+      newBitset.set(bitset);
+      bitset = newBitset;
+      this.history.set(scenarioName, bitset);
+    }
+
+    bitset[requiredIndex] |= (1 << (index & 7));
+
+    this.saveReadHistory(scenarioName);
+  }
+
+  public checkIsRead() {
+    this.checkLoad();
+
+    const scenarioName = this.sceneManager.sceneData.currentScene.sceneName;
+    const index = this.sceneManager.sceneData.currentSentenceId;
+
+    let isRead = false;
+    if (this.history.has(scenarioName)) {
+      const bitset = this.history.get(scenarioName)!;
+      isRead = (bitset[index >> 3] & (1 << (index & 7))) !== 0;
+    }
+    stageStateManager.setStage('isRead', isRead);
+    if (!isRead) {
+      this.addReadHistory();
+    }
+  }
+}

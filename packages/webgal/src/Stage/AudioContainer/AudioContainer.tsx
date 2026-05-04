@@ -1,12 +1,13 @@
 import { useSelector } from 'react-redux';
-import { RootState, webgalStore } from '@/store/store';
-import { setStage } from '@/store/stageReducer';
+import { RootState } from '@/store/store';
 import { useEffect, useState } from 'react';
 import { logger } from '@/Core/util/logger';
 import bgmManager from '@/Core/Modules/audio/bgmManager';
+import { useStageState } from '@/hooks/useStageState';
+import { stageStateManager } from '@/Core/Modules/stage/stageStateManager';
 
 export const AudioContainer = () => {
-  const stageStore = useSelector((webgalStore: RootState) => webgalStore.stage);
+  const stageStore = useStageState();
   const userDataState = useSelector((state: RootState) => state.userData);
   const mainVol = userDataState.optionData.volumeMain;
   const vocalBaseVol = mainVol * 0.01 * userDataState.optionData.vocalVolume * 0.01;
@@ -58,7 +59,7 @@ export const AudioContainer = () => {
       // Processing after sound effects are played
       uiSeAudioElement.remove();
     });
-    webgalStore.dispatch(setStage({ key: 'uiSe', value: '' }));
+    stageStateManager.setStageAndCommit('uiSe', '');
   }, [uiSoundEffects]);
 
   useEffect(() => {

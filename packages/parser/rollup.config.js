@@ -40,6 +40,7 @@ export default [
         tsconfigOverride: {
           compilerOptions: {
             sourceMap: !isProd,
+            rootDir: "src",
             declarationDir: "build/cjs"
           }, include: ["src"]
         }
@@ -61,6 +62,7 @@ export default [
         tsconfigOverride: {
           compilerOptions: {
             sourceMap: !isProd,
+            rootDir: "src",
             declarationDir: "build/types"
           }, include: ["src"]
         }

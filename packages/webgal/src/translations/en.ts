@@ -58,6 +58,13 @@ const en = {
               contributors: 'Contributors',
               website: 'Website',
             },
+            skipAll: {
+              title: 'Skip Mode',
+              options: {
+                read: 'Read',
+                all: 'All',
+              }
+            }
           },
         },
         display: {
@@ -89,9 +96,9 @@ const en = {
             textFont: {
               title: 'Text Font',
               options: {
+                resourceHanRounded: 'Resource Han Rounded',
                 siYuanSimSun: 'Source Han Serif',
                 SimHei: 'Sans',
-                lxgw: 'LXGW WenKai',
               },
             },
             textboxOpacity: {

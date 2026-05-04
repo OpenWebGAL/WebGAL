@@ -4,7 +4,7 @@ import { v4 as uuid } from 'uuid';
 import * as PIXI from 'pixi.js';
 import PixiStage from '@/Core/controller/stage/pixi/PixiController';
 import { logger } from '@/Core/util/logger';
-import { webgalStore } from '@/store/store';
+import { stageStateManager } from '@/Core/Modules/stage/stageStateManager';
 // utils/loadPixiSpine.ts
 // @ts-ignore
 let pixiSpineModule: typeof import('pixi-spine') | null = null;
@@ -111,9 +111,13 @@ export async function addSpineFigureImpl(
         figureSpine.pivot.set(spineCenterX, spineCenterY);
         figureSpine.interactive = false;
 
-        // 检查状态中是否有指定的动画
-        const motionFromState = webgalStore.getState().stage.live2dMotion.find((e) => e.target === key);
+        const motionFromState = stageStateManager.getViewStageState().live2dMotion.find((e) => e.target === key);
         let animationToPlay = '';
+        if (motionFromState?.skin) {
+          if (!applySpineSkin(figureSpine, motionFromState.skin)) {
+            logger.warn(`Spine skin not found: ${motionFromState.skin} on ${key}`);
+          }
+        }
 
         if (
           motionFromState &&
@@ -276,4 +280,41 @@ export async function addSpineBgImpl(this: PixiStage, key: string, url: string) 
     // 复用
     await setup();
   }
+}
+
+function applySpineSkin(spineObject: any, skinName: string) {
+  // @ts-ignore
+  const skeleton = spineObject.skeleton;
+  // @ts-ignore
+  const skeletonData = skeleton?.data ?? spineObject.spineData;
+  const skin =
+    // @ts-ignore
+    skeletonData?.findSkin?.(skinName) ??
+    // @ts-ignore
+    skeletonData?.skins?.find((item: any) => item.name === skinName);
+  if (!skeleton || !skin) {
+    return false;
+  }
+  try {
+    // @ts-ignore
+    if (typeof skeleton.setSkinByName === 'function') {
+      // @ts-ignore
+      skeleton.setSkinByName(skinName);
+    } else {
+      // @ts-ignore
+      skeleton.setSkin(skin);
+    }
+  } catch (error) {
+    // @ts-ignore
+    skeleton.setSkin?.(skin);
+  }
+  // @ts-ignore
+  if (typeof skeleton.setSlotsToSetupPose === 'function') {
+    // @ts-ignore
+    skeleton.setSlotsToSetupPose();
+  } else {
+    // @ts-ignore
+    skeleton.setupPoseSlots?.();
+  }
+  return true;
 }
