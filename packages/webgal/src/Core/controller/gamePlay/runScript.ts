@@ -15,11 +15,5 @@ export const runScript = (script: ISentence) => {
   // 调用脚本对应的函数
   perform = funcToRun(script);
 
-  if (perform.arrangePerformPromise) {
-    perform.arrangePerformPromise.then((resolovedPerform) =>
-      WebGAL.gameplay.performController.arrangeNewPerform(resolovedPerform, script),
-    );
-  } else {
-    WebGAL.gameplay.performController.arrangeNewPerform(perform, script);
-  }
+  WebGAL.gameplay.performController.arrangeNewPerform(perform, script);
 };

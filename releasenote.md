@@ -1,139 +1,97 @@
 ## 发布日志
 
-**本仓库只发布源代码**
+**本仓库发布源代码，并在 Release 中附带 WebGAL 引擎网页版压缩包。**
 
-**如果你想要体验使用便捷的图形化编辑器创建、制作并实时预览 WebGAL 游戏，请 [下载 WebGAL 图形化编辑器](https://github.com/OpenWebGAL/WebGAL_Terre/releases)**
+**如果你想要体验使用便捷的图形化编辑器创建、制作并实时预览 WebGAL 游戏，请 [下载 WebGAL 图形化编辑器](https://github.com/OpenWebGAL/WebGAL_Terre/releases)。**
 
 ### 在此版本中
 
 #### 新功能
 
--when 指令支持字符串条件判断，变量表达式中的空白会自动裁剪
+优化舞台画面表现，提升背景、立绘、Spine、Live2D、变换和特效在播放、读档、回溯和快速预览中的一致性。
 
-解析器新增行内注释保留能力，语句可读取 inlineComment 字段
+优化快速预览和正常播放的演出同步，减少预览结果与实际播放不一致的情况。
 
-changeFigure 支持 blendMode 参数，可设置 normal / add / multiply / screen 混合模式
+优化场景切换、子场景调用、回溯跳转、读档和返回标题后的画面恢复，减少旧画面元素残留。
 
-黑边填充背景切换支持淡入淡出过渡
+优化 BGM、语音、视频、背景、立绘、特效和变量相关演出在快速预览中的表现。
 
-模板样式文件（标题、文本框、选项）会在启动时预加载并支持热更新
-
-文本框行高支持通过全局变量 Line_height 调整
-
-鉴赏模式中解锁的 CG / BGM 会立即写入本地存储，减少异常退出导致的解锁丢失
+快速预览超时时会通知编辑器，便于定位循环跳转或过长快进造成的问题。
 
 #### 修复
 
-修复语音播放时音量倍率在切换语音后可能不正确的问题
+修复快速预览中自动选择选项后流程继续推进异常的问题。
 
-修复切换语音资源时口型分析节点未重建导致口型动画异常的问题
+修复 BGM 在快速预览中可能不播放或状态不同步的问题。
 
-修复 changeBg / changeFigure 的退出动画与时长设置在部分场景不生效或残留的问题
+修复部分异步演出在快速预览或状态恢复时可能提前推进的问题。
 
-修复 keep 动画停止与 timeline 单关键帧时的异常行为
+修复 setTransform / changeFigure / changeBg 在部分状态恢复场景下表现不同步的问题。
 
-修复透明度滤镜场景下默认进退场动画与 alpha 恢复不一致的问题
-
-修复 setTransform 在透明度转换场景下误修改源 transform，导致后续变换异常的问题
-
-修复 Live2D blink / focus 在部分参数更新时被错误覆盖的问题
-
-修复解析器在行末注释与转义分号场景下的语句解析问题
-
-修复鉴赏模式数据更新与持久化问题，并在清除全部数据时保留 config 初始全局变量
-
-修复鉴赏界面 CG 导航溢出及 Logo 淡出期间背景闪烁问题
+修复 Pixi 条件渲染在状态变化后可能未及时刷新的问题。
 
 <!-- English Translation -->
 ## Release Notes
 
-**Only source code is released in this repository**
+**This repository releases source code and includes a WebGAL engine web package in each Release.**
 
-**If you want to experience creating, making, and real-time previewing WebGAL games using a user-friendly graphical editor, please [download the WebGAL graphical editor](https://github.com/OpenWebGAL/WebGAL_Terre/releases)**
+**If you want to create, edit, and preview WebGAL games with a graphical editor, please [download the WebGAL graphical editor](https://github.com/OpenWebGAL/WebGAL_Terre/releases).**
 
 ### In this version
 
 #### New Features
 
-The -when command now supports string condition checks, and whitespace in expressions is trimmed automatically
+Improved stage visuals, making backgrounds, figures, Spine, Live2D, transforms, and effects more consistent during playback, save loading, backlog jumps, and fast preview.
 
-The parser now preserves inline comments, exposed via the inlineComment field on sentences
+Improved perform synchronization between fast preview and normal playback, reducing cases where preview results differ from actual playback.
 
-changeFigure now supports a blendMode argument with normal / add / multiply / screen modes
+Improved screen restoration after scene changes, child scene calls, backlog jumps, save loading, and returning to title, reducing stale visual elements.
 
-Black-border fill background switching now supports fade transitions
+Improved BGM, voice, video, background, figure, effect, and variable behavior during fast preview.
 
-Template style files (title, textbox, choose) are preloaded on startup and support hot style refresh
-
-Textbox line height can now be controlled through the global variable Line_height
-
-Unlocked CG / BGM entries in appreciation mode are now persisted immediately to local storage to reduce data loss on unexpected exit
+Fast preview timeout now notifies the editor, making it easier to locate loop jumps or excessively long fast-forward calculations.
 
 #### Fixes
 
-Fixed incorrect vocal volume scaling after switching voice playback
+Fixed fast preview flow continuing incorrectly after automatically selecting a choose option.
 
-Fixed lip-sync analyzer nodes not being reconnected when switching vocal media sources
+Fixed BGM possibly not playing or desynchronizing during fast preview.
 
-Fixed cases where changeBg / changeFigure exit animations and durations did not apply correctly or were left behind
+Fixed some asynchronous performs advancing too early during fast preview or state restoration.
 
-Fixed abnormal behavior when stopping keep animations and when timeline animations had only a single keyframe
+Fixed setTransform / changeFigure / changeBg desynchronization in some state restoration scenarios.
 
-Fixed inconsistencies in default enter/exit fades and alpha restoration under alpha-filter-based rendering
-
-Fixed source transform data being mutated during alpha conversion in setTransform paths, which caused later transforms to behave incorrectly
-
-Fixed Live2D blink / focus updates incorrectly overwriting partial parameter updates
-
-Fixed parser issues with end-of-line comments and escaped semicolon scenarios
-
-Fixed appreciation data update/persistence issues, and now preserves initial config globals when clearing all data
-
-Fixed CG navigation overflow in Extra UI and logo fade background flicker
+Fixed Pixi conditional rendering sometimes not refreshing immediately after state changes.
 
 <!-- Japanese Translation -->
 ## リリースノート
 
-**このリポジトリはソースコードのみを公開しています**
+**このリポジトリではソースコードを公開し、Release には WebGAL エンジンの Web 版パッケージも同梱しています。**
 
-**もしあなたが使いやすいグラフィカルエディタでWebGALゲームを作成、制作、リアルタイムプレビューしたい場合は、[WebGALグラフィカルエディタをダウンロードしてください](https://github.com/OpenWebGAL/WebGAL_Terre/releases)**
+**グラフィカルエディターで WebGAL ゲームを作成、編集、リアルタイムプレビューしたい場合は、[WebGAL グラフィカルエディターをダウンロードしてください](https://github.com/OpenWebGAL/WebGAL_Terre/releases)。**
 
 ### このバージョンについて
 
 #### 新機能
 
--when コマンドで文字列条件の判定に対応し、式中の空白を自動でトリミングするようになりました
+舞台画面の表示を改善し、背景、立ち絵、Spine、Live2D、変換、エフェクトが再生、ロード、バックログジャンプ、高速プレビューでより一貫して表示されるようにしました。
 
-パーサーが行内コメントを保持するようになり、文オブジェクトの inlineComment から参照できます
+高速プレビューと通常再生の演出同期を改善し、プレビュー結果と実際の再生結果が異なるケースを減らしました。
 
-changeFigure で blendMode 引数をサポートし、normal / add / multiply / screen を指定できます
+シーン切り替え、子シーン呼び出し、バックログジャンプ、ロード、タイトルへ戻る操作後の画面復元を改善し、古い画面要素が残りにくくなりました。
 
-黒縁塗りつぶし背景の切り替えにフェード遷移を追加しました
+BGM、ボイス、動画、背景、立ち絵、エフェクト、変数関連演出の高速プレビュー中の挙動を改善しました。
 
-テンプレートのスタイルファイル（タイトル・テキストボックス・選択肢）を起動時にプリロードし、スタイル更新にも追従します
-
-テキストボックスの行間をグローバル変数 Line_height で調整できるようになりました
-
-鑑賞モードで解放した CG / BGM を即時にローカル保存するようにし、異常終了時の取りこぼしを減らしました
+高速プレビューのタイムアウトをエディターへ通知するようになり、ループジャンプや長すぎる早送り計算を特定しやすくなりました。
 
 #### 修正
 
-ボイス切り替え後に音量倍率が正しく反映されない問題を修正しました
+高速プレビューで選択肢を自動選択した後、フローが正しく進まない問題を修正しました。
 
-ボイス音源の切り替え時に口パク解析ノードが再接続されず、口パクが乱れる問題を修正しました
+高速プレビュー中に BGM が再生されない、または状態が同期しない場合がある問題を修正しました。
 
-changeBg / changeFigure の退場アニメーションと時間設定が一部で効かない、または残留する問題を修正しました
+一部の非同期演出が高速プレビューや状態復元中に早く進みすぎる問題を修正しました。
 
-keep アニメーション停止時と timeline が単一キーフレームの場合の異常動作を修正しました
+setTransform / changeFigure / changeBg が一部の状態復元シナリオで同期しない問題を修正しました。
 
-アルファフィルター適用時にデフォルト入退場フェードと透明度復元が一致しない問題を修正しました
-
-setTransform の透明度変換処理で元の transform が不正に書き換わり、後続の変換が崩れる問題を修正しました
-
-Live2D の blink / focus で一部パラメータ更新時に設定が不正に上書きされる問題を修正しました
-
-行末コメントやエスケープされたセミコロンを含む場合のパーサー解析不具合を修正しました
-
-鑑賞モードのデータ更新・永続化の不具合を修正し、全データ削除時に config 初期グローバル変数を保持するようにしました
-
-Extra 画面の CG ナビゲーションのはみ出しと、ロゴフェード時の背景ちらつきを修正しました
+Pixi の条件付きレンダリングが状態変更後すぐに更新されない場合がある問題を修正しました。

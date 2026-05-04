@@ -8,13 +8,13 @@ import { sceneFetcher } from './controller/scene/sceneFetcher';
 import { sceneParser } from './parser/sceneParser';
 import { bindExtraFunc } from '@/Core/util/coreInitialFunction/bindExtraFunc';
 import { startPreviewSyncRuntime } from '@/Core/util/syncWithEditor/previewSyncRuntime';
-import uniqWith from 'lodash/uniqWith';
-import { scenePrefetcher } from './util/prefetcher/scenePrefetcher';
 import PixiStage from '@/Core/controller/stage/pixi/PixiController';
+import { syncPixiStageState } from '@/Core/controller/stage/pixi/syncPixiStageState';
 import axios from 'axios';
 import { __INFO } from '@/config/info';
 import { WebGAL } from '@/Core/WebGAL';
 import { loadTemplate } from '@/Core/util/coreInitialFunction/templateLoader';
+import { stageStateManager } from '@/Core/Modules/stage/stageStateManager';
 
 export const isIOS = window.__WEBGAL_DEVICE_INFO__?.isIOS ?? false; // 判断是否是 iOS 终端
 
@@ -49,11 +49,7 @@ export const initializeScript = (): void => {
   // 场景写入到运行时
   const initialSceneReady = sceneFetcher(sceneUrl).then((rawScene) => {
     WebGAL.sceneManager.sceneData.currentScene = sceneParser(rawScene, 'start.txt', sceneUrl);
-    // 开始场景的预加载
-    const subSceneList = WebGAL.sceneManager.sceneData.currentScene.subSceneList;
-    WebGAL.sceneManager.settledScenes.push(sceneUrl); // 放入已加载场景列表，避免递归加载相同场景
-    const subSceneListUniq = uniqWith(subSceneList); // 去重
-    scenePrefetcher(subSceneListUniq);
+    WebGAL.sceneManager.settledScenes.add(sceneUrl); // 放入已加载场景列表，避免递归加载相同场景
   });
   // 获取游戏信息
   const gameConfigReady = infoFetcher('./game/config.txt');
@@ -73,6 +69,7 @@ export const initializeScript = (): void => {
    * 启动Pixi
    */
   WebGAL.gameplay.pixiStage = new PixiStage();
+  stageStateManager.setCommitHandler(syncPixiStageState);
 
   /**
    * iOS 设备 卸载所有 Service Worker

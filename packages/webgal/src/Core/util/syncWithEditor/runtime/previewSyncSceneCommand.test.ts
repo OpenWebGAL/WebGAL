@@ -11,20 +11,13 @@ interface ActiveModuleState {
   setVisibility: ReturnType<typeof vi.fn>;
   resetStage: ReturnType<typeof vi.fn>;
   sceneFetcher: ReturnType<typeof vi.fn>;
-  jumpFromBacklog: ReturnType<typeof vi.fn>;
-  nextSentence: ReturnType<typeof vi.fn>;
+  forward: ReturnType<typeof vi.fn>;
+  commitForward: ReturnType<typeof vi.fn>;
   sceneParser: ReturnType<typeof vi.fn>;
   loggerWarn: ReturnType<typeof vi.fn>;
+  loggerInfo: ReturnType<typeof vi.fn>;
+  loggerError: ReturnType<typeof vi.fn>;
   assetSetter: ReturnType<typeof vi.fn>;
-}
-
-interface PreviewSyncSceneCommandHarness {
-  dispatch: ReturnType<typeof vi.fn>;
-  WebGAL: Record<string, any>;
-  resetStage: ReturnType<typeof vi.fn>;
-  jumpFromBacklog: ReturnType<typeof vi.fn>;
-  sceneFetcher: ReturnType<typeof vi.fn>;
-  sceneParser: ReturnType<typeof vi.fn>;
 }
 
 let activeModuleState: ActiveModuleState | null = null;
@@ -67,15 +60,12 @@ vi.doMock('@/Core/controller/scene/sceneFetcher', () => ({
   },
 }));
 
-vi.doMock('@/Core/controller/storage/jumpFromBacklog', () => ({
-  get jumpFromBacklog() {
-    return getActiveModuleState().jumpFromBacklog;
-  },
-}));
-
 vi.doMock('@/Core/controller/gamePlay/nextSentence', () => ({
-  get nextSentence() {
-    return getActiveModuleState().nextSentence;
+  get forward() {
+    return getActiveModuleState().forward;
+  },
+  get commitForward() {
+    return getActiveModuleState().commitForward;
   },
 }));
 
@@ -89,6 +79,8 @@ vi.doMock('@/Core/util/logger', () => ({
   get logger() {
     return {
       warn: getActiveModuleState().loggerWarn,
+      info: getActiveModuleState().loggerInfo,
+      error: getActiveModuleState().loggerError,
     };
   },
 }));
@@ -103,109 +95,101 @@ vi.doMock('@/Core/util/gameAssetsAccess/assetSetter', () => ({
 }));
 
 async function flushMicrotasks() {
-  await Promise.resolve();
-  await Promise.resolve();
+  for (let i = 0; i < 10; i += 1) {
+    await Promise.resolve();
+  }
 }
 
-async function setupPreviewSyncSceneCommandHarness() {
+interface HarnessOptions {
+  targetSceneName?: string;
+  targetSentenceList?: IScene['sentenceList'];
+  initialSentenceId?: number;
+}
+
+async function setupPreviewSyncSceneCommandHarness(options: HarnessOptions = {}) {
   vi.resetModules();
   vi.stubGlobal('document', {
     querySelector: vi.fn(() => null),
   });
 
-  const dispatch = vi.fn();
-  const resetStage = vi.fn();
-  const jumpFromBacklog = vi.fn();
-  const nextSentence = vi.fn();
+  const targetSceneName = options.targetSceneName ?? 'scene/branch.txt';
+  const sentenceList: IScene['sentenceList'] = options.targetSentenceList ?? [
+    {
+      command: 0,
+      commandRaw: 'say:first',
+      content: 'first',
+      args: [],
+      sentenceAssets: [],
+      subScene: [],
+      inlineComment: '',
+    },
+    {
+      command: 0,
+      commandRaw: 'say:new-second',
+      content: 'new-second',
+      args: [],
+      sentenceAssets: [],
+      subScene: [],
+      inlineComment: '',
+    },
+  ];
   const previousScene: IScene = {
     sceneName: 'scene/original.txt',
     sceneUrl: 'asset://scene/original.txt',
-    sentenceList: [
-      {
-        command: 0,
-        commandRaw: 'say:first',
-        content: 'first',
-        args: [],
-        sentenceAssets: [],
-        subScene: [],
-        inlineComment: '',
-      },
-      {
-        command: 0,
-        commandRaw: 'say:old-second',
-        content: 'old-second',
-        args: [],
-        sentenceAssets: [],
-        subScene: [],
-        inlineComment: '',
-      },
-    ],
+    sentenceList: [],
     assetsList: [],
     subSceneList: [],
   };
   const parsedScene: IScene = {
-    sceneName: 'scene/branch.txt',
-    sceneUrl: 'asset://scene/branch.txt',
-    sentenceList: [
-      {
-        command: 0,
-        commandRaw: 'say:first',
-        content: 'first',
-        args: [],
-        sentenceAssets: [],
-        subScene: [],
-        inlineComment: '',
-      },
-      {
-        command: 0,
-        commandRaw: 'say:new-second',
-        content: 'new-second',
-        args: [],
-        sentenceAssets: [],
-        subScene: [],
-        inlineComment: '',
-      },
-    ],
+    sceneName: targetSceneName,
+    sceneUrl: `asset://${targetSceneName}`,
+    sentenceList,
     assetsList: [],
     subSceneList: [],
   };
+
+  const dispatch = vi.fn();
+  const resetStage = vi.fn();
+  const commitForward = vi.fn();
   const sceneFetcher = vi.fn(async () => '; new scene');
   const sceneParser = vi.fn(() => parsedScene);
-  const assetSetter = vi.fn(() => 'asset://scene/branch.txt');
-  const WebGAL = {
+  const assetSetter = vi.fn((name: string) => `asset://${name}`);
+
+  const WebGAL: Record<string, any> = {
     sceneManager: {
       sceneData: {
         currentScene: previousScene,
-        currentSentenceId: 1,
+        currentSentenceId: options.initialSentenceId ?? 0,
+        sceneStack: [] as unknown[],
       },
+      sceneWritePromise: null as Promise<void> | null,
     },
     gameplay: {
       isFast: false,
-    },
-    backlogManager: {
-      getBacklog: vi.fn(() => [
-        {
-          saveScene: {
-            currentSentenceId: 1,
-            sceneName: 'scene/branch.txt',
-          },
-        },
-      ]),
+      isFastPreview: false,
+      performController: {
+        hasPendingBlockingStateCalculationPerform: vi.fn(() => false),
+      },
     },
   };
 
+  const forward = vi.fn(() => {
+    WebGAL.sceneManager.sceneData.currentSentenceId += 1;
+    return true;
+  });
+
   activeModuleState = {
-    webgalStore: {
-      dispatch,
-    },
+    webgalStore: { dispatch },
     WebGAL,
     setVisibility: vi.fn((payload: unknown) => ({ type: 'gui/setVisibility', payload })),
     resetStage,
     sceneFetcher,
-    jumpFromBacklog,
-    nextSentence,
+    forward,
+    commitForward,
     sceneParser,
     loggerWarn: vi.fn(),
+    loggerInfo: vi.fn(),
+    loggerError: vi.fn(),
     assetSetter,
   };
 
@@ -215,31 +199,26 @@ async function setupPreviewSyncSceneCommandHarness() {
     dispatch,
     WebGAL,
     resetStage,
-    jumpFromBacklog,
     sceneFetcher,
     sceneParser,
+    forward,
+    commitForward,
     executePreviewSyncSceneCommand: module.executePreviewSyncSceneCommand,
   };
 }
 
 describe('executePreviewSyncSceneCommand', () => {
-  beforeEach(() => {
-    vi.useFakeTimers();
-  });
-
   afterEach(() => {
-    vi.useRealTimers();
     vi.restoreAllMocks();
     vi.unstubAllGlobals();
     activeModuleState = null;
   });
 
-  it('compares backlog recovery against the newly parsed scene instead of the current in-memory scene', async () => {
+  it('fetches the target scene, resets the stage, and forwards toward the target sentence', async () => {
     const harness = await setupPreviewSyncSceneCommandHarness();
     const payload: SyncScenePayload = {
       sceneName: 'scene/branch.txt',
       sentenceId: 2,
-      syncMode: 'fast',
     };
 
     harness.executePreviewSyncSceneCommand(payload);
@@ -248,23 +227,30 @@ describe('executePreviewSyncSceneCommand', () => {
     expect(harness.sceneFetcher).toHaveBeenCalledWith('asset://scene/branch.txt');
     expect(harness.sceneParser).toHaveBeenCalledWith('; new scene', 'scene/branch.txt', 'asset://scene/branch.txt');
     expect(harness.resetStage).toHaveBeenCalledWith(true);
-    expect(harness.jumpFromBacklog).not.toHaveBeenCalled();
+    expect(harness.forward).toHaveBeenCalled();
+    expect(harness.commitForward).toHaveBeenCalled();
     expect(harness.WebGAL.sceneManager.sceneData.currentScene).toMatchObject({
       sceneName: 'scene/branch.txt',
     });
+    expect(harness.WebGAL.sceneManager.sceneData.currentSentenceId).toBe(2);
+    expect(harness.WebGAL.gameplay.isFast).toBe(false);
+    expect(harness.WebGAL.gameplay.isFastPreview).toBe(false);
   });
 
-  it('avoids JSON stringification while comparing shared sentences for recovery', async () => {
-    const harness = await setupPreviewSyncSceneCommandHarness();
-    const stringifySpy = vi.spyOn(JSON, 'stringify');
+  it('stops forwarding once a perform requires user input', async () => {
+    const harness = await setupPreviewSyncSceneCommandHarness({ initialSentenceId: 0 });
+    harness.WebGAL.gameplay.performController.hasPendingBlockingStateCalculationPerform = vi
+      .fn()
+      .mockReturnValueOnce(false)
+      .mockReturnValue(true);
 
     harness.executePreviewSyncSceneCommand({
       sceneName: 'scene/branch.txt',
-      sentenceId: 2,
-      syncMode: 'fast',
+      sentenceId: 100,
     });
     await flushMicrotasks();
 
-    expect(stringifySpy).not.toHaveBeenCalled();
+    expect(harness.forward).toHaveBeenCalledTimes(2);
+    expect(harness.commitForward).toHaveBeenCalled();
   });
 });

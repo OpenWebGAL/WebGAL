@@ -15,6 +15,7 @@ import {
   SetFontOptimizationPayload,
   StageSnapshotUpdatedPayload,
   SyncScenePayload,
+  FastPreviewTimeoutPayload,
 } from '../../../types/editorPreviewProtocol';
 import { webgalStore } from '@/store/store';
 import { setFontOptimization, setVisibility } from '@/store/GUIReducer';
@@ -25,9 +26,9 @@ import { runScript } from '@/Core/controller/gamePlay/runScript';
 import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
 import { resetStage } from '@/Core/controller/stage/resetStage';
 import { logger } from '@/Core/util/logger';
-import { stageActions } from '@/store/stageReducer';
-import { baseTransform } from '@/store/stageInterface';
-import type { IStageState } from '@/store/stageInterface';
+import { stageStateManager } from '@/Core/Modules/stage/stageStateManager';
+import { baseTransform } from '@/Core/Modules/stage/stageInterface';
+import type { IStageState } from '@/Core/Modules/stage/stageInterface';
 import { requestEmbeddedLaunchId } from './runtime/embeddedPreviewBootstrap';
 import {
   createPreviewSyncTransport,
@@ -103,7 +104,7 @@ export const startPreviewSyncRuntime = () => {
       return;
     }
 
-    const stageState = webgalStore.getState().stage;
+    const stageState = stageStateManager.getCalculationStageState();
     const sceneName = WebGAL.sceneManager.sceneData.currentScene.sceneName;
     const sentenceId = WebGAL.sceneManager.sceneData.currentSentenceId;
     const snapshotUnchanged =
@@ -152,8 +153,15 @@ export const startPreviewSyncRuntime = () => {
     );
   };
 
+  const emitFastPreviewTimeout = (payload: FastPreviewTimeoutPayload) => {
+    if (!registered) {
+      return;
+    }
+    transport.send(createEventEnvelope('preview.event.fast-preview-timeout', payload));
+  };
+
   const handleSyncScene = (payload: SyncScenePayload) => {
-    executePreviewSyncSceneCommand(payload);
+    executePreviewSyncSceneCommand(payload, emitFastPreviewTimeout);
   };
 
   const handleRunSnippet = (payload: RunSnippetPayload) => {
@@ -193,6 +201,7 @@ export const startPreviewSyncRuntime = () => {
     applyComponentVisibility({
       showTitle: false,
       showMenuPanel: false,
+      isEnterGame: true,
       showPanicOverlay: false,
     });
     setTimeout(() => {
@@ -209,7 +218,9 @@ export const startPreviewSyncRuntime = () => {
   };
 
   const handleSetEffect = (payload: SetEffectPayload) => {
-    const targetEffect = webgalStore.getState().stage.effects.find((effect) => effect.target === payload.target);
+    const targetEffect = stageStateManager
+      .getCalculationStageState()
+      .effects.find((effect) => effect.target === payload.target);
     const targetTransform = targetEffect?.transform ? targetEffect.transform : baseTransform;
     const newTransform = {
       ...targetTransform,
@@ -224,12 +235,10 @@ export const startPreviewSyncRuntime = () => {
       },
     };
     WebGAL.gameplay.pixiStage?.removeAnimationByTargetKey(payload.target);
-    webgalStore.dispatch(
-      stageActions.updateEffect({
-        target: payload.target,
-        transform: newTransform,
-      }),
-    );
+    stageStateManager.updateEffectAndCommit({
+      target: payload.target,
+      transform: newTransform,
+    });
   };
 
   const previewRequestHandlers: {
@@ -338,7 +347,7 @@ export const startPreviewSyncRuntime = () => {
     logWarn: (message, error) => logger.warn(message, error),
   });
 
-  const storeUnsubscribe = webgalStore.subscribe(() => {
+  const storeUnsubscribe = stageStateManager.subscribe(() => {
     publishStageSnapshot(false);
   });
 

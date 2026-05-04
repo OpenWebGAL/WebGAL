@@ -85,7 +85,12 @@ interface ActiveModuleState {
   runScript: ReturnType<typeof vi.fn>;
   nextSentence: ReturnType<typeof vi.fn>;
   resetStage: ReturnType<typeof vi.fn>;
-  updateEffect: ReturnType<typeof vi.fn>;
+  updateEffectAndCommit: ReturnType<typeof vi.fn>;
+  stageStateManager: {
+    subscribe: ReturnType<typeof vi.fn>;
+    getCalculationStageState: ReturnType<typeof vi.fn>;
+    updateEffectAndCommit: ReturnType<typeof vi.fn>;
+  };
   loggerInfo: ReturnType<typeof vi.fn>;
   loggerWarn: ReturnType<typeof vi.fn>;
   loggerError: ReturnType<typeof vi.fn>;
@@ -109,7 +114,7 @@ interface WebSocketRuntimeHarness {
     }>;
     layers: Array<{ id: string }>;
   };
-  updateEffect: ReturnType<typeof vi.fn>;
+  updateEffectAndCommit: ReturnType<typeof vi.fn>;
   webgalParserParse: ReturnType<typeof vi.fn>;
   WebGAL: Record<string, any>;
 }
@@ -186,14 +191,12 @@ vi.doMock('./runtime/previewSyncSceneCommand', () => ({
     return getActiveModuleState().executePreviewSyncSceneCommand;
   },
 }));
-vi.doMock('@/store/stageReducer', () => ({
-  stageActions: {
-    get updateEffect() {
-      return getActiveModuleState().updateEffect;
-    },
+vi.doMock('@/Core/Modules/stage/stageStateManager', () => ({
+  get stageStateManager() {
+    return getActiveModuleState().stageStateManager;
   },
 }));
-vi.doMock('@/store/stageInterface', () => ({
+vi.doMock('@/Core/Modules/stage/stageInterface', () => ({
   baseTransform: {
     position: { x: 0, y: 0 },
     scale: { x: 1, y: 1 },
@@ -247,16 +250,19 @@ async function setupWebSocketRuntimeHarness(): Promise<WebSocketRuntimeHarness> 
     layers: [{ id: 'layer-1' }],
   };
   const webgalStore = {
+    subscribe: vi.fn(),
+    dispatch,
+    getState: vi.fn(() => ({})),
+  };
+  const stageStateManager = {
     subscribe: vi.fn((listener: () => void) => {
       subscribeListeners.add(listener);
       return () => {
         subscribeListeners.delete(listener);
       };
     }),
-    dispatch,
-    getState: vi.fn(() => ({
-      stage: stageState,
-    })),
+    getCalculationStageState: vi.fn(() => stageState),
+    updateEffectAndCommit: vi.fn(),
   };
 
   const WebGAL = {
@@ -293,7 +299,7 @@ async function setupWebSocketRuntimeHarness(): Promise<WebSocketRuntimeHarness> 
   const runScript = vi.fn();
   const nextSentence = vi.fn();
   const resetStage = vi.fn();
-  const updateEffect = vi.fn((payload: unknown) => ({ type: 'stage/updateEffect', payload }));
+  const updateEffectAndCommit = stageStateManager.updateEffectAndCommit;
 
   activeModuleState = {
     webgalStore,
@@ -307,7 +313,8 @@ async function setupWebSocketRuntimeHarness(): Promise<WebSocketRuntimeHarness> 
     runScript,
     nextSentence,
     resetStage,
-    updateEffect,
+    updateEffectAndCommit,
+    stageStateManager,
     loggerInfo: vi.fn(),
     loggerWarn: vi.fn(),
     loggerError: vi.fn(),
@@ -334,7 +341,7 @@ async function setupWebSocketRuntimeHarness(): Promise<WebSocketRuntimeHarness> 
     runScript,
     socket,
     stageState,
-    updateEffect,
+    updateEffectAndCommit,
     webgalParserParse,
     WebGAL,
   };
@@ -427,7 +434,6 @@ describe('startPreviewSyncRuntime runtime behavior', () => {
         createRequestEnvelope('preview.command.sync-scene', 'req-sync-scene', {
           sceneName: 'scene/branch.txt',
           sentenceId: 12,
-          syncMode: 'fast',
         }),
       ),
     );
@@ -501,17 +507,18 @@ describe('startPreviewSyncRuntime runtime behavior', () => {
         createRequestEnvelope('preview.command.sync-scene', 'req-sync-scene', {
           sceneName: 'scene/branch.txt',
           sentenceId: 12,
-          syncMode: 'fast',
         }),
       ),
     );
     await flushMicrotasks();
 
-    expect(harness.executePreviewSyncSceneCommand).toHaveBeenCalledWith({
-      sceneName: 'scene/branch.txt',
-      sentenceId: 12,
-      syncMode: 'fast',
-    });
+    expect(harness.executePreviewSyncSceneCommand).toHaveBeenCalledWith(
+      {
+        sceneName: 'scene/branch.txt',
+        sentenceId: 12,
+      },
+      expect.any(Function),
+    );
     expect(parseSentEnvelope(harness.socket, 3)).toEqual({
       kind: 'response',
       type: 'preview.command.sync-scene',
@@ -577,25 +584,13 @@ describe('startPreviewSyncRuntime runtime behavior', () => {
     await flushMicrotasks();
 
     expect(harness.WebGAL.gameplay.pixiStage.removeAnimationByTargetKey).toHaveBeenCalledWith('effect-1');
-    expect(harness.updateEffect).toHaveBeenCalledWith({
+    expect(harness.updateEffectAndCommit).toHaveBeenCalledWith({
       target: 'effect-1',
       transform: {
         position: { x: 9, y: 2 },
         scale: { x: 3, y: 8 },
         alpha: 0.7,
         rotation: 10,
-      },
-    });
-    expect(harness.dispatch).toHaveBeenCalledWith({
-      type: 'stage/updateEffect',
-      payload: {
-        target: 'effect-1',
-        transform: {
-          position: { x: 9, y: 2 },
-          scale: { x: 3, y: 8 },
-          alpha: 0.7,
-          rotation: 10,
-        },
       },
     });
     expect(parseSentEnvelope(harness.socket, 3)).toEqual({

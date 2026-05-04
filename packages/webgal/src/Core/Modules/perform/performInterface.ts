@@ -1,3 +1,5 @@
+import { WEBGAL_NONE } from '@/Core/constants';
+
 /**
  * 描述演出的接口，主要用于控制演出，而不是执行（在演出开始时被调用演出的执行器返回）
  * @interface IPerform
@@ -9,18 +11,22 @@ export interface IPerform {
   duration: number;
   // 演出是不是一个保持类型的演出
   isHoldOn: boolean;
+  // 启动演出的函数；只在状态 commit 后调用
+  startFunction?: () => void;
+  // 演出是否已经启动；未 commit 的演出被清理时不调用卸载函数
+  isStarted?: boolean;
   // 卸载演出的函数
   stopFunction: () => void;
   // 演出是否阻塞游戏流程继续（一个函数，返回 boolean类型的结果，判断要不要阻塞）
   blockingNext: () => boolean;
   // 演出是否阻塞自动模式（一个函数，返回 boolean类型的结果，判断要不要阻塞）
   blockingAuto: () => boolean;
-  // 自动回收使用的 Timeout
-  stopTimeout: undefined | ReturnType<typeof setTimeout>;
+  // 演出是否阻塞状态演算；默认不阻塞，只有需要外部输入才能确定后续状态的演出需要覆盖
+  blockingStateCalculation?: () => boolean;
+  // 未 commit 的演出被丢弃时，将它的终态同步到演算状态
+  settleStateOnDiscard?: () => void;
   // 演出结束后转到下一句
   goNextWhenOver?: boolean;
-  // 对于延迟触发的演出，使用 Promise
-  arrangePerformPromise?: Promise<IPerform>;
   // 跳过由 nextSentence 函数引发的演出回收
   skipNextCollect?: boolean;
 }
@@ -40,5 +46,21 @@ export const initPerform: IPerform = {
   stopFunction: () => {},
   blockingNext: () => false,
   blockingAuto: () => true,
-  stopTimeout: undefined,
 };
+
+export interface INonePerformOptions {
+  isHoldOn?: boolean;
+  blockingAuto?: boolean;
+}
+
+export function createNonePerform(options: INonePerformOptions = {}): IPerform {
+  const { isHoldOn = false, blockingAuto = true } = options;
+  return {
+    performName: WEBGAL_NONE,
+    duration: 0,
+    isHoldOn,
+    stopFunction: () => {},
+    blockingNext: () => false,
+    blockingAuto: () => blockingAuto,
+  };
+}

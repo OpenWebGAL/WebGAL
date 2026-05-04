@@ -1,5 +1,4 @@
 import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
-import stageReducer from '@/store/stageReducer';
 import GUIReducer from '@/store/GUIReducer';
 import userDataReducer from '@/store/userDataReducer';
 import savesReducer from '@/store/savesReducer';
@@ -9,7 +8,6 @@ import savesReducer from '@/store/savesReducer';
  */
 export const webgalStore = configureStore({
   reducer: {
-    stage: stageReducer,
     GUI: GUIReducer,
     userData: userDataReducer,
     saveData: savesReducer,

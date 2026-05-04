@@ -4,7 +4,9 @@ import styles from '@/UI/BottomControlPanel/bottomControlPanel.module.scss';
 import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
 
 import { WebGAL } from '@/Core/WebGAL';
+import { webgalStore } from "@/store/store";
 import { SYSTEM_CONFIG } from '@/config';
+import { stageStateManager } from '@/Core/Modules/stage/stageStateManager';
 
 /**
  * 设置 fast 按钮的激活与否
@@ -36,12 +38,17 @@ export const stopFast = () => {
 /**
  * 开启快进
  */
-export const startFast = () => {
+export const startFast = (force = false) => {
   if (isFast()) {
     return;
   }
   WebGAL.gameplay.isFast = true;
+  const skipAll = force || webgalStore.getState().userData.optionData.skipAll;
   WebGAL.gameplay.fastInterval = setInterval(() => {
+    if (!skipAll && !stageStateManager.getCalculationStageState().isRead) {
+      stopFast();
+      return;
+    }
     nextSentence();
   }, SYSTEM_CONFIG.fast_timeout);
 };

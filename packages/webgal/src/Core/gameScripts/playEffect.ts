@@ -1,12 +1,10 @@
 import { ISentence } from '@/Core/controller/scene/sceneInterface';
 import { logger } from '@/Core/util/logger';
-import { RootState, webgalStore } from '@/store/store';
+import { webgalStore } from '@/store/store';
 import { getNumberArgByKey, getStringArgByKey } from '@/Core/util/getSentenceArg';
-import { IPerform } from '@/Core/Modules/perform/performInterface';
-import { useSelector } from 'react-redux';
+import { createNonePerform, IPerform } from '@/Core/Modules/perform/performInterface';
 import { WebGAL } from '@/Core/WebGAL';
 import { WEBGAL_NONE } from '@/Core/constants';
-import { end } from './end';
 
 /**
  * 播放一段效果音
@@ -29,85 +27,52 @@ export const playEffect = (sentence: ISentence): IPerform => {
     isLoop = true;
   }
   let isOver = false;
+  let seElement: HTMLAudioElement | null = null;
   if (!url || url === WEBGAL_NONE) {
-    return {
-      performName: WEBGAL_NONE,
-      duration: 0,
-      isHoldOn: false,
-      blockingAuto(): boolean {
-        return false;
-      },
-      blockingNext(): boolean {
-        return false;
-      },
-      stopFunction(): void {},
-      stopTimeout: undefined,
-    };
+    return createNonePerform({ blockingAuto: false });
   }
   return {
-    performName: 'none',
+    performName: performInitName,
+    duration: 1000 * 60 * 60,
+    isHoldOn: isLoop,
+    skipNextCollect: true,
+    startFunction: () => {
+      let volume = getNumberArgByKey(sentence, 'volume') ?? 100; // 获取音量比
+      volume = Math.max(0, Math.min(volume, 100)); // 限制音量在 0-100 之间
+      seElement = document.createElement('audio');
+      seElement.src = url;
+      if (isLoop) {
+        seElement.loop = true;
+      }
+      const userDataState = webgalStore.getState().userData;
+      const mainVol = userDataState.optionData.volumeMain;
+      const seVol = mainVol * 0.01 * (userDataState.optionData?.seVolume ?? 100) * 0.01 * volume * 0.01;
+      seElement.volume = seVol;
+      seElement.currentTime = 0;
+      const endFunc = () => {
+        isOver = true;
+        WebGAL.gameplay.performController.unmountPerform(performInitName);
+      };
+      seElement.onended = endFunc;
+      seElement.addEventListener('error', () => {
+        logger.error(`播放效果音失败: ${url}`);
+        endFunc();
+      });
+      seElement.play().catch(() => {});
+    },
     blockingAuto(): boolean {
-      return false;
+      if (isLoop) return false;
+      return !isOver;
     },
     blockingNext(): boolean {
       return false;
     },
-    isHoldOn: false,
-    stopFunction(): void {},
-    stopTimeout: undefined,
-
-    duration: 1000 * 60 * 60,
-    arrangePerformPromise: new Promise((resolve) => {
-      // 播放效果音
-      setTimeout(() => {
-        let volume = getNumberArgByKey(sentence, 'volume') ?? 100; // 获取音量比
-        volume = Math.max(0, Math.min(volume, 100)); // 限制音量在 0-100 之间
-        let seElement = document.createElement('audio');
-        seElement.src = url;
-        if (isLoop) {
-          seElement.loop = true;
-        }
-        const userDataState = webgalStore.getState().userData;
-        const mainVol = userDataState.optionData.volumeMain;
-        const seVol = mainVol * 0.01 * (userDataState.optionData?.seVolume ?? 100) * 0.01 * volume * 0.01;
-        seElement.volume = seVol;
-        seElement.currentTime = 0;
-        const perform: IPerform = {
-          performName: performInitName,
-          duration: 1000 * 60 * 60,
-          isHoldOn: isLoop,
-          skipNextCollect: true,
-          stopFunction: () => {
-            // 演出已经结束了，所以不用播放效果音了
-            seElement.pause();
-            seElement.remove();
-          },
-          blockingNext: () => false,
-          blockingAuto: () => {
-            // loop 的话就不 block auto
-            if (isLoop) return false;
-            return !isOver;
-          },
-          stopTimeout: undefined, // 暂时不用，后面会交给自动清除
-        };
-        resolve(perform);
-        seElement?.play();
-        const endFunc = () => {
-          for (const e of WebGAL.gameplay.performController.performList) {
-            if (e.performName === performInitName) {
-              isOver = true;
-              e.stopFunction();
-              WebGAL.gameplay.performController.unmountPerform(e.performName);
-            }
-          }
-        };
-        seElement.onended = endFunc;
-        seElement.addEventListener('error', (e) => {
-          logger.error(`播放效果音失败: ${url}`);
-          // 播放失败提前结束
-          endFunc();
-        });
-      }, 1);
-    }),
+    stopFunction(): void {
+      if (!seElement) return;
+      seElement.onended = null;
+      seElement.pause();
+      seElement.remove();
+      seElement = null;
+    },
   };
 };

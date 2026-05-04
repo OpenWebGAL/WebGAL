@@ -58,6 +58,13 @@ const en = {
               contributors: 'Contributors',
               website: 'Website',
             },
+            skipAll: {
+              title: 'Skip Mode',
+              options: {
+                read: 'Read',
+                all: 'All',
+              }
+            }
           },
         },
         display: {

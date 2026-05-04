@@ -1,11 +1,12 @@
 import { useSelector } from 'react-redux';
-import { RootState, webgalStore } from '@/store/store';
-import { setStage } from '@/store/stageReducer';
+import { RootState } from '@/store/store';
 import { useEffect, useState } from 'react';
 import { logger } from '@/Core/util/logger';
+import { useStageState } from '@/hooks/useStageState';
+import { stageStateManager } from '@/Core/Modules/stage/stageStateManager';
 
 export const AudioContainer = () => {
-  const stageStore = useSelector((webgalStore: RootState) => webgalStore.stage);
+  const stageStore = useStageState();
   const titleBgm = useSelector((webgalStore: RootState) => webgalStore.GUI.titleBgm);
   const isShowTitle = useSelector((webgalStore: RootState) => webgalStore.GUI.showTitle);
   const userDataState = useSelector((state: RootState) => state.userData);
@@ -45,7 +46,7 @@ export const AudioContainer = () => {
           // 如果音量接近或达到最小值，则设置最终音量（淡出）
           bgm.volume = 0;
           // 淡出效果结束后，将 bgm 置空
-          webgalStore.dispatch(setStage({ key: 'bgm', value: { src: '', enter: 0, volume: 100 } }));
+          stageStateManager.setStageAndCommit('bgm', { src: '', enter: 0, volume: 100 });
         } else {
           // 否则增加音量，并递归调用
           bgm.volume += volumeStep;
@@ -67,8 +68,11 @@ export const AudioContainer = () => {
     // 如果当前背景音乐元素存在，则淡入淡出
     if (bgmElement) {
       bgmEnter === 0 ? (bgmElement.volume = bgmVol) : bgmFadeIn(bgmElement, bgmVol, bgmEnter);
+      if (bgmElement.src && isEnterGame) {
+        bgmElement.play().catch(() => {});
+      }
     }
-  }, [isShowTitle, titleBgm, stageStore.bgm.src, bgmVol, bgmEnter]);
+  }, [isShowTitle, titleBgm, stageStore.bgm.src, bgmVol, bgmEnter, isEnterGame]);
 
   useEffect(() => {
     logger.debug(`设置背景音量：${bgmVol}`);
@@ -105,7 +109,7 @@ export const AudioContainer = () => {
       // Processing after sound effects are played
       uiSeAudioElement.remove();
     });
-    webgalStore.dispatch(setStage({ key: 'uiSe', value: '' }));
+    stageStateManager.setStageAndCommit('uiSe', '');
   }, [uiSoundEffects]);
 
   useEffect(() => {

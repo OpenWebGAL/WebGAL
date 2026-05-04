@@ -1,5 +1,5 @@
 import { ISentence } from '@/Core/controller/scene/sceneInterface';
-import { IPerform } from '@/Core/Modules/perform/performInterface';
+import { createNonePerform, IPerform } from '@/Core/Modules/perform/performInterface';
 import { webgalStore } from '@/store/store';
 import { unlockBgmInUserData } from '@/store/userDataReducer';
 import localforage from 'localforage';
@@ -20,13 +20,5 @@ export const unlockBgm = (sentence: ISentence): IPerform => {
   webgalStore.dispatch(unlockBgmInUserData({ name, url, series }));
   const userDataState = webgalStore.getState().userData;
   localforage.setItem(WebGAL.gameKey, userDataState).then(() => {});
-  return {
-    performName: 'none',
-    duration: 0,
-    isHoldOn: false,
-    stopFunction: () => {},
-    blockingNext: () => false,
-    blockingAuto: () => true,
-    stopTimeout: undefined, // 暂时不用，后面会交给自动清除
-  };
+  return createNonePerform();
 };

@@ -3,6 +3,7 @@
 !dist/index.html
 !dist/assets/**
 !dist/webgal-serviceworker.js
+!dist/webgal-engine.json
 !package.json
 !README.md
 !LICENSE
