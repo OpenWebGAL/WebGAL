@@ -7,52 +7,52 @@ import { commitForward, forward } from '@/Core/controller/gamePlay/nextSentence'
 import { sceneParser } from '@/Core/parser/sceneParser';
 import { logger } from '@/Core/util/logger';
 import { assetSetter, fileType } from '@/Core/util/gameAssetsAccess/assetSetter';
-import type { IFastPreviewTimeoutPayload } from '@/types/debugProtocol';
+import { FastPreviewTimeoutPayload, SyncScenePayload } from '../../../../types/editorPreviewProtocol';
 
-const FAST_PREVIEW_MAX_DURATION_MS = 500;
+export const FAST_PREVIEW_MAX_DURATION_MS = 500;
 const FAST_PREVIEW_TIMEOUT_CHECK_INTERVAL = 100;
 
-type FastPreviewTimeoutHandler = (payload: IFastPreviewTimeoutPayload) => void;
+export type FastPreviewTimeoutEmitter = (payload: FastPreviewTimeoutPayload) => void;
 
-export const syncWithOrigine = (
-  sceneName: string,
-  sentenceId: number,
-  onFastPreviewTimeout?: FastPreviewTimeoutHandler,
-) => {
+export function executePreviewSyncSceneCommand(
+  { sceneName, sentenceId }: SyncScenePayload,
+  onFastPreviewTimeout?: FastPreviewTimeoutEmitter,
+): void {
   logger.warn('正在跳转到' + sceneName + ':' + sentenceId);
   WebGAL.gameplay.isFastPreview = false;
+
   const dispatch = webgalStore.dispatch;
   dispatch(setVisibility({ component: 'showTitle', visibility: false }));
   dispatch(setVisibility({ component: 'showMenuPanel', visibility: false }));
   dispatch(setVisibility({ component: 'isEnterGame', visibility: true }));
   dispatch(setVisibility({ component: 'isShowLogo', visibility: false }));
-  const title = document.querySelector('.html-body__title-enter') as HTMLElement;
+
+  const title = document.querySelector('.html-body__title-enter') as HTMLElement | null;
   if (title) {
     title.style.display = 'none';
   }
-  // 重新获取场景
-  const sceneUrl: string = assetSetter(sceneName, fileType.scene);
-  // 场景写入到运行时
+
+  const sceneUrl = assetSetter(sceneName, fileType.scene);
+
   sceneFetcher(sceneUrl)
     .then((rawScene) => {
       resetStage(true);
       WebGAL.sceneManager.sceneData.currentScene = sceneParser(rawScene, sceneName, sceneUrl);
-      // 开始快进到指定语句
       const currentSceneName = WebGAL.sceneManager.sceneData.currentScene.sceneName;
-      void syncFast(sentenceId, currentSceneName, onFastPreviewTimeout);
+      void runFastPreview(sentenceId, currentSceneName, onFastPreviewTimeout);
     })
-    .catch((e) => {
+    .catch((error) => {
       WebGAL.gameplay.isFast = false;
       WebGAL.gameplay.isFastPreview = false;
-      logger.error('实时预览跳转错误', e);
+      logger.error('实时预览跳转错误', error);
     });
-};
+}
 
-export async function syncFast(
+export async function runFastPreview(
   sentenceId: number,
   currentSceneName: string,
-  onFastPreviewTimeout?: FastPreviewTimeoutHandler,
-) {
+  onFastPreviewTimeout?: FastPreviewTimeoutEmitter,
+): Promise<void> {
   const fastPreviewStartTime = performance.now();
   const baseSceneStackDepth = WebGAL.sceneManager.sceneData.sceneStack.length;
   WebGAL.gameplay.isFast = true;
@@ -100,7 +100,6 @@ export async function syncFast(
         logger.warn('实时预览跳转停止：本次 forward 没有推进语句指针');
         break;
       }
-
     }
   } finally {
     WebGAL.gameplay.isFast = false;
@@ -108,16 +107,18 @@ export async function syncFast(
   }
 
   commitForward();
+
   const forwardedLineCount =
     WebGAL.sceneManager.sceneData.currentScene.sceneName === currentSceneName
       ? Math.min(WebGAL.sceneManager.sceneData.currentSentenceId, sentenceId)
       : sentenceId;
   const fastPreviewElapsedMs = Math.round(performance.now() - fastPreviewStartTime - suspendedElapsedMs);
+
   if (isTimedOut) {
-    const payload: IFastPreviewTimeoutPayload = {
-      scene: WebGAL.sceneManager.sceneData.currentScene.sceneName,
-      sentence: WebGAL.sceneManager.sceneData.currentSentenceId,
-      targetSentence: sentenceId,
+    const payload: FastPreviewTimeoutPayload = {
+      sceneName: WebGAL.sceneManager.sceneData.currentScene.sceneName,
+      sentenceId: WebGAL.sceneManager.sceneData.currentSentenceId,
+      targetSentenceId: sentenceId,
       forwardedLineCount,
       elapsedMs: Math.max(timeoutElapsedMs, fastPreviewElapsedMs),
       maxDurationMs: FAST_PREVIEW_MAX_DURATION_MS,
@@ -127,10 +128,11 @@ export async function syncFast(
     );
     onFastPreviewTimeout?.(payload);
   }
+
   logger.info(`实时预览快进完成：快进 ${forwardedLineCount} 行，用时 ${fastPreviewElapsedMs}ms`);
 }
 
-function shouldContinueFastPreview(sentenceId: number, currentSceneName: string, baseSceneStackDepth: number) {
+function shouldContinueFastPreview(sentenceId: number, currentSceneName: string, baseSceneStackDepth: number): boolean {
   const sceneData = WebGAL.sceneManager.sceneData;
   if (sceneData.currentScene.sceneName === currentSceneName) {
     return sceneData.currentSentenceId < sentenceId;
@@ -138,7 +140,7 @@ function shouldContinueFastPreview(sentenceId: number, currentSceneName: string,
   return sceneData.sceneStack.length > baseSceneStackDepth;
 }
 
-async function waitForPendingSceneWrite() {
+async function waitForPendingSceneWrite(): Promise<boolean> {
   const sceneWritePromise = WebGAL.sceneManager.sceneWritePromise;
   if (!sceneWritePromise) {
     return false;

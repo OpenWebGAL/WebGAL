@@ -7,7 +7,7 @@ import { assetSetter, fileType } from './util/gameAssetsAccess/assetSetter';
 import { sceneFetcher } from './controller/scene/sceneFetcher';
 import { sceneParser } from './parser/sceneParser';
 import { bindExtraFunc } from '@/Core/util/coreInitialFunction/bindExtraFunc';
-import { webSocketFunc } from '@/Core/util/syncWithEditor/webSocketFunc';
+import { startPreviewSyncRuntime } from '@/Core/util/syncWithEditor/previewSyncRuntime';
 import PixiStage from '@/Core/controller/stage/pixi/PixiController';
 import { syncPixiStageState } from '@/Core/controller/stage/pixi/syncPixiStageState';
 import axios from 'axios';
@@ -44,15 +44,27 @@ export const initializeScript = (): void => {
   loadStyle('./game/userStyleSheet.css');
   // 获得 user Animation
   getUserAnimation();
-  // 获取游戏信息
-  infoFetcher('./game/config.txt');
   // 获取start场景
   const sceneUrl: string = assetSetter('start.txt', fileType.scene);
   // 场景写入到运行时
-  sceneFetcher(sceneUrl).then((rawScene) => {
+  const initialSceneReady = sceneFetcher(sceneUrl).then((rawScene) => {
     WebGAL.sceneManager.sceneData.currentScene = sceneParser(rawScene, 'start.txt', sceneUrl);
     WebGAL.sceneManager.settledScenes.add(sceneUrl); // 放入已加载场景列表，避免递归加载相同场景
   });
+  // 获取游戏信息
+  const gameConfigReady = infoFetcher('./game/config.txt');
+  gameConfigReady
+    .then(async (gameConfig) => {
+      if (gameConfig.Enable_Editor_Sync !== true) {
+        return;
+      }
+
+      await initialSceneReady;
+      startPreviewSyncRuntime();
+    })
+    .catch((error) => {
+      logger.error('启动编辑器同步 V1 runtime 失败', error);
+    });
   /**
    * 启动Pixi
    */
@@ -76,7 +88,6 @@ export const initializeScript = (): void => {
    * 绑定工具函数
    */
   bindExtraFunc();
-  webSocketFunc();
 };
 
 function loadStyle(url: string) {
