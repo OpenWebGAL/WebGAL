@@ -35,6 +35,11 @@ export function argsParser(
         key: 'vocal',
         value: assetSetter(e, fileType.vocal),
       });
+    } else if (argName === 'vocal' && argValue !== undefined) {
+      returnArrayList.push({
+        key: argName,
+        value: assetSetter(argValue, fileType.vocal),
+      });
     } else {
       // 判断是不是省略参数
       if (argValue === undefined) {
