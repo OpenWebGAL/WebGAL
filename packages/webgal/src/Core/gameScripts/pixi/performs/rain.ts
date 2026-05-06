@@ -3,6 +3,7 @@ import * as PIXI from 'pixi.js';
 import { registerPerform } from '@/Core/util/pixiPerformManager/pixiPerformManager';
 import { WebGAL } from '@/Core/WebGAL';
 import { SCREEN_CONSTANTS } from '@/Core/util/constants';
+import rainTextureUrl from '@/assets/tex/rain.png';
 
 type ContainerType = 'foreground' | 'background';
 
@@ -59,7 +60,6 @@ const pixiRain = (
   const raindropTextures: PIXI.Texture[] = [];
   const raindrops: RaindropSprite[] = [];
 
-  const baseTexturePath = './game/tex/rain.png';
   const SPRITE_WIDTH = 128;
   const SPRITE_HEIGHT = 640;
   const NUM_SPRITES = 5;
@@ -133,7 +133,7 @@ const pixiRain = (
     while (raindrops.length > 0) raindrops.pop();
     particleContainer.removeChildren();
 
-    const baseTexture = PIXI.BaseTexture.from(baseTexturePath);
+    const baseTexture = PIXI.BaseTexture.from(rainTextureUrl);
 
     const finalizeSetup = () => {
       if (baseTexture.valid) {
@@ -174,7 +174,7 @@ const pixiRain = (
         finalizeSetup();
       });
       baseTexture.once('error', (errorEvent) => {
-        console.error(`Error loading base texture ${baseTexturePath}:`, errorEvent);
+        console.error(`Error loading base texture ${rainTextureUrl}:`, errorEvent);
         finalizeSetup();
       });
     }
