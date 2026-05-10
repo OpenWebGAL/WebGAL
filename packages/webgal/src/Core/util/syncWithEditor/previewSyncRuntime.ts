@@ -13,6 +13,7 @@ import {
   SetComponentVisibilityPayload,
   SetEffectPayload,
   SetFontOptimizationPayload,
+  SetTextReadModePayload,
   StageSnapshotUpdatedPayload,
   SyncScenePayload,
   FastPreviewTimeoutPayload,
@@ -36,6 +37,7 @@ import {
   PreviewSyncTransportSocket,
 } from './runtime/previewSyncTransport';
 import { executePreviewSyncSceneCommand } from './runtime/previewSyncSceneCommand';
+import { setDebugTextReadMode } from '@/Core/Modules/readHistory';
 
 let previewSyncRuntimeStarted = false;
 type StageStateSnapshot = IStageState;
@@ -217,6 +219,10 @@ export const startPreviewSyncRuntime = () => {
     applyComponentVisibility(payload);
   };
 
+  const handleSetTextReadMode = (payload: SetTextReadModePayload) => {
+    setDebugTextReadMode(payload.isRead);
+  };
+
   const handleSetEffect = (payload: SetEffectPayload) => {
     const targetEffect = stageStateManager
       .getCalculationStageState()
@@ -270,6 +276,10 @@ export const startPreviewSyncRuntime = () => {
     },
     'preview.command.set-font-optimization': (payload: SetFontOptimizationPayload) => {
       handleSetFontOptimization(payload);
+      return {};
+    },
+    'preview.command.set-text-read-mode': (payload: SetTextReadModePayload) => {
+      handleSetTextReadMode(payload);
       return {};
     },
   };

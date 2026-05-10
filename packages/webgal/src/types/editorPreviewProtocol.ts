@@ -34,6 +34,10 @@ export interface SetFontOptimizationPayload {
   enabled: boolean;
 }
 
+export interface SetTextReadModePayload {
+  isRead: boolean;
+}
+
 export interface PreviewCommandPayloadByType {
   'preview.command.sync-scene': SyncScenePayload;
   'preview.command.run-scene-content': RunSceneContentPayload;
@@ -42,6 +46,7 @@ export interface PreviewCommandPayloadByType {
   'preview.command.set-effect': SetEffectPayload;
   'preview.command.set-component-visibility': SetComponentVisibilityPayload;
   'preview.command.set-font-optimization': SetFontOptimizationPayload;
+  'preview.command.set-text-read-mode': SetTextReadModePayload;
 }
 
 export type PreviewCommandType = keyof PreviewCommandPayloadByType;
@@ -54,6 +59,7 @@ const PREVIEW_COMMAND_TYPES = [
   'preview.command.set-effect',
   'preview.command.set-component-visibility',
   'preview.command.set-font-optimization',
+  'preview.command.set-text-read-mode',
 ] as const satisfies readonly PreviewCommandType[];
 
 export interface PreviewRequestPayloadByType extends PreviewCommandPayloadByType {}

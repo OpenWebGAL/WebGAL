@@ -91,6 +91,7 @@ interface ActiveModuleState {
     getCalculationStageState: ReturnType<typeof vi.fn>;
     updateEffectAndCommit: ReturnType<typeof vi.fn>;
   };
+  setDebugTextReadMode: ReturnType<typeof vi.fn>;
   loggerInfo: ReturnType<typeof vi.fn>;
   loggerWarn: ReturnType<typeof vi.fn>;
   loggerError: ReturnType<typeof vi.fn>;
@@ -114,6 +115,7 @@ interface WebSocketRuntimeHarness {
     }>;
     layers: Array<{ id: string }>;
   };
+  setDebugTextReadMode: ReturnType<typeof vi.fn>;
   updateEffectAndCommit: ReturnType<typeof vi.fn>;
   webgalParserParse: ReturnType<typeof vi.fn>;
   WebGAL: Record<string, any>;
@@ -194,6 +196,11 @@ vi.doMock('./runtime/previewSyncSceneCommand', () => ({
 vi.doMock('@/Core/Modules/stage/stageStateManager', () => ({
   get stageStateManager() {
     return getActiveModuleState().stageStateManager;
+  },
+}));
+vi.doMock('@/Core/Modules/readHistory', () => ({
+  get setDebugTextReadMode() {
+    return getActiveModuleState().setDebugTextReadMode;
   },
 }));
 vi.doMock('@/Core/Modules/stage/stageInterface', () => ({
@@ -300,6 +307,7 @@ async function setupWebSocketRuntimeHarness(): Promise<WebSocketRuntimeHarness> 
   const nextSentence = vi.fn();
   const resetStage = vi.fn();
   const updateEffectAndCommit = stageStateManager.updateEffectAndCommit;
+  const setDebugTextReadMode = vi.fn();
 
   activeModuleState = {
     webgalStore,
@@ -315,6 +323,7 @@ async function setupWebSocketRuntimeHarness(): Promise<WebSocketRuntimeHarness> 
     resetStage,
     updateEffectAndCommit,
     stageStateManager,
+    setDebugTextReadMode,
     loggerInfo: vi.fn(),
     loggerWarn: vi.fn(),
     loggerError: vi.fn(),
@@ -341,6 +350,7 @@ async function setupWebSocketRuntimeHarness(): Promise<WebSocketRuntimeHarness> 
     runScript,
     socket,
     stageState,
+    setDebugTextReadMode,
     updateEffectAndCommit,
     webgalParserParse,
     WebGAL,
@@ -597,6 +607,29 @@ describe('startPreviewSyncRuntime runtime behavior', () => {
       kind: 'response',
       type: 'preview.command.set-effect',
       requestId: 'req-set-effect',
+      payload: {},
+    });
+  });
+
+  it('applies text read mode updates through the v1 protocol and replies with a success envelope', async () => {
+    const harness = await setupWebSocketRuntimeHarness();
+
+    await completeRegisterPreviewHandshake(harness);
+
+    harness.socket.emitMessage(
+      JSON.stringify(
+        createRequestEnvelope('preview.command.set-text-read-mode', 'req-set-text-read-mode', {
+          isRead: true,
+        }),
+      ),
+    );
+    await flushMicrotasks();
+
+    expect(harness.setDebugTextReadMode).toHaveBeenCalledWith(true);
+    expect(parseSentEnvelope(harness.socket, 3)).toEqual({
+      kind: 'response',
+      type: 'preview.command.set-text-read-mode',
+      requestId: 'req-set-text-read-mode',
       payload: {},
     });
   });

@@ -18,6 +18,7 @@ describe('editorPreviewProtocol artifacts', () => {
   it('exposes a preview command type guard', () => {
     expect(isPreviewCommandType('preview.command.sync-scene')).toBe(true);
     expect(isPreviewCommandType('preview.command.run-snippet')).toBe(true);
+    expect(isPreviewCommandType('preview.command.set-text-read-mode')).toBe(true);
     expect(isPreviewCommandType('preview.command.unknown')).toBe(false);
     expect(isPreviewCommandType('session.register-preview')).toBe(false);
   });
