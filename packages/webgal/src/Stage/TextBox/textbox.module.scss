@@ -235,6 +235,18 @@ $height: 330px;
   overflow: hidden;
 }
 
-.read {
+.readText {
+  --webgal-read-text: 1;
+}
+
+.readTextOuter {
+  background-image: none;
+  background-clip: border-box;
+  -webkit-background-clip: border-box;
   color: #C0C0C0;
+  -webkit-text-fill-color: #C0C0C0;
+}
+
+.readTextInner {
+  --webgal-read-text-inner: 1;
 }
