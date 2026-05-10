@@ -2,6 +2,7 @@ import {
   DebugCommand,
   IComponentVisibilityCommand,
   IDebugMessage,
+  ITextReadModeCommand,
   type IFastPreviewTimeoutPayload,
 } from '@/types/debugProtocol';
 import { webgalStore } from '@/store/store';
@@ -16,6 +17,7 @@ import { logger } from '@/Core/util/logger';
 import { syncWithOrigine } from './syncWithOrigine';
 import { baseTransform, IEffect } from '@/Core/Modules/stage/stageInterface';
 import { stageStateManager } from '@/Core/Modules/stage/stageStateManager';
+import { setDebugTextReadMode } from '@/Core/Modules/readHistory';
 
 let editorSocket: WebSocket | null = null;
 
@@ -156,6 +158,14 @@ export const webSocketFunc = () => {
       } catch (e) {
         logger.error(`无法设置效果 ${message.message}, ${e}`);
         return;
+      }
+    }
+    if (message.command === DebugCommand.SET_TEXT_READ_MODE) {
+      try {
+        const command = JSON.parse(message.message) as ITextReadModeCommand;
+        setDebugTextReadMode(command.isRead);
+      } catch (e) {
+        logger.error(`无法设置文本已读显示模式 ${message.message}, ${e}`);
       }
     }
   };

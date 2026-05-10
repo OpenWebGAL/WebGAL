@@ -21,6 +21,8 @@ export enum DebugCommand {
   SET_EFFECT,
   // 实时预览快进超时
   FAST_PREVIEW_TIMEOUT,
+  // 设置文本已读显示模式
+  SET_TEXT_READ_MODE,
 }
 
 export interface IFastPreviewTimeoutPayload {
@@ -63,4 +65,8 @@ export interface IComponentsVisibility {
 export interface IComponentVisibilityCommand {
   component: keyof IComponentsVisibility;
   visibility: boolean;
+}
+
+export interface ITextReadModeCommand {
+  isRead: boolean;
 }
