@@ -3,7 +3,6 @@ import { logger } from '../../util/logger';
 import { sceneFetcher } from '../scene/sceneFetcher';
 import { sceneParser } from '../../parser/sceneParser';
 import { webgalStore } from '@/store/store';
-import { resetStageState } from '@/store/stageReducer';
 import { setVisibility } from '@/store/GUIReducer';
 import { restorePerform } from './jumpFromBacklog';
 import { stopAllPerform } from '@/Core/controller/gamePlay/stopAllPerform';
@@ -11,6 +10,7 @@ import cloneDeep from 'lodash/cloneDeep';
 import { setEbg } from '@/Core/gameScripts/changeBg/setEbg';
 
 import { WebGAL } from '@/Core/WebGAL';
+import { stageStateManager } from '@/Core/Modules/stage/stageStateManager';
 
 /**
  * 读取游戏存档
@@ -58,7 +58,7 @@ export function loadGameFromStageData(stageData: ISaveData) {
   // 确保原先未读的文本在 load 时能正确显示为已读文本
   newStageState.isRead = true;
   const dispatch = webgalStore.dispatch;
-  dispatch(resetStageState(newStageState));
+  stageStateManager.replaceCalculationStageState(newStageState);
 
   // 恢复演出
   setTimeout(restorePerform, 0);
@@ -69,5 +69,5 @@ export function loadGameFromStageData(stageData: ISaveData) {
   /**
    * 恢复模糊背景
    */
-  setEbg(webgalStore.getState().stage.bgName);
+  setEbg(newStageState.bgName);
 }

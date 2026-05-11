@@ -28,11 +28,13 @@ export class SceneManager {
   public settledAssets: Set<string> = new Set();
   public sceneData: ISceneData = cloneDeep(initSceneData);
   public lockSceneWrite = false;
+  public sceneWritePromise: Promise<void> | null = null;
 
   public resetScene() {
     this.sceneData.currentSentenceId = 0;
     this.sceneData.sceneStack = [];
     this.sceneData.currentScene = cloneDeep(initSceneData.currentScene);
+    this.sceneWritePromise = null;
     this.settledScenes.clear();
     this.settledAssets.clear();
   }

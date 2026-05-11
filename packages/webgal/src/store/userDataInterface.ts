@@ -1,4 +1,4 @@
-import { IGameVar, IStageState } from './stageInterface';
+import { IGameVar, IStageState } from '@/Core/Modules/stage/stageInterface';
 import { language } from '@/config/language';
 import { IBacklogItem } from '@/Core/Modules/backlog';
 import { ISceneEntry } from '@/Core/Modules/scene';

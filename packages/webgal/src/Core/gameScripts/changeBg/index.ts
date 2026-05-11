@@ -3,18 +3,18 @@ import { IPerform } from '@/Core/Modules/perform/performInterface';
 // import {getRandomPerformName} from '../../../util/getRandomPerformName';
 import styles from '@/Stage/stage.module.scss';
 import { webgalStore } from '@/store/store';
-import { setStage, stageActions } from '@/store/stageReducer';
 import { getNumberArgByKey, getStringArgByKey } from '@/Core/util/getSentenceArg';
 import { unlockCgInUserData } from '@/store/userDataReducer';
 import { logger } from '@/Core/util/logger';
-import { ITransform } from '@/store/stageInterface';
+import { ITransform } from '@/Core/Modules/stage/stageInterface';
 import { generateTransformAnimationObj } from '@/Core/controller/stage/pixi/animations/generateTransformAnimationObj';
 import { AnimationFrame, IUserAnimation } from '@/Core/Modules/animations';
 import cloneDeep from 'lodash/cloneDeep';
-import { getAnimateDuration } from '@/Core/Modules/animationFunctions';
+import { applyAnimationEndState, getAnimateDuration } from '@/Core/Modules/animationFunctions';
 import { WebGAL } from '@/Core/WebGAL';
 import { DEFAULT_BG_OUT_DURATION } from '@/Core/constants';
 import localforage from 'localforage';
+import { stageStateManager } from '@/Core/Modules/stage/stageStateManager';
 
 /**
  * 进行背景图片的切换
@@ -42,14 +42,14 @@ export const changeBg = (sentence: ISentence): IPerform => {
   /**
    * 判断背景 URL 是否发生了变化
    */
-  const isUrlChanged = webgalStore.getState().stage.bgName !== sentence.content;
+  const isUrlChanged = stageStateManager.getCalculationStageState().bgName !== sentence.content;
 
   /**
    * 删掉相关 Effects，因为已经移除了
    */
   if (isUrlChanged) {
-    dispatch(stageActions.removeEffectByTargetId(`bg-main`));
-    dispatch(stageActions.removeAnimationSettingsByTarget(`bg-main`));
+    stageStateManager.removeEffectByTargetId(`bg-main`);
+    stageStateManager.removeAnimationSettingsByTarget(`bg-main`);
   }
 
   // 处理 transform 和 默认 transform
@@ -64,9 +64,7 @@ export const changeBg = (sentence: ISentence): IPerform => {
       const newAnimation: IUserAnimation = { name: animationName, effects: animationObj };
       WebGAL.animationManager.addAnimation(newAnimation);
       duration = getAnimateDuration(animationName);
-      webgalStore.dispatch(
-        stageActions.updateAnimationSettings({ target: 'bg-main', key: 'enterAnimationName', value: animationName }),
-      );
+      stageStateManager.updateAnimationSettings({ target: 'bg-main', key: 'enterAnimationName', value: animationName });
     } catch (e) {
       // 解析都错误了，歇逼吧
       applyDefaultTransform();
@@ -85,35 +83,25 @@ export const changeBg = (sentence: ISentence): IPerform => {
     const newAnimation: IUserAnimation = { name: animationName, effects: animationObj };
     WebGAL.animationManager.addAnimation(newAnimation);
     duration = getAnimateDuration(animationName);
-    webgalStore.dispatch(
-      stageActions.updateAnimationSettings({ target: 'bg-main', key: 'enterAnimationName', value: animationName }),
-    );
+    stageStateManager.updateAnimationSettings({ target: 'bg-main', key: 'enterAnimationName', value: animationName });
   }
 
   // 应用动画的优先级更高一点
   const enterAnimation = getStringArgByKey(sentence, 'enter');
   const exitAnimation = getStringArgByKey(sentence, 'exit');
   if (enterAnimation) {
-    webgalStore.dispatch(
-      stageActions.updateAnimationSettings({ target: 'bg-main', key: 'enterAnimationName', value: enterAnimation }),
-    );
+    stageStateManager.updateAnimationSettings({ target: 'bg-main', key: 'enterAnimationName', value: enterAnimation });
     duration = getAnimateDuration(enterAnimation);
   }
   if (exitAnimation) {
-    webgalStore.dispatch(
-      stageActions.updateAnimationSettings({ target: 'bg-main', key: 'exitAnimationName', value: exitAnimation }),
-    );
+    stageStateManager.updateAnimationSettings({ target: 'bg-main', key: 'exitAnimationName', value: exitAnimation });
     duration = getAnimateDuration(exitAnimation);
   }
   if (enterDuration >= 0) {
-    webgalStore.dispatch(
-      stageActions.updateAnimationSettings({ target: 'bg-main', key: 'enterDuration', value: enterDuration }),
-    );
+    stageStateManager.updateAnimationSettings({ target: 'bg-main', key: 'enterDuration', value: enterDuration });
   }
   if (exitDuration >= 0) {
-    webgalStore.dispatch(
-      stageActions.updateAnimationSettings({ target: 'bg-main', key: 'exitDuration', value: exitDuration }),
-    );
+    stageStateManager.updateAnimationSettings({ target: 'bg-main', key: 'exitDuration', value: exitDuration });
   }
 
   /**
@@ -127,17 +115,27 @@ export const changeBg = (sentence: ISentence): IPerform => {
   }
 
   postBgStateSet();
-  dispatch(setStage({ key: 'bgName', value: sentence.content }));
+  stageStateManager.setStage('bgName', sentence.content);
 
   return {
     performName: `bg-main-${sentence.content}`,
     duration,
     isHoldOn: false,
+    settleStateOnDiscard: () => {
+      if (sentence.content === '' || !isUrlChanged) {
+        return;
+      }
+      const animationName = stageStateManager
+        .getCalculationStageState()
+        .animationSettings.find((setting) => setting.target === 'bg-main')?.enterAnimationName;
+      if (animationName) {
+        applyAnimationEndState(animationName, 'bg-main', false);
+      }
+    },
     stopFunction: () => {
       WebGAL.gameplay.pixiStage?.stopPresetAnimationOnTarget('bg-main');
     },
     blockingNext: () => false,
     blockingAuto: () => true,
-    stopTimeout: undefined, // 暂时不用，后面会交给自动清除
   };
 };

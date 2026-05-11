@@ -1,4 +1,4 @@
-import { IStageState } from '@/store/stageInterface';
+import { IStageState } from '@/Core/Modules/stage/stageInterface';
 
 export enum DebugCommand {
   // 跳转
@@ -19,6 +19,19 @@ export enum DebugCommand {
   FONT_OPTIMIZATION,
   // 直接设置效果
   SET_EFFECT,
+  // 实时预览快进超时
+  FAST_PREVIEW_TIMEOUT,
+  // 设置文本已读显示模式
+  SET_TEXT_READ_MODE,
+}
+
+export interface IFastPreviewTimeoutPayload {
+  scene: string;
+  sentence: number;
+  targetSentence: number;
+  forwardedLineCount: number;
+  elapsedMs: number;
+  maxDurationMs: number;
 }
 
 export interface IDebugMessage {
@@ -52,4 +65,8 @@ export interface IComponentsVisibility {
 export interface IComponentVisibilityCommand {
   component: keyof IComponentsVisibility;
   visibility: boolean;
+}
+
+export interface ITextReadModeCommand {
+  isRead: boolean;
 }

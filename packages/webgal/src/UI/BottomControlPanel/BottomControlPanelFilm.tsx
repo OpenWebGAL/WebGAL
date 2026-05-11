@@ -8,10 +8,11 @@ import { componentsVisibility, MenuPanelTag } from '@/store/guiInterface';
 import { backToTitle } from '@/Core/controller/gamePlay/backToTitle';
 import { useValue } from '@/hooks/useValue';
 import { HamburgerButton } from '@icon-park/react';
+import { useStageState } from '@/hooks/useStageState';
 
 export const BottomControlPanelFilm = () => {
   const showPanel = useValue(false);
-  const stageState = useSelector((state: RootState) => state.stage);
+  const stageState = useStageState();
   const dispatch = useDispatch();
   const setComponentVisibility = (component: keyof componentsVisibility, visibility: boolean) => {
     dispatch(setVisibility({ component, visibility }));

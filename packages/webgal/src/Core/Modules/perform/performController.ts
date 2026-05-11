@@ -1,12 +1,9 @@
 import { IPerform } from '@/Core/Modules/perform/performInterface';
 import { ISentence } from '@/Core/controller/scene/sceneInterface';
-import { webgalStore } from '@/store/store';
-import cloneDeep from 'lodash/cloneDeep';
-import { resetStageState, stageActions } from '@/store/stageReducer';
 import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
-import { IRunPerform } from '@/store/stageInterface';
 import { WEBGAL_NONE } from '@/Core/constants';
 import { getBooleanArgByKey } from '@/Core/util/getSentenceArg';
+import { stageStateManager } from '@/Core/Modules/stage/stageStateManager';
 
 /**
  * 获取随机演出名称
@@ -15,8 +12,17 @@ export const getRandomPerformName = (): string => {
   return Math.random().toString().substring(0, 10);
 };
 
+interface IPendingPerform {
+  perform: IPerform;
+  script: ISentence;
+  syncPerformState: boolean;
+}
+
 export class PerformController {
   public performList: Array<IPerform> = [];
+  private pendingPerformList: Array<IPendingPerform> = [];
+  private isCollectingPerforms = false;
+  private stopTimeoutMap = new WeakMap<IPerform, ReturnType<typeof setTimeout>>();
 
   /**
    * 判断 perform 名称是否匹配（支持前缀匹配，用于清理并行演出）
@@ -24,6 +30,14 @@ export class PerformController {
    */
   private matchPerformName(performName: string, name: string): boolean {
     return performName === name || performName.startsWith(name + '#');
+  }
+
+  public beginCollectingPerforms() {
+    this.isCollectingPerforms = true;
+  }
+
+  public endCollectingPerforms() {
+    this.isCollectingPerforms = false;
   }
 
   public arrangeNewPerform(perform: IPerform, script: ISentence, syncPerformState = true) {
@@ -35,26 +49,108 @@ export class PerformController {
       for (let i = 0; i < this.performList.length; i++) {
         const e = this.performList[i];
         if (e.performName === perform.performName) {
-          e.stopFunction();
-          clearTimeout(e.stopTimeout as unknown as number);
+          this.stopStartedPerform(e);
+          this.clearPerformTimeout(e);
           this.performList.splice(i, 1);
           i--;
         }
       }
     }
+    perform.isStarted = false;
+    this.pendingPerformList = this.pendingPerformList.filter((p) => p.perform.performName !== perform.performName);
 
     // 语句不执行演出
     if (perform.performName === WEBGAL_NONE) {
       return;
     }
+
     // 同步演出状态
     if (syncPerformState) {
       const performToAdd = { id: perform.performName, isHoldOn: perform.isHoldOn, script: script };
-      webgalStore.dispatch(stageActions.addPerform(performToAdd));
+      if (this.isCollectingPerforms) {
+        stageStateManager.addPerform(performToAdd);
+      } else {
+        stageStateManager.addPerform(performToAdd);
+        stageStateManager.commit({ applyPixiEffects: false });
+      }
     }
 
+    if (this.isCollectingPerforms) {
+      this.pendingPerformList.push({ perform, script, syncPerformState });
+      return;
+    }
+
+    this.startPerform(perform, script);
+    if (!this.isCollectingPerforms) {
+      stageStateManager.applyCommittedPixiEffects();
+    }
+  }
+
+  public commitPendingPerforms() {
+    const performsToStart = this.pendingPerformList;
+    this.pendingPerformList = [];
+    performsToStart.forEach(({ perform, script }) => {
+      this.startPerform(perform, script);
+    });
+  }
+
+  public discardUncommittedNonHoldPerforms(settleDiscardedState = false) {
+    this.pendingPerformList = this.pendingPerformList.filter(({ perform }) => {
+      if (perform.isHoldOn) {
+        return true;
+      }
+      if (settleDiscardedState) {
+        perform.settleStateOnDiscard?.();
+      }
+      return false;
+    });
+  }
+
+  public hasPendingBlockingStateCalculationPerform() {
+    return this.pendingPerformList.some(({ perform }) => perform.blockingStateCalculation?.() ?? false);
+  }
+
+  public hasBlockingNextPerform() {
+    return this.performList.some((e) => e.blockingNext());
+  }
+
+  public hasUnsettledNonHoldPerform() {
+    return this.performList.some((e) => !e.isHoldOn && !e.skipNextCollect);
+  }
+
+  public settleNonHoldPerforms() {
+    let isGoNext = false;
+    for (let i = 0; i < this.performList.length; i++) {
+      const e = this.performList[i];
+      if (!e.isHoldOn) {
+        if (e.goNextWhenOver) {
+          isGoNext = true;
+        }
+        if (!e.skipNextCollect) {
+          this.stopStartedPerform(e);
+          this.clearPerformTimeout(e);
+          this.performList.splice(i, 1);
+          i--;
+          this.erasePerformFromState(e.performName);
+        }
+      }
+    }
+    stageStateManager.commit();
+    if (isGoNext) {
+      nextSentence();
+    }
+  }
+
+  public clearNonHoldPerformsFromStageState() {
+    stageStateManager.clearUncommittedNonHoldPerforms();
+  }
+
+  private startPerform(perform: IPerform, script: ISentence) {
+    perform.isStarted = true;
+    perform.startFunction?.();
+
     // 时间到后自动清理演出
-    perform.stopTimeout = setTimeout(() => {
+    const stopTimeout = setTimeout(() => {
       // perform.stopFunction();
       // perform.isOver = true;
       if (!perform.isHoldOn) {
@@ -62,6 +158,7 @@ export class PerformController {
         this.softUnmountPerformObject(perform);
       }
     }, perform.duration);
+    this.stopTimeoutMap.set(perform, stopTimeout);
 
     const hasContinue = getBooleanArgByKey(script, 'continue') ?? false;
     if (hasContinue) perform.goNextWhenOver = true;
@@ -70,12 +167,23 @@ export class PerformController {
   }
 
   public unmountPerform(name: string, force = false) {
+    let isPendingRemoved = false;
+    this.pendingPerformList = this.pendingPerformList.filter(({ perform }) => {
+      const matched = this.matchPerformName(perform.performName, name);
+      if ((force && matched) || (matched && !perform.isHoldOn)) {
+        isPendingRemoved = true;
+      }
+      return force ? !matched : !(matched && !perform.isHoldOn);
+    });
+    if (isPendingRemoved) {
+      this.erasePerformFromState(name);
+    }
     if (!force) {
       for (let i = 0; i < this.performList.length; i++) {
         const e = this.performList[i];
         if (!e.isHoldOn && this.matchPerformName(e.performName, name)) {
-          e.stopFunction();
-          clearTimeout(e.stopTimeout as unknown as number);
+          this.stopStartedPerform(e);
+          this.clearPerformTimeout(e);
           /**
            * 在演出列表里删除演出对象的操作必须在调用 goNextWhenOver 之前
            * 因为 goNextWhenOver 会调用 nextSentence，而 nextSentence 会清除目前未结束的演出
@@ -89,14 +197,15 @@ export class PerformController {
             // nextSentence();
             this.goNextWhenOver();
           }
+          this.erasePerformFromState(name);
         }
       }
     } else {
       for (let i = 0; i < this.performList.length; i++) {
         const e = this.performList[i];
         if (this.matchPerformName(e.performName, name)) {
-          e.stopFunction();
-          clearTimeout(e.stopTimeout as unknown as number);
+          this.stopStartedPerform(e);
+          this.clearPerformTimeout(e);
           /**
            * 在演出列表里删除演出对象的操作必须在调用 goNextWhenOver 之前（同上）
            */
@@ -115,11 +224,39 @@ export class PerformController {
     }
   }
 
+  public unmountPerformByPrefix(prefix: string, force = false) {
+    let isPendingRemoved = false;
+    this.pendingPerformList = this.pendingPerformList.filter(({ perform }) => {
+      const matched = perform.performName.startsWith(prefix);
+      if ((force && matched) || (matched && !perform.isHoldOn)) {
+        isPendingRemoved = true;
+      }
+      return force ? !matched : !(matched && !perform.isHoldOn);
+    });
+    if (isPendingRemoved) {
+      stageStateManager.removePerformByPrefix(prefix);
+    }
+
+    for (let i = 0; i < this.performList.length; i++) {
+      const e = this.performList[i];
+      if (e.performName.startsWith(prefix) && (force || !e.isHoldOn)) {
+        this.stopStartedPerform(e);
+        this.clearPerformTimeout(e);
+        this.performList.splice(i, 1);
+        i--;
+        if (e.goNextWhenOver) {
+          this.goNextWhenOver();
+        }
+        this.erasePerformFromState(e.performName);
+      }
+    }
+  }
+
   public softUnmountPerformObject(perform: IPerform) {
     const idx = this.performList.indexOf(perform);
     if (idx < 0) return;
-    perform.stopFunction();
-    clearTimeout(perform.stopTimeout as unknown as number);
+    this.stopStartedPerform(perform);
+    this.clearPerformTimeout(perform);
     /**
      * 在演出列表里删除演出对象的操作必须在调用 goNextWhenOver 之前
      * 因为 goNextWhenOver 会调用 nextSentence，而 nextSentence 会清除目前未结束的演出
@@ -128,6 +265,8 @@ export class PerformController {
      * 此问题对所有 goNextWhenOver 属性为真的演出都有影响，但只有 2 个演出有此问题
      */
     this.performList.splice(idx, 1);
+    this.erasePerformFromState(perform.performName);
+    stageStateManager.commit();
     if (perform.goNextWhenOver) {
       // nextSentence();
       this.goNextWhenOver();
@@ -135,29 +274,44 @@ export class PerformController {
   }
 
   public erasePerformFromState(name: string) {
-    webgalStore.dispatch(stageActions.removePerformByName(name));
+    stageStateManager.removePerformByName(name);
   }
 
   public removeAllPerform() {
+    this.pendingPerformList = [];
     for (const e of this.performList) {
-      clearTimeout(e.stopTimeout);
-      e.stopFunction();
+      this.clearPerformTimeout(e);
+      this.stopStartedPerform(e);
     }
     this.performList = [];
   }
 
-  private goNextWhenOver() {
-    let isBlockingAuto = false;
+  private clearPerformTimeout(perform: IPerform) {
+    const stopTimeout = this.stopTimeoutMap.get(perform);
+    if (stopTimeout) {
+      clearTimeout(stopTimeout);
+      this.stopTimeoutMap.delete(perform);
+    }
+  }
+
+  private stopStartedPerform(perform: IPerform) {
+    if (!perform.isStarted) return;
+    perform.stopFunction();
+    perform.isStarted = false;
+  }
+
+  private goNextWhenOver = () => {
+    let isBlockingNext = false;
     this.performList?.forEach((e) => {
-      if (e.blockingAuto())
+      if (e.blockingNext())
         // 阻塞且没有结束的演出
-        isBlockingAuto = true;
+        isBlockingNext = true;
     });
-    if (isBlockingAuto) {
+    if (isBlockingNext) {
       // 有阻塞，提前结束
       setTimeout(this.goNextWhenOver, 100);
     } else {
       nextSentence();
     }
-  }
+  };
 }

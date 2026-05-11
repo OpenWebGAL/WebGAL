@@ -18,7 +18,7 @@ import {
 } from '@/store/userDataInterface';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import cloneDeep from 'lodash/cloneDeep';
-import { ISetGameVar } from './stageInterface';
+import { ISetGameVar } from '@/Core/Modules/stage/stageInterface';
 
 const initialOptionSet: IOptionData = {
   slPage: 1,

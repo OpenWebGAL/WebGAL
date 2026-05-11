@@ -54,9 +54,14 @@ export function generateUniversalSoftOffAnimationObj(targetKey: string, duration
     }
   }
 
+  function getEndStateEffect() {
+    return { alpha: 0 };
+  }
+
   return {
     setStartState,
     setEndState,
     tickerFunc,
+    getEndStateEffect,
   };
 }

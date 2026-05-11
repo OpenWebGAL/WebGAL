@@ -1,18 +1,17 @@
 import { ISentence } from '@/Core/controller/scene/sceneInterface';
 import { IPerform } from '@/Core/Modules/perform/performInterface';
-import { webgalStore } from '@/store/store';
-import { setStage, stageActions } from '@/store/stageReducer';
 import cloneDeep from 'lodash/cloneDeep';
 import { getBooleanArgByKey, getNumberArgByKey, getStringArgByKey } from '@/Core/util/getSentenceArg';
-import { IFreeFigure, IStageState, ITransform } from '@/store/stageInterface';
+import { IFreeFigure, IStageState, ITransform } from '@/Core/Modules/stage/stageInterface';
 import { AnimationFrame, IUserAnimation } from '@/Core/Modules/animations';
 import { generateTransformAnimationObj } from '@/Core/controller/stage/pixi/animations/generateTransformAnimationObj';
 import { assetSetter, fileType } from '@/Core/util/gameAssetsAccess/assetSetter';
 import { logger } from '@/Core/util/logger';
-import { getAnimateDuration } from '@/Core/Modules/animationFunctions';
+import { applyAnimationEndState, getAnimateDuration } from '@/Core/Modules/animationFunctions';
 import { WebGAL } from '@/Core/WebGAL';
 import { baseBlinkParam, baseFocusParam, BlinkParam, FocusParam } from '@/Core/live2DCore';
 import { DEFAULT_FIG_IN_DURATION, DEFAULT_FIG_OUT_DURATION, WEBGAL_NONE } from '../constants';
+import { stageStateManager } from '@/Core/Modules/stage/stageStateManager';
 /**
  * 更改立绘
  * @param sentence 语句
@@ -97,9 +96,7 @@ export function changeFigure(sentence: ISentence): IPerform {
   duration = enterDuration;
   const exitDuration = getNumberArgByKey(sentence, 'exitDuration') ?? DEFAULT_FIG_OUT_DURATION;
 
-  const dispatch = webgalStore.dispatch;
-
-  const currentFigureAssociatedAnimation = webgalStore.getState().stage.figureAssociatedAnimation;
+  const currentFigureAssociatedAnimation = stageStateManager.getCalculationStageState().figureAssociatedAnimation;
   const filteredFigureAssociatedAnimation = currentFigureAssociatedAnimation.filter((item) => item.targetId !== id);
   const newFigureAssociatedAnimationItem = {
     targetId: id,
@@ -115,14 +112,14 @@ export function changeFigure(sentence: ISentence): IPerform {
     },
   };
   filteredFigureAssociatedAnimation.push(newFigureAssociatedAnimationItem);
-  dispatch(setStage({ key: 'figureAssociatedAnimation', value: filteredFigureAssociatedAnimation }));
+  stageStateManager.setStage('figureAssociatedAnimation', filteredFigureAssociatedAnimation);
 
   /**
    * 如果 url 没变，不移除
    */
   let isUrlChanged = true;
   if (key !== '') {
-    const figWithKey = webgalStore.getState().stage.freeFigure.find((e) => e.key === key);
+    const figWithKey = stageStateManager.getCalculationStageState().freeFigure.find((e) => e.key === key);
     if (figWithKey) {
       if (figWithKey.name === sentence.content) {
         isUrlChanged = false;
@@ -130,17 +127,17 @@ export function changeFigure(sentence: ISentence): IPerform {
     }
   } else {
     if (pos === 'center') {
-      if (webgalStore.getState().stage.figName === sentence.content) {
+      if (stageStateManager.getCalculationStageState().figName === sentence.content) {
         isUrlChanged = false;
       }
     }
     if (pos === 'left') {
-      if (webgalStore.getState().stage.figNameLeft === sentence.content) {
+      if (stageStateManager.getCalculationStageState().figNameLeft === sentence.content) {
         isUrlChanged = false;
       }
     }
     if (pos === 'right') {
-      if (webgalStore.getState().stage.figNameRight === sentence.content) {
+      if (stageStateManager.getCalculationStageState().figNameRight === sentence.content) {
         isUrlChanged = false;
       }
     }
@@ -149,8 +146,8 @@ export function changeFigure(sentence: ISentence): IPerform {
    * 处理 Effects
    */
   if (isUrlChanged) {
-    webgalStore.dispatch(stageActions.removeEffectByTargetId(id));
-    webgalStore.dispatch(stageActions.removeAnimationSettingsByTarget(id));
+    stageStateManager.removeEffectByTargetId(id);
+    stageStateManager.removeAnimationSettingsByTarget(id);
     const oldStageObject = WebGAL.gameplay.pixiStage?.getStageObjByKey(id);
     if (oldStageObject) {
       oldStageObject.isExiting = true;
@@ -174,9 +171,7 @@ export function changeFigure(sentence: ISentence): IPerform {
         const newAnimation: IUserAnimation = { name: animationName, effects: animationObj };
         WebGAL.animationManager.addAnimation(newAnimation);
         duration = getAnimateDuration(animationName);
-        webgalStore.dispatch(
-          stageActions.updateAnimationSettings({ target: key, key: 'enterAnimationName', value: animationName }),
-        );
+        stageStateManager.updateAnimationSettings({ target: key, key: 'enterAnimationName', value: animationName });
       } catch (e) {
         // 解析都错误了，歇逼吧
         applyDefaultTransform();
@@ -195,32 +190,22 @@ export function changeFigure(sentence: ISentence): IPerform {
       const newAnimation: IUserAnimation = { name: animationName, effects: animationObj };
       WebGAL.animationManager.addAnimation(newAnimation);
       duration = getAnimateDuration(animationName);
-      webgalStore.dispatch(
-        stageActions.updateAnimationSettings({ target: key, key: 'enterAnimationName', value: animationName }),
-      );
+      stageStateManager.updateAnimationSettings({ target: key, key: 'enterAnimationName', value: animationName });
     }
 
     if (enterAnimation) {
-      webgalStore.dispatch(
-        stageActions.updateAnimationSettings({ target: key, key: 'enterAnimationName', value: enterAnimation }),
-      );
+      stageStateManager.updateAnimationSettings({ target: key, key: 'enterAnimationName', value: enterAnimation });
       duration = getAnimateDuration(enterAnimation);
     }
     if (exitAnimation) {
-      webgalStore.dispatch(
-        stageActions.updateAnimationSettings({ target: key, key: 'exitAnimationName', value: exitAnimation }),
-      );
+      stageStateManager.updateAnimationSettings({ target: key, key: 'exitAnimationName', value: exitAnimation });
       duration = getAnimateDuration(exitAnimation);
     }
     if (enterDuration >= 0) {
-      webgalStore.dispatch(
-        stageActions.updateAnimationSettings({ target: key, key: 'enterDuration', value: enterDuration }),
-      );
+      stageStateManager.updateAnimationSettings({ target: key, key: 'enterDuration', value: enterDuration });
     }
     if (exitDuration >= 0) {
-      webgalStore.dispatch(
-        stageActions.updateAnimationSettings({ target: key, key: 'exitDuration', value: exitDuration }),
-      );
+      stageStateManager.updateAnimationSettings({ target: key, key: 'exitDuration', value: exitDuration });
     }
   };
 
@@ -235,32 +220,32 @@ export function changeFigure(sentence: ISentence): IPerform {
       focus = focus ?? cloneDeep(baseFocusParam);
       zIndex = Math.max(zIndex, 0);
       blendMode = blendMode ?? 'normal';
-      dispatch(stageActions.setLive2dMotion({ target: key, motion, skin, overrideBounds: bounds }));
-      dispatch(stageActions.setLive2dExpression({ target: key, expression }));
-      dispatch(stageActions.setLive2dBlink({ target: key, blink }));
-      dispatch(stageActions.setLive2dFocus({ target: key, focus }));
-      dispatch(stageActions.setFigureMetaData([key, 'zIndex', zIndex, false]));
-      dispatch(stageActions.setFigureMetaData([key, 'blendMode', blendMode, false]));
+      stageStateManager.setLive2dMotion({ target: key, motion, skin, overrideBounds: bounds });
+      stageStateManager.setLive2dExpression({ target: key, expression });
+      stageStateManager.setLive2dBlink({ target: key, blink });
+      stageStateManager.setLive2dFocus({ target: key, focus });
+      stageStateManager.setFigureMetaData([key, 'zIndex', zIndex, false]);
+      stageStateManager.setFigureMetaData([key, 'blendMode', blendMode, false]);
     } else {
       // 当 url 没有发生变化时，即没有新立绘替换
       // 应当保留旧立绘的状态，仅在需要时更新
       if (motion || skin || bounds) {
-        dispatch(stageActions.setLive2dMotion({ target: key, motion, skin, overrideBounds: bounds }));
+        stageStateManager.setLive2dMotion({ target: key, motion, skin, overrideBounds: bounds });
       }
       if (expression) {
-        dispatch(stageActions.setLive2dExpression({ target: key, expression }));
+        stageStateManager.setLive2dExpression({ target: key, expression });
       }
       if (blink) {
-        dispatch(stageActions.setLive2dBlink({ target: key, blink }));
+        stageStateManager.setLive2dBlink({ target: key, blink });
       }
       if (focus) {
-        dispatch(stageActions.setLive2dFocus({ target: key, focus }));
+        stageStateManager.setLive2dFocus({ target: key, focus });
       }
       if (zIndex >= 0) {
-        dispatch(stageActions.setFigureMetaData([key, 'zIndex', zIndex, false]));
+        stageStateManager.setFigureMetaData([key, 'zIndex', zIndex, false]);
       }
       if (blendMode) {
-        dispatch(stageActions.setFigureMetaData([key, 'blendMode', blendMode, false]));
+        stageStateManager.setFigureMetaData([key, 'blendMode', blendMode, false]);
       }
     }
   }
@@ -272,7 +257,7 @@ export function changeFigure(sentence: ISentence): IPerform {
     const freeFigureItem: IFreeFigure = { key, name: content, basePosition: pos };
     setAnimationNames(key, sentence);
     postFigureStateSet();
-    dispatch(stageActions.setFreeFigureByKey(freeFigureItem));
+    stageStateManager.setFreeFigureByKey(freeFigureItem);
   } else {
     /**
      * 下面的代码是设置与位置关联的立绘的
@@ -291,19 +276,29 @@ export function changeFigure(sentence: ISentence): IPerform {
     key = positionMap[pos];
     setAnimationNames(key, sentence);
     postFigureStateSet();
-    dispatch(setStage({ key: dispatchMap[pos], value: content }));
+    stageStateManager.setStage(dispatchMap[pos], content);
   }
 
   return {
     performName: `enter-${key}`,
     duration,
     isHoldOn: false,
+    settleStateOnDiscard: () => {
+      if (content === '' || !isUrlChanged) {
+        return;
+      }
+      const animationName = stageStateManager
+        .getCalculationStageState()
+        .animationSettings.find((setting) => setting.target === key)?.enterAnimationName;
+      if (animationName) {
+        applyAnimationEndState(animationName, key, false);
+      }
+    },
     stopFunction: () => {
       WebGAL.gameplay.pixiStage?.stopPresetAnimationOnTarget(key);
     },
     blockingNext: () => false,
     blockingAuto: () => true,
-    stopTimeout: undefined, // 暂时不用，后面会交给自动清除
   };
 }
 

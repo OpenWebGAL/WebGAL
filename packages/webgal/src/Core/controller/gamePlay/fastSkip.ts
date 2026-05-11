@@ -6,6 +6,7 @@ import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
 import { WebGAL } from '@/Core/WebGAL';
 import { webgalStore } from "@/store/store";
 import { SYSTEM_CONFIG } from '@/config';
+import { stageStateManager } from '@/Core/Modules/stage/stageStateManager';
 
 /**
  * 设置 fast 按钮的激活与否
@@ -44,7 +45,7 @@ export const startFast = (force = false) => {
   WebGAL.gameplay.isFast = true;
   const skipAll = force || webgalStore.getState().userData.optionData.skipAll;
   WebGAL.gameplay.fastInterval = setInterval(() => {
-    if (!skipAll && !webgalStore.getState().stage.isRead) {
+    if (!skipAll && !stageStateManager.getCalculationStageState().isRead) {
       stopFast();
       return;
     }
