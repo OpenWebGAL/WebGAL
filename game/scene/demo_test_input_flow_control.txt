@@ -1,0 +1,34 @@
+用户输入流程控制测试 1 开始：验证快速预览下 getUserInput 会写入 defaultValue。
+getUserInput:previewName -title=输入测试 -buttonText=确认 -defaultValue=FastPreviewName;
+jumpLabel:input_default_ok -when=previewName=="FastPreviewName";
+用户输入流程控制测试 1 手动输入路径：previewName={previewName}，与默认值不同。
+jumpLabel:input_default_end;
+label:input_default_ok;
+用户输入流程控制测试 1 默认值路径：previewName={previewName}，快速预览默认值命中。
+label:input_default_end;
+用户输入流程控制测试 1 结束：预期状态：快速预览时 previewName={previewName}，应为 FastPreviewName；普通运行或普通快进时应等待用户确认，并按实际输入分支。
+
+用户输入流程控制测试 2 开始：验证快速预览下 choose 的 defaultChoose 会决定流程。
+choose:手动路径:input_manual_path|快速预览默认路径:input_fast_path -defaultChoose=2;
+label:input_manual_path;
+setVar:inputChoice=manual;
+用户输入流程控制测试 2 手动路径：手动选择第 1 项时会看到这里。
+jumpLabel:input_choice_after;
+label:input_fast_path;
+setVar:inputChoice=fastPreviewDefault;
+用户输入流程控制测试 2 默认路径：快速预览默认选择第 2 项。
+label:input_choice_after;
+用户输入流程控制测试 2 结束：预期状态：快速预览时 inputChoice={inputChoice}，应为 fastPreviewDefault；普通运行或普通快进时应等待玩家选择。
+
+用户输入流程控制测试 3 开始：验证输入变量可以参与后续 choose 的显示条件。
+choose:(previewName=="FastPreviewName")->默认输入路径:input_name_default|(previewName!="FastPreviewName")->其它输入路径:input_name_other -defaultChoose=1;
+label:input_name_default;
+setVar:inputNameBranch=defaultName;
+用户输入流程控制测试 3 默认输入路径：快速预览默认输入会显示并选择这里。
+jumpLabel:input_name_after;
+label:input_name_other;
+setVar:inputNameBranch=otherName;
+用户输入流程控制测试 3 其它输入路径：手动输入其它名字时可选择这里。
+label:input_name_after;
+用户输入流程控制测试 3 结束：预期状态：快速预览时 inputNameBranch={inputNameBranch}，应为 defaultName。
+end;
