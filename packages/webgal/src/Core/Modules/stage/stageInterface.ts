@@ -219,6 +219,7 @@ export interface IStageState {
   showText: string; // 文字
   showTextSize: number; // 文字
   showName: string; // 人物名
+  textboxTheme: string; // 对话框主题
   command: string; // 语句指令
   choose: Array<IChooseItem>; // 选项列表
   vocal: string; // 语音 文件地址（相对或绝对）
