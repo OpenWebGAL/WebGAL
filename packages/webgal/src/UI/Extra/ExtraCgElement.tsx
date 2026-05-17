@@ -1,37 +1,45 @@
 import { useValue } from '@/hooks/useValue';
 import styles from '@/UI/Extra/extra.module.scss';
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import useSoundEffect from '@/hooks/useSoundEffect';
+import { IAppreciationAsset } from '@/store/userDataInterface';
+
+export const isVideoFile = (url: string) => {
+  const extension = url.split('.').pop()?.toLowerCase() || '';
+  return ['mp4', 'webm', 'mkv'].includes(extension);
+}
 
 interface IProps {
   name: string;
-  resourceUrl: string;
+  resources: IAppreciationAsset[];
   transformDeg: number;
   index: number;
 }
 
 export function ExtraCgElement(props: IProps) {
   const showFull = useValue(false);
+  const [currentResourceIndex, setCurrentResourceIndex] = useState(0);
   const { playSeEnter, playSeClick } = useSoundEffect();
+  const previewResource = props.resources[0];
+  const currentResource = props.resources[currentResourceIndex] ?? previewResource;
 
   // Determine if the resource is a video based on file extension
   const isVideo = useMemo(() => {
-    const extension = props.resourceUrl.split('.').pop()?.toLowerCase() || '';
-    return ['mp4', 'webm', 'mkv'].includes(extension);
-  }, [props.resourceUrl]);
+    return isVideoFile(previewResource.url);
+  }, [previewResource.url]);
 
   // Determine if the resource is an image based on file extension
   const isImage = useMemo(() => {
-    const extension = props.resourceUrl.split('.').pop()?.toLowerCase() || '';
+    const extension = previewResource.url.split('.').pop()?.toLowerCase() || '';
     return ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg', 'bmp'].includes(extension);
-  }, [props.resourceUrl]);
+  }, [previewResource.url]);
 
   // Render media content based on resource type
-  const renderMedia = (fullScreen: boolean) => {
+  const renderMedia = (resourceUrl: string) => {
     if (isVideo) {
       return (
         <video
-          src={props.resourceUrl}
+          src={resourceUrl}
           autoPlay
           loop
           muted
@@ -47,7 +55,7 @@ export function ExtraCgElement(props: IProps) {
       return (
         <div
           style={{
-            backgroundImage: `url('${props.resourceUrl}')`,
+            backgroundImage: `url('${resourceUrl}')`,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             width: '100%',
@@ -60,7 +68,7 @@ export function ExtraCgElement(props: IProps) {
       return (
         <div
           style={{
-            backgroundImage: `url('${props.resourceUrl}')`,
+            backgroundImage: `url('${resourceUrl}')`,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             width: '100%',
@@ -71,25 +79,45 @@ export function ExtraCgElement(props: IProps) {
     }
   };
 
+  const openFullPreview = () => {
+    setCurrentResourceIndex(0);
+    showFull.set(true);
+    playSeClick();
+  };
+
+  const closeFullPreview = () => {
+    setCurrentResourceIndex(0);
+    showFull.set(false);
+    playSeClick();
+  };
+
+  const handleFullPreviewClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.stopPropagation();
+
+    if (currentResourceIndex >= props.resources.length - 1) {
+      closeFullPreview();
+      return;
+    }
+
+    playSeClick();
+    setCurrentResourceIndex((currentIndex) => currentIndex + 1);
+  };
+
   return (
     <>
       {showFull.value && (
         <div
-          onClick={() => {
-            showFull.set(!showFull.value);
-            playSeClick();
-          }}
+          onClick={closeFullPreview}
           className={styles.showFullContainer}
           onMouseEnter={playSeEnter}
         >
-          <div className={styles.showFullCgMain}>{renderMedia(true)}</div>
+          <div className={styles.showFullCgMain} onClick={(e) => handleFullPreviewClick(e)}>
+            {renderMedia(currentResource.url)}
+          </div>
         </div>
       )}
       <div
-        onClick={() => {
-          showFull.set(!showFull.value);
-          playSeClick();
-        }}
+        onClick={openFullPreview}
         onMouseEnter={playSeEnter}
         style={{
           animation: `cg_softIn_${props.transformDeg} 1.5s ease-out ${100 + props.index * 100}ms forwards`,
@@ -97,7 +125,7 @@ export function ExtraCgElement(props: IProps) {
         key={props.name}
         className={styles.cgElement}
       >
-        {renderMedia(false)}
+        {renderMedia(previewResource.url)}
       </div>
     </>
   );
