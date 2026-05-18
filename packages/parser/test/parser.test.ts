@@ -202,6 +202,27 @@ test("say statement", async () => {
   expect(result.sentenceList).toContainEqual(expectSentenceItem);
 });
 
+test("say statement applies asset setter to vocal named argument", async () => {
+  const parser = new SceneParser((assetList) => {
+  }, (fileName, assetType) => {
+    if (assetType === fileType.vocal) {
+      return `./game/vocal/${fileName}`;
+    }
+    return fileName;
+  }, ADD_NEXT_ARG_LIST, SCRIPT_CONFIG);
+
+  const result = parser.parse(`say:123 -speaker=xx -vocal=a.mp3;`, 'test', 'test');
+  const sentence = result.sentenceList[0];
+
+  expect(sentence.args).toContainEqual({ key: 'vocal', value: './game/vocal/a.mp3' });
+  expect(sentence.sentenceAssets).toContainEqual({
+    name: './game/vocal/a.mp3',
+    url: './game/vocal/a.mp3',
+    type: fileType.vocal,
+    lineNumber: 0,
+  });
+});
+
 test("wait command", async () => {
   const parser = new SceneParser((assetList) => {
   }, (fileName, assetType) => {
