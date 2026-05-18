@@ -26,8 +26,10 @@ try {
   const engineJson = JSON.parse(fs.readFileSync(engineJsonPath, 'utf-8'));
 
   // 更新版本号
-  const oldVersion = engineJson.version;
-  engineJson.version = version;
+  const oldVersion = engineJson.webgalVersion;
+  if (engineJson.type === 'official') {
+    engineJson.version = version;
+  }
   engineJson.webgalVersion = version;
 
   // 写回文件（保持格式化）
