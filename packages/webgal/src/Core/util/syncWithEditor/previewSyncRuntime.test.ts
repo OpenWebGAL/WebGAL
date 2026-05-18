@@ -99,7 +99,7 @@ interface ActiveModuleState {
 
 interface WebSocketRuntimeHarness {
   dispatch: ReturnType<typeof vi.fn>;
-  emitStoreUpdate: () => void;
+  emitStoreUpdate: (nextStageState?: WebSocketRuntimeHarness['stageState']) => void;
   executePreviewSyncSceneCommand: ReturnType<typeof vi.fn>;
   runScript: ReturnType<typeof vi.fn>;
   socket: MockWebSocket;
@@ -250,7 +250,7 @@ async function setupWebSocketRuntimeHarness(): Promise<WebSocketRuntimeHarness> 
   activeMockWindow = mockWindow;
   const mockDocument = createMockDocument();
 
-  const subscribeListeners = new Set<() => void>();
+  const subscribeListeners = new Set<(nextStageState: WebSocketRuntimeHarness['stageState']) => void>();
   const dispatch = vi.fn();
   const stageState = {
     effects: [] as WebSocketRuntimeHarness['stageState']['effects'],
@@ -262,7 +262,7 @@ async function setupWebSocketRuntimeHarness(): Promise<WebSocketRuntimeHarness> 
     getState: vi.fn(() => ({})),
   };
   const stageStateManager = {
-    subscribe: vi.fn((listener: () => void) => {
+    subscribe: vi.fn((listener: (nextStageState: WebSocketRuntimeHarness['stageState']) => void) => {
       subscribeListeners.add(listener);
       return () => {
         subscribeListeners.delete(listener);
@@ -343,8 +343,8 @@ async function setupWebSocketRuntimeHarness(): Promise<WebSocketRuntimeHarness> 
 
   return {
     dispatch,
-    emitStoreUpdate() {
-      subscribeListeners.forEach((listener) => listener());
+    emitStoreUpdate(nextStageState = stageState) {
+      subscribeListeners.forEach((listener) => listener(nextStageState));
     },
     executePreviewSyncSceneCommand,
     runScript,
@@ -482,6 +482,33 @@ describe('startPreviewSyncRuntime runtime behavior', () => {
       payload: {
         sceneName: 'scene/start.txt',
         sentenceId: 8,
+        stageState: {
+          effects: [],
+          layers: [{ id: 'layer-2' }],
+        },
+      },
+    });
+  });
+
+  it('publishes committed snapshot changes that keep the same scene and sentence', async () => {
+    const harness = await setupWebSocketRuntimeHarness();
+
+    await completeRegisterPreviewHandshake(harness);
+
+    const committedStageState = {
+      ...harness.stageState,
+      layers: [{ id: 'layer-2' }],
+    };
+    harness.emitStoreUpdate(committedStageState);
+    await flushMicrotasks();
+
+    expect(harness.socket.sentMessages).toHaveLength(4);
+    expect(parseSentEnvelope(harness.socket, 3)).toEqual({
+      kind: 'event',
+      type: 'stage.snapshot.updated',
+      payload: {
+        sceneName: 'scene/start.txt',
+        sentenceId: 7,
         stageState: {
           effects: [],
           layers: [{ id: 'layer-2' }],

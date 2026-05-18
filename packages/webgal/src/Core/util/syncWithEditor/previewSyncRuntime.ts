@@ -101,12 +101,11 @@ export const startPreviewSyncRuntime = () => {
     );
   };
 
-  const publishStageSnapshot = (force: boolean) => {
+  const publishStageSnapshot = (force: boolean, stageState = stageStateManager.getCalculationStageState()) => {
     if (!registered) {
       return;
     }
 
-    const stageState = stageStateManager.getCalculationStageState();
     const sceneName = WebGAL.sceneManager.sceneData.currentScene.sceneName;
     const sentenceId = WebGAL.sceneManager.sceneData.currentSentenceId;
     const snapshotUnchanged =
@@ -357,8 +356,8 @@ export const startPreviewSyncRuntime = () => {
     logWarn: (message, error) => logger.warn(message, error),
   });
 
-  const storeUnsubscribe = stageStateManager.subscribe(() => {
-    publishStageSnapshot(false);
+  const storeUnsubscribe = stageStateManager.subscribe((stageState) => {
+    publishStageSnapshot(false, stageState);
   });
 
   const ensureConnected = () => {
