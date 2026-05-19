@@ -7,7 +7,7 @@ const ptBr = {
 
   menu: {
     options: {
-      title: 'OPTIONS',
+      title: 'OPÇÕES',
       pages: {
         system: {
           title: 'Sistema',
