@@ -31,9 +31,9 @@ const ptBr = {
                 clearAll: 'Limpar todos os dados',
               },
               dialogs: {
-                clearGameSave: 'Tem certeza que deseja limpar o salvamento do jogo',
-                resetSettings: 'Tem certeza que deseja reiniciar todas as configurações',
-                clearAll: 'Tem certeza que deseja limpar todos os dados',
+                clearGameSave: 'Tem certeza que deseja limpar o salvamento do jogo?',
+                resetSettings: 'Tem certeza que deseja reiniciar todas as configurações?',
+                clearAll: 'Tem certeza que deseja limpar todos os dados?',
               },
             },
             gameSave: {
@@ -44,7 +44,7 @@ const ptBr = {
               },
               dialogs: {
                 import: {
-                  title: 'Tem certeza que deseja importar o salvamento do jogo e as opções',
+                  title: 'Tem certeza que deseja importar o salvamento do jogo e as opções?',
                   tip: 'Importar salvamento do jogo',
                   error: 'Não foi possível analisar o salvamento do jogo',
                 },
@@ -132,7 +132,7 @@ const ptBr = {
       isOverwrite: 'Tem certeza que deseja sobrescrever este salvamento?',
     },
     loadSaving: {
-      title: 'ABRIR',
+      title: 'CARREGAR',
     },
     title: {
       title: 'TÍTULO',
@@ -156,7 +156,7 @@ const ptBr = {
       subtitle: '',
     },
     load: {
-      title: 'ABRIR',
+      title: 'CARREGAR',
       subtitle: '',
     },
     extra: {
@@ -169,7 +169,7 @@ const ptBr = {
       tips: 'Deseja realmente sair?',
     },
   },
-
+/
   gaming: {
     noSaving: 'Sem salvamentos',
     buttons: {
@@ -180,9 +180,9 @@ const ptBr = {
       auto: 'Auto',
       forward: 'Avançar',
       quicklySave: 'Salvar rapidamente',
-      quicklyLoad: 'Abrir rapidamente',
+      quicklyLoad: 'Carregar rapidamente',
       save: 'Salvar',
-      load: 'Abrir',
+      load: 'Carregar',
       fullscreen: 'Tela cheia',
       options: 'Opções',
       title: 'Título',
