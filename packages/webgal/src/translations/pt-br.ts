@@ -1,5 +1,5 @@
 const ptBr = {
-  // 通用
+  // Geral
   common: {
     yes: 'Ok',
     no: 'Cancelar',
