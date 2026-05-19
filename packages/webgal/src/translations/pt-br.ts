@@ -52,7 +52,7 @@ const ptBr = {
             },
             about: {
               title: 'Sobre o WebGAL',
-              subTitle: 'WebGAL: Um motor de Novelas Visuais baseado em web de código aberto',
+              subTitle: 'WebGAL: Um motor de Novelas Visuais de código aberto baseado na web',
               version: 'Versão',
               source: 'Repositório do código',
               contributors: 'Colaboradores',
