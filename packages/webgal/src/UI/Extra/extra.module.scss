@@ -189,6 +189,37 @@
   cursor: pointer;
 }
 
+.cgElementStack {
+  background-color: transparent;
+  box-shadow: none;
+}
+
+.cgStackItem {
+  position: absolute;
+  inset: 0.6em;
+  box-sizing: border-box;
+  padding: 0.75em;
+  background-color: rgba(255, 255, 255, 0.85);
+  box-shadow: 0 0 15px 5px rgba(0, 0, 0, 0.28);
+  transform-origin: center 70%;
+  opacity: 0;
+  animation: cgStackItemIn 1.5s ease-out both;
+}
+
+@keyframes cgStackItemIn {
+  0% {
+    opacity: 0;
+    transform: var(--cg-stack-start-transform);
+  }
+  20% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+    transform: var(--cg-stack-end-transform);
+  }
+}
+
 .cgShowDiv {
   height: 8%;
   width: 100%;

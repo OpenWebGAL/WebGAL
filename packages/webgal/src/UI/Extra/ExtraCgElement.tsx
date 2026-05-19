@@ -33,6 +33,19 @@ export function ExtraCgElement(props: IProps) {
     const extension = previewResource.url.split('.').pop()?.toLowerCase() || '';
     return ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg', 'bmp'].includes(extension);
   }, [previewResource.url]);
+  const isStackPreview = props.resources.length > 1 && isImage;
+  const animationDelay = 100 + props.index * 100;
+  const stackResources = isStackPreview ? [...props.resources].reverse() : [];
+
+  const getStackItemStyle = (index: number, length: number) => {
+    const offset = index - (length - 1) / 2;
+    return {
+      zIndex: index,
+      animationDelay: `${animationDelay + index * 140}ms`,
+      '--cg-stack-start-transform': `translate(${offset * 1.5}%, ${offset * -0.8}%) rotate(${offset * 2}deg)`,
+      '--cg-stack-end-transform': `translate(${offset * 6}%, ${offset * -3}%) rotate(${offset * 6}deg)`,
+    } as React.CSSProperties;
+  };
 
   // Render media content based on resource type
   const renderMedia = (resourceUrl: string) => {
@@ -120,12 +133,22 @@ export function ExtraCgElement(props: IProps) {
         onClick={openFullPreview}
         onMouseEnter={playSeEnter}
         style={{
-          animation: `cg_softIn_${props.transformDeg} 1.5s ease-out ${100 + props.index * 100}ms forwards`,
+          animation: `cg_softIn_${isStackPreview ? 0 : props.transformDeg} 1.5s ease-out ${animationDelay}ms forwards`,
         }}
         key={props.name}
-        className={styles.cgElement}
+        className={`${styles.cgElement} ${isStackPreview ? styles.cgElementStack : ''}`}
       >
-        {renderMedia(previewResource.url)}
+        {isStackPreview ? (
+          <>
+            {stackResources.map((resource, index) => (
+              <div className={styles.cgStackItem} style={getStackItemStyle(index, stackResources.length)} key={`${resource.url}_${index}`}>
+                {renderMedia(resource.url)}
+              </div>
+            ))}
+          </>
+        ) : (
+          renderMedia(previewResource.url)
+        )}
       </div>
     </>
   );
