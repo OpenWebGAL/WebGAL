@@ -11,6 +11,7 @@ import zhCn from '@/translations/zh-cn';
 import fr from '@/translations/fr';
 import de from '@/translations/de';
 import zhTw from '@/translations/zh-tw';
+import ptBr from '@/translations/pt-br';
 /*
   Import your translation configs here;
   example:
@@ -24,6 +25,7 @@ export enum language {
   fr,
   de,
   zhTw,
+  ptBr,
 }
 
 const languages: Record<string, string> = {
@@ -33,6 +35,7 @@ const languages: Record<string, string> = {
   fr: 'Français',
   de: 'Deutsch',
   zhTw: '繁體中文',
+  ptBr: 'Português do Brasil',
 };
 
 export const i18nTranslationResources: Record<string, { translation: Record<string, any> }> = {
@@ -42,6 +45,7 @@ export const i18nTranslationResources: Record<string, { translation: Record<stri
   fr: { translation: fr },
   de: { translation: de },
   zhTw: { translation: zhTw },
+  ptBr: { translation: ptBr },
 };
 
 export const defaultLanguage: language = language.zhCn;

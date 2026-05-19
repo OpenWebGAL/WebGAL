@@ -169,7 +169,7 @@ const ptBr = {
       tips: 'Deseja realmente sair?',
     },
   },
-/
+
   gaming: {
     noSaving: 'Sem salvamentos',
     buttons: {
