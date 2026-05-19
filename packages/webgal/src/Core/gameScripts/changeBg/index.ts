@@ -25,6 +25,7 @@ export const changeBg = (sentence: ISentence): IPerform => {
   const url = sentence.content;
   const unlockName = getStringArgByKey(sentence, 'unlockname') ?? '';
   const series = getStringArgByKey(sentence, 'series') ?? 'default';
+  const order = getNumberArgByKey(sentence, 'order') ?? 0;
   const transformString = getStringArgByKey(sentence, 'transform');
   let duration = getNumberArgByKey(sentence, 'duration') ?? DEFAULT_BG_OUT_DURATION;
   const enterDuration = getNumberArgByKey(sentence, 'enterDuration') ?? duration;
@@ -34,7 +35,7 @@ export const changeBg = (sentence: ISentence): IPerform => {
 
   const dispatch = webgalStore.dispatch;
   if (unlockName !== '') {
-    dispatch(unlockCgInUserData({ name: unlockName, url, series }));
+    dispatch(unlockCgInUserData({ name: unlockName, url, series, order }));
     const userDataState = webgalStore.getState().userData;
     localforage.setItem(WebGAL.gameKey, userDataState).then(() => {});
   }

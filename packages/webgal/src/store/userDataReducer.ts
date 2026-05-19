@@ -65,7 +65,7 @@ const userDataSlice = createSlice({
       state[key] = value;
     },
     unlockCgInUserData: (state, action: PayloadAction<IAppreciationAsset>) => {
-      const { name, url, series } = action.payload;
+      const { name, url, series, order } = action.payload;
       // 检查是否存在
       let isExist = false;
       state.appreciationData.cg.forEach((e) => {
@@ -73,6 +73,7 @@ const userDataSlice = createSlice({
           isExist = true;
           e.name = name;
           e.series = series;
+          e.order = order;
         }
       });
       if (!isExist) {
