@@ -13,7 +13,7 @@ import { stageStateManager } from '@/Core/Modules/stage/stageStateManager';
 import { jumpToLabel } from '@/Core/gameScripts/label/jumpToLabel';
 import { prefetchCurrentSceneByProgress } from '@/Core/util/prefetcher/progressPrefetcher';
 
-const MAX_FORWARD_SCRIPT_EXECUTION = 10000;
+const MAX_FORWARD_SCRIPT_EXECUTION = 1000;
 
 export const whenChecker = (whenValue: string | undefined): boolean => {
   if (whenValue === undefined) {
