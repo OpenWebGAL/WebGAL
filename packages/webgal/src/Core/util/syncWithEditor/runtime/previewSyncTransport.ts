@@ -1,6 +1,5 @@
 const SOCKET_CONNECTING = 0;
 const SOCKET_OPEN = 1;
-const DEFAULT_MAX_RECONNECT_DELAY_MS = 3_000;
 
 export interface PreviewSyncTransportSocket {
   readyState: number;
@@ -23,9 +22,6 @@ export interface PreviewSyncTransportOptions {
   logInfo: (message: string) => void;
   logError: (message: string, error?: unknown) => void;
   logWarn: (message: string, error?: unknown) => void;
-  setTimeoutFn?: typeof setTimeout;
-  clearTimeoutFn?: typeof clearTimeout;
-  maxReconnectDelayMs?: number;
 }
 
 export interface PreviewSyncTransport {
@@ -52,22 +48,10 @@ export function createPreviewSyncTransport({
   logInfo,
   logError,
   logWarn,
-  setTimeoutFn = setTimeout,
-  clearTimeoutFn = clearTimeout,
-  maxReconnectDelayMs = DEFAULT_MAX_RECONNECT_DELAY_MS,
 }: PreviewSyncTransportOptions): PreviewSyncTransport {
   let disposed = false;
   let activeSocket: PreviewSyncTransportSocket | null = null;
-  let reconnectTimer: ReturnType<typeof setTimeout> | null = null;
-  let reconnectAttempt = 0;
   let connectionId = 0;
-
-  const clearReconnectTimer = () => {
-    if (reconnectTimer) {
-      clearTimeoutFn(reconnectTimer);
-      reconnectTimer = null;
-    }
-  };
 
   const isSocketOpen = (socket: PreviewSyncTransportSocket | null | undefined) => {
     return socket !== null && socket !== undefined && socket.readyState === SOCKET_OPEN;
@@ -113,8 +97,6 @@ export function createPreviewSyncTransport({
         return;
       }
 
-      clearReconnectTimer();
-      reconnectAttempt = 0;
       logInfo('编辑器同步 V1 WebSocket 已连接');
       Promise.resolve(onOpen(socket)).catch((error) => {
         logError('处理编辑器同步 V1 WebSocket 连接回调失败', error);
@@ -144,14 +126,6 @@ export function createPreviewSyncTransport({
       }
 
       logInfo('编辑器同步 V1 WebSocket 已关闭');
-      clearReconnectTimer();
-      const delay = Math.min(1000 * 2 ** reconnectAttempt, maxReconnectDelayMs);
-      reconnectAttempt += 1;
-      logInfo(`编辑器同步 V1 WebSocket 将在 ${delay}ms 后重连`);
-      reconnectTimer = setTimeoutFn(() => {
-        reconnectTimer = null;
-        connect();
-      }, delay);
     };
 
     socket.onerror = (error) => {
@@ -181,7 +155,6 @@ export function createPreviewSyncTransport({
     }
 
     disposed = true;
-    clearReconnectTimer();
     if (activeSocket) {
       const socket = activeSocket;
       activeSocket = null;

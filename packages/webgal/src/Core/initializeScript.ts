@@ -52,19 +52,7 @@ export const initializeScript = (): void => {
     WebGAL.sceneManager.settledScenes.add(sceneUrl); // 放入已加载场景列表，避免递归加载相同场景
   });
   // 获取游戏信息
-  const gameConfigReady = infoFetcher('./game/config.txt');
-  gameConfigReady
-    .then(async (gameConfig) => {
-      if (gameConfig.Enable_Editor_Sync !== true) {
-        return;
-      }
-
-      await initialSceneReady;
-      startPreviewSyncRuntime();
-    })
-    .catch((error) => {
-      logger.error('启动编辑器同步 V1 runtime 失败', error);
-    });
+  infoFetcher('./game/config.txt');
   /**
    * 启动Pixi
    */
@@ -88,6 +76,7 @@ export const initializeScript = (): void => {
    * 绑定工具函数
    */
   bindExtraFunc();
+  startPreviewSyncRuntime();
 };
 
 function loadStyle(url: string) {
