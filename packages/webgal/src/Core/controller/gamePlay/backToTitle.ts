@@ -5,9 +5,11 @@ import { stopAuto } from '@/Core/controller/gamePlay/autoPlay';
 import { stopFast } from '@/Core/controller/gamePlay/fastSkip';
 import { setEbg } from '@/Core/gameScripts/changeBg/setEbg';
 import { stageStateManager } from '@/Core/Modules/stage/stageStateManager';
+import { fastSaveGame } from '../storage/fastSaveLoad';
 
 export const backToTitle = () => {
   if (webgalStore.getState().GUI.showTitle) return;
+  fastSaveGame();
   const dispatch = webgalStore.dispatch;
   stopAllPerform();
   stopAuto();

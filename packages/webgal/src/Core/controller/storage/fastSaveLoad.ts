@@ -22,6 +22,11 @@ export function initKey() {
  * 用于紧急回避时的数据存储 & 快速保存
  */
 export async function fastSaveGame() {
+  const showTitle = webgalStore.getState().GUI.showTitle;
+  if (showTitle) {
+    // 如果在标题界面，不进行快速保存
+    return;
+  }
   const saveData: ISaveData = generateCurrentStageData(-1, false);
   const newSaveData = cloneDeep(saveData);
   webgalStore.dispatch(saveActions.setFastSave(newSaveData));
@@ -48,6 +53,7 @@ export async function loadFastSaveGame() {
   if (!loadFile) {
     return;
   }
+  removeFastSaveGameRecord();
   loadGameFromStageData(loadFile);
 }
 
@@ -56,7 +62,5 @@ export async function loadFastSaveGame() {
  */
 export async function removeFastSaveGameRecord() {
   webgalStore.dispatch(saveActions.resetFastSave());
-  await setStorageAsync();
-  // await localforage.setItem(isFastSaveKey, false);
-  // await localforage.setItem(fastSaveGameKey, null);
+  await dumpFastSaveToStorage();
 }

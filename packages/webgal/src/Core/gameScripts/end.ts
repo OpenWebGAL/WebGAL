@@ -9,7 +9,7 @@ import { setVisibility } from '@/store/GUIReducer';
 import { playBgm } from '@/Core/controller/stage/playBgm';
 import { WebGAL } from '@/Core/WebGAL';
 import { dumpToStorageFast } from '@/Core/controller/storage/storageController';
-import { saveActions } from '@/store/savesReducer';
+import { removeFastSaveGameRecord } from '../controller/storage/fastSaveLoad';
 
 /**
  * 结束游戏
@@ -24,7 +24,7 @@ export const end = (sentence: ISentence): IPerform => {
   setTimeout(() => {
     WebGAL.sceneManager.resetScene();
   }, 5);
-  dispatch(saveActions.resetFastSave());
+  removeFastSaveGameRecord();
   dumpToStorageFast();
   sceneFetcher(sceneUrl).then((rawScene) => {
     // 场景写入到运行时
