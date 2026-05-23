@@ -38,6 +38,7 @@ import {
 } from './runtime/previewSyncTransport';
 import { executePreviewSyncSceneCommand } from './runtime/previewSyncSceneCommand';
 import { setDebugTextReadMode } from '@/Core/Modules/readHistory';
+import { applyPreviewDebugVariables } from './runtime/previewDebugVariables';
 
 let previewSyncRuntimeStarted = false;
 type StageStateSnapshot = IStageState;
@@ -166,6 +167,7 @@ export const startPreviewSyncRuntime = () => {
   };
 
   const handleRunSnippet = (payload: RunSnippetPayload) => {
+    applyPreviewDebugVariables(payload.debugVariables);
     const scene = WebgalParser.parse(payload.snippet, 'temp.txt', 'temp.txt');
     (scene.sentenceList as unknown as ISentence[]).forEach((sentence) => {
       runScript(sentence);
@@ -198,6 +200,7 @@ export const startPreviewSyncRuntime = () => {
 
   const handleRunSceneContent = (payload: RunSceneContentPayload) => {
     resetStage(true);
+    applyPreviewDebugVariables(payload.debugVariables);
     WebGAL.sceneManager.sceneData.currentScene = sceneParser(payload.sceneContent, 'temp', './temp.txt');
     applyComponentVisibility({
       showTitle: false,
