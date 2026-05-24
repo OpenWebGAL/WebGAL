@@ -12,76 +12,101 @@ import random from 'lodash/random';
 import { getBooleanArgByKey } from '../util/getSentenceArg';
 import { stageStateManager } from '@/Core/Modules/stage/stageStateManager';
 
+interface ISetGameVarFromExpressionPayload {
+  key: string;
+  value: string;
+  isGlobal?: boolean;
+  persistGlobal?: boolean;
+}
+
 /**
- * 设置变量
- * @param sentence
+ * 设置变量表达式。
  */
-export const setVar = (sentence: ISentence): IPerform => {
-  let setGlobal = getBooleanArgByKey(sentence, 'global') ?? false;
+export const setGameVarFromExpression = ({
+  key,
+  value,
+  isGlobal = false,
+  persistGlobal = true,
+}: ISetGameVarFromExpressionPayload) => {
   const setGameVar = (payload: ISetGameVar) => {
-    if (setGlobal) {
+    if (isGlobal) {
       webgalStore.dispatch(setScriptManagedGlobalVar(payload));
     } else {
       stageStateManager.setStageVar(payload);
     }
   };
-  // 先把表达式拆分为变量名和赋值语句
+
+  const normalizedKey = key.trim();
+  if (!normalizedKey) {
+    return;
+  }
+  setGameVar({ key: normalizedKey, value: resolveSetVarValue(value) });
+  if (isGlobal) {
+    logger.debug('设置全局变量：', { key: normalizedKey, value: webgalStore.getState().userData.globalGameVar[normalizedKey] });
+    if (persistGlobal) {
+      dumpToStorageFast();
+    }
+  } else {
+    logger.debug('设置变量：', { key: normalizedKey, value: stageStateManager.getCalculationStageState().GameVar[normalizedKey] });
+  }
+};
+
+/**
+ * 设置变量
+ * @param sentence
+ */
+export const setVar = (sentence: ISentence): IPerform => {
+  const setGlobal = getBooleanArgByKey(sentence, 'global') ?? false;
   if (sentence.content.match(/\s*=\s*/)) {
     const key = sentence.content.split(/\s*=\s*/)[0];
     const valExp = sentence.content.split(/\s*=\s*/)[1];
-    if (/^\s*[a-zA-Z_$][\w$]*\s*\(.*\)\s*$/.test(valExp)) {
-      setGameVar({ key, value: EvaluateExpression(valExp) });
-    } else if (valExp.match(/[+\-*\/()]/)) {
-      // 如果包含加减乘除号，则运算
-      // 先取出运算表达式中的变量
-      const valExpArr = valExp.split(/([+\-*\/()])/g);
-      // 将变量替换为变量的值，然后合成表达式字符串
-      const valExp2 = valExpArr
-        .map((e) => {
-          if (!e.trim().match(/^[a-zA-Z_$][a-zA-Z0-9_.]*$/)) {
-            // 检查是否是变量名，不是就返回本身
-            return e;
-          }
-          const _r = getValueFromStateElseKey(e.trim(), true);
-          return typeof _r === 'string' ? `'${_r}'` : _r;
-        })
-        .reduce((pre, curr) => pre + curr, '');
-      let result = '';
-      try {
-        const exp = compile(valExp2);
-        result = exp();
-      } catch (e) {
-        logger.error('expression compile error', e);
-      }
-      setGameVar({ key, value: result });
-    } else if (valExp.match(/true|false/)) {
-      if (valExp.match(/true/)) {
-        setGameVar({ key, value: true });
-      }
-      if (valExp.match(/false/)) {
-        setGameVar({ key, value: false });
-      }
-    } else if (valExp.length === 0) {
-      setGameVar({ key, value: '' });
-    } else {
-      if (!isNaN(Number(valExp))) {
-        setGameVar({ key, value: Number(valExp) });
-      } else {
-        // 字符串
-        setGameVar({ key, value: getValueFromStateElseKey(valExp, true) });
-      }
-    }
-    if (setGlobal) {
-      logger.debug('设置全局变量：', { key, value: webgalStore.getState().userData.globalGameVar[key] });
-      dumpToStorageFast();
-    } else {
-      logger.debug('设置变量：', { key, value: stageStateManager.getCalculationStageState().GameVar[key] });
-    }
+    setGameVarFromExpression({ key, value: valExp, isGlobal: setGlobal });
   }
   return createNonePerform();
 };
 
 type BaseVal = string | number | boolean | undefined;
+
+export function resolveSetVarValue(valExp: string): string | boolean | number {
+  if (/^\s*[a-zA-Z_$][\w$]*\s*\(.*\)\s*$/.test(valExp)) {
+    return EvaluateExpression(valExp);
+  } else if (valExp.match(/[+\-*\/()]/)) {
+    const valExpArr = valExp.split(/([+\-*\/()])/g);
+    const valExp2 = valExpArr
+      .map((e) => {
+        if (!e.trim().match(/^[a-zA-Z_$][a-zA-Z0-9_.]*$/)) {
+          return e;
+        }
+        const _r = getValueFromStateElseKey(e.trim(), true);
+        return typeof _r === 'string' ? `'${_r}'` : _r;
+      })
+      .reduce((pre, curr) => pre + curr, '');
+    let result = '';
+    try {
+      const exp = compile(valExp2);
+      result = exp();
+    } catch (e) {
+      logger.error('expression compile error', e);
+    }
+    return result;
+  } else if (valExp.match(/true|false/)) {
+    if (valExp.match(/true/)) {
+      return true;
+    }
+    if (valExp.match(/false/)) {
+      return false;
+    }
+  } else if (valExp.length === 0) {
+    return '';
+  } else {
+    if (!isNaN(Number(valExp))) {
+      return Number(valExp);
+    } else {
+      return getValueFromStateElseKey(valExp, true) ?? '';
+    }
+  }
+  return '';
+}
 
 /**
  * 执行函数
