@@ -1,6 +1,5 @@
-import { baseTransform } from '../../Modules/stage/stageInterface';
-import type { ITransform } from '../../Modules/stage/stageInterface';
-import type { SetEffectPayload } from '../../../types/editorPreviewProtocol';
+import type { ITransform } from '@/Core/Modules/stage/stageInterface';
+import type { SetEffectPayload } from '@/types/editorPreviewProtocol';
 
 type SetEffectTransformInput = SetEffectPayload['transform'];
 
@@ -20,8 +19,4 @@ export function mergeSetEffectPreviewTransform(
       ...(transform?.scale ?? {}),
     },
   };
-}
-
-export function normalizeSetEffectPreviewBaseline(transform?: ITransform): ITransform {
-  return mergeSetEffectPreviewTransform(baseTransform, transform);
 }

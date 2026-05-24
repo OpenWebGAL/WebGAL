@@ -28,11 +28,9 @@ import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
 import { resetStage } from '@/Core/controller/stage/resetStage';
 import { logger } from '@/Core/util/logger';
 import { stageStateManager } from '@/Core/Modules/stage/stageStateManager';
+import { baseTransform } from '@/Core/Modules/stage/stageInterface';
 import type { IStageState, ITransform } from '@/Core/Modules/stage/stageInterface';
-import {
-  mergeSetEffectPreviewTransform,
-  normalizeSetEffectPreviewBaseline,
-} from './previewSetEffectTransform';
+import { mergeSetEffectPreviewTransform } from './previewSetEffectTransform';
 import { requestEmbeddedLaunchId } from './runtime/embeddedPreviewBootstrap';
 import {
   createPreviewSyncTransport,
@@ -233,7 +231,7 @@ export const startPreviewSyncRuntime = () => {
     setDebugTextReadMode(payload.isRead);
   };
 
-  const getSetEffectBaseline = (target: string) => {
+  const getSetEffectBaseline = (target: string): ITransform => {
     const cachedBaseline = setEffectBaselines.get(target);
     if (cachedBaseline) {
       return cachedBaseline;
@@ -242,7 +240,7 @@ export const startPreviewSyncRuntime = () => {
     const currentTransform = stageStateManager
       .getCalculationStageState()
       .effects.find((effect) => effect.target === target)?.transform;
-    const baseline = normalizeSetEffectPreviewBaseline(currentTransform);
+    const baseline = mergeSetEffectPreviewTransform(baseTransform, currentTransform);
     setEffectBaselines.set(target, baseline);
     return baseline;
   };
