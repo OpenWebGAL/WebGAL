@@ -8,6 +8,7 @@ import { sceneParser } from '@/Core/parser/sceneParser';
 import { logger } from '@/Core/util/logger';
 import { assetSetter, fileType } from '@/Core/util/gameAssetsAccess/assetSetter';
 import { FastPreviewTimeoutPayload, SyncScenePayload } from '../../../../types/editorPreviewProtocol';
+import { applyPreviewDebugVariables } from './previewDebugVariables';
 
 export const FAST_PREVIEW_MAX_DURATION_MS = 500;
 const FAST_PREVIEW_TIMEOUT_CHECK_INTERVAL = 100;
@@ -15,7 +16,7 @@ const FAST_PREVIEW_TIMEOUT_CHECK_INTERVAL = 100;
 export type FastPreviewTimeoutEmitter = (payload: FastPreviewTimeoutPayload) => void;
 
 export function executePreviewSyncSceneCommand(
-  { sceneName, sentenceId }: SyncScenePayload,
+  { sceneName, sentenceId, debugVariables }: SyncScenePayload,
   onFastPreviewTimeout?: FastPreviewTimeoutEmitter,
 ): void {
   logger.warn('正在跳转到' + sceneName + ':' + sentenceId);
@@ -37,6 +38,7 @@ export function executePreviewSyncSceneCommand(
   sceneFetcher(sceneUrl)
     .then((rawScene) => {
       resetStage(true);
+      applyPreviewDebugVariables(debugVariables);
       WebGAL.sceneManager.sceneData.currentScene = sceneParser(rawScene, sceneName, sceneUrl);
       const currentSceneName = WebGAL.sceneManager.sceneData.currentScene.sceneName;
       void runFastPreview(sentenceId, currentSceneName, onFastPreviewTimeout);
