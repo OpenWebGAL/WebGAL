@@ -15,6 +15,7 @@ import { __INFO } from '@/config/info';
 import { WebGAL } from '@/Core/WebGAL';
 import { loadTemplate } from '@/Core/util/coreInitialFunction/templateLoader';
 import { stageStateManager } from '@/Core/Modules/stage/stageStateManager';
+import { autoFastSaveGame } from './controller/storage/fastSaveLoad';
 
 export const isIOS = window.__WEBGAL_DEVICE_INFO__?.isIOS ?? false; // 判断是否是 iOS 终端
 
@@ -57,7 +58,10 @@ export const initializeScript = (): void => {
    * 启动Pixi
    */
   WebGAL.gameplay.pixiStage = new PixiStage();
-  stageStateManager.setCommitHandler(syncPixiStageState);
+  stageStateManager.setCommitHandler((stageState, options) => {
+    syncPixiStageState(stageState, options);
+    if (options.notifyReact) autoFastSaveGame();
+  });
 
   /**
    * iOS 设备 卸载所有 Service Worker
