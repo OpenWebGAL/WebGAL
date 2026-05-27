@@ -29,7 +29,8 @@ import { resetStage } from '@/Core/controller/stage/resetStage';
 import { logger } from '@/Core/util/logger';
 import { stageStateManager } from '@/Core/Modules/stage/stageStateManager';
 import { baseTransform } from '@/Core/Modules/stage/stageInterface';
-import type { IStageState } from '@/Core/Modules/stage/stageInterface';
+import type { IStageState, ITransform } from '@/Core/Modules/stage/stageInterface';
+import { mergeSetEffectPreviewTransform } from './previewSetEffectTransform';
 import { requestEmbeddedLaunchId } from './runtime/embeddedPreviewBootstrap';
 import {
   createPreviewSyncTransport,
@@ -75,6 +76,7 @@ export const startPreviewSyncRuntime = () => {
   let lastPublishedSceneName: string | null = null;
   let lastPublishedSentenceId: number | null = null;
   let lastPublishedStageState: StageStateSnapshot | null = null;
+  const setEffectBaselines = new Map<string, ITransform>();
   const embeddedLaunchIdPromise = requestEmbeddedLaunchId();
   let transport!: PreviewSyncTransport;
 
@@ -88,6 +90,7 @@ export const startPreviewSyncRuntime = () => {
     lastPublishedSceneName = null;
     lastPublishedSentenceId = null;
     lastPublishedStageState = null;
+    setEffectBaselines.clear();
   };
 
   const buildStageStateSnapshot = (stageState: StageStateSnapshot): StageSnapshotUpdatedPayload['stageState'] => {
@@ -163,10 +166,12 @@ export const startPreviewSyncRuntime = () => {
   };
 
   const handleSyncScene = (payload: SyncScenePayload) => {
+    setEffectBaselines.clear();
     executePreviewSyncSceneCommand(payload, emitFastPreviewTimeout);
   };
 
   const handleRunSnippet = (payload: RunSnippetPayload) => {
+    setEffectBaselines.clear();
     applyPreviewDebugVariables(payload.debugVariables);
     const scene = WebgalParser.parse(payload.snippet, 'temp.txt', 'temp.txt');
     (scene.sentenceList as unknown as ISentence[]).forEach((sentence) => {
@@ -199,6 +204,7 @@ export const startPreviewSyncRuntime = () => {
   };
 
   const handleRunSceneContent = (payload: RunSceneContentPayload) => {
+    setEffectBaselines.clear();
     resetStage(true);
     applyPreviewDebugVariables(payload.debugVariables);
     WebGAL.sceneManager.sceneData.currentScene = sceneParser(payload.sceneContent, 'temp', './temp.txt');
@@ -225,23 +231,22 @@ export const startPreviewSyncRuntime = () => {
     setDebugTextReadMode(payload.isRead);
   };
 
-  const handleSetEffect = (payload: SetEffectPayload) => {
-    const targetEffect = stageStateManager
+  const getSetEffectBaseline = (target: string): ITransform => {
+    const cachedBaseline = setEffectBaselines.get(target);
+    if (cachedBaseline) {
+      return cachedBaseline;
+    }
+
+    const currentTransform = stageStateManager
       .getCalculationStageState()
-      .effects.find((effect) => effect.target === payload.target);
-    const targetTransform = targetEffect?.transform ? targetEffect.transform : baseTransform;
-    const newTransform = {
-      ...targetTransform,
-      ...(payload.transform ?? {}),
-      position: {
-        ...targetTransform.position,
-        ...(payload.transform?.position ?? {}),
-      },
-      scale: {
-        ...targetTransform.scale,
-        ...(payload.transform?.scale ?? {}),
-      },
-    };
+      .effects.find((effect) => effect.target === target)?.transform;
+    const baseline = mergeSetEffectPreviewTransform(baseTransform, currentTransform);
+    setEffectBaselines.set(target, baseline);
+    return baseline;
+  };
+
+  const handleSetEffect = (payload: SetEffectPayload) => {
+    const newTransform = mergeSetEffectPreviewTransform(getSetEffectBaseline(payload.target), payload.transform);
     WebGAL.gameplay.pixiStage?.removeAnimationByTargetKey(payload.target);
     stageStateManager.updateEffectAndCommit({
       target: payload.target,
