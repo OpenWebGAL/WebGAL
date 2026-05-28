@@ -4,6 +4,7 @@ import { WebGAL } from '@/Core/WebGAL';
 import { resetStage } from '@/Core/controller/stage/resetStage';
 import { sceneFetcher } from '@/Core/controller/scene/sceneFetcher';
 import { commitForward, forward } from '@/Core/controller/gamePlay/nextSentence';
+import { stopFast } from '@/Core/controller/gamePlay/fastSkip';
 import { sceneParser } from '@/Core/parser/sceneParser';
 import { logger } from '@/Core/util/logger';
 import { assetSetter, fileType } from '@/Core/util/gameAssetsAccess/assetSetter';
@@ -44,7 +45,7 @@ export function executePreviewSyncSceneCommand(
       void runFastPreview(sentenceId, currentSceneName, onFastPreviewTimeout);
     })
     .catch((error) => {
-      WebGAL.gameplay.isFast = false;
+      stopFast();
       WebGAL.gameplay.isFastPreview = false;
       logger.error('实时预览跳转错误', error);
     });
@@ -57,7 +58,7 @@ export async function runFastPreview(
 ): Promise<void> {
   const fastPreviewStartTime = performance.now();
   const baseSceneStackDepth = WebGAL.sceneManager.sceneData.sceneStack.length;
-  WebGAL.gameplay.isFast = true;
+  stopFast();
   WebGAL.gameplay.isFastPreview = true;
   let forwardCount = 0;
   let isTimedOut = false;
@@ -104,7 +105,6 @@ export async function runFastPreview(
       }
     }
   } finally {
-    WebGAL.gameplay.isFast = false;
     WebGAL.gameplay.isFastPreview = false;
   }
 

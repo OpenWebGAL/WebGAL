@@ -31,6 +31,9 @@ export class Gameplay {
     this._isFast = value;
     setFastButton(value);
   }
+  public get skipAnimation() {
+    return this.isFast || this.isFastPreview;
+  }
 
   public resetGamePlay() {
     this.isAuto = false;
