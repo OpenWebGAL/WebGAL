@@ -3,6 +3,7 @@ import * as PIXI from 'pixi.js';
 import { registerPerform } from '@/Core/util/pixiPerformManager/pixiPerformManager';
 import { WebGAL } from '@/Core/WebGAL';
 import { SCREEN_CONSTANTS } from '@/Core/util/constants';
+import snowTextureUrl from '@/assets/tex/snow.png';
 
 type ContainerType = 'foreground' | 'background';
 
@@ -60,7 +61,6 @@ const pixiSnow = (
   const snowflakeTextures: PIXI.Texture[] = [];
   const snowflakes: SnowflakeSprite[] = [];
 
-  const baseTexturePath = './game/tex/snow.png';
   const SPRITE_WIDTH = 128;
   const SPRITE_HEIGHT = 128;
   const NUM_SPRITES = 10;
@@ -138,7 +138,7 @@ const pixiSnow = (
     while (snowflakes.length > 0) snowflakes.pop();
     particleContainer.removeChildren();
 
-    const baseTexture = PIXI.BaseTexture.from(baseTexturePath);
+    const baseTexture = PIXI.BaseTexture.from(snowTextureUrl);
 
     const finalizeSetup = () => {
       if (baseTexture.valid) {
@@ -179,7 +179,7 @@ const pixiSnow = (
         finalizeSetup();
       });
       baseTexture.once('error', (errorEvent) => {
-        console.error(`Error loading base texture ${baseTexturePath}:`, errorEvent);
+        console.error(`Error loading base texture ${snowTextureUrl}:`, errorEvent);
         finalizeSetup();
       });
     }
