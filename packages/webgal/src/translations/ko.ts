@@ -1,5 +1,5 @@
-const zhCn = {
-  // 通用
+const ko = {
+  // 공통
   common: {
     yes: '네',
     no: '아니요',
@@ -52,7 +52,7 @@ const zhCn = {
             },
             about: {
               title: 'WebGAL에 관하여',
-              subTitle: 'WebGAL：오픈 소스 웹 기반 비주얼 노벨 엔진',
+              subTitle: 'WebGAL: 오픈 소스 웹 기반 비주얼 노벨 엔진',
               version: '버전 이름',
               source: '소스 코드 저장소',
               contributors: '기여자',
@@ -132,7 +132,7 @@ const zhCn = {
     },
     saving: {
       title: '저장',
-      isOverwrite: '기존 데이터를 덮어쓰시겠습니까？',
+      isOverwrite: '기존 데이터를 덮어쓰시겠습니까?',
     },
     loadSaving: {
       title: '불러오기',
@@ -202,4 +202,4 @@ const zhCn = {
   },
 };
 
-export default zhCn;
+export default ko;
