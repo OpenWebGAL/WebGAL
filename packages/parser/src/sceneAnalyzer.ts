@@ -583,11 +583,12 @@ function validateAssets(context: AnalyzerContext): void {
     seen.add(key);
 
     if (!asset.url || asset.url.trim().length === 0) {
+      const sentence = context.scene.sentenceList[asset.sentenceIndex];
       context.warnings.push({
         severity: 'warning',
         code: 'empty-asset-url',
         message: `Asset "${asset.name}" has an empty URL.`,
-        lineNumber: asset.lineNumber,
+        lineNumber: asset.lineNumber > 0 ? asset.lineNumber : getSentenceLineNumber(sentence, asset.sentenceIndex),
         sentenceIndex: asset.sentenceIndex,
         command: asset.sourceCommand,
         commandRaw: asset.sourceCommandRaw,
@@ -599,6 +600,10 @@ function validateAssets(context: AnalyzerContext): void {
 function validateControlFlow(context: AnalyzerContext): void {
   context.scene.sentenceList.forEach((sentence, index) => {
     if (!TERMINAL_COMMANDS.has(sentence.command)) {
+      return;
+    }
+
+    if (sentence.args.some((arg) => arg.key === 'when')) {
       return;
     }
 
@@ -722,12 +727,11 @@ function extractAssignedVariableName(expression: string): string | undefined {
 }
 
 function extractVariableNames(expression: string): string[] {
-  const withoutStrings = expression.replace(/(["'`])(?:\\.|(?!\1).)*\1/g, ' ');
+  const withoutStrings = expression.replace(/"(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*'|`(?:\\.|[^`\\])*`/g, ' ');
   const names = new Set<string>();
-  let match: RegExpExecArray | null;
+  const matches = withoutStrings.match(VARIABLE_TOKEN_RE) || [];
 
-  while ((match = VARIABLE_TOKEN_RE.exec(withoutStrings)) !== null) {
-    const token = match[0];
+  for (const token of matches) {
     if (!RESERVED_VARIABLE_WORDS.has(token.toLowerCase()) && Number.isNaN(Number(token))) {
       names.add(token);
     }
@@ -773,7 +777,8 @@ function isSceneResolved(context: AnalyzerContext, target: string): boolean {
   }
 
   const normalized = normalizeSceneTarget(target);
-  return context.knownScenes.has(normalized) || context.knownScenes.has(stripLeadingSlash(normalized));
+  const stripped = stripLeadingSlash(normalized);
+  return context.knownScenes.has(normalized) || context.knownScenes.has(stripped) || context.knownScenes.has(`/${stripped}`);
 }
 
 function stripLeadingSlash(input: string): string {
