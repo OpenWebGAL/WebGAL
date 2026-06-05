@@ -4,6 +4,7 @@ import { expect, test } from "vitest";
 import { commandType, ISentence } from "../src/interface/sceneInterface";
 import * as fsp from 'fs/promises';
 import { fileType } from "../src/interface/assets";
+import { argsParser } from "../src/scriptParser/argsParser";
 
 test("label", async () => {
 
@@ -54,6 +55,15 @@ test("args", async () => {
     inlineComment: ""
   };
   expect(result.sentenceList).toContainEqual(expectSentenceItem);
+});
+
+test("args parser only treats real audio extensions as vocal args", () => {
+  const result = argsParser(" -sogg -voice.mp3", (fileName, assetType) => {
+    return `${assetType}:${fileName}`;
+  });
+
+  expect(result).toContainEqual({ key: "sogg", value: true });
+  expect(result).toContainEqual({ key: "vocal", value: `${fileType.vocal}:voice.mp3` });
 });
 
 test("choose", async () => {

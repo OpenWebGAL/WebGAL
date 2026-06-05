@@ -30,7 +30,7 @@ export function argsParser(
       argValue = undefined;
     }
     // 判断是不是语音参数
-    if (argName.toLowerCase().match(/.ogg|.mp3|.wav/)) {
+    if (/\.(ogg|mp3|wav)$/i.test(argName)) {
       returnArrayList.push({
         key: 'vocal',
         value: assetSetter(e, fileType.vocal),
