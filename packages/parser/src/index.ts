@@ -10,6 +10,7 @@ import { IAsset } from './interface/sceneInterface';
 import { sceneParser } from './sceneParser';
 import { IWebGALStyleObj, scss2cssinjsParser } from "./styleParser";
 import { sceneTextPreProcess } from "./sceneTextPreProcessor";
+import { analyzeScene, SceneAnalyzerOptions } from './sceneAnalyzer';
 
 export default class SceneParser {
   private readonly SCRIPT_CONFIG_MAP: ConfigMap;
@@ -50,6 +51,10 @@ export default class SceneParser {
     );
   }
 
+  analyze(rawScene: string, sceneName: string, sceneUrl: string, options?: SceneAnalyzerOptions) {
+    return analyzeScene(this.parse(rawScene, sceneName, sceneUrl), options);
+  }
+
   parseConfig(configText: string) {
     return configParser(configText);
   }
@@ -78,3 +83,15 @@ export default class SceneParser {
 
 export { ADD_NEXT_ARG_LIST, SCRIPT_CONFIG };
 export { sceneTextPreProcess };
+export { analyzeScene };
+export type {
+  SceneAnalysisResult,
+  SceneAnalyzerOptions,
+  SceneAnalyzerWarning,
+  SceneAssetInfo,
+  SceneChoiceInfo,
+  SceneCommandSummary,
+  SceneLabelInfo,
+  SceneReferenceInfo,
+  SceneVariableUsage,
+} from './sceneAnalyzer';

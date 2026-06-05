@@ -202,6 +202,30 @@ test("say statement", async () => {
   expect(result.sentenceList).toContainEqual(expectSentenceItem);
 });
 
+test("scene analyzer", async () => {
+  const parser = new SceneParser((assetList) => {
+  }, (fileName, assetType) => {
+    return fileName;
+  }, ADD_NEXT_ARG_LIST, SCRIPT_CONFIG);
+
+  const result = parser.analyze(`
+label:start;
+setVar:score=score+1;
+choose:Go next:next.txt|Stay:start.txt;
+jumpLabel:missing;
+changeBg:bg.png;
+changeScene:end.txt;
+say:unreachable;
+`, "start", "/start.txt", { knownScenes: ["next.txt", "start.txt"] });
+
+  expect(result.definedLabels).toContain("start");
+  expect(result.referencedScenes).toContain("next.txt");
+  expect(result.variables).toContainEqual(expect.objectContaining({ name: "score", kind: "write" }));
+  expect(result.assets).toContainEqual(expect.objectContaining({ name: "bg.png", type: fileType.background }));
+  expect(result.warnings).toContainEqual(expect.objectContaining({ code: "missing-label" }));
+  expect(result.warnings).toContainEqual(expect.objectContaining({ code: "unknown-scene" }));
+});
+
 test("wait command", async () => {
   const parser = new SceneParser((assetList) => {
   }, (fileName, assetType) => {
