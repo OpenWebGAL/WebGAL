@@ -80,8 +80,7 @@ export const startPreviewSyncRuntime = () => {
   const embeddedLaunchIdPromise = requestEmbeddedLaunchId();
   let transport!: PreviewSyncTransport;
 
-  const createRequestId = () =>
-    window.crypto?.randomUUID?.() ?? `req-${Date.now()}-${Math.random().toString(16).slice(2)}`;
+  const createRequestId = () => `req-${Date.now()}-${Math.random().toString(16).slice(2)}`;
 
   const resetRegistrationState = () => {
     registered = false;
