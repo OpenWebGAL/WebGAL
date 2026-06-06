@@ -3,6 +3,11 @@ import { TemplateFontDescriptor } from '@/types/template';
 
 export const DEFAULT_FONT_OPTIONS: FontOption[] = [
   {
+    family: `'资源圆体', serif`,
+    source: 'default',
+    labelKey: 'textFont.options.resourceHanRounded',
+  },
+  {
     family: `'思源宋体', serif`,
     source: 'default',
     labelKey: 'textFont.options.siYuanSimSun',
@@ -12,14 +17,9 @@ export const DEFAULT_FONT_OPTIONS: FontOption[] = [
     source: 'default',
     labelKey: 'textFont.options.SimHei',
   },
-  {
-    family: `'LXGW', serif`,
-    source: 'default',
-    labelKey: 'textFont.options.lxgw',
-  },
 ];
 
-export const FALLBACK_FONT_FAMILY = DEFAULT_FONT_OPTIONS[1].family;
+export const FALLBACK_FONT_FAMILY = DEFAULT_FONT_OPTIONS[2].family;
 
 export function buildFontOptionsFromTemplate(fonts: TemplateFontDescriptor[]): FontOption[] {
   const templateOptions: FontOption[] = fonts.map((font) => ({

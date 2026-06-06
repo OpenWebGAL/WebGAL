@@ -113,14 +113,14 @@
 
 .bgmName {
   color: rgba(255, 255, 255, 0.8);
-  font-family: "思源宋体", serif;
+  font-family: "资源圆体", serif;
   font-size: 155%;
   margin: 5px 5px 0 15px;
   overflow: hidden;
 }
 
 .bgmElement {
-  font-family: "思源宋体", serif;
+  font-family: "资源圆体", serif;
   padding: 0.5em 1em 0.5em 1em;
   overflow: hidden;
   background-color: rgba(0, 0, 0, 0.1);
@@ -187,6 +187,37 @@
   z-index: 1;
   position: relative;
   cursor: pointer;
+}
+
+.cgElementStack {
+  background-color: transparent;
+  box-shadow: none;
+}
+
+.cgStackItem {
+  position: absolute;
+  inset: 0.6em;
+  box-sizing: border-box;
+  padding: 0.75em;
+  background-color: rgba(255, 255, 255, 0.85);
+  box-shadow: 0 0 15px 5px rgba(0, 0, 0, 0.28);
+  transform-origin: center 70%;
+  opacity: 0;
+  animation: cgStackItemIn 1.5s ease-out both;
+}
+
+@keyframes cgStackItemIn {
+  0% {
+    opacity: 0;
+    transform: var(--cg-stack-start-transform);
+  }
+  20% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+    transform: var(--cg-stack-end-transform);
+  }
 }
 
 .cgShowDiv {

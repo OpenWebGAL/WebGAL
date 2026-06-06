@@ -1,0 +1,3 @@
+流程控制子场景测试开始：验证 callScene 会压栈进入子场景。
+setVar:flowChildDone=1;
+流程控制子场景测试结束：预期状态：flowChildDone={flowChildDone}，下一句应回到父场景。;

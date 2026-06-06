@@ -1,7 +1,7 @@
 bgm:s_Title.mp3 -volume=80 -enter=3000;
 unlockBgm:s_Title.mp3 -name=welcome;
 intro:*Getting started| The image materials used in this demo game are AI-generated images;
-intro:*Credit| Created By ondoku3.com;
+intro:*Credit| Created by ondoku3.com;
 changeBg:bg.webp -next;
 unlockCg:bg.webp -name=良い夜;
 changeFigure:stand.webp -left -enter=enter-from-left -next;
@@ -22,7 +22,7 @@ pixiPerform:snow;
 For example, let's make it snow as a special effect. -e008_For_example_let's_make.mp3;
 As you can see, WebGAL has attractive features. |Try it out and experience it. -e009_As_you_can see_WebGAL.mp3;
 That's all for the feature introduction. -e010_That's_all_for_the_feature introduction.mp3;
-Next,I will introduce the history and trivia of WebGAL. -e011_Next_I_will introduce_the_ history.mp3;
+Next, I will introduce the history and trivia of WebGAL. -e011_Next_I_will introduce_the_ history.mp3;
 pixiInit;
 choose:WebGAL History:choose1|WebGAL Trivia:choose2;
 ;選択１

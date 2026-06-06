@@ -14,13 +14,13 @@ export function generateTemplateAnimationObj(targetKey: string, duration: number
   /**
    * 在此书写为动画设置初态的操作
    */
-  function setStartState() {}
+  function setStartState() { }
 
   // TODO：通用终态设置
   /**
    * 在此书写为动画设置终态的操作
    */
-  function setEndState() {}
+  function setEndState() { }
 
   /**
    * 在此书写动画每一帧执行的函数
@@ -31,7 +31,7 @@ export function generateTemplateAnimationObj(targetKey: string, duration: number
       // 要操控的精灵
       const sprite = target.pixiContainer;
       // 每一帧的时间
-      const baseDuration = WebGAL.gameplay.pixiStage!.frameDuration;
+      const currentDeltaMS = WebGAL.gameplay.pixiStage!.currentApp!.ticker.deltaMS;
 
       /**
        * 在下面书写具体的动画

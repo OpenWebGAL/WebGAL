@@ -8,11 +8,12 @@ import { getTextSize } from '@/UI/getTextSize';
 import IMSSTextbox from '@/Stage/TextBox/IMSSTextbox';
 import { compileSentence } from '@/Stage/TextBox/TextBox';
 import { useState } from 'react';
+import { useStageState } from '@/hooks/useStageState';
 
 export const TextPreview = (props: any) => {
   const t = useTrans('menu.options.pages.display.options.');
   const userDataState = useSelector((state: RootState) => state.userData);
-  const stageState = useSelector((state: RootState) => state.stage);
+  const stageState = useStageState();
   const previewBackground = stageState.bgName;
   const textDelay = useTextDelay(userDataState.optionData.textSpeed);
   const textDuration = useTextAnimationDuration(userDataState.optionData.textSpeed);
@@ -54,6 +55,7 @@ export const TextPreview = (props: any) => {
     lineLimit: 3,
     isUseStroke: true,
     textboxOpacity: textboxOpacity,
+    isRead: false,
   };
 
   return (

@@ -1,5 +1,5 @@
 webgal:我会修改标题 -hold;
-setVar:Game_name=WebGal_Change -global;
+setVar:Game_name=WebGAL_Change -global;
 webgal:游戏标题已经被我修改为{Game_name} -hold;
 webgal:我会修改游戏背景 -hold;
 setVar:Title_img=bg.webp -global;

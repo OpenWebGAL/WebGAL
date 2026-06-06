@@ -16,6 +16,7 @@ import styles from './title.module.scss';
 /** 标题页 */
 export default function Title() {
   const userDataState = useSelector((state: RootState) => state.userData);
+  const userSaveData = useSelector((state: RootState) => state.saveData);
   const GUIState = useSelector((state: RootState) => state.GUI);
   const dispatch = useDispatch();
   const fullScreen = userDataState.optionData.fullScreen;
@@ -24,12 +25,21 @@ export default function Title() {
   const t = useTrans('title.');
   const tCommon = useTrans('common.');
   const { playSeEnter, playSeClick } = useSoundEffect();
+  const fastSaveData = userSaveData.quickSaveData;
+  const enableContinue = userDataState.globalGameVar.Enable_Continue !== false;
 
   const applyStyle = useApplyStyle('title');
   useConfigData(); // 监听基础ConfigData变化
 
   const appreciationItems = useSelector((state: RootState) => state.userData.appreciationData);
   const hasAppreciationItems = appreciationItems.bgm.length > 0 || appreciationItems.cg.length > 0;
+  const renderButtonText = (text: string) => (
+    <div className={applyStyle('Title_button_text', styles.Title_button_text)}>
+      {text}
+      <span className={applyStyle('Title_button_text_outer', styles.Title_button_text_outer)}>{text}</span>
+      <span className={applyStyle('Title_button_text_inner', styles.Title_button_text_inner)}>{text}</span>
+    </div>
+  );
 
   return (
     <>
@@ -63,19 +73,24 @@ export default function Title() {
               }}
               onMouseEnter={playSeEnter}
             >
-              <div className={applyStyle('Title_button_text', styles.Title_button_text)}>{t('start.title')}</div>
+              {renderButtonText(t('start.title'))}
             </div>
-            <div
-              className={applyStyle('Title_button', styles.Title_button)}
-              onClick={async () => {
-                playSeClick();
-                dispatch(setVisibility({ component: 'showTitle', visibility: false }));
-                continueGame();
-              }}
-              onMouseEnter={playSeEnter}
-            >
-              <div className={applyStyle('Title_button_text', styles.Title_button_text)}>{t('continue.title')}</div>
-            </div>
+            {enableContinue && (
+              <div
+                className={`${applyStyle('Title_button', styles.Title_button)} ${
+                  !fastSaveData ? applyStyle('Title_button_disabled', styles.Title_button_disabled) : ''
+                }`}
+                onClick={() => {
+                  if (fastSaveData) {
+                    playSeClick();
+                    continueGame();
+                  }
+                }}
+                onMouseEnter={fastSaveData ? playSeEnter : undefined}
+              >
+                {renderButtonText(t('continue.title'))}
+              </div>
+            )}
             <div
               className={applyStyle('Title_button', styles.Title_button)}
               onClick={() => {
@@ -85,7 +100,7 @@ export default function Title() {
               }}
               onMouseEnter={playSeEnter}
             >
-              <div className={applyStyle('Title_button_text', styles.Title_button_text)}>{t('options.title')}</div>
+              {renderButtonText(t('options.title'))}
             </div>
             <div
               className={applyStyle('Title_button', styles.Title_button)}
@@ -96,12 +111,12 @@ export default function Title() {
               }}
               onMouseEnter={playSeEnter}
             >
-              <div className={applyStyle('Title_button_text', styles.Title_button_text)}>{t('load.title')}</div>
+              {renderButtonText(t('load.title'))}
             </div>
             {GUIState.enableAppreciationMode && (
               <div
                 className={`${applyStyle('Title_button', styles.Title_button)} ${
-                  !hasAppreciationItems ? styles.Title_button_disabled : ''
+                  !hasAppreciationItems ? applyStyle('Title_button_disabled', styles.Title_button_disabled) : ''
                 }`}
                 onClick={() => {
                   if (hasAppreciationItems) {
@@ -111,7 +126,7 @@ export default function Title() {
                 }}
                 onMouseEnter={playSeEnter}
               >
-                <div className={applyStyle('Title_button_text', styles.Title_button_text)}>{t('extra.title')}</div>
+                {renderButtonText(t('extra.title'))}
               </div>
             )}
             <div
@@ -130,7 +145,7 @@ export default function Title() {
               }}
               onMouseEnter={playSeEnter}
             >
-              <div className={applyStyle('Title_button_text', styles.Title_button_text)}>{t('exit.title')}</div>
+              {renderButtonText(t('exit.title'))}
             </div>
           </div>
         </div>

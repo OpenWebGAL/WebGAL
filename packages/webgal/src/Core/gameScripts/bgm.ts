@@ -1,5 +1,5 @@
 import { ISentence } from '@/Core/controller/scene/sceneInterface';
-import { IPerform } from '@/Core/Modules/perform/performInterface';
+import { createNonePerform, IPerform } from '@/Core/Modules/perform/performInterface';
 import { playBgm } from '@/Core/controller/stage/playBgm';
 import { getNumberArgByKey, getStringArgByKey } from '@/Core/util/getSentenceArg';
 import { webgalStore } from '@/store/store';
@@ -28,13 +28,5 @@ export const bgm = (sentence: ISentence): IPerform => {
 
   playBgm(url, enter, volume);
 
-  return {
-    performName: 'none',
-    duration: 0,
-    isHoldOn: true,
-    stopFunction: () => {},
-    blockingNext: () => false,
-    blockingAuto: () => true,
-    stopTimeout: undefined, // 暂时不用，后面会交给自动清除
-  };
+  return createNonePerform({ isHoldOn: true });
 };

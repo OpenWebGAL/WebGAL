@@ -1,4 +1,4 @@
-import { setFastButton, startFast, stopAll, stopFast } from '@/Core/controller/gamePlay/fastSkip';
+import { startFast, startTemporaryFast, stopAll, stopFast } from '@/Core/controller/gamePlay/fastSkip';
 import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
 import { fastSaveGame } from '@/Core/controller/storage/fastSaveLoad';
 import { setStorage } from '@/Core/controller/storage/storageController';
@@ -90,10 +90,6 @@ export function useMouseRightClickHotKey() {
   });
 }
 
-let wheelTimeout = setTimeout(() => {
-  // 初始化，什么也不干
-}, 0);
-
 /**
  * 滚轮向上打开历史记录
  * 滚轮向下关闭历史记录
@@ -138,19 +134,12 @@ export function useMouseWheel() {
       }
       // setComponentVisibility('showBacklog', false);
     } else if (isGameActive() && direction === 'down' && !ctrlKey) {
-      clearTimeout(wheelTimeout);
-      // 已开启快进模式
-      if (WebGAL.gameplay.isFast) stopFast();
-      WebGAL.gameplay.isFast = true;
       // 滚轮视作快进
-      setFastButton(true);
-      setTimeout(() => {
-        WebGAL.gameplay.isFast = false;
-        setFastButton(false);
-      }, 150);
+      startTemporaryFast();
       next();
     }
   }, []);
+
   useMounted(() => {
     document.addEventListener('wheel', handleMouseWheel);
   });
@@ -202,7 +191,8 @@ export function useSkip() {
   const isCtrlKey = useCallback((e) => e.keyCode === 17, []);
   const handleCtrlKeydown = useCallback((e) => {
     if (isCtrlKey(e) && isGameActive()) {
-      startFast();
+      // 按下 ctrl 键快进时，强制全文快进
+      startFast(true);
     }
   }, []);
   const handleCtrlKeyup = useCallback((e) => {

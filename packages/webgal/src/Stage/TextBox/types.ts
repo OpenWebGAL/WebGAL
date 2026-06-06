@@ -5,6 +5,7 @@ export interface ITextboxProps {
   textDelay: number;
   currentConcatDialogPrev: string;
   currentDialogKey: string;
+  isRead: boolean;
   isText: boolean;
   isSafari: boolean;
   isFirefox: boolean;

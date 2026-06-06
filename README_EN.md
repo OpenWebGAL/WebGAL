@@ -62,6 +62,14 @@ Even so, your sponsorship can provide motivation for the developers to move forw
 
 [Sponsor this project](https://docs.openwebgal.com/en/sponsor/)
 
+## Related Projects
+
+- [webgal-craft](https://github.com/A-kirami/webgal-craft): A community WIP visual editor for WebGAL.
+- [Webgal_transformEditor](https://github.com/KonshinHaoshin/Webgal_transformEditor): A visual editor for `setTransform` and `changeFigure` scene scripting.
+- [webgal-language-tools](https://github.com/xiaoxustudio/webgal-language-tools): Volar.js-based language tools for WebGAL, with LSP, VS Code extension, and Monaco support.
+- [webgal-tool-l2dw](https://github.com/LostWaym/webgal-tool-l2dw): A Live2D utility for WebGAL to adjust models and motions and export related commands.
+- [webgal-mygo](https://github.com/boomwwww/webgal-mygo): A MyGO-specific maintenance fork of the WebGAL engine.
+
 # Sponsors
 
 <a href="https://openwebgal.com/">

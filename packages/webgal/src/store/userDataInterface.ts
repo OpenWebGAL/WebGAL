@@ -1,4 +1,4 @@
-import { IGameVar, IStageState } from './stageInterface';
+import { IGameVar, IStageState } from '@/Core/Modules/stage/stageInterface';
 import { language } from '@/config/language';
 import { IBacklogItem } from '@/Core/Modules/backlog';
 import { ISceneEntry } from '@/Core/Modules/scene';
@@ -46,6 +46,7 @@ export interface IOptionData {
   language: language;
   voiceInterruption: voiceOption; // 是否中断语音
   fullScreen: fullScreenOption;
+  skipAll: boolean; // 快进已读/快进全文
 }
 
 /**
@@ -75,6 +76,7 @@ export interface IAppreciationAsset {
   name: string;
   url: string;
   series: string;
+  order?: number;
 }
 
 export interface IAppreciation {
@@ -91,6 +93,7 @@ export interface IUserData {
   optionData: IOptionData; // 用户设置选项数据
   appreciationData: IAppreciation;
   gameConfigInit: IGameVar;
+  readHistory: Record<string, string>;
 }
 
 export interface ISetUserDataPayload {

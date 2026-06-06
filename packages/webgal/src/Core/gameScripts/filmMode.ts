@@ -1,7 +1,6 @@
 import { ISentence } from '@/Core/controller/scene/sceneInterface';
-import { IPerform } from '@/Core/Modules/perform/performInterface';
-import { webgalStore } from '@/store/store';
-import { setStage } from '@/store/stageReducer';
+import { createNonePerform, IPerform } from '@/Core/Modules/perform/performInterface';
+import { stageStateManager } from '@/Core/Modules/stage/stageStateManager';
 
 /**
  * 语句执行的模板代码
@@ -9,17 +8,9 @@ import { setStage } from '@/store/stageReducer';
  */
 export const filmMode = (sentence: ISentence): IPerform => {
   if (sentence.content !== '' && sentence.content !== 'none') {
-    webgalStore.dispatch(setStage({ key: 'enableFilm', value: sentence.content }));
+    stageStateManager.setStage('enableFilm', sentence.content);
   } else {
-    webgalStore.dispatch(setStage({ key: 'enableFilm', value: '' }));
+    stageStateManager.setStage('enableFilm', '');
   }
-  return {
-    performName: 'none',
-    duration: 0,
-    isHoldOn: false,
-    stopFunction: () => {},
-    blockingNext: () => false,
-    blockingAuto: () => true,
-    stopTimeout: undefined, // 暂时不用，后面会交给自动清除
-  };
+  return createNonePerform();
 };

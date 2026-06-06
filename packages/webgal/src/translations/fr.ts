@@ -58,6 +58,13 @@ const fr = {
               contributors: 'Contributeurs',
               website: 'Site web',
             },
+            skipAll: {
+              title: 'Mode Avance Rapide',
+              options: {
+                read: 'Lu',
+                all: 'Tout',
+              }
+            }
           },
         },
         display: {
@@ -82,9 +89,9 @@ const fr = {
             textFont: {
               title: 'Police du texte',
               options: {
+                resourceHanRounded: 'Resource Han Rounded',
                 siYuanSimSun: 'Source Han Serif',
                 SimHei: 'Sans',
-                lxgw: 'LXGW WenKai',
               },
             },
             textboxOpacity: {

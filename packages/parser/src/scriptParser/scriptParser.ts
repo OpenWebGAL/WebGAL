@@ -24,6 +24,7 @@ export const scriptParser = (
   assetSetter: any,
   ADD_NEXT_ARG_LIST: commandType[],
   SCRIPT_CONFIG_MAP: ConfigMap,
+  lineNumber = 0,
 ): ISentence => {
   let command: commandType; // 默认为对话
   let content: string; // 语句内容
@@ -105,7 +106,7 @@ export const scriptParser = (
   }
 
   content = contentParser(newSentenceRaw.trim(), command, assetSetter); // 将语句内容里的文件名转为相对或绝对路径
-  sentenceAssets = assetsScanner(command, content, args); // 扫描语句携带资源
+  sentenceAssets = assetsScanner(command, content, args, lineNumber); // 扫描语句携带资源
   subScene = subSceneScanner(command, content); // 扫描语句携带子场景
   return {
     command: command, // 语句类型

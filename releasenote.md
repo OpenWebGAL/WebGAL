@@ -1,139 +1,103 @@
 ## 发布日志
 
-**本仓库只发布源代码**
+**本仓库发布源代码，并在 Release 中附带 WebGAL 引擎网页版压缩包。**
 
-**如果你想要体验使用便捷的图形化编辑器创建、制作并实时预览 WebGAL 游戏，请 [下载 WebGAL 图形化编辑器](https://github.com/OpenWebGAL/WebGAL_Terre/releases)**
+**如果你想要体验使用便捷的图形化编辑器创建、制作并实时预览 WebGAL 游戏，请 [下载 WebGAL 图形化编辑器](https://github.com/OpenWebGAL/WebGAL_Terre/releases)。**
 
 ### 在此版本中
 
 #### 新功能
 
--when 指令支持字符串条件判断，变量表达式中的空白会自动裁剪
+优化编辑器实时预览，提升场景跳转和状态同步的稳定性，并支持调试变量、模板刷新和更多界面预览设置。
 
-解析器新增行内注释保留能力，语句可读取 inlineComment 字段
+changeBg / changeFigure / setTransition / setAnimation / setTempAnimation / setTransform 支持 ignoreDefault 参数，可让自定义动画忽略未声明的默认变换和效果。
 
-changeFigure 支持 blendMode 参数，可设置 normal / add / multiply / screen 混合模式
+CG 鉴赏支持按 series 分组并按 order 排序，系列图片可堆叠显示并依次预览。
 
-黑边填充背景切换支持淡入淡出过渡
+新增 Enable_Continue 配置项，可控制继续游戏按钮是否显示；无自动存档时按钮会置灰，游戏结束时会清理自动存档。
 
-模板样式文件（标题、文本框、选项）会在启动时预加载并支持热更新
-
-文本框行高支持通过全局变量 Line_height 调整
-
-鉴赏模式中解锁的 CG / BGM 会立即写入本地存储，减少异常退出导致的解锁丢失
+新增巴西葡萄牙语和韩语，并将语言设置优化为下拉选择。
 
 #### 修复
 
-修复语音播放时音量倍率在切换语音后可能不正确的问题
+修复使用 vocal 参数指定语音时资源路径解析错误的问题。
 
-修复切换语音资源时口型分析节点未重建导致口型动画异常的问题
+修复快速预览、滚轮推进和重置舞台后，快进与动画状态可能不一致的问题。
 
-修复 changeBg / changeFigure 的退出动画与时长设置在部分场景不生效或残留的问题
+修复长场景连续推进时可能发生调用栈溢出的问题。
 
-修复 keep 动画停止与 timeline 单关键帧时的异常行为
+修复自定义模板样式仍受引擎默认样式干扰的问题。
 
-修复透明度滤镜场景下默认进退场动画与 alpha 恢复不一致的问题
+修复非官方引擎构建时自身版本号被错误覆盖的问题。
 
-修复 setTransform 在透明度转换场景下误修改源 transform，导致后续变换异常的问题
-
-修复 Live2D blink / focus 在部分参数更新时被错误覆盖的问题
-
-修复解析器在行末注释与转义分号场景下的语句解析问题
-
-修复鉴赏模式数据更新与持久化问题，并在清除全部数据时保留 config 初始全局变量
-
-修复鉴赏界面 CG 导航溢出及 Logo 淡出期间背景闪烁问题
+修复自定义模板未包含 game/tex 纹理文件时，内置雨、雪和樱花特效无法显示的问题。
 
 <!-- English Translation -->
 ## Release Notes
 
-**Only source code is released in this repository**
+**This repository releases source code and includes a WebGAL engine web package in each Release.**
 
-**If you want to experience creating, making, and real-time previewing WebGAL games using a user-friendly graphical editor, please [download the WebGAL graphical editor](https://github.com/OpenWebGAL/WebGAL_Terre/releases)**
+**If you want to create, edit, and preview WebGAL games with a graphical editor, please [download the WebGAL graphical editor](https://github.com/OpenWebGAL/WebGAL_Terre/releases).**
 
 ### In this version
 
 #### New Features
 
-The -when command now supports string condition checks, and whitespace in expressions is trimmed automatically
+Improved editor live preview with more reliable scene navigation and state synchronization, plus support for debug variables, template refreshes, and additional interface preview settings.
 
-The parser now preserves inline comments, exposed via the inlineComment field on sentences
+changeBg / changeFigure / setTransition / setAnimation / setTempAnimation / setTransform now support the ignoreDefault argument, allowing custom animations to ignore undeclared default transforms and effects.
 
-changeFigure now supports a blendMode argument with normal / add / multiply / screen modes
+The CG gallery now supports grouping by series and sorting by order, with series images displayed as a stack for sequential preview.
 
-Black-border fill background switching now supports fade transitions
+Added the Enable_Continue configuration option to control whether the Continue button is shown; it is disabled without an autosave, and autosaves are cleared when the game ends.
 
-Template style files (title, textbox, choose) are preloaded on startup and support hot style refresh
-
-Textbox line height can now be controlled through the global variable Line_height
-
-Unlocked CG / BGM entries in appreciation mode are now persisted immediately to local storage to reduce data loss on unexpected exit
+Added Brazilian Portuguese and Korean translations, and improved language settings with a dropdown selector.
 
 #### Fixes
 
-Fixed incorrect vocal volume scaling after switching voice playback
+Fixed incorrect voice asset path resolution when specifying voice files with the vocal argument.
 
-Fixed lip-sync analyzer nodes not being reconnected when switching vocal media sources
+Fixed fast-forward and animation states becoming inconsistent after fast preview, mouse-wheel advancement, or stage reset.
 
-Fixed cases where changeBg / changeFigure exit animations and durations did not apply correctly or were left behind
+Fixed possible call stack overflow when advancing continuously through long scenes.
 
-Fixed abnormal behavior when stopping keep animations and when timeline animations had only a single keyframe
+Fixed custom template styles still being affected by engine default styles.
 
-Fixed inconsistencies in default enter/exit fades and alpha restoration under alpha-filter-based rendering
+Fixed version numbers of unofficial engine packages being overwritten incorrectly during builds.
 
-Fixed source transform data being mutated during alpha conversion in setTransform paths, which caused later transforms to behave incorrectly
-
-Fixed Live2D blink / focus updates incorrectly overwriting partial parameter updates
-
-Fixed parser issues with end-of-line comments and escaped semicolon scenarios
-
-Fixed appreciation data update/persistence issues, and now preserves initial config globals when clearing all data
-
-Fixed CG navigation overflow in Extra UI and logo fade background flicker
+Fixed built-in rain, snow, and cherry blossom effects not displaying when custom templates do not include the game/tex texture files.
 
 <!-- Japanese Translation -->
 ## リリースノート
 
-**このリポジトリはソースコードのみを公開しています**
+**このリポジトリではソースコードを公開し、Release には WebGAL エンジンの Web 版パッケージも同梱しています。**
 
-**もしあなたが使いやすいグラフィカルエディタでWebGALゲームを作成、制作、リアルタイムプレビューしたい場合は、[WebGALグラフィカルエディタをダウンロードしてください](https://github.com/OpenWebGAL/WebGAL_Terre/releases)**
+**グラフィカルエディターで WebGAL ゲームを作成、編集、リアルタイムプレビューしたい場合は、[WebGAL グラフィカルエディターをダウンロードしてください](https://github.com/OpenWebGAL/WebGAL_Terre/releases)。**
 
 ### このバージョンについて
 
 #### 新機能
 
--when コマンドで文字列条件の判定に対応し、式中の空白を自動でトリミングするようになりました
+エディターのリアルタイムプレビューを改善し、シーン移動と状態同期の安定性を向上しました。また、デバッグ変数、テンプレート更新、より多くの画面プレビュー設定に対応しました。
 
-パーサーが行内コメントを保持するようになり、文オブジェクトの inlineComment から参照できます
+changeBg / changeFigure / setTransition / setAnimation / setTempAnimation / setTransform が ignoreDefault 引数に対応し、カスタムアニメーションで未指定のデフォルト変換やエフェクトを無視できるようになりました。
 
-changeFigure で blendMode 引数をサポートし、normal / add / multiply / screen を指定できます
+CG 鑑賞が series によるグループ化と order による並べ替えに対応し、シリーズ画像を重ねて表示して順番にプレビューできるようになりました。
 
-黒縁塗りつぶし背景の切り替えにフェード遷移を追加しました
+続きからボタンの表示を制御する Enable_Continue 設定を追加しました。自動セーブがない場合はボタンが無効になり、ゲーム終了時には自動セーブが削除されます。
 
-テンプレートのスタイルファイル（タイトル・テキストボックス・選択肢）を起動時にプリロードし、スタイル更新にも追従します
-
-テキストボックスの行間をグローバル変数 Line_height で調整できるようになりました
-
-鑑賞モードで解放した CG / BGM を即時にローカル保存するようにし、異常終了時の取りこぼしを減らしました
+ブラジルポルトガル語と韓国語を追加し、言語設定をドロップダウン選択に改善しました。
 
 #### 修正
 
-ボイス切り替え後に音量倍率が正しく反映されない問題を修正しました
+vocal 引数でボイスを指定した際、アセットパスが正しく解決されない問題を修正しました。
 
-ボイス音源の切り替え時に口パク解析ノードが再接続されず、口パクが乱れる問題を修正しました
+高速プレビュー、マウスホイールによる進行、舞台リセット後に、早送りとアニメーションの状態が一致しない問題を修正しました。
 
-changeBg / changeFigure の退場アニメーションと時間設定が一部で効かない、または残留する問題を修正しました
+長いシーンを連続して進めた際に、コールスタックのオーバーフローが発生する場合がある問題を修正しました。
 
-keep アニメーション停止時と timeline が単一キーフレームの場合の異常動作を修正しました
+カスタムテンプレートのスタイルがエンジンのデフォルトスタイルの影響を受ける問題を修正しました。
 
-アルファフィルター適用時にデフォルト入退場フェードと透明度復元が一致しない問題を修正しました
+非公式エンジンのビルド時に拡張パッケージのバージョン番号が誤って上書きされる問題を修正しました。
 
-setTransform の透明度変換処理で元の transform が不正に書き換わり、後続の変換が崩れる問題を修正しました
-
-Live2D の blink / focus で一部パラメータ更新時に設定が不正に上書きされる問題を修正しました
-
-行末コメントやエスケープされたセミコロンを含む場合のパーサー解析不具合を修正しました
-
-鑑賞モードのデータ更新・永続化の不具合を修正し、全データ削除時に config 初期グローバル変数を保持するようにしました
-
-Extra 画面の CG ナビゲーションのはみ出しと、ロゴフェード時の背景ちらつきを修正しました
+カスタムテンプレートに game/tex のテクスチャファイルが含まれていない場合、内蔵の雨、雪、桜エフェクトが表示されない問題を修正しました。

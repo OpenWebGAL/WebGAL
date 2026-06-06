@@ -8,11 +8,10 @@ import { setVisibility } from '@/store/GUIReducer';
 import { restorePerform } from './jumpFromBacklog';
 import { stopAllPerform } from '@/Core/controller/gamePlay/stopAllPerform';
 import cloneDeep from 'lodash/cloneDeep';
-import uniqWith from 'lodash/uniqWith';
-import { scenePrefetcher } from '@/Core/util/prefetcher/scenePrefetcher';
 import { setEbg } from '@/Core/gameScripts/changeBg/setEbg';
 
 import { WebGAL } from '@/Core/WebGAL';
+import { stageStateManager } from '@/Core/Modules/stage/stageStateManager';
 
 /**
  * 读取游戏存档
@@ -41,11 +40,7 @@ export function loadGameFromStageData(stageData: ISaveData) {
       loadFile.sceneData.sceneName,
       loadFile.sceneData.sceneUrl,
     );
-    // 开始场景的预加载
-    const subSceneList = WebGAL.sceneManager.sceneData.currentScene.subSceneList;
-    WebGAL.sceneManager.settledScenes.push(WebGAL.sceneManager.sceneData.currentScene.sceneUrl); // 放入已加载场景列表，避免递归加载相同场景
-    const subSceneListUniq = uniqWith(subSceneList); // 去重
-    scenePrefetcher(subSceneListUniq);
+    WebGAL.sceneManager.settledScenes.add(WebGAL.sceneManager.sceneData.currentScene.sceneUrl); // 放入已加载场景列表，避免递归加载相同场景
   });
   WebGAL.sceneManager.sceneData.currentSentenceId = loadFile.sceneData.currentSentenceId;
   WebGAL.sceneManager.sceneData.sceneStack = cloneDeep(loadFile.sceneData.sceneStack);
@@ -73,8 +68,10 @@ export function loadGameFromStageData(stageData: ISaveData) {
   });
   // iframes将被指令创建，我们不需要使用存档中的iframes
   newStageState.iframes = [];
+  // 确保原先未读的文本在 load 时能正确显示为已读文本
+  newStageState.isRead = true;
   const dispatch = webgalStore.dispatch;
-  dispatch(resetStageState(newStageState));
+  stageStateManager.replaceCalculationStageState(newStageState);
   // 将持久化数据存储到全局变量中，供后续创建iframe时使用
   (window as any).__iframePersistentData = iframePersistentData;
 
@@ -87,5 +84,5 @@ export function loadGameFromStageData(stageData: ISaveData) {
   /**
    * 恢复模糊背景
    */
-  setEbg(webgalStore.getState().stage.bgName);
+  setEbg(newStageState.bgName);
 }

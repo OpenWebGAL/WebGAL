@@ -32,7 +32,7 @@ export function System() {
   const dispatch = useDispatch();
   const setLanguage = useLanguage();
   const t = useTrans('menu.options.pages.system.options.');
-  const { playSeDialogOpen } = useSoundEffect();
+  const { playSeDialogOpen, playSeEnter, playSeSwitch } = useSoundEffect();
 
   function exportSaves() {
     const gameData: IExportGameData = {
@@ -95,6 +95,7 @@ export function System() {
   }
 
   const [showAbout, setShowAbout] = useState(false);
+  const [showLanguageSelect, setShowLanguageSelect] = useState(false);
 
   function toggleAbout() {
     setShowAbout(!showAbout);
@@ -116,14 +117,66 @@ export function System() {
               }}
             />
           </NormalOption>
-          <NormalOption key="option7" title={t('language.title')}>
+          <NormalOption key="skipAll" title={t('skipAll.title')}>
             <NormalButton
-              currentChecked={userDataState.optionData.language}
-              textList={Object.values(languages)}
-              functionList={Object.keys(languages).map(
-                (k) => () => setLanguage(language[k as unknown as number] as unknown as language),
-              )}
+              textList={t('skipAll.options.read', 'skipAll.options.all')}
+              functionList={[() => {
+                dispatch(setOptionData({ key: 'skipAll', value: false }));
+                setStorage();
+              }, () => {
+                dispatch(setOptionData({ key: 'skipAll', value: true }));
+                setStorage();
+              }]}
+              currentChecked={userDataState.optionData.skipAll ? 1 : 0}
             />
+          </NormalOption>
+          <NormalOption key="option7" title={t('language.title')} style={{ zIndex: showLanguageSelect ? 1 : undefined }}>
+            <div
+              className={styles.Option_select}
+              onBlur={(event) => {
+                if (!event.currentTarget.contains(event.relatedTarget)) setShowLanguageSelect(false);
+              }}
+            >
+              <button
+                type="button"
+                className={`${styles.Option_select_button} ${
+                  showLanguageSelect ? styles.Option_select_button_active : ''
+                }`}
+                onClick={() => {
+                  playSeSwitch();
+                  setShowLanguageSelect(!showLanguageSelect);
+                }}
+                onMouseEnter={playSeEnter}
+              >
+                {languages[language[userDataState.optionData.language]]}
+              </button>
+              {showLanguageSelect && (
+                <div className={styles.Option_select_menu}>
+                  {Object.entries(languages).map(([key, name]) => {
+                    const value = language[key as keyof typeof language] as language;
+                    return (
+                      <button
+                        type="button"
+                        key={key}
+                        className={`${styles.Option_select_item} ${
+                          value === userDataState.optionData.language
+                            ? styles.Option_select_item_active
+                            : ''
+                        }`}
+                        onClick={() => {
+                          playSeSwitch();
+                          setLanguage(value);
+                          setShowLanguageSelect(false);
+                        }}
+                        onMouseEnter={playSeEnter}
+                      >
+                        {name}
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
           </NormalOption>
           <NormalOption key="option2" title={t('resetData.title')}>
             <NormalButton

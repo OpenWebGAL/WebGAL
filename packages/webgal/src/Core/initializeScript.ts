@@ -7,17 +7,17 @@ import { assetSetter, fileType } from './util/gameAssetsAccess/assetSetter';
 import { sceneFetcher } from './controller/scene/sceneFetcher';
 import { sceneParser } from './parser/sceneParser';
 import { bindExtraFunc } from '@/Core/util/coreInitialFunction/bindExtraFunc';
-import { webSocketFunc } from '@/Core/util/syncWithEditor/webSocketFunc';
-import uniqWith from 'lodash/uniqWith';
-import { scenePrefetcher } from './util/prefetcher/scenePrefetcher';
+import { startPreviewSyncRuntime } from '@/Core/util/syncWithEditor/previewSyncRuntime';
 import PixiStage from '@/Core/controller/stage/pixi/PixiController';
+import { syncPixiStageState } from '@/Core/controller/stage/pixi/syncPixiStageState';
 import axios from 'axios';
 import { __INFO } from '@/config/info';
 import { WebGAL } from '@/Core/WebGAL';
 import { loadTemplate } from '@/Core/util/coreInitialFunction/templateLoader';
+import { stageStateManager } from '@/Core/Modules/stage/stageStateManager';
+import { autoFastSaveGame } from './controller/storage/fastSaveLoad';
 
-const u = navigator.userAgent;
-export const isIOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); // 判断是否是 iOS终端
+export const isIOS = window.__WEBGAL_DEVICE_INFO__?.isIOS ?? false; // 判断是否是 iOS 终端
 
 /**
  * 引擎初始化函数
@@ -30,14 +30,14 @@ export const initializeScript = (): void => {
   loadTemplate();
   // 激活强制缩放
   // 在调整窗口大小时重新计算宽高，设计稿按照 1600*900。
-  if (isIOS) {
+  if (isIOS && window.innerWidth <= window.innerHeight) {
     /**
      * iOS
      */
     alert(
-      `iOS 用户请横屏使用以获得最佳体验
-| Please use landscape mode on iOS for the best experience
-| iOS ユーザーは横画面での使用をお勧めします`,
+      `iOS 用户请横屏后刷新页面，以获得最佳体验
+| Please rotate to landscape and refresh the page on iOS for the best experience
+| iOS ユーザーは横画面にしてからページを再読み込みしてください`,
     );
   }
 
@@ -45,23 +45,23 @@ export const initializeScript = (): void => {
   loadStyle('./game/userStyleSheet.css');
   // 获得 user Animation
   getUserAnimation();
-  // 获取游戏信息
-  infoFetcher('./game/config.txt');
   // 获取start场景
   const sceneUrl: string = assetSetter('start.txt', fileType.scene);
   // 场景写入到运行时
-  sceneFetcher(sceneUrl).then((rawScene) => {
+  const initialSceneReady = sceneFetcher(sceneUrl).then((rawScene) => {
     WebGAL.sceneManager.sceneData.currentScene = sceneParser(rawScene, 'start.txt', sceneUrl);
-    // 开始场景的预加载
-    const subSceneList = WebGAL.sceneManager.sceneData.currentScene.subSceneList;
-    WebGAL.sceneManager.settledScenes.push(sceneUrl); // 放入已加载场景列表，避免递归加载相同场景
-    const subSceneListUniq = uniqWith(subSceneList); // 去重
-    scenePrefetcher(subSceneListUniq);
+    WebGAL.sceneManager.settledScenes.add(sceneUrl); // 放入已加载场景列表，避免递归加载相同场景
   });
+  // 获取游戏信息
+  infoFetcher('./game/config.txt');
   /**
    * 启动Pixi
    */
   WebGAL.gameplay.pixiStage = new PixiStage();
+  stageStateManager.setCommitHandler((stageState, options) => {
+    syncPixiStageState(stageState, options);
+    if (options.notifyReact) autoFastSaveGame();
+  });
 
   /**
    * iOS 设备 卸载所有 Service Worker
@@ -80,7 +80,7 @@ export const initializeScript = (): void => {
    * 绑定工具函数
    */
   bindExtraFunc();
-  webSocketFunc();
+  startPreviewSyncRuntime();
 };
 
 function loadStyle(url: string) {

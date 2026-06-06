@@ -1,29 +1,35 @@
 import { logger } from '../../util/logger';
 import { sceneFetcher } from '../scene/sceneFetcher';
 import { sceneParser } from '../../parser/sceneParser';
-import { IStageState } from '@/store/stageInterface';
+import { IStageState } from '@/Core/Modules/stage/stageInterface';
 import { webgalStore } from '@/store/store';
-import { resetStageState, stageActions } from '@/store/stageReducer';
 import { setVisibility } from '@/store/GUIReducer';
 import { runScript } from '@/Core/controller/gamePlay/runScript';
 import { stopAllPerform } from '@/Core/controller/gamePlay/stopAllPerform';
 import cloneDeep from 'lodash/cloneDeep';
-import uniqWith from 'lodash/uniqWith';
-import { scenePrefetcher } from '@/Core/util/prefetcher/scenePrefetcher';
 
 import { WebGAL } from '@/Core/WebGAL';
+import { stageStateManager } from '@/Core/Modules/stage/stageStateManager';
 
 /**
  * 恢复演出
  */
 export const restorePerform = () => {
-  const stageState = webgalStore.getState().stage;
+  const stageState = stageStateManager.getCalculationStageState();
   const performToRestore = cloneDeep(stageState.PerformList);
   // 清除状态表中演出序列
-  webgalStore.dispatch(stageActions.removeAllPerform());
-  performToRestore.forEach((e) => {
-    runScript(e.script);
-  });
+  stageStateManager.removeAllPerform();
+  WebGAL.gameplay.performController.beginCollectingPerforms();
+  try {
+    performToRestore.forEach((e) => {
+      runScript(e.script);
+    });
+  } finally {
+    WebGAL.gameplay.performController.endCollectingPerforms();
+  }
+  stageStateManager.commit({ applyPixiEffects: false });
+  WebGAL.gameplay.performController.commitPendingPerforms();
+  stageStateManager.applyCommittedPixiEffects();
 };
 
 /**
@@ -44,11 +50,7 @@ export const jumpFromBacklog = (index: number, refetchScene = true) => {
         backlogFile.saveScene.sceneName,
         backlogFile.saveScene.sceneUrl,
       );
-      // 开始场景的预加载
-      const subSceneList = WebGAL.sceneManager.sceneData.currentScene.subSceneList;
-      WebGAL.sceneManager.settledScenes.push(WebGAL.sceneManager.sceneData.currentScene.sceneUrl); // 放入已加载场景列表，避免递归加载相同场景
-      const subSceneListUniq = uniqWith(subSceneList); // 去重
-      scenePrefetcher(subSceneListUniq);
+      WebGAL.sceneManager.settledScenes.add(WebGAL.sceneManager.sceneData.currentScene.sceneUrl); // 放入已加载场景列表，避免递归加载相同场景
     });
   WebGAL.sceneManager.sceneData.currentSentenceId = backlogFile.saveScene.currentSentenceId;
   WebGAL.sceneManager.sceneData.sceneStack = cloneDeep(backlogFile.saveScene.sceneStack);
@@ -67,7 +69,10 @@ export const jumpFromBacklog = (index: number, refetchScene = true) => {
   // 恢复舞台状态
   const newStageState: IStageState = cloneDeep(backlogFile.currentStageState);
 
-  dispatch(resetStageState(newStageState));
+  // 确保原先未读的文本在使用 backlog 时能正确显示为已读文本
+  newStageState.isRead = true;
+
+  stageStateManager.replaceCalculationStageState(newStageState);
 
   // 恢复演出
   setTimeout(restorePerform, 0);
@@ -77,4 +82,7 @@ export const jumpFromBacklog = (index: number, refetchScene = true) => {
 
   // 重新显示 TextBox
   dispatch(setVisibility({ component: 'showTextBox', visibility: true }));
+
+  // 重新渲染
+  setTimeout(() => WebGAL.gameplay.pixiStage?.requestRender(), 100);
 };

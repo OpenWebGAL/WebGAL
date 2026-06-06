@@ -1,12 +1,11 @@
-import { ITransform } from '@/store/stageInterface';
+import { ITransform } from '@/Core/Modules/stage/stageInterface';
 import * as popmotion from 'popmotion';
 import { WebGAL } from '@/Core/WebGAL';
-import { webgalStore } from '@/store/store';
-import { stageActions } from '@/store/stageReducer';
 import omitBy from 'lodash/omitBy';
 import isUndefined from 'lodash/isUndefined';
 import PixiStage, { IAnimationObject } from '@/Core/controller/stage/pixi/PixiController';
 import { AnimationFrame } from '@/Core/Modules/animations';
+import { stageStateManager } from '@/Core/Modules/stage/stageStateManager';
 
 /**
  * 动画创建模板
@@ -18,6 +17,7 @@ export function generateTimelineObj(
   timeline: Array<AnimationFrame>,
   targetKey: string,
   duration: number,
+  syncEndStateToStageState = true,
 ): IAnimationObject {
   const target = WebGAL.gameplay.pixiStage!.getStageObjByKey(targetKey);
   let currentDelay = 0;
@@ -29,8 +29,10 @@ export function generateTimelineObj(
     const segmentDuration = segment.duration;
     currentDelay += segmentDuration;
     const { position, scale, ...segmentValues } = segment;
+    // 移除所有值类型不是 number 的属性
+    const filteredSegmentValues = omitBy(segmentValues, (value) => typeof value !== 'number');
     // 不能用 scale，因为 popmotion 不能用嵌套
-    values.push({ x: position.x, y: position.y, scaleX: scale.x, scaleY: scale.y, ...segmentValues });
+    values.push({ x: position?.x, y: position?.y, scaleX: scale?.x, scaleY: scale?.y, ...filteredSegmentValues });
     // Easing 需要比 values 的长度少一个
     if (i > 0) {
       easeArray.push(stringToEasing(segment.ease));
@@ -61,8 +63,10 @@ export function generateTimelineObj(
     });
   }
 
-  const { duration: sliceDuration, ...endState } = getEndStateEffect();
-  webgalStore.dispatch(stageActions.updateEffect({ target: targetKey, transform: endState }));
+  if (syncEndStateToStageState) {
+    const { duration: sliceDuration, ease, ...endState } = getEndStateEffect();
+    stageStateManager.updateEffect({ target: targetKey, transform: endState });
+  }
 
   /**
    * 在此书写为动画设置初态的操作
@@ -71,11 +75,11 @@ export function generateTimelineObj(
     if (target?.pixiContainer) {
       // 不能赋值到 position，因为 x 和 y 被 WebGALPixiContainer 代理，而 position 属性没有代理
       const { position, scale, ...state } = getStartStateEffect();
-      const assignValue = omitBy({ x: position.x, y: position.y, ...state }, isUndefined);
+      const assignValue = omitBy({ x: position?.x, y: position?.y, ...state }, isUndefined);
       // @ts-ignore
       PixiStage.assignTransform(target?.pixiContainer, assignValue);
-      if (target?.pixiContainer) {
-        if (!isUndefined(scale.x)) {
+      if (scale && target?.pixiContainer) {
+        if (!isUndefined(scale?.x)) {
           target.pixiContainer.scale.x = scale.x;
         }
         if (!isUndefined(scale?.y)) {
@@ -98,11 +102,11 @@ export function generateTimelineObj(
       // 不能赋值到 position，因为 x 和 y 被 WebGALPixiContainer 代理，而 position 属性没有代理
       // 不能赋值到 position，因为 x 和 y 被 WebGALPixiContainer 代理，而 position 属性没有代理
       const { position, scale, ...state } = getEndStateEffect();
-      const assignValue = omitBy({ x: position.x, y: position.y, ...state }, isUndefined);
+      const assignValue = omitBy({ x: position?.x, y: position?.y, ...state }, isUndefined);
       // @ts-ignore
       PixiStage.assignTransform(target?.pixiContainer, assignValue);
-      if (target?.pixiContainer) {
-        if (!isUndefined(scale.x)) {
+      if (scale && target?.pixiContainer) {
+        if (!isUndefined(scale?.x)) {
           target.pixiContainer.scale.x = scale.x;
         }
         if (!isUndefined(scale?.y)) {

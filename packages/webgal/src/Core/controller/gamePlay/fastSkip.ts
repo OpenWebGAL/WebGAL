@@ -4,13 +4,22 @@ import styles from '@/UI/BottomControlPanel/bottomControlPanel.module.scss';
 import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
 
 import { WebGAL } from '@/Core/WebGAL';
+import { webgalStore } from "@/store/store";
 import { SYSTEM_CONFIG } from '@/config';
+import { stageStateManager } from '@/Core/Modules/stage/stageStateManager';
+
+let temporaryFastTimeout: ReturnType<typeof setTimeout> | null = null;
+
+const clearTemporaryFast = () => {
+  if (temporaryFastTimeout !== null) clearTimeout(temporaryFastTimeout);
+  temporaryFastTimeout = null;
+};
 
 /**
  * 设置 fast 按钮的激活与否
  * @param on
  */
-const setButton = (on: boolean) => {
+export const setFastButton = (on: boolean) => {
   const autoIcon = document.getElementById('Button_ControlPanel_fast');
   if (autoIcon) {
     if (on) {
@@ -19,17 +28,12 @@ const setButton = (on: boolean) => {
   }
 };
 
-export { setButton as setFastButton };
-
 /**
  * 停止快进模式
  */
 export const stopFast = () => {
-  if (!isFast()) {
-    return;
-  }
+  clearTemporaryFast();
   WebGAL.gameplay.isFast = false;
-  setButton(false);
   if (WebGAL.gameplay.fastInterval !== null) {
     clearInterval(WebGAL.gameplay.fastInterval);
     WebGAL.gameplay.fastInterval = null;
@@ -39,15 +43,32 @@ export const stopFast = () => {
 /**
  * 开启快进
  */
-export const startFast = () => {
-  if (isFast()) {
+export const startFast = (force = false) => {
+  clearTemporaryFast();
+  if (WebGAL.gameplay.fastInterval !== null) {
     return;
   }
   WebGAL.gameplay.isFast = true;
-  setButton(true);
+  const skipAll = force || webgalStore.getState().userData.optionData.skipAll;
   WebGAL.gameplay.fastInterval = setInterval(() => {
+    if (!skipAll && !stageStateManager.getCalculationStageState().isRead) {
+      stopFast();
+      return;
+    }
     nextSentence();
   }, SYSTEM_CONFIG.fast_timeout);
+};
+
+export const startTemporaryFast = (duration = 150) => {
+  clearTemporaryFast();
+  if (WebGAL.gameplay.fastInterval !== null) stopFast();
+  WebGAL.gameplay.isFast = true;
+  temporaryFastTimeout = setTimeout(() => {
+    if (WebGAL.gameplay.fastInterval === null) {
+      WebGAL.gameplay.isFast = false;
+    }
+    temporaryFastTimeout = null;
+  }, duration);
 };
 
 // 判断是否是快进模式
@@ -68,7 +89,7 @@ export const stopAll = () => {
  */
 export const switchFast = () => {
   // 现在正在快进
-  if (WebGAL.gameplay.isFast) {
+  if (WebGAL.gameplay.fastInterval !== null) {
     stopFast();
   } else {
     // 当前不在快进
