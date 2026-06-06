@@ -11,6 +11,7 @@ import { compileSentence } from '@/Stage/TextBox/TextBox';
 import { performMouthAnimation } from '@/Core/gameScripts/vocal/vocalAnimation';
 import { match } from '@/Core/util/match';
 import { stageStateManager } from '@/Core/Modules/stage/stageStateManager';
+import { resolveDialogDisplayState } from './resolveDialogDisplayState';
 
 /**
  * 进行普通对话的显示
@@ -29,6 +30,7 @@ export const say = (sentence: ISentence): IPerform => {
   const isNotend = getBooleanArgByKey(sentence, 'notend') ?? false; // 是否有 notend 参数
   const speaker = getStringArgByKey(sentence, 'speaker'); // 获取说话者
   const clear = getBooleanArgByKey(sentence, 'clear') ?? false; // 是否清除说话者
+  const textboxThemeOverride = getStringArgByKey(sentence, 'theme'); // 覆盖本句对话框主题
   const vocal = getStringArgByKey(sentence, 'vocal'); // 是否播放语音
 
   // 如果是concat，那么就继承上一句的key，并且继承上一句对话。
@@ -75,15 +77,15 @@ export const say = (sentence: ISentence): IPerform => {
       break;
   }
 
-  // 设置显示的角色名称
-  let showName = stageState.showName; // 先默认继承
-  if (speaker !== null) {
-    showName = speaker;
-  }
-  if (clear) {
-    showName = '';
-  }
-  stageStateManager.setStage('showName', showName);
+  const dialogDisplayState = resolveDialogDisplayState({
+    previousShowName: stageState.showName,
+    previousTextboxTheme: stageState.textboxTheme,
+    speaker,
+    textboxThemeOverride,
+    clear,
+  });
+  stageStateManager.setStage('showName', dialogDisplayState.showName);
+  stageStateManager.setStage('textboxTheme', dialogDisplayState.textboxTheme);
 
   // 模拟说话
   let performSimulateVocalTimeout: ReturnType<typeof setTimeout> | null = null;

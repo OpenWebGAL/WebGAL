@@ -47,6 +47,7 @@ export const TextBox = () => {
   const textArray = compileSentence(stageState.showText, lineLimit);
   const isHasName = stageState.showName !== '';
   const showName = compileSentence(stageState.showName, lineLimit);
+  const textboxTheme = stageState.textboxTheme;
   const currentConcatDialogPrev = stageState.currentConcatDialogPrev;
   const currentDialogKey = stageState.currentDialogKey;
   const miniAvatar = stageState.miniAvatar;
@@ -95,6 +96,7 @@ export const TextBox = () => {
       textDelay={textDelay}
       showName={showName}
       isHasName={isHasName}
+      textboxTheme={textboxTheme}
       currentConcatDialogPrev={currentConcatDialogPrev}
       fontSize={size}
       currentDialogKey={currentDialogKey}

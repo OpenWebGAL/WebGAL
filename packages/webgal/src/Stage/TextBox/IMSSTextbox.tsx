@@ -22,6 +22,7 @@ export default function IMSSTextbox(props: ITextboxProps) {
     miniAvatar,
     isHasName,
     showName,
+    textboxTheme,
     font,
     textDuration,
     isUseStroke,
@@ -214,7 +215,7 @@ export default function IMSSTextbox(props: ITextboxProps) {
   return (
     <>
       {isText && (
-        <div className={styles.TextBox_Container}>
+        <div className={styles.TextBox_Container} data-textbox-theme={textboxTheme || undefined}>
           <div
             className={
               applyStyle('TextBox_main', styles.TextBox_main) +
