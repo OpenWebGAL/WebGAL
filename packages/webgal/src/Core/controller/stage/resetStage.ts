@@ -1,7 +1,6 @@
-import { webgalStore } from '@/store/store';
 import cloneDeep from 'lodash/cloneDeep';
 import { WebGAL } from '@/Core/WebGAL';
-import { initState, stageStateManager, stageActions } from '@/Core/Modules/stage/stageStateManager';
+import { initState, stageStateManager } from '@/Core/Modules/stage/stageStateManager';
 import { stopFast } from '@/Core/controller/gamePlay/fastSkip';
 
 export const resetStage = (resetBacklog: boolean, resetSceneAndVar = true) => {
@@ -31,5 +30,5 @@ export const resetStage = (resetBacklog: boolean, resetSceneAndVar = true) => {
   }
 
   // 清空frames
-  webgalStore.dispatch(stageActions.resetIframe());
+  stageStateManager.resetIframe();
 };

@@ -10,7 +10,6 @@ import { restorePerform } from '@/Core/controller/storage/jumpFromBacklog';
 
 import { hasFastSaveRecord, loadFastSaveGame } from '@/Core/controller/storage/fastSaveLoad';
 import { WebGAL } from '@/Core/WebGAL';
-import { stageActions } from '@/store/stageReducer';
 import { stageStateManager } from '@/Core/Modules/stage/stageStateManager';
 
 /**
@@ -41,7 +40,7 @@ export async function continueGame() {
     await loadFastSaveGame();
     return;
   }
-  webgalStore.dispatch(stageActions.resetIframe());
+  stageStateManager.resetIframe();
   if (
     WebGAL.sceneManager.sceneData.currentSentenceId === 0 &&
     WebGAL.sceneManager.sceneData.currentScene.sceneName === 'start.txt'

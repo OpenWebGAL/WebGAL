@@ -1,3 +1,4 @@
+import { IStageState } from '@/Core/Modules/stage/stageInterface';
 import { RootState } from '@/store/store';
 
 export type WebGalAPIEventsKeyNames =
@@ -13,7 +14,7 @@ export interface WebGalAPI {
     options?: { immediate?: boolean },
   ) => () => void;
   // 获取特定状态的方法
-  getStageState: () => RootState['stage'];
+  getStageState: () => IStageState;
   getGUIState: () => RootState['GUI'];
   getUserData: () => RootState['userData'];
   getSaveData: () => RootState['saveData'];

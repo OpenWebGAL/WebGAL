@@ -1,11 +1,11 @@
-import { RootState } from '@/store/store';
-import { useSelector } from 'react-redux';
 import Iframe from './Iframe';
 import styles from './IframeContainer.module.scss';
 import { useMemo } from 'react';
+import { useStageState } from '@/hooks/useStageState';
 
 export default function IframeContainer() {
-  const iframes = useSelector((state: RootState) => state.stage.iframes);
+  const stage = useStageState();
+  const iframes = useMemo(() => stage.iframes, [stage]);
   const shouldShowIframe = useMemo(() => iframes.filter((iframe) => iframe.isActive), [iframes]);
   return (
     <div className={styles.IframeContainer} id="iframeContainer">

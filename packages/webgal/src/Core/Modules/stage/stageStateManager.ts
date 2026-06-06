@@ -8,6 +8,7 @@ import {
   IEffect,
   IFigureMetadata,
   IFreeFigure,
+  IIFrame,
   ILive2DBlink,
   ILive2DExpression,
   ILive2DFocus,
@@ -78,6 +79,7 @@ export const initState: IStageState = {
   isDisableTextbox: false,
   replacedUIlable: {},
   figureMetaData: {},
+  iframes: [],
 };
 
 /**
@@ -344,12 +346,43 @@ export class StageStateManager {
   }
 
   public clearUncommittedNonHoldPerforms() {
-    this.calculationStageState.PerformList = this.calculationStageState.PerformList.filter((perform) => perform.isHoldOn);
+    this.calculationStageState.PerformList = this.calculationStageState.PerformList.filter(
+      (perform) => perform.isHoldOn,
+    );
   }
 
   public removeNonHoldPerformsAndCommit() {
     this.clearUncommittedNonHoldPerforms();
     this.commit();
+  }
+
+  public addIframe(payload: IIFrame) {
+    payload.isActive = true;
+    this.calculationStageState.iframes.push(payload);
+    this.commit();
+  }
+
+  public removeIframe(payload: { id: string; isActive?: boolean }) {
+    if (!payload.isActive) {
+      this.calculationStageState.iframes = this.calculationStageState.iframes.filter((e) => e.id !== payload.id);
+    } else {
+      this.calculationStageState.iframes = this.calculationStageState.iframes.map((e) =>
+        e.id === payload.id ? { ...e, isActive: false } : e,
+      );
+    }
+    this.commit();
+  }
+
+  public resetIframe() {
+    this.calculationStageState.iframes = [];
+    this.commit();
+  }
+
+  public updateIframePersistentData(payload: { id: string; persistentData: Record<string, any> }) {
+    const iframe = this.calculationStageState.iframes.find((e) => e.id === payload.id);
+    if (iframe) {
+      iframe.persistentData = { ...iframe.persistentData, ...payload.persistentData };
+    }
   }
 
   public commit(options: IStageCommitOptions = {}) {

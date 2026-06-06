@@ -3,7 +3,6 @@ import { logger } from '../../util/logger';
 import { sceneFetcher } from '../scene/sceneFetcher';
 import { sceneParser } from '../../parser/sceneParser';
 import { webgalStore } from '@/store/store';
-import { resetStageState, stageActions } from '@/store/stageReducer';
 import { setVisibility } from '@/store/GUIReducer';
 import { restorePerform } from './jumpFromBacklog';
 import { stopAllPerform } from '@/Core/controller/gamePlay/stopAllPerform';
@@ -48,7 +47,7 @@ export function loadGameFromStageData(stageData: ISaveData) {
   // 强制停止所有演出
   stopAllPerform();
   // 清空frames
-  webgalStore.dispatch(stageActions.resetIframe());
+  stageStateManager.resetIframe();
 
   // 恢复backlog
   const newBacklog = loadFile.backlog;

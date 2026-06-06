@@ -1,39 +1,38 @@
 import { useEffect, useMemo, useRef, useCallback, SyntheticEvent } from 'react';
-import { IIFrame } from '@/store/stageInterface';
 import { RootState, webgalStore } from '@/store/store';
 import { useSelector } from 'react-redux';
 import { isEqual } from 'lodash';
 import { ReactiveWatcher, WebGalAPI, WebGalAPIEventsKeyNames } from './interface';
-import { setStageVar, stageActions } from '@/store/stageReducer';
 import { setScriptManagedGlobalVar } from '@/store/userDataReducer';
 import { WebGAL } from '@/Core/WebGAL';
 import { nextSentence as nextSentenceController } from '@/Core/controller/gamePlay/nextSentence';
+import { IIFrame } from '@/Core/Modules/stage/stageInterface';
+import { stageStateManager } from '@/Core/Modules/stage/stageStateManager';
+import { useStageState } from '@/hooks/useStageState';
 
 export default function Iframe({ id, sandbox, src, width, height, wait, injectArgs, style }: IIFrame) {
   const idString = `iframe-${id}`;
   const iframeRef = useRef<HTMLIFrameElement>(null);
-  const stage = useSelector((state: RootState) => state.stage, isEqual);
   const GUI = useSelector((state: RootState) => state.GUI, isEqual);
   const userData = useSelector((state: RootState) => state.userData, isEqual);
   const saveData = useSelector((state: RootState) => state.saveData, isEqual);
+  const stage = useStageState();
 
   // 尝试从全局变量中恢复持久化数据
   useEffect(() => {
     const globalPersistentData = (window as any).__iframePersistentData;
     if (globalPersistentData?.has(id)) {
       const persistentData = globalPersistentData.get(id);
-      webgalStore.dispatch(
-        stageActions.updateIframePersistentData({
-          id,
-          persistentData,
-        }),
-      );
+      stageStateManager.updateIframePersistentData({
+        id,
+        persistentData,
+      });
       // 恢复后从全局变量中删除
       globalPersistentData.delete(id);
     }
   }, [id]);
 
-  const store = useMemo(() => ({ stage, GUI, userData, saveData }), [stage, GUI, userData, saveData]);
+  const store = useMemo(() => ({ stage, GUI, userData, saveData }), [GUI, userData, saveData]);
 
   const watchersRef = useRef<Map<number, ReactiveWatcher>>(new Map());
   const watcherIdRef = useRef(0);
@@ -163,9 +162,9 @@ export default function Iframe({ id, sandbox, src, width, height, wait, injectAr
     };
     api.closeIframe = (key?: string) => {
       if (key) {
-        webgalStore.dispatch(stageActions.removeIframe({ id: key }));
+        stageStateManager.removeIframe({ id: key });
       } else {
-        webgalStore.dispatch(stageActions.removeIframe({ id }));
+        stageStateManager.removeIframe({ id });
       }
     };
     api.openIframe = (key?: string) => {
@@ -182,12 +181,12 @@ export default function Iframe({ id, sandbox, src, width, height, wait, injectAr
       // 如果 iframe 已经存在且被关闭，则重新添加到 iframes 列表中
       const existingIndex = stage.iframes.findIndex((e) => e.id === key);
       if (existingIndex === -1) {
-        webgalStore.dispatch(stageActions.addIframe(iframe));
+        stageStateManager.addIframe(iframe);
       }
     };
     api.getGameVar = (key: string) => store.stage.GameVar[key];
     api.getGlobalGameVar = (key: string) => store.userData.globalGameVar[key];
-    api.setGameVar = (key: string, value: any) => webgalStore.dispatch(setStageVar({ key, value }));
+    api.setGameVar = (key: string, value: any) => stageStateManager.setStageVar({ key, value });
     api.setGlobalGameVar = (key: string, value: any) => webgalStore.dispatch(setScriptManagedGlobalVar({ key, value }));
     api.complete = (returnValue?: any) => {
       if (wait) {
@@ -216,12 +215,10 @@ export default function Iframe({ id, sandbox, src, width, height, wait, injectAr
         return;
       }
       const currentData = iframe.persistentData || {};
-      webgalStore.dispatch(
-        stageActions.updateIframePersistentData({
-          id,
-          persistentData: { ...currentData, [key]: value },
-        }),
-      );
+      stageStateManager.updateIframePersistentData({
+        id,
+        persistentData: { ...currentData, [key]: value },
+      });
     };
     api.clearPersistentData = (key?: string) => {
       const iframe = stage.iframes.find((e) => e.id === id);
@@ -234,21 +231,17 @@ export default function Iframe({ id, sandbox, src, width, height, wait, injectAr
         if (iframe.persistentData?.[key]) {
           const newData = { ...iframe.persistentData };
           delete newData[key];
-          webgalStore.dispatch(
-            stageActions.updateIframePersistentData({
-              id,
-              persistentData: newData,
-            }),
-          );
+          stageStateManager.updateIframePersistentData({
+            id,
+            persistentData: newData,
+          });
         }
       } else {
         // 清除所有持久化数据
-        webgalStore.dispatch(
-          stageActions.updateIframePersistentData({
-            id,
-            persistentData: {},
-          }),
-        );
+        stageStateManager.updateIframePersistentData({
+          id,
+          persistentData: {},
+        });
       }
     };
     api.postIframeMessage = (key: string, data?: any) => {
@@ -286,7 +279,7 @@ export default function Iframe({ id, sandbox, src, width, height, wait, injectAr
   const onError = useCallback((e: SyntheticEvent<HTMLIFrameElement, Event>) => {
     console.error('iframe加载失败', e);
     // 加载失败，则移除该iframe
-    webgalStore.dispatch(stageActions.removeIframe({ id }));
+    stageStateManager.removeIframe({ id });
   }, []);
 
   if (!src || !id) {
@@ -316,7 +309,7 @@ export default function Iframe({ id, sandbox, src, width, height, wait, injectAr
       if (iframe?.contentWindow) {
         try {
           delete (iframe.contentWindow as any).webgal;
-        } catch (e) {
+        } catch {
           // If the iframe has navigated to a different origin, this will fail.
           // This is expected and can be ignored.
         }

@@ -1,8 +1,7 @@
 import { ISentence } from '@/Core/controller/scene/sceneInterface';
 import { IPerform } from '@/Core/Modules/perform/performInterface';
-import { stageActions } from '@/store/stageReducer';
-import { webgalStore } from '@/store/store';
 import { getBooleanArgByKey } from '../util/getSentenceArg';
+import { stageStateManager } from '@/Core/Modules/stage/stageStateManager';
 
 /**
  * 移除框架
@@ -19,11 +18,10 @@ export const removeIframe = (sentence: ISentence): IPerform => {
       stopFunction: () => {},
       blockingNext: () => false,
       blockingAuto: () => true,
-      stopTimeout: undefined,
     };
   }
 
-  webgalStore.dispatch(stageActions.removeIframe({ id, isActive: save }));
+  stageStateManager.removeIframe({ id, isActive: save });
 
   return {
     performName: 'none',
@@ -32,6 +30,5 @@ export const removeIframe = (sentence: ISentence): IPerform => {
     stopFunction: () => {},
     blockingNext: () => false,
     blockingAuto: () => true,
-    stopTimeout: undefined,
   };
 };

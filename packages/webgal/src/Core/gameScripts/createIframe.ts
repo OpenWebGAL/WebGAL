@@ -1,10 +1,9 @@
 import { ISentence } from '@/Core/controller/scene/sceneInterface';
 import { IPerform } from '@/Core/Modules/perform/performInterface';
 import { getBooleanArgByKey, getStringArgByKey } from '../util/getSentenceArg';
-import { IIFrame } from '@/store/stageInterface';
-import { webgalStore } from '@/store/store';
-import { stageActions } from '@/store/stageReducer';
 import { CSSProperties } from 'react';
+import { IIFrame } from '../Modules/stage/stageInterface';
+import { stageStateManager } from '../Modules/stage/stageStateManager';
 
 const allSandboxProperties = {
   'allow-forms': 'allowForms', // 允许iframe内提交表单
@@ -42,7 +41,6 @@ export const createIframe = (sentence: ISentence): IPerform => {
       stopFunction: () => {},
       blockingNext: () => false,
       blockingAuto: () => true,
-      stopTimeout: undefined,
     };
   }
 
@@ -85,8 +83,7 @@ export const createIframe = (sentence: ISentence): IPerform => {
     }
   }
 
-  webgalStore.dispatch(stageActions.addIframe(frameData));
-
+  stageStateManager.addIframe(frameData);
   // 如果需要等待iframe完成，则返回阻塞的perform
   if (wait) {
     let isCompleted = false;
@@ -101,12 +98,10 @@ export const createIframe = (sentence: ISentence): IPerform => {
         isCompleted = true;
         // 如果有returnValue，则存储到游戏变量中
         if (returnValue && event.data.returnValue !== undefined) {
-          webgalStore.dispatch(
-            stageActions.setStageVar({
-              key: returnValue,
-              value: event.data.returnValue,
-            }),
-          );
+          stageStateManager.setStageVar({
+            key: returnValue,
+            value: event.data.returnValue,
+          });
         }
         // 移除事件监听器
         window.removeEventListener('message', handleFrameComplete);
@@ -125,7 +120,6 @@ export const createIframe = (sentence: ISentence): IPerform => {
       },
       blockingNext: () => !isCompleted,
       blockingAuto: () => !isCompleted,
-      stopTimeout: undefined,
     };
   }
 
@@ -136,6 +130,5 @@ export const createIframe = (sentence: ISentence): IPerform => {
     stopFunction: () => {},
     blockingNext: () => false,
     blockingAuto: () => true,
-    stopTimeout: undefined,
   };
 };
