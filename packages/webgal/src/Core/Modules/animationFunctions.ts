@@ -66,21 +66,19 @@ export function getAnimationTimeline(
     }
     const mappedEffects = effect.effects.map((effect) => {
       const targetSetEffect = stageStateManager.getCalculationStageState().effects.find((e) => e.target === target);
+      const sourceTransform =
+        !writeDefault && targetSetEffect && targetSetEffect.transform ? targetSetEffect.transform : baseTransform;
       let newEffect;
 
-      if (!writeDefault && targetSetEffect && targetSetEffect.transform) {
-        if (writeFullEffect) {
-          newEffect = cloneDeep({ ...targetSetEffect.transform, duration: 0, ease: '' });
-        } else {
-          const targetScale = pickBy(targetSetEffect.transform.scale || {}, (source, key) => unionScaleKeys.has(key));
-          const targetPosition = pickBy(targetSetEffect.transform.position || {}, (s, key) => unionPositionKeys.has(key));
-          const originalTransform = { ...pickBy(targetSetEffect.transform, (source, key) => unionKeys.has(key)) };
-          originalTransform.scale = targetScale;
-          originalTransform.position = targetPosition;
-          newEffect = cloneDeep({ ...originalTransform, duration: 0, ease: '' });
-        }
+      if (writeFullEffect) {
+        newEffect = cloneDeep({ ...sourceTransform, duration: 0, ease: '' });
       } else {
-        newEffect = cloneDeep({ ...baseTransform, duration: 0, ease: '' });
+        const targetScale = pickBy(sourceTransform.scale || {}, (source, key) => unionScaleKeys.has(key));
+        const targetPosition = pickBy(sourceTransform.position || {}, (s, key) => unionPositionKeys.has(key));
+        const originalTransform = { ...pickBy(sourceTransform, (source, key) => unionKeys.has(key)) };
+        if (unionScaleKeys.size > 0) originalTransform.scale = targetScale;
+        if (unionPositionKeys.size > 0) originalTransform.position = targetPosition;
+        newEffect = cloneDeep({ ...originalTransform, duration: 0, ease: '' });
       }
 
       PixiStage.assignTransform(newEffect, effect, false);
@@ -121,22 +119,26 @@ export function getEnterExitAnimation(
     if (isBg) {
       duration = DEFAULT_BG_IN_DURATION;
     }
-    duration =
-      stageStateManager.getCalculationStageState().animationSettings.find((setting) => setting.target === target)
-        ?.enterDuration ??
-      duration;
+    const animationSettings = stageStateManager
+      .getCalculationStageState()
+      .animationSettings.find((setting) => setting.target === target);
+    duration = animationSettings?.enterDuration ?? duration;
     // 走默认动画
     let animation: IAnimationObject | null = generateUniversalSoftInAnimationObj(realTarget ?? target, duration);
 
     const transformState = stageStateManager.getCalculationStageState().effects;
     const targetEffect = transformState.find((effect) => effect.target === target);
 
-    const animationName = stageStateManager
-      .getCalculationStageState()
-      .animationSettings.find((setting) => setting.target === target)?.enterAnimationName;
+    const animationName = animationSettings?.enterAnimationName;
     if (animationName && !targetEffect) {
       logger.debug('取代默认进入动画', target);
-      animation = getAnimationObject(animationName, realTarget ?? target, getAnimateDuration(animationName), false);
+      animation = getAnimationObject(
+        animationName,
+        realTarget ?? target,
+        getAnimateDuration(animationName),
+        false,
+        !(animationSettings?.enterAnimationIgnoreDefault ?? false),
+      );
       duration = getAnimateDuration(animationName);
     }
     return { duration, animation };
@@ -155,7 +157,13 @@ export function getEnterExitAnimation(
     const animationName = animationSettings?.exitAnimationName;
     if (animationName) {
       logger.debug('取代默认退出动画', target);
-      animation = getAnimationObject(animationName, realTarget ?? target, getAnimateDuration(animationName), false);
+      animation = getAnimationObject(
+        animationName,
+        realTarget ?? target,
+        getAnimateDuration(animationName),
+        false,
+        !(animationSettings?.exitAnimationIgnoreDefault ?? false),
+      );
       duration = getAnimateDuration(animationName);
     }
     if (animationSettings) {
