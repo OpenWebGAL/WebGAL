@@ -383,6 +383,7 @@ export class StageStateManager {
     if (iframe) {
       iframe.persistentData = { ...iframe.persistentData, ...payload.persistentData };
     }
+    this.commit();
   }
 
   public commit(options: IStageCommitOptions = {}) {

@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useCallback, SyntheticEvent } from 'react';
 import { RootState, webgalStore } from '@/store/store';
 import { useSelector } from 'react-redux';
 import { isEqual } from 'lodash';
-import { ReactiveWatcher, WebGalAPI, WebGalAPIEventsKeyNames } from './interface';
+import { WebGalAPI, WebGalAPIEventsKeyNames } from './interface';
 import { setScriptManagedGlobalVar } from '@/store/userDataReducer';
 import { WebGAL } from '@/Core/WebGAL';
 import { nextSentence as nextSentenceController } from '@/Core/controller/gamePlay/nextSentence';
@@ -18,134 +18,79 @@ export default function Iframe({ id, sandbox, src, width, height, wait, injectAr
   const saveData = useSelector((state: RootState) => state.saveData, isEqual);
   const stage = useStageState();
 
-  // 尝试从全局变量中恢复持久化数据
   useEffect(() => {
     const globalPersistentData = (window as any).__iframePersistentData;
     if (globalPersistentData?.has(id)) {
       const persistentData = globalPersistentData.get(id);
-      stageStateManager.updateIframePersistentData({
-        id,
-        persistentData,
-      });
-      // 恢复后从全局变量中删除
+      stageStateManager.updateIframePersistentData({ id, persistentData });
       globalPersistentData.delete(id);
     }
   }, [id]);
 
-  const store = useMemo(() => ({ stage, GUI, userData, saveData }), [GUI, userData, saveData]);
+  const store = useMemo(() => ({ stage, GUI, userData, saveData }), [stage, GUI, userData, saveData]);
+  const storeRef = useRef(store);
+  storeRef.current = store;
 
-  const watchersRef = useRef<Map<number, ReactiveWatcher>>(new Map());
-  const watcherIdRef = useRef(0);
-
-  // 通过webgal的EventBus触发，我们只做桥接
   const eventsMap = useMemo(
     () => ({ save: WebGAL.events.save, load: WebGAL.events.load, sentence: WebGAL.events.userInteractNext }),
     [],
   );
 
-  // 获取嵌套属性的值
-  const getNestedValue = useCallback((obj: any, path: string) => {
-    return path.split('.').reduce((acc, part) => acc?.[part], obj);
-  }, []);
+  const apiRef = useRef<WebGalAPI | null>(null);
+  if (!apiRef.current) {
+    const api: WebGalAPI = Object.create(null);
 
-  // 获取当前值的函数
-  const getValue = useCallback(
-    (source: string | string[] | ((store: RootState) => any), state: RootState) => {
+    const getNestedValue = (obj: any, path: string) =>
+      path.split('.').reduce((acc: any, part: string) => acc?.[part], obj);
+
+    const getValue = (source: string | string[] | ((store: RootState) => any), state: RootState) => {
       const isFunction = typeof source === 'function';
       const isArray = Array.isArray(source);
       const isString = typeof source === 'string';
-
-      if (isFunction) {
-        return (source as (store: RootState) => any)(state);
-      } else if (isArray) {
+      if (isFunction) return (source as (store: RootState) => any)(state);
+      if (isArray) {
         const result: any = {};
-        (source as string[]).forEach((key) => {
+        (source as string[]).forEach((key: string) => {
           result[key] = getNestedValue(state, key);
         });
         return result;
-      } else if (isString) {
-        return getNestedValue(state, source as string);
       }
+      if (isString) return getNestedValue(state, source as string);
       return state;
-    },
-    [getNestedValue],
-  );
+    };
 
-  // 检测所有watcher监听的值的变化
-  const watchedValues = useSelector((state: RootState) => {
-    const result: Record<number, any> = {};
-    watchersRef.current.forEach((watcher, watcherId) => {
-      result[watcherId] = getValue(watcher.source, state);
-    });
-    return result;
-  }, isEqual);
+    const watchers: Record<string, any> = {};
+    (api as any)._watchers = watchers;
 
-  useEffect(() => {
-    watchersRef.current.forEach((watcher, watcherId) => {
-      const newValue = watchedValues[watcherId];
-      const oldValue = watcher.oldValue;
-
-      const hasChanged = !isEqual(newValue, oldValue);
-
-      if (hasChanged) {
-        watcher.callback(newValue, oldValue);
-        // 更新watcher的oldValue
-        watchersRef.current.set(watcherId, {
-          ...watcher,
-          oldValue: newValue,
-        });
-      }
-    });
-  }, [watchedValues]);
-
-  const apiInstance = useMemo((): WebGalAPI => {
-    const api: WebGalAPI = Object.create(null);
-    // 获取响应式状态的方法
     api.getReactiveStore = (source, callback, options = {}) => {
-      // 创建新的watcher ID
-      const watcherId = watcherIdRef.current++;
-
-      // 获取当前值
-      const currentValue = getValue(source, store);
-
-      // 添加watcher到列表
-      watchersRef.current.set(watcherId, {
+      const watcherId = Date.now() + Math.random();
+      const currentValue = getValue(source, storeRef.current);
+      watchers[watcherId] = {
         source,
         callback,
         options,
         oldValue: currentValue,
-      });
-
-      // 立即执行回调函数
-      if (options.immediate) {
-        callback(currentValue, undefined);
-      }
-
-      // 返回取消订阅的函数
+      };
+      if (options.immediate) callback(currentValue, undefined);
       return () => {
-        watchersRef.current.delete(watcherId);
+        delete watchers[watcherId];
       };
     };
-    // 获取特定状态的方法
-    api.getStageState = () => store.stage;
-    api.getGUIState = () => store.GUI;
-    api.getUserData = () => store.userData;
-    api.getSaveData = () => store.saveData;
-    // 操作
+
+    api.getStageState = () => storeRef.current.stage;
+    api.getGUIState = () => storeRef.current.GUI;
+    api.getUserData = () => storeRef.current.userData;
+    api.getSaveData = () => storeRef.current.saveData;
+
     api.isBlockSentence = () => {
       let isBlockingNext = false;
       WebGAL.gameplay.performController.performList.forEach((e) => {
-        if (e.blockingNext())
-          // 阻塞且没有结束的演出
-          isBlockingNext = true;
+        if (e.blockingNext()) isBlockingNext = true;
       });
       return isBlockingNext;
     };
-    api.nextSentence = () => {
-      // 触发下一句执行
-      nextSentenceController();
-    };
-    // 事件
+    api.nextSentence = () => nextSentenceController();
+
     api.on = (event: WebGalAPIEventsKeyNames, callback: (data?: any) => void) => {
       if (!eventsMap[event]) {
         console.error(`无效的事件类型: ${event}`);
@@ -160,34 +105,30 @@ export default function Iframe({ id, sandbox, src, width, height, wait, injectAr
       }
       eventsMap[event].off(callback);
     };
+
     api.closeIframe = (key?: string) => {
-      if (key) {
-        stageStateManager.removeIframe({ id: key });
-      } else {
-        stageStateManager.removeIframe({ id });
-      }
+      if (key) stageStateManager.removeIframe({ id: key });
+      else stageStateManager.removeIframe({ id });
     };
     api.openIframe = (key?: string) => {
       if (!key) {
         console.warn('openIframe 需要指定 iframe 的 key');
         return;
       }
-      // 从 stage.iframes 中查找指定 key 的 iframe
-      const iframe = stage.iframes.find((e) => e.id === key);
+      const iframe = storeRef.current.stage.iframes.find((e: any) => e.id === key);
       if (!iframe) {
         console.error(`找不到 id 为 ${key} 的 iframe`);
         return;
       }
-      // 如果 iframe 已经存在且被关闭，则重新添加到 iframes 列表中
-      const existingIndex = stage.iframes.findIndex((e) => e.id === key);
-      if (existingIndex === -1) {
-        stageStateManager.addIframe(iframe);
-      }
+      const existingIndex = storeRef.current.stage.iframes.findIndex((e: any) => e.id === key);
+      if (existingIndex === -1) stageStateManager.addIframe(iframe);
     };
-    api.getGameVar = (key: string) => store.stage.GameVar[key];
-    api.getGlobalGameVar = (key: string) => store.userData.globalGameVar[key];
-    api.setGameVar = (key: string, value: any) => stageStateManager.setStageVar({ key, value });
+
+    api.getGameVar = (key: string) => storeRef.current.stage.GameVar[key];
+    api.getGlobalGameVar = (key: string) => storeRef.current.userData.globalGameVar[key];
+    api.setGameVar = (key: string, value: any) => stageStateManager.setStageVarAndCommit({ key, value });
     api.setGlobalGameVar = (key: string, value: any) => webgalStore.dispatch(setScriptManagedGlobalVar({ key, value }));
+
     api.complete = (returnValue?: any) => {
       if (wait) {
         window.parent.postMessage(
@@ -196,20 +137,18 @@ export default function Iframe({ id, sandbox, src, width, height, wait, injectAr
             frameId: id,
             returnValue,
           },
-          window.location.origin, // 使用当前页面的源
+          window.location.origin,
         );
       }
     };
-    // 持久化数据方法
+
     api.getPersistentData = (key?: string) => {
-      const iframe = stage.iframes.find((e) => e.id === id);
-      if (!iframe?.persistentData) {
-        return key ? undefined : {};
-      }
+      const iframe = storeRef.current.stage.iframes.find((e: any) => e.id === id);
+      if (!iframe?.persistentData) return key ? undefined : {};
       return key ? iframe.persistentData[key] : iframe.persistentData;
     };
     api.setPersistentData = (key: string, value: any) => {
-      const iframe = stage.iframes.find((e) => e.id === id);
+      const iframe = storeRef.current.stage.iframes.find((e: any) => e.id === id);
       if (!iframe) {
         console.error(`找不到id为${id}的iframe`);
         return;
@@ -221,13 +160,12 @@ export default function Iframe({ id, sandbox, src, width, height, wait, injectAr
       });
     };
     api.clearPersistentData = (key?: string) => {
-      const iframe = stage.iframes.find((e) => e.id === id);
+      const iframe = storeRef.current.stage.iframes.find((e: any) => e.id === id);
       if (!iframe) {
         console.error(`找不到id为${id}的iframe`);
         return null;
       }
       if (key) {
-        // 清除指定key的数据
         if (iframe.persistentData?.[key]) {
           const newData = { ...iframe.persistentData };
           delete newData[key];
@@ -237,29 +175,20 @@ export default function Iframe({ id, sandbox, src, width, height, wait, injectAr
           });
         }
       } else {
-        // 清除所有持久化数据
-        stageStateManager.updateIframePersistentData({
-          id,
-          persistentData: {},
-        });
+        stageStateManager.updateIframePersistentData({ id, persistentData: {} });
       }
     };
     api.postIframeMessage = (key: string, data?: any) => {
-      // 查找目标iframe
-      const targetIframe = stage.iframes.find((e) => e.id === key);
+      const targetIframe = storeRef.current.stage.iframes.find((e: any) => e.id === key);
       if (!targetIframe) {
         console.error(`找不到id为${key}的iframe`);
         return;
       }
-
-      // 查找目标iframe的DOM元素
       const targetIframeElement = document.getElementById(`iframe-${key}`) as HTMLIFrameElement;
       if (!targetIframeElement) {
         console.error(`找不到id为iframe-${key}的iframe元素`);
         return;
       }
-
-      // 向目标iframe发送消息
       try {
         targetIframeElement.contentWindow?.postMessage(
           {
@@ -273,14 +202,51 @@ export default function Iframe({ id, sandbox, src, width, height, wait, injectAr
         console.error(`向iframe ${key} 发送消息失败:`, e);
       }
     };
-    return api;
-  }, [store, id, wait]);
 
-  const onError = useCallback((e: SyntheticEvent<HTMLIFrameElement, Event>) => {
-    console.error('iframe加载失败', e);
-    // 加载失败，则移除该iframe
-    stageStateManager.removeIframe({ id });
+    apiRef.current = api;
+  }
+
+  const apiInstance = apiRef.current!;
+
+  useEffect(() => {
+    return stageStateManager.subscribe(() => {
+      const watchers = (apiRef.current as any)?._watchers;
+      if (!watchers) return;
+      const getNestedValue = (obj: any, path: string) =>
+        path.split('.').reduce((acc: any, part: string) => acc?.[part], obj);
+      const getValue = (source: string | string[] | ((store: RootState) => any), s: any) => {
+        const isFunction = typeof source === 'function';
+        const isArray = Array.isArray(source);
+        const isString = typeof source === 'string';
+        if (isFunction) return source(s);
+        if (isArray) {
+          const r: any = {};
+          (source as string[]).forEach((key: string) => {
+            r[key] = getNestedValue(s, key);
+          });
+          return r;
+        }
+        if (isString) return getNestedValue(s, source as string);
+        return s;
+      };
+      Object.entries(watchers).forEach(([, watcher]: [string, any]) => {
+        const newValue = getValue(watcher.source, storeRef.current);
+        const oldValue = watcher.oldValue;
+        if (!isEqual(newValue, oldValue)) {
+          watcher.callback(newValue, oldValue);
+          watcher.oldValue = newValue;
+        }
+      });
+    });
   }, []);
+
+  const onError = useCallback(
+    (e: SyntheticEvent<HTMLIFrameElement, Event>) => {
+      console.error('iframe加载失败', e);
+      stageStateManager.removeIframe({ id });
+    },
+    [id],
+  );
 
   if (!src || !id) {
     return null;
@@ -289,14 +255,12 @@ export default function Iframe({ id, sandbox, src, width, height, wait, injectAr
   useEffect(() => {
     const iframe = iframeRef.current;
     if (iframeRef.current?.contentWindow) {
-      // 将apiInstance注入到window.webgal
       Object.defineProperty(iframeRef.current.contentWindow, 'webgal', {
         value: apiInstance,
         configurable: true,
         enumerable: true,
       });
 
-      // 将injectArgs注入到window.webgal.params
       if (injectArgs && Object.keys(injectArgs).length > 0) {
         Object.defineProperty(apiInstance, 'params', {
           value: injectArgs,
@@ -310,8 +274,7 @@ export default function Iframe({ id, sandbox, src, width, height, wait, injectAr
         try {
           delete (iframe.contentWindow as any).webgal;
         } catch {
-          // If the iframe has navigated to a different origin, this will fail.
-          // This is expected and can be ignored.
+          // cross-origin is expected
         }
       }
     };
