@@ -44,6 +44,9 @@ export default function Translation() {
           case 'pt_BR':
             setLang(language.ptBr);
             break;
+          case 'ko':
+            setLang(language.ko);
+            break;
           default:
             setLang(language.zhCn);
             break;
