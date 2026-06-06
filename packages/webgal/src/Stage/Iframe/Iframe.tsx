@@ -82,13 +82,7 @@ export default function Iframe({ id, sandbox, src, width, height, wait, injectAr
     api.getUserData = () => storeRef.current.userData;
     api.getSaveData = () => storeRef.current.saveData;
 
-    api.isBlockSentence = () => {
-      let isBlockingNext = false;
-      WebGAL.gameplay.performController.performList.forEach((e) => {
-        if (e.blockingNext()) isBlockingNext = true;
-      });
-      return isBlockingNext;
-    };
+    api.isBlockSentence = () => WebGAL.gameplay.performController.hasBlockingNextPerform();
     api.nextSentence = () => nextSentenceController();
 
     api.on = (event: WebGalAPIEventsKeyNames, callback: (data?: any) => void) => {
