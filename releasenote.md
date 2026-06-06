@@ -8,33 +8,29 @@
 
 #### 新功能
 
-优化舞台画面表现，提升背景、立绘、Spine、Live2D、变换和特效在播放、读档、回溯和快速预览中的一致性。
+优化编辑器实时预览，提升场景跳转和状态同步的稳定性，并支持调试变量、模板刷新和更多界面预览设置。
 
-优化快速预览和正常播放的演出同步，减少预览结果与实际播放不一致的情况。
+changeBg / changeFigure / setTransition / setAnimation / setTempAnimation / setTransform 支持 ignoreDefault 参数，可让自定义动画忽略未声明的默认变换和效果。
 
-优化场景切换、子场景调用、回溯跳转、读档和返回标题后的画面恢复，减少旧画面元素残留。
+CG 鉴赏支持按 series 分组并按 order 排序，系列图片可堆叠显示并依次预览。
 
-优化 BGM、语音、视频、背景、立绘、特效和变量相关演出在快速预览中的表现。
+新增 Enable_Continue 配置项，可控制继续游戏按钮是否显示；无自动存档时按钮会置灰，游戏结束时会清理自动存档。
 
-快速预览超时时会通知编辑器，便于定位循环跳转或过长快进造成的问题。
-
-新增编辑器调试协议，可设置文本已读显示模式，便于在模板和样式调试中预览已读文本效果。
-
-优化文本框模板的已读文本样式类，支持分别定制整体、外层和内层文本的已读样式。
+新增巴西葡萄牙语和韩语，并将语言设置优化为下拉选择。
 
 #### 修复
 
-修复快速预览中自动选择选项后流程继续推进异常的问题。
+修复使用 vocal 参数指定语音时资源路径解析错误的问题。
 
-修复 BGM 在快速预览中可能不播放或状态不同步的问题。
+修复快速预览、滚轮推进和重置舞台后，快进与动画状态可能不一致的问题。
 
-修复部分异步演出在快速预览或状态恢复时可能提前推进的问题。
+修复长场景连续推进时可能发生调用栈溢出的问题。
 
-修复 setTransform / changeFigure / changeBg 在部分状态恢复场景下表现不同步的问题。
+修复自定义模板样式仍受引擎默认样式干扰的问题。
 
-修复 Pixi 条件渲染在状态变化后可能未及时刷新的问题。
+修复非官方引擎构建时自身版本号被错误覆盖的问题。
 
-修复 npm 包中缺少 webgal-engine.json 的问题。
+修复自定义模板未包含 game/tex 纹理文件时，内置雨、雪和樱花特效无法显示的问题。
 
 <!-- English Translation -->
 ## Release Notes
@@ -47,33 +43,29 @@
 
 #### New Features
 
-Improved stage visuals, making backgrounds, figures, Spine, Live2D, transforms, and effects more consistent during playback, save loading, backlog jumps, and fast preview.
+Improved editor live preview with more reliable scene navigation and state synchronization, plus support for debug variables, template refreshes, and additional interface preview settings.
 
-Improved perform synchronization between fast preview and normal playback, reducing cases where preview results differ from actual playback.
+changeBg / changeFigure / setTransition / setAnimation / setTempAnimation / setTransform now support the ignoreDefault argument, allowing custom animations to ignore undeclared default transforms and effects.
 
-Improved screen restoration after scene changes, child scene calls, backlog jumps, save loading, and returning to title, reducing stale visual elements.
+The CG gallery now supports grouping by series and sorting by order, with series images displayed as a stack for sequential preview.
 
-Improved BGM, voice, video, background, figure, effect, and variable behavior during fast preview.
+Added the Enable_Continue configuration option to control whether the Continue button is shown; it is disabled without an autosave, and autosaves are cleared when the game ends.
 
-Fast preview timeout now notifies the editor, making it easier to locate loop jumps or excessively long fast-forward calculations.
-
-Added editor debug protocol support for setting text read display mode, making it easier to preview read-text effects while debugging templates and styles.
-
-Improved read-text style classes in textbox templates, allowing separate customization for the full text element, outer text, and inner text.
+Added Brazilian Portuguese and Korean translations, and improved language settings with a dropdown selector.
 
 #### Fixes
 
-Fixed fast preview flow continuing incorrectly after automatically selecting a choose option.
+Fixed incorrect voice asset path resolution when specifying voice files with the vocal argument.
 
-Fixed BGM possibly not playing or desynchronizing during fast preview.
+Fixed fast-forward and animation states becoming inconsistent after fast preview, mouse-wheel advancement, or stage reset.
 
-Fixed some asynchronous performs advancing too early during fast preview or state restoration.
+Fixed possible call stack overflow when advancing continuously through long scenes.
 
-Fixed setTransform / changeFigure / changeBg desynchronization in some state restoration scenarios.
+Fixed custom template styles still being affected by engine default styles.
 
-Fixed Pixi conditional rendering sometimes not refreshing immediately after state changes.
+Fixed version numbers of unofficial engine packages being overwritten incorrectly during builds.
 
-Fixed webgal-engine.json missing from the npm package.
+Fixed built-in rain, snow, and cherry blossom effects not displaying when custom templates do not include the game/tex texture files.
 
 <!-- Japanese Translation -->
 ## リリースノート
@@ -86,30 +78,26 @@ Fixed webgal-engine.json missing from the npm package.
 
 #### 新機能
 
-舞台画面の表示を改善し、背景、立ち絵、Spine、Live2D、変換、エフェクトが再生、ロード、バックログジャンプ、高速プレビューでより一貫して表示されるようにしました。
+エディターのリアルタイムプレビューを改善し、シーン移動と状態同期の安定性を向上しました。また、デバッグ変数、テンプレート更新、より多くの画面プレビュー設定に対応しました。
 
-高速プレビューと通常再生の演出同期を改善し、プレビュー結果と実際の再生結果が異なるケースを減らしました。
+changeBg / changeFigure / setTransition / setAnimation / setTempAnimation / setTransform が ignoreDefault 引数に対応し、カスタムアニメーションで未指定のデフォルト変換やエフェクトを無視できるようになりました。
 
-シーン切り替え、子シーン呼び出し、バックログジャンプ、ロード、タイトルへ戻る操作後の画面復元を改善し、古い画面要素が残りにくくなりました。
+CG 鑑賞が series によるグループ化と order による並べ替えに対応し、シリーズ画像を重ねて表示して順番にプレビューできるようになりました。
 
-BGM、ボイス、動画、背景、立ち絵、エフェクト、変数関連演出の高速プレビュー中の挙動を改善しました。
+続きからボタンの表示を制御する Enable_Continue 設定を追加しました。自動セーブがない場合はボタンが無効になり、ゲーム終了時には自動セーブが削除されます。
 
-高速プレビューのタイムアウトをエディターへ通知するようになり、ループジャンプや長すぎる早送り計算を特定しやすくなりました。
-
-エディターのデバッグプロトコルにテキスト既読表示モードの設定を追加し、テンプレートやスタイルの調整中に既読テキストの表示を確認しやすくしました。
-
-テキストボックステンプレートの既読テキスト用スタイルクラスを改善し、テキスト全体、外側、内側の既読スタイルを個別に調整できるようにしました。
+ブラジルポルトガル語と韓国語を追加し、言語設定をドロップダウン選択に改善しました。
 
 #### 修正
 
-高速プレビューで選択肢を自動選択した後、フローが正しく進まない問題を修正しました。
+vocal 引数でボイスを指定した際、アセットパスが正しく解決されない問題を修正しました。
 
-高速プレビュー中に BGM が再生されない、または状態が同期しない場合がある問題を修正しました。
+高速プレビュー、マウスホイールによる進行、舞台リセット後に、早送りとアニメーションの状態が一致しない問題を修正しました。
 
-一部の非同期演出が高速プレビューや状態復元中に早く進みすぎる問題を修正しました。
+長いシーンを連続して進めた際に、コールスタックのオーバーフローが発生する場合がある問題を修正しました。
 
-setTransform / changeFigure / changeBg が一部の状態復元シナリオで同期しない問題を修正しました。
+カスタムテンプレートのスタイルがエンジンのデフォルトスタイルの影響を受ける問題を修正しました。
 
-Pixi の条件付きレンダリングが状態変更後すぐに更新されない場合がある問題を修正しました。
+非公式エンジンのビルド時に拡張パッケージのバージョン番号が誤って上書きされる問題を修正しました。
 
-npm パッケージに webgal-engine.json が含まれない問題を修正しました。
+カスタムテンプレートに game/tex のテクスチャファイルが含まれていない場合、内蔵の雨、雪、桜エフェクトが表示されない問題を修正しました。
