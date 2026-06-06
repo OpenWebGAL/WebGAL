@@ -1,17 +1,20 @@
-import { FC, useEffect, useRef } from 'react';
+import { FC, useEffect } from 'react';
 import styles from './logo.module.scss';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import { useValue } from '@/hooks/useValue';
+import { setVisibility } from '@/store/GUIReducer';
 
 /**
  * 标识
  * @constructor
  */
 const Logo: FC = () => {
+  const dispatch = useDispatch();
   const GUIState = useSelector((state: RootState) => state.GUI);
   const logoImage = GUIState.logoImage;
   const isEnterGame = GUIState.isEnterGame;
+  const isShowLogo = GUIState.isShowLogo;
   const currentLogoIndex = useValue(-1);
   const currentTimeOutId = useValue<any>(-1);
   const animationDuration = 5000;
@@ -23,20 +26,31 @@ const Logo: FC = () => {
       currentTimeOutId.set(setTimeout(nextImg, animationDuration));
     } else {
       currentLogoIndex.set(-1);
+      dispatch(setVisibility({ component: 'isShowLogo', visibility: false }));
     }
   };
 
   useEffect(() => {
-    if (isEnterGame && logoImage.length > 0) {
+    if (isEnterGame && isShowLogo && logoImage.length > 0) {
       /**
        * 启动 Enter Logo
        */
       currentLogoIndex.set(0);
       currentTimeOutId.set(setTimeout(nextImg, animationDuration));
     }
-  }, [isEnterGame]);
+  }, [isEnterGame, isShowLogo]);
+
+  useEffect(() => {
+    if (!isShowLogo) {
+      clearTimeout(currentTimeOutId.value);
+      currentLogoIndex.set(-1);
+    }
+  }, [isShowLogo]);
 
   const currentLogoUrl = currentLogoIndex.value === -1 ? '' : logoImage[currentLogoIndex.value];
+  if (!isShowLogo) {
+    return null;
+  }
   return (
     <>
       {currentLogoIndex.value !== -1 && (

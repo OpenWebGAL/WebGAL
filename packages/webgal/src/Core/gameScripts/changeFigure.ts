@@ -95,6 +95,7 @@ export function changeFigure(sentence: ISentence): IPerform {
   const enterDuration = getNumberArgByKey(sentence, 'enterDuration') ?? duration;
   duration = enterDuration;
   const exitDuration = getNumberArgByKey(sentence, 'exitDuration') ?? DEFAULT_FIG_OUT_DURATION;
+  const ignoreDefault = getBooleanArgByKey(sentence, 'ignoreDefault') ?? false;
 
   const currentFigureAssociatedAnimation = stageStateManager.getCalculationStageState().figureAssociatedAnimation;
   const filteredFigureAssociatedAnimation = currentFigureAssociatedAnimation.filter((item) => item.targetId !== id);
@@ -164,7 +165,7 @@ export function changeFigure(sentence: ISentence): IPerform {
       console.log(transformString);
       try {
         const frame = JSON.parse(transformString) as AnimationFrame;
-        animationObj = generateTransformAnimationObj(key, frame, duration, ease);
+        animationObj = generateTransformAnimationObj(key, frame, duration, ease, !ignoreDefault);
         // 因为是切换，必须把一开始的 alpha 改为 0
         animationObj[0].alpha = 0;
         const animationName = (Math.random() * 10).toString(16);
@@ -183,7 +184,7 @@ export function changeFigure(sentence: ISentence): IPerform {
     function applyDefaultTransform() {
       // 应用默认的
       const frame = {};
-      animationObj = generateTransformAnimationObj(key, frame as AnimationFrame, duration, ease);
+      animationObj = generateTransformAnimationObj(key, frame as AnimationFrame, duration, ease, !ignoreDefault);
       // 因为是切换，必须把一开始的 alpha 改为 0
       animationObj[0].alpha = 0;
       const animationName = (Math.random() * 10).toString(16);
@@ -192,6 +193,11 @@ export function changeFigure(sentence: ISentence): IPerform {
       duration = getAnimateDuration(animationName);
       stageStateManager.updateAnimationSettings({ target: key, key: 'enterAnimationName', value: animationName });
     }
+    stageStateManager.updateAnimationSettings({
+      target: key,
+      key: 'enterAnimationIgnoreDefault',
+      value: ignoreDefault,
+    });
 
     if (enterAnimation) {
       stageStateManager.updateAnimationSettings({ target: key, key: 'enterAnimationName', value: enterAnimation });
@@ -199,6 +205,11 @@ export function changeFigure(sentence: ISentence): IPerform {
     }
     if (exitAnimation) {
       stageStateManager.updateAnimationSettings({ target: key, key: 'exitAnimationName', value: exitAnimation });
+      stageStateManager.updateAnimationSettings({
+        target: key,
+        key: 'exitAnimationIgnoreDefault',
+        value: ignoreDefault,
+      });
       duration = getAnimateDuration(exitAnimation);
     }
     if (enterDuration >= 0) {
@@ -287,11 +298,16 @@ export function changeFigure(sentence: ISentence): IPerform {
       if (content === '' || !isUrlChanged) {
         return;
       }
-      const animationName = stageStateManager
+      const animationSetting = stageStateManager
         .getCalculationStageState()
-        .animationSettings.find((setting) => setting.target === key)?.enterAnimationName;
-      if (animationName) {
-        applyAnimationEndState(animationName, key, false);
+        .animationSettings.find((setting) => setting.target === key);
+      if (animationSetting?.enterAnimationName) {
+        applyAnimationEndState(
+          animationSetting.enterAnimationName,
+          key,
+          false,
+          !(animationSetting.enterAnimationIgnoreDefault ?? false),
+        );
       }
     },
     stopFunction: () => {

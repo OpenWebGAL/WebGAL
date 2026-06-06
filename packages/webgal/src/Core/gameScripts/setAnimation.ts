@@ -20,6 +20,7 @@ export const setAnimation = (sentence: ISentence): IPerform => {
   const writeDefault = getBooleanArgByKey(sentence, 'writeDefault') ?? false;
   const keep = getBooleanArgByKey(sentence, 'keep') ?? false;
   const parallel = getBooleanArgByKey(sentence, 'parallel') ?? false;
+  const writeFullEffect = !parallel && !(getBooleanArgByKey(sentence, 'ignoreDefault') ?? false);
 
   const key = `${target}-${animationName}-${animationDuration}`;
   const performInitName = `animation-${target}`;
@@ -27,7 +28,7 @@ export const setAnimation = (sentence: ISentence): IPerform => {
   let keepAnimationStopped = false;
 
   if (!parallel) WebGAL.gameplay.performController.unmountPerform(performInitName, true);
-  const animationTimeline = applyAnimationEndState(animationName, target, writeDefault, !parallel);
+  const animationTimeline = applyAnimationEndState(animationName, target, writeDefault, writeFullEffect);
 
   const startFunction = () => {
     if (keep && keepAnimationStopped) {

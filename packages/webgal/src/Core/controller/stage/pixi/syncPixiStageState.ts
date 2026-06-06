@@ -55,7 +55,7 @@ function syncBg(stageState: IStageState) {
     addBg(thisBgKey, bgName);
     logger.debug('重设背景');
     const { duration, animation } = getEnterExitAnimation(thisBgKey, 'enter', true);
-    if (WebGAL.gameplay.isFast) {
+    if (WebGAL.gameplay.skipAnimation) {
       setEbg(bgName, 0);
     } else {
       setEbg(bgName, duration);
@@ -111,7 +111,7 @@ function syncFigureSlot(key: string, sourceUrl: string, position: 'left' | 'cent
     addFigure(key, sourceUrl, position);
     logger.debug(`${key} 立绘已重设`);
     const { duration, animation } = getEnterExitAnimation(key, 'enter');
-    if (!WebGAL.gameplay.isFast) {
+    if (!WebGAL.gameplay.skipAnimation) {
       pixiStage.registerPresetAnimation(animation, softInAniKey, key, stageState.effects);
       setTimeout(() => pixiStage.removeAnimationWithSetEffects(softInAniKey), duration);
     }
@@ -163,7 +163,7 @@ function removeBg(bgObject: IStageObject): number {
   const pixiStage = WebGAL.gameplay.pixiStage;
   if (!pixiStage) return DEFAULT_BG_OUT_DURATION;
   pixiStage.removeAnimationWithSetEffects('bg-main-softin');
-  if (WebGAL.gameplay.isFast) {
+  if (WebGAL.gameplay.skipAnimation) {
     pixiStage.removeStageObjectByKey(bgObject.key);
     return 0;
   }
@@ -185,7 +185,7 @@ function removeFig(figObj: IStageObject, enterTikerKey: string, effects: IEffect
   const pixiStage = WebGAL.gameplay.pixiStage;
   if (!pixiStage) return;
   pixiStage.removeAnimationWithSetEffects(enterTikerKey);
-  if (WebGAL.gameplay.isFast) {
+  if (WebGAL.gameplay.skipAnimation) {
     logger.debug('快速模式，立刻关闭立绘');
     pixiStage.removeStageObjectByKey(figObj.key);
     return;

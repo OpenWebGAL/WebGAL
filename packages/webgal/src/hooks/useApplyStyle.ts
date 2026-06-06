@@ -17,7 +17,7 @@ export default function useApplyStyle(ui: string) {
     const className = replaced?.[classNameLable] ?? classNameLable;
     if (Object.keys(styleObject.value.classNameStyles).includes(className)) {
       const cijClassName = css(styleObject.value.classNameStyles?.[className] ?? '');
-      return `${fallbackClassName} ${cijClassName}`;
+      return cijClassName;
     }
     return fallbackClassName;
   };

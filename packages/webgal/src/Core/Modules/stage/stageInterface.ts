@@ -83,6 +83,8 @@ export interface IStageAnimationSetting {
   exitAnimationName?: string;
   enterDuration?: number;
   exitDuration?: number;
+  enterAnimationIgnoreDefault?: boolean;
+  exitAnimationIgnoreDefault?: boolean;
 }
 
 export type StageAnimationSettingUpdatableKey = Exclude<keyof IStageAnimationSetting, 'target'>;

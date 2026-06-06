@@ -24,6 +24,7 @@ export const setTransform = (sentence: ISentence): IPerform => {
   const target = getStringArgByKey(sentence, 'target') ?? '0';
   const keep = getBooleanArgByKey(sentence, 'keep') ?? false;
   const parallel = getBooleanArgByKey(sentence, 'parallel') ?? false;
+  const writeFullEffect = !parallel && !(getBooleanArgByKey(sentence, 'ignoreDefault') ?? false);
 
   const performInitName = `animation-${target}`;
   const performName = parallel ? `${performInitName}#${animationName}` : performInitName;
@@ -32,8 +33,7 @@ export const setTransform = (sentence: ISentence): IPerform => {
 
   try {
     const frame = JSON.parse(animationString) as AnimationFrame;
-    // 保持 writeDefault 的旧语义；是否写完整字段由 parallel 单独控制
-    animationObj = generateTransformAnimationObj(target, frame, duration, ease, !parallel);
+    animationObj = generateTransformAnimationObj(target, frame, duration, ease, writeFullEffect);
     console.log('animationObj:', animationObj);
   } catch (e) {
     // 解析都错误了，歇逼吧
@@ -43,7 +43,7 @@ export const setTransform = (sentence: ISentence): IPerform => {
   const newAnimation: IUserAnimation = { name: animationName, effects: animationObj };
   WebGAL.animationManager.addAnimation(newAnimation);
   const animationDuration = getAnimateDuration(animationName);
-  const animationTimeline = applyAnimationEndState(animationName, target, writeDefault, !parallel);
+  const animationTimeline = applyAnimationEndState(animationName, target, writeDefault, writeFullEffect);
   const key = `${target}-${animationName}-${animationDuration}`;
   let keepAnimationStopped = false;
   const startFunction = () => {

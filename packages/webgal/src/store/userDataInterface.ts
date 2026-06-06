@@ -76,6 +76,7 @@ export interface IAppreciationAsset {
   name: string;
   url: string;
   series: string;
+  order?: number;
 }
 
 export interface IAppreciation {
