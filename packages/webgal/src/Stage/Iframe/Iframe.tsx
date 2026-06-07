@@ -11,6 +11,18 @@ import { stopAuto, startAuto } from '@/Core/controller/gamePlay/autoPlay';
 import { stopFast, startFast } from '@/Core/controller/gamePlay/fastSkip';
 import { playBgm } from '@/Core/controller/stage/playBgm';
 import { jumpToLabel } from '@/Core/gameScripts/label/jumpToLabel';
+import { logger } from '@/Core/util/logger';
+
+// 验证sandbox属性是否安全
+function getSandboxAttr(sandbox: string): string {
+  if (!sandbox || sandbox.trim() === '') {
+    return 'allow-scripts allow-same-origin allow-forms';
+  }
+  if (!sandbox.includes('allow-same-origin')) {
+    return `${sandbox} allow-same-origin`;
+  }
+  return sandbox;
+}
 
 export default function Iframe({ id, sandbox, src, width, height, wait, injectArgs, style }: IIFrame) {
   const idString = `iframe-${id}`;
@@ -204,14 +216,14 @@ export default function Iframe({ id, sandbox, src, width, height, wait, injectAr
     api.event = {
       on: (event: WebGalAPIEventsKeyNames, callback: (data?: any) => void) => {
         if (!eventsMap[event]) {
-          console.error(`无效的事件类型: ${event}`);
+          logger.error(`无效的事件类型: ${event}`);
           return;
         }
         eventsMap[event].on(callback);
       },
       off: (event: WebGalAPIEventsKeyNames, callback: (data?: any) => void) => {
         if (!eventsMap[event]) {
-          console.error(`无效的事件类型: ${event}`);
+          logger.error(`无效的事件类型: ${event}`);
           return;
         }
         eventsMap[event].off(callback);
@@ -219,12 +231,12 @@ export default function Iframe({ id, sandbox, src, width, height, wait, injectAr
       postIframeMessage: (key: string, data?: any) => {
         const targetIframe = stageRef.current.iframes.find((e: any) => e.id === key);
         if (!targetIframe) {
-          console.error(`找不到id为${key}的iframe`);
+          logger.error(`找不到id为${key}的iframe`);
           return;
         }
         const targetIframeElement = document.getElementById(`iframe-${key}`) as HTMLIFrameElement;
         if (!targetIframeElement) {
-          console.error(`找不到id为iframe-${key}的iframe元素`);
+          logger.error(`找不到id为iframe-${key}的iframe元素`);
           return;
         }
         try {
@@ -237,7 +249,7 @@ export default function Iframe({ id, sandbox, src, width, height, wait, injectAr
             window.location.origin,
           );
         } catch (e) {
-          console.error(`向iframe ${key} 发送消息失败:`, e);
+          logger.error(`向iframe ${key} 发送消息失败:`, e);
         }
       },
     };
@@ -252,7 +264,7 @@ export default function Iframe({ id, sandbox, src, width, height, wait, injectAr
       setPersistentData: (key: string, value: any) => {
         const iframe = stageRef.current.iframes.find((e: any) => e.id === id);
         if (!iframe) {
-          console.error(`找不到id为${id}的iframe`);
+          logger.error(`找不到id为${id}的iframe`);
           return;
         }
         const currentData = iframe.persistentData || {};
@@ -264,7 +276,7 @@ export default function Iframe({ id, sandbox, src, width, height, wait, injectAr
       clearPersistentData: (key?: string) => {
         const iframe = stageRef.current.iframes.find((e: any) => e.id === id);
         if (!iframe) {
-          console.error(`找不到id为${id}的iframe`);
+          logger.error(`找不到id为${id}的iframe`);
           return null;
         }
         if (key) {
@@ -309,7 +321,7 @@ export default function Iframe({ id, sandbox, src, width, height, wait, injectAr
 
   const onError = useCallback(
     (e: SyntheticEvent<HTMLIFrameElement, Event>) => {
-      console.error('iframe加载失败', e);
+      logger.error('iframe加载失败', e);
       stageStateManager.removeIframe({ id });
     },
     [id],
@@ -352,7 +364,7 @@ export default function Iframe({ id, sandbox, src, width, height, wait, injectAr
       ref={iframeRef}
       id={idString}
       src={src}
-      sandbox={sandbox}
+      sandbox={getSandboxAttr(sandbox || '')}
       onError={onError}
       data-frame-id={idString}
       style={{
@@ -360,6 +372,7 @@ export default function Iframe({ id, sandbox, src, width, height, wait, injectAr
         width,
         height,
       }}
+      referrerPolicy="no-referrer"
     />
   );
 }
