@@ -1,7 +1,7 @@
 export type WebGalAPIEventsKeyNames =
   | 'save' // 保存存档
   | 'load' // 加载存档
-  | 'nextSentence'; // 执行下一句; // 场景更改
+  | 'nextSentence'; // 执行下一句;
 
 export interface IWebGALBridge {
   frameId: string;
@@ -59,8 +59,6 @@ export interface IWebGALBridge {
     setPersistentData: (key: string, value: any) => void;
     clearPersistentData: (key?: string) => void;
   };
-  _gameVarWatchers: IWatchers;
-  _prevGameVar: any;
 }
 
 export type IWatchers = Record<string, Array<{ callback: (newValue: any) => void }>>;

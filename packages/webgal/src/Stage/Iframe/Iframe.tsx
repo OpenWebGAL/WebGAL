@@ -29,7 +29,8 @@ export default function Iframe({ id, sandbox, src, width, height, wait, injectAr
   const stageRef = useRef(stage);
   stageRef.current = stage;
 
-  const gameVarWatchersRef = useRef<Record<string, Array<{ callback: (newValue: any) => void }>> | null>(null);
+  const gameVarWatchersRef = useRef<IWatchers | null>(null);
+  const prevGameVarRef = useRef<Record<string, any>>({});
 
   const eventsMap = useMemo(
     () => ({
@@ -281,9 +282,6 @@ export default function Iframe({ id, sandbox, src, width, height, wait, injectAr
       },
     };
 
-    // Store watcher reference for use in subscription
-    api._gameVarWatchers = gameVarWatchers;
-    api._prevGameVar = {};
     api.frameId = id;
 
     apiRef.current = api;
@@ -293,7 +291,7 @@ export default function Iframe({ id, sandbox, src, width, height, wait, injectAr
 
   useEffect(() => {
     const gameVarWatchers = gameVarWatchersRef.current;
-    const prevVars = apiInstance._prevGameVar;
+    const prevVars = prevGameVarRef.current;
 
     if (!gameVarWatchers) return;
 
