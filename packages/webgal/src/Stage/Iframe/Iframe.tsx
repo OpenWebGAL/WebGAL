@@ -1,21 +1,20 @@
 import { useEffect, useMemo, useRef, useCallback, SyntheticEvent } from 'react';
-import { RootState, webgalStore } from '@/store/store';
-import { useSelector } from 'react-redux';
-import { isEqual } from 'lodash';
-import { WebGalAPI, WebGalAPIEventsKeyNames } from './interface';
+import { webgalStore } from '@/store/store';
+import { IWatchers, IWebGALBridge, WebGalAPIEventsKeyNames } from './interface';
 import { setScriptManagedGlobalVar } from '@/store/userDataReducer';
 import { WebGAL } from '@/Core/WebGAL';
 import { nextSentence as nextSentenceController } from '@/Core/controller/gamePlay/nextSentence';
 import { IIFrame } from '@/Core/Modules/stage/stageInterface';
 import { stageStateManager } from '@/Core/Modules/stage/stageStateManager';
 import { useStageState } from '@/hooks/useStageState';
+import { stopAuto, startAuto } from '@/Core/controller/gamePlay/autoPlay';
+import { stopFast, startFast } from '@/Core/controller/gamePlay/fastSkip';
+import { playBgm } from '@/Core/controller/stage/playBgm';
+import { jumpToLabel } from '@/Core/gameScripts/label/jumpToLabel';
 
 export default function Iframe({ id, sandbox, src, width, height, wait, injectArgs, style }: IIFrame) {
   const idString = `iframe-${id}`;
   const iframeRef = useRef<HTMLIFrameElement>(null);
-  const GUI = useSelector((state: RootState) => state.GUI, isEqual);
-  const userData = useSelector((state: RootState) => state.userData, isEqual);
-  const saveData = useSelector((state: RootState) => state.saveData, isEqual);
   const stage = useStageState();
 
   useEffect(() => {
@@ -27,175 +26,265 @@ export default function Iframe({ id, sandbox, src, width, height, wait, injectAr
     }
   }, [id]);
 
-  const store = useMemo(() => ({ stage, GUI, userData, saveData }), [stage, GUI, userData, saveData]);
-  const storeRef = useRef(store);
-  storeRef.current = store;
+  const stageRef = useRef(stage);
+  stageRef.current = stage;
+
+  const gameVarWatchersRef = useRef<Record<string, Array<{ callback: (newValue: any) => void }>> | null>(null);
 
   const eventsMap = useMemo(
-    () => ({ save: WebGAL.events.save, load: WebGAL.events.load, sentence: WebGAL.events.userInteractNext }),
+    () => ({
+      save: WebGAL.events.save,
+      load: WebGAL.events.load,
+      nextSentence: WebGAL.events.userInteractNext,
+    }),
     [],
   );
 
-  const apiRef = useRef<WebGalAPI | null>(null);
+  const apiRef = useRef<IWebGALBridge | null>(null);
   if (!apiRef.current) {
-    const api: WebGalAPI = Object.create(null);
+    const api: IWebGALBridge = Object.create(null);
 
-    const getNestedValue = (obj: any, path: string) =>
-      path.split('.').reduce((acc: any, part: string) => acc?.[part], obj);
+    // variable: game variables, scene, stage, audio, iframe
+    const gameVarWatchers: IWatchers = {};
+    gameVarWatchersRef.current = gameVarWatchers;
 
-    const getValue = (source: string | string[] | ((store: RootState) => any), state: RootState) => {
-      const isFunction = typeof source === 'function';
-      const isArray = Array.isArray(source);
-      const isString = typeof source === 'string';
-      if (isFunction) return (source as (store: RootState) => any)(state);
-      if (isArray) {
-        const result: any = {};
-        (source as string[]).forEach((key: string) => {
-          result[key] = getNestedValue(state, key);
-        });
-        return result;
-      }
-      if (isString) return getNestedValue(state, source as string);
-      return state;
+    // flow: navigation and playback controls
+    api.flow = {
+      next: () => nextSentenceController(),
+      autoOn: () => startAuto(),
+      autoOff: () => stopAuto(),
+      fastSkipOn: () => startFast(),
+      fastSkipOff: () => stopFast(),
     };
 
-    const watchers: Record<string, any> = {};
-    (api as any)._watchers = watchers;
-
-    api.getReactiveStore = (source, callback, options = {}) => {
-      const watcherId = Date.now() + Math.random();
-      const currentValue = getValue(source, storeRef.current);
-      watchers[watcherId] = {
-        source,
-        callback,
-        options,
-        oldValue: currentValue,
-      };
-      if (options.immediate) callback(currentValue, undefined);
-      return () => {
-        delete watchers[watcherId];
-      };
-    };
-
-    api.getStageState = () => storeRef.current.stage;
-    api.getGUIState = () => storeRef.current.GUI;
-    api.getUserData = () => storeRef.current.userData;
-    api.getSaveData = () => storeRef.current.saveData;
-
-    api.isBlockSentence = () => WebGAL.gameplay.performController.hasBlockingNextPerform();
-    api.nextSentence = () => nextSentenceController();
-
-    api.on = (event: WebGalAPIEventsKeyNames, callback: (data?: any) => void) => {
-      if (!eventsMap[event]) {
-        console.error(`无效的事件类型: ${event}`);
-        return;
-      }
-      eventsMap[event].on(callback);
-    };
-    api.off = (event: WebGalAPIEventsKeyNames, callback: (data?: any) => void) => {
-      if (!eventsMap[event]) {
-        console.error(`无效的事件类型: ${event}`);
-        return;
-      }
-      eventsMap[event].off(callback);
-    };
-
-    api.closeIframe = (key?: string) => {
-      if (key) stageStateManager.removeIframe({ id: key });
-      else stageStateManager.removeIframe({ id });
-    };
-    api.openIframe = (key?: string) => {
-      if (!key) {
-        console.warn('openIframe 需要指定 iframe 的 key');
-        return;
-      }
-      const iframe = storeRef.current.stage.iframes.find((e: any) => e.id === key);
-      if (!iframe) {
-        console.error(`找不到 id 为 ${key} 的 iframe`);
-        return;
-      }
-      const existingIndex = storeRef.current.stage.iframes.findIndex((e: any) => e.id === key);
-      if (existingIndex === -1) stageStateManager.addIframe(iframe);
-    };
-
-    api.getGameVar = (key: string) => storeRef.current.stage.GameVar[key];
-    api.getGlobalGameVar = (key: string) => storeRef.current.userData.globalGameVar[key];
-    api.setGameVar = (key: string, value: any) => stageStateManager.setStageVarAndCommit({ key, value });
-    api.setGlobalGameVar = (key: string, value: any) => webgalStore.dispatch(setScriptManagedGlobalVar({ key, value }));
-
-    api.complete = (returnValue?: any) => {
-      if (wait) {
-        window.parent.postMessage(
-          {
-            type: 'webgal-frame-complete',
-            frameId: id,
-            returnValue,
-          },
-          window.location.origin,
-        );
-      }
-    };
-
-    api.getPersistentData = (key?: string) => {
-      const iframe = storeRef.current.stage.iframes.find((e: any) => e.id === id);
-      if (!iframe?.persistentData) return key ? undefined : {};
-      return key ? iframe.persistentData[key] : iframe.persistentData;
-    };
-    api.setPersistentData = (key: string, value: any) => {
-      const iframe = storeRef.current.stage.iframes.find((e: any) => e.id === id);
-      if (!iframe) {
-        console.error(`找不到id为${id}的iframe`);
-        return;
-      }
-      const currentData = iframe.persistentData || {};
-      stageStateManager.updateIframePersistentData({
-        id,
-        persistentData: { ...currentData, [key]: value },
-      });
-    };
-    api.clearPersistentData = (key?: string) => {
-      const iframe = storeRef.current.stage.iframes.find((e: any) => e.id === id);
-      if (!iframe) {
-        console.error(`找不到id为${id}的iframe`);
-        return null;
-      }
-      if (key) {
-        if (iframe.persistentData?.[key]) {
-          const newData = { ...iframe.persistentData };
-          delete newData[key];
-          stageStateManager.updateIframePersistentData({
-            id,
-            persistentData: newData,
-          });
+    api.variable = {
+      get: (key: string) => stageRef.current.GameVar[key],
+      set: (key: string, value: string | number | boolean, options?: { global?: boolean }) => {
+        if (options?.global) {
+          webgalStore.dispatch(setScriptManagedGlobalVar({ key, value }));
+        } else {
+          stageStateManager.setStageVarAndCommit({ key, value });
         }
-      } else {
-        stageStateManager.updateIframePersistentData({ id, persistentData: {} });
-      }
+      },
+      onChange: (key: string, callback: (newValue: any) => void) => {
+        if (!gameVarWatchers[key]) {
+          gameVarWatchers[key] = [];
+        }
+        const watcher = { callback };
+        gameVarWatchers[key].push(watcher);
+        return () => {
+          const index = gameVarWatchers[key].indexOf(watcher);
+          if (index > -1) gameVarWatchers[key].splice(index, 1);
+        };
+      },
     };
-    api.postIframeMessage = (key: string, data?: any) => {
-      const targetIframe = storeRef.current.stage.iframes.find((e: any) => e.id === key);
-      if (!targetIframe) {
-        console.error(`找不到id为${key}的iframe`);
-        return;
-      }
-      const targetIframeElement = document.getElementById(`iframe-${key}`) as HTMLIFrameElement;
-      if (!targetIframeElement) {
-        console.error(`找不到id为iframe-${key}的iframe元素`);
-        return;
-      }
-      try {
-        targetIframeElement.contentWindow?.postMessage(
-          {
-            type: 'webgal-iframe-message',
-            sourceId: id,
-            data,
-          },
-          window.location.origin,
-        );
-      } catch (e) {
-        console.error(`向iframe ${key} 发送消息失败:`, e);
-      }
+
+    api.scene = {
+      jumpTo: (sceneUrl: string, label?: string) => {
+        if (label) {
+          jumpToLabel(label);
+        }
+      },
     };
+
+    api.stage = {
+      getBackground: () => stageRef.current.bgName,
+      getFigures: () => ({
+        left: stageRef.current.figNameLeft,
+        center: stageRef.current.figName,
+        right: stageRef.current.figNameRight,
+      }),
+      getCurrentText: () => stageRef.current.showText,
+      getCurrentSpeaker: () => stageRef.current.showName,
+      getPerformList: () => {
+        const performs = stageRef.current.PerformList;
+        return performs.map((p) => ({ id: p.id, isHoldOn: p.isHoldOn }));
+      },
+      isBlockSentence: () => {
+        return WebGAL.gameplay.performController.hasBlockingNextPerform();
+      },
+    };
+
+    api.audio = {
+      playBgm: (url: string, options?: { volume?: number; fade?: number }) => {
+        playBgm(url, options?.fade ?? 0, options?.volume ?? 100);
+      },
+      stopBgm: (fade?: number) => {
+        const bgmElement = document.getElementById('currentBgm') as HTMLAudioElement | null;
+        if (bgmElement) {
+          if (fade) {
+            const originalVolume = bgmElement.volume;
+            const steps = 20;
+            const stepTime = (fade / steps) | 0;
+            let step = 0;
+            const fadeInterval = setInterval(() => {
+              step++;
+              bgmElement.volume = originalVolume * (1 - step / steps);
+              if (step >= steps) {
+                clearInterval(fadeInterval);
+                bgmElement.pause();
+                bgmElement.volume = originalVolume;
+              }
+            }, stepTime);
+          } else {
+            bgmElement.pause();
+          }
+        }
+      },
+      playEffect: (url: string) => {
+        const userDataState = webgalStore.getState().userData;
+        const mainVol = userDataState.optionData.volumeMain;
+        const seVol = mainVol * 0.01 * (userDataState.optionData?.seVolume ?? 100) * 0.01 * 100 * 0.01;
+        const seElement = document.createElement('audio');
+        seElement.src = url;
+        seElement.volume = seVol;
+        seElement.play().catch(() => {});
+      },
+      setVolume: (type: 'bgm' | 'vocal' | 'effect', volume: number) => {
+        const currentStage = stageRef.current;
+        if (type === 'bgm') {
+          stageStateManager.setStage('bgm', { ...currentStage.bgm, volume });
+        } else if (type === 'vocal') {
+          stageStateManager.setStage('vocalVolume', volume);
+        }
+      },
+    };
+
+    api.iframe = {
+      close: () => stageStateManager.removeIframe({ id }),
+      resize: (width: number, height: number) => {
+        const iframeElement = document.getElementById(`iframe-${id}`) as HTMLIFrameElement;
+        if (iframeElement) {
+          iframeElement.style.width = `${width}px`;
+          iframeElement.style.height = `${height}px`;
+        }
+      },
+      move: (x: number, y: number) => {
+        const iframeElement = document.getElementById(`iframe-${id}`) as HTMLIFrameElement;
+        if (iframeElement) {
+          iframeElement.style.transform = `translate(${x}px, ${y}px)`;
+        }
+      },
+      getPosition: () => {
+        const iframeElement = document.getElementById(`iframe-${id}`) as HTMLIFrameElement;
+        if (iframeElement) {
+          const rect = iframeElement.getBoundingClientRect();
+          return { x: rect.left, y: rect.top, width: rect.width, height: rect.height };
+        }
+        return { x: 0, y: 0, width: 0, height: 0 };
+      },
+      complete: (returnValue?: any) => {
+        if (wait) {
+          window.parent.postMessage(
+            {
+              type: 'webgal-frame-complete',
+              frameId: id,
+              returnValue,
+            },
+            window.location.origin,
+          );
+        }
+      },
+      openIframe: (key?: string) => {
+        const targetId = key ?? id;
+        const iframe = stageRef.current.iframes.find((e: any) => e.id === targetId);
+        if (iframe) {
+          iframe.isActive = true;
+          stageStateManager.commit();
+        }
+      },
+      closeIframe: (key?: string) => {
+        const targetId = key ?? id;
+        stageStateManager.removeIframe({ id: targetId, isActive: true });
+      },
+    };
+
+    // event: event handling
+    api.event = {
+      on: (event: WebGalAPIEventsKeyNames, callback: (data?: any) => void) => {
+        if (!eventsMap[event]) {
+          console.error(`无效的事件类型: ${event}`);
+          return;
+        }
+        eventsMap[event].on(callback);
+      },
+      off: (event: WebGalAPIEventsKeyNames, callback: (data?: any) => void) => {
+        if (!eventsMap[event]) {
+          console.error(`无效的事件类型: ${event}`);
+          return;
+        }
+        eventsMap[event].off(callback);
+      },
+      postIframeMessage: (key: string, data?: any) => {
+        const targetIframe = stageRef.current.iframes.find((e: any) => e.id === key);
+        if (!targetIframe) {
+          console.error(`找不到id为${key}的iframe`);
+          return;
+        }
+        const targetIframeElement = document.getElementById(`iframe-${key}`) as HTMLIFrameElement;
+        if (!targetIframeElement) {
+          console.error(`找不到id为iframe-${key}的iframe元素`);
+          return;
+        }
+        try {
+          targetIframeElement.contentWindow?.postMessage(
+            {
+              type: 'webgal-iframe-message',
+              sourceId: id,
+              data,
+            },
+            window.location.origin,
+          );
+        } catch (e) {
+          console.error(`向iframe ${key} 发送消息失败:`, e);
+        }
+      },
+    };
+
+    // store: persistent data
+    api.store = {
+      getPersistentData: (key?: string) => {
+        const iframe = stageRef.current.iframes.find((e: any) => e.id === id);
+        if (!iframe?.persistentData) return key ? undefined : {};
+        return key ? iframe.persistentData[key] : iframe.persistentData;
+      },
+      setPersistentData: (key: string, value: any) => {
+        const iframe = stageRef.current.iframes.find((e: any) => e.id === id);
+        if (!iframe) {
+          console.error(`找不到id为${id}的iframe`);
+          return;
+        }
+        const currentData = iframe.persistentData || {};
+        stageStateManager.updateIframePersistentData({
+          id,
+          persistentData: { ...currentData, [key]: value },
+        });
+      },
+      clearPersistentData: (key?: string) => {
+        const iframe = stageRef.current.iframes.find((e: any) => e.id === id);
+        if (!iframe) {
+          console.error(`找不到id为${id}的iframe`);
+          return null;
+        }
+        if (key) {
+          if (iframe.persistentData?.[key]) {
+            const newData = { ...iframe.persistentData };
+            delete newData[key];
+            stageStateManager.updateIframePersistentData({
+              id,
+              persistentData: newData,
+            });
+          }
+        } else {
+          stageStateManager.updateIframePersistentData({ id, persistentData: {} });
+        }
+      },
+    };
+
+    // Store watcher reference for use in subscription
+    api._gameVarWatchers = gameVarWatchers;
+    api._prevGameVar = {};
+    api.frameId = id;
 
     apiRef.current = api;
   }
@@ -203,36 +292,22 @@ export default function Iframe({ id, sandbox, src, width, height, wait, injectAr
   const apiInstance = apiRef.current!;
 
   useEffect(() => {
-    return stageStateManager.subscribe(() => {
-      const watchers = (apiRef.current as any)?._watchers;
-      if (!watchers) return;
-      const getNestedValue = (obj: any, path: string) =>
-        path.split('.').reduce((acc: any, part: string) => acc?.[part], obj);
-      const getValue = (source: string | string[] | ((store: RootState) => any), s: any) => {
-        const isFunction = typeof source === 'function';
-        const isArray = Array.isArray(source);
-        const isString = typeof source === 'string';
-        if (isFunction) return source(s);
-        if (isArray) {
-          const r: any = {};
-          (source as string[]).forEach((key: string) => {
-            r[key] = getNestedValue(s, key);
-          });
-          return r;
-        }
-        if (isString) return getNestedValue(s, source as string);
-        return s;
-      };
-      Object.entries(watchers).forEach(([, watcher]: [string, any]) => {
-        const newValue = getValue(watcher.source, storeRef.current);
-        const oldValue = watcher.oldValue;
-        if (!isEqual(newValue, oldValue)) {
-          watcher.callback(newValue, oldValue);
-          watcher.oldValue = newValue;
-        }
-      });
-    });
-  }, []);
+    const gameVarWatchers = gameVarWatchersRef.current;
+    const prevVars = apiInstance._prevGameVar;
+
+    if (!gameVarWatchers) return;
+
+    const currentVars = stageRef.current.GameVar;
+
+    for (const key of Object.keys(gameVarWatchers)) {
+      if (currentVars[key] !== prevVars[key]) {
+        prevVars[key] = currentVars[key];
+        gameVarWatchers[key].forEach((watcher: { callback: (newValue: any) => void }) => {
+          watcher.callback(currentVars[key]);
+        });
+      }
+    }
+  }, [stage]);
 
   const onError = useCallback(
     (e: SyntheticEvent<HTMLIFrameElement, Event>) => {

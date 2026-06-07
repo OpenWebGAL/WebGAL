@@ -34,6 +34,17 @@ export const stopAuto = () => {
 };
 
 /**
+ * 开始自动播放
+ */
+export const startAuto = () => {
+  if (WebGAL.gameplay.autoInterval !== null) {
+    return;
+  }
+  WebGAL.gameplay.isAuto = true;
+  WebGAL.gameplay.autoInterval = setInterval(autoPlay, 100);
+};
+
+/**
  * 切换自动播放状态
  */
 export const switchAuto = () => {
@@ -42,8 +53,7 @@ export const switchAuto = () => {
     stopAuto();
   } else {
     // 当前不在自动播放
-    WebGAL.gameplay.isAuto = true;
-    WebGAL.gameplay.autoInterval = setInterval(autoPlay, 100);
+    startAuto();
   }
 };
 

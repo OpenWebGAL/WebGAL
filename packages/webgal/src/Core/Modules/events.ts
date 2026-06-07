@@ -14,6 +14,7 @@ export class Events {
   public afterStyleUpdate = formEvent('after-style-update');
   public save = formEvent('save');
   public load = formEvent('load');
+  public sceneChange = formEvent('scene-change');
 }
 
 const eventBus = mitt();

@@ -139,7 +139,11 @@ function Choose(props: { chooseOptions: ChooseOption[] }) {
             }
           : () => {};
         return (
-          <div className={applyStyle('Choose_item_outer', styles.Choose_item_outer)} key={e.jump + i}>
+          <div
+            className={applyStyle('Choose_item_outer', styles.Choose_item_outer)}
+            key={e.jump + i}
+            style={{ pointerEvents: 'auto' }}
+          >
             <div className={className} style={{ fontFamily: font }} onClick={onClick} onMouseEnter={playSeEnter}>
               {e.text}
             </div>
