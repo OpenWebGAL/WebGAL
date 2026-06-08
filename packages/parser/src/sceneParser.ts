@@ -68,6 +68,9 @@ export const sceneParser = (
 const deduplicateAssets = (assetsList: IAsset[]): IAsset[] => {
   const seenAssets = new Set<string>();
   return assetsList.filter((asset) => {
+    if (!asset || typeof asset.url !== 'string' || asset.url === '') {
+      return false;
+    }
     const assetKey = `${asset.type}:${asset.url}`;
     if (seenAssets.has(assetKey)) {
       return false;
