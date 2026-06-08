@@ -1,0 +1,11 @@
+setVar:a=1;
+WebGAL:a=1? -when=a==1;
+
+;正常解析
+WebGAL:test;
+
+; : 异常测试
+WebGAL   :   test;
+
+分号后应该被截断;看不到我！
+转义分号后应该不截断\;能看到我！
