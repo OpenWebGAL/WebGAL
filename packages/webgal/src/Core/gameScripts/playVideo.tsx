@@ -7,14 +7,19 @@ import { webgalStore } from '@/store/store';
 import { getRandomPerformName } from '@/Core/Modules/perform/performController';
 import { getBooleanArgByKey } from '@/Core/util/getSentenceArg';
 import { WebGAL } from '@/Core/WebGAL';
+import bgmManager from '../Modules/audio/bgmManager';
+import { useStageState } from '@/hooks/useStageState';
 /**
  * 播放一段视频 * @param sentence
  */
 export const playVideo = (sentence: ISentence): IPerform => {
+  const stageState = useStageState();
   const userDataState = webgalStore.getState().userData;
   const mainVol = userDataState.optionData.volumeMain;
   const vocalVol = mainVol * 0.01 * userDataState.optionData.vocalVolume * 0.01;
   const bgmVol = mainVol * 0.01 * userDataState.optionData.bgmVolume * 0.01;
+  const bgmEnter = stageState.bgm.enter;
+  const bgmExit = stageState.bgm.exit;
   const performInitName: string = getRandomPerformName();
 
   let blockingNextFlag = getBooleanArgByKey(sentence, 'skipOff') ?? false;
@@ -25,10 +30,7 @@ export const playVideo = (sentence: ISentence): IPerform => {
     /**
      * 恢复音量
      */
-    const bgmElement: any = document.getElementById('currentBgm');
-    if (bgmElement) {
-      bgmElement.volume = bgmVol.toString();
-    }
+    bgmManager.resume(bgmEnter);
     const vocalElement: any = document.getElementById('currentVocal');
     if (vocalElement) {
       vocalElement.volume = vocalVol.toString();
@@ -68,10 +70,7 @@ export const playVideo = (sentence: ISentence): IPerform => {
           /**
            * 把bgm和语音的音量设为0
            */
-          const bgmElement: any = document.getElementById('currentBgm');
-          if (bgmElement) {
-            bgmElement.volume = '0';
-          }
+          bgmManager.pause(bgmExit);
           const vocalElement: any = document.getElementById('currentVocal');
           if (vocalElement) {
             vocalElement.volume = '0';

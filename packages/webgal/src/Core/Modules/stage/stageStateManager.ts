@@ -52,8 +52,9 @@ export const initState: IStageState = {
   vocalVolume: 100,
   bgm: {
     src: '',
-    enter: 0,
     volume: 100,
+    enter: 0,
+    exit: 0,
   },
   uiSe: '',
   miniAvatar: '',

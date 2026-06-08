@@ -8,10 +8,10 @@ import useSoundEffect from '@/hooks/useSoundEffect';
 import useApplyStyle from '@/hooks/useApplyStyle';
 import { keyboard } from '@/hooks/useHotkey';
 import useConfigData from '@/hooks/useConfigData';
-import { playBgm } from '@/Core/controller/stage/playBgm';
 import { continueGame, startGame } from '@/Core/controller/gamePlay/startContinueGame';
 import { showGlogalDialog } from '../GlobalDialog/GlobalDialog';
 import styles from './title.module.scss';
+import bgmManager from '@/Core/Modules/audio/bgmManager';
 
 /** 标题页 */
 export default function Title() {
@@ -47,7 +47,7 @@ export default function Title() {
       <div
         className="title__enter-game-target"
         onClick={() => {
-          playBgm(GUIState.titleBgm);
+          bgmManager.play({ src: GUIState.titleBgm, volume: 100, enter: 2000 });
           dispatch(setVisibility({ component: 'isEnterGame', visibility: true }));
           if (fullScreen === fullScreenOption.on) {
             document.documentElement.requestFullscreen();
@@ -140,7 +140,7 @@ export default function Title() {
                   leftFunc: () => {
                     window.close();
                   },
-                  rightFunc: () => {},
+                  rightFunc: () => { },
                 });
               }}
               onMouseEnter={playSeEnter}

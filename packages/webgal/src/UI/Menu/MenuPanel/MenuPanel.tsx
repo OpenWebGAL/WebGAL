@@ -1,6 +1,5 @@
 import styles from './menuPanel.module.scss';
 import { MenuPanelButton } from './MenuPanelButton';
-import { playBgm } from '@/Core/controller/stage/playBgm';
 import { MenuPanelTag } from '@/store/guiInterface';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
@@ -80,7 +79,7 @@ export const MenuPanel = () => {
               backToTitle();
               dispatch(setVisibility({ component: 'showMenuPanel', visibility: false }));
             },
-            rightFunc: () => {},
+            rightFunc: () => { },
           });
         }}
         tagName={t('title.title')}

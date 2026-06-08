@@ -6,7 +6,7 @@ import { sceneParser } from '@/Core/parser/sceneParser';
 import { resetStage } from '@/Core/controller/stage/resetStage';
 import { webgalStore } from '@/store/store';
 import { setVisibility } from '@/store/GUIReducer';
-import { playBgm } from '@/Core/controller/stage/playBgm';
+import bgmManager from '@/Core/Modules/audio/bgmManager';
 import { WebGAL } from '@/Core/WebGAL';
 import { dumpToStorageFast } from '@/Core/controller/storage/storageController';
 import { removeFastSaveGameRecord } from '../controller/storage/fastSaveLoad';
@@ -31,6 +31,6 @@ export const end = (sentence: ISentence): IPerform => {
     WebGAL.sceneManager.sceneData.currentScene = sceneParser(rawScene, 'start.txt', sceneUrl);
   });
   dispatch(setVisibility({ component: 'showTitle', visibility: true }));
-  playBgm(webgalStore.getState().GUI.titleBgm);
+  bgmManager.play({ src: webgalStore.getState().GUI.titleBgm, volume: 100, enter: 2000 });
   return createNonePerform();
 };

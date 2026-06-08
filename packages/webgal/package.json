@@ -16,6 +16,7 @@
     "axios": "^1.13.5",
     "cloudlogjs": "^1.0.9",
     "gifuct-js": "^2.1.2",
+    "gsap": "^3.14.2",
     "i18next": "^22.4.15",
     "localforage": "^1.10.0",
     "lodash": "^4.17.23",
