@@ -1,0 +1,17 @@
+{
+  "name": "webgal-test",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "WebGAL integration test framework",
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:ui": "vitest --ui"
+  },
+  "devDependencies": {
+    "vitest": "^3.2.1",
+    "playwright": "^1.52.0",
+    "typescript": "^5.8.3"
+  }
+}

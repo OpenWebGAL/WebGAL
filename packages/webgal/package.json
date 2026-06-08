@@ -3,7 +3,9 @@
   "version": "4.6.1",
   "scripts": {
     "dev": "vite --host --port 3000",
+    "dev:test": "cross-env WEBGAL_TEST=true vite --host --port 3000",
     "build": "node scripts/update-engine-version.js && cross-env NODE_ENV=production tsc && vite build --base=./",
+    "build:test": "node scripts/update-engine-version.js && cross-env NODE_ENV=production WEBGAL_TEST=true tsc && cross-env WEBGAL_TEST=true vite build --base=./",
     "preview": "vite preview",
     "lint": "eslint src/** --fix",
     "prepublishOnly": "npm run build"
