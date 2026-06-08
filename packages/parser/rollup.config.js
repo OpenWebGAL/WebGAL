@@ -53,6 +53,7 @@ export default [
         file: "./build/umd/index.global.js",
         name: 'webgalParser',
         format: 'iife',
+        exports: "named",
         sourcemap: !isProd
       },
     ],

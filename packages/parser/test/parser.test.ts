@@ -1,7 +1,7 @@
 import SceneParser from "../src/index";
 import { ADD_NEXT_ARG_LIST, SCRIPT_CONFIG } from "../src/config/scriptConfig";
 import { expect, test } from "vitest";
-import { commandType, ISentence } from "../src/interface/sceneInterface";
+import { commandType, IAsset, ISentence } from "../src/interface/sceneInterface";
 import * as fsp from 'fs/promises';
 import { fileType } from "../src/interface/assets";
 
@@ -221,6 +221,39 @@ test("say statement applies asset setter to vocal named argument", async () => {
     type: fileType.vocal,
     lineNumber: 0,
   });
+});
+
+test("scene assets are deduplicated by type and url", async () => {
+  let prefetchedAssets: IAsset[] = [];
+  const parser = new SceneParser((assetList) => {
+    prefetchedAssets = assetList;
+  }, (fileName, assetType) => {
+    return fileName;
+  }, ADD_NEXT_ARG_LIST, SCRIPT_CONFIG);
+
+  const result = parser.parse(`changeBg:shared.webp;
+changeFigure:shared.webp;
+changeBg:shared.webp;`, 'test', 'test');
+
+  expect(result.assetsList).toEqual([
+    { name: "shared.webp", url: 'shared.webp', type: fileType.background, lineNumber: 0 },
+    { name: "shared.webp", url: 'shared.webp', type: fileType.figure, lineNumber: 1 },
+  ]);
+  expect(prefetchedAssets).toEqual(result.assetsList);
+});
+
+test("scene assets skip entries with empty urls", async () => {
+  const parser = new SceneParser((assetList) => {
+  }, (fileName, assetType) => {
+    if (assetType === fileType.vocal) {
+      return '';
+    }
+    return fileName;
+  }, ADD_NEXT_ARG_LIST, SCRIPT_CONFIG);
+
+  const result = parser.parse(`say:123 -vocal=missing.mp3;`, 'test', 'test');
+
+  expect(result.assetsList).toEqual([]);
 });
 
 test("wait command", async () => {
