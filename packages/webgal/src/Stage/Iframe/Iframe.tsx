@@ -13,15 +13,15 @@ import { playBgm } from '@/Core/controller/stage/playBgm';
 import { jumpToLabel } from '@/Core/gameScripts/label/jumpToLabel';
 import { logger } from '@/Core/util/logger';
 
-// 验证sandbox属性是否安全
+const SAME_ORIGIN = window.location.origin;
+
+// 验证sandbox属性：默认仅允许脚本执行，除非脚本显式指定同源权限
 function getSandboxAttr(sandbox: string): string {
-  if (!sandbox || sandbox.trim() === '') {
-    return 'allow-scripts allow-same-origin allow-forms';
+  const trimmed = sandbox?.trim() || '';
+  if (trimmed === '') {
+    return 'allow-scripts';
   }
-  if (!sandbox.includes('allow-same-origin')) {
-    return `${sandbox} allow-same-origin`;
-  }
-  return sandbox;
+  return trimmed;
 }
 
 export default function Iframe({ id, sandbox, src, width, height, wait, injectArgs, style }: IIFrame) {
@@ -71,7 +71,10 @@ export default function Iframe({ id, sandbox, src, width, height, wait, injectAr
     };
 
     api.variable = {
-      get: (key: string) => stageRef.current.GameVar[key],
+      get: (key: string) => {
+        const val = stageRef.current.GameVar[key];
+        return val !== undefined ? val : null;
+      },
       set: (key: string, value: string | number | boolean, options?: { global?: boolean }) => {
         if (options?.global) {
           webgalStore.dispatch(setScriptManagedGlobalVar({ key, value }));
@@ -147,7 +150,7 @@ export default function Iframe({ id, sandbox, src, width, height, wait, injectAr
       playEffect: (url: string) => {
         const userDataState = webgalStore.getState().userData;
         const mainVol = userDataState.optionData.volumeMain;
-        const seVol = mainVol * 0.01 * (userDataState.optionData?.seVolume ?? 100) * 0.01 * 100 * 0.01;
+        const seVol = mainVol * 0.01 * (userDataState.optionData?.seVolume ?? 100) * 0.01;
         const seElement = document.createElement('audio');
         seElement.src = url;
         seElement.volume = seVol;
@@ -194,7 +197,7 @@ export default function Iframe({ id, sandbox, src, width, height, wait, injectAr
               frameId: id,
               returnValue,
             },
-            window.location.origin,
+            SAME_ORIGIN,
           );
         }
       },
@@ -208,7 +211,7 @@ export default function Iframe({ id, sandbox, src, width, height, wait, injectAr
       },
       closeIframe: (key?: string) => {
         const targetId = key ?? id;
-        stageStateManager.removeIframe({ id: targetId, isActive: true });
+        stageStateManager.removeIframe({ id: targetId });
       },
     };
 
@@ -234,19 +237,22 @@ export default function Iframe({ id, sandbox, src, width, height, wait, injectAr
           logger.error(`找不到id为${key}的iframe`);
           return;
         }
-        const targetIframeElement = document.getElementById(`iframe-${key}`) as HTMLIFrameElement;
+        const targetIframeElement = document.getElementById(`iframe-${key}`) as HTMLIFrameElement | null;
         if (!targetIframeElement) {
           logger.error(`找不到id为iframe-${key}的iframe元素`);
           return;
         }
         try {
-          targetIframeElement.contentWindow?.postMessage(
+          const targetWindow = targetIframeElement.contentWindow;
+          if (!targetWindow) return;
+          const targetOrigin = targetWindow.origin === 'null' ? '*' : SAME_ORIGIN;
+          targetWindow.postMessage(
             {
               type: 'webgal-iframe-message',
               sourceId: id,
               data,
             },
-            window.location.origin,
+            targetOrigin,
           );
         } catch (e) {
           logger.error(`向iframe ${key} 发送消息失败:`, e);
@@ -321,8 +327,8 @@ export default function Iframe({ id, sandbox, src, width, height, wait, injectAr
 
   const onError = useCallback(
     (e: SyntheticEvent<HTMLIFrameElement, Event>) => {
-      logger.error('iframe加载失败', e);
-      stageStateManager.removeIframe({ id });
+      logger.error('iframe加载失败:', e);
+      stageStateManager.removeIframe({ id, save: true });
     },
     [id],
   );
@@ -333,20 +339,23 @@ export default function Iframe({ id, sandbox, src, width, height, wait, injectAr
 
   useEffect(() => {
     const iframe = iframeRef.current;
-    if (iframeRef.current?.contentWindow) {
-      Object.defineProperty(iframeRef.current.contentWindow, 'webgal', {
+    if (!iframe?.contentWindow) return;
+    try {
+      Object.defineProperty(iframe.contentWindow, 'webgal', {
         value: apiInstance,
         configurable: true,
         enumerable: true,
       });
+    } catch (e) {
+      logger.warn('无法注入webgal API到跨域iframe:', e);
+    }
 
-      if (injectArgs && Object.keys(injectArgs).length > 0) {
-        Object.defineProperty(apiInstance, 'params', {
-          value: injectArgs,
-          configurable: true,
-          enumerable: true,
-        });
-      }
+    if (injectArgs && Object.keys(injectArgs).length > 0) {
+      Object.defineProperty(apiInstance, 'params', {
+        value: injectArgs,
+        configurable: true,
+        enumerable: true,
+      });
     }
     return () => {
       if (iframe?.contentWindow) {
@@ -357,7 +366,7 @@ export default function Iframe({ id, sandbox, src, width, height, wait, injectAr
         }
       }
     };
-  }, [injectArgs]);
+  }, [injectArgs, apiInstance]);
 
   return (
     <iframe

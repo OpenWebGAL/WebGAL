@@ -5,6 +5,8 @@ import { CSSProperties } from 'react';
 import { IIFrame } from '../Modules/stage/stageInterface';
 import { stageStateManager } from '../Modules/stage/stageStateManager';
 
+const SAME_ORIGIN = window.location.origin;
+
 const allSandboxProperties = {
   'allow-forms': 'allowForms', // 允许iframe内提交表单
   'allow-scripts': 'allowScripts', // 允许iframe内执行JavaScript脚本（包括定时器、事件等）
@@ -53,15 +55,23 @@ export const createIframe = (sentence: ISentence): IPerform => {
   }
 
   let rawSrc = src;
-  // 处理src
-  if (!rawSrc.startsWith('http://') && !rawSrc.startsWith('https://')) {
+  if (
+    !rawSrc.startsWith('http://') &&
+    !rawSrc.startsWith('https://') &&
+    !rawSrc.startsWith('about:') &&
+    !rawSrc.startsWith('data:')
+  ) {
     rawSrc = './game/' + rawSrc;
   }
 
   // 查询所有参数(以@开头)
   const args = sentence.args;
-  const injectArgs =
-    args.filter((arg) => arg.key.startsWith('@')).map((arg) => ({ key: arg.key.slice(1), value: arg.value })) ?? {};
+  const injectArgs: Record<string, any> = {};
+  args.forEach((arg) => {
+    if (arg.key.startsWith('@')) {
+      injectArgs[arg.key.slice(1)] = arg.value;
+    }
+  });
 
   const frameData: IIFrame = {
     id,
@@ -84,18 +94,34 @@ export const createIframe = (sentence: ISentence): IPerform => {
   }
 
   stageStateManager.addIframe(frameData);
+
+  // 如果该id的iframe已存在，先移除旧监听器（通过标记避免重复注册）
+  const listenerKey = `__webgal-iframe-listener-${id}`;
+  if (!(window as any)[listenerKey]) {
+    (window as any)[listenerKey] = true;
+  } else {
+    // 已有同id的监听器在运行，先清理
+    window.removeEventListener('message', (window as any)[`__webgal-iframe-handler-${id}`]);
+  }
+
   // 如果需要等待iframe完成，则返回阻塞的perform
   if (wait) {
     let isCompleted = false;
     // 监听iframe完成消息
     const handleFrameComplete = (event: MessageEvent) => {
+      if (event.origin !== SAME_ORIGIN) return;
       if (
         event.data &&
         typeof event.data === 'object' &&
         event.data.type === 'webgal-frame-complete' &&
-        event.data.frameId === id
+        event.data.frameId === id &&
+        !isCompleted
       ) {
         isCompleted = true;
+        // 移除事件监听器
+        window.removeEventListener('message', handleFrameComplete);
+        delete (window as any)[`__webgal-iframe-handler-${id}`];
+        delete (window as any)[listenerKey];
         // 如果有returnValue，则存储到游戏变量中
         if (returnValue && event.data.returnValue !== undefined) {
           stageStateManager.setStageVar({
@@ -103,10 +129,11 @@ export const createIframe = (sentence: ISentence): IPerform => {
             value: event.data.returnValue,
           });
         }
-        // 移除事件监听器
-        window.removeEventListener('message', handleFrameComplete);
       }
     };
+
+    // 保存handler引用，便于去重清理
+    (window as any)[`__webgal-iframe-handler-${id}`] = handleFrameComplete;
 
     // 添加事件监听器
     window.addEventListener('message', handleFrameComplete);
@@ -117,6 +144,8 @@ export const createIframe = (sentence: ISentence): IPerform => {
       isHoldOn: true,
       stopFunction: () => {
         window.removeEventListener('message', handleFrameComplete);
+        delete (window as any)[`__webgal-iframe-handler-${id}`];
+        delete (window as any)[listenerKey];
       },
       blockingNext: () => !isCompleted,
       blockingAuto: () => !isCompleted,
@@ -129,6 +158,6 @@ export const createIframe = (sentence: ISentence): IPerform => {
     isHoldOn: false,
     stopFunction: () => {},
     blockingNext: () => false,
-    blockingAuto: () => true,
+    blockingAuto: () => false,
   };
 };

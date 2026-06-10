@@ -358,17 +358,22 @@ export class StageStateManager {
 
   public addIframe(payload: IIFrame) {
     payload.isActive = true;
-    this.calculationStageState.iframes.push(payload);
+    const existing = this.calculationStageState.iframes.findIndex((e) => e.id === payload.id);
+    if (existing > -1) {
+      this.calculationStageState.iframes[existing] = payload;
+    } else {
+      this.calculationStageState.iframes.push(payload);
+    }
     this.commit();
   }
 
-  public removeIframe(payload: { id: string; isActive?: boolean }) {
-    if (!payload.isActive) {
-      this.calculationStageState.iframes = this.calculationStageState.iframes.filter((e) => e.id !== payload.id);
-    } else {
+  public removeIframe(payload: { id: string; save?: boolean }) {
+    if (payload.save) {
       this.calculationStageState.iframes = this.calculationStageState.iframes.map((e) =>
         e.id === payload.id ? { ...e, isActive: false } : e,
       );
+    } else {
+      this.calculationStageState.iframes = this.calculationStageState.iframes.filter((e) => e.id !== payload.id);
     }
     this.commit();
   }

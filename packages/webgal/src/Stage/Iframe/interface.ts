@@ -13,7 +13,12 @@ export interface IWebGALBridge {
     fastSkipOff: () => void; // 关闭快进
   };
   variable: {
-    get: (key: string) => string | boolean | number | Array<string | boolean | number>;
+    get: (key: string) =>
+      | string
+      | boolean
+      | number
+      | Array<string | boolean | number>
+      | null;
     set: (key: string, value: string | number | boolean, options?: { global?: boolean }) => void;
     onChange: (key: string, callback: (newValue: any) => void) => () => void; // 返回取消订阅函数
   };

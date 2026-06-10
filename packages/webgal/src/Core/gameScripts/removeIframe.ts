@@ -9,7 +9,7 @@ import { stageStateManager } from '@/Core/Modules/stage/stageStateManager';
  */
 export const removeIframe = (sentence: ISentence): IPerform => {
   const id = sentence.content;
-  const save = getBooleanArgByKey(sentence, 'save') ?? false;
+  const hideOnly = getBooleanArgByKey(sentence, 'save') ?? false;
   if (!id) {
     return {
       performName: 'none',
@@ -21,7 +21,7 @@ export const removeIframe = (sentence: ISentence): IPerform => {
     };
   }
 
-  stageStateManager.removeIframe({ id, isActive: save });
+  stageStateManager.removeIframe({ id, save: hideOnly });
 
   return {
     performName: 'none',
