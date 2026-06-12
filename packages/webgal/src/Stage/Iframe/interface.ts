@@ -13,12 +13,7 @@ export interface IWebGALBridge {
     fastSkipOff: () => void; // 关闭快进
   };
   variable: {
-    get: (key: string) =>
-      | string
-      | boolean
-      | number
-      | Array<string | boolean | number>
-      | null;
+    get: (key: string) => string | boolean | number | Array<string | boolean | number> | null;
     set: (key: string, value: string | number | boolean, options?: { global?: boolean }) => void;
     onChange: (key: string, callback: (newValue: any) => void) => () => void; // 返回取消订阅函数
   };
@@ -35,8 +30,7 @@ export interface IWebGALBridge {
   };
   audio: {
     playBgm(url: string, options?: { volume?: number; fade?: number }): void;
-    stopBgm(fade?: number): void;
-    playEffect(url: string): void;
+    stopBgm(): void;
     setVolume(type: 'bgm' | 'vocal' | 'effect', volume: number): void;
   };
   iframe: {

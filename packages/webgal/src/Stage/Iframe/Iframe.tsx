@@ -124,39 +124,21 @@ export default function Iframe({ id, sandbox, src, width, height, wait, injectAr
     api.audio = {
       playBgm: (url: string, options?: { volume?: number; fade?: number }) => {
         playBgm(url, options?.fade ?? 0, options?.volume ?? 100);
-      },
-      stopBgm: (fade?: number) => {
-        const bgmElement = document.getElementById('currentBgm') as HTMLAudioElement | null;
-        if (bgmElement) {
-          if (fade) {
-            const originalVolume = bgmElement.volume;
-            const steps = 20;
-            const stepTime = (fade / steps) | 0;
-            let step = 0;
-            const fadeInterval = setInterval(() => {
-              step++;
-              bgmElement.volume = originalVolume * (1 - step / steps);
-              if (step >= steps) {
-                clearInterval(fadeInterval);
-                bgmElement.pause();
-                bgmElement.volume = originalVolume;
-              }
-            }, stepTime);
-          } else {
-            bgmElement.pause();
-          }
+        stageStateManager.commit();
+        const VocalControl = document.getElementById('currentBgm') as HTMLMediaElement;
+        if (VocalControl !== null) {
+          VocalControl.currentTime = 0;
+          if (VocalControl.paused) VocalControl.play();
         }
       },
-      playEffect: (url: string) => {
-        const userDataState = webgalStore.getState().userData;
-        const mainVol = userDataState.optionData.volumeMain;
-        const seVol = mainVol * 0.01 * (userDataState.optionData?.seVolume ?? 100) * 0.01;
-        const seElement = document.createElement('audio');
-        seElement.src = url;
-        seElement.volume = seVol;
-        seElement.play().catch(() => {});
+      stopBgm: () => {
+        const VocalControl = document.getElementById('currentBgm') as HTMLMediaElement;
+        if (VocalControl !== null) {
+          VocalControl.currentTime = 0;
+          if (!VocalControl.paused) VocalControl.pause();
+        }
       },
-      setVolume: (type: 'bgm' | 'vocal' | 'effect', volume: number) => {
+      setVolume: (type: 'bgm' | 'vocal', volume: number) => {
         const currentStage = stageRef.current;
         if (type === 'bgm') {
           stageStateManager.setStage('bgm', { ...currentStage.bgm, volume });
