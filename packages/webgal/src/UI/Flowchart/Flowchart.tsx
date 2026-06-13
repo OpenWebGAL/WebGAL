@@ -10,9 +10,9 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styles from './flowchart.module.scss';
 
-const NODE_WIDTH = 190;
+const NODE_MIN_WIDTH = 190;
 const NODE_HEIGHT = 78;
-const COL_GAP = 270;
+const NODE_GAP = 80;
 const ROW_GAP = 170;
 const MARGIN_X = 90;
 const MARGIN_Y = 45;
@@ -21,6 +21,7 @@ const CONNECTOR_GAP = 12;
 interface LayoutNode extends IFlowchartNode {
   x: number;
   y: number;
+  width: number;
 }
 
 interface LayoutEdge extends IFlowchartEdge {
@@ -186,12 +187,12 @@ export const Flowchart = () => {
                         }`}
                         x={node.x}
                         y={node.y}
-                        width={NODE_WIDTH}
+                        width={node.width}
                         height={NODE_HEIGHT}
                         rx="7"
                       />
                       <text className={styles.flowchart_node_label} x={node.x + 12} y={node.y + NODE_HEIGHT / 2} dominantBaseline="middle">
-                        {truncateText(labelText, 10)}
+                        {labelText}
                       </text>
                     </g>
                   );
@@ -244,18 +245,31 @@ function layoutFlowchart(flowchart?: IFlowchart) {
   const layers = [...layerMap.entries()]
     .sort(([a], [b]) => a - b)
     .map(([, layer]) => layer);
-  const maxCols = Math.max(1, ...layers.map((layer) => layer.length));
-  const width = MARGIN_X * 2 + NODE_WIDTH + (maxCols - 1) * COL_GAP;
+  const nodeWidthMap = new Map(flowchart.nodes.map((node) => [node.id, getNodeWidth(node)]));
+  const layerWidths = layers.map((layer) => layer.reduce((sum, node) => sum + (nodeWidthMap.get(node.id) ?? NODE_MIN_WIDTH), 0) + (layer.length - 1) * NODE_GAP);
+  const width = MARGIN_X * 2 + Math.max(NODE_MIN_WIDTH, ...layerWidths);
   const layoutNodeMap = new Map<string, LayoutNode>();
   layers.forEach((layer, depth) => {
-    const layerWidth = NODE_WIDTH + (layer.length - 1) * COL_GAP;
-    layer.forEach((node, index) => {
-      const parentXs = (parentMap.get(node.id) ?? []).map((id) => layoutNodeMap.get(id)?.x).filter((x): x is number => typeof x === 'number');
+    const layerWidth = layerWidths[depth];
+    let x = (width - layerWidth) / 2;
+    layer.forEach((node) => {
+      const nodeWidth = nodeWidthMap.get(node.id) ?? NODE_MIN_WIDTH;
+      const parentXs = (parentMap.get(node.id) ?? [])
+        .map((id) => {
+          const parent = layoutNodeMap.get(id);
+          return parent ? parent.x + parent.width / 2 : undefined;
+        })
+        .filter((parentX): parentX is number => typeof parentX === 'number');
       layoutNodeMap.set(node.id, {
         ...node,
-        x: layer.length === 1 && parentXs.length > 0 ? parentXs.reduce((sum, x) => sum + x, 0) / parentXs.length : (width - layerWidth) / 2 + index * COL_GAP,
+        width: nodeWidth,
+        x:
+          layer.length === 1 && parentXs.length > 0
+            ? parentXs.reduce((sum, parentX) => sum + parentX, 0) / parentXs.length - nodeWidth / 2
+            : x,
         y: MARGIN_Y + depth * ROW_GAP,
       });
+      x += nodeWidth + NODE_GAP;
     });
   });
   const nodes = [...layoutNodeMap.values()];
@@ -265,34 +279,54 @@ function layoutFlowchart(flowchart?: IFlowchart) {
   return { nodes, edges, width, height: MARGIN_Y * 2 + NODE_HEIGHT + (layers.length - 1) * ROW_GAP };
 }
 
-function getConnectorSegments(edges: LayoutEdge[], flowchartId: string): ConnectorSegment[] {
-  const edgeGroups = new Map<string, LayoutEdge[]>();
-  edges.forEach((edge) => edgeGroups.set(edge.source, [...(edgeGroups.get(edge.source) ?? []), edge]));
-  return [...edgeGroups.values()].flatMap((groupEdges) => getConnectorSegmentsBySource(groupEdges, flowchartId));
+function getNodeWidth(node: IFlowchartNode) {
+  const label = node.data?.label || node.id;
+  const textWidth = Array.from(label).reduce((sum, char) => sum + (char.charCodeAt(0) > 255 ? 24 : 14), 0);
+  return Math.max(NODE_MIN_WIDTH, textWidth + 36);
 }
 
-function getConnectorSegmentsBySource(edges: LayoutEdge[], flowchartId: string): ConnectorSegment[] {
+function getConnectorSegments(edges: LayoutEdge[], flowchartId: string): ConnectorSegment[] {
+  const targetBendYMap = getTargetBendYMap(edges);
+  const edgeGroups = new Map<string, LayoutEdge[]>();
+  edges.forEach((edge) => edgeGroups.set(edge.source, [...(edgeGroups.get(edge.source) ?? []), edge]));
+  return [...edgeGroups.values()].flatMap((groupEdges) => getConnectorSegmentsBySource(groupEdges, flowchartId, targetBendYMap));
+}
+
+function getTargetBendYMap(edges: LayoutEdge[]) {
+  const targetGroups = new Map<string, LayoutEdge[]>();
+  edges.forEach((edge) => targetGroups.set(edge.target, [...(targetGroups.get(edge.target) ?? []), edge]));
+  const bendYMap = new Map<string, number>();
+  targetGroups.forEach((targetEdges, target) => {
+    if (targetEdges.length < 2) return;
+    const ty = targetEdges[0].targetNode.y - CONNECTOR_GAP;
+    const maxSourceY = Math.max(...targetEdges.map((edge) => edge.sourceNode.y + NODE_HEIGHT));
+    bendYMap.set(target, getSingleEdgeBendY(maxSourceY, ty));
+  });
+  return bendYMap;
+}
+
+function getConnectorSegmentsBySource(edges: LayoutEdge[], flowchartId: string, targetBendYMap: Map<string, number>): ConnectorSegment[] {
   if (edges.length === 0) return [];
   const source = edges[0].sourceNode;
-  const sx = source.x + NODE_WIDTH / 2;
+  const sx = source.x + source.width / 2;
   const sy = source.y + NODE_HEIGHT;
   const sourceUnlocked = WebGAL.flowchartManager.isUnlocked(flowchartId, source.id);
   if (edges.length === 1) {
     const edge = edges[0];
-    const tx = edge.targetNode.x + NODE_WIDTH / 2;
+    const tx = edge.targetNode.x + edge.targetNode.width / 2;
     const ty = edge.targetNode.y - CONNECTOR_GAP;
-    const midY = sy + Math.max(30, (ty - sy) / 2);
+    const bendY = targetBendYMap.get(edge.target) ?? getSingleEdgeBendY(sy, ty);
     return [
       {
         id: edge.id,
-        d: sx === tx ? `M ${sx} ${sy} V ${ty}` : `M ${sx} ${sy} V ${midY} H ${tx} V ${ty}`,
+        d: sx === tx ? `M ${sx} ${sy} V ${ty}` : `M ${sx} ${sy} V ${bendY} H ${tx} V ${ty}`,
         unlocked: sourceUnlocked && WebGAL.flowchartManager.isUnlocked(flowchartId, edge.target),
         arrow: true,
         layerY: ty,
       },
     ];
   }
-  const targetXs = edges.map((edge) => edge.targetNode.x + NODE_WIDTH / 2);
+  const targetXs = edges.map((edge) => edge.targetNode.x + edge.targetNode.width / 2);
   const targetY = Math.min(...edges.map((edge) => edge.targetNode.y)) - CONNECTOR_GAP;
   const busY = sy + Math.max(34, (targetY - sy) / 2);
   const hasUnlockedTarget = edges.some((edge) => WebGAL.flowchartManager.isUnlocked(flowchartId, edge.target));
@@ -307,7 +341,7 @@ function getConnectorSegmentsBySource(edges: LayoutEdge[], flowchartId: string):
     },
   ];
   edges.forEach((edge) => {
-    const tx = edge.targetNode.x + NODE_WIDTH / 2;
+    const tx = edge.targetNode.x + edge.targetNode.width / 2;
     segments.push({
       id: edge.id,
       d: `M ${tx} ${busY} V ${edge.targetNode.y - CONNECTOR_GAP}`,
@@ -319,7 +353,7 @@ function getConnectorSegmentsBySource(edges: LayoutEdge[], flowchartId: string):
   return segments;
 }
 
-function truncateText(text: string | undefined, maxLength: number) {
-  const safeText = text ?? '';
-  return safeText.length > maxLength ? `${safeText.slice(0, maxLength)}...` : safeText;
+function getSingleEdgeBendY(sy: number, ty: number) {
+  const spanY = ty - sy;
+  return spanY > ROW_GAP ? ty - Math.max(34, Math.min(70, spanY / 4)) : sy + Math.max(30, spanY / 2);
 }
