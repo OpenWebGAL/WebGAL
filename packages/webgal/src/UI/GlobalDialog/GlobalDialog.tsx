@@ -10,7 +10,7 @@ export default function GlobalDialog() {
   return <>{isGlobalDialogShow && <div id="globalDialogContainer" />}</>;
 }
 
-interface IShowGlobalDialogProps {
+export interface IShowGlobalDialogProps {
   title: string;
   leftText: string;
   rightText?: string;

@@ -7,12 +7,10 @@ import { language } from '@/config/language';
 import {
   IAppreciationAsset,
   IOptionData,
-  ISaveData,
   ISetOptionDataPayload,
   ISetUserDataPayload,
   IUserData,
   fullScreenOption,
-  playSpeed,
   textSize,
   voiceOption,
 } from '@/store/userDataInterface';

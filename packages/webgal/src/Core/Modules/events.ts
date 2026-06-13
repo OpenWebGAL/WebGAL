@@ -12,6 +12,9 @@ export class Events {
   public fullscreenDbClick = formEvent('fullscreen-dbclick');
   public styleUpdate = formEvent('style-update');
   public afterStyleUpdate = formEvent('after-style-update');
+  public save = formEvent('save');
+  public load = formEvent('load');
+  public sceneChange = formEvent('scene-change');
 }
 
 const eventBus = mitt();

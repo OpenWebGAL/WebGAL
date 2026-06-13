@@ -28,4 +28,7 @@ export const resetStage = (resetBacklog: boolean, resetSceneAndVar = true) => {
   if (!resetSceneAndVar) {
     stageStateManager.setStageAndCommit('GameVar', currentVars);
   }
+
+  // 清空frames
+  stageStateManager.resetIframe();
 };

@@ -34,9 +34,20 @@ export async function continueGame() {
    * 重设模糊背景
    */
   setEbg(stageStateManager.getViewStageState().bgName);
-  if ((await hasFastSaveRecord())) {
+  if (await hasFastSaveRecord()) {
     webgalStore.dispatch(setVisibility({ component: 'showTitle', visibility: false }));
     // 恢复记录
     await loadFastSaveGame();
+    return;
+  }
+  stageStateManager.resetIframe();
+  if (
+    WebGAL.sceneManager.sceneData.currentSentenceId === 0 &&
+    WebGAL.sceneManager.sceneData.currentScene.sceneName === 'start.txt'
+  ) {
+    // 如果游戏没有开始，开始游戏
+    nextSentence();
+  } else {
+    restorePerform();
   }
 }

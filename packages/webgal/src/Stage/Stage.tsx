@@ -15,6 +15,7 @@ import { isIOS } from '@/Core/initializeScript';
 import { WebGAL } from '@/Core/WebGAL';
 import { IGuiState } from '@/store/guiInterface';
 import { IStageState } from '@/Core/Modules/stage/stageInterface';
+import IframeContainer from './Iframe/IframeContainer';
 import { useStageState } from '@/hooks/useStageState';
 // import OldStage from '@/Components/Stage/OldStage/OldStage';
 
@@ -106,7 +107,9 @@ export const Stage: FC = () => {
         id="FullScreenClick"
         style={{ width: '100%', height: '100%', position: 'absolute', zIndex: '12', top: '0' }}
         onMouseMove={(e) => !GUIState.showControls && updateControlsVisibility(e, stageState, GUIState, dispatch)}
-      />
+      >
+        <IframeContainer />
+      </div>
       <IntroContainer />
     </div>
   );

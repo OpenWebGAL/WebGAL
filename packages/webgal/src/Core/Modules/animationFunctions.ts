@@ -6,7 +6,6 @@ import { baseTransform } from '@/Core/Modules/stage/stageInterface';
 import { generateTimelineObj } from '@/Core/controller/stage/pixi/animations/timeline';
 import { WebGAL } from '@/Core/WebGAL';
 import PixiStage, { IAnimationObject } from '@/Core/controller/stage/pixi/PixiController';
-import { IUserAnimation } from './animations';
 import { pickBy } from 'lodash';
 import {
   DEFAULT_BG_IN_DURATION,

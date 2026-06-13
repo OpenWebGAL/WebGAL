@@ -1,4 +1,4 @@
-import {commandType} from '../interface/sceneInterface';
+import { commandType } from '../interface/sceneInterface';
 
 export const SCRIPT_CONFIG = [
   { scriptString: 'say', scriptType: commandType.say },
@@ -31,7 +31,10 @@ export const SCRIPT_CONFIG = [
   { scriptString: 'setTextbox', scriptType: commandType.setTextbox },
   { scriptString: 'setAnimation', scriptType: commandType.setAnimation },
   { scriptString: 'playEffect', scriptType: commandType.playEffect },
-  { scriptString: 'setTempAnimation', scriptType: commandType.setTempAnimation },
+  {
+    scriptString: 'setTempAnimation',
+    scriptType: commandType.setTempAnimation,
+  },
   // comment?
   { scriptString: 'setTransform', scriptType: commandType.setTransform },
   { scriptString: 'setTransition', scriptType: commandType.setTransition },
@@ -39,6 +42,8 @@ export const SCRIPT_CONFIG = [
   { scriptString: 'applyStyle', scriptType: commandType.applyStyle },
   { scriptString: 'wait', scriptType: commandType.wait },
   { scriptString: 'callSteam', scriptType: commandType.callSteam },
+  { scriptString: 'createIframe', scriptType: commandType.createIframe },
+  { scriptString: 'removeIframe', scriptType: commandType.removeIframe },
 ];
 export const ADD_NEXT_ARG_LIST = [
   commandType.bgm,
