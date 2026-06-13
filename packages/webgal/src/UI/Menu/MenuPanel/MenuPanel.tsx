@@ -20,6 +20,7 @@ export const MenuPanel = () => {
 
   const { playSeClick, playSeDialogOpen, playSePageChange } = useSoundEffect();
   const GUIState = useSelector((state: RootState) => state.GUI);
+  const enableFlowchart = useSelector((state: RootState) => state.userData.globalGameVar.Enable_flowchart === true);
   const dispatch = useDispatch();
   // 设置Menu按钮的高亮
   const SaveTagOn = GUIState.currentMenuTag === MenuPanelTag.Save ? ` ${styles.MenuPanel_button_hl}` : ``;
@@ -41,6 +42,21 @@ export const MenuPanel = () => {
 
   return (
     <div className={styles.MenuPanel_main}>
+      {enableFlowchart && (
+        <MenuPanelButton
+          iconName="flowchart"
+          iconColor="rgba(21, 105, 120, 0.9)"
+          tagColor="rgba(21, 105, 120, 0.9)"
+          clickFunc={() => {
+            playSePageChange();
+            dispatch(setVisibility({ component: 'showMenuPanel', visibility: false }));
+            dispatch(setVisibility({ component: 'showFlowchart', visibility: true }));
+            dispatch(setVisibility({ component: 'showTextBox', visibility: false }));
+          }}
+          tagName={t('flowchart.title')}
+          key="flowchartButton"
+        />
+      )}
       <MenuPanelButton
         iconName="save"
         buttonOnClassName={SaveTagOn}

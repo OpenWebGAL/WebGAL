@@ -57,6 +57,7 @@ export function useMouseRightClickHotKey() {
   const setComponentVisibility = useSetComponentVisibility();
   const isGameActive = useGameActive<typeof GUIStore>(GUIStore);
   const isInBackLog = useIsInBackLog<typeof GUIStore>(GUIStore);
+  const isInFlowchart = useIsInFlowchart<typeof GUIStore>(GUIStore);
   const isOpenedDialog = useIsOpenedDialog<typeof GUIStore>(GUIStore);
   const validMenuPanelTag = useValidMenuPanelTag<typeof GUIStore>(GUIStore);
   const isShowExtra = useIsOpenedExtra<typeof GUIStore>(GUIStore);
@@ -74,6 +75,10 @@ export function useMouseRightClickHotKey() {
     }
     if (isInBackLog()) {
       setComponentVisibility('showBacklog', false);
+      setComponentVisibility('showTextBox', true);
+    }
+    if (isInFlowchart()) {
+      setComponentVisibility('showFlowchart', false);
       setComponentVisibility('showTextBox', true);
     }
     if (validMenuPanelTag()) {
@@ -250,6 +255,7 @@ function useGameActive<T = any>(GUIStore: T & any): () => boolean {
       !GUIStore.current.showTitle &&
       !GUIStore.current.showMenuPanel &&
       !GUIStore.current.showBacklog &&
+      !GUIStore.current.showFlowchart &&
       !GUIStore.current.showPanicOverlay
     );
   }, [GUIStore]);
@@ -259,6 +265,12 @@ function useGameActive<T = any>(GUIStore: T & any): () => boolean {
 function useIsInBackLog<T = any>(GUIStore: T & any): () => boolean {
   return useCallback(() => {
     return GUIStore.current.showBacklog;
+  }, [GUIStore]);
+}
+
+function useIsInFlowchart<T = any>(GUIStore: T & any): () => boolean {
+  return useCallback(() => {
+    return GUIStore.current.showFlowchart;
   }, [GUIStore]);
 }
 

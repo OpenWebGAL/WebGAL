@@ -1,0 +1,196 @@
+.Flowchart_main {
+  font-family: "思源宋体", serif;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+  background: rgba(0, 0, 0, 0.8);
+  padding: 2em 0;
+  animation: flowchart_soft_in 0.7s ease-out forwards;
+  box-sizing: border-box;
+}
+
+.Flowchart_main_out {
+  @extend .Flowchart_main;
+  animation: flowchart_soft_out 0.7s ease-out forwards;
+}
+
+.Flowchart_main_out_IndexHide {
+  z-index: -10;
+}
+
+.flowchart_top {
+  padding: 0 0 0 1em;
+  display: flex;
+  height: 10%;
+}
+
+.flowchart_top_icon {
+  padding: 0.6em 0.6em 0 0.6em;
+  border-radius: 1000px;
+  transform: translate(0, -13px);
+  cursor: pointer;
+}
+
+.flowchart_top_icon:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.flowchart_title {
+  height: 100%;
+  line-height: 100%;
+  font-size: 360%;
+  font-weight: bold;
+  color: transparent;
+  background: linear-gradient(150deg, #fff 0%, #fff 35%, rgba(165, 212, 228, 1) 100%);
+  -webkit-background-clip: text;
+}
+
+.flowchart_body {
+  display: flex;
+  gap: 2.5em;
+  height: 82%;
+  padding: 0.5em 5em 1em 5em;
+  box-sizing: border-box;
+}
+
+.flowchart_sidebar {
+  width: 18em;
+  flex-shrink: 0;
+  overflow: auto;
+  padding: 0.5em 0;
+}
+
+.flowchart_tab {
+  display: block;
+  width: 100%;
+  margin: 0 0 0.75em 0;
+  padding: 0.65em 0.8em;
+  border: none;
+  border-radius: 7px;
+  color: rgba(255, 255, 255, 0.78);
+  background: rgba(255, 255, 255, 0.08);
+  text-align: left;
+  font-size: 135%;
+  cursor: pointer;
+  transition: background-color 0.25s, color 0.25s;
+}
+
+.flowchart_tab:hover,
+.flowchart_tab_active {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.22);
+}
+
+.flowchart_content {
+  flex: 1;
+  overflow: auto;
+  padding: 0.5em;
+  box-sizing: border-box;
+  display: flex;
+}
+
+.flowchart_empty {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 180%;
+}
+
+.flowchart_canvas {
+  display: block;
+  flex: 0 0 auto;
+  margin: 0 auto;
+  overflow: visible;
+}
+
+.flowchart_arrow_unlocked {
+  fill: #f5f5f5;
+  fill-opacity: 1;
+}
+
+.flowchart_arrow_locked {
+  fill: #8d8d8d;
+  fill-opacity: 1;
+}
+
+.flowchart_line_unlocked,
+.flowchart_line_locked {
+  fill: none;
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-opacity: 1;
+  pointer-events: none;
+}
+
+.flowchart_line_unlocked {
+  stroke: #f5f5f5;
+}
+
+.flowchart_line_locked {
+  stroke: #8d8d8d;
+}
+
+.flowchart_node {
+  font-family: "资源圆体", serif;
+  outline: none;
+}
+
+.flowchart_node_unlocked {
+  cursor: pointer;
+}
+
+.flowchart_node_locked {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.flowchart_node_rect {
+  transition: fill 0.25s, stroke 0.25s;
+}
+
+.flowchart_node_rect_unlocked {
+  fill: rgba(255, 255, 255, 0.12);
+  stroke: rgba(255, 255, 255, 0.42);
+  stroke-width: 1;
+}
+
+.flowchart_node_rect_locked {
+  fill: rgba(255, 255, 255, 0.08);
+  stroke: rgba(255, 255, 255, 0.28);
+  stroke-width: 1;
+}
+
+.flowchart_node_unlocked:hover .flowchart_node_rect_unlocked {
+  fill: rgba(255, 255, 255, 0.24);
+  stroke: rgba(255, 255, 255, 0.72);
+}
+
+.flowchart_node_label {
+  fill: #fff;
+  font-size: 22px;
+  font-weight: bold;
+  pointer-events: none;
+}
+
+@keyframes flowchart_soft_in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes flowchart_soft_out {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}

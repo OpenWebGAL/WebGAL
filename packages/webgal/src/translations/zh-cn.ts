@@ -137,6 +137,9 @@ const zhCn = {
     loadSaving: {
       title: '读档',
     },
+    flowchart: {
+      title: '流程图',
+    },
     title: {
       title: '标题',
       options: {
@@ -183,6 +186,7 @@ const zhCn = {
       hide: '隐藏',
       show: '显示',
       backlog: '回想',
+      flowchart: '流程图',
       replay: '重播',
       auto: '自动',
       forward: '快进',
@@ -194,6 +198,15 @@ const zhCn = {
       options: '选项',
       title: '标题',
       titleTips: '确定要返回标题界面吗？',
+    },
+    flowchart: {
+      title: '流程图',
+      empty: '暂无流程图',
+      locked: '未解锁',
+      main: '主线',
+      character: '个人线',
+      root: '开始',
+      chapter: '章节',
     },
   },
 

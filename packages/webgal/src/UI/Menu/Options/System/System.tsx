@@ -221,6 +221,7 @@ export function System() {
                     rightText: t('$common.no'),
                     leftFunc: () => {
                       dispatch(resetAllData());
+                      WebGAL.flowchartManager.clearProgress();
                       dumpToStorageFast();
                       dispatch(saveActions.resetSaves());
                       dumpSavesToStorage(0, 200);

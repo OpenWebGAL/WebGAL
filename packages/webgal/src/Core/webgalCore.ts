@@ -9,10 +9,12 @@ import { SteamIntegration } from '@/Core/integration/steamIntegration';
 import { WebgalTemplate } from '@/types/template';
 import { IWebGALStyleObj } from 'webgal-parser/build/types/styleParser';
 import { stageStateManager } from '@/Core/Modules/stage/stageStateManager';
+import { FlowchartManager } from '@/Core/Modules/flowchart';
 
 export class WebgalCore {
   public sceneManager = new SceneManager();
   public backlogManager = new BacklogManager(this.sceneManager);
+  public flowchartManager = new FlowchartManager(this.sceneManager);
   public readHistoryManager = new ReadHistoryManager(this.sceneManager);
   public animationManager = new AnimationManager();
   public gameplay = new Gameplay();

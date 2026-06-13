@@ -16,6 +16,7 @@ import { DEFAULT_FONT_OPTIONS } from '@/Core/util/fonts/fontOptions';
 const initState: IGuiState = {
   fontOptions: [...DEFAULT_FONT_OPTIONS],
   showBacklog: false,
+  showFlowchart: false,
   showStarter: true,
   showTitle: true,
   showMenuPanel: false,

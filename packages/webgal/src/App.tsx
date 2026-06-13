@@ -5,6 +5,7 @@ import { Stage } from '@/Stage/Stage';
 import { BottomControlPanel } from '@/UI/BottomControlPanel/BottomControlPanel';
 import { BottomControlPanelFilm } from '@/UI/BottomControlPanel/BottomControlPanelFilm';
 import { Backlog } from '@/UI/Backlog/Backlog';
+import { Flowchart } from '@/UI/Flowchart/Flowchart';
 import Title from '@/UI/Title/Title';
 import Logo from '@/UI/Logo/Logo';
 import { Extra } from '@/UI/Extra/Extra';
@@ -24,6 +25,7 @@ export default function App() {
       <BottomControlPanel />
       <BottomControlPanelFilm />
       <Backlog />
+      <Flowchart />
       <Title />
       <Logo />
       <Extra />
