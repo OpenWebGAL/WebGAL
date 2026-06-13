@@ -12,6 +12,7 @@ import { stopFast, startFast } from '@/Core/controller/gamePlay/fastSkip';
 import { playBgm } from '@/Core/controller/stage/playBgm';
 import { jumpToLabel } from '@/Core/gameScripts/label/jumpToLabel';
 import { logger } from '@/Core/util/logger';
+import { IShowGlobalDialogProps, showGlogalDialog } from '@/UI/GlobalDialog/GlobalDialog';
 
 const SAME_ORIGIN = window.location.origin;
 
@@ -68,6 +69,7 @@ export default function Iframe({ id, sandbox, src, width, height, wait, injectAr
       autoOff: () => stopAuto(),
       fastSkipOn: () => startFast(),
       fastSkipOff: () => stopFast(),
+      showDialog: (props: IShowGlobalDialogProps) => showGlogalDialog(props),
     };
 
     api.variable = {

@@ -1,3 +1,5 @@
+import { IShowGlobalDialogProps, showGlogalDialog } from '@/UI/GlobalDialog/GlobalDialog';
+
 export type WebGalAPIEventsKeyNames =
   | 'save' // 保存存档
   | 'load' // 加载存档
@@ -11,6 +13,7 @@ export interface IWebGALBridge {
     autoOff: () => void; // 关闭自动播放
     fastSkipOn: () => void; // 开启快进
     fastSkipOff: () => void; // 关闭快进
+    showDialog: (props: IShowGlobalDialogProps) => ReturnType<typeof showGlogalDialog>; // 显示全局对话框
   };
   variable: {
     get: (key: string) => string | boolean | number | Array<string | boolean | number> | null;
