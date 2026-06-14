@@ -44,6 +44,8 @@ export class FlowchartManager {
   private data: IFlowchartData = { flowcharts: [] };
   private unlocked = new Set<string>();
   private snapshots = new Map<string, ISaveData>();
+  private pendingUnlockCurrentScene = false;
+  private waitingUnlockSceneKey = '';
 
   public constructor(private readonly sceneManager: SceneManager) {}
 
@@ -59,7 +61,7 @@ export class FlowchartManager {
       this.data = normalizeFlowchartData(res.data);
       const unlocked = await localforage.getItem<string[]>(this.progressKey());
       this.unlocked = new Set(Array.isArray(unlocked) ? unlocked : []);
-      this.unlockCurrentScene();
+      this.unlockPendingCurrentScene();
     } catch {
       this.data = { flowcharts: [] };
     }
@@ -81,6 +83,23 @@ export class FlowchartManager {
     return this.unlocked.has(this.nodeKey(flowchartId, nodeId));
   }
 
+  public requestUnlockCurrentScene() {
+    if (this.currentSceneKey() !== this.waitingUnlockSceneKey) return;
+    this.pendingUnlockCurrentScene = true;
+  }
+
+  public unlockPendingCurrentScene() {
+    if (!this.pendingUnlockCurrentScene || !this.hasFlowchart()) return;
+    this.pendingUnlockCurrentScene = false;
+    this.waitingUnlockSceneKey = '';
+    this.unlockCurrentScene(true);
+  }
+
+  public waitForCurrentSceneDialog() {
+    this.pendingUnlockCurrentScene = false;
+    this.waitingUnlockSceneKey = this.currentSceneKey();
+  }
+
   public async loadSnapshot(flowchartId: string, nodeId: string) {
     const key = this.nodeKey(flowchartId, nodeId);
     if (!this.unlocked.has(key)) return null;
@@ -98,7 +117,7 @@ export class FlowchartManager {
     window.dispatchEvent(new Event(FLOWCHART_UPDATED_EVENT));
   }
 
-  public unlockCurrentScene() {
+  public unlockCurrentScene(refreshSnapshot = false) {
     if (!this.hasFlowchart()) return;
     const sceneNames = new Set([
       normalizeSceneName(this.sceneManager.sceneData.currentScene.sceneName),
@@ -114,9 +133,12 @@ export class FlowchartManager {
     let changed = false;
     matched.forEach(({ flowchart, node }) => {
       const key = this.nodeKey(flowchart.id, node.id);
-      if (this.unlocked.has(key)) return;
-      changed = true;
-      this.unlocked.add(key);
+      const isUnlocked = this.unlocked.has(key);
+      if (isUnlocked && !refreshSnapshot) return;
+      if (!isUnlocked) {
+        changed = true;
+        this.unlocked.add(key);
+      }
       this.snapshots.set(key, snapshot);
       localforage.setItem(this.snapshotKey(flowchart.id, node.id), snapshot);
     });
@@ -128,7 +150,7 @@ export class FlowchartManager {
 
   private createSnapshot(): ISaveData {
     return {
-      nowStageState: cloneDeep(stageStateManager.getCalculationStageState()),
+      nowStageState: cloneDeep(stageStateManager.getViewStageState()),
       backlog: [],
       index: -1,
       saveTime: new Date().toLocaleDateString() + ' ' + new Date().toLocaleTimeString('chinese', { hour12: false }),
@@ -156,6 +178,11 @@ export class FlowchartManager {
 
   private nodeKey(flowchartId: string, nodeId: string) {
     return `${flowchartId}-${nodeId}`;
+  }
+
+  private currentSceneKey() {
+    const { currentScene } = this.sceneManager.sceneData;
+    return `${normalizeSceneName(currentScene.sceneName)}|${normalizeSceneName(currentScene.sceneUrl)}`;
   }
 }
 
