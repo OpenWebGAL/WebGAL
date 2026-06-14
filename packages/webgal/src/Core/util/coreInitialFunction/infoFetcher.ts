@@ -77,14 +77,14 @@ export const infoFetcher = (url: string): Promise<IGameVar> => {
               const arr = token.split(',').map((e) => e.trim());
               const url = `/game/${arr[0]}`;
               const type = arr?.[1] ?? 'auto';
-              if (String(arr[0]).endsWith('.ani')) {
+              if (String(url).endsWith('.ani')) {
                 const width = parseInt(arr?.[2] ?? '32');
                 const height = parseInt(arr?.[3] ?? '32');
                 setANICursor('html *', url, type, width, height);
               } else {
                 const hotspot = `${arr?.[2] ?? ''} ${arr?.[3] ?? ''}`;
                 const cursorCss = document.createElement('style');
-                cursorCss.innerHTML = `html * { cursor: url(${arr[0]}) ${hotspot}, ${type} !important; }`;
+                cursorCss.innerHTML = `html * { cursor: url(${url}) ${hotspot}, ${type} !important; }`;
                 document.head.appendChild(cursorCss);
               }
             }
