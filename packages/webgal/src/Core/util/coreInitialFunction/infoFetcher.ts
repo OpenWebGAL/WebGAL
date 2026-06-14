@@ -75,16 +75,16 @@ export const infoFetcher = (url: string): Promise<IGameVar> => {
               .filter((e) => e);
             for (const token of group) {
               const arr = token.split(',').map((e) => e.trim());
-              const url = `/game/${arr[0]}`;
+              const safeUrl = `/game/${arr[0]}`.replace(/\\/g, '\\\\');
               const type = arr?.[1] ?? 'auto';
-              if (String(url).endsWith('.ani')) {
+              if (String(safeUrl).endsWith('.ani')) {
                 const width = parseInt(arr?.[2] ?? '32');
                 const height = parseInt(arr?.[3] ?? '32');
-                setANICursor('html *', url, type, width, height);
+                setANICursor('html *', safeUrl, type, width, height);
               } else {
                 const hotspot = `${arr?.[2] ?? ''} ${arr?.[3] ?? ''}`;
                 const cursorCss = document.createElement('style');
-                cursorCss.innerHTML = `html * { cursor: url(${url}) ${hotspot}, ${type} !important; }`;
+                cursorCss.innerHTML = `html * { cursor: url(${safeUrl}) ${hotspot}, ${type} !important; }`;
                 document.head.appendChild(cursorCss);
               }
             }
