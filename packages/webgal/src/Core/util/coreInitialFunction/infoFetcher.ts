@@ -84,7 +84,7 @@ export const infoFetcher = (url: string): Promise<IGameVar> => {
               } else {
                 const hotspot = `${arr?.[2] ?? ''} ${arr?.[3] ?? ''}`;
                 const cursorCss = document.createElement('style');
-                cursorCss.innerHTML = `html * { cursor: url(${safeUrl}) ${hotspot}, ${type} !important; }`;
+                cursorCss.textContent = `html * { cursor: url(${safeUrl}) ${hotspot}, ${type} !important; }`;
                 document.head.appendChild(cursorCss);
               }
             }
