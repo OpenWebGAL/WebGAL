@@ -74,7 +74,7 @@ export const infoFetcher = (url: string): Promise<IGameVar> => {
               .split(/\s+/)
               .filter((e) => e);
             for (const token of group) {
-              const arr = token.split(',');
+              const arr = token.split(',').map((e) => e.trim());
               const url = `/game/${arr[0]}`;
               const type = arr?.[1] ?? 'auto';
               if (String(arr[0]).endsWith('.ani')) {
