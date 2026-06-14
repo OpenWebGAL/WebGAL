@@ -1,5 +1,5 @@
 import { ISentence } from '@/Core/controller/scene/sceneInterface';
-import { IPerform } from '@/Core/Modules/perform/performInterface';
+import { createNonePerform, IPerform } from '@/Core/Modules/perform/performInterface';
 import { callScene } from '../controller/scene/callScene';
 
 /**
@@ -9,14 +9,6 @@ import { callScene } from '../controller/scene/callScene';
 export const callSceneScript = (sentence: ISentence): IPerform => {
   const sceneNameArray: Array<string> = sentence.content.split('/');
   const sceneName = sceneNameArray[sceneNameArray.length - 1];
-  callScene(sentence.content, sceneName, sentence.args);
-  return {
-    performName: 'none',
-    duration: 0,
-    isHoldOn: true,
-    stopFunction: () => {},
-    blockingNext: () => false,
-    blockingAuto: () => true,
-    stopTimeout: undefined, // 暂时不用，后面会交给自动清除
-  };
+  callScene(sentence.content, sceneName);
+  return createNonePerform({ isHoldOn: true });
 };

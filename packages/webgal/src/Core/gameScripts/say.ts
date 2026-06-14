@@ -2,15 +2,15 @@ import { ISentence } from '@/Core/controller/scene/sceneInterface';
 import { IPerform } from '@/Core/Modules/perform/performInterface';
 import { playVocal } from './vocal';
 import { webgalStore } from '@/store/store';
-import { setStage } from '@/store/stageReducer';
 import { useTextAnimationDuration, useTextDelay } from '@/hooks/useTextOptions';
-import { getRandomPerformName, PerformController } from '@/Core/Modules/perform/performController';
+import { getRandomPerformName } from '@/Core/Modules/perform/performController';
 import { getBooleanArgByKey, getStringArgByKey } from '@/Core/util/getSentenceArg';
 import { textSize, voiceOption } from '@/store/userDataInterface';
 import { WebGAL } from '@/Core/WebGAL';
 import { compileSentence } from '@/Stage/TextBox/TextBox';
 import { performMouthAnimation } from '@/Core/gameScripts/vocal/vocalAnimation';
 import { match } from '@/Core/util/match';
+import { stageStateManager } from '@/Core/Modules/stage/stageStateManager';
 
 /**
  * 进行普通对话的显示
@@ -18,9 +18,8 @@ import { match } from '@/Core/util/match';
  * @return {IPerform} 执行的演出
  */
 export const say = (sentence: ISentence): IPerform => {
-  const stageState = webgalStore.getState().stage;
+  const stageState = stageStateManager.getCalculationStageState();
   const userDataState = webgalStore.getState().userData;
-  const dispatch = webgalStore.dispatch;
   let dialogKey = Math.random().toString(); // 生成一个随机的key
   let dialogToShow = sentence.content; // 获取对话内容
   if (dialogToShow) {
@@ -36,23 +35,23 @@ export const say = (sentence: ISentence): IPerform => {
   if (isConcat) {
     dialogKey = stageState.currentDialogKey;
     dialogToShow = stageState.showText + dialogToShow;
-    dispatch(setStage({ key: 'currentConcatDialogPrev', value: stageState.showText }));
+    stageStateManager.setStage('currentConcatDialogPrev', stageState.showText);
   } else {
-    dispatch(setStage({ key: 'currentConcatDialogPrev', value: '' }));
+    stageStateManager.setStage('currentConcatDialogPrev', '');
   }
 
   // 设置文本显示
-  dispatch(setStage({ key: 'showText', value: dialogToShow }));
-  dispatch(setStage({ key: 'vocal', value: '' }));
+  stageStateManager.setStage('showText', dialogToShow);
+  stageStateManager.setStage('vocal', '');
 
   // 清除语音
   if (!(userDataState.optionData.voiceInterruption === voiceOption.no && vocal === null)) {
     // 只有开关设置为不中断，并且没有语音的时候，才需要不中断
-    dispatch(setStage({ key: 'playVocal', value: '' }));
+    stageStateManager.setStage('playVocal', '');
     WebGAL.gameplay.performController.unmountPerform('vocal-play', true);
   }
   // 设置key
-  dispatch(setStage({ key: 'currentDialogKey', value: dialogKey }));
+  stageStateManager.setStage('currentDialogKey', dialogKey);
   // 计算延迟
   const textDelay = useTextDelay(userDataState.optionData.textSpeed);
   // 本句延迟
@@ -63,16 +62,16 @@ export const say = (sentence: ISentence): IPerform => {
   const fontSizeFromArgs = getStringArgByKey(sentence, 'fontSize');
   switch (fontSizeFromArgs) {
     case 'small':
-      dispatch(setStage({ key: 'showTextSize', value: textSize.small }));
+      stageStateManager.setStage('showTextSize', textSize.small);
       break;
     case 'medium':
-      dispatch(setStage({ key: 'showTextSize', value: textSize.medium }));
+      stageStateManager.setStage('showTextSize', textSize.medium);
       break;
     case 'large':
-      dispatch(setStage({ key: 'showTextSize', value: textSize.large }));
+      stageStateManager.setStage('showTextSize', textSize.large);
       break;
     default:
-      dispatch(setStage({ key: 'showTextSize', value: -1 }));
+      stageStateManager.setStage('showTextSize', -1);
       break;
   }
 
@@ -84,11 +83,10 @@ export const say = (sentence: ISentence): IPerform => {
   if (clear) {
     showName = '';
   }
-  dispatch(setStage({ key: 'showName', value: showName }));
+  stageStateManager.setStage('showName', showName);
 
   // 模拟说话
   let performSimulateVocalTimeout: ReturnType<typeof setTimeout> | null = null;
-  let performSimulateVocalDelay = 0;
 
   let pos: '' | 'center' | 'left' | 'right' = '';
   const leftFromArgs = getBooleanArgByKey(sentence, 'left') ?? false;
@@ -109,7 +107,7 @@ export const say = (sentence: ISentence): IPerform => {
     }
     // 确保结果在 25 到 100 之间
     audioLevel = Math.max(15, Math.min(nextAudioLevel, 100));
-    const currentStageState = webgalStore.getState().stage;
+    const currentStageState = stageStateManager.getCalculationStageState();
     const figureAssociatedAnimation = currentStageState.figureAssociatedAnimation;
     const animationItem = figureAssociatedAnimation.find((tid) => tid.targetId === key);
     const targetKey = key ? key : `fig-${pos}`;
@@ -130,11 +128,10 @@ export const say = (sentence: ISentence): IPerform => {
   };
   // 播放一段语音
   if (vocal) {
-    playVocal(sentence);
-  } else if (key || pos) {
-    performSimulateVocalDelay = len * 250;
-    performSimulateVocal();
+    WebGAL.gameplay.performController.arrangeNewPerform(playVocal(sentence), sentence, false);
   }
+  const shouldSimulateVocal = !vocal && (key !== '' || pos !== '');
+  const performSimulateVocalDelay = shouldSimulateVocal ? len * 250 : 0;
 
   const performInitName: string = getRandomPerformName();
   let endDelay = useTextAnimationDuration(userDataState.optionData.textSpeed) / 2;
@@ -147,6 +144,11 @@ export const say = (sentence: ISentence): IPerform => {
     performName: performInitName,
     duration: sentenceDelay + endDelay + performSimulateVocalDelay,
     isHoldOn: false,
+    startFunction: () => {
+      if (shouldSimulateVocal) {
+        performSimulateVocal();
+      }
+    },
     stopFunction: () => {
       WebGAL.events.textSettle.emit();
       if (performSimulateVocalTimeout) {
@@ -156,7 +158,6 @@ export const say = (sentence: ISentence): IPerform => {
     },
     blockingNext: () => false,
     blockingAuto: () => true,
-    stopTimeout: undefined, // 暂时不用，后面会交给自动清除
     goNextWhenOver: isNotend,
   };
 };

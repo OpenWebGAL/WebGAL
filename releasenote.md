@@ -1,109 +1,103 @@
 ## 发布日志
 
-**本仓库只发布源代码**
+**本仓库发布源代码，并在 Release 中附带 WebGAL 引擎网页版压缩包。**
 
-**如果你想要体验使用便捷的图形化编辑器创建、制作并实时预览 WebGAL 游戏，请 [下载 WebGAL 图形化编辑器](https://github.com/OpenWebGAL/WebGAL_Terre/releases)**
+**如果你想要体验使用便捷的图形化编辑器创建、制作并实时预览 WebGAL 游戏，请 [下载 WebGAL 图形化编辑器](https://github.com/OpenWebGAL/WebGAL_Terre/releases)。**
 
 ### 在此版本中
 
 #### 新功能
 
-getUserInput 支持正则校验参数 rule / ruleFlag / ruleText / ruleButtonText，可在输入不匹配时弹窗提示，ruleText 中可用 $0 引用用户输入值
+优化编辑器实时预览，提升场景跳转和状态同步的稳定性，并支持调试变量、模板刷新和更多界面预览设置。
 
-changeFigure 支持 skin 参数，可切换 Spine 模型皮肤
+changeBg / changeFigure / setTransition / setAnimation / setTempAnimation / setTransform 支持 ignoreDefault 参数，可让自定义动画忽略未声明的默认变换和效果。
 
-setTransform 新增 oldFilm / dotFilm / reflectionFilm / glitchFilm / rgbFilm / godrayFilm 滤镜属性
+CG 鉴赏支持按 series 分组并按 order 排序，系列图片可堆叠显示并依次预览。
 
-添加引擎描述文件 webgal-engine.json 及版本自动同步机制
+新增 Enable_Continue 配置项，可控制继续游戏按钮是否显示；无自动存档时按钮会置灰，游戏结束时会清理自动存档。
 
-标题按钮文字支持多层渲染（outer / inner），方便模板自定义描边与阴影效果
-
-内置默认字体更换为「资源圆体」(Resource Han Rounded)
+新增巴西葡萄牙语和韩语，并将语言设置优化为下拉选择。
 
 #### 修复
 
-修复 removeAnimationByTargetKey 无法移除同一目标上多个动画的问题
+修复使用 vocal 参数指定语音时资源路径解析错误的问题。
 
-修复 setEffect 前未先移除旧动画导致效果叠加异常的问题
+修复快速预览、滚轮推进和重置舞台后，快进与动画状态可能不一致的问题。
 
-修复自动播放与快进按钮状态在部分操作后与实际状态不同步的问题
+修复长场景连续推进时可能发生调用栈溢出的问题。
 
-修复 Safari / iOS 下视口大小与缩放异常的问题
+修复自定义模板样式仍受引擎默认样式干扰的问题。
 
-重构 Service Worker，采用 cache-first 策略缓存游戏关键资源，修复旧缓存逻辑缺陷
+修复非官方引擎构建时自身版本号被错误覆盖的问题。
 
-修复标题界面样式与布局问题
+修复自定义模板未包含 game/tex 纹理文件时，内置雨、雪和樱花特效无法显示的问题。
 
 <!-- English Translation -->
 ## Release Notes
 
-**Only source code is released in this repository**
+**This repository releases source code and includes a WebGAL engine web package in each Release.**
 
-**If you want to experience creating, making, and real-time previewing WebGAL games using a user-friendly graphical editor, please [download the WebGAL graphical editor](https://github.com/OpenWebGAL/WebGAL_Terre/releases)**
+**If you want to create, edit, and preview WebGAL games with a graphical editor, please [download the WebGAL graphical editor](https://github.com/OpenWebGAL/WebGAL_Terre/releases).**
 
 ### In this version
 
 #### New Features
 
-getUserInput now supports regex validation via rule / ruleFlag / ruleText / ruleButtonText arguments, showing a dialog when input does not match; ruleText supports $0 to reference the user's input value
+Improved editor live preview with more reliable scene navigation and state synchronization, plus support for debug variables, template refreshes, and additional interface preview settings.
 
-changeFigure now supports a skin argument for switching Spine model skins
+changeBg / changeFigure / setTransition / setAnimation / setTempAnimation / setTransform now support the ignoreDefault argument, allowing custom animations to ignore undeclared default transforms and effects.
 
-setTransform adds new filter properties: oldFilm / dotFilm / reflectionFilm / glitchFilm / rgbFilm / godrayFilm
+The CG gallery now supports grouping by series and sorting by order, with series images displayed as a stack for sequential preview.
 
-Added engine description file webgal-engine.json and automatic version synchronization mechanism
+Added the Enable_Continue configuration option to control whether the Continue button is shown; it is disabled without an autosave, and autosaves are cleared when the game ends.
 
-Title button text now supports layered rendering (outer / inner) for easier template customization of strokes and shadows
-
-Default built-in font changed to Resource Han Rounded (资源圆体)
+Added Brazilian Portuguese and Korean translations, and improved language settings with a dropdown selector.
 
 #### Fixes
 
-Fixed removeAnimationByTargetKey not removing all animations sharing the same target key
+Fixed incorrect voice asset path resolution when specifying voice files with the vocal argument.
 
-Fixed old animations not being removed before setEffect, causing effects to stack incorrectly
+Fixed fast-forward and animation states becoming inconsistent after fast preview, mouse-wheel advancement, or stage reset.
 
-Fixed auto-play and fast-forward button states becoming out of sync with actual state after certain operations
+Fixed possible call stack overflow when advancing continuously through long scenes.
 
-Fixed viewport sizing and scaling issues on Safari / iOS
+Fixed custom template styles still being affected by engine default styles.
 
-Refactored Service Worker with a cache-first strategy for critical game assets, fixing legacy caching logic issues
+Fixed version numbers of unofficial engine packages being overwritten incorrectly during builds.
 
-Fixed title screen style and layout issues
+Fixed built-in rain, snow, and cherry blossom effects not displaying when custom templates do not include the game/tex texture files.
 
 <!-- Japanese Translation -->
 ## リリースノート
 
-**このリポジトリはソースコードのみを公開しています**
+**このリポジトリではソースコードを公開し、Release には WebGAL エンジンの Web 版パッケージも同梱しています。**
 
-**もしあなたが使いやすいグラフィカルエディタでWebGALゲームを作成、制作、リアルタイムプレビューしたい場合は、[WebGALグラフィカルエディタをダウンロードしてください](https://github.com/OpenWebGAL/WebGAL_Terre/releases)**
+**グラフィカルエディターで WebGAL ゲームを作成、編集、リアルタイムプレビューしたい場合は、[WebGAL グラフィカルエディターをダウンロードしてください](https://github.com/OpenWebGAL/WebGAL_Terre/releases)。**
 
 ### このバージョンについて
 
 #### 新機能
 
-getUserInput で正規表現バリデーション引数 rule / ruleFlag / ruleText / ruleButtonText をサポートし、入力が一致しない場合にダイアログを表示できるようになりました。ruleText 内で $0 を使用してユーザー入力値を参照できます
+エディターのリアルタイムプレビューを改善し、シーン移動と状態同期の安定性を向上しました。また、デバッグ変数、テンプレート更新、より多くの画面プレビュー設定に対応しました。
 
-changeFigure で skin 引数をサポートし、Spine モデルのスキンを切り替えられるようになりました
+changeBg / changeFigure / setTransition / setAnimation / setTempAnimation / setTransform が ignoreDefault 引数に対応し、カスタムアニメーションで未指定のデフォルト変換やエフェクトを無視できるようになりました。
 
-setTransform に oldFilm / dotFilm / reflectionFilm / glitchFilm / rgbFilm / godrayFilm フィルター属性を追加しました
+CG 鑑賞が series によるグループ化と order による並べ替えに対応し、シリーズ画像を重ねて表示して順番にプレビューできるようになりました。
 
-エンジン記述ファイル webgal-engine.json およびバージョン自動同期メカニズムを追加しました
+続きからボタンの表示を制御する Enable_Continue 設定を追加しました。自動セーブがない場合はボタンが無効になり、ゲーム終了時には自動セーブが削除されます。
 
-タイトルボタンのテキストが多層レンダリング（outer / inner）に対応し、テンプレートでのストロークやシャドウのカスタマイズが容易になりました
-
-デフォルト内蔵フォントを「資源圓體」(Resource Han Rounded) に変更しました
+ブラジルポルトガル語と韓国語を追加し、言語設定をドロップダウン選択に改善しました。
 
 #### 修正
 
-removeAnimationByTargetKey が同一ターゲット上の複数アニメーションを削除できない問題を修正しました
+vocal 引数でボイスを指定した際、アセットパスが正しく解決されない問題を修正しました。
 
-setEffect の前に旧アニメーションが削除されず、エフェクトが不正に重複する問題を修正しました
+高速プレビュー、マウスホイールによる進行、舞台リセット後に、早送りとアニメーションの状態が一致しない問題を修正しました。
 
-一部操作後に自動再生・早送りボタンの状態が実際の状態と同期しなくなる問題を修正しました
+長いシーンを連続して進めた際に、コールスタックのオーバーフローが発生する場合がある問題を修正しました。
 
-Safari / iOS でのビューポートサイズとスケーリングの異常を修正しました
+カスタムテンプレートのスタイルがエンジンのデフォルトスタイルの影響を受ける問題を修正しました。
 
-Service Worker をリファクタリングし、ゲームの重要なアセットに cache-first 戦略を採用、レガシーキャッシュロジックの不具合を修正しました
+非公式エンジンのビルド時に拡張パッケージのバージョン番号が誤って上書きされる問題を修正しました。
 
-タイトル画面のスタイルとレイアウトの問題を修正しました
+カスタムテンプレートに game/tex のテクスチャファイルが含まれていない場合、内蔵の雨、雪、桜エフェクトが表示されない問題を修正しました。

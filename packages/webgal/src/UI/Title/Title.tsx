@@ -16,6 +16,7 @@ import styles from './title.module.scss';
 /** 标题页 */
 export default function Title() {
   const userDataState = useSelector((state: RootState) => state.userData);
+  const userSaveData = useSelector((state: RootState) => state.saveData);
   const GUIState = useSelector((state: RootState) => state.GUI);
   const dispatch = useDispatch();
   const fullScreen = userDataState.optionData.fullScreen;
@@ -24,6 +25,8 @@ export default function Title() {
   const t = useTrans('title.');
   const tCommon = useTrans('common.');
   const { playSeEnter, playSeClick } = useSoundEffect();
+  const fastSaveData = userSaveData.quickSaveData;
+  const enableContinue = userDataState.globalGameVar.Enable_Continue !== false;
 
   const applyStyle = useApplyStyle('title');
   useConfigData(); // 监听基础ConfigData变化
@@ -72,17 +75,22 @@ export default function Title() {
             >
               {renderButtonText(t('start.title'))}
             </div>
-            <div
-              className={applyStyle('Title_button', styles.Title_button)}
-              onClick={async () => {
-                playSeClick();
-                dispatch(setVisibility({ component: 'showTitle', visibility: false }));
-                continueGame();
-              }}
-              onMouseEnter={playSeEnter}
-            >
-              {renderButtonText(t('continue.title'))}
-            </div>
+            {enableContinue && (
+              <div
+                className={`${applyStyle('Title_button', styles.Title_button)} ${
+                  !fastSaveData ? applyStyle('Title_button_disabled', styles.Title_button_disabled) : ''
+                }`}
+                onClick={() => {
+                  if (fastSaveData) {
+                    playSeClick();
+                    continueGame();
+                  }
+                }}
+                onMouseEnter={fastSaveData ? playSeEnter : undefined}
+              >
+                {renderButtonText(t('continue.title'))}
+              </div>
+            )}
             <div
               className={applyStyle('Title_button', styles.Title_button)}
               onClick={() => {

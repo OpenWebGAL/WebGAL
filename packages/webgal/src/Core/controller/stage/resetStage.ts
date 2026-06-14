@@ -1,8 +1,7 @@
-import { initState, resetStageState, setStage } from '@/store/stageReducer';
-import { webgalStore } from '@/store/store';
 import cloneDeep from 'lodash/cloneDeep';
 import { WebGAL } from '@/Core/WebGAL';
-import { saveActions } from '@/store/savesReducer';
+import { initState, stageStateManager } from '@/Core/Modules/stage/stageStateManager';
+import { stopFast } from '@/Core/controller/gamePlay/fastSkip';
 
 export const resetStage = (resetBacklog: boolean, resetSceneAndVar = true) => {
   /**
@@ -18,14 +17,15 @@ export const resetStage = (resetBacklog: boolean, resetSceneAndVar = true) => {
 
   // 清空所有演出和timeOut
   WebGAL.gameplay.pixiStage?.removeAllAnimations();
+  stopFast();
   WebGAL.gameplay.performController.removeAllPerform();
   WebGAL.gameplay.resetGamePlay();
 
   // 清空舞台状态表
   const initSceneDataCopy = cloneDeep(initState);
-  const currentVars = webgalStore.getState().stage.GameVar;
-  webgalStore.dispatch(resetStageState(initSceneDataCopy));
+  const currentVars = stageStateManager.getCalculationStageState().GameVar;
+  stageStateManager.resetAllStageState(initSceneDataCopy);
   if (!resetSceneAndVar) {
-    webgalStore.dispatch(setStage({ key: 'GameVar', value: currentVars }));
+    stageStateManager.setStageAndCommit('GameVar', currentVars);
   }
 };

@@ -21,6 +21,5 @@ export const wait = (sentence: ISentence): IPerform => {
     },
     blockingNext: () => nobreak,
     blockingAuto: () => nobreak,
-    stopTimeout: undefined, // 暂时不用，后面会交给自动清除
   };
 };

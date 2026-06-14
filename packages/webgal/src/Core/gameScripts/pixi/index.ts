@@ -11,27 +11,18 @@ import { WebGAL } from '@/Core/WebGAL';
  */
 export const pixi = (sentence: ISentence): IPerform => {
   const pixiPerformName = 'PixiPerform' + sentence.content;
-  WebGAL.gameplay.performController.performList.forEach((e) => {
-    if (e.performName === pixiPerformName) {
-      return {
-        performName: 'none',
-        duration: 0,
-        isOver: false,
-        isHoldOn: true,
-        stopFunction: () => {},
-        blockingNext: () => false,
-        blockingAuto: () => false,
-        stopTimeout: undefined, // 暂时不用，后面会交给自动清除
-      };
-    }
-  });
-  const res: IResult = call(sentence.content);
-  const { fg, bg } = res;
+  let fg: IResult['fg'];
+  let bg: IResult['bg'];
 
   return {
     performName: pixiPerformName,
     duration: 0,
     isHoldOn: true,
+    startFunction: () => {
+      const res: IResult = call(sentence.content);
+      fg = res.fg;
+      bg = res.bg;
+    },
     stopFunction: () => {
       logger.warn('现在正在卸载pixi演出');
       if (fg) {
@@ -47,6 +38,5 @@ export const pixi = (sentence: ISentence): IPerform => {
     },
     blockingNext: () => false,
     blockingAuto: () => false,
-    stopTimeout: undefined, // 暂时不用，后面会交给自动清除
   };
 };

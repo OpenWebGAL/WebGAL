@@ -12,6 +12,7 @@ export const assetsScanner = (
   command: commandType,
   content: string,
   args: Array<arg>,
+  lineNumber: number,
 ): Array<IAsset> => {
   let hasVocalArg = false;
   const returnAssetsList: Array<IAsset> = [];
@@ -22,7 +23,7 @@ export const assetsScanner = (
         returnAssetsList.push({
           name: e.value as string,
           url: e.value as string,
-          lineNumber: 0,
+          lineNumber,
           type: fileType.vocal,
         });
       }
@@ -36,7 +37,7 @@ export const assetsScanner = (
     returnAssetsList.push({
       name: content,
       url: content,
-      lineNumber: 0,
+      lineNumber,
       type: fileType.background,
     });
   }
@@ -44,7 +45,7 @@ export const assetsScanner = (
     returnAssetsList.push({
       name: content,
       url: content,
-      lineNumber: 0,
+      lineNumber,
       type: fileType.figure,
     });
   }
@@ -52,7 +53,7 @@ export const assetsScanner = (
     returnAssetsList.push({
       name: content,
       url: content,
-      lineNumber: 0,
+      lineNumber,
       type: fileType.figure,
     });
   }
@@ -60,7 +61,7 @@ export const assetsScanner = (
     returnAssetsList.push({
       name: content,
       url: content,
-      lineNumber: 0,
+      lineNumber,
       type: fileType.video,
     });
   }
@@ -68,7 +69,7 @@ export const assetsScanner = (
     returnAssetsList.push({
       name: content,
       url: content,
-      lineNumber: 0,
+      lineNumber,
       type: fileType.bgm,
     });
   }

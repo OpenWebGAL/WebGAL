@@ -6,7 +6,8 @@ setTransition: -target=bg-main -exit=shockwaveOut;
 :你好|欢迎来到 {engine} 的世界;
 changeBg:bg.webp -next;
 setTransition: -target=bg-main -enter=shockwaveIn -next;
-unlockCg:bg.webp -name=良い夜; // 解锁CG并赋予名称
+unlockCg:bg.webp -name=良い夜 -series=op; // 解锁CG并赋予名称
+unlockCg:WebGAL_New_Enter_Image.webp -name=Enter -series=op; // 解锁CG并赋予名称
 changeFigure:stand.webp -left -enter=enter-from-left -animationFlag=on -eyesOpen=stand.webp -eyesClose=stand.webp -mouthOpen=open_mouth.webp -mouthHalfOpen=open_mouth.webp -mouthClose=stand.webp -next;
 miniAvatar:miniavatar.webp;
 {heroine}:欢迎使用 {engine}！这是一款全新的网页端视觉小说引擎。 -v1.wav -left;

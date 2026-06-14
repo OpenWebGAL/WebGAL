@@ -1,9 +1,8 @@
 import styles from './figureContainer.module.scss';
-import { useSelector } from 'react-redux';
-import { RootState } from '@/store/store';
+import { useStageState } from '@/hooks/useStageState';
 
 export const FigureContainer = () => {
-  const stageState = useSelector((state: RootState) => state.stage);
+  const stageState = useStageState();
   return (
     <div className={styles.FigureContainer_main}>
       <div className={styles.figContainerLeft + ' ' + styles.figContainer} id="figLeftContainer">

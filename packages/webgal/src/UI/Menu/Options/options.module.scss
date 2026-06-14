@@ -117,6 +117,65 @@
   animation: Elements_in ease-out 0.7s forwards;
 }
 
+.Option_select {
+  position: relative;
+  max-width: 100%;
+  font-size: 150%;
+}
+
+.Option_select_button,
+.Option_select_item {
+  box-sizing: border-box;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  background: rgba(50, 50, 50, 0.05);
+  color: rgba(160, 170, 160, 1);
+  font: inherit;
+  cursor: pointer;
+}
+
+.Option_select_button {
+  min-width: 10em;
+  padding: 0.2em 1em;
+  text-align: left;
+}
+
+.Option_select_button:hover,
+.Option_select_button:focus-visible,
+.Option_select_button_active {
+  border-bottom-color: rgba(81, 110, 65, 0.9);
+  color: rgba(81, 110, 65, 0.9);
+  font-weight: bold;
+}
+
+.Option_select_menu {
+  position: absolute;
+  z-index: 1;
+  top: 100%;
+  left: 0;
+  display: grid;
+  min-width: 100%;
+  padding: 0.25em;
+  background: rgb(235, 243, 250);
+  box-shadow: 0 0.2em 0.8em rgba(34, 75, 55, 0.2);
+}
+
+.Option_select_item {
+  padding: 0.35em 0.75em;
+  background: rgb(235, 243, 250);
+  text-align: left;
+  white-space: nowrap;
+}
+
+.Option_select_item:hover,
+.Option_select_item:focus-visible,
+.Option_select_item_active {
+  background: rgba(81, 110, 65, 0.15);
+  border-bottom-color: rgba(81, 110, 65, 0.9);
+  color: rgba(81, 110, 65, 0.9);
+  font-weight: bold;
+}
+
 .Options_page_button {
   font-family: "思源宋体", serif;
   font-size: 300%;

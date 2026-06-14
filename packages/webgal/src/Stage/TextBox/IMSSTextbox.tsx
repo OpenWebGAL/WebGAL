@@ -30,6 +30,11 @@ export default function IMSSTextbox(props: ITextboxProps) {
   } = props;
 
   const applyStyle = useApplyStyle('textbox');
+  const readTextClassName = isRead ? ` ${applyStyle('readText', styles.readText)}` : '';
+  const readTextOuterClassName = isRead
+    ? ` ${applyStyle('readTextOuter', styles.readTextOuter)}`
+    : '';
+  const readTextInnerClassName = isRead ? ` ${applyStyle('readTextInner', styles.readTextInner)}` : '';
 
   useEffect(() => {
     function settleText() {
@@ -146,14 +151,18 @@ export default function IMSSTextbox(props: ITextboxProps) {
           <span
             // data-text={e}
             id={`${delay}`}
-            className={applyStyle('TextBox_textElement_Settled', styles.TextBox_textElement_Settled)}
+            className={applyStyle('TextBox_textElement_Settled', styles.TextBox_textElement_Settled) + readTextClassName}
             key={currentDialogKey + index}
             style={{ animationDelay: `${delay}ms`, animationDuration: `${textDuration}ms` }}
           >
             <span className={styles.zhanwei + styleAllText}>
               {e}
-              <span className={applyStyle('outer', styles.outer) + styleClassName + styleAllText}>{e}</span>
-              {isUseStroke && <span className={applyStyle('inner', styles.inner) + styleAllText}>{e}</span>}
+              <span className={applyStyle('outer', styles.outer) + readTextOuterClassName + styleClassName + styleAllText}>
+                {e}
+              </span>
+              {isUseStroke && (
+                <span className={applyStyle('inner', styles.inner) + readTextInnerClassName + styleAllText}>{e}</span>
+              )}
             </span>
           </span>
         );
@@ -162,14 +171,21 @@ export default function IMSSTextbox(props: ITextboxProps) {
         <span
           // data-text={e}
           id={`${delay}`}
-          className={`${applyStyle('TextBox_textElement_start', styles.TextBox_textElement_start)} Textelement_start`}
+          className={`${applyStyle(
+            'TextBox_textElement_start',
+            styles.TextBox_textElement_start,
+          )}${readTextClassName} Textelement_start`}
           key={currentDialogKey + index}
           style={{ animationDelay: `${delay}ms`, position: 'relative' }}
         >
           <span className={styles.zhanwei + styleAllText}>
             {e}
-            <span className={applyStyle('outer', styles.outer) + `${isRead ? ` ${applyStyle('read', styles.read)}` : ''}` + styleClassName + styleAllText}>{e}</span>
-            {isUseStroke && <span className={applyStyle('inner', styles.inner) + styleAllText}>{e}</span>}
+            <span className={applyStyle('outer', styles.outer) + readTextOuterClassName + styleClassName + styleAllText}>
+              {e}
+            </span>
+            {isUseStroke && (
+              <span className={applyStyle('inner', styles.inner) + readTextInnerClassName + styleAllText}>{e}</span>
+            )}
           </span>
         </span>
       );

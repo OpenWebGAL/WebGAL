@@ -1,23 +1,30 @@
 import styles from '@/UI/Extra/extra.module.scss';
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import { useValue } from '@/hooks/useValue';
 import './extraCG_animation_List.scss';
-import { ExtraCgElement } from '@/UI/Extra/ExtraCgElement';
+import { ExtraCgElement, isVideoFile } from '@/UI/Extra/ExtraCgElement';
 import useSoundEffect from '@/hooks/useSoundEffect';
+import { IAppreciationAsset } from '@/store/userDataInterface';
+
+interface IExtraCgDisplayItem {
+  key: string;
+  name: string;
+  resources: IAppreciationAsset[];
+}
 
 export function ExtraCg() {
   const cgPerPage = 8;
   const extraState = useSelector((state: RootState) => state.userData.appreciationData);
-  const pageNumber = Math.ceil(extraState.cg.length / cgPerPage);
-  // const pageNumber = 10;
+  const groupedCgList = useMemo(() => buildGroupedCgList(extraState.cg), [extraState.cg]);
+  const pageNumber = Math.ceil(groupedCgList.length / cgPerPage);
   const currentPage = useValue(1);
   const { playSeEnter, playSeClick } = useSoundEffect();
 
   // 开始生成立绘鉴赏的图片
   const showCgList = [];
-  const len = extraState.cg.length;
+  const len = groupedCgList.length;
   for (
     let i = (currentPage.value - 1) * cgPerPage;
     i < Math.min(len, (currentPage.value - 1) * cgPerPage + cgPerPage);
@@ -27,11 +34,11 @@ export function ExtraCg() {
     const deg = Random(-5, 5);
     const temp = (
       <ExtraCgElement
-        name={extraState.cg[i].name}
-        resourceUrl={extraState.cg[i].url}
+        name={groupedCgList[i].name}
+        resources={groupedCgList[i].resources}
         transformDeg={deg}
         index={index}
-        key={index.toString() + extraState.cg[i].url}
+        key={groupedCgList[i].key}
       />
     );
     showCgList.push(temp);
@@ -72,4 +79,43 @@ export function ExtraCg() {
 
 function Random(min: number, max: number) {
   return Math.round(Math.random() * (max - min)) + min;
+}
+
+function buildGroupedCgList(cgList: IAppreciationAsset[]): IExtraCgDisplayItem[] {
+  const groupedCgList: IExtraCgDisplayItem[] = [];
+  const seriesIndexMap = new Map<string, number>();
+
+  cgList.forEach((cg, index) => {
+    // 视频不进行分组
+    if (cg.series !== 'default' && !isVideoFile(cg.url)) {
+      const groupedIndex = seriesIndexMap.get(cg.series);
+      if (groupedIndex !== undefined) {
+        groupedCgList[groupedIndex].resources.push(cg);
+        return;
+      }
+
+      seriesIndexMap.set(cg.series, groupedCgList.length);
+      groupedCgList.push({
+        key: `series:${cg.series}`,
+        name: cg.name,
+        resources: [cg],
+      });
+      return;
+    }
+
+    groupedCgList.push({
+      key: `default:${index}:${cg.url}`,
+      name: cg.name,
+      resources: [cg],
+    });
+  });
+
+  return groupedCgList.map((groupedCg) => ({
+    ...groupedCg,
+    resources: groupedCg.resources.length > 1 ? [...groupedCg.resources].sort(sortCgByOrder) : groupedCg.resources,
+  }));
+}
+
+function sortCgByOrder(prev: IAppreciationAsset, next: IAppreciationAsset) {
+  return (prev.order ?? 0) - (next.order ?? 0);
 }

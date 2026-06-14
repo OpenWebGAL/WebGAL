@@ -1,14 +1,14 @@
 // import styles from '@/Components/Stage/stage.module.scss';
 // import { FigureContainer } from '@/Components/Stage/FigureContainer/FigureContainer';
 // import { useEffect } from 'react';
-// import { IEffect } from '@/store/stageInterface';
+// import { IEffect } from '@/Core/Modules/stage/stageInterface';
 // import { useSelector } from 'react-redux';
 // import { RootState } from '@/store/store';
 
 export default function OldStage() {
-  // const stageState = useSelector((state: RootState) => state.stage);
-  // const oldBg = useSelector((state: RootState) => state.stageTemp.oldBg);
-  // const oldBgKey = useSelector((state: RootState) => state.stageTemp.oldBgKey);
+  // const stageState = useStageState();
+  // const oldBg = '';
+  // const oldBgKey = '';
   //
   // /**
   //  * 设置效果

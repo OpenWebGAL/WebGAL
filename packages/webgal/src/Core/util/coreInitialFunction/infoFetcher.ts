@@ -8,15 +8,15 @@ import { initKey } from '@/Core/controller/storage/fastSaveLoad';
 import { getFastSaveFromStorage, getSavesFromStorage } from '@/Core/controller/storage/savesController';
 import { logger } from '@/Core/util/logger';
 import axios from 'axios';
-import { IGameVar } from '@/store/stageInterface';
+import { IGameVar } from '@/Core/Modules/stage/stageInterface';
 
 /**
  * 获取游戏信息
  * @param url 游戏信息路径
  */
-export const infoFetcher = (url: string) => {
+export const infoFetcher = (url: string): Promise<IGameVar> => {
   const dispatch = webgalStore.dispatch;
-  axios.get(url).then(async (r) => {
+  return axios.get(url).then(async (r) => {
     let gameConfigRaw: string = r.data;
     let gameConfig = WebgalParser.parseConfig(gameConfigRaw);
     logger.info('获取到游戏信息', gameConfig);
@@ -75,5 +75,7 @@ export const infoFetcher = (url: string) => {
     // @ts-expect-error renderPromiseResolve is a global variable
     window.renderPromiseResolve();
     setStorage();
+
+    return gameConfigInit;
   });
 };

@@ -27,11 +27,18 @@
 
 .langSelect{
   display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: 50px;
+  width: 90%;
+  max-width: 1200px;
+  box-sizing: border-box;
   padding: 50px;
 }
 
 .langSelectButton{
+  max-width: 100%;
+  box-sizing: border-box;
   font-family: "资源圆体", serif;
   cursor: pointer;
   font-size: 200%;
@@ -39,6 +46,7 @@
   border-radius: 4px;
   border: 1px solid rgba(255,255,255,0.8);
   padding: 10px 50px;
+  text-align: center;
   transition: color 0.33s, background-color 0.33s;
 }
 

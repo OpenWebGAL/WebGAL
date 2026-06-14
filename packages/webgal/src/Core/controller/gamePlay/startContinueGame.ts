@@ -10,6 +10,7 @@ import { restorePerform } from '@/Core/controller/storage/jumpFromBacklog';
 
 import { hasFastSaveRecord, loadFastSaveGame } from '@/Core/controller/storage/fastSaveLoad';
 import { WebGAL } from '@/Core/WebGAL';
+import { stageStateManager } from '@/Core/Modules/stage/stageStateManager';
 
 /**
  * 从头开始游戏
@@ -32,21 +33,10 @@ export async function continueGame() {
   /**
    * 重设模糊背景
    */
-  setEbg(webgalStore.getState().stage.bgName);
-  // 当且仅当游戏未开始时使用快速存档
-  // 当游戏开始后 使用原来的逻辑
-  if ((await hasFastSaveRecord()) && WebGAL.sceneManager.sceneData.currentSentenceId === 0) {
+  setEbg(stageStateManager.getViewStageState().bgName);
+  if ((await hasFastSaveRecord())) {
+    webgalStore.dispatch(setVisibility({ component: 'showTitle', visibility: false }));
     // 恢复记录
     await loadFastSaveGame();
-    return;
-  }
-  if (
-    WebGAL.sceneManager.sceneData.currentSentenceId === 0 &&
-    WebGAL.sceneManager.sceneData.currentScene.sceneName === 'start.txt'
-  ) {
-    // 如果游戏没有开始，开始游戏
-    nextSentence();
-  } else {
-    restorePerform();
   }
 }

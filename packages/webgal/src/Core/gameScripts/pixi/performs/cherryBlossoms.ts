@@ -3,6 +3,7 @@ import * as PIXI from 'pixi.js';
 import { registerPerform } from '@/Core/util/pixiPerformManager/pixiPerformManager';
 import { WebGAL } from '@/Core/WebGAL';
 import { SCREEN_CONSTANTS } from '@/Core/util/constants';
+import cherryBlossomsTextureUrl from '@/assets/tex/cherryBlossoms.webp';
 
 type ContainerType = 'foreground' | 'background';
 
@@ -59,7 +60,7 @@ const pixiCherryBlossoms = (
   container.addChild(particleContainer);
 
   const sakuras: SakuraSprite[] = [];
-  const texture = PIXI.Texture.from('./game/tex/cherryBlossoms.webp');
+  const texture = PIXI.Texture.from(cherryBlossomsTextureUrl);
 
   const randRange = (min: number, max: number): number => min + Math.random() * (max - min);
 

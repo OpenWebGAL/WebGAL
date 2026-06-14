@@ -1,5 +1,5 @@
 import { ISentence } from '@/Core/controller/scene/sceneInterface';
-import { IPerform } from '@/Core/Modules/perform/performInterface';
+import { createNonePerform, IPerform } from '@/Core/Modules/perform/performInterface';
 import { assetSetter, fileType } from '@/Core/util/gameAssetsAccess/assetSetter';
 import { sceneFetcher } from '@/Core/controller/scene/sceneFetcher';
 import { sceneParser } from '@/Core/parser/sceneParser';
@@ -9,7 +9,7 @@ import { setVisibility } from '@/store/GUIReducer';
 import { playBgm } from '@/Core/controller/stage/playBgm';
 import { WebGAL } from '@/Core/WebGAL';
 import { dumpToStorageFast } from '@/Core/controller/storage/storageController';
-import { saveActions } from '@/store/savesReducer';
+import { removeFastSaveGameRecord } from '../controller/storage/fastSaveLoad';
 
 /**
  * 结束游戏
@@ -24,7 +24,7 @@ export const end = (sentence: ISentence): IPerform => {
   setTimeout(() => {
     WebGAL.sceneManager.resetScene();
   }, 5);
-  dispatch(saveActions.resetFastSave());
+  removeFastSaveGameRecord();
   dumpToStorageFast();
   sceneFetcher(sceneUrl).then((rawScene) => {
     // 场景写入到运行时
@@ -32,13 +32,5 @@ export const end = (sentence: ISentence): IPerform => {
   });
   dispatch(setVisibility({ component: 'showTitle', visibility: true }));
   playBgm(webgalStore.getState().GUI.titleBgm);
-  return {
-    performName: 'none',
-    duration: 0,
-    isHoldOn: false,
-    stopFunction: () => {},
-    blockingNext: () => false,
-    blockingAuto: () => true,
-    stopTimeout: undefined, // 暂时不用，后面会交给自动清除
-  };
+  return createNonePerform();
 };

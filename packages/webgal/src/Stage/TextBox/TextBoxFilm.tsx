@@ -4,9 +4,10 @@ import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 
 import { PERFORM_CONFIG } from '@/config';
+import { useStageState } from '@/hooks/useStageState';
 
 export const TextBoxFilm = () => {
-  const stageState = useSelector((state: RootState) => state.stage);
+  const stageState = useStageState();
   const userDataState = useSelector((state: RootState) => state.userData);
   useEffect(() => {});
   const textDelay = PERFORM_CONFIG.textInitialDelay - 20 * userDataState.optionData.textSpeed;

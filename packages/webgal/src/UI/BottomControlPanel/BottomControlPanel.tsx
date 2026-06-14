@@ -32,6 +32,7 @@ import {
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import styles from './bottomControlPanel.module.scss';
+import { useStageState } from '@/hooks/useStageState';
 
 export const BottomControlPanel = () => {
   const t = useTrans('gaming.');
@@ -48,7 +49,7 @@ export const BottomControlPanel = () => {
   }
   const { isSupported: isFullscreenSupport, isFullScreen, toggle: toggleFullscreen } = useFullScreen();
   const GUIStore = useSelector((state: RootState) => state.GUI);
-  const stageState = useSelector((state: RootState) => state.stage);
+  const stageState = useStageState();
   const dispatch = useDispatch();
   const setComponentVisibility = (component: keyof componentsVisibility, visibility: boolean) => {
     dispatch(setVisibility({ component, visibility }));

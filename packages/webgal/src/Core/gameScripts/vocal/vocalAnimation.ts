@@ -1,7 +1,7 @@
 import { WebGAL } from '@/Core/WebGAL';
 
 interface IAudioContextWrapper {
-  audioContext: AudioContext;
+  audioContext: AudioContext | null;
   source: MediaElementAudioSourceNode | null;
   analyser: AnalyserNode | undefined;
   dataArray: Uint8Array | undefined;
@@ -12,13 +12,41 @@ interface IAudioContextWrapper {
 
 // Initialize the object based on the interface
 export const audioContextWrapper: IAudioContextWrapper = {
-  audioContext: new AudioContext(),
+  audioContext: null,
   source: null,
   analyser: undefined,
   dataArray: undefined,
   audioLevelInterval: setInterval(() => {}, 0), // dummy interval
   blinkTimerID: setTimeout(() => {}, 0), // dummy timeout
   maxAudioLevel: 0,
+};
+
+export const ensureAudioContextReady = async (): Promise<boolean> => {
+  if (!audioContextWrapper.audioContext) {
+    const AudioContextCtor =
+      window.AudioContext ??
+      (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
+
+    if (!AudioContextCtor) {
+      return false;
+    }
+
+    audioContextWrapper.audioContext = new AudioContextCtor();
+  }
+
+  if (audioContextWrapper.audioContext.state === 'suspended') {
+    try {
+      await audioContextWrapper.audioContext.resume();
+    } catch {
+      return false;
+    }
+  }
+
+  return audioContextWrapper.audioContext.state === 'running';
+};
+
+export const resetMaxAudioLevel = () => {
+  audioContextWrapper.maxAudioLevel = 0;
 };
 
 export const updateThresholds = (audioLevel: number) => {
@@ -52,8 +80,12 @@ export const performBlinkAnimation = (params: {
 };
 
 // Updated getAudioLevel function
-export const getAudioLevel = (analyser: AnalyserNode, dataArray: Uint8Array, bufferLength: number): number => {
-  analyser.getByteFrequencyData(dataArray);
+export const getAudioLevel = (
+  analyser: AnalyserNode,
+  dataArray: Uint8Array,
+  bufferLength: number,
+): number => {
+  analyser.getByteFrequencyData(dataArray as any);
   let sum = 0;
   for (let i = 0; i < bufferLength; i++) {
     sum += dataArray[i];
