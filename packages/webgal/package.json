@@ -13,6 +13,7 @@
     "@icon-park/react": "^1.4.2",
     "@reduxjs/toolkit": "^1.8.1",
     "angular-expressions": "^1.4.3",
+    "ani-cursor.js": "^1.0.2",
     "axios": "^1.13.5",
     "cloudlogjs": "^1.0.9",
     "gifuct-js": "^2.1.2",

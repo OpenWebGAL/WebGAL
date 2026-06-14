@@ -9,6 +9,7 @@ import { getFastSaveFromStorage, getSavesFromStorage } from '@/Core/controller/s
 import { logger } from '@/Core/util/logger';
 import axios from 'axios';
 import { IGameVar } from '@/Core/Modules/stage/stageInterface';
+import { setANICursor } from 'ani-cursor.js';
 
 /**
  * 获取游戏信息
@@ -21,7 +22,7 @@ export const infoFetcher = (url: string): Promise<IGameVar> => {
     let gameConfig = WebgalParser.parseConfig(gameConfigRaw);
     logger.info('获取到游戏信息', gameConfig);
     // 先把 key 找到并设置了
-    const keyItem = gameConfig.find((e) => e.command === 'Game_key');
+    const keyItem = gameConfig.find((e: any) => e.command === 'Game_key');
     WebGAL.gameKey = (keyItem?.args?.[0] as string) ?? '';
     initKey();
     await getStorageAsync();
@@ -30,7 +31,7 @@ export const infoFetcher = (url: string): Promise<IGameVar> => {
     // 存储 config.txt 中的配置，用于清除所有数据时还原配置
     const gameConfigInit: IGameVar = {};
     // 按照游戏的配置开始设置对应的状态
-    gameConfig.forEach((e) => {
+    gameConfig.forEach((e: any) => {
       const { command, args } = e;
       if (args.length > 0) {
         if (args.length > 1) {
@@ -66,6 +67,27 @@ export const infoFetcher = (url: string): Promise<IGameVar> => {
           if (command === 'Steam_AppID') {
             const appId = String(res);
             WebGAL.steam.initialize(appId);
+          }
+          // 自定义光标
+          if (command === 'Custom_Corsur') {
+            const group = String(res)
+              .split(/\s+/)
+              .filter((e) => e);
+            for (const token of group) {
+              const arr = token.split(',').map((e) => e.trim());
+              const safeUrl = `/game/${arr[0]}`.replace(/\\/g, '\\\\');
+              const type = arr?.[1] ?? 'auto';
+              if (String(safeUrl).endsWith('.ani')) {
+                const width = parseInt(arr?.[2] ?? '32');
+                const height = parseInt(arr?.[3] ?? '32');
+                setANICursor('html *', safeUrl, type, width, height);
+              } else {
+                const hotspot = `${arr?.[2] ?? ''} ${arr?.[3] ?? ''}`;
+                const cursorCss = document.createElement('style');
+                cursorCss.textContent = `html * { cursor: url(${safeUrl}) ${hotspot}, ${type} !important; }`;
+                document.head.appendChild(cursorCss);
+              }
+            }
           }
         }
       }
