@@ -9,6 +9,13 @@ import { changeScene } from '../controller/scene/changeScene';
 export const changeSceneScript = (sentence: ISentence): IPerform => {
   const sceneNameArray: Array<string> = sentence.content.split('/');
   const sceneName = sceneNameArray[sceneNameArray.length - 1];
-  changeScene(sentence.content, sceneName);
+  // 从 args 中提取场景参数
+  const params: Record<string, any> = {};
+  sentence.args.forEach((arg) => {
+    if (arg.key.startsWith('@')) {
+      params[arg.key.slice(1)] = arg.value;
+    }
+  });
+  changeScene(sentence.content, sceneName, params);
   return createNonePerform({ isHoldOn: true });
 };

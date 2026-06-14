@@ -12,4 +12,6 @@ export interface sceneEntry {
  * 场景栈条目接口 (兼容性别名)
  * @interface ISceneEntry
  */
-export interface ISceneEntry extends sceneEntry {}
+export interface ISceneEntry extends sceneEntry {
+  sceneParams: Record<string, any>; // 场景参数
+}

@@ -9,6 +9,11 @@ import { callScene } from '../controller/scene/callScene';
 export const callSceneScript = (sentence: ISentence): IPerform => {
   const sceneNameArray: Array<string> = sentence.content.split('/');
   const sceneName = sceneNameArray[sceneNameArray.length - 1];
-  callScene(sentence.content, sceneName);
+  // 从 args 中提取场景参数
+  const params: Record<string, any> = {};
+  sentence.args.forEach((arg) => {
+    if (arg.key.startsWith('@')) params[arg.key.slice(1)] = arg.value;
+  });
+  callScene(sentence.content, sceneName, params);
   return createNonePerform({ isHoldOn: true });
 };

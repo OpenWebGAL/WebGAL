@@ -5,6 +5,7 @@ export interface ISceneEntry {
   sceneName: string; // 场景名称
   sceneUrl: string; // 场景url
   continueLine: number; // 继续原场景的行号
+  sceneParams: Record<string, any>; // 场景参数
 }
 
 /**
@@ -29,6 +30,7 @@ export class SceneManager {
   public sceneData: ISceneData = cloneDeep(initSceneData);
   public lockSceneWrite = false;
   public sceneWritePromise: Promise<void> | null = null;
+  public currentSceneParams: Record<string, any> = {}; // 当前场景参数
 
   public resetScene() {
     this.sceneData.currentSentenceId = 0;
@@ -37,5 +39,6 @@ export class SceneManager {
     this.sceneWritePromise = null;
     this.settledScenes.clear();
     this.settledAssets.clear();
+    this.currentSceneParams = {};
   }
 }

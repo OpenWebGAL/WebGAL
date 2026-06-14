@@ -6,11 +6,8 @@ import { setScriptManagedGlobalVar } from '@/store/userDataReducer';
 import { ISetGameVar } from '@/Core/Modules/stage/stageInterface';
 import { dumpToStorageFast } from '@/Core/controller/storage/storageController';
 import { getBooleanArgByKey } from '../util/getSentenceArg';
-import expression from 'angular-expressions';
-import get from 'lodash/get';
-import random from 'lodash/random';
 import { stageStateManager } from '@/Core/Modules/stage/stageStateManager';
-import { compile } from 'angular-expressions';
+import { evaluateStageExpressionWithoutDot } from '../util/evalSentenceFn';
 
 interface ISetGameVarFromExpressionPayload {
   key: string;
@@ -40,7 +37,7 @@ export const setGameVarFromExpression = ({
   if (!normalizedKey) {
     return;
   }
-  setGameVar({ key: normalizedKey, value: resolveSetVarValue(value) });
+  setGameVar({ key: normalizedKey, value: evaluateStageExpressionWithoutDot(value, { returnType: 'origin' }) });
   if (isGlobal) {
     logger.debug('设置全局变量：', {
       key: normalizedKey,
@@ -70,96 +67,3 @@ export const setVar = (sentence: ISentence): IPerform => {
   }
   return createNonePerform();
 };
-
-type BaseVal = string | number | boolean | undefined;
-
-export function resolveSetVarValue(valExp: string): string | boolean | number {
-  if (/^\s*[a-zA-Z_$][\w$]*\s*\(.*\)\s*$/.test(valExp)) {
-    return EvaluateExpression(valExp);
-  } else if (valExp.match(/[+\-*\/()]/)) {
-    const valExpArr = valExp.split(/([+\-*\/()])/g);
-    const valExp2 = valExpArr
-      .map((e) => {
-        if (!e.trim().match(/^[a-zA-Z_$][a-zA-Z0-9_.]*$/)) {
-          return e;
-        }
-        const _r = getValueFromStateElseKey(e.trim(), true);
-        return typeof _r === 'string' ? `'${_r}'` : _r;
-      })
-      .reduce((pre, curr) => pre + curr, '');
-    let result = '';
-    try {
-      const exp = compile(valExp2);
-      result = exp();
-    } catch (e) {
-      logger.error('expression compile error', e);
-    }
-    return result;
-  } else if (valExp.match(/true|false/)) {
-    if (valExp.match(/true/)) {
-      return true;
-    }
-    if (valExp.match(/false/)) {
-      return false;
-    }
-  } else if (valExp.length === 0) {
-    return '';
-  } else {
-    if (!isNaN(Number(valExp))) {
-      return Number(valExp);
-    } else {
-      return getValueFromStateElseKey(valExp, true) ?? '';
-    }
-  }
-  return '';
-}
-
-/**
- * 执行函数
- */
-function EvaluateExpression(val: string) {
-  const instance = expression.compile(val);
-  return instance({
-    random: (...args: any[]) => {
-      return args.length ? random(...args) : Math.random();
-    },
-  });
-}
-
-/**
- * 取不到时返回 undefined
- */
-export function getValueFromState(key: string) {
-  let ret: any;
-  const stage = stageStateManager.getCalculationStageState();
-  const userData = webgalStore.getState().userData;
-  const _Merge = { stage, userData }; // 不要直接合并到一起，防止可能的键冲突
-  if (stage.GameVar.hasOwnProperty(key)) {
-    ret = stage.GameVar[key];
-  } else if (userData.globalGameVar.hasOwnProperty(key)) {
-    ret = userData.globalGameVar[key];
-  } else if (key.startsWith('$')) {
-    const propertyKey = key.replace('$', '');
-    ret = get(_Merge, propertyKey, undefined) as BaseVal;
-  }
-  return ret;
-}
-
-/**
- * 取不到时返回 {key}
- */
-export function getValueFromStateElseKey(key: string, useKeyNameAsReturn = false, quoteString = false) {
-  const valueFromState = getValueFromState(key);
-  if (valueFromState === null || valueFromState === undefined) {
-    logger.warn('valueFromState result null, key = ' + key);
-    if (useKeyNameAsReturn) {
-      return key;
-    }
-    return `{${key}}`;
-  }
-  // 用 "" 包裹字符串，用于使用 compile 条件判断，处理字符串类型的变量
-  if (quoteString && typeof valueFromState === 'string') {
-    return `"${valueFromState.replaceAll('"', '\\"')}"`;
-  }
-  return valueFromState;
-}

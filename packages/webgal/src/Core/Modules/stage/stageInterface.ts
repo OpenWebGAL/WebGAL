@@ -1,4 +1,4 @@
-import { arg, ISentence } from '@/Core/controller/scene/sceneInterface';
+import { ISentence } from '@/Core/controller/scene/sceneInterface';
 import { BlinkParam, FocusParam } from '@/Core/live2DCore';
 
 /**
@@ -253,16 +253,6 @@ export interface IStageState {
   isDisableTextbox: boolean;
   replacedUIlable: Record<string, string>;
   figureMetaData: figureMetaData;
-  sceneArguments: ISceneArgument;
-}
-
-export interface ISceneArgument {
-  [key: string]: Array<arg>;
-}
-
-export interface ISceneArgumentPayload {
-  url: string;
-  value: Array<arg>;
 }
 
 /**

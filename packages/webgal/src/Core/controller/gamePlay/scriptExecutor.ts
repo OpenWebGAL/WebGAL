@@ -10,15 +10,15 @@ import { getBooleanArgByKey, getStringArgByKey } from '@/Core/util/getSentenceAr
 import { stageStateManager } from '@/Core/Modules/stage/stageStateManager';
 import { jumpToLabel } from '@/Core/gameScripts/label/jumpToLabel';
 import { prefetchCurrentSceneByProgress } from '@/Core/util/prefetcher/progressPrefetcher';
+import { evaluateStageExpression } from '@/Core/util/evalSentenceFn';
 
 const MAX_FORWARD_SCRIPT_EXECUTION = 1000;
-import { EvaluateExpression } from '@/Core/util/evalSentenceFn';
 
 export const whenChecker = (whenValue: string | undefined): boolean => {
   if (whenValue === undefined) {
     return true;
   }
-  return !!EvaluateExpression(whenValue, { ErrorReturnsBoolean: true });
+  return evaluateStageExpression(whenValue, { returnType: 'boolean' });
 };
 
 /**
@@ -55,9 +55,15 @@ export const scriptExecutor = (depth = 0) => {
 
     if (contentExp !== null) {
       contentExp.forEach((e) => {
-        const likeExpr = e.replace(/(?<!\\)\{(.*)\}/, '$1');
-        const contentVarValue = EvaluateExpression(likeExpr, { InvalidValueReturns: 'block' });
-        retContent = retContent.replace(e, contentVarValue);
+        let likeExpr = e;
+        // {}可能是对象
+        if (!/(?<!\\)\{.+\s*:\s*.+\}/.test(e)) {
+          likeExpr = e.replace(/(?<!\\)\{(.*)\}/, '$1');
+        }
+        const contentVarValue = evaluateStageExpression(likeExpr, { returnType: 'origin' });
+        // 如果是对象，我们需要将其转换为字符串
+        if (typeof contentVarValue === 'object') retContent = retContent.replace(e, JSON.stringify(contentVarValue));
+        else retContent = retContent.replace(e, String(contentVarValue));
       });
     }
     retContent = retContent.replace(/\\{/g, '{').replace(/\\}/g, '}');

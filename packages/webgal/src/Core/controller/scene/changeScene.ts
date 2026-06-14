@@ -5,7 +5,7 @@ import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
 import { clearPrefetchLinks } from '@/Core/util/prefetcher/assetsPrefetcher';
 
 import { WebGAL } from '@/Core/WebGAL';
-import { arg } from './sceneInterface';
+import { evaluateStageExpressionWithoutDot } from '@/Core/util/evalSentenceFn';
 
 /**
  * 切换场景
@@ -13,7 +13,7 @@ import { arg } from './sceneInterface';
  * @param sceneName 场景名称
  * @param args 场景参数
  */
-export const changeScene = (sceneUrl: string, sceneName: string, args: Array<arg>) => {
+export const changeScene = (sceneUrl: string, sceneName: string, params: Record<string, any> = {}) => {
   if (WebGAL.sceneManager.lockSceneWrite) {
     return;
   }
@@ -29,6 +29,15 @@ export const changeScene = (sceneUrl: string, sceneName: string, args: Array<arg
       WebGAL.sceneManager.settledScenes.add(sceneUrl); // 放入已加载场景列表，避免递归加载相同场景
       logger.debug('现在切换场景，切换后的结果：', WebGAL.sceneManager.sceneData);
       shouldAutoNext = !isFastPreviewSceneWrite;
+      WebGAL.sceneManager.currentSceneParams = Object.entries(params)
+        .map(([key, value]) => ({
+          key,
+          value: evaluateStageExpressionWithoutDot(value),
+        }))
+        .reduce((res: Record<string, string>, item: Record<string, string>) => {
+          res[item.key] = item.value;
+          return res;
+        }, {} as Record<string, string>); // 设置新场景参数并立即求值
     })
     .catch((e) => {
       logger.error('场景调用错误', e);

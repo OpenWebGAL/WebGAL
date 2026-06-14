@@ -1,9 +1,8 @@
-import { arg, ISentence } from '@/Core/controller/scene/sceneInterface';
+import { ISentence } from '@/Core/controller/scene/sceneInterface';
 import { createNonePerform, IPerform } from '@/Core/Modules/perform/performInterface';
 import { changeScene } from '@/Core/controller/scene/changeScene';
 import { jmp } from '@/Core/gameScripts/label/jmp';
 import ReactDOM from 'react-dom';
-import React from 'react';
 import styles from './choose.module.scss';
 import { webgalStore } from '@/store/store';
 import { useSEByWebgalStore } from '@/hooks/useSoundEffect';
@@ -16,6 +15,7 @@ import { useFontFamily } from '@/hooks/useFontFamily';
 import { getNumberArgByKey } from '@/Core/util/getSentenceArg';
 
 class ChooseOption {
+  public params: Record<string, any> = {};
   /**
    * 格式：
    * (showConditionVar>1)[enableConditionVar>2]->text:jump
@@ -38,6 +38,13 @@ class ChooseOption {
     }
     return option;
   }
+  public appendArgs(args: { key: string; value: any }[]) {
+    // 解析后面的 -xxx 参数
+    args.forEach(({ key, value }) => {
+      if (key.startsWith('@')) this.params[key.slice(1)] = value;
+    });
+    return this;
+  }
   public text: string;
   public jump: string;
   public jumpToScene: boolean;
@@ -55,14 +62,13 @@ class ChooseOption {
  * 显示选择枝
  * @param sentence
  */
-export const choose = (sentence: ISentence, args: any): IPerform => {
+export const choose = (sentence: ISentence): IPerform => {
   const chooseOptionScripts = sentence.content.split(/(?<!\\)\|/);
-  const chooseOptions = chooseOptionScripts.map((e) => ChooseOption.parse(e.trim()));
+  const chooseOptions = chooseOptionScripts.map((e) => ChooseOption.parse(e.trim()).appendArgs(sentence.args));
   const defaultChoose = getNumberArgByKey(sentence, 'defaultChoose');
   const defaultPreviewChoice = getDefaultPreviewChoice(chooseOptions, defaultChoose);
-
   if (defaultPreviewChoice) {
-    selectChooseOption(defaultPreviewChoice, false, args);
+    selectChooseOption(defaultPreviewChoice, false);
     if (!defaultPreviewChoice.jumpToScene) {
       // The default preview choice is resolved during script calculation.
       // Let scriptExecutor continue from the target label in this same forward.
@@ -79,7 +85,7 @@ export const choose = (sentence: ISentence, args: any): IPerform => {
       // eslint-disable-next-line react/no-deprecated
       ReactDOM.render(
         <Provider store={webgalStore}>
-          <Choose chooseOptions={chooseOptions} args={args} />
+          <Choose chooseOptions={chooseOptions} />
         </Provider>,
         document.getElementById('chooseContainer'),
       );
@@ -110,22 +116,22 @@ function getDefaultPreviewChoice(chooseOptions: ChooseOption[], defaultChoose: n
   return defaultOption;
 }
 
-function selectChooseOption(option: ChooseOption, autoNext = true, args: arg[]) {
+function selectChooseOption(option: ChooseOption, autoNext = true) {
   if (option.jumpToScene) {
-    changeScene(option.jump, option.text, args);
+    changeScene(option.jump, option.text, option.params);
   } else {
     jmp(option.jump, autoNext);
   }
 }
 
-function Choose(props: { chooseOptions: ChooseOption[]; args: arg[] }) {
+function Choose(props: { chooseOptions: ChooseOption[] }) {
   const font = useFontFamily();
   const { playSeEnter, playSeClick } = useSEByWebgalStore();
   const applyStyle = useApplyStyle('choose');
   // 运行时计算JSX.Element[]
   const runtimeBuildList = (chooseListFull: ChooseOption[]) => {
     return chooseListFull
-      .filter((e, i) => whenChecker(e.showCondition))
+      .filter((e) => whenChecker(e.showCondition))
       .map((e, i) => {
         const enable = whenChecker(e.enableCondition);
         const className = enable
@@ -135,7 +141,7 @@ function Choose(props: { chooseOptions: ChooseOption[]; args: arg[] }) {
           ? () => {
               playSeClick();
               WebGAL.gameplay.performController.unmountPerform('choose');
-              selectChooseOption(e, true, props.args);
+              selectChooseOption(e, true);
             }
           : () => {};
         return (

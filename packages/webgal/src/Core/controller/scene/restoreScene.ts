@@ -24,6 +24,7 @@ export const restoreScene = (entry: ISceneEntry) => {
       WebGAL.sceneManager.sceneData.currentSentenceId = entry.continueLine + 1; // 重设场景
       logger.debug('现在恢复场景，恢复后场景：', WebGAL.sceneManager.sceneData.currentScene);
       shouldAutoNext = !isFastPreviewSceneWrite;
+      WebGAL.sceneManager.currentSceneParams = entry.sceneParams ?? {};
     })
     .catch((e) => {
       logger.error('场景调用错误', e);

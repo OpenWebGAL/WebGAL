@@ -1,7 +1,7 @@
 /**
  * 语句类型
  */
-import { sceneEntry, ISceneEntry } from './runtimeInterface';
+import { ISceneEntry } from './runtimeInterface';
 import { fileType } from './assets';
 
 export enum commandType {
