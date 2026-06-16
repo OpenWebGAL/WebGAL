@@ -1720,7 +1720,7 @@ ajv@^6.14.0:
 
 angular-expressions@^1.5.5:
   version "1.5.5"
-  resolved "https://registry.npmmirror.com/angular-expressions/-/angular-expressions-1.5.5.tgz#26de781221bfe2ad69111e95202b2955bd63f4ee"
+  resolved "https://registry.yarnpkg.com/angular-expressions/-/angular-expressions-1.5.5.tgz#26de781221bfe2ad69111e95202b2955bd63f4ee"
   integrity sha512-MZqPMw7FYq6XkqE/v4udnanaIRrhJ22hmn3SeJkqDYEtZsoewafa+QgZqR9HrCXP114jaChzOjCjrM6LqvnflA==
 
 ansi-escapes@^4.3.0:
