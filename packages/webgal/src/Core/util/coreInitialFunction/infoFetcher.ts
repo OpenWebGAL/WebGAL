@@ -69,6 +69,24 @@ export const infoFetcher = (url: string): Promise<IGameVar> => {
             WebGAL.steam.initialize(appId);
           }
           // 自定义光标
+          const customCorsurSize = { width: 32, height: 32 };
+          if (command === 'Custom_Corsur_Ani_Size') {
+            const corsurSize = String(res)
+              .split(/\s+/)
+              .filter((e) => e);
+            if (corsurSize.length === 2) {
+              const width = parseInt(corsurSize[0]);
+              const height = parseInt(corsurSize[1]);
+              // see to https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/cursor#icon_size_limits
+              if (width > 32 || height > 32) {
+                logger.warn('size to large, we suggest set to 32x32 size');
+              }
+              if (width > 0 && height > 0) {
+                customCorsurSize.width = width;
+                customCorsurSize.height = height;
+              }
+            }
+          }
           if (command === 'Custom_Corsur') {
             const group = String(res)
               .split(/\s+/)
@@ -78,9 +96,17 @@ export const infoFetcher = (url: string): Promise<IGameVar> => {
               const safeUrl = `/game/${arr[0]}`.replace(/\\/g, '\\\\');
               const type = arr?.[1] ?? 'auto';
               if (String(safeUrl).endsWith('.ani')) {
-                const width = parseInt(arr?.[2] ?? '32');
-                const height = parseInt(arr?.[3] ?? '32');
-                setANICursor('html *', safeUrl, type, width, height);
+                const hotspotX = parseInt(arr?.[2]);
+                const hotspotY = parseInt(arr?.[3]);
+                setANICursor(
+                  'html *',
+                  safeUrl,
+                  type,
+                  customCorsurSize.width,
+                  customCorsurSize.height,
+                  hotspotX > 0 ? hotspotX : undefined,
+                  hotspotY > 0 ? hotspotY : undefined,
+                );
               } else {
                 const hotspot = `${arr?.[2] ?? ''} ${arr?.[3] ?? ''}`;
                 const cursorCss = document.createElement('style');
