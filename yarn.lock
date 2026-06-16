@@ -1723,10 +1723,10 @@ angular-expressions@^1.4.3:
   resolved "https://registry.yarnpkg.com/angular-expressions/-/angular-expressions-1.4.3.tgz#24fb9e8e9e0278885dd0f7e28512ac88a74037f6"
   integrity sha512-r7j+dqOuHy0OYiR5AazDixU/Us3TDN2FfuxGX4Dq6d61Y2MhBQHMdUNBfkkLPjDqVm2Is394h31gC3bcBwy9zw==
 
-ani-cursor.js@^1.0.2:
-  version "1.0.2"
-  resolved "https://registry.npmmirror.com/ani-cursor.js/-/ani-cursor.js-1.0.2.tgz#891342a98873e12e662699315a8c33285acb87a2"
-  integrity sha512-spNSKKZJxr9fj2uG27Hh9zxe025uK59KNEVLoAgtUk/CPOdzQOHPB612qwAI0GawwxZdp8lU5QEph7C8QeiY8g==
+ani-cursor.js@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/ani-cursor.js/-/ani-cursor.js-1.0.3.tgz#a0b390a887f2692da83c69c9251a043c7c17888f"
+  integrity sha512-asDn4Ts+iSSTHIQxyqn3iYQtf2FLk3Njid1aOb03QnSsEPY9qT9aDeuJUlzt+cc5LRTw6D+1vBp9WzBOceS+LQ==
   dependencies:
     buffer "^6.0.3"
     riff-file "^1.0.3"
