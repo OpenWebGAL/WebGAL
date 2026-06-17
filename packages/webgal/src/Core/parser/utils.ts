@@ -1,11 +1,12 @@
 import { commandType, ISentence } from '@/Core/controller/scene/sceneInterface';
 import { IPerform } from '@/Core/Modules/perform/performInterface';
+import type { IStageCommitOptions } from '@/Core/Modules/stage/stageStateManager';
 
 /**
  * 规范函数的类型
  * @type {(sentence: ISentence) => IPerform}
  */
-export type ScriptFunction = (sentence: ISentence) => IPerform;
+export type ScriptFunction = (sentence: ISentence, commitOptions?: IStageCommitOptions) => IPerform;
 
 export interface ScriptConfig {
   scriptType: commandType;

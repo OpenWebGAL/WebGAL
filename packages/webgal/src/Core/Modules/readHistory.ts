@@ -6,14 +6,15 @@ import { webgalStore } from "@/store/store";
 import { SceneManager } from "./scene";
 import { setReadHistory } from "@/store/userDataReducer";
 import { setStorage } from "../controller/storage/storageController";
+import type { IStageCommitOptions } from '@/Core/Modules/stage/stageStateManager';
 import { stageStateManager } from '@/Core/Modules/stage/stageStateManager';
 
 let debugTextReadMode: boolean | null = null;
 
-export function setDebugTextReadMode(isRead: boolean | null) {
+export function setDebugTextReadMode(isRead: boolean | null, commitOptions: IStageCommitOptions = {}) {
   debugTextReadMode = isRead;
   if (isRead !== null) {
-    stageStateManager.setStageAndCommit('isRead', isRead);
+    stageStateManager.setStageAndCommit('isRead', isRead, commitOptions);
   }
 }
 

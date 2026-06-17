@@ -60,7 +60,7 @@ export const initializeScript = (): void => {
   WebGAL.gameplay.pixiStage = new PixiStage();
   stageStateManager.setCommitHandler((stageState, options) => {
     syncPixiStageState(stageState, options);
-    if (options.notifyReact) autoFastSaveGame();
+    if (options.autoFastSave) autoFastSaveGame();
   });
 
   /**

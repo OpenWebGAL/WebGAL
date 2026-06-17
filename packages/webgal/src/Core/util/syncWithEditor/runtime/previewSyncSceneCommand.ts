@@ -38,7 +38,7 @@ export function executePreviewSyncSceneCommand(
 
   sceneFetcher(sceneUrl)
     .then((rawScene) => {
-      resetStage(true);
+      resetStage(true, true, { autoFastSave: false });
       applyPreviewDebugVariables(debugVariables);
       WebGAL.sceneManager.sceneData.currentScene = sceneParser(rawScene, sceneName, sceneUrl);
       const currentSceneName = WebGAL.sceneManager.sceneData.currentScene.sceneName;
@@ -69,7 +69,7 @@ export async function runFastPreview(
     while (shouldContinueFastPreview(sentenceId, currentSceneName, baseSceneStackDepth)) {
       const prevSentenceId = WebGAL.sceneManager.sceneData.currentSentenceId;
       const prevSceneName = WebGAL.sceneManager.sceneData.currentScene.sceneName;
-      const isForwarded = forward();
+      const isForwarded = forward({ autoFastSave: false });
       forwardCount++;
       const sceneWriteWaitStart = performance.now();
       const awaitedSceneWrite = await waitForPendingSceneWrite();
@@ -108,7 +108,7 @@ export async function runFastPreview(
     WebGAL.gameplay.isFastPreview = false;
   }
 
-  commitForward();
+  commitForward({ autoFastSave: false });
 
   const forwardedLineCount =
     WebGAL.sceneManager.sceneData.currentScene.sceneName === currentSceneName

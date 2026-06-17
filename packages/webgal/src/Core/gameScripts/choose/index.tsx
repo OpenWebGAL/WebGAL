@@ -14,6 +14,7 @@ import useApplyStyle from '@/hooks/useApplyStyle';
 import { Provider } from 'react-redux';
 import { useFontFamily } from '@/hooks/useFontFamily';
 import { getNumberArgByKey } from '@/Core/util/getSentenceArg';
+import type { IStageCommitOptions } from '@/Core/Modules/stage/stageStateManager';
 
 class ChooseOption {
   /**
@@ -55,14 +56,14 @@ class ChooseOption {
  * 显示选择枝
  * @param sentence
  */
-export const choose = (sentence: ISentence): IPerform => {
+export const choose = (sentence: ISentence, commitOptions: IStageCommitOptions = {}): IPerform => {
   const chooseOptionScripts = sentence.content.split(/(?<!\\)\|/);
   const chooseOptions = chooseOptionScripts.map((e) => ChooseOption.parse(e.trim()));
   const defaultChoose = getNumberArgByKey(sentence, 'defaultChoose');
   const defaultPreviewChoice = getDefaultPreviewChoice(chooseOptions, defaultChoose);
 
   if (defaultPreviewChoice) {
-    selectChooseOption(defaultPreviewChoice, false);
+    selectChooseOption(defaultPreviewChoice, false, commitOptions);
     if (!defaultPreviewChoice.jumpToScene) {
       // The default preview choice is resolved during script calculation.
       // Let scriptExecutor continue from the target label in this same forward.
@@ -79,7 +80,7 @@ export const choose = (sentence: ISentence): IPerform => {
       // eslint-disable-next-line react/no-deprecated
       ReactDOM.render(
         <Provider store={webgalStore}>
-          <Choose chooseOptions={chooseOptions} />
+          <Choose chooseOptions={chooseOptions} commitOptions={commitOptions} />
         </Provider>,
         document.getElementById('chooseContainer'),
       );
@@ -110,15 +111,15 @@ function getDefaultPreviewChoice(chooseOptions: ChooseOption[], defaultChoose: n
   return defaultOption;
 }
 
-function selectChooseOption(option: ChooseOption, autoNext = true) {
+function selectChooseOption(option: ChooseOption, autoNext = true, commitOptions: IStageCommitOptions = {}) {
   if (option.jumpToScene) {
-    changeScene(option.jump, option.text);
+    changeScene(option.jump, option.text, commitOptions);
   } else {
-    jmp(option.jump, autoNext);
+    jmp(option.jump, autoNext, commitOptions);
   }
 }
 
-function Choose(props: { chooseOptions: ChooseOption[] }) {
+function Choose(props: { chooseOptions: ChooseOption[]; commitOptions: IStageCommitOptions }) {
   const font = useFontFamily();
   const { playSeEnter, playSeClick } = useSEByWebgalStore();
   const applyStyle = useApplyStyle('choose');
@@ -135,7 +136,7 @@ function Choose(props: { chooseOptions: ChooseOption[] }) {
           ? () => {
               playSeClick();
               WebGAL.gameplay.performController.unmountPerform('choose');
-              selectChooseOption(e);
+              selectChooseOption(e, true, props.commitOptions);
             }
           : () => {};
         return (

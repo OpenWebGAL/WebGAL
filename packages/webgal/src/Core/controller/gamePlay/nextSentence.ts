@@ -3,12 +3,13 @@ import { logger } from '../../util/logger';
 import { webgalStore } from '@/store/store';
 
 import { WebGAL } from '@/Core/WebGAL';
+import type { IStageCommitOptions } from '@/Core/Modules/stage/stageStateManager';
 import { stageStateManager } from '@/Core/Modules/stage/stageStateManager';
 
 /**
  * 步进前工作：检查阻塞，并在当前演出未完成时提前结束普通演出。
  */
-export const preForward = () => {
+export const preForward = (commitOptions: IStageCommitOptions = {}) => {
   if (WebGAL.sceneManager.lockSceneWrite) {
     logger.warn('next 被场景切换阻塞！');
     return false;
@@ -22,7 +23,7 @@ export const preForward = () => {
   const hasUnsettledNonHoldPerform = WebGAL.gameplay.performController.hasUnsettledNonHoldPerform();
   if (hasUnsettledNonHoldPerform) {
     logger.debug('提前结束被触发，现在清除普通演出');
-    WebGAL.gameplay.performController.settleNonHoldPerforms();
+    WebGAL.gameplay.performController.settleNonHoldPerforms(commitOptions);
     return false;
   }
 
@@ -32,7 +33,7 @@ export const preForward = () => {
 /**
  * 执行一条语句或由 -next 连接的语句序列，只修改演算状态并收集演出。
  */
-export const forward = () => {
+export const forward = (commitOptions: IStageCommitOptions = {}) => {
   if (WebGAL.sceneManager.lockSceneWrite) {
     logger.warn('forward 被场景切换阻塞！');
     return false;
@@ -47,7 +48,7 @@ export const forward = () => {
   WebGAL.gameplay.performController.clearNonHoldPerformsFromStageState();
   WebGAL.gameplay.performController.beginCollectingPerforms();
   try {
-    scriptExecutor();
+    scriptExecutor(0, commitOptions);
   } finally {
     WebGAL.gameplay.performController.endCollectingPerforms();
   }
@@ -57,8 +58,8 @@ export const forward = () => {
 /**
  * 将演算状态提交到当前视图状态，并启动本序列收集到的演出。
  */
-export const commitForward = () => {
-  stageStateManager.commit({ applyPixiEffects: false });
+export const commitForward = (options: IStageCommitOptions = {}) => {
+  stageStateManager.commit({ ...options, applyPixiEffects: false });
   WebGAL.gameplay.performController.commitPendingPerforms();
   stageStateManager.applyCommittedPixiEffects();
 };
@@ -66,7 +67,7 @@ export const commitForward = () => {
 /**
  * 用户操作步进。
  */
-export const nextSentence = () => {
+export const nextSentence = (commitOptions: IStageCommitOptions = {}) => {
   WebGAL.events.userInteractNext.emit();
 
   const GUIState = webgalStore.getState().GUI;
@@ -74,10 +75,10 @@ export const nextSentence = () => {
     return;
   }
 
-  if (!preForward()) {
+  if (!preForward(commitOptions)) {
     return;
   }
 
-  forward();
-  commitForward();
+  forward(commitOptions);
+  commitForward(commitOptions);
 };

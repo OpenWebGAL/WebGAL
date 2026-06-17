@@ -174,7 +174,7 @@ export const startPreviewSyncRuntime = () => {
     applyPreviewDebugVariables(payload.debugVariables);
     const scene = WebgalParser.parse(payload.snippet, 'temp.txt', 'temp.txt');
     (scene.sentenceList as unknown as ISentence[]).forEach((sentence) => {
-      runScript(sentence);
+      runScript(sentence, { autoFastSave: false });
     });
   };
 
@@ -204,7 +204,7 @@ export const startPreviewSyncRuntime = () => {
 
   const handleRunSceneContent = (payload: RunSceneContentPayload) => {
     setEffectBaselines.clear();
-    resetStage(true);
+    resetStage(true, true, { autoFastSave: false });
     applyPreviewDebugVariables(payload.debugVariables);
     WebGAL.sceneManager.sceneData.currentScene = sceneParser(payload.sceneContent, 'temp', './temp.txt');
     applyComponentVisibility({
@@ -214,7 +214,7 @@ export const startPreviewSyncRuntime = () => {
       showPanicOverlay: false,
     });
     setTimeout(() => {
-      nextSentence();
+      nextSentence({ autoFastSave: false });
     }, 100);
   };
 
@@ -227,7 +227,7 @@ export const startPreviewSyncRuntime = () => {
   };
 
   const handleSetTextReadMode = (payload: SetTextReadModePayload) => {
-    setDebugTextReadMode(payload.isRead);
+    setDebugTextReadMode(payload.isRead, { autoFastSave: false });
   };
 
   const getSetEffectBaseline = (target: string): ITransform => {
@@ -247,10 +247,13 @@ export const startPreviewSyncRuntime = () => {
   const handleSetEffect = (payload: SetEffectPayload) => {
     const newTransform = mergeSetEffectPreviewTransform(getSetEffectBaseline(payload.target), payload.transform);
     WebGAL.gameplay.pixiStage?.removeAnimationByTargetKey(payload.target);
-    stageStateManager.updateEffectAndCommit({
-      target: payload.target,
-      transform: newTransform,
-    });
+    stageStateManager.updateEffectAndCommit(
+      {
+        target: payload.target,
+        transform: newTransform,
+      },
+      { autoFastSave: false },
+    );
   };
 
   const previewRequestHandlers: {

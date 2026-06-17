@@ -14,12 +14,13 @@ import { logger } from '@/Core/util/logger';
 import { tryToRegex } from '@/Core/util/global';
 import { showGlogalDialog } from '@/UI/GlobalDialog/GlobalDialog';
 import { stageStateManager } from '@/Core/Modules/stage/stageStateManager';
+import type { IStageCommitOptions } from '@/Core/Modules/stage/stageStateManager';
 
 /**
  * 显示选择枝
  * @param sentence
  */
-export const getUserInput = (sentence: ISentence): IPerform => {
+export const getUserInput = (sentence: ISentence, commitOptions: IStageCommitOptions = {}): IPerform => {
   const varKey = sentence.content.toString().trim();
 
   let title = getStringArgByKey(sentence, 'title') ?? '';
@@ -68,14 +69,17 @@ export const getUserInput = (sentence: ISentence): IPerform => {
               }
             }
             if (userInput) {
-              stageStateManager.setStageVarAndCommit({
-                key: varKey,
-                value: userInput?.value || defaultValue || ' ',
-              });
+              stageStateManager.setStageVarAndCommit(
+                {
+                  key: varKey,
+                  value: userInput?.value || defaultValue || ' ',
+                },
+                commitOptions,
+              );
             }
             playSeClick();
             WebGAL.gameplay.performController.unmountPerform('userInput');
-            nextSentence();
+            nextSentence(commitOptions);
           }}
           className={styles.button}
         >

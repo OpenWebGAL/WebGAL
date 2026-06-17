@@ -3,6 +3,7 @@ import { sceneParser } from '../../parser/sceneParser';
 import { logger } from '../../util/logger';
 import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
 import { clearPrefetchLinks } from '@/Core/util/prefetcher/assetsPrefetcher';
+import type { IStageCommitOptions } from '@/Core/Modules/stage/stageStateManager';
 
 import { WebGAL } from '@/Core/WebGAL';
 
@@ -11,7 +12,7 @@ import { WebGAL } from '@/Core/WebGAL';
  * @param sceneUrl 场景路径
  * @param sceneName 场景名称
  */
-export const callScene = (sceneUrl: string, sceneName: string) => {
+export const callScene = (sceneUrl: string, sceneName: string, commitOptions: IStageCommitOptions = {}) => {
   if (WebGAL.sceneManager.lockSceneWrite) {
     return;
   }
@@ -43,7 +44,7 @@ export const callScene = (sceneUrl: string, sceneName: string) => {
         WebGAL.sceneManager.sceneWritePromise = null;
       }
       if (shouldAutoNext) {
-        nextSentence();
+        nextSentence(commitOptions);
       }
     });
   WebGAL.sceneManager.sceneWritePromise = sceneWritePromise;

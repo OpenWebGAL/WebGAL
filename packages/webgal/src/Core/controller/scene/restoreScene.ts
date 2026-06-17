@@ -3,6 +3,7 @@ import { sceneParser } from '../../parser/sceneParser';
 import { logger } from '../../util/logger';
 import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
 import { ISceneEntry } from '@/Core/Modules/scene';
+import type { IStageCommitOptions } from '@/Core/Modules/stage/stageStateManager';
 
 import { WebGAL } from '@/Core/WebGAL';
 
@@ -10,7 +11,7 @@ import { WebGAL } from '@/Core/WebGAL';
  * 恢复场景
  * @param entry 场景入口
  */
-export const restoreScene = (entry: ISceneEntry) => {
+export const restoreScene = (entry: ISceneEntry, commitOptions: IStageCommitOptions = {}) => {
   if (WebGAL.sceneManager.lockSceneWrite) {
     return;
   }
@@ -34,7 +35,7 @@ export const restoreScene = (entry: ISceneEntry) => {
         WebGAL.sceneManager.sceneWritePromise = null;
       }
       if (shouldAutoNext) {
-        nextSentence();
+        nextSentence(commitOptions);
       }
     });
   WebGAL.sceneManager.sceneWritePromise = sceneWritePromise;

@@ -23,12 +23,14 @@ export interface IStageCommitOptions {
   syncPixiStage?: boolean;
   applyPixiEffects?: boolean;
   notifyReact?: boolean;
+  autoFastSave?: boolean;
 }
 
 export interface IResolvedStageCommitOptions {
   syncPixiStage: boolean;
   applyPixiEffects: boolean;
   notifyReact: boolean;
+  autoFastSave: boolean;
 }
 
 type StageCommitHandler = (stageState: IStageState, options: IResolvedStageCommitOptions) => void;
@@ -104,35 +106,39 @@ export class StageStateManager {
     this.calculationStageState[key] = value;
   }
 
-  public setStageAndCommit<K extends keyof IStageState>(key: K, value: IStageState[K]) {
+  public setStageAndCommit<K extends keyof IStageState>(
+    key: K,
+    value: IStageState[K],
+    options: IStageCommitOptions = {},
+  ) {
     this.setStage(key, value);
-    this.commit();
+    this.commit(options);
   }
 
   public setStageVar(payload: ISetGameVar) {
     this.calculationStageState.GameVar[payload.key] = payload.value;
   }
 
-  public setStageVarAndCommit(payload: ISetGameVar) {
+  public setStageVarAndCommit(payload: ISetGameVar, options: IStageCommitOptions = {}) {
     this.setStageVar(payload);
-    this.commit();
+    this.commit(options);
   }
 
   public replaceCalculationStageState(stageState: IStageState) {
     this.calculationStageState = cloneDeep(stageState);
   }
 
-  public replaceAllStageState(stageState: IStageState) {
+  public replaceAllStageState(stageState: IStageState, options: IStageCommitOptions = {}) {
     this.calculationStageState = cloneDeep(stageState);
-    this.commit();
+    this.commit(options);
   }
 
   public resetCalculationStageState(stageState: IStageState) {
     this.replaceCalculationStageState(stageState);
   }
 
-  public resetAllStageState(stageState: IStageState) {
-    this.replaceAllStageState(stageState);
+  public resetAllStageState(stageState: IStageState, options: IStageCommitOptions = {}) {
+    this.replaceAllStageState(stageState, options);
   }
 
   public updateEffect(payload: IEffect) {
@@ -169,9 +175,9 @@ export class StageStateManager {
     }
   }
 
-  public updateEffectAndCommit(payload: IEffect) {
+  public updateEffectAndCommit(payload: IEffect, options: IStageCommitOptions = {}) {
     this.updateEffect(payload);
-    this.commit();
+    this.commit(options);
   }
 
   public removeEffectByTargetId(target: string) {
@@ -357,6 +363,7 @@ export class StageStateManager {
       syncPixiStage: options.syncPixiStage ?? true,
       applyPixiEffects: options.applyPixiEffects ?? true,
       notifyReact: options.notifyReact ?? true,
+      autoFastSave: options.autoFastSave ?? true,
     };
     this.viewStageState = cloneDeep(this.calculationStageState);
     this.commitHandler?.(this.viewStageState, resolvedOptions);
@@ -370,6 +377,7 @@ export class StageStateManager {
       syncPixiStage: false,
       applyPixiEffects: true,
       notifyReact: false,
+      autoFastSave: false,
     });
   }
 
