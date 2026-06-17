@@ -350,7 +350,9 @@ export class StageStateManager {
   }
 
   public clearUncommittedNonHoldPerforms() {
-    this.calculationStageState.PerformList = this.calculationStageState.PerformList.filter((perform) => perform.isHoldOn);
+    this.calculationStageState.PerformList = this.calculationStageState.PerformList.filter(
+      (perform) => perform.isHoldOn,
+    );
   }
 
   public removeNonHoldPerformsAndCommit() {
@@ -359,11 +361,12 @@ export class StageStateManager {
   }
 
   public commit(options: IStageCommitOptions = {}) {
+    const notifyReact = options.notifyReact ?? true;
     const resolvedOptions: IResolvedStageCommitOptions = {
       syncPixiStage: options.syncPixiStage ?? true,
       applyPixiEffects: options.applyPixiEffects ?? true,
-      notifyReact: options.notifyReact ?? true,
-      autoFastSave: options.autoFastSave ?? true,
+      notifyReact,
+      autoFastSave: options.autoFastSave ?? notifyReact,
     };
     this.viewStageState = cloneDeep(this.calculationStageState);
     this.commitHandler?.(this.viewStageState, resolvedOptions);
