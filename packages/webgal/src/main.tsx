@@ -39,3 +39,10 @@ ReactDOM.render(
   </StrictMode>,
   document.querySelector('#root'),
 );
+
+// 测试框架初始化（仅在 WEBGAL_TEST=true 编译时启用）
+if (__WEBGAL_TEST__) {
+  import('./test').then(({ initTestFramework }) => {
+    initTestFramework();
+  });
+}
