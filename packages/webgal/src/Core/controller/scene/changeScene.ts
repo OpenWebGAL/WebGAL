@@ -26,6 +26,7 @@ export const changeScene = (sceneUrl: string, sceneName: string, commitOptions: 
       WebGAL.sceneManager.sceneData.currentSentenceId = 0;
       clearPrefetchLinks();
       WebGAL.sceneManager.settledScenes.add(sceneUrl); // 放入已加载场景列表，避免递归加载相同场景
+      WebGAL.flowchartManager.waitForCurrentSceneDialog();
       logger.debug('现在切换场景，切换后的结果：', WebGAL.sceneManager.sceneData);
       shouldAutoNext = !isFastPreviewSceneWrite;
     })

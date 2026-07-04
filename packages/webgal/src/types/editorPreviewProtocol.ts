@@ -79,6 +79,7 @@ export const COMPONENT_VISIBILITY_KEYS = [
   'showStarter',
   'showTitle',
   'showMenuPanel',
+  'showFlowchart',
   'showTextBox',
   'showControls',
   'controlsVisibility',

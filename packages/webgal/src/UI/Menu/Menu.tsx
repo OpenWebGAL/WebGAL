@@ -7,6 +7,7 @@ import { Options } from './Options/Options';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import { MenuPanelTag } from '@/store/guiInterface';
+import { Flowchart } from '@/UI/Flowchart/Flowchart';
 
 /**
  * Menu 页面，包括存读档、选项等
@@ -28,6 +29,9 @@ const Menu: FC = () => {
     case MenuPanelTag.Option:
       currentTag = <Options />;
       // menuBgColor = 'linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%)';
+      break;
+    case MenuPanelTag.Flowchart:
+      currentTag = <Flowchart />;
       break;
   }
   return (

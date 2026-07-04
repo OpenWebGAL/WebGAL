@@ -51,6 +51,7 @@ export const initializeScript = (): void => {
   const initialSceneReady = sceneFetcher(sceneUrl).then((rawScene) => {
     WebGAL.sceneManager.sceneData.currentScene = sceneParser(rawScene, 'start.txt', sceneUrl);
     WebGAL.sceneManager.settledScenes.add(sceneUrl); // 放入已加载场景列表，避免递归加载相同场景
+    WebGAL.flowchartManager.waitForCurrentSceneDialog();
   });
   // 获取游戏信息
   infoFetcher('./game/config.txt');

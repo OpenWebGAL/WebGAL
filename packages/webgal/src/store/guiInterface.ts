@@ -5,6 +5,7 @@ export enum MenuPanelTag {
   Save, // “保存”选项卡
   Load, // “读取”选项卡
   Option, // “设置”选项卡
+  Flowchart, // “流程图”选项卡
 }
 
 /**
@@ -20,6 +21,7 @@ export interface IGuiState {
   controlsVisibility: boolean;
   currentMenuTag: MenuPanelTag; // 当前Menu界面的选项卡
   showBacklog: boolean;
+  showFlowchart: boolean;
   titleBgm: string; // 标题背景音乐
   titleBg: string; // 标题背景图片
   logoImage: string[];

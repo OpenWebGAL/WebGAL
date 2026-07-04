@@ -356,6 +356,7 @@ export const startPreviewSyncRuntime = () => {
     applyComponentVisibility({
       showTitle: false,
       showMenuPanel: false,
+      showFlowchart: false,
       isEnterGame: true,
       showPanicOverlay: false,
     });

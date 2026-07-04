@@ -137,6 +137,9 @@ const zhTw = {
     loadSaving: {
       title: '讀檔',
     },
+    flowchart: {
+      title: '流程圖',
+    },
     title: {
       title: '主選單',
       options: {
@@ -183,6 +186,7 @@ const zhTw = {
       hide: '隱藏',
       show: '顯示',
       backlog: '回想',
+      flowchart: '流程圖',
       replay: '重播',
       auto: '自動',
       forward: '加速',
@@ -194,6 +198,15 @@ const zhTw = {
       options: '設定',
       title: '主選單',
       titleTips: '確定要返回主選單嗎？',
+    },
+    flowchart: {
+      title: '流程圖',
+      empty: '暫無流程圖',
+      locked: '未解鎖',
+      main: '主線',
+      character: '個人線',
+      root: '開始',
+      chapter: '章節',
     },
   },
 

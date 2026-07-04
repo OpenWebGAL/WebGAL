@@ -5,3 +5,4 @@ Title_bgm:s_Title.mp3;
 Game_Logo:WebGalEnter.webp;
 Enable_Appreciation:true;
 Enable_Continue:true;
+Enable_flowchart:true;

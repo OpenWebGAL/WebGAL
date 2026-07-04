@@ -86,6 +86,7 @@ export const commitForward = (options: IStageCommitOptions = {}) => {
   stageStateManager.commit({ ...options, applyPixiEffects: false });
   WebGAL.gameplay.performController.commitPendingPerforms();
   stageStateManager.applyCommittedPixiEffects();
+  WebGAL.flowchartManager.unlockPendingCurrentScene();
 };
 
 /**

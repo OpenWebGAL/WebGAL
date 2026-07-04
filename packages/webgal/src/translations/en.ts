@@ -134,6 +134,9 @@ const en = {
     loadSaving: {
       title: 'LOAD',
     },
+    flowchart: {
+      title: 'FLOWCHART',
+    },
     title: {
       title: 'TITLE',
     },
@@ -176,6 +179,7 @@ const en = {
       hide: 'Hide',
       show: 'Show',
       backlog: 'Backlog',
+      flowchart: 'Flowchart',
       replay: 'Replay',
       auto: 'Auto',
       forward: 'Forward',
@@ -187,6 +191,15 @@ const en = {
       options: 'Options',
       title: 'Title',
       titleTips: 'Confirm return to the title screen',
+    },
+    flowchart: {
+      title: 'Flowchart',
+      empty: 'No flowchart',
+      locked: 'Locked',
+      main: 'Main',
+      character: 'Route',
+      root: 'Start',
+      chapter: 'Chapter',
     },
   },
 

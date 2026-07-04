@@ -13,6 +13,7 @@ import { useStageState } from '@/hooks/useStageState';
 export const BottomControlPanelFilm = () => {
   const showPanel = useValue(false);
   const stageState = useStageState();
+  const enableFlowchart = useSelector((state: RootState) => state.userData.globalGameVar.Enable_flowchart === true);
   const dispatch = useDispatch();
   const setComponentVisibility = (component: keyof componentsVisibility, visibility: boolean) => {
     dispatch(setVisibility({ component, visibility }));
@@ -44,6 +45,18 @@ export const BottomControlPanelFilm = () => {
               >
                 <span className={styles.button_text}>剧情回想 / BACKLOG</span>
               </span>
+              {enableFlowchart && (
+                <span
+                  className={styles.singleButton}
+                  onClick={() => {
+                    setMenuPanel(MenuPanelTag.Flowchart);
+                    setComponentVisibility('showMenuPanel', true);
+                    showPanel.set(!showPanel.value);
+                  }}
+                >
+                  <span className={styles.button_text}>流程图 / FLOWCHART</span>
+                </span>
+              )}
               <span
                 className={styles.singleButton}
                 onClick={() => {

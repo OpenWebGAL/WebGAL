@@ -42,6 +42,7 @@ export const say = (sentence: ISentence): IPerform => {
 
   // 设置文本显示
   stageStateManager.setStage('showText', dialogToShow);
+  WebGAL.flowchartManager.requestUnlockCurrentScene();
   stageStateManager.setStage('vocal', '');
 
   // 清除语音

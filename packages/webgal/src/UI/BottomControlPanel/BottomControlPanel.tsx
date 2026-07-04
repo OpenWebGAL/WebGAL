@@ -27,6 +27,7 @@ import {
   ReplayMusic,
   Save,
   SettingTwo,
+  TreeDiagram,
   Unlock,
 } from '@icon-park/react';
 import { useTranslation } from 'react-i18next';
@@ -49,6 +50,7 @@ export const BottomControlPanel = () => {
   }
   const { isSupported: isFullscreenSupport, isFullScreen, toggle: toggleFullscreen } = useFullScreen();
   const GUIStore = useSelector((state: RootState) => state.GUI);
+  const enableFlowchart = useSelector((state: RootState) => state.userData.globalGameVar.Enable_flowchart === true);
   const stageState = useStageState();
   const dispatch = useDispatch();
   const setComponentVisibility = (component: keyof componentsVisibility, visibility: boolean) => {
@@ -143,6 +145,27 @@ export const BottomControlPanel = () => {
             />
             <span className={styles.button_text}>{t('buttons.backlog')}</span>
           </span>
+          {enableFlowchart && (
+            <span
+              className={styles.singleButton}
+              style={{ fontSize }}
+              onClick={() => {
+                setMenuPanel(MenuPanelTag.Flowchart);
+                setComponentVisibility('showMenuPanel', true);
+                playSeClick();
+              }}
+              onMouseEnter={playSeEnter}
+            >
+              <TreeDiagram
+                className={styles.button}
+                theme="outline"
+                size={size}
+                fill="#f5f5f7"
+                strokeWidth={strokeWidth}
+              />
+              <span className={styles.button_text}>{t('buttons.flowchart')}</span>
+            </span>
+          )}
           <span
             className={styles.singleButton}
             style={{ fontSize }}

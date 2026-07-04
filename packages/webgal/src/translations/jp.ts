@@ -137,6 +137,9 @@ const jp = {
     loadSaving: {
       title: 'LOAD',
     },
+    flowchart: {
+      title: 'FLOWCHART',
+    },
     title: {
       title: 'HOME',
     },
@@ -179,6 +182,7 @@ const jp = {
       hide: 'CLOSE',
       show: 'SHOW',
       backlog: 'LOG',
+      flowchart: 'FLOWCHART',
       replay: 'REPLAY',
       auto: 'AUTO',
       forward: 'SKIP',
@@ -190,6 +194,15 @@ const jp = {
       options: 'CONFIG',
       title: 'HOME',
       titleTips: 'タイトル画面に戻りますか？',
+    },
+    flowchart: {
+      title: 'Flowchart',
+      empty: 'フローチャートなし',
+      locked: '未解放',
+      main: 'メイン',
+      character: 'ルート',
+      root: '開始',
+      chapter: '章',
     },
   },
 

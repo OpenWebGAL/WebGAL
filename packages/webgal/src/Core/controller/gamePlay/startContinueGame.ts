@@ -23,6 +23,7 @@ export const startGame = () => {
   // 场景写入到运行时
   sceneFetcher(sceneUrl).then((rawScene) => {
     WebGAL.sceneManager.sceneData.currentScene = sceneParser(rawScene, 'start.txt', sceneUrl);
+    WebGAL.flowchartManager.waitForCurrentSceneDialog();
     // 开始第一条语句
     continueSentence();
   });

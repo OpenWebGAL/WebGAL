@@ -1,0 +1,172 @@
+{
+  "flowcharts": [
+    {
+      "id": "main",
+      "name": "示例游戏主线",
+      "type": "main",
+      "nodes": [
+        {
+          "id": "start",
+          "type": "root",
+          "position": { "x": 250, "y": 0 },
+          "data": {
+            "label": "入口选择",
+            "sceneName": "start.txt",
+            "isRoot": true
+          }
+        },
+        {
+          "id": "zh_cn",
+          "type": "chapter",
+          "position": { "x": 0, "y": 120 },
+          "data": {
+            "label": "简体中文演示",
+            "sceneName": "demo_zh_cn.txt"
+          }
+        },
+        {
+          "id": "ja",
+          "type": "chapter",
+          "position": { "x": 240, "y": 120 },
+          "data": {
+            "label": "日本語デモ",
+            "sceneName": "demo_ja.txt"
+          }
+        },
+        {
+          "id": "en",
+          "type": "chapter",
+          "position": { "x": 480, "y": 120 },
+          "data": {
+            "label": "English Demo",
+            "sceneName": "demo_en.txt"
+          }
+        },
+        {
+          "id": "function_test",
+          "type": "branch",
+          "position": { "x": 720, "y": 120 },
+          "data": {
+            "label": "功能测试入口",
+            "sceneName": "function_test.txt"
+          }
+        }
+      ],
+      "edges": [
+        { "id": "e-start-zh-cn", "source": "start", "target": "zh_cn" },
+        { "id": "e-start-ja", "source": "start", "target": "ja" },
+        { "id": "e-start-en", "source": "start", "target": "en" },
+        { "id": "e-start-function-test", "source": "start", "target": "function_test" }
+      ]
+    },
+    {
+      "id": "function-tests",
+      "name": "功能测试分支",
+      "type": "character",
+      "nodes": [
+        {
+          "id": "function_test",
+          "type": "root",
+          "position": { "x": 550, "y": 0 },
+          "data": {
+            "label": "功能测试入口",
+            "sceneName": "function_test.txt",
+            "isRoot": true
+          }
+        },
+        {
+          "id": "animation",
+          "type": "event",
+          "position": { "x": 0, "y": 120 },
+          "data": {
+            "label": "口型动画测试",
+            "sceneName": "demo_animation.txt"
+          }
+        },
+        {
+          "id": "var",
+          "type": "event",
+          "position": { "x": 220, "y": 120 },
+          "data": {
+            "label": "变量插值测试",
+            "sceneName": "demo_var.txt"
+          }
+        },
+        {
+          "id": "change_config",
+          "type": "event",
+          "position": { "x": 440, "y": 120 },
+          "data": {
+            "label": "配置修改测试",
+            "sceneName": "demo_changeConfig.txt"
+          }
+        },
+        {
+          "id": "performs",
+          "type": "event",
+          "position": { "x": 660, "y": 120 },
+          "data": {
+            "label": "Pixi 演出测试",
+            "sceneName": "demo_performs.txt"
+          }
+        },
+        {
+          "id": "flow_control",
+          "type": "branch",
+          "position": { "x": 880, "y": 120 },
+          "data": {
+            "label": "流程控制测试",
+            "sceneName": "demo_test_flow_control.txt"
+          }
+        },
+        {
+          "id": "variable_flow",
+          "type": "branch",
+          "position": { "x": 1100, "y": 120 },
+          "data": {
+            "label": "变量流程测试",
+            "sceneName": "demo_test_variable_flow_control.txt"
+          }
+        },
+        {
+          "id": "input_flow",
+          "type": "branch",
+          "position": { "x": 1320, "y": 120 },
+          "data": {
+            "label": "用户输入流程测试",
+            "sceneName": "demo_test_input_flow_control.txt"
+          }
+        },
+        {
+          "id": "dom_control",
+          "type": "event",
+          "position": { "x": 1540, "y": 120 },
+          "data": {
+            "label": "DOM 生命周期测试",
+            "sceneName": "demo_test_dom_control.txt"
+          }
+        },
+        {
+          "id": "flow_child",
+          "type": "event",
+          "position": { "x": 880, "y": 240 },
+          "data": {
+            "label": "callScene 子场景",
+            "sceneName": "demo_test_flow_control_child.txt"
+          }
+        }
+      ],
+      "edges": [
+        { "id": "e-function-animation", "source": "function_test", "target": "animation" },
+        { "id": "e-function-var", "source": "function_test", "target": "var" },
+        { "id": "e-function-change-config", "source": "function_test", "target": "change_config" },
+        { "id": "e-function-performs", "source": "function_test", "target": "performs" },
+        { "id": "e-function-flow-control", "source": "function_test", "target": "flow_control" },
+        { "id": "e-function-variable-flow", "source": "function_test", "target": "variable_flow" },
+        { "id": "e-function-input-flow", "source": "function_test", "target": "input_flow" },
+        { "id": "e-function-dom-control", "source": "function_test", "target": "dom_control" },
+        { "id": "e-flow-control-child", "source": "flow_control", "target": "flow_child" }
+      ]
+    }
+  ]
+}
