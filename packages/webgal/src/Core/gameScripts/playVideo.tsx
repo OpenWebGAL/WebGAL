@@ -37,6 +37,7 @@ export const playVideo = (sentence: ISentence): IPerform => {
     ReactDOM.render(<div />, document.getElementById('videoContainer'));
   };
   const endPerform = () => {
+    if (isOver) return;
     isOver = true;
     WebGAL.gameplay.performController.unmountPerform(performInitName);
   };
@@ -63,8 +64,6 @@ export const playVideo = (sentence: ISentence): IPerform => {
         if (VocalControl !== null) {
           VocalControl.currentTime = 0;
           VocalControl.volume = bgmVol;
-          // 双击可跳过视频
-          WebGAL.events.fullscreenDbClick.on(skipVideo);
           /**
            * 把bgm和语音的音量设为0
            */
@@ -77,11 +76,12 @@ export const playVideo = (sentence: ISentence): IPerform => {
             vocalElement.volume = '0';
           }
 
-          VocalControl?.play().catch(() => {});
-
-          VocalControl.onended = () => {
-            endPerform();
-          };
+          VocalControl.addEventListener('error', () => endPerform());
+          VocalControl.addEventListener('ended', () => endPerform());
+          VocalControl.play().catch(() => endPerform());
+          if (!blockingNextFlag) {
+            WebGAL.events.fullscreenDbClick.on(skipVideo);
+          }
         }
       }, 1);
     },

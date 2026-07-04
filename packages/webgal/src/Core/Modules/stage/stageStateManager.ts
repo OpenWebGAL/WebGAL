@@ -24,6 +24,7 @@ export interface IStageCommitOptions {
   applyPixiEffects?: boolean;
   notifyReact?: boolean;
   autoFastSave?: boolean;
+  skipAnimation?: boolean;
 }
 
 export interface IResolvedStageCommitOptions {
@@ -31,6 +32,7 @@ export interface IResolvedStageCommitOptions {
   applyPixiEffects: boolean;
   notifyReact: boolean;
   autoFastSave: boolean;
+  skipAnimation: boolean;
 }
 
 type StageCommitHandler = (stageState: IStageState, options: IResolvedStageCommitOptions) => void;
@@ -367,6 +369,7 @@ export class StageStateManager {
       applyPixiEffects: options.applyPixiEffects ?? true,
       notifyReact,
       autoFastSave: options.autoFastSave ?? notifyReact,
+      skipAnimation: options.skipAnimation ?? false,
     };
     this.viewStageState = cloneDeep(this.calculationStageState);
     this.commitHandler?.(this.viewStageState, resolvedOptions);
@@ -381,6 +384,7 @@ export class StageStateManager {
       applyPixiEffects: true,
       notifyReact: false,
       autoFastSave: false,
+      skipAnimation: false,
     });
   }
 

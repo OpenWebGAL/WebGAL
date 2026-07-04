@@ -6,13 +6,15 @@ import { webgalStore } from '@/store/store';
 import { unlockBgmInUserData } from '@/store/userDataReducer';
 import localforage from 'localforage';
 import { WebGAL } from '../WebGAL';
+import { stageStateManager } from '@/Core/Modules/stage/stageStateManager';
+import { WEBGAL_NONE } from '@/Core/constants';
 
 /**
  * 播放一段bgm
  * @param sentence
  */
 export const bgm = (sentence: ISentence): IPerform => {
-  let url: string = sentence.content; // 获取bgm的url
+  let url: string = sentence.content === WEBGAL_NONE ? '' : sentence.content; // 获取bgm的url
   const name = getStringArgByKey(sentence, 'unlockname') ?? '';
   const series = getStringArgByKey(sentence, 'series') ?? 'default';
   let enter = getNumberArgByKey(sentence, 'enter') ?? 0; // 获取bgm的淡入时间
@@ -26,7 +28,11 @@ export const bgm = (sentence: ISentence): IPerform => {
     localforage.setItem(WebGAL.gameKey, userDataState).then(() => {});
   }
 
-  playBgm(url, enter, volume);
+  if (url === '' && enter === 0) {
+    stageStateManager.setStage('bgm', { src: '', enter, volume });
+  } else {
+    playBgm(url, enter, volume);
+  }
 
   return createNonePerform({ isHoldOn: true });
 };

@@ -9,6 +9,7 @@ import { WebGAL } from '@/Core/WebGAL';
 import { applyAnimationEndState, getAnimateDuration } from '../Modules/animationFunctions';
 import { v4 as uuid } from 'uuid';
 import { generateTimelineObj } from '@/Core/controller/stage/pixi/animations/timeline';
+import { parseSetTransformFrame } from './parseTransformFrame';
 /**
  * 设置变换
  * @param sentence
@@ -31,12 +32,10 @@ export const setTransform = (sentence: ISentence): IPerform => {
 
   if (!parallel) WebGAL.gameplay.performController.unmountPerform(performInitName, true);
 
-  try {
-    const frame = JSON.parse(animationString) as AnimationFrame;
+  const frame = parseSetTransformFrame(animationString);
+  if (frame) {
     animationObj = generateTransformAnimationObj(target, frame, duration, ease, writeFullEffect);
-    console.log('animationObj:', animationObj);
-  } catch (e) {
-    // 解析都错误了，歇逼吧
+  } else {
     animationObj = [];
   }
 

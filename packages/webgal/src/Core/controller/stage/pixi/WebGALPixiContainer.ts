@@ -328,6 +328,45 @@ const PROPERTY_CONFIGS: Record<string, PropertyConfig> = {
   },
 };
 
+function getChildReferenceBounds(child: PIXI.DisplayObject, containerPivot: PIXI.IPointData): PIXI.Rectangle {
+  child.transform.updateLocalTransform();
+  const bounds = child.getLocalBounds();
+  const { a, b, c, d, tx, ty } = child.transform.localTransform;
+  const x0 = bounds.x;
+  const x1 = bounds.x + bounds.width;
+  const y0 = bounds.y;
+  const y1 = bounds.y + bounds.height;
+  const pivotX = containerPivot.x;
+  const pivotY = containerPivot.y;
+
+  const p0x = a * x0 + c * y0 + tx - pivotX;
+  const p0y = b * x0 + d * y0 + ty - pivotY;
+  const p1x = a * x1 + c * y0 + tx - pivotX;
+  const p1y = b * x1 + d * y0 + ty - pivotY;
+  const p2x = a * x0 + c * y1 + tx - pivotX;
+  const p2y = b * x0 + d * y1 + ty - pivotY;
+  const p3x = a * x1 + c * y1 + tx - pivotX;
+  const p3y = b * x1 + d * y1 + ty - pivotY;
+
+  const minX = Math.min(p0x, p1x, p2x, p3x);
+  const minY = Math.min(p0y, p1y, p2y, p3y);
+  const maxX = Math.max(p0x, p1x, p2x, p3x);
+  const maxY = Math.max(p0y, p1y, p2y, p3y);
+
+  return new PIXI.Rectangle(minX, minY, maxX - minX, maxY - minY);
+}
+
+function mergeBounds(target: PIXI.Rectangle, next: PIXI.Rectangle): void {
+  const minX = Math.min(target.x, next.x);
+  const minY = Math.min(target.y, next.y);
+  const maxX = Math.max(target.x + target.width, next.x + next.width);
+  const maxY = Math.max(target.y + target.height, next.y + next.height);
+  target.x = minX;
+  target.y = minY;
+  target.width = maxX - minX;
+  target.height = maxY - minY;
+}
+
 export class WebGALPixiContainer extends PIXI.Container {
   public containerFilters = new Map<string, PIXI.Filter>();
   private filterToName = new Map<PIXI.Filter, string>();
@@ -413,6 +452,33 @@ export class WebGALPixiContainer extends PIXI.Container {
     const old = this.y;
     this.baseY = y;
     this.y = old;
+  }
+
+  public getBasePosition(): { x: number; y: number } {
+    return {
+      x: this.baseX,
+      y: this.baseY,
+    };
+  }
+
+  public getReferenceLocalBounds(): PIXI.Rectangle | undefined {
+    if (this.children.length === 0) {
+      return undefined;
+    }
+
+    let referenceBounds: PIXI.Rectangle | undefined;
+    for (const child of this.children) {
+      const localBounds = getChildReferenceBounds(child, this.pivot);
+
+      if (!referenceBounds) {
+        referenceBounds = localBounds;
+        continue;
+      }
+
+      mergeBounds(referenceBounds, localBounds);
+    }
+
+    return referenceBounds;
   }
 
   // --- Standard Filters ---

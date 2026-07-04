@@ -8,7 +8,7 @@ import styles from './getUserInput.module.scss';
 import { useSEByWebgalStore } from '@/hooks/useSoundEffect';
 import { WebGAL } from '@/Core/WebGAL';
 import { getStringArgByKey } from '@/Core/util/getSentenceArg';
-import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
+import { continueSentence } from '@/Core/controller/gamePlay/nextSentence';
 import { getCurrentFontFamily } from '@/hooks/useFontFamily';
 import { logger } from '@/Core/util/logger';
 import { tryToRegex } from '@/Core/util/global';
@@ -79,7 +79,7 @@ export const getUserInput = (sentence: ISentence, commitOptions: IStageCommitOpt
             }
             playSeClick();
             WebGAL.gameplay.performController.unmountPerform('userInput');
-            nextSentence(commitOptions);
+            continueSentence(commitOptions);
           }}
           className={styles.button}
         >

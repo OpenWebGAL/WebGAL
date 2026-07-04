@@ -17,17 +17,17 @@ export interface IPerform {
   isStarted?: boolean;
   // 卸载演出的函数
   stopFunction: () => void;
-  // 演出是否阻塞游戏流程继续（一个函数，返回 boolean类型的结果，判断要不要阻塞）
+  // 是否阻塞用户/内部继续推进。为 true 时，next/forward/continue 都不能执行下一条语句。
   blockingNext: () => boolean;
-  // 演出是否阻塞自动模式（一个函数，返回 boolean类型的结果，判断要不要阻塞）
+  // 是否阻塞自动播放计时器触发下一步；只影响 autoPlay，不影响用户点击或内部继续推进。
   blockingAuto: () => boolean;
-  // 演出是否阻塞状态演算；默认不阻塞，只有需要外部输入才能确定后续状态的演出需要覆盖
+  // 是否阻塞同一轮 -next 继续演算；只有需要外部输入才能确定后续状态的演出需要覆盖。
   blockingStateCalculation?: () => boolean;
   // 未 commit 的演出被丢弃时，将它的终态同步到演算状态
   settleStateOnDiscard?: () => void;
-  // 演出结束后转到下一句
+  // 演出自然结束或被卸载后触发内部继续推进；推进前仍会等待 blockingNext 解除。
   goNextWhenOver?: boolean;
-  // 跳过由 nextSentence 函数引发的演出回收
+  // 跳过由 nextSentence/continueSentence 引发的非 hold 演出回收。
   skipNextCollect?: boolean;
 }
 

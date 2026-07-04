@@ -31,9 +31,6 @@ export default function IMSSTextbox(props: ITextboxProps) {
 
   const applyStyle = useApplyStyle('textbox');
   const readTextClassName = isRead ? ` ${applyStyle('readText', styles.readText)}` : '';
-  const readTextOuterClassName = isRead
-    ? ` ${applyStyle('readTextOuter', styles.readTextOuter)}`
-    : '';
   const readTextInnerClassName = isRead ? ` ${applyStyle('readTextInner', styles.readTextInner)}` : '';
 
   useEffect(() => {
@@ -138,6 +135,8 @@ export default function IMSSTextbox(props: ITextboxProps) {
       // if (e === '<br />') {
       //   return <br key={`br${index}`} />;
       // }
+      const outerClassName = applyStyle('outer', styles.outer);
+      const readTextOuterClassName = isRead ? ` ${applyStyle('readTextOuter', styles.readTextOuter)}` : '';
       let delay = allTextIndex * textDelay;
       allTextIndex++;
       let prevLength = currentConcatDialogPrev.length;
@@ -157,9 +156,7 @@ export default function IMSSTextbox(props: ITextboxProps) {
           >
             <span className={styles.zhanwei + styleAllText}>
               {e}
-              <span className={applyStyle('outer', styles.outer) + readTextOuterClassName + styleClassName + styleAllText}>
-                {e}
-              </span>
+              <span className={outerClassName + readTextOuterClassName + styleClassName + styleAllText}>{e}</span>
               {isUseStroke && (
                 <span className={applyStyle('inner', styles.inner) + readTextInnerClassName + styleAllText}>{e}</span>
               )}
@@ -180,9 +177,7 @@ export default function IMSSTextbox(props: ITextboxProps) {
         >
           <span className={styles.zhanwei + styleAllText}>
             {e}
-            <span className={applyStyle('outer', styles.outer) + readTextOuterClassName + styleClassName + styleAllText}>
-              {e}
-            </span>
+            <span className={outerClassName + readTextOuterClassName + styleClassName + styleAllText}>{e}</span>
             {isUseStroke && (
               <span className={applyStyle('inner', styles.inner) + readTextInnerClassName + styleAllText}>{e}</span>
             )}

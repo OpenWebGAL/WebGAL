@@ -1,7 +1,7 @@
 import { sceneFetcher } from './sceneFetcher';
 import { sceneParser } from '../../parser/sceneParser';
 import { logger } from '../../util/logger';
-import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
+import { continueSentence } from '@/Core/controller/gamePlay/nextSentence';
 import { clearPrefetchLinks } from '@/Core/util/prefetcher/assetsPrefetcher';
 import type { IStageCommitOptions } from '@/Core/Modules/stage/stageStateManager';
 
@@ -44,7 +44,8 @@ export const callScene = (sceneUrl: string, sceneName: string, commitOptions: IS
         WebGAL.sceneManager.sceneWritePromise = null;
       }
       if (shouldAutoNext) {
-        nextSentence(commitOptions);
+        // 场景写入完成后的第一句推进是内核流程，不应触发用户 next 语义。
+        continueSentence(commitOptions);
       }
     });
   WebGAL.sceneManager.sceneWritePromise = sceneWritePromise;

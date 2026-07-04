@@ -12,6 +12,7 @@ import { WebGAL } from '@/Core/WebGAL';
 import { baseBlinkParam, baseFocusParam, BlinkParam, FocusParam } from '@/Core/live2DCore';
 import { DEFAULT_FIG_IN_DURATION, DEFAULT_FIG_OUT_DURATION, WEBGAL_NONE } from '../constants';
 import { stageStateManager } from '@/Core/Modules/stage/stageStateManager';
+import { parseTransformFrame } from './parseTransformFrame';
 /**
  * 更改立绘
  * @param sentence 语句
@@ -161,30 +162,15 @@ export function changeFigure(sentence: ISentence): IPerform {
     }
     // 处理 transform 和 默认 transform
     let animationObj: AnimationFrame[];
-    if (transformString) {
-      console.log(transformString);
-      try {
-        const frame = JSON.parse(transformString) as AnimationFrame;
-        animationObj = generateTransformAnimationObj(key, frame, duration, ease, !ignoreDefault);
-        // 因为是切换，必须把一开始的 alpha 改为 0
-        animationObj[0].alpha = 0;
-        const animationName = (Math.random() * 10).toString(16);
-        const newAnimation: IUserAnimation = { name: animationName, effects: animationObj };
-        WebGAL.animationManager.addAnimation(newAnimation);
-        duration = getAnimateDuration(animationName);
-        stageStateManager.updateAnimationSettings({ target: key, key: 'enterAnimationName', value: animationName });
-      } catch (e) {
-        // 解析都错误了，歇逼吧
-        applyDefaultTransform();
-      }
+    const frame = transformString ? parseTransformFrame(transformString) : null;
+    if (frame) {
+      applyTransform(frame);
     } else {
       applyDefaultTransform();
     }
 
-    function applyDefaultTransform() {
-      // 应用默认的
-      const frame = {};
-      animationObj = generateTransformAnimationObj(key, frame as AnimationFrame, duration, ease, !ignoreDefault);
+    function applyTransform(frame: AnimationFrame) {
+      animationObj = generateTransformAnimationObj(key, frame, duration, ease, !ignoreDefault);
       // 因为是切换，必须把一开始的 alpha 改为 0
       animationObj[0].alpha = 0;
       const animationName = (Math.random() * 10).toString(16);
@@ -192,6 +178,12 @@ export function changeFigure(sentence: ISentence): IPerform {
       WebGAL.animationManager.addAnimation(newAnimation);
       duration = getAnimateDuration(animationName);
       stageStateManager.updateAnimationSettings({ target: key, key: 'enterAnimationName', value: animationName });
+    }
+
+    function applyDefaultTransform() {
+      // 应用默认的
+      const frame = {};
+      applyTransform(frame as AnimationFrame);
     }
     stageStateManager.updateAnimationSettings({
       target: key,

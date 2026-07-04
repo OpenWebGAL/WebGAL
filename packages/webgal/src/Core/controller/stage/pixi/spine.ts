@@ -172,6 +172,7 @@ export async function addSpineFigureImpl(
         }
         thisFigureContainer.pivot.set(0, this.stageHeight / 2);
         thisFigureContainer.addChild(figureSprite);
+        this.notifyTargetReferenceBoxChanged(key);
       }
     }, 0);
   };
@@ -264,6 +265,7 @@ export async function addSpineBgImpl(this: PixiStage, key: string, url: string) 
 
         // 挂载
         thisBgContainer.addChild(bgSprite);
+        this.notifyTargetReferenceBoxChanged(key);
       }
     }, 0);
   };

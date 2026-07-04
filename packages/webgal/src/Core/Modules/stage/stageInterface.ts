@@ -1,5 +1,6 @@
 import { ISentence } from '@/Core/controller/scene/sceneInterface';
 import { BlinkParam, FocusParam } from '@/Core/live2DCore';
+import type { Transform } from '@/types/editorPreviewProtocol';
 
 /**
  * 游戏内变量
@@ -24,49 +25,7 @@ export interface IChooseItem {
   isSubScene: boolean; // 是否是子场景调用
 }
 
-export interface ITransform {
-  alpha?: number;
-  scale?: {
-    x?: number;
-    y?: number;
-  };
-  // pivot: {
-  //   x: number;
-  //   y: number;
-  // };
-  position?: {
-    x?: number;
-    y?: number;
-  };
-  rotation?: number;
-  blur?: number;
-  brightness?: number;
-  contrast?: number;
-  saturation?: number;
-  gamma?: number;
-  colorRed?: number;
-  colorGreen?: number;
-  colorBlue?: number;
-  bevel?: number;
-  bevelThickness?: number;
-  bevelRotation?: number;
-  bevelSoftness?: number;
-  bevelRed?: number;
-  bevelGreen?: number;
-  bevelBlue?: number;
-  bloom?: number;
-  bloomBrightness?: number;
-  bloomBlur?: number;
-  bloomThreshold?: number;
-  oldFilm?: number;
-  dotFilm?: number;
-  reflectionFilm?: number;
-  glitchFilm?: number;
-  rgbFilm?: number;
-  godrayFilm?: number;
-  shockwaveFilter?: number;
-  radiusAlphaFilter?: number;
-}
+export type ITransform = Transform;
 
 /**
  * 基本效果接口
@@ -104,10 +63,6 @@ export const baseTransform: ITransform = {
     x: 1,
     y: 1,
   },
-  // pivot: {
-  //   x: 0.5,
-  //   y: 0.5,
-  // },
   position: {
     x: 0,
     y: 0,

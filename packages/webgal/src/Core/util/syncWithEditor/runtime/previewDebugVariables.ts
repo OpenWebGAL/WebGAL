@@ -3,7 +3,7 @@ import { stageStateManager } from '@/Core/Modules/stage/stageStateManager';
 import type { IGameVar } from '@/Core/Modules/stage/stageInterface';
 import { webgalStore } from '@/store/store';
 import { setUserData } from '@/store/userDataReducer';
-import type { DebugVariablePayload } from '../../../../types/editorPreviewProtocol';
+import type { DebugVariable } from '@/types/editorPreviewProtocol';
 
 let debugStageVarKeys = new Set<string>();
 let debugGlobalBackup: { globalGameVar: IGameVar; scriptManagedGlobalVar: string[] } | null = null;
@@ -23,7 +23,7 @@ function clearPreviewDebugVariables() {
   debugGlobalBackup = null;
 }
 
-export function applyPreviewDebugVariables(debugVariables: DebugVariablePayload[] = []) {
+export function applyPreviewDebugVariables(debugVariables: DebugVariable[] = []) {
   clearPreviewDebugVariables();
   if (debugVariables.some((item) => item.isGlobal)) {
     const userData = webgalStore.getState().userData;

@@ -15,6 +15,7 @@ import { WebGAL } from '@/Core/WebGAL';
 import { DEFAULT_BG_OUT_DURATION } from '@/Core/constants';
 import localforage from 'localforage';
 import { stageStateManager } from '@/Core/Modules/stage/stageStateManager';
+import { parseTransformFrame } from '../parseTransformFrame';
 
 /**
  * 进行背景图片的切换
@@ -56,29 +57,15 @@ export const changeBg = (sentence: ISentence): IPerform => {
 
   // 处理 transform 和 默认 transform
   let animationObj: AnimationFrame[];
-  if (transformString) {
-    try {
-      const frame = JSON.parse(transformString.toString()) as AnimationFrame;
-      animationObj = generateTransformAnimationObj('bg-main', frame, enterDuration, ease, !ignoreDefault);
-      // 因为是切换，必须把一开始的 alpha 改为 0
-      animationObj[0].alpha = 0;
-      const animationName = (Math.random() * 10).toString(16);
-      const newAnimation: IUserAnimation = { name: animationName, effects: animationObj };
-      WebGAL.animationManager.addAnimation(newAnimation);
-      duration = getAnimateDuration(animationName);
-      stageStateManager.updateAnimationSettings({ target: 'bg-main', key: 'enterAnimationName', value: animationName });
-    } catch (e) {
-      // 解析都错误了，歇逼吧
-      applyDefaultTransform();
-    }
+  const frame = transformString ? parseTransformFrame(transformString) : null;
+  if (frame) {
+    applyTransform(frame);
   } else {
     applyDefaultTransform();
   }
 
-  function applyDefaultTransform() {
-    // 应用默认的
-    const frame = {};
-    animationObj = generateTransformAnimationObj('bg-main', frame as AnimationFrame, duration, ease, !ignoreDefault);
+  function applyTransform(frame: AnimationFrame) {
+    animationObj = generateTransformAnimationObj('bg-main', frame, enterDuration, ease, !ignoreDefault);
     // 因为是切换，必须把一开始的 alpha 改为 0
     animationObj[0].alpha = 0;
     const animationName = (Math.random() * 10).toString(16);
@@ -86,6 +73,12 @@ export const changeBg = (sentence: ISentence): IPerform => {
     WebGAL.animationManager.addAnimation(newAnimation);
     duration = getAnimateDuration(animationName);
     stageStateManager.updateAnimationSettings({ target: 'bg-main', key: 'enterAnimationName', value: animationName });
+  }
+
+  function applyDefaultTransform() {
+    // 应用默认的
+    const frame = {};
+    applyTransform(frame as AnimationFrame);
   }
   stageStateManager.updateAnimationSettings({
     target: 'bg-main',

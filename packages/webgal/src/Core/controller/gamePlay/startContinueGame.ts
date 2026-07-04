@@ -4,7 +4,7 @@ import { sceneParser } from '../../parser/sceneParser';
 import { resetStage } from '@/Core/controller/stage/resetStage';
 import { webgalStore } from '@/store/store';
 import { setVisibility } from '@/store/GUIReducer';
-import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
+import { continueSentence } from '@/Core/controller/gamePlay/nextSentence';
 import { setEbg } from '@/Core/gameScripts/changeBg/setEbg';
 import { restorePerform } from '@/Core/controller/storage/jumpFromBacklog';
 
@@ -24,7 +24,7 @@ export const startGame = () => {
   sceneFetcher(sceneUrl).then((rawScene) => {
     WebGAL.sceneManager.sceneData.currentScene = sceneParser(rawScene, 'start.txt', sceneUrl);
     // 开始第一条语句
-    nextSentence();
+    continueSentence();
   });
   webgalStore.dispatch(setVisibility({ component: 'showTitle', visibility: false }));
 };

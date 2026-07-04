@@ -13,8 +13,22 @@ import { stageStateManager } from '@/Core/Modules/stage/stageStateManager';
 import type { IStageCommitOptions } from '@/Core/Modules/stage/stageStateManager';
 import { jumpToLabel } from '@/Core/gameScripts/label/jumpToLabel';
 import { prefetchCurrentSceneByProgress } from '@/Core/util/prefetcher/progressPrefetcher';
+import { WEBGAL_NONE } from '@/Core/constants';
 
 const MAX_FORWARD_SCRIPT_EXECUTION = 1000;
+
+export interface ScriptExecutionContext {
+  sceneName: string;
+  sentenceId: number;
+}
+
+export interface ScriptExecutionOptions {
+  beforeSentenceExecute?: (context: ScriptExecutionContext) => void;
+}
+
+export interface ScriptExecutorOptions extends ScriptExecutionOptions {
+  commitOptions?: IStageCommitOptions;
+}
 
 export const whenChecker = (whenValue: string | undefined): boolean => {
   if (whenValue === undefined) {
@@ -40,7 +54,8 @@ export const whenChecker = (whenValue: string | undefined): boolean => {
  * 语句执行器
  * 执行语句，同步场景状态，并根据情况立即执行下一句或者加入backlog
  */
-export const scriptExecutor = (depth = 0, commitOptions: IStageCommitOptions = {}) => {
+export const scriptExecutor = (depth = 0, options: ScriptExecutorOptions = {}) => {
+  const commitOptions = options.commitOptions ?? {};
   if (depth > MAX_FORWARD_SCRIPT_EXECUTION) {
     logger.error('forward 中执行的语句数量超过限制，可能存在 jumpLabel 或 -next 死循环');
     return;
@@ -60,8 +75,13 @@ export const scriptExecutor = (depth = 0, commitOptions: IStageCommitOptions = {
     }
     return;
   }
+  const sentenceId = WebGAL.sceneManager.sceneData.currentSentenceId;
+  options.beforeSentenceExecute?.({
+    sceneName: WebGAL.sceneManager.sceneData.currentScene.sceneName,
+    sentenceId,
+  });
   const currentScript: ISentence = cloneDeep(
-    WebGAL.sceneManager.sceneData.currentScene.sentenceList[WebGAL.sceneManager.sceneData.currentSentenceId],
+    WebGAL.sceneManager.sceneData.currentScene.sentenceList[sentenceId],
   );
 
   const interpolationOneItem = (content: string): string => {
@@ -92,6 +112,7 @@ export const scriptExecutor = (depth = 0, commitOptions: IStageCommitOptions = {
   };
 
   variableInterpolation();
+  if (currentScript.content === WEBGAL_NONE) currentScript.content = '';
 
   // 判断这个脚本要不要执行
   let runThis = true;
@@ -105,7 +126,7 @@ export const scriptExecutor = (depth = 0, commitOptions: IStageCommitOptions = {
   if (!runThis) {
     logger.warn('不满足条件，跳过本句！');
     WebGAL.sceneManager.sceneData.currentSentenceId++;
-    scriptExecutor(depth + 1, commitOptions);
+    scriptExecutor(depth + 1, options);
     return;
   }
 
@@ -116,7 +137,7 @@ export const scriptExecutor = (depth = 0, commitOptions: IStageCommitOptions = {
       logger.warn(`未找到标签 ${currentScript.content}，跳过 jumpLabel`);
       WebGAL.sceneManager.sceneData.currentSentenceId++;
     }
-    scriptExecutor(depth + 1, commitOptions);
+    scriptExecutor(depth + 1, options);
     return;
   }
 
@@ -149,7 +170,7 @@ export const scriptExecutor = (depth = 0, commitOptions: IStageCommitOptions = {
   if (isNext && !hasPendingBlockingStateCalculationPerform && !WebGAL.sceneManager.lockSceneWrite) {
     WebGAL.sceneManager.sceneData.currentSentenceId++;
     saveBacklogIfNeeded();
-    scriptExecutor(depth + 1, commitOptions);
+    scriptExecutor(depth + 1, options);
     return;
   }
 

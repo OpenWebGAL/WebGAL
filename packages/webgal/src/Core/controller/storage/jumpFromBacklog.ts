@@ -14,7 +14,7 @@ import { stageStateManager } from '@/Core/Modules/stage/stageStateManager';
 /**
  * 恢复演出
  */
-export const restorePerform = () => {
+export const restorePerform = (skipAnimation = false) => {
   const stageState = stageStateManager.getCalculationStageState();
   const performToRestore = cloneDeep(stageState.PerformList);
   // 清除状态表中演出序列
@@ -27,7 +27,7 @@ export const restorePerform = () => {
   } finally {
     WebGAL.gameplay.performController.endCollectingPerforms();
   }
-  stageStateManager.commit({ applyPixiEffects: false });
+  stageStateManager.commit({ applyPixiEffects: false, skipAnimation });
   WebGAL.gameplay.performController.commitPendingPerforms();
   stageStateManager.applyCommittedPixiEffects();
 };

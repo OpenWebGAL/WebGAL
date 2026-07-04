@@ -61,7 +61,7 @@ export function loadGameFromStageData(stageData: ISaveData) {
   stageStateManager.replaceCalculationStageState(newStageState);
 
   // 恢复演出
-  setTimeout(restorePerform, 0);
+  setTimeout(() => restorePerform(true), 0);
   // restorePerform();
 
   dispatch(setVisibility({ component: 'showTitle', visibility: false }));
@@ -69,5 +69,5 @@ export function loadGameFromStageData(stageData: ISaveData) {
   /**
    * 恢复模糊背景
    */
-  setEbg(newStageState.bgName);
+  setEbg(newStageState.bgName, 0);
 }

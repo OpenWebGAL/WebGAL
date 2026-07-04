@@ -40,7 +40,7 @@ export const scriptParser = (
   const commentSplit = sentenceRaw.split(/(?<!\\);/);
   let newSentenceRaw = commentSplit[0];
   newSentenceRaw = newSentenceRaw.replaceAll('\\;',';');
-  const sentenceComment = commentSplit[1] ?? '';
+  const sentenceComment = commentSplit.slice(1).join(';');
   if (newSentenceRaw.trim() === '') {
     // 注释提前返回
     return {

@@ -10,6 +10,7 @@ import useTrans from '@/hooks/useTrans';
 import { compileSentence, EnhancedNode } from '@/Stage/TextBox/TextBox';
 import useSoundEffect from '@/hooks/useSoundEffect';
 import { WebGAL } from '@/Core/WebGAL';
+import { stopAuto } from '@/Core/controller/gamePlay/autoPlay';
 
 export const Backlog = () => {
   const t = useTrans('gaming.');
@@ -127,6 +128,21 @@ export const Backlog = () => {
                 <div
                   onClick={() => {
                     playSeClick();
+                    // 暂停所有 backlog 语音（包括当前；后续会重置并播放当前）
+                    document
+                      .querySelectorAll('[id^="backlog_audio_play_element_"]')
+                      .forEach((audio: any) => {
+                        audio.pause();
+                        audio.currentTime = 0;
+                      });
+                    // 暂停游戏内正在播放的语音，避免与 backlog 语音混合
+                    const currentVocal = document.getElementById('currentVocal') as HTMLAudioElement | null;
+                    if (currentVocal) {
+                      currentVocal.pause();
+                      currentVocal.currentTime = 0;
+                    }
+                    // 卸载 vocal-play perform，避免其 blockingAuto 阻塞自动播放
+                    WebGAL.gameplay.performController.unmountPerform('vocal-play', true);
                     // 获取到播放 backlog 语音的元素
                     const backlog_audio_element: any = document.getElementById(
                       'backlog_audio_play_element_' + indexOfBacklog,
@@ -165,6 +181,7 @@ export const Backlog = () => {
   useEffect(() => {
     /* 切换为展示历史记录时触发 */
     if (GUIStore.showBacklog) {
+      stopAuto();
       // logger.info('展示backlog');
       // 立即清除 防止来回滚动时可能导致的错乱
       if (timeRef.current) {

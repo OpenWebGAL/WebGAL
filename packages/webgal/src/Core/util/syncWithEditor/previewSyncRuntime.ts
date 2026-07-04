@@ -1,13 +1,23 @@
 import {
   createEventEnvelope,
   createRequestEnvelope,
+  createRequestErrorEnvelope,
   createResponseEnvelope,
   EDITOR_PREVIEW_PROTOCOL_V1_SUBPROTOCOL,
+  isAnyProtocolEnvelope,
+  isPreviewQueryType,
   isPreviewRequestEnvelope,
-  isProtocolEnvelope,
-  PreviewRequestPayloadByType,
+} from '@/types/editorPreviewProtocol';
+import type {
+  AnyProtocolEnvelope,
+  FastPreviewTimeoutPayload,
+  PreviewCommandPayloadByType,
+  PreviewCommandResponsePayloadByType,
+  PreviewCommandType,
+  PreviewQueryType,
+  PreviewRequestErrorCode,
   PreviewRequestType,
-  PreviewResponsePayloadByType,
+  RequestEnvelopeByType,
   RunSceneContentPayload,
   RunSnippetPayload,
   SetComponentVisibilityPayload,
@@ -16,20 +26,20 @@ import {
   SetTextReadModePayload,
   StageSnapshotUpdatedPayload,
   SyncScenePayload,
-  FastPreviewTimeoutPayload,
-} from '../../../types/editorPreviewProtocol';
+} from '@/types/editorPreviewProtocol';
 import { webgalStore } from '@/store/store';
 import { setFontOptimization, setVisibility } from '@/store/GUIReducer';
 import { WebGAL } from '@/Core/WebGAL';
 import { sceneParser, WebgalParser } from '@/Core/parser/sceneParser';
 import { ISentence } from '@/Core/controller/scene/sceneInterface';
 import { runScript } from '@/Core/controller/gamePlay/runScript';
-import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
+import { continueSentence } from '@/Core/controller/gamePlay/nextSentence';
 import { resetStage } from '@/Core/controller/stage/resetStage';
 import { logger } from '@/Core/util/logger';
 import { stageStateManager } from '@/Core/Modules/stage/stageStateManager';
 import { baseTransform } from '@/Core/Modules/stage/stageInterface';
 import type { IStageState, ITransform } from '@/Core/Modules/stage/stageInterface';
+import { applyStageEffectToTarget } from '@/Core/controller/stage/pixi/syncPixiStageState';
 import { mergeSetEffectPreviewTransform } from './previewSetEffectTransform';
 import { requestEmbeddedLaunchId } from './runtime/embeddedPreviewBootstrap';
 import {
@@ -40,6 +50,12 @@ import {
 import { executePreviewSyncSceneCommand } from './runtime/previewSyncSceneCommand';
 import { setDebugTextReadMode } from '@/Core/Modules/readHistory';
 import { applyPreviewDebugVariables } from './runtime/previewDebugVariables';
+import { handleReferenceBoxQuery } from './runtime/handlers/referenceBoxQueryHandler';
+import {
+  cloneBaseTransform,
+  createTargetTransformBaselineManager,
+  isTargetTransformBaselineSyncSettled,
+} from './runtime/targetTransformBaseline';
 
 let previewSyncRuntimeStarted = false;
 type StageStateSnapshot = IStageState;
@@ -49,6 +65,16 @@ interface RegisterPreviewLogContext {
   gameId: string | undefined;
   embeddedLaunchId: string | undefined;
 }
+
+type PreviewRequestEnvelope = RequestEnvelopeByType<PreviewRequestType>;
+type PreviewQueryEnvelope = RequestEnvelopeByType<PreviewQueryType>;
+type RawRequestEnvelope = {
+  kind: 'request';
+  type: string;
+  requestId: string;
+};
+
+const UNSUPPORTED_REQUEST_MESSAGE = '当前预览运行时不支持该请求类型';
 
 export const startPreviewSyncRuntime = () => {
   if (previewSyncRuntimeStarted) {
@@ -77,10 +103,29 @@ export const startPreviewSyncRuntime = () => {
   let lastPublishedSentenceId: number | null = null;
   let lastPublishedStageState: StageStateSnapshot | null = null;
   const setEffectBaselines = new Map<string, ITransform>();
+  const targetTransformBaselines = createTargetTransformBaselineManager();
   const embeddedLaunchIdPromise = requestEmbeddedLaunchId();
   let transport!: PreviewSyncTransport;
+  let nextSyncSceneRevision = 0;
+  let activeSyncSceneRevision: number | null = null;
 
   const createRequestId = () => `req-${Date.now()}-${Math.random().toString(16).slice(2)}`;
+
+  const isRecord = (value: unknown): value is Record<string, unknown> => typeof value === 'object' && value !== null;
+
+  const isRawRequestEnvelope = (value: unknown): value is RawRequestEnvelope =>
+    isRecord(value) &&
+    value.kind === 'request' &&
+    typeof value.type === 'string' &&
+    typeof value.requestId === 'string';
+
+  const sendRequestError = (
+    request: Pick<RawRequestEnvelope, 'type' | 'requestId'>,
+    code: PreviewRequestErrorCode,
+    message?: string,
+  ) => {
+    transport.send(createRequestErrorEnvelope(request.type, request.requestId, message ? { code, message } : { code }));
+  };
 
   const resetRegistrationState = () => {
     registered = false;
@@ -90,6 +135,31 @@ export const startPreviewSyncRuntime = () => {
     lastPublishedSentenceId = null;
     lastPublishedStageState = null;
     setEffectBaselines.clear();
+    activeSyncSceneRevision = null;
+    WebGAL.gameplay.isFastPreview = false;
+    targetTransformBaselines.invalidateCurrentRevision();
+  };
+
+  const startSyncSceneTransaction = () => {
+    nextSyncSceneRevision += 1;
+    activeSyncSceneRevision = nextSyncSceneRevision;
+    return activeSyncSceneRevision;
+  };
+
+  const isActiveSyncSceneRevision = (revision: number) => activeSyncSceneRevision === revision;
+
+  const finishSyncSceneTransaction = (revision: number) => {
+    if (!isActiveSyncSceneRevision(revision)) {
+      return false;
+    }
+
+    activeSyncSceneRevision = null;
+    return true;
+  };
+
+  const cancelActiveSyncScene = () => {
+    activeSyncSceneRevision = null;
+    WebGAL.gameplay.isFastPreview = false;
   };
 
   const buildStageStateSnapshot = (stageState: StageStateSnapshot): StageSnapshotUpdatedPayload['stageState'] => {
@@ -106,6 +176,9 @@ export const startPreviewSyncRuntime = () => {
 
   const publishStageSnapshot = (force: boolean, stageState = stageStateManager.getCalculationStageState()) => {
     if (!registered) {
+      return;
+    }
+    if (activeSyncSceneRevision !== null) {
       return;
     }
 
@@ -134,6 +207,10 @@ export const startPreviewSyncRuntime = () => {
     }
   };
 
+  const publishSettledStageSnapshot = () => {
+    publishStageSnapshot(true, stageStateManager.getViewStageState());
+  };
+
   const registerPreview = async (socket: PreviewSyncTransportSocket) => {
     const requestId = createRequestId();
     pendingRegisterRequestId = requestId;
@@ -157,6 +234,19 @@ export const startPreviewSyncRuntime = () => {
     );
   };
 
+  const finishRegisterPreview = () => {
+    const registeredPreviewContext = pendingRegisterContext;
+    if (registeredPreviewContext) {
+      logger.info('编辑器同步 V1 注册完成', registeredPreviewContext);
+    }
+
+    pendingRegisterRequestId = null;
+    pendingRegisterContext = null;
+    registered = true;
+    publishReady();
+    publishStageSnapshot(true);
+  };
+
   const emitFastPreviewTimeout = (payload: FastPreviewTimeoutPayload) => {
     if (!registered) {
       return;
@@ -165,12 +255,66 @@ export const startPreviewSyncRuntime = () => {
   };
 
   const handleSyncScene = (payload: SyncScenePayload) => {
+    const syncSceneRevision = startSyncSceneTransaction();
+    const isLatestSyncScene = () => isActiveSyncSceneRevision(syncSceneRevision);
     setEffectBaselines.clear();
-    executePreviewSyncSceneCommand(payload, emitFastPreviewTimeout);
+    const { transformBaselineRevision } = payload;
+    if (transformBaselineRevision) {
+      targetTransformBaselines.acceptRevision(transformBaselineRevision);
+    } else {
+      targetTransformBaselines.invalidateCurrentRevision();
+    }
+
+    executePreviewSyncSceneCommand(payload, {
+      onFastPreviewTimeout: emitFastPreviewTimeout,
+      isLatest: isLatestSyncScene,
+      onBeforeTargetScriptExecute: () => {
+        if (!isLatestSyncScene()) {
+          return;
+        }
+        if (!transformBaselineRevision) {
+          return;
+        }
+
+        targetTransformBaselines.captureSnapshot(
+          transformBaselineRevision,
+          stageStateManager.getCalculationStageState(),
+        );
+      },
+      onSettled: (result) => {
+        if (!finishSyncSceneTransaction(syncSceneRevision)) {
+          return;
+        }
+
+        if (result === null) {
+          if (transformBaselineRevision) {
+            targetTransformBaselines.failRevision(transformBaselineRevision);
+          }
+          return;
+        }
+
+        if (!transformBaselineRevision) {
+          publishSettledStageSnapshot();
+          return;
+        }
+
+        const isSyncSettled = isTargetTransformBaselineSyncSettled(result, payload);
+        if (!isSyncSettled || !targetTransformBaselines.publishCapturedSnapshot(transformBaselineRevision)) {
+          targetTransformBaselines.failRevision(transformBaselineRevision);
+          publishSettledStageSnapshot();
+          return;
+        }
+
+        setEffectBaselines.clear();
+        publishSettledStageSnapshot();
+      },
+    });
   };
 
   const handleRunSnippet = (payload: RunSnippetPayload) => {
+    cancelActiveSyncScene();
     setEffectBaselines.clear();
+    targetTransformBaselines.invalidateCurrentRevision();
     applyPreviewDebugVariables(payload.debugVariables);
     const scene = WebgalParser.parse(payload.snippet, 'temp.txt', 'temp.txt');
     (scene.sentenceList as unknown as ISentence[]).forEach((sentence) => {
@@ -203,7 +347,9 @@ export const startPreviewSyncRuntime = () => {
   };
 
   const handleRunSceneContent = (payload: RunSceneContentPayload) => {
+    cancelActiveSyncScene();
     setEffectBaselines.clear();
+    targetTransformBaselines.invalidateCurrentRevision();
     resetStage(true, true, { autoFastSave: false });
     applyPreviewDebugVariables(payload.debugVariables);
     WebGAL.sceneManager.sceneData.currentScene = sceneParser(payload.sceneContent, 'temp', './temp.txt');
@@ -214,7 +360,7 @@ export const startPreviewSyncRuntime = () => {
       showPanicOverlay: false,
     });
     setTimeout(() => {
-      nextSentence({ autoFastSave: false });
+      continueSentence({ autoFastSave: false });
     }, 100);
   };
 
@@ -236,17 +382,21 @@ export const startPreviewSyncRuntime = () => {
       return cachedBaseline;
     }
 
-    const currentTransform = stageStateManager
-      .getCalculationStageState()
-      .effects.find((effect) => effect.target === target)?.transform;
-    const baseline = mergeSetEffectPreviewTransform(baseTransform, currentTransform);
+    const baselineOverride = targetTransformBaselines.getReadyTransformBaselineOverride(target);
+    const baseline = mergeSetEffectPreviewTransform(baseTransform, baselineOverride);
     setEffectBaselines.set(target, baseline);
     return baseline;
   };
 
   const handleSetEffect = (payload: SetEffectPayload) => {
-    const newTransform = mergeSetEffectPreviewTransform(getSetEffectBaseline(payload.target), payload.transform);
+    const baseline = getSetEffectBaseline(payload.target);
+    const newTransform = mergeSetEffectPreviewTransform(baseline, payload.transform);
     WebGAL.gameplay.pixiStage?.removeAnimationByTargetKey(payload.target);
+    if (payload.phase === 'preview') {
+      applyStageEffectToTarget(payload.target, newTransform);
+      return;
+    }
+
     stageStateManager.updateEffectAndCommit(
       {
         target: payload.target,
@@ -256,8 +406,8 @@ export const startPreviewSyncRuntime = () => {
     );
   };
 
-  const previewRequestHandlers: {
-    [K in PreviewRequestType]: (payload: PreviewRequestPayloadByType[K]) => PreviewResponsePayloadByType[K];
+  const previewCommandHandlers: {
+    [K in PreviewCommandType]: (payload: PreviewCommandPayloadByType[K]) => PreviewCommandResponsePayloadByType[K];
   } = {
     'preview.command.sync-scene': (payload: SyncScenePayload) => {
       handleSyncScene(payload);
@@ -293,15 +443,114 @@ export const startPreviewSyncRuntime = () => {
     },
   };
 
-  const handlePreviewRequest = <TType extends PreviewRequestType>(
+  const isPreviewQueryEnvelope = (envelope: PreviewRequestEnvelope): envelope is PreviewQueryEnvelope => {
+    return isPreviewQueryType(envelope.type);
+  };
+
+  const handlePreviewQuery = (envelope: PreviewQueryEnvelope) => {
+    switch (envelope.type) {
+      case 'preview.query.reference-box':
+        void handleReferenceBoxQuery(envelope, WebGAL.gameplay.pixiStage)
+          .then((response) => {
+            transport.send(response);
+          })
+          .catch((error) => {
+            logger.error(`执行编辑器同步 V1 请求失败：${envelope.type}`, error);
+            sendRequestError(envelope, 'internal-error', '预览运行时无法安全完成该请求');
+          });
+        return;
+      case 'preview.query.base-transform':
+        transport.send(
+          createResponseEnvelope('preview.query.base-transform', envelope.requestId, {
+            baseTransform: cloneBaseTransform(),
+          }),
+        );
+        return;
+      case 'preview.query.transform-baseline':
+        transport.send(
+          createResponseEnvelope(
+            'preview.query.transform-baseline',
+            envelope.requestId,
+            targetTransformBaselines.queryTransformBaseline(
+              envelope.payload.target,
+              envelope.payload.transformBaselineRevision,
+            ),
+          ),
+        );
+        return;
+    }
+  };
+
+  const handlePreviewCommand = <TType extends PreviewCommandType>(
     type: TType,
-    payload: PreviewRequestPayloadByType[TType],
-  ): PreviewResponsePayloadByType[TType] => {
-    const handler = previewRequestHandlers[type] as (
-      nextPayload: PreviewRequestPayloadByType[TType],
-    ) => PreviewResponsePayloadByType[TType];
+    payload: PreviewCommandPayloadByType[TType],
+  ): PreviewCommandResponsePayloadByType[TType] => {
+    const handler = previewCommandHandlers[type] as (
+      nextPayload: PreviewCommandPayloadByType[TType],
+    ) => PreviewCommandResponsePayloadByType[TType];
 
     return handler(payload);
+  };
+
+  const respondToPreviewRequest = (envelope: PreviewRequestEnvelope) => {
+    if (isPreviewQueryEnvelope(envelope)) {
+      handlePreviewQuery(envelope);
+      return;
+    }
+
+    const responsePayload = handlePreviewCommand(envelope.type, envelope.payload);
+    transport.send(createResponseEnvelope(envelope.type, envelope.requestId, responsePayload));
+  };
+
+  const handleProtocolEnvelope = (envelope: AnyProtocolEnvelope) => {
+    if (envelope.kind === 'response' && envelope.type === 'session.register-preview') {
+      if (pendingRegisterRequestId !== null && envelope.requestId === pendingRegisterRequestId) {
+        finishRegisterPreview();
+      }
+      return;
+    }
+
+    if (!registered) {
+      if (envelope.kind === 'request') {
+        logger.warn(`收到注册完成前的编辑器同步 V1 请求：${envelope.type}`);
+      }
+      return;
+    }
+
+    if (!isPreviewRequestEnvelope(envelope)) {
+      if (envelope.kind === 'request') {
+        logger.warn(`收到未支持的编辑器同步 V1 请求：${envelope.type}`);
+        sendRequestError(envelope, 'unsupported-request-type', UNSUPPORTED_REQUEST_MESSAGE);
+      }
+      return;
+    }
+
+    try {
+      respondToPreviewRequest(envelope);
+    } catch (error) {
+      logger.error(`执行编辑器同步 V1 请求失败：${envelope.type}`, error);
+      sendRequestError(envelope, 'internal-error', '预览运行时无法安全完成该请求');
+    }
+  };
+
+  const handleRawMessage = (rawData: unknown) => {
+    try {
+      const envelope = JSON.parse(String(rawData)) as unknown;
+      if (!isAnyProtocolEnvelope(envelope)) {
+        if (isRawRequestEnvelope(envelope)) {
+          logger.warn(`收到非法的编辑器同步 V1 请求：${envelope.type}`);
+          sendRequestError(envelope, 'bad-request', '请求 envelope 格式不合法');
+          return;
+        }
+
+        logger.warn('收到无法识别的编辑器同步 V1 消息');
+        return;
+      }
+
+      handleProtocolEnvelope(envelope);
+    } catch (error) {
+      logger.error('解析编辑器同步 V1 消息失败', error);
+    }
   };
 
   transport = createPreviewSyncTransport({
@@ -309,57 +558,7 @@ export const startPreviewSyncRuntime = () => {
     subprotocol: EDITOR_PREVIEW_PROTOCOL_V1_SUBPROTOCOL,
     onConnecting: resetRegistrationState,
     onOpen: registerPreview,
-    onMessage: (rawData) => {
-      try {
-        const envelope = JSON.parse(String(rawData)) as unknown;
-        if (!isProtocolEnvelope(envelope)) {
-          logger.warn('收到无法识别的编辑器同步 V1 消息');
-          return;
-        }
-
-        if (envelope.kind === 'response' && envelope.type === 'session.register-preview') {
-          if (pendingRegisterRequestId === null || envelope.requestId !== pendingRegisterRequestId) {
-            return;
-          }
-
-          if (pendingRegisterContext) {
-            logger.info('编辑器同步 V1 注册完成', pendingRegisterContext);
-          }
-          pendingRegisterRequestId = null;
-          pendingRegisterContext = null;
-          registered = true;
-          publishReady();
-          publishStageSnapshot(true);
-          return;
-        }
-
-        if (!registered) {
-          if (envelope.kind === 'request') {
-            logger.warn(`收到注册完成前的编辑器同步 V1 请求：${envelope.type}`);
-          }
-          return;
-        }
-
-        if (!isPreviewRequestEnvelope(envelope)) {
-          if (envelope.kind === 'request') {
-            logger.warn(`收到未支持的编辑器同步 V1 请求：${envelope.type}`);
-          }
-          return;
-        }
-
-        let responsePayload: PreviewResponsePayloadByType[typeof envelope.type];
-        try {
-          responsePayload = handlePreviewRequest(envelope.type, envelope.payload);
-        } catch (error) {
-          logger.error(`执行编辑器同步 V1 命令失败：${envelope.type}`, error);
-          return;
-        }
-
-        transport.send(createResponseEnvelope(envelope.type, envelope.requestId, responsePayload));
-      } catch (error) {
-        logger.error('解析编辑器同步 V1 消息失败', error);
-      }
-    },
+    onMessage: handleRawMessage,
     onClose: resetRegistrationState,
     logInfo: (message) => logger.info(message),
     logError: (message, error) => logger.error(message, error),

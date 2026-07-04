@@ -1,19 +1,30 @@
-import { baseTransform } from '@/Core/Modules/stage/stageInterface';
 import type { IEffect, IStageState, ITransform } from '@/Core/Modules/stage/stageInterface';
 import type { IResolvedStageCommitOptions } from '@/Core/Modules/stage/stageStateManager';
 import { DEFAULT_BG_OUT_DURATION } from '@/Core/constants';
 import { WebGAL } from '@/Core/WebGAL';
-import PixiStage from '@/Core/controller/stage/pixi/PixiController';
 import type { IStageObject } from '@/Core/controller/stage/pixi/PixiController';
 import { getEnterExitAnimation } from '@/Core/Modules/animationFunctions';
 import { logger } from '@/Core/util/logger';
 import { setEbg } from '@/Core/gameScripts/changeBg/setEbg';
-import { isUndefined, omitBy } from 'lodash';
+import { applyTransformToPixiContainer } from '@/Core/controller/stage/pixi/stageEffectTransform';
+
+interface ISyncFigureSlotPayload {
+  key: string;
+  sourceUrl: string;
+  position: 'left' | 'center' | 'right';
+  stageState: IStageState;
+  skipAnimation: boolean;
+}
+
+interface IRemoveFigOptions {
+  effects: IEffect[];
+  skipAnimation: boolean;
+}
 
 export function syncPixiStageState(stageState: IStageState, options: IResolvedStageCommitOptions) {
   if (options.syncPixiStage) {
-    syncBg(stageState);
-    syncFigures(stageState);
+    syncBg(stageState, options.skipAnimation);
+    syncFigures(stageState, options.skipAnimation);
     syncLive2d(stageState);
     syncFigureMetaData(stageState);
   }
@@ -31,16 +42,26 @@ export function applyStageEffects(effects: IEffect[]) {
     const key = stageObj.key;
     if (lockedStageTargets.includes(key)) continue;
     const effect = effects.find((effect) => effect.target === key);
-    const targetPixiContainer = pixiStage.getStageObjByKey(key);
-    const container = targetPixiContainer?.pixiContainer;
+    const container = stageObj.pixiContainer;
     if (!container) continue;
-    // @ts-ignore WebGALPixiContainer exposes transform-like fields.
-    PixiStage.assignTransform(container, convertTransform(effect?.transform ?? baseTransform));
+    applyTransformToPixiContainer(container, effect?.transform);
   }
   pixiStage.requestRender();
 }
 
-function syncBg(stageState: IStageState) {
+export function applyStageEffectToTarget(target: string, transform: ITransform | undefined) {
+  const pixiStage = WebGAL.gameplay.pixiStage;
+  if (!pixiStage) return;
+  if (pixiStage.getAllLockedObject().includes(target)) return;
+
+  const container = pixiStage.getStageObjByKey(target)?.pixiContainer;
+  if (!container) return;
+
+  applyTransformToPixiContainer(container, transform);
+  pixiStage.requestRender();
+}
+
+function syncBg(stageState: IStageState, skipAnimation: boolean) {
   const pixiStage = WebGAL.gameplay.pixiStage;
   if (!pixiStage) return;
   const thisBgKey = 'bg-main';
@@ -50,12 +71,12 @@ function syncBg(stageState: IStageState) {
   if (bgName !== '') {
     if (currentBg?.sourceUrl === bgName) return;
     if (currentBg) {
-      removeBg(currentBg);
+      removeBg(currentBg, skipAnimation);
     }
     addBg(thisBgKey, bgName);
     logger.debug('重设背景');
     const { duration, animation } = getEnterExitAnimation(thisBgKey, 'enter', true);
-    if (WebGAL.gameplay.skipAnimation) {
+    if (skipAnimation || WebGAL.gameplay.skipAnimation) {
       setEbg(bgName, 0);
     } else {
       setEbg(bgName, duration);
@@ -66,17 +87,23 @@ function syncBg(stageState: IStageState) {
   }
 
   if (!currentBg) return;
-  const exitDuration = removeBg(currentBg);
+  const exitDuration = removeBg(currentBg, skipAnimation);
   setEbg(bgName, exitDuration, 'cubic-bezier(0.5, 0, 0.75, 0)');
 }
 
-function syncFigures(stageState: IStageState) {
-  syncFigureSlot('fig-center', stageState.figName, 'center', stageState);
-  syncFigureSlot('fig-left', stageState.figNameLeft, 'left', stageState);
-  syncFigureSlot('fig-right', stageState.figNameRight, 'right', stageState);
+function syncFigures(stageState: IStageState, skipAnimation: boolean) {
+  syncFigureSlot({ key: 'fig-center', sourceUrl: stageState.figName, position: 'center', stageState, skipAnimation });
+  syncFigureSlot({ key: 'fig-left', sourceUrl: stageState.figNameLeft, position: 'left', stageState, skipAnimation });
+  syncFigureSlot({
+    key: 'fig-right',
+    sourceUrl: stageState.figNameRight,
+    position: 'right',
+    stageState,
+    skipAnimation,
+  });
 
   for (const fig of stageState.freeFigure) {
-    syncFigureSlot(fig.key, fig.name, fig.basePosition, stageState);
+    syncFigureSlot({ key: fig.key, sourceUrl: fig.name, position: fig.basePosition, stageState, skipAnimation });
   }
 
   const currentFigures = WebGAL.gameplay.pixiStage?.getFigureObjects();
@@ -92,12 +119,12 @@ function syncFigures(stageState: IStageState) {
       continue;
     }
     if (!freeFigureKeys.has(existFigure.key)) {
-      removeFig(existFigure, `${existFigure.key}-softin`, stageState.effects);
+      removeFig(existFigure, `${existFigure.key}-softin`, { effects: stageState.effects, skipAnimation });
     }
   }
 }
 
-function syncFigureSlot(key: string, sourceUrl: string, position: 'left' | 'center' | 'right', stageState: IStageState) {
+function syncFigureSlot({ key, sourceUrl, position, stageState, skipAnimation }: ISyncFigureSlotPayload) {
   const pixiStage = WebGAL.gameplay.pixiStage;
   if (!pixiStage) return;
   const softInAniKey = `${key}-softin`;
@@ -106,12 +133,12 @@ function syncFigureSlot(key: string, sourceUrl: string, position: 'left' | 'cent
   if (sourceUrl !== '') {
     if (currentFigure?.sourceUrl === sourceUrl) return;
     if (currentFigure) {
-      removeFig(currentFigure, softInAniKey, stageState.effects);
+      removeFig(currentFigure, softInAniKey, { effects: stageState.effects, skipAnimation });
     }
     addFigure(key, sourceUrl, position);
     logger.debug(`${key} 立绘已重设`);
     const { duration, animation } = getEnterExitAnimation(key, 'enter');
-    if (!WebGAL.gameplay.skipAnimation) {
+    if (!skipAnimation && !WebGAL.gameplay.skipAnimation) {
       pixiStage.registerPresetAnimation(animation, softInAniKey, key, stageState.effects);
       setTimeout(() => pixiStage.removeAnimationWithSetEffects(softInAniKey), duration);
     }
@@ -119,7 +146,7 @@ function syncFigureSlot(key: string, sourceUrl: string, position: 'left' | 'cent
   }
 
   if (currentFigure) {
-    removeFig(currentFigure, softInAniKey, stageState.effects);
+    removeFig(currentFigure, softInAniKey, { effects: stageState.effects, skipAnimation });
   }
 }
 
@@ -159,11 +186,11 @@ function syncFigureMetaData(stageState: IStageState) {
   });
 }
 
-function removeBg(bgObject: IStageObject): number {
+function removeBg(bgObject: IStageObject, skipAnimation: boolean): number {
   const pixiStage = WebGAL.gameplay.pixiStage;
   if (!pixiStage) return DEFAULT_BG_OUT_DURATION;
   pixiStage.removeAnimationWithSetEffects('bg-main-softin');
-  if (WebGAL.gameplay.skipAnimation) {
+  if (skipAnimation || WebGAL.gameplay.skipAnimation) {
     pixiStage.removeStageObjectByKey(bgObject.key);
     return 0;
   }
@@ -181,11 +208,11 @@ function removeBg(bgObject: IStageObject): number {
   return duration;
 }
 
-function removeFig(figObj: IStageObject, enterTikerKey: string, effects: IEffect[]) {
+function removeFig(figObj: IStageObject, enterTikerKey: string, options: IRemoveFigOptions) {
   const pixiStage = WebGAL.gameplay.pixiStage;
   if (!pixiStage) return;
   pixiStage.removeAnimationWithSetEffects(enterTikerKey);
-  if (WebGAL.gameplay.skipAnimation) {
+  if (options.skipAnimation || WebGAL.gameplay.skipAnimation) {
     logger.debug('快速模式，立刻关闭立绘');
     pixiStage.removeStageObjectByKey(figObj.key);
     return;
@@ -197,7 +224,7 @@ function removeFig(figObj: IStageObject, enterTikerKey: string, effects: IEffect
   pixiStage.removeStageObjectByKey(oldFigKey);
   const leaveKey = figKey + '-softoff';
   const { duration, animation } = getEnterExitAnimation(figLeaveAniKey, 'exit', false, figKey);
-  pixiStage.registerPresetAnimation(animation, leaveKey, figKey, effects);
+  pixiStage.registerPresetAnimation(animation, leaveKey, figKey, options.effects);
   setTimeout(() => {
     pixiStage.removeAnimation(leaveKey);
     pixiStage.removeStageObjectByKey(figKey);
@@ -229,12 +256,4 @@ function addFigure(key: string, url: string, position: 'left' | 'center' | 'righ
   } else {
     pixiStage.addFigure(key, url, position);
   }
-}
-
-function convertTransform(transform: ITransform | undefined) {
-  if (!transform) {
-    return {};
-  }
-  const { position, ...rest } = transform;
-  return omitBy({ ...rest, x: position?.x, y: position?.y }, isUndefined);
 }

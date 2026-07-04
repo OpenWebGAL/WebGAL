@@ -5,7 +5,6 @@ import {
   ISentence,
 } from './interface/sceneInterface';
 import { scriptParser } from './scriptParser/scriptParser';
-import uniqWith from 'lodash/uniqWith';
 import { fileType } from './interface/assets';
 import { ConfigMap } from './config/scriptConfig';
 
@@ -54,7 +53,7 @@ export const sceneParser = (
   );
 
   // 开始资源的预加载
-  assetsList = uniqWith(assetsList); // 去重
+  assetsList = deduplicateAssets(assetsList);
   assetsPrefetcher(assetsList);
 
   return {
@@ -64,4 +63,19 @@ export const sceneParser = (
     assetsList: assetsList, // 资源列表
     subSceneList: subSceneList, // 子场景列表
   };
+};
+
+const deduplicateAssets = (assetsList: IAsset[]): IAsset[] => {
+  const seenAssets = new Set<string>();
+  return assetsList.filter((asset) => {
+    if (!asset || typeof asset.url !== 'string' || asset.url === '') {
+      return false;
+    }
+    const assetKey = `${asset.type}:${asset.url}`;
+    if (seenAssets.has(assetKey)) {
+      return false;
+    }
+    seenAssets.add(assetKey);
+    return true;
+  });
 };
