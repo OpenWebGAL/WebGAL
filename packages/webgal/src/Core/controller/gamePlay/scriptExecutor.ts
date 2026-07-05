@@ -3,7 +3,7 @@ import { runScript } from './runScript';
 import { logger } from '../../util/logger';
 import { restoreScene } from '../scene/restoreScene';
 import { webgalStore } from '@/store/store';
-import { getValueFromStateElseKey } from '@/Core/gameScripts/setVar';
+import { legacyGetValueFromStateElseKey } from '@/Core/gameScripts/setVar';
 import { strIf } from '@/Core/controller/gamePlay/strIf';
 import cloneDeep from 'lodash/cloneDeep';
 import { ISceneEntry } from '@/Core/Modules/scene';
@@ -13,6 +13,7 @@ import { stageStateManager } from '@/Core/Modules/stage/stageStateManager';
 import { jumpToLabel } from '@/Core/gameScripts/label/jumpToLabel';
 import { prefetchCurrentSceneByProgress } from '@/Core/util/prefetcher/progressPrefetcher';
 import { WEBGAL_NONE } from '@/Core/constants';
+import { evaluateExpression } from '@/Core/controller/gamePlay/expressionEvaluation';
 
 const MAX_FORWARD_SCRIPT_EXECUTION = 1000;
 
@@ -29,6 +30,11 @@ export const whenChecker = (whenValue: string | undefined): boolean => {
   if (whenValue === undefined) {
     return true;
   }
+
+  if (!WebGAL.legacyExpressionParser) {
+    return Boolean(evaluateExpression(whenValue));
+  }
+
   // 先把变量解析出来
   const valExpArr = whenValue.split(/([+\-*\/()><!]|>=|<=|==|&&|\|\||!=)/g);
   const valExp = valExpArr
@@ -38,7 +44,7 @@ export const whenChecker = (whenValue: string | undefined): boolean => {
         if (e.match(/^(true|false)$/)) {
           return e;
         }
-        return getValueFromStateElseKey(e, true, true);
+        return legacyGetValueFromStateElseKey(e, true, true);
       } else return e;
     })
     .reduce((pre, curr) => pre + curr, '');
@@ -84,7 +90,7 @@ export const scriptExecutor = (depth = 0, options: ScriptExecutionOptions = {}) 
 
     if (contentExp !== null) {
       contentExp.forEach((e) => {
-        const contentVarValue = getValueFromStateElseKey(e.replace(/(?<!\\)\{(.*)\}/, '$1'));
+        const contentVarValue = legacyGetValueFromStateElseKey(e.replace(/(?<!\\)\{(.*)\}/, '$1'));
         retContent = retContent.replace(e, contentVarValue);
       });
     }

@@ -25,4 +25,5 @@ export class WebgalCore {
   public steam = new SteamIntegration();
   public template: WebgalTemplate | null = null;
   public styleObjects: Map<string, IWebGALStyleObj> = new Map();
+  public legacyExpressionParser = false;
 }
