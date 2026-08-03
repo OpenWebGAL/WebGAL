@@ -23,30 +23,53 @@ export const Backlog = () => {
   const [indexHide, setIndexHide] = useState(false);
   const [isDisableScroll, setIsDisableScroll] = useState(false);
   const [limit, setLimit] = useState(20);
-  useEffect(() => {
-    if (!isBacklogOpen) {
+  const backlogContentRef = useRef<HTMLDivElement>(null);
+  const userRequestedMoreRef = useRef(false);
+  const isLoadingMoreRef = useRef(false);
+  const wheelGestureTimeoutRef = useRef<ReturnType<typeof setTimeout>>();
+  const tryLoadMore = () => {
+    const backlogContent = backlogContentRef.current;
+    const backlogLength = WebGAL.backlogManager.getBacklog().length;
+    if (
+      !isBacklogOpen ||
+      !backlogContent ||
+      !userRequestedMoreRef.current ||
+      isLoadingMoreRef.current ||
+      limit >= backlogLength
+    ) {
       return;
     }
-    let options = {
-      root: null,
-      rootMargin: '0px',
-      threshold: [1.0],
-    };
-
-    let observer = new IntersectionObserver((entries) => {
-      if ((entries?.[0]?.intersectionRatio ?? 0) <= 0) return;
-      setLimit(limit + 20);
-    }, options);
-
-    const observeTarget = document.querySelector(`#backlog_item_${limit - 5}`);
-    if (observeTarget) {
-      observer.observe(observeTarget);
+    const observeTarget = backlogContent.querySelector(`#backlog_item_${limit - 5}`);
+    if (!observeTarget) {
+      return;
     }
+    const contentRect = backlogContent.getBoundingClientRect();
+    const targetRect = observeTarget.getBoundingClientRect();
+    const isTargetVisible = targetRect.top >= contentRect.top && targetRect.bottom <= contentRect.bottom;
+    if (!isTargetVisible) {
+      return;
+    }
+    userRequestedMoreRef.current = false;
+    isLoadingMoreRef.current = true;
+    setLimit((currentLimit) => Math.min(currentLimit + 20, backlogLength));
+  };
 
-    return () => {
-      observer.disconnect();
-    };
-  }, [limit, isBacklogOpen]);
+  useEffect(() => {
+    isLoadingMoreRef.current = false;
+  }, [limit]);
+
+  const handleWheel = () => {
+    if (!wheelGestureTimeoutRef.current) {
+      userRequestedMoreRef.current = true;
+    }
+    if (wheelGestureTimeoutRef.current) {
+      clearTimeout(wheelGestureTimeoutRef.current);
+    }
+    wheelGestureTimeoutRef.current = setTimeout(() => {
+      wheelGestureTimeoutRef.current = undefined;
+    }, 200);
+    requestAnimationFrame(tryLoadMore);
+  };
 
   useEffect(() => {
     if (!isBacklogOpen) {
@@ -241,7 +264,18 @@ export const Backlog = () => {
             </div>
           </div>
           {GUIStore.showBacklog && (
-            <div className={`${styles.backlog_content} ${isDisableScroll ? styles.Backlog_main_DisableScroll : ''}`}>
+            <div
+              ref={backlogContentRef}
+              onScroll={tryLoadMore}
+              onWheel={handleWheel}
+              onTouchStart={() => {
+                userRequestedMoreRef.current = true;
+              }}
+              onTouchMove={() => {
+                requestAnimationFrame(tryLoadMore);
+              }}
+              className={`${styles.backlog_content} ${isDisableScroll ? styles.Backlog_main_DisableScroll : ''}`}
+            >
               {backlogList}
             </div>
           )}
