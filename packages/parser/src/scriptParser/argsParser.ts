@@ -30,7 +30,10 @@ export function argsParser(
       argValue = undefined;
     }
     // 判断是不是语音参数
-    if (argName.toLowerCase().match(/.ogg|.mp3|.wav|.opus/)) {
+    const isVocalShorthand =
+      argValue === undefined &&
+      (/\.(?:ogg|mp3|wav|opus)$/i.test(argName) || /(?<!\\)\{.+?\}/.test(argName));
+    if (isVocalShorthand) {
       returnArrayList.push({
         key: 'vocal',
         value: assetSetter(e, fileType.vocal),

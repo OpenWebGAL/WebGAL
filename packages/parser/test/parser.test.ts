@@ -68,6 +68,19 @@ test("args", async () => {
   expectSentenceIn(result.sentenceList, expectSentenceItem);
 });
 
+test("interpolated vocal shorthand", () => {
+  const parser = new SceneParser(() => {}, (fileName, assetType) => {
+    return assetType === fileType.vocal ? `./game/vocal/${fileName}` : fileName;
+  }, ADD_NEXT_ARG_LIST, SCRIPT_CONFIG);
+
+  const result = parser.parse('Narrator:Line -{voiceFile};', "vocal", "/vocal.txt");
+
+  expect(result.sentenceList[0].args).toContainEqual({
+    key: 'vocal',
+    value: './game/vocal/{voiceFile}',
+  });
+});
+
 test("choose", async () => {
 
   const sceneRaw = await fsp.readFile('test/test-resources/choose.txt');
