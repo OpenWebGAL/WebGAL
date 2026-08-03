@@ -28,6 +28,8 @@ const uniqueAssetsByUrl = (assetList: Array<IAsset>) => {
   });
 };
 
+const hasRuntimeInterpolation = (url: string) => /(?<!\\)\{.*?\}/.test(url);
+
 const inferPrefetchAs = (assetType: fileType): string => {
   switch (assetType) {
     case fileType.background:
@@ -109,6 +111,10 @@ export const assetsPrefetcher = (assetList: Array<IAsset>, options: IAssetsPrefe
   //   return;
   // }
   const filteredAssetList = uniqueAssetsByUrl(assetList).filter((asset) => {
+    if (hasRuntimeInterpolation(asset.url)) {
+      logger.debug(`跳过包含运行时变量的资源预加载：${asset.url}`);
+      return false;
+    }
     if (options.ignoreLineGate) {
       return true;
     }
