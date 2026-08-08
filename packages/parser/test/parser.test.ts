@@ -91,6 +91,26 @@ test("choose", async () => {
   expectSentenceIn(result.sentenceList, expectSentenceItem);
 });
 
+test("choose supports chinese colon separator", async () => {
+  const parser = new SceneParser((assetList) => {
+  }, (fileName, assetType) => {
+    return fileName;
+  }, ADD_NEXT_ARG_LIST, SCRIPT_CONFIG);
+
+  const result = parser.parse(`choose:继续冒险：sceneA.scene|返回城市：sceneB.scene;`, 'test', 'test');
+
+  const expectSentenceItem: ISentence = {
+    command: commandType.choose,
+    commandRaw: "choose",
+    content: "继续冒险:sceneA.scene|返回城市:sceneB.scene",
+    args: [],
+    sentenceAssets: [],
+    subScene: ["sceneA.scene", "sceneB.scene"],
+    inlineComment: ""
+  };
+  expect(result.sentenceList).toContainEqual(expectSentenceItem);
+});
+
 test("long-script", async () => {
 
   const sceneRaw = await fsp.readFile('test/test-resources/long-script.txt');

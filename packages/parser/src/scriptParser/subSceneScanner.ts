@@ -18,7 +18,7 @@ export const subSceneScanner = (
   }
   if (command === commandType.choose) {
     const chooseList = content.split('|');
-    const chooseValue = chooseList.map((e) => e.split(':')[1] ?? '');
+    const chooseValue = chooseList.map((e) => e.split(/(?<!\\):|(?<!\\)：/)[1] ?? '');
     chooseValue.forEach((e) => {
       if (e.match(/\./)) {
         subSceneList.push(e);
