@@ -16,6 +16,7 @@ import { WebGAL } from '@/Core/WebGAL';
 import { loadTemplate } from '@/Core/util/coreInitialFunction/templateLoader';
 import { stageStateManager } from '@/Core/Modules/stage/stageStateManager';
 import { autoFastSaveGame } from './controller/storage/fastSaveLoad';
+import { createUserAnimation, type UserAnimationResource } from '@/Core/Modules/animations';
 
 export const isIOS = window.__WEBGAL_DEVICE_INFO__?.isIOS ?? false; // 判断是否是 iOS 终端
 
@@ -99,10 +100,7 @@ function getUserAnimation() {
     for (const animationName of animations) {
       axios.get(`./game/animation/${animationName}.json`).then((res) => {
         if (res.data) {
-          const userAnimation = {
-            name: animationName,
-            effects: res.data,
-          };
+          const userAnimation = createUserAnimation(animationName, res.data as UserAnimationResource);
           WebGAL.animationManager.addAnimation(userAnimation);
         }
       });
