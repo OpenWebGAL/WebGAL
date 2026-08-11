@@ -57,7 +57,7 @@ export const scriptParser = (
     };
   }
   // 截取命令
-  const getCommandResult = /:/.exec(newSentenceRaw);
+  const getCommandResult = /(?<!\\):|(?<!\\)：/.exec(newSentenceRaw);
   /**
    * 拆分命令和语句，同时处理连续对话。
    */
