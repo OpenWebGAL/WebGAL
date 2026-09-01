@@ -31,15 +31,11 @@ function sceneTextPreProcessPassOne(lines: string[]): string[] {
   let thisLineIsMultiline = false;
 
   for (const line of lines) {
-    thisLineIsMultiline = false;
-
-    if (canBeMultiline(line)) {
-      thisLineIsMultiline = true;
-    }
-
-    if (shouldNotBeMultiline(line, lastLineIsMultiline)) {
-      thisLineIsMultiline = false;
-    }
+    // 续行需要接到上一行，所以场景的第一行永远不会是续行。
+    thisLineIsMultiline =
+      processedLines.length > 0 &&
+      canBeMultiline(line) &&
+      !shouldNotBeMultiline(line, lastLineIsMultiline);
 
     if (thisLineIsMultiline) {
       processedLines[processedLines.length - 1] += '\\';
@@ -98,7 +94,10 @@ function isEmptyLine(line: string): boolean {
  */
 function sceneTextPreProcessPassTwo(lines: string[]): string[] {
   const processedLines: string[] = [];
-  let currentMultilineContent = "";
+  // null 表示当前不在多行序列里。这里不能用空串来判断：
+  // 序列的首行本身可能就是空行（比如空行后面紧跟着一条续行），
+  // 那样整条序列会被静默丢弃，破坏「预处理前后行数一致」这个前提。
+  let currentMultilineContent: string | null = null;
   let placeHolderLines: string[] = [];
 
   function concat(line: string) {
@@ -110,12 +109,18 @@ function sceneTextPreProcessPassTwo(lines: string[]): string[] {
     placeHolderLines.push(placeholderLine(line));
   }
 
+  /** 把折叠好的整条语句连同补齐行数的占位行一起输出 */
+  function flushMultiline() {
+    processedLines.push(currentMultilineContent as string, ...placeHolderLines);
+    placeHolderLines = [];
+    currentMultilineContent = null;
+  }
+
   for (const line of lines) {
-    console.log(line);
     if (line.endsWith('\\')) {
       const trueLine = line.slice(0, -1);
 
-      if (currentMultilineContent === "") {
+      if (currentMultilineContent === null) {
         // first line
         currentMultilineContent = trueLine;
       } else {
@@ -125,21 +130,36 @@ function sceneTextPreProcessPassTwo(lines: string[]): string[] {
       continue;
     }
 
-    if (currentMultilineContent !== "") {
+    if (currentMultilineContent !== null) {
       // end line
       concat(line);
-      processedLines.push(currentMultilineContent);
-      processedLines.push(...placeHolderLines);
-
-      placeHolderLines = [];
-      currentMultilineContent = "";
+      flushMultiline();
       continue;
     }
 
     processedLines.push(line);
   }
 
+  // 场景末行仍以 \ 结尾时循环里没有机会收尾，在这里把累积的内容补出去。
+  if (currentMultilineContent !== null) {
+    flushMultiline();
+  }
+
   return processedLines;
+}
+
+/**
+ * 占位行的前缀。占位行本身是一条注释，引擎会空跑掉；
+ * 它的作用是让预处理后的行数与原始场景一致，从而保持
+ * 「解析后语句 index == 文件行号」这一不变量。
+ */
+export const WEBGAL_LINE_BREAK_MARK = ';_WEBGAL_LINE_BREAK_';
+
+/**
+ * 判断预处理后的某一行是否是占位行，即它是上一条多行语句折叠掉的续行。
+ */
+export function isLineBreakPlaceholder(processedLine: string): boolean {
+  return processedLine.startsWith(WEBGAL_LINE_BREAK_MARK);
 }
 
 /**
@@ -150,74 +170,5 @@ function sceneTextPreProcessPassTwo(lines: string[]): string[] {
  * @returns The placeholder line
  */
 function placeholderLine(content = "") {
-  return ";_WEBGAL_LINE_BREAK_" + content;
+  return WEBGAL_LINE_BREAK_MARK + content;
 }
-
-// export function sceneTextPreProcess(sceneText: string): string {
-//   const lines = sceneText.replaceAll('\r', '').split('\n');
-//   const processedLines: string[] = [];
-//   let lastNonMultilineIndex = -1;
-//   let isInMultilineSequence = false;
-
-//   function isMultiline(line: string): boolean {
-//     if (!line.startsWith(' ')) return false;
-//     const trimmedLine = line.trimStart();
-//     return trimmedLine.startsWith('|') || trimmedLine.startsWith('-');
-//   }
-
-//   for (let i = 0; i < lines.length; i++) {
-//     const line = lines[i];
-
-//     if (line.trim() === '') {
-//       // Empty line handling
-//       if (isInMultilineSequence) {
-//         // Check if the next line is a multiline line
-
-//         let isStillInMulti = false;
-//         for (let j = i + 1; j < lines.length; j++) {
-//           const lookForwardLine = lines[j] || '';
-//           // 遇到正常语句了，直接中断
-//           if (lookForwardLine.trim() !== '' && !isMultiline(lookForwardLine)) {
-//             isStillInMulti = false;
-//             break;
-//           }
-//           // 必须找到后面接的是参数，并且中间没有遇到任何正常语句才行
-//           if (lookForwardLine.trim() !== '' && isMultiline(lookForwardLine)) {
-//             isStillInMulti = true;
-//             break;
-//           }
-//         }
-//         if (isStillInMulti) {
-//           // Still within a multiline sequence
-//           processedLines.push(';_WEBGAL_LINE_BREAK_');
-//         } else {
-//           // End of multiline sequence
-//           isInMultilineSequence = false;
-//           processedLines.push(line);
-//         }
-//       } else {
-//         // Preserve empty lines outside of multiline sequences
-//         processedLines.push(line);
-//       }
-//     } else if (isMultiline(line)) {
-//       // Multiline statement handling
-//       if (lastNonMultilineIndex >= 0) {
-//         // Concatenate to the previous non-multiline statement
-//         const trimedLine = line.trimStart();
-//         const addBlank = trimedLine.startsWith('-') ? ' ' : '';
-//         processedLines[lastNonMultilineIndex] += addBlank + trimedLine;
-//       }
-
-//       // Add the special comment line
-//       processedLines.push(';_WEBGAL_LINE_BREAK_' + line);
-//       isInMultilineSequence = true;
-//     } else {
-//       // Non-multiline statement handling
-//       processedLines.push(line);
-//       lastNonMultilineIndex = processedLines.length - 1;
-//       isInMultilineSequence = false;
-//     }
-//   }
-
-//   return processedLines.join('\n');
-// }

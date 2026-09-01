@@ -54,6 +54,7 @@ export const jumpFromBacklog = (index: number, refetchScene = true) => {
     });
   WebGAL.sceneManager.sceneData.currentSentenceId = backlogFile.saveScene.currentSentenceId;
   WebGAL.sceneManager.sceneData.sceneStack = cloneDeep(backlogFile.saveScene.sceneStack);
+  WebGAL.sceneManager.sceneData.currentLocals = cloneDeep(backlogFile.saveScene.currentLocals ?? {}); // 旧存档没有此字段
 
   // 强制停止所有演出
   stopAllPerform();
@@ -75,7 +76,7 @@ export const jumpFromBacklog = (index: number, refetchScene = true) => {
   stageStateManager.replaceCalculationStageState(newStageState);
 
   // 恢复演出
-  setTimeout(restorePerform, 0);
+  restorePerform();
 
   // 关闭backlog界面
   dispatch(setVisibility({ component: 'showBacklog', visibility: false }));
@@ -84,5 +85,5 @@ export const jumpFromBacklog = (index: number, refetchScene = true) => {
   dispatch(setVisibility({ component: 'showTextBox', visibility: true }));
 
   // 重新渲染
-  setTimeout(() => WebGAL.gameplay.pixiStage?.requestRender(), 100);
+  WebGAL.gameplay.pixiStage?.requestRender();
 };

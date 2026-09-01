@@ -5,6 +5,7 @@ import { STAGE_KEYS } from '@/Core/constants';
 import { baseBlinkParam, baseFocusParam } from '@/Core/live2DCore';
 import {
   baseTransform,
+  FIGURE_KEYS,
   IEffect,
   IFigureMetadata,
   IFreeFigure,
@@ -41,6 +42,10 @@ export const initState: IStageState = {
   figName: '',
   figNameLeft: '',
   figNameRight: '',
+  figNameLeft13: '',
+  figNameRight13: '',
+  figNameLeft14: '',
+  figNameRight14: '',
   freeFigure: [],
   figureAssociatedAnimation: [],
   isRead: false,
@@ -143,9 +148,7 @@ export class StageStateManager {
     const activeTargets = [
       STAGE_KEYS.STAGE_MAIN,
       STAGE_KEYS.BGMAIN,
-      STAGE_KEYS.FIG_C,
-      STAGE_KEYS.FIG_L,
-      STAGE_KEYS.FIG_R,
+      ...FIGURE_KEYS,
       ...state.freeFigure.map((figure) => figure.key),
     ];
     if (!activeTargets.includes(target)) return;
@@ -288,7 +291,10 @@ export class StageStateManager {
     } else {
       this.calculationStageState.live2dMotion[index].motion = motion;
       this.calculationStageState.live2dMotion[index].skin = skin;
-      this.calculationStageState.live2dMotion[index].overrideBounds = overrideBounds;
+      // 绘制范围参与立绘身份判定，没指定就沿用旧值，否则只改动作也会被当成换了一张立绘
+      if (overrideBounds !== undefined) {
+        this.calculationStageState.live2dMotion[index].overrideBounds = overrideBounds;
+      }
     }
   }
 

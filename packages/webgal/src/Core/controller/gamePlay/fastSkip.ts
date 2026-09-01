@@ -4,7 +4,7 @@ import styles from '@/UI/BottomControlPanel/bottomControlPanel.module.scss';
 import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
 
 import { WebGAL } from '@/Core/WebGAL';
-import { webgalStore } from "@/store/store";
+import { webgalStore } from '@/store/store';
 import { SYSTEM_CONFIG } from '@/config';
 import { stageStateManager } from '@/Core/Modules/stage/stageStateManager';
 

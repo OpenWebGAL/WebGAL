@@ -150,7 +150,9 @@ export default function IMSSTextbox(props: ITextboxProps) {
           <span
             // data-text={e}
             id={`${delay}`}
-            className={applyStyle('TextBox_textElement_Settled', styles.TextBox_textElement_Settled) + readTextClassName}
+            className={
+              applyStyle('TextBox_textElement_Settled', styles.TextBox_textElement_Settled) + readTextClassName
+            }
             key={currentDialogKey + index}
             style={{ animationDelay: `${delay}ms`, animationDuration: `${textDuration}ms` }}
           >

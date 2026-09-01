@@ -63,8 +63,8 @@ const ko = {
               options: {
                 read: '읽은 부분',
                 all: '전부',
-              }
-            }
+              },
+            },
           },
         },
         display: {

@@ -15,6 +15,11 @@ import { stageStateManager } from '@/Core/Modules/stage/stageStateManager';
  * @param index 游戏的档位
  */
 export const saveGame = (index: number) => {
+  if (WebGAL.sceneManager.lockSceneWrite) {
+    // 场景写入期间状态是撕裂的：场景栈已变更，但当前场景与语句ID尚未切换
+    logger.warn('场景切换中，忽略本次存档');
+    return;
+  }
   const saveData: ISaveData = generateCurrentStageData(index);
   webgalStore.dispatch(saveActions.saveGame({ index, saveData }));
   dumpSavesToStorage(index, index);
@@ -54,6 +59,7 @@ export function generateCurrentStageData(index: number, isSavePreviewImage = tru
       sceneStack: cloneDeep(WebGAL.sceneManager.sceneData.sceneStack), // 场景栈
       sceneName: WebGAL.sceneManager.sceneData.currentScene.sceneName, // 场景名称
       sceneUrl: WebGAL.sceneManager.sceneData.currentScene.sceneUrl, // 场景url
+      currentLocals: cloneDeep(WebGAL.sceneManager.sceneData.currentLocals), // 当前帧的局部变量
     },
     previewImage: urlToSave,
   };

@@ -1,4 +1,5 @@
 import { ISentence } from '@/Core/controller/scene/sceneInterface';
+import { FIGURE_POSITIONS, IFigurePosition } from '@/Core/Modules/stage/stageInterface';
 import { toSafeBoolean, toSafeNumber, toSafeString } from './toSafeType';
 
 export function getSentenceArgByKey(sentence: ISentence, argKey: string): null | string | boolean | number {
@@ -22,4 +23,11 @@ export function getNumberArgByKey(sentence: ISentence, argKey: string): number |
 export function getStringArgByKey(sentence: ISentence, argKey: string): string | null {
   const argValue = getSentenceArgByKey(sentence, argKey);
   return toSafeString(argValue);
+}
+
+/**
+ * 从参数中获取立绘的预设位置，没有指定位置时返回空字符串
+ */
+export function getFigurePositionFromArgs(sentence: ISentence): IFigurePosition | '' {
+  return FIGURE_POSITIONS.find((position) => getBooleanArgByKey(sentence, position)) ?? '';
 }

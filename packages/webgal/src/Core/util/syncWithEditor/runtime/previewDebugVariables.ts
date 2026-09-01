@@ -39,7 +39,7 @@ export function applyPreviewDebugVariables(debugVariables: DebugVariable[] = [])
       setGameVarFromExpression({
         key: item.key,
         value: item.value,
-        isGlobal: item.isGlobal,
+        scope: item.isGlobal ? 'global' : 'stage',
         persistGlobal: false,
       });
       if (!item.isGlobal) {

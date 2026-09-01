@@ -2,10 +2,10 @@
  * 已读历史记录
  */
 
-import { webgalStore } from "@/store/store";
-import { SceneManager } from "./scene";
-import { setReadHistory } from "@/store/userDataReducer";
-import { setStorage } from "../controller/storage/storageController";
+import { webgalStore } from '@/store/store';
+import { SceneManager } from './scene';
+import { setReadHistory } from '@/store/userDataReducer';
+import { setStorage } from '../controller/storage/storageController';
 import { stageStateManager } from '@/Core/Modules/stage/stageStateManager';
 
 let debugTextReadMode: boolean | null = null;
@@ -60,10 +60,12 @@ export class ReadHistoryManager {
 
     try {
       const base64 = Buffer.from(bitset).toString('base64');
-      webgalStore.dispatch(setReadHistory({
-        key,
-        value: base64,
-      }));
+      webgalStore.dispatch(
+        setReadHistory({
+          key,
+          value: base64,
+        }),
+      );
     } catch {
       // 浏览器环境下没有 Buffer 时的兜底逻辑
       let binary = '';
@@ -72,10 +74,12 @@ export class ReadHistoryManager {
         binary += String.fromCharCode(bitset[i]);
       }
       const base64 = btoa(binary);
-      webgalStore.dispatch(setReadHistory({
-        key,
-        value: base64,
-      }));
+      webgalStore.dispatch(
+        setReadHistory({
+          key,
+          value: base64,
+        }),
+      );
     }
     setStorage();
   }
@@ -100,7 +104,7 @@ export class ReadHistoryManager {
       this.history.set(scenarioName, bitset);
     }
 
-    bitset[requiredIndex] |= (1 << (index & 7));
+    bitset[requiredIndex] |= 1 << (index & 7);
 
     this.saveReadHistory(scenarioName);
   }

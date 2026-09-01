@@ -58,6 +58,7 @@ export interface ISaveScene {
   sceneStack: Array<ISceneEntry>; // 场景栈
   sceneName: string; // 场景名称
   sceneUrl: string; // 场景url
+  currentLocals?: IGameVar; // 当前帧的局部变量，旧存档没有此字段
 }
 
 /**

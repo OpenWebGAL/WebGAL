@@ -1,9 +1,15 @@
-import type { IEffect, IStageState, ITransform } from '@/Core/Modules/stage/stageInterface';
+import type { IEffect, IFigurePosition, IStageState, ITransform } from '@/Core/Modules/stage/stageInterface';
+import {
+  FIGURE_KEYS,
+  FIGURE_POSITIONS,
+  figureStateKeyByPosition,
+  normalizeFigureBounds,
+} from '@/Core/Modules/stage/stageInterface';
 import type { IResolvedStageCommitOptions } from '@/Core/Modules/stage/stageStateManager';
-import { DEFAULT_BG_OUT_DURATION } from '@/Core/constants';
+import { DEFAULT_BG_IN_DURATION, DEFAULT_BG_OUT_DURATION, DEFAULT_FIG_IN_DURATION } from '@/Core/constants';
 import { WebGAL } from '@/Core/WebGAL';
 import type { IStageObject } from '@/Core/controller/stage/pixi/PixiController';
-import { getEnterExitAnimation } from '@/Core/Modules/animationFunctions';
+import { getAnimateDuration, getExitAnimation } from '@/Core/Modules/animationFunctions';
 import { logger } from '@/Core/util/logger';
 import { setEbg } from '@/Core/gameScripts/changeBg/setEbg';
 import { applyTransformToPixiContainer } from '@/Core/controller/stage/pixi/stageEffectTransform';
@@ -11,14 +17,34 @@ import { applyTransformToPixiContainer } from '@/Core/controller/stage/pixi/stag
 interface ISyncFigureSlotPayload {
   key: string;
   sourceUrl: string;
-  position: 'left' | 'center' | 'right';
-  stageState: IStageState;
+  position: IFigurePosition;
+  /** Live2D 自定义绘制范围，与位置一样只在创建时落地 */
+  bounds?: [number, number, number, number];
   skipAnimation: boolean;
 }
 
-interface IRemoveFigOptions {
-  effects: IEffect[];
-  skipAnimation: boolean;
+/**
+ * 立绘对象的身份：图片地址、基准位置、Live2D 绘制范围。
+ *
+ * 这三者都只在创建舞台对象时落地（基准位置写进 setBaseX，绘制范围写进模型的 pivot 与遮罩），
+ * 事后没有就地修改的通路。所以身份一变就必须关掉旧立绘再开新的，否则改动会被静默吞掉。
+ * 其余参数（zIndex、blendMode、动作、表情、皮肤、眨眼、注视）都有各自的更新通路，不属于身份。
+ */
+function getFigureIdentity({ sourceUrl, position, bounds }: ISyncFigureSlotPayload): string {
+  return JSON.stringify([sourceUrl, position, normalizeFigureBounds(bounds)]);
+}
+
+/**
+ * 取入场过渡时长。
+ *
+ * 入场动画本身由 changeBg/changeFigure 作为演出产出，这里只需要时长来同步其他视觉元素。
+ */
+function getEnterDuration(stageState: IStageState, target: string, isBg: boolean): number {
+  const animationSettings = stageState.animationSettings.find((setting) => setting.target === target);
+  if (animationSettings?.enterAnimationName) {
+    return getAnimateDuration(animationSettings.enterAnimationName);
+  }
+  return animationSettings?.enterDuration ?? (isBg ? DEFAULT_BG_IN_DURATION : DEFAULT_FIG_IN_DURATION);
 }
 
 export function syncPixiStageState(stageState: IStageState, options: IResolvedStageCommitOptions) {
@@ -75,14 +101,8 @@ function syncBg(stageState: IStageState, skipAnimation: boolean) {
     }
     addBg(thisBgKey, bgName);
     logger.debug('重设背景');
-    const { duration, animation } = getEnterExitAnimation(thisBgKey, 'enter', true);
-    if (skipAnimation || WebGAL.gameplay.skipAnimation) {
-      setEbg(bgName, 0);
-    } else {
-      setEbg(bgName, duration);
-      pixiStage.registerPresetAnimation(animation, 'bg-main-softin', thisBgKey, stageState.effects);
-      setTimeout(() => pixiStage.removeAnimationWithSetEffects('bg-main-softin'), duration);
-    }
+    const isSkipAnimation = skipAnimation || WebGAL.gameplay.skipAnimation;
+    setEbg(bgName, isSkipAnimation ? 0 : getEnterDuration(stageState, thisBgKey, true));
     return;
   }
 
@@ -92,61 +112,69 @@ function syncBg(stageState: IStageState, skipAnimation: boolean) {
 }
 
 function syncFigures(stageState: IStageState, skipAnimation: boolean) {
-  syncFigureSlot({ key: 'fig-center', sourceUrl: stageState.figName, position: 'center', stageState, skipAnimation });
-  syncFigureSlot({ key: 'fig-left', sourceUrl: stageState.figNameLeft, position: 'left', stageState, skipAnimation });
-  syncFigureSlot({
-    key: 'fig-right',
-    sourceUrl: stageState.figNameRight,
-    position: 'right',
-    stageState,
-    skipAnimation,
-  });
+  const getBounds = (key: string) => stageState.live2dMotion.find((motion) => motion.target === key)?.overrideBounds;
+
+  for (const position of FIGURE_POSITIONS) {
+    const key = `fig-${position}`;
+    syncFigureSlot({
+      key,
+      sourceUrl: stageState[figureStateKeyByPosition[position]],
+      position,
+      bounds: getBounds(key),
+      skipAnimation,
+    });
+  }
 
   for (const fig of stageState.freeFigure) {
-    syncFigureSlot({ key: fig.key, sourceUrl: fig.name, position: fig.basePosition, stageState, skipAnimation });
+    syncFigureSlot({
+      key: fig.key,
+      sourceUrl: fig.name,
+      position: fig.basePosition,
+      bounds: getBounds(fig.key),
+      skipAnimation,
+    });
   }
 
   const currentFigures = WebGAL.gameplay.pixiStage?.getFigureObjects();
   if (!currentFigures) return;
   const freeFigureKeys = new Set(stageState.freeFigure.map((fig) => fig.key));
   for (const existFigure of [...currentFigures]) {
-    if (
-      existFigure.key === 'fig-left' ||
-      existFigure.key === 'fig-center' ||
-      existFigure.key === 'fig-right' ||
-      existFigure.key.endsWith('-off')
-    ) {
+    if (FIGURE_KEYS.includes(existFigure.key) || existFigure.key.endsWith('-off')) {
       continue;
     }
     if (!freeFigureKeys.has(existFigure.key)) {
-      removeFig(existFigure, `${existFigure.key}-softin`, { effects: stageState.effects, skipAnimation });
+      removeFig(existFigure, `${existFigure.key}-softin`, skipAnimation);
     }
   }
 }
 
-function syncFigureSlot({ key, sourceUrl, position, stageState, skipAnimation }: ISyncFigureSlotPayload) {
+function syncFigureSlot(payload: ISyncFigureSlotPayload) {
+  const { key, sourceUrl, position, skipAnimation } = payload;
   const pixiStage = WebGAL.gameplay.pixiStage;
   if (!pixiStage) return;
   const softInAniKey = `${key}-softin`;
   const currentFigure = pixiStage.getStageObjByKey(key);
 
-  if (sourceUrl !== '') {
-    if (currentFigure?.sourceUrl === sourceUrl) return;
+  // 旧存档中可能没有新增位置的字段，这里同时容错 undefined
+  if (sourceUrl) {
+    const identity = getFigureIdentity(payload);
+    if (currentFigure?.figureIdentity === identity) return;
     if (currentFigure) {
-      removeFig(currentFigure, softInAniKey, { effects: stageState.effects, skipAnimation });
+      removeFig(currentFigure, softInAniKey, skipAnimation);
     }
+    // 入场动画由 changeFigure 作为演出产出，这里只负责创建舞台对象
     addFigure(key, sourceUrl, position);
-    logger.debug(`${key} 立绘已重设`);
-    const { duration, animation } = getEnterExitAnimation(key, 'enter');
-    if (!skipAnimation && !WebGAL.gameplay.skipAnimation) {
-      pixiStage.registerPresetAnimation(animation, softInAniKey, key, stageState.effects);
-      setTimeout(() => pixiStage.removeAnimationWithSetEffects(softInAniKey), duration);
+    // 舞台对象是同步入表的，这里记下它是按哪份身份创建的，供下次同步比对
+    const newFigure = pixiStage.getStageObjByKey(key);
+    if (newFigure) {
+      newFigure.figureIdentity = identity;
     }
+    logger.debug(`${key} 立绘已重设`);
     return;
   }
 
   if (currentFigure) {
-    removeFig(currentFigure, softInAniKey, { effects: stageState.effects, skipAnimation });
+    removeFig(currentFigure, softInAniKey, skipAnimation);
   }
 }
 
@@ -189,7 +217,7 @@ function syncFigureMetaData(stageState: IStageState) {
 function removeBg(bgObject: IStageObject, skipAnimation: boolean): number {
   const pixiStage = WebGAL.gameplay.pixiStage;
   if (!pixiStage) return DEFAULT_BG_OUT_DURATION;
-  pixiStage.removeAnimationWithSetEffects('bg-main-softin');
+  pixiStage.removeAnimation('bg-main-softin');
   if (skipAnimation || WebGAL.gameplay.skipAnimation) {
     pixiStage.removeStageObjectByKey(bgObject.key);
     return 0;
@@ -199,7 +227,7 @@ function removeBg(bgObject: IStageObject, skipAnimation: boolean): number {
   const bgKey = bgObject.key;
   const bgAniKey = bgObject.key + '-softoff';
   pixiStage.removeStageObjectByKey(oldBgKey);
-  const { duration, animation } = getEnterExitAnimation('bg-main-off', 'exit', true, bgKey);
+  const { duration, animation } = getExitAnimation('bg-main-off', true, bgKey);
   pixiStage.registerAnimation(animation, bgAniKey, bgKey);
   setTimeout(() => {
     pixiStage.removeAnimation(bgAniKey);
@@ -208,11 +236,13 @@ function removeBg(bgObject: IStageObject, skipAnimation: boolean): number {
   return duration;
 }
 
-function removeFig(figObj: IStageObject, enterTikerKey: string, options: IRemoveFigOptions) {
+function removeFig(figObj: IStageObject, enterTikerKey: string, skipAnimation: boolean) {
   const pixiStage = WebGAL.gameplay.pixiStage;
   if (!pixiStage) return;
-  pixiStage.removeAnimationWithSetEffects(enterTikerKey);
-  if (options.skipAnimation || WebGAL.gameplay.skipAnimation) {
+  // 只有真正决定让它退场时才打标记，标记与下面的改名同属一步，不会留给复用中的立绘
+  figObj.isExiting = true;
+  pixiStage.removeAnimation(enterTikerKey);
+  if (skipAnimation || WebGAL.gameplay.skipAnimation) {
     logger.debug('快速模式，立刻关闭立绘');
     pixiStage.removeStageObjectByKey(figObj.key);
     return;
@@ -223,8 +253,9 @@ function removeFig(figObj: IStageObject, enterTikerKey: string, options: IRemove
   const figKey = figObj.key;
   pixiStage.removeStageObjectByKey(oldFigKey);
   const leaveKey = figKey + '-softoff';
-  const { duration, animation } = getEnterExitAnimation(figLeaveAniKey, 'exit', false, figKey);
-  pixiStage.registerPresetAnimation(animation, leaveKey, figKey, options.effects);
+  // 退出对象的 key 带时间戳，永远不在 effects 白名单里，因此与背景一样走普通动画通道即可
+  const { duration, animation } = getExitAnimation(figLeaveAniKey, false, figKey);
+  pixiStage.registerAnimation(animation, leaveKey, figKey);
   setTimeout(() => {
     pixiStage.removeAnimation(leaveKey);
     pixiStage.removeStageObjectByKey(figKey);
@@ -243,7 +274,7 @@ function addBg(key: string, url: string) {
   }
 }
 
-function addFigure(key: string, url: string, position: 'left' | 'center' | 'right') {
+function addFigure(key: string, url: string, position: IFigurePosition) {
   const pixiStage = WebGAL.gameplay.pixiStage;
   if (!pixiStage) return;
   const baseUrl = window.location.origin;

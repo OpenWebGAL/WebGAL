@@ -49,9 +49,8 @@ export const setTransform = (sentence: ISentence): IPerform => {
     if (keep && keepAnimationStopped) {
       return;
     }
-    WebGAL.gameplay.pixiStage?.stopPresetAnimationOnTarget(target);
     const animationObj: IAnimationObject | null = animationTimeline
-      ? generateTimelineObj(animationTimeline, target, animationDuration, false)
+      ? generateTimelineObj(animationTimeline, target, animationDuration)
       : null;
     if (animationObj) {
       logger.debug(`动画${animationName}作用在${target}`, animationDuration);
@@ -64,7 +63,8 @@ export const setTransform = (sentence: ISentence): IPerform => {
       keepAnimationStopped = true;
       return;
     }
-    WebGAL.gameplay.pixiStage?.removeAnimationWithSetEffects(key);
+    // 终态已在命令函数阶段写入 effects，这里只把容器推到终态，不回写演算状态
+    WebGAL.gameplay.pixiStage?.removeAnimation(key);
   };
 
   return {

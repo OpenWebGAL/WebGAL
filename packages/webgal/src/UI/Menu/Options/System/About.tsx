@@ -15,19 +15,19 @@ export default function About(props: { onClose: () => void }) {
       <div className={s.text}>{__INFO.version}</div>
       <div className={s.title}>{t('source')}</div>
       <div className={s.text}>
-        <a target="_blank" href="https://github.com/OpenWebGAL/WebGAL">
+        <a target="_blank" href="https://github.com/OpenWebGAL/WebGAL" rel="noreferrer">
           https://github.com/OpenWebGAL/WebGAL
         </a>
       </div>
       <div className={s.title}>{t('contributors')}</div>
       <div className={s.text}>
-        <a target="_blank" href="https://github.com/OpenWebGAL/WebGAL/graphs/contributors">
+        <a target="_blank" href="https://github.com/OpenWebGAL/WebGAL/graphs/contributors" rel="noreferrer">
           https://github.com/OpenWebGAL/WebGAL/graphs/contributors
         </a>
       </div>
       <div className={s.title}>{t('website')}</div>
       <div className={s.text}>
-        <a target="_blank" href="https://openwebgal.com/">
+        <a target="_blank" href="https://openwebgal.com/" rel="noreferrer">
           https://openwebgal.com/
         </a>
       </div>

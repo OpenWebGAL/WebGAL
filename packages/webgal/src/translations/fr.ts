@@ -63,8 +63,8 @@ const fr = {
               options: {
                 read: 'Lu',
                 all: 'Tout',
-              }
-            }
+              },
+            },
           },
         },
         display: {

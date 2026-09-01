@@ -1,12 +1,11 @@
 import { commandType, ISentence } from '@/Core/controller/scene/sceneInterface';
 import { runScript } from './runScript';
 import { logger } from '../../util/logger';
-import { restoreScene } from '../scene/restoreScene';
+import { returnFromScene } from '../scene/returnFromScene';
 import { webgalStore } from '@/store/store';
 import { legacyGetValueFromStateElseKey } from '@/Core/gameScripts/setVar';
 import { strIf } from '@/Core/controller/gamePlay/strIf';
 import cloneDeep from 'lodash/cloneDeep';
-import { ISceneEntry } from '@/Core/Modules/scene';
 import { WebGAL } from '@/Core/WebGAL';
 import { getBooleanArgByKey, getStringArgByKey } from '@/Core/util/getSentenceArg';
 import { stageStateManager } from '@/Core/Modules/stage/stageStateManager';
@@ -67,12 +66,8 @@ export const scriptExecutor = (depth = 0, options: ScriptExecutionOptions = {}) 
     WebGAL.sceneManager.sceneData.currentSentenceId >
     WebGAL.sceneManager.sceneData.currentScene.sentenceList.length - 1
   ) {
-    if (WebGAL.sceneManager.sceneData.sceneStack.length !== 0 && !WebGAL.sceneManager.lockSceneWrite) {
-      const sceneToRestore: ISceneEntry | undefined = WebGAL.sceneManager.sceneData.sceneStack.pop();
-      if (sceneToRestore !== undefined) {
-        restoreScene(sceneToRestore);
-      }
-    }
+    // 没有 return 语句而自然结束，返回空值
+    returnFromScene();
     return;
   }
   const sentenceId = WebGAL.sceneManager.sceneData.currentSentenceId;
@@ -80,9 +75,7 @@ export const scriptExecutor = (depth = 0, options: ScriptExecutionOptions = {}) 
     sceneName: WebGAL.sceneManager.sceneData.currentScene.sceneName,
     sentenceId,
   });
-  const currentScript: ISentence = cloneDeep(
-    WebGAL.sceneManager.sceneData.currentScene.sentenceList[sentenceId],
-  );
+  const currentScript: ISentence = cloneDeep(WebGAL.sceneManager.sceneData.currentScene.sentenceList[sentenceId]);
 
   const interpolationOneItem = (content: string): string => {
     let retContent = content;

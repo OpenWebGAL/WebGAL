@@ -1,7 +1,7 @@
 /**
  * 当前的backlog
  */
-import { IEffect, IStageState } from '@/Core/Modules/stage/stageInterface';
+import { IStageState } from '@/Core/Modules/stage/stageInterface';
 import { ISaveScene } from '@/store/userDataInterface';
 import cloneDeep from 'lodash/cloneDeep';
 
@@ -26,10 +26,6 @@ export class BacklogManager {
 
   public getBacklog() {
     return this.backlog;
-  }
-
-  public editLastBacklogItemEffect(effects: IEffect[]) {
-    this.backlog[this.backlog.length - 1].currentStageState.effects = effects;
   }
 
   public makeBacklogEmpty() {
@@ -57,6 +53,7 @@ export class BacklogManager {
         sceneStack: cloneDeep(this.sceneManager.sceneData.sceneStack), // 场景栈
         sceneName: this.sceneManager.sceneData.currentScene.sceneName, // 场景名称
         sceneUrl: this.sceneManager.sceneData.currentScene.sceneUrl, // 场景url
+        currentLocals: cloneDeep(this.sceneManager.sceneData.currentLocals), // 当前帧的局部变量
       },
     };
     this.getBacklog().push(backlogElement);

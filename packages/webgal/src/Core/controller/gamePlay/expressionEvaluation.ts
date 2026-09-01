@@ -3,6 +3,7 @@ import { stageStateManager } from '@/Core/Modules/stage/stageStateManager';
 import { webgalStore } from '@/store/store';
 import { logger } from '@/Core/util/logger';
 import random from 'lodash/random';
+import { WebGAL } from '@/Core/WebGAL';
 
 /**
  * 提取变量名和表达式
@@ -55,10 +56,10 @@ export function evaluateExpression(expressionString: string): string | number | 
     const scope: any = {};
     // 先加入内置函数（最低优先级）
     Object.assign(scope, builtinFunctions);
-    // 然后加入全局变量
+    // 然后按查找链依次覆盖：全局变量 -> 舞台变量 -> 当前调用帧的局部变量（最高优先级）
     Object.assign(scope, globalVar);
-    // 最后加入舞台变量以保证最高优先级
     Object.assign(scope, stageVar);
+    Object.assign(scope, WebGAL.sceneManager.sceneData.currentLocals);
     // 支持 $ 前缀的特殊值
     scope['$stage'] = stageState;
     scope['$userData'] = userData;

@@ -129,12 +129,10 @@ export const Backlog = () => {
                   onClick={() => {
                     playSeClick();
                     // 暂停所有 backlog 语音（包括当前；后续会重置并播放当前）
-                    document
-                      .querySelectorAll('[id^="backlog_audio_play_element_"]')
-                      .forEach((audio: any) => {
-                        audio.pause();
-                        audio.currentTime = 0;
-                      });
+                    document.querySelectorAll('[id^="backlog_audio_play_element_"]').forEach((audio: any) => {
+                      audio.pause();
+                      audio.currentTime = 0;
+                    });
                     // 暂停游戏内正在播放的语音，避免与 backlog 语音混合
                     const currentVocal = document.getElementById('currentVocal') as HTMLAudioElement | null;
                     if (currentVocal) {

@@ -63,8 +63,8 @@ const zhCn = {
               options: {
                 read: '已读',
                 all: '全部',
-              }
-            }
+              },
+            },
           },
         },
         display: {

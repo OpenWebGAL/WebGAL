@@ -60,7 +60,7 @@ export const forward = (options: ForwardOptions = {}) => {
     return false;
   }
 
-  WebGAL.gameplay.performController.discardUncommittedNonHoldPerforms(WebGAL.gameplay.isFastPreview);
+  WebGAL.gameplay.performController.discardUncommittedNonHoldPerforms();
   WebGAL.gameplay.performController.clearNonHoldPerformsFromStageState();
   WebGAL.gameplay.performController.beginCollectingPerforms();
   try {

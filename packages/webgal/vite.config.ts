@@ -27,6 +27,11 @@ export default defineConfig({
       '@': resolve('src'),
     },
   },
+  // angular-expressions accesses Node's `global` during expression compilation.
+  // Map it to the browser's standard globalThis in the generated bundle.
+  define: {
+    global: 'globalThis',
+  },
   build: {
     // sourcemap: true,
   },

@@ -75,6 +75,14 @@ export class FlowchartManager {
     return this.data.flowcharts;
   }
 
+  /** 个人线在玩家踏入之前属于剧透，主线之外的流程图要解锁到任意节点才对玩家可见 */
+  public getVisibleFlowcharts() {
+    return this.data.flowcharts.filter(
+      (flowchart) =>
+        flowchart.type === 'main' || flowchart.nodes.some((node) => this.isUnlocked(flowchart.id, node.id)),
+    );
+  }
+
   public getEventName() {
     return FLOWCHART_UPDATED_EVENT;
   }

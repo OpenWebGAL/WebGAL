@@ -97,10 +97,60 @@ export const baseTransform: ITransform = {
   radiusAlphaFilter: 0,
 };
 
+/**
+ * 立绘的预设位置，left / right 为靠边定位，其余均为中心定位
+ */
+export const FIGURE_POSITIONS = ['center', 'left', 'right', 'left13', 'right13', 'left14', 'right14'] as const;
+
+export type IFigurePosition = (typeof FIGURE_POSITIONS)[number];
+
+export const FIGURE_KEYS = FIGURE_POSITIONS.map((position) => `fig-${position}`);
+
+export const figureStateKeyByPosition = {
+  center: 'figName',
+  left: 'figNameLeft',
+  right: 'figNameRight',
+  left13: 'figNameLeft13',
+  right13: 'figNameRight13',
+  left14: 'figNameLeft14',
+  right14: 'figNameRight14',
+} as const satisfies Record<IFigurePosition, keyof IStageState>;
+
+/**
+ * 计算立绘的基准 X 坐标
+ */
+export function getFigureBaseX(position: IFigurePosition, stageWidth: number, targetWidth: number): number {
+  switch (position) {
+    case 'left':
+      return targetWidth / 2;
+    case 'right':
+      return stageWidth - targetWidth / 2;
+    case 'left13':
+      return stageWidth / 3;
+    case 'right13':
+      return (stageWidth * 2) / 3;
+    case 'left14':
+      return stageWidth / 4;
+    case 'right14':
+      return (stageWidth * 3) / 4;
+    default:
+      return stageWidth / 2;
+  }
+}
+
 export interface IFreeFigure {
-  basePosition: 'left' | 'center' | 'right';
+  basePosition: IFigurePosition;
   name: string;
   key: string;
+}
+
+/**
+ * Live2D 自定义绘制范围的归一：未指定与全 0 是同一件事。
+ *
+ * 绘制范围参与立绘身份判定，演算与提交两侧必须用同一个口径，否则会把没变的立绘判成换了一张。
+ */
+export function normalizeFigureBounds(bounds?: [number, number, number, number]): [number, number, number, number] {
+  return bounds ?? [0, 0, 0, 0];
 }
 
 export interface IFigureAssociatedAnimation {
@@ -169,6 +219,10 @@ export interface IStageState {
   figName: string; // 立绘_中 文件地址（相对或绝对）
   figNameLeft: string; // 立绘_左 文件地址（相对或绝对）
   figNameRight: string; // 立绘_右 文件地址（相对或绝对）
+  figNameLeft13: string; // 立绘_左 1/3 文件地址（相对或绝对）
+  figNameRight13: string; // 立绘_右 1/3 文件地址（相对或绝对）
+  figNameLeft14: string; // 立绘_左 1/4 文件地址（相对或绝对）
+  figNameRight14: string; // 立绘_右 1/4 文件地址（相对或绝对）
   // 自由立绘
   freeFigure: Array<IFreeFigure>;
   figureAssociatedAnimation: Array<IFigureAssociatedAnimation>;

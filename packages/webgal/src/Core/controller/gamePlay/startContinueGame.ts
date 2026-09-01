@@ -35,7 +35,7 @@ export async function continueGame() {
    * 重设模糊背景
    */
   setEbg(stageStateManager.getViewStageState().bgName);
-  if ((await hasFastSaveRecord())) {
+  if (await hasFastSaveRecord()) {
     webgalStore.dispatch(setVisibility({ component: 'showTitle', visibility: false }));
     // 恢复记录
     await loadFastSaveGame();

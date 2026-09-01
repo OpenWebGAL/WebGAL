@@ -5,7 +5,6 @@ import omitBy from 'lodash/omitBy';
 import isUndefined from 'lodash/isUndefined';
 import PixiStage, { IAnimationObject } from '@/Core/controller/stage/pixi/PixiController';
 import { AnimationFrame } from '@/Core/Modules/animations';
-import { stageStateManager } from '@/Core/Modules/stage/stageStateManager';
 
 /**
  * 动画创建模板
@@ -17,7 +16,6 @@ export function generateTimelineObj(
   timeline: Array<AnimationFrame>,
   targetKey: string,
   duration: number,
-  syncEndStateToStageState = true,
 ): IAnimationObject {
   const target = WebGAL.gameplay.pixiStage!.getStageObjByKey(targetKey);
   let currentDelay = 0;
@@ -61,11 +59,6 @@ export function generateTimelineObj(
         }
       },
     });
-  }
-
-  if (syncEndStateToStageState) {
-    const { duration: sliceDuration, ease, ...endState } = getEndStateEffect();
-    stageStateManager.updateEffect({ target: targetKey, transform: endState });
   }
 
   /**

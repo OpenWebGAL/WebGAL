@@ -7,7 +7,7 @@ import { IAppreciationAsset } from '@/store/userDataInterface';
 export const isVideoFile = (url: string) => {
   const extension = url.split('.').pop()?.toLowerCase() || '';
   return ['mp4', 'webm', 'mkv'].includes(extension);
-}
+};
 
 interface IProps {
   name: string;
@@ -119,11 +119,7 @@ export function ExtraCgElement(props: IProps) {
   return (
     <>
       {showFull.value && (
-        <div
-          onClick={closeFullPreview}
-          className={styles.showFullContainer}
-          onMouseEnter={playSeEnter}
-        >
+        <div onClick={closeFullPreview} className={styles.showFullContainer} onMouseEnter={playSeEnter}>
           <div className={styles.showFullCgMain} onClick={(e) => handleFullPreviewClick(e)}>
             {renderMedia(currentResource.url)}
           </div>
@@ -141,7 +137,11 @@ export function ExtraCgElement(props: IProps) {
         {isStackPreview ? (
           <>
             {stackResources.map((resource, index) => (
-              <div className={styles.cgStackItem} style={getStackItemStyle(index, stackResources.length)} key={`${resource.url}_${index}`}>
+              <div
+                className={styles.cgStackItem}
+                style={getStackItemStyle(index, stackResources.length)}
+                key={`${resource.url}_${index}`}
+              >
                 {renderMedia(resource.url)}
               </div>
             ))}

@@ -120,17 +120,24 @@ export function System() {
           <NormalOption key="skipAll" title={t('skipAll.title')}>
             <NormalButton
               textList={t('skipAll.options.read', 'skipAll.options.all')}
-              functionList={[() => {
-                dispatch(setOptionData({ key: 'skipAll', value: false }));
-                setStorage();
-              }, () => {
-                dispatch(setOptionData({ key: 'skipAll', value: true }));
-                setStorage();
-              }]}
+              functionList={[
+                () => {
+                  dispatch(setOptionData({ key: 'skipAll', value: false }));
+                  setStorage();
+                },
+                () => {
+                  dispatch(setOptionData({ key: 'skipAll', value: true }));
+                  setStorage();
+                },
+              ]}
               currentChecked={userDataState.optionData.skipAll ? 1 : 0}
             />
           </NormalOption>
-          <NormalOption key="option7" title={t('language.title')} style={{ zIndex: showLanguageSelect ? 1 : undefined }}>
+          <NormalOption
+            key="option7"
+            title={t('language.title')}
+            style={{ zIndex: showLanguageSelect ? 1 : undefined }}
+          >
             <div
               className={styles.Option_select}
               onBlur={(event) => {
@@ -159,9 +166,7 @@ export function System() {
                         type="button"
                         key={key}
                         className={`${styles.Option_select_item} ${
-                          value === userDataState.optionData.language
-                            ? styles.Option_select_item_active
-                            : ''
+                          value === userDataState.optionData.language ? styles.Option_select_item_active : ''
                         }`}
                         onClick={() => {
                           playSeSwitch();

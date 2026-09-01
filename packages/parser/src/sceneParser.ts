@@ -7,6 +7,10 @@ import {
 import { scriptParser } from './scriptParser/scriptParser';
 import { fileType } from './interface/assets';
 import { ConfigMap } from './config/scriptConfig';
+import {
+  isLineBreakPlaceholder,
+  sceneTextPreProcess,
+} from './sceneTextPreProcessor';
 
 /**
  * 场景解析器
@@ -28,7 +32,9 @@ export const sceneParser = (
   ADD_NEXT_ARG_LIST: commandType[],
   SCRIPT_CONFIG_MAP: ConfigMap,
 ): IScene => {
-  const rawSentenceList = rawScene.replaceAll('\r', '').split('\n'); // 原始句子列表
+  // 预处理把多行语句折叠进它的首行，并用占位行补齐被折叠掉的行，
+  // 因此这里的行数与原始场景严格一致，「语句 index == 文件行号」始终成立。
+  const rawSentenceList = sceneTextPreProcess(rawScene).split('\n'); // 原始句子列表
 
   // 去分号留到后面去做了，现在注释要单独处理
   const rawSentenceListWithoutEmpty = rawSentenceList;
@@ -52,6 +58,8 @@ export const sceneParser = (
     },
   );
 
+  markMultilineRanges(sentenceList, rawSentenceList);
+
   // 开始资源的预加载
   assetsList = deduplicateAssets(assetsList);
   assetsPrefetcher(assetsList);
@@ -63,6 +71,33 @@ export const sceneParser = (
     assetsList: assetsList, // 资源列表
     subSceneList: subSceneList, // 子场景列表
   };
+};
+
+/**
+ * 回填多行语句的行范围。
+ *
+ * 预处理后，一条多行语句的完整内容都落在它的首行，紧跟其后的若干占位行
+ * 就是被折叠掉的续行。这里把占位行标记出来，并把首行语句的 endLine
+ * 推到最后一条续行，图形编辑器据此按整个行范围替换语句。
+ *
+ * @param sentenceList 解析后的语句列表
+ * @param processedLines 预处理后的行，与 sentenceList 一一对应
+ */
+const markMultilineRanges = (
+  sentenceList: ISentence[],
+  processedLines: string[],
+) => {
+  let headIndex = -1; // 最近一条非占位语句的下标，即当前多行语句的首行
+  for (let index = 0; index < sentenceList.length; index++) {
+    if (!isLineBreakPlaceholder(processedLines[index])) {
+      headIndex = index;
+      continue;
+    }
+    sentenceList[index].isLineBreakHolder = true;
+    if (headIndex >= 0) {
+      sentenceList[headIndex].endLine = index;
+    }
+  }
 };
 
 const deduplicateAssets = (assetsList: IAsset[]): IAsset[] => {

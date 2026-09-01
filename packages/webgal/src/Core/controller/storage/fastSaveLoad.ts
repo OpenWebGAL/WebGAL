@@ -30,8 +30,8 @@ function dumpFastSaveToStorageSerial() {
  */
 export async function fastSaveGame() {
   const showTitle = webgalStore.getState().GUI.showTitle;
-  if (showTitle || WebGAL.sceneManager.sceneData.currentSentenceId === 0) {
-    // 如果在标题界面或游戏未开始，不进行快速保存
+  if (showTitle || WebGAL.sceneManager.sceneData.currentSentenceId === 0 || WebGAL.sceneManager.lockSceneWrite) {
+    // 如果在标题界面、游戏未开始或场景正在写入（此时状态是撕裂的），不进行快速保存
     return;
   }
   const saveData: ISaveData = generateCurrentStageData(-1, false);

@@ -50,7 +50,8 @@ export const Flowchart = () => {
   const [isDragging, setIsDragging] = useState(false);
   const dragStateRef = useRef({ moved: false, scrollLeft: 0, scrollTop: 0, startX: 0, startY: 0 });
   const blockClickRef = useRef(false);
-  const flowcharts = WebGAL.flowchartManager.getFlowcharts();
+  // 每次渲染重新取，解锁事件触发的重渲染会让新解锁的个人线立刻出现在侧边栏
+  const flowcharts = WebGAL.flowchartManager.getVisibleFlowcharts();
   const currentFlowchart = flowcharts.find((e) => e.id === currentFlowchartId) ?? flowcharts[0];
   const layout = useMemo(
     () => layoutFlowchart(currentFlowchart, lockedNodeVisibility),

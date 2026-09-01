@@ -63,8 +63,8 @@ const en = {
               options: {
                 read: 'Read',
                 all: 'All',
-              }
-            }
+              },
+            },
           },
         },
         display: {

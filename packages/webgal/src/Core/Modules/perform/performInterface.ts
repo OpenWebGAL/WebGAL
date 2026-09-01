@@ -23,8 +23,6 @@ export interface IPerform {
   blockingAuto: () => boolean;
   // 是否阻塞同一轮 -next 继续演算；只有需要外部输入才能确定后续状态的演出需要覆盖。
   blockingStateCalculation?: () => boolean;
-  // 未 commit 的演出被丢弃时，将它的终态同步到演算状态
-  settleStateOnDiscard?: () => void;
   // 演出自然结束或被卸载后触发内部继续推进；推进前仍会等待 blockingNext 解除。
   goNextWhenOver?: boolean;
   // 跳过由 nextSentence/continueSentence 引发的非 hold 演出回收。

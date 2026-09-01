@@ -5,6 +5,7 @@ import * as PIXI from 'pixi.js';
 import PixiStage from '@/Core/controller/stage/pixi/PixiController';
 import { logger } from '@/Core/util/logger';
 import { stageStateManager } from '@/Core/Modules/stage/stageStateManager';
+import { getFigureBaseX, IFigurePosition } from '@/Core/Modules/stage/stageInterface';
 // utils/loadPixiSpine.ts
 // @ts-ignore
 let pixiSpineModule: typeof import('pixi-spine') | null = null;
@@ -56,7 +57,7 @@ export async function addSpineFigureImpl(
   this: PixiStage,
   key: string,
   url: string,
-  presetPosition: 'left' | 'center' | 'right' = 'center',
+  presetPosition: IFigurePosition = 'center',
 ) {
   const spineId = `spine-${url}`;
   // 准备用于存放这个立绘的 Container
@@ -161,15 +162,7 @@ export async function addSpineFigureImpl(
         if (targetHeight < this.stageHeight) {
           thisFigureContainer.setBaseY(this.stageHeight / 2 + (this.stageHeight - targetHeight) / 2);
         }
-        if (presetPosition === 'center') {
-          thisFigureContainer.setBaseX(this.stageWidth / 2);
-        }
-        if (presetPosition === 'left') {
-          thisFigureContainer.setBaseX(targetWidth / 2);
-        }
-        if (presetPosition === 'right') {
-          thisFigureContainer.setBaseX(this.stageWidth - targetWidth / 2);
-        }
+        thisFigureContainer.setBaseX(getFigureBaseX(presetPosition, this.stageWidth, targetWidth));
         thisFigureContainer.pivot.set(0, this.stageHeight / 2);
         thisFigureContainer.addChild(figureSprite);
         this.notifyTargetReferenceBoxChanged(key);

@@ -63,8 +63,8 @@ const jp = {
               options: {
                 read: '既読',
                 all: 'すべて',
-              }
-            }
+              },
+            },
           },
         },
         display: {

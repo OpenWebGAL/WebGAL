@@ -43,6 +43,8 @@ const inferPrefetchAs = (assetType: fileType): string => {
   }
 };
 
+const inferPrefetchType = (url: string): string => (url.match(/\.opus(?:[?#].*)?$/i) ? 'audio/ogg' : '');
+
 const prefetchByLinkElement = (asset: IAsset) => {
   const newLink = document.createElement('link');
   newLink.setAttribute('rel', 'prefetch');
@@ -50,6 +52,10 @@ const prefetchByLinkElement = (asset: IAsset) => {
   const prefetchAs = inferPrefetchAs(asset.type);
   if (prefetchAs) {
     newLink.setAttribute('as', prefetchAs);
+  }
+  const prefetchType = inferPrefetchType(asset.url);
+  if (prefetchType) {
+    newLink.setAttribute('type', prefetchType);
   }
   const head = document.getElementsByTagName('head');
   if (!head.length) {

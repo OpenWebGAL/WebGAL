@@ -1,5 +1,10 @@
 import { sceneTextPreProcess } from "../src/sceneTextPreProcessor";
+import SceneParser from "../src/index";
+import { ADD_NEXT_ARG_LIST, SCRIPT_CONFIG } from "../src/config/scriptConfig";
 import { expect, test } from "vitest";
+import * as fsp from 'fs/promises';
+
+const parser = new SceneParser(() => { }, (fileName) => fileName, ADD_NEXT_ARG_LIST, SCRIPT_CONFIG);
 
 test("parser-multiline-basic", async () => {
     const testScene = `changeFigure:a.png -left
@@ -145,4 +150,54 @@ WebGAL 引擎也具有动画系统和特效系统，使用 WebGAL 开发的游�
 
     const preprocessedScene = sceneTextPreProcess(testScene);
     expect(preprocessedScene).toEqual(expected);
+});
+
+test("parser-multiline-marks-line-range", async () => {
+    const testScene = `changeFigure:a.png -left
+  -next
+  -id=id1
+saySomething`;
+
+    const { sentenceList } = parser.parse(testScene, 'test', 'test');
+
+    // 折叠后的参数全部落在首行语句上
+    expect(sentenceList[0].args).toEqual([
+        { key: 'left', value: true },
+        { key: 'next', value: true },
+        { key: 'id', value: 'id1' },
+    ]);
+    // 首行语句的行范围覆盖被折叠掉的两条续行
+    expect(sentenceList[0]).toMatchObject({ startLine: 0, endLine: 2, isLineBreakHolder: false });
+    expect(sentenceList[1]).toMatchObject({ startLine: 1, endLine: 1, isLineBreakHolder: true });
+    expect(sentenceList[2]).toMatchObject({ startLine: 2, endLine: 2, isLineBreakHolder: true });
+    // 续行之后的语句回到单行
+    expect(sentenceList[3]).toMatchObject({ startLine: 3, endLine: 3, isLineBreakHolder: false });
+});
+
+/**
+ * 行数守恒是存档兼容性的护栏：引擎的 currentSentenceId / continueLine 存的是
+ * 语句 index，只要「语句数 == 文件行数」成立，多行支持就不会让旧存档错位。
+ */
+test("parser-multiline-preserves-line-count", async () => {
+    const sceneText = (await fsp.readFile('test/test-resources/long-script.txt'))
+        .toString()
+        .replaceAll('\r', '');
+
+    const { sentenceList } = parser.parse(sceneText, 'test', 'test');
+
+    expect(sentenceList.length).toBe(sceneText.split('\n').length);
+});
+
+/**
+ * 折叠序列的首行是空行时，曾经整条序列会被丢掉，导致预处理后行数变少、
+ * 「语句 index == 文件行号」失效，进而让存档错位。
+ */
+test("parser-multiline-empty-first-line-keeps-line-count", async () => {
+    const testScene = `A;
+
+  -next
+B;`;
+
+    expect(sceneTextPreProcess(testScene).split('\n')).toHaveLength(4);
+    expect(parser.parse(testScene, 'test', 'test').sentenceList).toHaveLength(4);
 });

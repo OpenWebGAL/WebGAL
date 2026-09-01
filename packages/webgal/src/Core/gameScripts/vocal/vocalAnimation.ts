@@ -24,8 +24,7 @@ export const audioContextWrapper: IAudioContextWrapper = {
 export const ensureAudioContextReady = async (): Promise<boolean> => {
   if (!audioContextWrapper.audioContext) {
     const AudioContextCtor =
-      window.AudioContext ??
-      (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
+      window.AudioContext ?? (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
 
     if (!AudioContextCtor) {
       return false;
@@ -80,11 +79,7 @@ export const performBlinkAnimation = (params: {
 };
 
 // Updated getAudioLevel function
-export const getAudioLevel = (
-  analyser: AnalyserNode,
-  dataArray: Uint8Array,
-  bufferLength: number,
-): number => {
+export const getAudioLevel = (analyser: AnalyserNode, dataArray: Uint8Array, bufferLength: number): number => {
   analyser.getByteFrequencyData(dataArray as any);
   let sum = 0;
   for (let i = 0; i < bufferLength; i++) {

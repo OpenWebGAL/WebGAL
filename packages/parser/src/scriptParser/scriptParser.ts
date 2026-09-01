@@ -51,6 +51,9 @@ export const scriptParser = (
       sentenceAssets: [], // 语句携带的资源列表
       subScene: [], // 语句携带的子场景
       inlineComment: '', // 行内注释
+      startLine: lineNumber,
+      endLine: lineNumber,
+      isLineBreakHolder: false,
     };
   }
   // 截取命令
@@ -116,5 +119,9 @@ export const scriptParser = (
     sentenceAssets: sentenceAssets, // 语句携带的资源列表
     subScene: subScene, // 语句携带的子场景
     inlineComment: sentenceComment.trim(), // 行内注释
+    // 单行语句的行范围就是自己，多行语句的 endLine 由 sceneParser 回填
+    startLine: lineNumber,
+    endLine: lineNumber,
+    isLineBreakHolder: false,
   };
 };

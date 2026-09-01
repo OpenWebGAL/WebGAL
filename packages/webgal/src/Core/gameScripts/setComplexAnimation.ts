@@ -13,7 +13,6 @@ import { stageStateManager } from '@/Core/Modules/stage/stageStateManager';
  * @param sentence
  */
 export const setComplexAnimation = (sentence: ISentence): IPerform => {
-  const startDialogKey = stageStateManager.getCalculationStageState().currentDialogKey;
   const animationName = sentence.content;
   const animationDuration = getNumberArgByKey(sentence, 'duration') ?? 0;
   const target = getStringArgByKey(sentence, 'target') ?? '0';
@@ -31,13 +30,11 @@ export const setComplexAnimation = (sentence: ISentence): IPerform => {
     startFunction = () => {
       logger.debug(`动画${animationName}作用在${target}`, animationDuration);
       const animationObj: IAnimationObject = animationFunction(target, animationDuration);
-      WebGAL.gameplay.pixiStage?.stopPresetAnimationOnTarget(target);
       WebGAL.gameplay.pixiStage?.registerAnimation(animationObj, key, target);
     };
     stopFunction = () => {
-      const endDialogKey = stageStateManager.getCalculationStageState().currentDialogKey;
-      const isHasNext = startDialogKey !== endDialogKey;
-      WebGAL.gameplay.pixiStage?.removeAnimationWithSetEffects(key);
+      // 终态已在命令函数阶段写入 effects，这里只把容器推到终态，不回写演算状态
+      WebGAL.gameplay.pixiStage?.removeAnimation(key);
     };
   }
   return {

@@ -14,13 +14,13 @@ export function generateTemplateAnimationObj(targetKey: string, duration: number
   /**
    * 在此书写为动画设置初态的操作
    */
-  function setStartState() { }
+  function setStartState() {}
 
   // TODO：通用终态设置
   /**
    * 在此书写为动画设置终态的操作
    */
-  function setEndState() { }
+  function setEndState() {}
 
   /**
    * 在此书写动画每一帧执行的函数

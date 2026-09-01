@@ -4,7 +4,7 @@ import { playVocal } from './vocal';
 import { webgalStore } from '@/store/store';
 import { useTextAnimationDuration, useTextDelay } from '@/hooks/useTextOptions';
 import { getRandomPerformName } from '@/Core/Modules/perform/performController';
-import { getBooleanArgByKey, getStringArgByKey } from '@/Core/util/getSentenceArg';
+import { getBooleanArgByKey, getFigurePositionFromArgs, getStringArgByKey } from '@/Core/util/getSentenceArg';
 import { textSize, voiceOption } from '@/store/userDataInterface';
 import { WebGAL } from '@/Core/WebGAL';
 import { compileSentence } from '@/Stage/TextBox/TextBox';
@@ -89,13 +89,7 @@ export const say = (sentence: ISentence): IPerform => {
   // 模拟说话
   let performSimulateVocalTimeout: ReturnType<typeof setTimeout> | null = null;
 
-  let pos: '' | 'center' | 'left' | 'right' = '';
-  const leftFromArgs = getBooleanArgByKey(sentence, 'left') ?? false;
-  const rightFromArgs = getBooleanArgByKey(sentence, 'right') ?? false;
-  const centerFromArgs = getBooleanArgByKey(sentence, 'center') ?? false;
-  if (leftFromArgs) pos = 'left';
-  if (rightFromArgs) pos = 'right';
-  if (centerFromArgs) pos = 'center';
+  const pos = getFigurePositionFromArgs(sentence);
 
   let key = getStringArgByKey(sentence, 'figureId') ?? '';
 

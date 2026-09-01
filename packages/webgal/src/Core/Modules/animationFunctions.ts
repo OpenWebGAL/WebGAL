@@ -1,4 +1,3 @@
-import { generateUniversalSoftInAnimationObj } from '@/Core/controller/stage/pixi/animations/universalSoftIn';
 import { logger } from '@/Core/util/logger';
 import { generateUniversalSoftOffAnimationObj } from '@/Core/controller/stage/pixi/animations/universalSoftOff';
 import cloneDeep from 'lodash/cloneDeep';
@@ -8,12 +7,7 @@ import { WebGAL } from '@/Core/WebGAL';
 import PixiStage, { IAnimationObject } from '@/Core/controller/stage/pixi/PixiController';
 import { IUserAnimation } from './animations';
 import { pickBy } from 'lodash';
-import {
-  DEFAULT_BG_IN_DURATION,
-  DEFAULT_BG_OUT_DURATION,
-  DEFAULT_FIG_IN_DURATION,
-  DEFAULT_FIG_OUT_DURATION,
-} from '../constants';
+import { DEFAULT_BG_OUT_DURATION, DEFAULT_FIG_OUT_DURATION } from '../constants';
 import { stageStateManager } from '@/Core/Modules/stage/stageStateManager';
 import { AnimationFrame } from '@/Core/Modules/animations';
 
@@ -24,11 +18,10 @@ export function getAnimationObject(
   duration: number,
   writeDefault: boolean,
   writeFullEffect = true,
-  syncEndStateToStageState = true,
 ) {
   const mappedEffects = getAnimationTimeline(animationName, target, writeDefault, writeFullEffect);
   if (mappedEffects) {
-    return generateTimelineObj(mappedEffects, target, duration, syncEndStateToStageState);
+    return generateTimelineObj(mappedEffects, target, duration);
   }
   return null;
 }
@@ -104,73 +97,43 @@ export function getAnimateDuration(animationName: string) {
   return 0;
 }
 
-// eslint-disable-next-line max-params
-export function getEnterExitAnimation(
+/**
+ * 取退出动画。
+ *
+ * 入场动画不在这里产出：它由 changeFigure/changeBg 作为普通演出返回，
+ * 终态在演算期写入 effects，因此不需要视图层反推该播哪个动画。
+ */
+export function getExitAnimation(
   target: string,
-  type: 'enter' | 'exit',
   isBg = false,
   realTarget?: string, // 用于立绘和背景移除时，以当前时间打上特殊标记
 ): {
   duration: number;
   animation: IAnimationObject | null;
 } {
-  if (type === 'enter') {
-    let duration = DEFAULT_FIG_IN_DURATION;
-    if (isBg) {
-      duration = DEFAULT_BG_IN_DURATION;
-    }
-    const animationSettings = stageStateManager
-      .getCalculationStageState()
-      .animationSettings.find((setting) => setting.target === target);
-    duration = animationSettings?.enterDuration ?? duration;
-    // 走默认动画
-    let animation: IAnimationObject | null = generateUniversalSoftInAnimationObj(realTarget ?? target, duration);
-
-    const transformState = stageStateManager.getCalculationStageState().effects;
-    const targetEffect = transformState.find((effect) => effect.target === target);
-
-    const animationName = animationSettings?.enterAnimationName;
-    if (animationName && !targetEffect) {
-      logger.debug('取代默认进入动画', target);
-      animation = getAnimationObject(
-        animationName,
-        realTarget ?? target,
-        getAnimateDuration(animationName),
-        false,
-        !(animationSettings?.enterAnimationIgnoreDefault ?? false),
-      );
-      duration = getAnimateDuration(animationName);
-    }
-    return { duration, animation };
-  } else {
-    // exit
-    let duration = DEFAULT_FIG_OUT_DURATION;
-    if (isBg) {
-      duration = DEFAULT_BG_OUT_DURATION;
-    }
-    const animationSettings = stageStateManager
-      .getCalculationStageState()
-      .animationSettings.find((setting) => setting.target === target);
-    duration = animationSettings?.exitDuration ?? duration;
-    // 走默认动画
-    let animation: IAnimationObject | null = generateUniversalSoftOffAnimationObj(realTarget ?? target, duration);
-    const animationName = animationSettings?.exitAnimationName;
-    if (animationName) {
-      logger.debug('取代默认退出动画', target);
-      animation = getAnimationObject(
-        animationName,
-        realTarget ?? target,
-        getAnimateDuration(animationName),
-        false,
-        !(animationSettings?.exitAnimationIgnoreDefault ?? false),
-      );
-      duration = getAnimateDuration(animationName);
-    }
-    if (animationSettings) {
-      // 退出动画拿完后，删了这个设定
-      stageStateManager.removeAnimationSettingsByTargetOff(target);
-      logger.debug('删除退出动画设定', target);
-    }
-    return { duration, animation };
+  let duration = isBg ? DEFAULT_BG_OUT_DURATION : DEFAULT_FIG_OUT_DURATION;
+  const animationSettings = stageStateManager
+    .getCalculationStageState()
+    .animationSettings.find((setting) => setting.target === target);
+  duration = animationSettings?.exitDuration ?? duration;
+  // 走默认动画
+  let animation: IAnimationObject | null = generateUniversalSoftOffAnimationObj(realTarget ?? target, duration);
+  const animationName = animationSettings?.exitAnimationName;
+  if (animationName) {
+    logger.debug('取代默认退出动画', target);
+    animation = getAnimationObject(
+      animationName,
+      realTarget ?? target,
+      getAnimateDuration(animationName),
+      false,
+      !(animationSettings?.exitAnimationIgnoreDefault ?? false),
+    );
+    duration = getAnimateDuration(animationName);
   }
+  if (animationSettings) {
+    // 退出动画拿完后，删了这个设定
+    stageStateManager.removeAnimationSettingsByTargetOff(target);
+    logger.debug('删除退出动画设定', target);
+  }
+  return { duration, animation };
 }

@@ -1,6 +1,6 @@
 import { ISentence } from '@/Core/controller/scene/sceneInterface';
 import { logger } from '@/Core/util/logger';
-import { getBooleanArgByKey, getNumberArgByKey, getStringArgByKey } from '@/Core/util/getSentenceArg';
+import { getFigurePositionFromArgs, getNumberArgByKey, getStringArgByKey } from '@/Core/util/getSentenceArg';
 import { IStageState } from '@/Core/Modules/stage/stageInterface';
 import {
   audioContextWrapper,
@@ -29,11 +29,7 @@ export const playVocal = (sentence: ISentence) => {
   let currentStageState: IStageState;
   currentStageState = stageStateManager.getCalculationStageState();
 
-  let pos: 'center' | 'left' | 'right' = 'center';
-  const leftFromArgs = getBooleanArgByKey(sentence, 'left') ?? false;
-  const rightFromArgs = getBooleanArgByKey(sentence, 'right') ?? false;
-  if (leftFromArgs) pos = 'left';
-  if (rightFromArgs) pos = 'right';
+  let pos = getFigurePositionFromArgs(sentence) || 'center';
 
   let key = getStringArgByKey(sentence, 'figureId') ?? '';
 

@@ -63,8 +63,8 @@ const de = {
               options: {
                 read: 'Gelesen',
                 all: 'Alle',
-              }
-            }
+              },
+            },
           },
         },
         display: {

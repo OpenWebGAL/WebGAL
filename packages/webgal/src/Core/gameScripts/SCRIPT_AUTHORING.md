@@ -59,61 +59,26 @@ export function someCommand(sentence: ISentence): IPerform {
 - `blockingNext`：是否阻塞用户下一步。
 - `blockingAuto`：是否阻塞自动播放。
 - `blockingStateCalculation`：是否阻塞继续演算后续状态。只有需要外部输入才能确定后续状态时才使用，例如选项和用户输入。
-- `settleStateOnDiscard`：pending perform 被“结算式丢弃”时的补偿钩子。它不是正常生命周期，不在 commit、start、stop、自然结束时执行。
 
-## settleStateOnDiscard
+## 演算状态只允许顺序写
 
-`settleStateOnDiscard` 只解决一个窄问题：某条历史命令的 pending perform 在 commit 前被跳过，但它的最终状态又必须影响后续演算。
+演算状态（`calculationStageState`）的写入必须发生在命令函数阶段，顺序与语句顺序一致。
 
-当前触发点是 `forward()` 开头：
+**不要把状态写入推迟到 `startFunction`、`stopFunction`、动画结束回调或 `setTimeout` 里。** 这类"延迟写"注册于语句 N，却执行于一个与语句顺序无关的时点，会覆盖语句 N+1 已经写好的状态。历史上 `settleStateOnDiscard` 就是为了给这种延迟写打补丁而存在的，现已连同问题一起移除。
 
-```ts
-performController.discardUncommittedNonHoldPerforms(WebGAL.gameplay.isFastPreview);
-```
+正确的分工：
 
-也就是说，只有调用方传入 `settleDiscardedState = true` 时，被丢弃的非 hold pending perform 才会执行 `settleStateOnDiscard`。目前这个 true 只用于实时预览快进。普通 discard 不会执行这个钩子。
+- **命令函数阶段**：算出终态并写入演算状态。终态必须是同步可算的——如果算不出来，说明这个状态不该由这条命令负责。
+- **`startFunction`**：只做运行时动作（注册 Pixi 动画、播放媒体、挂载 UI），不写演算状态。
+- **`stopFunction`**：只清理运行时动作。
 
-实现要求：
+这样一条命令的 perform 无论被启动、被提前结算还是被丢弃，演算状态都一样，快速预览与正常播放自然一致。
 
-- 必须同步执行，不能等待 loader、timer、动画帧或网络。
-- 必须幂等，重复调用不能把状态越写越偏。
-- 只写 `calculationStageState` 中可恢复、可被后续命令依赖的状态。
-- 不要操作 Pixi 对象、DOM、音频实例、ticker。
-- 不要调用 `commit()`。
+## 快速预览为什么仍然特殊
 
-什么时候需要实现：
+实时预览快进会连续调用 `forward()`，中间不 commit，只在到达目标位置后提交一次。前一轮 `forward()` 收集到的非 hold pending perform，会在下一轮 `forward()` 开头被丢弃，因此不会执行 `startFunction` 和 `stopFunction`。
 
-- 命令返回一个非 hold perform。
-- 命令的最终状态没有在命令函数阶段直接写入。
-- 这个最终状态对后续命令有意义。
-- 如果在命令函数阶段直接写入终态，会破坏当前行的正常视觉表现。
-
-什么时候不需要实现：
-
-- 命令已经在函数阶段写好了后续命令需要的状态，例如普通 `setAnimation`、`setTransform`。
-- 命令只产生一次性声音、日志、UI 提示，后续演算不依赖它。
-- perform 是 hold，并且本来就应该保留到后续状态里。
-
-## 快速预览为什么特殊
-
-实时预览快进会连续调用 `forward()`，中间不 commit，只在到达目标位置后提交一次。
-
-这会带来一个差异：前一轮 `forward()` 收集到的非 hold pending perform，在下一轮 `forward()` 开头会被丢弃。被丢弃的 perform 不会执行：
-
-- `startFunction`
-- `stopFunction`
-- Pixi 注册动画后的结束回调
-- `setTimeout` 自动卸载逻辑
-
-所以，如果某个命令把终态延迟到了这些阶段，快速预览历史行就会丢状态。
-
-这次 `changeFigure -transform` 的问题就是这个类型：
-
-1. `changeFigure` 创建新立绘，并把 transform 做成进入动画。
-2. 正常播放时，进入动画由 Pixi sync 注册，终态会在动画结束或 preset 结算时写入 `effects`。
-3. 快速预览时，这条 enter perform 作为历史行被丢弃，没有机会注册进入动画。
-4. 后续 `setAnimation -parallel` 读取不到 figure 的 position，只能从默认 transform 开始算。
-5. 因此 `changeFigure` 需要在 `settleStateOnDiscard` 中把进入动画终态补写到 `calculationStageState.effects`。
+这只影响**视觉**，不影响演算状态——前提是命令遵守上面那条规则。如果某个命令把状态写进了这两个回调，快速预览就会丢状态，这是命令实现的 bug，不是预览机制的缺陷。
 
 ## 动画命令
 
@@ -126,7 +91,9 @@ performController.discardUncommittedNonHoldPerforms(WebGAL.gameplay.isFastPrevie
 
 `-parallel` 下只能写动画实际控制的字段。例如只改 `scale` 的并行动画不应该把 `position` 重置成默认值。生成 timeline 或写终态时要使用局部字段合并，而不是完整覆盖目标 transform。
 
-新背景、新立绘的进入动画是特殊情况。当前行正常播放时不能无条件提前写入目标 `effects`，因为 `registerPresetAnimation()` 会把已有 effect 解释为目标已经结算，于是直接应用终态并跳过进入动画。它们应该在正常路径交给 Pixi preset 动画结算，在快速预览历史行被丢弃时再通过 `settleStateOnDiscard` 补写终态。
+新背景、新立绘的进入动画不是特殊情况，遵循同一条规则：`changeBg`、`changeFigure` 在命令函数阶段调用 `applyAnimationEndState()` 写入终态，进入动画由 returned perform 的 `startFunction` 用 `registerAnimation()` 注册。因此不存在"延迟结算"，快速预览与正常播放读到的演算状态一致。
+
+进入动画的演出名与 `setTransform` 等共用 `animation-<target>`，同一目标上的动画冲突由演出去重统一裁决：后写的命令顶掉先写的，不需要按 `effects` 是否存在来猜测。视图层（`syncPixiStageState`）只负责创建和移除舞台对象，不再补写进入动画。
 
 ## 参数和资源
 
@@ -148,7 +115,7 @@ JSON 参数必须 try/catch。解析失败时应回退到旧语义或安全默�
 
 - 后续命令需要读取的状态是否已经写入 `calculationStageState`？
 - perform 在快速预览历史行中被丢弃时，最终状态是否仍然正确？
-- `settleStateOnDiscard` 是否只处理 pending discard 补偿，没有混入正常生命周期逻辑？
+- 是否有任何演算状态的写入被推迟到了 `startFunction`、`stopFunction` 或定时器里？
 - `startFunction` 是否只依赖已 commit 的状态？
 - `stopFunction` 是否只清理已经启动过的运行时动作？
 - `-next`、`-continue`、`-parallel`、`-keep` 下状态是否一致？

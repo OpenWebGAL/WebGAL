@@ -63,8 +63,8 @@ const ptBr = {
               options: {
                 read: 'Leitura',
                 all: 'Tudo',
-              }
-            }
+              },
+            },
           },
         },
         display: {
@@ -106,7 +106,7 @@ const ptBr = {
             },
             textPreview: {
               title: 'Prévia da exibição do texto',
-              text: "Você está vendo uma prévia da fonte, tamanho e velocidade de exibição do texto. Você pode ajustar as opções acima da forma que achar que fique melhor.",
+              text: 'Você está vendo uma prévia da fonte, tamanho e velocidade de exibição do texto. Você pode ajustar as opções acima da forma que achar que fique melhor.',
             },
           },
         },
