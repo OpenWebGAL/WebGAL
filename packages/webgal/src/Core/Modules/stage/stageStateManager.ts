@@ -52,6 +52,7 @@ export const initState: IStageState = {
   showText: '',
   showTextSize: -1,
   showName: '',
+  textboxTheme: '',
   command: '',
   choose: [],
   vocal: '',
