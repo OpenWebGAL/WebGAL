@@ -51,9 +51,16 @@ export const sceneParser = (
         SCRIPT_CONFIG_MAP,
         index,
       );
-      // 在这里解析出语句可能携带的资源和场景，合并到 assetsList 和 subSceneList
-      assetsList = [...assetsList, ...returnSentence.sentenceAssets];
-      subSceneList = [...subSceneList, ...returnSentence.subScene];
+      // 在这里解析出语句可能携带的资源和场景，合并到 assetsList 和 subSceneList。
+      // 必须就地追加：如果写成 [...assetsList, ...sentenceAssets]，每条语句都要复制
+      // 一次已累积的列表，整体退化成 Θ(资源数²)——资源密集的场景脚本（几乎每条语句
+      // 都带 bg / figure / vocal）在数千条语句规模下会明显变慢。
+      for (const asset of returnSentence.sentenceAssets) {
+        assetsList.push(asset);
+      }
+      for (const subScene of returnSentence.subScene) {
+        subSceneList.push(subScene);
+      }
       return returnSentence;
     },
   );
