@@ -27,11 +27,14 @@ export const sceneParser = (
   rawScene: string,
   sceneName: string,
   sceneUrl: string,
-  assetsPrefetcher: (assetList: Array<IAsset>) => void,
+  assetsPrefetcher: ((assetList: Array<IAsset>) => void) | undefined,
   assetSetter: (fileName: string, assetType: fileType) => string,
   ADD_NEXT_ARG_LIST: commandType[],
   SCRIPT_CONFIG_MAP: ConfigMap,
 ): IScene => {
+  // 没有预取回调时不需要场景级资源列表，连同每条语句的资源扫描一起跳过
+  const collectAssets = assetsPrefetcher !== undefined;
+
   // 预处理把多行语句折叠进它的首行，并用占位行补齐被折叠掉的行，
   // 因此这里的行数与原始场景严格一致，「语句 index == 文件行号」始终成立。
   const rawSentenceList = sceneTextPreProcess(rawScene).split('\n'); // 原始句子列表
@@ -50,7 +53,11 @@ export const sceneParser = (
         ADD_NEXT_ARG_LIST,
         SCRIPT_CONFIG_MAP,
         index,
+        collectAssets,
       );
+      if (!collectAssets) {
+        return returnSentence;
+      }
       // 在这里解析出语句可能携带的资源和场景，合并到 assetsList 和 subSceneList。
       // 必须就地追加：如果写成 [...assetsList, ...sentenceAssets]，每条语句都要复制
       // 一次已累积的列表，整体退化成 Θ(资源数²)——资源密集的场景脚本（几乎每条语句
@@ -67,9 +74,11 @@ export const sceneParser = (
 
   markMultilineRanges(sentenceList, rawSentenceList);
 
-  // 开始资源的预加载
-  assetsList = deduplicateAssets(assetsList);
-  assetsPrefetcher(assetsList);
+  if (collectAssets) {
+    // 开始资源的预加载
+    assetsList = deduplicateAssets(assetsList);
+    assetsPrefetcher(assetsList);
+  }
 
   return {
     sceneName: sceneName, // 场景名称
