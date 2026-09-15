@@ -13,6 +13,7 @@ export interface ITextboxProps {
   miniAvatar: string;
   showName: EnhancedNode[][];
   isHasName: boolean;
+  textboxTheme: string;
   font: string;
   textDuration: number;
   textSizeState: number;
