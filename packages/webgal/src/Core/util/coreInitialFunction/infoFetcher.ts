@@ -67,6 +67,9 @@ export const infoFetcher = (url: string): Promise<IGameVar> => {
             const appId = String(res);
             WebGAL.steam.initialize(appId);
           }
+          if (command === 'Legacy_Expression_Parser') {
+            WebGAL.legacyExpressionParser = res === true;
+          }
         }
       }
     });
