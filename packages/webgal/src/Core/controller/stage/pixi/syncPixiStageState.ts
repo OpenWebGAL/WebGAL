@@ -5,7 +5,7 @@ import {
   figureStateKeyByPosition,
   normalizeFigureBounds,
 } from '@/Core/Modules/stage/stageInterface';
-import type { IResolvedStageCommitOptions } from '@/Core/Modules/stage/stageStateManager';
+import { stageStateManager, type IResolvedStageCommitOptions } from '@/Core/Modules/stage/stageStateManager';
 import { DEFAULT_BG_IN_DURATION, DEFAULT_BG_OUT_DURATION, DEFAULT_FIG_IN_DURATION } from '@/Core/constants';
 import { WebGAL } from '@/Core/WebGAL';
 import type { IStageObject } from '@/Core/controller/stage/pixi/PixiController';
@@ -13,6 +13,12 @@ import { getAnimateDuration, getExitAnimation } from '@/Core/Modules/animationFu
 import { logger } from '@/Core/util/logger';
 import { setEbg } from '@/Core/gameScripts/changeBg/setEbg';
 import { applyTransformToPixiContainer } from '@/Core/controller/stage/pixi/stageEffectTransform';
+import { CharacterFigureSourceSync } from '@/Core/character/characterFigureSourceSync';
+import {
+  clearDeferredCharacterPresentation,
+  playDeferredCharacterPresentation,
+} from '@/Core/character/characterDeferredPresentationRuntime';
+import { collectCharacterFigureTargets, parseCharacterFigureSource } from '@/Core/character/characterFigureSource';
 
 interface ISyncFigureSlotPayload {
   key: string;
@@ -22,6 +28,37 @@ interface ISyncFigureSlotPayload {
   bounds?: [number, number, number, number];
   skipAnimation: boolean;
 }
+
+const characterFigureSourceSync = new CharacterFigureSourceSync({
+  replaceFigure: ({ key, sourceUrl, position, skipAnimation }) => {
+    const pixiStage = WebGAL.gameplay.pixiStage;
+    if (!pixiStage) return;
+    pixiStage.removeAnimation(`${key}-softin`);
+    const currentFigure = pixiStage.getStageObjByKey(key);
+    if (currentFigure) {
+      removeFig(currentFigure, `${key}-softin`, skipAnimation);
+    }
+    pixiStage.addFigure(key, sourceUrl, position);
+    const state = stageStateManager.getViewStageState();
+    const setting = state.animationSettings.find((item) => item.target === key);
+    const effect = state.effects.find((item) => item.target === key);
+    applyStageEffectToTarget(key, effect?.transform);
+    if (skipAnimation) {
+      clearDeferredCharacterPresentation(key);
+    } else {
+      playDeferredCharacterPresentation(key, setting);
+    }
+  },
+  removeFigure: (key, skipAnimation) => {
+    clearDeferredCharacterPresentation(key);
+    const currentFigure = WebGAL.gameplay.pixiStage?.getStageObjByKey(key);
+    if (currentFigure) {
+      removeFig(currentFigure, `${key}-softin`, skipAnimation);
+    }
+  },
+  hasFigure: (key) => !!WebGAL.gameplay.pixiStage?.getStageObjByKey(key),
+  reportError: (message, error) => logger.error(message, error),
+});
 
 /**
  * 立绘对象的身份：图片地址、基准位置、Live2D 绘制范围。
@@ -49,6 +86,11 @@ function getEnterDuration(stageState: IStageState, target: string, isBg: boolean
 
 export function syncPixiStageState(stageState: IStageState, options: IResolvedStageCommitOptions) {
   if (options.syncPixiStage) {
+    const characterTargets = collectCharacterFigureTargets(stageState);
+    if (options.skipAnimation) {
+      characterTargets.forEach((target) => clearDeferredCharacterPresentation(target.key));
+    }
+    characterFigureSourceSync.sync(characterTargets, options.skipAnimation);
     syncBg(stageState, options.skipAnimation);
     syncFigures(stageState, options.skipAnimation);
     syncLive2d(stageState);
@@ -154,6 +196,10 @@ function syncFigureSlot(payload: ISyncFigureSlotPayload) {
   if (!pixiStage) return;
   const softInAniKey = `${key}-softin`;
   const currentFigure = pixiStage.getStageObjByKey(key);
+
+  if (sourceUrl && parseCharacterFigureSource(sourceUrl)) {
+    return;
+  }
 
   // 旧存档中可能没有新增位置的字段，这里同时容错 undefined
   if (sourceUrl) {

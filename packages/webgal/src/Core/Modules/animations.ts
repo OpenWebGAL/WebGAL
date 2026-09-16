@@ -3,6 +3,8 @@ import { ITransform } from '@/Core/Modules/stage/stageInterface';
 export interface IUserAnimation {
   name: string;
   effects: Array<AnimationFrame>;
+  /** User-authored frames are relative; unmarked engine timelines remain absolute. */
+  frameMode?: 'relative';
 }
 
 export type AnimationFrame = ITransform & { duration: number; ease: string };

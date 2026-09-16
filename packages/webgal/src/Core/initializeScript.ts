@@ -102,6 +102,7 @@ function getUserAnimation() {
           const userAnimation = {
             name: animationName,
             effects: res.data,
+            frameMode: 'relative' as const,
           };
           WebGAL.animationManager.addAnimation(userAnimation);
         }

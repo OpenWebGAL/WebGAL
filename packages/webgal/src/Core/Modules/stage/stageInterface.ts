@@ -44,6 +44,7 @@ export interface IStageAnimationSetting {
   exitDuration?: number;
   enterAnimationIgnoreDefault?: boolean;
   exitAnimationIgnoreDefault?: boolean;
+  baseTransform?: ITransform;
 }
 
 export type StageAnimationSettingUpdatableKey = Exclude<keyof IStageAnimationSetting, 'target'>;

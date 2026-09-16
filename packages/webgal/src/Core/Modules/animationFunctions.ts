@@ -1,7 +1,7 @@
 import { logger } from '@/Core/util/logger';
 import { generateUniversalSoftOffAnimationObj } from '@/Core/controller/stage/pixi/animations/universalSoftOff';
 import cloneDeep from 'lodash/cloneDeep';
-import { baseTransform } from '@/Core/Modules/stage/stageInterface';
+import { baseTransform, ITransform } from '@/Core/Modules/stage/stageInterface';
 import { generateTimelineObj } from '@/Core/controller/stage/pixi/animations/timeline';
 import { WebGAL } from '@/Core/WebGAL';
 import PixiStage, { IAnimationObject } from '@/Core/controller/stage/pixi/PixiController';
@@ -44,6 +44,7 @@ export function getAnimationTimeline(
   target: string,
   writeDefault: boolean,
   writeFullEffect = true,
+  sourceTransformOverride?: ITransform,
 ): AnimationFrame[] | null {
   const effect = WebGAL.animationManager.getAnimations().find((ani) => ani.name === animationName);
   if (effect) {
@@ -57,10 +58,11 @@ export function getAnimationTimeline(
         if (effect.position) Object.keys(effect.position).forEach((k) => unionPositionKeys.add(k));
       });
     }
+    const useRelativeFrames = !writeDefault && effect.frameMode === 'relative';
+    const sourceTransform = writeDefault
+      ? baseTransform
+      : cloneDeep(sourceTransformOverride ?? getAnimationSourceTransform(target, useRelativeFrames));
     const mappedEffects = effect.effects.map((effect) => {
-      const targetSetEffect = stageStateManager.getCalculationStageState().effects.find((e) => e.target === target);
-      const sourceTransform =
-        !writeDefault && targetSetEffect && targetSetEffect.transform ? targetSetEffect.transform : baseTransform;
       let newEffect;
 
       if (writeFullEffect) {
@@ -74,7 +76,8 @@ export function getAnimationTimeline(
         newEffect = cloneDeep({ ...originalTransform, duration: 0, ease: '' });
       }
 
-      PixiStage.assignTransform(newEffect, effect, false);
+      const composedFrame = useRelativeFrames ? composeAnimationFrame(sourceTransform, effect) : effect;
+      PixiStage.assignTransform(newEffect, composedFrame, false);
       newEffect.duration = effect.duration;
       newEffect.ease = effect.ease;
       return newEffect;
@@ -83,6 +86,51 @@ export function getAnimationTimeline(
     return mappedEffects;
   }
   return null;
+}
+
+function composeAnimationFrame(base: ITransform, frame: AnimationFrame): AnimationFrame {
+  const next = cloneDeep(frame);
+  if (next.position) {
+    if (next.position.x !== undefined) next.position.x += base.position?.x ?? 0;
+    if (next.position.y !== undefined) next.position.y += base.position?.y ?? 0;
+  }
+  if (next.scale) {
+    if (next.scale.x !== undefined) next.scale.x *= base.scale?.x ?? 1;
+    if (next.scale.y !== undefined) next.scale.y *= base.scale?.y ?? 1;
+  }
+  if (next.rotation !== undefined) next.rotation += base.rotation ?? 0;
+  if (next.alpha !== undefined) next.alpha *= base.alpha ?? 1;
+  return next;
+}
+
+function getAnimationSourceTransform(target: string, useLiveTargetFallback: boolean): ITransform {
+  const targetSetEffect = stageStateManager
+    .getCalculationStageState()
+    .effects.find((effect) => effect.target === target);
+  const liveTargetTransform = useLiveTargetFallback ? getCurrentTargetTransform(target) : null;
+  return cloneDeep(targetSetEffect?.transform ?? liveTargetTransform ?? baseTransform);
+}
+
+function getCurrentTargetTransform(target: string): ITransform | null {
+  const container = WebGAL.gameplay.pixiStage?.getStageObjByKey(target)?.pixiContainer;
+  if (!container) return null;
+
+  const transform = cloneDeep(baseTransform);
+  const containerRecord = container as unknown as Record<string, unknown>;
+  const transformRecord = transform as unknown as Record<string, unknown>;
+  for (const key of Object.keys(baseTransform)) {
+    const value = containerRecord[key];
+    if (typeof value === 'number') transformRecord[key] = value;
+  }
+  transform.alpha = container.alphaFilterVal ?? container.alpha ?? transform.alpha;
+  transform.position = transform.position ?? { x: 0, y: 0 };
+  transform.scale = transform.scale ?? { x: 1, y: 1 };
+  transform.position.x = container.x ?? transform.position.x ?? 0;
+  transform.position.y = container.y ?? transform.position.y ?? 0;
+  transform.scale.x = container.scale?.x ?? transform.scale.x ?? 1;
+  transform.scale.y = container.scale?.y ?? transform.scale.y ?? 1;
+  transform.rotation = container.rotation ?? transform.rotation;
+  return transform;
 }
 
 export function getAnimateDuration(animationName: string) {

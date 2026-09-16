@@ -8,7 +8,13 @@ import {
   getNumberArgByKey,
   getStringArgByKey,
 } from '@/Core/util/getSentenceArg';
-import { figureStateKeyByPosition, IFreeFigure, normalizeFigureBounds } from '@/Core/Modules/stage/stageInterface';
+import {
+  baseTransform,
+  figureStateKeyByPosition,
+  IFreeFigure,
+  ITransform,
+  normalizeFigureBounds,
+} from '@/Core/Modules/stage/stageInterface';
 import { AnimationFrame, IUserAnimation } from '@/Core/Modules/animations';
 import { generateTransformAnimationObj } from '@/Core/controller/stage/pixi/animations/generateTransformAnimationObj';
 import { generateTimelineObj } from '@/Core/controller/stage/pixi/animations/timeline';
@@ -148,6 +154,15 @@ export function changeFigure(sentence: ISentence): IPerform {
     // 处理 transform 和 默认 transform
     let animationObj: AnimationFrame[];
     const frame = transformString ? parseTransformFrame(transformString) : null;
+    const currentTransform = stageStateManager
+      .getCalculationStageState()
+      .effects.find((effect) => effect.target === key)?.transform;
+    const transformBase = isIdentityChanged ? baseTransform : currentTransform ?? baseTransform;
+    const presentationBaseTransform = frame ? buildTransformFromFrame(transformBase, frame) : cloneDeep(transformBase);
+    if (frame || isIdentityChanged) {
+      stageStateManager.updateEffect({ target: key, transform: presentationBaseTransform });
+    }
+    stageStateManager.updateAnimationSettings({ target: key, key: 'baseTransform', value: presentationBaseTransform });
     if (frame) {
       applyTransform(frame);
     } else {
@@ -241,9 +256,14 @@ export function changeFigure(sentence: ISentence): IPerform {
      * 下面的代码是设置自由立绘的
      */
     const freeFigureItem: IFreeFigure = { key, name: content, basePosition: pos };
+    if (content !== '') {
+      stageStateManager.setFreeFigureByKey(freeFigureItem);
+    }
     setAnimationNames(key, sentence);
     postFigureStateSet();
-    stageStateManager.setFreeFigureByKey(freeFigureItem);
+    if (content === '') {
+      stageStateManager.setFreeFigureByKey(freeFigureItem);
+    }
   } else {
     /**
      * 下面的代码是设置与位置关联的立绘的
@@ -304,4 +324,17 @@ function getOverrideBoundsArr(raw: string): undefined | [number, number, number,
   isPass = isPass && parseOverrideBoundsResult.length === 4;
   if (isPass) return parseOverrideBoundsResult as [number, number, number, number];
   else return undefined;
+}
+
+function buildTransformFromFrame(base: ITransform, frame: Partial<AnimationFrame>): ITransform {
+  const transform = cloneDeep(base);
+  if (frame.position) {
+    transform.position = { ...transform.position, ...frame.position };
+  }
+  if (frame.scale) {
+    transform.scale = { ...transform.scale, ...frame.scale };
+  }
+  const { position, scale, duration, ease, ...rest } = frame;
+  Object.assign(transform, rest);
+  return transform;
 }

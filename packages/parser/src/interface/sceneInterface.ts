@@ -41,6 +41,7 @@ export enum commandType {
   wait,
   callSteam, // 调用Steam功能
   return, // 从被调用的场景返回
+  character, // 管理静态组合角色
 }
 
 /**
