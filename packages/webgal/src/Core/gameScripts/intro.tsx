@@ -82,6 +82,7 @@ export const intro = (sentence: ISentence): IPerform => {
     // 由于用户操作，相当于时间向前推进，这时候更新这个演出的预计完成时间
     baseDuration -= delayTime;
     if (setBlockingStateTimeout) clearTimeout(setBlockingStateTimeout);
+    // 按用户推进后的剩余展示时长解除阻塞，不能立即跳过尚未展示的内容。
     setBlockingStateTimeout = setTimeout(() => {
       isBlocking = false;
     }, baseDuration);
@@ -132,6 +133,7 @@ export const intro = (sentence: ISentence): IPerform => {
             if (timeout) clearTimeout(timeout);
             // 如果 Hold 了，自然不要自动结束
             if (!isHold) {
+              // 用户提前推进后，按缩短的剩余时长结束非 hold 演出。
               timeout = setTimeout(() => {
                 WebGAL.gameplay.performController.unmountPerform(performName);
               }, baseDuration);
@@ -167,6 +169,7 @@ export const intro = (sentence: ISentence): IPerform => {
     isHoldOn: false,
     startFunction: () => {
       isBlocking = true;
+      // 等文字按 animationDelay 展示完并经过结尾等待后，才允许继续推进。
       setBlockingStateTimeout = setTimeout(() => {
         isBlocking = false;
       }, baseDuration);

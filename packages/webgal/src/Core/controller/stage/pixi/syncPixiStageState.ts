@@ -229,6 +229,7 @@ function removeBg(bgObject: IStageObject, skipAnimation: boolean): number {
   pixiStage.removeStageObjectByKey(oldBgKey);
   const { duration, animation } = getExitAnimation('bg-main-off', true, bgKey);
   pixiStage.registerAnimation(animation, bgAniKey, bgKey);
+  // 保留退出对象直到退场时长结束；同步销毁会让退场动画不可见。
   setTimeout(() => {
     pixiStage.removeAnimation(bgAniKey);
     pixiStage.removeStageObjectByKey(bgKey);
@@ -256,6 +257,7 @@ function removeFig(figObj: IStageObject, enterTikerKey: string, skipAnimation: b
   // 退出对象的 key 带时间戳，永远不在 effects 白名单里，因此与背景一样走普通动画通道即可
   const { duration, animation } = getExitAnimation(figLeaveAniKey, false, figKey);
   pixiStage.registerAnimation(animation, leaveKey, figKey);
+  // 保留退出对象直到退场时长结束；同步销毁会让退场动画不可见。
   setTimeout(() => {
     pixiStage.removeAnimation(leaveKey);
     pixiStage.removeStageObjectByKey(figKey);

@@ -49,6 +49,7 @@ function debounce<T, K>(func: (...args: T[]) => K, wait: number) {
   function context(...args: T[]): K {
     clearTimeout(timeout);
     let ret!: K;
+    // 等连续调用停止 wait 毫秒后只执行最后一次，合并频繁的存储写入。
     timeout = setTimeout(() => {
       ret = func.apply(context, args);
     }, wait);

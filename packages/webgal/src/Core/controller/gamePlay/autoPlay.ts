@@ -71,6 +71,7 @@ const autoPlay = () => {
   }
   // nextSentence();
   if (WebGAL.gameplay.autoTimeout === null) {
+    // 保留自动阅读的停留时间，到时再检查能否推进，不能同步连续跳句。
     WebGAL.gameplay.autoTimeout = setTimeout(autoNextSentence, autoPlayDelay);
   }
 };

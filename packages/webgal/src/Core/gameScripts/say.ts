@@ -119,6 +119,7 @@ export const say = (sentence: ISentence): IPerform => {
       animationItem,
       pos,
     });
+    // 每 50ms 更新模拟嘴型，保留说话节奏并让出主线程，直到演出结束。
     if (!end) performSimulateVocalTimeout = setTimeout(performSimulateVocal, 50);
   };
   // 播放一段语音
