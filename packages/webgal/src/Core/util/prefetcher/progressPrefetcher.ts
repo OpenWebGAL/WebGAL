@@ -2,6 +2,7 @@ import { IScene } from '@/Core/controller/scene/sceneInterface';
 import { assetsPrefetcher } from '@/Core/util/prefetcher/assetsPrefetcher';
 import { scenePrefetcher } from '@/Core/util/prefetcher/scenePrefetcher';
 import { WebGAL } from '@/Core/WebGAL';
+import { getPixiPrefetchRequests } from './pixiPrefetcher';
 
 const PROGRESS_ASSET_LOOKAHEAD = 20;
 const PROGRESS_SUB_SCENE_LOOKAHEAD = 36;
@@ -33,6 +34,7 @@ const uniqueSubScenes = (scene: IScene, startLine: number, lookahead: number) =>
 
 export const prefetchSceneByProgress = (scene: IScene, currentSentenceId: number, force = false) => {
   if (!scene.sceneUrl) {
+    WebGAL.gameplay.pixiStage?.assets.preload([]);
     return;
   }
   const mark = `${scene.sceneUrl}#${currentSentenceId}`;
@@ -43,6 +45,7 @@ export const prefetchSceneByProgress = (scene: IScene, currentSentenceId: number
   const startLine = Math.max(0, currentSentenceId);
   const nextAssets = uniqueAssetsByUrl(scene, startLine, PROGRESS_ASSET_LOOKAHEAD);
   const nextSubScenes = uniqueSubScenes(scene, startLine, PROGRESS_SUB_SCENE_LOOKAHEAD);
+  WebGAL.gameplay.pixiStage?.assets.preload(getPixiPrefetchRequests(scene, startLine, PROGRESS_ASSET_LOOKAHEAD));
   if (nextAssets.length > 0) {
     assetsPrefetcher(nextAssets, { ignoreLineGate: true });
   }

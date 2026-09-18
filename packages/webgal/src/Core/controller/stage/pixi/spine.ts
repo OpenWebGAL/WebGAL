@@ -12,7 +12,7 @@ let pixiSpineModule: typeof import('pixi-spine') | null = null;
 // @ts-ignore
 let pixiSpineLoading: Promise<typeof import('pixi-spine') | null> | null = null;
 
-let spineLoader: undefined | PIXI.Loader;
+// Spine 必须由用户按 https://docs.openwebgal.com/spine.html 显式启用。
 
 /**
  * 动态加载 'pixi-spine' 模块，并缓存结果
@@ -31,7 +31,6 @@ export async function loadPixiSpine(): Promise<typeof import('pixi-spine') | nul
   // @ts-ignore
   // pixiSpineLoading = import('pixi-spine')
   //   .then((module) => {
-  //     spineLoader = new PIXI.Loader();
   //     pixiSpineModule = module;
   //     return module;
   //   })
@@ -59,7 +58,6 @@ export async function addSpineFigureImpl(
   url: string,
   presetPosition: IFigurePosition = 'center',
 ) {
-  const spineId = `spine-${url}`;
   // 准备用于存放这个立绘的 Container
   const thisFigureContainer = new WebGALPixiContainer();
 
@@ -90,10 +88,10 @@ export async function addSpineFigureImpl(
     sourceExt: this.getExtName(url),
     spineAnimation: '_initial',
   });
-  const pixiSpine = await loadPixiSpine();
 
   // 完成图片加载后执行的函数
   const setup = async () => {
+    const pixiSpine = await loadPixiSpine();
     // 对象已同步入表，资源就绪后直接挂载；动画由 commit 后的演出启动。
     console.log('Setting up Spine' + key + url);
     if (!pixiSpine) {
@@ -103,7 +101,7 @@ export async function addSpineFigureImpl(
     }
 
     const { Spine } = pixiSpine;
-    const spineResource: any = spineLoader!.resources?.[spineId];
+    const spineResource: any = this.assets.getReady({ url, kind: 'spine' });
     if (spineResource && this.getStageObjByUuid(figureUuid)) {
       const figureSpine = new Spine(spineResource.spineData);
       const spineBounds = figureSpine.getLocalBounds();
@@ -166,21 +164,11 @@ export async function addSpineFigureImpl(
       thisFigureContainer.pivot.set(0, this.stageHeight / 2);
       thisFigureContainer.addChild(figureSprite);
       this.notifyTargetReferenceBoxChanged(key);
+      this.requestRender();
     }
   };
 
-  /**
-   * 加载器部分
-   * 这里不再使用 this.loadAsset，因为我们可能需要单独管理 Spine 资源
-   * 但为了避免性能问题，我们继续使用现有的 loader，并确保资源只加载一次
-   */
-  this.cacheGC();
-  if (!spineLoader!.resources?.[spineId]) {
-    spineLoader!.add(spineId, url).load(setup);
-  } else {
-    // 复用
-    await setup();
-  }
+  this.loadStageAsset(figureUuid, setup, { url, kind: 'spine' });
 }
 
 /**
@@ -189,7 +177,6 @@ export async function addSpineFigureImpl(
  * @param url Spine 数据的 URL
  */
 export async function addSpineBgImpl(this: PixiStage, key: string, url: string) {
-  const spineId = `spine-${url}`;
   // 准备用于存放这个背景的 Container
   const thisBgContainer = new WebGALPixiContainer();
 
@@ -225,7 +212,7 @@ export async function addSpineBgImpl(this: PixiStage, key: string, url: string) 
     }
 
     const { Spine } = pixiSpine;
-    const spineResource: any = spineLoader!.resources?.[spineId];
+    const spineResource: any = this.assets.getReady({ url, kind: 'spine' });
     // 对象已同步入表，资源就绪后直接挂载；动画由 commit 后的演出启动。
     if (spineResource && this.getStageObjByUuid(bgUuid)) {
       const bgSpine = new Spine(spineResource.spineData);
@@ -257,21 +244,11 @@ export async function addSpineBgImpl(this: PixiStage, key: string, url: string) 
       // 挂载
       thisBgContainer.addChild(bgSprite);
       this.notifyTargetReferenceBoxChanged(key);
+      this.requestRender();
     }
   };
 
-  /**
-   * 加载器部分
-   * 这里不再使用 this.loadAsset，因为我们可能需要单独管理 Spine 资源
-   * 但为了避免性能问题，我们继续使用现有的 loader，并确保资源只加载一次
-   */
-  this.cacheGC();
-  if (!spineLoader!.resources?.[spineId]) {
-    spineLoader!.add(spineId, url).load(setup);
-  } else {
-    // 复用
-    await setup();
-  }
+  this.loadStageAsset(bgUuid, setup, { url, kind: 'spine' });
 }
 
 function applySpineSkin(spineObject: any, skinName: string) {

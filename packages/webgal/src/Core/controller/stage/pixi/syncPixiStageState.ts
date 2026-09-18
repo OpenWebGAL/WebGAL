@@ -13,6 +13,7 @@ import { getAnimateDuration, getExitAnimation } from '@/Core/Modules/animationFu
 import { logger } from '@/Core/util/logger';
 import { setEbg } from '@/Core/gameScripts/changeBg/setEbg';
 import { applyTransformToPixiContainer } from '@/Core/controller/stage/pixi/stageEffectTransform';
+import { prefetchCurrentSceneByProgress } from '@/Core/util/prefetcher/progressPrefetcher';
 
 interface ISyncFigureSlotPayload {
   key: string;
@@ -53,6 +54,7 @@ export function syncPixiStageState(stageState: IStageState, options: IResolvedSt
     syncFigures(stageState, options.skipAnimation);
     syncLive2d(stageState);
     syncFigureMetaData(stageState);
+    prefetchCurrentSceneByProgress();
   }
   if (options.applyPixiEffects) {
     applyStageEffects(stageState.effects);
@@ -201,6 +203,13 @@ function syncLive2d(stageState: IStageState) {
 function syncFigureMetaData(stageState: IStageState) {
   const pixiStage = WebGAL.gameplay.pixiStage;
   if (!pixiStage) return;
+  for (const animation of stageState.figureAssociatedAnimation) {
+    const object = pixiStage.getStageObjByKey(animation.targetId);
+    if (!object || object.isExiting) continue;
+    for (const url of [...Object.values(animation.mouthAnimation), ...Object.values(animation.blinkAnimation)]) {
+      if (url && !url.endsWith('/')) pixiStage.loadStageAsset(object.uuid, () => undefined, { url, kind: 'texture' });
+    }
+  }
   Object.entries(stageState.figureMetaData).forEach(([key, value]) => {
     const figureObject = pixiStage.getStageObjByKey(key);
     if (figureObject && !figureObject.isExiting && figureObject.pixiContainer) {

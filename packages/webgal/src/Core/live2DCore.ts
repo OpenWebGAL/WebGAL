@@ -1,3 +1,4 @@
+import { installLive2dAssetCache } from './controller/stage/pixi/assets/live2dAssetCache';
 /** 眨眼参数，毫秒 */
 export interface BlinkParam {
   blinkInterval: number; // 眨眼间隔
@@ -29,6 +30,7 @@ export const baseFocusParam: FocusParam = {
 
 export class Live2DCore {
   public isAvailable = false;
+  public readonly ready: Promise<void>;
 
   public Live2DModel: any;
   public SoundManager: any;
@@ -48,19 +50,20 @@ export class Live2DCore {
   }
 
   public constructor() {
-    this.initLive2D();
+    this.ready = this.initLive2D();
   }
 
   public initLive2D() {
     // @ts-expect-error live2dPromise is a global variable
-    (window.live2dPromise as Promise<[boolean, boolean]>)
+    return (window.live2dPromise as Promise<[boolean, boolean]>)
       .then(async ([live2d2dAvailable, live2d4Available]) => {
         const _isAvailable = live2d2dAvailable && live2d4Available;
         if (!_isAvailable) {
           console.warn('live2d plugin load failed');
           return;
         }
-        const { Live2DModel, SoundManager, config } = await import('pixi-live2d-display-webgal');
+        const { Live2DModel, SoundManager, config, Live2DLoader } = await import('pixi-live2d-display-webgal');
+        installLive2dAssetCache(Live2DLoader);
         this.Live2DModel = Live2DModel;
         this.SoundManager = SoundManager;
         this.Config = config;
