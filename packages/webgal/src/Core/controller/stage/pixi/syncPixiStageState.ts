@@ -14,6 +14,7 @@ import { logger } from '@/Core/util/logger';
 import { setEbg } from '@/Core/gameScripts/changeBg/setEbg';
 import { applyTransformToPixiContainer } from '@/Core/controller/stage/pixi/stageEffectTransform';
 import { prefetchCurrentSceneByProgress } from '@/Core/util/prefetcher/progressPrefetcher';
+import { prepareFigureDiff } from './prepareFigureDiff';
 
 interface ISyncFigureSlotPayload {
   key: string;
@@ -51,7 +52,11 @@ function getEnterDuration(stageState: IStageState, target: string, isBg: boolean
 export function syncPixiStageState(stageState: IStageState, options: IResolvedStageCommitOptions) {
   if (options.syncPixiStage) {
     syncBg(stageState, options.skipAnimation);
-    syncFigures(stageState, options.skipAnimation);
+    try {
+      syncFigures(stageState, options.skipAnimation);
+    } finally {
+      WebGAL.figureDiffManager.clear();
+    }
     syncLive2d(stageState);
     syncFigureMetaData(stageState);
     prefetchCurrentSceneByProgress();
@@ -161,6 +166,20 @@ function syncFigureSlot(payload: ISyncFigureSlotPayload) {
   if (sourceUrl) {
     const identity = getFigureIdentity(payload);
     if (currentFigure?.figureIdentity === identity) return;
+    const sameGeometry =
+      currentFigure?.figureIdentity === getFigureIdentity({ ...payload, sourceUrl: currentFigure?.sourceUrl ?? '' });
+    const diffAnimation =
+      currentFigure &&
+      sameGeometry &&
+      !skipAnimation &&
+      WebGAL.figureDiffManager.consume(key, currentFigure.sourceUrl, sourceUrl)
+        ? prepareFigureDiff(currentFigure, sourceUrl)
+        : undefined;
+    if (currentFigure && diffAnimation) {
+      currentFigure.figureIdentity = identity;
+      pixiStage.registerAnimation(diffAnimation, softInAniKey, key);
+      return;
+    }
     if (currentFigure) {
       removeFig(currentFigure, softInAniKey, skipAnimation);
     }

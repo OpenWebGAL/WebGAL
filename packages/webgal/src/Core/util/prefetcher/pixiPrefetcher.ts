@@ -9,7 +9,8 @@ export function getPixiPrefetchRequests(scene: IScene, start: number, lookahead:
   const requests: ResourceRequest[] = [];
   for (const sentence of scene.sentenceList.slice(start, start + lookahead + 1)) {
     const figure = sentence.command === commandType.changeFigure;
-    if (!figure && sentence.command !== commandType.changeBg) continue;
+    if (!figure && sentence.command !== commandType.changeBg && sentence.command !== commandType.changeFigureDiff)
+      continue;
     const content = sentence.content;
     if (content && content !== 'none' && !content.includes('{')) {
       // content 已由 parser 做过路径转换，不能再次追加 game/figure 前缀。

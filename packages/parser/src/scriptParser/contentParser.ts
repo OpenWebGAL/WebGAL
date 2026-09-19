@@ -22,6 +22,7 @@ export const contentParser = (
     case commandType.changeBg:
       return assetSetter(contentRaw, fileType.background);
     case commandType.changeFigure:
+    case commandType.changeFigureDiff:
       return assetSetter(contentRaw, fileType.figure);
     case commandType.bgm:
       return assetSetter(contentRaw, fileType.bgm);

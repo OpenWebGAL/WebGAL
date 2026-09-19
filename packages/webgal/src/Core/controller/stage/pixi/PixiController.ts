@@ -267,6 +267,10 @@ export default class PixiStage {
     this.removeAnimationByIndex(index);
   }
 
+  public hasAnimation(key: string): boolean {
+    return this.stageAnimations.some((animation) => animation.key === key);
+  }
+
   public removeAnimationByTargetKey(targetKey: string) {
     let index = this.stageAnimations.findIndex((e) => e.targetKey === targetKey);
     while (index !== -1) {
