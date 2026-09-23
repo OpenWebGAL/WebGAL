@@ -8,9 +8,9 @@ const FIGURE_TEXTURE_ARGS = ['mouthOpen', 'mouthClose', 'mouthHalfOpen', 'eyesOp
 export function getPixiPrefetchRequests(scene: IScene, start: number, lookahead: number): ResourceRequest[] {
   const requests: ResourceRequest[] = [];
   for (const sentence of scene.sentenceList.slice(start, start + lookahead + 1)) {
-    const figure = sentence.command === commandType.changeFigure;
-    if (!figure && sentence.command !== commandType.changeBg && sentence.command !== commandType.changeFigureDiff)
-      continue;
+    // 换立绘和换差分都可以带口型眨眼图。
+    const figure = sentence.command === commandType.changeFigure || sentence.command === commandType.changeFigureDiff;
+    if (!figure && sentence.command !== commandType.changeBg) continue;
     const content = sentence.content;
     if (content && content !== 'none' && !content.includes('{')) {
       // content 已由 parser 做过路径转换，不能再次追加 game/figure 前缀。

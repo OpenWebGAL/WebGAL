@@ -1,5 +1,5 @@
 import { Texture } from 'pixi.js';
-import { Assets } from './assetParsers';
+import { Assets, decodeData } from './assetParsers';
 import { LoadDependency, PreparedResource, ResourceRequest } from './resourceTypes';
 
 export async function loadResource(request: ResourceRequest, dependency: LoadDependency): Promise<PreparedResource> {
@@ -11,10 +11,12 @@ export async function loadResource(request: ResourceRequest, dependency: LoadDep
     const { loadSpineResources } = await import('./spineAssets');
     return loadSpineResources(request.url, dependency);
   }
-  const value = await Assets.load({ src: request.url, data: { webgalKind: request.kind } });
+  // 直接使用 loader：AssetManager 已按 kind + URL 管理条目，不需要 Resolver 的别名表。
+  const loaded = await Assets.loader.load({ src: request.url, data: { webgalKind: request.kind } });
+  const value = loaded instanceof Texture ? loaded : decodeData(loaded, request.kind);
   return {
     value,
     textures: value instanceof Texture ? [value] : [],
-    dispose: () => Assets.unload(request.url),
+    dispose: () => Assets.loader.unload(request.url),
   };
 }

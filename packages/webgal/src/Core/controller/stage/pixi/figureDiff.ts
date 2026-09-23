@@ -7,8 +7,10 @@ interface FigureDiffMark {
 export class FigureDiffManager {
   private readonly marks = new Map<string, FigureDiffMark>();
 
+  /** 同一次提交内连续差分（A→B→C）时，起点仍是尚在舞台上的 A。 */
   public mark(key: string, mark: FigureDiffMark) {
-    this.marks.set(key, mark);
+    const sourceUrl = this.marks.get(key)?.sourceUrl ?? mark.sourceUrl;
+    this.marks.set(key, { sourceUrl, targetUrl: mark.targetUrl });
   }
 
   /** 只匹配实际上屏的源图；无论是否匹配，本次尝试都会消费标记。 */

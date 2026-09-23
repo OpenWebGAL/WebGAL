@@ -1,4 +1,5 @@
 import type { Texture } from 'pixi.js';
+import { Live2D } from '@/Core/WebGAL';
 import type { LoadDependency, PreparedResource } from './resourceTypes';
 
 interface Live2dSettings {
@@ -20,6 +21,9 @@ interface Live2dSettings {
 
 /** 只加载数据和纹理；模型实例、动作起点和自定义 bounds 仍由舞台决定。 */
 export async function loadLive2dResources(url: string, load: LoadDependency): Promise<PreparedResource> {
+  // 未引入 SDK 时不下载模型；舞台 setup 同样会因不可用而跳过，不产生错误。
+  await Live2D.ready;
+  if (!Live2D.isAvailable) return { value: undefined };
   const settings = await load<Live2dSettings>(url, 'json');
   const files = settings.FileReferences;
   const resolve = (file: string) => new URL(file, url).href;

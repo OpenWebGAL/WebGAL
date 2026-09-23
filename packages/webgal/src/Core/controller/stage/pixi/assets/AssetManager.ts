@@ -21,6 +21,7 @@ export class AssetManager {
   private running = false;
   private renderer?: Renderer;
   private contextVersion = 0;
+  private lastTouch = -Infinity;
 
   public attach(renderer: Renderer) {
     this.renderer = renderer;
@@ -118,12 +119,14 @@ export class AssetManager {
 
   public collect() {
     const wanted = this.wanted();
-    for (const [key, entry] of this.entries) {
-      if (wanted.has(key) || entry.operation) continue;
-      entry.operation = Promise.resolve()
-        .then(async () => {
-          // 给同一轮舞台替换机会重新持有资源，避免无谓卸载。
-          if (this.wanted().has(key)) return;
+    const candidates = [...this.entries].filter(([key, entry]) => !wanted.has(key) && !entry.operation);
+    if (candidates.length === 0) return;
+    // 给同一轮舞台替换机会重新持有资源，避免无谓卸载；整批只重算一次持有集合。
+    const latest = Promise.resolve().then(() => this.wanted());
+    for (const [key, entry] of candidates) {
+      entry.operation = latest
+        .then(async (wanted) => {
+          if (wanted.has(key)) return;
           entry.ready = false;
           await entry.resource?.dispose?.();
           entry.resource = undefined;
@@ -158,9 +161,13 @@ export class AssetManager {
 
   /** 只保护仍被持有的纹理，不关闭其他 Pixi 资源的自动 GC。 */
   public prerender() {
+    const gc = this.renderer!.textureGC;
+    // GC 只回收闲置超过 maxIdle 帧的纹理，每半个周期刷新一次即可，无需逐帧重算持有集合。
+    if (gc.count - this.lastTouch < gc.maxIdle / 2) return;
+    this.lastTouch = gc.count;
     for (const key of this.wanted()) {
       this.entries.get(key)?.resource?.textures?.forEach((texture) => {
-        texture.baseTexture.touched = this.renderer!.textureGC.count;
+        texture.baseTexture.touched = gc.count;
       });
     }
   }

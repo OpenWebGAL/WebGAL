@@ -55,7 +55,12 @@ export interface IStageObject {
   figureIdentity?: string;
   isExiting?: boolean;
   releaseInstance?: () => void;
-  textureRequest?: string;
+  /** 口型、眨眼各自最新的换图请求，旧请求完成时据此丢弃 */
+  textureRequests?: Partial<Record<'mouth' | 'blink', string>>;
+  /** Sprite 当前显示的口型眨眼图地址；未设置时显示的是 sourceUrl */
+  textureUrl?: string;
+  /** 差分混合进行中，口型眨眼暂不换图 */
+  isDiffBlending?: boolean;
 }
 
 export interface ILive2DRecord {
@@ -298,25 +303,7 @@ export default class PixiStage {
       closed: targetAnimation.mouthAnimation.close,
     };
 
-    // Load mouth texture (reuse if already loaded)
-    const object = this.getStageObjByKey(key);
-    if (!object) return;
-    const request = uuid();
-    object.textureRequest = request;
-    this.loadStageAsset(
-      object.uuid,
-      () => {
-        if (object.textureRequest !== request) return;
-        const texture = this.assets.getReady<PIXI.Texture>({ url: mouthTextureUrls[mouthState], kind: 'texture' });
-        const sprite = currentFigure?.children?.[0] as PIXI.Sprite;
-        if (!texture || !sprite) {
-          return;
-        }
-        sprite.texture = texture;
-        this.requestRender();
-      },
-      { url: mouthTextureUrls[mouthState], kind: 'texture' },
-    );
+    this.swapFigureTexture(key, 'mouth', mouthTextureUrls[mouthState]);
   }
 
   // eslint-disable-next-line max-params
@@ -336,24 +323,41 @@ export default class PixiStage {
       closed: targetAnimation.blinkAnimation.close,
     };
 
-    // Load eye texture (reuse if already loaded)
+    this.swapFigureTexture(key, 'blink', blinkTextureUrls[blinkState]);
+  }
+
+  /**
+   * 口型与眨眼各自只采用本通道最新一次请求；空路径表示未配置该差分，不发起加载。
+   * 差分优先：混合进行中不换图；语音等演出捕获的旧表情配置已被差分替换，同样丢弃。
+   */
+  private swapFigureTexture(key: string, channel: 'mouth' | 'blink', url: string) {
     const object = this.getStageObjByKey(key);
-    if (!object) return;
+    if (!object || object.isDiffBlending || !url || url.endsWith('/')) return;
+    if (!this.isCurrentAssociatedTexture(key, url)) return;
     const request = uuid();
-    object.textureRequest = request;
+    object.textureRequests = { ...object.textureRequests, [channel]: request };
     this.loadStageAsset(
       object.uuid,
       () => {
-        if (object.textureRequest !== request) return;
-        const texture = this.assets.getReady<PIXI.Texture>({ url: blinkTextureUrls[blinkState], kind: 'texture' });
-        const sprite = currentFigure?.children?.[0] as PIXI.Sprite;
-        if (!texture || !sprite) {
-          return;
-        }
+        if (object.textureRequests?.[channel] !== request || object.isDiffBlending) return;
+        // 加载期间可能已换了差分，完成时再确认一次。
+        if (!this.isCurrentAssociatedTexture(key, url)) return;
+        const texture = this.assets.getReady<PIXI.Texture>({ url, kind: 'texture' });
+        const sprite = object.pixiContainer?.children?.[0] as PIXI.Sprite | undefined;
+        if (!texture || !sprite) return;
         sprite.texture = texture;
+        object.textureUrl = url;
         this.requestRender();
       },
-      { url: blinkTextureUrls[blinkState], kind: 'texture' },
+      { url, kind: 'texture' },
+    );
+  }
+
+  /** 只接受已提交状态中该立绘当前的口型眨眼图 */
+  private isCurrentAssociatedTexture(key: string, url: string) {
+    const current = stageStateManager.getViewStageState().figureAssociatedAnimation.find((e) => e.targetId === key);
+    return (
+      !!current && [...Object.values(current.mouthAnimation), ...Object.values(current.blinkAnimation)].includes(url)
     );
   }
 

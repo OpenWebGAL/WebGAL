@@ -168,27 +168,30 @@ function syncFigureSlot(payload: ISyncFigureSlotPayload) {
     if (currentFigure?.figureIdentity === identity) return;
     const sameGeometry =
       currentFigure?.figureIdentity === getFigureIdentity({ ...payload, sourceUrl: currentFigure?.sourceUrl ?? '' });
-    const diffAnimation =
-      currentFigure &&
-      sameGeometry &&
-      !skipAnimation &&
-      WebGAL.figureDiffManager.consume(key, currentFigure.sourceUrl, sourceUrl)
-        ? prepareFigureDiff(currentFigure, sourceUrl)
-        : undefined;
+    const isDiff =
+      !!currentFigure && sameGeometry && WebGAL.figureDiffManager.consume(key, currentFigure.sourceUrl, sourceUrl);
+    const diffAnimation = isDiff && !skipAnimation ? prepareFigureDiff(currentFigure!, sourceUrl) : undefined;
     if (currentFigure && diffAnimation) {
       currentFigure.figureIdentity = identity;
       pixiStage.registerAnimation(diffAnimation, softInAniKey, key);
       return;
     }
+    // 差分是同一立绘，未能混合时新对象也要接替旧对象的遮挡顺序，而不是排到同层末尾。
+    const diffIndex =
+      isDiff && currentFigure?.pixiContainer
+        ? pixiStage.figureContainer.getChildIndex(currentFigure.pixiContainer)
+        : -1;
     if (currentFigure) {
       removeFig(currentFigure, softInAniKey, skipAnimation);
     }
-    // 入场动画由 changeFigure 作为演出产出，这里只负责创建舞台对象
+    // 入场动画由 changeFigure / changeFigureDiff 作为演出产出，这里只负责创建舞台对象
     addFigure(key, sourceUrl, position);
     // 舞台对象是同步入表的，这里记下它是按哪份身份创建的，供下次同步比对
     const newFigure = pixiStage.getStageObjByKey(key);
     if (newFigure) {
       newFigure.figureIdentity = identity;
+      if (diffIndex >= 0 && newFigure.pixiContainer)
+        pixiStage.figureContainer.addChildAt(newFigure.pixiContainer, diffIndex);
     }
     logger.debug(`${key} 立绘已重设`);
     return;

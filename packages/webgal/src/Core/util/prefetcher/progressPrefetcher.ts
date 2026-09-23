@@ -32,9 +32,15 @@ const uniqueSubScenes = (scene: IScene, startLine: number, lookahead: number) =>
   return [...sceneSet];
 };
 
+/** 清空 Pixi 预取窗口，并让下一次提交重新计算，不被相同的进度标记跳过。 */
+export const clearProgressPrefetch = () => {
+  lastProgressPrefetchMark = '';
+  WebGAL.gameplay.pixiStage?.assets.preload([]);
+};
+
 export const prefetchSceneByProgress = (scene: IScene, currentSentenceId: number, force = false) => {
   if (!scene.sceneUrl) {
-    WebGAL.gameplay.pixiStage?.assets.preload([]);
+    clearProgressPrefetch();
     return;
   }
   const mark = `${scene.sceneUrl}#${currentSentenceId}`;

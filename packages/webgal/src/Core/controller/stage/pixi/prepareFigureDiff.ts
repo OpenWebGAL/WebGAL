@@ -22,14 +22,14 @@ export function prepareFigureDiff(object: IStageObject, url: string) {
   const container = object.pixiContainer;
   if (!stage?.currentApp || !container || object.sourceType !== 'img' || object.isExiting || object.releaseInstance)
     return;
-  if (WebGAL.gameplay.skipAnimation || stage.getAllLockedObject().includes(object.key) || object.textureRequest) return;
+  if (WebGAL.gameplay.skipAnimation || stage.getAllLockedObject().includes(object.key)) return;
   const sprite = container.children[0];
   if (container.children.length !== 1 || !(sprite instanceof Sprite)) return;
-  const oldRequest = { url: object.sourceUrl, kind: 'texture' as const };
+  // 起点是 Sprite 实际显示的图，可能是口型眨眼图（闭嘴图常与原图相同）；差分优先于口型眨眼。
+  const oldRequest = { url: object.textureUrl ?? object.sourceUrl, kind: 'texture' as const };
   const newRequest = { url, kind: 'texture' as const };
   const oldTexture = stage.assets.getReady<Texture>(oldRequest);
   const newTexture = stage.assets.getReady<Texture>(newRequest);
-  // Sprite 可能已被口型等差分改写，只有仍显示源图时才能确认这次混合的起点。
   if (!isStaticTexture(oldTexture) || !isStaticTexture(newTexture) || sprite.texture !== oldTexture) return;
   // 复用容器与 Sprite 的几何，要求逻辑尺寸和像素密度同时一致。
   if (
@@ -48,22 +48,23 @@ export function prepareFigureDiff(object: IStageObject, url: string) {
   stage.assets.release(object.uuid);
   stage.assets.retain(object.uuid, newRequest);
   object.sourceUrl = url;
+  // 混合期间暂停口型眨眼并丢弃未完成的换图，结束后显示新差分的原图。
+  object.textureRequests = undefined;
+  object.textureUrl = undefined;
+  object.isDiffBlending = true;
   object.sourceExt = stage.getExtName(url);
-  // 状态仍遵循 changeFigure 的重置规则；只省去旧对象退场和新对象入场。
+  // 差分保留立绘状态，复用原容器即保持了遮挡顺序；混合期间对象被锁定，先落地最新变换。
   const state = stageStateManager.getCalculationStageState();
   applyTransformToPixiContainer(container, state.effects.find((effect) => effect.target === object.key)?.transform);
-  // 与普通新建对象一样排到同层末尾，保持原来的遮挡顺序规则。
-  stage.figureContainer.addChild(container);
   const animation = blend.attach(sprite, () => {
     stage.assets.release(owner);
     object.releaseInstance = undefined;
+    object.isDiffBlending = false;
   });
   object.releaseInstance = () => {
     stage.removeAnimation(`${object.key}-softin`);
     animation.setEndState();
   };
-  // 普通路径由 getExitAnimation 消费退出设置；混合不播放退出，也必须完成这项收尾。
-  stageStateManager.removeAnimationSettingsByTargetOff(`${object.key}-off`);
   stage.requestRender();
   return animation;
 }
