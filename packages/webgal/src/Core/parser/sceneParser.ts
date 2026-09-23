@@ -7,6 +7,7 @@ import { bgm } from '@/Core/gameScripts/bgm';
 import { callSceneScript } from '@/Core/gameScripts/callSceneScript';
 import { changeBg } from '@/Core/gameScripts/changeBg';
 import { changeFigure } from '@/Core/gameScripts/changeFigure';
+import { changeFigureDiff } from '@/Core/gameScripts/changeFigureDiff';
 import { changeSceneScript } from '@/Core/gameScripts/changeSceneScript';
 import { choose } from '@/Core/gameScripts/choose';
 import { comment } from '@/Core/gameScripts/comment';
@@ -43,6 +44,7 @@ export const SCRIPT_TAG_MAP = defineScripts({
   say: ScriptConfig(commandType.say, say),
   changeBg: ScriptConfig(commandType.changeBg, changeBg),
   changeFigure: ScriptConfig(commandType.changeFigure, changeFigure),
+  changeFigureDiff: ScriptConfig(commandType.changeFigureDiff, changeFigureDiff),
   bgm: ScriptConfig(commandType.bgm, bgm, { next: true }),
   playVideo: ScriptConfig(commandType.video, playVideo),
   pixiPerform: ScriptConfig(commandType.pixi, pixi, { next: true }),

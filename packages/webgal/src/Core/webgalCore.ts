@@ -10,6 +10,7 @@ import { WebgalTemplate } from '@/types/template';
 import { IWebGALStyleObj } from 'webgal-parser/build/types/styleParser';
 import { stageStateManager } from '@/Core/Modules/stage/stageStateManager';
 import { FlowchartManager } from '@/Core/Modules/flowchart';
+import { FigureDiffManager } from '@/Core/controller/stage/pixi/figureDiff';
 
 export class WebgalCore {
   public sceneManager = new SceneManager();
@@ -22,6 +23,7 @@ export class WebgalCore {
   public gameKey = '';
   public events = new Events();
   public stageManager = stageStateManager;
+  public readonly figureDiffManager = new FigureDiffManager();
   public steam = new SteamIntegration();
   public template: WebgalTemplate | null = null;
   public styleObjects: Map<string, IWebGALStyleObj> = new Map();

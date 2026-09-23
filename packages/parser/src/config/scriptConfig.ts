@@ -4,6 +4,7 @@ export const SCRIPT_CONFIG = [
   { scriptString: 'say', scriptType: commandType.say },
   { scriptString: 'changeBg', scriptType: commandType.changeBg },
   { scriptString: 'changeFigure', scriptType: commandType.changeFigure },
+  { scriptString: 'changeFigureDiff', scriptType: commandType.changeFigureDiff },
   { scriptString: 'bgm', scriptType: commandType.bgm },
   { scriptString: 'playVideo', scriptType: commandType.video },
   { scriptString: 'pixiPerform', scriptType: commandType.pixi },

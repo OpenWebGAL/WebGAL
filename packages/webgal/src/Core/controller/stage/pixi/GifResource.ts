@@ -109,6 +109,8 @@ export class GifResource extends BaseImageResource {
 
       this.source.width = canvas.width;
       this.source.height = canvas.height;
+      // 预加载期间不推进动画，但要让 prepare 上传真实的首帧。
+      this.source.getContext('2d')!.putImageData(this._frames[0].imageData, 0, 0);
       super.update();
 
       if (this.autoPlay) this.play();

@@ -363,6 +363,8 @@ export const startPreviewSyncRuntime = () => {
       isEnterGame: true,
       showPanicOverlay: false,
     });
+    // 暂留旧版等待：resetStage 不清除进行中的场景写入锁，立即推进可能被 preForward 拦截。
+    // 100ms 不保证解锁；替换前需处理旧加载结果失效和解锁后的推进，避免覆盖新预览。
     setTimeout(() => {
       continueSentence();
     }, 100);

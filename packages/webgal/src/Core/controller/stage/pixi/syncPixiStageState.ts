@@ -13,6 +13,8 @@ import { getAnimateDuration, getExitAnimation } from '@/Core/Modules/animationFu
 import { logger } from '@/Core/util/logger';
 import { setEbg } from '@/Core/gameScripts/changeBg/setEbg';
 import { applyTransformToPixiContainer } from '@/Core/controller/stage/pixi/stageEffectTransform';
+import { prefetchCurrentSceneByProgress } from '@/Core/util/prefetcher/progressPrefetcher';
+import { prepareFigureDiff } from './prepareFigureDiff';
 
 interface ISyncFigureSlotPayload {
   key: string;
@@ -50,9 +52,14 @@ function getEnterDuration(stageState: IStageState, target: string, isBg: boolean
 export function syncPixiStageState(stageState: IStageState, options: IResolvedStageCommitOptions) {
   if (options.syncPixiStage) {
     syncBg(stageState, options.skipAnimation);
-    syncFigures(stageState, options.skipAnimation);
+    try {
+      syncFigures(stageState, options.skipAnimation);
+    } finally {
+      WebGAL.figureDiffManager.clear();
+    }
     syncLive2d(stageState);
     syncFigureMetaData(stageState);
+    prefetchCurrentSceneByProgress();
   }
   if (options.applyPixiEffects) {
     applyStageEffects(stageState.effects);
@@ -159,15 +166,32 @@ function syncFigureSlot(payload: ISyncFigureSlotPayload) {
   if (sourceUrl) {
     const identity = getFigureIdentity(payload);
     if (currentFigure?.figureIdentity === identity) return;
+    const sameGeometry =
+      currentFigure?.figureIdentity === getFigureIdentity({ ...payload, sourceUrl: currentFigure?.sourceUrl ?? '' });
+    const isDiff =
+      !!currentFigure && sameGeometry && WebGAL.figureDiffManager.consume(key, currentFigure.sourceUrl, sourceUrl);
+    const diffAnimation = isDiff && !skipAnimation ? prepareFigureDiff(currentFigure!, sourceUrl) : undefined;
+    if (currentFigure && diffAnimation) {
+      currentFigure.figureIdentity = identity;
+      pixiStage.registerAnimation(diffAnimation, softInAniKey, key);
+      return;
+    }
+    // 差分是同一立绘，未能混合时新对象也要接替旧对象的遮挡顺序，而不是排到同层末尾。
+    const diffIndex =
+      isDiff && currentFigure?.pixiContainer
+        ? pixiStage.figureContainer.getChildIndex(currentFigure.pixiContainer)
+        : -1;
     if (currentFigure) {
       removeFig(currentFigure, softInAniKey, skipAnimation);
     }
-    // 入场动画由 changeFigure 作为演出产出，这里只负责创建舞台对象
+    // 入场动画由 changeFigure / changeFigureDiff 作为演出产出，这里只负责创建舞台对象
     addFigure(key, sourceUrl, position);
     // 舞台对象是同步入表的，这里记下它是按哪份身份创建的，供下次同步比对
     const newFigure = pixiStage.getStageObjByKey(key);
     if (newFigure) {
       newFigure.figureIdentity = identity;
+      if (diffIndex >= 0 && newFigure.pixiContainer)
+        pixiStage.figureContainer.addChildAt(newFigure.pixiContainer, diffIndex);
     }
     logger.debug(`${key} 立绘已重设`);
     return;
@@ -201,6 +225,13 @@ function syncLive2d(stageState: IStageState) {
 function syncFigureMetaData(stageState: IStageState) {
   const pixiStage = WebGAL.gameplay.pixiStage;
   if (!pixiStage) return;
+  for (const animation of stageState.figureAssociatedAnimation) {
+    const object = pixiStage.getStageObjByKey(animation.targetId);
+    if (!object || object.isExiting) continue;
+    for (const url of [...Object.values(animation.mouthAnimation), ...Object.values(animation.blinkAnimation)]) {
+      if (url && !url.endsWith('/')) pixiStage.loadStageAsset(object.uuid, () => undefined, { url, kind: 'texture' });
+    }
+  }
   Object.entries(stageState.figureMetaData).forEach(([key, value]) => {
     const figureObject = pixiStage.getStageObjByKey(key);
     if (figureObject && !figureObject.isExiting && figureObject.pixiContainer) {
@@ -229,6 +260,7 @@ function removeBg(bgObject: IStageObject, skipAnimation: boolean): number {
   pixiStage.removeStageObjectByKey(oldBgKey);
   const { duration, animation } = getExitAnimation('bg-main-off', true, bgKey);
   pixiStage.registerAnimation(animation, bgAniKey, bgKey);
+  // 保留退出对象直到退场时长结束；同步销毁会让退场动画不可见。
   setTimeout(() => {
     pixiStage.removeAnimation(bgAniKey);
     pixiStage.removeStageObjectByKey(bgKey);
@@ -256,6 +288,7 @@ function removeFig(figObj: IStageObject, enterTikerKey: string, skipAnimation: b
   // 退出对象的 key 带时间戳，永远不在 effects 白名单里，因此与背景一样走普通动画通道即可
   const { duration, animation } = getExitAnimation(figLeaveAniKey, false, figKey);
   pixiStage.registerAnimation(animation, leaveKey, figKey);
+  // 保留退出对象直到退场时长结束；同步销毁会让退场动画不可见。
   setTimeout(() => {
     pixiStage.removeAnimation(leaveKey);
     pixiStage.removeStageObjectByKey(figKey);
