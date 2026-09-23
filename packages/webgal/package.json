@@ -11,6 +11,8 @@
   "dependencies": {
     "@emotion/css": "^11.11.2",
     "@icon-park/react": "^1.4.2",
+    "@pixi/assets": "6.5.10",
+    "@pixi/basis": "6.5.10",
     "@reduxjs/toolkit": "^1.8.1",
     "angular-expressions": "^1.4.3",
     "axios": "^1.13.5",

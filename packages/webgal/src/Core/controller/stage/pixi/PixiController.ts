@@ -17,6 +17,10 @@ import { cloneDeep, isEqual } from 'lodash';
 import * as PIXI from 'pixi.js';
 import { INSTALLED } from 'pixi.js';
 import { GifResource } from './GifResource';
+import { figureCash } from '@/Core/gameScripts/vocal/conentsCash';
+import { AssetManager } from './assets/AssetManager';
+import { acquireVideoTexture } from './assets/videoTexture';
+import { ResourceRequest } from './assets/resourceTypes';
 import { stageStateManager } from '@/Core/Modules/stage/stageStateManager';
 import { queryStageObjectReferenceBox, type QueryTargetReferenceBoxResult } from './referenceBox';
 import { assignPixiTransform } from './stageEffectTransform';
@@ -50,6 +54,13 @@ export interface IStageObject {
   /** 创建这个立绘时用的身份，见 syncPixiStageState 的 getFigureIdentity */
   figureIdentity?: string;
   isExiting?: boolean;
+  releaseInstance?: () => void;
+  /** 口型、眨眼各自最新的换图请求，旧请求完成时据此丢弃 */
+  textureRequests?: Partial<Record<'mouth' | 'blink', string>>;
+  /** Sprite 当前显示的口型眨眼图地址；未设置时显示的是 sourceUrl */
+  textureUrl?: string;
+  /** 差分混合进行中，口型眨眼暂不换图 */
+  isDiffBlending?: boolean;
 }
 
 export interface ILive2DRecord {
@@ -88,7 +99,7 @@ export default class PixiStage {
   public figureObjects = this.createReactiveList<IStageObject>([]);
   public stageWidth = SCREEN_CONSTANTS.width;
   public stageHeight = SCREEN_CONSTANTS.height;
-  public assetLoader = new PIXI.Loader();
+  public readonly assets = new AssetManager();
   public readonly backgroundContainer: PIXI.Container;
   public backgroundObjects = this.createReactiveList<IStageObject>([]);
   public mainStageObject: IStageObject;
@@ -102,7 +113,7 @@ export default class PixiStage {
   public addSpineBg = addSpineBgImpl.bind(this);
   // 注册到 Ticker 上的函数
   private stageAnimations = this.createReactiveList<IStageAnimationObject>([]);
-  private loadQueue: { url: string; callback: () => void; name?: string }[] = [];
+
   private live2dFigureRecorder: Array<ILive2DRecord> = [];
   // 锁定变换对象（对象可能正在执行动画，不能应用变换）
   private lockTransformTarget: Array<string> = [];
@@ -118,7 +129,6 @@ export default class PixiStage {
    */
   private MAX_TEX_COUNT = 10;
 
-  private figureCash: any;
   public constructor() {
     const app = new PIXI.Application({
       backgroundAlpha: 0,
@@ -185,13 +195,7 @@ export default class PixiStage {
       this.backgroundContainer,
     );
     this.currentApp = app;
-    // loader 防死
-    const reload = () => {
-      setTimeout(reload, 500);
-      this.callLoader();
-    };
-    reload();
-    this.initialize();
+    if (app.renderer instanceof PIXI.Renderer) this.assets.attach(app.renderer);
     this.requestRender();
   }
 
@@ -268,6 +272,10 @@ export default class PixiStage {
     this.removeAnimationByIndex(index);
   }
 
+  public hasAnimation(key: string): boolean {
+    return this.stageAnimations.some((animation) => animation.key === key);
+  }
+
   public removeAnimationByTargetKey(targetKey: string) {
     let index = this.stageAnimations.findIndex((e) => e.targetKey === targetKey);
     while (index !== -1) {
@@ -295,16 +303,7 @@ export default class PixiStage {
       closed: targetAnimation.mouthAnimation.close,
     };
 
-    // Load mouth texture (reuse if already loaded)
-    this.loadAsset(mouthTextureUrls[mouthState], () => {
-      const texture = this.assetLoader.resources[mouthTextureUrls[mouthState]].texture;
-      const sprite = currentFigure?.children?.[0] as PIXI.Sprite;
-      if (!texture || !sprite) {
-        return;
-      }
-      sprite.texture = texture;
-      this.requestRender();
-    });
+    this.swapFigureTexture(key, 'mouth', mouthTextureUrls[mouthState]);
   }
 
   // eslint-disable-next-line max-params
@@ -324,16 +323,42 @@ export default class PixiStage {
       closed: targetAnimation.blinkAnimation.close,
     };
 
-    // Load eye texture (reuse if already loaded)
-    this.loadAsset(blinkTextureUrls[blinkState], () => {
-      const texture = this.assetLoader.resources[blinkTextureUrls[blinkState]].texture;
-      const sprite = currentFigure?.children?.[0] as PIXI.Sprite;
-      if (!texture || !sprite) {
-        return;
-      }
-      sprite.texture = texture;
-      this.requestRender();
-    });
+    this.swapFigureTexture(key, 'blink', blinkTextureUrls[blinkState]);
+  }
+
+  /**
+   * 口型与眨眼各自只采用本通道最新一次请求；空路径表示未配置该差分，不发起加载。
+   * 差分优先：混合进行中不换图；语音等演出捕获的旧表情配置已被差分替换，同样丢弃。
+   */
+  private swapFigureTexture(key: string, channel: 'mouth' | 'blink', url: string) {
+    const object = this.getStageObjByKey(key);
+    if (!object || object.isDiffBlending || !url || url.endsWith('/')) return;
+    if (!this.isCurrentAssociatedTexture(key, url)) return;
+    const request = uuid();
+    object.textureRequests = { ...object.textureRequests, [channel]: request };
+    this.loadStageAsset(
+      object.uuid,
+      () => {
+        if (object.textureRequests?.[channel] !== request || object.isDiffBlending) return;
+        // 加载期间可能已换了差分，完成时再确认一次。
+        if (!this.isCurrentAssociatedTexture(key, url)) return;
+        const texture = this.assets.getReady<PIXI.Texture>({ url, kind: 'texture' });
+        const sprite = object.pixiContainer?.children?.[0] as PIXI.Sprite | undefined;
+        if (!texture || !sprite) return;
+        sprite.texture = texture;
+        object.textureUrl = url;
+        this.requestRender();
+      },
+      { url, kind: 'texture' },
+    );
+  }
+
+  /** 只接受已提交状态中该立绘当前的口型眨眼图 */
+  private isCurrentAssociatedTexture(key: string, url: string) {
+    const current = stageStateManager.getViewStageState().figureAssociatedAnimation.find((e) => e.targetId === key);
+    return (
+      !!current && [...Object.values(current.mouthAnimation), ...Object.values(current.blinkAnimation)].includes(url)
+    );
   }
 
   /**
@@ -342,8 +367,6 @@ export default class PixiStage {
    * @param url 背景图片url
    */
   public addBg(key: string, url: string) {
-    // const loader = this.assetLoader;
-    const loader = this.assetLoader;
     // 准备用于存放这个背景的 Container
     const thisBgContainer = new WebGALPixiContainer();
 
@@ -372,46 +395,38 @@ export default class PixiStage {
 
     // 完成图片加载后执行的函数
     const setup = () => {
-      // TODO：找一个更好的解法，现在的解法是无论是否复用原来的资源，都设置一个延时以让动画工作正常！
+      // 对象已同步入表，资源就绪后直接挂载；动画由 commit 后的演出启动。
+      const texture = this.assets.getReady<PIXI.Texture>({ url, kind: 'texture' });
+      if (texture && this.getStageObjByUuid(bgUuid)) {
+        /**
+         * 重设大小
+         */
+        const originalWidth = texture.width;
+        const originalHeight = texture.height;
+        const scaleX = this.stageWidth / originalWidth;
+        const scaleY = this.stageHeight / originalHeight;
+        const targetScale = Math.max(scaleX, scaleY);
+        const bgSprite = new PIXI.Sprite(texture);
+        bgSprite.scale.x = targetScale;
+        bgSprite.scale.y = targetScale;
+        bgSprite.anchor.set(0.5);
+        bgSprite.position.y = this.stageHeight / 2;
+        thisBgContainer.setBaseX(this.stageWidth / 2);
+        thisBgContainer.setBaseY(this.stageHeight / 2);
+        thisBgContainer.pivot.set(0, this.stageHeight / 2);
 
-      setTimeout(() => {
-        const texture = loader.resources?.[url]?.texture;
-        if (texture && this.getStageObjByUuid(bgUuid)) {
-          /**
-           * 重设大小
-           */
-          const originalWidth = texture.width;
-          const originalHeight = texture.height;
-          const scaleX = this.stageWidth / originalWidth;
-          const scaleY = this.stageHeight / originalHeight;
-          const targetScale = Math.max(scaleX, scaleY);
-          const bgSprite = new PIXI.Sprite(texture);
-          bgSprite.scale.x = targetScale;
-          bgSprite.scale.y = targetScale;
-          bgSprite.anchor.set(0.5);
-          bgSprite.position.y = this.stageHeight / 2;
-          thisBgContainer.setBaseX(this.stageWidth / 2);
-          thisBgContainer.setBaseY(this.stageHeight / 2);
-          thisBgContainer.pivot.set(0, this.stageHeight / 2);
-
-          // 挂载
-          thisBgContainer.addChild(bgSprite);
-          this.notifyTargetReferenceBoxChanged(key);
-          this.requestRender();
-        }
-      }, 0);
+        // 挂载
+        thisBgContainer.addChild(bgSprite);
+        if (texture.baseTexture.resource instanceof GifResource) texture.baseTexture.resource.play();
+        this.notifyTargetReferenceBoxChanged(key);
+        this.requestRender();
+      }
     };
 
     /**
      * 加载器部分
      */
-    this.cacheGC();
-    if (!loader.resources?.[url]?.texture) {
-      this.loadAsset(url, setup);
-    } else {
-      // 复用
-      setup();
-    }
+    this.loadStageAsset(bgUuid, setup);
   }
 
   /**
@@ -420,7 +435,6 @@ export default class PixiStage {
    * @param url 背景图片url
    */
   public addVideoBg(key: string, url: string) {
-    const loader = this.assetLoader;
     // 准备用于存放这个背景的 Container
     const thisBgContainer = new WebGALPixiContainer();
 
@@ -446,57 +460,44 @@ export default class PixiStage {
       sourceExt: this.getExtName(url),
     });
 
-    // 完成加载后执行的函数
     const setup = () => {
-      // TODO：找一个更好的解法，现在的解法是无论是否复用原来的资源，都设置一个延时以让动画工作正常！
-
-      setTimeout(() => {
-        console.debug('start loaded video: ' + url);
-        const video = document.createElement('video');
-        const videoResource = new PIXI.VideoResource(video);
-        videoResource.src = url;
-        videoResource.source.preload = 'auto';
-        videoResource.source.muted = true;
-        videoResource.source.loop = true;
-        videoResource.source.autoplay = true;
-        videoResource.source.src = url;
-        // @ts-ignore
-        const texture = PIXI.Texture.from(videoResource);
-        if (texture && this.getStageObjByUuid(bgUuid)) {
-          /**
-           * 重设大小
-           */
-          texture.baseTexture.resource.load().then(() => {
-            const originalWidth = videoResource.source.videoWidth;
-            const originalHeight = videoResource.source.videoHeight;
-            const scaleX = this.stageWidth / originalWidth;
-            const scaleY = this.stageHeight / originalHeight;
-            const targetScale = Math.max(scaleX, scaleY);
-            const bgSprite = new PIXI.Sprite(texture);
-            bgSprite.scale.x = targetScale;
-            bgSprite.scale.y = targetScale;
-            bgSprite.anchor.set(0.5);
-            bgSprite.position.y = this.stageHeight / 2;
-            thisBgContainer.setBaseX(this.stageWidth / 2);
-            thisBgContainer.setBaseY(this.stageHeight / 2);
-            thisBgContainer.pivot.set(0, this.stageHeight / 2);
-            thisBgContainer.addChild(bgSprite);
-            this.notifyTargetReferenceBoxChanged(key);
-          });
-        }
-      }, 0);
+      const prepared = this.assets.getReady<PIXI.Texture>({ url, kind: 'texture' });
+      if (!prepared) return;
+      return acquireVideoTexture(prepared, url)
+        .then(async ({ texture, video, release }) => {
+          const object = this.getStageObjByUuid(bgUuid);
+          if (!object) {
+            release();
+            return;
+          }
+          object.releaseInstance = release;
+          await this.assets.prepare([texture]);
+          if (!this.getStageObjByUuid(bgUuid)) return;
+          const originalWidth = video.videoWidth;
+          const originalHeight = video.videoHeight;
+          const scaleX = this.stageWidth / originalWidth;
+          const scaleY = this.stageHeight / originalHeight;
+          const targetScale = Math.max(scaleX, scaleY);
+          const bgSprite = new PIXI.Sprite(texture);
+          bgSprite.scale.x = targetScale;
+          bgSprite.scale.y = targetScale;
+          bgSprite.anchor.set(0.5);
+          bgSprite.position.y = this.stageHeight / 2;
+          thisBgContainer.setBaseX(this.stageWidth / 2);
+          thisBgContainer.setBaseY(this.stageHeight / 2);
+          thisBgContainer.pivot.set(0, this.stageHeight / 2);
+          thisBgContainer.addChild(bgSprite);
+          void video.play().catch((error) => logger.warn('视频背景播放失败', error));
+          this.notifyTargetReferenceBoxChanged(key);
+          this.requestRender();
+        })
+        .catch((error) => logger.warn(`视频背景加载失败：${url}`, error));
     };
 
     /**
      * 加载器部分
      */
-    this.cacheGC();
-    if (!loader.resources?.[url]?.texture) {
-      this.loadAsset(url, setup);
-    } else {
-      // 复用
-      setup();
-    }
+    this.loadStageAsset(bgUuid, setup);
   }
 
   /**
@@ -506,7 +507,6 @@ export default class PixiStage {
    * @param presetPosition
    */
   public addFigure(key: string, url: string, presetPosition: IFigurePosition = 'center') {
-    const loader = this.assetLoader;
     // 准备用于存放这个立绘的 Container
     const thisFigureContainer = new WebGALPixiContainer();
 
@@ -542,48 +542,41 @@ export default class PixiStage {
     });
     // 完成图片加载后执行的函数
     const setup = () => {
-      // TODO：找一个更好的解法，现在的解法是无论是否复用原来的资源，都设置一个延时以让动画工作正常！
-      setTimeout(() => {
-        const texture = loader.resources?.[url]?.texture;
-        if (texture && this.getStageObjByUuid(figureUuid)) {
-          /**
-           * 重设大小
-           */
-          const originalWidth = texture.width;
-          const originalHeight = texture.height;
-          const scaleX = this.stageWidth / originalWidth;
-          const scaleY = this.stageHeight / originalHeight;
-          const targetScale = Math.min(scaleX, scaleY);
-          const figureSprite = new PIXI.Sprite(texture);
-          figureSprite.scale.x = targetScale;
-          figureSprite.scale.y = targetScale;
-          figureSprite.anchor.set(0.5);
-          figureSprite.position.y = this.stageHeight / 2;
-          const targetWidth = originalWidth * targetScale;
-          const targetHeight = originalHeight * targetScale;
-          thisFigureContainer.setBaseY(this.stageHeight / 2);
-          if (targetHeight < this.stageHeight) {
-            thisFigureContainer.setBaseY(this.stageHeight / 2 + (this.stageHeight - targetHeight) / 2);
-          }
-          thisFigureContainer.setBaseX(getFigureBaseX(presetPosition, this.stageWidth, targetWidth));
-          thisFigureContainer.pivot.set(0, this.stageHeight / 2);
-          thisFigureContainer.addChild(figureSprite);
-          this.notifyTargetReferenceBoxChanged(key);
-          this.requestRender();
+      // 对象已同步入表，资源就绪后直接挂载；动画由 commit 后的演出启动。
+      const texture = this.assets.getReady<PIXI.Texture>({ url, kind: 'texture' });
+      if (texture && this.getStageObjByUuid(figureUuid)) {
+        /**
+         * 重设大小
+         */
+        const originalWidth = texture.width;
+        const originalHeight = texture.height;
+        const scaleX = this.stageWidth / originalWidth;
+        const scaleY = this.stageHeight / originalHeight;
+        const targetScale = Math.min(scaleX, scaleY);
+        const figureSprite = new PIXI.Sprite(texture);
+        figureSprite.scale.x = targetScale;
+        figureSprite.scale.y = targetScale;
+        figureSprite.anchor.set(0.5);
+        figureSprite.position.y = this.stageHeight / 2;
+        const targetWidth = originalWidth * targetScale;
+        const targetHeight = originalHeight * targetScale;
+        thisFigureContainer.setBaseY(this.stageHeight / 2);
+        if (targetHeight < this.stageHeight) {
+          thisFigureContainer.setBaseY(this.stageHeight / 2 + (this.stageHeight - targetHeight) / 2);
         }
-      }, 0);
+        thisFigureContainer.setBaseX(getFigureBaseX(presetPosition, this.stageWidth, targetWidth));
+        thisFigureContainer.pivot.set(0, this.stageHeight / 2);
+        thisFigureContainer.addChild(figureSprite);
+        if (texture.baseTexture.resource instanceof GifResource) texture.baseTexture.resource.play();
+        this.notifyTargetReferenceBoxChanged(key);
+        this.requestRender();
+      }
     };
 
     /**
      * 加载器部分
      */
-    this.cacheGC();
-    if (!loader.resources?.[url]?.texture) {
-      this.loadAsset(url, setup);
-    } else {
-      // 复用
-      setup();
-    }
+    this.loadStageAsset(figureUuid, setup);
   }
 
   /**
@@ -592,14 +585,12 @@ export default class PixiStage {
    */
   // eslint-disable-next-line max-params
   public addLive2dFigure(key: string, jsonPath: string, pos: IFigurePosition) {
-    if (Live2D.isAvailable !== true) return;
     try {
       let stageWidth = this.stageWidth;
       let stageHeight = this.stageHeight;
 
-      this.figureCash.push(jsonPath);
+      figureCash.push(jsonPath);
 
-      const loader = this.assetLoader;
       // 准备用于存放这个立绘的 Container
       const thisFigureContainer = new WebGALPixiContainer();
 
@@ -637,7 +628,9 @@ export default class PixiStage {
 
       const setup = () => {
         if (thisFigureContainer && this.getStageObjByUuid(figureUuid)) {
-          (async function () {
+          return (async function () {
+            await Live2D.ready;
+            if (!Live2D.isAvailable || !instance.getStageObjByUuid(figureUuid)) return;
             let overrideBounds: [number, number, number, number] = [0, 0, 0, 0];
             const mot = stageStateManager.getViewStageState().live2dMotion.find((e) => e.target === key);
             if (mot?.overrideBounds) {
@@ -657,6 +650,10 @@ export default class PixiStage {
             ]);
 
             models.forEach((model) => {
+              if (!instance.getStageObjByUuid(figureUuid)) {
+                model.destroy();
+                return;
+              }
               const scaleX = stageWidth / model.width;
               const scaleY = stageHeight / model.height;
               const targetScale = Math.min(scaleX, scaleY);
@@ -725,25 +722,18 @@ export default class PixiStage {
 
               thisFigureContainer.addChild(model);
               instance.notifyTargetReferenceBoxChanged(key);
+              instance.requestRender();
             });
-          })();
+          })().catch((error) => logger.warn(`Live2D 加载失败：${jsonPath}`, error));
         }
       };
 
       /**
        * 加载器部分
        */
-      const resourses = Object.keys(loader.resources);
-      this.cacheGC();
-      if (!resourses.includes(jsonPath)) {
-        this.loadAsset(jsonPath, () => setup());
-      } else {
-        // 复用
-        setup();
-      }
+      this.loadStageAsset(figureUuid, setup);
     } catch (error) {
       console.error('Live2d Module err: ' + error);
-      Live2D.isAvailable = false;
     }
   }
 
@@ -973,6 +963,7 @@ export default class PixiStage {
         resolve();
       };
 
+      // 资源加载失败或尺寸通知缺失时也要结束等待，避免参考尺寸查询永久挂起。
       timeoutId = window.setTimeout(resolveAndCleanup, timeoutMs);
       waiters.add(resolveAndCleanup);
     });
@@ -997,12 +988,14 @@ export default class PixiStage {
       const bgSprite = this.figureObjects[indexFig];
       if (bgSprite.pixiContainer)
         for (const element of bgSprite.pixiContainer.children) {
-          element.destroy();
+          element.destroy({ children: true });
         }
       if (bgSprite.pixiContainer) {
         bgSprite.pixiContainer.destroy();
         this.figureContainer.removeChild(bgSprite.pixiContainer);
       }
+      bgSprite.releaseInstance?.();
+      this.assets.release(bgSprite.uuid);
       bgSprite.pixiContainer = null;
       this.figureObjects.splice(indexFig, 1);
       this.notifyTargetReferenceBoxChanged(key);
@@ -1011,12 +1004,14 @@ export default class PixiStage {
       const bgSprite = this.backgroundObjects[indexBg];
       if (bgSprite.pixiContainer)
         for (const element of bgSprite.pixiContainer.children) {
-          element.destroy();
+          element.destroy({ children: true });
         }
       if (bgSprite.pixiContainer) {
         bgSprite.pixiContainer.destroy();
         this.backgroundContainer.removeChild(bgSprite.pixiContainer);
       }
+      bgSprite.releaseInstance?.();
+      this.assets.release(bgSprite.uuid);
       bgSprite.pixiContainer = null;
       this.backgroundObjects.splice(indexBg, 1);
       this.notifyTargetReferenceBoxChanged(key);
@@ -1033,10 +1028,6 @@ export default class PixiStage {
     // updateCurrentEffects(newEffects);
   }
 
-  public cacheGC() {
-    PIXI.utils.clearTextureCache();
-  }
-
   public getExtName(url: string) {
     return (url.split(/[?#]/)[0].split('.').pop() ?? 'png').toLowerCase();
   }
@@ -1045,15 +1036,33 @@ export default class PixiStage {
     return stageStateManager.getViewStageState().figureMetaData[key];
   }
 
-  public loadAsset(url: string, callback: () => void, name?: string) {
-    /**
-     * Loader 复用疑似有问题，转而采用先前的单独方式
-     */
-    this.loadQueue.unshift({ url, callback, name });
-    /**
-     * 尝试启动加载
-     */
-    this.callLoader();
+  public loadStageAsset(stageUuid: string, setup: () => void | Promise<void>, request?: ResourceRequest) {
+    const object = this.getStageObjByUuid(stageUuid);
+    if (!object) return;
+    request ??= {
+      url: object.sourceUrl,
+      kind: object.sourceType === 'live2d' || object.sourceType === 'spine' ? object.sourceType : 'texture',
+    };
+    this.assets.retain(stageUuid, request);
+    // 模型实例初始化尚未结束时，即使舞台对象退场，也不能销毁 SDK 正在使用的纹理。
+    const pendingOwner = `${stageUuid}:pending:${uuid()}`;
+    this.assets.retain(pendingOwner, request);
+    const mount = () => (this.getStageObjByUuid(stageUuid) ? setup() : undefined);
+    try {
+      const operation =
+        this.assets.getReady(request) !== undefined
+          ? Promise.resolve(mount())
+          : this.assets
+              .ensureReady(request)
+              .catch(() => this.assets.ensureReady(request!))
+              .then(mount);
+      void operation
+        .catch((error) => logger.warn(`舞台资源加载失败：${request!.url}`, error))
+        .finally(() => this.assets.release(pendingOwner));
+    } catch (error) {
+      this.assets.release(pendingOwner);
+      logger.warn(`舞台资源挂载失败：${request.url}`, error);
+    }
   }
 
   private updateL2dMotionByKey(target: string, motion: string) {
@@ -1103,37 +1112,6 @@ export default class PixiStage {
     }
   }
 
-  private callLoader() {
-    if (!this.assetLoader.loading) {
-      const front = this.loadQueue.shift();
-      if (front) {
-        try {
-          if (this.assetLoader.resources[front.url]) {
-            front.callback();
-            this.callLoader();
-          } else {
-            if (front.name) {
-              this.assetLoader.add(front.name, front.url).load(() => {
-                front.callback();
-                this.callLoader();
-              });
-            } else {
-              this.assetLoader.add(front.url).load(() => {
-                front.callback();
-                this.callLoader();
-              });
-            }
-          }
-        } catch (error) {
-          logger.fatal('PIXI Loader 故障', error);
-          front.callback();
-          // this.assetLoader.reset(); // 暂时先不用重置
-          this.callLoader();
-        }
-      }
-    }
-  }
-
   private lockStageObject(targetName: string) {
     this.lockTransformTarget.push(targetName);
   }
@@ -1141,16 +1119,6 @@ export default class PixiStage {
   private unlockStageObject(targetName: string) {
     const index = this.lockTransformTarget.findIndex((name) => name === targetName);
     if (index >= 0) this.lockTransformTarget.splice(index, 1);
-  }
-
-  private async initialize() {
-    // 动态加载 figureCash
-    try {
-      const { figureCash } = await import('@/Core/gameScripts/vocal/conentsCash');
-      this.figureCash = figureCash;
-    } catch (error) {
-      console.error('Failed to load figureCash:', error);
-    }
   }
 
   private createReactiveList<T extends object>(array: T[]): T[] {

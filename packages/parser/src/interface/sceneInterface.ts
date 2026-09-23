@@ -41,6 +41,7 @@ export enum commandType {
   wait,
   callSteam, // 调用Steam功能
   return, // 从被调用的场景返回
+  changeFigureDiff, // 切换等尺寸静态立绘差分；追加以保持旧指令编号
 }
 
 /**

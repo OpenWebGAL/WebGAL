@@ -12,7 +12,7 @@ let pixiSpineModule: typeof import('pixi-spine') | null = null;
 // @ts-ignore
 let pixiSpineLoading: Promise<typeof import('pixi-spine') | null> | null = null;
 
-let spineLoader: undefined | PIXI.Loader;
+// Spine 必须由用户按 https://docs.openwebgal.com/spine.html 显式启用。
 
 /**
  * 动态加载 'pixi-spine' 模块，并缓存结果
@@ -31,7 +31,6 @@ export async function loadPixiSpine(): Promise<typeof import('pixi-spine') | nul
   // @ts-ignore
   // pixiSpineLoading = import('pixi-spine')
   //   .then((module) => {
-  //     spineLoader = new PIXI.Loader();
   //     pixiSpineModule = module;
   //     return module;
   //   })
@@ -59,7 +58,6 @@ export async function addSpineFigureImpl(
   url: string,
   presetPosition: IFigurePosition = 'center',
 ) {
-  const spineId = `spine-${url}`;
   // 准备用于存放这个立绘的 Container
   const thisFigureContainer = new WebGALPixiContainer();
 
@@ -90,98 +88,87 @@ export async function addSpineFigureImpl(
     sourceExt: this.getExtName(url),
     spineAnimation: '_initial',
   });
-  const pixiSpine = await loadPixiSpine();
 
   // 完成图片加载后执行的函数
   const setup = async () => {
-    setTimeout(() => {
-      console.log('Setting up Spine' + key + url);
-      if (!pixiSpine) {
-        // 无法加载 'pixi-spine'，跳过 Spine 相关逻辑
-        logger.warn(`Spine module not loaded. Skipping Spine figure: ${key}`);
-        return;
+    const pixiSpine = await loadPixiSpine();
+    // 对象已同步入表，资源就绪后直接挂载；动画由 commit 后的演出启动。
+    console.log('Setting up Spine' + key + url);
+    if (!pixiSpine) {
+      // 无法加载 'pixi-spine'，跳过 Spine 相关逻辑
+      logger.warn(`Spine module not loaded. Skipping Spine figure: ${key}`);
+      return;
+    }
+
+    const { Spine } = pixiSpine;
+    const spineResource: any = this.assets.getReady({ url, kind: 'spine' });
+    if (spineResource && this.getStageObjByUuid(figureUuid)) {
+      const figureSpine = new Spine(spineResource.spineData);
+      const spineBounds = figureSpine.getLocalBounds();
+      const spineCenterX = spineBounds.x + spineBounds.width / 2;
+      const spineCenterY = spineBounds.y + spineBounds.height / 2;
+      figureSpine.pivot.set(spineCenterX, spineCenterY);
+      figureSpine.interactive = false;
+
+      const motionFromState = stageStateManager.getViewStageState().live2dMotion.find((e) => e.target === key);
+      let animationToPlay = '';
+      if (motionFromState?.skin) {
+        if (!applySpineSkin(figureSpine, motionFromState.skin)) {
+          logger.warn(`Spine skin not found: ${motionFromState.skin} on ${key}`);
+        }
       }
 
-      const { Spine } = pixiSpine;
-      const spineResource: any = spineLoader!.resources?.[spineId];
-      if (spineResource && this.getStageObjByUuid(figureUuid)) {
-        const figureSpine = new Spine(spineResource.spineData);
-        const spineBounds = figureSpine.getLocalBounds();
-        const spineCenterX = spineBounds.x + spineBounds.width / 2;
-        const spineCenterY = spineBounds.y + spineBounds.height / 2;
-        figureSpine.pivot.set(spineCenterX, spineCenterY);
-        figureSpine.interactive = false;
-
-        const motionFromState = stageStateManager.getViewStageState().live2dMotion.find((e) => e.target === key);
-        let animationToPlay = '';
-        if (motionFromState?.skin) {
-          if (!applySpineSkin(figureSpine, motionFromState.skin)) {
-            logger.warn(`Spine skin not found: ${motionFromState.skin} on ${key}`);
-          }
-        }
-
-        if (
-          motionFromState &&
-          figureSpine.spineData.animations.find((anim: any) => anim.name === motionFromState.motion)
-        ) {
-          // 使用状态中指定的动画
-          animationToPlay = motionFromState.motion;
-        } else if (figureSpine.spineData.animations.length > 0) {
-          // 播放默认动画（第一个动画）
-          animationToPlay = figureSpine.spineData.animations[0].name;
-        }
-
-        if (animationToPlay) {
-          figureSpine.state.setAnimation(0, animationToPlay, false);
-          figureSpine.autoUpdate = true;
-          const stageObj = this.getStageObjByUuid(figureUuid);
-          if (stageObj) {
-            if (stageObj.spineAnimation) {
-              stageObj.spineAnimation = animationToPlay;
-            }
-          }
-        }
-
-        /**
-         * 重设大小
-         */
-        const originalWidth = figureSpine.width;
-        const originalHeight = figureSpine.height;
-        const scaleX = this.stageWidth / originalWidth;
-        const scaleY = this.stageHeight / originalHeight;
-        const targetScale = Math.min(scaleX, scaleY);
-        const figureSprite = new PIXI.Sprite();
-        figureSprite.addChild(figureSpine);
-        figureSprite.scale.x = targetScale;
-        figureSprite.scale.y = targetScale;
-        figureSprite.anchor.set(0.5);
-        figureSprite.position.y = this.stageHeight / 2;
-        const targetWidth = originalWidth * targetScale;
-        const targetHeight = originalHeight * targetScale;
-        thisFigureContainer.setBaseY(this.stageHeight / 2);
-        if (targetHeight < this.stageHeight) {
-          thisFigureContainer.setBaseY(this.stageHeight / 2 + (this.stageHeight - targetHeight) / 2);
-        }
-        thisFigureContainer.setBaseX(getFigureBaseX(presetPosition, this.stageWidth, targetWidth));
-        thisFigureContainer.pivot.set(0, this.stageHeight / 2);
-        thisFigureContainer.addChild(figureSprite);
-        this.notifyTargetReferenceBoxChanged(key);
+      if (
+        motionFromState &&
+        figureSpine.spineData.animations.find((anim: any) => anim.name === motionFromState.motion)
+      ) {
+        // 使用状态中指定的动画
+        animationToPlay = motionFromState.motion;
+      } else if (figureSpine.spineData.animations.length > 0) {
+        // 播放默认动画（第一个动画）
+        animationToPlay = figureSpine.spineData.animations[0].name;
       }
-    }, 0);
+
+      if (animationToPlay) {
+        figureSpine.state.setAnimation(0, animationToPlay, false);
+        figureSpine.autoUpdate = true;
+        const stageObj = this.getStageObjByUuid(figureUuid);
+        if (stageObj) {
+          if (stageObj.spineAnimation) {
+            stageObj.spineAnimation = animationToPlay;
+          }
+        }
+      }
+
+      /**
+       * 重设大小
+       */
+      const originalWidth = figureSpine.width;
+      const originalHeight = figureSpine.height;
+      const scaleX = this.stageWidth / originalWidth;
+      const scaleY = this.stageHeight / originalHeight;
+      const targetScale = Math.min(scaleX, scaleY);
+      const figureSprite = new PIXI.Sprite();
+      figureSprite.addChild(figureSpine);
+      figureSprite.scale.x = targetScale;
+      figureSprite.scale.y = targetScale;
+      figureSprite.anchor.set(0.5);
+      figureSprite.position.y = this.stageHeight / 2;
+      const targetWidth = originalWidth * targetScale;
+      const targetHeight = originalHeight * targetScale;
+      thisFigureContainer.setBaseY(this.stageHeight / 2);
+      if (targetHeight < this.stageHeight) {
+        thisFigureContainer.setBaseY(this.stageHeight / 2 + (this.stageHeight - targetHeight) / 2);
+      }
+      thisFigureContainer.setBaseX(getFigureBaseX(presetPosition, this.stageWidth, targetWidth));
+      thisFigureContainer.pivot.set(0, this.stageHeight / 2);
+      thisFigureContainer.addChild(figureSprite);
+      this.notifyTargetReferenceBoxChanged(key);
+      this.requestRender();
+    }
   };
 
-  /**
-   * 加载器部分
-   * 这里不再使用 this.loadAsset，因为我们可能需要单独管理 Spine 资源
-   * 但为了避免性能问题，我们继续使用现有的 loader，并确保资源只加载一次
-   */
-  this.cacheGC();
-  if (!spineLoader!.resources?.[spineId]) {
-    spineLoader!.add(spineId, url).load(setup);
-  } else {
-    // 复用
-    await setup();
-  }
+  this.loadStageAsset(figureUuid, setup, { url, kind: 'spine' });
 }
 
 /**
@@ -190,7 +177,6 @@ export async function addSpineFigureImpl(
  * @param url Spine 数据的 URL
  */
 export async function addSpineBgImpl(this: PixiStage, key: string, url: string) {
-  const spineId = `spine-${url}`;
   // 准备用于存放这个背景的 Container
   const thisBgContainer = new WebGALPixiContainer();
 
@@ -226,55 +212,43 @@ export async function addSpineBgImpl(this: PixiStage, key: string, url: string) 
     }
 
     const { Spine } = pixiSpine;
-    const spineResource: any = spineLoader!.resources?.[spineId];
-    // TODO：找一个更好的解法，现在的解法是无论是否复用原来的资源，都设置一个延时以让动画工作正常！
-    setTimeout(() => {
-      if (spineResource && this.getStageObjByUuid(bgUuid)) {
-        const bgSpine = new Spine(spineResource.spineData);
-        const transY = spineResource?.spineData?.y ?? 0;
-        /**
-         * 重设大小
-         */
-        const originalWidth = bgSpine.width; // TODO: 视图大小可能小于画布大小，应提供参数指定视图大小
-        const originalHeight = bgSpine.height; // TODO: 视图大小可能小于画布大小，应提供参数指定视图大小
-        const scaleX = this.stageWidth / originalWidth;
-        const scaleY = this.stageHeight / originalHeight;
-        logger.debug('bgSpine state', bgSpine.state);
-        // TODO: 也许应该使用 setAnimation 播放初始动画
-        if (bgSpine.spineData.animations.length > 0) {
-          // 播放首个动画
-          bgSpine.state.setAnimation(0, bgSpine.spineData.animations[0].name, true);
-        }
-        const targetScale = Math.max(scaleX, scaleY);
-        const bgSprite = new PIXI.Sprite();
-        bgSprite.addChild(bgSpine);
-        bgSprite.scale.x = targetScale;
-        bgSprite.scale.y = targetScale;
-        bgSprite.anchor.set(0.5);
-        bgSprite.position.y = this.stageHeight / 2;
-        thisBgContainer.setBaseX(this.stageWidth / 2);
-        thisBgContainer.setBaseY(this.stageHeight / 2);
-        thisBgContainer.pivot.set(0, this.stageHeight / 2);
-
-        // 挂载
-        thisBgContainer.addChild(bgSprite);
-        this.notifyTargetReferenceBoxChanged(key);
+    const spineResource: any = this.assets.getReady({ url, kind: 'spine' });
+    // 对象已同步入表，资源就绪后直接挂载；动画由 commit 后的演出启动。
+    if (spineResource && this.getStageObjByUuid(bgUuid)) {
+      const bgSpine = new Spine(spineResource.spineData);
+      const transY = spineResource?.spineData?.y ?? 0;
+      /**
+       * 重设大小
+       */
+      const originalWidth = bgSpine.width; // TODO: 视图大小可能小于画布大小，应提供参数指定视图大小
+      const originalHeight = bgSpine.height; // TODO: 视图大小可能小于画布大小，应提供参数指定视图大小
+      const scaleX = this.stageWidth / originalWidth;
+      const scaleY = this.stageHeight / originalHeight;
+      logger.debug('bgSpine state', bgSpine.state);
+      // TODO: 也许应该使用 setAnimation 播放初始动画
+      if (bgSpine.spineData.animations.length > 0) {
+        // 播放首个动画
+        bgSpine.state.setAnimation(0, bgSpine.spineData.animations[0].name, true);
       }
-    }, 0);
+      const targetScale = Math.max(scaleX, scaleY);
+      const bgSprite = new PIXI.Sprite();
+      bgSprite.addChild(bgSpine);
+      bgSprite.scale.x = targetScale;
+      bgSprite.scale.y = targetScale;
+      bgSprite.anchor.set(0.5);
+      bgSprite.position.y = this.stageHeight / 2;
+      thisBgContainer.setBaseX(this.stageWidth / 2);
+      thisBgContainer.setBaseY(this.stageHeight / 2);
+      thisBgContainer.pivot.set(0, this.stageHeight / 2);
+
+      // 挂载
+      thisBgContainer.addChild(bgSprite);
+      this.notifyTargetReferenceBoxChanged(key);
+      this.requestRender();
+    }
   };
 
-  /**
-   * 加载器部分
-   * 这里不再使用 this.loadAsset，因为我们可能需要单独管理 Spine 资源
-   * 但为了避免性能问题，我们继续使用现有的 loader，并确保资源只加载一次
-   */
-  this.cacheGC();
-  if (!spineLoader!.resources?.[spineId]) {
-    spineLoader!.add(spineId, url).load(setup);
-  } else {
-    // 复用
-    await setup();
-  }
+  this.loadStageAsset(bgUuid, setup, { url, kind: 'spine' });
 }
 
 function applySpineSkin(spineObject: any, skinName: string) {
