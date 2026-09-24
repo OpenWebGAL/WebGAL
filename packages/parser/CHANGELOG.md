@@ -1,5 +1,14 @@
 # WebGAL Parser Changelog
 
+## [4.6.5] - 2026-09-24
+
+### Added
+- 新增 `changeFigureDiff` 命令（切换立绘差分），语句内容按立绘路径解析，并参与资源扫描
+- `SceneParser` 的 `assetsPrefetcher` 改为可选：省略时跳过资源收集，`sentenceAssets`、`subScene`、`assetsList`、`subSceneList` 均为空数组，适用于只需要语句结构的调用方（如编辑器语法解析）
+
+### Fixed
+- 资源与子场景列表改为就地累积，消除资源密集的长场景解析时 Θ(资源数²) 的开销
+
 ## [4.6.3] - 2026-08-01
 
 正式发布 4.6.3-beta.1 / beta.2 的多行语句支持，另含以下改动。

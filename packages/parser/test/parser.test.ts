@@ -291,6 +291,30 @@ test("scene assets skip entries with empty urls", async () => {
   expect(result.assetsList).toEqual([]);
 });
 
+test("scene assets and subscenes are accumulated from every statement", async () => {
+  let prefetchedAssets: IAsset[] = [];
+  const parser = new SceneParser((assetList) => {
+    prefetchedAssets = assetList;
+  }, (fileName, assetType) => {
+    return fileName;
+  }, ADD_NEXT_ARG_LIST, SCRIPT_CONFIG);
+
+  const result = parser.parse(`changeBg:a.webp;
+changeFigure:b.png -id=b;
+say:voice line -vocal=c.mp3;
+changeBg:a.webp;
+callScene:chapter1.txt;
+callScene:chapter2.txt;`, 'test', 'test');
+
+  expect(result.assetsList).toEqual([
+    { name: 'a.webp', url: 'a.webp', type: fileType.background, lineNumber: 0 },
+    { name: 'b.png', url: 'b.png', type: fileType.figure, lineNumber: 1 },
+    { name: 'c.mp3', url: 'c.mp3', type: fileType.vocal, lineNumber: 2 },
+  ]);
+  expect(prefetchedAssets).toEqual(result.assetsList);
+  expect(result.subSceneList).toEqual(['chapter1.txt', 'chapter2.txt']);
+});
+
 test("wait command", async () => {
   const parser = new SceneParser((assetList) => {
   }, (fileName, assetType) => {

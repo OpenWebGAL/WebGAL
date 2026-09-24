@@ -12,7 +12,6 @@ import { figureStateKeyByPosition, IFreeFigure, normalizeFigureBounds } from '@/
 import { AnimationFrame, IUserAnimation } from '@/Core/Modules/animations';
 import { generateTransformAnimationObj } from '@/Core/controller/stage/pixi/animations/generateTransformAnimationObj';
 import { generateTimelineObj } from '@/Core/controller/stage/pixi/animations/timeline';
-import { assetSetter, fileType } from '@/Core/util/gameAssetsAccess/assetSetter';
 import { logger } from '@/Core/util/logger';
 import { applyAnimationEndState, getAnimateDuration } from '@/Core/Modules/animationFunctions';
 import { WebGAL } from '@/Core/WebGAL';
@@ -20,6 +19,7 @@ import { baseBlinkParam, baseFocusParam, BlinkParam, FocusParam } from '@/Core/l
 import { DEFAULT_FIG_IN_DURATION, DEFAULT_FIG_OUT_DURATION, WEBGAL_NONE } from '../constants';
 import { stageStateManager } from '@/Core/Modules/stage/stageStateManager';
 import { parseTransformFrame } from './parseTransformFrame';
+import { setFigureAssociatedAnimation } from './figureAssociatedAnimation';
 /**
  * 更改立绘
  * @param sentence 语句
@@ -70,14 +70,6 @@ export function changeFigure(sentence: ISentence): IPerform {
     }
   }
 
-  // 图片立绘差分
-  const mouthOpen = assetSetter(getStringArgByKey(sentence, 'mouthOpen') ?? '', fileType.figure);
-  const mouthClose = assetSetter(getStringArgByKey(sentence, 'mouthClose') ?? '', fileType.figure);
-  const mouthHalfOpen = assetSetter(getStringArgByKey(sentence, 'mouthHalfOpen') ?? '', fileType.figure);
-  const eyesOpen = assetSetter(getStringArgByKey(sentence, 'eyesOpen') ?? '', fileType.figure);
-  const eyesClose = assetSetter(getStringArgByKey(sentence, 'eyesClose') ?? '', fileType.figure);
-  const animationFlag = getStringArgByKey(sentence, 'animationFlag') ?? '';
-
   // 其他参数
   const transformString = getStringArgByKey(sentence, 'transform');
   const ease = getStringArgByKey(sentence, 'ease') ?? '';
@@ -91,23 +83,8 @@ export function changeFigure(sentence: ISentence): IPerform {
   const exitDuration = getNumberArgByKey(sentence, 'exitDuration') ?? DEFAULT_FIG_OUT_DURATION;
   const ignoreDefault = getBooleanArgByKey(sentence, 'ignoreDefault') ?? false;
 
-  const currentFigureAssociatedAnimation = stageStateManager.getCalculationStageState().figureAssociatedAnimation;
-  const filteredFigureAssociatedAnimation = currentFigureAssociatedAnimation.filter((item) => item.targetId !== id);
-  const newFigureAssociatedAnimationItem = {
-    targetId: id,
-    animationFlag: animationFlag,
-    mouthAnimation: {
-      open: mouthOpen,
-      close: mouthClose,
-      halfOpen: mouthHalfOpen,
-    },
-    blinkAnimation: {
-      open: eyesOpen,
-      close: eyesClose,
-    },
-  };
-  filteredFigureAssociatedAnimation.push(newFigureAssociatedAnimationItem);
-  stageStateManager.setStage('figureAssociatedAnimation', filteredFigureAssociatedAnimation);
+  // 图片立绘的口型、眨眼差分
+  setFigureAssociatedAnimation(sentence, id);
 
   /**
    * 立绘的身份：图片地址、基准位置、Live2D 绘制范围。

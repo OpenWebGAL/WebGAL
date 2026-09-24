@@ -1,5 +1,5 @@
 import styles from './textbox.module.scss';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { WebGAL } from '@/Core/WebGAL';
 import { ITextboxProps } from './types';
 import useApplyStyle from '@/hooks/useApplyStyle';
@@ -12,10 +12,11 @@ export default function IMSSTextbox(props: ITextboxProps) {
   const {
     textArray,
     textDelay,
-    currentConcatDialogPrev,
+    concatPrefixNodeCount,
     currentDialogKey,
     isRead,
     isText,
+    isPreview = false,
     isSafari,
     isFirefox: boolean,
     fontSize,
@@ -24,6 +25,7 @@ export default function IMSSTextbox(props: ITextboxProps) {
     showName,
     font,
     textDuration,
+    textRevealEnd,
     isUseStroke,
     textboxOpacity,
     textSizeState,
@@ -32,12 +34,13 @@ export default function IMSSTextbox(props: ITextboxProps) {
   const applyStyle = useApplyStyle('textbox');
   const readTextClassName = isRead ? ` ${applyStyle('readText', styles.readText)}` : '';
   const readTextInnerClassName = isRead ? ` ${applyStyle('readTextInner', styles.readTextInner)}` : '';
+  const textboxRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    if (isPreview) return;
     function settleText() {
-      const textElements = document.querySelectorAll('.Textelement_start');
-      const textArray = [...textElements];
-      textArray.forEach((e) => {
+      // 只结算本实例的文字，避免剧情演出打断设置页的预览。
+      textboxRef.current?.querySelectorAll('.Textelement_start').forEach((e) => {
         e.className = applyStyle('TextBox_textElement_Settled', styles.TextBox_textElement_Settled);
       });
     }
@@ -46,7 +49,7 @@ export default function IMSSTextbox(props: ITextboxProps) {
     return () => {
       WebGAL.events.textSettle.off(settleText);
     };
-  }, []);
+  }, [isPreview]);
   let allTextIndex = 0;
   const nameElementList = showName.map((line, index) => {
     const textline = line.map((en, index) => {
@@ -137,15 +140,16 @@ export default function IMSSTextbox(props: ITextboxProps) {
       // }
       const outerClassName = applyStyle('outer', styles.outer);
       const readTextOuterClassName = isRead ? ` ${applyStyle('readTextOuter', styles.readTextOuter)}` : '';
-      let delay = allTextIndex * textDelay;
-      allTextIndex++;
-      let prevLength = currentConcatDialogPrev.length;
-      if (currentConcatDialogPrev !== '' && allTextIndex >= prevLength) {
-        delay = delay - prevLength * textDelay;
-      }
+      const nodeIndex = allTextIndex++;
+      // concat 继承的前缀直接显示；新接上的字从本句开始重新计算延迟
+      const isConcatPrefix = nodeIndex < concatPrefixNodeCount;
+      const delay = (isConcatPrefix ? nodeIndex : nodeIndex - concatPrefixNodeCount) * textDelay;
+      // notend 末尾逐渐缩短渐显，确保推进时已经全显，stopFunction 无需特殊处理。
+      const duration =
+        textRevealEnd === undefined ? textDuration : Math.min(textDuration, Math.max(0, textRevealEnd - delay));
       const styleClassName = ' ' + css(style);
       const styleAllText = ' ' + css(style_alltext);
-      if (allTextIndex < prevLength) {
+      if (isConcatPrefix) {
         return (
           <span
             // data-text={e}
@@ -175,7 +179,7 @@ export default function IMSSTextbox(props: ITextboxProps) {
             styles.TextBox_textElement_start,
           )}${readTextClassName} Textelement_start`}
           key={currentDialogKey + index}
-          style={{ animationDelay: `${delay}ms`, position: 'relative' }}
+          style={{ animationDelay: `${delay}ms`, animationDuration: `${duration}ms`, position: 'relative' }}
         >
           <span className={styles.zhanwei + styleAllText}>
             {e}
@@ -211,7 +215,7 @@ export default function IMSSTextbox(props: ITextboxProps) {
   return (
     <>
       {isText && (
-        <div className={styles.TextBox_Container}>
+        <div ref={textboxRef} className={styles.TextBox_Container}>
           <div
             className={
               applyStyle('TextBox_main', styles.TextBox_main) +

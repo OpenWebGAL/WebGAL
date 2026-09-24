@@ -1,16 +1,12 @@
 import { ISentence } from '@/Core/controller/scene/sceneInterface';
 import { IPerform } from '@/Core/Modules/perform/performInterface';
-import { playVocal } from './vocal';
 import { webgalStore } from '@/store/store';
-import { useTextAnimationDuration, useTextDelay } from '@/hooks/useTextOptions';
-import { getRandomPerformName } from '@/Core/Modules/perform/performController';
-import { getBooleanArgByKey, getFigurePositionFromArgs, getStringArgByKey } from '@/Core/util/getSentenceArg';
+import { getBooleanArgByKey, getStringArgByKey } from '@/Core/util/getSentenceArg';
 import { textSize, voiceOption } from '@/store/userDataInterface';
 import { WebGAL } from '@/Core/WebGAL';
-import { compileSentence } from '@/Stage/TextBox/TextBox';
-import { performMouthAnimation } from '@/Core/gameScripts/vocal/vocalAnimation';
-import { match } from '@/Core/util/match';
 import { stageStateManager } from '@/Core/Modules/stage/stageStateManager';
+import { getDialogSegments } from '@/Core/Modules/stage/dialogText';
+import { createSayPerform } from './say/createSayPerform';
 
 /**
  * 进行普通对话的显示
@@ -30,6 +26,7 @@ export const say = (sentence: ISentence): IPerform => {
   const speaker = getStringArgByKey(sentence, 'speaker'); // 获取说话者
   const clear = getBooleanArgByKey(sentence, 'clear') ?? false; // 是否清除说话者
   const vocal = getStringArgByKey(sentence, 'vocal'); // 是否播放语音
+  const dialogSegments = isConcat ? [...getDialogSegments(stageState), dialogToShow] : [dialogToShow];
 
   // 如果是concat，那么就继承上一句的key，并且继承上一句对话。
   if (isConcat) {
@@ -42,6 +39,8 @@ export const say = (sentence: ISentence): IPerform => {
 
   // 设置文本显示
   stageStateManager.setStage('showText', dialogToShow);
+  stageStateManager.setStage('currentDialogSegments', dialogSegments);
+  stageStateManager.setStage('isDialogNotend', isNotend);
   WebGAL.flowchartManager.requestUnlockCurrentScene();
   stageStateManager.setStage('vocal', '');
 
@@ -53,12 +52,6 @@ export const say = (sentence: ISentence): IPerform => {
   }
   // 设置key
   stageStateManager.setStage('currentDialogKey', dialogKey);
-  // 计算延迟
-  const textDelay = useTextDelay(userDataState.optionData.textSpeed);
-  // 本句延迟
-  const textNodes = compileSentence(sentence.content, 3);
-  const len = textNodes.reduce((prev, curr) => prev + curr.length, 0);
-  const sentenceDelay = textDelay * len;
 
   const fontSizeFromArgs = getStringArgByKey(sentence, 'fontSize');
   switch (fontSizeFromArgs) {
@@ -86,73 +79,5 @@ export const say = (sentence: ISentence): IPerform => {
   }
   stageStateManager.setStage('showName', showName);
 
-  // 模拟说话
-  let performSimulateVocalTimeout: ReturnType<typeof setTimeout> | null = null;
-
-  const pos = getFigurePositionFromArgs(sentence);
-
-  let key = getStringArgByKey(sentence, 'figureId') ?? '';
-
-  let audioLevel = 80;
-  const performSimulateVocal = (end = false) => {
-    let nextAudioLevel = audioLevel + (Math.random() * 60 - 30); // 在 -30 到 +30 之间波动
-    // 确保波动幅度不小于 5
-    if (Math.abs(nextAudioLevel - audioLevel) < 5) {
-      nextAudioLevel = audioLevel + Math.sign(nextAudioLevel - audioLevel) * 5;
-    }
-    // 确保结果在 25 到 100 之间
-    audioLevel = Math.max(15, Math.min(nextAudioLevel, 100));
-    const currentStageState = stageStateManager.getCalculationStageState();
-    const figureAssociatedAnimation = currentStageState.figureAssociatedAnimation;
-    const animationItem = figureAssociatedAnimation.find((tid) => tid.targetId === key);
-    const targetKey = key ? key : `fig-${pos}`;
-    if (end) {
-      audioLevel = 0;
-    }
-    performMouthAnimation({
-      audioLevel,
-      OPEN_THRESHOLD: 50,
-      HALF_OPEN_THRESHOLD: 25,
-      currentMouthValue: 0,
-      lerpSpeed: 1,
-      key: targetKey,
-      animationItem,
-      pos,
-    });
-    if (!end) performSimulateVocalTimeout = setTimeout(performSimulateVocal, 50);
-  };
-  // 播放一段语音
-  if (vocal) {
-    WebGAL.gameplay.performController.arrangeNewPerform(playVocal(sentence), sentence, false);
-  }
-  const shouldSimulateVocal = !vocal && (key !== '' || pos !== '');
-  const performSimulateVocalDelay = shouldSimulateVocal ? len * 250 : 0;
-
-  const performInitName: string = getRandomPerformName();
-  let endDelay = useTextAnimationDuration(userDataState.optionData.textSpeed) / 2;
-  // 如果有 notend 参数，那么就不需要等待
-  if (isNotend) {
-    endDelay = 0;
-  }
-
-  return {
-    performName: performInitName,
-    duration: sentenceDelay + endDelay + performSimulateVocalDelay,
-    isHoldOn: false,
-    startFunction: () => {
-      if (shouldSimulateVocal) {
-        performSimulateVocal();
-      }
-    },
-    stopFunction: () => {
-      WebGAL.events.textSettle.emit();
-      if (performSimulateVocalTimeout) {
-        performSimulateVocal(true);
-        clearTimeout(performSimulateVocalTimeout);
-      }
-    },
-    blockingNext: () => false,
-    blockingAuto: () => true,
-    goNextWhenOver: isNotend,
-  };
+  return createSayPerform(sentence);
 };

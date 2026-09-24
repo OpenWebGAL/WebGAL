@@ -10,6 +10,9 @@ import cloneDeep from 'lodash/cloneDeep';
 
 import { WebGAL } from '@/Core/WebGAL';
 import { stageStateManager } from '@/Core/Modules/stage/stageStateManager';
+import { commandType } from '@/Core/controller/scene/sceneInterface';
+import { getBooleanArgByKey } from '@/Core/util/getSentenceArg';
+import { createSayPerform } from '@/Core/gameScripts/say/createSayPerform';
 
 /**
  * 恢复演出
@@ -22,6 +25,14 @@ export const restorePerform = (skipAnimation = false) => {
   WebGAL.gameplay.performController.beginCollectingPerforms();
   try {
     performToRestore.forEach((e) => {
+      if (e.script.command === commandType.say) {
+        // 正文和分段已经在存档中，只重建演出，不能重跑 say 再追加一次 concat。
+        if (stageState.isDialogNotend === undefined) {
+          stageStateManager.setStage('isDialogNotend', getBooleanArgByKey(e.script, 'notend') ?? false);
+        }
+        WebGAL.gameplay.performController.arrangeNewPerform(createSayPerform(e.script), e.script);
+        return;
+      }
       runScript(e.script);
     });
   } finally {

@@ -38,7 +38,7 @@ import { resetStage } from '@/Core/controller/stage/resetStage';
 import { logger } from '@/Core/util/logger';
 import { stageStateManager } from '@/Core/Modules/stage/stageStateManager';
 import { baseTransform } from '@/Core/Modules/stage/stageInterface';
-import type { IStageState, ITransform } from '@/Core/Modules/stage/stageInterface';
+import type { IStageState } from '@/Core/Modules/stage/stageInterface';
 import { applyStageEffectToTarget } from '@/Core/controller/stage/pixi/syncPixiStageState';
 import { mergeSetEffectPreviewTransform } from './previewSetEffectTransform';
 import { requestEmbeddedLaunchId } from './runtime/embeddedPreviewBootstrap';
@@ -102,7 +102,6 @@ export const startPreviewSyncRuntime = () => {
   let lastPublishedSceneName: string | null = null;
   let lastPublishedSentenceId: number | null = null;
   let lastPublishedStageState: StageStateSnapshot | null = null;
-  const setEffectBaselines = new Map<string, ITransform>();
   const targetTransformBaselines = createTargetTransformBaselineManager();
   const embeddedLaunchIdPromise = requestEmbeddedLaunchId();
   let transport!: PreviewSyncTransport;
@@ -134,10 +133,9 @@ export const startPreviewSyncRuntime = () => {
     lastPublishedSceneName = null;
     lastPublishedSentenceId = null;
     lastPublishedStageState = null;
-    setEffectBaselines.clear();
     activeSyncSceneRevision = null;
     WebGAL.gameplay.isFastPreview = false;
-    targetTransformBaselines.invalidateCurrentRevision();
+    targetTransformBaselines.invalidateBaselines();
   };
 
   const startSyncSceneTransaction = () => {
@@ -257,13 +255,14 @@ export const startPreviewSyncRuntime = () => {
   const handleSyncScene = (payload: SyncScenePayload) => {
     const syncSceneRevision = startSyncSceneTransaction();
     const isLatestSyncScene = () => isActiveSyncSceneRevision(syncSceneRevision);
-    setEffectBaselines.clear();
     const { transformBaselineRevision } = payload;
-    if (transformBaselineRevision) {
-      targetTransformBaselines.acceptRevision(transformBaselineRevision);
-    } else {
-      targetTransformBaselines.invalidateCurrentRevision();
-    }
+    targetTransformBaselines.applySyncSceneTarget(
+      {
+        sceneName: payload.sceneName,
+        sentenceId: payload.sentenceId,
+      },
+      transformBaselineRevision,
+    );
 
     executePreviewSyncSceneCommand(payload, {
       onFastPreviewTimeout: emitFastPreviewTimeout,
@@ -280,6 +279,7 @@ export const startPreviewSyncRuntime = () => {
           transformBaselineRevision,
           stageStateManager.getCalculationStageState(),
         );
+        targetTransformBaselines.publishCapturedSnapshot(transformBaselineRevision);
       },
       onSettled: (result) => {
         if (!finishSyncSceneTransaction(syncSceneRevision)) {
@@ -298,14 +298,19 @@ export const startPreviewSyncRuntime = () => {
           return;
         }
 
-        const isSyncSettled = isTargetTransformBaselineSyncSettled(result, payload);
+        const isSyncSettled = isTargetTransformBaselineSyncSettled(result, payload.sceneName);
+        if (!isSyncSettled) {
+          logger.warn(
+            `revision-bound sync 未停在目标停点，失效基线: scene=${result.sceneName}, sentence=${result.sentenceId}, reason=${result.stopReason}`,
+          );
+        }
+
         if (!isSyncSettled || !targetTransformBaselines.publishCapturedSnapshot(transformBaselineRevision)) {
           targetTransformBaselines.failRevision(transformBaselineRevision);
           publishSettledStageSnapshot();
           return;
         }
 
-        setEffectBaselines.clear();
         publishSettledStageSnapshot();
       },
     });
@@ -313,8 +318,7 @@ export const startPreviewSyncRuntime = () => {
 
   const handleRunSnippet = (payload: RunSnippetPayload) => {
     cancelActiveSyncScene();
-    setEffectBaselines.clear();
-    targetTransformBaselines.invalidateCurrentRevision();
+    targetTransformBaselines.invalidateBaselines();
     applyPreviewDebugVariables(payload.debugVariables);
     const scene = WebgalParser.parse(payload.snippet, 'temp.txt', 'temp.txt');
     (scene.sentenceList as unknown as ISentence[]).forEach((sentence) => {
@@ -348,8 +352,7 @@ export const startPreviewSyncRuntime = () => {
 
   const handleRunSceneContent = (payload: RunSceneContentPayload) => {
     cancelActiveSyncScene();
-    setEffectBaselines.clear();
-    targetTransformBaselines.invalidateCurrentRevision();
+    targetTransformBaselines.invalidateBaselines();
     resetStage(true);
     applyPreviewDebugVariables(payload.debugVariables);
     WebGAL.sceneManager.sceneData.currentScene = sceneParser(payload.sceneContent, 'temp', './temp.txt');
@@ -360,6 +363,8 @@ export const startPreviewSyncRuntime = () => {
       isEnterGame: true,
       showPanicOverlay: false,
     });
+    // 暂留旧版等待：resetStage 不清除进行中的场景写入锁，立即推进可能被 preForward 拦截。
+    // 100ms 不保证解锁；替换前需处理旧加载结果失效和解锁后的推进，避免覆盖新预览。
     setTimeout(() => {
       continueSentence();
     }, 100);
@@ -377,20 +382,11 @@ export const startPreviewSyncRuntime = () => {
     setDebugTextReadMode(payload.isRead);
   };
 
-  const getSetEffectBaseline = (target: string): ITransform => {
-    const cachedBaseline = setEffectBaselines.get(target);
-    if (cachedBaseline) {
-      return cachedBaseline;
-    }
-
-    const baselineOverride = targetTransformBaselines.getReadyTransformBaselineOverride(target);
-    const baseline = mergeSetEffectPreviewTransform(baseTransform, baselineOverride);
-    setEffectBaselines.set(target, baseline);
-    return baseline;
-  };
-
   const handleSetEffect = (payload: SetEffectPayload) => {
-    const baseline = getSetEffectBaseline(payload.target);
+    // 基线每次现算：snapshot 不可用时只回退 base default（fail closed），不做第二份缓存，
+    // 否则缓存会与 snapshot 各自拥有一套有效期，重新引入「基线已失效但预览仍用旧值」的问题。
+    const baselineOverride = targetTransformBaselines.getReadyTransformBaselineOverride(payload.target);
+    const baseline = mergeSetEffectPreviewTransform(baseTransform, baselineOverride);
     const newTransform = mergeSetEffectPreviewTransform(baseline, payload.transform);
     WebGAL.gameplay.pixiStage?.removeAnimationByTargetKey(payload.target);
     if (payload.phase === 'preview') {
