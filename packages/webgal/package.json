@@ -1,6 +1,6 @@
 {
   "name": "webgal-engine",
-  "version": "4.6.4",
+  "version": "4.6.5",
   "scripts": {
     "dev": "vite --host --port 3000",
     "build": "node scripts/update-engine-version.js && cross-env NODE_ENV=production tsc && vite build --base=./",
