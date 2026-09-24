@@ -130,12 +130,9 @@ export const say = (sentence: ISentence): IPerform => {
   const performSimulateVocalDelay = shouldSimulateVocal ? len * 250 : 0;
 
   const performInitName: string = getRandomPerformName();
-  // 渐显也是演出的一部分，演出时长要覆盖到最后一个字渐显完成
-  let endDelay = useTextAnimationDuration(userDataState.optionData.textSpeed);
-  // 如果有 notend 参数，那么就不需要等待，继续推进时由后续语句把末尾的字推到终态
-  if (isNotend) {
-    endDelay = 0;
-  }
+  // 渐显也是演出的一部分，演出时长要覆盖到最后一个字渐显完成。
+  // notend 同样如此：推进到下一句会把本句演出推到终态，提前推进会让末尾的字跳变。
+  const endDelay = useTextAnimationDuration(userDataState.optionData.textSpeed);
 
   return {
     performName: performInitName,
