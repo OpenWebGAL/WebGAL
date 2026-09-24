@@ -1,18 +1,12 @@
 import { ISentence } from '@/Core/controller/scene/sceneInterface';
 import { IPerform } from '@/Core/Modules/perform/performInterface';
-import { playVocal } from './vocal';
 import { webgalStore } from '@/store/store';
-import { getTextLineLimit, useTextAnimationDuration, useTextDelay } from '@/hooks/useTextOptions';
-import { getRandomPerformName } from '@/Core/Modules/perform/performController';
-import { getBooleanArgByKey, getFigurePositionFromArgs, getStringArgByKey } from '@/Core/util/getSentenceArg';
+import { getBooleanArgByKey, getStringArgByKey } from '@/Core/util/getSentenceArg';
 import { textSize, voiceOption } from '@/store/userDataInterface';
 import { WebGAL } from '@/Core/WebGAL';
-import { compileSentence } from '@/Stage/TextBox/TextBox';
-import { performMouthAnimation } from '@/Core/gameScripts/vocal/vocalAnimation';
-import { match } from '@/Core/util/match';
 import { stageStateManager } from '@/Core/Modules/stage/stageStateManager';
 import { getDialogSegments } from '@/Core/Modules/stage/dialogText';
-import { concatTextLines } from '@/Stage/TextBox/concatTextLines';
+import { createSayPerform } from './say/createSayPerform';
 
 /**
  * 进行普通对话的显示
@@ -58,12 +52,6 @@ export const say = (sentence: ISentence): IPerform => {
   }
   // 设置key
   stageStateManager.setStage('currentDialogKey', dialogKey);
-  // 计算延迟
-  const textDelay = useTextDelay(userDataState.optionData.textSpeed);
-  // 本句延迟
-  const textNodes = compileSentence(sentence.content, 3);
-  const len = textNodes.reduce((prev, curr) => prev + curr.length, 0);
-  const sentenceDelay = textDelay * len;
 
   const fontSizeFromArgs = getStringArgByKey(sentence, 'fontSize');
   switch (fontSizeFromArgs) {
@@ -91,84 +79,5 @@ export const say = (sentence: ISentence): IPerform => {
   }
   stageStateManager.setStage('showName', showName);
 
-  // 模拟说话
-  let performSimulateVocalTimeout: ReturnType<typeof setTimeout> | null = null;
-
-  const pos = getFigurePositionFromArgs(sentence);
-
-  let key = getStringArgByKey(sentence, 'figureId') ?? '';
-
-  let audioLevel = 80;
-  const performSimulateVocal = (end = false) => {
-    let nextAudioLevel = audioLevel + (Math.random() * 60 - 30); // 在 -30 到 +30 之间波动
-    // 确保波动幅度不小于 5
-    if (Math.abs(nextAudioLevel - audioLevel) < 5) {
-      nextAudioLevel = audioLevel + Math.sign(nextAudioLevel - audioLevel) * 5;
-    }
-    // 确保结果在 25 到 100 之间
-    audioLevel = Math.max(15, Math.min(nextAudioLevel, 100));
-    const currentStageState = stageStateManager.getCalculationStageState();
-    const figureAssociatedAnimation = currentStageState.figureAssociatedAnimation;
-    const animationItem = figureAssociatedAnimation.find((tid) => tid.targetId === key);
-    const targetKey = key ? key : `fig-${pos}`;
-    if (end) {
-      audioLevel = 0;
-    }
-    performMouthAnimation({
-      audioLevel,
-      OPEN_THRESHOLD: 50,
-      HALF_OPEN_THRESHOLD: 25,
-      currentMouthValue: 0,
-      lerpSpeed: 1,
-      key: targetKey,
-      animationItem,
-      pos,
-    });
-    // 每 50ms 更新模拟嘴型，保留说话节奏并让出主线程，直到演出结束。
-    if (!end) performSimulateVocalTimeout = setTimeout(performSimulateVocal, 50);
-  };
-  // 播放一段语音
-  if (vocal) {
-    WebGAL.gameplay.performController.arrangeNewPerform(playVocal(sentence), sentence, false);
-  }
-  // notend 优先保证文字接续，不启动模拟嘴型，也不为它延长本句。
-  const shouldSimulateVocal = !isNotend && !vocal && (key !== '' || pos !== '');
-  const performSimulateVocalDelay = shouldSimulateVocal ? len * 250 : 0;
-
-  const performInitName: string = getRandomPerformName();
-  // notend 的尾部渐显收敛到文字排列结束；普通对话保留完整渐显时间。
-  const endDelay = isNotend ? 0 : useTextAnimationDuration(userDataState.optionData.textSpeed);
-
-  const perform: IPerform = {
-    performName: performInitName,
-    duration: sentenceDelay + endDelay + performSimulateVocalDelay,
-    isHoldOn: false,
-    startFunction: () => {
-      if (isNotend) {
-        // 在 commit 后按实际显示的正文计时，读档重建演出时也使用恢复后的分段。
-        const state = stageStateManager.getViewStageState();
-        const size = state.showTextSize === -1 ? userDataState.optionData.textSize : state.showTextSize;
-        const lineLimit = getTextLineLimit(size, userDataState.globalGameVar.Max_line);
-        const { textArray, concatPrefixNodeCount } = concatTextLines(
-          getDialogSegments(state).map((text) => compileSentence(text, lineLimit, true)),
-          lineLimit,
-        );
-        perform.duration = (textArray.flat().length - concatPrefixNodeCount) * textDelay;
-      }
-      if (shouldSimulateVocal) {
-        performSimulateVocal();
-      }
-    },
-    stopFunction: () => {
-      WebGAL.events.textSettle.emit();
-      if (performSimulateVocalTimeout) {
-        performSimulateVocal(true);
-        clearTimeout(performSimulateVocalTimeout);
-      }
-    },
-    blockingNext: () => false,
-    blockingAuto: () => true,
-    goNextWhenOver: isNotend,
-  };
-  return perform;
+  return createSayPerform(sentence);
 };

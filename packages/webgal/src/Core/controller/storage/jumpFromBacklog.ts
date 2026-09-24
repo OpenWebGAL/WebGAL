@@ -10,31 +10,34 @@ import cloneDeep from 'lodash/cloneDeep';
 
 import { WebGAL } from '@/Core/WebGAL';
 import { stageStateManager } from '@/Core/Modules/stage/stageStateManager';
+import { commandType } from '@/Core/controller/scene/sceneInterface';
+import { getBooleanArgByKey } from '@/Core/util/getSentenceArg';
+import { createSayPerform } from '@/Core/gameScripts/say/createSayPerform';
 
 /**
  * 恢复演出
  */
 export const restorePerform = (skipAnimation = false) => {
   const stageState = stageStateManager.getCalculationStageState();
-  const { showText, currentConcatDialogPrev, currentDialogSegments, currentDialogKey, isDialogNotend } = stageState;
   const performToRestore = cloneDeep(stageState.PerformList);
   // 清除状态表中演出序列
   stageStateManager.removeAllPerform();
   WebGAL.gameplay.performController.beginCollectingPerforms();
   try {
     performToRestore.forEach((e) => {
+      if (e.script.command === commandType.say) {
+        // 正文和分段已经在存档中，只重建演出，不能重跑 say 再追加一次 concat。
+        if (stageState.isDialogNotend === undefined) {
+          stageStateManager.setStage('isDialogNotend', getBooleanArgByKey(e.script, 'notend') ?? false);
+        }
+        WebGAL.gameplay.performController.arrangeNewPerform(createSayPerform(e.script), e.script);
+        return;
+      }
       runScript(e.script);
     });
   } finally {
     WebGAL.gameplay.performController.endCollectingPerforms();
   }
-  // 存档已包含末句正文；重建 say 演出时不能再次追加 concat，也不能丢失原有分段。
-  stageStateManager.setStage('showText', showText);
-  stageStateManager.setStage('currentConcatDialogPrev', currentConcatDialogPrev);
-  stageStateManager.setStage('currentDialogSegments', currentDialogSegments);
-  stageStateManager.setStage('currentDialogKey', currentDialogKey);
-  // 旧存档缺省时沿用重建 say 演出得到的 notend 标记。
-  if (isDialogNotend !== undefined) stageStateManager.setStage('isDialogNotend', isDialogNotend);
   stageStateManager.commit({ applyPixiEffects: false, skipAnimation });
   WebGAL.gameplay.performController.commitPendingPerforms();
   stageStateManager.applyCommittedPixiEffects();
