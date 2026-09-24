@@ -19,6 +19,7 @@ export default function StandardTextbox(props: ITextboxProps) {
     showName,
     font,
     textDuration,
+    textRevealEnd,
     textSizeState,
     isUseStroke,
     textboxOpacity,
@@ -67,6 +68,8 @@ export default function StandardTextbox(props: ITextboxProps) {
     if (index >= prevLength) {
       delay = delay - prevLength * textDelay;
     }
+    const duration =
+      textRevealEnd === undefined ? textDuration : Math.min(textDuration, Math.max(0, textRevealEnd - delay));
     if (index < prevLength) {
       return (
         <span
@@ -90,7 +93,7 @@ export default function StandardTextbox(props: ITextboxProps) {
         id={`${delay}`}
         className={`${styles.TextBox_textElement_start} Textelement_start`}
         key={currentDialogKey + index}
-        style={{ animationDelay: `${delay}ms`, animationDuration: `${textDuration}ms`, position: 'relative' }}
+        style={{ animationDelay: `${delay}ms`, animationDuration: `${duration}ms`, position: 'relative' }}
       >
         <span className={styles.zhanwei}>
           {e}

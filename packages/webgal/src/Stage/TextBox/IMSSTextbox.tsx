@@ -24,6 +24,7 @@ export default function IMSSTextbox(props: ITextboxProps) {
     showName,
     font,
     textDuration,
+    textRevealEnd,
     isUseStroke,
     textboxOpacity,
     textSizeState,
@@ -141,6 +142,9 @@ export default function IMSSTextbox(props: ITextboxProps) {
       // concat 继承的前缀直接显示；新接上的字从本句开始重新计算延迟
       const isConcatPrefix = nodeIndex < concatPrefixNodeCount;
       const delay = (isConcatPrefix ? nodeIndex : nodeIndex - concatPrefixNodeCount) * textDelay;
+      // notend 末尾逐渐缩短渐显，确保推进时已经全显，stopFunction 无需特殊处理。
+      const duration =
+        textRevealEnd === undefined ? textDuration : Math.min(textDuration, Math.max(0, textRevealEnd - delay));
       const styleClassName = ' ' + css(style);
       const styleAllText = ' ' + css(style_alltext);
       if (isConcatPrefix) {
@@ -173,7 +177,7 @@ export default function IMSSTextbox(props: ITextboxProps) {
             styles.TextBox_textElement_start,
           )}${readTextClassName} Textelement_start`}
           key={currentDialogKey + index}
-          style={{ animationDelay: `${delay}ms`, animationDuration: `${textDuration}ms`, position: 'relative' }}
+          style={{ animationDelay: `${delay}ms`, animationDuration: `${duration}ms`, position: 'relative' }}
         >
           <span className={styles.zhanwei + styleAllText}>
             {e}

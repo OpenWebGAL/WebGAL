@@ -2,7 +2,7 @@ import { ReactNode, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import { useFontFamily } from '@/hooks/useFontFamily';
-import { useTextAnimationDuration, useTextDelay } from '@/hooks/useTextOptions';
+import { getTextLineLimit, useTextAnimationDuration, useTextDelay } from '@/hooks/useTextOptions';
 import { getTextSize } from '@/UI/getTextSize';
 import { match } from '@/Core/util/match';
 import { textSize } from '@/store/userDataInterface';
@@ -37,14 +37,7 @@ export const TextBox = () => {
     size = getTextSize(stageState.showTextSize) + '%';
     textSizeState = stageState.showTextSize;
   }
-  const MaxTextLine = Number(userDataState.globalGameVar.Max_line); // congfig定义字体行数
-  const lineLimit = Number.isNaN(MaxTextLine)
-    ? match(textSizeState)
-        .with(textSize.small, () => 3)
-        .with(textSize.medium, () => 2)
-        .with(textSize.large, () => 2)
-        .default(() => 2)
-    : MaxTextLine;
+  const lineLimit = getTextLineLimit(textSizeState, userDataState.globalGameVar.Max_line);
   // 按原始语句分别解析，连续 concat 也不重新合并前面已经显示的节点。
   const { textArray, concatPrefixNodeCount } = concatTextLines(
     getDialogSegments(stageState).map((text) => compileSentence(text, lineLimit, true)),
@@ -106,6 +99,9 @@ export const TextBox = () => {
       isFirefox={isFirefox}
       miniAvatar={miniAvatar}
       textDuration={textDuration}
+      textRevealEnd={
+        stageState.isDialogNotend ? (textArray.flat().length - concatPrefixNodeCount) * textDelay : undefined
+      }
       font={font}
       textSizeState={textSizeState}
       lineLimit={lineLimit}

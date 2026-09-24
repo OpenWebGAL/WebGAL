@@ -2,7 +2,7 @@ import { ISentence } from '@/Core/controller/scene/sceneInterface';
 import { IPerform } from '@/Core/Modules/perform/performInterface';
 import { playVocal } from './vocal';
 import { webgalStore } from '@/store/store';
-import { useTextAnimationDuration, useTextDelay } from '@/hooks/useTextOptions';
+import { getTextLineLimit, useTextAnimationDuration, useTextDelay } from '@/hooks/useTextOptions';
 import { getRandomPerformName } from '@/Core/Modules/perform/performController';
 import { getBooleanArgByKey, getFigurePositionFromArgs, getStringArgByKey } from '@/Core/util/getSentenceArg';
 import { textSize, voiceOption } from '@/store/userDataInterface';
@@ -12,6 +12,7 @@ import { performMouthAnimation } from '@/Core/gameScripts/vocal/vocalAnimation';
 import { match } from '@/Core/util/match';
 import { stageStateManager } from '@/Core/Modules/stage/stageStateManager';
 import { getDialogSegments } from '@/Core/Modules/stage/dialogText';
+import { concatTextLines } from '@/Stage/TextBox/concatTextLines';
 
 /**
  * 进行普通对话的显示
@@ -45,6 +46,7 @@ export const say = (sentence: ISentence): IPerform => {
   // 设置文本显示
   stageStateManager.setStage('showText', dialogToShow);
   stageStateManager.setStage('currentDialogSegments', dialogSegments);
+  stageStateManager.setStage('isDialogNotend', isNotend);
   WebGAL.flowchartManager.requestUnlockCurrentScene();
   stageStateManager.setStage('vocal', '');
 
@@ -129,19 +131,30 @@ export const say = (sentence: ISentence): IPerform => {
   if (vocal) {
     WebGAL.gameplay.performController.arrangeNewPerform(playVocal(sentence), sentence, false);
   }
-  const shouldSimulateVocal = !vocal && (key !== '' || pos !== '');
+  // notend 优先保证文字接续，不启动模拟嘴型，也不为它延长本句。
+  const shouldSimulateVocal = !isNotend && !vocal && (key !== '' || pos !== '');
   const performSimulateVocalDelay = shouldSimulateVocal ? len * 250 : 0;
 
   const performInitName: string = getRandomPerformName();
-  // 渐显也是演出的一部分，演出时长要覆盖到最后一个字渐显完成。
-  // notend 同样如此：推进到下一句会把本句演出推到终态，提前推进会让末尾的字跳变。
-  const endDelay = useTextAnimationDuration(userDataState.optionData.textSpeed);
+  // notend 的尾部渐显收敛到文字排列结束；普通对话保留完整渐显时间。
+  const endDelay = isNotend ? 0 : useTextAnimationDuration(userDataState.optionData.textSpeed);
 
-  return {
+  const perform: IPerform = {
     performName: performInitName,
     duration: sentenceDelay + endDelay + performSimulateVocalDelay,
     isHoldOn: false,
     startFunction: () => {
+      if (isNotend) {
+        // 在 commit 后按实际显示的正文计时，读档重建演出时也使用恢复后的分段。
+        const state = stageStateManager.getViewStageState();
+        const size = state.showTextSize === -1 ? userDataState.optionData.textSize : state.showTextSize;
+        const lineLimit = getTextLineLimit(size, userDataState.globalGameVar.Max_line);
+        const { textArray, concatPrefixNodeCount } = concatTextLines(
+          getDialogSegments(state).map((text) => compileSentence(text, lineLimit, true)),
+          lineLimit,
+        );
+        perform.duration = (textArray.flat().length - concatPrefixNodeCount) * textDelay;
+      }
       if (shouldSimulateVocal) {
         performSimulateVocal();
       }
@@ -157,4 +170,5 @@ export const say = (sentence: ISentence): IPerform => {
     blockingAuto: () => true,
     goNextWhenOver: isNotend,
   };
+  return perform;
 };

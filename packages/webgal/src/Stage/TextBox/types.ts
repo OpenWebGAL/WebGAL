@@ -16,6 +16,7 @@ export interface ITextboxProps {
   isHasName: boolean;
   font: string;
   textDuration: number;
+  textRevealEnd?: number; // 本句渐显的结束时间（毫秒），普通对话不限制
   textSizeState: number;
   lineLimit: number;
   isUseStroke: boolean;

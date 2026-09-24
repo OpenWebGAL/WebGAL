@@ -258,6 +258,7 @@ export interface IStageState {
   // currentPerformDelay:number
   currentConcatDialogPrev: string;
   currentDialogSegments?: string[]; // 按 say 语句保存原文分段，避免 concat 重新合并旧节点；旧存档可能缺省
+  isDialogNotend?: boolean; // notend 的渐显在本句排列结束前完成；旧存档缺省为普通渐显
   // 测试：电影叙事
   enableFilm: string;
   isDisableTextbox: boolean;

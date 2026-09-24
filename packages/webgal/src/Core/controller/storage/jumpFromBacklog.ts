@@ -16,7 +16,7 @@ import { stageStateManager } from '@/Core/Modules/stage/stageStateManager';
  */
 export const restorePerform = (skipAnimation = false) => {
   const stageState = stageStateManager.getCalculationStageState();
-  const { showText, currentConcatDialogPrev, currentDialogSegments, currentDialogKey } = stageState;
+  const { showText, currentConcatDialogPrev, currentDialogSegments, currentDialogKey, isDialogNotend } = stageState;
   const performToRestore = cloneDeep(stageState.PerformList);
   // 清除状态表中演出序列
   stageStateManager.removeAllPerform();
@@ -33,6 +33,8 @@ export const restorePerform = (skipAnimation = false) => {
   stageStateManager.setStage('currentConcatDialogPrev', currentConcatDialogPrev);
   stageStateManager.setStage('currentDialogSegments', currentDialogSegments);
   stageStateManager.setStage('currentDialogKey', currentDialogKey);
+  // 旧存档缺省时沿用重建 say 演出得到的 notend 标记。
+  if (isDialogNotend !== undefined) stageStateManager.setStage('isDialogNotend', isDialogNotend);
   stageStateManager.commit({ applyPixiEffects: false, skipAnimation });
   WebGAL.gameplay.performController.commitPendingPerforms();
   stageStateManager.applyCommittedPixiEffects();
