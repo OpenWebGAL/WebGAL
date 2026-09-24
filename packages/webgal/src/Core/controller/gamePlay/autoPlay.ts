@@ -66,7 +66,11 @@ const autoPlay = () => {
       isBlockingAuto = true;
   });
   if (isBlockingAuto) {
-    // 有阻塞，提前结束
+    // 有阻塞：已定下的翻页依据的是上一句已显示完，现在前提失效，撤销后等阻塞结束重新计时
+    if (WebGAL.gameplay.autoTimeout !== null) {
+      clearTimeout(WebGAL.gameplay.autoTimeout);
+      WebGAL.gameplay.autoTimeout = null;
+    }
     return;
   }
   // nextSentence();

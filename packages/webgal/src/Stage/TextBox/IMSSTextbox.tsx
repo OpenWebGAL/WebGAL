@@ -175,7 +175,7 @@ export default function IMSSTextbox(props: ITextboxProps) {
             styles.TextBox_textElement_start,
           )}${readTextClassName} Textelement_start`}
           key={currentDialogKey + index}
-          style={{ animationDelay: `${delay}ms`, position: 'relative' }}
+          style={{ animationDelay: `${delay}ms`, animationDuration: `${textDuration}ms`, position: 'relative' }}
         >
           <span className={styles.zhanwei + styleAllText}>
             {e}
