@@ -1,5 +1,5 @@
 import styles from './textbox.module.scss';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { WebGAL } from '@/Core/WebGAL';
 import { ITextboxProps } from './types';
 import useApplyStyle from '@/hooks/useApplyStyle';
@@ -16,6 +16,7 @@ export default function IMSSTextbox(props: ITextboxProps) {
     currentDialogKey,
     isRead,
     isText,
+    isPreview = false,
     isSafari,
     isFirefox: boolean,
     fontSize,
@@ -33,12 +34,13 @@ export default function IMSSTextbox(props: ITextboxProps) {
   const applyStyle = useApplyStyle('textbox');
   const readTextClassName = isRead ? ` ${applyStyle('readText', styles.readText)}` : '';
   const readTextInnerClassName = isRead ? ` ${applyStyle('readTextInner', styles.readTextInner)}` : '';
+  const textboxRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    if (isPreview) return;
     function settleText() {
-      const textElements = document.querySelectorAll('.Textelement_start');
-      const textArray = [...textElements];
-      textArray.forEach((e) => {
+      // 只结算本实例的文字，避免剧情演出打断设置页的预览。
+      textboxRef.current?.querySelectorAll('.Textelement_start').forEach((e) => {
         e.className = applyStyle('TextBox_textElement_Settled', styles.TextBox_textElement_Settled);
       });
     }
@@ -47,7 +49,7 @@ export default function IMSSTextbox(props: ITextboxProps) {
     return () => {
       WebGAL.events.textSettle.off(settleText);
     };
-  }, []);
+  }, [isPreview]);
   let allTextIndex = 0;
   const nameElementList = showName.map((line, index) => {
     const textline = line.map((en, index) => {
@@ -213,7 +215,7 @@ export default function IMSSTextbox(props: ITextboxProps) {
   return (
     <>
       {isText && (
-        <div className={styles.TextBox_Container}>
+        <div ref={textboxRef} className={styles.TextBox_Container}>
           <div
             className={
               applyStyle('TextBox_main', styles.TextBox_main) +

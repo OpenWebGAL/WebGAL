@@ -8,6 +8,7 @@ export interface ITextboxProps {
   currentDialogKey: string;
   isRead: boolean;
   isText: boolean;
+  isPreview?: boolean; // 设置预览独立播放，不响应剧情的文字结算
   isSafari: boolean;
   isFirefox: boolean;
   fontSize: string;

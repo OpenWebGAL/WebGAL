@@ -40,12 +40,14 @@ export const TextPreview = (props: any) => {
   const textboxProps = {
     textArray: previewTextArray,
     isText: true,
+    isPreview: true,
     textDelay: textDelay,
     isHasName: isHasName,
     showName: showNameArray,
     concatPrefixNodeCount: 0,
     fontSize: size,
-    currentDialogKey: String(previewKey),
+    // 调速或点击只重播文字，保留文本框和姓名栏。
+    currentDialogKey: `preview-${previewKey}-${textDelay}`,
     isSafari: isSafari,
     isFirefox: isFirefox,
     miniAvatar: '',
@@ -66,7 +68,7 @@ export const TextPreview = (props: any) => {
       }}
       onClick={forcePreviewUpdate}
     >
-      <div key={`previewTextbox-${textDelay}`} className={styles.textbox}>
+      <div className={styles.textbox}>
         <Textbox {...textboxProps} />
       </div>
     </div>
