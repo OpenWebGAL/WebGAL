@@ -10,6 +10,8 @@ import IMSSTextbox from '@/Stage/TextBox/IMSSTextbox';
 import { SCREEN_CONSTANTS } from '@/Core/util/constants';
 import useEscape from '@/hooks/useEscape';
 import { useStageState } from '@/hooks/useStageState';
+import { concatTextLines } from './concatTextLines';
+import { getDialogSegments } from '@/Core/Modules/stage/dialogText';
 
 const userAgent = navigator.userAgent;
 const isFirefox = /firefox/i.test(userAgent);
@@ -43,11 +45,13 @@ export const TextBox = () => {
         .with(textSize.large, () => 2)
         .default(() => 2)
     : MaxTextLine;
-  // 拆字
-  const textArray = compileSentence(stageState.showText, lineLimit);
+  // 按原始语句分别解析，连续 concat 也不重新合并前面已经显示的节点。
+  const { textArray, concatPrefixNodeCount } = concatTextLines(
+    getDialogSegments(stageState).map((text) => compileSentence(text, lineLimit, true)),
+    lineLimit,
+  );
   const isHasName = stageState.showName !== '';
   const showName = compileSentence(stageState.showName, lineLimit);
-  const currentConcatDialogPrev = stageState.currentConcatDialogPrev;
   const currentDialogKey = stageState.currentDialogKey;
   const miniAvatar = stageState.miniAvatar;
   const textboxOpacity = userDataState.optionData.textboxOpacity;
@@ -95,7 +99,7 @@ export const TextBox = () => {
       textDelay={textDelay}
       showName={showName}
       isHasName={isHasName}
-      currentConcatDialogPrev={currentConcatDialogPrev}
+      concatPrefixNodeCount={concatPrefixNodeCount}
       fontSize={size}
       currentDialogKey={currentDialogKey}
       isSafari={isSafari}

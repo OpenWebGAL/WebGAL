@@ -16,6 +16,7 @@ import { stageStateManager } from '@/Core/Modules/stage/stageStateManager';
  */
 export const restorePerform = (skipAnimation = false) => {
   const stageState = stageStateManager.getCalculationStageState();
+  const { showText, currentConcatDialogPrev, currentDialogSegments, currentDialogKey } = stageState;
   const performToRestore = cloneDeep(stageState.PerformList);
   // 清除状态表中演出序列
   stageStateManager.removeAllPerform();
@@ -27,6 +28,11 @@ export const restorePerform = (skipAnimation = false) => {
   } finally {
     WebGAL.gameplay.performController.endCollectingPerforms();
   }
+  // 存档已包含末句正文；重建 say 演出时不能再次追加 concat，也不能丢失原有分段。
+  stageStateManager.setStage('showText', showText);
+  stageStateManager.setStage('currentConcatDialogPrev', currentConcatDialogPrev);
+  stageStateManager.setStage('currentDialogSegments', currentDialogSegments);
+  stageStateManager.setStage('currentDialogKey', currentDialogKey);
   stageStateManager.commit({ applyPixiEffects: false, skipAnimation });
   WebGAL.gameplay.performController.commitPendingPerforms();
   stageStateManager.applyCommittedPixiEffects();

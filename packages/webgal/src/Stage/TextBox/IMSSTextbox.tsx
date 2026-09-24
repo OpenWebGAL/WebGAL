@@ -12,7 +12,7 @@ export default function IMSSTextbox(props: ITextboxProps) {
   const {
     textArray,
     textDelay,
-    currentConcatDialogPrev,
+    concatPrefixNodeCount,
     currentDialogKey,
     isRead,
     isText,
@@ -137,15 +137,13 @@ export default function IMSSTextbox(props: ITextboxProps) {
       // }
       const outerClassName = applyStyle('outer', styles.outer);
       const readTextOuterClassName = isRead ? ` ${applyStyle('readTextOuter', styles.readTextOuter)}` : '';
-      let delay = allTextIndex * textDelay;
-      allTextIndex++;
-      let prevLength = currentConcatDialogPrev.length;
-      if (currentConcatDialogPrev !== '' && allTextIndex >= prevLength) {
-        delay = delay - prevLength * textDelay;
-      }
+      const nodeIndex = allTextIndex++;
+      // concat 继承的前缀直接显示；新接上的字从本句开始重新计算延迟
+      const isConcatPrefix = nodeIndex < concatPrefixNodeCount;
+      const delay = (isConcatPrefix ? nodeIndex : nodeIndex - concatPrefixNodeCount) * textDelay;
       const styleClassName = ' ' + css(style);
       const styleAllText = ' ' + css(style_alltext);
-      if (allTextIndex < prevLength) {
+      if (isConcatPrefix) {
         return (
           <span
             // data-text={e}

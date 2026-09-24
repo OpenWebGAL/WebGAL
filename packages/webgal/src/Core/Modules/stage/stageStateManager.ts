@@ -82,6 +82,7 @@ export const initState: IStageState = {
   live2dBlink: [],
   live2dFocus: [],
   currentConcatDialogPrev: '',
+  currentDialogSegments: [],
   enableFilm: '',
   isDisableTextbox: false,
   replacedUIlable: {},

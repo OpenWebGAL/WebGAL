@@ -3,7 +3,8 @@ import { EnhancedNode } from '@/Stage/TextBox/TextBox';
 export interface ITextboxProps {
   textArray: EnhancedNode[][];
   textDelay: number;
-  currentConcatDialogPrev: string;
+  // concat 继承的前缀所占的渲染节点数（拆字会合并单词与标点，不等于字符串长度）
+  concatPrefixNodeCount: number;
   currentDialogKey: string;
   isRead: boolean;
   isText: boolean;

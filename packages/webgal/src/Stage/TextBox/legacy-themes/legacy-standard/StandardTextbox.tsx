@@ -8,7 +8,7 @@ export default function StandardTextbox(props: ITextboxProps) {
   const {
     textArray,
     textDelay,
-    currentConcatDialogPrev,
+    concatPrefixNodeCount,
     currentDialogKey,
     isText,
     isSafari,
@@ -40,7 +40,7 @@ export default function StandardTextbox(props: ITextboxProps) {
     };
   }, []);
   const nameElementList = showName.map((e, index) => {
-    let prevLength = currentConcatDialogPrev.length;
+    let prevLength = concatPrefixNodeCount;
     if (index < prevLength) {
       return (
         <span key={currentDialogKey + index} className={styles.zhanwei}>
@@ -63,8 +63,8 @@ export default function StandardTextbox(props: ITextboxProps) {
     //   return <br key={`br${index}`} />;
     // }
     let delay = index * textDelay;
-    let prevLength = currentConcatDialogPrev.length;
-    if (currentConcatDialogPrev !== '' && index >= prevLength) {
+    let prevLength = concatPrefixNodeCount;
+    if (index >= prevLength) {
       delay = delay - prevLength * textDelay;
     }
     if (index < prevLength) {

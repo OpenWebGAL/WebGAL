@@ -47,8 +47,14 @@ export const switchAuto = () => {
   }
 };
 
+/**
+ * 是否存在阻塞自动播放的演出
+ */
+const hasBlockingAutoPerform = () => WebGAL.gameplay.performController.performList.some((e) => e.blockingAuto());
+
 export const autoNextSentence = () => {
-  nextSentence();
+  // 两次轮询之间可能出现了新的阻塞，到期时再确认一次
+  if (!hasBlockingAutoPerform()) nextSentence();
   WebGAL.gameplay.autoTimeout = null;
 };
 
@@ -59,13 +65,7 @@ const autoPlay = () => {
   const data = webgalStore.getState().userData.optionData.autoSpeed;
   // 范围为 [250, 1750]
   const autoPlayDelay = 250 + (100 - data) * 15;
-  let isBlockingAuto = false;
-  WebGAL.gameplay.performController.performList.forEach((e) => {
-    if (e.blockingAuto())
-      // 阻塞且没有结束的演出
-      isBlockingAuto = true;
-  });
-  if (isBlockingAuto) {
+  if (hasBlockingAutoPerform()) {
     // 有阻塞：已定下的翻页依据的是上一句已显示完，现在前提失效，撤销后等阻塞结束重新计时
     if (WebGAL.gameplay.autoTimeout !== null) {
       clearTimeout(WebGAL.gameplay.autoTimeout);

@@ -11,6 +11,7 @@ import { compileSentence } from '@/Stage/TextBox/TextBox';
 import { performMouthAnimation } from '@/Core/gameScripts/vocal/vocalAnimation';
 import { match } from '@/Core/util/match';
 import { stageStateManager } from '@/Core/Modules/stage/stageStateManager';
+import { getDialogSegments } from '@/Core/Modules/stage/dialogText';
 
 /**
  * 进行普通对话的显示
@@ -30,6 +31,7 @@ export const say = (sentence: ISentence): IPerform => {
   const speaker = getStringArgByKey(sentence, 'speaker'); // 获取说话者
   const clear = getBooleanArgByKey(sentence, 'clear') ?? false; // 是否清除说话者
   const vocal = getStringArgByKey(sentence, 'vocal'); // 是否播放语音
+  const dialogSegments = isConcat ? [...getDialogSegments(stageState), dialogToShow] : [dialogToShow];
 
   // 如果是concat，那么就继承上一句的key，并且继承上一句对话。
   if (isConcat) {
@@ -42,6 +44,7 @@ export const say = (sentence: ISentence): IPerform => {
 
   // 设置文本显示
   stageStateManager.setStage('showText', dialogToShow);
+  stageStateManager.setStage('currentDialogSegments', dialogSegments);
   WebGAL.flowchartManager.requestUnlockCurrentScene();
   stageStateManager.setStage('vocal', '');
 
