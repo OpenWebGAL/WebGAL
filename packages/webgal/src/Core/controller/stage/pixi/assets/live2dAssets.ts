@@ -27,9 +27,12 @@ export async function loadLive2dResources(url: string, load: LoadDependency): Pr
   const settings = await load<Live2dSettings>(url, 'json');
   const files = settings.FileReferences;
   const resolve = (file: string) => new URL(file, url).href;
-  const textures = await Promise.all(
+  const rawTextures = await Promise.all(
     (files?.Textures ?? settings.textures ?? []).map((file) => load<Texture>(resolve(file), 'texture')),
   );
+  const adaptor = Live2D.createCubism2Texture;
+  const textures = files?.Moc || !adaptor ? rawTextures : rawTextures.map((texture) => adaptor(texture));
+
   const model = files?.Moc ?? settings.model;
   if (model) await load(resolve(model), 'binary');
   // 可选动作损坏不应让本来能显示的模型加载失败；SDK 会在使用时重试。
