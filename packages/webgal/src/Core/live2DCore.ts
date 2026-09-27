@@ -1,3 +1,4 @@
+import { Texture } from 'pixi.js';
 import { installLive2dAssetCache } from './controller/stage/pixi/assets/live2dAssetCache';
 /** 眨眼参数，毫秒 */
 export interface BlinkParam {
@@ -36,6 +37,8 @@ export class Live2DCore {
   public SoundManager: any;
   public Config: any;
 
+  public createCubism2Texture?: (texture: Texture) => Texture;
+
   // 临时记录未初始化前的数据
   // 旧版表情混合模式
   private _legacyExpressionBlendMode = false;
@@ -62,7 +65,7 @@ export class Live2DCore {
           console.warn('live2d plugin load failed');
           return;
         }
-        const { Live2DModel, SoundManager, config, Live2DLoader, ModelSettings } = await import(
+        const { Live2DModel, SoundManager, config, Live2DLoader, ModelSettings, createCubism2Texture } = await import(
           'pixi-live2d-display-webgal'
         );
         installLive2dAssetCache({ Live2DLoader, ModelSettings });
@@ -70,6 +73,7 @@ export class Live2DCore {
         this.SoundManager = SoundManager;
         this.Config = config;
         this.isAvailable = true;
+        this.createCubism2Texture = createCubism2Texture;
         console.log('Live2D plugin load success');
         this.initConfig();
       })

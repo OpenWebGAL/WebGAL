@@ -4993,10 +4993,10 @@ pixi-filters@^4.2.0:
     "@pixi/filter-twist" "4.2.0"
     "@pixi/filter-zoom-blur" "4.2.0"
 
-pixi-live2d-display-webgal@^0.5.12:
-  version "0.5.12"
-  resolved "https://registry.yarnpkg.com/pixi-live2d-display-webgal/-/pixi-live2d-display-webgal-0.5.12.tgz#f920f926e37bacf222c77343782b5b6fc3d209ab"
-  integrity sha512-93UDIM8ducia8zIgVtidqxlDamxlwEK4+ddUnl/8XcEKBinbr2Qlu0bBN9i1f4c5rzX5OPgEKc0DhjlDa7fJVg==
+pixi-live2d-display-webgal@^0.5.16:
+  version "0.5.16"
+  resolved "https://registry.yarnpkg.com/pixi-live2d-display-webgal/-/pixi-live2d-display-webgal-0.5.16.tgz#eddc6a4a478f9fef51fce942d0a21faccc2a7074"
+  integrity sha512-dKKWLHRdC70FUGyo10R0oNtB0fH4q1sCmJxFr3DhHDlUI+rPtsCiGag5PJ8yF6KG9HX+rUpe6R2GrvuHk3N5PA==
   dependencies:
     gh-pages "^4.0.0"
 
