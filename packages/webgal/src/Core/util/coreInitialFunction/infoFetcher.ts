@@ -67,6 +67,11 @@ export const infoFetcher = (url: string): Promise<IGameVar> => {
             const appId = String(res);
             WebGAL.steam.initialize(appId);
           }
+          if (command === 'Cubism_Memory_Reserved_Size_MB') {
+            if (typeof res === 'number') {
+              Live2D.CubismMemoryReservedSize = res;
+            }
+          }
         }
       }
     });
