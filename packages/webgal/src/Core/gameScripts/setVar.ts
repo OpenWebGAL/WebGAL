@@ -12,6 +12,7 @@ import random from 'lodash/random';
 import { getBooleanArgByKey } from '../util/getSentenceArg';
 import { stageStateManager } from '@/Core/Modules/stage/stageStateManager';
 import { WebGAL } from '@/Core/WebGAL';
+import { evaluateExpression, extractVariableNameAndExpression } from '@/Core/controller/gamePlay/expressionEvaluation';
 
 /**
  * 变量的作用域，与查找链一一对应。
@@ -67,7 +68,13 @@ export const setGameVarFromExpression = ({
   if (!normalizedKey) {
     return;
   }
-  setGameVar({ key: normalizedKey, value: resolveSetVarValue(value) }, scope);
+
+  const resolvedValue = resolveSetVarValue(value);
+  if (resolvedValue === undefined) {
+    return;
+  }
+  setGameVar({ key: normalizedKey, value: resolvedValue }, scope);
+
   if (scope === 'global') {
     logger.debug('设置全局变量：', {
       key: normalizedKey,
@@ -95,10 +102,20 @@ export const setGameVarFromExpression = ({
  */
 export const setVar = (sentence: ISentence): IPerform => {
   const scope = resolveVarScope(sentence);
-  if (sentence.content.match(/\s*=\s*/)) {
-    const key = sentence.content.split(/\s*=\s*/)[0];
-    const valExp = sentence.content.split(/\s*=\s*/)[1];
-    setGameVarFromExpression({ key, value: valExp, scope });
+  if (WebGAL.legacyExpressionParser) {
+    if (sentence.content.match(/\s*=\s*/)) {
+      const key = sentence.content.split(/\s*=\s*/)[0];
+      const valExp = sentence.content.split(/\s*=\s*/)[1];
+      setGameVarFromExpression({ key, value: valExp, scope });
+    }
+  } else {
+    const extracted = extractVariableNameAndExpression(sentence.content);
+    if (extracted) {
+      const { variableName, expression } = extracted;
+      setGameVarFromExpression({ key: variableName, value: expression, scope });
+    } else {
+      logger.error(`setVar 语句格式错误，无法提取变量名和表达式: ${sentence.content}`);
+    }
   }
   return createNonePerform();
 };
@@ -107,9 +124,14 @@ type BaseVal = string | number | boolean | undefined;
 
 const hasOwn = (obj: object, key: string) => Object.prototype.hasOwnProperty.call(obj, key);
 
-export function resolveSetVarValue(valExp: string): string | boolean | number {
+export function resolveSetVarValue(valExp: string): string | boolean | number | undefined {
+  if (!WebGAL.legacyExpressionParser) {
+    // 空表达式（如不带返回值的 return）没有求值的必要，直接取空值，避免无谓的求值失败告警
+    return valExp.trim() ? evaluateExpression(valExp) : '';
+  }
+
   if (/^\s*[a-zA-Z_$][\w$]*\s*\(.*\)\s*$/.test(valExp)) {
-    return EvaluateExpression(valExp);
+    return LegacyEvaluateExpression(valExp);
   } else if (valExp.match(/[+\-*\/()]/)) {
     const valExpArr = valExp.split(/([+\-*\/()])/g);
     const valExp2 = valExpArr
@@ -117,7 +139,7 @@ export function resolveSetVarValue(valExp: string): string | boolean | number {
         if (!e.trim().match(/^[a-zA-Z_$][a-zA-Z0-9_.]*$/)) {
           return e;
         }
-        const _r = getValueFromStateElseKey(e.trim(), true);
+        const _r = legacyGetValueFromStateElseKey(e.trim(), true);
         return typeof _r === 'string' ? `'${_r}'` : _r;
       })
       .reduce((pre, curr) => pre + curr, '');
@@ -142,7 +164,7 @@ export function resolveSetVarValue(valExp: string): string | boolean | number {
     if (!isNaN(Number(valExp))) {
       return Number(valExp);
     } else {
-      return getValueFromStateElseKey(valExp, true) ?? '';
+      return legacyGetValueFromStateElseKey(valExp, true) ?? '';
     }
   }
   return '';
@@ -151,7 +173,7 @@ export function resolveSetVarValue(valExp: string): string | boolean | number {
 /**
  * 执行函数
  */
-function EvaluateExpression(val: string) {
+function LegacyEvaluateExpression(val: string) {
   const instance = expression.compile(val);
   return instance({
     random: (...args: any[]) => {
@@ -163,7 +185,7 @@ function EvaluateExpression(val: string) {
 /**
  * 取不到时返回 undefined
  */
-export function getValueFromState(key: string) {
+export function legacyGetValueFromState(key: string) {
   let ret: any;
   const locals = WebGAL.sceneManager.sceneData.currentLocals;
   const stage = stageStateManager.getCalculationStageState();
@@ -187,8 +209,8 @@ export function getValueFromState(key: string) {
 /**
  * 取不到时返回 {key}
  */
-export function getValueFromStateElseKey(key: string, useKeyNameAsReturn = false, quoteString = false) {
-  const valueFromState = getValueFromState(key);
+export function legacyGetValueFromStateElseKey(key: string, useKeyNameAsReturn = false, quoteString = false) {
+  const valueFromState = legacyGetValueFromState(key);
   if (valueFromState === null || valueFromState === undefined) {
     logger.warn('valueFromState result null, key = ' + key);
     if (useKeyNameAsReturn) {
