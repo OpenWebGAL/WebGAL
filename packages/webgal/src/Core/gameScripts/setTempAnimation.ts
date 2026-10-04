@@ -7,6 +7,7 @@ import { applyAnimationEndState, getAnimateDuration } from '@/Core/Modules/anima
 import { WebGAL } from '@/Core/WebGAL';
 import { v4 as uuid } from 'uuid';
 import { generateTimelineObj } from '@/Core/controller/stage/pixi/animations/timeline';
+import { IAnimationV2, normalizeAnimation } from '@/Core/Modules/animations';
 
 /**
  * 设置临时动画
@@ -14,17 +15,7 @@ import { generateTimelineObj } from '@/Core/controller/stage/pixi/animations/tim
  */
 export const setTempAnimation = (sentence: ISentence): IPerform => {
   const animationName = uuid();
-  const animationString = sentence.content;
-  let animationObj;
-  try {
-    animationObj = JSON.parse(animationString);
-  } catch (e) {
-    animationObj = [];
-  }
-  // 传入 relative 或 inherit 时，关键帧数组也按 v2 处理；v2 对象中的对应字段会被覆盖
-  const relative = getBooleanArgByKey(sentence, 'relative');
-  const inherit = getBooleanArgByKey(sentence, 'inherit');
-  WebGAL.animationManager.addAnimation(animationName, animationObj, { relative, inherit });
+  WebGAL.animationManager.addAnimation(animationName, parseTempAnimation(sentence));
   const animationDuration = getAnimateDuration(animationName);
   const target = getStringArgByKey(sentence, 'target') ?? '0';
   const keep = getBooleanArgByKey(sentence, 'keep') ?? false;
@@ -71,3 +62,19 @@ export const setTempAnimation = (sentence: ISentence): IPerform => {
     blockingAuto: () => !keep,
   };
 };
+
+/**
+ * 解析语句中的临时动画。
+ * 传入 relative 或 inherit 时，关键帧数组也按 v2 处理；v2 对象中的对应字段会被覆盖
+ */
+export function parseTempAnimation(sentence: ISentence): IAnimationV2 {
+  let animationObj;
+  try {
+    animationObj = JSON.parse(sentence.content);
+  } catch (e) {
+    animationObj = [];
+  }
+  const relative = getBooleanArgByKey(sentence, 'relative');
+  const inherit = getBooleanArgByKey(sentence, 'inherit');
+  return normalizeAnimation(animationObj, { relative, inherit });
+}

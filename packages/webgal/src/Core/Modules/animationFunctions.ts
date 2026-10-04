@@ -79,6 +79,13 @@ function getAnimationTracks(
   return tracks;
 }
 
+/**
+ * 是否为相对动画。相对动画的结果依赖执行时的舞台状态，重复执行会叠加
+ */
+export function isRelativeAnimation(animationName: string) {
+  return WebGAL.animationManager.getAnimations().find((ani) => ani.name === animationName)?.animation.relative ?? false;
+}
+
 export function getAnimateDuration(animationName: string) {
   const userAnimation = WebGAL.animationManager.getAnimations().find((ani) => ani.name === animationName);
   if (userAnimation) {
