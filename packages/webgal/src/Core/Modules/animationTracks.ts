@@ -7,7 +7,7 @@
 import get from 'lodash/get';
 import set from 'lodash/set';
 import { baseTransform, ITransform } from '@/Core/Modules/stage/stageInterface';
-import { AnimationFrame, IAnimationV2, RelativeCalc } from '@/Core/Modules/animations';
+import { IAnimationV2, Keyframe, RelativeCalc } from '@/Core/Modules/animations';
 
 /**
  * 轨道上的关键点
@@ -85,14 +85,12 @@ function getAnimatedPaths(animation: IAnimationV2, writeFullEffect: boolean): st
 function buildTrackPoints(animation: IAnimationV2, path: string, baseValue: number): ITrackPoint[] {
   const calc = getRelativeCalc(animation, path);
   const points: ITrackPoint[] = [];
-  let time = 0;
   for (const frame of animation.keyframes) {
-    time += frame.duration;
     if (hasValue(frame, path)) {
-      points.push({ time, value: applyRelativeCalc(calc, baseValue, get(frame, path)), ease: frame.ease });
+      points.push({ time: frame.time, value: applyRelativeCalc(calc, baseValue, get(frame, path)), ease: frame.ease });
     } else if (!animation.inherit) {
       // 不继承时，关键帧中未指定的属性取当前基准状态；继承时直接跳过，由前后关键帧插值
-      points.push({ time, value: baseValue, ease: frame.ease });
+      points.push({ time: frame.time, value: baseValue, ease: frame.ease });
     }
   }
   // 第一个关键帧之前：v2 从当前基准状态过渡到第一个关键帧；
@@ -125,7 +123,7 @@ function applyRelativeCalc(calc: RelativeCalc, baseValue: number, frameValue: nu
   }
 }
 
-function hasValue(frame: AnimationFrame, path: string): boolean {
+function hasValue(frame: Keyframe, path: string): boolean {
   return typeof get(frame, path) === 'number';
 }
 

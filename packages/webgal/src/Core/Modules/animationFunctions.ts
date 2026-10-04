@@ -89,11 +89,9 @@ export function isRelativeAnimation(animationName: string) {
 export function getAnimateDuration(animationName: string) {
   const userAnimation = WebGAL.animationManager.getAnimations().find((ani) => ani.name === animationName);
   if (userAnimation) {
-    let duration = 0;
-    userAnimation.animation.keyframes.forEach((frame) => {
-      duration += frame.duration;
-    });
-    return duration;
+    // 关键帧已按时间排序，最后一帧的时间就是动画时长
+    const keyframes = userAnimation.animation.keyframes;
+    return keyframes.length > 0 ? keyframes[keyframes.length - 1].time : 0;
   }
   return 0;
 }

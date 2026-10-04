@@ -7,7 +7,7 @@ import { applyAnimationEndState, getAnimateDuration } from '@/Core/Modules/anima
 import { WebGAL } from '@/Core/WebGAL';
 import { v4 as uuid } from 'uuid';
 import { generateTimelineObj } from '@/Core/controller/stage/pixi/animations/timeline';
-import { IAnimationV2, normalizeAnimation } from '@/Core/Modules/animations';
+import { IAnimationOverrides, IAnimationV2, normalizeAnimation } from '@/Core/Modules/animations';
 
 /**
  * 设置临时动画
@@ -15,7 +15,8 @@ import { IAnimationV2, normalizeAnimation } from '@/Core/Modules/animations';
  */
 export const setTempAnimation = (sentence: ISentence): IPerform => {
   const animationName = uuid();
-  WebGAL.animationManager.addAnimation(animationName, parseTempAnimation(sentence));
+  const { rawAnimation, overrides } = readTempAnimation(sentence);
+  WebGAL.animationManager.addAnimation(animationName, rawAnimation, overrides);
   const animationDuration = getAnimateDuration(animationName);
   const target = getStringArgByKey(sentence, 'target') ?? '0';
   const keep = getBooleanArgByKey(sentence, 'keep') ?? false;
@@ -64,17 +65,25 @@ export const setTempAnimation = (sentence: ISentence): IPerform => {
 };
 
 /**
- * 解析语句中的临时动画。
- * 传入 relative 或 inherit 时，关键帧数组也按 v2 处理；v2 对象中的对应字段会被覆盖
+ * 解析语句中的临时动画，规则与 setTempAnimation 注册动画时相同
  */
 export function parseTempAnimation(sentence: ISentence): IAnimationV2 {
-  let animationObj;
+  const { rawAnimation, overrides } = readTempAnimation(sentence);
+  return normalizeAnimation(rawAnimation, overrides);
+}
+
+/**
+ * 读取语句中的动画 JSON 与 relative、inherit 参数。
+ * 传入 relative 或 inherit 时，关键帧数组也按 v2 处理；v2 对象中的对应字段会被覆盖
+ */
+function readTempAnimation(sentence: ISentence): { rawAnimation: unknown; overrides: IAnimationOverrides } {
+  let rawAnimation;
   try {
-    animationObj = JSON.parse(sentence.content);
+    rawAnimation = JSON.parse(sentence.content);
   } catch (e) {
-    animationObj = [];
+    rawAnimation = [];
   }
   const relative = getBooleanArgByKey(sentence, 'relative');
   const inherit = getBooleanArgByKey(sentence, 'inherit');
-  return normalizeAnimation(animationObj, { relative, inherit });
+  return { rawAnimation, overrides: { relative, inherit } };
 }

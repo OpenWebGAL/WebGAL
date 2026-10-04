@@ -5,11 +5,11 @@
   },
   "keyframes": [
     {
-      "duration": 0,
+      "time": 0,
       "alpha": 0
     },
     {
-      "duration": 300,
+      "time": 300,
       "alpha": 1
     }
   ]

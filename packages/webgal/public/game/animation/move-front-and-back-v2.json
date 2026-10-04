@@ -2,14 +2,14 @@
   "version": 2,
   "keyframes": [
     {
-      "duration": 500,
+      "time": 500,
       "scale": {
         "x": 1.15,
         "y": 1.15
       }
     },
     {
-      "duration": 500,
+      "time": 1000,
       "scale": {
         "x": 1,
         "y": 1

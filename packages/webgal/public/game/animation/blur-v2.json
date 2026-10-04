@@ -2,7 +2,7 @@
   "version": 2,
   "keyframes": [
     {
-      "duration": 300,
+      "time": 300,
       "blur": 5
     }
   ]

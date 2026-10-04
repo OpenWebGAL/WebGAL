@@ -5,7 +5,7 @@
   },
   "keyframes": [
     {
-      "duration": 0,
+      "time": 0,
       "alpha": 0,
       "position": {
         "y": 50
@@ -13,7 +13,7 @@
       "blur": 5
     },
     {
-      "duration": 500,
+      "time": 500,
       "alpha": 1,
       "position": {
         "y": 0

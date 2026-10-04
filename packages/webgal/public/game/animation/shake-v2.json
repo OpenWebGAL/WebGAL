@@ -2,21 +2,21 @@
   "version": 2,
   "keyframes": [
     {
-      "duration": 250,
+      "time": 250,
       "position": {
         "x": -100
       },
       "ease": "easeOut"
     },
     {
-      "duration": 500,
+      "time": 750,
       "position": {
         "x": 100
       },
       "ease": "easeInOut"
     },
     {
-      "duration": 250,
+      "time": 1000,
       "position": {
         "x": 0
       },

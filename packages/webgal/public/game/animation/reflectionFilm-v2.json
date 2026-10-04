@@ -2,7 +2,7 @@
   "version": 2,
   "keyframes": [
     {
-      "duration": 0,
+      "time": 0,
       "reflectionFilm": 1
     }
   ]
