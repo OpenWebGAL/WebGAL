@@ -135,7 +135,10 @@ export interface SeekAnimationPayload {
   target: string;
   animation: JsonValue;
   time: number;
-  /** 动画开始前目标的状态，与默认变换合并后作为当前基准状态；缺省时取目标在演算状态中的变换 */
+  /**
+   * 动画开始前目标的状态，与默认变换合并后作为当前基准状态。
+   * 缺省时取带 transformBaselineRevision 的 sync-scene 记录的目标语句执行前的变换，再缺省时取演算状态中的变换
+   */
   baseTransform?: Transform;
 }
 

@@ -447,7 +447,7 @@ export const startPreviewSyncRuntime = () => {
       return {};
     },
     'preview.command.seek-animation': (payload: SeekAnimationPayload) => {
-      seekAnimationPreview(payload);
+      seekAnimationPreview(payload, targetTransformBaselines.getReadyTransformBaselineOverride(payload.target));
       return {};
     },
   };
