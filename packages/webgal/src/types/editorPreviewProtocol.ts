@@ -127,6 +127,16 @@ export interface SetEffectPayload {
   phase?: SetEffectPhase;
 }
 
+/**
+ * 把动画在 time 时刻的状态写入目标，仅用于预览，不写入舞台状态。
+ * animation 为动画 JSON（v1 关键帧数组或 v2 对象），以目标的当前变换为基准状态
+ */
+export interface SeekAnimationPayload {
+  target: string;
+  animation: JsonValue;
+  time: number;
+}
+
 export interface SetFontOptimizationPayload {
   enabled: boolean;
 }
@@ -194,6 +204,7 @@ export const PREVIEW_COMMAND_PAYLOADS = definePayloadMap({
   'preview.command.set-component-visibility': payload<SetComponentVisibilityPayload>(),
   'preview.command.set-font-optimization': payload<SetFontOptimizationPayload>(),
   'preview.command.set-text-read-mode': payload<SetTextReadModePayload>(),
+  'preview.command.seek-animation': payload<SeekAnimationPayload>(),
 });
 
 export type PreviewCommandPayloadByType = typeof PREVIEW_COMMAND_PAYLOADS;

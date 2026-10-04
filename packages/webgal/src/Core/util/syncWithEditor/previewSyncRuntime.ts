@@ -20,6 +20,7 @@ import type {
   RequestEnvelopeByType,
   RunSceneContentPayload,
   RunSnippetPayload,
+  SeekAnimationPayload,
   SetComponentVisibilityPayload,
   SetEffectPayload,
   SetFontOptimizationPayload,
@@ -51,6 +52,7 @@ import { executePreviewSyncSceneCommand } from './runtime/previewSyncSceneComman
 import { setDebugTextReadMode } from '@/Core/Modules/readHistory';
 import { applyPreviewDebugVariables } from './runtime/previewDebugVariables';
 import { handleReferenceBoxQuery } from './runtime/handlers/referenceBoxQueryHandler';
+import { seekAnimationPreview } from './runtime/previewSeekAnimation';
 import {
   cloneBaseTransform,
   createTargetTransformBaselineManager,
@@ -342,11 +344,18 @@ export const startPreviewSyncRuntime = () => {
     });
   };
 
-  const handleReloadTemplates = () => {
+  /**
+   * 隐藏“点击屏幕开始”的落地页，与 sync-scene 一致
+   */
+  const hideTitleEnter = () => {
     const title = document.querySelector('.html-body__title-enter') as HTMLElement | null;
     if (title) {
       title.style.display = 'none';
     }
+  };
+
+  const handleReloadTemplates = () => {
+    hideTitleEnter();
     WebGAL.events.styleUpdate.emit();
   };
 
@@ -361,8 +370,10 @@ export const startPreviewSyncRuntime = () => {
       showMenuPanel: false,
       showFlowchart: false,
       isEnterGame: true,
+      isShowLogo: false,
       showPanicOverlay: false,
     });
+    hideTitleEnter();
     // 暂留旧版等待：resetStage 不清除进行中的场景写入锁，立即推进可能被 preForward 拦截。
     // 100ms 不保证解锁；替换前需处理旧加载结果失效和解锁后的推进，避免覆盖新预览。
     setTimeout(() => {
@@ -433,6 +444,10 @@ export const startPreviewSyncRuntime = () => {
     },
     'preview.command.set-text-read-mode': (payload: SetTextReadModePayload) => {
       handleSetTextReadMode(payload);
+      return {};
+    },
+    'preview.command.seek-animation': (payload: SeekAnimationPayload) => {
+      seekAnimationPreview(payload);
       return {};
     },
   };

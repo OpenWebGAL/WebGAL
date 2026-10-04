@@ -73,7 +73,7 @@ export function generateTimelineObj(tracks: IAnimationTrack[], targetKey: string
 /**
  * 取轨道在 time 时刻的值
  */
-function sampleTrack(points: ITrackPoint[], time: number): number {
+export function sampleTrack(points: ITrackPoint[], time: number): number {
   // 本区间的插值终点：第一个晚于 time 的关键点
   const nextIndex = points.findIndex((point) => point.time > time);
   // 在最后一个关键点之后：保持最后的值
