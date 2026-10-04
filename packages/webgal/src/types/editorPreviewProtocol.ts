@@ -129,12 +129,14 @@ export interface SetEffectPayload {
 
 /**
  * 把动画在 time 时刻的状态写入目标，仅用于预览，不写入舞台状态。
- * animation 为动画 JSON（v1 关键帧数组或 v2 对象），以目标的当前变换为基准状态
+ * animation 为动画 JSON（v1 关键帧数组或 v2 对象）
  */
 export interface SeekAnimationPayload {
   target: string;
   animation: JsonValue;
   time: number;
+  /** 动画开始前目标的状态，与默认变换合并后作为当前基准状态；缺省时取目标在演算状态中的变换 */
+  baseTransform?: Transform;
 }
 
 export interface SetFontOptimizationPayload {
