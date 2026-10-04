@@ -1,0 +1,15 @@
+{
+  "version": 2,
+  "keyframes": [
+    {
+      "duration": 0,
+      "shockwaveFilter": 0,
+      "radiusAlphaFilter": 0
+    },
+    {
+      "duration": 2000,
+      "shockwaveFilter": 3.05,
+      "radiusAlphaFilter": 1.05
+    }
+  ]
+}

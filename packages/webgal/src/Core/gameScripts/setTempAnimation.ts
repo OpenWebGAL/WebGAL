@@ -3,7 +3,6 @@ import { IPerform } from '@/Core/Modules/perform/performInterface';
 import { getBooleanArgByKey, getStringArgByKey, resolveTransformArgs } from '@/Core/util/getSentenceArg';
 import { IAnimationObject } from '@/Core/controller/stage/pixi/PixiController';
 import { logger } from '@/Core/util/logger';
-import { IUserAnimation } from '../Modules/animations';
 import { applyAnimationEndState, getAnimateDuration } from '@/Core/Modules/animationFunctions';
 import { WebGAL } from '@/Core/WebGAL';
 import { v4 as uuid } from 'uuid';
@@ -22,8 +21,10 @@ export const setTempAnimation = (sentence: ISentence): IPerform => {
   } catch (e) {
     animationObj = [];
   }
-  const newAnimation: IUserAnimation = { name: animationName, effects: animationObj };
-  WebGAL.animationManager.addAnimation(newAnimation);
+  // 传入 relative 或 inherit 时，关键帧数组也按 v2 处理；v2 对象中的对应字段会被覆盖
+  const relative = getBooleanArgByKey(sentence, 'relative');
+  const inherit = getBooleanArgByKey(sentence, 'inherit');
+  WebGAL.animationManager.addAnimation(animationName, animationObj, { relative, inherit });
   const animationDuration = getAnimateDuration(animationName);
   const target = getStringArgByKey(sentence, 'target') ?? '0';
   const keep = getBooleanArgByKey(sentence, 'keep') ?? false;

@@ -1,0 +1,26 @@
+{
+  "version": 2,
+  "keyframes": [
+    {
+      "duration": 250,
+      "position": {
+        "x": -100
+      },
+      "ease": "easeOut"
+    },
+    {
+      "duration": 500,
+      "position": {
+        "x": 100
+      },
+      "ease": "easeInOut"
+    },
+    {
+      "duration": 250,
+      "position": {
+        "x": 0
+      },
+      "ease": "easeIn"
+    }
+  ]
+}

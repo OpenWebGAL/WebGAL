@@ -1,0 +1,9 @@
+{
+  "version": 2,
+  "keyframes": [
+    {
+      "duration": 300,
+      "alpha": 0
+    }
+  ]
+}
