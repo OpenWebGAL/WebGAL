@@ -8,7 +8,7 @@ import {
 } from '@/Core/util/getSentenceArg';
 import { IAnimationObject } from '@/Core/controller/stage/pixi/PixiController';
 import { logger } from '@/Core/util/logger';
-import { AnimationFrame, IUserAnimation } from '../Modules/animations';
+import { AnimationFrame } from '../Modules/animations';
 import { generateTransformAnimationObj } from '@/Core/controller/stage/pixi/animations/generateTransformAnimationObj';
 import { WebGAL } from '@/Core/WebGAL';
 import { applyAnimationEndState, getAnimateDuration } from '../Modules/animationFunctions';
@@ -43,8 +43,7 @@ export const setTransform = (sentence: ISentence): IPerform => {
     animationObj = [];
   }
 
-  const newAnimation: IUserAnimation = { name: animationName, effects: animationObj };
-  WebGAL.animationManager.addAnimation(newAnimation);
+  WebGAL.animationManager.addAnimation(animationName, animationObj);
   const animationDuration = getAnimateDuration(animationName);
   const animationTimeline = applyAnimationEndState(animationName, target, writeDefault, writeFullEffect);
   const key = `${target}-${animationName}-${animationDuration}`;

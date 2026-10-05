@@ -9,7 +9,7 @@ import {
   getStringArgByKey,
 } from '@/Core/util/getSentenceArg';
 import { figureStateKeyByPosition, IFreeFigure, normalizeFigureBounds } from '@/Core/Modules/stage/stageInterface';
-import { AnimationFrame, IUserAnimation } from '@/Core/Modules/animations';
+import { AnimationFrame } from '@/Core/Modules/animations';
 import { generateTransformAnimationObj } from '@/Core/controller/stage/pixi/animations/generateTransformAnimationObj';
 import { generateTimelineObj } from '@/Core/controller/stage/pixi/animations/timeline';
 import { logger } from '@/Core/util/logger';
@@ -136,8 +136,7 @@ export function changeFigure(sentence: ISentence): IPerform {
       // 因为是切换，必须把一开始的 alpha 改为 0
       animationObj[0].alpha = 0;
       const animationName = (Math.random() * 10).toString(16);
-      const newAnimation: IUserAnimation = { name: animationName, effects: animationObj };
-      WebGAL.animationManager.addAnimation(newAnimation);
+      WebGAL.animationManager.addAnimation(animationName, animationObj);
       duration = getAnimateDuration(animationName);
       stageStateManager.updateAnimationSettings({ target: key, key: 'enterAnimationName', value: animationName });
     }

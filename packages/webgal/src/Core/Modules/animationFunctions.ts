@@ -1,16 +1,16 @@
 import { logger } from '@/Core/util/logger';
 import { generateUniversalSoftOffAnimationObj } from '@/Core/controller/stage/pixi/animations/universalSoftOff';
-import cloneDeep from 'lodash/cloneDeep';
-import { baseTransform } from '@/Core/Modules/stage/stageInterface';
-import { generateTimelineObj } from '@/Core/controller/stage/pixi/animations/timeline';
+import { baseTransform, ITransform } from '@/Core/Modules/stage/stageInterface';
+import { generateTimelineObj, readContainerTransform } from '@/Core/controller/stage/pixi/animations/timeline';
 import { WebGAL } from '@/Core/WebGAL';
-import PixiStage, { IAnimationObject } from '@/Core/controller/stage/pixi/PixiController';
-import { IUserAnimation } from './animations';
-import { pickBy } from 'lodash';
+import { IAnimationObject } from '@/Core/controller/stage/pixi/PixiController';
 import { DEFAULT_BG_OUT_DURATION, DEFAULT_FIG_OUT_DURATION } from '../constants';
 import { stageStateManager } from '@/Core/Modules/stage/stageStateManager';
-import { AnimationFrame } from '@/Core/Modules/animations';
+import { buildAnimationTracks, getTracksEndState, IAnimationTrack } from '@/Core/Modules/animationTracks';
 
+/**
+ * 生成动画对象。目前只用于退出动画：退场的舞台对象在演算状态中已没有变换记录，因此从容器读取它的当前状态
+ */
 // eslint-disable-next-line max-params
 export function getAnimationObject(
   animationName: string,
@@ -19,80 +19,79 @@ export function getAnimationObject(
   writeDefault: boolean,
   writeFullEffect = true,
 ) {
-  const mappedEffects = getAnimationTimeline(animationName, target, writeDefault, writeFullEffect);
-  if (mappedEffects) {
-    return generateTimelineObj(mappedEffects, target, duration);
+  const container = WebGAL.gameplay.pixiStage?.getStageObjByKey(target)?.pixiContainer;
+  const currentTransform = container ? readContainerTransform(container) : baseTransform;
+  const tracks = getAnimationTracks(animationName, currentTransform, writeDefault, writeFullEffect);
+  if (tracks) {
+    return generateTimelineObj(tracks, target, duration);
   }
   return null;
 }
 
+/**
+ * 在演算期把动画终态写入 effects，并返回动画轨道供演出播放
+ */
 export function applyAnimationEndState(
   animationName: string,
   target: string,
   writeDefault: boolean,
   writeFullEffect = true,
 ) {
-  const mappedEffects = getAnimationTimeline(animationName, target, writeDefault, writeFullEffect);
-  if (!mappedEffects || mappedEffects.length === 0) return null;
-  const { duration, ease, ...endState } = mappedEffects[mappedEffects.length - 1];
-  stageStateManager.updateEffect({ target, transform: endState });
-  return mappedEffects;
+  const tracks = getAnimationTimeline(animationName, target, writeDefault, writeFullEffect);
+  if (!tracks || tracks.length === 0) return null;
+  stageStateManager.updateEffect({ target, transform: getTracksEndState(tracks) });
+  return tracks;
 }
 
+/**
+ * 以演算状态中目标的当前变换为起点，生成动画轨道
+ */
 export function getAnimationTimeline(
   animationName: string,
   target: string,
   writeDefault: boolean,
   writeFullEffect = true,
-): AnimationFrame[] | null {
-  const effect = WebGAL.animationManager.getAnimations().find((ani) => ani.name === animationName);
-  if (effect) {
-    const unionKeys = new Set<string>();
-    const unionScaleKeys = new Set<string>();
-    const unionPositionKeys = new Set<string>();
-    if (!writeFullEffect) {
-      effect.effects.forEach((effect) => {
-        Object.keys(effect).forEach((k) => unionKeys.add(k));
-        if (effect.scale) Object.keys(effect.scale).forEach((k) => unionScaleKeys.add(k));
-        if (effect.position) Object.keys(effect.position).forEach((k) => unionPositionKeys.add(k));
-      });
-    }
-    const mappedEffects = effect.effects.map((effect) => {
-      const targetSetEffect = stageStateManager.getCalculationStageState().effects.find((e) => e.target === target);
-      const sourceTransform =
-        !writeDefault && targetSetEffect && targetSetEffect.transform ? targetSetEffect.transform : baseTransform;
-      let newEffect;
+): IAnimationTrack[] | null {
+  const targetEffect = stageStateManager.getCalculationStageState().effects.find((e) => e.target === target);
+  const currentTransform = targetEffect?.transform ?? baseTransform;
+  return getAnimationTracks(animationName, currentTransform, writeDefault, writeFullEffect);
+}
 
-      if (writeFullEffect) {
-        newEffect = cloneDeep({ ...sourceTransform, duration: 0, ease: '' });
-      } else {
-        const targetScale = pickBy(sourceTransform.scale || {}, (source, key) => unionScaleKeys.has(key));
-        const targetPosition = pickBy(sourceTransform.position || {}, (s, key) => unionPositionKeys.has(key));
-        const originalTransform = { ...pickBy(sourceTransform, (source, key) => unionKeys.has(key)) };
-        if (unionScaleKeys.size > 0) originalTransform.scale = targetScale;
-        if (unionPositionKeys.size > 0) originalTransform.position = targetPosition;
-        newEffect = cloneDeep({ ...originalTransform, duration: 0, ease: '' });
-      }
+/**
+ * @param currentTransform 动画开始前目标的变换
+ * @param writeDefault 为 true 时以 baseTransform 为当前基准状态（transformFrom=default）
+ * @param writeFullEffect v1 动画中未涉及的属性是否也写入基准状态
+ */
+// eslint-disable-next-line max-params
+function getAnimationTracks(
+  animationName: string,
+  currentTransform: ITransform,
+  writeDefault: boolean,
+  writeFullEffect: boolean,
+): IAnimationTrack[] | null {
+  const userAnimation = WebGAL.animationManager.getAnimations().find((ani) => ani.name === animationName);
+  if (!userAnimation) return null;
+  const tracks = buildAnimationTracks(userAnimation.animation, {
+    base: writeDefault ? baseTransform : currentTransform,
+    writeFullEffect,
+  });
+  logger.debug('装载自定义动画', tracks);
+  return tracks;
+}
 
-      PixiStage.assignTransform(newEffect, effect, false);
-      newEffect.duration = effect.duration;
-      newEffect.ease = effect.ease;
-      return newEffect;
-    });
-    logger.debug('装载自定义动画', mappedEffects);
-    return mappedEffects;
-  }
-  return null;
+/**
+ * 是否为相对动画。相对动画的结果依赖执行时的舞台状态，重复执行会叠加
+ */
+export function isRelativeAnimation(animationName: string) {
+  return WebGAL.animationManager.getAnimations().find((ani) => ani.name === animationName)?.animation.relative ?? false;
 }
 
 export function getAnimateDuration(animationName: string) {
-  const effect = WebGAL.animationManager.getAnimations().find((ani) => ani.name === animationName);
-  if (effect) {
-    let duration = 0;
-    effect.effects.forEach((e) => {
-      duration += e.duration;
-    });
-    return duration;
+  const userAnimation = WebGAL.animationManager.getAnimations().find((ani) => ani.name === animationName);
+  if (userAnimation) {
+    // 关键帧已按时间排序，最后一帧的时间就是动画时长
+    const keyframes = userAnimation.animation.keyframes;
+    return keyframes.length > 0 ? keyframes[keyframes.length - 1].time : 0;
   }
   return 0;
 }

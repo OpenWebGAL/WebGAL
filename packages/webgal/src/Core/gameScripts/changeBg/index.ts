@@ -9,7 +9,7 @@ import { logger } from '@/Core/util/logger';
 import { ITransform } from '@/Core/Modules/stage/stageInterface';
 import { generateTransformAnimationObj } from '@/Core/controller/stage/pixi/animations/generateTransformAnimationObj';
 import { generateTimelineObj } from '@/Core/controller/stage/pixi/animations/timeline';
-import { AnimationFrame, IUserAnimation } from '@/Core/Modules/animations';
+import { AnimationFrame } from '@/Core/Modules/animations';
 import cloneDeep from 'lodash/cloneDeep';
 import { applyAnimationEndState, getAnimateDuration } from '@/Core/Modules/animationFunctions';
 import { WebGAL } from '@/Core/WebGAL';
@@ -72,8 +72,7 @@ export const changeBg = (sentence: ISentence): IPerform => {
     // 因为是切换，必须把一开始的 alpha 改为 0
     animationObj[0].alpha = 0;
     const animationName = (Math.random() * 10).toString(16);
-    const newAnimation: IUserAnimation = { name: animationName, effects: animationObj };
-    WebGAL.animationManager.addAnimation(newAnimation);
+    WebGAL.animationManager.addAnimation(animationName, animationObj);
     duration = getAnimateDuration(animationName);
     stageStateManager.updateAnimationSettings({ target: 'bg-main', key: 'enterAnimationName', value: animationName });
   }
