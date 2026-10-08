@@ -10,9 +10,43 @@ import cloneDeep from 'lodash/cloneDeep';
 
 import { WebGAL } from '@/Core/WebGAL';
 import { stageStateManager } from '@/Core/Modules/stage/stageStateManager';
-import { commandType } from '@/Core/controller/scene/sceneInterface';
+import { commandType, ISentence } from '@/Core/controller/scene/sceneInterface';
 import { getBooleanArgByKey } from '@/Core/util/getSentenceArg';
 import { createSayPerform } from '@/Core/gameScripts/say/createSayPerform';
+import { parseTempAnimation } from '@/Core/gameScripts/setTempAnimation';
+import { isRelativeAnimation } from '@/Core/Modules/animationFunctions';
+
+/**
+ * 恢复演出的方式：
+ * - rerun：重新执行语句（默认）
+ * - rebuildSayPerform：只重建对话演出，不重新执行语句
+ * - skip：不恢复
+ */
+type RestoreMode = 'rerun' | 'rebuildSayPerform' | 'skip';
+
+/**
+ * 需要特殊处理的语句，以及如何处理。不在表中的语句按 rerun 处理
+ */
+const specialRestoreScripts: Array<{ isMatch: (script: ISentence) => boolean; mode: RestoreMode }> = [
+  // 正文和分段已经在存档中，只重建演出，不能重跑 say 再追加一次 concat
+  {
+    isMatch: (script) => script.command === commandType.say,
+    mode: 'rebuildSayPerform',
+  },
+  // 存档已保存了动画执行后的舞台状态，相对动画重新执行会在此基础上再叠加一次，因此不重播
+  {
+    isMatch: (script) => script.command === commandType.setTempAnimation && parseTempAnimation(script).relative,
+    mode: 'skip',
+  },
+  {
+    isMatch: (script) => script.command === commandType.setAnimation && isRelativeAnimation(script.content),
+    mode: 'skip',
+  },
+];
+
+function getRestoreMode(script: ISentence): RestoreMode {
+  return specialRestoreScripts.find((item) => item.isMatch(script))?.mode ?? 'rerun';
+}
 
 /**
  * 恢复演出
@@ -25,8 +59,11 @@ export const restorePerform = (skipAnimation = false) => {
   WebGAL.gameplay.performController.beginCollectingPerforms();
   try {
     performToRestore.forEach((e) => {
-      if (e.script.command === commandType.say) {
-        // 正文和分段已经在存档中，只重建演出，不能重跑 say 再追加一次 concat。
+      const restoreMode = getRestoreMode(e.script);
+      if (restoreMode === 'skip') {
+        return;
+      }
+      if (restoreMode === 'rebuildSayPerform') {
         if (stageState.isDialogNotend === undefined) {
           stageStateManager.setStage('isDialogNotend', getBooleanArgByKey(e.script, 'notend') ?? false);
         }

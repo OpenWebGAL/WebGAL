@@ -8,25 +8,13 @@
 
 #### 新功能
 
-新增立绘差分切换。用于为立绘更换表情等差分。执行此指令时，位置、效果和层级都保持不变，尺寸相同的图片之间会平滑过渡。
+新增新版动画格式。动画可以基于立绘或背景的当前状态进行变换，关键帧中未设置的属性会沿用之前关键帧的值。同时新增一组以 -v2 结尾、基于当前状态执行的内置动画。
 
-设置变换与动画时，可以选择从立绘当前的状态开始，还是从默认状态开始。
-
-优化资源的预加载与缓存，切换背景和立绘更加流畅。
+新增 Live2D 内存预留设置，可在游戏配置中调整 Live2D 预先分配的内存大小。
 
 #### 修复
 
-修复自动播放时，等待之后接续的对话会瞬间全部显示，以及等待时间被提前结束的问题。
-
-修复对话最后几个字还在渐显时突然全部显示的问题。文字速度设置现在也会影响每个字渐显的快慢。
-
-修复接续的对话中包含英文或标点时，文字显示异常的问题。
-
-修复设置页中的文字速度预览可能被正在进行的剧情打断的问题。
-
-修复在图形化编辑器中调整效果时，实时预览中的立绘可能丢失缩放、滤镜等效果的问题。
-
-修复资源较多的长场景加载缓慢的问题。
+修复部分 Cubism 2 立绘显示错乱的问题。
 
 <!-- English Translation -->
 ## Release Notes
@@ -39,25 +27,13 @@
 
 #### New Features
 
-Added figure variant switching, which changes a figure's variant, such as its expression. When this command runs, the figure's position, effects, and layer stay the same, and images of the same size blend smoothly.
+Added a new animation format. Animations can now transform figures or backgrounds relative to their current state, and properties not set in a keyframe carry over values from previous keyframes. Also added a set of built-in animations ending in -v2 that run from the current state.
 
-When setting transforms and animations, you can now choose whether to start from the figure's current state or from the default state.
-
-Improved resource preloading and caching, so switching backgrounds and figures is smoother.
+Added a Live2D memory reservation setting, which lets you adjust how much memory Live2D allocates in advance in the game config.
 
 #### Fixes
 
-Fixed continued dialogue appearing all at once after a wait during auto-play, and the wait ending early.
-
-Fixed the last few characters of dialogue appearing all at once while they were still fading in. The text speed setting now also controls how fast each character fades in.
-
-Fixed display issues when continued dialogue contained English words or punctuation.
-
-Fixed the text speed preview on the settings page being interrupted by the ongoing story.
-
-Fixed figures in the graphical editor's live preview possibly losing effects such as scale and filters while adjusting effects.
-
-Fixed slow loading of long scenes with many resources.
+Fixed some Cubism 2 figures displaying incorrectly.
 
 <!-- Japanese Translation -->
 ## リリースノート
@@ -70,22 +46,10 @@ Fixed slow loading of long scenes with many resources.
 
 #### 新機能
 
-立ち絵の差分切り替えを追加しました。立ち絵の表情などの差分を変更するためのものです。この命令を実行しても、位置、エフェクト、レイヤーはそのまま保持され、同じサイズの画像同士はなめらかに切り替わります。
+新しいアニメーション形式を追加しました。立ち絵や背景の現在の状態を基準に変換できるようになり、キーフレームで指定していないプロパティは前のキーフレームの値を引き継ぎます。あわせて、現在の状態を基準に実行される、名前が -v2 で終わる組み込みアニメーションを追加しました。
 
-変換やアニメーションを設定するときに、立ち絵の現在の状態から始めるか、デフォルトの状態から始めるかを選べるようになりました。
-
-リソースの先読みとキャッシュを改善し、背景や立ち絵の切り替えがよりスムーズになりました。
+Live2D のメモリ予約設定を追加しました。ゲーム設定で、Live2D が事前に確保するメモリの大きさを調整できます。
 
 #### 修正
 
-オートプレイ中、待機のあとに続くセリフが一度にすべて表示される問題と、待機時間が途中で打ち切られる問題を修正しました。
-
-セリフの最後の数文字がフェードイン中に突然すべて表示される問題を修正しました。文字速度の設定が、各文字のフェードインの速さにも反映されるようになりました。
-
-続きのセリフに英単語や句読点が含まれる場合に、文字が正しく表示されない問題を修正しました。
-
-設定画面の文字速度プレビューが、進行中のストーリーによって中断されることがある問題を修正しました。
-
-グラフィカルエディターでエフェクトを調整する際、リアルタイムプレビューの立ち絵から拡大縮小やフィルターなどのエフェクトが失われることがある問題を修正しました。
-
-リソースの多い長いシーンの読み込みが遅い問題を修正しました。
+一部の Cubism 2 立ち絵が正しく表示されない問題を修正しました。

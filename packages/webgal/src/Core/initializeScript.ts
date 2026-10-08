@@ -99,11 +99,7 @@ function getUserAnimation() {
     for (const animationName of animations) {
       axios.get(`./game/animation/${animationName}.json`).then((res) => {
         if (res.data) {
-          const userAnimation = {
-            name: animationName,
-            effects: res.data,
-          };
-          WebGAL.animationManager.addAnimation(userAnimation);
+          WebGAL.animationManager.addAnimation(animationName, res.data);
         }
       });
     }

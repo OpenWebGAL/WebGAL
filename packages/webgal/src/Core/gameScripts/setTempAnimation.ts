@@ -3,11 +3,11 @@ import { IPerform } from '@/Core/Modules/perform/performInterface';
 import { getBooleanArgByKey, getStringArgByKey, resolveTransformArgs } from '@/Core/util/getSentenceArg';
 import { IAnimationObject } from '@/Core/controller/stage/pixi/PixiController';
 import { logger } from '@/Core/util/logger';
-import { IUserAnimation } from '../Modules/animations';
 import { applyAnimationEndState, getAnimateDuration } from '@/Core/Modules/animationFunctions';
 import { WebGAL } from '@/Core/WebGAL';
 import { v4 as uuid } from 'uuid';
 import { generateTimelineObj } from '@/Core/controller/stage/pixi/animations/timeline';
+import { IAnimationOverrides, IAnimationV2, normalizeAnimation } from '@/Core/Modules/animations';
 
 /**
  * 设置临时动画
@@ -15,15 +15,8 @@ import { generateTimelineObj } from '@/Core/controller/stage/pixi/animations/tim
  */
 export const setTempAnimation = (sentence: ISentence): IPerform => {
   const animationName = uuid();
-  const animationString = sentence.content;
-  let animationObj;
-  try {
-    animationObj = JSON.parse(animationString);
-  } catch (e) {
-    animationObj = [];
-  }
-  const newAnimation: IUserAnimation = { name: animationName, effects: animationObj };
-  WebGAL.animationManager.addAnimation(newAnimation);
+  const { rawAnimation, overrides } = readTempAnimation(sentence);
+  WebGAL.animationManager.addAnimation(animationName, rawAnimation, overrides);
   const animationDuration = getAnimateDuration(animationName);
   const target = getStringArgByKey(sentence, 'target') ?? '0';
   const keep = getBooleanArgByKey(sentence, 'keep') ?? false;
@@ -70,3 +63,27 @@ export const setTempAnimation = (sentence: ISentence): IPerform => {
     blockingAuto: () => !keep,
   };
 };
+
+/**
+ * 解析语句中的临时动画，规则与 setTempAnimation 注册动画时相同
+ */
+export function parseTempAnimation(sentence: ISentence): IAnimationV2 {
+  const { rawAnimation, overrides } = readTempAnimation(sentence);
+  return normalizeAnimation(rawAnimation, overrides);
+}
+
+/**
+ * 读取语句中的动画 JSON 与 relative、inherit 参数。
+ * 传入 relative 或 inherit 时，关键帧数组也按 v2 处理；v2 对象中的对应字段会被覆盖
+ */
+function readTempAnimation(sentence: ISentence): { rawAnimation: unknown; overrides: IAnimationOverrides } {
+  let rawAnimation;
+  try {
+    rawAnimation = JSON.parse(sentence.content);
+  } catch (e) {
+    rawAnimation = [];
+  }
+  const relative = getBooleanArgByKey(sentence, 'relative');
+  const inherit = getBooleanArgByKey(sentence, 'inherit');
+  return { rawAnimation, overrides: { relative, inherit } };
+}

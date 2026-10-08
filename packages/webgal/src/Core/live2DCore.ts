@@ -1,3 +1,4 @@
+import { Texture } from 'pixi.js';
 import { installLive2dAssetCache } from './controller/stage/pixi/assets/live2dAssetCache';
 /** 眨眼参数，毫秒 */
 export interface BlinkParam {
@@ -36,6 +37,9 @@ export class Live2DCore {
   public SoundManager: any;
   public Config: any;
 
+  public createCubism2Texture?: (texture: Texture) => Texture;
+  public reserveCoreMemory?: (size: number) => void;
+
   // 临时记录未初始化前的数据
   // 旧版表情混合模式
   private _legacyExpressionBlendMode = false;
@@ -46,6 +50,18 @@ export class Live2DCore {
     this._legacyExpressionBlendMode = value;
     if (this.isAvailable) {
       this.Config.legacyExpressionBlendMode = value;
+    }
+  }
+
+  // CubismCore预留堆内存容量，单位MB；PLDW的对应API的单位是byte
+  private _cubismMemoryReservedSize = 32
+  public get CubismMemoryReservedSize() {
+    return this._cubismMemoryReservedSize;
+  }
+  public set CubismMemoryReservedSize(size: number) {
+    this._cubismMemoryReservedSize = size;
+    if (this.isAvailable && this.reserveCoreMemory) {
+      this.reserveCoreMemory(this.CubismMemoryReservedSize * 1024 * 1024);
     }
   }
 
@@ -62,16 +78,27 @@ export class Live2DCore {
           console.warn('live2d plugin load failed');
           return;
         }
-        const { Live2DModel, SoundManager, config, Live2DLoader, ModelSettings } = await import(
-          'pixi-live2d-display-webgal'
-        );
+        const {
+          Live2DModel,
+          SoundManager,
+          config,
+          Live2DLoader,
+          ModelSettings,
+          createCubism2Texture,
+          reserveCoreMemory,
+        } = await import('pixi-live2d-display-webgal');
         installLive2dAssetCache({ Live2DLoader, ModelSettings });
         this.Live2DModel = Live2DModel;
         this.SoundManager = SoundManager;
         this.Config = config;
         this.isAvailable = true;
+        this.createCubism2Texture = createCubism2Texture;
+        this.reserveCoreMemory = reserveCoreMemory;
         console.log('Live2D plugin load success');
         this.initConfig();
+        if (this.reserveCoreMemory) {
+          this.reserveCoreMemory(this.CubismMemoryReservedSize * 1024 * 1024);
+        }
       })
       .catch((error) => {
         this.isAvailable = false;
