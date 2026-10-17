@@ -14,13 +14,20 @@ export function dumpSavesToStorage(startIndex: number, endIndex: number) {
   }
 }
 
+/**
+ * 从本地存储读取指定区间的存档到 store
+ * @returns 全部读取完成时 resolve，需要完整存档数据的调用方（如导出）应等待它
+ */
 export function getSavesFromStorage(startIndex: number, endIndex: number) {
+  const tasks = [];
   for (let i = startIndex; i <= endIndex; i++) {
-    localforage.getItem(`${WebGAL.gameKey}-saves${i}`).then((save) => {
+    const task = localforage.getItem(`${WebGAL.gameKey}-saves${i}`).then((save) => {
       webgalStore.dispatch(saveActions.saveGame({ index: i, saveData: save as ISaveData }));
       logger.info(`存档${i}读取自本地存储`);
     });
+    tasks.push(task);
   }
+  return Promise.all(tasks);
 }
 
 export async function dumpFastSaveToStorage() {
