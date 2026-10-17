@@ -66,7 +66,12 @@ export class PerformController {
 
     // 同步演出状态
     if (syncPerformState) {
-      const performToAdd = { id: perform.performName, isHoldOn: perform.isHoldOn, script: script };
+      const performToAdd = {
+        id: perform.performName,
+        isHoldOn: perform.isHoldOn,
+        script: script,
+        animationBase: perform.animationBase,
+      };
       if (this.isCollectingPerforms) {
         stageStateManager.addPerform(performToAdd);
       } else {

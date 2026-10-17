@@ -3,7 +3,11 @@ import { IPerform } from '@/Core/Modules/perform/performInterface';
 import { getBooleanArgByKey, getStringArgByKey, resolveTransformArgs } from '@/Core/util/getSentenceArg';
 import { IAnimationObject } from '@/Core/controller/stage/pixi/PixiController';
 import { logger } from '@/Core/util/logger';
-import { applyAnimationEndState, getAnimateDuration } from '@/Core/Modules/animationFunctions';
+import {
+  applyAnimationEndState,
+  getAnimateDuration,
+  getRelativeAnimationBase,
+} from '@/Core/Modules/animationFunctions';
 import { WebGAL } from '@/Core/WebGAL';
 import { v4 as uuid } from 'uuid';
 import { generateTimelineObj } from '@/Core/controller/stage/pixi/animations/timeline';
@@ -29,6 +33,7 @@ export const setTempAnimation = (sentence: ISentence): IPerform => {
   let keepAnimationStopped = false;
 
   if (!parallel) WebGAL.gameplay.performController.unmountPerform(performInitName, true);
+  const animationBase = getRelativeAnimationBase(animationName, target);
   const animationTimeline = applyAnimationEndState(animationName, target, writeDefault, writeFullEffect);
 
   const startFunction = () => {
@@ -61,6 +66,7 @@ export const setTempAnimation = (sentence: ISentence): IPerform => {
     stopFunction,
     blockingNext: () => false,
     blockingAuto: () => !keep,
+    animationBase,
   };
 };
 

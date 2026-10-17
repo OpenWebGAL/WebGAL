@@ -1,6 +1,7 @@
 import { logger } from '@/Core/util/logger';
 import { generateUniversalSoftOffAnimationObj } from '@/Core/controller/stage/pixi/animations/universalSoftOff';
-import { baseTransform, ITransform } from '@/Core/Modules/stage/stageInterface';
+import { baseTransform, IEffect, ITransform } from '@/Core/Modules/stage/stageInterface';
+import cloneDeep from 'lodash/cloneDeep';
 import { generateTimelineObj, readContainerTransform } from '@/Core/controller/stage/pixi/animations/timeline';
 import { WebGAL } from '@/Core/WebGAL';
 import { IAnimationObject } from '@/Core/controller/stage/pixi/PixiController';
@@ -84,6 +85,15 @@ function getAnimationTracks(
  */
 export function isRelativeAnimation(animationName: string) {
   return WebGAL.animationManager.getAnimations().find((ani) => ani.name === animationName)?.animation.relative ?? false;
+}
+
+/**
+ * 记录相对动画执行前目标的变换。存档只有终态，读档时需要以此为基准重放相对动画；非相对动画不需要记录
+ */
+export function getRelativeAnimationBase(animationName: string, target: string): IEffect | undefined {
+  if (!isRelativeAnimation(animationName)) return undefined;
+  const targetEffect = stageStateManager.getCalculationStageState().effects.find((e) => e.target === target);
+  return { target, transform: cloneDeep(targetEffect?.transform ?? baseTransform) };
 }
 
 export function getAnimateDuration(animationName: string) {

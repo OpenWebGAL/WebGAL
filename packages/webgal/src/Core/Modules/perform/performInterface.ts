@@ -1,4 +1,5 @@
 import { WEBGAL_NONE } from '@/Core/constants';
+import { IEffect } from '@/Core/Modules/stage/stageInterface';
 
 /**
  * 描述演出的接口，主要用于控制演出，而不是执行（在演出开始时被调用演出的执行器返回）
@@ -27,6 +28,8 @@ export interface IPerform {
   goNextWhenOver?: boolean;
   // 跳过由 nextSentence/continueSentence 引发的非 hold 演出回收。
   skipNextCollect?: boolean;
+  // 相对动画执行前目标的变换，会同步到演出状态，供读档恢复
+  animationBase?: IEffect;
 }
 
 // next之后，可以被打断的演出会被打断，不能被打断的演出会继续，阻塞next的演出会阻止next被响应。

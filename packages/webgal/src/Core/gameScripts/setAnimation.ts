@@ -4,7 +4,11 @@ import { getBooleanArgByKey, getStringArgByKey, resolveTransformArgs } from '@/C
 import { IAnimationObject } from '@/Core/controller/stage/pixi/PixiController';
 import { logger } from '@/Core/util/logger';
 
-import { applyAnimationEndState, getAnimateDuration } from '@/Core/Modules/animationFunctions';
+import {
+  applyAnimationEndState,
+  getAnimateDuration,
+  getRelativeAnimationBase,
+} from '@/Core/Modules/animationFunctions';
 import { WebGAL } from '@/Core/WebGAL';
 import { generateTimelineObj } from '@/Core/controller/stage/pixi/animations/timeline';
 
@@ -27,6 +31,7 @@ export const setAnimation = (sentence: ISentence): IPerform => {
   let keepAnimationStopped = false;
 
   if (!parallel) WebGAL.gameplay.performController.unmountPerform(performInitName, true);
+  const animationBase = getRelativeAnimationBase(animationName, target);
   const animationTimeline = applyAnimationEndState(animationName, target, writeDefault, writeFullEffect);
 
   const startFunction = () => {
@@ -59,5 +64,6 @@ export const setAnimation = (sentence: ISentence): IPerform => {
     stopFunction,
     blockingNext: () => false,
     blockingAuto: () => !keep,
+    animationBase,
   };
 };

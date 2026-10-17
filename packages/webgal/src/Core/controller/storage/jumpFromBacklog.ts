@@ -1,7 +1,7 @@
 import { logger } from '../../util/logger';
 import { sceneFetcher } from '../scene/sceneFetcher';
 import { sceneParser } from '../../parser/sceneParser';
-import { IStageState } from '@/Core/Modules/stage/stageInterface';
+import { IEffect, IRunPerform, IStageState } from '@/Core/Modules/stage/stageInterface';
 import { webgalStore } from '@/store/store';
 import { setVisibility } from '@/store/GUIReducer';
 import { runScript } from '@/Core/controller/gamePlay/runScript';
@@ -10,7 +10,7 @@ import cloneDeep from 'lodash/cloneDeep';
 
 import { WebGAL } from '@/Core/WebGAL';
 import { stageStateManager } from '@/Core/Modules/stage/stageStateManager';
-import { commandType, ISentence } from '@/Core/controller/scene/sceneInterface';
+import { commandType } from '@/Core/controller/scene/sceneInterface';
 import { getBooleanArgByKey } from '@/Core/util/getSentenceArg';
 import { createSayPerform } from '@/Core/gameScripts/say/createSayPerform';
 import { parseTempAnimation } from '@/Core/gameScripts/setTempAnimation';
@@ -19,33 +19,47 @@ import { isRelativeAnimation } from '@/Core/Modules/animationFunctions';
 /**
  * 恢复演出的方式：
  * - rerun：重新执行语句（默认）
+ * - rerunFromBase：先把目标恢复为动画执行前的变换，再重新执行语句
  * - rebuildSayPerform：只重建对话演出，不重新执行语句
  * - skip：不恢复
  */
-type RestoreMode = 'rerun' | 'rebuildSayPerform' | 'skip';
+type RestoreMode = 'rerun' | 'rerunFromBase' | 'rebuildSayPerform' | 'skip';
 
 /**
- * 需要特殊处理的语句，以及如何处理。不在表中的语句按 rerun 处理
+ * 需要特殊处理的演出，以及如何处理。不在表中的演出按 rerun 处理
  */
-const specialRestoreScripts: Array<{ isMatch: (script: ISentence) => boolean; mode: RestoreMode }> = [
+const specialRestorePerforms: Array<{ isMatch: (perform: IRunPerform) => boolean; mode: RestoreMode }> = [
   // 正文和分段已经在存档中，只重建演出，不能重跑 say 再追加一次 concat
   {
-    isMatch: (script) => script.command === commandType.say,
+    isMatch: ({ script }) => script.command === commandType.say,
     mode: 'rebuildSayPerform',
   },
-  // 存档已保存了动画执行后的舞台状态，相对动画重新执行会在此基础上再叠加一次，因此不重播
+  // 相对动画的结果依赖执行前的变换，而存档中只有终态，因此以记录的基准变换重放
   {
-    isMatch: (script) => script.command === commandType.setTempAnimation && parseTempAnimation(script).relative,
+    isMatch: (perform) => perform.animationBase !== undefined,
+    mode: 'rerunFromBase',
+  },
+  // 旧存档没有记录基准变换，相对动画重新执行会在终态上再叠加一次，因此不重播
+  {
+    isMatch: ({ script }) => script.command === commandType.setTempAnimation && parseTempAnimation(script).relative,
     mode: 'skip',
   },
   {
-    isMatch: (script) => script.command === commandType.setAnimation && isRelativeAnimation(script.content),
+    isMatch: ({ script }) => script.command === commandType.setAnimation && isRelativeAnimation(script.content),
     mode: 'skip',
   },
 ];
 
-function getRestoreMode(script: ISentence): RestoreMode {
-  return specialRestoreScripts.find((item) => item.isMatch(script))?.mode ?? 'rerun';
+function getRestoreMode(perform: IRunPerform): RestoreMode {
+  return specialRestorePerforms.find((item) => item.isMatch(perform))?.mode ?? 'rerun';
+}
+
+/**
+ * 直接替换演算状态中目标的变换，不与已有变换合并
+ */
+function replaceEffect(effect: IEffect) {
+  stageStateManager.removeEffectByTargetId(effect.target);
+  stageStateManager.getCalculationStageState().effects.push(cloneDeep(effect));
 }
 
 /**
@@ -54,13 +68,20 @@ function getRestoreMode(script: ISentence): RestoreMode {
 export const restorePerform = (skipAnimation = false) => {
   const stageState = stageStateManager.getCalculationStageState();
   const performToRestore = cloneDeep(stageState.PerformList);
+  // 存档中的变换已是所有动画叠加后的终态，重放动画只为恢复画面，结束后还原
+  const savedEffects = cloneDeep(stageState.effects);
   // 清除状态表中演出序列
   stageStateManager.removeAllPerform();
   WebGAL.gameplay.performController.beginCollectingPerforms();
   try {
     performToRestore.forEach((e) => {
-      const restoreMode = getRestoreMode(e.script);
+      const restoreMode = getRestoreMode(e);
       if (restoreMode === 'skip') {
+        return;
+      }
+      if (restoreMode === 'rerunFromBase') {
+        replaceEffect(e.animationBase!);
+        runScript(e.script);
         return;
       }
       if (restoreMode === 'rebuildSayPerform') {
@@ -75,6 +96,7 @@ export const restorePerform = (skipAnimation = false) => {
   } finally {
     WebGAL.gameplay.performController.endCollectingPerforms();
   }
+  stageStateManager.setStage('effects', savedEffects);
   stageStateManager.commit({ applyPixiEffects: false, skipAnimation });
   WebGAL.gameplay.performController.commitPendingPerforms();
   stageStateManager.applyCommittedPixiEffects();

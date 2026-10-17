@@ -179,6 +179,7 @@ export interface IRunPerform {
   id: string;
   isHoldOn: boolean; // 演出类型
   script: ISentence; // 演出脚本
+  animationBase?: IEffect; // 相对动画执行前目标的变换，读档时以此为基准重放
 }
 
 export interface ILive2DMotion {
