@@ -29,7 +29,8 @@ export const whenChecker = (whenValue: string | undefined): boolean => {
     return true;
   }
   // 先把变量解析出来
-  const valExpArr = whenValue.split(/([+\-*\/()><!]|>=|<=|==|&&|\|\||!=)/g);
+  // 多字符运算符必须排在单字符之前，否则 >= 会被拆成 > 和 =xxx，导致右侧变量无法被识别
+  const valExpArr = whenValue.split(/(>=|<=|==|!=|&&|\|\||[+\-*\/()><!])/g);
   const valExp = valExpArr
     .map((_e) => {
       const e = _e.trim();
