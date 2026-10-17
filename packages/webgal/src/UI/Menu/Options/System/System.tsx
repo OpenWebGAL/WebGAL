@@ -17,7 +17,11 @@ import About from '@/UI/Menu/Options/System/About';
 import { WebGAL } from '@/Core/WebGAL';
 import useSoundEffect from '@/hooks/useSoundEffect';
 import savesReducer, { ISavesData, saveActions } from '@/store/savesReducer';
-import { dumpFastSaveToStorage, dumpSavesToStorage } from '@/Core/controller/storage/savesController';
+import {
+  dumpFastSaveToStorage,
+  dumpSavesToStorage,
+  getSavesFromStorage,
+} from '@/Core/controller/storage/savesController';
 import { OptionSlider } from '@/UI/Menu/Options/OptionSlider';
 import { Info } from '@icon-park/react';
 
@@ -28,16 +32,17 @@ interface IExportGameData {
 
 export function System() {
   const userDataState = useSelector((state: RootState) => state.userData);
-  const userSavesState = useSelector((state: RootState) => state.saveData);
   const dispatch = useDispatch();
   const setLanguage = useLanguage();
   const t = useTrans('menu.options.pages.system.options.');
   const { playSeDialogOpen, playSeEnter, playSeSwitch } = useSoundEffect();
 
-  function exportSaves() {
+  async function exportSaves() {
+    // 存档按分页懒加载，store 中只有访问过的分页，导出前需先读取全部槽位
+    await getSavesFromStorage(0, 200);
     const gameData: IExportGameData = {
       userData: userDataState,
-      saves: userSavesState,
+      saves: webgalStore.getState().saveData,
     };
 
     const saves = JSON.stringify(gameData);
