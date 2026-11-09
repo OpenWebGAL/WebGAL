@@ -97,7 +97,8 @@ export const restorePerform = (skipAnimation = false) => {
     WebGAL.gameplay.performController.endCollectingPerforms();
   }
   stageStateManager.setStage('effects', savedEffects);
-  stageStateManager.commit({ applyPixiEffects: false, skipAnimation });
+  // 动画启动后会锁定整个目标，需先应用完整变换，保留未参与动画的属性。
+  stageStateManager.commit({ skipAnimation });
   WebGAL.gameplay.performController.commitPendingPerforms();
   stageStateManager.applyCommittedPixiEffects();
 };
