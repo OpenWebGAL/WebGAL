@@ -142,6 +142,13 @@ export interface SeekAnimationPayload {
   baseTransform?: Transform;
 }
 
+export interface SeekAnimationResponsePayload {
+  /** 本次写入目标的生效变换 */
+  transform: Transform;
+  /** 本次使用的基准状态：payload.baseTransform、语句前基线或演算状态中的变换 */
+  baseTransform: Transform;
+}
+
 export interface SetFontOptimizationPayload {
   enabled: boolean;
 }
@@ -294,7 +301,12 @@ export const REQUEST_TYPES = [
   ...PREVIEW_REQUEST_TYPES,
 ] as const satisfies readonly RequestType[];
 
-export type PreviewCommandResponsePayloadByType = Record<PreviewCommandType, EmptyObject>;
+export type PreviewCommandResponsePayloadByType = Omit<
+  Record<PreviewCommandType, EmptyObject>,
+  'preview.command.seek-animation'
+> & {
+  'preview.command.seek-animation': SeekAnimationResponsePayload;
+};
 
 export const PREVIEW_QUERY_RESPONSE_PAYLOADS = definePayloadMap({
   'preview.query.reference-box': payload<ReferenceBoxQueryResultPayload>(),
