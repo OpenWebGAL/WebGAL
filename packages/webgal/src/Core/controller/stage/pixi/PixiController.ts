@@ -982,6 +982,11 @@ export default class PixiStage {
    * @param key
    */
   public removeStageObjectByKey(key: string) {
+    // 退场动画会先把原立绘改名为 *-off 再调用本方法释放原槽位，因此记录需无条件按原 key 清理。
+    const recordIndex = this.live2dFigureRecorder.findIndex((e) => e.target === key);
+    if (recordIndex >= 0) {
+      this.live2dFigureRecorder.splice(recordIndex, 1);
+    }
     const indexFig = this.figureObjects.findIndex((e) => e.key === key);
     const indexBg = this.backgroundObjects.findIndex((e) => e.key === key);
     if (indexFig >= 0) {
