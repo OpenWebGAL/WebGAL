@@ -8,7 +8,6 @@ import styles from './getUserInput.module.scss';
 import { useSEByWebgalStore } from '@/hooks/useSoundEffect';
 import { WebGAL } from '@/Core/WebGAL';
 import { getStringArgByKey } from '@/Core/util/getSentenceArg';
-import { continueSentence } from '@/Core/controller/gamePlay/nextSentence';
 import { getCurrentFontFamily } from '@/hooks/useFontFamily';
 import { logger } from '@/Core/util/logger';
 import { tryToRegex } from '@/Core/util/global';
@@ -74,8 +73,8 @@ export const getUserInput = (sentence: ISentence): IPerform => {
               });
             }
             playSeClick();
+            // 卸载时由 goNextWhenOver 继续推进，这里不能再手动推进，否则与 -continue 叠加会推进两次
             WebGAL.gameplay.performController.unmountPerform('userInput');
-            continueSentence();
           }}
           className={styles.button}
         >
@@ -102,5 +101,7 @@ export const getUserInput = (sentence: ISentence): IPerform => {
     blockingNext: () => true,
     blockingAuto: () => true,
     blockingStateCalculation: () => true,
+    // 确认输入后总是继续，无论是否带 -continue
+    goNextWhenOver: true,
   };
 };
