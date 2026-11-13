@@ -1,4 +1,6 @@
 import mitt from 'mitt';
+import type { IGameVar } from '@/Core/Modules/stage/stageInterface';
+import type { WebgalTemplate } from '@/types/template';
 
 interface IWebgalEvent<T> {
   on: (callback: (message?: T) => void, id?: string) => void;
@@ -12,6 +14,8 @@ export class Events {
   public fullscreenDbClick = formEvent('fullscreen-dbclick');
   public styleUpdate = formEvent('style-update');
   public afterStyleUpdate = formEvent('after-style-update');
+  public templateLoaded = formEvent<WebgalTemplate>('template-loaded');
+  public gameInfoLoaded = formEvent<IGameVar>('game-info-loaded');
 }
 
 const eventBus = mitt();

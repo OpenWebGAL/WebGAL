@@ -76,7 +76,9 @@ export const infoFetcher = (url: string): Promise<IGameVar> => {
       }
     });
 
+    WebGAL.gameConfig = gameConfigInit;
     dispatch(setUserData({ key: 'gameConfigInit', value: gameConfigInit }));
+    WebGAL.events.gameInfoLoaded.emit(gameConfigInit);
     await WebGAL.flowchartManager.init(WebGAL.gameKey, gameConfigInit.Enable_flowchart === true);
     // @ts-expect-error renderPromiseResolve is a global variable
     window.renderPromiseResolve();
