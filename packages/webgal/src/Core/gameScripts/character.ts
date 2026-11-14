@@ -4,7 +4,7 @@ import type { ISentence } from '@/Core/controller/scene/sceneInterface';
 import { createNonePerform, type IPerform } from '@/Core/Modules/perform/performInterface';
 import type { ICharacterFigure } from '@/Core/Modules/stage/stageInterface';
 import { stageStateManager } from '@/Core/Modules/stage/stageStateManager';
-import { CharacterTemplateError, parseCharacterSelector } from '@/Core/character/characterTemplate';
+import { parseCharacterComponentsArg, parseCharacterContent } from '@/Core/character/characterTemplate';
 import type { AnimationFrame } from '@/Core/Modules/animations';
 import { applyAnimationEndState, getAnimateDuration } from '@/Core/Modules/animationFunctions';
 import type { IAnimationTrack } from '@/Core/Modules/animationTracks';
@@ -51,30 +51,32 @@ interface ICharacterAnimationArgs {
  * 组合立绘指令入口：直接读写 stageStateManager.characterFigures，独立于 changeFigure 槽位。
  */
 export function character(sentence: ISentence): IPerform {
-  try {
-    const content = sentence.content.trim();
-    if (content === '' || content === WEBGAL_NONE) {
-      return clearCharacterFigures();
-    }
+  const content = sentence.content.trim();
+  if (content === '' || content === WEBGAL_NONE) {
+    return clearCharacterFigures();
+  }
 
-    const selector = parseCharacterSelector(content);
-    if (getBooleanArgByKey(sentence, 'clear')) {
-      return clearCharacterFigures(selector.characterName);
-    }
-    if (selector.items.length === 0) {
-      throw new CharacterTemplateError(`角色 ${selector.characterName} 的组合列表不能为空`);
-    }
-    const unsupportedArg = sentence.args.find((arg) => CHARACTER_UNSUPPORTED_FIGURE_ARGS.has(arg.key));
-    if (unsupportedArg) {
-      throw new CharacterTemplateError(`静态组合角色不支持参数 -${unsupportedArg.key}`);
-    }
-
-    return applyCharacterFigure(sentence, selector.characterName, selector.items);
-  } catch (error) {
-    const message = error instanceof CharacterTemplateError ? error.message : String(error);
-    logger.error(`character 命令无效：${message}`);
+  const parsed = parseCharacterContent(content);
+  if (!parsed) {
+    logger.warn(`character 命令角色名无效，已忽略：${content}`);
     return createNonePerform();
   }
+
+  if (getBooleanArgByKey(sentence, 'clear')) {
+    return clearCharacterFigures(parsed.characterName);
+  }
+
+  const components = parseCharacterComponentsArg(getSentenceArgByKey(sentence, 'components'));
+  const preset = components ? undefined : parsed.preset;
+
+  const ignoredArgs = sentence.args
+    .filter((arg) => CHARACTER_UNSUPPORTED_FIGURE_ARGS.has(arg.key))
+    .map((arg) => arg.key);
+  if (ignoredArgs.length > 0) {
+    logger.warn(`静态组合角色不支持参数，已忽略：${ignoredArgs.map((k) => `-${k}`).join(', ')}`);
+  }
+
+  return applyCharacterFigure(sentence, parsed.characterName, preset, components);
 }
 
 function clearCharacterFigures(characterName?: string, exceptTargetKey?: string): IPerform {
@@ -117,7 +119,12 @@ function clearCharacterEntry(entry: ICharacterFigure): number {
   return exitDuration;
 }
 
-function applyCharacterFigure(sentence: ISentence, characterName: string, items: string[]): IPerform {
+function applyCharacterFigure(
+  sentence: ISentence,
+  characterName: string,
+  preset?: string,
+  components?: string[],
+): IPerform {
   const pos = getFigurePositionFromArgs(sentence) || 'center';
   const explicitId = getStringArgByKey(sentence, 'id')?.trim() ?? '';
   const key = explicitId || `fig-${pos}`;
@@ -128,7 +135,6 @@ function applyCharacterFigure(sentence: ISentence, characterName: string, items:
   const state = stageStateManager.getCalculationStageState();
   const existing = (state.characterFigures ?? []).find((entry) => entry.key === key);
   const isSameCharacterSlot = !!existing && existing.name === characterName && existing.basePosition === pos;
-  const isSameItems = isSameCharacterSlot && isEqual(existing.items, items);
 
   // 同槽位互斥：清理普通立绘槽位，再写入组合立绘
   stageStateManager.clearStandardFigureSlotByKey(key);
@@ -137,14 +143,19 @@ function applyCharacterFigure(sentence: ISentence, characterName: string, items:
   const nextCharacter: ICharacterFigure = {
     key,
     name: characterName,
-    items,
     basePosition: pos,
+    ...(preset !== undefined ? { preset } : {}),
+    ...(components !== undefined ? { components } : {}),
   };
+  const isSameSelection =
+    isSameCharacterSlot &&
+    existing.preset === nextCharacter.preset &&
+    isEqual(existing.components, nextCharacter.components);
 
   if (!isSameCharacterSlot) {
     return enterCharacterFigure(nextCharacter, args);
   }
-  return updateCharacterFigure(nextCharacter, isSameItems, args);
+  return updateCharacterFigure(nextCharacter, isSameSelection, args);
 }
 
 function resolveCharacterAnimationArgs(sentence: ISentence): ICharacterAnimationArgs {
@@ -163,12 +174,24 @@ function resolveCharacterAnimationArgs(sentence: ISentence): ICharacterAnimation
     enterDuration: getNumberArgByKey(sentence, 'enterDuration') ?? duration,
     exitDurationArg,
     exitDuration: exitDurationArg ?? DEFAULT_FIG_OUT_DURATION,
-    enterAnimation: getStringArgByKey(sentence, 'enter'),
-    exitAnimation: getStringArgByKey(sentence, 'exit'),
+    enterAnimation: resolveRegisteredAnimationName(getStringArgByKey(sentence, 'enter'), '-enter'),
+    exitAnimation: resolveRegisteredAnimationName(getStringArgByKey(sentence, 'exit'), '-exit'),
     zIndex: getNumberArgByKey(sentence, 'zIndex') ?? -1,
     blendMode: getStringArgByKey(sentence, 'blendMode'),
     ignoreDefault,
   };
+}
+
+function resolveRegisteredAnimationName(name: string | null, argName: '-enter' | '-exit'): string | null {
+  if (!name) {
+    return null;
+  }
+  const exists = WebGAL.animationManager.getAnimations().some((ani) => ani.name === name);
+  if (!exists) {
+    logger.warn(`未找到角色 ${argName} 动画：${name}，将使用默认淡入淡出`);
+    return null;
+  }
+  return name;
 }
 
 function enterCharacterFigure(nextCharacter: ICharacterFigure, args: ICharacterAnimationArgs): IPerform {
@@ -198,11 +221,11 @@ function enterCharacterFigure(nextCharacter: ICharacterFigure, args: ICharacterA
 
 function updateCharacterFigure(
   nextCharacter: ICharacterFigure,
-  isSameItems: boolean,
+  isSameSelection: boolean,
   args: ICharacterAnimationArgs,
 ): IPerform {
   const { key } = nextCharacter;
-  // 同角色同槽位原地切换 items，保留 effects 与正在运行的动画
+  // 同角色同槽位原地切换预设或部件，保留 effects 与正在运行的动画
   stageStateManager.setCharacterFigureByKey(nextCharacter);
 
   if (args.zIndex >= 0) {
@@ -216,7 +239,7 @@ function updateCharacterFigure(
     stageStateManager.updateAnimationSettings({ target: key, key: 'exitDuration', value: args.exitDurationArg });
   }
 
-  if (!isSameItems && args.transformString) {
+  if (!isSameSelection && args.transformString) {
     const frame = parseTransformFrame(args.transformString);
     if (frame) {
       const animationObj = generateTransformAnimationObj(

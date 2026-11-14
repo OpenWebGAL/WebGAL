@@ -302,8 +302,9 @@ export class StageStateManager {
     const nextCharacter: ICharacterFigure = {
       key: newCharacter.key,
       name: newCharacter.name,
-      items: [...newCharacter.items],
       basePosition: newCharacter.basePosition,
+      ...(newCharacter.preset !== undefined ? { preset: newCharacter.preset } : {}),
+      ...(newCharacter.components !== undefined ? { components: [...newCharacter.components] } : {}),
     };
     const index = currentCharacters.findIndex((character) => character.key === newCharacter.key);
     if (index >= 0) {

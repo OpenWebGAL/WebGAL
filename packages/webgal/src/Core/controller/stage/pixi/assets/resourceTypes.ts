@@ -4,7 +4,8 @@ export type ResourceKind = 'texture' | 'live2d' | 'spine' | 'character' | 'json'
 export interface ResourceRequest {
   url: string;
   kind: ResourceKind;
-  items?: readonly string[];
+  preset?: string;
+  components?: readonly string[];
 }
 export interface PreparedResource {
   value: unknown;
@@ -14,8 +15,12 @@ export interface PreparedResource {
 export type LoadDependency = <T>(url: string, kind: ResourceKind) => Promise<T>;
 
 export const resourceUrl = (url: string) => new URL(url, document.baseURI).href;
-export const resourceKey = ({ url, kind, items }: ResourceRequest) =>
-  items ? `${kind}:${resourceUrl(url)}#${JSON.stringify(items)}` : `${kind}:${resourceUrl(url)}`;
+export const resourceKey = ({ url, kind, preset, components }: ResourceRequest) => {
+  const base = `${kind}:${resourceUrl(url)}`;
+  if (kind !== 'character') return base;
+  if (components !== undefined) return `${base}#components:${JSON.stringify(components)}`;
+  return preset !== undefined ? `${base}#preset:${preset}` : `${base}#default`;
+};
 export const resourceExtension = (url: string) =>
   new URL(url, document.baseURI).pathname.split('.').pop()?.toLowerCase();
 

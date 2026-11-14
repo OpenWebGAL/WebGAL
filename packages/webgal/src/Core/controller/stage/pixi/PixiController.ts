@@ -56,8 +56,8 @@ export interface IStageObject {
   figureIdentity?: string;
   /** 创建组合角色时用的身份，见 characterFigure 的 getCharacterIdentity */
   characterIdentity?: string;
-  /** 组合角色当前选中的组件列表标识，见 characterFigure 的 getCharacterItemsKey */
-  characterItemsKey?: string;
+  /** 组合角色当前选中的预设或组件选择标识，见 characterFigure 的 getCharacterSelectionKey */
+  characterSelectionKey?: string;
   isExiting?: boolean;
   releaseInstance?: () => void;
   /** 口型、眨眼各自最新的换图请求，旧请求完成时据此丢弃 */

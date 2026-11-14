@@ -475,7 +475,7 @@ test("comment-only line preserves following semicolons", async () => {
   expectSentenceIn(result.sentenceList, expectSentenceItem);
 });
 
-test("character command parses selector, none, and clear without emitting raw selectors into assetsList", () => {
+test("character command parses default preset, explicit preset, components, none, and clear without emitting raw targets into assetsList", () => {
   const prefetchedAssets: IAsset[] = [];
   const parser = new SceneParser(
     (assetList) => {
@@ -487,7 +487,7 @@ test("character command parses selector, none, and clear without emitting raw se
   );
 
   const result = parser.parse(
-    `character:alice/body,smile -left;\ncharacter:none;\ncharacter:alice -clear;`,
+    `character:alice ;默认第一个预设\ncharacter:alice.smile -left;\ncharacter:alice -components=school_body, eye_open, mouth_smile -right;\ncharacter:none;\ncharacter:alice -clear;`,
     'test',
     'test',
   );
@@ -496,8 +496,29 @@ test("character command parses selector, none, and clear without emitting raw se
     {
       command: commandType.character,
       commandRaw: 'character',
-      content: 'alice/body,smile',
+      content: 'alice',
+      args: [],
+      sentenceAssets: [],
+      subScene: [],
+      inlineComment: '默认第一个预设',
+    },
+    {
+      command: commandType.character,
+      commandRaw: 'character',
+      content: 'alice.smile',
       args: [{ key: 'left', value: true }],
+      sentenceAssets: [],
+      subScene: [],
+      inlineComment: '',
+    },
+    {
+      command: commandType.character,
+      commandRaw: 'character',
+      content: 'alice',
+      args: [
+        { key: 'components', value: 'school_body, eye_open, mouth_smile' },
+        { key: 'right', value: true },
+      ],
       sentenceAssets: [],
       subScene: [],
       inlineComment: '',

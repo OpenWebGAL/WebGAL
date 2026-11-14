@@ -1,7 +1,4 @@
-export interface ICharacterSelector {
-  characterName: string;
-  items: string[];
-}
+import { logger } from '@/Core/util/logger';
 
 export interface ICharacterCanvas {
   width: number;
@@ -10,147 +7,109 @@ export interface ICharacterCanvas {
 
 export interface ICharacterComponent {
   src: string;
-  x: number;
-  y: number;
+  x?: number;
+  y?: number;
   scale?: number;
   width?: number;
   height?: number;
 }
 
-export interface ICharacterPreset {
-  /** 预设自己的合成画布；立绘组可使用默认底图的裁剪后尺寸。 */
+export interface ICharacterTemplate {
+  version: 1;
   canvas?: ICharacterCanvas;
-  items: string[];
+  components: Record<string, ICharacterComponent>;
+  presets?: Record<string, string[]>;
 }
 
-export type ICharacterPresetDefinition = string[] | ICharacterPreset;
+export interface ICharacterSelection {
+  preset?: string;
+  components?: readonly string[];
+}
 
-export interface ICharacterTemplate {
-  Version: 1;
-  canvas: ICharacterCanvas;
-  components: Record<string, ICharacterComponent>;
-  presets?: Record<string, ICharacterPresetDefinition>;
+export interface ICharacterContentTarget {
+  characterName: string;
+  preset?: string;
 }
 
 export interface ICharacterCompositionLayer extends ICharacterComponent {
   name: string;
+  x: number;
+  y: number;
 }
 
 export interface ICharacterComposition {
-  canvas: ICharacterCanvas;
+  canvas: ICharacterCanvas | null;
   layers: ICharacterCompositionLayer[];
 }
 
 const MAX_CHARACTER_CANVAS_EDGE = 8192;
-const MAX_CHARACTER_CANVAS_PIXELS = 16_777_216;
 
-export class CharacterTemplateError extends Error {
-  public constructor(message: string) {
-    super(message);
-    this.name = 'CharacterTemplateError';
+export function parseCharacterContent(rawContent: string): ICharacterContentTarget | null {
+  const content = rawContent.trim().replace(/\\/g, '/');
+  if (!content || content.startsWith('/') || content.endsWith('/') || /[:%?#]/.test(content)) {
+    return null;
   }
+
+  const lastSlashIndex = content.lastIndexOf('/');
+  const dotIndex = content.lastIndexOf('.');
+  // 仅将最后一级路径段中的最后一个 "." 视为预设分隔符，避免误切上级目录名中的 "."
+  const hasPresetSeparator = dotIndex > lastSlashIndex;
+  const characterName = (hasPresetSeparator ? content.slice(0, dotIndex) : content).trim();
+  const segments = characterName.split('/');
+  if (!characterName || segments.some((segment) => !segment || segment === '.' || segment === '..')) {
+    return null;
+  }
+
+  const preset = hasPresetSeparator ? content.slice(dotIndex + 1).trim() : '';
+  return preset ? { characterName, preset } : { characterName };
 }
 
-export function parseCharacterSelector(rawSelector: string): ICharacterSelector {
-  const selector = rawSelector.trim();
-  const separatorIndex = selector.indexOf('/');
-  const characterName = (separatorIndex >= 0 ? selector.slice(0, separatorIndex) : selector).trim();
-  if (!characterName || characterName === '.' || characterName === '..' || /[\\/%?#]/.test(characterName)) {
-    throw new CharacterTemplateError(`非法角色名：${characterName || '(空)'}`);
+export function parseCharacterComponentsArg(
+  rawArg: string | number | boolean | null | undefined,
+): string[] | undefined {
+  if (rawArg === null || rawArg === undefined || typeof rawArg === 'boolean') {
+    return undefined;
   }
-  if (separatorIndex < 0) {
-    return { characterName, items: [] };
-  }
-
-  const items = selector
-    .slice(separatorIndex + 1)
+  const items = String(rawArg)
     .split(',')
-    .map((item) => item.trim());
-  if (items.length === 0 || items.some((item) => item === '')) {
-    throw new CharacterTemplateError(`角色 ${characterName} 的组合列表不能为空`);
-  }
-  return { characterName, items };
+    .map((item) => item.trim())
+    .filter(Boolean);
+  return items.length > 0 ? items : undefined;
 }
 
 export function resolveCharacterTemplateSelection(
-  template: ICharacterTemplate,
-  items: string[],
+  template: unknown,
+  selection: ICharacterSelection = {},
 ): ICharacterComposition {
-  if (items.length === 0) {
-    throw new CharacterTemplateError('组合列表不能为空');
+  const canvas = resolveTemplateCanvas(template);
+  if (isPlainRecord(template)) {
+    const rawVersion = template.version;
+    if (rawVersion !== undefined && rawVersion !== 1) {
+      logger.warn(`不支持的角色模板版本：${String(rawVersion)}，将按版本 1 解析`);
+    }
+  }
+  if (!isPlainRecord(template) || !isPlainRecord(template.components)) {
+    logger.warn('角色模板缺少有效的 components 定义');
+    return { canvas, layers: [] };
   }
 
+  const componentNames = resolveSelectedComponentNames(template, selection);
   const layers: ICharacterCompositionLayer[] = [];
-  let selectedCanvas: ICharacterCanvas | undefined;
 
-  const expandItem = (name: string): void => {
-    if (hasOwn(template.components, name)) {
-      layers.push(normalizeCompositionLayer(name, template.components[name]));
-      return;
+  for (const name of componentNames) {
+    if (!hasOwn(template.components, name)) {
+      logger.warn(`未找到角色部件，已跳过：${name}`);
+      continue;
     }
-    if (!hasOwn(template.presets, name)) {
-      throw new CharacterTemplateError(`未找到角色部件或预设：${name}`);
+    const layer = normalizeCompositionLayer(name, template.components[name]);
+    if (!layer) {
+      logger.warn(`角色部件定义无效，已跳过：${name}`);
+      continue;
     }
-    const preset = template.presets![name];
-    const presetCanvas = getPresetCanvas(preset);
-    if (presetCanvas) {
-      if (selectedCanvas && !sameCanvas(selectedCanvas, presetCanvas)) {
-        throw new CharacterTemplateError('一次角色组合选择不能混用不同预设画布');
-      }
-      selectedCanvas = presetCanvas;
-    }
-    getPresetItems(preset).forEach(expandItem);
-  };
-
-  items.forEach(expandItem);
-  return { canvas: { ...(selectedCanvas ?? template.canvas) }, layers };
-}
-
-export function validateCharacterTemplate(template: ICharacterTemplate): void {
-  if (!isPlainRecord(template)) {
-    throw new CharacterTemplateError('角色模板必须是对象');
-  }
-  if (template.Version !== 1) {
-    throw new CharacterTemplateError(`不支持的角色模板版本：${String(template.Version)}`);
-  }
-  validateCanvas(template.canvas, '角色模板画布');
-  if (!isPlainRecord(template.components)) {
-    throw new CharacterTemplateError('角色模板 components 必须是对象');
-  }
-  if (template.presets !== undefined && !isPlainRecord(template.presets)) {
-    throw new CharacterTemplateError('角色模板 presets 必须是对象');
+    layers.push(layer);
   }
 
-  const duplicateName = Object.keys(template.presets ?? {}).find((name) => hasOwn(template.components, name));
-  if (duplicateName) {
-    throw new CharacterTemplateError(`角色模板部件与预设名称重复：${duplicateName}`);
-  }
-  Object.entries(template.components).forEach(([name, component]) => validateComponent(name, component));
-  Object.entries(template.presets ?? {}).forEach(([name, preset]) => validatePreset(template, name, preset));
-  validatePresetCycles(template);
-}
-
-export function validateCharacterComponentPath(componentPath: string): void {
-  if (isNonRelativeComponentPath(componentPath)) {
-    throw new CharacterTemplateError(`角色部件路径必须相对角色目录：${componentPath}`);
-  }
-  let decodedPath: string;
-  try {
-    decodedPath = decodeURIComponent(componentPath);
-  } catch {
-    throw new CharacterTemplateError(`角色部件路径包含非法编码：${componentPath}`);
-  }
-  // 解码后再检查，避免百分号编码隐藏绝对路径或目录回退段。
-  if (isNonRelativeComponentPath(decodedPath)) {
-    throw new CharacterTemplateError(`角色部件路径必须相对角色目录：${componentPath}`);
-  }
-  if (decodedPath.replace(/\\/g, '/').split('/').includes('..')) {
-    throw new CharacterTemplateError(`角色部件路径越出角色目录：${componentPath}`);
-  }
-  const resourcePath = decodedPath.split(/[?#]/, 1)[0];
-  if (!/\.(?:png|webp|jpe?g)$/i.test(resourcePath)) {
-    throw new CharacterTemplateError(`角色部件只支持静态 PNG、WebP 或 JPEG：${componentPath}`);
-  }
+  return { canvas, layers };
 }
 
 export function resolveCharacterComponentUrl(
@@ -158,126 +117,140 @@ export function resolveCharacterComponentUrl(
   templateUrl: string,
   baseHref = (typeof document !== 'undefined' && document.baseURI) ||
     (typeof window !== 'undefined' ? window.location.href : 'http://localhost/'),
-): string {
-  validateCharacterComponentPath(componentPath);
-  const characterDirectoryUrl = new URL('./', new URL(templateUrl, baseHref));
-  const componentUrl = new URL(componentPath, characterDirectoryUrl);
-  if (
-    componentUrl.origin !== characterDirectoryUrl.origin ||
-    !componentUrl.pathname.startsWith(characterDirectoryUrl.pathname)
-  ) {
-    throw new CharacterTemplateError(`角色部件路径越出角色目录：${componentPath}`);
+): string | null {
+  if (typeof componentPath !== 'string' || !componentPath.trim()) {
+    logger.warn('角色部件路径为空，已跳过');
+    return null;
   }
-  return componentUrl.toString();
-}
-
-function validateComponent(name: string, component: ICharacterComponent): void {
-  if (!component || typeof component !== 'object' || typeof component.src !== 'string' || !component.src.trim()) {
-    throw new CharacterTemplateError(`角色部件 ${name} 缺少有效的 src`);
-  }
-  validateCharacterComponentPath(component.src);
-  if (![component.x, component.y].every(Number.isFinite)) {
-    throw new CharacterTemplateError(`角色部件 ${name} 的 x、y 必须是有限数值`);
+  const trimmedPath = componentPath.trim();
+  if (isNonRelativeComponentPath(trimmedPath)) {
+    logger.warn(`角色部件路径必须相对角色目录，已跳过：${componentPath}`);
+    return null;
   }
 
-  const hasScale = component.scale !== undefined;
-  const hasWidth = component.width !== undefined;
-  const hasHeight = component.height !== undefined;
-  if (hasScale && (hasWidth || hasHeight)) {
-    throw new CharacterTemplateError(`角色部件 ${name} 的 scale 不能与 width、height 同时提供`);
+  let decodedPath: string;
+  try {
+    decodedPath = decodeURIComponent(trimmedPath);
+  } catch {
+    logger.warn(`角色部件路径包含非法编码，已跳过：${componentPath}`);
+    return null;
   }
-  if (hasWidth !== hasHeight) {
-    throw new CharacterTemplateError(`角色部件 ${name} 的 width、height 必须成对提供`);
-  }
-  if (hasScale && !isFinitePositiveNumber(component.scale)) {
-    throw new CharacterTemplateError(`角色部件 ${name} 的 scale 必须是有限正数`);
-  }
-  if (hasWidth && (!isFinitePositiveNumber(component.width) || !isFinitePositiveNumber(component.height))) {
-    throw new CharacterTemplateError(`角色部件 ${name} 的 width、height 必须是有限正数`);
-  }
-}
 
-function validatePreset(template: ICharacterTemplate, presetName: string, preset: ICharacterPresetDefinition): void {
-  if (!Array.isArray(preset) && (!isPlainRecord(preset) || !Array.isArray(preset.items))) {
-    throw new CharacterTemplateError(`角色组合预设 ${presetName} 必须是列表或带 items 的对象`);
+  // 解码后再检查，避免百分号编码隐藏绝对路径或目录回退段。
+  if (isNonRelativeComponentPath(decodedPath)) {
+    logger.warn(`角色部件路径必须相对角色目录，已跳过：${componentPath}`);
+    return null;
   }
-  const presetItems = getPresetItems(preset);
-  if (presetItems.length === 0) {
-    throw new CharacterTemplateError(`角色组合预设 ${presetName} 的列表不能为空`);
+  if (decodedPath.replace(/\\/g, '/').split('/').includes('..')) {
+    logger.warn(`角色部件路径越出角色目录，已跳过：${componentPath}`);
+    return null;
   }
-  const presetCanvas = getPresetCanvas(preset);
-  if (presetCanvas) {
-    validateCanvas(presetCanvas, `角色组合预设 ${presetName} 的画布`);
+
+  const resourcePath = decodedPath.split(/[?#]/, 1)[0];
+  if (!/\.(?:png|webp|jpe?g|avif|bmp|svg)$/i.test(resourcePath)) {
+    logger.warn(`角色部件图片格式不受支持，已跳过：${componentPath}`);
+    return null;
   }
-  for (const item of presetItems) {
-    if (typeof item !== 'string' || !item) {
-      throw new CharacterTemplateError(`角色组合预设 ${presetName} 包含非法引用`);
+
+  try {
+    const characterDirectoryUrl = new URL('./', new URL(templateUrl, baseHref));
+    const componentUrl = new URL(trimmedPath, characterDirectoryUrl);
+    if (
+      componentUrl.origin !== characterDirectoryUrl.origin ||
+      !componentUrl.pathname.startsWith(characterDirectoryUrl.pathname)
+    ) {
+      logger.warn(`角色部件路径越出角色目录，已跳过：${componentPath}`);
+      return null;
     }
-    if (!hasOwn(template.components, item) && !hasOwn(template.presets, item)) {
-      throw new CharacterTemplateError(`角色组合预设 ${presetName} 引用了不存在的部件或预设：${item}`);
-    }
+    return componentUrl.toString();
+  } catch {
+    logger.warn(`角色部件路径解析失败，已跳过：${componentPath}`);
+    return null;
   }
 }
 
-function validatePresetCycles(template: ICharacterTemplate): void {
-  const visited = new Set<string>();
-  const visit = (name: string, stack: string[]): void => {
-    // visited 允许不同分支复用预设，只有当前递归链上的重复才构成循环。
-    if (hasOwn(template.components, name) || visited.has(name)) {
-      return;
-    }
-    const cycleStart = stack.indexOf(name);
-    if (cycleStart >= 0) {
-      const cycle = [...stack.slice(cycleStart), name].join(' -> ');
-      throw new CharacterTemplateError(`角色组合预设存在循环引用：${cycle}`);
-    }
-    getPresetItems(template.presets![name]).forEach((item) => visit(item, [...stack, name]));
-    visited.add(name);
+function resolveTemplateCanvas(template: unknown): ICharacterCanvas | null {
+  if (!isPlainRecord(template) || !isPlainRecord(template.canvas)) {
+    return null;
+  }
+  const { width, height } = template.canvas;
+  if (!isFinitePositiveNumber(width) || !isFinitePositiveNumber(height)) {
+    return null;
+  }
+  return {
+    width: Math.min(MAX_CHARACTER_CANVAS_EDGE, Math.max(1, Math.round(width))),
+    height: Math.min(MAX_CHARACTER_CANVAS_EDGE, Math.max(1, Math.round(height))),
   };
-  Object.keys(template.presets ?? {}).forEach((name) => visit(name, []));
 }
 
-function normalizeCompositionLayer(name: string, component: ICharacterComponent): ICharacterCompositionLayer {
-  const layer: ICharacterCompositionLayer = { name, src: component.src, x: component.x, y: component.y };
-  if (component.scale !== undefined) {
-    return { ...layer, scale: component.scale };
+function resolveSelectedComponentNames(template: Record<string, unknown>, selection: ICharacterSelection): string[] {
+  const customItems = selection.components
+    ?.map((item) => (typeof item === 'string' ? item.trim() : ''))
+    .filter(Boolean);
+  if (customItems && customItems.length > 0) {
+    return customItems;
   }
-  if (component.width !== undefined && component.height !== undefined) {
-    return { ...layer, width: component.width, height: component.height };
+
+  const presets = isPlainRecord(template.presets) ? template.presets : undefined;
+  if (selection.preset) {
+    const presetItems =
+      presets && hasOwn(presets, selection.preset) ? extractStringItems(presets[selection.preset]) : null;
+    if (presetItems) {
+      return presetItems;
+    }
+    logger.warn(`未找到角色预设或预设为空：${selection.preset}，将回退到默认预设`);
+  }
+
+  const fallbackItems = resolveFirstValidPreset(presets);
+  if (!fallbackItems) {
+    logger.warn('角色模板未定义任何有效预设');
+    return [];
+  }
+  return fallbackItems;
+}
+
+function resolveFirstValidPreset(presets: Record<string, unknown> | undefined): string[] | null {
+  if (!presets) {
+    return null;
+  }
+  for (const preset of Object.values(presets)) {
+    const items = extractStringItems(preset);
+    if (items) {
+      return items;
+    }
+  }
+  return null;
+}
+
+function extractStringItems(value: unknown): string[] | null {
+  if (!Array.isArray(value)) {
+    return null;
+  }
+  const items = value.map((item) => (typeof item === 'string' ? item.trim() : '')).filter(Boolean);
+  return items.length > 0 ? items : null;
+}
+
+function normalizeCompositionLayer(name: string, rawComponent: unknown): ICharacterCompositionLayer | null {
+  if (!isPlainRecord(rawComponent) || typeof rawComponent.src !== 'string' || !rawComponent.src.trim()) {
+    return null;
+  }
+  const layer: ICharacterCompositionLayer = {
+    name,
+    src: rawComponent.src.trim(),
+    x: Number.isFinite(rawComponent.x) ? rawComponent.x : 0,
+    y: Number.isFinite(rawComponent.y) ? rawComponent.y : 0,
+  };
+  if (isFinitePositiveNumber(rawComponent.width) && isFinitePositiveNumber(rawComponent.height)) {
+    return { ...layer, width: rawComponent.width, height: rawComponent.height };
+  }
+  if (isFinitePositiveNumber(rawComponent.scale)) {
+    return { ...layer, scale: rawComponent.scale };
   }
   return layer;
 }
 
-function getPresetItems(preset: ICharacterPresetDefinition): string[] {
-  return Array.isArray(preset) ? preset : preset.items;
-}
-
-function getPresetCanvas(preset: ICharacterPresetDefinition): ICharacterCanvas | undefined {
-  return Array.isArray(preset) ? undefined : preset.canvas;
-}
-
-function validateCanvas(canvas: ICharacterCanvas, label: string): void {
-  if (!isPositiveInteger(canvas?.width) || !isPositiveInteger(canvas?.height)) {
-    throw new CharacterTemplateError(`${label}宽高必须是正整数`);
-  }
-  if (canvas.width > MAX_CHARACTER_CANVAS_EDGE || canvas.height > MAX_CHARACTER_CANVAS_EDGE) {
-    throw new CharacterTemplateError(`${label}单边不能超过 ${MAX_CHARACTER_CANVAS_EDGE}`);
-  }
-  if (canvas.width * canvas.height > MAX_CHARACTER_CANVAS_PIXELS) {
-    throw new CharacterTemplateError(`${label}总像素不能超过 ${MAX_CHARACTER_CANVAS_PIXELS}`);
-  }
-}
-
-function sameCanvas(left: ICharacterCanvas, right: ICharacterCanvas): boolean {
-  return left.width === right.width && left.height === right.height;
-}
-
 function isPlainRecord(value: unknown): value is Record<string, any> {
   return Boolean(value) && typeof value === 'object' && !Array.isArray(value);
-}
-
-function isPositiveInteger(value: number): boolean {
-  return Number.isInteger(value) && value > 0;
 }
 
 function isFinitePositiveNumber(value: unknown): value is number {

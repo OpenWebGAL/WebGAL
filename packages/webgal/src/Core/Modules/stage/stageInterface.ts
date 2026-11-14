@@ -147,8 +147,9 @@ export interface IFreeFigure {
 export interface ICharacterFigure {
   key: string;
   name: string;
-  items: string[];
   basePosition: IFigurePosition;
+  preset?: string;
+  components?: string[];
 }
 
 /**

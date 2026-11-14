@@ -155,9 +155,15 @@ export function getCharacterIdentity(character: Pick<ICharacterFigure, 'name' | 
   return JSON.stringify([character.name, character.basePosition]);
 }
 
-/** 组合角色当前选中的部件与预设列表键，用于判断是否可原地增量换装。 */
-export function getCharacterItemsKey(items: readonly string[]): string {
-  return JSON.stringify(items);
+/** 组合角色当前选中的预设或组件列表键，用于判断是否可原地增量换装。 */
+export function getCharacterSelectionKey(character: Pick<ICharacterFigure, 'preset' | 'components'>): string {
+  if (character.components !== undefined) {
+    return `components:${JSON.stringify(character.components)}`;
+  }
+  if (character.preset !== undefined) {
+    return `preset:${character.preset}`;
+  }
+  return 'default';
 }
 
 function getCharacterTemplateUrl(name: string): string {
@@ -281,9 +287,10 @@ function applyCharacterRevision(stage: PixiStage, stageObj: IStageObject, charac
   const request: ResourceRequest = {
     url: templateUrl,
     kind: 'character',
-    items: [...character.items],
+    ...(character.preset !== undefined ? { preset: character.preset } : {}),
+    ...(character.components !== undefined ? { components: [...character.components] } : {}),
   };
-  stageObj.characterItemsKey = getCharacterItemsKey(character.items);
+  stageObj.characterSelectionKey = getCharacterSelectionKey(character);
 
   const revOwner = `${stageObj.uuid}:rev:${revision}`;
   stage.assets.retain(revOwner, request);
@@ -367,7 +374,7 @@ export function addCharacterFigureImpl(this: PixiStage, key: string, character: 
     sourceType: 'character',
     sourceExt: 'json',
     characterIdentity: getCharacterIdentity(character),
-    characterItemsKey: getCharacterItemsKey(character.items),
+    characterSelectionKey: getCharacterSelectionKey(character),
     releaseInstance: () => releaseCharacterFigureOwners(this, stageObj),
   };
   this.figureObjects.push(stageObj);

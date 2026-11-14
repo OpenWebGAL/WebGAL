@@ -1,8 +1,8 @@
 import { commandType, IScene, ISentence } from '@/Core/controller/scene/sceneInterface';
 import { assetSetter, fileType } from '@/Core/util/gameAssetsAccess/assetSetter';
 import { ResourceRequest, stageResource } from '@/Core/controller/stage/pixi/assets/resourceTypes';
-import { parseCharacterSelector } from '@/Core/character/characterTemplate';
-import { getBooleanArgByKey } from '@/Core/util/getSentenceArg';
+import { parseCharacterComponentsArg, parseCharacterContent } from '@/Core/character/characterTemplate';
+import { getBooleanArgByKey, getSentenceArgByKey } from '@/Core/util/getSentenceArg';
 
 const FIGURE_TEXTURE_ARGS = ['mouthOpen', 'mouthClose', 'mouthHalfOpen', 'eyesOpen', 'eyesClose'];
 
@@ -11,19 +11,22 @@ function toCharacterPrefetchRequest(sentence: ISentence): ResourceRequest | null
   if (!content || content === 'none' || content.includes('{') || getBooleanArgByKey(sentence, 'clear')) {
     return null;
   }
-  try {
-    const selector = parseCharacterSelector(content);
-    if (selector.items.length === 0) {
-      return null;
-    }
-    return {
-      url: assetSetter(`${selector.characterName}/figure.json`, fileType.figure),
-      kind: 'character',
-      items: selector.items,
-    };
-  } catch {
+  const rawComponents = getSentenceArgByKey(sentence, 'components');
+  if (typeof rawComponents === 'string' && rawComponents.includes('{')) {
     return null;
   }
+  const parsed = parseCharacterContent(content);
+  if (!parsed) {
+    return null;
+  }
+  const components = parseCharacterComponentsArg(rawComponents);
+  const preset = components ? undefined : parsed.preset;
+  return {
+    url: assetSetter(`${parsed.characterName}/figure.json`, fileType.figure),
+    kind: 'character',
+    ...(preset !== undefined ? { preset } : {}),
+    ...(components !== undefined ? { components } : {}),
+  };
 }
 
 /** 只预测路径已确定的舞台资源，不提前执行变量赋值、条件或跳转。 */
