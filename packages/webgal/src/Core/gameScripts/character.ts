@@ -1,4 +1,3 @@
-import isEqual from 'lodash/isEqual';
 import { v4 as uuid } from 'uuid';
 import type { ISentence } from '@/Core/controller/scene/sceneInterface';
 import { createNonePerform, type IPerform } from '@/Core/Modules/perform/performInterface';
@@ -59,7 +58,7 @@ export function character(sentence: ISentence): IPerform {
 
 function clearCharacterSlot(sentence: ISentence, key: string): IPerform {
   const entry = (stageStateManager.getCalculationStageState().characterFigures ?? []).find((item) => item.key === key);
-  if (!entry) return createNonePerform();
+  if (!entry) return createInstantPerform(sentence, key);
 
   applyExitAnimation(sentence, key, resolveCharacterTransformArgs(sentence).writeFullEffect);
   // 必须在移除 animationSettings 前计算退场时长，移除后阶段层会转为 ${key}-off 退场
@@ -101,9 +100,7 @@ function applyCharacter(
   };
 
   const transformArgs = resolveCharacterTransformArgs(sentence);
-  return isSameSlot
-    ? updateCharacter(sentence, next, existing, transformArgs)
-    : enterCharacter(sentence, next, transformArgs);
+  return isSameSlot ? updateCharacter(sentence, next, transformArgs) : enterCharacter(sentence, next, transformArgs);
 }
 
 type CharacterTransformArgs = { writeDefault: boolean; writeFullEffect: boolean };
@@ -138,12 +135,7 @@ function enterCharacter(sentence: ISentence, next: ICharacterFigure, transformAr
   return createAnimationPerform(key, getAnimateDuration(enterAnim), timeline);
 }
 
-function updateCharacter(
-  sentence: ISentence,
-  next: ICharacterFigure,
-  existing: ICharacterFigure,
-  transformArgs: CharacterTransformArgs,
-): IPerform {
+function updateCharacter(sentence: ISentence, next: ICharacterFigure, transformArgs: CharacterTransformArgs): IPerform {
   const { key } = next;
   const { writeDefault, writeFullEffect } = transformArgs;
   // 同角色同槽位原地切换预设或部件，保留 effects 与正在运行的动画
@@ -155,13 +147,27 @@ function updateCharacter(
   if (blendMode) stageStateManager.setFigureMetaData([key, 'blendMode', blendMode, false]);
   applyExitAnimation(sentence, key, writeFullEffect);
 
-  const isSameSelection = existing.preset === next.preset && isEqual(existing.components, next.components);
-  const animName = isSameSelection ? null : createTransformAnimation(sentence, key, writeFullEffect, false);
-  if (!animName) return createNonePerform();
+  const animName = createTransformAnimation(sentence, key, writeFullEffect, false);
+  if (!animName) return createInstantPerform(sentence, key);
 
   WebGAL.gameplay.performController.unmountPerform(`animation-${key}`, true);
   const timeline = applyAnimationEndState(animName, key, writeDefault, writeFullEffect);
   return createAnimationPerform(key, getAnimateDuration(animName), timeline);
+}
+
+/** 无动画更新默认返回空演出；显式指定 -continue 时返回零时长具名演出以触发自动推进 */
+function createInstantPerform(sentence: ISentence, key: string): IPerform {
+  if (!getBooleanArgByKey(sentence, 'continue') || getBooleanArgByKey(sentence, 'next')) {
+    return createNonePerform();
+  }
+  return {
+    performName: `character-${key}`,
+    duration: 0,
+    isHoldOn: false,
+    stopFunction: () => {},
+    blockingNext: () => false,
+    blockingAuto: () => false,
+  };
 }
 
 function resolveCharacterTransformArgs(sentence: ISentence): CharacterTransformArgs {
