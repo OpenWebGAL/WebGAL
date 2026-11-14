@@ -8,13 +8,19 @@
 
 #### 新功能
 
-新增新版动画格式。动画可以基于立绘或背景的当前状态进行变换，关键帧中未设置的属性会沿用之前关键帧的值。同时新增一组以 -v2 结尾、基于当前状态执行的内置动画。
+新增组合立绘功能。可以将身体、服装、表情等多个部件图片组合为同一个角色立绘，调整各图层的偏移、缩放和旋转，并在演出时按预设或自定义图层组合进行展示与切换。
 
-新增 Live2D 内存预留设置，可在游戏配置中调整 Live2D 预先分配的内存大小。
+优化编辑器实时预览。预览新版动画时的变换定位更加准确，并支持向编辑器同步模板与游戏配置信息。
 
 #### 修复
 
-修复部分 Cubism 2 立绘显示错乱的问题。
+修复导出存档时，未打开过的存档页不会被一并导出的问题。
+
+修复条件判断中使用 >=、<=、!= 直接与变量比较时结果不正确的问题。
+
+修复获取玩家输入时若带有 -continue 参数，确认后会多跳过一句剧情的问题。
+
+修复快速切换对话或语音提前结束时，配音与口型、眨眼动画可能未及时停止的问题。
 
 <!-- English Translation -->
 ## Release Notes
@@ -27,13 +33,19 @@
 
 #### New Features
 
-Added a new animation format. Animations can now transform figures or backgrounds relative to their current state, and properties not set in a keyframe carry over values from previous keyframes. Also added a set of built-in animations ending in -v2 that run from the current state.
+Added composite figures. Multiple part images such as body, outfit, and expression can be combined into a single character figure, with per-layer offset, scale, and rotation adjustments, and displayed or switched using presets or custom layer combinations.
 
-Added a Live2D memory reservation setting, which lets you adjust how much memory Live2D allocates in advance in the game config.
+Improved editor live preview. Transform positioning is more accurate when previewing the new animation format, and template and game config information can now be synced to the editor.
 
 #### Fixes
 
-Fixed some Cubism 2 figures displaying incorrectly.
+Fixed unopened save pages not being included when exporting saves.
+
+Fixed incorrect condition results when comparing directly against a variable with >=, <=, or !=.
+
+Fixed getting user input with the -continue option skipping an extra line after confirmation.
+
+Fixed voice playback and lip-sync or blink animations sometimes not stopping promptly when switching dialogue quickly or ending voice playback early.
 
 <!-- Japanese Translation -->
 ## リリースノート
@@ -46,10 +58,16 @@ Fixed some Cubism 2 figures displaying incorrectly.
 
 #### 新機能
 
-新しいアニメーション形式を追加しました。立ち絵や背景の現在の状態を基準に変換できるようになり、キーフレームで指定していないプロパティは前のキーフレームの値を引き継ぎます。あわせて、現在の状態を基準に実行される、名前が -v2 で終わる組み込みアニメーションを追加しました。
+合成立ち絵機能を追加しました。素体、衣装、表情などの複数のパーツ画像を 1 つのキャラクター立ち絵として組み合わせ、各レイヤーの位置、拡大縮小、回転を調整し、演出時にプリセットや任意のレイヤー構成で表示・切り替えができます。
 
-Live2D のメモリ予約設定を追加しました。ゲーム設定で、Live2D が事前に確保するメモリの大きさを調整できます。
+エディターのリアルタイムプレビューを改善しました。新しいアニメーション形式をプレビューする際の変換位置がより正確になり、テンプレートやゲーム設定の情報をエディターへ同期できるようになりました。
 
 #### 修正
 
-一部の Cubism 2 立ち絵が正しく表示されない問題を修正しました。
+セーブデータをエクスポートする際、一度も開いていないセーブページが含まれない問題を修正しました。
+
+条件判定で >=、<=、!= を使って変数と直接比較した際の結果が正しくならない問題を修正しました。
+
+プレイヤー入力の取得で -continue を指定した際、確定後にストーリーが 1 行余分にスキップされる問題を修正しました。
+
+会話を素早く切り替えた時やボイスが途中で終了した時に、ボイス再生や口パク・まばたきアニメーションがすぐに止まらないことがある問題を修正しました。
