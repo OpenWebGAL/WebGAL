@@ -2,12 +2,15 @@ import * as PIXI from 'pixi.js';
 import { v4 as uuid } from 'uuid';
 import type { ICharacterCanvas } from '@/Core/character/characterTemplate';
 import type PixiStage from '@/Core/controller/stage/pixi/PixiController';
+import type { IStageObject } from '@/Core/controller/stage/pixi/PixiController';
 import { WebGALPixiContainer } from '@/Core/controller/stage/pixi/WebGALPixiContainer';
 import type {
   IPreparedCharacterFigure,
   IPreparedCharacterLayer,
 } from '@/Core/controller/stage/pixi/assets/characterAssets';
-import { getFigureBaseX, type IFigurePosition } from '@/Core/Modules/stage/stageInterface';
+import type { ResourceRequest } from '@/Core/controller/stage/pixi/assets/resourceTypes';
+import { getFigureBaseX, type ICharacterFigure, type IFigurePosition } from '@/Core/Modules/stage/stageInterface';
+import { assetSetter, fileType } from '@/Core/util/gameAssetsAccess/assetSetter';
 import { logger } from '@/Core/util/logger';
 
 export interface ICharacterStageLayout {
@@ -128,6 +131,74 @@ export class CharacterCanvasContainer extends PIXI.Container {
   }
 }
 
+interface ICharacterFigureState {
+  revision: number;
+  activeOwner: string | null;
+  inFlightOwners: Set<string>;
+}
+
+interface IApplyPreparedRevisionParams {
+  stage: PixiStage;
+  stageObj: IStageObject;
+  state: ICharacterFigureState;
+  revision: number;
+  revOwner: string;
+  prepared: IPreparedCharacterFigure;
+  basePosition: IFigurePosition;
+  templateUrl: string;
+}
+
+const characterFigureStates = new WeakMap<IStageObject, ICharacterFigureState>();
+
+/** 组合角色的舞台身份键：角色名与预设基准位置共同决定是否需要重建容器。 */
+export function getCharacterIdentity(character: Pick<ICharacterFigure, 'name' | 'basePosition'>): string {
+  return JSON.stringify([character.name, character.basePosition]);
+}
+
+/** 组合角色当前选中的部件与预设列表键，用于判断是否可原地增量换装。 */
+export function getCharacterItemsKey(items: readonly string[]): string {
+  return JSON.stringify(items);
+}
+
+function getCharacterTemplateUrl(name: string): string {
+  return assetSetter(`${name}/figure.json`, fileType.figure);
+}
+
+function getOrCreateCharacterState(stageObj: IStageObject): ICharacterFigureState {
+  let state = characterFigureStates.get(stageObj);
+  if (!state) {
+    state = { revision: 0, activeOwner: null, inFlightOwners: new Set() };
+    characterFigureStates.set(stageObj, state);
+  }
+  return state;
+}
+
+function releaseCharacterFigureOwners(stage: PixiStage, stageObj: IStageObject): void {
+  const state = characterFigureStates.get(stageObj);
+  if (!state) {
+    return;
+  }
+  // 使未完成的异步加载全部失效，避免卸载后回写或残留资源持有。
+  state.revision += 1;
+  if (state.activeOwner) {
+    stage.assets.release(state.activeOwner);
+    state.activeOwner = null;
+  }
+  for (const owner of state.inFlightOwners) {
+    stage.assets.release(owner);
+  }
+  state.inFlightOwners.clear();
+}
+
+function removePreviousCanvasContainers(figureContainer: WebGALPixiContainer): void {
+  for (const child of [...figureContainer.children]) {
+    if (child instanceof CharacterCanvasContainer) {
+      figureContainer.removeChild(child);
+      child.destroy({ children: true });
+    }
+  }
+}
+
 function mountPreparedCharacterFigure(
   stage: PixiStage,
   figureContainer: WebGALPixiContainer,
@@ -164,19 +235,106 @@ function mountPreparedCharacterFigure(
     canvasContainer.addChild(sprite);
   }
 
+  removePreviousCanvasContainers(figureContainer);
   figureContainer.setBaseY(layout.baseY);
   figureContainer.setBaseX(layout.baseX);
   figureContainer.pivot.set(0, layout.pivotY);
   figureContainer.addChild(canvasContainer);
 }
 
+function applyPreparedRevision({
+  stage,
+  stageObj,
+  state,
+  revision,
+  revOwner,
+  prepared,
+  basePosition,
+  templateUrl,
+}: IApplyPreparedRevisionParams): boolean {
+  if (state.revision !== revision || !stage.getStageObjByUuid(stageObj.uuid) || !stageObj.pixiContainer) {
+    return false;
+  }
+  try {
+    mountPreparedCharacterFigure(stage, stageObj.pixiContainer, prepared, basePosition);
+  } catch (error) {
+    logger.warn(`组合角色装配失败：${templateUrl}`, error);
+    return false;
+  }
+  const previousOwner = state.activeOwner;
+  state.activeOwner = revOwner;
+  state.inFlightOwners.delete(revOwner);
+  if (previousOwner && previousOwner !== revOwner) {
+    stage.assets.release(previousOwner);
+  }
+  if (!stageObj.isExiting) {
+    stage.notifyTargetReferenceBoxChanged(stageObj.key);
+  }
+  stage.requestRender();
+  return true;
+}
+
+function applyCharacterRevision(stage: PixiStage, stageObj: IStageObject, character: ICharacterFigure): void {
+  const state = getOrCreateCharacterState(stageObj);
+  const revision = ++state.revision;
+  const templateUrl = getCharacterTemplateUrl(character.name);
+  const request: ResourceRequest = {
+    url: templateUrl,
+    kind: 'character',
+    items: [...character.items],
+  };
+  stageObj.characterItemsKey = getCharacterItemsKey(character.items);
+
+  const revOwner = `${stageObj.uuid}:rev:${revision}`;
+  stage.assets.retain(revOwner, request);
+
+  const ready = stage.assets.getReady<IPreparedCharacterFigure>(request);
+  if (ready) {
+    const applied = applyPreparedRevision({
+      stage,
+      stageObj,
+      state,
+      revision,
+      revOwner,
+      prepared: ready,
+      basePosition: character.basePosition,
+      templateUrl,
+    });
+    if (!applied) {
+      stage.assets.release(revOwner);
+    }
+    return;
+  }
+
+  // 冷加载期间保留旧画布，避免原地换装出现空白闪烁。
+  state.inFlightOwners.add(revOwner);
+  void stage.assets
+    .ensureReady<IPreparedCharacterFigure>(request)
+    .catch(() => stage.assets.ensureReady<IPreparedCharacterFigure>(request))
+    .then((loaded) => {
+      applyPreparedRevision({
+        stage,
+        stageObj,
+        state,
+        revision,
+        revOwner,
+        prepared: loaded,
+        basePosition: character.basePosition,
+        templateUrl,
+      });
+    })
+    .catch((error) => {
+      logger.warn(`组合角色加载失败：${templateUrl}`, error);
+    })
+    .finally(() => {
+      if (state.inFlightOwners.delete(revOwner)) {
+        stage.assets.release(revOwner);
+      }
+    });
+}
+
 /** 同步注册组合角色舞台对象，资源就绪后按模板图层装配到画布容器中。 */
-export function addCharacterFigureImpl(
-  this: PixiStage,
-  key: string,
-  url: string,
-  presetPosition: IFigurePosition = 'center',
-): void {
+export function addCharacterFigureImpl(this: PixiStage, key: string, character: ICharacterFigure): void {
   const thisFigureContainer = new WebGALPixiContainer();
 
   if (this.figureObjects.some((entry) => entry.key === key)) {
@@ -194,38 +352,34 @@ export function addCharacterFigureImpl(
   }
 
   // 冷启动加载前先写入默认预设槽位坐标，确保同步挂载的动画与变换基准一致。
-  thisFigureContainer.setBaseX(getFigureBaseX(presetPosition, this.stageWidth, 0));
+  thisFigureContainer.setBaseX(getFigureBaseX(character.basePosition, this.stageWidth, 0));
   thisFigureContainer.setBaseY(this.stageHeight / 2);
   thisFigureContainer.pivot.set(0, this.stageHeight / 2);
 
   this.figureContainer.addChild(thisFigureContainer);
   const figureUuid = uuid();
-  this.figureObjects.push({
+  const templateUrl = getCharacterTemplateUrl(character.name);
+  const stageObj: IStageObject = {
     uuid: figureUuid,
     key,
     pixiContainer: thisFigureContainer,
-    sourceUrl: url,
+    sourceUrl: templateUrl,
     sourceType: 'character',
     sourceExt: 'json',
-  });
-
-  const request = { url, kind: 'character' } as const;
-  const setup = () => {
-    const prepared = this.assets.getReady<IPreparedCharacterFigure>(request);
-    const stageObj = this.getStageObjByUuid(figureUuid);
-    if (!prepared || !stageObj) {
-      return;
-    }
-    try {
-      mountPreparedCharacterFigure(this, thisFigureContainer, prepared, presetPosition);
-      if (!stageObj.isExiting) {
-        this.notifyTargetReferenceBoxChanged(stageObj.key);
-      }
-      this.requestRender();
-    } catch (error) {
-      logger.warn(`组合角色装配失败：${url}`, error);
-    }
+    characterIdentity: getCharacterIdentity(character),
+    characterItemsKey: getCharacterItemsKey(character.items),
+    releaseInstance: () => releaseCharacterFigureOwners(this, stageObj),
   };
+  this.figureObjects.push(stageObj);
 
-  this.loadStageAsset(figureUuid, setup, request);
+  applyCharacterRevision(this, stageObj, character);
+}
+
+/** 在保留外层容器、相对偏移、滤镜与进行中动画的前提下原地更新组合角色部件。 */
+export function updateCharacterFigureImpl(this: PixiStage, key: string, character: ICharacterFigure): void {
+  const stageObj = this.getStageObjByKey(key);
+  if (!stageObj || stageObj.sourceType !== 'character' || !stageObj.pixiContainer) {
+    return;
+  }
+  applyCharacterRevision(this, stageObj, character);
 }

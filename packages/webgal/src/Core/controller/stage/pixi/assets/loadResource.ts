@@ -13,7 +13,7 @@ export async function loadResource(request: ResourceRequest, dependency: LoadDep
   }
   if (request.kind === 'character') {
     const { loadCharacterResources } = await import('./characterAssets');
-    return loadCharacterResources(request.url, dependency);
+    return loadCharacterResources(request.url, request.items ?? [], dependency);
   }
   // 直接使用 loader：AssetManager 已按 kind + URL 管理条目，不需要 Resolver 的别名表。
   const loaded = await Assets.loader.load({ src: request.url, data: { webgalKind: request.kind } });

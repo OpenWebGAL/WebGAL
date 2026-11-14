@@ -1,7 +1,6 @@
 import { commandType, IScene, ISentence } from '@/Core/controller/scene/sceneInterface';
 import { assetSetter, fileType } from '@/Core/util/gameAssetsAccess/assetSetter';
 import { ResourceRequest, stageResource } from '@/Core/controller/stage/pixi/assets/resourceTypes';
-import { serializeCharacterFigureSource } from '@/Core/character/characterSource';
 import { parseCharacterSelector } from '@/Core/character/characterTemplate';
 import { getBooleanArgByKey } from '@/Core/util/getSentenceArg';
 
@@ -18,8 +17,9 @@ function toCharacterPrefetchRequest(sentence: ISentence): ResourceRequest | null
       return null;
     }
     return {
-      url: serializeCharacterFigureSource({ name: selector.characterName, items: selector.items }),
+      url: assetSetter(`${selector.characterName}/figure.json`, fileType.figure),
       kind: 'character',
+      items: selector.items,
     };
   } catch {
     return null;

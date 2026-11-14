@@ -9,7 +9,7 @@ import { Live2D } from '@/Core/WebGAL';
 import { baseBlinkParam, baseFocusParam, BlinkParam, FocusParam } from '@/Core/live2DCore';
 import { isIOS } from '@/Core/initializeScript';
 import { WebGALPixiContainer } from '@/Core/controller/stage/pixi/WebGALPixiContainer';
-import { addCharacterFigureImpl } from '@/Core/controller/stage/pixi/characterFigure';
+import { addCharacterFigureImpl, updateCharacterFigureImpl } from '@/Core/controller/stage/pixi/characterFigure';
 import { addSpineBgImpl, addSpineFigureImpl } from '@/Core/controller/stage/pixi/spine';
 import { SCREEN_CONSTANTS } from '@/Core/util/constants';
 import { logger } from '@/Core/util/logger';
@@ -54,6 +54,10 @@ export interface IStageObject {
   spineAnimation?: string;
   /** 创建这个立绘时用的身份，见 syncPixiStageState 的 getFigureIdentity */
   figureIdentity?: string;
+  /** 创建组合角色时用的身份，见 characterFigure 的 getCharacterIdentity */
+  characterIdentity?: string;
+  /** 组合角色当前选中的组件列表标识，见 characterFigure 的 getCharacterItemsKey */
+  characterItemsKey?: string;
   isExiting?: boolean;
   releaseInstance?: () => void;
   /** 口型、眨眼各自最新的换图请求，旧请求完成时据此丢弃 */
@@ -113,6 +117,7 @@ export default class PixiStage {
   public addSpineFigure = addSpineFigureImpl.bind(this);
   public addSpineBg = addSpineBgImpl.bind(this);
   public addCharacterFigure = addCharacterFigureImpl.bind(this);
+  public updateCharacterFigure = updateCharacterFigureImpl.bind(this);
   // 注册到 Ticker 上的函数
   private stageAnimations = this.createReactiveList<IStageAnimationObject>([]);
 

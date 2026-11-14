@@ -7,6 +7,9 @@ import { baseBlinkParam, baseFocusParam } from '@/Core/live2DCore';
 import {
   baseTransform,
   FIGURE_KEYS,
+  FIGURE_POSITIONS,
+  figureStateKeyByPosition,
+  ICharacterFigure,
   IEffect,
   IFigureMetadata,
   IFreeFigure,
@@ -48,6 +51,7 @@ export const initState: IStageState = {
   figNameLeft14: '',
   figNameRight14: '',
   freeFigure: [],
+  characterFigures: [],
   figureAssociatedAnimation: [],
   isRead: false,
   showText: '',
@@ -132,6 +136,7 @@ export class StageStateManager {
     // 读档、回溯与场景重建只恢复普通状态，不能携带上一次演算的换图意图。
     WebGAL.figureDiffManager.clear();
     this.calculationStageState = cloneDeep(stageState);
+    this.calculationStageState.characterFigures ??= [];
   }
 
   public replaceAllStageState(stageState: IStageState, options?: IStageCommitOptions) {
@@ -156,6 +161,7 @@ export class StageStateManager {
       STAGE_KEYS.BGMAIN,
       ...FIGURE_KEYS,
       ...state.freeFigure.map((figure) => figure.key),
+      ...(state.characterFigures ?? []).map((character) => character.key),
     ];
     if (!activeTargets.includes(target)) return;
 
@@ -289,6 +295,56 @@ export class StageStateManager {
     } else if (newFigure.name !== '') {
       currentFreeFigures.push(newFigure);
     }
+  }
+
+  public setCharacterFigureByKey(newCharacter: ICharacterFigure) {
+    const currentCharacters = (this.calculationStageState.characterFigures ??= []);
+    const nextCharacter: ICharacterFigure = {
+      key: newCharacter.key,
+      name: newCharacter.name,
+      items: [...newCharacter.items],
+      basePosition: newCharacter.basePosition,
+    };
+    const index = currentCharacters.findIndex((character) => character.key === newCharacter.key);
+    if (index >= 0) {
+      currentCharacters[index] = nextCharacter;
+    } else {
+      currentCharacters.push(nextCharacter);
+    }
+  }
+
+  public removeCharacterFigureByKey(key: string): boolean {
+    const currentCharacters = (this.calculationStageState.characterFigures ??= []);
+    const index = currentCharacters.findIndex((character) => character.key === key);
+    if (index < 0) {
+      return false;
+    }
+    currentCharacters.splice(index, 1);
+    return true;
+  }
+
+  public clearStandardFigureSlotByKey(key: string): boolean {
+    const state = this.calculationStageState;
+    let cleared = false;
+
+    for (const pos of FIGURE_POSITIONS) {
+      if (key === `fig-${pos}`) {
+        const stateKey = figureStateKeyByPosition[pos];
+        if (state[stateKey] !== '') {
+          state[stateKey] = '';
+          cleared = true;
+        }
+        break;
+      }
+    }
+
+    if (state.freeFigure.some((figure) => figure.key === key)) {
+      this.setFreeFigureByKey({ key, name: '', basePosition: 'center' });
+      cleared = true;
+    }
+
+    state.figureAssociatedAnimation = state.figureAssociatedAnimation.filter((item) => item.targetId !== key);
+    return cleared;
   }
 
   public setLive2dMotion(payload: ILive2DMotion) {

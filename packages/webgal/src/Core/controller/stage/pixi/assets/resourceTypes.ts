@@ -1,10 +1,10 @@
 import type { Texture } from 'pixi.js';
-import { isCharacterFigureSource } from '@/Core/character/characterSource';
 
 export type ResourceKind = 'texture' | 'live2d' | 'spine' | 'character' | 'json' | 'binary' | 'text';
 export interface ResourceRequest {
   url: string;
   kind: ResourceKind;
+  items?: readonly string[];
 }
 export interface PreparedResource {
   value: unknown;
@@ -14,14 +14,12 @@ export interface PreparedResource {
 export type LoadDependency = <T>(url: string, kind: ResourceKind) => Promise<T>;
 
 export const resourceUrl = (url: string) => new URL(url, document.baseURI).href;
-export const resourceKey = ({ url, kind }: ResourceRequest) => `${kind}:${resourceUrl(url)}`;
+export const resourceKey = ({ url, kind, items }: ResourceRequest) =>
+  items ? `${kind}:${resourceUrl(url)}#${JSON.stringify(items)}` : `${kind}:${resourceUrl(url)}`;
 export const resourceExtension = (url: string) =>
   new URL(url, document.baseURI).pathname.split('.').pop()?.toLowerCase();
 
 export function stageResource(url: string): ResourceRequest {
-  if (isCharacterFigureSource(url)) {
-    return { url, kind: 'character' };
-  }
   const parsed = new URL(url, document.baseURI);
   const ext = resourceExtension(url);
   const kind =

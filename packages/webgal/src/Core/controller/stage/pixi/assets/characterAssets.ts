@@ -1,5 +1,4 @@
 import type * as PIXI from 'pixi.js';
-import { parseCharacterFigureSource } from '@/Core/character/characterSource';
 import {
   CharacterTemplateError,
   type ICharacterCanvas,
@@ -9,7 +8,6 @@ import {
   resolveCharacterTemplateSelection,
   validateCharacterTemplate,
 } from '@/Core/character/characterTemplate';
-import { assetSetter, fileType } from '@/Core/util/gameAssetsAccess/assetSetter';
 import type { LoadDependency, PreparedResource } from './resourceTypes';
 
 export interface IPreparedCharacterLayer {
@@ -50,18 +48,17 @@ function toPreparedLayer(layer: ICharacterCompositionLayer, texture: PIXI.Textur
 
 /** 加载组合角色模板及所选图层的纹理，图集由 AssetManager 统一去重与回收。 */
 export async function loadCharacterResources(
-  sourceUrl: string,
+  templateUrl: string,
+  items: readonly string[],
   load: LoadDependency,
 ): Promise<IPreparedCharacterFigureResource> {
-  const source = parseCharacterFigureSource(sourceUrl);
-  if (!source) {
-    throw new CharacterTemplateError(`无效的组合角色资源标识：${sourceUrl}`);
+  if (items.length === 0) {
+    throw new CharacterTemplateError('组合列表不能为空');
   }
 
-  const templateUrl = assetSetter(`${source.name}/figure.json`, fileType.figure);
   const template = await load<ICharacterTemplate>(templateUrl, 'json');
   validateCharacterTemplate(template);
-  const composition = resolveCharacterTemplateSelection(template, source.items);
+  const composition = resolveCharacterTemplateSelection(template, [...items]);
 
   // 先校验并解析全部图层路径，避免部分纹理已发请求才发现路径越界。
   const layerRequests = composition.layers.map((layer) => ({
