@@ -7,6 +7,9 @@ import { baseBlinkParam, baseFocusParam } from '@/Core/live2DCore';
 import {
   baseTransform,
   FIGURE_KEYS,
+  FIGURE_POSITIONS,
+  figureStateKeyByPosition,
+  ICharacterFigure,
   IEffect,
   IFigureMetadata,
   IFreeFigure,
@@ -48,6 +51,7 @@ export const initState: IStageState = {
   figNameLeft14: '',
   figNameRight14: '',
   freeFigure: [],
+  characterFigures: [],
   figureAssociatedAnimation: [],
   isRead: false,
   showText: '',
@@ -132,6 +136,7 @@ export class StageStateManager {
     // 读档、回溯与场景重建只恢复普通状态，不能携带上一次演算的换图意图。
     WebGAL.figureDiffManager.clear();
     this.calculationStageState = cloneDeep(stageState);
+    this.calculationStageState.characterFigures ??= [];
   }
 
   public replaceAllStageState(stageState: IStageState, options?: IStageCommitOptions) {
@@ -156,6 +161,7 @@ export class StageStateManager {
       STAGE_KEYS.BGMAIN,
       ...FIGURE_KEYS,
       ...state.freeFigure.map((figure) => figure.key),
+      ...(state.characterFigures ?? []).map((character) => character.key),
     ];
     if (!activeTargets.includes(target)) return;
 
@@ -289,6 +295,34 @@ export class StageStateManager {
     } else if (newFigure.name !== '') {
       currentFreeFigures.push(newFigure);
     }
+  }
+
+  public setCharacterFigureByKey(character: ICharacterFigure): void {
+    const current = (this.calculationStageState.characterFigures ??= []);
+    const next: ICharacterFigure = {
+      key: character.key,
+      name: character.name,
+      basePosition: character.basePosition,
+      ...(character.preset !== undefined ? { preset: character.preset } : {}),
+      ...(character.components !== undefined ? { components: [...character.components] } : {}),
+    };
+    const index = current.findIndex((entry) => entry.key === character.key);
+    if (index >= 0) current[index] = next;
+    else current.push(next);
+  }
+
+  public removeCharacterFigureByKey(key: string): void {
+    const current = (this.calculationStageState.characterFigures ??= []);
+    const index = current.findIndex((entry) => entry.key === key);
+    if (index >= 0) current.splice(index, 1);
+  }
+
+  public clearStandardFigureSlotByKey(key: string): void {
+    const state = this.calculationStageState;
+    const pos = FIGURE_POSITIONS.find((p) => `fig-${p}` === key);
+    if (pos) state[figureStateKeyByPosition[pos]] = '';
+    this.setFreeFigureByKey({ key, name: '', basePosition: 'center' });
+    state.figureAssociatedAnimation = state.figureAssociatedAnimation.filter((item) => item.targetId !== key);
   }
 
   public setLive2dMotion(payload: ILive2DMotion) {

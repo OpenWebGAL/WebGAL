@@ -222,6 +222,9 @@ function createSnapshot(stageState: IStageState): TargetTransformBaselineSnapsho
   stageState.freeFigure.forEach((figure) => {
     knownTargets.add(figure.key);
   });
+  (stageState.characterFigures ?? []).forEach((character) => {
+    knownTargets.add(character.key);
+  });
 
   const transformsByTarget = new Map<string, ITransform>();
   stageState.effects.forEach((effect) => {

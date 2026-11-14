@@ -474,3 +474,74 @@ test("comment-only line preserves following semicolons", async () => {
   };
   expectSentenceIn(result.sentenceList, expectSentenceItem);
 });
+
+test("character command parses default preset, explicit preset, components, none, and clear without emitting raw targets into assetsList", () => {
+  const prefetchedAssets: IAsset[] = [];
+  const parser = new SceneParser(
+    (assetList) => {
+      prefetchedAssets.push(...assetList);
+    },
+    (fileName) => `/game/figure/${fileName}`,
+    ADD_NEXT_ARG_LIST,
+    SCRIPT_CONFIG,
+  );
+
+  const result = parser.parse(
+    `character:alice ;默认第一个预设\ncharacter:alice.smile -left;\ncharacter:alice -components=school_body, eye_open, mouth_smile -right;\ncharacter:none;\ncharacter:alice -clear;`,
+    'test',
+    'test',
+  );
+
+  expect(result.sentenceList.map(dropLineRange)).toEqual([
+    {
+      command: commandType.character,
+      commandRaw: 'character',
+      content: 'alice',
+      args: [],
+      sentenceAssets: [],
+      subScene: [],
+      inlineComment: '默认第一个预设',
+    },
+    {
+      command: commandType.character,
+      commandRaw: 'character',
+      content: 'alice.smile',
+      args: [{ key: 'left', value: true }],
+      sentenceAssets: [],
+      subScene: [],
+      inlineComment: '',
+    },
+    {
+      command: commandType.character,
+      commandRaw: 'character',
+      content: 'alice',
+      args: [
+        { key: 'components', value: 'school_body, eye_open, mouth_smile' },
+        { key: 'right', value: true },
+      ],
+      sentenceAssets: [],
+      subScene: [],
+      inlineComment: '',
+    },
+    {
+      command: commandType.character,
+      commandRaw: 'character',
+      content: '',
+      args: [],
+      sentenceAssets: [],
+      subScene: [],
+      inlineComment: '',
+    },
+    {
+      command: commandType.character,
+      commandRaw: 'character',
+      content: 'alice',
+      args: [{ key: 'clear', value: true }],
+      sentenceAssets: [],
+      subScene: [],
+      inlineComment: '',
+    },
+  ]);
+  expect(result.assetsList).toEqual([]);
+  expect(prefetchedAssets).toEqual([]);
+});
