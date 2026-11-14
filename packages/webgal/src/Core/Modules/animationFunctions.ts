@@ -96,6 +96,12 @@ export function getAnimateDuration(animationName: string) {
   return 0;
 }
 
+export function getExitDuration(target: string, isBg = false): number {
+  const setting = stageStateManager.getCalculationStageState().animationSettings.find((item) => item.target === target);
+  if (setting?.exitAnimationName) return getAnimateDuration(setting.exitAnimationName);
+  return setting?.exitDuration ?? (isBg ? DEFAULT_BG_OUT_DURATION : DEFAULT_FIG_OUT_DURATION);
+}
+
 /**
  * 取退出动画。
  *
@@ -110,11 +116,10 @@ export function getExitAnimation(
   duration: number;
   animation: IAnimationObject | null;
 } {
-  let duration = isBg ? DEFAULT_BG_OUT_DURATION : DEFAULT_FIG_OUT_DURATION;
+  const duration = getExitDuration(target, isBg);
   const animationSettings = stageStateManager
     .getCalculationStageState()
     .animationSettings.find((setting) => setting.target === target);
-  duration = animationSettings?.exitDuration ?? duration;
   // 走默认动画
   let animation: IAnimationObject | null = generateUniversalSoftOffAnimationObj(realTarget ?? target, duration);
   const animationName = animationSettings?.exitAnimationName;
@@ -123,11 +128,10 @@ export function getExitAnimation(
     animation = getAnimationObject(
       animationName,
       realTarget ?? target,
-      getAnimateDuration(animationName),
+      duration,
       false,
       !(animationSettings?.exitAnimationIgnoreDefault ?? false),
     );
-    duration = getAnimateDuration(animationName);
   }
   if (animationSettings) {
     // 退出动画拿完后，删了这个设定

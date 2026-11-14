@@ -14,7 +14,8 @@ import { logger } from '@/Core/util/logger';
 import { setEbg } from '@/Core/gameScripts/changeBg/setEbg';
 import { applyTransformToPixiContainer } from '@/Core/controller/stage/pixi/stageEffectTransform';
 import { prefetchCurrentSceneByProgress } from '@/Core/util/prefetcher/progressPrefetcher';
-import { getCharacterIdentity, getCharacterSelectionKey } from '@/Core/controller/stage/pixi/characterFigure';
+import { getCharacterIdentity } from '@/Core/controller/stage/pixi/characterFigure';
+import { characterResource, resourceKey } from './assets/resourceTypes';
 import { prepareFigureDiff } from './prepareFigureDiff';
 
 interface ISyncFigureSlotPayload {
@@ -172,19 +173,15 @@ function syncCharacterFigures(stageState: IStageState, skipAnimation: boolean) {
   for (const entry of characters) {
     const currentFigure = pixiStage.getStageObjByKey(entry.key);
     const identity = getCharacterIdentity(entry);
-    const selectionKey = getCharacterSelectionKey(entry);
-
-    if (!currentFigure) {
+    if (!currentFigure || currentFigure.sourceType !== 'character' || currentFigure.characterIdentity !== identity) {
+      if (currentFigure) removeFig(currentFigure, `${entry.key}-softin`, skipAnimation);
       pixiStage.addCharacterFigure(entry.key, entry);
-    } else if (currentFigure.sourceType !== 'character' || currentFigure.characterIdentity !== identity) {
-      removeFig(currentFigure, `${entry.key}-softin`, skipAnimation);
-      pixiStage.addCharacterFigure(entry.key, entry);
-    } else if (currentFigure.characterSelectionKey !== selectionKey) {
+    } else if (currentFigure.characterResourceKey !== resourceKey(characterResource(entry.name, entry))) {
       pixiStage.updateCharacterFigure(entry.key, entry);
     }
   }
 
-  for (const existFigure of [...(pixiStage.getFigureObjects() ?? [])]) {
+  for (const existFigure of [...pixiStage.getFigureObjects()]) {
     if (
       existFigure.sourceType === 'character' &&
       !existFigure.key.endsWith('-off') &&

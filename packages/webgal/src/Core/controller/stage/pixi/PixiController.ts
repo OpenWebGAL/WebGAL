@@ -56,8 +56,10 @@ export interface IStageObject {
   figureIdentity?: string;
   /** 创建组合角色时用的身份，见 characterFigure 的 getCharacterIdentity */
   characterIdentity?: string;
-  /** 组合角色当前选中的预设或组件选择标识，见 characterFigure 的 getCharacterSelectionKey */
-  characterSelectionKey?: string;
+  /** 组合角色当前选用的资源键，见 resourceTypes 的 resourceKey */
+  characterResourceKey?: string;
+  /** 组合角色最新换装请求标识，异步完成后据此丢弃过期请求 */
+  characterRequestId?: string;
   isExiting?: boolean;
   releaseInstance?: () => void;
   /** 口型、眨眼各自最新的换图请求，旧请求完成时据此丢弃 */
@@ -1054,10 +1056,7 @@ export default class PixiStage {
     if (!object) return;
     request ??= {
       url: object.sourceUrl,
-      kind:
-        object.sourceType === 'live2d' || object.sourceType === 'spine' || object.sourceType === 'character'
-          ? object.sourceType
-          : 'texture',
+      kind: object.sourceType === 'live2d' || object.sourceType === 'spine' ? object.sourceType : 'texture',
     };
     this.assets.retain(stageUuid, request);
     // 模型实例初始化尚未结束时，即使舞台对象退场，也不能销毁 SDK 正在使用的纹理。

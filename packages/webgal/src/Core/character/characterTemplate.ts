@@ -1,11 +1,11 @@
 import { logger } from '@/Core/util/logger';
 
-export interface ICharacterCanvas {
+export interface CharacterCanvas {
   width: number;
   height: number;
 }
 
-export interface ICharacterComponent {
+export interface CharacterComponent {
   src: string;
   x?: number;
   y?: number;
@@ -14,253 +14,179 @@ export interface ICharacterComponent {
   height?: number;
 }
 
-export interface ICharacterTemplate {
+export interface CharacterTemplate {
   version: 1;
-  canvas?: ICharacterCanvas;
-  components: Record<string, ICharacterComponent>;
+  canvas?: CharacterCanvas;
+  components: Record<string, CharacterComponent>;
   presets?: Record<string, string[]>;
 }
 
-export interface ICharacterSelection {
+export interface CharacterSelection {
   preset?: string;
   components?: readonly string[];
 }
 
-export interface ICharacterContentTarget {
+export interface CharacterLayerSpec {
+  src: string;
+  x: number;
+  y: number;
+  scale?: number;
+  width?: number;
+  height?: number;
+}
+
+export interface CharacterContentTarget {
   characterName: string;
   preset?: string;
 }
 
-export interface ICharacterCompositionLayer extends ICharacterComponent {
-  name: string;
-  x: number;
-  y: number;
-}
+export const MAX_CHARACTER_CANVAS_EDGE = 8192;
 
-export interface ICharacterComposition {
-  canvas: ICharacterCanvas | null;
-  layers: ICharacterCompositionLayer[];
-}
+const CHARACTER_IMAGE_EXTENSIONS = new Set(['png', 'webp', 'jpg', 'jpeg', 'avif', 'bmp', 'svg']);
 
-const MAX_CHARACTER_CANVAS_EDGE = 8192;
+const isRecord = (v: unknown): v is Record<string, unknown> => Boolean(v) && typeof v === 'object' && !Array.isArray(v);
+const isPositive = (v: unknown): v is number => typeof v === 'number' && Number.isFinite(v) && v > 0;
+const hasOwn = (obj: object, key: string): boolean => Object.prototype.hasOwnProperty.call(obj, key);
 
-export function parseCharacterContent(rawContent: string): ICharacterContentTarget | null {
+const toNonEmptyStrings = (value: unknown): string[] | null => {
+  if (!Array.isArray(value)) return null;
+  const items = value.map((item) => (typeof item === 'string' ? item.trim() : '')).filter(Boolean);
+  return items.length > 0 ? items : null;
+};
+
+export function parseCharacterContent(rawContent: string): CharacterContentTarget | null {
   const content = rawContent.trim().replace(/\\/g, '/');
-  if (!content || content.startsWith('/') || content.endsWith('/') || /[:%?#]/.test(content)) {
-    return null;
-  }
+  if (!content || content.startsWith('/') || content.endsWith('/') || /[:%?#]/.test(content)) return null;
 
-  const lastSlashIndex = content.lastIndexOf('/');
-  const dotIndex = content.lastIndexOf('.');
+  const lastSlash = content.lastIndexOf('/');
+  const dot = content.lastIndexOf('.');
   // 仅将最后一级路径段中的最后一个 "." 视为预设分隔符，避免误切上级目录名中的 "."
-  const hasPresetSeparator = dotIndex > lastSlashIndex;
-  const characterName = (hasPresetSeparator ? content.slice(0, dotIndex) : content).trim();
-  const segments = characterName.split('/');
-  if (!characterName || segments.some((segment) => !segment || segment === '.' || segment === '..')) {
-    return null;
-  }
+  const hasPreset = dot > lastSlash;
+  const characterName = (hasPreset ? content.slice(0, dot) : content).trim();
+  if (!characterName || characterName.split('/').some((seg) => !seg || seg === '.' || seg === '..')) return null;
 
-  const preset = hasPresetSeparator ? content.slice(dotIndex + 1).trim() : '';
+  const preset = hasPreset ? content.slice(dot + 1).trim() : '';
   return preset ? { characterName, preset } : { characterName };
 }
 
 export function parseCharacterComponentsArg(
   rawArg: string | number | boolean | null | undefined,
 ): string[] | undefined {
-  if (rawArg === null || rawArg === undefined || typeof rawArg === 'boolean') {
-    return undefined;
-  }
-  const items = String(rawArg)
-    .split(',')
-    .map((item) => item.trim())
-    .filter(Boolean);
-  return items.length > 0 ? items : undefined;
+  if (rawArg === null || rawArg === undefined || typeof rawArg === 'boolean') return undefined;
+  return toNonEmptyStrings(String(rawArg).split(',')) ?? undefined;
 }
 
-export function resolveCharacterTemplateSelection(
-  template: unknown,
-  selection: ICharacterSelection = {},
-): ICharacterComposition {
-  const canvas = resolveTemplateCanvas(template);
-  if (isPlainRecord(template)) {
-    const rawVersion = template.version;
-    if (rawVersion !== undefined && rawVersion !== 1) {
-      logger.warn(`不支持的角色模板版本：${String(rawVersion)}，将按版本 1 解析`);
-    }
-  }
-  if (!isPlainRecord(template) || !isPlainRecord(template.components)) {
-    logger.warn('角色模板缺少有效的 components 定义');
-    return { canvas, layers: [] };
-  }
-
-  const componentNames = resolveSelectedComponentNames(template, selection);
-  const layers: ICharacterCompositionLayer[] = [];
-
-  for (const name of componentNames) {
-    if (!hasOwn(template.components, name)) {
-      logger.warn(`未找到角色部件，已跳过：${name}`);
-      continue;
-    }
-    const layer = normalizeCompositionLayer(name, template.components[name]);
-    if (!layer) {
-      logger.warn(`角色部件定义无效，已跳过：${name}`);
-      continue;
-    }
-    layers.push(layer);
-  }
-
-  return { canvas, layers };
+export function parseCharacterTarget(
+  rawContent: string,
+  rawComponents?: string | number | boolean | null,
+): { name: string; preset?: string; components?: string[] } | null {
+  const parsed = parseCharacterContent(rawContent);
+  if (!parsed) return null;
+  const components = parseCharacterComponentsArg(rawComponents);
+  const preset = components ? undefined : parsed.preset;
+  return {
+    name: parsed.characterName,
+    ...(preset !== undefined ? { preset } : {}),
+    ...(components !== undefined ? { components } : {}),
+  };
 }
 
-export function resolveCharacterComponentUrl(
-  componentPath: string,
-  templateUrl: string,
-  baseHref = (typeof document !== 'undefined' && document.baseURI) ||
-    (typeof window !== 'undefined' ? window.location.href : 'http://localhost/'),
-): string | null {
-  if (typeof componentPath !== 'string' || !componentPath.trim()) {
-    logger.warn('角色部件路径为空，已跳过');
-    return null;
-  }
-  const trimmedPath = componentPath.trim();
-  if (isNonRelativeComponentPath(trimmedPath)) {
-    logger.warn(`角色部件路径必须相对角色目录，已跳过：${componentPath}`);
-    return null;
-  }
-
-  let decodedPath: string;
-  try {
-    decodedPath = decodeURIComponent(trimmedPath);
-  } catch {
-    logger.warn(`角色部件路径包含非法编码，已跳过：${componentPath}`);
-    return null;
-  }
-
-  // 解码后再检查，避免百分号编码隐藏绝对路径或目录回退段。
-  if (isNonRelativeComponentPath(decodedPath)) {
-    logger.warn(`角色部件路径必须相对角色目录，已跳过：${componentPath}`);
-    return null;
-  }
-  if (decodedPath.replace(/\\/g, '/').split('/').includes('..')) {
-    logger.warn(`角色部件路径越出角色目录，已跳过：${componentPath}`);
-    return null;
-  }
-
-  const resourcePath = decodedPath.split(/[?#]/, 1)[0];
-  if (!/\.(?:png|webp|jpe?g|avif|bmp|svg)$/i.test(resourcePath)) {
-    logger.warn(`角色部件图片格式不受支持，已跳过：${componentPath}`);
-    return null;
-  }
-
-  try {
-    const characterDirectoryUrl = new URL('./', new URL(templateUrl, baseHref));
-    const componentUrl = new URL(trimmedPath, characterDirectoryUrl);
-    if (
-      componentUrl.origin !== characterDirectoryUrl.origin ||
-      !componentUrl.pathname.startsWith(characterDirectoryUrl.pathname)
-    ) {
-      logger.warn(`角色部件路径越出角色目录，已跳过：${componentPath}`);
-      return null;
-    }
-    return componentUrl.toString();
-  } catch {
-    logger.warn(`角色部件路径解析失败，已跳过：${componentPath}`);
-    return null;
-  }
-}
-
-function resolveTemplateCanvas(template: unknown): ICharacterCanvas | null {
-  if (!isPlainRecord(template) || !isPlainRecord(template.canvas)) {
-    return null;
-  }
+function parseCanvas(template: unknown): CharacterCanvas | null {
+  if (!isRecord(template) || !isRecord(template.canvas)) return null;
   const { width, height } = template.canvas;
-  if (!isFinitePositiveNumber(width) || !isFinitePositiveNumber(height)) {
-    return null;
-  }
+  if (!isPositive(width) || !isPositive(height)) return null;
   return {
     width: Math.min(MAX_CHARACTER_CANVAS_EDGE, Math.max(1, Math.round(width))),
     height: Math.min(MAX_CHARACTER_CANVAS_EDGE, Math.max(1, Math.round(height))),
   };
 }
 
-function resolveSelectedComponentNames(template: Record<string, unknown>, selection: ICharacterSelection): string[] {
-  const customItems = selection.components
-    ?.map((item) => (typeof item === 'string' ? item.trim() : ''))
-    .filter(Boolean);
-  if (customItems && customItems.length > 0) {
-    return customItems;
-  }
+function selectComponentNames(template: Record<string, unknown>, selection: CharacterSelection): string[] {
+  const custom = toNonEmptyStrings(selection.components);
+  if (custom) return custom;
 
-  const presets = isPlainRecord(template.presets) ? template.presets : undefined;
+  const presets = isRecord(template.presets) ? template.presets : undefined;
   if (selection.preset) {
-    const presetItems =
-      presets && hasOwn(presets, selection.preset) ? extractStringItems(presets[selection.preset]) : null;
-    if (presetItems) {
-      return presetItems;
-    }
+    const chosen = presets && hasOwn(presets, selection.preset) ? toNonEmptyStrings(presets[selection.preset]) : null;
+    if (chosen) return chosen;
     logger.warn(`未找到角色预设或预设为空：${selection.preset}，将回退到默认预设`);
   }
 
-  const fallbackItems = resolveFirstValidPreset(presets);
-  if (!fallbackItems) {
-    logger.warn('角色模板未定义任何有效预设');
-    return [];
-  }
-  return fallbackItems;
+  const fallback = presets ? Object.values(presets).map(toNonEmptyStrings).find(Boolean) ?? null : null;
+  if (!fallback) logger.warn('角色模板未定义任何有效预设');
+  return fallback ?? [];
 }
 
-function resolveFirstValidPreset(presets: Record<string, unknown> | undefined): string[] | null {
-  if (!presets) {
-    return null;
+function toLayerSpec(raw: unknown): CharacterLayerSpec | null {
+  if (!isRecord(raw) || typeof raw.src !== 'string' || !raw.src.trim()) return null;
+  const x = typeof raw.x === 'number' && Number.isFinite(raw.x) ? raw.x : 0;
+  const y = typeof raw.y === 'number' && Number.isFinite(raw.y) ? raw.y : 0;
+  if (isPositive(raw.width) && isPositive(raw.height)) {
+    return { src: raw.src.trim(), x, y, width: raw.width, height: raw.height };
   }
-  for (const preset of Object.values(presets)) {
-    const items = extractStringItems(preset);
-    if (items) {
-      return items;
+  if (isPositive(raw.scale)) return { src: raw.src.trim(), x, y, scale: raw.scale };
+  return { src: raw.src.trim(), x, y };
+}
+
+export function resolveCharacterLayers(
+  template: unknown,
+  selection: CharacterSelection = {},
+): { canvas: CharacterCanvas | null; layers: CharacterLayerSpec[] } {
+  const canvas = parseCanvas(template);
+  if (isRecord(template) && template.version !== undefined && template.version !== 1) {
+    logger.warn(`不支持的角色模板版本：${String(template.version)}，将按版本 1 解析`);
+  }
+  if (!isRecord(template) || !isRecord(template.components)) {
+    logger.warn('角色模板缺少有效的 components 定义');
+    return { canvas, layers: [] };
+  }
+
+  const layers: CharacterLayerSpec[] = [];
+  for (const name of selectComponentNames(template, selection)) {
+    const spec = hasOwn(template.components, name) ? toLayerSpec(template.components[name]) : null;
+    if (!spec) {
+      logger.warn(`角色部件缺失或定义无效，已跳过：${name}`);
+      continue;
     }
+    layers.push(spec);
   }
-  return null;
+  return { canvas, layers };
 }
 
-function extractStringItems(value: unknown): string[] | null {
-  if (!Array.isArray(value)) {
+export function resolveCharacterComponentUrl(
+  componentPath: string,
+  templateUrl: string,
+  baseHref = (typeof document !== 'undefined' && document.baseURI) || 'http://localhost/',
+): string | null {
+  const trimmed = typeof componentPath === 'string' ? componentPath.trim() : '';
+  if (!trimmed) {
+    logger.warn('角色部件路径为空，已跳过');
     return null;
   }
-  const items = value.map((item) => (typeof item === 'string' ? item.trim() : '')).filter(Boolean);
-  return items.length > 0 ? items : null;
-}
-
-function normalizeCompositionLayer(name: string, rawComponent: unknown): ICharacterCompositionLayer | null {
-  if (!isPlainRecord(rawComponent) || typeof rawComponent.src !== 'string' || !rawComponent.src.trim()) {
+  try {
+    const decoded = decodeURIComponent(trimmed);
+    const unsafe = /^(?:[a-z][a-z\d+.-]*:|[\\/])/i;
+    // 解码后再校验，防止百分号编码绕过相对路径与目录越界检查
+    if (unsafe.test(trimmed) || unsafe.test(decoded) || decoded.replace(/\\/g, '/').split('/').includes('..')) {
+      logger.warn(`角色部件路径必须相对角色目录，已跳过：${componentPath}`);
+      return null;
+    }
+    const baseDir = new URL('./', new URL(templateUrl, baseHref));
+    const componentUrl = new URL(trimmed, baseDir);
+    if (componentUrl.origin !== baseDir.origin || !componentUrl.pathname.startsWith(baseDir.pathname)) {
+      logger.warn(`角色部件路径越出角色目录，已跳过：${componentPath}`);
+      return null;
+    }
+    const fileName = componentUrl.pathname.split('/').pop() ?? '';
+    const dotIdx = fileName.lastIndexOf('.');
+    const ext = dotIdx > 0 ? fileName.slice(dotIdx + 1).toLowerCase() : '';
+    if (!CHARACTER_IMAGE_EXTENSIONS.has(ext)) {
+      logger.warn(`角色部件图片格式不受支持，已跳过：${componentPath}`);
+      return null;
+    }
+    return componentUrl.toString();
+  } catch {
+    logger.warn(`角色部件路径无效，已跳过：${componentPath}`);
     return null;
   }
-  const layer: ICharacterCompositionLayer = {
-    name,
-    src: rawComponent.src.trim(),
-    x: Number.isFinite(rawComponent.x) ? rawComponent.x : 0,
-    y: Number.isFinite(rawComponent.y) ? rawComponent.y : 0,
-  };
-  if (isFinitePositiveNumber(rawComponent.width) && isFinitePositiveNumber(rawComponent.height)) {
-    return { ...layer, width: rawComponent.width, height: rawComponent.height };
-  }
-  if (isFinitePositiveNumber(rawComponent.scale)) {
-    return { ...layer, scale: rawComponent.scale };
-  }
-  return layer;
-}
-
-function isPlainRecord(value: unknown): value is Record<string, any> {
-  return Boolean(value) && typeof value === 'object' && !Array.isArray(value);
-}
-
-function isFinitePositiveNumber(value: unknown): value is number {
-  return Number.isFinite(value) && (value as number) > 0;
-}
-
-function isNonRelativeComponentPath(componentPath: string): boolean {
-  return /^(?:[a-z][a-z\d+.-]*:|[\\/])/i.test(componentPath);
-}
-
-function hasOwn(record: object | undefined, key: string): boolean {
-  return record !== undefined && Object.prototype.hasOwnProperty.call(record, key);
 }

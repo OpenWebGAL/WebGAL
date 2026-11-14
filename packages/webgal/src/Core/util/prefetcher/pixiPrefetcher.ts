@@ -1,32 +1,26 @@
 import { commandType, IScene, ISentence } from '@/Core/controller/scene/sceneInterface';
 import { assetSetter, fileType } from '@/Core/util/gameAssetsAccess/assetSetter';
-import { ResourceRequest, stageResource } from '@/Core/controller/stage/pixi/assets/resourceTypes';
-import { parseCharacterComponentsArg, parseCharacterContent } from '@/Core/character/characterTemplate';
+import { characterResource, ResourceRequest, stageResource } from '@/Core/controller/stage/pixi/assets/resourceTypes';
+import { parseCharacterTarget } from '@/Core/character/characterTemplate';
+import { WEBGAL_NONE } from '@/Core/constants';
 import { getBooleanArgByKey, getSentenceArgByKey } from '@/Core/util/getSentenceArg';
 
 const FIGURE_TEXTURE_ARGS = ['mouthOpen', 'mouthClose', 'mouthHalfOpen', 'eyesOpen', 'eyesClose'];
 
 function toCharacterPrefetchRequest(sentence: ISentence): ResourceRequest | null {
   const content = sentence.content;
-  if (!content || content === 'none' || content.includes('{') || getBooleanArgByKey(sentence, 'clear')) {
-    return null;
-  }
   const rawComponents = getSentenceArgByKey(sentence, 'components');
-  if (typeof rawComponents === 'string' && rawComponents.includes('{')) {
+  if (
+    !content ||
+    content === WEBGAL_NONE ||
+    content.includes('{') ||
+    getBooleanArgByKey(sentence, 'clear') ||
+    (typeof rawComponents === 'string' && rawComponents.includes('{'))
+  ) {
     return null;
   }
-  const parsed = parseCharacterContent(content);
-  if (!parsed) {
-    return null;
-  }
-  const components = parseCharacterComponentsArg(rawComponents);
-  const preset = components ? undefined : parsed.preset;
-  return {
-    url: assetSetter(`${parsed.characterName}/figure.json`, fileType.figure),
-    kind: 'character',
-    ...(preset !== undefined ? { preset } : {}),
-    ...(components !== undefined ? { components } : {}),
-  };
+  const target = parseCharacterTarget(content, rawComponents);
+  return target ? characterResource(target.name, target) : null;
 }
 
 /** 只预测路径已确定的舞台资源，不提前执行变量赋值、条件或跳转。 */

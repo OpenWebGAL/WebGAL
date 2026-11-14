@@ -1,4 +1,5 @@
 import type { Texture } from 'pixi.js';
+import { assetSetter, fileType } from '@/Core/util/gameAssetsAccess/assetSetter';
 
 export type ResourceKind = 'texture' | 'live2d' | 'spine' | 'character' | 'json' | 'binary' | 'text';
 export interface ResourceRequest {
@@ -30,4 +31,16 @@ export function stageResource(url: string): ResourceRequest {
   const kind =
     parsed.searchParams.get('type') === 'spine' || ext === 'skel' ? 'spine' : ext === 'json' ? 'live2d' : 'texture';
   return { url, kind };
+}
+
+export function characterResource(
+  name: string,
+  selection: Pick<ResourceRequest, 'preset' | 'components'> = {},
+): ResourceRequest {
+  return {
+    url: assetSetter(`${name}/figure.json`, fileType.figure),
+    kind: 'character',
+    ...(selection.preset !== undefined ? { preset: selection.preset } : {}),
+    ...(selection.components !== undefined ? { components: [...selection.components] } : {}),
+  };
 }

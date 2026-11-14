@@ -297,55 +297,32 @@ export class StageStateManager {
     }
   }
 
-  public setCharacterFigureByKey(newCharacter: ICharacterFigure) {
-    const currentCharacters = (this.calculationStageState.characterFigures ??= []);
-    const nextCharacter: ICharacterFigure = {
-      key: newCharacter.key,
-      name: newCharacter.name,
-      basePosition: newCharacter.basePosition,
-      ...(newCharacter.preset !== undefined ? { preset: newCharacter.preset } : {}),
-      ...(newCharacter.components !== undefined ? { components: [...newCharacter.components] } : {}),
+  public setCharacterFigureByKey(character: ICharacterFigure): void {
+    const current = (this.calculationStageState.characterFigures ??= []);
+    const next: ICharacterFigure = {
+      key: character.key,
+      name: character.name,
+      basePosition: character.basePosition,
+      ...(character.preset !== undefined ? { preset: character.preset } : {}),
+      ...(character.components !== undefined ? { components: [...character.components] } : {}),
     };
-    const index = currentCharacters.findIndex((character) => character.key === newCharacter.key);
-    if (index >= 0) {
-      currentCharacters[index] = nextCharacter;
-    } else {
-      currentCharacters.push(nextCharacter);
-    }
+    const index = current.findIndex((entry) => entry.key === character.key);
+    if (index >= 0) current[index] = next;
+    else current.push(next);
   }
 
-  public removeCharacterFigureByKey(key: string): boolean {
-    const currentCharacters = (this.calculationStageState.characterFigures ??= []);
-    const index = currentCharacters.findIndex((character) => character.key === key);
-    if (index < 0) {
-      return false;
-    }
-    currentCharacters.splice(index, 1);
-    return true;
+  public removeCharacterFigureByKey(key: string): void {
+    const current = (this.calculationStageState.characterFigures ??= []);
+    const index = current.findIndex((entry) => entry.key === key);
+    if (index >= 0) current.splice(index, 1);
   }
 
-  public clearStandardFigureSlotByKey(key: string): boolean {
+  public clearStandardFigureSlotByKey(key: string): void {
     const state = this.calculationStageState;
-    let cleared = false;
-
-    for (const pos of FIGURE_POSITIONS) {
-      if (key === `fig-${pos}`) {
-        const stateKey = figureStateKeyByPosition[pos];
-        if (state[stateKey] !== '') {
-          state[stateKey] = '';
-          cleared = true;
-        }
-        break;
-      }
-    }
-
-    if (state.freeFigure.some((figure) => figure.key === key)) {
-      this.setFreeFigureByKey({ key, name: '', basePosition: 'center' });
-      cleared = true;
-    }
-
+    const pos = FIGURE_POSITIONS.find((p) => `fig-${p}` === key);
+    if (pos) state[figureStateKeyByPosition[pos]] = '';
+    this.setFreeFigureByKey({ key, name: '', basePosition: 'center' });
     state.figureAssociatedAnimation = state.figureAssociatedAnimation.filter((item) => item.targetId !== key);
-    return cleared;
   }
 
   public setLive2dMotion(payload: ILive2DMotion) {
