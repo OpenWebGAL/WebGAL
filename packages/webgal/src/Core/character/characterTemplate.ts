@@ -6,6 +6,7 @@ export interface CharacterCanvas {
 }
 
 export interface CharacterComponent {
+  name: string;
   src: string;
   x?: number;
   y?: number;
@@ -20,7 +21,7 @@ export interface CharacterComponent {
 export interface CharacterTemplate {
   version: 1;
   canvas?: CharacterCanvas;
-  components: Record<string, CharacterComponent>;
+  components: CharacterComponent[];
   presets?: Record<string, string[]>;
 }
 
@@ -155,14 +156,27 @@ export function resolveCharacterLayers(
   if (isRecord(template) && template.version !== undefined && template.version !== 1) {
     logger.warn(`不支持的角色模板版本：${String(template.version)}，将按版本 1 解析`);
   }
-  if (!isRecord(template) || !isRecord(template.components)) {
+  if (!isRecord(template) || !Array.isArray(template.components)) {
     logger.warn('角色模板缺少有效的 components 定义');
     return { canvas, layers: [] };
   }
 
+  const componentMap = new Map<string, unknown>();
+  for (const item of template.components) {
+    const name = isRecord(item) && typeof item.name === 'string' ? item.name.trim() : '';
+    if (!name) {
+      logger.warn('角色部件缺少有效名称，已跳过');
+      continue;
+    }
+    if (componentMap.has(name)) {
+      logger.warn(`角色部件名称重复，已覆盖同名定义：${name}`);
+    }
+    componentMap.set(name, item);
+  }
+
   const layers: CharacterLayerSpec[] = [];
   for (const name of selectComponentNames(template, selection)) {
-    const spec = hasOwn(template.components, name) ? toLayerSpec(template.components[name]) : null;
+    const spec = toLayerSpec(componentMap.get(name));
     if (!spec) {
       logger.warn(`角色部件缺失或定义无效，已跳过：${name}`);
       continue;
