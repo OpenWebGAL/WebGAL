@@ -109,7 +109,11 @@ function parseCanvas(template: unknown): CharacterCanvas | null {
   };
 }
 
-function selectComponentNames(template: Record<string, unknown>, selection: CharacterSelection): string[] {
+function selectComponentNames(
+  template: Record<string, unknown>,
+  selection: CharacterSelection,
+  allComponentNames: readonly string[],
+): readonly string[] {
   const custom = toNonEmptyStrings(selection.components);
   if (custom) return custom;
 
@@ -117,12 +121,11 @@ function selectComponentNames(template: Record<string, unknown>, selection: Char
   if (selection.preset) {
     const chosen = presets && hasOwn(presets, selection.preset) ? toNonEmptyStrings(presets[selection.preset]) : null;
     if (chosen) return chosen;
-    logger.warn(`未找到角色预设或预设为空：${selection.preset}，将回退到默认预设`);
+    logger.warn(`未找到角色预设或预设为空：${selection.preset}，将回退到默认显示`);
   }
 
   const fallback = presets ? Object.values(presets).map(toNonEmptyStrings).find(Boolean) ?? null : null;
-  if (!fallback) logger.warn('角色模板未定义任何有效预设');
-  return fallback ?? [];
+  return fallback ?? allComponentNames;
 }
 
 function toLayerSpec(raw: unknown): CharacterLayerSpec | null {
@@ -170,12 +173,13 @@ export function resolveCharacterLayers(
     }
     if (componentMap.has(name)) {
       logger.warn(`角色部件名称重复，已覆盖同名定义：${name}`);
+      componentMap.delete(name);
     }
     componentMap.set(name, item);
   }
 
   const layers: CharacterLayerSpec[] = [];
-  for (const name of selectComponentNames(template, selection)) {
+  for (const name of selectComponentNames(template, selection, Array.from(componentMap.keys()))) {
     const spec = toLayerSpec(componentMap.get(name));
     if (!spec) {
       logger.warn(`角色部件缺失或定义无效，已跳过：${name}`);
