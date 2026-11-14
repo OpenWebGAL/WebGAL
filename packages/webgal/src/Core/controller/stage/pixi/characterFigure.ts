@@ -60,12 +60,23 @@ function mountPreparedCharacter(
   for (const layer of layers) {
     if (layer.texture.width <= 0 || layer.texture.height <= 0) continue;
     const sprite = new PIXI.Sprite(layer.texture);
-    sprite.position.set(layer.x, layer.y);
+    const sx = layer.scaleX ?? layer.scale ?? 1;
+    const sy = layer.scaleY ?? layer.scale ?? 1;
+    const drawW = layer.width ?? layer.texture.width * sx;
+    const drawH = layer.height ?? layer.texture.height * sy;
     if (layer.width !== undefined && layer.height !== undefined) {
       sprite.width = layer.width;
       sprite.height = layer.height;
-    } else if (layer.scale !== undefined) {
-      sprite.scale.set(layer.scale, layer.scale);
+    } else if (sx !== 1 || sy !== 1) {
+      sprite.scale.set(sx, sy);
+    }
+    if (layer.rotation) {
+      // 围绕图层中心旋转，再把中心放回原局部坐标框的几何中心
+      sprite.anchor.set(0.5, 0.5);
+      sprite.position.set(layer.x + drawW / 2, layer.y + drawH / 2);
+      sprite.rotation = layer.rotation;
+    } else {
+      sprite.position.set(layer.x, layer.y);
     }
     canvasContainer.addChild(sprite);
   }

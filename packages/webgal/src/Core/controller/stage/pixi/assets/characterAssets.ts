@@ -25,10 +25,25 @@ function inferCharacterCanvas(layers: readonly CharacterTextureLayer[]): Charact
   let maxBottom = 0;
   for (const layer of layers) {
     const tex = layer.texture;
-    const drawW = layer.width ?? (layer.scale !== undefined ? tex.width * layer.scale : tex.width);
-    const drawH = layer.height ?? (layer.scale !== undefined ? tex.height * layer.scale : tex.height);
-    if (Number.isFinite(drawW) && drawW > 0) maxRight = Math.max(maxRight, layer.x + drawW);
-    if (Number.isFinite(drawH) && drawH > 0) maxBottom = Math.max(maxBottom, layer.y + drawH);
+    const sx = layer.scaleX ?? layer.scale ?? 1;
+    const sy = layer.scaleY ?? layer.scale ?? 1;
+    const drawW = layer.width ?? tex.width * sx;
+    const drawH = layer.height ?? tex.height * sy;
+    if (!Number.isFinite(drawW) || !Number.isFinite(drawH) || drawW <= 0 || drawH <= 0) continue;
+
+    const r = layer.rotation ?? 0;
+    if (!r) {
+      maxRight = Math.max(maxRight, layer.x + drawW);
+      maxBottom = Math.max(maxBottom, layer.y + drawH);
+      continue;
+    }
+    // 围绕图层中心旋转后的轴对齐包围盒右/下边界，确保画布能完整容纳旋转部件
+    const cx = layer.x + drawW / 2;
+    const cy = layer.y + drawH / 2;
+    const cos = Math.abs(Math.cos(r));
+    const sin = Math.abs(Math.sin(r));
+    maxRight = Math.max(maxRight, cx + (cos * drawW + sin * drawH) / 2);
+    maxBottom = Math.max(maxBottom, cy + (sin * drawW + cos * drawH) / 2);
   }
   const clampEdge = (val: number, fallback: number) =>
     val > 0 ? Math.min(MAX_CHARACTER_CANVAS_EDGE, Math.max(1, Math.ceil(val))) : fallback;

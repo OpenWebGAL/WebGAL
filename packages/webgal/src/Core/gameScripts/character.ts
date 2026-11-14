@@ -2,7 +2,7 @@ import isEqual from 'lodash/isEqual';
 import { v4 as uuid } from 'uuid';
 import type { ISentence } from '@/Core/controller/scene/sceneInterface';
 import { createNonePerform, type IPerform } from '@/Core/Modules/perform/performInterface';
-import type { ICharacterFigure } from '@/Core/Modules/stage/stageInterface';
+import type { ICharacterFigure, IFigurePosition } from '@/Core/Modules/stage/stageInterface';
 import { stageStateManager } from '@/Core/Modules/stage/stageStateManager';
 import { parseCharacterTarget } from '@/Core/character/characterTemplate';
 import type { AnimationFrame } from '@/Core/Modules/animations';
@@ -36,33 +36,41 @@ const UNSUPPORTED_FIGURE_ARGS = new Set<string>([
 
 /** 组合立绘指令入口：直接读写 stageStateManager.characterFigures，独立于 changeFigure 槽位。 */
 export function character(sentence: ISentence): IPerform {
-  const content = sentence.content.trim();
-  if (content === '' || content === WEBGAL_NONE) return clearCharacters();
+  const basePosition = getFigurePositionFromArgs(sentence) || 'center';
+  const key = getStringArgByKey(sentence, 'id')?.trim() || `fig-${basePosition}`;
+  const content = getBooleanArgByKey(sentence, 'clear') ? '' : sentence.content.trim();
+  if (content === '' || content === WEBGAL_NONE) {
+    return clearCharacterSlot(sentence, key);
+  }
 
   const target = parseCharacterTarget(content, getSentenceArgByKey(sentence, 'components'));
   if (!target) {
     logger.warn(`character 命令角色名无效，已忽略：${content}`);
     return createNonePerform();
   }
-  if (getBooleanArgByKey(sentence, 'clear')) return clearCharacters(target.name);
 
   const ignored = sentence.args.filter((arg) => UNSUPPORTED_FIGURE_ARGS.has(arg.key)).map((arg) => `-${arg.key}`);
   if (ignored.length > 0) {
     logger.warn(`静态组合角色不支持参数，已忽略：${ignored.join(', ')}`);
   }
 
-  return applyCharacter(sentence, target.name, target.preset, target.components);
+  return applyCharacter(sentence, key, basePosition, target);
 }
 
-function clearCharacters(characterName?: string, exceptKey?: string): IPerform {
-  const targets = (stageStateManager.getCalculationStageState().characterFigures ?? []).filter(
-    (entry) => entry.key !== exceptKey && (characterName === undefined || entry.name === characterName),
-  );
-  if (targets.length === 0) return createNonePerform();
+function clearCharacterSlot(sentence: ISentence, key: string): IPerform {
+  const entry = (stageStateManager.getCalculationStageState().characterFigures ?? []).find((item) => item.key === key);
+  if (!entry) return createNonePerform();
 
-  const duration = Math.max(...targets.map(clearCharacterEntry));
+  applyExitAnimation(sentence, key, resolveCharacterTransformArgs(sentence).writeFullEffect);
+  // 必须在移除 animationSettings 前计算退场时长，移除后阶段层会转为 ${key}-off 退场
+  const duration = getExitDuration(key);
+  WebGAL.gameplay.performController.unmountPerform(`animation-${key}`, true);
+  stageStateManager.removeEffectByTargetId(key);
+  stageStateManager.removeAnimationSettingsByTarget(key);
+  stageStateManager.setFigureMetaData([key, 'zIndex', undefined, true]);
+  stageStateManager.removeCharacterFigureByKey(key);
   return {
-    performName: `exit-${targets[0].key}`,
+    performName: `exit-${key}`,
     duration,
     isHoldOn: false,
     startFunction: () => {},
@@ -72,24 +80,13 @@ function clearCharacters(characterName?: string, exceptKey?: string): IPerform {
   };
 }
 
-function clearCharacterEntry(entry: ICharacterFigure): number {
-  // 必须在移除 animationSettings 前计算退场时长，移除后阶段层会转为 ${key}-off 退场
-  const exitDuration = getExitDuration(entry.key);
-
-  WebGAL.gameplay.performController.unmountPerform(`animation-${entry.key}`, true);
-  stageStateManager.removeEffectByTargetId(entry.key);
-  stageStateManager.removeAnimationSettingsByTarget(entry.key);
-  stageStateManager.setFigureMetaData([entry.key, 'zIndex', undefined, true]);
-  stageStateManager.removeCharacterFigureByKey(entry.key);
-  return exitDuration;
-}
-
-function applyCharacter(sentence: ISentence, name: string, preset?: string, components?: string[]): IPerform {
-  const basePosition = getFigurePositionFromArgs(sentence) || 'center';
-  const key = getStringArgByKey(sentence, 'id')?.trim() || `fig-${basePosition}`;
-
-  // 同名角色不能同时留在多个槽位上
-  clearCharacters(name, key);
+function applyCharacter(
+  sentence: ISentence,
+  key: string,
+  basePosition: IFigurePosition,
+  target: NonNullable<ReturnType<typeof parseCharacterTarget>>,
+): IPerform {
+  const { name, preset, components } = target;
   const existing = (stageStateManager.getCalculationStageState().characterFigures ?? []).find((e) => e.key === key);
   const isSameSlot = !!existing && existing.name === name && existing.basePosition === basePosition;
 
@@ -168,10 +165,9 @@ function updateCharacter(
 }
 
 function resolveCharacterTransformArgs(sentence: ISentence): CharacterTransformArgs {
-  const hasTransformFlag = ['transformFrom', 'writeDefault', 'ignoreDefault'].some(
-    (key) => getSentenceArgByKey(sentence, key) !== null,
-  );
-  return hasTransformFlag ? resolveTransformArgs(sentence) : { writeDefault: false, writeFullEffect: true };
+  return getSentenceArgByKey(sentence, 'transformFrom') !== null
+    ? resolveTransformArgs(sentence)
+    : { writeDefault: false, writeFullEffect: true };
 }
 
 const resolveEnterDuration = (sentence: ISentence): number =>

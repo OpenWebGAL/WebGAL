@@ -10,8 +10,11 @@ export interface CharacterComponent {
   x?: number;
   y?: number;
   scale?: number;
+  scaleX?: number;
+  scaleY?: number;
   width?: number;
   height?: number;
+  rotation?: number;
 }
 
 export interface CharacterTemplate {
@@ -31,8 +34,11 @@ export interface CharacterLayerSpec {
   x: number;
   y: number;
   scale?: number;
+  scaleX?: number;
+  scaleY?: number;
   width?: number;
   height?: number;
+  rotation?: number;
 }
 
 export interface CharacterContentTarget {
@@ -45,7 +51,8 @@ export const MAX_CHARACTER_CANVAS_EDGE = 8192;
 const CHARACTER_IMAGE_EXTENSIONS = new Set(['png', 'webp', 'jpg', 'jpeg', 'avif', 'bmp', 'svg']);
 
 const isRecord = (v: unknown): v is Record<string, unknown> => Boolean(v) && typeof v === 'object' && !Array.isArray(v);
-const isPositive = (v: unknown): v is number => typeof v === 'number' && Number.isFinite(v) && v > 0;
+const isFiniteNumber = (v: unknown): v is number => typeof v === 'number' && Number.isFinite(v);
+const isPositive = (v: unknown): v is number => isFiniteNumber(v) && v > 0;
 const hasOwn = (obj: object, key: string): boolean => Object.prototype.hasOwnProperty.call(obj, key);
 
 const toNonEmptyStrings = (value: unknown): string[] | null => {
@@ -119,13 +126,25 @@ function selectComponentNames(template: Record<string, unknown>, selection: Char
 
 function toLayerSpec(raw: unknown): CharacterLayerSpec | null {
   if (!isRecord(raw) || typeof raw.src !== 'string' || !raw.src.trim()) return null;
-  const x = typeof raw.x === 'number' && Number.isFinite(raw.x) ? raw.x : 0;
-  const y = typeof raw.y === 'number' && Number.isFinite(raw.y) ? raw.y : 0;
+  const x = isFiniteNumber(raw.x) ? raw.x : 0;
+  const y = isFiniteNumber(raw.y) ? raw.y : 0;
+  const rotation = isFiniteNumber(raw.rotation) && raw.rotation !== 0 ? raw.rotation : undefined;
+  const spec: CharacterLayerSpec = {
+    src: raw.src.trim(),
+    x,
+    y,
+    ...(rotation !== undefined ? { rotation } : {}),
+  };
   if (isPositive(raw.width) && isPositive(raw.height)) {
-    return { src: raw.src.trim(), x, y, width: raw.width, height: raw.height };
+    return { ...spec, width: raw.width, height: raw.height };
   }
-  if (isPositive(raw.scale)) return { src: raw.src.trim(), x, y, scale: raw.scale };
-  return { src: raw.src.trim(), x, y };
+  const baseScale = isPositive(raw.scale) ? raw.scale : undefined;
+  const sx = isPositive(raw.scaleX) ? raw.scaleX : baseScale;
+  const sy = isPositive(raw.scaleY) ? raw.scaleY : baseScale;
+  const scaleX = sx ?? 1;
+  const scaleY = sy ?? 1;
+  if (scaleX === 1 && scaleY === 1) return spec;
+  return scaleX === scaleY ? { ...spec, scale: scaleX, scaleX, scaleY } : { ...spec, scaleX, scaleY };
 }
 
 export function resolveCharacterLayers(
