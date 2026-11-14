@@ -8,17 +8,10 @@ import {
   getNumberArgByKey,
   getStringArgByKey,
 } from '@/Core/util/getSentenceArg';
-import {
-  baseTransform,
-  figureStateKeyByPosition,
-  IFreeFigure,
-  ITransform,
-  normalizeFigureBounds,
-} from '@/Core/Modules/stage/stageInterface';
-import { AnimationFrame, IUserAnimation } from '@/Core/Modules/animations';
+import { figureStateKeyByPosition, IFreeFigure, normalizeFigureBounds } from '@/Core/Modules/stage/stageInterface';
+import { AnimationFrame } from '@/Core/Modules/animations';
 import { generateTransformAnimationObj } from '@/Core/controller/stage/pixi/animations/generateTransformAnimationObj';
 import { generateTimelineObj } from '@/Core/controller/stage/pixi/animations/timeline';
-import { assetSetter, fileType } from '@/Core/util/gameAssetsAccess/assetSetter';
 import { logger } from '@/Core/util/logger';
 import { applyAnimationEndState, getAnimateDuration } from '@/Core/Modules/animationFunctions';
 import { WebGAL } from '@/Core/WebGAL';
@@ -26,6 +19,7 @@ import { baseBlinkParam, baseFocusParam, BlinkParam, FocusParam } from '@/Core/l
 import { DEFAULT_FIG_IN_DURATION, DEFAULT_FIG_OUT_DURATION, WEBGAL_NONE } from '../constants';
 import { stageStateManager } from '@/Core/Modules/stage/stageStateManager';
 import { parseTransformFrame } from './parseTransformFrame';
+import { setFigureAssociatedAnimation } from './figureAssociatedAnimation';
 /**
  * 更改立绘
  * @param sentence 语句
@@ -76,14 +70,6 @@ export function changeFigure(sentence: ISentence): IPerform {
     }
   }
 
-  // 图片立绘差分
-  const mouthOpen = assetSetter(getStringArgByKey(sentence, 'mouthOpen') ?? '', fileType.figure);
-  const mouthClose = assetSetter(getStringArgByKey(sentence, 'mouthClose') ?? '', fileType.figure);
-  const mouthHalfOpen = assetSetter(getStringArgByKey(sentence, 'mouthHalfOpen') ?? '', fileType.figure);
-  const eyesOpen = assetSetter(getStringArgByKey(sentence, 'eyesOpen') ?? '', fileType.figure);
-  const eyesClose = assetSetter(getStringArgByKey(sentence, 'eyesClose') ?? '', fileType.figure);
-  const animationFlag = getStringArgByKey(sentence, 'animationFlag') ?? '';
-
   // 其他参数
   const transformString = getStringArgByKey(sentence, 'transform');
   const ease = getStringArgByKey(sentence, 'ease') ?? '';
@@ -97,23 +83,8 @@ export function changeFigure(sentence: ISentence): IPerform {
   const exitDuration = getNumberArgByKey(sentence, 'exitDuration') ?? DEFAULT_FIG_OUT_DURATION;
   const ignoreDefault = getBooleanArgByKey(sentence, 'ignoreDefault') ?? false;
 
-  const currentFigureAssociatedAnimation = stageStateManager.getCalculationStageState().figureAssociatedAnimation;
-  const filteredFigureAssociatedAnimation = currentFigureAssociatedAnimation.filter((item) => item.targetId !== id);
-  const newFigureAssociatedAnimationItem = {
-    targetId: id,
-    animationFlag: animationFlag,
-    mouthAnimation: {
-      open: mouthOpen,
-      close: mouthClose,
-      halfOpen: mouthHalfOpen,
-    },
-    blinkAnimation: {
-      open: eyesOpen,
-      close: eyesClose,
-    },
-  };
-  filteredFigureAssociatedAnimation.push(newFigureAssociatedAnimationItem);
-  stageStateManager.setStage('figureAssociatedAnimation', filteredFigureAssociatedAnimation);
+  // 图片立绘的口型、眨眼差分
+  setFigureAssociatedAnimation(sentence, id);
 
   /**
    * 立绘的身份：图片地址、基准位置、Live2D 绘制范围。
@@ -154,15 +125,6 @@ export function changeFigure(sentence: ISentence): IPerform {
     // 处理 transform 和 默认 transform
     let animationObj: AnimationFrame[];
     const frame = transformString ? parseTransformFrame(transformString) : null;
-    const currentTransform = stageStateManager
-      .getCalculationStageState()
-      .effects.find((effect) => effect.target === key)?.transform;
-    const transformBase = isIdentityChanged ? baseTransform : currentTransform ?? baseTransform;
-    const presentationBaseTransform = frame ? buildTransformFromFrame(transformBase, frame) : cloneDeep(transformBase);
-    if (frame || isIdentityChanged) {
-      stageStateManager.updateEffect({ target: key, transform: presentationBaseTransform });
-    }
-    stageStateManager.updateAnimationSettings({ target: key, key: 'baseTransform', value: presentationBaseTransform });
     if (frame) {
       applyTransform(frame);
     } else {
@@ -174,8 +136,7 @@ export function changeFigure(sentence: ISentence): IPerform {
       // 因为是切换，必须把一开始的 alpha 改为 0
       animationObj[0].alpha = 0;
       const animationName = (Math.random() * 10).toString(16);
-      const newAnimation: IUserAnimation = { name: animationName, effects: animationObj };
-      WebGAL.animationManager.addAnimation(newAnimation);
+      WebGAL.animationManager.addAnimation(animationName, animationObj);
       duration = getAnimateDuration(animationName);
       stageStateManager.updateAnimationSettings({ target: key, key: 'enterAnimationName', value: animationName });
     }
@@ -256,14 +217,9 @@ export function changeFigure(sentence: ISentence): IPerform {
      * 下面的代码是设置自由立绘的
      */
     const freeFigureItem: IFreeFigure = { key, name: content, basePosition: pos };
-    if (content !== '') {
-      stageStateManager.setFreeFigureByKey(freeFigureItem);
-    }
     setAnimationNames(key, sentence);
     postFigureStateSet();
-    if (content === '') {
-      stageStateManager.setFreeFigureByKey(freeFigureItem);
-    }
+    stageStateManager.setFreeFigureByKey(freeFigureItem);
   } else {
     /**
      * 下面的代码是设置与位置关联的立绘的
@@ -324,17 +280,4 @@ function getOverrideBoundsArr(raw: string): undefined | [number, number, number,
   isPass = isPass && parseOverrideBoundsResult.length === 4;
   if (isPass) return parseOverrideBoundsResult as [number, number, number, number];
   else return undefined;
-}
-
-function buildTransformFromFrame(base: ITransform, frame: Partial<AnimationFrame>): ITransform {
-  const transform = cloneDeep(base);
-  if (frame.position) {
-    transform.position = { ...transform.position, ...frame.position };
-  }
-  if (frame.scale) {
-    transform.scale = { ...transform.scale, ...frame.scale };
-  }
-  const { position, scale, duration, ease, ...rest } = frame;
-  Object.assign(transform, rest);
-  return transform;
 }

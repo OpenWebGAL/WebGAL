@@ -1,4 +1,5 @@
 import cloneDeep from 'lodash/cloneDeep';
+import { WebGAL } from '@/Core/WebGAL';
 import { isUndefined, omitBy } from 'lodash';
 import { commandType } from '@/Core/controller/scene/sceneInterface';
 import { STAGE_KEYS } from '@/Core/constants';
@@ -81,6 +82,8 @@ export const initState: IStageState = {
   live2dBlink: [],
   live2dFocus: [],
   currentConcatDialogPrev: '',
+  currentDialogSegments: [],
+  isDialogNotend: false,
   enableFilm: '',
   isDisableTextbox: false,
   replacedUIlable: {},
@@ -126,11 +129,13 @@ export class StageStateManager {
   }
 
   public replaceCalculationStageState(stageState: IStageState) {
+    // 读档、回溯与场景重建只恢复普通状态，不能携带上一次演算的换图意图。
+    WebGAL.figureDiffManager.clear();
     this.calculationStageState = cloneDeep(stageState);
   }
 
   public replaceAllStageState(stageState: IStageState, options?: IStageCommitOptions) {
-    this.calculationStageState = cloneDeep(stageState);
+    this.replaceCalculationStageState(stageState);
     this.commit(options);
   }
 
@@ -144,6 +149,7 @@ export class StageStateManager {
 
   public updateEffect(payload: IEffect) {
     const { target, transform } = payload;
+    WebGAL.figureDiffManager.clear(target);
     const state = this.calculationStageState;
     const activeTargets = [
       STAGE_KEYS.STAGE_MAIN,
@@ -188,6 +194,8 @@ export class StageStateManager {
 
   public updateAnimationSettings(payload: IUpdateAnimationSettingPayload) {
     const { target, key, value } = payload;
+    // 后续普通换图或自定义过渡覆盖了目标；差分指令会在自身状态更新完毕后重新打标。
+    WebGAL.figureDiffManager.clear(target);
     const state = this.calculationStageState;
     const animationIndex = state.animationSettings.findIndex((a) => a.target === target);
     if (animationIndex >= 0) {
@@ -352,6 +360,8 @@ export class StageStateManager {
   }
 
   public clearUncommittedNonHoldPerforms() {
+    // 快速预览丢弃演出时，一并丢弃其尚未上屏的差分标记。
+    WebGAL.figureDiffManager.clear();
     this.calculationStageState.PerformList = this.calculationStageState.PerformList.filter(
       (perform) => perform.isHoldOn,
     );

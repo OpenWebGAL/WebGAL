@@ -8,7 +8,7 @@ export default function StandardTextbox(props: ITextboxProps) {
   const {
     textArray,
     textDelay,
-    currentConcatDialogPrev,
+    concatPrefixNodeCount,
     currentDialogKey,
     isText,
     isSafari,
@@ -19,6 +19,7 @@ export default function StandardTextbox(props: ITextboxProps) {
     showName,
     font,
     textDuration,
+    textRevealEnd,
     textSizeState,
     isUseStroke,
     textboxOpacity,
@@ -40,7 +41,7 @@ export default function StandardTextbox(props: ITextboxProps) {
     };
   }, []);
   const nameElementList = showName.map((e, index) => {
-    let prevLength = currentConcatDialogPrev.length;
+    let prevLength = concatPrefixNodeCount;
     if (index < prevLength) {
       return (
         <span key={currentDialogKey + index} className={styles.zhanwei}>
@@ -63,10 +64,12 @@ export default function StandardTextbox(props: ITextboxProps) {
     //   return <br key={`br${index}`} />;
     // }
     let delay = index * textDelay;
-    let prevLength = currentConcatDialogPrev.length;
-    if (currentConcatDialogPrev !== '' && index >= prevLength) {
+    let prevLength = concatPrefixNodeCount;
+    if (index >= prevLength) {
       delay = delay - prevLength * textDelay;
     }
+    const duration =
+      textRevealEnd === undefined ? textDuration : Math.min(textDuration, Math.max(0, textRevealEnd - delay));
     if (index < prevLength) {
       return (
         <span
@@ -90,7 +93,7 @@ export default function StandardTextbox(props: ITextboxProps) {
         id={`${delay}`}
         className={`${styles.TextBox_textElement_start} Textelement_start`}
         key={currentDialogKey + index}
-        style={{ animationDelay: `${delay}ms`, position: 'relative' }}
+        style={{ animationDelay: `${delay}ms`, animationDuration: `${duration}ms`, position: 'relative' }}
       >
         <span className={styles.zhanwei}>
           {e}

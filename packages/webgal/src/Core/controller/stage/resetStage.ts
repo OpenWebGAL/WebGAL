@@ -2,6 +2,7 @@ import cloneDeep from 'lodash/cloneDeep';
 import { WebGAL } from '@/Core/WebGAL';
 import { initState, stageStateManager } from '@/Core/Modules/stage/stageStateManager';
 import { stopFast } from '@/Core/controller/gamePlay/fastSkip';
+import { clearProgressPrefetch } from '@/Core/util/prefetcher/progressPrefetcher';
 
 export interface ResetStageOptions {
   commitStageState?: boolean;
@@ -22,6 +23,7 @@ export const resetStage = (resetBacklog: boolean, resetSceneAndVar = true, optio
 
   // 清空所有演出和timeOut
   WebGAL.gameplay.pixiStage?.removeAllAnimations();
+  clearProgressPrefetch();
   stopFast();
   WebGAL.gameplay.performController.removeAllPerform();
   WebGAL.gameplay.resetGamePlay();

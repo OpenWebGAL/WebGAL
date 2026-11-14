@@ -17,8 +17,12 @@ import {
 
 export default class SceneParser {
   private readonly SCRIPT_CONFIG_MAP: ConfigMap;
+  /**
+   * @param assetsPrefetcher 资源预取回调。省略时不收集资源：`sentenceAssets`、`subScene`、
+   * `assetsList`、`subSceneList` 均为空数组，适用于只需要语句结构的调用方（编辑器语法解析等）。
+   */
   constructor(
-    private readonly assetsPrefetcher: (assetList: IAsset[]) => void,
+    private readonly assetsPrefetcher: ((assetList: IAsset[]) => void) | undefined,
     private readonly assetSetter: (
       fileName: string,
       assetType: fileType,

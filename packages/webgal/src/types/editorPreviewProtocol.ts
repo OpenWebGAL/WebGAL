@@ -127,6 +127,28 @@ export interface SetEffectPayload {
   phase?: SetEffectPhase;
 }
 
+/**
+ * 把动画在 time 时刻的状态写入目标，仅用于预览，不写入舞台状态。
+ * animation 为动画 JSON（v1 关键帧数组或 v2 对象）
+ */
+export interface SeekAnimationPayload {
+  target: string;
+  animation: JsonValue;
+  time: number;
+  /**
+   * 动画开始前目标的状态，与默认变换合并后作为当前基准状态。
+   * 缺省时取带 transformBaselineRevision 的 sync-scene 记录的目标语句执行前的变换，再缺省时取演算状态中的变换
+   */
+  baseTransform?: Transform;
+}
+
+export interface SeekAnimationResponsePayload {
+  /** 本次写入目标的生效变换 */
+  transform: Transform;
+  /** 本次使用的基准状态：payload.baseTransform、语句前基线或演算状态中的变换 */
+  baseTransform: Transform;
+}
+
 export interface SetFontOptimizationPayload {
   enabled: boolean;
 }
@@ -194,6 +216,7 @@ export const PREVIEW_COMMAND_PAYLOADS = definePayloadMap({
   'preview.command.set-component-visibility': payload<SetComponentVisibilityPayload>(),
   'preview.command.set-font-optimization': payload<SetFontOptimizationPayload>(),
   'preview.command.set-text-read-mode': payload<SetTextReadModePayload>(),
+  'preview.command.seek-animation': payload<SeekAnimationPayload>(),
 });
 
 export type PreviewCommandPayloadByType = typeof PREVIEW_COMMAND_PAYLOADS;
@@ -227,6 +250,48 @@ export interface PreviewReadyUpdatedPayload {
   ready: boolean;
 }
 
+export type TemplateFontFormat =
+  | 'truetype'
+  | 'opentype'
+  | 'woff'
+  | 'woff2'
+  | 'embedded-opentype'
+  | 'svg'
+  | 'collection';
+
+export interface TemplateFontDescriptor {
+  'font-family': string;
+  url: string;
+  type: TemplateFontFormat;
+  weight?: string | number;
+  style?: string;
+  display?: 'auto' | 'block' | 'swap' | 'fallback' | 'optional';
+}
+
+export interface PreviewTemplateMetadata {
+  name: string;
+  id?: string;
+  'webgal-version': string;
+  fonts?: TemplateFontDescriptor[];
+  [key: string]: unknown;
+}
+
+export type PreviewGameConfigValue = string | boolean | number | Array<string | boolean | number>;
+
+export type PreviewGameMetadata = Record<string, PreviewGameConfigValue>;
+
+export interface PreviewVersionUpdatedPayload {
+  version: string;
+}
+
+export interface PreviewTemplateUpdatedPayload {
+  template: PreviewTemplateMetadata;
+}
+
+export interface PreviewGameInfoUpdatedPayload {
+  gameInfo: PreviewGameMetadata;
+}
+
 export interface StageSnapshotUpdatedPayload {
   sceneName: string;
   sentenceId: number;
@@ -244,6 +309,9 @@ export interface FastPreviewTimeoutPayload {
 
 export const HOST_EVENT_PAYLOADS = definePayloadMap({
   'preview.ready.updated': payload<PreviewReadyUpdatedPayload>(),
+  'preview.version.updated': payload<PreviewVersionUpdatedPayload>(),
+  'preview.template.updated': payload<PreviewTemplateUpdatedPayload>(),
+  'preview.game-info.updated': payload<PreviewGameInfoUpdatedPayload>(),
   'stage.snapshot.updated': payload<StageSnapshotUpdatedPayload>(),
   'preview.event.fast-preview-timeout': payload<FastPreviewTimeoutPayload>(),
 });
@@ -278,7 +346,12 @@ export const REQUEST_TYPES = [
   ...PREVIEW_REQUEST_TYPES,
 ] as const satisfies readonly RequestType[];
 
-export type PreviewCommandResponsePayloadByType = Record<PreviewCommandType, EmptyObject>;
+export type PreviewCommandResponsePayloadByType = Omit<
+  Record<PreviewCommandType, EmptyObject>,
+  'preview.command.seek-animation'
+> & {
+  'preview.command.seek-animation': SeekAnimationResponsePayload;
+};
 
 export const PREVIEW_QUERY_RESPONSE_PAYLOADS = definePayloadMap({
   'preview.query.reference-box': payload<ReferenceBoxQueryResultPayload>(),

@@ -20,7 +20,8 @@ export const end = (sentence: ISentence): IPerform => {
   const dispatch = webgalStore.dispatch;
   // 重新获取初始场景
   const sceneUrl: string = assetSetter('start.txt', fileType.scene);
-  // 为了在 scriptExecutor 自增 sentenceId 后再重置场景
+  // scriptExecutor 会在命令返回后自增 sentenceId，必须在此之后重置，避免重置后又变为 1。
+  // 移除延时需要先让执行器显式处理结束流程，与 Pixi 是否同步无关。
   setTimeout(() => {
     WebGAL.sceneManager.resetScene();
   }, 5);

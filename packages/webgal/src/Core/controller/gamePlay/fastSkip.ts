@@ -63,6 +63,7 @@ export const startTemporaryFast = (duration = 150) => {
   clearTemporaryFast();
   if (WebGAL.gameplay.fastInterval !== null) stopFast();
   WebGAL.gameplay.isFast = true;
+  // 临时快进状态持续 duration 毫秒，供此期间的演出判断是否跳过动画。
   temporaryFastTimeout = setTimeout(() => {
     if (WebGAL.gameplay.fastInterval === null) {
       WebGAL.gameplay.isFast = false;

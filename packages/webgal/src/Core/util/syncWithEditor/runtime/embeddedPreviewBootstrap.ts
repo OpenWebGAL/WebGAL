@@ -91,6 +91,7 @@ export async function requestEmbeddedLaunchId({
     };
 
     selfWindow.addEventListener('message', handleMessage);
+    // 父窗口未回复握手时超时降级，避免预览注册永久等待；收到回复会提前清除。
     timerId = selfWindow.setTimeout(() => {
       logger.warn('等待 embeddedLaunchId bootstrap 超时，将继续以未绑定模式注册');
       finish(undefined);

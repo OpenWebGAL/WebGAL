@@ -18,6 +18,8 @@ import { ConfigMap } from '../config/scriptConfig';
  * @param assetSetter
  * @param ADD_NEXT_ARG_LIST
  * @param SCRIPT_CONFIG_MAP
+ * @param lineNumber 语句所在行号
+ * @param collectAssets 是否扫描语句携带的资源与子场景；为 false 时两者都返回空数组
  */
 export const scriptParser = (
   sentenceRaw: string,
@@ -25,6 +27,7 @@ export const scriptParser = (
   ADD_NEXT_ARG_LIST: commandType[],
   SCRIPT_CONFIG_MAP: ConfigMap,
   lineNumber = 0,
+  collectAssets = true,
 ): ISentence => {
   let command: commandType; // 默认为对话
   let content: string; // 语句内容
@@ -109,8 +112,8 @@ export const scriptParser = (
   }
 
   content = contentParser(newSentenceRaw.trim(), command, assetSetter); // 将语句内容里的文件名转为相对或绝对路径
-  sentenceAssets = assetsScanner(command, content, args, lineNumber); // 扫描语句携带资源
-  subScene = subSceneScanner(command, content); // 扫描语句携带子场景
+  sentenceAssets = collectAssets ? assetsScanner(command, content, args, lineNumber) : []; // 扫描语句携带资源
+  subScene = collectAssets ? subSceneScanner(command, content) : []; // 扫描语句携带子场景
   return {
     command: command, // 语句类型
     commandRaw: commandRaw.trim(), // 命令原始内容，方便调试

@@ -69,13 +69,15 @@ export const playVocal = (sentence: ISentence) => {
     isHoldOn: false,
     skipNextCollect: true,
     startFunction: () => {
+      // commit 只同步舞台状态，音频元素的 key/src 和音量仍由 React 渲染及 effect 更新。
+      // 暂留延时避免操作旧元素；1ms 不保证就绪，移除前应改为音频元素就绪通知。
       startTimer = setTimeout(async () => {
-        const VocalControl = document.getElementById('currentVocal') as HTMLMediaElement | null;
+        if (isOver) return;
+        let VocalControl = document.getElementById('currentVocal') as HTMLMediaElement | null;
         if (VocalControl === null) {
-          isOver = true;
+          finishPerform();
           return;
         }
-        VocalControl.currentTime = 0;
         key = key ? key : `fig-${pos}`;
         const animationItem = figureAssociatedAnimation.find((tid) => tid.targetId === key);
         if (animationItem) {
@@ -87,6 +89,13 @@ export const playVocal = (sentence: ISentence) => {
           }
 
           const isAudioContextReady = await ensureAudioContextReady();
+          // 等待 AudioContext 恢复期间演出可能已被提前结束，此时不能再挂载定时器或继续播放。
+          if (isOver) return;
+          VocalControl = document.getElementById('currentVocal') as HTMLMediaElement | null;
+          if (VocalControl === null) {
+            finishPerform();
+            return;
+          }
           if (isAudioContextReady && audioContextWrapper.audioContext) {
             if (!audioContextWrapper.analyser) {
               audioContextWrapper.analyser = audioContextWrapper.audioContext.createAnalyser();
@@ -95,20 +104,25 @@ export const playVocal = (sentence: ISentence) => {
 
             bufferLength = audioContextWrapper.analyser.frequencyBinCount;
             audioContextWrapper.dataArray = new Uint8Array(bufferLength);
-            const vocalControl = document.getElementById('currentVocal') as HTMLMediaElement;
 
-            if (!audioContextWrapper.source || audioContextWrapper.source.mediaElement !== vocalControl) {
+            if (!audioContextWrapper.source || audioContextWrapper.source.mediaElement !== VocalControl) {
               if (audioContextWrapper.source) {
                 audioContextWrapper.source.disconnect();
               }
-              audioContextWrapper.source = audioContextWrapper.audioContext.createMediaElementSource(vocalControl);
+              audioContextWrapper.source = audioContextWrapper.audioContext.createMediaElementSource(VocalControl);
               audioContextWrapper.source.connect(audioContextWrapper.analyser);
             }
 
             audioContextWrapper.analyser.connect(audioContextWrapper.audioContext.destination);
 
             // Lip-sync Animation
+            clearInterval(audioContextWrapper.audioLevelInterval);
             audioContextWrapper.audioLevelInterval = setInterval(() => {
+              if (isOver) {
+                clearInterval(audioContextWrapper.audioLevelInterval);
+                audioContextWrapper.audioLevelInterval = undefined;
+                return;
+              }
               const audioLevel = getAudioLevel(
                 audioContextWrapper.analyser!,
                 audioContextWrapper.dataArray!,
@@ -134,11 +148,14 @@ export const playVocal = (sentence: ISentence) => {
           const animationEndTime = Date.now() + 10000;
           performBlinkAnimation({ key, animationItem, pos, animationEndTime });
 
+          // 到达本轮眨眼的 10 秒时限后取消后续调度，不能在启动时就清除。
           blinkEndTimer = setTimeout(() => {
             clearTimeout(audioContextWrapper.blinkTimerID);
+            audioContextWrapper.blinkTimerID = undefined;
           }, 10000);
         }
 
+        VocalControl.currentTime = 0;
         VocalControl.play().catch(finishPerform);
 
         VocalControl.onended = () => {
@@ -147,9 +164,17 @@ export const playVocal = (sentence: ISentence) => {
       }, 1);
     },
     stopFunction: () => {
-      if (startTimer) clearTimeout(startTimer);
-      if (blinkEndTimer) clearTimeout(blinkEndTimer);
+      isOver = true;
+      if (startTimer) {
+        clearTimeout(startTimer);
+        startTimer = undefined;
+      }
+      if (blinkEndTimer) {
+        clearTimeout(blinkEndTimer);
+        blinkEndTimer = undefined;
+      }
       clearInterval(audioContextWrapper.audioLevelInterval);
+      audioContextWrapper.audioLevelInterval = undefined;
       const VocalControl = document.getElementById('currentVocal') as HTMLMediaElement | null;
       if (VocalControl) {
         VocalControl.pause();
@@ -168,6 +193,7 @@ export const playVocal = (sentence: ISentence) => {
         pos,
       });
       clearTimeout(audioContextWrapper.blinkTimerID);
+      audioContextWrapper.blinkTimerID = undefined;
     },
     blockingNext: () => false,
     blockingAuto: () => {

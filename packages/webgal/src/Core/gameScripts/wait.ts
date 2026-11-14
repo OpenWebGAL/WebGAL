@@ -20,6 +20,7 @@ export const wait = (sentence: ISentence): IPerform => {
       // 无需状态清理
     },
     blockingNext: () => nobreak,
-    blockingAuto: () => nobreak,
+    // nobreak 只限制用户点击；自动播放无论如何都要等待结束，否则等待会被自动播放截短。
+    blockingAuto: () => true,
   };
 };

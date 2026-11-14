@@ -41,7 +41,7 @@ export const assetsScanner = (
       type: fileType.background,
     });
   }
-  if (command === commandType.changeFigure) {
+  if (command === commandType.changeFigure || command === commandType.changeFigureDiff) {
     returnAssetsList.push({
       name: content,
       url: content,

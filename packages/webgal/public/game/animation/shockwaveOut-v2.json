@@ -1,0 +1,13 @@
+{
+  "version": 2,
+  "keyframes": [
+    {
+      "time": 0,
+      "shockwaveFilter": 0
+    },
+    {
+      "time": 2000,
+      "shockwaveFilter": 3
+    }
+  ]
+}

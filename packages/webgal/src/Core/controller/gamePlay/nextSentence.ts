@@ -11,11 +11,13 @@ import { stageStateManager } from '@/Core/Modules/stage/stageStateManager';
  * 这里处理三种“不能直接进入下一条语句”的情况：
  * 1. 场景正在异步写入时，任何推进都必须停止。
  * 2. 存在 blockingNext 的演出时，用户推进和内部推进都必须等待。
- * 3. 存在可提前结束的非 hold 演出时，用户推进只负责结束演出并停下；
- *    内部继续推进会先结束演出，然后继续执行下一条语句。
+ * 3. 存在可提前结束的非 hold 演出时，用户推进将所有可回收的非 hold 演出提前结束，
+ *    这在 galgame 中很常见，用户并非想要推进到下一条语句，而是想要让当前对话的演出先推进到终态，
+ *    比如立刻展示完整文字并将立绘动画结束并推到终态；
+ *    内部继续推进会先结束演出（但是实际上在很多情况下，其他演出已经结束了），然后继续执行下一条语句。
  *
  * @param continueAfterSettling 是否在清理普通非 hold 演出后继续推进。
- * @returns true 表示可以继续调用 forward/commitForward。
+ * @returns true 表示可以继续调用 forward/commitForward，也就是推进到下一条语句。
  */
 export const preForward = (continueAfterSettling = false) => {
   if (WebGAL.sceneManager.lockSceneWrite) {
@@ -31,11 +33,21 @@ export const preForward = (continueAfterSettling = false) => {
   const hasUnsettledNonHoldPerform = WebGAL.gameplay.performController.hasUnsettledNonHoldPerform();
   if (hasUnsettledNonHoldPerform) {
     logger.debug('提前结束被触发，现在清除普通演出');
-    // 用户 next 不消费 goNextWhenOver；内部继续推进会自己接着 forward，避免重复触发下一步。
+    // 对于用户推进，传入 true，
+    // 这样执行 settleNonHoldPerforms 的时候，遇到明确要在结束后继续推进到下一条语句的演出时，
+    // 就会触发内部推进，尝试推进到下一语句。比如 intro 演出请求了结束后继续，按语义应该继续。
+    // ------
+    // 而对于内部推进，传入 false，因为调用方已经打算在提前结算演出后继续，不需要再触发一次。
+    // 例如，一个演出序列里有 2 个不同时长的演出都设置了 goNextWhenOver。
+    // 但是目标都是一致的，那就是结束后转到下一句。快的那个触发了内部继续，在这里结束了慢的那个演出。
+    // 慢的演出要求的内部继续已经可以被调用方满足，因此无需重复触发。
     WebGAL.gameplay.performController.settleNonHoldPerforms(!continueAfterSettling);
+    // 用户推进时，返回 false，因为无论是遇到了提前结束当前句演出还是引发了内部推进，这里都不能让调用方继续语句推进流程了。
+    // 内部推进时，返回 true，让调用方继续到下一步的语句推进流程。
     return continueAfterSettling;
   }
 
+  // 没有阻塞，也没有需要提前结束的演出，允许调用方继续推进语句。
   return true;
 };
 
@@ -111,6 +123,7 @@ export const continueSentence = () => {
  * 供点击、键盘、自动播放和快进等“外部下一步”入口调用。
  * 它会触发 userInteractNext，让 intro 等演出先响应用户输入。
  * 如果当前存在可提前结束的普通演出，本次用户推进只结束演出，不再继续执行下一条语句。
+ * 结算过程仍可能依据 goNextWhenOver 触发内部继续，那是演出要求的，需要满足。
  */
 export const nextSentence = () => {
   WebGAL.events.userInteractNext.emit();

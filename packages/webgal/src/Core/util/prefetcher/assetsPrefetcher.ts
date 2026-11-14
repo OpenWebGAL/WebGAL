@@ -74,6 +74,7 @@ const runAssetsPrefetchQueue = () => {
   }
   isAssetPrefetchQueueRunning = true;
   const nextAsset = assetPrefetchQueue.shift() as IAsset;
+  // 按配置间隔分批发起资源预加载，避免同步递归一次性提交整个队列。
   setTimeout(() => {
     try {
       prefetchByLinkElement(nextAsset);

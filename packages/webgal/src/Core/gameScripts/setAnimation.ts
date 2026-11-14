@@ -1,6 +1,6 @@
 import { ISentence } from '@/Core/controller/scene/sceneInterface';
 import { IPerform } from '@/Core/Modules/perform/performInterface';
-import { getBooleanArgByKey, getStringArgByKey } from '@/Core/util/getSentenceArg';
+import { getBooleanArgByKey, getStringArgByKey, resolveTransformArgs } from '@/Core/util/getSentenceArg';
 import { IAnimationObject } from '@/Core/controller/stage/pixi/PixiController';
 import { logger } from '@/Core/util/logger';
 
@@ -17,10 +17,9 @@ export const setAnimation = (sentence: ISentence): IPerform => {
   const animationDuration = getAnimateDuration(animationName);
   let target = getStringArgByKey(sentence, 'target') ?? '';
   target = target !== '' ? target : 'default_id';
-  const writeDefault = getBooleanArgByKey(sentence, 'writeDefault') ?? false;
   const keep = getBooleanArgByKey(sentence, 'keep') ?? false;
   const parallel = getBooleanArgByKey(sentence, 'parallel') ?? false;
-  const writeFullEffect = !parallel && !(getBooleanArgByKey(sentence, 'ignoreDefault') ?? false);
+  const { writeDefault, writeFullEffect } = resolveTransformArgs(sentence, parallel);
 
   const key = `${target}-${animationName}-${animationDuration}`;
   const performInitName = `animation-${target}`;

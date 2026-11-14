@@ -1,0 +1,9 @@
+{
+  "version": 2,
+  "keyframes": [
+    {
+      "time": 300,
+      "blur": 5
+    }
+  ]
+}

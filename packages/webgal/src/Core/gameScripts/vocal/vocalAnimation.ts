@@ -5,8 +5,8 @@ interface IAudioContextWrapper {
   source: MediaElementAudioSourceNode | null;
   analyser: AnalyserNode | undefined;
   dataArray: Uint8Array | undefined;
-  audioLevelInterval: ReturnType<typeof setInterval>;
-  blinkTimerID: ReturnType<typeof setTimeout>;
+  audioLevelInterval: ReturnType<typeof setInterval> | undefined;
+  blinkTimerID: ReturnType<typeof setTimeout> | undefined;
   maxAudioLevel: number;
 }
 
@@ -16,8 +16,8 @@ export const audioContextWrapper: IAudioContextWrapper = {
   source: null,
   analyser: undefined,
   dataArray: undefined,
-  audioLevelInterval: setInterval(() => {}, 0), // dummy interval
-  blinkTimerID: setTimeout(() => {}, 0), // dummy timeout
+  audioLevelInterval: undefined,
+  blinkTimerID: undefined,
   maxAudioLevel: 0,
 };
 
@@ -68,13 +68,18 @@ export const performBlinkAnimation = (params: {
     if (isBlinking || (params.animationEndTime && Date.now() > params.animationEndTime)) return;
     isBlinking = true;
     WebGAL.gameplay.pixiStage?.performBlinkAnimation(params.key, params.animationItem, 'closed', params.pos);
+    // 闭眼持续 200ms 后再睁眼，同步执行会看不到眨眼过程。
+    clearTimeout(audioContextWrapper.blinkTimerID);
     audioContextWrapper.blinkTimerID = setTimeout(() => {
       WebGAL.gameplay.pixiStage?.performBlinkAnimation(params.key, params.animationItem, 'open', params.pos);
       isBlinking = false;
       const nextBlinkTime = Math.random() * 300 + 3500;
+      // 随机间隔后开始下一次眨眼，避免连续无间隔地切换眼睛贴图。
+      clearTimeout(audioContextWrapper.blinkTimerID);
       audioContextWrapper.blinkTimerID = setTimeout(blink, nextBlinkTime);
     }, 200);
   }
+  clearTimeout(audioContextWrapper.blinkTimerID);
   blink();
 };
 

@@ -169,7 +169,7 @@ export class PerformController {
     perform.isStarted = true;
     perform.startFunction?.();
 
-    // 时间到后自动清理演出
+    // 演出持续 duration 毫秒后自动回收；同步清理会使演出刚启动就结束。
     const stopTimeout = setTimeout(() => {
       // perform.stopFunction();
       // perform.isOver = true;
@@ -332,6 +332,7 @@ export class PerformController {
     });
     if (isBlockingNext) {
       // 有阻塞，提前结束
+      // 其他演出仍阻塞推进，间隔重试以等待其结束，避免同步递归占住主线程。
       setTimeout(this.goNextWhenOver, 100);
     } else {
       continueSentence();

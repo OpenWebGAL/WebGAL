@@ -2,45 +2,40 @@ import { commandType, type ISentence } from '@/Core/controller/scene/sceneInterf
 import { createNonePerform, type IPerform } from '@/Core/Modules/perform/performInterface';
 import { stageStateManager } from '@/Core/Modules/stage/stageStateManager';
 import { CharacterTemplateError, parseCharacterSelector } from '@/Core/character/characterTemplate';
-import { parseCharacterFigureSource, serializeCharacterFigureSource } from '@/Core/character/characterFigureSource';
 import {
-  listFigureTargets,
-  resolveFigureTarget,
-  type IFigureTargetState,
-} from '@/Core/character/characterFigureTarget';
-import { getBooleanArgByKey } from '@/Core/util/getSentenceArg';
+  isCharacterFigureSource,
+  listStageFigureTargets,
+  parseCharacterFigureSource,
+  resolveFigureSlotTarget,
+  serializeCharacterFigureSource,
+  type IFigureSlotTargetState,
+} from '@/Core/character/characterSource';
+import { getBooleanArgByKey, getSentenceArgByKey, resolveTransformArgs } from '@/Core/util/getSentenceArg';
 import { logger } from '@/Core/util/logger';
 import { WEBGAL_NONE } from '@/Core/constants';
 import { changeFigure } from './changeFigure';
+import { FIGURE_ASSOCIATED_ARGS } from './figureAssociatedAnimation';
 
-const CHARACTER_UNSUPPORTED_FIGURE_ARGS = new Set([
+const CHARACTER_UNSUPPORTED_FIGURE_ARGS = new Set<string>([
   'motion',
   'skin',
   'expression',
   'bounds',
   'blink',
   'focus',
-  'mouthOpen',
-  'mouthClose',
-  'mouthHalfOpen',
-  'eyesOpen',
-  'eyesClose',
-  'animationFlag',
+  ...FIGURE_ASSOCIATED_ARGS,
 ]);
 
 export function character(sentence: ISentence): IPerform {
   try {
     const content = sentence.content.trim();
-    // scriptExecutor normalizes the public `none` sentinel to an empty string before dispatch.
     if (content === '' || content === WEBGAL_NONE) {
-      clearCharacterFigureTargets();
-      return createNonePerform();
+      return clearCharacterFigureTargets(sentence);
     }
 
     const selector = parseCharacterSelector(content);
     if (getBooleanArgByKey(sentence, 'clear')) {
-      clearCharacterFigureTargets(selector.characterName);
-      return createNonePerform();
+      return clearCharacterFigureTargets(sentence, selector.characterName);
     }
     if (selector.items.length === 0) {
       throw new CharacterTemplateError(`角色 ${selector.characterName} 的组合列表不能为空`);
@@ -50,13 +45,10 @@ export function character(sentence: ISentence): IPerform {
       throw new CharacterTemplateError(`静态组合角色不支持参数 -${unsupportedArg.key}`);
     }
 
-    const target = resolveFigureTarget(sentence);
-    clearCharacterFigureTargets(selector.characterName, target.key);
+    const target = resolveFigureSlotTarget(sentence);
+    clearCharacterFigureTargets(sentence, selector.characterName, target.key);
     const source = serializeCharacterFigureSource({ name: selector.characterName, items: selector.items });
-    // Character 只提供一个可持久化的静态图片来源；Figure 状态、transform、animation 与退场
-    // 全部委托给上游 changeFigure。真正图片异步就绪后由 Character source adapter 交付给 Pixi。
-    changeFigure(toStaticFigureSentence(sentence, source));
-    return createNonePerform();
+    return changeFigure(toStaticFigureSentence(sentence, source, buildForwardedArgs(sentence)));
   } catch (error) {
     const message = error instanceof CharacterTemplateError ? error.message : String(error);
     logger.error(`character 命令无效：${message}`);
@@ -64,35 +56,70 @@ export function character(sentence: ISentence): IPerform {
   }
 }
 
-function clearCharacterFigureTargets(characterName?: string, exceptTargetKey?: string): void {
-  const targets = listFigureTargets(stageStateManager.getCalculationStageState());
+function clearCharacterFigureTargets(
+  baseSentence: ISentence,
+  characterName?: string,
+  exceptTargetKey?: string,
+): IPerform {
+  const targets = listStageFigureTargets(stageStateManager.getCalculationStageState());
+  const performs: IPerform[] = [];
   for (const target of targets) {
     if (!target.source || target.key === exceptTargetKey) {
       continue;
     }
-    const source = parseCharacterFigureSource(target.source);
-    if (source && (characterName === undefined || source.name === characterName)) {
-      changeFigure(toClearFigureSentence(target));
+    const shouldClear =
+      characterName === undefined
+        ? isCharacterFigureSource(target.source)
+        : parseCharacterFigureSource(target.source)?.name === characterName;
+    if (shouldClear) {
+      performs.push(changeFigure(toClearFigureSentence(baseSentence, target)));
     }
   }
+  return mergeClearedPerforms(performs);
 }
 
-function toStaticFigureSentence(sentence: ISentence, source: string): ISentence {
+function mergeClearedPerforms(performs: IPerform[]): IPerform {
+  if (performs.length === 0) {
+    return createNonePerform();
+  }
+  if (performs.length === 1) {
+    return performs[0];
+  }
+  return {
+    ...performs[0],
+    duration: Math.max(...performs.map((perform) => perform.duration)),
+    stopFunction: () => performs.forEach((perform) => perform.stopFunction()),
+  };
+}
+
+function buildForwardedArgs(sentence: ISentence): ISentence['args'] {
+  const hasTransformFrom = getSentenceArgByKey(sentence, 'transformFrom') !== null;
+  const hasWriteDefault = getSentenceArgByKey(sentence, 'writeDefault') !== null;
+  if (!hasTransformFrom && !hasWriteDefault) {
+    return sentence.args;
+  }
+  const { writeFullEffect } = resolveTransformArgs(sentence);
+  const filteredArgs = sentence.args.filter((arg) => arg.key !== 'ignoreDefault');
+  return [...filteredArgs, { key: 'ignoreDefault', value: !writeFullEffect }];
+}
+
+function toStaticFigureSentence(sentence: ISentence, source: string, args: ISentence['args']): ISentence {
   return {
     ...sentence,
     command: commandType.changeFigure,
     commandRaw: 'changeFigure',
     content: source,
-    args: sentence.args,
+    args,
   };
 }
 
-function toClearFigureSentence(target: IFigureTargetState): ISentence {
+function toClearFigureSentence(baseSentence: ISentence, target: IFigureSlotTargetState): ISentence {
   const args: ISentence['args'] = [{ key: target.position, value: true }];
   if (target.isFree) {
     args.push({ key: 'id', value: target.key });
   }
   return {
+    ...baseSentence,
     command: commandType.changeFigure,
     commandRaw: 'changeFigure',
     content: WEBGAL_NONE,

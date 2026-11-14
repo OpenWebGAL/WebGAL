@@ -15,5 +15,22 @@
   "godrayFilm",
   "removeFilm",
   "shockwaveIn",
-  "shockwaveOut"
+  "shockwaveOut",
+  "enter-from-left-v2",
+  "enter-from-bottom-v2",
+  "enter-from-right-v2",
+  "shake-v2",
+  "move-front-and-back-v2",
+  "enter-v2",
+  "exit-v2",
+  "blur-v2",
+  "oldFilm-v2",
+  "dotFilm-v2",
+  "reflectionFilm-v2",
+  "glitchFilm-v2",
+  "rgbFilm-v2",
+  "godrayFilm-v2",
+  "removeFilm-v2",
+  "shockwaveIn-v2",
+  "shockwaveOut-v2"
 ]

@@ -1,0 +1,16 @@
+{
+  "version": 2,
+  "relativeCalc": {
+    "alpha": "multiplyWithZeroFallback"
+  },
+  "keyframes": [
+    {
+      "time": 0,
+      "alpha": 0
+    },
+    {
+      "time": 300,
+      "alpha": 1
+    }
+  ]
+}

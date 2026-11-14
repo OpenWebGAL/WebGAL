@@ -8,11 +8,13 @@
 
 #### 新功能
 
-本版本没有功能更新。
+新增新版动画格式。动画可以基于立绘或背景的当前状态进行变换，关键帧中未设置的属性会沿用之前关键帧的值。同时新增一组以 -v2 结尾、基于当前状态执行的内置动画。
+
+新增 Live2D 内存预留设置，可在游戏配置中调整 Live2D 预先分配的内存大小。
 
 #### 修复
 
-修复立绘在图片不变、仅改变位置或 Live2D 绘制范围时，画面和编辑器实时预览不会更新的问题。
+修复部分 Cubism 2 立绘显示错乱的问题。
 
 <!-- English Translation -->
 ## Release Notes
@@ -25,11 +27,13 @@
 
 #### New Features
 
-This version has no feature updates.
+Added a new animation format. Animations can now transform figures or backgrounds relative to their current state, and properties not set in a keyframe carry over values from previous keyframes. Also added a set of built-in animations ending in -v2 that run from the current state.
+
+Added a Live2D memory reservation setting, which lets you adjust how much memory Live2D allocates in advance in the game config.
 
 #### Fixes
 
-Fixed figures not updating on screen or in the editor's live preview when only the position or the Live2D drawing bounds changed while the image stayed the same.
+Fixed some Cubism 2 figures displaying incorrectly.
 
 <!-- Japanese Translation -->
 ## リリースノート
@@ -42,8 +46,10 @@ Fixed figures not updating on screen or in the editor's live preview when only t
 
 #### 新機能
 
-このバージョンでは機能の更新はありません。
+新しいアニメーション形式を追加しました。立ち絵や背景の現在の状態を基準に変換できるようになり、キーフレームで指定していないプロパティは前のキーフレームの値を引き継ぎます。あわせて、現在の状態を基準に実行される、名前が -v2 で終わる組み込みアニメーションを追加しました。
+
+Live2D のメモリ予約設定を追加しました。ゲーム設定で、Live2D が事前に確保するメモリの大きさを調整できます。
 
 #### 修正
 
-立ち絵の画像が同じまま位置や Live2D の描画範囲だけを変更した場合に、画面とエディターのリアルタイムプレビューが更新されない問題を修正しました。
+一部の Cubism 2 立ち絵が正しく表示されない問題を修正しました。

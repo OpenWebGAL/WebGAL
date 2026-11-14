@@ -1,84 +1,45 @@
-import { ITransform } from '@/Core/Modules/stage/stageInterface';
 import * as popmotion from 'popmotion';
+import get from 'lodash/get';
+import set from 'lodash/set';
 import { WebGAL } from '@/Core/WebGAL';
-import omitBy from 'lodash/omitBy';
-import isUndefined from 'lodash/isUndefined';
-import PixiStage, { IAnimationObject } from '@/Core/controller/stage/pixi/PixiController';
-import { AnimationFrame } from '@/Core/Modules/animations';
+import { IAnimationObject } from '@/Core/controller/stage/pixi/PixiController';
+import type { WebGALPixiContainer } from '@/Core/controller/stage/pixi/WebGALPixiContainer';
+import { ITransform } from '@/Core/Modules/stage/stageInterface';
+import { ANIMATABLE_PATHS, IAnimationTrack, ITrackPoint } from '@/Core/Modules/animationTracks';
 
 /**
  * 动画创建模板
- * @param timeline
+ * @param tracks 各属性的关键帧轨道，见 buildAnimationTracks
  * @param targetKey 作用目标
  * @param duration 持续时间
  */
-export function generateTimelineObj(
-  timeline: Array<AnimationFrame>,
-  targetKey: string,
-  duration: number,
-): IAnimationObject {
-  const target = WebGAL.gameplay.pixiStage!.getStageObjByKey(targetKey);
-  let currentDelay = 0;
-  const values = [];
-  const easeArray: Array<popmotion.Easing> = [];
-  const times: number[] = [];
-  for (let i = 0; i < timeline.length; i++) {
-    const segment = timeline[i];
-    const segmentDuration = segment.duration;
-    currentDelay += segmentDuration;
-    const { position, scale, ...segmentValues } = segment;
-    // 移除所有值类型不是 number 的属性
-    const filteredSegmentValues = omitBy(segmentValues, (value) => typeof value !== 'number');
-    // 不能用 scale，因为 popmotion 不能用嵌套
-    values.push({ x: position?.x, y: position?.y, scaleX: scale?.x, scaleY: scale?.y, ...filteredSegmentValues });
-    // Easing 需要比 values 的长度少一个
-    if (i > 0) {
-      easeArray.push(stringToEasing(segment.ease));
-    }
-    if (duration !== 0) {
-      times.push(currentDelay / duration);
-    } else times.push(0);
-  }
-  const container = target?.pixiContainer;
+export function generateTimelineObj(tracks: IAnimationTrack[], targetKey: string, duration: number): IAnimationObject {
+  const container = WebGAL.gameplay.pixiStage!.getStageObjByKey(targetKey)?.pixiContainer;
   let animateInstance: ReturnType<typeof popmotion.animate> | null = null;
-  // 只有有 duration 且 timeline 长度大于 1 的时候才有动画
-  if (duration > 0 && timeline.length > 1) {
-    animateInstance = popmotion.animate({
-      to: values,
-      offset: times,
-      duration,
-      ease: easeArray,
-      onUpdate: (updateValue) => {
-        if (container) {
-          const { scaleX, scaleY, ...val } = updateValue;
-          // @ts-ignore
-          PixiStage.assignTransform(container, omitBy(val, isUndefined));
-          // 因为 popmotion 不能用嵌套，scale 要手动设置
-          if (!isUndefined(scaleX)) container.scale.x = scaleX;
-          if (!isUndefined(scaleY)) container.scale.y = scaleY;
-        }
-      },
-    });
+
+  /**
+   * 把动画在 time 时刻的状态写入容器
+   */
+  function applyStateAt(time: number) {
+    if (!container) return;
+    for (const track of tracks) {
+      setContainerValue(container, track.path, sampleTrack(track.points, time));
+    }
   }
 
   /**
    * 在此书写为动画设置初态的操作
    */
   function setStartState() {
-    if (target?.pixiContainer) {
-      // 不能赋值到 position，因为 x 和 y 被 WebGALPixiContainer 代理，而 position 属性没有代理
-      const { position, scale, ...state } = getStartStateEffect();
-      const assignValue = omitBy({ x: position?.x, y: position?.y, ...state }, isUndefined);
-      // @ts-ignore
-      PixiStage.assignTransform(target?.pixiContainer, assignValue);
-      if (scale && target?.pixiContainer) {
-        if (!isUndefined(scale?.x)) {
-          target.pixiContainer.scale.x = scale.x;
-        }
-        if (!isUndefined(scale?.y)) {
-          target.pixiContainer.scale.y = scale.y;
-        }
-      }
+    applyStateAt(0);
+    if (duration > 0) {
+      animateInstance = popmotion.animate({
+        from: 0,
+        to: duration,
+        duration,
+        ease: popmotion.linear,
+        onUpdate: (time) => applyStateAt(time),
+      });
     }
   }
 
@@ -86,42 +47,15 @@ export function generateTimelineObj(
    * 在此书写为动画设置终态的操作
    */
   function setEndState() {
-    if (!container) {
-      return;
-    }
-    if (animateInstance) animateInstance.stop();
-    animateInstance = null;
-    if (target?.pixiContainer) {
-      // 不能赋值到 position，因为 x 和 y 被 WebGALPixiContainer 代理，而 position 属性没有代理
-      // 不能赋值到 position，因为 x 和 y 被 WebGALPixiContainer 代理，而 position 属性没有代理
-      const { position, scale, ...state } = getEndStateEffect();
-      const assignValue = omitBy({ x: position?.x, y: position?.y, ...state }, isUndefined);
-      // @ts-ignore
-      PixiStage.assignTransform(target?.pixiContainer, assignValue);
-      if (scale && target?.pixiContainer) {
-        if (!isUndefined(scale?.x)) {
-          target.pixiContainer.scale.x = scale.x;
-        }
-        if (!isUndefined(scale?.y)) {
-          target.pixiContainer.scale.y = scale.y;
-        }
-      }
-    }
+    forceStopWithoutSetEndState();
+    applyStateAt(duration);
   }
 
   /**
-   * 在此书写动画每一帧执行的函数
+   * 在此书写动画每一帧执行的函数。时间由 popmotion 驱动，这里不需要做什么
    * @param delta
    */
   function tickerFunc(delta: number) {}
-
-  function getStartStateEffect() {
-    return timeline[0];
-  }
-
-  function getEndStateEffect() {
-    return timeline[timeline.length - 1];
-  }
 
   function forceStopWithoutSetEndState() {
     if (animateInstance) animateInstance.stop();
@@ -132,9 +66,52 @@ export function generateTimelineObj(
     setStartState,
     setEndState,
     tickerFunc,
-    getEndStateEffect,
     forceStopWithoutSetEndState,
   };
+}
+
+/**
+ * 取轨道在 time 时刻的值
+ */
+export function sampleTrack(points: ITrackPoint[], time: number): number {
+  // 本区间的插值终点：第一个晚于 time 的关键点
+  const nextIndex = points.findIndex((point) => point.time > time);
+  // 在最后一个关键点之后：保持最后的值
+  if (nextIndex === -1) return points[points.length - 1].value;
+  // 在第一个关键点之前：保持第一个关键点的值
+  if (nextIndex === 0) return points[0].value;
+  // 本区间的起点。时间相同的多个关键点中，靠后的是跳变后的状态，正好是 nextIndex 的前一个
+  const prev = points[nextIndex - 1];
+  const next = points[nextIndex];
+  const progress = (time - prev.time) / (next.time - prev.time);
+  return prev.value + (next.value - prev.value) * stringToEasing(next.ease)(progress);
+}
+
+/**
+ * 变换属性在容器上的对应属性：透明度由 alpha 滤镜实现，位置由 WebGALPixiContainer 代理的 x、y 实现，
+ * 与 assignPixiTransform 的写法一致。其余属性同名
+ */
+const CONTAINER_PROPERTY: Partial<Record<string, string>> = {
+  alpha: 'alphaFilterVal',
+  'position.x': 'x',
+  'position.y': 'y',
+};
+
+function getContainerValue(container: WebGALPixiContainer, path: string): number {
+  return get(container, CONTAINER_PROPERTY[path] ?? path);
+}
+
+function setContainerValue(container: WebGALPixiContainer, path: string, value: number) {
+  set(container, CONTAINER_PROPERTY[path] ?? path, value);
+}
+
+/**
+ * 从容器读取当前变换，用于演算状态中已没有记录的舞台对象（如正在退场的立绘）
+ */
+export function readContainerTransform(container: WebGALPixiContainer): ITransform {
+  const transform: ITransform = {};
+  ANIMATABLE_PATHS.forEach((path) => set(transform, path, getContainerValue(container, path)));
+  return transform;
 }
 
 const stringToEasing = (ease: string): popmotion.Easing => {

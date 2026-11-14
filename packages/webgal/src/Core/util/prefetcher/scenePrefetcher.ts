@@ -21,6 +21,7 @@ const runScenePrefetchQueue = () => {
   }
   isScenePrefetchQueueRunning = true;
   const sceneUrl = scenePrefetchQueue.shift() as string;
+  // 为每次场景预加载保留请求间隔，避免后台预加载连续争抢当前场景的加载资源。
   setTimeout(async () => {
     if (WebGAL.sceneManager.settledScenes.has(sceneUrl)) {
       queuedSceneUrlSet.delete(sceneUrl);
