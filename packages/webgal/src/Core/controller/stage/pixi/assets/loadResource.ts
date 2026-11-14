@@ -11,6 +11,10 @@ export async function loadResource(request: ResourceRequest, dependency: LoadDep
     const { loadSpineResources } = await import('./spineAssets');
     return loadSpineResources(request.url, dependency);
   }
+  if (request.kind === 'character') {
+    const { loadCharacterResources } = await import('./characterAssets');
+    return loadCharacterResources(request.url, { preset: request.preset, components: request.components }, dependency);
+  }
   // 直接使用 loader：AssetManager 已按 kind + URL 管理条目，不需要 Resolver 的别名表。
   const loaded = await Assets.loader.load({ src: request.url, data: { webgalKind: request.kind } });
   const value = loaded instanceof Texture ? loaded : decodeData(loaded, request.kind);

@@ -100,10 +100,13 @@ export function changeFigure(sentence: ISentence): IPerform {
   let isIdentityChanged = true;
   if (key !== '') {
     const figWithKey = currentState.freeFigure.find((e) => e.key === key);
-    if (figWithKey && figWithKey.name === sentence.content && figWithKey.basePosition === pos && !isBoundsChanged) {
+    if (
+      (!figWithKey && content === '') ||
+      (figWithKey && figWithKey.name === content && figWithKey.basePosition === pos && !isBoundsChanged)
+    ) {
       isIdentityChanged = false;
     }
-  } else if (currentState[figureStateKeyByPosition[pos]] === sentence.content && !isBoundsChanged) {
+  } else if (currentState[figureStateKeyByPosition[pos]] === content && !isBoundsChanged) {
     isIdentityChanged = false;
   }
   /**
@@ -210,6 +213,10 @@ export function changeFigure(sentence: ISentence): IPerform {
         stageStateManager.setFigureMetaData([key, 'blendMode', blendMode, false]);
       }
     }
+  }
+
+  if (content !== '') {
+    stageStateManager.removeCharacterFigureByKey(id);
   }
 
   if (isFreeFigure) {

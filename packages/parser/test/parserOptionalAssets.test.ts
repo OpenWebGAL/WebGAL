@@ -5,7 +5,7 @@ import SceneParser from '../src/index';
 import { IAsset } from '../src/interface/sceneInterface';
 
 const SCENE = `changeBg:a.webp;
-character:hello -vocal=b.mp3;
+speaker:hello -vocal=b.mp3;
 callScene:chapter.txt;`;
 
 const identityAssetSetter = (fileName: string) => fileName;

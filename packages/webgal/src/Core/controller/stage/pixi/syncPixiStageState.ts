@@ -14,6 +14,8 @@ import { logger } from '@/Core/util/logger';
 import { setEbg } from '@/Core/gameScripts/changeBg/setEbg';
 import { applyTransformToPixiContainer } from '@/Core/controller/stage/pixi/stageEffectTransform';
 import { prefetchCurrentSceneByProgress } from '@/Core/util/prefetcher/progressPrefetcher';
+import { getCharacterIdentity } from '@/Core/controller/stage/pixi/characterFigure';
+import { characterResource, resourceKey } from './assets/resourceTypes';
 import { prepareFigureDiff } from './prepareFigureDiff';
 
 interface ISyncFigureSlotPayload {
@@ -146,10 +148,45 @@ function syncFigures(stageState: IStageState, skipAnimation: boolean) {
   if (!currentFigures) return;
   const freeFigureKeys = new Set(stageState.freeFigure.map((fig) => fig.key));
   for (const existFigure of [...currentFigures]) {
-    if (FIGURE_KEYS.includes(existFigure.key) || existFigure.key.endsWith('-off')) {
+    if (
+      existFigure.sourceType === 'character' ||
+      FIGURE_KEYS.includes(existFigure.key) ||
+      existFigure.key.endsWith('-off')
+    ) {
       continue;
     }
     if (!freeFigureKeys.has(existFigure.key)) {
+      removeFig(existFigure, `${existFigure.key}-softin`, skipAnimation);
+    }
+  }
+
+  syncCharacterFigures(stageState, skipAnimation);
+}
+
+function syncCharacterFigures(stageState: IStageState, skipAnimation: boolean) {
+  const pixiStage = WebGAL.gameplay.pixiStage;
+  if (!pixiStage) return;
+
+  const characters = stageState.characterFigures ?? [];
+  const activeCharacterKeys = new Set(characters.map((entry) => entry.key));
+
+  for (const entry of characters) {
+    const currentFigure = pixiStage.getStageObjByKey(entry.key);
+    const identity = getCharacterIdentity(entry);
+    if (!currentFigure || currentFigure.sourceType !== 'character' || currentFigure.characterIdentity !== identity) {
+      if (currentFigure) removeFig(currentFigure, `${entry.key}-softin`, skipAnimation);
+      pixiStage.addCharacterFigure(entry.key, entry);
+    } else if (currentFigure.characterResourceKey !== resourceKey(characterResource(entry.name, entry))) {
+      pixiStage.updateCharacterFigure(entry.key, entry);
+    }
+  }
+
+  for (const existFigure of [...pixiStage.getFigureObjects()]) {
+    if (
+      existFigure.sourceType === 'character' &&
+      !existFigure.key.endsWith('-off') &&
+      !activeCharacterKeys.has(existFigure.key)
+    ) {
       removeFig(existFigure, `${existFigure.key}-softin`, skipAnimation);
     }
   }
@@ -197,7 +234,7 @@ function syncFigureSlot(payload: ISyncFigureSlotPayload) {
     return;
   }
 
-  if (currentFigure) {
+  if (currentFigure && currentFigure.sourceType !== 'character') {
     removeFig(currentFigure, softInAniKey, skipAnimation);
   }
 }

@@ -9,6 +9,7 @@ import { SteamIntegration } from '@/Core/integration/steamIntegration';
 import { WebgalTemplate } from '@/types/template';
 import { IWebGALStyleObj } from 'webgal-parser/build/types/styleParser';
 import { stageStateManager } from '@/Core/Modules/stage/stageStateManager';
+import type { IGameVar } from '@/Core/Modules/stage/stageInterface';
 import { FlowchartManager } from '@/Core/Modules/flowchart';
 import { FigureDiffManager } from '@/Core/controller/stage/pixi/figureDiff';
 
@@ -21,6 +22,7 @@ export class WebgalCore {
   public gameplay = new Gameplay();
   public gameName = '';
   public gameKey = '';
+  public gameConfig: IGameVar | null = null;
   public events = new Events();
   public stageManager = stageStateManager;
   public readonly figureDiffManager = new FigureDiffManager();

@@ -21,6 +21,7 @@ export async function loadTemplate(): Promise<WebgalTemplate | null> {
     updateFontOptions(fonts);
     await loadStyleFiles();
     WebGAL.events.styleUpdate.on(loadStyleFiles);
+    WebGAL.events.templateLoaded.emit(data);
     return data;
   } catch (error) {
     logger.warn('加载模板文件失败', error);

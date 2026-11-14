@@ -9,6 +9,7 @@ import { Live2D } from '@/Core/WebGAL';
 import { baseBlinkParam, baseFocusParam, BlinkParam, FocusParam } from '@/Core/live2DCore';
 import { isIOS } from '@/Core/initializeScript';
 import { WebGALPixiContainer } from '@/Core/controller/stage/pixi/WebGALPixiContainer';
+import { addCharacterFigureImpl, updateCharacterFigureImpl } from '@/Core/controller/stage/pixi/characterFigure';
 import { addSpineBgImpl, addSpineFigureImpl } from '@/Core/controller/stage/pixi/spine';
 import { SCREEN_CONSTANTS } from '@/Core/util/constants';
 import { logger } from '@/Core/util/logger';
@@ -49,10 +50,16 @@ export interface IStageObject {
   // 相关的源 url
   sourceUrl: string;
   sourceExt: string;
-  sourceType: 'img' | 'live2d' | 'spine' | 'gif' | 'video' | 'stage';
+  sourceType: 'img' | 'live2d' | 'spine' | 'character' | 'gif' | 'video' | 'stage';
   spineAnimation?: string;
   /** 创建这个立绘时用的身份，见 syncPixiStageState 的 getFigureIdentity */
   figureIdentity?: string;
+  /** 创建组合角色时用的身份，见 characterFigure 的 getCharacterIdentity */
+  characterIdentity?: string;
+  /** 组合角色当前选用的资源键，见 resourceTypes 的 resourceKey */
+  characterResourceKey?: string;
+  /** 组合角色最新换装请求标识，异步完成后据此丢弃过期请求 */
+  characterRequestId?: string;
   isExiting?: boolean;
   releaseInstance?: () => void;
   /** 口型、眨眼各自最新的换图请求，旧请求完成时据此丢弃 */
@@ -111,6 +118,8 @@ export default class PixiStage {
    */
   public addSpineFigure = addSpineFigureImpl.bind(this);
   public addSpineBg = addSpineBgImpl.bind(this);
+  public addCharacterFigure = addCharacterFigureImpl.bind(this);
+  public updateCharacterFigure = updateCharacterFigureImpl.bind(this);
   // 注册到 Ticker 上的函数
   private stageAnimations = this.createReactiveList<IStageAnimationObject>([]);
 
@@ -332,7 +341,8 @@ export default class PixiStage {
    */
   private swapFigureTexture(key: string, channel: 'mouth' | 'blink', url: string) {
     const object = this.getStageObjByKey(key);
-    if (!object || object.isDiffBlending || !url || url.endsWith('/')) return;
+    if (!object || object.isExiting || object.sourceType !== 'img') return;
+    if (object.isDiffBlending || !url || url.endsWith('/')) return;
     if (!this.isCurrentAssociatedTexture(key, url)) return;
     const request = uuid();
     object.textureRequests = { ...object.textureRequests, [channel]: request };
@@ -982,6 +992,11 @@ export default class PixiStage {
    * @param key
    */
   public removeStageObjectByKey(key: string) {
+    // 退场动画会先把原立绘改名为 *-off 再调用本方法释放原槽位，因此记录需无条件按原 key 清理。
+    const recordIndex = this.live2dFigureRecorder.findIndex((e) => e.target === key);
+    if (recordIndex >= 0) {
+      this.live2dFigureRecorder.splice(recordIndex, 1);
+    }
     const indexFig = this.figureObjects.findIndex((e) => e.key === key);
     const indexBg = this.backgroundObjects.findIndex((e) => e.key === key);
     if (indexFig >= 0) {

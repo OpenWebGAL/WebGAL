@@ -144,6 +144,14 @@ export interface IFreeFigure {
   key: string;
 }
 
+export interface ICharacterFigure {
+  key: string;
+  name: string;
+  basePosition: IFigurePosition;
+  preset?: string;
+  components?: string[];
+}
+
 /**
  * Live2D 自定义绘制范围的归一：未指定与全 0 是同一件事。
  *
@@ -225,6 +233,7 @@ export interface IStageState {
   figNameRight14: string; // 立绘_右 1/4 文件地址（相对或绝对）
   // 自由立绘
   freeFigure: Array<IFreeFigure>;
+  characterFigures: Array<ICharacterFigure>;
   figureAssociatedAnimation: Array<IFigureAssociatedAnimation>;
   isRead: boolean; // 是否已读
   showText: string; // 文字

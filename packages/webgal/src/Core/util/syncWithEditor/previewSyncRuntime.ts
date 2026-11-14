@@ -58,6 +58,7 @@ import {
   createTargetTransformBaselineManager,
   isTargetTransformBaselineSyncSettled,
 } from './runtime/targetTransformBaseline';
+import { createPreviewMetadataPublisher } from './runtime/previewMetadataPublisher';
 
 let previewSyncRuntimeStarted = false;
 type StageStateSnapshot = IStageState;
@@ -107,6 +108,10 @@ export const startPreviewSyncRuntime = () => {
   const targetTransformBaselines = createTargetTransformBaselineManager();
   const embeddedLaunchIdPromise = requestEmbeddedLaunchId();
   let transport!: PreviewSyncTransport;
+  const metadataPublisher = createPreviewMetadataPublisher({
+    isRegistered: () => registered,
+    send: (envelope) => transport.send(envelope),
+  });
   let nextSyncSceneRevision = 0;
   let activeSyncSceneRevision: number | null = null;
 
@@ -138,6 +143,7 @@ export const startPreviewSyncRuntime = () => {
     activeSyncSceneRevision = null;
     WebGAL.gameplay.isFastPreview = false;
     targetTransformBaselines.invalidateBaselines();
+    metadataPublisher.reset();
   };
 
   const startSyncSceneTransaction = () => {
@@ -243,6 +249,7 @@ export const startPreviewSyncRuntime = () => {
     pendingRegisterRequestId = null;
     pendingRegisterContext = null;
     registered = true;
+    metadataPublisher.publishRegisteredMetadata();
     publishReady();
     publishStageSnapshot(true);
   };
@@ -447,8 +454,7 @@ export const startPreviewSyncRuntime = () => {
       return {};
     },
     'preview.command.seek-animation': (payload: SeekAnimationPayload) => {
-      seekAnimationPreview(payload, targetTransformBaselines.getReadyTransformBaselineOverride(payload.target));
-      return {};
+      return seekAnimationPreview(payload, targetTransformBaselines.getReadyTransformBaselineOverride(payload.target));
     },
   };
 
@@ -592,6 +598,7 @@ export const startPreviewSyncRuntime = () => {
     }
 
     disposed = true;
+    metadataPublisher.dispose();
     storeUnsubscribe();
     transport.dispose();
   };
