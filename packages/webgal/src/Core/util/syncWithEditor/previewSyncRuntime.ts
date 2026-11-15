@@ -21,10 +21,16 @@ import type {
   RunSceneContentPayload,
   RunSnippetPayload,
   SeekAnimationPayload,
+  SelectUiPartPayload,
+  SetActiveUiScreenPayload,
   SetComponentVisibilityPayload,
   SetEffectPayload,
   SetFontOptimizationPayload,
   SetTextReadModePayload,
+  SetUiEditModePayload,
+  SetUiMockDataPayload,
+  SetUiPartStylePayload,
+  SetUiPseudoStatePayload,
   StageSnapshotUpdatedPayload,
   SyncScenePayload,
 } from '@/types/editorPreviewProtocol';
@@ -59,6 +65,7 @@ import {
   isTargetTransformBaselineSyncSettled,
 } from './runtime/targetTransformBaseline';
 import { createPreviewMetadataPublisher } from './runtime/previewMetadataPublisher';
+import { createUiEditorBridge } from './runtime/uiEditorBridge';
 
 let previewSyncRuntimeStarted = false;
 type StageStateSnapshot = IStageState;
@@ -109,6 +116,10 @@ export const startPreviewSyncRuntime = () => {
   const embeddedLaunchIdPromise = requestEmbeddedLaunchId();
   let transport!: PreviewSyncTransport;
   const metadataPublisher = createPreviewMetadataPublisher({
+    isRegistered: () => registered,
+    send: (envelope) => transport.send(envelope),
+  });
+  const uiEditorBridge = createUiEditorBridge({
     isRegistered: () => registered,
     send: (envelope) => transport.send(envelope),
   });
@@ -250,6 +261,7 @@ export const startPreviewSyncRuntime = () => {
     pendingRegisterContext = null;
     registered = true;
     metadataPublisher.publishRegisteredMetadata();
+    uiEditorBridge.publishCurrentScreen();
     publishReady();
     publishStageSnapshot(true);
   };
@@ -456,6 +468,30 @@ export const startPreviewSyncRuntime = () => {
     'preview.command.seek-animation': (payload: SeekAnimationPayload) => {
       return seekAnimationPreview(payload, targetTransformBaselines.getReadyTransformBaselineOverride(payload.target));
     },
+    'preview.command.set-ui-edit-mode': (payload: SetUiEditModePayload) => {
+      uiEditorBridge.setUiEditMode(payload);
+      return {};
+    },
+    'preview.command.set-active-ui-screen': (payload: SetActiveUiScreenPayload) => {
+      uiEditorBridge.setActiveUiScreen(payload);
+      return {};
+    },
+    'preview.command.select-ui-part': (payload: SelectUiPartPayload) => {
+      uiEditorBridge.selectUiPart(payload);
+      return {};
+    },
+    'preview.command.set-ui-part-style': (payload: SetUiPartStylePayload) => {
+      uiEditorBridge.setUiPartStyle(payload);
+      return {};
+    },
+    'preview.command.set-ui-pseudo-state': (payload: SetUiPseudoStatePayload) => {
+      uiEditorBridge.setUiPseudoState(payload);
+      return {};
+    },
+    'preview.command.set-ui-mock-data': (payload: SetUiMockDataPayload) => {
+      uiEditorBridge.setUiMockData(payload);
+      return {};
+    },
   };
 
   const isPreviewQueryEnvelope = (envelope: PreviewRequestEnvelope): envelope is PreviewQueryEnvelope => {
@@ -491,6 +527,11 @@ export const startPreviewSyncRuntime = () => {
               envelope.payload.transformBaselineRevision,
             ),
           ),
+        );
+        return;
+      case 'preview.query.ui-screen':
+        transport.send(
+          createResponseEnvelope('preview.query.ui-screen', envelope.requestId, uiEditorBridge.queryUiScreen()),
         );
         return;
     }
@@ -599,6 +640,7 @@ export const startPreviewSyncRuntime = () => {
 
     disposed = true;
     metadataPublisher.dispose();
+    uiEditorBridge.dispose();
     storeUnsubscribe();
     transport.dispose();
   };

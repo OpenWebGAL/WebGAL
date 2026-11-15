@@ -7,6 +7,35 @@ interface SteamBridge {
 
 const isWindowAvailable = (): boolean => typeof window !== 'undefined';
 
+let capturedSteamBridge: SteamBridge | undefined;
+let electronBridgeLocked = false;
+
+/**
+ * Captures the Electron Steam bridge once during host startup and locks `window.electronFuncs`
+ * so dynamically loaded third-party UI scripts cannot invoke Electron host APIs directly.
+ */
+export function captureAndLockElectronBridge(): void {
+  if (!isWindowAvailable() || electronBridgeLocked) return;
+  capturedSteamBridge = window.electronFuncs?.steam;
+  electronBridgeLocked = true;
+  if (!('electronFuncs' in window)) return;
+  try {
+    delete window.electronFuncs;
+  } catch {
+    // Ignore when preload defines a non-configurable property.
+  }
+  try {
+    Object.defineProperty(window, 'electronFuncs', {
+      value: undefined,
+      writable: false,
+      configurable: false,
+      enumerable: false,
+    });
+  } catch {
+    // Ignore when already locked by Electron contextBridge.
+  }
+}
+
 /**
  * Provides a thin bridge between the renderer process and the Electron Steam integration.
  */
@@ -71,6 +100,6 @@ export class SteamIntegration {
       logger.debug('Steam integration unavailable: window is undefined');
       return undefined;
     }
-    return window.electronFuncs?.steam;
+    return electronBridgeLocked ? capturedSteamBridge : window.electronFuncs?.steam;
   }
 }

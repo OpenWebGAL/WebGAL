@@ -11,6 +11,11 @@ import { initReactI18next, Trans } from 'react-i18next';
 import { defaultLanguage, i18nTranslationResources, language } from './config/language';
 import { Provider } from 'react-redux';
 import { webgalStore } from './store/store';
+import { installGlobalUiSdk } from './sdk/globalUiSdk';
+import { captureAndLockElectronBridge } from './Core/integration/steamIntegration';
+
+captureAndLockElectronBridge();
+installGlobalUiSdk();
 
 i18n
   .use(initReactI18next) // passes i18n down to react-i18next

@@ -8,24 +8,34 @@ import { setFontOptions } from '@/store/GUIReducer';
 import { setOptionData } from '@/store/userDataReducer';
 import { scss2cssinjsParser } from '@/Core/controller/customUI/scss2cssinjsParser';
 import { injectGlobal } from '@emotion/css';
+import { isCustomUiTemplate } from '@/screens/screenRegistry';
+import { reloadTemplateScreens } from '@/screens/screenLoader';
 
 const TEMPLATE_PATH = './game/template/template.json';
 const TEMPLATE_FONT_STYLE_SELECTOR = 'style[data-webgal-template-fonts]';
+let styleUpdateListenerAttached = false;
 
 export async function loadTemplate(): Promise<WebgalTemplate | null> {
   try {
-    const { data } = await axios.get<WebgalTemplate>(TEMPLATE_PATH);
+    const { data } = await axios.get<WebgalTemplate>(`${TEMPLATE_PATH}?t=${Date.now()}`);
     WebGAL.template = data;
     const fonts = data.fonts ?? [];
     injectTemplateFonts(fonts);
     updateFontOptions(fonts);
     await loadStyleFiles();
-    WebGAL.events.styleUpdate.on(loadStyleFiles);
+    if (!styleUpdateListenerAttached) {
+      styleUpdateListenerAttached = true;
+      WebGAL.events.styleUpdate.on(() => {
+        void loadTemplate();
+      });
+    }
     WebGAL.events.templateLoaded.emit(data);
     return data;
   } catch (error) {
     logger.warn('加载模板文件失败', error);
+    WebGAL.template = null;
     updateFontOptions([]);
+    await reloadTemplateScreens(null);
     return null;
   }
 }
@@ -83,6 +93,15 @@ function resolveTemplateAssetPath(path: string): string {
 }
 
 async function loadStyleFiles() {
+  if (isCustomUiTemplate(WebGAL.template)) {
+    WebGAL.styleObjects.clear();
+    await reloadTemplateScreens(WebGAL.template);
+    WebGAL.events.afterStyleUpdate.emit();
+    return;
+  }
+
+  await reloadTemplateScreens(null);
+
   // TODO: 以后应该改成从 templates.json 读取，而不是现在这样写死
   const TEMPLATES: { ui: string; path: string }[] = [
     { ui: 'title', path: 'UI/Title/title.scss' },

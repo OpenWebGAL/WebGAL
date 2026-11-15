@@ -149,6 +149,73 @@ export interface SeekAnimationResponsePayload {
   baseTransform: Transform;
 }
 
+export const UI_SCREEN_IDS = [
+  'title',
+  'textbox',
+  'choose',
+  'save',
+  'load',
+  'options',
+  'flowchart',
+  'menuPanel',
+  'backlog',
+  'extra',
+  'bottomControlPanel',
+  'globalDialog',
+] as const;
+
+export type UiScreenId = (typeof UI_SCREEN_IDS)[number];
+
+export type UiPreviewMode = 'interactive' | 'edit';
+export type UiPseudoState = 'default' | 'hover' | 'active' | 'disabled';
+
+export interface UiLogicalBox {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+}
+
+export interface UiPartDescriptor {
+  id: string;
+  name: string;
+  selector: string;
+  allowLayoutEdit: boolean;
+  box: UiLogicalBox | null;
+}
+
+export interface SetUiEditModePayload {
+  mode: UiPreviewMode;
+}
+
+export interface SetActiveUiScreenPayload {
+  screen: UiScreenId | null;
+}
+
+export interface SelectUiPartPayload {
+  screen: UiScreenId;
+  partId: string | null;
+}
+
+export interface SetUiPartStylePayload {
+  screen: UiScreenId;
+  variantId?: string;
+  scssText: string;
+  phase: 'preview' | 'commit';
+}
+
+export interface SetUiPseudoStatePayload {
+  screen: UiScreenId;
+  selector: string | null;
+  pseudoState: UiPseudoState;
+}
+
+export interface SetUiMockDataPayload {
+  enabled: boolean;
+}
+
+export type QueryUiScreenPayload = EmptyObject;
+
 export interface SetFontOptimizationPayload {
   enabled: boolean;
 }
@@ -217,6 +284,12 @@ export const PREVIEW_COMMAND_PAYLOADS = definePayloadMap({
   'preview.command.set-font-optimization': payload<SetFontOptimizationPayload>(),
   'preview.command.set-text-read-mode': payload<SetTextReadModePayload>(),
   'preview.command.seek-animation': payload<SeekAnimationPayload>(),
+  'preview.command.set-ui-edit-mode': payload<SetUiEditModePayload>(),
+  'preview.command.set-active-ui-screen': payload<SetActiveUiScreenPayload>(),
+  'preview.command.select-ui-part': payload<SelectUiPartPayload>(),
+  'preview.command.set-ui-part-style': payload<SetUiPartStylePayload>(),
+  'preview.command.set-ui-pseudo-state': payload<SetUiPseudoStatePayload>(),
+  'preview.command.set-ui-mock-data': payload<SetUiMockDataPayload>(),
 });
 
 export type PreviewCommandPayloadByType = typeof PREVIEW_COMMAND_PAYLOADS;
@@ -229,6 +302,7 @@ export const PREVIEW_QUERY_PAYLOADS = definePayloadMap({
   'preview.query.reference-box': payload<ReferenceBoxQueryPayload>(),
   'preview.query.base-transform': payload<BaseTransformQueryPayload>(),
   'preview.query.transform-baseline': payload<TransformBaselineQueryPayload>(),
+  'preview.query.ui-screen': payload<QueryUiScreenPayload>(),
 });
 
 export type PreviewQueryPayloadByType = typeof PREVIEW_QUERY_PAYLOADS;
@@ -273,6 +347,8 @@ export interface PreviewTemplateMetadata {
   id?: string;
   'webgal-version': string;
   fonts?: TemplateFontDescriptor[];
+  uiMode?: 'legacy' | 'custom';
+  screens?: Partial<Record<UiScreenId, string>>;
   [key: string]: unknown;
 }
 
@@ -307,6 +383,28 @@ export interface FastPreviewTimeoutPayload {
   maxDurationMs: number;
 }
 
+export interface UiScreenUpdatedPayload {
+  screen: UiScreenId | null;
+  variantId: string | null;
+  scssPath: string | null;
+  isCustomTemplate: boolean;
+  defaultCssText: string;
+  currentScssText: string;
+  parts: UiPartDescriptor[];
+}
+
+export interface UiPartSelectedPayload {
+  screen: UiScreenId;
+  partId: string | null;
+}
+
+export interface ApplyStyleIgnoredPayload {
+  sceneName?: string;
+  sentenceId?: number;
+  content: string;
+  reason: 'new-template-enabled';
+}
+
 export const HOST_EVENT_PAYLOADS = definePayloadMap({
   'preview.ready.updated': payload<PreviewReadyUpdatedPayload>(),
   'preview.version.updated': payload<PreviewVersionUpdatedPayload>(),
@@ -314,6 +412,9 @@ export const HOST_EVENT_PAYLOADS = definePayloadMap({
   'preview.game-info.updated': payload<PreviewGameInfoUpdatedPayload>(),
   'stage.snapshot.updated': payload<StageSnapshotUpdatedPayload>(),
   'preview.event.fast-preview-timeout': payload<FastPreviewTimeoutPayload>(),
+  'ui.screen.updated': payload<UiScreenUpdatedPayload>(),
+  'ui.part.selected': payload<UiPartSelectedPayload>(),
+  'preview.event.apply-style-ignored': payload<ApplyStyleIgnoredPayload>(),
 });
 
 export type EventPayloadByType = typeof HOST_EVENT_PAYLOADS;
@@ -325,6 +426,16 @@ export const HOST_EVENT_TYPES = messageTypes(HOST_EVENT_PAYLOADS);
 export interface RegisterPreviewRequestPayload {
   gameId?: string;
   embeddedLaunchId?: string;
+}
+
+/**
+ * 独占预览：embeddedLaunchId 带有此前缀的嵌入式预览只听从指定了它的命令（见 RequestEnvelope.embeddedLaunchId），
+ * 不接收广播，它发出的事件转发给编辑器时会带上 embeddedLaunchId。用于动画编辑器等自带预览窗口的场合
+ */
+export const DEDICATED_PREVIEW_LAUNCH_ID_PREFIX = 'dedicated:';
+
+export function isDedicatedPreviewLaunchId(embeddedLaunchId: string | undefined): boolean {
+  return embeddedLaunchId?.startsWith(DEDICATED_PREVIEW_LAUNCH_ID_PREFIX) ?? false;
 }
 
 export const SESSION_REQUEST_PAYLOADS = definePayloadMap({
@@ -357,6 +468,7 @@ export const PREVIEW_QUERY_RESPONSE_PAYLOADS = definePayloadMap({
   'preview.query.reference-box': payload<ReferenceBoxQueryResultPayload>(),
   'preview.query.base-transform': payload<BaseTransformQueryResultPayload>(),
   'preview.query.transform-baseline': payload<TransformBaselineQueryResultPayload>(),
+  'preview.query.ui-screen': payload<UiScreenUpdatedPayload>(),
 });
 
 export type PreviewQueryResponsePayloadByType = typeof PREVIEW_QUERY_RESPONSE_PAYLOADS;
@@ -399,6 +511,8 @@ export interface EventEnvelope<TPayload = unknown, TType extends string = string
   kind: 'event';
   type: TType;
   payload: TPayload;
+  /** 事件来自哪个独占预览；来自普通预览时缺省 */
+  embeddedLaunchId?: string;
 }
 
 export interface RequestEnvelope<TPayload = unknown, TType extends string = string> {
@@ -406,6 +520,8 @@ export interface RequestEnvelope<TPayload = unknown, TType extends string = stri
   type: TType;
   requestId: string;
   payload: TPayload;
+  /** 只发给这个独占预览；缺省时广播给普通预览 */
+  embeddedLaunchId?: string;
 }
 
 export interface ResponseEnvelope<TPayload = unknown, TType extends string = string> {
