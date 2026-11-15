@@ -27,7 +27,7 @@ function joinRichTextSegments(sdk, segments, lineLimit) {
         prefixNodeCount,
     };
 }
-const TEXTBOX_NVL_PARTS = [
+const TEXTBOX_BARE_PARTS = [
     { id: 'background', name: '文本框底图', selector: '.TextBox_Background', allowLayoutEdit: true },
     { id: 'main', name: '文本框容器', selector: '.TextBox_main', allowLayoutEdit: true },
     { id: 'miniAvatar', name: '小头像容器', selector: '.TextBox_miniAvatarContainer', allowLayoutEdit: true },
@@ -35,12 +35,7 @@ const TEXTBOX_NVL_PARTS = [
     { id: 'showName', name: '角色名文本', selector: '.TextBox_showName', allowLayoutEdit: true },
     { id: 'text', name: '对话正文', selector: '.TextBox_text', allowLayoutEdit: false },
 ];
-const TEXTBOX_NVL_DEFAULT_CSS = `
-@keyframes webgalTextBoxShowSoftly {
-  0% { opacity: 0; }
-  100% { opacity: 1; }
-}
-
+const TEXTBOX_BARE_DEFAULT_CSS = `
 @keyframes webgalTextDelayShow {
   0% { opacity: 0; }
   100% { opacity: 1; }
@@ -54,55 +49,44 @@ const TEXTBOX_NVL_DEFAULT_CSS = `
   height: 1440px;
   z-index: 6;
   pointer-events: none;
-  animation: webgalTextBoxShowSoftly 0.6s ease-out forwards;
 }
 
 .TextBox_Background {
   position: absolute;
   left: 0px;
-  top: 0px;
   right: 0px;
   bottom: 0px;
-  width: 2560px;
-  height: 1440px;
+  min-height: 360px;
+  max-height: 360px;
   z-index: 2;
-  border-radius: 0px;
-  background: rgba(11, 15, 23, 0.76);
-  backdrop-filter: blur(12px);
   box-sizing: border-box;
 }
 
 .TextBox_main {
   position: absolute;
   left: 0px;
-  top: 0px;
   right: 0px;
   bottom: 0px;
-  width: 2560px;
-  height: 1440px;
+  min-height: 360px;
+  max-height: 360px;
   z-index: 3;
-  border-radius: 0px;
-  padding: 260px 440px 180px 440px;
+  padding: 96px 80px 48px 460px;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  font-weight: normal;
-  color: #f8fafc;
-  letter-spacing: 0.12em;
 }
 
 .TextBox_main.TextBox_main_miniavatarOff {
-  padding: 260px 440px 180px 440px;
+  padding: 96px 80px 48px 80px;
 }
 
 .TextBox_miniAvatarContainer {
   position: absolute;
-  left: 72px;
-  bottom: 96px;
-  width: 300px;
-  height: 300px;
-  border-radius: 16px;
+  left: 40px;
+  bottom: 0px;
+  width: 360px;
+  height: 360px;
   overflow: hidden;
   pointer-events: none;
 }
@@ -112,45 +96,41 @@ const TEXTBOX_NVL_DEFAULT_CSS = `
   max-width: 100%;
   position: absolute;
   bottom: 0px;
-  filter: drop-shadow(0px 6px 16px rgba(0, 0, 0, 0.55));
 }
 
 .TextBox_ShowName_Background {
   position: absolute;
-  left: 440px;
-  top: 152px;
-  height: 76px;
-  min-width: 480px;
-  line-height: 68px;
-  padding: 0px 40px 8px 0px;
+  left: 460px;
+  top: 24px;
+  height: 64px;
+  min-width: 240px;
+  line-height: 64px;
+  padding: 0px;
   font-size: 48px;
-  border-radius: 0px;
   z-index: 2;
-  background: transparent;
-  border: 0px solid transparent;
-  border-bottom: 2px solid rgba(226, 232, 240, 0.35);
   white-space: nowrap;
   box-sizing: border-box;
 }
 
 .TextBox_showName {
   position: absolute;
-  left: 440px;
-  top: 152px;
-  height: 76px;
-  min-width: 480px;
-  line-height: 68px;
-  padding: 0px 40px 8px 0px;
+  left: 460px;
+  top: 24px;
+  height: 64px;
+  min-width: 240px;
+  line-height: 64px;
+  padding: 0px;
   font-size: 48px;
-  border-radius: 0px;
   z-index: 3;
-  border: 0px solid transparent;
   white-space: nowrap;
   box-sizing: border-box;
-  color: #e2e8f0;
-  font-weight: 600;
-  letter-spacing: 0.18em;
-  text-shadow: 0px 2px 10px rgba(0, 0, 0, 0.65);
+  font-weight: bold;
+  color: #ffffff;
+}
+
+.TextBox_main_miniavatarOff .TextBox_ShowName_Background,
+.TextBox_main_miniavatarOff .TextBox_showName {
+  left: 80px;
 }
 
 .TextBox_text {
@@ -158,14 +138,12 @@ const TEXTBOX_NVL_DEFAULT_CSS = `
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  padding-left: 0.1em;
   box-sizing: border-box;
-  color: #f8fafc;
-  text-shadow: 0px 2px 10px rgba(0, 0, 0, 0.65);
+  color: #ffffff;
 }
 
 .TextBox_text.TextBox_text_read {
-  color: #94a3b8;
+  color: #c0c0c0;
 }
 
 .TextBox_text ruby rt {
@@ -190,9 +168,9 @@ const TEXTBOX_NVL_DEFAULT_CSS = `
   opacity: 1;
 }
 `.trim();
-export function TextBoxImmersiveNvl(props) {
+export function TextBoxBare(props) {
     const sdk = getUiSdk();
-    const { rootProps } = sdk.useScreenParts('textbox', TEXTBOX_NVL_PARTS, TEXTBOX_NVL_DEFAULT_CSS);
+    const { rootProps } = sdk.useScreenParts('textbox', TEXTBOX_BARE_PARTS, TEXTBOX_BARE_DEFAULT_CSS);
     const [isSettled, setIsSettled] = useState(false);
     const segmentSignature = props.dialogSegments.join('\0');
     useEffect(() => {
@@ -228,14 +206,14 @@ export function TextBoxImmersiveNvl(props) {
                                 animateClassName: 'TextBox_textElement_start',
                             }) })] })] }) }));
 }
-export const TEXTBOX_IMMERSIVE_NVL_VARIANT = {
+export const TEXTBOX_BARE_VARIANT = {
     screen: 'textbox',
-    variantId: 'immersive-nvl',
-    name: '全屏书卷 (NVL)',
-    component: TextBoxImmersiveNvl,
-    parts: TEXTBOX_NVL_PARTS,
-    defaultCssText: TEXTBOX_NVL_DEFAULT_CSS,
+    variantId: 'bare',
+    name: '无样式基底',
+    component: TextBoxBare,
+    parts: TEXTBOX_BARE_PARTS,
+    defaultCssText: TEXTBOX_BARE_DEFAULT_CSS,
 };
 
-export { TEXTBOX_NVL_PARTS as parts, TEXTBOX_NVL_DEFAULT_CSS as defaultCssText, TextBoxImmersiveNvl as Screen };
-export default TextBoxImmersiveNvl;
+export { TEXTBOX_BARE_PARTS as parts, TEXTBOX_BARE_DEFAULT_CSS as defaultCssText, TextBoxBare as Screen };
+export default TextBoxBare;

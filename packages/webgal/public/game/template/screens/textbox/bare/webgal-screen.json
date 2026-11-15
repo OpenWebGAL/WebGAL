@@ -1,7 +1,7 @@
 {
   "screen": "textbox",
-  "variantId": "clean-adv",
-  "name": "极简底栏",
+  "variantId": "bare",
+  "name": "无样式基底",
   "version": "1.0.0",
   "entry": "index.js",
   "style": "style.scss",

@@ -4,7 +4,7 @@ if (!__WEBGAL_SDK__) {
 }
 const { jsx: _jsx, jsxs: _jsxs, Fragment: _Fragment } = __WEBGAL_SDK__.jsxRuntime;
 const { useMemo, useState } = __WEBGAL_SDK__.react;
-const { CloseSmall, GoEnd, GoStart, Left, Music, PauseOne, Picture, PlayOne, Right } = __WEBGAL_SDK__.icons;
+const { CloseSmall, GoEnd, GoStart, Left, Music, Picture, PlayOne, Right, SquareSmall } = __WEBGAL_SDK__.icons;
 const { resolveScreenAssetUrl, useScreenParts } = __WEBGAL_SDK__;
 const CG_PER_PAGE = 8;
 const EXTRA_SPLIT_PARTS = [
@@ -16,6 +16,46 @@ const EXTRA_SPLIT_PARTS = [
     { id: 'bgmItem', name: '曲目列表项', selector: '.Extra_Split_bgmItem', allowLayoutEdit: false },
 ];
 const EXTRA_SPLIT_DEFAULT_CSS = `
+@keyframes Extra_Split_cgSoftIn {
+  0% {
+    opacity: 0;
+    transform: scale(1.15, 1.15) translate(-50px, -125px) rotateX(-25deg) rotateY(25deg);
+  }
+  70% {
+    opacity: 1;
+    transform: scale(1, 1) translate3d(0px, 0px, 0px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1, 1) translate3d(0px, 0px, 0px);
+  }
+}
+
+@keyframes Extra_Split_cgStackIn {
+  0% {
+    opacity: 0;
+    transform: var(--cg-stack-start-transform, translate(0px, 0px));
+  }
+  20% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+    transform: var(--cg-stack-end-transform, translate(0px, 0px));
+  }
+}
+
+@keyframes Extra_Split_fullCgIn {
+  0% {
+    opacity: 0;
+    transform: scale(1.05, 1.05) translate(-25px, -50px) rotateX(-10deg) rotateY(10deg);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1, 1) translate3d(0px, 0px, 0px);
+  }
+}
+
 .Extra_Split_main {
   position: absolute;
   left: 0px;
@@ -35,35 +75,43 @@ const EXTRA_SPLIT_DEFAULT_CSS = `
   height: 124px;
   display: flex;
   align-items: center;
-  gap: 32px;
+  gap: 20px;
   flex-shrink: 0;
 }
 
 .Extra_Split_close {
   cursor: pointer;
-  padding: 6px;
-  border-radius: 100%;
+  padding: 15.36px;
+  border-radius: 1000px;
   border: none;
   background: transparent;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  transition: background 0.3s;
+  line-height: 0;
+  transition: background 0.33s;
+}
+
+.Extra_Split_close > span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 0;
 }
 
 .Extra_Split_close:hover {
-  background: rgba(0, 0, 0, 0.2);
+  background: rgba(0, 0, 0, 0.25);
 }
 
 .Extra_Split_title {
   font-family: "思源宋体", serif;
-  font-size: 80px;
+  font-size: 83.2px;
   font-weight: bold;
   color: transparent;
-  background: linear-gradient(135deg, #ffffff 0%, #51A8DD 100%);
+  background: linear-gradient(150deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 1) 75%, #51A8DD 100%);
   -webkit-background-clip: text;
   background-clip: text;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.06em;
 }
 
 .Extra_Split_tabs {
@@ -83,8 +131,23 @@ const EXTRA_SPLIT_DEFAULT_CSS = `
   color: #556270;
   font-size: 36px;
   font-weight: bold;
+  line-height: 1;
   cursor: pointer;
   transition: background-color 0.25s, color 0.25s, transform 0.2s;
+}
+
+.Extra_Split_tabIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 0;
+}
+
+.Extra_Split_tabIcon > span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 0;
 }
 
 .Extra_Split_tab:hover,
@@ -96,7 +159,7 @@ const EXTRA_SPLIT_DEFAULT_CSS = `
 .Extra_Split_body {
   flex: 1;
   min-height: 0px;
-  padding-top: 32px;
+  padding-top: 24px;
   display: flex;
   flex-direction: column;
   gap: 24px;
@@ -109,70 +172,94 @@ const EXTRA_SPLIT_DEFAULT_CSS = `
 }
 
 .Extra_Split_pageBtn {
-  font-size: 38px;
-  padding: 6px 36px;
+  font-size: 40px;
+  padding: 6px 40px;
   border-radius: 7px;
   border: none;
   background: rgba(255, 255, 255, 0.5);
   color: #666666;
-  font-weight: bold;
   cursor: pointer;
+  transition: color 0.3s, background-color 0.3s;
 }
 
 .Extra_Split_pageBtn:hover,
 .Extra_Split_pageBtn.Extra_Split_pageBtn_active {
-  background: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.78);
   color: #005CAF;
 }
 
 .Extra_Split_cgGrid {
-  flex: 1;
-  min-height: 0px;
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  grid-template-rows: repeat(2, 1fr);
-  gap: 36px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 56px 48px;
+  align-content: start;
+  padding: 40px 16px 24px 16px;
+  box-sizing: border-box;
 }
 
 .Extra_Split_cgCard {
-  background: rgba(255, 255, 255, 0.8);
-  box-shadow: 0px 8px 22px rgba(0, 0, 0, 0.2);
-  padding: 18px;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  padding: 0px;
   border: none;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+  background: transparent;
   cursor: pointer;
-  transition: transform 0.25s, background-color 0.25s;
+  position: relative;
+  opacity: 0;
+  animation: Extra_Split_cgSoftIn 1.5s ease-out forwards;
 }
 
 .Extra_Split_cgCard:hover {
-  transform: translateY(-6px);
-  background: #ffffff;
+  z-index: 2;
 }
 
-.Extra_Split_cgThumb {
-  flex: 1;
-  min-height: 0px;
+.Extra_Split_cgFrame {
+  position: absolute;
+  inset: 0px;
+  background-color: rgba(255, 255, 255, 0.85);
+  box-shadow: 0px 0px 15px 5px rgba(0, 0, 0, 0.28);
+  padding: 19.2px;
+  box-sizing: border-box;
+  transform: rotate(var(--cg-tilt, 0deg));
+  transition: transform 0.33s, background-color 0.33s, box-shadow 0.33s;
+}
+
+.Extra_Split_cgCard:hover .Extra_Split_cgFrame {
+  background-color: #ffffff;
+  box-shadow: 0px 6px 24px 6px rgba(0, 0, 0, 0.32);
+  transform: scale(1.04) rotate(0deg);
+}
+
+.Extra_Split_cgStackItem {
+  position: absolute;
+  inset: 0px;
+  background-color: rgba(255, 255, 255, 0.85);
+  box-shadow: 0px 0px 15px 5px rgba(0, 0, 0, 0.28);
+  padding: 19.2px;
+  box-sizing: border-box;
+  transform-origin: center 70%;
+  opacity: 0;
+  animation: Extra_Split_cgStackIn 1.5s ease-out both;
+  transition: background-color 0.33s, box-shadow 0.33s;
+}
+
+.Extra_Split_cgCard:hover .Extra_Split_cgStackItem {
+  background-color: #ffffff;
+  box-shadow: 0px 6px 24px 6px rgba(0, 0, 0, 0.32);
+}
+
+.Extra_Split_cgMediaBg {
   width: 100%;
-  overflow: hidden;
-  background: rgba(0, 0, 0, 0.05);
+  height: 100%;
+  background-size: cover;
+  background-position: center;
 }
 
-.Extra_Split_cgThumb img,
-.Extra_Split_cgThumb video {
+.Extra_Split_cgMediaVideo {
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
-}
-
-.Extra_Split_cgCaption {
-  font-size: 28px;
-  font-weight: bold;
-  color: #005CAF;
-  display: flex;
-  justify-content: space-between;
 }
 
 .Extra_Split_bgmPanel {
@@ -180,40 +267,55 @@ const EXTRA_SPLIT_DEFAULT_CSS = `
   min-height: 0px;
   display: flex;
   flex-direction: column;
-  gap: 28px;
+  gap: 24px;
 }
 
 .Extra_Split_bgmPlayer {
   display: flex;
   align-items: center;
-  gap: 20px;
-  padding: 28px 44px;
-  border-radius: 8px;
+  padding: 25.6px 51.2px;
+  border-radius: 4px;
   background-image: linear-gradient(315deg, rgba(163, 189, 237, 0.95) 0%, rgba(105, 145, 199, 0.95) 100%);
-  box-shadow: 0px 10px 26px rgba(0, 0, 0, 0.2);
   color: #ffffff;
 }
 
 .Extra_Split_bgmCtrl {
-  border: none;
-  background: rgba(255, 255, 255, 0.16);
-  border-radius: 999px;
-  width: 72px;
-  height: 72px;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  padding: 12px 28px;
+  margin: 0px 5px;
+  cursor: pointer;
+  border-radius: 4px;
+  flex-shrink: 0;
+  line-height: 0;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
+  transition: background-color 0.33s, color 0.33s, box-shadow 0.33s;
+}
+
+.Extra_Split_bgmCtrl > span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 0;
 }
 
 .Extra_Split_bgmCtrl:hover {
-  background: rgba(255, 255, 255, 0.32);
+  box-shadow: 0px 0px 10px 5px rgba(255, 255, 255, 0.35);
 }
 
 .Extra_Split_bgmNow {
-  margin-left: 16px;
-  font-size: 42px;
-  font-weight: bold;
+  color: rgba(255, 255, 255, 0.85);
+  font-family: "资源圆体", serif;
+  font-size: 39.68px;
+  font-weight: normal;
+  margin: 0px 5px 0px 20px;
+  padding: 0px;
+  min-width: 0px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .Extra_Split_bgmList {
@@ -221,30 +323,40 @@ const EXTRA_SPLIT_DEFAULT_CSS = `
   min-height: 0px;
   overflow-y: auto;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px 28px;
   align-content: start;
+  padding: 24px 32px;
+  border-radius: 4px;
+  background-image: linear-gradient(315deg, rgba(163, 189, 237, 0.55) 0%, rgba(105, 145, 199, 0.55) 100%);
+  box-sizing: border-box;
 }
 
 .Extra_Split_bgmItem {
-  padding: 24px 32px;
-  border: none;
-  border-left: 6px solid transparent;
-  border-radius: 6px;
-  background: rgba(255, 255, 255, 0.65);
-  color: #364f6b;
-  font-size: 34px;
-  text-align: left;
+  font-family: "资源圆体", serif;
+  background-color: rgba(0, 0, 0, 0.1);
+  font-size: 32px;
+  padding: 18px 32px;
   cursor: pointer;
-  transition: background-color 0.22s, color 0.22s, border-color 0.22s;
+  color: #ffffff;
+  border: none;
+  border-radius: 5px;
+  text-align: left;
+  box-sizing: border-box;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  transition: background-color 0.5s, color 0.5s;
 }
 
-.Extra_Split_bgmItem:hover,
+.Extra_Split_bgmItem:hover {
+  background-color: rgba(255, 255, 255, 0.65);
+  color: #666666;
+}
+
 .Extra_Split_bgmItem.Extra_Split_bgmItem_active {
-  background: rgba(255, 255, 255, 0.92);
-  color: #005CAF;
-  font-weight: bold;
-  border-left-color: #005CAF;
+  background-color: rgba(255, 255, 255, 0.85);
+  color: #666666;
 }
 
 .Extra_Split_modal {
@@ -255,8 +367,7 @@ const EXTRA_SPLIT_DEFAULT_CSS = `
   height: 1440px;
   padding: 96px;
   box-sizing: border-box;
-  background: rgba(0, 0, 0, 0.35);
-  backdrop-filter: blur(25px);
+  background: rgba(0, 0, 0, 0.25);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -266,10 +377,13 @@ const EXTRA_SPLIT_DEFAULT_CSS = `
 .Extra_Split_modalCard {
   width: 1920px;
   height: 1080px;
-  background: rgba(255, 255, 255, 0.95);
-  padding: 36px;
+  background-color: rgba(255, 255, 255, 0.95);
+  padding: 51.2px;
+  cursor: pointer;
   box-sizing: border-box;
   box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.35);
+  animation: Extra_Split_fullCgIn 0.5s ease-out forwards;
+  opacity: 0;
 }
 
 .Extra_Split_modalCard img,
@@ -289,7 +403,15 @@ const EXTRA_SPLIT_DEFAULT_CSS = `
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  line-height: 0;
   cursor: pointer;
+}
+
+.Extra_Split_modalStep > span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 0;
 }
 
 .Extra_Split_modalStep:hover {
@@ -299,6 +421,20 @@ const EXTRA_SPLIT_DEFAULT_CSS = `
 function isVideoUrl(url) {
     const ext = url.split('.').pop()?.toLowerCase() ?? '';
     return ext === 'mp4' || ext === 'webm' || ext === 'mkv';
+}
+function isImageUrl(url) {
+    const ext = url.split('.').pop()?.toLowerCase() ?? '';
+    return ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg', 'bmp'].includes(ext);
+}
+function getDeterministicTiltDeg(index) {
+    return ((index * 7 + 3) % 11) - 5;
+}
+function renderCgMedia(url) {
+    const resolved = resolveScreenAssetUrl(url);
+    if (isVideoUrl(url)) {
+        return _jsx("video", { className: "Extra_Split_cgMediaVideo", src: resolved, autoPlay: true, loop: true, muted: true, playsInline: true });
+    }
+    return _jsx("div", { className: "Extra_Split_cgMediaBg", style: { backgroundImage: `url('${resolved}')` } });
 }
 export function ExtraSplitTabsScreen(props) {
     const { visible, cgGroups, bgmList, currentBgmUrl, isBgmPlaying, t, playSe, onSelectBgm, onToggleBgmPlay, onPrevBgm, onNextBgm, onClose, } = props;
@@ -321,35 +457,51 @@ export function ExtraSplitTabsScreen(props) {
     return (_jsxs("div", { ...rootProps, className: `${rootProps.className} Extra_Split_main`, children: [_jsxs("div", { className: "Extra_Split_top", children: [_jsx("button", { type: "button", className: "Extra_Split_close", onMouseEnter: playSe.click, onClick: () => {
                             playSe.click();
                             onClose();
-                        }, children: _jsx(CloseSmall, { theme: "outline", size: 84, fill: "#fff", strokeWidth: 3 }) }), _jsx("div", { className: "Extra_Split_title", children: t('extra.title') }), _jsxs("div", { className: "Extra_Split_tabs", children: [_jsxs("button", { type: "button", className: `Extra_Split_tab${activeTab === 'cg' ? ' Extra_Split_tab_active' : ''}`, onMouseEnter: playSe.enter, onClick: () => {
+                        }, children: _jsx(CloseSmall, { theme: "outline", size: 92, fill: "#fff", strokeWidth: 3 }) }), _jsx("div", { className: "Extra_Split_title", children: t('extra.title') }), _jsxs("div", { className: "Extra_Split_tabs", children: [_jsxs("button", { type: "button", className: `Extra_Split_tab${activeTab === 'cg' ? ' Extra_Split_tab_active' : ''}`, onMouseEnter: playSe.enter, onClick: () => {
                                     playSe.switch();
                                     setActiveTab('cg');
-                                }, children: [_jsx(Picture, { theme: "outline", size: 34, fill: "currentColor" }), _jsx("span", { children: "CG" })] }), _jsxs("button", { type: "button", className: `Extra_Split_tab${activeTab === 'bgm' ? ' Extra_Split_tab_active' : ''}`, onMouseEnter: playSe.enter, onClick: () => {
+                                }, children: [_jsx("span", { className: "Extra_Split_tabIcon", children: _jsx(Picture, { theme: "outline", size: 34, fill: "currentColor" }) }), _jsx("span", { children: "CG" })] }), _jsxs("button", { type: "button", className: `Extra_Split_tab${activeTab === 'bgm' ? ' Extra_Split_tab_active' : ''}`, onMouseEnter: playSe.enter, onClick: () => {
                                     playSe.switch();
                                     setActiveTab('bgm');
-                                }, children: [_jsx(Music, { theme: "outline", size: 34, fill: "currentColor" }), _jsx("span", { children: "BGM" })] })] })] }), _jsx("div", { className: "Extra_Split_body", children: activeTab === 'cg' ? (_jsxs(_Fragment, { children: [cgGroups.length > 0 && (_jsx("div", { className: "Extra_Split_pages", children: Array.from({ length: pageCount }, (_, i) => i + 1).map((page) => (_jsx("button", { type: "button", className: `Extra_Split_pageBtn${safePage === page ? ' Extra_Split_pageBtn_active' : ''}`, onMouseEnter: playSe.enter, onClick: () => {
+                                }, children: [_jsx("span", { className: "Extra_Split_tabIcon", children: _jsx(Music, { theme: "outline", size: 34, fill: "currentColor" }) }), _jsx("span", { children: "BGM" })] })] })] }), _jsx("div", { className: "Extra_Split_body", children: activeTab === 'cg' ? (_jsxs(_Fragment, { children: [cgGroups.length > 0 && (_jsx("div", { className: "Extra_Split_pages", children: Array.from({ length: pageCount }, (_, i) => i + 1).map((page) => (_jsx("button", { type: "button", className: `Extra_Split_pageBtn${safePage === page ? ' Extra_Split_pageBtn_active' : ''}`, onMouseEnter: playSe.enter, onClick: () => {
                                     playSe.pageChange();
                                     setCgPage(page);
-                                }, children: page }, page))) })), _jsx("div", { className: "Extra_Split_cgGrid", children: pageGroups.map((group) => {
+                                }, children: page }, page))) })), _jsx("div", { className: "Extra_Split_cgGrid", children: pageGroups.map((group, idx) => {
                                 const asset = group.resources[0];
                                 if (!asset)
                                     return null;
-                                const url = resolveScreenAssetUrl(asset.url);
-                                return (_jsxs("button", { type: "button", className: "Extra_Split_cgCard", onMouseEnter: playSe.enter, onClick: () => {
+                                const isStackPreview = group.resources.length > 1 && isImageUrl(asset.url);
+                                const animationDelay = 100 + idx * 100;
+                                const tiltDeg = getDeterministicTiltDeg(idx);
+                                const stackResources = isStackPreview ? [...group.resources].reverse() : [];
+                                return (_jsx("button", { type: "button", title: group.name, className: "Extra_Split_cgCard", style: { animationDelay: `${animationDelay}ms` }, onMouseEnter: playSe.enter, onClick: () => {
                                         playSe.click();
                                         setFullIndex(0);
                                         setActiveGroupKey(group.key);
-                                    }, children: [_jsx("div", { className: "Extra_Split_cgThumb", children: isVideoUrl(asset.url) ? (_jsx("video", { src: url, autoPlay: true, loop: true, muted: true, playsInline: true })) : (_jsx("img", { src: url, alt: group.name })) }), _jsxs("div", { className: "Extra_Split_cgCaption", children: [_jsx("span", { children: group.name }), _jsxs("span", { children: ["1 / ", group.resources.length] })] })] }, group.key));
-                            }) })] })) : (_jsxs("div", { className: "Extra_Split_bgmPanel", children: [_jsxs("div", { className: "Extra_Split_bgmPlayer", children: [_jsx("button", { type: "button", className: "Extra_Split_bgmCtrl", onMouseEnter: playSe.enter, onClick: () => {
+                                    }, children: isStackPreview ? (stackResources.map((resource, stackIdx) => {
+                                        const offset = stackIdx - (stackResources.length - 1) / 2;
+                                        return (_jsx("div", { className: "Extra_Split_cgStackItem", style: {
+                                                zIndex: stackIdx,
+                                                animationDelay: `${animationDelay + stackIdx * 140}ms`,
+                                                '--cg-stack-start-transform': `translate(${offset * 1.5}%, ${offset * -0.8}%) rotate(${offset * 2}deg)`,
+                                                '--cg-stack-end-transform': `translate(${offset * 5.5}%, ${offset * -2.8}%) rotate(${offset * 5.5}deg)`,
+                                            }, children: renderCgMedia(resource.url) }, `${resource.url}_${stackIdx}`));
+                                    })) : (_jsx("div", { className: "Extra_Split_cgFrame", style: { '--cg-tilt': `${tiltDeg}deg` }, children: renderCgMedia(asset.url) })) }, group.key));
+                            }) }, `split-cg-page-${safePage}`)] })) : (_jsxs("div", { className: "Extra_Split_bgmPanel", children: [_jsxs("div", { className: "Extra_Split_bgmPlayer", children: [_jsx("button", { type: "button", className: "Extra_Split_bgmCtrl", onMouseEnter: playSe.enter, onClick: () => {
                                         playSe.click();
                                         onPrevBgm();
-                                    }, children: _jsx(GoStart, { theme: "filled", size: 38, fill: "#fff", strokeWidth: 3, strokeLinejoin: "miter" }) }), _jsx("button", { type: "button", className: "Extra_Split_bgmCtrl", onMouseEnter: playSe.enter, onClick: () => {
+                                    }, children: _jsx(GoStart, { theme: "filled", size: 39, fill: "#fff", strokeWidth: 3, strokeLinejoin: "miter" }) }), _jsx("button", { type: "button", className: "Extra_Split_bgmCtrl", onMouseEnter: playSe.enter, onClick: () => {
                                         playSe.click();
-                                        onToggleBgmPlay();
-                                    }, children: isBgmPlaying ? (_jsx(PauseOne, { theme: "filled", size: 38, fill: "#fff", strokeWidth: 3, strokeLinejoin: "miter" })) : (_jsx(PlayOne, { theme: "filled", size: 38, fill: "#fff", strokeWidth: 3, strokeLinejoin: "miter" })) }), _jsx("button", { type: "button", className: "Extra_Split_bgmCtrl", onMouseEnter: playSe.enter, onClick: () => {
+                                        if (!isBgmPlaying)
+                                            onToggleBgmPlay();
+                                    }, children: _jsx(PlayOne, { theme: "filled", size: 39, fill: "#fff", strokeWidth: 3, strokeLinejoin: "miter" }) }), _jsx("button", { type: "button", className: "Extra_Split_bgmCtrl", onMouseEnter: playSe.enter, onClick: () => {
                                         playSe.click();
                                         onNextBgm();
-                                    }, children: _jsx(GoEnd, { theme: "filled", size: 38, fill: "#fff", strokeWidth: 3, strokeLinejoin: "miter" }) }), _jsx("div", { className: "Extra_Split_bgmNow", children: currentTrackName })] }), _jsx("div", { className: "Extra_Split_bgmList", children: bgmList.map((bgm, idx) => (_jsx("button", { type: "button", className: `Extra_Split_bgmItem${bgm.url === currentBgmUrl ? ' Extra_Split_bgmItem_active' : ''}`, onMouseEnter: playSe.enter, onClick: () => {
+                                    }, children: _jsx(GoEnd, { theme: "filled", size: 39, fill: "#fff", strokeWidth: 3, strokeLinejoin: "miter" }) }), _jsx("button", { type: "button", className: "Extra_Split_bgmCtrl", onMouseEnter: playSe.enter, onClick: () => {
+                                        playSe.click();
+                                        if (isBgmPlaying)
+                                            onToggleBgmPlay();
+                                    }, children: _jsx(SquareSmall, { theme: "filled", size: 39, fill: "#fff", strokeWidth: 3, strokeLinejoin: "miter" }) }), _jsx("div", { className: "Extra_Split_bgmNow", children: currentTrackName })] }), _jsx("div", { className: "Extra_Split_bgmList", children: bgmList.map((bgm, idx) => (_jsx("button", { type: "button", className: `Extra_Split_bgmItem${bgm.url === currentBgmUrl ? ' Extra_Split_bgmItem_active' : ''}`, onMouseEnter: playSe.enter, onClick: () => {
                                     playSe.click();
                                     onSelectBgm(bgm.url);
                                 }, children: bgm.name }, `${bgm.url}-${idx}`))) })] })) }), activeGroup && activeAsset && (_jsxs("div", { className: "Extra_Split_modal", onClick: () => {

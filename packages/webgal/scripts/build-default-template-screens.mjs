@@ -22,7 +22,7 @@ const UI_ICONS_PATH = path.join(SRC_ROOT, 'sdk', 'uiIcons.ts');
 const SCREENS_STAGE_DIR = path.join(SRC_ROOT, 'screens', 'stage');
 const SCREENS_MENU_DIR = path.join(SRC_ROOT, 'screens', 'menu');
 const OUTPUT_SCREENS_DIR = path.join(WEBGAL_ROOT, 'public', 'game', 'template', 'screens');
-const EXPECTED_VARIANT_COUNT = 25;
+const EXPECTED_VARIANT_COUNT = 24;
 
 const SDK_PREAMBLE = [
   'const __WEBGAL_SDK__ = globalThis.__WEBGAL_UI_SDK__;',

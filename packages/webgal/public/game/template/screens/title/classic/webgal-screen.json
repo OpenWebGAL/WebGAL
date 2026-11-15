@@ -1,7 +1,7 @@
 {
   "screen": "title",
   "variantId": "classic",
-  "name": "经典底栏 (WebGAL Classic)",
+  "name": "经典底栏",
   "version": "1.0.0",
   "entry": "index.js",
   "style": "style.scss",

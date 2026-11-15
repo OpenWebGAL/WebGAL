@@ -52,9 +52,39 @@
   gap: 10px;
   padding: 10px 24px;
   border-radius: 999px;
+  border: 1px solid rgba(81, 110, 65, 0.18);
   background: rgba(255, 255, 255, 0.56);
   color: rgba(81, 110, 65, 0.92);
+  font-family: inherit;
   font-size: 28px;
+  line-height: 1;
+  cursor: pointer;
+  transition: background-color 0.2s, border-color 0.2s;
+}
+
+.Options_Scroll_versionPill:hover,
+.Options_Scroll_versionPill.Options_Scroll_versionPill_active {
+  background: rgba(255, 255, 255, 0.85);
+  border-color: rgba(81, 110, 65, 0.45);
+}
+
+.Options_Scroll_versionIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 0;
+  flex-shrink: 0;
+}
+
+.Options_Scroll_versionIcon > span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 0;
+}
+
+.Options_Scroll_versionText {
+  line-height: 1;
 }
 
 .Options_Scroll_content {
@@ -62,6 +92,7 @@
   min-height: 0px;
   padding: 16px 128px 40px 128px;
   overflow-y: auto;
+  scrollbar-gutter: stable;
   display: flex;
   flex-direction: column;
   gap: 32px;
@@ -73,14 +104,15 @@
   border: 1px solid rgba(255, 255, 255, 0.78);
   border-radius: 6px;
   padding: 32px 44px;
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 28px 48px;
+  align-items: start;
   box-shadow: 0px 8px 24px rgba(34, 75, 55, 0.06);
 }
 
 .Options_Scroll_sectionHeading {
-  width: 100%;
+  grid-column: 1 / -1;
   font-family: "思源宋体", serif;
   font-size: 52px;
   font-weight: bold;
@@ -93,14 +125,69 @@
 }
 
 .Options_Scroll_item {
-  min-width: 560px;
+  min-width: 0px;
   display: flex;
   flex-direction: column;
   gap: 14px;
 }
 
 .Options_Scroll_item.Options_Scroll_item_full {
+  grid-column: 1 / -1;
   width: 100%;
+}
+
+.Options_Scroll_about {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.Options_Scroll_aboutBack {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  line-height: 0;
+  width: 56px;
+  height: 56px;
+  background: rgba(0, 0, 0, 0.08);
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  margin-bottom: 8px;
+  transition: background-color 0.2s;
+}
+
+.Options_Scroll_aboutBack > span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 0;
+}
+
+.Options_Scroll_aboutBack:hover {
+  background: rgba(0, 0, 0, 0.16);
+}
+
+.Options_Scroll_aboutHeading {
+  color: transparent;
+  background: linear-gradient(to left, #227D51, rgba(81, 110, 65, 1));
+  -webkit-background-clip: text;
+  background-clip: text;
+  font-size: 44px;
+  font-weight: bold;
+  margin-top: 12px;
+}
+
+.Options_Scroll_aboutText {
+  color: rgba(81, 110, 65, 1);
+  font-size: 34px;
+  padding-left: 4px;
+}
+
+.Options_Scroll_aboutText a {
+  color: rgba(81, 110, 65, 1);
 }
 
 .Options_Scroll_label {

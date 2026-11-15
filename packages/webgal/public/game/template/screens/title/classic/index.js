@@ -27,39 +27,40 @@ const TITLE_CLASSIC_DEFAULT_CSS = `
 }
 
 .Title_buttonList {
+  font-family: "思源宋体", serif;
+  display: flex;
   position: absolute;
   left: 0px;
-  bottom: 172.8px;
+  bottom: 0px;
   width: 2560px;
   height: 172.8px;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
+  background: rgba(0, 0, 0, 0.4);
+  justify-content: space-evenly;
+  justify-items: center;
   align-items: center;
-  gap: 32px;
-  padding: 0px 80px;
-  background: rgba(255, 255, 255, 0.25);
-  backdrop-filter: blur(5px);
-  box-sizing: border-box;
+  flex-flow: row;
   transition: background 0.75s;
+  box-sizing: border-box;
+}
+
+.Title_buttonList:hover {
+  background: rgba(0, 0, 0, 0.6);
 }
 
 .Title_button {
-  flex: 0 1 auto;
   font-weight: bold;
   text-align: center;
+  flex: 0 1 auto;
   cursor: pointer;
-  padding: 20px 44px;
-  margin: 0px 12px;
+  padding: 5.12px 25.6px;
   border: 0px solid transparent;
-  border-radius: 6px;
   background: transparent;
-  transition: text-shadow 0.35s ease, background-color 0.35s ease, transform 0.25s ease;
+  transition: background-color 0.3s, transform 0.3s, text-shadow 0.3s;
 }
 
 .Title_button:hover {
-  background: rgba(255, 255, 255, 0.2);
-  text-shadow: 0px 0px 14px rgba(255, 255, 255, 1), 0px 0px 24px rgba(255, 255, 255, 0.85);
+  text-shadow: 0px 0px 10px rgba(255, 255, 255, 1);
+  transform: scale(1.025, 1.025) translate(0px, -1.28px);
 }
 
 .Title_button:disabled,
@@ -70,17 +71,29 @@ const TITLE_CLASSIC_DEFAULT_CSS = `
 
 .Title_button:disabled:hover,
 .Title_button.Title_button_disabled:hover {
-  background: transparent;
   text-shadow: none;
+  transform: none;
 }
 
 .Title_button_text {
   display: block;
-  font-family: "WebgalUI", -apple-system, BlinkMacSystemFont, sans-serif;
-  font-size: 46px;
-  color: #ffffff;
-  letter-spacing: 0.16em;
-  text-shadow: 0px 2px 10px rgba(0, 0, 0, 0.5);
+  font-size: 47.36px;
+  font-family:
+    "WebgalUI",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    Oxygen,
+    Ubuntu,
+    Cantarell,
+    "Fira Sans",
+    "Droid Sans",
+    "Helvetica Neue",
+    sans-serif;
+  letter-spacing: 0.15em;
+  padding: 0px 23.68px;
+  color: #f5f5f5;
   white-space: nowrap;
 }
 `.trim();
@@ -108,7 +121,7 @@ export function TitleClassic(props) {
 export const TITLE_CLASSIC_VARIANT = {
     screen: 'title',
     variantId: 'classic',
-    name: '经典底栏 (WebGAL Classic)',
+    name: '经典底栏',
     component: TitleClassic,
     parts: TITLE_CLASSIC_PARTS,
     defaultCssText: TITLE_CLASSIC_DEFAULT_CSS,

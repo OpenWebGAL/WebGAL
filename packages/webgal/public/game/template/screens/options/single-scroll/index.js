@@ -2,9 +2,9 @@ const __WEBGAL_SDK__ = globalThis.__WEBGAL_UI_SDK__;
 if (!__WEBGAL_SDK__) {
   throw new Error("WebGAL UI SDK is not initialized.");
 }
-const { jsx: _jsx, jsxs: _jsxs } = __WEBGAL_SDK__.jsxRuntime;
+const { jsx: _jsx, jsxs: _jsxs, Fragment: _Fragment } = __WEBGAL_SDK__.jsxRuntime;
 const { useMemo, useRef, useState } = __WEBGAL_SDK__.react;
-const { Info } = __WEBGAL_SDK__.icons;
+const { Info, Left } = __WEBGAL_SDK__.icons;
 const { renderRichText, resolveScreenAssetUrl, useScreenParts } = __WEBGAL_SDK__;
 const OPTIONS_SCROLL_PARTS = [
     { id: 'main', name: '选项页面容器', selector: '.Options_Scroll_main', allowLayoutEdit: true },
@@ -70,9 +70,39 @@ const OPTIONS_SCROLL_DEFAULT_CSS = `
   gap: 10px;
   padding: 10px 24px;
   border-radius: 999px;
+  border: 1px solid rgba(81, 110, 65, 0.18);
   background: rgba(255, 255, 255, 0.56);
   color: rgba(81, 110, 65, 0.92);
+  font-family: inherit;
   font-size: 28px;
+  line-height: 1;
+  cursor: pointer;
+  transition: background-color 0.2s, border-color 0.2s;
+}
+
+.Options_Scroll_versionPill:hover,
+.Options_Scroll_versionPill.Options_Scroll_versionPill_active {
+  background: rgba(255, 255, 255, 0.85);
+  border-color: rgba(81, 110, 65, 0.45);
+}
+
+.Options_Scroll_versionIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 0;
+  flex-shrink: 0;
+}
+
+.Options_Scroll_versionIcon > span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 0;
+}
+
+.Options_Scroll_versionText {
+  line-height: 1;
 }
 
 .Options_Scroll_content {
@@ -80,6 +110,7 @@ const OPTIONS_SCROLL_DEFAULT_CSS = `
   min-height: 0px;
   padding: 16px 128px 40px 128px;
   overflow-y: auto;
+  scrollbar-gutter: stable;
   display: flex;
   flex-direction: column;
   gap: 32px;
@@ -91,14 +122,15 @@ const OPTIONS_SCROLL_DEFAULT_CSS = `
   border: 1px solid rgba(255, 255, 255, 0.78);
   border-radius: 6px;
   padding: 32px 44px;
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 28px 48px;
+  align-items: start;
   box-shadow: 0px 8px 24px rgba(34, 75, 55, 0.06);
 }
 
 .Options_Scroll_sectionHeading {
-  width: 100%;
+  grid-column: 1 / -1;
   font-family: "思源宋体", serif;
   font-size: 52px;
   font-weight: bold;
@@ -111,14 +143,69 @@ const OPTIONS_SCROLL_DEFAULT_CSS = `
 }
 
 .Options_Scroll_item {
-  min-width: 560px;
+  min-width: 0px;
   display: flex;
   flex-direction: column;
   gap: 14px;
 }
 
 .Options_Scroll_item.Options_Scroll_item_full {
+  grid-column: 1 / -1;
   width: 100%;
+}
+
+.Options_Scroll_about {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.Options_Scroll_aboutBack {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  line-height: 0;
+  width: 56px;
+  height: 56px;
+  background: rgba(0, 0, 0, 0.08);
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  margin-bottom: 8px;
+  transition: background-color 0.2s;
+}
+
+.Options_Scroll_aboutBack > span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 0;
+}
+
+.Options_Scroll_aboutBack:hover {
+  background: rgba(0, 0, 0, 0.16);
+}
+
+.Options_Scroll_aboutHeading {
+  color: transparent;
+  background: linear-gradient(to left, #227D51, rgba(81, 110, 65, 1));
+  -webkit-background-clip: text;
+  background-clip: text;
+  font-size: 44px;
+  font-weight: bold;
+  margin-top: 12px;
+}
+
+.Options_Scroll_aboutText {
+  color: rgba(81, 110, 65, 1);
+  font-size: 34px;
+  padding-left: 4px;
+}
+
+.Options_Scroll_aboutText a {
+  color: rgba(81, 110, 65, 1);
 }
 
 .Options_Scroll_label {
@@ -324,6 +411,7 @@ export function OptionsSingleScrollScreen(props) {
     const { visible, optionData, fontOptions, languageOptions, isFullscreenSupported, isFullscreen, previewBgUrl, version, t, playSe, onChangeOption, onChangeLanguage, onToggleFullscreen, onResetSaves, onResetOptions, onResetAll, onExportSaves, onImportSaves, textboxPreviewNode, } = props;
     const { rootProps } = useScreenParts('options', OPTIONS_SCROLL_PARTS, OPTIONS_SCROLL_DEFAULT_CSS);
     const [previewKey, setPreviewKey] = useState(0);
+    const [showAbout, setShowAbout] = useState(false);
     const importInputRef = useRef(null);
     const fontLabels = useMemo(() => fontOptions.map((option) => {
         if (option.labelKey)
@@ -343,53 +431,59 @@ export function OptionsSingleScrollScreen(props) {
                     if (file)
                         onImportSaves(file);
                     e.target.value = '';
-                } }), _jsxs("div", { className: "Options_Scroll_main", children: [_jsxs("div", { className: "Options_Scroll_header", children: [_jsx("div", { className: "Options_Scroll_titleText", children: t('menu.options.title') }), _jsxs("div", { className: "Options_Scroll_versionPill", children: [_jsx(Info, { theme: "outline", size: 28, fill: "rgba(81, 110, 65, 0.9)" }), _jsx("span", { children: version })] })] }), _jsxs("div", { className: "Options_Scroll_content", children: [_jsxs("div", { className: "Options_Scroll_section", children: [_jsx("div", { className: "Options_Scroll_sectionHeading", children: t('menu.options.pages.system.title') }), _jsxs("div", { className: "Options_Scroll_item", children: [_jsx("div", { className: "Options_Scroll_label", children: t('menu.options.pages.system.options.autoSpeed.title') }), _jsx("div", { className: "Options_Scroll_row", children: [
-                                                    [0, t('menu.options.pages.system.options.autoSpeed.options.slow')],
-                                                    [1, t('menu.options.pages.system.options.autoSpeed.options.medium')],
-                                                    [2, t('menu.options.pages.system.options.autoSpeed.options.fast')],
-                                                ].map(([val, label]) => (_jsx("button", { type: "button", className: `Options_Scroll_button${optionData.autoSpeed === val ? ' Options_Scroll_button_active' : ''}`, onMouseEnter: playSe.enter, onClick: () => {
-                                                        playSe.switch();
-                                                        onChangeOption('autoSpeed', val);
-                                                    }, children: label }, val))) })] }), _jsxs("div", { className: "Options_Scroll_item", children: [_jsx("div", { className: "Options_Scroll_label", children: t('menu.options.pages.system.options.language.title') }), _jsx("div", { className: "Options_Scroll_row", children: languageOptions.map((item) => (_jsx("button", { type: "button", className: `Options_Scroll_button${optionData.language === item.value ? ' Options_Scroll_button_active' : ''}`, onMouseEnter: playSe.enter, onClick: () => {
-                                                        playSe.switch();
-                                                        onChangeLanguage(item.value);
-                                                    }, children: item.label }, item.value))) })] }), _jsxs("div", { className: "Options_Scroll_item", children: [_jsx("div", { className: "Options_Scroll_label", children: t('menu.options.pages.system.options.skipAll.title') }), _jsxs("div", { className: "Options_Scroll_row", children: [_jsx("button", { type: "button", className: `Options_Scroll_button${!optionData.skipAll ? ' Options_Scroll_button_active' : ''}`, onMouseEnter: playSe.enter, onClick: () => {
+                } }), _jsxs("div", { className: "Options_Scroll_main", children: [_jsxs("div", { className: "Options_Scroll_header", children: [_jsx("div", { className: "Options_Scroll_titleText", children: t('menu.options.title') }), _jsxs("button", { type: "button", className: `Options_Scroll_versionPill${showAbout ? ' Options_Scroll_versionPill_active' : ''}`, "aria-label": t('menu.options.pages.system.options.about.title'), onMouseEnter: playSe.enter, onClick: () => {
+                                    playSe.switch();
+                                    setShowAbout((prev) => !prev);
+                                }, children: [_jsx("span", { className: "Options_Scroll_versionIcon", children: _jsx(Info, { theme: "outline", size: 28, fill: "rgba(81, 110, 65, 0.9)" }) }), _jsx("span", { className: "Options_Scroll_versionText", children: version })] })] }), _jsx("div", { className: "Options_Scroll_content", children: showAbout ? (_jsx("div", { className: "Options_Scroll_section", children: _jsxs("div", { className: "Options_Scroll_about", children: [_jsx("button", { type: "button", className: "Options_Scroll_aboutBack", onMouseEnter: playSe.enter, onClick: () => {
+                                            playSe.switch();
+                                            setShowAbout(false);
+                                        }, children: _jsx(Left, { theme: "outline", size: 35, strokeWidth: 3, fill: "#333" }) }), _jsx("div", { className: "Options_Scroll_aboutHeading", children: t('menu.options.pages.system.options.about.subTitle') }), _jsx("div", { className: "Options_Scroll_aboutHeading", children: t('menu.options.pages.system.options.about.version') }), _jsx("div", { className: "Options_Scroll_aboutText", children: version }), _jsx("div", { className: "Options_Scroll_aboutHeading", children: t('menu.options.pages.system.options.about.source') }), _jsx("div", { className: "Options_Scroll_aboutText", children: _jsx("a", { target: "_blank", href: "https://github.com/OpenWebGAL/WebGAL", rel: "noreferrer", children: "https://github.com/OpenWebGAL/WebGAL" }) }), _jsx("div", { className: "Options_Scroll_aboutHeading", children: t('menu.options.pages.system.options.about.contributors') }), _jsx("div", { className: "Options_Scroll_aboutText", children: _jsx("a", { target: "_blank", href: "https://github.com/OpenWebGAL/WebGAL/graphs/contributors", rel: "noreferrer", children: "https://github.com/OpenWebGAL/WebGAL/graphs/contributors" }) }), _jsx("div", { className: "Options_Scroll_aboutHeading", children: t('menu.options.pages.system.options.about.website') }), _jsx("div", { className: "Options_Scroll_aboutText", children: _jsx("a", { target: "_blank", href: "https://openwebgal.com/", rel: "noreferrer", children: "https://openwebgal.com/" }) })] }) })) : (_jsxs(_Fragment, { children: [_jsxs("div", { className: "Options_Scroll_section", children: [_jsx("div", { className: "Options_Scroll_sectionHeading", children: t('menu.options.pages.system.title') }), _jsxs("div", { className: "Options_Scroll_item", children: [_jsx("div", { className: "Options_Scroll_label", children: t('menu.options.pages.system.options.autoSpeed.title') }), _jsx("div", { className: "Options_Scroll_row", children: [
+                                                        [0, t('menu.options.pages.system.options.autoSpeed.options.slow')],
+                                                        [1, t('menu.options.pages.system.options.autoSpeed.options.medium')],
+                                                        [2, t('menu.options.pages.system.options.autoSpeed.options.fast')],
+                                                    ].map(([val, label]) => (_jsx("button", { type: "button", className: `Options_Scroll_button${optionData.autoSpeed === val ? ' Options_Scroll_button_active' : ''}`, onMouseEnter: playSe.enter, onClick: () => {
                                                             playSe.switch();
-                                                            onChangeOption('skipAll', false);
-                                                        }, children: t('menu.options.pages.system.options.skipAll.options.read') }), _jsx("button", { type: "button", className: `Options_Scroll_button${optionData.skipAll ? ' Options_Scroll_button_active' : ''}`, onMouseEnter: playSe.enter, onClick: () => {
+                                                            onChangeOption('autoSpeed', val);
+                                                        }, children: label }, val))) })] }), _jsxs("div", { className: "Options_Scroll_item", children: [_jsx("div", { className: "Options_Scroll_label", children: t('menu.options.pages.system.options.skipAll.title') }), _jsxs("div", { className: "Options_Scroll_row", children: [_jsx("button", { type: "button", className: `Options_Scroll_button${!optionData.skipAll ? ' Options_Scroll_button_active' : ''}`, onMouseEnter: playSe.enter, onClick: () => {
+                                                                playSe.switch();
+                                                                onChangeOption('skipAll', false);
+                                                            }, children: t('menu.options.pages.system.options.skipAll.options.read') }), _jsx("button", { type: "button", className: `Options_Scroll_button${optionData.skipAll ? ' Options_Scroll_button_active' : ''}`, onMouseEnter: playSe.enter, onClick: () => {
+                                                                playSe.switch();
+                                                                onChangeOption('skipAll', true);
+                                                            }, children: t('menu.options.pages.system.options.skipAll.options.all') })] })] }), _jsxs("div", { className: "Options_Scroll_item", children: [_jsx("div", { className: "Options_Scroll_label", children: t('menu.options.pages.system.options.gameSave.title') }), _jsxs("div", { className: "Options_Scroll_row", children: [_jsx("button", { type: "button", className: "Options_Scroll_button", onMouseEnter: playSe.enter, onClick: onExportSaves, children: t('menu.options.pages.system.options.gameSave.options.export') }), _jsx("button", { type: "button", className: "Options_Scroll_button", onMouseEnter: playSe.enter, onClick: () => importInputRef.current?.click(), children: t('menu.options.pages.system.options.gameSave.options.import') })] })] }), _jsxs("div", { className: "Options_Scroll_item", children: [_jsx("div", { className: "Options_Scroll_label", children: t('menu.options.pages.system.options.resetData.title') }), _jsxs("div", { className: "Options_Scroll_row", children: [_jsx("button", { type: "button", className: "Options_Scroll_button", onMouseEnter: playSe.enter, onClick: onResetSaves, children: t('menu.options.pages.system.options.resetData.options.clearGameSave') }), _jsx("button", { type: "button", className: "Options_Scroll_button", onMouseEnter: playSe.enter, onClick: onResetOptions, children: t('menu.options.pages.system.options.resetData.options.resetSettings') }), _jsx("button", { type: "button", className: "Options_Scroll_button", onMouseEnter: playSe.enter, onClick: onResetAll, children: t('menu.options.pages.system.options.resetData.options.clearAll') })] })] }), _jsxs("div", { className: "Options_Scroll_item Options_Scroll_item_full", children: [_jsx("div", { className: "Options_Scroll_label", children: t('menu.options.pages.system.options.language.title') }), _jsx("div", { className: "Options_Scroll_row", children: languageOptions.map((item) => (_jsx("button", { type: "button", className: `Options_Scroll_button${optionData.language === item.value ? ' Options_Scroll_button_active' : ''}`, onMouseEnter: playSe.enter, onClick: () => {
                                                             playSe.switch();
-                                                            onChangeOption('skipAll', true);
-                                                        }, children: t('menu.options.pages.system.options.skipAll.options.all') })] })] }), _jsxs("div", { className: "Options_Scroll_item", children: [_jsx("div", { className: "Options_Scroll_label", children: t('menu.options.pages.system.options.gameSave.title') }), _jsxs("div", { className: "Options_Scroll_row", children: [_jsx("button", { type: "button", className: "Options_Scroll_button", onMouseEnter: playSe.enter, onClick: onExportSaves, children: t('menu.options.pages.system.options.gameSave.options.export') }), _jsx("button", { type: "button", className: "Options_Scroll_button", onMouseEnter: playSe.enter, onClick: () => importInputRef.current?.click(), children: t('menu.options.pages.system.options.gameSave.options.import') })] })] }), _jsxs("div", { className: "Options_Scroll_item Options_Scroll_item_full", children: [_jsx("div", { className: "Options_Scroll_label", children: t('menu.options.pages.system.options.resetData.title') }), _jsxs("div", { className: "Options_Scroll_row", children: [_jsx("button", { type: "button", className: "Options_Scroll_button", onMouseEnter: playSe.enter, onClick: onResetSaves, children: t('menu.options.pages.system.options.resetData.options.clearGameSave') }), _jsx("button", { type: "button", className: "Options_Scroll_button", onMouseEnter: playSe.enter, onClick: onResetOptions, children: t('menu.options.pages.system.options.resetData.options.resetSettings') }), _jsx("button", { type: "button", className: "Options_Scroll_button", onMouseEnter: playSe.enter, onClick: onResetAll, children: t('menu.options.pages.system.options.resetData.options.clearAll') })] })] })] }), _jsxs("div", { className: "Options_Scroll_section", children: [_jsx("div", { className: "Options_Scroll_sectionHeading", children: t('menu.options.pages.display.title') }), isFullscreenSupported && (_jsxs("div", { className: "Options_Scroll_item", children: [_jsx("div", { className: "Options_Scroll_label", children: t('menu.options.pages.display.options.fullScreen.title') }), _jsxs("div", { className: "Options_Scroll_row", children: [_jsx("button", { type: "button", className: `Options_Scroll_button${isFullscreen ? ' Options_Scroll_button_active' : ''}`, onMouseEnter: playSe.enter, onClick: () => onToggleFullscreen(true), children: t('menu.options.pages.display.options.fullScreen.options.on') }), _jsx("button", { type: "button", className: `Options_Scroll_button${!isFullscreen ? ' Options_Scroll_button_active' : ''}`, onMouseEnter: playSe.enter, onClick: () => onToggleFullscreen(false), children: t('menu.options.pages.display.options.fullScreen.options.off') })] })] })), _jsxs("div", { className: "Options_Scroll_item", children: [_jsx("div", { className: "Options_Scroll_label", children: t('menu.options.pages.display.options.textSize.title') }), _jsx("div", { className: "Options_Scroll_row", children: [
-                                                    [0, t('menu.options.pages.display.options.textSize.options.small')],
-                                                    [1, t('menu.options.pages.display.options.textSize.options.medium')],
-                                                    [2, t('menu.options.pages.display.options.textSize.options.large')],
-                                                ].map(([val, label]) => (_jsx("button", { type: "button", className: `Options_Scroll_button${optionData.textSize === val ? ' Options_Scroll_button_active' : ''}`, onMouseEnter: playSe.enter, onClick: () => {
-                                                        playSe.switch();
-                                                        onChangeOption('textSize', val);
-                                                    }, children: label }, val))) })] }), _jsxs("div", { className: "Options_Scroll_item Options_Scroll_item_full", children: [_jsx("div", { className: "Options_Scroll_label", children: t('menu.options.pages.display.options.textFont.title') }), _jsx("div", { className: "Options_Scroll_row", children: fontLabels.map((label, index) => (_jsx("button", { type: "button", className: `Options_Scroll_button${currentFontIndex === index ? ' Options_Scroll_button_active' : ''}`, onMouseEnter: playSe.enter, onClick: () => {
-                                                        playSe.switch();
-                                                        onChangeOption('textboxFont', index);
-                                                    }, children: label }, `${label}-${index}`))) })] }), _jsxs("div", { className: "Options_Scroll_item", children: [_jsx("div", { className: "Options_Scroll_label", children: t('menu.options.pages.display.options.textSpeed.title') }), _jsxs("div", { className: "Options_Scroll_rangeWrap", children: [_jsx("input", { type: "range", min: 0, max: 100, value: optionData.textSpeed, onMouseEnter: playSe.enter, onChange: (e) => onChangeOption('textSpeed', Number(e.target.value)) }), _jsx("span", { className: "Options_Scroll_rangeVal", children: optionData.textSpeed })] })] }), _jsxs("div", { className: "Options_Scroll_item", children: [_jsx("div", { className: "Options_Scroll_label", children: t('menu.options.pages.display.options.textboxOpacity.title') }), _jsxs("div", { className: "Options_Scroll_rangeWrap", children: [_jsx("input", { type: "range", min: 0, max: 100, value: optionData.textboxOpacity, onMouseEnter: playSe.enter, onChange: (e) => onChangeOption('textboxOpacity', Number(e.target.value)) }), _jsxs("span", { className: "Options_Scroll_rangeVal", children: [optionData.textboxOpacity, "%"] })] })] }), _jsxs("div", { className: "Options_Scroll_item Options_Scroll_item_full", children: [_jsx("div", { className: "Options_Scroll_label", children: t('menu.options.pages.display.options.textPreview.title') }), _jsx("div", { className: "Options_Scroll_preview", style: {
-                                                    background: previewBgUrl
-                                                        ? `bottom / cover no-repeat url('${resolveScreenAssetUrl(previewBgUrl)}')`
-                                                        : 'rgba(0, 0, 0, 0.1)',
-                                                }, onClick: () => setPreviewKey((k) => k + 1), children: textboxPreviewNode ?? (_jsxs("div", { className: "Options_Scroll_previewTextbox", children: [_jsx("div", { className: "Options_Scroll_previewBg", style: { opacity: optionData.textboxOpacity / 100 } }), _jsxs("div", { className: "Options_Scroll_previewBox", style: { fontFamily: activeFontFamily }, children: [_jsx("div", { className: "Options_Scroll_previewNameBar", style: { opacity: optionData.textboxOpacity / 100 } }), _jsx("div", { className: "Options_Scroll_previewName", children: t('menu.options.pages.display.options.textPreview.title') }), _jsx("div", { className: "Options_Scroll_previewText", style: {
-                                                                        fontSize: `${getPreviewFontSizePx(optionData.textSize)}px`,
-                                                                        lineHeight: optionData.textSize === 1 ? '2.2em' : '2em',
-                                                                    }, children: renderRichText(t('menu.options.pages.display.options.textPreview.text'), {
-                                                                        replaceSpaceWithNbsp: true,
-                                                                        isSettled: false,
-                                                                        charDelayMs: 3 + (100 - optionData.textSpeed) * 1.5,
-                                                                        charDurationMs: 200 + (100 - optionData.textSpeed) * 15,
-                                                                        animateClassName: 'Options_Scroll_char',
-                                                                        dialogKey: `preview-${previewKey}-${optionData.textSpeed}`,
-                                                                    }) })] })] }, `${previewKey}-${optionData.textSpeed}`)) })] })] }), _jsxs("div", { className: "Options_Scroll_section", children: [_jsx("div", { className: "Options_Scroll_sectionHeading", children: t('menu.options.pages.sound.title') }), [
-                                        ['volumeMain', 'menu.options.pages.sound.options.volumeMain.title'],
-                                        ['vocalVolume', 'menu.options.pages.sound.options.vocalVolume.title'],
-                                        ['bgmVolume', 'menu.options.pages.sound.options.bgmVolume.title'],
-                                        ['seVolume', 'menu.options.pages.sound.options.seVolume.title'],
-                                        ['uiSeVolume', 'menu.options.pages.sound.options.uiSeVolume.title'],
-                                    ].map(([key, titleKey]) => (_jsxs("div", { className: "Options_Scroll_item", children: [_jsx("div", { className: "Options_Scroll_label", children: t(titleKey) }), _jsxs("div", { className: "Options_Scroll_rangeWrap", children: [_jsx("input", { type: "range", min: 0, max: 100, value: optionData[key], onMouseEnter: playSe.enter, onChange: (e) => onChangeOption(key, Number(e.target.value)) }), _jsx("span", { className: "Options_Scroll_rangeVal", children: optionData[key] })] })] }, key))), _jsxs("div", { className: "Options_Scroll_item", children: [_jsx("div", { className: "Options_Scroll_label", children: t('menu.options.pages.sound.options.voiceOption.title') }), _jsxs("div", { className: "Options_Scroll_row", children: [_jsx("button", { type: "button", className: `Options_Scroll_button${optionData.voiceInterruption === 0 ? ' Options_Scroll_button_active' : ''}`, onMouseEnter: playSe.enter, onClick: () => onChangeOption('voiceInterruption', 0), children: t('menu.options.pages.sound.options.voiceStop.title') }), _jsx("button", { type: "button", className: `Options_Scroll_button${optionData.voiceInterruption === 1 ? ' Options_Scroll_button_active' : ''}`, onMouseEnter: playSe.enter, onClick: () => onChangeOption('voiceInterruption', 1), children: t('menu.options.pages.sound.options.voiceContinue.title') })] })] })] })] })] })] }));
+                                                            onChangeLanguage(item.value);
+                                                        }, children: item.label }, item.value))) })] })] }), _jsxs("div", { className: "Options_Scroll_section", children: [_jsx("div", { className: "Options_Scroll_sectionHeading", children: t('menu.options.pages.display.title') }), isFullscreenSupported && (_jsxs("div", { className: "Options_Scroll_item", children: [_jsx("div", { className: "Options_Scroll_label", children: t('menu.options.pages.display.options.fullScreen.title') }), _jsxs("div", { className: "Options_Scroll_row", children: [_jsx("button", { type: "button", className: `Options_Scroll_button${isFullscreen ? ' Options_Scroll_button_active' : ''}`, onMouseEnter: playSe.enter, onClick: () => onToggleFullscreen(true), children: t('menu.options.pages.display.options.fullScreen.options.on') }), _jsx("button", { type: "button", className: `Options_Scroll_button${!isFullscreen ? ' Options_Scroll_button_active' : ''}`, onMouseEnter: playSe.enter, onClick: () => onToggleFullscreen(false), children: t('menu.options.pages.display.options.fullScreen.options.off') })] })] })), _jsxs("div", { className: "Options_Scroll_item", children: [_jsx("div", { className: "Options_Scroll_label", children: t('menu.options.pages.display.options.textSize.title') }), _jsx("div", { className: "Options_Scroll_row", children: [
+                                                        [0, t('menu.options.pages.display.options.textSize.options.small')],
+                                                        [1, t('menu.options.pages.display.options.textSize.options.medium')],
+                                                        [2, t('menu.options.pages.display.options.textSize.options.large')],
+                                                    ].map(([val, label]) => (_jsx("button", { type: "button", className: `Options_Scroll_button${optionData.textSize === val ? ' Options_Scroll_button_active' : ''}`, onMouseEnter: playSe.enter, onClick: () => {
+                                                            playSe.switch();
+                                                            onChangeOption('textSize', val);
+                                                        }, children: label }, val))) })] }), _jsxs("div", { className: "Options_Scroll_item Options_Scroll_item_full", children: [_jsx("div", { className: "Options_Scroll_label", children: t('menu.options.pages.display.options.textFont.title') }), _jsx("div", { className: "Options_Scroll_row", children: fontLabels.map((label, index) => (_jsx("button", { type: "button", className: `Options_Scroll_button${currentFontIndex === index ? ' Options_Scroll_button_active' : ''}`, onMouseEnter: playSe.enter, onClick: () => {
+                                                            playSe.switch();
+                                                            onChangeOption('textboxFont', index);
+                                                        }, children: label }, `${label}-${index}`))) })] }), _jsxs("div", { className: "Options_Scroll_item", children: [_jsx("div", { className: "Options_Scroll_label", children: t('menu.options.pages.display.options.textSpeed.title') }), _jsxs("div", { className: "Options_Scroll_rangeWrap", children: [_jsx("input", { type: "range", min: 0, max: 100, value: optionData.textSpeed, onMouseEnter: playSe.enter, onChange: (e) => onChangeOption('textSpeed', Number(e.target.value)) }), _jsx("span", { className: "Options_Scroll_rangeVal", children: optionData.textSpeed })] })] }), _jsxs("div", { className: "Options_Scroll_item", children: [_jsx("div", { className: "Options_Scroll_label", children: t('menu.options.pages.display.options.textboxOpacity.title') }), _jsxs("div", { className: "Options_Scroll_rangeWrap", children: [_jsx("input", { type: "range", min: 0, max: 100, value: optionData.textboxOpacity, onMouseEnter: playSe.enter, onChange: (e) => onChangeOption('textboxOpacity', Number(e.target.value)) }), _jsxs("span", { className: "Options_Scroll_rangeVal", children: [optionData.textboxOpacity, "%"] })] })] }), _jsxs("div", { className: "Options_Scroll_item Options_Scroll_item_full", children: [_jsx("div", { className: "Options_Scroll_label", children: t('menu.options.pages.display.options.textPreview.title') }), _jsx("div", { className: "Options_Scroll_preview", style: {
+                                                        background: previewBgUrl
+                                                            ? `bottom / cover no-repeat url('${resolveScreenAssetUrl(previewBgUrl)}')`
+                                                            : 'rgba(0, 0, 0, 0.1)',
+                                                    }, onClick: () => setPreviewKey((k) => k + 1), children: textboxPreviewNode ?? (_jsxs("div", { className: "Options_Scroll_previewTextbox", children: [_jsx("div", { className: "Options_Scroll_previewBg", style: { opacity: optionData.textboxOpacity / 100 } }), _jsxs("div", { className: "Options_Scroll_previewBox", style: { fontFamily: activeFontFamily }, children: [_jsx("div", { className: "Options_Scroll_previewNameBar", style: { opacity: optionData.textboxOpacity / 100 } }), _jsx("div", { className: "Options_Scroll_previewName", children: t('menu.options.pages.display.options.textPreview.title') }), _jsx("div", { className: "Options_Scroll_previewText", style: {
+                                                                            fontSize: `${getPreviewFontSizePx(optionData.textSize)}px`,
+                                                                            lineHeight: optionData.textSize === 1 ? '2.2em' : '2em',
+                                                                        }, children: renderRichText(t('menu.options.pages.display.options.textPreview.text'), {
+                                                                            replaceSpaceWithNbsp: true,
+                                                                            isSettled: false,
+                                                                            charDelayMs: 3 + (100 - optionData.textSpeed) * 1.5,
+                                                                            charDurationMs: 200 + (100 - optionData.textSpeed) * 15,
+                                                                            animateClassName: 'Options_Scroll_char',
+                                                                            dialogKey: `preview-${previewKey}-${optionData.textSpeed}`,
+                                                                        }) })] })] }, `${previewKey}-${optionData.textSpeed}`)) })] })] }), _jsxs("div", { className: "Options_Scroll_section", children: [_jsx("div", { className: "Options_Scroll_sectionHeading", children: t('menu.options.pages.sound.title') }), [
+                                            ['volumeMain', 'menu.options.pages.sound.options.volumeMain.title'],
+                                            ['vocalVolume', 'menu.options.pages.sound.options.vocalVolume.title'],
+                                            ['bgmVolume', 'menu.options.pages.sound.options.bgmVolume.title'],
+                                            ['seVolume', 'menu.options.pages.sound.options.seVolume.title'],
+                                            ['uiSeVolume', 'menu.options.pages.sound.options.uiSeVolume.title'],
+                                        ].map(([key, titleKey]) => (_jsxs("div", { className: "Options_Scroll_item", children: [_jsx("div", { className: "Options_Scroll_label", children: t(titleKey) }), _jsxs("div", { className: "Options_Scroll_rangeWrap", children: [_jsx("input", { type: "range", min: 0, max: 100, value: optionData[key], onMouseEnter: playSe.enter, onChange: (e) => onChangeOption(key, Number(e.target.value)) }), _jsx("span", { className: "Options_Scroll_rangeVal", children: optionData[key] })] })] }, key))), _jsxs("div", { className: "Options_Scroll_item", children: [_jsx("div", { className: "Options_Scroll_label", children: t('menu.options.pages.sound.options.voiceOption.title') }), _jsxs("div", { className: "Options_Scroll_row", children: [_jsx("button", { type: "button", className: `Options_Scroll_button${optionData.voiceInterruption === 0 ? ' Options_Scroll_button_active' : ''}`, onMouseEnter: playSe.enter, onClick: () => onChangeOption('voiceInterruption', 0), children: t('menu.options.pages.sound.options.voiceStop.title') }), _jsx("button", { type: "button", className: `Options_Scroll_button${optionData.voiceInterruption === 1 ? ' Options_Scroll_button_active' : ''}`, onMouseEnter: playSe.enter, onClick: () => onChangeOption('voiceInterruption', 1), children: t('menu.options.pages.sound.options.voiceContinue.title') })] })] })] })] })) })] })] }));
 }
 export const OPTIONS_SINGLE_SCROLL_VARIANT = {
     screen: 'options',
