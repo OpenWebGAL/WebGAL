@@ -1,0 +1,47 @@
+:root {
+  position: absolute;
+  inset: 0;
+  width: 2560px;
+  height: 1440px;
+  z-index: 10;
+}
+
+.custom-title-bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  background-color: #111827;
+}
+
+.custom-title-menu {
+  position: absolute;
+  left: 160px;
+  bottom: 180px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.custom-title-btn {
+  min-width: 360px;
+  padding: 20px 36px;
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  border-radius: 12px;
+  background: rgba(15, 23, 42, 0.72);
+  color: #f8fafc;
+  font-size: 38px;
+  text-align: left;
+  cursor: pointer;
+  transition: transform 0.2s ease, background 0.2s ease;
+
+  &:hover {
+    background: rgba(51, 65, 85, 0.88);
+    transform: translateX(12px);
+  }
+
+  &:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+}

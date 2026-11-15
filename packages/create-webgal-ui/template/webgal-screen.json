@@ -1,0 +1,28 @@
+{
+  "screen": "title",
+  "variantId": "custom-title",
+  "name": "Custom Title Screen",
+  "version": "0.1.0",
+  "entry": "index.js",
+  "style": "style.scss",
+  "parts": [
+    {
+      "id": "background",
+      "name": "背景层",
+      "selector": ".custom-title-bg",
+      "allowLayoutEdit": false
+    },
+    {
+      "id": "menu",
+      "name": "标题按钮栏",
+      "selector": ".custom-title-menu",
+      "allowLayoutEdit": true
+    },
+    {
+      "id": "button",
+      "name": "按钮样式",
+      "selector": ".custom-title-btn",
+      "allowLayoutEdit": false
+    }
+  ]
+}

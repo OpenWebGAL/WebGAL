@@ -1,0 +1,17 @@
+{
+  "name": "create-webgal-ui",
+  "version": "0.1.0",
+  "description": "Scaffold a standalone custom UI Screen plugin for WebGAL",
+  "type": "module",
+  "bin": {
+    "create-webgal-ui": "./bin/index.mjs"
+  },
+  "files": [
+    "bin",
+    "template"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "license": "MPL-2.0"
+}
