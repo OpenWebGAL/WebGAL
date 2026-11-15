@@ -16,6 +16,7 @@ import { WebGAL } from '@/Core/WebGAL';
 import { IGuiState } from '@/store/guiInterface';
 import { IStageState } from '@/Core/Modules/stage/stageInterface';
 import { useStageState } from '@/hooks/useStageState';
+import { useActiveUiScreen } from '@/sdk/mockData';
 // import OldStage from '@/Components/Stage/OldStage/OldStage';
 
 let timeoutEventHandle: ReturnType<typeof setTimeout> | null = null;
@@ -76,9 +77,12 @@ function updateControlsVisibility(
 export const Stage: FC = () => {
   const stageState = useStageState();
   const GUIState = useSelector((state: RootState) => state.GUI);
+  const activeUiScreen = useActiveUiScreen();
   const dispatch = useDispatch();
 
   useHotkey();
+
+  const isTextboxPreview = activeUiScreen === 'textbox';
 
   return (
     <div className={styles.MainStage_main}>
@@ -87,8 +91,10 @@ export const Stage: FC = () => {
       {/* <OldStage /> */}
       <div id="pixiContianer" className={styles.pixiContainer} style={{ zIndex: isIOS ? '-5' : undefined }} />
       <div id="chooseContainer" className={styles.chooseContainer} />
-      {GUIState.showTextBox && stageState.enableFilm === '' && !stageState.isDisableTextbox && <TextBox />}
-      {GUIState.showTextBox && stageState.enableFilm !== '' && <TextBoxFilm />}
+      {((GUIState.showTextBox && stageState.enableFilm === '' && !stageState.isDisableTextbox) || isTextboxPreview) && (
+        <TextBox />
+      )}
+      {!isTextboxPreview && GUIState.showTextBox && stageState.enableFilm !== '' && <TextBoxFilm />}
       <AudioContainer />
       <div
         onClick={() => {

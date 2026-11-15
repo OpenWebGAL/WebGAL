@@ -12,6 +12,10 @@ import useEscape from '@/hooks/useEscape';
 import { useStageState } from '@/hooks/useStageState';
 import { concatTextLines } from './concatTextLines';
 import { getDialogSegments } from '@/Core/Modules/stage/dialogText';
+import { WebGAL } from '@/Core/WebGAL';
+import { ScreenSlotRenderer } from '@/screens/ScreenSlotRenderer';
+import { useIsCustomUiTemplate, useUiCommonProps } from '@/screens/stage/shared';
+import { getMockTextBoxSample, useActiveUiScreen, useUiMockDataEnabled } from '@/sdk/mockData';
 
 const userAgent = navigator.userAgent;
 const isFirefox = /firefox/i.test(userAgent);
@@ -51,7 +55,21 @@ export const TextBox = () => {
   const Textbox = IMSSTextbox;
   const fontOptimization = guiState.fontOptimization;
 
+  const isCustomUi = useIsCustomUiTemplate();
+  const mockDataEnabled = useUiMockDataEnabled();
+  const activeUiScreen = useActiveUiScreen();
+  const uiCommon = useUiCommonProps();
+  const [settledSignal, setSettledSignal] = useState(0);
   const [isShowStroke, setIsShowStroke] = useState(true);
+
+  useEffect(() => {
+    if (!isCustomUi) return;
+    const onSettle = () => setSettledSignal((v) => v + 1);
+    WebGAL.events.textSettle.on(onSettle);
+    return () => {
+      WebGAL.events.textSettle.off(onSettle);
+    };
+  }, [isCustomUi]);
 
   useEffect(() => {
     if (!fontOptimization) {
@@ -83,6 +101,46 @@ export const TextBox = () => {
       window.removeEventListener('resize', handleResize);
     };
   }, [fontOptimization]);
+
+  if (isCustomUi) {
+    const customLineHeight = Number(userDataState.globalGameVar.Line_height);
+    const defaultLineHeight = textSizeState === textSize.medium ? 2.2 : 2;
+    const lineHeight = !Number.isNaN(customLineHeight) && customLineHeight > 0 ? customLineHeight : defaultLineHeight;
+    const fontSizePercent = Number.parseFloat(size) || getTextSize(textSizeState);
+    const dialogSegments = getDialogSegments(stageState);
+    const mockSample = mockDataEnabled ? getMockTextBoxSample() : null;
+    const isTextboxPreview = activeUiScreen === 'textbox';
+
+    return (
+      <ScreenSlotRenderer
+        screen="textbox"
+        screenProps={{
+          visible: isTextboxPreview || Boolean(mockSample) || isText,
+          isHasName: Boolean(mockSample) || isTextboxPreview || isHasName,
+          showName: mockSample ? mockSample.showName : stageState.showName,
+          dialogSegments: mockSample ? mockSample.dialogSegments : dialogSegments,
+          currentDialogKey: mockSample ? mockSample.currentDialogKey : currentDialogKey,
+          isRead: mockSample ? false : isRead,
+          isPreview: isTextboxPreview,
+          miniAvatarUrl: miniAvatar,
+          fontFamily: font,
+          fontSizePercent,
+          lineHeight,
+          lineLimit,
+          textDelayMs: textDelay,
+          textDurationMs: textDuration,
+          textRevealEndMs:
+            !mockSample && stageState.isDialogNotend
+              ? (textArray.flat().length - concatPrefixNodeCount) * textDelay
+              : undefined,
+          textboxOpacity,
+          isDialogNotend: mockSample ? false : Boolean(stageState.isDialogNotend),
+          settledSignal,
+          ...uiCommon,
+        }}
+      />
+    );
+  }
 
   return (
     <Textbox

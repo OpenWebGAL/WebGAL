@@ -81,7 +81,7 @@ function Random(min: number, max: number) {
   return Math.round(Math.random() * (max - min)) + min;
 }
 
-function buildGroupedCgList(cgList: IAppreciationAsset[]): IExtraCgDisplayItem[] {
+export function buildGroupedCgList(cgList: IAppreciationAsset[]): IExtraCgDisplayItem[] {
   const groupedCgList: IExtraCgDisplayItem[] = [];
   const seriesIndexMap = new Map<string, number>();
 

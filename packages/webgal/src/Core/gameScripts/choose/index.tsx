@@ -14,6 +14,9 @@ import useApplyStyle from '@/hooks/useApplyStyle';
 import { Provider } from 'react-redux';
 import { useFontFamily } from '@/hooks/useFontFamily';
 import { getNumberArgByKey } from '@/Core/util/getSentenceArg';
+import { ScreenSlotRenderer } from '@/screens/ScreenSlotRenderer';
+import { useIsCustomUiTemplate, useUiCommonProps } from '@/screens/stage/shared';
+import { useActiveUiScreen } from '@/sdk/mockData';
 
 class ChooseOption {
   /**
@@ -85,8 +88,11 @@ export const choose = (sentence: ISentence): IPerform => {
       );
     },
     stopFunction: () => {
-      // eslint-disable-next-line react/no-deprecated
-      ReactDOM.render(<div />, document.getElementById('chooseContainer'));
+      const container = document.getElementById('chooseContainer');
+      if (container) {
+        // eslint-disable-next-line react/no-deprecated
+        ReactDOM.unmountComponentAtNode(container);
+      }
     },
     blockingNext: () => true,
     blockingAuto: () => true,
@@ -122,6 +128,43 @@ function Choose(props: { chooseOptions: ChooseOption[] }) {
   const font = useFontFamily();
   const { playSeEnter, playSeClick } = useSEByWebgalStore();
   const applyStyle = useApplyStyle('choose');
+  const isCustomUi = useIsCustomUiTemplate();
+  const activeUiScreen = useActiveUiScreen();
+  const uiCommon = useUiCommonProps();
+
+  if (isCustomUi) {
+    if (activeUiScreen !== null && activeUiScreen !== 'choose') {
+      return null;
+    }
+    const visibleOptions = props.chooseOptions.filter((e) => whenChecker(e.showCondition));
+    const options = visibleOptions.map((e, index) => ({
+      id: `${e.jump}:${index}`,
+      text: e.text,
+      disabled: !whenChecker(e.enableCondition),
+    }));
+    const optionMap = new Map<string, ChooseOption>(
+      visibleOptions.map((e, index) => [`${e.jump}:${index}`, e] as const),
+    );
+
+    return (
+      <ScreenSlotRenderer
+        screen="choose"
+        screenProps={{
+          visible: true,
+          options,
+          fontFamily: font,
+          onSelect: (id) => {
+            const target = optionMap.get(id);
+            if (!target || !whenChecker(target.enableCondition)) return;
+            WebGAL.gameplay.performController.unmountPerform('choose');
+            selectChooseOption(target);
+          },
+          ...uiCommon,
+        }}
+      />
+    );
+  }
+
   // 运行时计算JSX.Element[]
   const runtimeBuildList = (chooseListFull: ChooseOption[]) => {
     return chooseListFull

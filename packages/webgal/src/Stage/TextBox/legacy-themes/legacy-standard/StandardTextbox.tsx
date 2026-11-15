@@ -40,26 +40,29 @@ export default function StandardTextbox(props: ITextboxProps) {
       WebGAL.events.textSettle.off(settleText);
     };
   }, []);
+  const renderLineNodes = (line: (typeof showName)[number]) => line.map((node) => node.reactNode);
   const nameElementList = showName.map((e, index) => {
+    const content = renderLineNodes(e);
     let prevLength = concatPrefixNodeCount;
     if (index < prevLength) {
       return (
         <span key={currentDialogKey + index} className={styles.zhanwei}>
-          {e}
-          <span className={styles.outer}>{e}</span>
-          {isUseStroke && <span className={styles.inner}>{e}</span>}
+          {content}
+          <span className={styles.outer}>{content}</span>
+          {isUseStroke && <span className={styles.inner}>{content}</span>}
         </span>
       );
     }
     return (
       <span key={currentDialogKey + index} className={styles.zhanwei}>
-        {e}
-        <span className={styles.outer}>{e}</span>
-        {isUseStroke && <span className={styles.inner}>{e}</span>}
+        {content}
+        <span className={styles.outer}>{content}</span>
+        {isUseStroke && <span className={styles.inner}>{content}</span>}
       </span>
     );
   });
   const textElementList = textArray.map((e, index) => {
+    const content = renderLineNodes(e);
     // if (e === '<br />') {
     //   return <br key={`br${index}`} />;
     // }
@@ -80,9 +83,9 @@ export default function StandardTextbox(props: ITextboxProps) {
           style={{ animationDelay: `${delay}ms`, animationDuration: `${textDuration}ms` }}
         >
           <span className={styles.zhanwei}>
-            {e}
-            <span className={styles.outer}>{e}</span>
-            {isUseStroke && <span className={styles.inner}>{e}</span>}
+            {content}
+            <span className={styles.outer}>{content}</span>
+            {isUseStroke && <span className={styles.inner}>{content}</span>}
           </span>
         </span>
       );
@@ -96,9 +99,9 @@ export default function StandardTextbox(props: ITextboxProps) {
         style={{ animationDelay: `${delay}ms`, animationDuration: `${duration}ms`, position: 'relative' }}
       >
         <span className={styles.zhanwei}>
-          {e}
-          <span className={styles.outer}>{e}</span>
-          {isUseStroke && <span className={styles.inner}>{e}</span>}
+          {content}
+          <span className={styles.outer}>{content}</span>
+          {isUseStroke && <span className={styles.inner}>{content}</span>}
         </span>
       </span>
     );

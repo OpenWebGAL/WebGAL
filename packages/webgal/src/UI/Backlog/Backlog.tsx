@@ -11,6 +11,9 @@ import { compileSentence, EnhancedNode } from '@/Stage/TextBox/TextBox';
 import useSoundEffect from '@/hooks/useSoundEffect';
 import { WebGAL } from '@/Core/WebGAL';
 import { stopAuto } from '@/Core/controller/gamePlay/autoPlay';
+import { ScreenSlotRenderer } from '@/screens/ScreenSlotRenderer';
+import { useIsCustomUiTemplate, useUiCommonProps } from '@/screens/stage/shared';
+import { getMockBacklogItems, useUiMockDataEnabled } from '@/sdk/mockData';
 
 export const Backlog = () => {
   const t = useTrans('gaming.');
@@ -19,6 +22,11 @@ export const Backlog = () => {
   const GUIStore = useSelector((state: RootState) => state.GUI);
   const isBacklogOpen = GUIStore.showBacklog;
   const dispatch = useDispatch();
+  const isCustomUi = useIsCustomUiTemplate();
+  const mockDataEnabled = useUiMockDataEnabled();
+  const uiCommon = useUiCommonProps();
+  const [playingIndex, setPlayingIndex] = useState<number | null>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
   const iconSize = '0.8em';
   const [indexHide, setIndexHide] = useState(false);
   const [isDisableScroll, setIsDisableScroll] = useState(false);
@@ -180,6 +188,7 @@ export const Backlog = () => {
     /* 切换为展示历史记录时触发 */
     if (GUIStore.showBacklog) {
       stopAuto();
+      if (isCustomUi) return;
       // logger.info('展示backlog');
       // 立即清除 防止来回滚动时可能导致的错乱
       if (timeRef.current) {
@@ -195,6 +204,12 @@ export const Backlog = () => {
         setIsDisableScroll(false);
       }, 0);
     } else {
+      setPlayingIndex(null);
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.currentTime = 0;
+      }
+      if (isCustomUi) return;
       /* 隐藏历史记录触发 */
       // 这里是为了让backlog的z-index降低
       timeRef.current = setTimeout(() => {
@@ -206,7 +221,76 @@ export const Backlog = () => {
         // 不加也没啥 问题不大
       }, 700 + 80);
     }
-  }, [GUIStore.showBacklog]);
+  }, [GUIStore.showBacklog, isCustomUi]);
+
+  if (isCustomUi) {
+    const rawBacklog = WebGAL.backlogManager.getBacklog();
+    const realItems = [];
+    for (let i = rawBacklog.length - 1; i >= 0; i--) {
+      const entry = rawBacklog[i];
+      realItems.push({
+        index: i,
+        speaker: entry.currentStageState.showName,
+        text: entry.currentStageState.showText,
+        vocalUrl: entry.currentStageState.vocal,
+        sentenceId: entry.saveScene.currentSentenceId,
+      });
+    }
+    const items = mockDataEnabled ? getMockBacklogItems() : realItems;
+
+    const handleToggleVocal = (index: number) => {
+      const target = items.find((item) => item.index === index);
+      if (!target || !target.vocalUrl || !audioRef.current) return;
+
+      const currentVocal = document.getElementById('currentVocal') as HTMLAudioElement | null;
+      if (currentVocal) {
+        currentVocal.pause();
+        currentVocal.currentTime = 0;
+      }
+      WebGAL.gameplay.performController.unmountPerform('vocal-play', true);
+
+      const audio = audioRef.current;
+      if (playingIndex === index && !audio.paused) {
+        audio.pause();
+        audio.currentTime = 0;
+        setPlayingIndex(null);
+        return;
+      }
+
+      const { optionData } = webgalStore.getState().userData;
+      audio.src = target.vocalUrl;
+      audio.currentTime = 0;
+      audio.volume = optionData.volumeMain * 0.01 * optionData.vocalVolume * 0.01;
+      setPlayingIndex(index);
+      void audio.play();
+    };
+
+    return (
+      <>
+        <ScreenSlotRenderer
+          screen="backlog"
+          screenProps={{
+            visible: GUIStore.showBacklog,
+            items,
+            playingIndex,
+            onJump: (index) => {
+              if (mockDataEnabled) return;
+              jumpFromBacklog(index);
+            },
+            onToggleVocal: handleToggleVocal,
+            onClose: () => {
+              dispatch(setVisibility({ component: 'showBacklog', visibility: false }));
+              dispatch(setVisibility({ component: 'showTextBox', visibility: true }));
+            },
+            scrollContainerAttr: 'data-webgal-backlog-scroll',
+            ...uiCommon,
+          }}
+        />
+        <audio ref={audioRef} onEnded={() => setPlayingIndex(null)} />
+      </>
+    );
+  }
+
   return (
     <>
       {

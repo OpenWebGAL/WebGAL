@@ -3,11 +3,18 @@ import { IFlowchart, IFlowchartEdge, IFlowchartNode } from '@/Core/Modules/flowc
 import { WebGAL } from '@/Core/WebGAL';
 import useSoundEffect from '@/hooks/useSoundEffect';
 import useTrans from '@/hooks/useTrans';
+import { MENU_BUILTIN_SCREENS } from '@/screens/menu';
+import { registerBuiltInScreens } from '@/screens/screenRegistry';
+import { ScreenSlotRenderer } from '@/screens/ScreenSlotRenderer';
+import { useIsCustomUiTemplate, useUiCommonProps } from '@/screens/stage/shared';
+import { getMockFlowcharts, useUiMockDataEnabled } from '@/sdk/mockData';
 import { setVisibility } from '@/store/GUIReducer';
 import { RootState } from '@/store/store';
-import { MouseEvent as ReactMouseEvent, useEffect, useMemo, useRef, useState } from 'react';
+import { MouseEvent as ReactMouseEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styles from './flowchart.module.scss';
+
+registerBuiltInScreens(MENU_BUILTIN_SCREENS);
 
 const NODE_MIN_WIDTH = 190;
 const NODE_HEIGHT = 78;
@@ -38,10 +45,17 @@ interface ConnectorSegment {
 
 type LockedNodeVisibility = 'all' | 'node' | 'none';
 
-export const Flowchart = () => {
+export interface FlowchartConnectorProps {
+  visible?: boolean;
+}
+
+export const Flowchart = ({ visible = true }: FlowchartConnectorProps) => {
   const t = useTrans('gaming.flowchart.');
   const { playSeClick, playSeEnter } = useSoundEffect();
   const dispatch = useDispatch();
+  const isCustomUi = useIsCustomUiTemplate();
+  const mockDataEnabled = useUiMockDataEnabled();
+  const uiCommon = useUiCommonProps();
   const lockedNodeVisibility = useSelector((state: RootState) =>
     normalizeLockedNodeVisibility(state.userData.globalGameVar.Flowchart_Locked_Node_Visibility),
   );
@@ -67,6 +81,49 @@ export const Flowchart = () => {
   useEffect(() => {
     if (!currentFlowchartId && flowcharts[0]) setCurrentFlowchartId(flowcharts[0].id);
   }, [flowcharts[0]?.id, currentFlowchartId]);
+
+  const unlockedNodeKeys = useMemo(() => {
+    const keys: string[] = [];
+    for (const fc of flowcharts) {
+      for (const node of fc.nodes) {
+        if (WebGAL.flowchartManager.isUnlocked(fc.id, node.id)) {
+          keys.push(`${fc.id}-${node.id}`);
+        }
+      }
+    }
+    return keys;
+  }, [flowcharts, version]);
+
+  const handleJumpByIds = useCallback(
+    (flowchartId: string, nodeId: string) => {
+      if (mockDataEnabled || !WebGAL.flowchartManager.isUnlocked(flowchartId, nodeId)) return;
+      playSeClick();
+      void WebGAL.flowchartManager.loadSnapshot(flowchartId, nodeId).then((snapshot) => {
+        if (!snapshot) return;
+        loadGameFromStageData(snapshot);
+        dispatch(setVisibility({ component: 'showMenuPanel', visibility: false }));
+        dispatch(setVisibility({ component: 'showTextBox', visibility: true }));
+      });
+    },
+    [dispatch, mockDataEnabled, playSeClick],
+  );
+
+  if (isCustomUi) {
+    const mockData = mockDataEnabled ? getMockFlowcharts() : null;
+    return (
+      <ScreenSlotRenderer
+        screen="flowchart"
+        screenProps={{
+          visible,
+          flowcharts: mockData ? mockData.flowcharts : flowcharts,
+          unlockedNodeKeys: mockData ? mockData.unlockedNodeKeys : unlockedNodeKeys,
+          lockedNodeVisibility,
+          onJumpToNode: handleJumpByIds,
+          ...uiCommon,
+        }}
+      />
+    );
+  }
 
   const jumpToNode = (node: IFlowchartNode) => {
     if (blockClickRef.current) {

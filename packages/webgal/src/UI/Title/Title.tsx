@@ -1,15 +1,14 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
-import { fullScreenOption } from '@/store/userDataInterface';
 import { setMenuPanelTag, setVisibility } from '@/store/GUIReducer';
 import { MenuPanelTag } from '@/store/guiInterface';
 import useTrans from '@/hooks/useTrans';
 import useSoundEffect from '@/hooks/useSoundEffect';
 import useApplyStyle from '@/hooks/useApplyStyle';
-import { keyboard } from '@/hooks/useHotkey';
-import useConfigData from '@/hooks/useConfigData';
-import { playBgm } from '@/Core/controller/stage/playBgm';
 import { continueGame, startGame } from '@/Core/controller/gamePlay/startContinueGame';
+import { ScreenSlotRenderer } from '@/screens/ScreenSlotRenderer';
+import { useIsCustomUiTemplate, useUiCommonProps } from '@/screens/stage/shared';
+import { useUiMockDataEnabled } from '@/sdk/mockData';
 import { showGlogalDialog } from '../GlobalDialog/GlobalDialog';
 import styles from './title.module.scss';
 
@@ -19,7 +18,9 @@ export default function Title() {
   const userSaveData = useSelector((state: RootState) => state.saveData);
   const GUIState = useSelector((state: RootState) => state.GUI);
   const dispatch = useDispatch();
-  const fullScreen = userDataState.optionData.fullScreen;
+  const isCustomUi = useIsCustomUiTemplate();
+  const mockDataEnabled = useUiMockDataEnabled();
+  const uiCommon = useUiCommonProps();
   const background = GUIState.titleBg;
   const showBackground = background === '' ? 'rgba(0,0,0,1)' : `url("${background}")`;
   const t = useTrans('title.');
@@ -29,10 +30,59 @@ export default function Title() {
   const enableContinue = userDataState.globalGameVar.Enable_Continue !== false;
 
   const applyStyle = useApplyStyle('title');
-  useConfigData(); // 监听基础ConfigData变化
 
   const appreciationItems = useSelector((state: RootState) => state.userData.appreciationData);
   const hasAppreciationItems = appreciationItems.bgm.length > 0 || appreciationItems.cg.length > 0;
+
+  if (isCustomUi) {
+    return (
+      <ScreenSlotRenderer
+        screen="title"
+        screenProps={{
+          visible: GUIState.showTitle,
+          backgroundUrl: background,
+          canContinue: mockDataEnabled ? true : Boolean(fastSaveData),
+          enableContinue,
+          enableExtra: mockDataEnabled ? true : GUIState.enableAppreciationMode,
+          hasAppreciationItems: mockDataEnabled ? true : hasAppreciationItems,
+          onStart: () => {
+            startGame();
+          },
+          onContinue: () => {
+            if (fastSaveData) {
+              continueGame();
+            }
+          },
+          onOpenLoad: () => {
+            dispatch(setVisibility({ component: 'showMenuPanel', visibility: true }));
+            dispatch(setMenuPanelTag(MenuPanelTag.Load));
+          },
+          onOpenOptions: () => {
+            dispatch(setVisibility({ component: 'showMenuPanel', visibility: true }));
+            dispatch(setMenuPanelTag(MenuPanelTag.Option));
+          },
+          onOpenExtra: () => {
+            if (hasAppreciationItems || mockDataEnabled) {
+              dispatch(setVisibility({ component: 'showExtra', visibility: true }));
+            }
+          },
+          onExit: () => {
+            showGlogalDialog({
+              title: t('exit.tips'),
+              leftText: tCommon('yes'),
+              rightText: tCommon('no'),
+              leftFunc: () => {
+                window.close();
+              },
+              rightFunc: () => {},
+            });
+          },
+          ...uiCommon,
+        }}
+      />
+    );
+  }
+
   const renderButtonText = (text: string) => (
     <div className={applyStyle('Title_button_text', styles.Title_button_text)}>
       {text}
@@ -44,18 +94,6 @@ export default function Title() {
   return (
     <>
       {GUIState.showTitle && <div className={applyStyle('Title_backup_background', styles.Title_backup_background)} />}
-      <div
-        className="title__enter-game-target"
-        onClick={() => {
-          playBgm(GUIState.titleBgm);
-          dispatch(setVisibility({ component: 'isEnterGame', visibility: true }));
-          if (fullScreen === fullScreenOption.on) {
-            document.documentElement.requestFullscreen();
-            if (keyboard) keyboard.lock(['Escape', 'F11']);
-          }
-        }}
-        onMouseEnter={playSeEnter}
-      />
       {GUIState.showTitle && (
         <div
           className={applyStyle('Title_main', styles.Title_main)}

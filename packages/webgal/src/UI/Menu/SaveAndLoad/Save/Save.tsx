@@ -1,29 +1,137 @@
-import { FC, useEffect } from 'react';
+import { FC, useCallback, useEffect, useMemo, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import styles from '../SaveAndLoad.module.scss';
 import { saveGame } from '@/Core/controller/storage/saveGame';
+import { getSavesFromStorage } from '@/Core/controller/storage/savesController';
 import { setStorage } from '@/Core/controller/storage/storageController';
-import { useDispatch, useSelector } from 'react-redux';
+import useSoundEffect from '@/hooks/useSoundEffect';
+import useTrans from '@/hooks/useTrans';
+import { MENU_BUILTIN_SCREENS } from '@/screens/menu';
+import { SaveSlotData } from '@/screens/contracts';
+import { registerBuiltInScreens } from '@/screens/screenRegistry';
+import { ScreenSlotRenderer } from '@/screens/ScreenSlotRenderer';
+import { useIsCustomUiTemplate, useUiCommonProps } from '@/screens/stage/shared';
+import { getMockSaveSlots, useUiMockDataEnabled } from '@/sdk/mockData';
+import { compileSentence } from '@/Stage/TextBox/TextBox';
 import { RootState } from '@/store/store';
 import { setSlPage } from '@/store/userDataReducer';
-import { showGlogalDialog } from '@/UI/GlobalDialog/GlobalDialog';
-import useTrans from '@/hooks/useTrans';
-import useSoundEffect from '@/hooks/useSoundEffect';
-import { getSavesFromStorage } from '@/Core/controller/storage/savesController';
-import { compileSentence } from '@/Stage/TextBox/TextBox';
 import { mergeStringsAndKeepObjects } from '@/UI/Backlog/Backlog';
+import { showGlogalDialog } from '@/UI/GlobalDialog/GlobalDialog';
+import { getMaxSaveSlotIndexFromStorage } from '@/UI/Menu/SaveAndLoad/saveStorageHelpers';
 
-export const Save: FC = () => {
+registerBuiltInScreens(MENU_BUILTIN_SCREENS);
+
+export interface SaveConnectorProps {
+  visible?: boolean;
+}
+
+export const Save: FC<SaveConnectorProps> = ({ visible = true }) => {
   const { playSePageChange, playSeEnter, playSeDialogOpen } = useSoundEffect();
   const userDataState = useSelector((state: RootState) => state.userData);
   const savesDataState = useSelector((state: RootState) => state.saveData);
   const dispatch = useDispatch();
+  const t = useTrans('menu.');
+  const tCommon = useTrans('common.');
+  const isCustomUi = useIsCustomUiTemplate();
+  const mockDataEnabled = useUiMockDataEnabled();
+  const uiCommon = useUiCommonProps();
+  const [loadedRange, setLoadedRange] = useState({ start: 1, end: 12 });
+
+  const slPage = userDataState.optionData.slPage;
+  const start = (slPage - 1) * 10 + 1;
+  const end = start + 9;
+
+  useEffect(() => {
+    if (!visible || mockDataEnabled) return;
+    void getMaxSaveSlotIndexFromStorage().then((maxIdx) => {
+      if (maxIdx > 0) {
+        void getSavesFromStorage(maxIdx, maxIdx);
+      }
+    });
+  }, [visible, mockDataEnabled]);
+
+  useEffect(() => {
+    if (!isCustomUi) {
+      void getSavesFromStorage(start, end);
+    }
+  }, [isCustomUi, start, end]);
+
+  const handleLoadRange = useCallback(
+    (rangeStart: number, rangeEnd: number) => {
+      setLoadedRange((prev) =>
+        prev.start === rangeStart && prev.end === rangeEnd ? prev : { start: rangeStart, end: rangeEnd },
+      );
+      if (!mockDataEnabled) {
+        void getSavesFromStorage(rangeStart, rangeEnd);
+      }
+    },
+    [mockDataEnabled],
+  );
+
+  const handleSlotAction = useCallback(
+    (index: number) => {
+      if (mockDataEnabled) return;
+      if (savesDataState.saveData[index]) {
+        playSeDialogOpen();
+        showGlogalDialog({
+          title: t('saving.isOverwrite'),
+          leftText: tCommon('yes'),
+          rightText: tCommon('no'),
+          leftFunc: () => {
+            saveGame(index);
+            setStorage();
+          },
+          rightFunc: () => {},
+        });
+      } else {
+        playSePageChange();
+        saveGame(index);
+      }
+    },
+    [mockDataEnabled, playSeDialogOpen, playSePageChange, savesDataState.saveData, t, tCommon],
+  );
+
+  const savesByIndex = useMemo(() => {
+    if (mockDataEnabled) {
+      return getMockSaveSlots(loadedRange.start, loadedRange.end);
+    }
+    const map: Record<number, SaveSlotData | null | undefined> = {};
+    for (const [key, item] of Object.entries(savesDataState.saveData)) {
+      const idx = Number(key);
+      if (Number.isInteger(idx) && idx >= 0) {
+        map[idx] = item;
+      }
+    }
+    return map;
+  }, [mockDataEnabled, loadedRange.start, loadedRange.end, savesDataState.saveData]);
+
+  if (isCustomUi) {
+    return (
+      <ScreenSlotRenderer
+        screen="save"
+        screenProps={{
+          visible,
+          slPage,
+          savesByIndex,
+          onSelectPage: (page) => {
+            dispatch(setSlPage(page));
+            setStorage();
+          },
+          onLoadRange: handleLoadRange,
+          onSlotAction: handleSlotAction,
+          ...uiCommon,
+        }}
+      />
+    );
+  }
+
   const page = [];
   for (let i = 1; i <= 20; i++) {
     let classNameOfElement = styles.Save_Load_top_button;
-    if (i === userDataState.optionData.slPage) {
+    if (i === slPage) {
       classNameOfElement = classNameOfElement + ' ' + styles.Save_Load_top_button_on;
     }
-    const element = (
+    page.push(
       <div
         onClick={() => {
           dispatch(setSlPage(i));
@@ -35,22 +143,11 @@ export const Save: FC = () => {
         className={classNameOfElement}
       >
         <div className={styles.Save_Load_top_button_text}>{i}</div>
-      </div>
+      </div>,
     );
-    page.push(element);
   }
 
-  const tCommon = useTrans('common.');
-
   const showSaves = [];
-  // 现在尝试设置10个存档每页
-  const start = (userDataState.optionData.slPage - 1) * 10 + 1;
-  const end = start + 9;
-
-  useEffect(() => {
-    getSavesFromStorage(start, end);
-  }, [start, end]);
-
   let animationIndex = 0;
   for (let i = start; i <= end; i++) {
     animationIndex++;
@@ -75,41 +172,18 @@ export const Save: FC = () => {
         </>
       );
     }
-    // else {
-
-    // }
-    const saveElement = (
+    showSaves.push(
       <div
-        onClick={() => {
-          if (savesDataState.saveData[i]) {
-            playSeDialogOpen();
-            showGlogalDialog({
-              title: t('saving.isOverwrite'),
-              leftText: tCommon('yes'),
-              rightText: tCommon('no'),
-              leftFunc: () => {
-                saveGame(i);
-                setStorage();
-              },
-              rightFunc: () => {},
-            });
-          } else {
-            playSePageChange();
-            saveGame(i);
-          }
-        }}
+        onClick={() => handleSlotAction(i)}
         onMouseEnter={playSeEnter}
         key={'saveElement_' + i}
         className={styles.Save_Load_content_element}
         style={{ animationDelay: `${animationIndex * 30}ms` }}
       >
         {saveElementContent}
-      </div>
+      </div>,
     );
-    showSaves.push(saveElement);
   }
-
-  const t = useTrans('menu.');
 
   return (
     <div className={styles.Save_Load_main}>
@@ -119,7 +193,7 @@ export const Save: FC = () => {
         </div>
         <div className={styles.Save_Load_top_buttonList}>{page}</div>
       </div>
-      <div className={styles.Save_Load_content} id={'Save_content_page_' + userDataState.optionData.slPage}>
+      <div className={styles.Save_Load_content} id={'Save_content_page_' + slPage}>
         {showSaves}
       </div>
     </div>
@@ -137,9 +211,9 @@ export function easyCompile(sentence: string) {
   return showNameArrayReduced.map((line, index) => {
     return (
       <div key={`backlog-line-${index}`}>
-        {line.map((e, index) => {
+        {line.map((e, idx) => {
           if (e === '<br />') {
-            return <br key={`br${index}`} />;
+            return <br key={`br${idx}`} />;
           } else {
             return e;
           }

@@ -8,6 +8,9 @@ import { backToTitle } from '@/Core/controller/gamePlay/backToTitle';
 import useTrans from '@/hooks/useTrans';
 import useSoundEffect from '@/hooks/useSoundEffect';
 import { showGlogalDialog } from '@/UI/GlobalDialog/GlobalDialog';
+import { ScreenSlotRenderer } from '@/screens/ScreenSlotRenderer';
+import { useIsCustomUiTemplate, useUiCommonProps } from '@/screens/stage/shared';
+import { useUiMockDataEnabled } from '@/sdk/mockData';
 
 /**
  * Menu页的底栏
@@ -21,6 +24,43 @@ export const MenuPanel = () => {
   const GUIState = useSelector((state: RootState) => state.GUI);
   const enableFlowchart = useSelector((state: RootState) => state.userData.globalGameVar.Enable_flowchart === true);
   const dispatch = useDispatch();
+  const isCustomUi = useIsCustomUiTemplate();
+  const mockDataEnabled = useUiMockDataEnabled();
+  const uiCommon = useUiCommonProps();
+
+  if (isCustomUi) {
+    return (
+      <ScreenSlotRenderer
+        screen="menuPanel"
+        screenProps={{
+          visible: GUIState.showMenuPanel,
+          activeTag: GUIState.currentMenuTag,
+          canSave: mockDataEnabled ? true : !GUIState.showTitle,
+          enableFlowchart: mockDataEnabled ? true : enableFlowchart,
+          onSelectTag: (tag) => {
+            if (tag === MenuPanelTag.Save && GUIState.showTitle && !mockDataEnabled) return;
+            dispatch(setMenuPanelTag(tag));
+          },
+          onBackToTitle: () => {
+            showGlogalDialog({
+              title: t('$gaming.buttons.titleTips'),
+              leftText: t('$common.yes'),
+              rightText: t('$common.no'),
+              leftFunc: () => {
+                backToTitle();
+                dispatch(setVisibility({ component: 'showMenuPanel', visibility: false }));
+              },
+              rightFunc: () => {},
+            });
+          },
+          onClose: () => {
+            dispatch(setVisibility({ component: 'showMenuPanel', visibility: false }));
+          },
+          ...uiCommon,
+        }}
+      />
+    );
+  }
   // 设置Menu按钮的高亮
   const SaveTagOn = GUIState.currentMenuTag === MenuPanelTag.Save ? ` ${styles.MenuPanel_button_hl}` : ``;
   const LoadTagOn = GUIState.currentMenuTag === MenuPanelTag.Load ? ` ${styles.MenuPanel_button_hl}` : ``;

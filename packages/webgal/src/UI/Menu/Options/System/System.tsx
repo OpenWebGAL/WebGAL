@@ -1,33 +1,136 @@
-import styles from '@/UI/Menu/Options/options.module.scss';
-import { NormalOption } from '@/UI/Menu/Options/NormalOption';
-import { NormalButton } from '@/UI/Menu/Options/NormalButton';
-import { resetAllData, resetOptionSet, setOptionData } from '@/store/userDataReducer';
-import { IUserData, playSpeed } from '@/store/userDataInterface';
-import { getStorage, setStorage, dumpToStorageFast } from '@/Core/controller/storage/storageController';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState, webgalStore } from '@/store/store';
-import { showGlogalDialog } from '@/UI/GlobalDialog/GlobalDialog';
 import localforage from 'localforage';
-import { logger } from '@/Core/util/logger';
-import useTrans from '@/hooks/useTrans';
-import useLanguage from '@/hooks/useLanguage';
-import languages, { language } from '@/config/language';
 import { useState } from 'react';
-import About from '@/UI/Menu/Options/System/About';
-import { WebGAL } from '@/Core/WebGAL';
-import useSoundEffect from '@/hooks/useSoundEffect';
-import savesReducer, { ISavesData, saveActions } from '@/store/savesReducer';
-import {
-  dumpFastSaveToStorage,
-  dumpSavesToStorage,
-  getSavesFromStorage,
-} from '@/Core/controller/storage/savesController';
-import { OptionSlider } from '@/UI/Menu/Options/OptionSlider';
+import { useDispatch, useSelector } from 'react-redux';
 import { Info } from '@icon-park/react';
+import { WebGAL } from '@/Core/WebGAL';
+import { getStorage, setStorage, dumpToStorageFast } from '@/Core/controller/storage/storageController';
+import { logger } from '@/Core/util/logger';
+import languages, { language } from '@/config/language';
+import useLanguage from '@/hooks/useLanguage';
+import useSoundEffect from '@/hooks/useSoundEffect';
+import useTrans from '@/hooks/useTrans';
+import { RootState, webgalStore } from '@/store/store';
+import { saveActions } from '@/store/savesReducer';
+import { resetAllData, resetOptionSet, setOptionData } from '@/store/userDataReducer';
+import { playSpeed } from '@/store/userDataInterface';
+import { showGlogalDialog } from '@/UI/GlobalDialog/GlobalDialog';
+import { NormalButton } from '@/UI/Menu/Options/NormalButton';
+import { NormalOption } from '@/UI/Menu/Options/NormalOption';
+import { OptionSlider } from '@/UI/Menu/Options/OptionSlider';
+import About from '@/UI/Menu/Options/System/About';
+import styles from '@/UI/Menu/Options/options.module.scss';
+import {
+  clearAllSavesFromStorage,
+  ExportGameData,
+  loadAllSavesFromStorage,
+  persistImportedSavesToStorage,
+} from '@/UI/Menu/SaveAndLoad/saveStorageHelpers';
 
-interface IExportGameData {
-  userData: IUserData;
-  saves: ISavesData;
+export async function exportSavesToJsonFile(): Promise<void> {
+  // 存档按分页懒加载，导出前动态扫描本地存储全部真实存档槽位
+  await loadAllSavesFromStorage();
+  const gameData: ExportGameData = {
+    userData: webgalStore.getState().userData,
+    saves: webgalStore.getState().saveData,
+  };
+  const jsonText = JSON.stringify(gameData);
+  const blob = new Blob([jsonText], { type: 'application/json' });
+  const blobUrl = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = blobUrl;
+  a.download = 'saves.json';
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(blobUrl);
+}
+
+export function importSavesFromFile(
+  file: File,
+  tSystemOptions: (key: string) => string,
+  playSeDialogOpen: () => void,
+): void {
+  const reader = new FileReader();
+  reader.onload = (evR) => {
+    const raw = evR.target?.result;
+    if (typeof raw !== 'string') return;
+    try {
+      const saveAsObj = JSON.parse(raw) as Partial<ExportGameData> | null;
+      if (
+        !saveAsObj ||
+        typeof saveAsObj !== 'object' ||
+        !saveAsObj.userData ||
+        typeof saveAsObj.userData !== 'object' ||
+        !saveAsObj.saves ||
+        typeof saveAsObj.saves !== 'object'
+      ) {
+        throw new Error('Invalid save data structure');
+      }
+      const importedUserData = saveAsObj.userData;
+      const importedSaveData = Array.isArray(saveAsObj.saves.saveData) ? saveAsObj.saves.saveData : [];
+      const importedQuickSave = saveAsObj.saves.quickSaveData;
+      playSeDialogOpen();
+      showGlogalDialog({
+        title: tSystemOptions('gameSave.dialogs.import.title'),
+        leftText: tSystemOptions('$common.yes'),
+        rightText: tSystemOptions('$common.no'),
+        leftFunc: async () => {
+          await localforage.setItem(WebGAL.gameKey, importedUserData);
+          logger.info(tSystemOptions('gameSave.dialogs.import.tip'));
+          getStorage();
+          webgalStore.dispatch(saveActions.replaceSaveGame(importedSaveData));
+          webgalStore.dispatch(saveActions.setFastSave(importedQuickSave));
+          await persistImportedSavesToStorage(importedSaveData);
+        },
+        rightFunc: () => {},
+      });
+    } catch (e) {
+      logger.error(tSystemOptions('gameSave.dialogs.import.error'), e);
+    }
+  };
+  reader.readAsText(file, 'UTF-8');
+}
+
+export function requestResetSavesDialog(tSystemOptions: (key: string) => string, playSeDialogOpen: () => void): void {
+  playSeDialogOpen();
+  showGlogalDialog({
+    title: tSystemOptions('resetData.dialogs.clearGameSave'),
+    leftText: tSystemOptions('$common.yes'),
+    rightText: tSystemOptions('$common.no'),
+    leftFunc: () => {
+      void clearAllSavesFromStorage();
+    },
+    rightFunc: () => {},
+  });
+}
+
+export function requestResetOptionsDialog(tSystemOptions: (key: string) => string, playSeDialogOpen: () => void): void {
+  playSeDialogOpen();
+  showGlogalDialog({
+    title: tSystemOptions('resetData.dialogs.resetSettings'),
+    leftText: tSystemOptions('$common.yes'),
+    rightText: tSystemOptions('$common.no'),
+    leftFunc: () => {
+      webgalStore.dispatch(resetOptionSet());
+      dumpToStorageFast();
+    },
+    rightFunc: () => {},
+  });
+}
+
+export function requestResetAllDialog(tSystemOptions: (key: string) => string, playSeDialogOpen: () => void): void {
+  playSeDialogOpen();
+  showGlogalDialog({
+    title: tSystemOptions('resetData.dialogs.clearAll'),
+    leftText: tSystemOptions('$common.yes'),
+    rightText: tSystemOptions('$common.no'),
+    leftFunc: () => {
+      webgalStore.dispatch(resetAllData());
+      WebGAL.flowchartManager.clearProgress();
+      dumpToStorageFast();
+      void clearAllSavesFromStorage();
+    },
+    rightFunc: () => {},
+  });
 }
 
 export function System() {
@@ -37,156 +140,98 @@ export function System() {
   const t = useTrans('menu.options.pages.system.options.');
   const { playSeDialogOpen, playSeEnter, playSeSwitch } = useSoundEffect();
 
-  async function exportSaves() {
-    // 存档按分页懒加载，store 中只有访问过的分页，导出前需先读取全部槽位
-    await getSavesFromStorage(0, 200);
-    const gameData: IExportGameData = {
-      userData: userDataState,
-      saves: webgalStore.getState().saveData,
-    };
-
-    const saves = JSON.stringify(gameData);
-    if (saves !== null) {
-      // @ts-ignore
-      const blob = new Blob([saves], { type: 'application/json' });
-      const blobUrl = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = blobUrl;
-      a.download = 'saves.json';
-      a.click();
-      a.remove();
-    }
-  }
-
-  function importSavesEventHandler(ev: any) {
-    // const t = useTrans('menu.options.pages.system.options.');
-
-    const file = ev.target.files[0];
-    const reader = new FileReader();
-    reader.onload = (evR) => {
-      const saves = evR!.target!.result as string;
-      try {
-        const saveAsObj: IExportGameData = JSON.parse(saves);
-        playSeDialogOpen();
-        showGlogalDialog({
-          title: t('gameSave.dialogs.import.title'),
-          leftText: t('$common.yes'),
-          rightText: t('$common.no'),
-          leftFunc: async () => {
-            await localforage.setItem(WebGAL.gameKey, saveAsObj.userData).then(() => {
-              logger.info(t('gameSave.dialogs.import.tip'));
-            });
-            getStorage();
-            webgalStore.dispatch(saveActions.replaceSaveGame(saveAsObj.saves.saveData));
-            webgalStore.dispatch(saveActions.setFastSave(saveAsObj.saves.quickSaveData));
-            dumpFastSaveToStorage();
-            dumpSavesToStorage(0, 200);
-          },
-          rightFunc: () => {},
-        });
-      } catch (e) {
-        logger.error(t('gameSave.dialogs.import.error'), e);
+  const importSaves = () => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.json';
+    input.onchange = (ev) => {
+      const target = ev.target as HTMLInputElement | null;
+      const file = target?.files?.[0];
+      if (file) {
+        importSavesFromFile(file, t, playSeDialogOpen);
       }
-      // window.location.reload(); // dirty: 强制刷新 UI
+      input.remove();
     };
-    reader.readAsText(file, 'UTF-8');
-  }
+    input.click();
+  };
 
-  function importSaves() {
-    const inputElement = document.createElement('input');
-    inputElement.type = 'file';
-    inputElement.onchange = importSavesEventHandler;
-    inputElement.click();
-  }
-
-  const [showAbout, setShowAbout] = useState(false);
   const [showLanguageSelect, setShowLanguageSelect] = useState(false);
+  const [showAbout, setShowAbout] = useState(false);
 
-  function toggleAbout() {
+  const toggleLanguageSelect = () => {
+    playSeSwitch();
+    setShowLanguageSelect(!showLanguageSelect);
+  };
+
+  const toggleAbout = () => {
+    playSeSwitch();
     setShowAbout(!showAbout);
-  }
+  };
+
+  const getLanguageName = (lang: language) => languages[language[lang]] || '日本語';
 
   return (
     <div className={styles.Options_main_content_half}>
-      {showAbout && <About onClose={toggleAbout} />}
-      {!showAbout && (
+      {showAbout ? (
+        <About onClose={toggleAbout} />
+      ) : (
         <>
-          <NormalOption key="option1" title={t('autoSpeed.title')}>
-            <OptionSlider
-              initValue={userDataState.optionData.autoSpeed}
-              uniqueID={t('autoSpeed.title')}
-              onChange={(event) => {
-                const newValue = event.target.value;
-                dispatch(setOptionData({ key: 'autoSpeed', value: Number(newValue) }));
-                setStorage();
-              }}
-            />
-          </NormalOption>
-          <NormalOption key="skipAll" title={t('skipAll.title')}>
+          <NormalOption key="option0" title={t('autoSpeed.title')}>
             <NormalButton
-              textList={t('skipAll.options.read', 'skipAll.options.all')}
+              textList={t('autoSpeed.options.slow', 'autoSpeed.options.medium', 'autoSpeed.options.fast')}
               functionList={[
                 () => {
-                  dispatch(setOptionData({ key: 'skipAll', value: false }));
+                  dispatch(setOptionData({ key: 'autoSpeed', value: playSpeed.slow }));
                   setStorage();
                 },
                 () => {
-                  dispatch(setOptionData({ key: 'skipAll', value: true }));
+                  dispatch(setOptionData({ key: 'autoSpeed', value: playSpeed.normal }));
+                  setStorage();
+                },
+                () => {
+                  dispatch(setOptionData({ key: 'autoSpeed', value: playSpeed.fast }));
                   setStorage();
                 },
               ]}
-              currentChecked={userDataState.optionData.skipAll ? 1 : 0}
+              currentChecked={userDataState.optionData.autoSpeed}
             />
           </NormalOption>
-          <NormalOption
-            key="option7"
-            title={t('language.title')}
-            style={{ zIndex: showLanguageSelect ? 1 : undefined }}
-          >
-            <div
-              className={styles.Option_select}
-              onBlur={(event) => {
-                if (!event.currentTarget.contains(event.relatedTarget)) setShowLanguageSelect(false);
-              }}
-            >
-              <button
-                type="button"
-                className={`${styles.Option_select_button} ${
-                  showLanguageSelect ? styles.Option_select_button_active : ''
-                }`}
-                onClick={() => {
-                  playSeSwitch();
-                  setShowLanguageSelect(!showLanguageSelect);
-                }}
-                onMouseEnter={playSeEnter}
-              >
-                {languages[language[userDataState.optionData.language]]}
-              </button>
+          <NormalOption key="option4" title={t('language.title')}>
+            <div className={styles.language_select}>
+              <div className={styles.language_select_button} onClick={toggleLanguageSelect} onMouseEnter={playSeEnter}>
+                {getLanguageName(userDataState.optionData.language)}
+              </div>
               {showLanguageSelect && (
-                <div className={styles.Option_select_menu}>
-                  {Object.entries(languages).map(([key, name]) => {
-                    const value = language[key as keyof typeof language] as language;
+                <div className={styles.language_select_dropdown}>
+                  {Object.keys(languages).map((key) => {
+                    const langValue = language[key as keyof typeof language];
                     return (
-                      <button
-                        type="button"
+                      <div
                         key={key}
-                        className={`${styles.Option_select_item} ${
-                          value === userDataState.optionData.language ? styles.Option_select_item_active : ''
-                        }`}
+                        className={styles.language_select_dropdown_item}
                         onClick={() => {
-                          playSeSwitch();
-                          setLanguage(value);
-                          setShowLanguageSelect(false);
+                          setLanguage(langValue);
+                          toggleLanguageSelect();
                         }}
-                        onMouseEnter={playSeEnter}
                       >
-                        {name}
-                      </button>
+                        {languages[key]}
+                      </div>
                     );
                   })}
                 </div>
               )}
             </div>
+          </NormalOption>
+          <NormalOption key="option1" title={t('skipAll.title')}>
+            <OptionSlider
+              initValue={userDataState.optionData.skipAll ? 100 : 0}
+              uniqueID="skipAll"
+              onChange={(event) => {
+                const newValue = event.target.value;
+                dispatch(setOptionData({ key: 'skipAll', value: Number(newValue) > 50 }));
+                setStorage();
+              }}
+            />
           </NormalOption>
           <NormalOption key="option2" title={t('resetData.title')}>
             <NormalButton
@@ -196,50 +241,9 @@ export function System() {
                 'resetData.options.clearAll',
               )}
               functionList={[
-                () => {
-                  playSeDialogOpen();
-                  showGlogalDialog({
-                    title: t('resetData.dialogs.clearGameSave'),
-                    leftText: t('$common.yes'),
-                    rightText: t('$common.no'),
-                    leftFunc: () => {
-                      dispatch(saveActions.resetSaves());
-                      dumpSavesToStorage(0, 200);
-                      dumpFastSaveToStorage();
-                    },
-                    rightFunc: () => {},
-                  });
-                },
-                () => {
-                  playSeDialogOpen();
-                  showGlogalDialog({
-                    title: t('resetData.dialogs.resetSettings'),
-                    leftText: t('$common.yes'),
-                    rightText: t('$common.no'),
-                    leftFunc: () => {
-                      dispatch(resetOptionSet());
-                      dumpToStorageFast();
-                    },
-                    rightFunc: () => {},
-                  });
-                },
-                () => {
-                  playSeDialogOpen();
-                  showGlogalDialog({
-                    title: t('resetData.dialogs.clearAll'),
-                    leftText: t('$common.yes'),
-                    rightText: t('$common.no'),
-                    leftFunc: () => {
-                      dispatch(resetAllData());
-                      WebGAL.flowchartManager.clearProgress();
-                      dumpToStorageFast();
-                      dispatch(saveActions.resetSaves());
-                      dumpSavesToStorage(0, 200);
-                      dumpFastSaveToStorage();
-                    },
-                    rightFunc: () => {},
-                  });
-                },
+                () => requestResetSavesDialog(t, playSeDialogOpen),
+                () => requestResetOptionsDialog(t, playSeDialogOpen),
+                () => requestResetAllDialog(t, playSeDialogOpen),
               ]}
               currentChecked={3}
             />
@@ -247,7 +251,7 @@ export function System() {
           <NormalOption key="option3" title={t('gameSave.title')}>
             <NormalButton
               textList={t('gameSave.options.export', 'gameSave.options.import')}
-              functionList={[exportSaves, importSaves]}
+              functionList={[() => void exportSavesToJsonFile(), importSaves]}
               currentChecked={2}
             />
           </NormalOption>
