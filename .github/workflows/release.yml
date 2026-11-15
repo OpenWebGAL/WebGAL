@@ -5,6 +5,7 @@ on:
     tags:
       - '*.*'
       - '!*beta*'
+      - '!*preview*'
 
 permissions:
   contents: write
