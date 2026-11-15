@@ -360,6 +360,7 @@ export interface UiSdkIcons {
   Music: UiIconComponent;
   MusicList: UiIconComponent;
   OffScreen: UiIconComponent;
+  Pause: UiIconComponent;
   PauseOne: UiIconComponent;
   Picture: UiIconComponent;
   Play: UiIconComponent;
@@ -454,6 +455,7 @@ declare module '@icon-park/react' {
   export const Music: UiIconComponent;
   export const MusicList: UiIconComponent;
   export const OffScreen: UiIconComponent;
+  export const Pause: UiIconComponent;
   export const PauseOne: UiIconComponent;
   export const Picture: UiIconComponent;
   export const Play: UiIconComponent;
