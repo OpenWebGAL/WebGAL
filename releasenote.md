@@ -8,19 +8,11 @@
 
 #### 新功能
 
-新增组合立绘功能。可以将身体、服装、表情等多个部件图片组合为同一个角色立绘，调整各图层的偏移、缩放和旋转，并在演出时按预设或自定义图层组合进行展示与切换。
+推出全新的模块化界面自定义体系。游戏内的标题界面、文本框、分支选择、存读档、设置、流程图、鉴赏、历史记录、菜单浮层、全局弹窗与底部快捷栏现已支持按界面独立更换与加载，创作者可自由组合不同布局并配合编辑器进行实时可视化调试与模拟数据预览。
 
-优化编辑器实时预览。预览新版动画时的变换定位更加准确，并支持向编辑器同步模板与游戏配置信息。
+提供多套开箱即用的全新界面预设变体。除保持统一的默认风格外，默认模板内置了多种经典与全新变体方案，涵盖标题（经典底栏、右侧书卷等）、文本框（默认、Classic、Black、无样式基底）、分支选择（默认、极简暗色）、存读档（2×5 网格、纵向列表、分栏预览）、设置（分类标签、单页滚动）与鉴赏（经典画廊、双页签分离），满足不同题材作品的视觉风格需求。
 
-#### 修复
-
-修复导出存档时，未打开过的存档页不会被一并导出的问题。
-
-修复条件判断中使用 >=、<=、!= 直接与变量比较时结果不正确的问题。
-
-修复获取玩家输入时若带有 -continue 参数，确认后会多跳过一句剧情的问题。
-
-修复快速切换对话或语音提前结束时，配音与口型、眨眼动画可能未及时停止的问题。
+新增独立界面开发脚手架（`create-webgal-ui`）。界面开发者与创作者可通过脚手架一键创建自定义界面项目，进行本地预览调试并打包导出供游戏与编辑器直接导入使用的界面扩展包。
 
 <!-- English Translation -->
 ## Release Notes
@@ -33,19 +25,11 @@
 
 #### New Features
 
-Added composite figures. Multiple part images such as body, outfit, and expression can be combined into a single character figure, with per-layer offset, scale, and rotation adjustments, and displayed or switched using presets or custom layer combinations.
+Introduced a modular screen customization system. Individual in-game screens—including the Title screen, Textbox, Choice prompt, Save/Load screens, Options, Flowchart, Extra Gallery, Backlog, Menu overlay, Global Dialog, and Bottom Control Bar—can now be swapped and loaded independently, allowing creators to mix layouts and enjoy live visual debugging with mock data in the editor.
 
-Improved editor live preview. Transform positioning is more accurate when previewing the new animation format, and template and game config information can now be synced to the editor.
+Added multiple ready-to-use built-in screen presets. Alongside the unified default style, the default template now ships with curated preset variants covering Title (Classic bottom bar, Editorial right), Textbox (Default, Classic, Black, Bare base), Choice (Default, Sleek Dark), Save/Load (2×5 Grid, Vertical List, Split Preview), Options (Tabbed Classic, Single Scroll), and Gallery (Classic, Split Tabs).
 
-#### Fixes
-
-Fixed unopened save pages not being included when exporting saves.
-
-Fixed incorrect condition results when comparing directly against a variable with >=, <=, or !=.
-
-Fixed getting user input with the -continue option skipping an extra line after confirmation.
-
-Fixed voice playback and lip-sync or blink animations sometimes not stopping promptly when switching dialogue quickly or ending voice playback early.
+Added the custom screen scaffolding toolkit (`create-webgal-ui`), enabling creators and UI developers to quickly scaffold standalone screen projects, preview changes locally, and export screen bundles ready for games and templates.
 
 <!-- Japanese Translation -->
 ## リリースノート
@@ -58,16 +42,8 @@ Fixed voice playback and lip-sync or blink animations sometimes not stopping pro
 
 #### 新機能
 
-合成立ち絵機能を追加しました。素体、衣装、表情などの複数のパーツ画像を 1 つのキャラクター立ち絵として組み合わせ、各レイヤーの位置、拡大縮小、回転を調整し、演出時にプリセットや任意のレイヤー構成で表示・切り替えができます。
+モジュール式の画面カスタマイズ仕組みを新たに導入しました。タイトル画面、テキストボックス、選択肢、セーブ／ロード画面、設定、フローチャート、鑑賞、バックログ、メニューオーバーレイ、確認ダイアログ、下部コントロールバーなどの各画面を個別に差し替えて読み込めるようになり、エディター上でのリアルタイム調整やテストデータを用いたプレビューにも対応しました。
 
-エディターのリアルタイムプレビューを改善しました。新しいアニメーション形式をプレビューする際の変換位置がより正確になり、テンプレートやゲーム設定の情報をエディターへ同期できるようになりました。
+すぐに使える多彩な画面プリセットバリエーションを追加しました。統一感のある標準デザインに加えて、タイトル（クラシック下部バー、右寄せエディトリアル）、テキストボックス（標準、Classic、Black、無装飾ベース）、選択肢（標準、ダークミニマル）、セーブ／ロード（2×5 グリッド、縦リスト、プレビュー分割）、設定（タブ切り替え、単ページスクロール）、鑑賞（クラシック、タブ分割）の各バリエーションを標準テンプレートに同梱しています。
 
-#### 修正
-
-セーブデータをエクスポートする際、一度も開いていないセーブページが含まれない問題を修正しました。
-
-条件判定で >=、<=、!= を使って変数と直接比較した際の結果が正しくならない問題を修正しました。
-
-プレイヤー入力の取得で -continue を指定した際、確定後にストーリーが 1 行余分にスキップされる問題を修正しました。
-
-会話を素早く切り替えた時やボイスが途中で終了した時に、ボイス再生や口パク・まばたきアニメーションがすぐに止まらないことがある問題を修正しました。
+カスタム画面開発用のスキャフォールドツール（`create-webgal-ui`）を追加し、独立した画面プロジェクトの作成からローカルプレビュー、ゲームやテンプレートでそのまま読み込める画面パッケージの出力までを手軽に行えるようになりました。
