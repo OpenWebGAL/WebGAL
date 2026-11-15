@@ -1,0 +1,34 @@
+{
+  "screen": "backlog",
+  "variantId": "default",
+  "name": "默认历史记录",
+  "version": "1.0.0",
+  "entry": "index.js",
+  "style": "style.scss",
+  "parts": [
+    {
+      "id": "main",
+      "name": "历史记录主容器",
+      "selector": ".Backlog_main",
+      "allowLayoutEdit": true
+    },
+    {
+      "id": "top",
+      "name": "顶部栏",
+      "selector": ".Backlog_top",
+      "allowLayoutEdit": true
+    },
+    {
+      "id": "content",
+      "name": "记录滚动容器",
+      "selector": ".Backlog_content",
+      "allowLayoutEdit": true
+    },
+    {
+      "id": "item",
+      "name": "单条记录项",
+      "selector": ".Backlog_item",
+      "allowLayoutEdit": false
+    }
+  ]
+}

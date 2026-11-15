@@ -1,0 +1,80 @@
+.Title_main {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  width: 2560px;
+  height: 1440px;
+  z-index: 13;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.Title_buttonList {
+  font-family: "资源圆体", serif;
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  min-width: 640px;
+  height: 1440px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding-left: 120px;
+  transition: background 0.75s;
+  box-sizing: border-box;
+}
+
+.Title_button {
+  flex: 0 1 auto;
+  font-weight: bold;
+  text-align: left;
+  cursor: pointer;
+  padding: 17.92px 0px;
+  margin: 18px 0px;
+  transition: transform 0.22s ease, opacity 0.22s ease;
+  background: transparent;
+  backdrop-filter: none;
+  border: 0px solid transparent;
+  border-radius: 0px;
+  transform: none;
+  overflow: visible;
+  text-shadow: none;
+}
+
+.Title_button:hover {
+  transform: translate3d(0px, -3px, 0px) scale(1.01);
+  padding: 17.92px 0px;
+  text-shadow: none;
+  filter: drop-shadow(0px 6px 8px rgba(6, 10, 18, 0.06)) drop-shadow(0px 3px 4px rgba(6, 10, 18, 0.04));
+}
+
+.Title_button:disabled,
+.Title_button.Title_button_disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.Title_button:disabled:hover,
+.Title_button.Title_button_disabled:hover {
+  transform: none;
+  filter: none;
+  padding: 17.92px 0px;
+}
+
+.Title_button_text {
+  display: block;
+  padding: 0.08em 0.55em 0.12em 0.35em;
+  font-size: 51.2px;
+  font-family: "资源圆体", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  letter-spacing: 0.16em;
+  line-height: 1.2;
+  white-space: nowrap;
+  color: #ffffff;
+  paint-order: stroke fill;
+  -webkit-text-stroke: 0.09em rgba(12, 20, 32, 0.7);
+  text-shadow:
+    0px 2px 6px rgba(7, 12, 20, 0.15),
+    0px 1px 2px rgba(7, 12, 20, 0.1);
+}

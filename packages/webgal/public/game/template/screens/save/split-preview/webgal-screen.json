@@ -1,0 +1,58 @@
+{
+  "screen": "save",
+  "variantId": "split-preview",
+  "name": "分栏大图预览",
+  "version": "1.0.0",
+  "entry": "index.js",
+  "style": "style.scss",
+  "parts": [
+    {
+      "id": "main",
+      "name": "存档页面容器",
+      "selector": ".Save_Split_main",
+      "allowLayoutEdit": true
+    },
+    {
+      "id": "top",
+      "name": "顶部栏",
+      "selector": ".Save_Split_top",
+      "allowLayoutEdit": true
+    },
+    {
+      "id": "title",
+      "name": "水印标题",
+      "selector": ".Save_Split_title",
+      "allowLayoutEdit": true
+    },
+    {
+      "id": "pageList",
+      "name": "页码栏",
+      "selector": ".Save_Split_pageList",
+      "allowLayoutEdit": true
+    },
+    {
+      "id": "pageButton",
+      "name": "页码按钮",
+      "selector": ".Save_Split_pageButton",
+      "allowLayoutEdit": false
+    },
+    {
+      "id": "previewPane",
+      "name": "左侧大图预览",
+      "selector": ".Save_Split_preview",
+      "allowLayoutEdit": true
+    },
+    {
+      "id": "content",
+      "name": "右侧档位区",
+      "selector": ".Save_Split_grid",
+      "allowLayoutEdit": true
+    },
+    {
+      "id": "slotCard",
+      "name": "紧凑档位卡",
+      "selector": ".Save_Split_card",
+      "allowLayoutEdit": false
+    }
+  ]
+}

@@ -11,6 +11,7 @@ const path = require('path');
 // 文件路径
 const packageJsonPath = path.resolve(__dirname, '../package.json');
 const engineJsonPath = path.resolve(__dirname, '../public/webgal-engine.json');
+const templateJsonPath = path.resolve(__dirname, '../public/game/template/template.json');
 
 try {
   // 读取 package.json
@@ -34,6 +35,13 @@ try {
 
   // 写回文件（保持格式化）
   fs.writeFileSync(engineJsonPath, JSON.stringify(engineJson, null, 2) + '\n', 'utf-8');
+
+  // 同步更新默认模板版本号（保持其他字段不变）
+  if (fs.existsSync(templateJsonPath)) {
+    const templateJson = JSON.parse(fs.readFileSync(templateJsonPath, 'utf-8'));
+    templateJson['webgal-version'] = version;
+    fs.writeFileSync(templateJsonPath, JSON.stringify(templateJson, null, 2) + '\n', 'utf-8');
+  }
 
   console.log('✅ 成功更新引擎描述文件版本号');
   console.log(`   ${oldVersion} → ${version}`);

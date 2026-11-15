@@ -1,0 +1,22 @@
+{
+  "screen": "choose",
+  "variantId": "default",
+  "name": "默认分支选择",
+  "version": "1.0.0",
+  "entry": "index.js",
+  "style": "style.scss",
+  "parts": [
+    {
+      "id": "main",
+      "name": "选项列表容器",
+      "selector": ".Choose_Main",
+      "allowLayoutEdit": true
+    },
+    {
+      "id": "item",
+      "name": "选项按钮",
+      "selector": ".Choose_item",
+      "allowLayoutEdit": false
+    }
+  ]
+}

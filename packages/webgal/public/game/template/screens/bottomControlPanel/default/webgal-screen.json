@@ -1,0 +1,28 @@
+{
+  "screen": "bottomControlPanel",
+  "variantId": "default",
+  "name": "默认底部快捷栏",
+  "version": "1.0.0",
+  "entry": "index.js",
+  "style": "style.scss",
+  "parts": [
+    {
+      "id": "main",
+      "name": "底部快捷栏容器",
+      "selector": ".BottomControlPanel_main",
+      "allowLayoutEdit": true
+    },
+    {
+      "id": "button",
+      "name": "快捷栏按钮",
+      "selector": ".BottomControlPanel_button",
+      "allowLayoutEdit": false
+    },
+    {
+      "id": "fastSlPreview",
+      "name": "快速存读档预览浮窗",
+      "selector": ".BottomControlPanel_fastSlPreview",
+      "allowLayoutEdit": true
+    }
+  ]
+}

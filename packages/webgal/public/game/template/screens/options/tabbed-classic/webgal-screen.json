@@ -1,0 +1,64 @@
+{
+  "screen": "options",
+  "variantId": "tabbed-classic",
+  "name": "经典分类标签",
+  "version": "1.0.0",
+  "entry": "index.js",
+  "style": "style.scss",
+  "parts": [
+    {
+      "id": "main",
+      "name": "选项页面容器",
+      "selector": ".Options_main",
+      "allowLayoutEdit": true
+    },
+    {
+      "id": "header",
+      "name": "顶部标题栏",
+      "selector": ".Options_main_header",
+      "allowLayoutEdit": true
+    },
+    {
+      "id": "titleText",
+      "name": "标题文本",
+      "selector": ".Option_title_text",
+      "allowLayoutEdit": true
+    },
+    {
+      "id": "tabs",
+      "name": "左侧分类栏",
+      "selector": ".Options_button_list",
+      "allowLayoutEdit": true
+    },
+    {
+      "id": "tabButton",
+      "name": "分类按钮",
+      "selector": ".Options_page_button",
+      "allowLayoutEdit": false
+    },
+    {
+      "id": "content",
+      "name": "右侧内容区",
+      "selector": ".Options_main_content",
+      "allowLayoutEdit": true
+    },
+    {
+      "id": "optionGroup",
+      "name": "选项分组",
+      "selector": ".NormalOption",
+      "allowLayoutEdit": false
+    },
+    {
+      "id": "optionButton",
+      "name": "选项按钮",
+      "selector": ".NormalButton",
+      "allowLayoutEdit": false
+    },
+    {
+      "id": "textPreview",
+      "name": "文本预览框",
+      "selector": ".Options_textPreview",
+      "allowLayoutEdit": true
+    }
+  ]
+}

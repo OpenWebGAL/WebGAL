@@ -1,0 +1,46 @@
+{
+  "screen": "textbox",
+  "variantId": "black",
+  "name": "暗黑半透 (WebGAL Black)",
+  "version": "1.0.0",
+  "entry": "index.js",
+  "style": "style.scss",
+  "parts": [
+    {
+      "id": "background",
+      "name": "文本框底图",
+      "selector": ".TextBox_Background",
+      "allowLayoutEdit": true
+    },
+    {
+      "id": "main",
+      "name": "文本框容器",
+      "selector": ".TextBox_main",
+      "allowLayoutEdit": true
+    },
+    {
+      "id": "miniAvatar",
+      "name": "小头像容器",
+      "selector": ".TextBox_miniAvatarContainer",
+      "allowLayoutEdit": true
+    },
+    {
+      "id": "nameBackground",
+      "name": "角色名背景",
+      "selector": ".TextBox_ShowName_Background",
+      "allowLayoutEdit": true
+    },
+    {
+      "id": "showName",
+      "name": "角色名文本",
+      "selector": ".TextBox_showName",
+      "allowLayoutEdit": true
+    },
+    {
+      "id": "text",
+      "name": "对话正文",
+      "selector": ".TextBox_text",
+      "allowLayoutEdit": false
+    }
+  ]
+}

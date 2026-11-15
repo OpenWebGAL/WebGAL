@@ -1,0 +1,22 @@
+{
+  "screen": "menuPanel",
+  "variantId": "default",
+  "name": "默认菜单底栏",
+  "version": "1.0.0",
+  "entry": "index.js",
+  "style": "style.scss",
+  "parts": [
+    {
+      "id": "main",
+      "name": "菜单底栏容器",
+      "selector": ".MenuPanel_main",
+      "allowLayoutEdit": true
+    },
+    {
+      "id": "button",
+      "name": "菜单按钮",
+      "selector": ".MenuPanel_button",
+      "allowLayoutEdit": false
+    }
+  ]
+}

@@ -1,0 +1,279 @@
+.Extra_Split_main {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  width: 2560px;
+  height: 1440px;
+  z-index: 14;
+  background-image: linear-gradient(135deg, #93a5cf 0%, #e4efe9 100%);
+  box-sizing: border-box;
+  padding: 51.2px 96px;
+  display: flex;
+  flex-direction: column;
+  cursor: default;
+}
+
+.Extra_Split_top {
+  height: 124px;
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  flex-shrink: 0;
+}
+
+.Extra_Split_close {
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 100%;
+  border: none;
+  background: transparent;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.3s;
+}
+
+.Extra_Split_close:hover {
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.Extra_Split_title {
+  font-family: "思源宋体", serif;
+  font-size: 80px;
+  font-weight: bold;
+  color: transparent;
+  background: linear-gradient(135deg, #ffffff 0%, #51A8DD 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  letter-spacing: 0.1em;
+}
+
+.Extra_Split_tabs {
+  margin-left: auto;
+  display: flex;
+  gap: 20px;
+}
+
+.Extra_Split_tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 40px;
+  border-radius: 7px;
+  border: none;
+  background: rgba(255, 255, 255, 0.5);
+  color: #556270;
+  font-size: 36px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.25s, color 0.25s, transform 0.2s;
+}
+
+.Extra_Split_tab:hover,
+.Extra_Split_tab.Extra_Split_tab_active {
+  background: rgba(255, 255, 255, 0.85);
+  color: #005CAF;
+}
+
+.Extra_Split_body {
+  flex: 1;
+  min-height: 0px;
+  padding-top: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.Extra_Split_pages {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.Extra_Split_pageBtn {
+  font-size: 38px;
+  padding: 6px 36px;
+  border-radius: 7px;
+  border: none;
+  background: rgba(255, 255, 255, 0.5);
+  color: #666666;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.Extra_Split_pageBtn:hover,
+.Extra_Split_pageBtn.Extra_Split_pageBtn_active {
+  background: rgba(255, 255, 255, 0.8);
+  color: #005CAF;
+}
+
+.Extra_Split_cgGrid {
+  flex: 1;
+  min-height: 0px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 36px;
+}
+
+.Extra_Split_cgCard {
+  background: rgba(255, 255, 255, 0.8);
+  box-shadow: 0px 8px 22px rgba(0, 0, 0, 0.2);
+  padding: 18px;
+  border: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  cursor: pointer;
+  transition: transform 0.25s, background-color 0.25s;
+}
+
+.Extra_Split_cgCard:hover {
+  transform: translateY(-6px);
+  background: #ffffff;
+}
+
+.Extra_Split_cgThumb {
+  flex: 1;
+  min-height: 0px;
+  width: 100%;
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.Extra_Split_cgThumb img,
+.Extra_Split_cgThumb video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.Extra_Split_cgCaption {
+  font-size: 28px;
+  font-weight: bold;
+  color: #005CAF;
+  display: flex;
+  justify-content: space-between;
+}
+
+.Extra_Split_bgmPanel {
+  flex: 1;
+  min-height: 0px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.Extra_Split_bgmPlayer {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 28px 44px;
+  border-radius: 8px;
+  background-image: linear-gradient(315deg, rgba(163, 189, 237, 0.95) 0%, rgba(105, 145, 199, 0.95) 100%);
+  box-shadow: 0px 10px 26px rgba(0, 0, 0, 0.2);
+  color: #ffffff;
+}
+
+.Extra_Split_bgmCtrl {
+  border: none;
+  background: rgba(255, 255, 255, 0.16);
+  border-radius: 999px;
+  width: 72px;
+  height: 72px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.Extra_Split_bgmCtrl:hover {
+  background: rgba(255, 255, 255, 0.32);
+}
+
+.Extra_Split_bgmNow {
+  margin-left: 16px;
+  font-size: 42px;
+  font-weight: bold;
+}
+
+.Extra_Split_bgmList {
+  flex: 1;
+  min-height: 0px;
+  overflow-y: auto;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  align-content: start;
+}
+
+.Extra_Split_bgmItem {
+  padding: 24px 32px;
+  border: none;
+  border-left: 6px solid transparent;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.65);
+  color: #364f6b;
+  font-size: 34px;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 0.22s, color 0.22s, border-color 0.22s;
+}
+
+.Extra_Split_bgmItem:hover,
+.Extra_Split_bgmItem.Extra_Split_bgmItem_active {
+  background: rgba(255, 255, 255, 0.92);
+  color: #005CAF;
+  font-weight: bold;
+  border-left-color: #005CAF;
+}
+
+.Extra_Split_modal {
+  position: fixed;
+  z-index: 25;
+  inset: 0px;
+  width: 2560px;
+  height: 1440px;
+  padding: 96px;
+  box-sizing: border-box;
+  background: rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(25px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 32px;
+}
+
+.Extra_Split_modalCard {
+  width: 1920px;
+  height: 1080px;
+  background: rgba(255, 255, 255, 0.95);
+  padding: 36px;
+  box-sizing: border-box;
+  box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.35);
+}
+
+.Extra_Split_modalCard img,
+.Extra_Split_modalCard video {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+.Extra_Split_modalStep {
+  width: 84px;
+  height: 84px;
+  border-radius: 999px;
+  border: none;
+  background: rgba(255, 255, 255, 0.22);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.Extra_Split_modalStep:hover {
+  background: rgba(255, 255, 255, 0.4);
+}

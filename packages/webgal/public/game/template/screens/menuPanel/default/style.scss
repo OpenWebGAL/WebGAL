@@ -1,0 +1,70 @@
+.MenuPanel_main {
+  position: absolute;
+  left: 0px;
+  top: 1296px;
+  width: 2560px;
+  height: 144px;
+  z-index: 16;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0px 55px;
+  box-sizing: border-box;
+}
+
+.MenuPanel_button {
+  display: flex;
+  justify-content: center;
+  min-width: 320px;
+  padding: 12.8px 15px 0px 15px;
+  margin-right: 15px;
+  border: 0px solid transparent;
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0);
+  color: rgba(123, 144, 169, 1);
+  font-size: 51.2px;
+  text-align: center;
+  cursor: pointer;
+  overflow: hidden;
+  transition: text-shadow 0.7s, background-color 0.7s;
+}
+
+.MenuPanel_button:last-child {
+  margin-right: 0px;
+}
+
+.MenuPanel_button:hover {
+  background-color: rgba(245, 246, 247, 0.15);
+}
+
+.MenuPanel_button:disabled,
+.MenuPanel_button.MenuPanel_button_disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.MenuPanel_button.MenuPanel_button_active {
+  background-color: rgba(245, 246, 247, 0.35);
+}
+
+.MenuPanel_button.MenuPanel_button_save.MenuPanel_button_active {
+  color: rgba(74, 34, 93, 0.9);
+}
+
+.MenuPanel_button.MenuPanel_button_load.MenuPanel_button_active {
+  color: rgba(11, 52, 110, 0.9);
+}
+
+.MenuPanel_button.MenuPanel_button_options.MenuPanel_button_active {
+  color: rgba(81, 110, 65, 0.9);
+}
+
+.MenuPanel_button.MenuPanel_button_flowchart.MenuPanel_button_active {
+  color: #2b5f75;
+}
+
+.MenuPanel_button_icon {
+  transform: translate(0px, 6.4px);
+  padding: 0px 7.68px 0px 0px;
+  margin: 0px 7.68px 0px 0px;
+}

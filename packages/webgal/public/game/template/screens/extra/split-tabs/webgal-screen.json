@@ -1,0 +1,46 @@
+{
+  "screen": "extra",
+  "variantId": "split-tabs",
+  "name": "双页签独立视图",
+  "version": "1.0.0",
+  "entry": "index.js",
+  "style": "style.scss",
+  "parts": [
+    {
+      "id": "main",
+      "name": "鉴赏页面容器",
+      "selector": ".Extra_Split_main",
+      "allowLayoutEdit": true
+    },
+    {
+      "id": "top",
+      "name": "顶部切换栏",
+      "selector": ".Extra_Split_top",
+      "allowLayoutEdit": true
+    },
+    {
+      "id": "cgGrid",
+      "name": "CG 画廊区",
+      "selector": ".Extra_Split_cgGrid",
+      "allowLayoutEdit": true
+    },
+    {
+      "id": "cgCard",
+      "name": "CG 卡片",
+      "selector": ".Extra_Split_cgCard",
+      "allowLayoutEdit": false
+    },
+    {
+      "id": "bgmPanel",
+      "name": "音乐厅区域",
+      "selector": ".Extra_Split_bgmPanel",
+      "allowLayoutEdit": true
+    },
+    {
+      "id": "bgmItem",
+      "name": "曲目列表项",
+      "selector": ".Extra_Split_bgmItem",
+      "allowLayoutEdit": false
+    }
+  ]
+}

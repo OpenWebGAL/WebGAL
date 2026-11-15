@@ -1,0 +1,153 @@
+@keyframes webgalTextBoxShowSoftly {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+@keyframes webgalTextDelayShow {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+.TextBox_Container {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  width: 2560px;
+  height: 1440px;
+  z-index: 6;
+  pointer-events: none;
+  animation: webgalTextBoxShowSoftly 0.6s ease-out forwards;
+}
+
+.TextBox_Background {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  width: 2560px;
+  height: 1440px;
+  z-index: 2;
+  border-radius: 0px;
+  background: rgba(11, 15, 23, 0.76);
+  backdrop-filter: blur(12px);
+  box-sizing: border-box;
+}
+
+.TextBox_main {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  width: 2560px;
+  height: 1440px;
+  z-index: 3;
+  border-radius: 0px;
+  padding: 260px 440px 180px 440px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  font-weight: normal;
+  color: #f8fafc;
+  letter-spacing: 0.12em;
+}
+
+.TextBox_main.TextBox_main_miniavatarOff {
+  padding: 260px 440px 180px 440px;
+}
+
+.TextBox_miniAvatarContainer {
+  position: absolute;
+  left: 72px;
+  bottom: 96px;
+  width: 300px;
+  height: 300px;
+  border-radius: 16px;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.TextBox_miniAvatarImg {
+  max-height: 100%;
+  max-width: 100%;
+  position: absolute;
+  bottom: 0px;
+  filter: drop-shadow(0px 6px 16px rgba(0, 0, 0, 0.55));
+}
+
+.TextBox_ShowName_Background {
+  position: absolute;
+  left: 440px;
+  top: 152px;
+  height: 76px;
+  min-width: 480px;
+  line-height: 68px;
+  padding: 0px 40px 8px 0px;
+  font-size: 48px;
+  border-radius: 0px;
+  z-index: 2;
+  background: transparent;
+  border: 0px solid transparent;
+  border-bottom: 2px solid rgba(226, 232, 240, 0.35);
+  white-space: nowrap;
+  box-sizing: border-box;
+}
+
+.TextBox_showName {
+  position: absolute;
+  left: 440px;
+  top: 152px;
+  height: 76px;
+  min-width: 480px;
+  line-height: 68px;
+  padding: 0px 40px 8px 0px;
+  font-size: 48px;
+  border-radius: 0px;
+  z-index: 3;
+  border: 0px solid transparent;
+  white-space: nowrap;
+  box-sizing: border-box;
+  color: #e2e8f0;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-shadow: 0px 2px 10px rgba(0, 0, 0, 0.65);
+}
+
+.TextBox_text {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding-left: 0.1em;
+  box-sizing: border-box;
+  color: #f8fafc;
+  text-shadow: 0px 2px 10px rgba(0, 0, 0, 0.65);
+}
+
+.TextBox_text.TextBox_text_read {
+  color: #94a3b8;
+}
+
+.TextBox_text ruby rt {
+  font-size: 0.45em;
+  line-height: 1;
+}
+
+.TextBox_textElement_start {
+  position: relative;
+  display: inline-flex;
+  align-content: space-between;
+  opacity: 0;
+  animation-name: webgalTextDelayShow;
+  animation-timing-function: ease-out;
+  animation-fill-mode: forwards;
+}
+
+.TextBox_textElement_Settled {
+  position: relative;
+  display: inline-flex;
+  align-content: space-between;
+  opacity: 1;
+}

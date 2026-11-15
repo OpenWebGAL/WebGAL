@@ -1,0 +1,34 @@
+{
+  "screen": "globalDialog",
+  "variantId": "default",
+  "name": "默认全局确认弹窗",
+  "version": "1.0.0",
+  "entry": "index.js",
+  "style": "style.scss",
+  "parts": [
+    {
+      "id": "main",
+      "name": "弹窗遮罩容器",
+      "selector": ".GlobalDialog_main",
+      "allowLayoutEdit": true
+    },
+    {
+      "id": "container",
+      "name": "弹窗内容条",
+      "selector": ".GlobalDialog_container",
+      "allowLayoutEdit": true
+    },
+    {
+      "id": "title",
+      "name": "弹窗标题",
+      "selector": ".GlobalDialog_title",
+      "allowLayoutEdit": false
+    },
+    {
+      "id": "button",
+      "name": "弹窗按钮",
+      "selector": ".GlobalDialog_button",
+      "allowLayoutEdit": false
+    }
+  ]
+}

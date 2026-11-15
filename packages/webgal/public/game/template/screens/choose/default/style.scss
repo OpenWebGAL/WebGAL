@@ -1,0 +1,44 @@
+.Choose_Main {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  width: 2560px;
+  height: 1440px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 13;
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.Choose_item {
+  font-family: inherit;
+  cursor: pointer;
+  min-width: 1280px;
+  padding: 16.96px 67.84px;
+  margin: 16.96px 0px;
+  font-size: 67.84px;
+  color: #8e354a;
+  text-align: center;
+  border-radius: 4px;
+  border: 3px solid rgba(0, 0, 0, 0);
+  box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.25);
+  background: rgba(255, 255, 255, 0.65);
+  transition: background-color 0.5s, border 0.5s, font-weight 0.5s, box-shadow 0.5s;
+}
+
+.Choose_item:hover {
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.35);
+  border: 3px solid #8e354a;
+}
+
+.Choose_item:disabled,
+.Choose_item.Choose_item_disabled {
+  cursor: not-allowed;
+  color: rgba(142, 53, 74, 0.5);
+  background: rgba(255, 255, 255, 0.5);
+  border: 3px solid rgba(0, 0, 0, 0);
+  box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.25);
+}

@@ -1,0 +1,222 @@
+@keyframes Flowchart_Elements_in {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+.Flowchart_backdrop {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  width: 2560px;
+  height: 1440px;
+  z-index: 15;
+  padding-bottom: 144px; /* 底部 144px 预留给 MenuPanel 浮层 */
+  box-sizing: border-box;
+  background-image: linear-gradient(to top, #accbee 0%, #e7f0fd 100%);
+  backdrop-filter: blur(50px);
+}
+
+.Flowchart_main {
+  font-family: "思源宋体", serif;
+  position: relative;
+  height: 100%;
+  width: 100%;
+  cursor: default;
+  display: flex;
+  flex-direction: column;
+}
+
+.flowchart_top {
+  height: 129.6px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  animation: Flowchart_Elements_in 0.7s ease-out forwards;
+  flex-shrink: 0;
+}
+
+.flowchart_title {
+  font-family: "思源宋体", serif;
+  letter-spacing: 0.1em;
+  width: auto;
+  font-size: 128px;
+  min-width: 350px;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  left: 20px;
+  top: 0px;
+  z-index: 0;
+  opacity: 0.22;
+  transform: translateY(-10px);
+  pointer-events: none;
+}
+
+.flowchart_title_text {
+  font-weight: bold;
+  color: transparent;
+  background: linear-gradient(135deg, #2B5F75 0%, #7ba8bc 100%);
+  text-shadow: 2px 2px 15px rgba(255, 255, 255, 0.5);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+.flowchart_body {
+  display: flex;
+  gap: 64px;
+  height: 1166.4px;
+  min-height: 0px;
+  padding: 12.8px 128px 25.6px 128px;
+  box-sizing: border-box;
+  animation: Flowchart_Elements_in 0.7s ease-out forwards;
+}
+
+.flowchart_sidebar {
+  width: 460.8px;
+  padding: 12.8px 0px;
+  flex-shrink: 0;
+  overflow: auto;
+}
+
+.flowchart_tab {
+  font-family: "资源圆体", serif;
+  display: block;
+  width: 100%;
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  margin: 0px 0px 25.92px 0px;
+  padding: 22.46px 27.65px;
+  border-radius: 4px;
+  text-align: left;
+  font-size: 34.56px;
+  color: rgba(52, 80, 92, 0.78);
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.78), rgba(239, 247, 250, 0.72));
+  cursor: pointer;
+  transition: color 0.25s, background 0.25s, border-color 0.25s;
+}
+
+.flowchart_tab:hover,
+.flowchart_tab.flowchart_tab_active {
+  color: #2B5F75;
+  border-color: rgba(43, 95, 117, 0.36);
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.95), rgba(226, 240, 246, 0.85));
+}
+
+.flowchart_content {
+  flex: 1;
+  min-width: 0px;
+  display: flex;
+  overflow-x: hidden;
+  overflow-y: auto;
+  user-select: none;
+  cursor: grab;
+  padding: 25.6px;
+  box-sizing: border-box;
+  border-radius: 4px;
+  background: linear-gradient(-45deg, rgba(255, 255, 255, 0.32), rgba(226, 240, 246, 0.2));
+  border: 1px solid rgba(255, 255, 255, 0.65);
+  box-shadow: inset 0px 0px 24px rgba(255, 255, 255, 0.38), 0px 10px 28px rgba(43, 95, 117, 0.06);
+}
+
+.flowchart_content.flowchart_content_dragging {
+  cursor: grabbing;
+}
+
+.flowchart_content.flowchart_content_dragging .flowchart_node_unlocked {
+  cursor: grabbing;
+}
+
+.flowchart_empty {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 46.08px;
+  color: rgba(52, 80, 92, 0.72);
+}
+
+.flowchart_canvas {
+  display: block;
+  flex: 0 0 auto;
+  margin: 0px auto;
+  overflow: visible;
+}
+
+.flowchart_line_unlocked {
+  fill: none;
+  stroke: #2B5F75;
+  stroke-width: 3px;
+  filter: drop-shadow(0px 0px 6px rgba(43, 95, 117, 0.28));
+  pointer-events: none;
+}
+
+.flowchart_line_locked {
+  fill: none;
+  stroke: #a9b7c4;
+  stroke-width: 3px;
+  stroke-dasharray: 7px 8px;
+  pointer-events: none;
+}
+
+.flowchart_arrow_unlocked {
+  fill: #2B5F75;
+}
+
+.flowchart_arrow_locked {
+  fill: #a9b7c4;
+}
+
+.flowchart_node {
+  font-family: "资源圆体", serif;
+  outline: none;
+}
+
+.flowchart_node.flowchart_node_unlocked {
+  cursor: pointer;
+}
+
+.flowchart_node.flowchart_node_locked {
+  cursor: default;
+  opacity: 0.62;
+}
+
+.flowchart_node_rect {
+  transition: stroke 0.2s, filter 0.2s;
+}
+
+.flowchart_node_rect.flowchart_node_rect_unlocked {
+  fill: url(#flowchart-node-unlocked);
+  stroke: #2B5F75;
+  stroke-width: 2px;
+  filter: url(#flowchart-node-glow);
+}
+
+.flowchart_node_unlocked:hover .flowchart_node_rect_unlocked,
+.flowchart_node_unlocked:focus-visible .flowchart_node_rect_unlocked {
+  stroke: #1f4e63;
+  filter: drop-shadow(0px 0px 10px rgba(43, 95, 117, 0.42));
+}
+
+.flowchart_node_rect.flowchart_node_rect_locked {
+  fill: url(#flowchart-node-locked);
+  stroke: rgba(154, 174, 194, 0.8);
+  stroke-width: 1.5px;
+}
+
+.flowchart_node_label {
+  fill: #243f4b;
+  font-size: 22px;
+  font-weight: bold;
+  stroke: rgba(255, 255, 255, 0.85);
+  stroke-width: 3px;
+  paint-order: stroke fill;
+  pointer-events: none;
+}
+
+.flowchart_node_locked .flowchart_node_label {
+  fill: rgba(97, 115, 133, 0.72);
+}

@@ -1,0 +1,52 @@
+{
+  "screen": "options",
+  "variantId": "single-scroll",
+  "name": "单页分组滚动",
+  "version": "1.0.0",
+  "entry": "index.js",
+  "style": "style.scss",
+  "parts": [
+    {
+      "id": "main",
+      "name": "选项页面容器",
+      "selector": ".Options_Scroll_main",
+      "allowLayoutEdit": true
+    },
+    {
+      "id": "header",
+      "name": "顶部标题栏",
+      "selector": ".Options_Scroll_header",
+      "allowLayoutEdit": true
+    },
+    {
+      "id": "titleText",
+      "name": "标题文本",
+      "selector": ".Options_Scroll_titleText",
+      "allowLayoutEdit": true
+    },
+    {
+      "id": "content",
+      "name": "单页滚动内容区",
+      "selector": ".Options_Scroll_content",
+      "allowLayoutEdit": true
+    },
+    {
+      "id": "section",
+      "name": "分组卡片",
+      "selector": ".Options_Scroll_section",
+      "allowLayoutEdit": false
+    },
+    {
+      "id": "optionButton",
+      "name": "选项按钮",
+      "selector": ".Options_Scroll_button",
+      "allowLayoutEdit": false
+    },
+    {
+      "id": "textPreview",
+      "name": "文本预览框",
+      "selector": ".Options_Scroll_preview",
+      "allowLayoutEdit": true
+    }
+  ]
+}
