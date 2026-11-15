@@ -3,7 +3,7 @@
   "version": "4.6.7",
   "scripts": {
     "dev": "vite --host --port 3000",
-    "build": "node scripts/update-engine-version.js && cross-env NODE_ENV=production tsc && vite build --base=./",
+    "build": "node scripts/update-engine-version.js && node scripts/build-default-template-screens.mjs && cross-env NODE_ENV=production tsc && vite build --base=./",
     "preview": "vite preview",
     "lint": "eslint \"src/**/*.{ts,tsx}\" --fix",
     "prepublishOnly": "npm run build"
@@ -27,19 +27,20 @@
     "pixi-live2d-display-webgal": "^0.5.19",
     "pixi.js": "^6.3.0",
     "popmotion": "^11.0.5",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "react-i18next": "^12.2.2",
     "react-redux": "^8.0.1",
     "sass": "^1.49.9",
+    "stylis": "^4.2.0",
     "uuid": "^9.0.0",
     "vite-plugin-package-version": "^1.0.2"
   },
   "devDependencies": {
     "@types/lodash": "^4.14.180",
     "@types/node": "^17.0.23",
-    "@types/react": "^17.0.33",
-    "@types/react-dom": "^17.0.10",
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
     "@types/uuid": "^8.3.4",
     "@eslint/js": "^9.39.5",
     "@vitejs/plugin-react": "^4.0.4",
