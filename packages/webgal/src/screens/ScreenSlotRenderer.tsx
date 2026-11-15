@@ -2,8 +2,10 @@ import { useEffect, useState } from 'react';
 import { WebGAL } from '@/Core/WebGAL';
 import type { ScreenPropsMap, UiScreenId } from '@/screens/contracts';
 import {
+  clearPreviousReadyScreenState,
   ensureCustomScreenLoaded,
   getCustomScreenState,
+  getPreviousReadyScreenState,
   loadCustomScreenStyle,
   subscribeScreenLoader,
 } from '@/screens/screenLoader';
@@ -58,6 +60,7 @@ export function ScreenSlotRenderer<TScreen extends UiScreenId>({
   const defaultFallbackNode = <DefaultBuiltInComponent {...screenProps} />;
 
   const restoreDefaultStyle = () => {
+    clearPreviousReadyScreenState(screen);
     void loadCustomScreenStyle(screen, defaultBuiltIn.variantId);
   };
 
@@ -77,30 +80,50 @@ export function ScreenSlotRenderer<TScreen extends UiScreenId>({
   }
 
   const customState = getCustomScreenState(screen, variantId);
-  if (customState?.status !== 'ready' || !customState.component) {
+  if (customState?.status === 'ready' && customState.component) {
+    const CustomComponent = customState.component;
+    return (
+      <ScreenErrorBoundary
+        screen={screen}
+        resetKey={`${screen}:custom:${variantId}:${customState.epoch}`}
+        fallback={defaultFallbackNode}
+        onError={restoreDefaultStyle}
+      >
+        <CustomComponent key={`${screen}:${variantId}`} {...screenProps} />
+      </ScreenErrorBoundary>
+    );
+  }
+
+  if (customState?.status === 'error') {
     const builtInFallback = getBuiltInScreenVariant(screen, variantId) ?? defaultBuiltIn;
     const BuiltInFallbackComponent = builtInFallback.component;
     return (
       <ScreenErrorBoundary
         screen={screen}
-        resetKey={`${screen}:fallback:${builtInFallback.variantId}:${templateEpoch}`}
+        resetKey={`${screen}:fallback:${builtInFallback.variantId}`}
         fallback={defaultFallbackNode}
         onError={builtInFallback.variantId !== defaultBuiltIn.variantId ? restoreDefaultStyle : undefined}
       >
-        <BuiltInFallbackComponent {...screenProps} />
+        <BuiltInFallbackComponent key={`${screen}:${builtInFallback.variantId}`} {...screenProps} />
       </ScreenErrorBoundary>
     );
   }
 
-  const CustomComponent = customState.component;
-  return (
-    <ScreenErrorBoundary
-      screen={screen}
-      resetKey={`${screen}:custom:${variantId}:${customState.epoch}:${templateEpoch}`}
-      fallback={defaultFallbackNode}
-      onError={restoreDefaultStyle}
-    >
-      <CustomComponent {...screenProps} />
-    </ScreenErrorBoundary>
-  );
+  // Keep the last ready screen mounted during async reload/switch transitions to avoid fallback flicker.
+  const prevReady = getPreviousReadyScreenState(screen);
+  if (prevReady?.component) {
+    const PrevComponent = prevReady.component;
+    return (
+      <ScreenErrorBoundary
+        screen={screen}
+        resetKey={`${screen}:prev:${prevReady.variantId}:${prevReady.epoch}`}
+        fallback={defaultFallbackNode}
+        onError={restoreDefaultStyle}
+      >
+        <PrevComponent key={`${screen}:${prevReady.variantId}`} {...screenProps} />
+      </ScreenErrorBoundary>
+    );
+  }
+
+  return null;
 }

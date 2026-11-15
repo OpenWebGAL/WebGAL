@@ -346,6 +346,7 @@ export function useScreenParts(
     const listener = () => setTick((v) => v + 1);
     set.add(listener);
     registerScreenMetadata(screen, parts, defaultCssText);
+    globalListeners.forEach((cb) => cb());
     return () => {
       set?.delete(listener);
     };

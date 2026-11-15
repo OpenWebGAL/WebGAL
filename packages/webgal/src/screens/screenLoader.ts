@@ -23,6 +23,7 @@ export interface CustomScreenLoadState {
 }
 
 const customScreenCache = new Map<string, CustomScreenLoadState>();
+const lastReadyScreenMap = new Map<UiScreenId, CustomScreenLoadState>();
 const loaderListeners = new Set<() => void>();
 let reloadEpoch = 0;
 
@@ -46,6 +47,34 @@ export function getCustomScreenState(screen: UiScreenId, variantId: string): Cus
   return state?.epoch === reloadEpoch ? state : undefined;
 }
 
+export function getPreviousReadyScreenState(screen: UiScreenId): CustomScreenLoadState | undefined {
+  return lastReadyScreenMap.get(screen);
+}
+
+export function clearPreviousReadyScreenState(screen: UiScreenId): void {
+  lastReadyScreenMap.delete(screen);
+}
+
+function getDocumentBaseUrl(): string {
+  if (typeof document !== 'undefined' && document.baseURI) {
+    return document.baseURI;
+  }
+  if (typeof window !== 'undefined' && window.location?.href) {
+    return window.location.href;
+  }
+  return '';
+}
+
+function resolveScreenHref(relativePath: string): string {
+  const base = getDocumentBaseUrl();
+  if (!base) return relativePath;
+  try {
+    return new URL(relativePath, base).href;
+  } catch {
+    return relativePath;
+  }
+}
+
 function resolveScreenComponent(mod: CustomScreenModule): ComponentType<any> | null {
   const candidate = mod.default ?? mod.Screen;
   if (typeof candidate === 'function' || (typeof candidate === 'object' && candidate !== null)) {
@@ -60,8 +89,8 @@ function buildScreenAssetUrls(screen: UiScreenId, variantId: string) {
   return {
     baseUrl,
     scssPath: `${relativeDir}/style.scss`,
-    scssUrl: `${baseUrl}style.scss`,
-    entryUrl: `${baseUrl}index.js`,
+    scssUrl: resolveScreenHref(`${baseUrl}style.scss`),
+    entryUrl: resolveScreenHref(`${baseUrl}index.js`),
   };
 }
 
@@ -109,7 +138,7 @@ export function ensureCustomScreenLoaded(screen: UiScreenId, variantId: string):
       await loadCustomScreenStyle(screen, variantId);
       if (currentEpoch !== reloadEpoch) return;
       registerScreenMetadata(screen, rawMod.parts ?? [], rawMod.defaultCssText ?? '');
-      customScreenCache.set(key, {
+      const readyState: CustomScreenLoadState = {
         status: 'ready',
         screen,
         variantId,
@@ -117,12 +146,15 @@ export function ensureCustomScreenLoaded(screen: UiScreenId, variantId: string):
         module: rawMod,
         epoch: currentEpoch,
         promise: loadPromise,
-      });
+      };
+      customScreenCache.set(key, readyState);
+      lastReadyScreenMap.set(screen, readyState);
       notifyLoaderListeners();
     } catch (err: unknown) {
       if (currentEpoch !== reloadEpoch) return;
       const error = err instanceof Error ? err : new Error(String(err));
       logger.warn(`Failed to load custom screen "${screen}/${variantId}", falling back to built-in default.`, error);
+      lastReadyScreenMap.delete(screen);
       customScreenCache.set(key, {
         status: 'error',
         screen,
@@ -156,9 +188,10 @@ export function ensureCustomScreenLoaded(screen: UiScreenId, variantId: string):
 export async function reloadTemplateScreens(template?: WebgalTemplate | null): Promise<void> {
   reloadEpoch += 1;
   customScreenCache.clear();
-  clearTemplateScreenStyles();
 
   if (!isCustomUiTemplate(template)) {
+    lastReadyScreenMap.clear();
+    clearTemplateScreenStyles();
     notifyLoaderListeners();
     return;
   }
