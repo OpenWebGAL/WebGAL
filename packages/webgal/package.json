@@ -1,6 +1,6 @@
 {
   "name": "webgal-engine",
-  "version": "4.7.0-preview.0",
+  "version": "4.7.0-preview.1",
   "scripts": {
     "dev": "node scripts/build-default-template-screens.mjs && vite --host --port 3000",
     "build": "node scripts/update-engine-version.js && node scripts/build-default-template-screens.mjs && cross-env NODE_ENV=production tsc && vite build --base=./",
