@@ -1,6 +1,6 @@
 {
   "name": "create-webgal-ui",
-  "version": "4.7.0-preview.1",
+  "version": "4.7.0-preview.2",
   "description": "Scaffold a standalone custom UI Screen plugin for WebGAL",
   "type": "module",
   "bin": {
