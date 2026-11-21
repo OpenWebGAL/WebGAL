@@ -1,6 +1,7 @@
 import { getFastSaveFromStorage, getSavesFromStorage } from '@/Core/controller/storage/savesController';
 import { getStorage } from '@/Core/controller/storage/storageController';
 import { setEbg } from '@/Core/gameScripts/changeBg/setEbg';
+import { applyLandingImage } from '@/Core/util/coreInitialFunction/applyLandingImage';
 import { assetSetter, fileType } from '@/Core/util/gameAssetsAccess/assetSetter';
 import { WebGAL } from '@/Core/WebGAL';
 import { setGuiAsset, setLogoImage } from '@/store/GUIReducer';
@@ -9,7 +10,7 @@ import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 
 const useConfigData = () => {
-  const _map = ['Title_img', 'Game_Logo', 'Title_bgm', 'Game_name', 'Game_key'];
+  const _map = ['Title_img', 'Landing_img', 'Game_Logo', 'Title_bgm', 'Game_name', 'Game_key'];
   const configData = useSelector((state: RootState) => state.userData.globalGameVar);
   return useEffect(() => {
     // configData发生变化
@@ -23,6 +24,11 @@ const useConfigData = () => {
           const titleUrl = assetSetter(val, fileType.background);
           webgalStore.dispatch(setGuiAsset({ asset: 'titleBg', value: titleUrl }));
           setEbg(titleUrl);
+          break;
+        }
+
+        case 'Landing_img': {
+          applyLandingImage(val);
           break;
         }
 
@@ -55,6 +61,13 @@ const useConfigData = () => {
       }
     }
     return () => {};
-  }, [configData.Game_Logo, configData.Game_key, configData.Game_name, configData.Title_bgm, configData.Title_img]);
+  }, [
+    configData.Game_Logo,
+    configData.Game_key,
+    configData.Game_name,
+    configData.Landing_img,
+    configData.Title_bgm,
+    configData.Title_img,
+  ]);
 };
 export default useConfigData;
