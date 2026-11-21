@@ -1,41 +1,69 @@
 import axios from 'axios';
+import { __INFO } from '@/config/info';
 import { logger } from '@/Core/util/logger';
+import { notifyTemplateIncompatible } from '@/Core/util/syncWithEditor/runtime/uiEditorBridge';
 import { WebGAL } from '@/Core/WebGAL';
 import { TemplateFontDescriptor, WebgalTemplate } from '@/types/template';
 import { buildFontOptionsFromTemplate } from '@/Core/util/fonts/fontOptions';
 import { webgalStore } from '@/store/store';
 import { setFontOptions } from '@/store/GUIReducer';
 import { setOptionData } from '@/store/userDataReducer';
-import { scss2cssinjsParser } from '@/Core/controller/customUI/scss2cssinjsParser';
-import { injectGlobal } from '@emotion/css';
-import { isCustomUiTemplate } from '@/screens/screenRegistry';
+import { checkTemplateCompatibility } from '@/screens/screenRegistry';
 import { reloadTemplateScreens } from '@/screens/screenLoader';
 
 const TEMPLATE_PATH = './game/template/template.json';
 const TEMPLATE_FONT_STYLE_SELECTOR = 'style[data-webgal-template-fonts]';
 let styleUpdateListenerAttached = false;
 
+function ensureStyleUpdateListener(): void {
+  if (styleUpdateListenerAttached) return;
+  styleUpdateListenerAttached = true;
+  WebGAL.events.styleUpdate.on(() => {
+    void loadTemplate();
+  });
+}
+
 export async function loadTemplate(): Promise<WebgalTemplate | null> {
+  ensureStyleUpdateListener();
   try {
     const { data } = await axios.get<WebgalTemplate>(`${TEMPLATE_PATH}?t=${Date.now()}`);
+    const compat = checkTemplateCompatibility(data, __INFO.version);
+    if (!compat.compatible) {
+      // eslint-disable-next-line no-console
+      console.warn(
+        `[WebGAL] 模板 "${data?.name ?? 'unknown'}" (webgal-version: ${
+          data?.['webgal-version'] ?? 'unknown'
+        }) 与当前引擎 (${__INFO.version}) 不兼容，已回退至内置默认界面。`,
+      );
+      notifyTemplateIncompatible({
+        templateName: data?.name,
+        templateVersion: data?.['webgal-version'],
+        engineVersion: __INFO.version,
+        reason: compat.reason,
+      });
+      WebGAL.template = null;
+      updateFontOptions([]);
+      await reloadTemplateScreens(null);
+      WebGAL.events.afterStyleUpdate.emit();
+      return null;
+    }
+
+    notifyTemplateIncompatible(null);
     WebGAL.template = data;
     const fonts = data.fonts ?? [];
     injectTemplateFonts(fonts);
     updateFontOptions(fonts);
-    await loadStyleFiles();
-    if (!styleUpdateListenerAttached) {
-      styleUpdateListenerAttached = true;
-      WebGAL.events.styleUpdate.on(() => {
-        void loadTemplate();
-      });
-    }
+    await reloadTemplateScreens(data);
+    WebGAL.events.afterStyleUpdate.emit();
     WebGAL.events.templateLoaded.emit(data);
     return data;
   } catch (error) {
     logger.warn('加载模板文件失败', error);
+    notifyTemplateIncompatible(null);
     WebGAL.template = null;
     updateFontOptions([]);
     await reloadTemplateScreens(null);
+    WebGAL.events.afterStyleUpdate.emit();
     return null;
   }
 }
@@ -51,21 +79,19 @@ function updateFontOptions(fonts: TemplateFontDescriptor[]): void {
 }
 
 function injectTemplateFonts(fonts: TemplateFontDescriptor[]): void {
-  if (!fonts.length) return;
-  const rules = fonts.map((font) => generateFontFaceRule(font)).filter((rule): rule is string => Boolean(rule));
-
-  if (!rules.length) return;
-
-  const styleElement = document.createElement('style');
-  styleElement.setAttribute('data-webgal-template-fonts', 'true');
-  styleElement.appendChild(document.createTextNode(rules.join('\n')));
-
   const head = document.head;
   if (!head) return;
 
   const existing = head.querySelector<HTMLStyleElement>(TEMPLATE_FONT_STYLE_SELECTOR);
   existing?.remove();
 
+  if (!fonts.length) return;
+  const rules = fonts.map((font) => generateFontFaceRule(font)).filter((rule): rule is string => Boolean(rule));
+  if (!rules.length) return;
+
+  const styleElement = document.createElement('style');
+  styleElement.setAttribute('data-webgal-template-fonts', 'true');
+  styleElement.appendChild(document.createTextNode(rules.join('\n')));
   head.appendChild(styleElement);
 }
 
@@ -90,39 +116,4 @@ function resolveTemplateAssetPath(path: string): string {
   }
   const normalized = path.replace(/^[./]+/, '');
   return `./game/template/${normalized}`;
-}
-
-async function loadStyleFiles() {
-  if (isCustomUiTemplate(WebGAL.template)) {
-    WebGAL.styleObjects.clear();
-    await reloadTemplateScreens(WebGAL.template);
-    WebGAL.events.afterStyleUpdate.emit();
-    return;
-  }
-
-  await reloadTemplateScreens(null);
-
-  // TODO: 以后应该改成从 templates.json 读取，而不是现在这样写死
-  const TEMPLATES: { ui: string; path: string }[] = [
-    { ui: 'title', path: 'UI/Title/title.scss' },
-    { ui: 'textbox', path: 'Stage/TextBox/textbox.scss' },
-    { ui: 'choose', path: 'Stage/Choose/choose.scss' },
-  ];
-
-  await Promise.all(
-    TEMPLATES.map(async (templatePath) => {
-      try {
-        logger.info(`加载模板样式文件: ${templatePath.path}`);
-        const resp = await axios.get(`game/template/${templatePath.path}`);
-        const scssStr = resp.data;
-        const styleObject = scss2cssinjsParser(scssStr);
-        WebGAL.styleObjects.set(templatePath.ui, styleObject);
-        injectGlobal(styleObject.others);
-      } catch (error) {
-        logger.warn(`加载模板样式文件失败: ${templatePath.path}`, error);
-      }
-    }),
-  );
-
-  WebGAL.events.afterStyleUpdate.emit();
 }

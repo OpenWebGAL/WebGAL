@@ -6,20 +6,14 @@ import { getTextLineLimit, useTextAnimationDuration, useTextDelay } from '@/hook
 import { getTextSize } from '@/UI/getTextSize';
 import { match } from '@/Core/util/match';
 import { textSize } from '@/store/userDataInterface';
-import IMSSTextbox from '@/Stage/TextBox/IMSSTextbox';
-import { SCREEN_CONSTANTS } from '@/Core/util/constants';
 import useEscape from '@/hooks/useEscape';
 import { useStageState } from '@/hooks/useStageState';
 import { concatTextLines } from './concatTextLines';
 import { getDialogSegments } from '@/Core/Modules/stage/dialogText';
 import { WebGAL } from '@/Core/WebGAL';
 import { ScreenSlotRenderer } from '@/screens/ScreenSlotRenderer';
-import { useIsCustomUiTemplate, useUiCommonProps } from '@/screens/stage/shared';
+import { useUiCommonProps } from '@/screens/stage/shared';
 import { getMockTextBoxSample, useActiveUiScreen, useUiMockDataEnabled } from '@/sdk/mockData';
-
-const userAgent = navigator.userAgent;
-const isFirefox = /firefox/i.test(userAgent);
-const isSafari = /^((?!chrome|android).)*safari/i.test(userAgent);
 
 export interface EnhancedNode {
   reactNode: ReactNode;
@@ -28,7 +22,6 @@ export interface EnhancedNode {
 
 export const TextBox = () => {
   const stageState = useStageState();
-  const guiState = useSelector((state: RootState) => state.GUI);
   const userDataState = useSelector((state: RootState) => state.userData);
   const textDelay = useTextDelay(userDataState.optionData.textSpeed);
   const textDuration = useTextAnimationDuration(userDataState.optionData.textSpeed);
@@ -48,123 +41,58 @@ export const TextBox = () => {
     lineLimit,
   );
   const isHasName = stageState.showName !== '';
-  const showName = compileSentence(stageState.showName, lineLimit);
   const currentDialogKey = stageState.currentDialogKey;
   const miniAvatar = stageState.miniAvatar;
   const textboxOpacity = userDataState.optionData.textboxOpacity;
-  const Textbox = IMSSTextbox;
-  const fontOptimization = guiState.fontOptimization;
 
-  const isCustomUi = useIsCustomUiTemplate();
   const mockDataEnabled = useUiMockDataEnabled();
   const activeUiScreen = useActiveUiScreen();
   const uiCommon = useUiCommonProps();
   const [settledSignal, setSettledSignal] = useState(0);
-  const [isShowStroke, setIsShowStroke] = useState(true);
 
   useEffect(() => {
-    if (!isCustomUi) return;
     const onSettle = () => setSettledSignal((v) => v + 1);
     WebGAL.events.textSettle.on(onSettle);
     return () => {
       WebGAL.events.textSettle.off(onSettle);
     };
-  }, [isCustomUi]);
+  }, []);
 
-  useEffect(() => {
-    if (!fontOptimization) {
-      setIsShowStroke(true);
-      return;
-    }
-
-    const handleResize = () => {
-      const targetHeight = SCREEN_CONSTANTS.height;
-      const targetWidth = SCREEN_CONSTANTS.width;
-
-      const h = window.innerHeight; // 窗口高度
-      const w = window.innerWidth; // 窗口宽度
-      const zoomH = h / targetHeight; // 以窗口高度为基准的变换比
-      const zoomW = w / targetWidth; // 以窗口宽度为基准的变换比
-      const zoomH2 = w / targetHeight; // 竖屏时以窗口高度为基础的变换比
-      const zoomW2 = h / targetWidth; // 竖屏时以窗口宽度为基础的变换比
-      [zoomH, zoomW, zoomH2, zoomW2].forEach((e) => {
-        if (e <= 0.2) {
-          setIsShowStroke(false);
-        } else {
-          setIsShowStroke(true);
-        }
-      });
-    };
-    window.addEventListener('resize', handleResize);
-    handleResize();
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  }, [fontOptimization]);
-
-  if (isCustomUi) {
-    const customLineHeight = Number(userDataState.globalGameVar.Line_height);
-    const defaultLineHeight = textSizeState === textSize.medium ? 2.2 : 2;
-    const lineHeight = !Number.isNaN(customLineHeight) && customLineHeight > 0 ? customLineHeight : defaultLineHeight;
-    const fontSizePercent = Number.parseFloat(size) || getTextSize(textSizeState);
-    const dialogSegments = getDialogSegments(stageState);
-    const mockSample = mockDataEnabled ? getMockTextBoxSample() : null;
-    const isTextboxPreview = activeUiScreen === 'textbox';
-
-    return (
-      <ScreenSlotRenderer
-        screen="textbox"
-        screenProps={{
-          visible: isTextboxPreview || Boolean(mockSample) || isText,
-          isHasName: Boolean(mockSample) || isTextboxPreview || isHasName,
-          showName: mockSample ? mockSample.showName : stageState.showName,
-          dialogSegments: mockSample ? mockSample.dialogSegments : dialogSegments,
-          currentDialogKey: mockSample ? mockSample.currentDialogKey : currentDialogKey,
-          isRead: mockSample ? false : isRead,
-          isPreview: isTextboxPreview,
-          miniAvatarUrl: miniAvatar,
-          fontFamily: font,
-          fontSizePercent,
-          lineHeight,
-          lineLimit,
-          textDelayMs: textDelay,
-          textDurationMs: textDuration,
-          textRevealEndMs:
-            !mockSample && stageState.isDialogNotend
-              ? (textArray.flat().length - concatPrefixNodeCount) * textDelay
-              : undefined,
-          textboxOpacity,
-          isDialogNotend: mockSample ? false : Boolean(stageState.isDialogNotend),
-          settledSignal,
-          ...uiCommon,
-        }}
-      />
-    );
-  }
+  const customLineHeight = Number(userDataState.globalGameVar.Line_height);
+  const defaultLineHeight = textSizeState === textSize.medium ? 2.2 : 2;
+  const lineHeight = !Number.isNaN(customLineHeight) && customLineHeight > 0 ? customLineHeight : defaultLineHeight;
+  const fontSizePercent = Number.parseFloat(size) || getTextSize(textSizeState);
+  const dialogSegments = getDialogSegments(stageState);
+  const mockSample = mockDataEnabled ? getMockTextBoxSample() : null;
+  const isTextboxPreview = activeUiScreen === 'textbox';
 
   return (
-    <Textbox
-      textArray={textArray}
-      isRead={isRead}
-      isText={isText}
-      textDelay={textDelay}
-      showName={showName}
-      isHasName={isHasName}
-      concatPrefixNodeCount={concatPrefixNodeCount}
-      fontSize={size}
-      currentDialogKey={currentDialogKey}
-      isSafari={isSafari}
-      isFirefox={isFirefox}
-      miniAvatar={miniAvatar}
-      textDuration={textDuration}
-      textRevealEnd={
-        stageState.isDialogNotend ? (textArray.flat().length - concatPrefixNodeCount) * textDelay : undefined
-      }
-      font={font}
-      textSizeState={textSizeState}
-      lineLimit={lineLimit}
-      isUseStroke={isShowStroke}
-      textboxOpacity={textboxOpacity}
+    <ScreenSlotRenderer
+      screen="textbox"
+      screenProps={{
+        visible: isTextboxPreview || Boolean(mockSample) || isText,
+        isHasName: Boolean(mockSample) || isTextboxPreview || isHasName,
+        showName: mockSample ? mockSample.showName : stageState.showName,
+        dialogSegments: mockSample ? mockSample.dialogSegments : dialogSegments,
+        currentDialogKey: mockSample ? mockSample.currentDialogKey : currentDialogKey,
+        isRead: mockSample ? false : isRead,
+        isPreview: isTextboxPreview,
+        miniAvatarUrl: miniAvatar,
+        fontFamily: font,
+        fontSizePercent,
+        lineHeight,
+        lineLimit,
+        textDelayMs: textDelay,
+        textDurationMs: textDuration,
+        textRevealEndMs:
+          !mockSample && stageState.isDialogNotend
+            ? (textArray.flat().length - concatPrefixNodeCount) * textDelay
+            : undefined,
+        textboxOpacity,
+        isDialogNotend: mockSample ? false : Boolean(stageState.isDialogNotend),
+        settledSignal,
+        ...uiCommon,
+      }}
     />
   );
 };

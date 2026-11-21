@@ -6,6 +6,7 @@ import {
   getBuiltInScreenVariant,
   getConfiguredScreenVariantId,
   getDefaultBuiltInVariant,
+  hasBuiltInScreenVariant,
   isCustomUiTemplate,
 } from '@/screens/screenRegistry';
 import { clearTemplateScreenStyles, registerScreenMetadata, setScreenTemplateStyles } from '@/sdk/styleRuntime';
@@ -152,6 +153,24 @@ export function ensureCustomScreenLoaded(screen: UiScreenId, variantId: string):
       notifyLoaderListeners();
     } catch (err: unknown) {
       if (currentEpoch !== reloadEpoch) return;
+      if (hasBuiltInScreenVariant(screen, variantId)) {
+        const builtIn = getBuiltInScreenVariant(screen, variantId)!;
+        await loadCustomScreenStyle(screen, variantId);
+        if (currentEpoch !== reloadEpoch) return;
+        registerScreenMetadata(screen, builtIn.parts, builtIn.defaultCssText);
+        const readyBuiltInState: CustomScreenLoadState = {
+          status: 'ready',
+          screen,
+          variantId,
+          component: builtIn.component,
+          epoch: currentEpoch,
+          promise: loadPromise,
+        };
+        customScreenCache.set(key, readyBuiltInState);
+        lastReadyScreenMap.set(screen, readyBuiltInState);
+        notifyLoaderListeners();
+        return;
+      }
       const error = err instanceof Error ? err : new Error(String(err));
       logger.warn(`Failed to load custom screen "${screen}/${variantId}", falling back to built-in default.`, error);
       lastReadyScreenMap.delete(screen);

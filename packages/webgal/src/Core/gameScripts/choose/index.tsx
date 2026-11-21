@@ -3,19 +3,15 @@ import { createNonePerform, IPerform } from '@/Core/Modules/perform/performInter
 import { changeScene } from '@/Core/controller/scene/changeScene';
 import { jmp } from '@/Core/gameScripts/label/jmp';
 import ReactDOM from 'react-dom';
-import React from 'react';
-import styles from './choose.module.scss';
 import { webgalStore } from '@/store/store';
-import { useSEByWebgalStore } from '@/hooks/useSoundEffect';
 import { WebGAL } from '@/Core/WebGAL';
 import { whenChecker } from '@/Core/controller/gamePlay/scriptExecutor';
 import useEscape from '@/hooks/useEscape';
-import useApplyStyle from '@/hooks/useApplyStyle';
 import { Provider } from 'react-redux';
 import { useFontFamily } from '@/hooks/useFontFamily';
 import { getNumberArgByKey } from '@/Core/util/getSentenceArg';
 import { ScreenSlotRenderer } from '@/screens/ScreenSlotRenderer';
-import { useIsCustomUiTemplate, useUiCommonProps } from '@/screens/stage/shared';
+import { useUiCommonProps } from '@/screens/stage/shared';
 import { useActiveUiScreen } from '@/sdk/mockData';
 
 class ChooseOption {
@@ -56,7 +52,6 @@ class ChooseOption {
 
 /**
  * 显示选择枝
- * @param sentence
  */
 export const choose = (sentence: ISentence): IPerform => {
   const chooseOptionScripts = sentence.content.split(/(?<!\\)\|/);
@@ -67,8 +62,6 @@ export const choose = (sentence: ISentence): IPerform => {
   if (defaultPreviewChoice) {
     selectChooseOption(defaultPreviewChoice, false);
     if (!defaultPreviewChoice.jumpToScene) {
-      // The default preview choice is resolved during script calculation.
-      // Let scriptExecutor continue from the target label in this same forward.
       sentence.args.push({ key: 'next', value: true });
     }
     return createNonePerform({ blockingAuto: false });
@@ -101,7 +94,6 @@ export const choose = (sentence: ISentence): IPerform => {
 };
 
 function getDefaultPreviewChoice(chooseOptions: ChooseOption[], defaultChoose: number | null): ChooseOption | null {
-  // Only realtime preview may consume defaultChoose automatically; ordinary fast-forward must still wait.
   if (!WebGAL.gameplay.isFastPreview || defaultChoose === null) {
     return null;
   }
@@ -126,70 +118,36 @@ function selectChooseOption(option: ChooseOption, autoNext = true) {
 
 function Choose(props: { chooseOptions: ChooseOption[] }) {
   const font = useFontFamily();
-  const { playSeEnter, playSeClick } = useSEByWebgalStore();
-  const applyStyle = useApplyStyle('choose');
-  const isCustomUi = useIsCustomUiTemplate();
   const activeUiScreen = useActiveUiScreen();
   const uiCommon = useUiCommonProps();
 
-  if (isCustomUi) {
-    if (activeUiScreen !== null && activeUiScreen !== 'choose') {
-      return null;
-    }
-    const visibleOptions = props.chooseOptions.filter((e) => whenChecker(e.showCondition));
-    const options = visibleOptions.map((e, index) => ({
-      id: `${e.jump}:${index}`,
-      text: e.text,
-      disabled: !whenChecker(e.enableCondition),
-    }));
-    const optionMap = new Map<string, ChooseOption>(
-      visibleOptions.map((e, index) => [`${e.jump}:${index}`, e] as const),
-    );
-
-    return (
-      <ScreenSlotRenderer
-        screen="choose"
-        screenProps={{
-          visible: true,
-          options,
-          fontFamily: font,
-          onSelect: (id) => {
-            const target = optionMap.get(id);
-            if (!target || !whenChecker(target.enableCondition)) return;
-            WebGAL.gameplay.performController.unmountPerform('choose');
-            selectChooseOption(target);
-          },
-          ...uiCommon,
-        }}
-      />
-    );
+  if (activeUiScreen !== null && activeUiScreen !== 'choose') {
+    return null;
   }
 
-  // 运行时计算JSX.Element[]
-  const runtimeBuildList = (chooseListFull: ChooseOption[]) => {
-    return chooseListFull
-      .filter((e, i) => whenChecker(e.showCondition))
-      .map((e, i) => {
-        const enable = whenChecker(e.enableCondition);
-        const className = enable
-          ? applyStyle('Choose_item', styles.Choose_item)
-          : applyStyle('Choose_item_disabled', styles.Choose_item_disabled);
-        const onClick = enable
-          ? () => {
-              playSeClick();
-              WebGAL.gameplay.performController.unmountPerform('choose');
-              selectChooseOption(e);
-            }
-          : () => {};
-        return (
-          <div className={applyStyle('Choose_item_outer', styles.Choose_item_outer)} key={e.jump + i}>
-            <div className={className} style={{ fontFamily: font }} onClick={onClick} onMouseEnter={playSeEnter}>
-              {e.text}
-            </div>
-          </div>
-        );
-      });
-  };
+  const visibleOptions = props.chooseOptions.filter((e) => whenChecker(e.showCondition));
+  const options = visibleOptions.map((e, index) => ({
+    id: `${e.jump}:${index}`,
+    text: e.text,
+    disabled: !whenChecker(e.enableCondition),
+  }));
+  const optionMap = new Map<string, ChooseOption>(visibleOptions.map((e, index) => [`${e.jump}:${index}`, e] as const));
 
-  return <div className={applyStyle('Choose_Main', styles.Choose_Main)}>{runtimeBuildList(props.chooseOptions)}</div>;
+  return (
+    <ScreenSlotRenderer
+      screen="choose"
+      screenProps={{
+        visible: true,
+        options,
+        fontFamily: font,
+        onSelect: (id) => {
+          const target = optionMap.get(id);
+          if (!target || !whenChecker(target.enableCondition)) return;
+          WebGAL.gameplay.performController.unmountPerform('choose');
+          selectChooseOption(target);
+        },
+        ...uiCommon,
+      }}
+    />
+  );
 }

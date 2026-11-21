@@ -25,6 +25,7 @@ import {
   type SetUiMockDataPayload,
   type SetUiPartStylePayload,
   type SetUiPseudoStatePayload,
+  type TemplateIncompatiblePayload,
   type UiLogicalBox,
   type UiPartDescriptor,
   type UiPreviewMode,
@@ -38,8 +39,19 @@ const SELECTED_ATTR = 'data-webgal-selected-part';
 type ApplyStyleReporter = (content: string) => void;
 let activeApplyStyleReporter: ApplyStyleReporter | null = null;
 
+type TemplateIncompatibleReporter = (payload: TemplateIncompatiblePayload) => void;
+let activeTemplateIncompatibleReporter: TemplateIncompatibleReporter | null = null;
+let cachedIncompatibleTemplate: TemplateIncompatiblePayload | null = null;
+
 export function notifyApplyStyleIgnored(content: string): void {
   activeApplyStyleReporter?.(content);
+}
+
+export function notifyTemplateIncompatible(payload: TemplateIncompatiblePayload | null): void {
+  cachedIncompatibleTemplate = payload;
+  if (payload) {
+    activeTemplateIncompatibleReporter?.(payload);
+  }
 }
 
 interface UiEditorBridgeOptions {
@@ -56,6 +68,7 @@ export interface UiEditorBridge {
   setUiMockData: (payload: SetUiMockDataPayload) => void;
   queryUiScreen: () => UiScreenUpdatedPayload;
   publishCurrentScreen: () => void;
+  publishPendingTemplateIncompatible: () => void;
   dispose: () => void;
 }
 
@@ -229,9 +242,18 @@ export function createUiEditorBridge({ isRegistered, send }: UiEditorBridgeOptio
     const { parts } = resolveScreenMetadata(screen, variantId);
     for (let i = parts.length - 1; i >= 0; i--) {
       const part = parts[i];
-      const matched = resolveMatchedElement(screenRoot, part.selector);
-      if (matched && matched.contains(target)) {
-        return part.id;
+      try {
+        if (screenRoot.matches(part.selector) && screenRoot.contains(target)) {
+          return part.id;
+        }
+        const matchedNodes = screenRoot.querySelectorAll(part.selector);
+        for (let idx = 0; idx < matchedNodes.length; idx++) {
+          if (matchedNodes[idx].contains(target)) {
+            return part.id;
+          }
+        }
+      } catch {
+        // Ignore invalid selector
       }
     }
     return null;
@@ -278,6 +300,13 @@ export function createUiEditorBridge({ isRegistered, send }: UiEditorBridgeOptio
     );
   };
 
+  const publishTemplateIncompatible = (payload: TemplateIncompatiblePayload) => {
+    if (!isRegistered()) return;
+    send(createEventEnvelope('preview.event.template-incompatible', payload));
+  };
+
+  activeTemplateIncompatibleReporter = publishTemplateIncompatible;
+
   return {
     setUiEditMode: ({ mode: nextMode }) => {
       mode = nextMode;
@@ -317,6 +346,11 @@ export function createUiEditorBridge({ isRegistered, send }: UiEditorBridgeOptio
     },
     queryUiScreen: buildPayload,
     publishCurrentScreen,
+    publishPendingTemplateIncompatible: () => {
+      if (cachedIncompatibleTemplate) {
+        publishTemplateIncompatible(cachedIncompatibleTemplate);
+      }
+    },
     dispose: () => {
       if (typeof document !== 'undefined') {
         document.removeEventListener('click', handleCaptureClick, true);
@@ -331,6 +365,7 @@ export function createUiEditorBridge({ isRegistered, send }: UiEditorBridgeOptio
       unsubscribeStyles();
       WebGAL.events.templateLoaded.off(handleTemplateLoaded);
       activeApplyStyleReporter = null;
+      activeTemplateIncompatibleReporter = null;
     },
   };
 }

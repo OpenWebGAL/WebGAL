@@ -1,6 +1,54 @@
 import { useEffect, useState } from 'react';
 import type { BuiltInScreenVariant, UiScreenId } from '@/screens/contracts';
+import type { TemplateIncompatibleReason } from '@/types/editorPreviewProtocol';
 import type { WebgalTemplate } from '@/types/template';
+
+export interface ParsedSemver {
+  major: number;
+  minor: number;
+  patch: number;
+}
+
+export function parseSemverCore(version: string | undefined | null): ParsedSemver | null {
+  if (typeof version !== 'string') return null;
+  const match = version.trim().match(/^v?(\d+)\.(\d+)(?:\.(\d+))?/);
+  if (!match) return null;
+  return {
+    major: Number(match[1]),
+    minor: Number(match[2]),
+    patch: Number(match[3] ?? 0),
+  };
+}
+
+export function checkTemplateCompatibility(
+  template: WebgalTemplate | null | undefined,
+  engineVersion?: string,
+): { compatible: true } | { compatible: false; reason: TemplateIncompatibleReason } {
+  if (!template) {
+    return { compatible: false, reason: 'legacy-template' };
+  }
+  if (template.uiMode === 'legacy') {
+    return { compatible: false, reason: 'legacy-template' };
+  }
+
+  const parsedTemplate = parseSemverCore(template['webgal-version']);
+  if (!parsedTemplate || parsedTemplate.major < 4 || (parsedTemplate.major === 4 && parsedTemplate.minor < 7)) {
+    return { compatible: false, reason: 'legacy-template' };
+  }
+
+  const hasModernConfig =
+    template.uiMode === 'custom' || (template.screens != null && Object.keys(template.screens).length > 0);
+  if (!hasModernConfig) {
+    return { compatible: false, reason: 'legacy-template' };
+  }
+
+  const parsedEngine = parseSemverCore(engineVersion);
+  if (parsedEngine && parsedTemplate.major !== parsedEngine.major) {
+    return { compatible: false, reason: 'version-mismatch' };
+  }
+
+  return { compatible: true };
+}
 
 export const DEFAULT_SCREEN_VARIANTS: Record<UiScreenId, string> = {
   title: 'default',
@@ -71,9 +119,7 @@ export function getBuiltInScreenVariant(
 }
 
 export function isCustomUiTemplate(template?: WebgalTemplate | null): boolean {
-  if (!template) return false;
-  if (template.uiMode === 'custom') return true;
-  return template.screens != null && Object.keys(template.screens).length > 0;
+  return checkTemplateCompatibility(template).compatible;
 }
 
 export function getConfiguredScreenVariantId(screen: UiScreenId, template?: WebgalTemplate | null): string {

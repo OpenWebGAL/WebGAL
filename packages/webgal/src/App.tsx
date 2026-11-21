@@ -9,7 +9,7 @@ import useSoundEffect from '@/hooks/useSoundEffect';
 import { ScreenSlotRenderer } from '@/screens/ScreenSlotRenderer';
 import { registerBuiltInScreens } from '@/screens/screenRegistry';
 import { STAGE_BUILTIN_SCREENS } from '@/screens/stage';
-import { useIsCustomUiTemplate, useUiCommonProps } from '@/screens/stage/shared';
+import { useUiCommonProps } from '@/screens/stage/shared';
 import { getMockChooseOptions, useActiveUiScreen, useUiMockDataEnabled } from '@/sdk/mockData';
 import { setVisibility } from '@/store/GUIReducer';
 import { RootState } from '@/store/store';
@@ -52,13 +52,12 @@ function TitleEnterGameTarget() {
 }
 
 function ChooseMockPreview() {
-  const isCustomUi = useIsCustomUiTemplate();
   const mockDataEnabled = useUiMockDataEnabled();
   const activeUiScreen = useActiveUiScreen();
   const fontFamily = useFontFamily();
   const uiCommon = useUiCommonProps();
 
-  if (!isCustomUi || activeUiScreen !== 'choose') {
+  if (activeUiScreen !== 'choose') {
     return null;
   }
 

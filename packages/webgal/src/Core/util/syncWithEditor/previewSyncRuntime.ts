@@ -262,6 +262,7 @@ export const startPreviewSyncRuntime = () => {
     registered = true;
     metadataPublisher.publishRegisteredMetadata();
     uiEditorBridge.publishCurrentScreen();
+    uiEditorBridge.publishPendingTemplateIncompatible();
     publishReady();
     publishStageSnapshot(true);
   };

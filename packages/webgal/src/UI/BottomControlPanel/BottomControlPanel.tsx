@@ -4,55 +4,21 @@ import { switchFast } from '@/Core/controller/gamePlay/fastSkip';
 import { loadGame } from '@/Core/controller/storage/loadGame';
 import { saveGame } from '@/Core/controller/storage/saveGame';
 import { showGlogalDialog, switchControls } from '@/UI/GlobalDialog/GlobalDialog';
-import { easyCompile } from '@/UI/Menu/SaveAndLoad/Save/Save';
 import useFullScreen from '@/hooks/useFullScreen';
-import useSoundEffect from '@/hooks/useSoundEffect';
 import useTrans from '@/hooks/useTrans';
 import { setMenuPanelTag, setVisibility } from '@/store/GUIReducer';
 import { componentsVisibility, MenuPanelTag } from '@/store/guiInterface';
 import { RootState } from '@/store/store';
-import {
-  AlignTextLeftOne,
-  DoubleDown,
-  DoubleRight,
-  DoubleUp,
-  FolderOpen,
-  FullScreen,
-  Home,
-  Lock,
-  OffScreen,
-  PlayOne,
-  PreviewCloseOne,
-  PreviewOpen,
-  ReplayMusic,
-  Save,
-  SettingTwo,
-  TreeDiagram,
-  Unlock,
-} from '@icon-park/react';
 import { useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import styles from './bottomControlPanel.module.scss';
 import { useStageState } from '@/hooks/useStageState';
 import { WebGAL } from '@/Core/WebGAL';
 import { ScreenSlotRenderer } from '@/screens/ScreenSlotRenderer';
-import { useIsCustomUiTemplate, useUiCommonProps } from '@/screens/stage/shared';
+import { useUiCommonProps } from '@/screens/stage/shared';
 import { getMockQuickSavePreview, useActiveUiScreen, useUiMockDataEnabled } from '@/sdk/mockData';
 
 export const BottomControlPanel = () => {
   const t = useTrans('gaming.');
-  const strokeWidth = 2.5;
-  const { i18n } = useTranslation();
-  const { playSeEnter, playSeClick, playSeDialogOpen } = useSoundEffect();
-  const lang = i18n.language;
-  const isFr = lang === 'fr';
-  let size = 42;
-  let fontSize = '150%';
-  if (isFr) {
-    fontSize = '125%';
-    size = 40;
-  }
   const { isSupported: isFullscreenSupport, isFullScreen, toggle: toggleFullscreen } = useFullScreen();
   const GUIStore = useSelector((state: RootState) => state.GUI);
   const enableFlowchart = useSelector((state: RootState) => state.userData.globalGameVar.Enable_flowchart === true);
@@ -66,7 +32,6 @@ export const BottomControlPanel = () => {
   };
 
   const saveData = useSelector((state: RootState) => state.saveData.saveData);
-  const isCustomUi = useIsCustomUiTemplate();
   const mockDataEnabled = useUiMockDataEnabled();
   const activeUiScreen = useActiveUiScreen();
   const uiCommon = useUiCommonProps();
@@ -74,7 +39,6 @@ export const BottomControlPanel = () => {
   const [isFast, setIsFast] = useState(() => WebGAL.gameplay.isFast);
 
   useEffect(() => {
-    if (!isCustomUi) return;
     const sync = () => {
       setIsAuto(WebGAL.gameplay.isAuto);
       setIsFast(WebGAL.gameplay.isFast);
@@ -82,399 +46,86 @@ export const BottomControlPanel = () => {
     sync();
     const timer = window.setInterval(sync, 200);
     return () => window.clearInterval(timer);
-  }, [isCustomUi]);
+  }, []);
 
-  if (isCustomUi) {
-    const isPreviewActive = activeUiScreen === 'bottomControlPanel';
-    const visible = (GUIStore.showTextBox && stageState.enableFilm === '') || isPreviewActive;
-    const quickSavePreview = saveData[0] ?? (mockDataEnabled ? getMockQuickSavePreview() : null);
-
-    return (
-      <ScreenSlotRenderer
-        screen="bottomControlPanel"
-        screenProps={{
-          visible,
-          controlsVisible: isPreviewActive ? true : GUIStore.controlsVisibility,
-          isTextBoxVisible: GUIStore.showTextBox,
-          isControlsLocked: GUIStore.showControls,
-          isAuto,
-          isFast,
-          isFullscreen: isFullScreen,
-          isFullscreenSupported: isFullscreenSupport,
-          enableFlowchart: mockDataEnabled ? true : enableFlowchart,
-          quickSavePreview,
-          onToggleTextBox: () => setComponentVisibility('showTextBox', !GUIStore.showTextBox),
-          onOpenBacklog: () => {
-            setComponentVisibility('showBacklog', true);
-            setComponentVisibility('showTextBox', false);
-          },
-          onOpenFlowchart: () => {
-            setMenuPanel(MenuPanelTag.Flowchart);
-            setComponentVisibility('showMenuPanel', true);
-          },
-          onReplayVocal: () => {
-            const vocal = document.getElementById('currentVocal') as HTMLAudioElement | null;
-            if (vocal) {
-              vocal.currentTime = 0;
-              vocal.pause();
-              void vocal.play();
-            }
-          },
-          onToggleAuto: () => {
-            switchAuto();
-            setIsAuto(WebGAL.gameplay.isAuto);
-          },
-          onToggleFast: () => {
-            switchFast();
-            setIsFast(WebGAL.gameplay.isFast);
-          },
-          onQuickSave: () => {
-            saveGame(0);
-          },
-          onQuickLoad: () => {
-            loadGame(0);
-          },
-          onOpenSave: () => {
-            setMenuPanel(MenuPanelTag.Save);
-            setComponentVisibility('showMenuPanel', true);
-          },
-          onOpenLoad: () => {
-            setMenuPanel(MenuPanelTag.Load);
-            setComponentVisibility('showMenuPanel', true);
-          },
-          onOpenOptions: () => {
-            setMenuPanel(MenuPanelTag.Option);
-            setComponentVisibility('showMenuPanel', true);
-          },
-          onBackToTitle: () => {
-            showGlogalDialog({
-              title: t('buttons.titleTips'),
-              leftText: t('$common.yes'),
-              rightText: t('$common.no'),
-              leftFunc: () => {
-                backToTitle();
-              },
-              rightFunc: () => {},
-            });
-          },
-          onToggleFullscreen: toggleFullscreen,
-          onToggleControlsLock: () => {
-            switchControls();
-          },
-          ...uiCommon,
-        }}
-      />
-    );
-  }
-  let fastSlPreview = (
-    <div style={{ height: '100%', width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-      <div style={{ fontSize: '125%' }}>{t('noSaving')}</div>
-    </div>
-  );
-  if (saveData[0]) {
-    const data = saveData[0];
-    fastSlPreview = (
-      <div className={styles.slPreviewMain}>
-        <div className={styles.imgContainer}>
-          <img style={{ height: '100%' }} alt="q-save-preview image" src={data.previewImage} />
-        </div>
-        <div className={styles.textContainer}>
-          <div>{easyCompile(data.nowStageState.showName)}</div>
-          <div style={{ fontSize: '75%', color: 'rgb(55,60,56)' }}>{easyCompile(data.nowStageState.showText)}</div>
-        </div>
-      </div>
-    );
-  }
+  const isPreviewActive = activeUiScreen === 'bottomControlPanel';
+  const visible = (GUIStore.showTextBox && stageState.enableFilm === '') || isPreviewActive;
+  const quickSavePreview = saveData[0] ?? (mockDataEnabled ? getMockQuickSavePreview() : null);
 
   return (
-    // <div className={styles.ToCenter}>
-    <>
-      {GUIStore.showTextBox && stageState.enableFilm === '' && (
-        <div className={styles.main} style={{ visibility: GUIStore.controlsVisibility ? 'visible' : 'hidden' }}>
-          {GUIStore.showTextBox && (
-            <span
-              className={styles.singleButton}
-              style={{ fontSize }}
-              onClick={() => {
-                setComponentVisibility('showTextBox', false);
-                playSeClick();
-              }}
-              onMouseEnter={playSeEnter}
-            >
-              <PreviewCloseOne
-                className={styles.button}
-                theme="outline"
-                size={size}
-                fill="#f5f5f7"
-                strokeWidth={strokeWidth}
-              />
-              <span className={styles.button_text}>{t('buttons.hide')}</span>
-            </span>
-          )}
-          {!GUIStore.showTextBox && (
-            <span
-              className={styles.singleButton}
-              style={{ fontSize }}
-              onClick={() => {
-                setComponentVisibility('showTextBox', true);
-                playSeClick();
-              }}
-              onMouseEnter={playSeEnter}
-            >
-              <PreviewOpen
-                className={styles.button}
-                theme="outline"
-                size={size}
-                fill="#f5f5f7"
-                strokeWidth={strokeWidth}
-              />
-              <span className={styles.button_text}>{t('buttons.show')}</span>
-            </span>
-          )}
-          <span
-            className={styles.singleButton}
-            style={{ fontSize }}
-            onClick={() => {
-              setComponentVisibility('showBacklog', true);
-              setComponentVisibility('showTextBox', false);
-              playSeClick();
-            }}
-            onMouseEnter={playSeEnter}
-          >
-            <AlignTextLeftOne
-              className={styles.button}
-              theme="outline"
-              size={size}
-              fill="#f5f5f7"
-              strokeWidth={strokeWidth}
-            />
-            <span className={styles.button_text}>{t('buttons.backlog')}</span>
-          </span>
-          {enableFlowchart && (
-            <span
-              className={styles.singleButton}
-              style={{ fontSize }}
-              onClick={() => {
-                setMenuPanel(MenuPanelTag.Flowchart);
-                setComponentVisibility('showMenuPanel', true);
-                playSeClick();
-              }}
-              onMouseEnter={playSeEnter}
-            >
-              <TreeDiagram
-                className={styles.button}
-                theme="outline"
-                size={size}
-                fill="#f5f5f7"
-                strokeWidth={strokeWidth}
-              />
-              <span className={styles.button_text}>{t('buttons.flowchart')}</span>
-            </span>
-          )}
-          <span
-            className={styles.singleButton}
-            style={{ fontSize }}
-            onClick={() => {
-              let VocalControl: any = document.getElementById('currentVocal');
-              if (VocalControl !== null) {
-                VocalControl.currentTime = 0;
-                VocalControl.pause();
-                VocalControl?.play();
-              }
-              playSeClick();
-            }}
-            onMouseEnter={playSeEnter}
-          >
-            <ReplayMusic
-              className={styles.button}
-              theme="outline"
-              size={size}
-              fill="#f5f5f7"
-              strokeWidth={strokeWidth}
-            />
-            <span className={styles.button_text}>{t('buttons.replay')}</span>
-          </span>
-          <span
-            id="Button_ControlPanel_auto"
-            className={styles.singleButton}
-            style={{ fontSize }}
-            onClick={() => {
-              switchAuto();
-              playSeClick();
-            }}
-            onMouseEnter={playSeEnter}
-          >
-            <PlayOne className={styles.button} theme="outline" size={size} fill="#f5f5f7" strokeWidth={strokeWidth} />
-            <span className={styles.button_text}>{t('buttons.auto')}</span>
-          </span>
-          <span
-            id="Button_ControlPanel_fast"
-            className={styles.singleButton}
-            style={{ fontSize }}
-            onClick={() => {
-              switchFast();
-              playSeClick();
-            }}
-            onMouseEnter={playSeEnter}
-          >
-            <DoubleRight
-              className={styles.button}
-              theme="outline"
-              size={size}
-              fill="#f5f5f7"
-              strokeWidth={strokeWidth}
-            />
-            <span className={styles.button_text}>{t('buttons.forward')}</span>
-          </span>
-          <span
-            className={styles.singleButton + ' ' + styles.fastsave}
-            style={{ fontSize }}
-            onClick={() => {
-              saveGame(0);
-              playSeClick();
-            }}
-            onMouseEnter={playSeEnter}
-          >
-            <DoubleDown
-              className={styles.button}
-              theme="outline"
-              size={size}
-              fill="#f5f5f7"
-              strokeWidth={strokeWidth}
-            />
-            <span className={styles.button_text}>{t('buttons.quicklySave')}</span>
-            <div className={styles.fastSlPreview + ' ' + styles.fastSPreview}>{fastSlPreview}</div>
-          </span>
-          <span
-            className={styles.singleButton + ' ' + styles.fastload}
-            style={{ fontSize }}
-            onClick={() => {
-              loadGame(0);
-              playSeClick();
-            }}
-            onMouseEnter={playSeEnter}
-          >
-            <DoubleUp className={styles.button} theme="outline" size={size} fill="#f5f5f7" strokeWidth={strokeWidth} />
-            <span className={styles.button_text}>{t('buttons.quicklyLoad')}</span>
-            <div className={styles.fastSlPreview + ' ' + styles.fastLPreview}>{fastSlPreview}</div>
-          </span>
-          <span
-            className={styles.singleButton}
-            style={{ fontSize }}
-            onClick={() => {
-              setMenuPanel(MenuPanelTag.Save);
-              setComponentVisibility('showMenuPanel', true);
-              playSeClick();
-            }}
-            onMouseEnter={playSeEnter}
-          >
-            <Save className={styles.button} theme="outline" size={size} fill="#f5f5f7" strokeWidth={strokeWidth} />
-            <span className={styles.button_text}>{t('buttons.save')}</span>
-          </span>
-          <span
-            className={styles.singleButton}
-            style={{ fontSize }}
-            onClick={() => {
-              setMenuPanel(MenuPanelTag.Load);
-              setComponentVisibility('showMenuPanel', true);
-              playSeClick();
-            }}
-            onMouseEnter={playSeEnter}
-          >
-            <FolderOpen
-              className={styles.button}
-              theme="outline"
-              size={size}
-              fill="#f5f5f7"
-              strokeWidth={strokeWidth}
-            />
-            <span className={styles.button_text}>{t('buttons.load')}</span>
-          </span>
-          <span
-            className={styles.singleButton}
-            style={{ fontSize }}
-            onClick={() => {
-              setMenuPanel(MenuPanelTag.Option);
-              setComponentVisibility('showMenuPanel', true);
-              playSeClick();
-            }}
-            onMouseEnter={playSeEnter}
-          >
-            <SettingTwo
-              className={styles.button}
-              theme="outline"
-              size={size}
-              fill="#f5f5f7"
-              strokeWidth={strokeWidth}
-            />
-            <span className={styles.button_text}>{t('buttons.options')}</span>
-          </span>
-          <span
-            className={styles.singleButton}
-            style={{ fontSize }}
-            onClick={() => {
-              playSeDialogOpen();
-              showGlogalDialog({
-                title: t('buttons.titleTips'),
-                leftText: t('$common.yes'),
-                rightText: t('$common.no'),
-                leftFunc: () => {
-                  backToTitle();
-                },
-                rightFunc: () => {},
-              });
-            }}
-            onMouseEnter={playSeEnter}
-          >
-            <Home className={styles.button} theme="outline" size={size} fill="#f5f5f7" strokeWidth={strokeWidth} />
-            <span className={styles.button_text}>{t('buttons.title')}</span>
-          </span>
-          {isFullscreenSupport && (
-            <span
-              className={`${styles.singleButton}`}
-              style={{ fontSize }}
-              onClick={toggleFullscreen}
-              onMouseEnter={playSeEnter}
-            >
-              {!isFullScreen && (
-                <FullScreen
-                  className={styles.button}
-                  theme="outline"
-                  size={size}
-                  fill="#f5f5f7"
-                  strokeWidth={strokeWidth}
-                />
-              )}
-              {isFullScreen && (
-                <OffScreen
-                  className={styles.button}
-                  theme="outline"
-                  size={size}
-                  fill="#f5f5f7"
-                  strokeWidth={strokeWidth}
-                />
-              )}
-              <span className={styles.button_text}>{t('buttons.fullscreen')}</span>
-            </span>
-          )}
-          <span
-            className={styles.singleButton}
-            style={{ fontSize }}
-            onClick={() => {
-              switchControls();
-              playSeClick();
-            }}
-            onMouseEnter={playSeEnter}
-          >
-            {GUIStore.showControls ? (
-              <Lock className={styles.button} theme="outline" size={size} fill="#f5f5f7" strokeWidth={strokeWidth} />
-            ) : (
-              <Unlock className={styles.button} theme="outline" size={size} fill="#f5f5f7" strokeWidth={strokeWidth} />
-            )}
-          </span>
-        </div>
-      )}
-    </>
-    // </div>
+    <ScreenSlotRenderer
+      screen="bottomControlPanel"
+      screenProps={{
+        visible,
+        controlsVisible: isPreviewActive ? true : GUIStore.controlsVisibility,
+        isTextBoxVisible: GUIStore.showTextBox,
+        isControlsLocked: GUIStore.showControls,
+        isAuto,
+        isFast,
+        isFullscreen: isFullScreen,
+        isFullscreenSupported: isFullscreenSupport,
+        enableFlowchart: mockDataEnabled ? true : enableFlowchart,
+        quickSavePreview,
+        onToggleTextBox: () => setComponentVisibility('showTextBox', !GUIStore.showTextBox),
+        onOpenBacklog: () => {
+          setComponentVisibility('showBacklog', true);
+          setComponentVisibility('showTextBox', false);
+        },
+        onOpenFlowchart: () => {
+          setMenuPanel(MenuPanelTag.Flowchart);
+          setComponentVisibility('showMenuPanel', true);
+        },
+        onReplayVocal: () => {
+          const vocal = document.getElementById('currentVocal') as HTMLAudioElement | null;
+          if (vocal) {
+            vocal.currentTime = 0;
+            vocal.pause();
+            void vocal.play();
+          }
+        },
+        onToggleAuto: () => {
+          switchAuto();
+          setIsAuto(WebGAL.gameplay.isAuto);
+        },
+        onToggleFast: () => {
+          switchFast();
+          setIsFast(WebGAL.gameplay.isFast);
+        },
+        onQuickSave: () => {
+          saveGame(0);
+        },
+        onQuickLoad: () => {
+          loadGame(0);
+        },
+        onOpenSave: () => {
+          setMenuPanel(MenuPanelTag.Save);
+          setComponentVisibility('showMenuPanel', true);
+        },
+        onOpenLoad: () => {
+          setMenuPanel(MenuPanelTag.Load);
+          setComponentVisibility('showMenuPanel', true);
+        },
+        onOpenOptions: () => {
+          setMenuPanel(MenuPanelTag.Option);
+          setComponentVisibility('showMenuPanel', true);
+        },
+        onBackToTitle: () => {
+          showGlogalDialog({
+            title: t('buttons.titleTips'),
+            leftText: t('$common.yes'),
+            rightText: t('$common.no'),
+            leftFunc: () => {
+              backToTitle();
+            },
+            rightFunc: () => {},
+          });
+        },
+        onToggleFullscreen: toggleFullscreen,
+        onToggleControlsLock: () => {
+          switchControls();
+        },
+        ...uiCommon,
+      }}
+    />
   );
 };

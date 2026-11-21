@@ -1,15 +1,11 @@
-import styles from './globalDialog.module.scss';
 import { useEffect, useRef } from 'react';
 import ReactDOM from 'react-dom';
 import { useSelector } from 'react-redux';
 import { RootState, webgalStore } from '@/store/store';
 import { setVisibility } from '@/store/GUIReducer';
-import { useSEByWebgalStore } from '@/hooks/useSoundEffect';
 import { ScreenSlotRenderer } from '@/screens/ScreenSlotRenderer';
-import { useIsCustomUiTemplate, useUiCommonProps } from '@/screens/stage/shared';
+import { useUiCommonProps } from '@/screens/stage/shared';
 import { getMockGlobalDialog, useActiveUiScreen, useUiMockDataEnabled } from '@/sdk/mockData';
-import { WebGAL } from '@/Core/WebGAL';
-import { isCustomUiTemplate } from '@/screens/screenRegistry';
 
 let hasImperativeGlobalDialog = false;
 let pendingRenderTimer: ReturnType<typeof setTimeout> | null = null;
@@ -60,7 +56,6 @@ function GlobalDialogMockPreview({ useMockText }: { useMockText: boolean }) {
 
 export default function GlobalDialog() {
   const isGlobalDialogShow = useSelector((state: RootState) => state.GUI.showGlobalDialog);
-  const isCustomUi = useIsCustomUiTemplate();
   const mockDataEnabled = useUiMockDataEnabled();
   const activeUiScreen = useActiveUiScreen();
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -82,7 +77,7 @@ export default function GlobalDialog() {
     };
   }, [isGlobalDialogShow]);
 
-  const showPreviewHost = isCustomUi && activeUiScreen === 'globalDialog' && !hasImperativeGlobalDialog;
+  const showPreviewHost = activeUiScreen === 'globalDialog' && !hasImperativeGlobalDialog;
 
   return (
     <>
@@ -101,7 +96,6 @@ interface IShowGlobalDialogProps {
 }
 
 export function showGlogalDialog(props: IShowGlobalDialogProps) {
-  const { playSeClick, playSeEnter } = useSEByWebgalStore();
   clearPendingRenderTimer();
   hasImperativeGlobalDialog = true;
   webgalStore.dispatch(setVisibility({ component: 'showGlobalDialog', visibility: true }));
@@ -113,43 +107,7 @@ export function showGlogalDialog(props: IShowGlobalDialogProps) {
     props.rightFunc?.();
     hideGlobalDialog();
   };
-  const renderElement = isCustomUiTemplate(WebGAL.template) ? (
-    <CustomGlobalDialogHost {...props} onConfirm={handleLeft} onCancel={handleRight} />
-  ) : (
-    <div className={styles.GlobalDialog_main}>
-      <div className={styles.glabalDialog_container}>
-        <div className={styles.glabalDialog_container_inner}>
-          <div className={styles.title}>{props.title}</div>
-          <div className={styles.button_list}>
-            {props.leftText && (
-              <div
-                className={styles.button}
-                onClick={() => {
-                  playSeClick();
-                  handleLeft();
-                }}
-                onMouseEnter={playSeEnter}
-              >
-                {props.leftText}
-              </div>
-            )}
-            {props.rightText && (
-              <div
-                className={styles.button}
-                onClick={() => {
-                  playSeClick();
-                  handleRight();
-                }}
-                onMouseEnter={playSeEnter}
-              >
-                {props.rightText}
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+  const renderElement = <CustomGlobalDialogHost {...props} onConfirm={handleLeft} onCancel={handleRight} />;
   pendingRenderTimer = setTimeout(() => {
     pendingRenderTimer = null;
     const container = document.getElementById('globalDialogContainer');
