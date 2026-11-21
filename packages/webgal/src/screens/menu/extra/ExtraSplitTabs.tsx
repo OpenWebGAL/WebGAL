@@ -6,12 +6,46 @@ import { resolveScreenAssetUrl, useScreenParts } from '@/sdk/globalUiSdk';
 const CG_PER_PAGE = 8;
 
 const EXTRA_SPLIT_PARTS: ScreenPartDefinition[] = [
-  { id: 'main', name: '鉴赏页面容器', selector: '.Extra_Split_main', allowLayoutEdit: true },
-  { id: 'top', name: '顶部切换栏', selector: '.Extra_Split_top', allowLayoutEdit: true },
-  { id: 'cgGrid', name: 'CG 画廊区', selector: '.Extra_Split_cgGrid', allowLayoutEdit: true },
-  { id: 'cgCard', name: 'CG 卡片', selector: '.Extra_Split_cgCard', allowLayoutEdit: false },
-  { id: 'bgmPanel', name: '音乐厅区域', selector: '.Extra_Split_bgmPanel', allowLayoutEdit: true },
-  { id: 'bgmItem', name: '曲目列表项', selector: '.Extra_Split_bgmItem', allowLayoutEdit: false },
+  { id: 'main', name: '鉴赏页面容器', selector: '.Extra_Split_main', kind: 'container', allowLayoutEdit: true },
+  { id: 'top', name: '顶部切换栏', selector: '.Extra_Split_top', kind: 'container', allowLayoutEdit: true },
+  { id: 'title', name: '顶部标题文字', selector: '.Extra_Split_title', kind: 'text', allowLayoutEdit: false },
+  { id: 'tabButton', name: '分类切换按钮', selector: '.Extra_Split_tab', kind: 'container', allowLayoutEdit: false },
+  {
+    id: 'tabButtonText',
+    name: '分类切换文字',
+    selector: '.Extra_Split_tabText',
+    kind: 'text',
+    stateHostSelector: '.Extra_Split_tab',
+    allowLayoutEdit: false,
+  },
+  {
+    id: 'cgPageButton',
+    name: 'CG 分页按钮',
+    selector: '.Extra_Split_pageBtn',
+    kind: 'container',
+    allowLayoutEdit: false,
+  },
+  {
+    id: 'cgPageButtonText',
+    name: 'CG 分页文字',
+    selector: '.Extra_Split_pageBtn_text',
+    kind: 'text',
+    stateHostSelector: '.Extra_Split_pageBtn',
+    allowLayoutEdit: false,
+  },
+  { id: 'cgGrid', name: 'CG 画廊区', selector: '.Extra_Split_cgGrid', kind: 'container', allowLayoutEdit: true },
+  { id: 'cgCard', name: 'CG 卡片', selector: '.Extra_Split_cgCard', kind: 'container', allowLayoutEdit: false },
+  { id: 'bgmPanel', name: '音乐厅区域', selector: '.Extra_Split_bgmPanel', kind: 'container', allowLayoutEdit: true },
+  { id: 'bgmNow', name: '当前曲目文字', selector: '.Extra_Split_bgmNow', kind: 'text', allowLayoutEdit: false },
+  { id: 'bgmItem', name: '曲目列表项', selector: '.Extra_Split_bgmItem', kind: 'container', allowLayoutEdit: false },
+  {
+    id: 'bgmItemText',
+    name: '曲目列表文字',
+    selector: '.Extra_Split_bgmItem_text',
+    kind: 'text',
+    stateHostSelector: '.Extra_Split_bgmItem',
+    allowLayoutEdit: false,
+  },
 ];
 
 const EXTRA_SPLIT_DEFAULT_CSS = `
@@ -128,8 +162,6 @@ const EXTRA_SPLIT_DEFAULT_CSS = `
   border: none;
   background: rgba(255, 255, 255, 0.5);
   color: #556270;
-  font-size: 36px;
-  font-weight: bold;
   line-height: 1;
   cursor: pointer;
   transition: background-color 0.25s, color 0.25s, transform 0.2s;
@@ -149,10 +181,20 @@ const EXTRA_SPLIT_DEFAULT_CSS = `
   line-height: 0;
 }
 
-.Extra_Split_tab:hover,
-.Extra_Split_tab.Extra_Split_tab_active {
+.Extra_Split_tab:hover {
   background: rgba(255, 255, 255, 0.85);
   color: #005CAF;
+}
+
+.Extra_Split_tab.active {
+  background: rgba(255, 255, 255, 0.85);
+  color: #005CAF;
+}
+
+.Extra_Split_tabText {
+  font-size: 36px;
+  font-weight: bold;
+  line-height: 1;
 }
 
 .Extra_Split_body {
@@ -171,19 +213,30 @@ const EXTRA_SPLIT_DEFAULT_CSS = `
 }
 
 .Extra_Split_pageBtn {
-  font-size: 40px;
   padding: 6px 40px;
   border-radius: 7px;
   border: none;
   background: rgba(255, 255, 255, 0.5);
-  color: #666666;
   cursor: pointer;
-  transition: color 0.3s, background-color 0.3s;
+  transition: background-color 0.3s;
 }
 
-.Extra_Split_pageBtn:hover,
-.Extra_Split_pageBtn.Extra_Split_pageBtn_active {
+.Extra_Split_pageBtn:hover {
   background: rgba(255, 255, 255, 0.78);
+}
+
+.Extra_Split_pageBtn.active {
+  background: rgba(255, 255, 255, 0.78);
+}
+
+.Extra_Split_pageBtn_text {
+  font-size: 40px;
+  color: #666666;
+  transition: color 0.3s;
+}
+
+.Extra_Split_pageBtn:hover .Extra_Split_pageBtn_text,
+.Extra_Split_pageBtn.active .Extra_Split_pageBtn_text {
   color: #005CAF;
 }
 
@@ -334,10 +387,8 @@ const EXTRA_SPLIT_DEFAULT_CSS = `
 .Extra_Split_bgmItem {
   font-family: "资源圆体", serif;
   background-color: rgba(0, 0, 0, 0.1);
-  font-size: 32px;
   padding: 18px 32px;
   cursor: pointer;
-  color: #ffffff;
   border: none;
   border-radius: 5px;
   text-align: left;
@@ -345,16 +396,25 @@ const EXTRA_SPLIT_DEFAULT_CSS = `
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  transition: background-color 0.5s, color 0.5s;
+  transition: background-color 0.5s;
 }
 
 .Extra_Split_bgmItem:hover {
   background-color: rgba(255, 255, 255, 0.65);
-  color: #666666;
 }
 
-.Extra_Split_bgmItem.Extra_Split_bgmItem_active {
+.Extra_Split_bgmItem.active {
   background-color: rgba(255, 255, 255, 0.85);
+}
+
+.Extra_Split_bgmItem_text {
+  font-size: 32px;
+  color: #ffffff;
+  transition: color 0.5s;
+}
+
+.Extra_Split_bgmItem:hover .Extra_Split_bgmItem_text,
+.Extra_Split_bgmItem.active .Extra_Split_bgmItem_text {
   color: #666666;
 }
 
@@ -493,7 +553,7 @@ export function ExtraSplitTabsScreen(props: ExtraScreenProps) {
         <div className="Extra_Split_tabs">
           <button
             type="button"
-            className={`Extra_Split_tab${activeTab === 'cg' ? ' Extra_Split_tab_active' : ''}`}
+            className={`Extra_Split_tab${activeTab === 'cg' ? ' active' : ''}`}
             onMouseEnter={playSe.enter}
             onClick={() => {
               playSe.switch();
@@ -503,11 +563,11 @@ export function ExtraSplitTabsScreen(props: ExtraScreenProps) {
             <span className="Extra_Split_tabIcon">
               <Picture theme="outline" size={34} fill="currentColor" />
             </span>
-            <span>CG</span>
+            <span className="Extra_Split_tabText">CG</span>
           </button>
           <button
             type="button"
-            className={`Extra_Split_tab${activeTab === 'bgm' ? ' Extra_Split_tab_active' : ''}`}
+            className={`Extra_Split_tab${activeTab === 'bgm' ? ' active' : ''}`}
             onMouseEnter={playSe.enter}
             onClick={() => {
               playSe.switch();
@@ -517,7 +577,7 @@ export function ExtraSplitTabsScreen(props: ExtraScreenProps) {
             <span className="Extra_Split_tabIcon">
               <Music theme="outline" size={34} fill="currentColor" />
             </span>
-            <span>BGM</span>
+            <span className="Extra_Split_tabText">BGM</span>
           </button>
         </div>
       </div>
@@ -531,14 +591,14 @@ export function ExtraSplitTabsScreen(props: ExtraScreenProps) {
                   <button
                     key={page}
                     type="button"
-                    className={`Extra_Split_pageBtn${safePage === page ? ' Extra_Split_pageBtn_active' : ''}`}
+                    className={`Extra_Split_pageBtn${safePage === page ? ' active' : ''}`}
                     onMouseEnter={playSe.enter}
                     onClick={() => {
                       playSe.pageChange();
                       setCgPage(page);
                     }}
                   >
-                    {page}
+                    <span className="Extra_Split_pageBtn_text">{page}</span>
                   </button>
                 ))}
               </div>
@@ -655,14 +715,14 @@ export function ExtraSplitTabsScreen(props: ExtraScreenProps) {
                 <button
                   key={`${bgm.url}-${idx}`}
                   type="button"
-                  className={`Extra_Split_bgmItem${bgm.url === currentBgmUrl ? ' Extra_Split_bgmItem_active' : ''}`}
+                  className={`Extra_Split_bgmItem${bgm.url === currentBgmUrl ? ' active' : ''}`}
                   onMouseEnter={playSe.enter}
                   onClick={() => {
                     playSe.click();
                     onSelectBgm(bgm.url);
                   }}
                 >
-                  {bgm.name}
+                  <span className="Extra_Split_bgmItem_text">{bgm.name}</span>
                 </button>
               ))}
             </div>

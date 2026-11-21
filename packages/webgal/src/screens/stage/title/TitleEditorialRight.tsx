@@ -6,10 +6,17 @@ function getUiSdk(): WebgalUiSdk {
 }
 
 const TITLE_EDITORIAL_PARTS: ScreenPartDefinition[] = [
-  { id: 'main', name: '标题主容器', selector: '.Title_main', allowLayoutEdit: true },
-  { id: 'buttonList', name: '按钮列表', selector: '.Title_buttonList', allowLayoutEdit: true },
-  { id: 'button', name: '标题按钮', selector: '.Title_button', allowLayoutEdit: false },
-  { id: 'buttonText', name: '按钮文字', selector: '.Title_button_text', allowLayoutEdit: false },
+  { id: 'main', name: '标题主容器', selector: '.Title_main', kind: 'container', allowLayoutEdit: true },
+  { id: 'buttonList', name: '按钮列表', selector: '.Title_buttonList', kind: 'container', allowLayoutEdit: true },
+  { id: 'button', name: '标题按钮', selector: '.Title_button', kind: 'container', allowLayoutEdit: false },
+  {
+    id: 'buttonText',
+    name: '按钮文字',
+    selector: '.Title_button_text',
+    kind: 'text',
+    stateHostSelector: '.Title_button',
+    allowLayoutEdit: false,
+  },
 ];
 
 const TITLE_EDITORIAL_DEFAULT_CSS = `

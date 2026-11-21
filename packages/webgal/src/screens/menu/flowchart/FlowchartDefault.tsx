@@ -34,12 +34,22 @@ const MARGIN_Y = 45;
 const CONNECTOR_GAP = 12;
 
 const FLOWCHART_PARTS: ScreenPartDefinition[] = [
-  { id: 'main', name: '流程图页面容器', selector: '.Flowchart_main', allowLayoutEdit: true },
-  { id: 'top', name: '顶部栏', selector: '.flowchart_top', allowLayoutEdit: true },
-  { id: 'title', name: '水印标题', selector: '.flowchart_title', allowLayoutEdit: true },
-  { id: 'sidebar', name: '分支列表栏', selector: '.flowchart_sidebar', allowLayoutEdit: true },
-  { id: 'tabButton', name: '分支标签', selector: '.flowchart_tab', allowLayoutEdit: false },
-  { id: 'canvasArea', name: '画布视口', selector: '.flowchart_content', allowLayoutEdit: true },
+  { id: 'backdrop', name: '页面背景', selector: '.Flowchart_backdrop', kind: 'container', allowLayoutEdit: false },
+  { id: 'main', name: '流程图页面容器', selector: '.Flowchart_main', kind: 'container', allowLayoutEdit: true },
+  { id: 'top', name: '顶部栏', selector: '.flowchart_top', kind: 'container', allowLayoutEdit: true },
+  { id: 'title', name: '水印标题容器', selector: '.flowchart_title', kind: 'container', allowLayoutEdit: true },
+  { id: 'titleText', name: '水印标题文字', selector: '.flowchart_title_text', kind: 'text', allowLayoutEdit: false },
+  { id: 'sidebar', name: '分支列表栏', selector: '.flowchart_sidebar', kind: 'container', allowLayoutEdit: true },
+  { id: 'tabButton', name: '分支标签', selector: '.flowchart_tab', kind: 'container', allowLayoutEdit: false },
+  {
+    id: 'tabButtonText',
+    name: '分支标签文字',
+    selector: '.flowchart_tab_text',
+    kind: 'text',
+    stateHostSelector: '.flowchart_tab',
+    allowLayoutEdit: false,
+  },
+  { id: 'canvasArea', name: '画布视口', selector: '.flowchart_content', kind: 'container', allowLayoutEdit: true },
 ];
 
 const FLOWCHART_DEFAULT_CSS = `
@@ -136,18 +146,30 @@ const FLOWCHART_DEFAULT_CSS = `
   padding: 22.46px 27.65px;
   border-radius: 4px;
   text-align: left;
-  font-size: 34.56px;
-  color: rgba(52, 80, 92, 0.78);
   background: linear-gradient(90deg, rgba(255, 255, 255, 0.78), rgba(239, 247, 250, 0.72));
   cursor: pointer;
-  transition: color 0.25s, background 0.25s, border-color 0.25s;
+  transition: background 0.25s, border-color 0.25s;
 }
 
-.flowchart_tab:hover,
-.flowchart_tab.flowchart_tab_active {
-  color: #2B5F75;
+.flowchart_tab:hover {
   border-color: rgba(43, 95, 117, 0.36);
   background: linear-gradient(90deg, rgba(255, 255, 255, 0.95), rgba(226, 240, 246, 0.85));
+}
+
+.flowchart_tab.active {
+  border-color: rgba(43, 95, 117, 0.36);
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.95), rgba(226, 240, 246, 0.85));
+}
+
+.flowchart_tab_text {
+  font-size: 34.56px;
+  color: rgba(52, 80, 92, 0.78);
+  transition: color 0.25s;
+}
+
+.flowchart_tab:hover .flowchart_tab_text,
+.flowchart_tab.active .flowchart_tab_text {
+  color: #2B5F75;
 }
 
 .flowchart_content {
@@ -561,14 +583,14 @@ export function FlowchartDefaultScreen(props: FlowchartScreenProps) {
                 <button
                   key={flowchart.id}
                   type="button"
-                  className={`flowchart_tab${isActive ? ' flowchart_tab_active' : ''}`}
+                  className={`flowchart_tab${isActive ? ' active' : ''}`}
                   onMouseEnter={playSe.enter}
                   onClick={() => {
                     playSe.click();
                     setCurrentFlowchartId(flowchart.id);
                   }}
                 >
-                  {flowchart.name}
+                  <span className="flowchart_tab_text">{flowchart.name}</span>
                 </button>
               );
             })}

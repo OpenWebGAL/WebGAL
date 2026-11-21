@@ -6,13 +6,33 @@ const SLOTS_PER_PAGE = 6;
 const BASE_PAGE_COUNT = 20;
 
 const LOAD_LIST_PARTS: ScreenPartDefinition[] = [
-  { id: 'main', name: '读档页面容器', selector: '.Load_List_main', allowLayoutEdit: true },
-  { id: 'top', name: '顶部栏', selector: '.Load_List_top', allowLayoutEdit: true },
-  { id: 'title', name: '水印标题', selector: '.Load_List_title', allowLayoutEdit: true },
-  { id: 'pageList', name: '页码栏', selector: '.Load_List_pageList', allowLayoutEdit: true },
-  { id: 'pageButton', name: '页码按钮', selector: '.Load_List_pageButton', allowLayoutEdit: false },
-  { id: 'content', name: '读档列表区', selector: '.Load_List_content', allowLayoutEdit: true },
-  { id: 'slotRow', name: '档位行卡片', selector: '.Load_List_row', allowLayoutEdit: false },
+  { id: 'backdrop', name: '页面背景', selector: '.Load_List_backdrop', kind: 'container', allowLayoutEdit: false },
+  { id: 'main', name: '读档页面容器', selector: '.Load_List_main', kind: 'container', allowLayoutEdit: true },
+  { id: 'top', name: '顶部栏', selector: '.Load_List_top', kind: 'container', allowLayoutEdit: true },
+  { id: 'title', name: '水印标题文字', selector: '.Load_List_title', kind: 'text', allowLayoutEdit: true },
+  { id: 'pageList', name: '页码栏', selector: '.Load_List_pageList', kind: 'container', allowLayoutEdit: true },
+  { id: 'pageButton', name: '页码按钮', selector: '.Load_List_pageButton', kind: 'container', allowLayoutEdit: false },
+  {
+    id: 'pageButtonText',
+    name: '页码按钮文字',
+    selector: '.Load_List_pageText',
+    kind: 'text',
+    stateHostSelector: '.Load_List_pageButton',
+    allowLayoutEdit: false,
+  },
+  { id: 'content', name: '读档列表区', selector: '.Load_List_content', kind: 'container', allowLayoutEdit: true },
+  { id: 'slotRow', name: '档位行卡片', selector: '.Load_List_row', kind: 'container', allowLayoutEdit: false },
+  { id: 'slotIndex', name: '档位序号底框', selector: '.Load_List_rowIndex', kind: 'container', allowLayoutEdit: false },
+  {
+    id: 'slotIndexText',
+    name: '档位序号文字',
+    selector: '.Load_List_rowIndex_text',
+    kind: 'text',
+    allowLayoutEdit: false,
+  },
+  { id: 'slotSpeaker', name: '角色名文本', selector: '.Load_List_rowSpeaker', kind: 'text', allowLayoutEdit: false },
+  { id: 'slotTime', name: '存档时间文本', selector: '.Load_List_rowTime', kind: 'text', allowLayoutEdit: false },
+  { id: 'slotText', name: '对话摘要文本', selector: '.Load_List_rowText', kind: 'text', allowLayoutEdit: false },
 ];
 
 const LOAD_LIST_DEFAULT_CSS = `
@@ -84,16 +104,14 @@ const LOAD_LIST_DEFAULT_CSS = `
 }
 
 .Load_List_pageButton {
-  font-size: 51.2px;
   text-align: center;
   cursor: pointer;
   width: 104.96px;
-  color: rgba(0, 0, 0, 0.5);
   border: 0px solid transparent;
   border-bottom: 4px solid rgba(0, 0, 0, 0);
   background: transparent;
   padding: 0px;
-  transition: color 0.33s, border-bottom-color 0.33s, background-color 0.33s;
+  transition: border-bottom-color 0.33s, background-color 0.33s;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -101,22 +119,31 @@ const LOAD_LIST_DEFAULT_CSS = `
 }
 
 .Load_List_pageButton:hover {
-  color: #005CAF;
   border-bottom: 5px solid #005CAF;
-  font-weight: bold;
 }
 
-.Load_List_pageButton.Load_List_pageButton_on {
-  font-weight: bold;
-  color: #005CAF;
+.Load_List_pageButton.active {
   border-bottom: 5px solid #005CAF;
   background-color: rgba(0, 92, 175, 0.1);
 }
 
 .Load_List_pageText {
+  font-size: 51.2px;
+  color: rgba(0, 0, 0, 0.5);
   width: 100%;
   padding-bottom: 3px;
   border-left: 2px solid rgba(0, 0, 0, 0.1);
+  transition: color 0.33s;
+}
+
+.Load_List_pageButton:hover .Load_List_pageText {
+  color: #005CAF;
+  font-weight: bold;
+}
+
+.Load_List_pageButton.active .Load_List_pageText {
+  font-weight: bold;
+  color: #005CAF;
 }
 
 .Load_List_pageButton:first-child .Load_List_pageText {
@@ -166,13 +193,16 @@ const LOAD_LIST_DEFAULT_CSS = `
   width: 120px;
   flex-shrink: 0;
   background-color: #51A8DD;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.Load_List_rowIndex_text {
   color: #ffffff;
   font-family: "资源圆体", serif;
   font-size: 42px;
   font-weight: bold;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
 .Load_List_row.Load_List_row_empty .Load_List_rowIndex {
@@ -283,7 +313,7 @@ export function LoadListVerticalScreen(props: LoadScreenProps) {
                 <button
                   key={page}
                   type="button"
-                  className={`Load_List_pageButton${isActive ? ' Load_List_pageButton_on' : ''}`}
+                  className={`Load_List_pageButton${isActive ? ' active' : ''}`}
                   onMouseEnter={playSe.enter}
                   onClick={() => {
                     playSe.pageChange();
@@ -312,7 +342,9 @@ export function LoadListVerticalScreen(props: LoadScreenProps) {
                   onSlotAction(slotIndex);
                 }}
               >
-                <div className="Load_List_rowIndex">{slotIndex}</div>
+                <div className="Load_List_rowIndex">
+                  <span className="Load_List_rowIndex_text">{slotIndex}</span>
+                </div>
                 {save ? (
                   <>
                     <div className="Load_List_rowThumb">

@@ -13,8 +13,8 @@
    - 在 TSX 中请通过 `@webgal/ui-sdk` 的 `resolveAssetUrl('./assets/icon.png')` 解析资源路径。
 4. **MenuPanel 底部安全区提醒（重要）**  
    当你在制作 `save`、`load`、`options` 或 `flowchart` Screen 时，注意 `menuPanel` 会以独立悬浮层形式叠放在页面底部，请务必为你的界面容器预留足够的底部内边距（推荐 `padding-bottom: 144px;`），避免列表内容或翻页按钮被 `MenuPanel` 遮挡。
-5. **部件声明（parts）**  
-   通过 `parts` 导出给可视化编辑器的可编辑部件；列表/重复按钮等项应设置 `allowLayoutEdit: false`（仅编辑外观样式），顶层面板/按钮栏可设置 `allowLayoutEdit: true`。
+5. **部件声明（parts）与状态约定**  
+   通过 `parts` 导出给可视化编辑器的可编辑部件；建议将容器背景/边框节点（`kind: 'container'`）与内部文字节点（`kind: 'text'`，可通过 `stateHostSelector` 绑定外层按钮的悬停/按下/选中/禁用状态）拆分为独立元素，避免背景填充与渐变文字冲突。列表/重复按钮等项应设置 `allowLayoutEdit: false`（仅编辑外观样式），顶层面板/按钮栏可设置 `allowLayoutEdit: true`。需要持续选中态（如当前页码、当前标签页、已开启的开关按钮）的部件请挂载 `.active` 类名（样式中使用 `&.active`），编辑器「选中」状态会自动读写并预览该样式。
 
 ## 常用命令
 

@@ -6,10 +6,17 @@ function getUiSdk(): WebgalUiSdk {
 }
 
 const TITLE_PARTS: ScreenPartDefinition[] = [
-  { id: 'main', name: '标题主容器', selector: '.Title_main', allowLayoutEdit: true },
-  { id: 'buttonList', name: '按钮列表', selector: '.Title_buttonList', allowLayoutEdit: true },
-  { id: 'button', name: '标题按钮', selector: '.Title_button', allowLayoutEdit: false },
-  { id: 'buttonText', name: '按钮文字', selector: '.Title_button_text', allowLayoutEdit: false },
+  { id: 'main', name: '标题主容器', selector: '.Title_main', kind: 'container', allowLayoutEdit: true },
+  { id: 'buttonList', name: '按钮列表', selector: '.Title_buttonList', kind: 'container', allowLayoutEdit: true },
+  { id: 'button', name: '标题按钮', selector: '.Title_button', kind: 'container', allowLayoutEdit: false },
+  {
+    id: 'buttonText',
+    name: '按钮文字',
+    selector: '.Title_button_text',
+    kind: 'text',
+    stateHostSelector: '.Title_button',
+    allowLayoutEdit: false,
+  },
 ];
 
 const TITLE_DEFAULT_CSS = `
@@ -43,7 +50,6 @@ const TITLE_DEFAULT_CSS = `
 
 .Title_button {
   flex: 0 1 auto;
-  font-weight: bold;
   text-align: left;
   cursor: pointer;
   padding: 17.92px 0px;
@@ -55,13 +61,11 @@ const TITLE_DEFAULT_CSS = `
   border-radius: 0px;
   transform: none;
   overflow: visible;
-  text-shadow: none;
 }
 
 .Title_button:hover {
   transform: translate3d(0px, -3px, 0px) scale(1.01);
   padding: 17.92px 0px;
-  text-shadow: none;
   filter: drop-shadow(0px 6px 8px rgba(6, 10, 18, 0.06)) drop-shadow(0px 3px 4px rgba(6, 10, 18, 0.04));
 }
 
@@ -82,6 +86,7 @@ const TITLE_DEFAULT_CSS = `
   display: block;
   padding: 0.08em 0.55em 0.12em 0.35em;
   font-size: 51.2px;
+  font-weight: bold;
   font-family: "资源圆体", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   letter-spacing: 0.16em;
   line-height: 1.2;

@@ -10,18 +10,29 @@
       "id": "background",
       "name": "背景层",
       "selector": ".custom-title-bg",
+      "kind": "container",
       "allowLayoutEdit": false
     },
     {
       "id": "menu",
       "name": "标题按钮栏",
       "selector": ".custom-title-menu",
+      "kind": "container",
       "allowLayoutEdit": true
     },
     {
       "id": "button",
-      "name": "按钮样式",
+      "name": "按钮容器",
       "selector": ".custom-title-btn",
+      "kind": "container",
+      "allowLayoutEdit": false
+    },
+    {
+      "id": "buttonText",
+      "name": "按钮文字",
+      "selector": ".custom-title-btn-text",
+      "kind": "text",
+      "stateHostSelector": ".custom-title-btn",
       "allowLayoutEdit": false
     }
   ]

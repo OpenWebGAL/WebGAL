@@ -6,8 +6,16 @@ function getUiSdk(): WebgalUiSdk {
 }
 
 const CHOOSE_PARTS: ScreenPartDefinition[] = [
-  { id: 'main', name: '选项列表容器', selector: '.Choose_Main', allowLayoutEdit: true },
-  { id: 'item', name: '选项按钮', selector: '.Choose_item', allowLayoutEdit: false },
+  { id: 'main', name: '选项列表容器', selector: '.Choose_Main', kind: 'container', allowLayoutEdit: true },
+  { id: 'item', name: '选项按钮', selector: '.Choose_item', kind: 'container', allowLayoutEdit: false },
+  {
+    id: 'itemText',
+    name: '选项按钮文字',
+    selector: '.Choose_item_text',
+    kind: 'text',
+    stateHostSelector: '.Choose_item',
+    allowLayoutEdit: false,
+  },
 ];
 
 const CHOOSE_DEFAULT_CSS = `
@@ -31,14 +39,12 @@ const CHOOSE_DEFAULT_CSS = `
   min-width: 1280px;
   padding: 16.96px 67.84px;
   margin: 16.96px 0px;
-  font-size: 67.84px;
-  color: #8e354a;
   text-align: center;
   border-radius: 4px;
   border: 3px solid rgba(0, 0, 0, 0);
   box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.25);
   background: rgba(255, 255, 255, 0.65);
-  transition: background-color 0.5s, border 0.5s, font-weight 0.5s, box-shadow 0.5s;
+  transition: background-color 0.5s, border 0.5s, box-shadow 0.5s;
 }
 
 .Choose_item:hover {
@@ -50,10 +56,21 @@ const CHOOSE_DEFAULT_CSS = `
 .Choose_item:disabled,
 .Choose_item.Choose_item_disabled {
   cursor: not-allowed;
-  color: rgba(142, 53, 74, 0.5);
   background: rgba(255, 255, 255, 0.5);
   border: 3px solid rgba(0, 0, 0, 0);
   box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.25);
+}
+
+.Choose_item_text {
+  display: inline-block;
+  font-size: 67.84px;
+  color: #8e354a;
+  transition: color 0.5s, font-weight 0.5s;
+}
+
+.Choose_item:disabled .Choose_item_text,
+.Choose_item.Choose_item_disabled .Choose_item_text {
+  color: rgba(142, 53, 74, 0.5);
 }
 `.trim();
 
@@ -79,7 +96,7 @@ export function ChooseScreen(props: ChooseScreenProps) {
             }}
             onMouseEnter={option.disabled ? undefined : props.playSe.enter}
           >
-            {option.text}
+            <span className="Choose_item_text">{option.text}</span>
           </button>
         ))}
       </div>

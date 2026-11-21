@@ -6,10 +6,24 @@ function getUiSdk() {
 }
 
 const GLOBAL_DIALOG_PARTS: ScreenPartDefinition[] = [
-  { id: 'main', name: '弹窗遮罩容器', selector: '.GlobalDialog_main', allowLayoutEdit: true },
-  { id: 'container', name: '弹窗内容条', selector: '.GlobalDialog_container', allowLayoutEdit: true },
-  { id: 'title', name: '弹窗标题', selector: '.GlobalDialog_title', allowLayoutEdit: false },
-  { id: 'button', name: '弹窗按钮', selector: '.GlobalDialog_button', allowLayoutEdit: false },
+  { id: 'main', name: '弹窗遮罩容器', selector: '.GlobalDialog_main', kind: 'container', allowLayoutEdit: true },
+  {
+    id: 'container',
+    name: '弹窗内容条',
+    selector: '.GlobalDialog_container',
+    kind: 'container',
+    allowLayoutEdit: true,
+  },
+  { id: 'title', name: '弹窗标题', selector: '.GlobalDialog_title', kind: 'text', allowLayoutEdit: false },
+  { id: 'button', name: '弹窗按钮', selector: '.GlobalDialog_button', kind: 'container', allowLayoutEdit: false },
+  {
+    id: 'buttonText',
+    name: '弹窗按钮文字',
+    selector: '.GlobalDialog_button_text',
+    kind: 'text',
+    stateHostSelector: '.GlobalDialog_button',
+    allowLayoutEdit: false,
+  },
 ];
 
 const GLOBAL_DIALOG_DEFAULT_CSS = `
@@ -76,25 +90,33 @@ const GLOBAL_DIALOG_DEFAULT_CSS = `
 }
 
 .GlobalDialog_button {
-  font-size: 51.2px;
   padding: 7.68px 51.2px;
   margin: 10.24px 51.2px;
   cursor: pointer;
-  transition: background-color 0.33s, color 0.33s, font-weight 0.33s, transform 0.33s;
-  text-shadow: 0px 0px 10px rgba(255, 255, 255, 1);
+  transition: background-color 0.33s, transform 0.33s;
   border-radius: 5px;
   border: 0px solid transparent;
   background: transparent;
-  color: #ffffff;
   font-family: inherit;
 }
 
 .GlobalDialog_button:hover {
+  transform: scale(1.1, 1.1);
+  background: rgba(255, 255, 255, 0.85);
+}
+
+.GlobalDialog_button_text {
+  display: inline-block;
+  font-size: 51.2px;
+  color: #ffffff;
+  text-shadow: 0px 0px 10px rgba(255, 255, 255, 1);
+  transition: color 0.33s, font-weight 0.33s, text-shadow 0.33s;
+}
+
+.GlobalDialog_button:hover .GlobalDialog_button_text {
   font-weight: bold;
   color: #005caf;
-  transform: scale(1.1, 1.1);
   text-shadow: 0px 0px 15px rgba(0, 0, 0, 0);
-  background: rgba(255, 255, 255, 0.85);
 }
 
 @keyframes showGlobalDialog {
@@ -128,7 +150,7 @@ export function GlobalDialogScreen(props: GlobalDialogScreenProps) {
               }}
               onMouseEnter={props.playSe.enter}
             >
-              {props.confirmText}
+              <span className="GlobalDialog_button_text">{props.confirmText}</span>
             </button>
             {props.cancelText !== undefined && props.cancelText !== '' && props.onCancel && (
               <button
@@ -140,7 +162,7 @@ export function GlobalDialogScreen(props: GlobalDialogScreenProps) {
                 }}
                 onMouseEnter={props.playSe.enter}
               >
-                {props.cancelText}
+                <span className="GlobalDialog_button_text">{props.cancelText}</span>
               </button>
             )}
           </div>

@@ -6,13 +6,32 @@ import { resolveScreenAssetUrl, useScreenParts } from '@/sdk/globalUiSdk';
 const CG_PER_PAGE = 8;
 
 const EXTRA_CLASSIC_PARTS: ScreenPartDefinition[] = [
-  { id: 'main', name: '鉴赏页面容器', selector: '.Extra_main', allowLayoutEdit: true },
-  { id: 'top', name: '顶部标题栏', selector: '.extra_top', allowLayoutEdit: true },
-  { id: 'cgNav', name: 'CG 分页栏', selector: '.cgShowDiv', allowLayoutEdit: true },
-  { id: 'cgNavButton', name: 'CG 分页按钮', selector: '.cgNav', allowLayoutEdit: false },
-  { id: 'cgGrid', name: 'CG 网格区', selector: '.cgContainer', allowLayoutEdit: true },
-  { id: 'cgCard', name: 'CG 卡片', selector: '.cgElement', allowLayoutEdit: false },
-  { id: 'bgmBar', name: '底部音乐条', selector: '.bgmContainer', allowLayoutEdit: true },
+  { id: 'main', name: '鉴赏页面容器', selector: '.Extra_main', kind: 'container', allowLayoutEdit: true },
+  { id: 'top', name: '顶部标题栏', selector: '.extra_top', kind: 'container', allowLayoutEdit: true },
+  { id: 'title', name: '顶部标题文字', selector: '.extra_title', kind: 'text', allowLayoutEdit: false },
+  { id: 'cgNav', name: 'CG 分页栏', selector: '.cgShowDiv', kind: 'container', allowLayoutEdit: true },
+  { id: 'cgNavButton', name: 'CG 分页按钮', selector: '.cgNav', kind: 'container', allowLayoutEdit: false },
+  {
+    id: 'cgNavButtonText',
+    name: 'CG 分页文字',
+    selector: '.cgNav_text',
+    kind: 'text',
+    stateHostSelector: '.cgNav',
+    allowLayoutEdit: false,
+  },
+  { id: 'cgGrid', name: 'CG 网格区', selector: '.cgContainer', kind: 'container', allowLayoutEdit: true },
+  { id: 'cgCard', name: 'CG 卡片', selector: '.cgElement', kind: 'container', allowLayoutEdit: false },
+  { id: 'bgmBar', name: '底部音乐条', selector: '.bgmContainer', kind: 'container', allowLayoutEdit: true },
+  { id: 'bgmName', name: '当前曲目文字', selector: '.bgmName', kind: 'text', allowLayoutEdit: false },
+  { id: 'bgmItem', name: '曲目按钮', selector: '.bgmElement', kind: 'container', allowLayoutEdit: false },
+  {
+    id: 'bgmItemText',
+    name: '曲目按钮文字',
+    selector: '.bgmElement_text',
+    kind: 'text',
+    stateHostSelector: '.bgmElement',
+    allowLayoutEdit: false,
+  },
 ];
 
 const EXTRA_CLASSIC_DEFAULT_CSS = `
@@ -142,17 +161,14 @@ const EXTRA_CLASSIC_DEFAULT_CSS = `
 }
 
 .cgNav {
-  font-size: 43.52px;
-  font-weight: normal;
   margin: 0px 10.88px;
   cursor: pointer;
   background-color: rgba(255, 255, 255, 0.5);
-  color: #666666;
   padding: 5.22px 43.52px;
   border-radius: 7px;
   border: none;
   flex-shrink: 0;
-  transition: color 0.5s, background-color 0.5s;
+  transition: background-color 0.5s;
 }
 
 .cgNav:first-child {
@@ -165,11 +181,21 @@ const EXTRA_CLASSIC_DEFAULT_CSS = `
 
 .cgNav:hover {
   background-color: rgba(255, 255, 255, 0.6);
-  color: #005CAF;
 }
 
-.cgNav.cgNav_active {
+.cgNav.active {
   background-color: rgba(255, 255, 255, 0.7);
+}
+
+.cgNav_text {
+  font-size: 43.52px;
+  font-weight: normal;
+  color: #666666;
+  transition: color 0.5s;
+}
+
+.cgNav:hover .cgNav_text,
+.cgNav.active .cgNav_text {
   color: #005CAF;
 }
 
@@ -335,27 +361,34 @@ const EXTRA_CLASSIC_DEFAULT_CSS = `
   font-family: "资源圆体", serif;
   background-color: rgba(0, 0, 0, 0.1);
   width: 28%;
-  font-size: 32px;
   padding: 16px 32px;
   margin: 16px 32px 16px 16px;
   cursor: pointer;
-  color: #ffffff;
   border: none;
   border-radius: 5px;
   text-align: left;
   box-sizing: border-box;
   flex-shrink: 0;
   overflow: hidden;
-  transition: background-color 0.5s, color 0.5s;
+  transition: background-color 0.5s;
 }
 
 .bgmElement:hover {
   background-color: rgba(255, 255, 255, 0.65);
-  color: #666666;
 }
 
-.bgmElement.bgmElement_active {
+.bgmElement.active {
   background-color: rgba(255, 255, 255, 0.85);
+}
+
+.bgmElement_text {
+  font-size: 32px;
+  color: #ffffff;
+  transition: color 0.5s;
+}
+
+.bgmElement:hover .bgmElement_text,
+.bgmElement.active .bgmElement_text {
   color: #666666;
 }
 `.trim();
@@ -449,14 +482,14 @@ export function ExtraGalleryClassicScreen(props: ExtraScreenProps) {
                   <button
                     key={page}
                     type="button"
-                    className={`cgNav${safePage === page ? ' cgNav_active' : ''}`}
+                    className={`cgNav${safePage === page ? ' active' : ''}`}
                     onMouseEnter={playSe.enter}
                     onClick={() => {
                       playSe.click();
                       setCurrentPage(page);
                     }}
                   >
-                    {page}
+                    <span className="cgNav_text">{page}</span>
                   </button>
                 ))}
             </div>
@@ -588,14 +621,14 @@ export function ExtraGalleryClassicScreen(props: ExtraScreenProps) {
                   <button
                     key={`${bgm.url}-${idx}`}
                     type="button"
-                    className={`bgmElement${bgm.url === currentBgmUrl ? ' bgmElement_active' : ''}`}
+                    className={`bgmElement${bgm.url === currentBgmUrl ? ' active' : ''}`}
                     onMouseEnter={playSe.enter}
                     onClick={() => {
                       playSe.click();
                       onSelectBgm(bgm.url);
                     }}
                   >
-                    {bgm.name}
+                    <span className="bgmElement_text">{bgm.name}</span>
                   </button>
                 ))}
               </div>

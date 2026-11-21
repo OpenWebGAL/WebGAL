@@ -6,10 +6,17 @@ function getUiSdk(): WebgalUiSdk {
 }
 
 const TITLE_CLASSIC_PARTS: ScreenPartDefinition[] = [
-  { id: 'main', name: '标题主容器', selector: '.Title_main', allowLayoutEdit: true },
-  { id: 'buttonList', name: '按钮列表', selector: '.Title_buttonList', allowLayoutEdit: true },
-  { id: 'button', name: '标题按钮', selector: '.Title_button', allowLayoutEdit: false },
-  { id: 'buttonText', name: '按钮文字', selector: '.Title_button_text', allowLayoutEdit: false },
+  { id: 'main', name: '标题主容器', selector: '.Title_main', kind: 'container', allowLayoutEdit: true },
+  { id: 'buttonList', name: '按钮列表', selector: '.Title_buttonList', kind: 'container', allowLayoutEdit: true },
+  { id: 'button', name: '标题按钮', selector: '.Title_button', kind: 'container', allowLayoutEdit: false },
+  {
+    id: 'buttonText',
+    name: '按钮文字',
+    selector: '.Title_button_text',
+    kind: 'text',
+    stateHostSelector: '.Title_button',
+    allowLayoutEdit: false,
+  },
 ];
 
 const TITLE_CLASSIC_DEFAULT_CSS = `
@@ -47,18 +54,16 @@ const TITLE_CLASSIC_DEFAULT_CSS = `
 }
 
 .Title_button {
-  font-weight: bold;
   text-align: center;
   flex: 0 1 auto;
   cursor: pointer;
   padding: 5.12px 25.6px;
   border: 0px solid transparent;
   background: transparent;
-  transition: background-color 0.3s, transform 0.3s, text-shadow 0.3s;
+  transition: background-color 0.3s, transform 0.3s;
 }
 
 .Title_button:hover {
-  text-shadow: 0px 0px 10px rgba(255, 255, 255, 1);
   transform: scale(1.025, 1.025) translate(0px, -1.28px);
 }
 
@@ -70,13 +75,13 @@ const TITLE_CLASSIC_DEFAULT_CSS = `
 
 .Title_button:disabled:hover,
 .Title_button.Title_button_disabled:hover {
-  text-shadow: none;
   transform: none;
 }
 
 .Title_button_text {
   display: block;
   font-size: 47.36px;
+  font-weight: bold;
   font-family:
     "WebgalUI",
     -apple-system,
@@ -94,6 +99,16 @@ const TITLE_CLASSIC_DEFAULT_CSS = `
   padding: 0px 23.68px;
   color: #f5f5f5;
   white-space: nowrap;
+  transition: text-shadow 0.3s;
+}
+
+.Title_button:hover .Title_button_text {
+  text-shadow: 0px 0px 10px rgba(255, 255, 255, 1);
+}
+
+.Title_button:disabled:hover .Title_button_text,
+.Title_button.Title_button_disabled:hover .Title_button_text {
+  text-shadow: none;
 }
 `.trim();
 

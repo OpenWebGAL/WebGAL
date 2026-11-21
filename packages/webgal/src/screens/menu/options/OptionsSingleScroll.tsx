@@ -4,13 +4,63 @@ import type { BuiltInScreenVariant, OptionsScreenProps, ScreenPartDefinition } f
 import { renderRichText, resolveScreenAssetUrl, useScreenParts } from '@/sdk/globalUiSdk';
 
 const OPTIONS_SCROLL_PARTS: ScreenPartDefinition[] = [
-  { id: 'main', name: '选项页面容器', selector: '.Options_Scroll_main', allowLayoutEdit: true },
-  { id: 'header', name: '顶部标题栏', selector: '.Options_Scroll_header', allowLayoutEdit: true },
-  { id: 'titleText', name: '标题文本', selector: '.Options_Scroll_titleText', allowLayoutEdit: true },
-  { id: 'content', name: '单页滚动内容区', selector: '.Options_Scroll_content', allowLayoutEdit: true },
-  { id: 'section', name: '分组卡片', selector: '.Options_Scroll_section', allowLayoutEdit: false },
-  { id: 'optionButton', name: '选项按钮', selector: '.Options_Scroll_button', allowLayoutEdit: false },
-  { id: 'textPreview', name: '文本预览框', selector: '.Options_Scroll_preview', allowLayoutEdit: true },
+  { id: 'backdrop', name: '页面背景', selector: '.Options_Scroll_backdrop', kind: 'container', allowLayoutEdit: false },
+  { id: 'main', name: '选项页面容器', selector: '.Options_Scroll_main', kind: 'container', allowLayoutEdit: true },
+  { id: 'header', name: '顶部标题栏', selector: '.Options_Scroll_header', kind: 'container', allowLayoutEdit: true },
+  { id: 'titleText', name: '标题文本', selector: '.Options_Scroll_titleText', kind: 'text', allowLayoutEdit: true },
+  {
+    id: 'versionPill',
+    name: '版本信息按钮',
+    selector: '.Options_Scroll_versionPill',
+    kind: 'container',
+    allowLayoutEdit: false,
+  },
+  {
+    id: 'versionText',
+    name: '版本信息文字',
+    selector: '.Options_Scroll_versionText',
+    kind: 'text',
+    stateHostSelector: '.Options_Scroll_versionPill',
+    allowLayoutEdit: false,
+  },
+  {
+    id: 'content',
+    name: '单页滚动内容区',
+    selector: '.Options_Scroll_content',
+    kind: 'container',
+    allowLayoutEdit: true,
+  },
+  { id: 'section', name: '分组卡片', selector: '.Options_Scroll_section', kind: 'container', allowLayoutEdit: false },
+  {
+    id: 'sectionHeading',
+    name: '分组大标题',
+    selector: '.Options_Scroll_sectionHeading',
+    kind: 'text',
+    allowLayoutEdit: false,
+  },
+  { id: 'optionLabel', name: '选项标签文字', selector: '.Options_Scroll_label', kind: 'text', allowLayoutEdit: false },
+  {
+    id: 'optionButton',
+    name: '选项按钮',
+    selector: '.Options_Scroll_button',
+    kind: 'container',
+    allowLayoutEdit: false,
+  },
+  {
+    id: 'optionButtonText',
+    name: '选项按钮文字',
+    selector: '.Options_Scroll_button_text',
+    kind: 'text',
+    stateHostSelector: '.Options_Scroll_button',
+    allowLayoutEdit: false,
+  },
+  {
+    id: 'textPreview',
+    name: '文本预览框',
+    selector: '.Options_Scroll_preview',
+    kind: 'container',
+    allowLayoutEdit: true,
+  },
 ];
 
 const OPTIONS_SCROLL_DEFAULT_CSS = `
@@ -70,16 +120,18 @@ const OPTIONS_SCROLL_DEFAULT_CSS = `
   border-radius: 999px;
   border: 1px solid rgba(81, 110, 65, 0.18);
   background: rgba(255, 255, 255, 0.56);
-  color: rgba(81, 110, 65, 0.92);
   font-family: inherit;
-  font-size: 28px;
   line-height: 1;
   cursor: pointer;
   transition: background-color 0.2s, border-color 0.2s;
 }
 
-.Options_Scroll_versionPill:hover,
-.Options_Scroll_versionPill.Options_Scroll_versionPill_active {
+.Options_Scroll_versionPill:hover {
+  background: rgba(255, 255, 255, 0.85);
+  border-color: rgba(81, 110, 65, 0.45);
+}
+
+.Options_Scroll_versionPill.active {
   background: rgba(255, 255, 255, 0.85);
   border-color: rgba(81, 110, 65, 0.45);
 }
@@ -100,6 +152,8 @@ const OPTIONS_SCROLL_DEFAULT_CSS = `
 }
 
 .Options_Scroll_versionText {
+  color: rgba(81, 110, 65, 0.92);
+  font-size: 28px;
   line-height: 1;
 }
 
@@ -220,20 +274,36 @@ const OPTIONS_SCROLL_DEFAULT_CSS = `
 }
 
 .Options_Scroll_button {
-  font-size: 34px;
   padding: 8px 34px;
   background-color: rgba(50, 50, 50, 0.05);
-  color: rgba(120, 134, 122, 1);
   border: none;
   border-bottom: 2px solid transparent;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
-.Options_Scroll_button:hover,
-.Options_Scroll_button.Options_Scroll_button_active {
+.Options_Scroll_button:hover {
   background-color: rgba(81, 110, 65, 0.15);
   border-bottom-color: rgba(81, 110, 65, 0.9);
+}
+
+.Options_Scroll_button.active {
+  background-color: rgba(81, 110, 65, 0.15);
+  border-bottom-color: rgba(81, 110, 65, 0.9);
+}
+
+.Options_Scroll_button_text {
+  font-size: 34px;
+  color: rgba(120, 134, 122, 1);
+  transition: color 0.2s ease;
+}
+
+.Options_Scroll_button:hover .Options_Scroll_button_text {
+  color: rgba(81, 110, 65, 0.95);
+  font-weight: bold;
+}
+
+.Options_Scroll_button.active .Options_Scroll_button_text {
   color: rgba(81, 110, 65, 0.95);
   font-weight: bold;
 }
@@ -467,7 +537,7 @@ export function OptionsSingleScrollScreen(props: OptionsScreenProps) {
           <div className="Options_Scroll_titleText">{t('menu.options.title')}</div>
           <button
             type="button"
-            className={`Options_Scroll_versionPill${showAbout ? ' Options_Scroll_versionPill_active' : ''}`}
+            className={`Options_Scroll_versionPill${showAbout ? ' active' : ''}`}
             aria-label={t('menu.options.pages.system.options.about.title')}
             onMouseEnter={playSe.enter}
             onClick={() => {
@@ -546,16 +616,14 @@ export function OptionsSingleScrollScreen(props: OptionsScreenProps) {
                       <button
                         key={val}
                         type="button"
-                        className={`Options_Scroll_button${
-                          optionData.autoSpeed === val ? ' Options_Scroll_button_active' : ''
-                        }`}
+                        className={`Options_Scroll_button${optionData.autoSpeed === val ? ' active' : ''}`}
                         onMouseEnter={playSe.enter}
                         onClick={() => {
                           playSe.switch();
                           onChangeOption('autoSpeed', val);
                         }}
                       >
-                        {label}
+                        <span className="Options_Scroll_button_text">{label}</span>
                       </button>
                     ))}
                   </div>
@@ -566,25 +634,29 @@ export function OptionsSingleScrollScreen(props: OptionsScreenProps) {
                   <div className="Options_Scroll_row">
                     <button
                       type="button"
-                      className={`Options_Scroll_button${!optionData.skipAll ? ' Options_Scroll_button_active' : ''}`}
+                      className={`Options_Scroll_button${!optionData.skipAll ? ' active' : ''}`}
                       onMouseEnter={playSe.enter}
                       onClick={() => {
                         playSe.switch();
                         onChangeOption('skipAll', false);
                       }}
                     >
-                      {t('menu.options.pages.system.options.skipAll.options.read')}
+                      <span className="Options_Scroll_button_text">
+                        {t('menu.options.pages.system.options.skipAll.options.read')}
+                      </span>
                     </button>
                     <button
                       type="button"
-                      className={`Options_Scroll_button${optionData.skipAll ? ' Options_Scroll_button_active' : ''}`}
+                      className={`Options_Scroll_button${optionData.skipAll ? ' active' : ''}`}
                       onMouseEnter={playSe.enter}
                       onClick={() => {
                         playSe.switch();
                         onChangeOption('skipAll', true);
                       }}
                     >
-                      {t('menu.options.pages.system.options.skipAll.options.all')}
+                      <span className="Options_Scroll_button_text">
+                        {t('menu.options.pages.system.options.skipAll.options.all')}
+                      </span>
                     </button>
                   </div>
                 </div>
@@ -598,7 +670,9 @@ export function OptionsSingleScrollScreen(props: OptionsScreenProps) {
                       onMouseEnter={playSe.enter}
                       onClick={onExportSaves}
                     >
-                      {t('menu.options.pages.system.options.gameSave.options.export')}
+                      <span className="Options_Scroll_button_text">
+                        {t('menu.options.pages.system.options.gameSave.options.export')}
+                      </span>
                     </button>
                     <button
                       type="button"
@@ -606,7 +680,9 @@ export function OptionsSingleScrollScreen(props: OptionsScreenProps) {
                       onMouseEnter={playSe.enter}
                       onClick={() => importInputRef.current?.click()}
                     >
-                      {t('menu.options.pages.system.options.gameSave.options.import')}
+                      <span className="Options_Scroll_button_text">
+                        {t('menu.options.pages.system.options.gameSave.options.import')}
+                      </span>
                     </button>
                   </div>
                 </div>
@@ -620,7 +696,9 @@ export function OptionsSingleScrollScreen(props: OptionsScreenProps) {
                       onMouseEnter={playSe.enter}
                       onClick={onResetSaves}
                     >
-                      {t('menu.options.pages.system.options.resetData.options.clearGameSave')}
+                      <span className="Options_Scroll_button_text">
+                        {t('menu.options.pages.system.options.resetData.options.clearGameSave')}
+                      </span>
                     </button>
                     <button
                       type="button"
@@ -628,7 +706,9 @@ export function OptionsSingleScrollScreen(props: OptionsScreenProps) {
                       onMouseEnter={playSe.enter}
                       onClick={onResetOptions}
                     >
-                      {t('menu.options.pages.system.options.resetData.options.resetSettings')}
+                      <span className="Options_Scroll_button_text">
+                        {t('menu.options.pages.system.options.resetData.options.resetSettings')}
+                      </span>
                     </button>
                     <button
                       type="button"
@@ -636,7 +716,9 @@ export function OptionsSingleScrollScreen(props: OptionsScreenProps) {
                       onMouseEnter={playSe.enter}
                       onClick={onResetAll}
                     >
-                      {t('menu.options.pages.system.options.resetData.options.clearAll')}
+                      <span className="Options_Scroll_button_text">
+                        {t('menu.options.pages.system.options.resetData.options.clearAll')}
+                      </span>
                     </button>
                   </div>
                 </div>
@@ -648,16 +730,14 @@ export function OptionsSingleScrollScreen(props: OptionsScreenProps) {
                       <button
                         key={item.value}
                         type="button"
-                        className={`Options_Scroll_button${
-                          optionData.language === item.value ? ' Options_Scroll_button_active' : ''
-                        }`}
+                        className={`Options_Scroll_button${optionData.language === item.value ? ' active' : ''}`}
                         onMouseEnter={playSe.enter}
                         onClick={() => {
                           playSe.switch();
                           onChangeLanguage(item.value);
                         }}
                       >
-                        {item.label}
+                        <span className="Options_Scroll_button_text">{item.label}</span>
                       </button>
                     ))}
                   </div>
@@ -675,19 +755,23 @@ export function OptionsSingleScrollScreen(props: OptionsScreenProps) {
                     <div className="Options_Scroll_row">
                       <button
                         type="button"
-                        className={`Options_Scroll_button${isFullscreen ? ' Options_Scroll_button_active' : ''}`}
+                        className={`Options_Scroll_button${isFullscreen ? ' active' : ''}`}
                         onMouseEnter={playSe.enter}
                         onClick={() => onToggleFullscreen(true)}
                       >
-                        {t('menu.options.pages.display.options.fullScreen.options.on')}
+                        <span className="Options_Scroll_button_text">
+                          {t('menu.options.pages.display.options.fullScreen.options.on')}
+                        </span>
                       </button>
                       <button
                         type="button"
-                        className={`Options_Scroll_button${!isFullscreen ? ' Options_Scroll_button_active' : ''}`}
+                        className={`Options_Scroll_button${!isFullscreen ? ' active' : ''}`}
                         onMouseEnter={playSe.enter}
                         onClick={() => onToggleFullscreen(false)}
                       >
-                        {t('menu.options.pages.display.options.fullScreen.options.off')}
+                        <span className="Options_Scroll_button_text">
+                          {t('menu.options.pages.display.options.fullScreen.options.off')}
+                        </span>
                       </button>
                     </div>
                   </div>
@@ -706,16 +790,14 @@ export function OptionsSingleScrollScreen(props: OptionsScreenProps) {
                       <button
                         key={val}
                         type="button"
-                        className={`Options_Scroll_button${
-                          optionData.textSize === val ? ' Options_Scroll_button_active' : ''
-                        }`}
+                        className={`Options_Scroll_button${optionData.textSize === val ? ' active' : ''}`}
                         onMouseEnter={playSe.enter}
                         onClick={() => {
                           playSe.switch();
                           onChangeOption('textSize', val);
                         }}
                       >
-                        {label}
+                        <span className="Options_Scroll_button_text">{label}</span>
                       </button>
                     ))}
                   </div>
@@ -728,16 +810,14 @@ export function OptionsSingleScrollScreen(props: OptionsScreenProps) {
                       <button
                         key={`${label}-${index}`}
                         type="button"
-                        className={`Options_Scroll_button${
-                          currentFontIndex === index ? ' Options_Scroll_button_active' : ''
-                        }`}
+                        className={`Options_Scroll_button${currentFontIndex === index ? ' active' : ''}`}
                         onMouseEnter={playSe.enter}
                         onClick={() => {
                           playSe.switch();
                           onChangeOption('textboxFont', index);
                         }}
                       >
-                        {label}
+                        <span className="Options_Scroll_button_text">{label}</span>
                       </button>
                     ))}
                   </div>
@@ -858,23 +938,23 @@ export function OptionsSingleScrollScreen(props: OptionsScreenProps) {
                   <div className="Options_Scroll_row">
                     <button
                       type="button"
-                      className={`Options_Scroll_button${
-                        optionData.voiceInterruption === 0 ? ' Options_Scroll_button_active' : ''
-                      }`}
+                      className={`Options_Scroll_button${optionData.voiceInterruption === 0 ? ' active' : ''}`}
                       onMouseEnter={playSe.enter}
                       onClick={() => onChangeOption('voiceInterruption', 0)}
                     >
-                      {t('menu.options.pages.sound.options.voiceStop.title')}
+                      <span className="Options_Scroll_button_text">
+                        {t('menu.options.pages.sound.options.voiceStop.title')}
+                      </span>
                     </button>
                     <button
                       type="button"
-                      className={`Options_Scroll_button${
-                        optionData.voiceInterruption === 1 ? ' Options_Scroll_button_active' : ''
-                      }`}
+                      className={`Options_Scroll_button${optionData.voiceInterruption === 1 ? ' active' : ''}`}
                       onMouseEnter={playSe.enter}
                       onClick={() => onChangeOption('voiceInterruption', 1)}
                     >
-                      {t('menu.options.pages.sound.options.voiceContinue.title')}
+                      <span className="Options_Scroll_button_text">
+                        {t('menu.options.pages.sound.options.voiceContinue.title')}
+                      </span>
                     </button>
                   </div>
                 </div>

@@ -29,8 +29,6 @@
   border: 2px solid rgba(255, 255, 255, 0.35);
   border-radius: 12px;
   background: rgba(15, 23, 42, 0.72);
-  color: #f8fafc;
-  font-size: 38px;
   text-align: left;
   cursor: pointer;
   transition: transform 0.2s ease, background 0.2s ease;
@@ -44,4 +42,9 @@
     opacity: 0.45;
     cursor: not-allowed;
   }
+}
+
+.custom-title-btn-text {
+  color: #f8fafc;
+  font-size: 38px;
 }

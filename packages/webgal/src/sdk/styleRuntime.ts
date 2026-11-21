@@ -115,7 +115,7 @@ function appendPseudoLockSelectors(selectors: string[], screen: UiScreenId): str
     return [];
   }
   const targetSelector = pseudoLock.selector.trim();
-  const pseudoSuffix = `:${pseudoLock.pseudoState}`;
+  const pseudoSuffix = pseudoLock.pseudoState === 'selected' ? '.active' : `:${pseudoLock.pseudoState}`;
   const pattern = new RegExp(
     `(^|[\\s>+~,(])${escapeRegExp(targetSelector)}${escapeRegExp(pseudoSuffix)}(?=$|[\\s>+~,.#:[\\)])`,
     'g',
@@ -237,7 +237,9 @@ export function registerScreenMetadata(
         p.id !== parts[idx]?.id ||
         p.name !== parts[idx]?.name ||
         p.selector !== parts[idx]?.selector ||
-        p.allowLayoutEdit !== parts[idx]?.allowLayoutEdit,
+        p.allowLayoutEdit !== parts[idx]?.allowLayoutEdit ||
+        p.kind !== parts[idx]?.kind ||
+        p.stateHostSelector !== parts[idx]?.stateHostSelector,
     );
   rec.parts = parts;
   rec.defaultCssText = defaultCssText;

@@ -17,11 +17,15 @@ export type UiScreenId =
   | 'bottomControlPanel'
   | 'globalDialog';
 
+export type UiPartKind = 'container' | 'text';
+
 export interface ScreenPartDefinition {
   id: string;
   name: string;
   selector: string;
   allowLayoutEdit: boolean;
+  kind?: UiPartKind;
+  stateHostSelector?: string;
 }
 
 export interface UiSoundEffects {

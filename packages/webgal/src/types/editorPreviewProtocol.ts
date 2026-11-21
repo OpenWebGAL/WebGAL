@@ -167,7 +167,8 @@ export const UI_SCREEN_IDS = [
 export type UiScreenId = (typeof UI_SCREEN_IDS)[number];
 
 export type UiPreviewMode = 'interactive' | 'edit';
-export type UiPseudoState = 'default' | 'hover' | 'active' | 'disabled';
+export type UiPseudoState = 'default' | 'hover' | 'active' | 'selected' | 'disabled';
+export type UiPartKind = 'container' | 'text';
 
 export interface UiLogicalBox {
   x: number;
@@ -181,6 +182,8 @@ export interface UiPartDescriptor {
   name: string;
   selector: string;
   allowLayoutEdit: boolean;
+  kind?: UiPartKind;
+  stateHostSelector?: string;
   box: UiLogicalBox | null;
 }
 
@@ -405,6 +408,15 @@ export interface ApplyStyleIgnoredPayload {
   reason: 'new-template-enabled';
 }
 
+export type TemplateIncompatibleReason = 'legacy-template' | 'version-mismatch';
+
+export interface TemplateIncompatiblePayload {
+  templateName?: string;
+  templateVersion?: string;
+  engineVersion: string;
+  reason: TemplateIncompatibleReason;
+}
+
 export const HOST_EVENT_PAYLOADS = definePayloadMap({
   'preview.ready.updated': payload<PreviewReadyUpdatedPayload>(),
   'preview.version.updated': payload<PreviewVersionUpdatedPayload>(),
@@ -415,6 +427,7 @@ export const HOST_EVENT_PAYLOADS = definePayloadMap({
   'ui.screen.updated': payload<UiScreenUpdatedPayload>(),
   'ui.part.selected': payload<UiPartSelectedPayload>(),
   'preview.event.apply-style-ignored': payload<ApplyStyleIgnoredPayload>(),
+  'preview.event.template-incompatible': payload<TemplateIncompatiblePayload>(),
 });
 
 export type EventPayloadByType = typeof HOST_EVENT_PAYLOADS;

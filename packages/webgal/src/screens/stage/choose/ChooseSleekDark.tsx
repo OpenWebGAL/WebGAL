@@ -6,8 +6,16 @@ function getUiSdk(): WebgalUiSdk {
 }
 
 const CHOOSE_SLEEK_DARK_PARTS: ScreenPartDefinition[] = [
-  { id: 'main', name: '选项列表容器', selector: '.Choose_Main', allowLayoutEdit: true },
-  { id: 'item', name: '单个选项按钮', selector: '.Choose_item', allowLayoutEdit: false },
+  { id: 'main', name: '选项列表容器', selector: '.Choose_Main', kind: 'container', allowLayoutEdit: true },
+  { id: 'item', name: '选项按钮', selector: '.Choose_item', kind: 'container', allowLayoutEdit: false },
+  {
+    id: 'itemText',
+    name: '选项按钮文字',
+    selector: '.Choose_item_text',
+    kind: 'text',
+    stateHostSelector: '.Choose_item',
+    allowLayoutEdit: false,
+  },
 ];
 
 const CHOOSE_SLEEK_DARK_DEFAULT_CSS = `
@@ -31,9 +39,6 @@ const CHOOSE_SLEEK_DARK_DEFAULT_CSS = `
   min-width: 1200px;
   padding: 22px 72px;
   margin: 16px 0px;
-  font-size: 52px;
-  letter-spacing: 0.1em;
-  color: #f1f5f9;
   text-align: center;
   border-radius: 10px;
   border: 1px solid rgba(148, 163, 184, 0.35);
@@ -49,7 +54,6 @@ const CHOOSE_SLEEK_DARK_DEFAULT_CSS = `
 }
 
 .Choose_item:hover {
-  color: #ffffff;
   background: linear-gradient(
     90deg,
     rgba(30, 41, 59, 0.92) 0%,
@@ -64,11 +68,27 @@ const CHOOSE_SLEEK_DARK_DEFAULT_CSS = `
 .Choose_item:disabled,
 .Choose_item.Choose_item_disabled {
   cursor: not-allowed;
-  color: rgba(148, 163, 184, 0.55);
   background: rgba(15, 23, 42, 0.6);
   border-color: rgba(148, 163, 184, 0.2);
   box-shadow: none;
   transform: none;
+}
+
+.Choose_item_text {
+  display: inline-block;
+  font-size: 52px;
+  letter-spacing: 0.1em;
+  color: #f1f5f9;
+  transition: color 0.25s ease;
+}
+
+.Choose_item:hover .Choose_item_text {
+  color: #ffffff;
+}
+
+.Choose_item:disabled .Choose_item_text,
+.Choose_item.Choose_item_disabled .Choose_item_text {
+  color: rgba(148, 163, 184, 0.55);
 }
 `.trim();
 
@@ -94,7 +114,7 @@ export function ChooseSleekDark(props: ChooseScreenProps) {
             }}
             onMouseEnter={option.disabled ? undefined : props.playSe.enter}
           >
-            {option.text}
+            <span className="Choose_item_text">{option.text}</span>
           </button>
         ))}
       </div>

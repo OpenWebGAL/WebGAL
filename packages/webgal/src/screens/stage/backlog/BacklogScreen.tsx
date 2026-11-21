@@ -7,10 +7,14 @@ function getUiSdk() {
 }
 
 const BACKLOG_PARTS: ScreenPartDefinition[] = [
-  { id: 'main', name: '历史记录主容器', selector: '.Backlog_main', allowLayoutEdit: true },
-  { id: 'top', name: '顶部栏', selector: '.Backlog_top', allowLayoutEdit: true },
-  { id: 'content', name: '记录滚动容器', selector: '.Backlog_content', allowLayoutEdit: true },
-  { id: 'item', name: '单条记录项', selector: '.Backlog_item', allowLayoutEdit: false },
+  { id: 'main', name: '历史记录主容器', selector: '.Backlog_main', kind: 'container', allowLayoutEdit: true },
+  { id: 'top', name: '顶部栏', selector: '.Backlog_top', kind: 'container', allowLayoutEdit: true },
+  { id: 'title', name: '顶部标题文字', selector: '.Backlog_title', kind: 'text', allowLayoutEdit: false },
+  { id: 'content', name: '记录滚动容器', selector: '.Backlog_content', kind: 'container', allowLayoutEdit: true },
+  { id: 'item', name: '单条记录项', selector: '.Backlog_item', kind: 'container', allowLayoutEdit: false },
+  { id: 'actionButton', name: '操作按钮', selector: '.Backlog_item_action', kind: 'container', allowLayoutEdit: false },
+  { id: 'itemName', name: '角色名文字', selector: '.Backlog_item_name', kind: 'text', allowLayoutEdit: false },
+  { id: 'itemText', name: '记录正文文字', selector: '.Backlog_item_text', kind: 'text', allowLayoutEdit: false },
 ];
 
 const BACKLOG_DEFAULT_CSS = `
@@ -123,7 +127,7 @@ const BACKLOG_DEFAULT_CSS = `
   background: rgba(255, 255, 255, 0.25);
 }
 
-.Backlog_item_action_playing {
+.Backlog_item_action.active {
   background: rgba(255, 255, 255, 0.25);
 }
 
@@ -145,6 +149,7 @@ const BACKLOG_DEFAULT_CSS = `
 }
 
 .Backlog_item_text {
+  color: #ffffff;
   font-size: 48.58px;
   width: 82.5%;
   box-sizing: border-box;
@@ -233,7 +238,7 @@ export function BacklogScreen(props: BacklogScreenProps) {
                     {item.vocalUrl !== '' && (
                       <button
                         type="button"
-                        className={`Backlog_item_action${isPlaying ? ' Backlog_item_action_playing' : ''}`}
+                        className={`Backlog_item_action${isPlaying ? ' active' : ''}`}
                         onClick={() => {
                           props.playSe.click();
                           props.onToggleVocal(item.index);

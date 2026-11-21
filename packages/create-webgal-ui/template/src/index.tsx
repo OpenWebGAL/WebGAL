@@ -6,9 +6,17 @@ export const variantId = 'custom-title';
 export const name = 'Custom Title Screen';
 
 export const parts: ScreenPartDefinition[] = [
-  { id: 'background', name: '背景层', selector: '.custom-title-bg', allowLayoutEdit: false },
-  { id: 'menu', name: '标题按钮栏', selector: '.custom-title-menu', allowLayoutEdit: true },
-  { id: 'button', name: '按钮样式', selector: '.custom-title-btn', allowLayoutEdit: false },
+  { id: 'background', name: '背景层', selector: '.custom-title-bg', kind: 'container', allowLayoutEdit: false },
+  { id: 'menu', name: '标题按钮栏', selector: '.custom-title-menu', kind: 'container', allowLayoutEdit: true },
+  { id: 'button', name: '按钮容器', selector: '.custom-title-btn', kind: 'container', allowLayoutEdit: false },
+  {
+    id: 'buttonText',
+    name: '按钮文字',
+    selector: '.custom-title-btn-text',
+    kind: 'text',
+    stateHostSelector: '.custom-title-btn',
+    allowLayoutEdit: false,
+  },
 ];
 
 export { defaultCssText };
@@ -33,7 +41,7 @@ export default function CustomTitleScreen(props: TitleScreenProps) {
             props.onStart();
           }}
         >
-          {props.t('title.start.title')}
+          <span className="custom-title-btn-text">{props.t('title.start.title')}</span>
         </button>
         {props.enableContinue && (
           <button
@@ -46,7 +54,7 @@ export default function CustomTitleScreen(props: TitleScreenProps) {
               props.onContinue();
             }}
           >
-            {props.t('title.continue.title')}
+            <span className="custom-title-btn-text">{props.t('title.continue.title')}</span>
           </button>
         )}
         <button
@@ -58,7 +66,7 @@ export default function CustomTitleScreen(props: TitleScreenProps) {
             props.onOpenLoad();
           }}
         >
-          {props.t('title.load.title')}
+          <span className="custom-title-btn-text">{props.t('title.load.title')}</span>
         </button>
         <button
           type="button"
@@ -69,7 +77,7 @@ export default function CustomTitleScreen(props: TitleScreenProps) {
             props.onOpenOptions();
           }}
         >
-          {props.t('title.options.title')}
+          <span className="custom-title-btn-text">{props.t('title.options.title')}</span>
         </button>
         {props.enableExtra && (
           <button
@@ -81,7 +89,7 @@ export default function CustomTitleScreen(props: TitleScreenProps) {
               props.onOpenExtra();
             }}
           >
-            {props.t('title.extra.title')}
+            <span className="custom-title-btn-text">{props.t('title.extra.title')}</span>
           </button>
         )}
         <button
@@ -93,7 +101,7 @@ export default function CustomTitleScreen(props: TitleScreenProps) {
             props.onExit();
           }}
         >
-          {props.t('title.exit.title')}
+          <span className="custom-title-btn-text">{props.t('title.exit.title')}</span>
         </button>
       </div>
     </div>

@@ -6,14 +6,51 @@ const SLOTS_PER_PAGE = 12;
 const BASE_PAGE_COUNT = 20;
 
 const SAVE_SPLIT_PARTS: ScreenPartDefinition[] = [
-  { id: 'main', name: '存档页面容器', selector: '.Save_Split_main', allowLayoutEdit: true },
-  { id: 'top', name: '顶部栏', selector: '.Save_Split_top', allowLayoutEdit: true },
-  { id: 'title', name: '水印标题', selector: '.Save_Split_title', allowLayoutEdit: true },
-  { id: 'pageList', name: '页码栏', selector: '.Save_Split_pageList', allowLayoutEdit: true },
-  { id: 'pageButton', name: '页码按钮', selector: '.Save_Split_pageButton', allowLayoutEdit: false },
-  { id: 'previewPane', name: '左侧大图预览', selector: '.Save_Split_preview', allowLayoutEdit: true },
-  { id: 'content', name: '右侧档位区', selector: '.Save_Split_grid', allowLayoutEdit: true },
-  { id: 'slotCard', name: '紧凑档位卡', selector: '.Save_Split_card', allowLayoutEdit: false },
+  { id: 'backdrop', name: '页面背景', selector: '.Save_Split_backdrop', kind: 'container', allowLayoutEdit: false },
+  { id: 'main', name: '存档页面容器', selector: '.Save_Split_main', kind: 'container', allowLayoutEdit: true },
+  { id: 'top', name: '顶部栏', selector: '.Save_Split_top', kind: 'container', allowLayoutEdit: true },
+  { id: 'title', name: '水印标题文字', selector: '.Save_Split_title', kind: 'text', allowLayoutEdit: true },
+  { id: 'pageList', name: '页码栏', selector: '.Save_Split_pageList', kind: 'container', allowLayoutEdit: true },
+  { id: 'pageButton', name: '页码按钮', selector: '.Save_Split_pageButton', kind: 'container', allowLayoutEdit: false },
+  {
+    id: 'pageButtonText',
+    name: '页码按钮文字',
+    selector: '.Save_Split_pageText',
+    kind: 'text',
+    stateHostSelector: '.Save_Split_pageButton',
+    allowLayoutEdit: false,
+  },
+  {
+    id: 'previewPane',
+    name: '左侧大图预览',
+    selector: '.Save_Split_preview',
+    kind: 'container',
+    allowLayoutEdit: true,
+  },
+  {
+    id: 'previewSpeaker',
+    name: '预览角色名',
+    selector: '.Save_Split_previewSpeaker',
+    kind: 'text',
+    allowLayoutEdit: false,
+  },
+  {
+    id: 'previewText',
+    name: '预览对话文本',
+    selector: '.Save_Split_previewText',
+    kind: 'text',
+    allowLayoutEdit: false,
+  },
+  { id: 'content', name: '右侧档位区', selector: '.Save_Split_grid', kind: 'container', allowLayoutEdit: true },
+  { id: 'slotCard', name: '紧凑档位卡', selector: '.Save_Split_card', kind: 'container', allowLayoutEdit: false },
+  {
+    id: 'cardSpeaker',
+    name: '卡片底部文字',
+    selector: '.Save_Split_cardFooter_text',
+    kind: 'text',
+    stateHostSelector: '.Save_Split_card',
+    allowLayoutEdit: false,
+  },
 ];
 
 const SAVE_SPLIT_DEFAULT_CSS = `
@@ -80,16 +117,14 @@ const SAVE_SPLIT_DEFAULT_CSS = `
 }
 
 .Save_Split_pageButton {
-  font-size: 51.2px;
   text-align: center;
   cursor: pointer;
   width: 104.96px;
-  color: rgba(0, 0, 0, 0.5);
   border: 0px solid transparent;
   border-bottom: 4px solid rgba(0, 0, 0, 0);
   background: transparent;
   padding: 0px;
-  transition: color 0.33s, border-bottom-color 0.33s, background-color 0.33s;
+  transition: border-bottom-color 0.33s, background-color 0.33s;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -97,22 +132,31 @@ const SAVE_SPLIT_DEFAULT_CSS = `
 }
 
 .Save_Split_pageButton:hover {
-  color: #77428D;
   border-bottom: 4px solid #77428D;
-  font-weight: bold;
 }
 
-.Save_Split_pageButton.Save_Split_pageButton_on {
-  font-weight: bold;
-  color: #77428D;
+.Save_Split_pageButton.active {
   border-bottom: 4px solid #77428D;
   background-color: rgba(119, 66, 141, 0.05);
 }
 
 .Save_Split_pageText {
+  font-size: 51.2px;
+  color: rgba(0, 0, 0, 0.5);
   width: 100%;
   padding-bottom: 3px;
   border-left: 2px solid rgba(0, 0, 0, 0.1);
+  transition: color 0.33s;
+}
+
+.Save_Split_pageButton:hover .Save_Split_pageText {
+  color: #77428D;
+  font-weight: bold;
+}
+
+.Save_Split_pageButton.active .Save_Split_pageText {
+  font-weight: bold;
+  color: #77428D;
 }
 
 .Save_Split_pageButton:first-child .Save_Split_pageText {
@@ -230,8 +274,13 @@ const SAVE_SPLIT_DEFAULT_CSS = `
   transition: transform 0.22s, box-shadow 0.22s, border-color 0.22s;
 }
 
-.Save_Split_card:hover,
-.Save_Split_card.Save_Split_card_selected {
+.Save_Split_card:hover {
+  transform: translateY(-4px);
+  border-color: #77428D;
+  box-shadow: 0px 8px 22px rgba(119, 66, 141, 0.18);
+}
+
+.Save_Split_card.active {
   transform: translateY(-4px);
   border-color: #77428D;
   box-shadow: 0px 8px 22px rgba(119, 66, 141, 0.18);
@@ -286,11 +335,15 @@ const SAVE_SPLIT_DEFAULT_CSS = `
   height: 54px;
   padding: 0px 16px;
   background: rgba(255, 255, 255, 0.94);
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+.Save_Split_cardFooter_text {
   font-size: 24px;
   font-weight: bold;
   color: #373C38;
-  display: flex;
-  align-items: center;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -348,7 +401,7 @@ export function SaveSplitPreviewScreen(props: SaveScreenProps) {
                 <button
                   key={page}
                   type="button"
-                  className={`Save_Split_pageButton${isActive ? ' Save_Split_pageButton_on' : ''}`}
+                  className={`Save_Split_pageButton${isActive ? ' active' : ''}`}
                   onMouseEnter={playSe.enter}
                   onClick={() => {
                     playSe.pageChange();
@@ -400,7 +453,7 @@ export function SaveSplitPreviewScreen(props: SaveScreenProps) {
                 <button
                   key={slotIndex}
                   type="button"
-                  className={`Save_Split_card${isSelected ? ' Save_Split_card_selected' : ''}`}
+                  className={`Save_Split_card${isSelected ? ' active' : ''}`}
                   onMouseEnter={() => {
                     playSe.enter();
                     setPreviewSlotIndex(slotIndex);
@@ -418,9 +471,11 @@ export function SaveSplitPreviewScreen(props: SaveScreenProps) {
                         <img src={resolveScreenAssetUrl(save.previewImage)} alt="preview" />
                       </div>
                       <div className="Save_Split_cardFooter">
-                        {save.nowStageState.showName === ''
-                          ? '\u00A0'
-                          : renderRichText(save.nowStageState.showName, { replaceSpaceWithNbsp: true })}
+                        <span className="Save_Split_cardFooter_text">
+                          {save.nowStageState.showName === ''
+                            ? '\u00A0'
+                            : renderRichText(save.nowStageState.showName, { replaceSpaceWithNbsp: true })}
+                        </span>
                       </div>
                     </>
                   ) : null}

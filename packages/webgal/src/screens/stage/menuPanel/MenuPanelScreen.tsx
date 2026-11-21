@@ -13,8 +13,16 @@ const MENU_TAG_OPTION = 2 as MenuPanelTag;
 const MENU_TAG_FLOWCHART = 3 as MenuPanelTag;
 
 const MENU_PANEL_PARTS: ScreenPartDefinition[] = [
-  { id: 'main', name: '菜单底栏容器', selector: '.MenuPanel_main', allowLayoutEdit: true },
-  { id: 'button', name: '菜单按钮', selector: '.MenuPanel_button', allowLayoutEdit: false },
+  { id: 'main', name: '菜单底栏容器', selector: '.MenuPanel_main', kind: 'container', allowLayoutEdit: true },
+  { id: 'button', name: '菜单按钮', selector: '.MenuPanel_button', kind: 'container', allowLayoutEdit: false },
+  {
+    id: 'buttonText',
+    name: '菜单按钮文字',
+    selector: '.MenuPanel_button_text',
+    kind: 'text',
+    stateHostSelector: '.MenuPanel_button',
+    allowLayoutEdit: false,
+  },
 ];
 
 const MENU_PANEL_DEFAULT_CSS = `
@@ -63,30 +71,34 @@ const MENU_PANEL_DEFAULT_CSS = `
   opacity: 0.45;
 }
 
-.MenuPanel_button.MenuPanel_button_active {
-  background-color: rgba(245, 246, 247, 0.35);
-}
-
-.MenuPanel_button.MenuPanel_button_save.MenuPanel_button_active {
+.MenuPanel_button.active:where(.MenuPanel_button_save) {
   color: rgba(74, 34, 93, 0.9);
 }
 
-.MenuPanel_button.MenuPanel_button_load.MenuPanel_button_active {
+.MenuPanel_button.active:where(.MenuPanel_button_load) {
   color: rgba(11, 52, 110, 0.9);
 }
 
-.MenuPanel_button.MenuPanel_button_options.MenuPanel_button_active {
+.MenuPanel_button.active:where(.MenuPanel_button_options) {
   color: rgba(81, 110, 65, 0.9);
 }
 
-.MenuPanel_button.MenuPanel_button_flowchart.MenuPanel_button_active {
+.MenuPanel_button.active:where(.MenuPanel_button_flowchart) {
   color: #2b5f75;
+}
+
+.MenuPanel_button.active {
+  background-color: rgba(245, 246, 247, 0.35);
 }
 
 .MenuPanel_button_icon {
   transform: translate(0px, 6.4px);
   padding: 0px 7.68px 0px 0px;
   margin: 0px 7.68px 0px 0px;
+}
+
+.MenuPanel_button_text {
+  font-size: 51.2px;
 }
 `.trim();
 
@@ -103,18 +115,16 @@ export function MenuPanelScreen(props: MenuPanelScreenProps) {
     tag: MenuPanelTag,
     roleClass: string,
     label: string,
-    activeColor: string,
-    iconRender: (color: string) => JSX.Element,
+    icon: JSX.Element,
     disabled = false,
   ) => {
     const active = isActive(tag);
-    const color = active ? activeColor : 'rgba(123, 144, 169, 1)';
     return (
       <button
         key={key}
         type="button"
         disabled={disabled}
-        className={`MenuPanel_button ${roleClass}${active ? ' MenuPanel_button_active' : ''}${
+        className={`MenuPanel_button ${roleClass}${active ? ' active' : ''}${
           disabled ? ' MenuPanel_button_disabled' : ''
         }`}
         onClick={() => {
@@ -124,8 +134,8 @@ export function MenuPanelScreen(props: MenuPanelScreenProps) {
         }}
         onMouseEnter={disabled ? undefined : props.playSe.enter}
       >
-        <span className="MenuPanel_button_icon">{iconRender(color)}</span>
-        <span>{label}</span>
+        <span className="MenuPanel_button_icon">{icon}</span>
+        <span className="MenuPanel_button_text">{label}</span>
       </button>
     );
   };
@@ -139,18 +149,14 @@ export function MenuPanelScreen(props: MenuPanelScreenProps) {
             MENU_TAG_FLOWCHART,
             'MenuPanel_button_flowchart',
             props.t('menu.flowchart.title'),
-            '#2B5F75',
-            (color) => <TreeDiagram theme="outline" size="1.2em" fill={color} strokeWidth={2} />,
+            <TreeDiagram theme="outline" size="1.2em" fill="currentColor" strokeWidth={2} />,
           )}
         {renderTagButton(
           'save',
           MENU_TAG_SAVE,
           'MenuPanel_button_save',
           props.t('menu.saving.title'),
-          'rgba(74, 34, 93, 0.9)',
-          (color) => (
-            <Save theme="outline" size="1.2em" fill={color} strokeWidth={2} />
-          ),
+          <Save theme="outline" size="1.2em" fill="currentColor" strokeWidth={2} />,
           !props.canSave,
         )}
         {renderTagButton(
@@ -158,10 +164,7 @@ export function MenuPanelScreen(props: MenuPanelScreenProps) {
           MENU_TAG_LOAD,
           'MenuPanel_button_load',
           props.t('menu.loadSaving.title'),
-          'rgba(11, 52, 110, 0.9)',
-          (color) => (
-            <FolderOpen theme="outline" size="1.2em" fill={color} strokeWidth={2} />
-          ),
+          <FolderOpen theme="outline" size="1.2em" fill="currentColor" strokeWidth={2} />,
         )}
         <button
           type="button"
@@ -173,19 +176,16 @@ export function MenuPanelScreen(props: MenuPanelScreenProps) {
           onMouseEnter={props.playSe.enter}
         >
           <span className="MenuPanel_button_icon">
-            <Home theme="outline" size="1.2em" fill="rgba(123, 144, 169, 1)" strokeWidth={2} />
+            <Home theme="outline" size="1.2em" fill="currentColor" strokeWidth={2} />
           </span>
-          <span>{props.t('menu.title.title')}</span>
+          <span className="MenuPanel_button_text">{props.t('menu.title.title')}</span>
         </button>
         {renderTagButton(
           'options',
           MENU_TAG_OPTION,
           'MenuPanel_button_options',
           props.t('menu.options.title'),
-          'rgba(81, 110, 65, 0.9)',
-          (color) => (
-            <SettingTwo theme="outline" size="1.2em" fill={color} strokeWidth={2} />
-          ),
+          <SettingTwo theme="outline" size="1.2em" fill="currentColor" strokeWidth={2} />,
         )}
         <button
           type="button"
@@ -197,9 +197,9 @@ export function MenuPanelScreen(props: MenuPanelScreenProps) {
           onMouseEnter={props.playSe.enter}
         >
           <span className="MenuPanel_button_icon">
-            <Logout theme="outline" size="1.2em" fill="rgba(123, 144, 169, 1)" strokeWidth={2} />
+            <Logout theme="outline" size="1.2em" fill="currentColor" strokeWidth={2} />
           </span>
-          <span>{props.t('menu.exit.title')}</span>
+          <span className="MenuPanel_button_text">{props.t('menu.exit.title')}</span>
         </button>
       </div>
     </div>

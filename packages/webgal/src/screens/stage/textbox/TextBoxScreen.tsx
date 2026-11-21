@@ -33,12 +33,24 @@ function joinRichTextSegments(
 }
 
 const TEXTBOX_PARTS: ScreenPartDefinition[] = [
-  { id: 'background', name: '文本框底图', selector: '.TextBox_Background', allowLayoutEdit: true },
-  { id: 'main', name: '文本框容器', selector: '.TextBox_main', allowLayoutEdit: true },
-  { id: 'miniAvatar', name: '小头像容器', selector: '.TextBox_miniAvatarContainer', allowLayoutEdit: true },
-  { id: 'nameBackground', name: '角色名背景', selector: '.TextBox_ShowName_Background', allowLayoutEdit: true },
-  { id: 'showName', name: '角色名文本', selector: '.TextBox_showName', allowLayoutEdit: true },
-  { id: 'text', name: '对话正文', selector: '.TextBox_text', allowLayoutEdit: false },
+  { id: 'background', name: '文本框底图', selector: '.TextBox_Background', kind: 'container', allowLayoutEdit: true },
+  { id: 'main', name: '文本框容器', selector: '.TextBox_main', kind: 'container', allowLayoutEdit: true },
+  {
+    id: 'miniAvatar',
+    name: '小头像容器',
+    selector: '.TextBox_miniAvatarContainer',
+    kind: 'container',
+    allowLayoutEdit: true,
+  },
+  {
+    id: 'nameBackground',
+    name: '角色名背景',
+    selector: '.TextBox_ShowName_Background',
+    kind: 'container',
+    allowLayoutEdit: true,
+  },
+  { id: 'showName', name: '角色名文本', selector: '.TextBox_showName', kind: 'text', allowLayoutEdit: true },
+  { id: 'text', name: '对话正文', selector: '.TextBox_text', kind: 'text', allowLayoutEdit: false },
 ];
 
 const TEXTBOX_DEFAULT_CSS = `
@@ -179,6 +191,8 @@ const TEXTBOX_DEFAULT_CSS = `
   line-height: 68px;
   padding: 0px 51.2px 10px 0px;
   font-size: 51.2px;
+  font-weight: bold;
+  letter-spacing: 0.2em;
   border-radius: 0px;
   z-index: 3;
   border: 4px solid rgba(255, 255, 255, 0);
@@ -194,11 +208,12 @@ const TEXTBOX_DEFAULT_CSS = `
 
 .TextBox_text {
   width: 100%;
-  display: flex;
-  flex-direction: column;
+  display: block;
   overflow: hidden;
   padding-left: 0.1em;
   box-sizing: border-box;
+  font-weight: bold;
+  letter-spacing: 0.2em;
   color: #f8f8f8;
   paint-order: stroke fill;
   -webkit-text-stroke: 0.12em #2e2312;
@@ -218,8 +233,6 @@ const TEXTBOX_DEFAULT_CSS = `
 
 .TextBox_textElement_start {
   position: relative;
-  display: inline-flex;
-  align-content: space-between;
   opacity: 0;
   animation-name: webgalTextDelayShow;
   animation-timing-function: ease-out;
@@ -228,8 +241,6 @@ const TEXTBOX_DEFAULT_CSS = `
 
 .TextBox_textElement_Settled {
   position: relative;
-  display: inline-flex;
-  align-content: space-between;
   opacity: 1;
 }
 `.trim();

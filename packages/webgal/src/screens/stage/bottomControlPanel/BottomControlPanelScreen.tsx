@@ -26,12 +26,33 @@ function getUiSdk() {
 }
 
 const BOTTOM_CONTROL_PANEL_PARTS: ScreenPartDefinition[] = [
-  { id: 'main', name: '底部快捷栏容器', selector: '.BottomControlPanel_main', allowLayoutEdit: true },
-  { id: 'button', name: '快捷栏按钮', selector: '.BottomControlPanel_button', allowLayoutEdit: false },
+  {
+    id: 'main',
+    name: '底部快捷栏容器',
+    selector: '.BottomControlPanel_main',
+    kind: 'container',
+    allowLayoutEdit: true,
+  },
+  {
+    id: 'button',
+    name: '快捷栏按钮',
+    selector: '.BottomControlPanel_button',
+    kind: 'container',
+    allowLayoutEdit: false,
+  },
+  {
+    id: 'buttonText',
+    name: '快捷栏按钮文字',
+    selector: '.BottomControlPanel_button_text',
+    kind: 'text',
+    stateHostSelector: '.BottomControlPanel_button',
+    allowLayoutEdit: false,
+  },
   {
     id: 'fastSlPreview',
     name: '快速存读档预览浮窗',
     selector: '.BottomControlPanel_fastSlPreview',
+    kind: 'container',
     allowLayoutEdit: true,
   },
 ];
@@ -77,8 +98,11 @@ const BOTTOM_CONTROL_PANEL_DEFAULT_CSS = `
   white-space: nowrap;
 }
 
-.BottomControlPanel_button:hover,
-.BottomControlPanel_button.BottomControlPanel_button_active {
+.BottomControlPanel_button:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+.BottomControlPanel_button.active {
   background-color: rgba(255, 255, 255, 0.3);
 }
 
@@ -93,6 +117,7 @@ const BOTTOM_CONTROL_PANEL_DEFAULT_CSS = `
 .BottomControlPanel_button_text {
   position: relative;
   bottom: 8px;
+  font-size: 30.72px;
   color: #ffffff;
   text-shadow: 1px 1px 5px rgba(0, 0, 0, 1);
   padding-left: 3px;
@@ -187,7 +212,7 @@ export function BottomControlPanelScreen(props: BottomControlPanelScreenProps) {
     <button
       key={key}
       type="button"
-      className={`BottomControlPanel_button${active ? ' BottomControlPanel_button_active' : ''}`}
+      className={`BottomControlPanel_button${active ? ' active' : ''}`}
       onClick={onClick}
       onMouseEnter={props.playSe.enter}
     >

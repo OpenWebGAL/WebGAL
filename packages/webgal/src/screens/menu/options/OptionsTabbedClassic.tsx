@@ -6,15 +6,63 @@ import { renderRichText, resolveScreenAssetUrl, useScreenParts } from '@/sdk/glo
 type OptionTab = 'system' | 'display' | 'sound';
 
 const OPTIONS_TABBED_PARTS: ScreenPartDefinition[] = [
-  { id: 'main', name: '选项页面容器', selector: '.Options_main', allowLayoutEdit: true },
-  { id: 'header', name: '顶部标题栏', selector: '.Options_main_header', allowLayoutEdit: true },
-  { id: 'titleText', name: '标题文本', selector: '.Option_title_text', allowLayoutEdit: true },
-  { id: 'tabs', name: '左侧分类栏', selector: '.Options_button_list', allowLayoutEdit: true },
-  { id: 'tabButton', name: '分类按钮', selector: '.Options_page_button', allowLayoutEdit: false },
-  { id: 'content', name: '右侧内容区', selector: '.Options_main_content', allowLayoutEdit: true },
-  { id: 'optionGroup', name: '选项分组', selector: '.NormalOption', allowLayoutEdit: false },
-  { id: 'optionButton', name: '选项按钮', selector: '.NormalButton', allowLayoutEdit: false },
-  { id: 'textPreview', name: '文本预览框', selector: '.Options_textPreview', allowLayoutEdit: true },
+  { id: 'backdrop', name: '页面背景', selector: '.Options_backdrop', kind: 'container', allowLayoutEdit: false },
+  { id: 'main', name: '选项页面容器', selector: '.Options_main', kind: 'container', allowLayoutEdit: true },
+  { id: 'header', name: '顶部标题栏', selector: '.Options_main_header', kind: 'container', allowLayoutEdit: true },
+  { id: 'titleText', name: '标题文本', selector: '.Option_title_text', kind: 'text', allowLayoutEdit: true },
+  { id: 'tabs', name: '左侧分类栏', selector: '.Options_button_list', kind: 'container', allowLayoutEdit: true },
+  { id: 'tabButton', name: '分类按钮', selector: '.Options_page_button', kind: 'container', allowLayoutEdit: false },
+  {
+    id: 'tabButtonText',
+    name: '分类按钮文字',
+    selector: '.Options_page_button_text',
+    kind: 'text',
+    stateHostSelector: '.Options_page_button',
+    allowLayoutEdit: false,
+  },
+  { id: 'content', name: '右侧内容区', selector: '.Options_main_content', kind: 'container', allowLayoutEdit: true },
+  { id: 'optionGroup', name: '选项分组', selector: '.NormalOption', kind: 'container', allowLayoutEdit: false },
+  {
+    id: 'optionGroupTitle',
+    name: '选项分组标题',
+    selector: '.NormalOption_title',
+    kind: 'text',
+    allowLayoutEdit: false,
+  },
+  { id: 'optionButton', name: '选项按钮', selector: '.NormalButton', kind: 'container', allowLayoutEdit: false },
+  {
+    id: 'optionButtonText',
+    name: '选项按钮文字',
+    selector: '.NormalButton_text',
+    kind: 'text',
+    stateHostSelector: '.NormalButton',
+    allowLayoutEdit: false,
+  },
+  {
+    id: 'selectButton',
+    name: '下拉选择按钮',
+    selector: '.Option_select_button',
+    kind: 'container',
+    allowLayoutEdit: false,
+  },
+  {
+    id: 'selectButtonText',
+    name: '下拉选择文字',
+    selector: '.Option_select_button_text',
+    kind: 'text',
+    stateHostSelector: '.Option_select_button',
+    allowLayoutEdit: false,
+  },
+  { id: 'selectItem', name: '下拉菜单项', selector: '.Option_select_item', kind: 'container', allowLayoutEdit: false },
+  {
+    id: 'selectItemText',
+    name: '下拉菜单文字',
+    selector: '.Option_select_item_text',
+    kind: 'text',
+    stateHostSelector: '.Option_select_item',
+    allowLayoutEdit: false,
+  },
+  { id: 'textPreview', name: '文本预览框', selector: '.Options_textPreview', kind: 'container', allowLayoutEdit: true },
 ];
 
 const OPTIONS_TABBED_DEFAULT_CSS = `
@@ -108,24 +156,32 @@ const OPTIONS_TABBED_DEFAULT_CSS = `
 }
 
 .Options_page_button {
-  font-family: "思源宋体", serif;
-  font-size: 76.8px;
-  font-weight: bold;
-  color: transparent;
-  background: linear-gradient(to left, #227D51, rgba(81, 110, 65, 1));
+  background: transparent;
   opacity: 0.35;
-  -webkit-background-clip: text;
-  background-clip: text;
-  transition: color 0.33s, opacity 0.33s;
+  transition: opacity 0.33s, background-color 0.33s;
   cursor: pointer;
   border: none;
   padding: 0px;
   text-align: left;
 }
 
-.Options_page_button:hover,
-.Options_page_button.Options_page_button_active {
+.Options_page_button:hover {
   opacity: 1;
+}
+
+.Options_page_button.active {
+  opacity: 1;
+}
+
+.Options_page_button_text {
+  display: inline-block;
+  font-family: "思源宋体", serif;
+  font-size: 76.8px;
+  font-weight: bold;
+  color: transparent;
+  background: linear-gradient(to left, #227D51, rgba(81, 110, 65, 1));
+  -webkit-background-clip: text;
+  background-clip: text;
 }
 
 .Options_main_content {
@@ -177,13 +233,11 @@ const OPTIONS_TABBED_DEFAULT_CSS = `
 }
 
 .NormalButton {
-  font-size: 38.4px;
   box-sizing: border-box;
   padding: 7.68px 38.4px;
   background-color: rgba(50, 50, 50, 0.05);
   margin: 0px 15.36px 0px 0px;
   transition: all 0.2s ease;
-  color: rgba(160, 170, 160, 1);
   cursor: pointer;
   border: none;
   border-bottom: 2px solid transparent;
@@ -191,13 +245,25 @@ const OPTIONS_TABBED_DEFAULT_CSS = `
 
 .NormalButton:hover {
   border-bottom: 2px solid rgba(81, 110, 65, 0.9);
+}
+
+.NormalButton.active {
+  background-color: rgba(81, 110, 65, 0.15);
+  border-bottom: 2px solid rgba(81, 110, 65, 0.9);
+}
+
+.NormalButton_text {
+  font-size: 38.4px;
+  color: rgba(160, 170, 160, 1);
+  transition: color 0.2s ease;
+}
+
+.NormalButton:hover .NormalButton_text {
   color: rgba(81, 110, 65, 0.9);
   font-weight: bold;
 }
 
-.NormalButton.NormalButtonChecked {
-  background-color: rgba(81, 110, 65, 0.15);
-  border-bottom: 2px solid rgba(81, 110, 65, 0.9);
+.NormalButton.active .NormalButton_text {
   color: rgba(81, 110, 65, 0.9);
   font-weight: bold;
 }
@@ -214,7 +280,6 @@ const OPTIONS_TABBED_DEFAULT_CSS = `
   border: 0px;
   border-bottom: 2px solid transparent;
   background: rgba(50, 50, 50, 0.05);
-  color: rgba(160, 170, 160, 1);
   font: inherit;
   cursor: pointer;
 }
@@ -226,9 +291,22 @@ const OPTIONS_TABBED_DEFAULT_CSS = `
 }
 
 .Option_select_button:hover,
-.Option_select_button:focus-visible,
-.Option_select_button.Option_select_button_active {
+.Option_select_button:focus-visible {
   border-bottom-color: rgba(81, 110, 65, 0.9);
+}
+
+.Option_select_button.active {
+  border-bottom-color: rgba(81, 110, 65, 0.9);
+}
+
+.Option_select_button_text {
+  font-size: 38.4px;
+  color: rgba(160, 170, 160, 1);
+}
+
+.Option_select_button:hover .Option_select_button_text,
+.Option_select_button:focus-visible .Option_select_button_text,
+.Option_select_button.active .Option_select_button_text {
   color: rgba(81, 110, 65, 0.9);
   font-weight: bold;
 }
@@ -253,10 +331,24 @@ const OPTIONS_TABBED_DEFAULT_CSS = `
 }
 
 .Option_select_item:hover,
-.Option_select_item:focus-visible,
-.Option_select_item.Option_select_item_active {
+.Option_select_item:focus-visible {
   background: rgba(81, 110, 65, 0.15);
   border-bottom-color: rgba(81, 110, 65, 0.9);
+}
+
+.Option_select_item.active {
+  background: rgba(81, 110, 65, 0.15);
+  border-bottom-color: rgba(81, 110, 65, 0.9);
+}
+
+.Option_select_item_text {
+  font-size: 38.4px;
+  color: rgba(160, 170, 160, 1);
+}
+
+.Option_select_item:hover .Option_select_item_text,
+.Option_select_item:focus-visible .Option_select_item_text,
+.Option_select_item.active .Option_select_item_text {
   color: rgba(81, 110, 65, 0.9);
   font-weight: bold;
 }
@@ -674,11 +766,11 @@ export function OptionsTabbedClassicScreen(props: OptionsScreenProps) {
               <button
                 key={tabKey}
                 type="button"
-                className={`Options_page_button${activeTab === tabKey ? ' Options_page_button_active' : ''}`}
+                className={`Options_page_button${activeTab === tabKey ? ' active' : ''}`}
                 onMouseEnter={playSe.enter}
                 onClick={() => selectTab(tabKey)}
               >
-                {label}
+                <span className="Options_page_button_text">{label}</span>
               </button>
             ))}
           </div>
@@ -741,14 +833,14 @@ export function OptionsTabbedClassicScreen(props: OptionsScreenProps) {
                           <button
                             key={val}
                             type="button"
-                            className={`NormalButton${optionData.autoSpeed === val ? ' NormalButtonChecked' : ''}`}
+                            className={`NormalButton${optionData.autoSpeed === val ? ' active' : ''}`}
                             onMouseEnter={playSe.enter}
                             onClick={() => {
                               playSe.switch();
                               onChangeOption('autoSpeed', val);
                             }}
                           >
-                            {label}
+                            <span className="NormalButton_text">{label}</span>
                           </button>
                         ))}
                       </div>
@@ -760,14 +852,14 @@ export function OptionsTabbedClassicScreen(props: OptionsScreenProps) {
                         <div className="Option_select">
                           <button
                             type="button"
-                            className={`Option_select_button${showLanguageMenu ? ' Option_select_button_active' : ''}`}
+                            className={`Option_select_button${showLanguageMenu ? ' active' : ''}`}
                             onMouseEnter={playSe.enter}
                             onClick={() => {
                               playSe.switch();
                               setShowLanguageMenu((prev) => !prev);
                             }}
                           >
-                            {currentLangLabel}
+                            <span className="Option_select_button_text">{currentLangLabel}</span>
                           </button>
                           {showLanguageMenu && (
                             <div className="Option_select_menu">
@@ -775,9 +867,7 @@ export function OptionsTabbedClassicScreen(props: OptionsScreenProps) {
                                 <button
                                   key={item.value}
                                   type="button"
-                                  className={`Option_select_item${
-                                    optionData.language === item.value ? ' Option_select_item_active' : ''
-                                  }`}
+                                  className={`Option_select_item${optionData.language === item.value ? ' active' : ''}`}
                                   onMouseEnter={playSe.enter}
                                   onClick={() => {
                                     playSe.switch();
@@ -785,7 +875,7 @@ export function OptionsTabbedClassicScreen(props: OptionsScreenProps) {
                                     setShowLanguageMenu(false);
                                   }}
                                 >
-                                  {item.label}
+                                  <span className="Option_select_item_text">{item.label}</span>
                                 </button>
                               ))}
                             </div>
@@ -815,7 +905,9 @@ export function OptionsTabbedClassicScreen(props: OptionsScreenProps) {
                           onMouseEnter={playSe.enter}
                           onClick={onResetSaves}
                         >
-                          {t('menu.options.pages.system.options.resetData.options.clearGameSave')}
+                          <span className="NormalButton_text">
+                            {t('menu.options.pages.system.options.resetData.options.clearGameSave')}
+                          </span>
                         </button>
                         <button
                           type="button"
@@ -823,10 +915,14 @@ export function OptionsTabbedClassicScreen(props: OptionsScreenProps) {
                           onMouseEnter={playSe.enter}
                           onClick={onResetOptions}
                         >
-                          {t('menu.options.pages.system.options.resetData.options.resetSettings')}
+                          <span className="NormalButton_text">
+                            {t('menu.options.pages.system.options.resetData.options.resetSettings')}
+                          </span>
                         </button>
                         <button type="button" className="NormalButton" onMouseEnter={playSe.enter} onClick={onResetAll}>
-                          {t('menu.options.pages.system.options.resetData.options.clearAll')}
+                          <span className="NormalButton_text">
+                            {t('menu.options.pages.system.options.resetData.options.clearAll')}
+                          </span>
                         </button>
                       </div>
                     </div>
@@ -843,7 +939,9 @@ export function OptionsTabbedClassicScreen(props: OptionsScreenProps) {
                             onExportSaves();
                           }}
                         >
-                          {t('menu.options.pages.system.options.gameSave.options.export')}
+                          <span className="NormalButton_text">
+                            {t('menu.options.pages.system.options.gameSave.options.export')}
+                          </span>
                         </button>
                         <button
                           type="button"
@@ -854,7 +952,9 @@ export function OptionsTabbedClassicScreen(props: OptionsScreenProps) {
                             importInputRef.current?.click();
                           }}
                         >
-                          {t('menu.options.pages.system.options.gameSave.options.import')}
+                          <span className="NormalButton_text">
+                            {t('menu.options.pages.system.options.gameSave.options.import')}
+                          </span>
                         </button>
                       </div>
                     </div>
@@ -883,25 +983,29 @@ export function OptionsTabbedClassicScreen(props: OptionsScreenProps) {
                     <div className="NormalOption_content">
                       <button
                         type="button"
-                        className={`NormalButton${isFullscreen ? ' NormalButtonChecked' : ''}`}
+                        className={`NormalButton${isFullscreen ? ' active' : ''}`}
                         onMouseEnter={playSe.enter}
                         onClick={() => {
                           playSe.switch();
                           onToggleFullscreen(true);
                         }}
                       >
-                        {t('menu.options.pages.display.options.fullScreen.options.on')}
+                        <span className="NormalButton_text">
+                          {t('menu.options.pages.display.options.fullScreen.options.on')}
+                        </span>
                       </button>
                       <button
                         type="button"
-                        className={`NormalButton${!isFullscreen ? ' NormalButtonChecked' : ''}`}
+                        className={`NormalButton${!isFullscreen ? ' active' : ''}`}
                         onMouseEnter={playSe.enter}
                         onClick={() => {
                           playSe.switch();
                           onToggleFullscreen(false);
                         }}
                       >
-                        {t('menu.options.pages.display.options.fullScreen.options.off')}
+                        <span className="NormalButton_text">
+                          {t('menu.options.pages.display.options.fullScreen.options.off')}
+                        </span>
                       </button>
                     </div>
                   </div>
@@ -920,14 +1024,14 @@ export function OptionsTabbedClassicScreen(props: OptionsScreenProps) {
                       <button
                         key={val}
                         type="button"
-                        className={`NormalButton${optionData.textSize === val ? ' NormalButtonChecked' : ''}`}
+                        className={`NormalButton${optionData.textSize === val ? ' active' : ''}`}
                         onMouseEnter={playSe.enter}
                         onClick={() => {
                           playSe.switch();
                           onChangeOption('textSize', val);
                         }}
                       >
-                        {label}
+                        <span className="NormalButton_text">{label}</span>
                       </button>
                     ))}
                   </div>
@@ -940,14 +1044,14 @@ export function OptionsTabbedClassicScreen(props: OptionsScreenProps) {
                       <button
                         key={`${label}-${index}`}
                         type="button"
-                        className={`NormalButton${currentFontIndex === index ? ' NormalButtonChecked' : ''}`}
+                        className={`NormalButton${currentFontIndex === index ? ' active' : ''}`}
                         onMouseEnter={playSe.enter}
                         onClick={() => {
                           playSe.switch();
                           onChangeOption('textboxFont', index);
                         }}
                       >
-                        {label}
+                        <span className="NormalButton_text">{label}</span>
                       </button>
                     ))}
                   </div>
@@ -1054,25 +1158,27 @@ export function OptionsTabbedClassicScreen(props: OptionsScreenProps) {
                   <div className="NormalOption_content">
                     <button
                       type="button"
-                      className={`NormalButton${optionData.voiceInterruption === 0 ? ' NormalButtonChecked' : ''}`}
+                      className={`NormalButton${optionData.voiceInterruption === 0 ? ' active' : ''}`}
                       onMouseEnter={playSe.enter}
                       onClick={() => {
                         playSe.switch();
                         onChangeOption('voiceInterruption', 0);
                       }}
                     >
-                      {t('menu.options.pages.sound.options.voiceStop.title')}
+                      <span className="NormalButton_text">{t('menu.options.pages.sound.options.voiceStop.title')}</span>
                     </button>
                     <button
                       type="button"
-                      className={`NormalButton${optionData.voiceInterruption === 1 ? ' NormalButtonChecked' : ''}`}
+                      className={`NormalButton${optionData.voiceInterruption === 1 ? ' active' : ''}`}
                       onMouseEnter={playSe.enter}
                       onClick={() => {
                         playSe.switch();
                         onChangeOption('voiceInterruption', 1);
                       }}
                     >
-                      {t('menu.options.pages.sound.options.voiceContinue.title')}
+                      <span className="NormalButton_text">
+                        {t('menu.options.pages.sound.options.voiceContinue.title')}
+                      </span>
                     </button>
                   </div>
                 </div>

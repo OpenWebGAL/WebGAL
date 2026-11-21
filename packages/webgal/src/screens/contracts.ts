@@ -21,7 +21,9 @@ export const UI_SCREEN_IDS = [
 
 export type UiScreenId = (typeof UI_SCREEN_IDS)[number];
 
-export type UiPseudoState = 'default' | 'hover' | 'active' | 'disabled';
+export type UiPseudoState = 'default' | 'hover' | 'active' | 'selected' | 'disabled';
+
+export type UiPartKind = 'container' | 'text';
 
 export type SaveSlotData = ISaveData;
 
@@ -32,6 +34,10 @@ export interface ScreenPartDefinition {
   selector: string;
   /** Whether layout properties (left/top/width/height) can be edited on canvas */
   allowLayoutEdit: boolean;
+  /** Visual role in Simple Mode: 'container' edits background/border; 'text' edits typography */
+  kind?: UiPartKind;
+  /** Optional ancestor selector that hosts interactive states (:hover/:active/.active/:disabled) */
+  stateHostSelector?: string;
 }
 
 export interface BuiltInScreenVariant<P = any> {
