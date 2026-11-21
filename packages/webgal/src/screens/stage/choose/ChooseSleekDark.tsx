@@ -29,7 +29,7 @@ const CHOOSE_SLEEK_DARK_DEFAULT_CSS = `
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  z-index: 10;
+  z-index: 13;
   background: rgba(5, 8, 15, 0.36);
 }
 
