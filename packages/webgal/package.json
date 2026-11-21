@@ -2,7 +2,7 @@
   "name": "webgal-engine",
   "version": "4.7.0-preview.0",
   "scripts": {
-    "dev": "vite --host --port 3000",
+    "dev": "node scripts/build-default-template-screens.mjs && vite --host --port 3000",
     "build": "node scripts/update-engine-version.js && node scripts/build-default-template-screens.mjs && cross-env NODE_ENV=production tsc && vite build --base=./",
     "preview": "vite preview",
     "lint": "eslint \"src/**/*.{ts,tsx}\" --fix",

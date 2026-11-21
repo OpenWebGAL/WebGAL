@@ -27,3 +27,4 @@ stats.html
 packages/webgal/public/game.old
 packages/parser/build
 packages/webgal/src/Core/util/pixiPerformManager/initRegister.ts
+packages/webgal/public/game/template/screens
