@@ -3,6 +3,7 @@ import react from '@vitejs/plugin-react';
 import loadVersion from 'vite-plugin-package-version';
 import { resolve } from 'path';
 import Info from 'unplugin-info/vite';
+import { scopeResetMotion } from './scripts/vite-plugin-scope-reset-motion';
 
 // https://vitejs.dev/config/
 
@@ -12,6 +13,7 @@ console.log(env);
 
 export default defineConfig({
   plugins: [
+    scopeResetMotion(),
     react(),
     loadVersion(),
     Info(),

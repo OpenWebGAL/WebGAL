@@ -80,8 +80,9 @@ export const Stage: FC = () => {
 
   useHotkey();
 
+  // data-webgal-stage 界定演出子树，供构建期改写的 reset 规则区分演出与 UI
   return (
-    <div className={styles.MainStage_main}>
+    <div className={styles.MainStage_main} data-webgal-stage="true">
       <FullScreenPerform />
       {/* 已弃用旧的立绘与背景舞台 */}
       {/* <OldStage /> */}
